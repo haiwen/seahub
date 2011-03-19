@@ -22,19 +22,10 @@
                     <a href="/home/">Home</a>
                 </li>
                 <li>
-                    <a href="/msgs/">Messages</a>
-                </li>
-                <li>
-                    <a href="/files/">Files</a>
-                </li>
-                <li>
                     <a href="/peers/">Peers</a>
                 </li>
                 <li>
                     <a href="/groups/">Groups</a>
-                </li>
-                <li>
-                    <a href="/settings/">Settings</a>
                 </li>
             </ul>
         </div>
@@ -42,8 +33,10 @@
     </div>
     <div id="main">
         <div id="left-panel">
+            {% block left_panel %}{% endblock %}
         </div>
         <div id="right-panel">
+            {% block right_panel %}{% endblock %}
         </div>
         <div id="main-panel">
         </div>
