@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{% block title %}{% endblock %} - SeaHub</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="文件 共享" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
+<link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.png" />
+
+{% block extra_style %}{% endblock %}
+{% block extra_script %}{% endblock %}
+
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="header">
+        <img id="logo" src="{{ MEDIA_URL }}img/logo.png" title="Seafile" />
+        <div class="navs">
+            <ul class="nav">
+                <li>
+                    <a href="/home/">Home</a>
+                </li>
+                <li>
+                    <a href="/msgs/">Messages</a>
+                </li>
+                <li>
+                    <a href="/files/">Files</a>
+                </li>
+                <li>
+                    <a href="/peers/">Peers</a>
+                </li>
+                <li>
+                    <a href="/groups/">Groups</a>
+                </li>
+                <li>
+                    <a href="/settings/">Settings</a>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-separator"></div>
+    </div>
+    <div id="main">
+        <div id="left-panel">
+        </div>
+        <div id="right-panel">
+        </div>
+        <div id="main-panel">
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div id="footer">
+        <p class="fleft">Copyright © 2011 GongGeng. All rights reserved.</p>
+        <p class="fright">Contact | About</p>
+        <div class="clear"></div>
+    </div>
+
+</div><!-- wrapper -->
+</body>
+</html>

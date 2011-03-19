@@ -1,0 +1,5 @@
+*.pyc
+*~
+seahub.db
+local_settings.py
+startserver.sh
