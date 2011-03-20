@@ -3,14 +3,16 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from seaserv import cclient, ccnet_rpc
+from seaserv import cclient, ccnet_rpc, get_groups
 
 def root(request):
     return HttpResponseRedirect(reverse(home))
 
+
 def home(request):
     return render_to_response('home.html', { 
             }, context_instance=RequestContext(request))
+
 
 def peers(request):
     peer_type = request.REQUEST.get('type', 'all')
@@ -30,3 +32,11 @@ def peers(request):
     return render_to_response('peers.html', { 
             'peers': peers,
             }, context_instance=RequestContext(request))
+
+
+def groups(request):
+    groups = get_groups()
+    return render_to_response('groups.html', { 
+            'groups': groups,
+            }, context_instance=RequestContext(request))
+

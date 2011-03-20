@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Groups{% endblock %}
+
+{% block left_panel %}
+
+{% endblock %}
+
+{% block right_panel %}
+<table class="group-list default">
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Maintainer</th>
+    </tr>
+    {% for group in groups %}
+        <tr>
+        <td>{{ group.props.name }}</td>
+        <td>{{ group.props.id }}</td>
+        <td>{{ group.props.maintainers }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

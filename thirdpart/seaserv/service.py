@@ -31,10 +31,30 @@ def translate_peerid(peer_id):
     except:
         peer = ccnet_rpc.get_peer(peer_id)
         if peer:
-            peer_db['peer_id'] = peer
+            peer_db[peer_id] = peer
         else:
-            return peer_id
-    return peer.props.name + "(" + peer_id[:4] + ")"
+            return peer_id[:8]
+    if peer.props.name:
+        return peer.props.name + "(" + peer_id[:4] + ")"
+    else:
+        return peer_id[:8]
+
+group_db = {}
+
+def translate_groupid(group_id):
+    try:
+        group = group_db[group_id]
+    except:
+        group = ccnet_rpc.get_group(group_id)
+        if group:
+            group_db[group_id] = group
+        else:
+            return group_id[:8]
+    if group.props.name:
+        return group.props.name + "(" + group_id[:4] + ")"
+    else:
+        return group_id[:8]
+
 
 def translate_msgtime(msgtime):
     return datetime.fromtimestamp(
