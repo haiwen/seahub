@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from seaserv import cclient, ccnet_rpc, get_groups
+from seaserv import cclient, ccnet_rpc, get_groups, get_users
 
 def root(request):
     return HttpResponseRedirect(reverse(home))
@@ -29,8 +29,10 @@ def peers(request):
             if peer.props.role_list.find('MyPeer') != -1:
                 peers.append(peer)
 
+    users = get_users()
     return render_to_response('peers.html', { 
             'peers': peers,
+            'users': users,
             }, context_instance=RequestContext(request))
 
 

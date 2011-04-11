@@ -10,6 +10,30 @@
 {% endblock %}
 
 {% block right_panel %}
+
+<h3>Users</h3>
+<table class="user-list default">
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Roles</th>
+        <th>My Roles On User</th>
+        <th>Action</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+        <td>{{ user.props.name }}</td>
+        <td>{{ user.props.id }}</td>
+        <td>{{ user.props.role_list }}</td>
+        <td>{{ user.props.my_role_list }}</td>
+        <td></td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h3>Peers</h3>
+
 <table class="peer-list default">
     <tr>
         <th>Name</th>

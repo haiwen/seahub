@@ -5,6 +5,7 @@ import sys
 from pysearpc import SearpcError
 import ccnet
 import seamsg
+import seafile
 
 DEFAULT_CCNET_CONF_PATH = "~/.ccnet"
 
@@ -22,6 +23,7 @@ cclient.load_confdir(CCNET_CONF_PATH)
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool)
 seamsg_rpc = seamsg.RpcClient(pool)
+seafile_rpc = seafile.RpcClient(pool)
 
 peer_db = {}
 
@@ -77,6 +79,24 @@ def get_peers_by_role(role):
     return peers
 
 
+def get_users():
+    user_ids = ccnet_rpc.list_users()
+    if not user_ids:
+        return []
+    users = [ ]
+    for user_id in user_ids.split("\n"):
+        # too handle the ending '\n'
+        if user_id == '':
+            continue
+        user = ccnet_rpc.get_user(user_id)
+        users.append(user)
+    return users
+
+
+def get_user(user_id):
+    user = ccnet_rpc.get_user(user_id)
+    return group
+
 def get_groups():
     group_ids = ccnet_rpc.list_groups()
     if not group_ids:
@@ -96,3 +116,17 @@ def get_group(group_id):
     group.members = group.props.members.split(" ")
     group.followers = group.props.followers.split(" ")
     return group
+
+
+def get_repos():
+    return seafile_rpc.get_repo_list("", 100)
+
+def get_repo(repo_id):
+    return seafile_rpc.get_repo(repo_id)
+
+def get_repo_sinfo(repo_id):
+    return seafile_rpc.get_repo_sinfo(repo_id)
+
+
+def get_commits(repo_id):
+    return seafile_rpc.get_commit_list(repo_id, "", 100)
