@@ -110,17 +110,6 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-#avatar
-AVATAR_STORAGE_DIR = 'avatars'
-
-AVATAR_GRAVATAR_BACKUP = False
-AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
-
-LOGIN_URL = SITE_ROOT + 'accounts/login'
-
-# profile
-AUTH_PROFILE_MODULE = "profile.UserProfile"
-
 
 try:
     import local_settings
@@ -142,3 +131,13 @@ else:
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(local_settings, attr)
 
+#avatar
+AVATAR_STORAGE_DIR = 'avatars'
+
+AVATAR_GRAVATAR_BACKUP = False
+AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
+
+LOGIN_URL = SITE_ROOT + 'accounts/login'
+
+# profile
+AUTH_PROFILE_MODULE = "profile.UserProfile"
