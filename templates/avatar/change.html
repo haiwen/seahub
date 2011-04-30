@@ -1,0 +1,31 @@
+{% extends "avatar/base.html" %}
+{% load avatar_tags %}
+
+{% block content %}
+<div class="avatar_op">
+   <h2>添加或修改头像</h2>
+   <div class="pic">
+        <h3>当前头像:</h3>
+        {% avatar user %}
+   </div>
+    <div class="text">
+    {% if not avatars %}
+        <p>您还没有自己的头像。</p>
+    {% else %}
+	<h3>从已有头像中选择:</h3>
+	<form method="POST" action="">
+            <ul>
+                {{ primary_avatar_form.as_ul }}
+            </ul>
+	    <div class="clear"></div>
+            <input type="submit" value="确定" />
+        </form>
+    {% endif %}
+    <h3>上传新头像:</h3>
+    <form enctype="multipart/form-data" method="POST" action="">
+        <input type="file" name="avatar" value="Avatar Image" /><br />
+        <input type="submit" value="提交" />
+    </form>
+   </div>
+</div>
+{% endblock %}

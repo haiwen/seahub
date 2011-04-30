@@ -1,0 +1,4 @@
+您好， 感谢注册 {{ site.name }}。 
+
+请点击下面的链接激活您的帐号 
+http://{{ site.name }}{{ SITE_ROOT }}accounts/activate/{{ activation_key }}/

@@ -1,0 +1,2 @@
+export CCNET_CONF_DIR=/home/plt/dev/ccnet/seafile/tests/basic/conf1
+export PYTHONPATH=/opt/lib/python2.6/site-packages:thirdpart

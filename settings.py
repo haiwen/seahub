@@ -62,6 +62,8 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
@@ -94,8 +96,31 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'seahub.basic',
+    'django.contrib.admin',
+    'registration',
+    'avatar',
+    'seahub.base',
+    'seahub.profile',
 )
+
+AUTHENTICATION_BACKENDS = (
+    'seahub.base.accounts.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+ACCOUNT_ACTIVATION_DAYS = 7
+
+#avatar
+AVATAR_STORAGE_DIR = 'avatars'
+
+AVATAR_GRAVATAR_BACKUP = False
+AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
+
+LOGIN_URL = SITE_ROOT + 'accounts/login'
+
+# profile
+AUTH_PROFILE_MODULE = "profile.UserProfile"
+
 
 try:
     import local_settings

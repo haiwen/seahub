@@ -29,6 +29,9 @@ table.default tr.first { background-color: #00FF00; }
 #right-panel { float:right; width:800px; }
 #footer { color:#999; padding-top:2px; margin:25px 0; border-top:1px solid #DDD; }
 /* #header */
+#header .top_operation { float:right; margin:2px 10px 0 0; color:#ddd; font-size:13px; }
+#header .top_operation a { font-weight:normal; font-size:13px; margin-left:2px; text-decoration: none; }
+#header .top_operation a:hover { background:#0A0; color:#FFF; }
 #logo { margin-top: 4px; }
 #header #ident { margin-top: 8px; float: right; font-size: 12px; }
 #header #ident p { color: #808; }
@@ -42,7 +45,7 @@ div.nav-separator { clear: both; border-top: #FF8C00 1px solid; border-bottom: n
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
-h2 { font-size:16px; color:#292; padding:4px 0 2px 0px; border-bottom: 2px solid #2B2; background-position:left 22px; margin:10px 0; }
+h2 { font-size:16px; color:#292; padding:4px 0 2px 0px; margin:10px 0; }
 h3 { font-size: 14px; color: #808; margin: 10px 0px 4px 0; }
 p { line-height: 22px; }
 ol { margin:0; padding:0px 0 0 2em; list-style-position:inside; }

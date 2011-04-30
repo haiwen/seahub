@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+<h2>用户注册</h2>
+  <form action="" method="post" class="reg">
+    <label for="id_username">用户名：</label>
+      {{ form.username }}
+        {% if form.username.errors %}
+        {{ form.username.errors }}
+        {% endif %}<br />
+     <label for="id_email">邮箱：</label>
+      {{ form.email }}<span>(我们将给您发送帐号激活邮件.)</span>
+        {% if form.email.errors %}
+        {{ form.email.errors }}
+        {% endif %}<br />
+     <label for="id_password1">密码：</label>
+      {{ form.password1 }}
+        {% if form.password1.errors %}
+        {{ form.password1.errors }}
+        {% endif %}<br />
+    <label for="id_password2">确认密码：</label>
+      {{ form.password2 }}<br />
+      <input type="submit" value="提交" class="submit" />
+  </form>
+{% endblock %}
+ 

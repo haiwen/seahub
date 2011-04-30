@@ -1,0 +1,18 @@
+{% extends "avatar/base.html" %}
+
+{% block content %}
+<div class="avatar_op">
+<h2>删除头像</h2>
+       {% if not avatars %}
+        <p>您还没有上传自己的头像。现在 <a href="{% url avatar_change %}">上传一个</a>.</p>
+    {% else %}
+        <form method="POST" action="">
+            <ul>
+                {{ delete_avatar_form.as_ul }}
+            </ul>
+<div class="clear"></div>
+            <input type="submit" value="删除" />
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
