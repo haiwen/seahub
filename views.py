@@ -4,10 +4,14 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
-from seaserv import cclient, ccnet_rpc, get_groups, get_users
+from seaserv import cclient, ccnet_rpc, get_groups, get_users, \
+    get_user_upload_info
 
 def root(request):
-    return HttpResponseRedirect(reverse(home))
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse(myhome))
+    else:
+        return HttpResponseRedirect(reverse(home))
 
 
 def home(request):
@@ -15,9 +19,25 @@ def home(request):
             }, context_instance=RequestContext(request))
 
 
+def get_user_cid(user):
+    try:
+        profile = user.get_profile()
+        return profile.ccnet_user_id
+    except UserProfile.DoesNotExist:
+        return None
+    
+
 @login_required
 def myhome(request):
+    ccnet_user_id = ""
+    try:
+        profile = request.user.get_profile()
+        ccnet_user_id = profile.ccnet_user_id
+    except UserProfile.DoesNotExist:
+        pass
+    
     return render_to_response('myhome.html', {
+            "ccnet_user_id": ccnet_user_id,
             }, context_instance=RequestContext(request))
 
 
@@ -50,3 +70,14 @@ def groups(request):
             'groups': groups,
             }, context_instance=RequestContext(request))
 
+
+@login_required
+def myfiles(request):
+    cid = get_user_cid(request.user)
+    if not cid:
+        uploaded_items = []
+    else:
+        uploaded_items = get_user_upload_info(cid)
+    return render_to_response('myfiles.html', {
+            'uploaded_items': uploaded_items,
+            }, context_instance=RequestContext(request))

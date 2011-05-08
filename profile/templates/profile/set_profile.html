@@ -4,17 +4,12 @@
 {% block content %}
 
 <form action="" method="post">
-  <labeld>当前状态:</label><br/>
-  {{ profile_form.status }}
-  {% if profile_form.status.errors %}
-  {{ profile_form.status.errors }}
-  {% endif %}<br />
-  <label for="id_message">兴趣:</label><br />
-  {{ profile_form.interests }}<br />
-  {% if profile_form.interests.errors %}
-  {{ profile_form.interests.errors }}
-  {% endif %}<br />
-  <input type="submit" value="更新个人资料" />
+    {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+    {% endif %}
+    <label>Ccnet User ID:</label><br/>
+    <input id="id_ccnet_user_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" maxlength="40" /><br/>
+    <input type="submit" value="更新个人资料" />
 </form>
 
 {% endblock %}

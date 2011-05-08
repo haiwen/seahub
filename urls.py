@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-from seahub.views import root, home, peers, groups, myhome
+from seahub.views import root, home, peers, groups, myhome, myfiles
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^home/my/$', myhome),
     (r'^peers/$', peers),
     (r'^groups/$', groups),
+    (r'^files/my/$', myfiles),
 
     (r'^avatar/', include('avatar.urls')),
     (r'^profile/', include('seahub.profile.urls')),

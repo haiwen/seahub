@@ -127,6 +127,8 @@ def get_repo(repo_id):
 def get_repo_sinfo(repo_id):
     return seafile_rpc.get_repo_sinfo(repo_id)
 
-
 def get_commits(repo_id):
     return seafile_rpc.get_commit_list(repo_id, "", 100)
+
+def get_user_upload_info(user_id):
+    return seafile_rpc.get_user_upload_info(user_id, 0, 100)

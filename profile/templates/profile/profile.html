@@ -3,7 +3,7 @@
 
 {% block left_panel %}
 <ul>
-  <li><a href="{% url profile_setting %}">修改资料</a></li>
+  <li><a href="{% url profile_setting %}">修改 Ccnet 设置</a></li>
   <li><a href="{% url avatar_change %}">修改头像</a></li>
   <li><a href="{% url avatar_delete %}">删除不用的头像</a></li>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改密码</a></li>
@@ -17,15 +17,10 @@
 {% load avatar_tags %}
 {% avatar user 90 %}
 
-<h3>基本信息</h3>
-<p>当前状态:{{ user.get_profile.status }}</p>
-<p>我的兴趣:{{ user.get_profile.interests }}</p>
 
-{% if peer %}
 <h3>Ccnet 当前设置</h3>
-<p>Ccnet ID: {{ peer.peer_id }}</p>
-<p>Ccnet Name: {{ peer.name }}</p>
-{% endif %}
+<p>Ccnet ID: {{ profile.ccnet_user_id }}</p>
+
 
 {% if groups %}
 <h3>加入的组</h3>

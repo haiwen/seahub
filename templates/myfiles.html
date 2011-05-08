@@ -1,0 +1,19 @@
+{% extends "myhome_base.html" %}
+
+{% block right_panel %}
+<table class="group-list default">
+    <tr>
+        <th>Repo ID</th>
+        <th>Commit ID</th>
+        <th>Timestamp</th>
+    </tr>
+
+    {% for item in uploaded_items %}
+    <tr>
+        <td>{{ item.props.repo_id }}</td>
+        <td>{{ item.props.commit_id }}</td>
+        <td>{{ item.props.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
