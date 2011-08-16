@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches
 
+from seahub.profile.models import UserProfile
+
 def root(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse(myhome))
