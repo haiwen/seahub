@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
-from seaserv import cclient, ccnet_rpc, get_groups, get_users, \
-    get_user_upload_info
+from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
+    get_repo, get_commits, get_branches
 
 def root(request):
     if request.user.is_authenticated():
@@ -15,9 +15,25 @@ def root(request):
 
 
 def home(request):
-    return render_to_response('home.html', { 
+    return render_to_response('home.html', {
             }, context_instance=RequestContext(request))
 
+def repos(request):
+    repos = get_repos()
+    return render_to_response('repos.html', {
+            "repos": repos,
+            }, context_instance=RequestContext(request))
+
+def repo(request, repo_id):
+    repo = get_repo(repo_id)
+    commits = get_commits(repo_id)
+    branches = get_branches(repo_id)
+    return render_to_response('repo.html', {
+            "repo": repo,
+            "commits": commits,
+            "branches": branches,
+            }, context_instance=RequestContext(request))
+    
 
 def get_user_cid(user):
     try:
@@ -74,10 +90,7 @@ def groups(request):
 @login_required
 def myfiles(request):
     cid = get_user_cid(request.user)
-    if not cid:
-        uploaded_items = []
-    else:
-        uploaded_items = get_user_upload_info(cid)
+    uploaded_items = []
     return render_to_response('myfiles.html', {
             'uploaded_items': uploaded_items,
             }, context_instance=RequestContext(request))

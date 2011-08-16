@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block right_panel %}
+
+<h3>Basic Info</h3>
+<p><i>Name:</i> {{repo.props.name}}</p>
+<p><i>ID:</i> {{repo.props.id}}</p>
+<p><i>Description:</i> {{repo.props.desc}}</p>
+
+
+<h3>Branches</h3>
+Current branch:  {{repo.props.head_branch}}
+
+<table class="branch-list default">
+    <tr>
+        <th>Name</th>
+        <th>Head Commit</th>
+    </tr>
+    {% for branch in branches %}
+    <tr>
+        <td>{{branch.props.name}}</td>
+        <td>{{branch.props.commit_id}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Commits</h3>
+<table class="commit-list default">
+    <tr>
+        <th>ID</th>
+        <th>Time</th>
+        <th>Discription</th>
+    </tr>
+    {% for commit in commits %}
+    <tr>
+        <td>{{commit.props.id}}</td>
+        <td>{{ commit.props.ctime }}</td>
+        <td>{{commit.props.desc}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
