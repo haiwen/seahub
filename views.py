@@ -5,7 +5,15 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
-    get_repo, get_commits, get_branches
+    get_repo, get_commits, get_branches, seafile_rpc
+
+
+def get_user_cid(user):
+    try:
+        profile = user.get_profile()
+        return profile.ccnet_user_id
+    except UserProfile.DoesNotExist:
+        return None
 
 from seahub.profile.models import UserProfile
 
@@ -19,45 +27,6 @@ def root(request):
 def home(request):
     return render_to_response('home.html', {
             }, context_instance=RequestContext(request))
-
-def repos(request):
-    repos = get_repos()
-    return render_to_response('repos.html', {
-            "repos": repos,
-            }, context_instance=RequestContext(request))
-
-def repo(request, repo_id):
-    repo = get_repo(repo_id)
-    commits = get_commits(repo_id)
-    branches = get_branches(repo_id)
-    return render_to_response('repo.html', {
-            "repo": repo,
-            "commits": commits,
-            "branches": branches,
-            }, context_instance=RequestContext(request))
-    
-
-def get_user_cid(user):
-    try:
-        profile = user.get_profile()
-        return profile.ccnet_user_id
-    except UserProfile.DoesNotExist:
-        return None
-    
-
-@login_required
-def myhome(request):
-    ccnet_user_id = ""
-    try:
-        profile = request.user.get_profile()
-        ccnet_user_id = profile.ccnet_user_id
-    except UserProfile.DoesNotExist:
-        pass
-    
-    return render_to_response('myhome.html', {
-            "ccnet_user_id": ccnet_user_id,
-            }, context_instance=RequestContext(request))
-
 
 
 def peers(request):
@@ -89,10 +58,50 @@ def groups(request):
             }, context_instance=RequestContext(request))
 
 
+def repo(request, repo_id):
+    # TODO: check permission
+    repo = get_repo(repo_id)
+    commits = get_commits(repo_id)
+    branches = get_branches(repo_id)
+    return render_to_response('repo.html', {
+            "repo": repo,
+            "commits": commits,
+            "branches": branches,
+            }, context_instance=RequestContext(request))
+
 @login_required
-def myfiles(request):
+def repo_share(request, repo_id):
+    return render_to_response('repo_share.html', {
+            "repo": repo,
+            "commits": commits,
+            "branches": branches,
+            }, context_instance=RequestContext(request))
+    
+
+@login_required
+def myhome(request):
+    ccnet_user_id = ""
+    try:
+        profile = request.user.get_profile()
+        ccnet_user_id = profile.ccnet_user_id
+    except UserProfile.DoesNotExist:
+        pass
+    
+    return render_to_response('myhome.html', {
+            "ccnet_user_id": ccnet_user_id,
+            }, context_instance=RequestContext(request))
+
+
+@login_required
+def mypeers(request):
     cid = get_user_cid(request.user)
-    uploaded_items = []
-    return render_to_response('myfiles.html', {
-            'uploaded_items': uploaded_items,
+    
+
+
+@login_required
+def myrepos(request):
+    cid = get_user_cid(request.user)
+    owned_repos = seafile_rpc.list_owned_repos(cid)
+    return render_to_response('myrepos.html', {
+            'owned_repos': owned_repos,
             }, context_instance=RequestContext(request))

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "myhome_base.html" %}
 
 {% block right_panel %}
 
@@ -33,9 +33,9 @@ Current branch:  {{repo.props.head_branch}}
     </tr>
     {% for commit in commits %}
     <tr>
-        <td>{{commit.props.id}}</td>
+        <td>{{ commit.props.id }}</td>
         <td>{{ commit.props.ctime }}</td>
-        <td>{{commit.props.desc}}</td>
+        <td>{{ commit.props.desc }}</td>
     </tr>
     {% endfor %}
 </table>

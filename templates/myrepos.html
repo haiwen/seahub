@@ -1,0 +1,19 @@
+{% extends "myhome_base.html" %}
+
+{% block right_panel %}
+<table class="repo-list default">
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Description</th>
+    </tr>
+
+    {% for repo in owned_repos %}
+    <tr>
+        <td><a href="/repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
