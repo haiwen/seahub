@@ -3,9 +3,14 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
-    get_repo, get_commits, get_branches, seafile_rpc
+    get_repo, get_commits, get_branches, seafile_rpc, get_group
+
+from seahub.profile.models import UserProfile
+from seahub.group.models import GroupRepo
+from seahub.group.forms import GroupAddRepoForm
 
 
 def get_user_cid(user):
@@ -15,7 +20,6 @@ def get_user_cid(user):
     except UserProfile.DoesNotExist:
         return None
 
-from seahub.profile.models import UserProfile
 
 def root(request):
     if request.user.is_authenticated():
@@ -55,6 +59,47 @@ def groups(request):
     groups = get_groups()
     return render_to_response('groups.html', { 
             'groups': groups,
+            }, context_instance=RequestContext(request))
+
+
+def group(request, group_id):
+    """Show a group.
+
+    Login is not required, but permission check based on token should
+    be added later.
+    """
+
+    group = get_group(group_id)
+    shared_repos = GroupRepo.objects.filter(group_id=group_id)
+    return render_to_response('group.html', {
+            'group': group, 'shared_repos': shared_repos,
+            }, context_instance=RequestContext(request))
+
+
+def group_add_repo(request, group_id):
+    """Add a repo to a group"""
+
+    group = get_group(group_id)
+    if not group:
+        raise Http404
+
+    if request.method == 'POST':
+        form = GroupAddRepoForm(request.POST)
+        if form.is_valid():
+            group_repo = GroupRepo()
+            group_repo.group_id = group_id
+            group_repo.repo_id = form.cleaned_data['repo_id']
+            try:
+                group_repo.save()
+            except IntegrityError:
+                # catch the case repo added to group before
+                pass
+            return HttpResponseRedirect(reverse('view_group', args=[group_id]))
+    else:
+        form = GroupAddRepoForm()
+    
+    return render_to_response("group_add_repo.html",  {
+            'form': form, 'group': group
             }, context_instance=RequestContext(request))
 
 

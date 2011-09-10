@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Group{% endblock %}
+
+{% block left_panel %}
+
+{% endblock %}
+
+{% block right_panel %}
+
+Add repo to {{ group.props.name }}
+
+<form action="" method="post">
+    {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+    {% endif %}
+    <label>Repo ID:</label><br/>
+    {{ form.repo_id }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

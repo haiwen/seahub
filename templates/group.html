@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Group{% endblock %}
+
+{% block left_panel %}
+<ul>
+    <li><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/addrepo/">Add Repo</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+
+<p>Use the following command to add a group:</p>
+<div><code>ccnet-tool group-follow &lt;group-id&gt; &lt;rendevous-id&gt;</code></div>
+
+<h3>Group</h3>
+
+<table class="default">
+    <tr>
+        <td>Name</td>
+        <td>{{ group.props.name }}</td>
+    </tr>
+    <tr>
+        <td>ID</td>
+        <td>{{ group.props.id }}</td>
+    </tr>
+    <tr>
+        <td>Timestamp</td>
+        <td>{{ group.props.timestamp }}</td>
+    </tr>
+    <tr>
+        <td>Rendezvous</td>
+        <td>{{ group.props.rendezvous }}</td>
+    </tr>
+    <tr>
+        <td>Creator</td>
+        <td>{{ group.props.creator }}</td>
+    </tr>
+    <tr>
+        <td>Maintainer</td>
+        <td>
+            {% for peer in group.maintainers %}
+            {{peer}}
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>Members</td>
+        <td>
+            {% for peer in group.members %}
+            {{peer}}
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>Followers</td>
+        <td>
+            {% for peer in group.followers %}
+            {{peer}}
+            {% endfor %}
+        </td>
+    </tr>
+</table>
+
+<h3>repos</h3>
+<table class="default">
+<tr>
+    <th>Repo ID</th>
+</tr>
+{% for item in shared_repos %}
+<tr>
+    <td>{{ item.repo_id }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
