@@ -21,13 +21,19 @@ table.default tr.even { background-color: #FAFAFA; }
 table.default tr.odd { background-color: #E0E0E0; }
 table.default tr.first { background-color: #00FF00; }
 /* container */
-#wrapper { margin:0 auto; width:950px; 
-           font-family: 宋体, Arial, Helvetica, sans-serif; font-size:13px; }
-#header { font-size: 14px;font-weight: bold;min-height: 60px;}
-#main { padding-top:10px; }
+#wrapper { font: 13px/1.5 宋体, Arial, Helvetica, sans-serif; }
+#header, #main, #footer { width:950px; }
+#header, #main { margin:0 auto; }
+#header { font-size: 14px; font-weight: bold;  }
 #left-panel { float:left; width:120px; }
 #right-panel { float:right; width:800px; }
-#footer { color:#999; padding-top:2px; margin:25px 0; border-top:1px solid #DDD; }
+#footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
+/* top-bar */
+#top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
+.top-bar { height:20px; color:#fff; text-align:right; font-weight:bold; background:#606; }
+.top-bar-in { width:950px; margin:0 auto; }
+.top-bar a { color:#ddd; font-weight:normal; }
+.top-bar a:hover { background:#A0A; }
 /* #header */
 #header .top_operation { float:right; margin:2px 10px 0 0; color:#ddd; font-size:13px; }
 #header .top_operation a { font-weight:normal; font-size:13px; margin-left:2px; text-decoration: none; }
@@ -45,8 +51,8 @@ div.nav-separator { clear: both; border-top: #FF8C00 1px solid; border-bottom: n
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
-h2 { font-size:16px; color:#292; padding:4px 0 2px 0px; margin:10px 0; }
-h3 { font-size: 14px; color: #808; margin: 10px 0px 4px 0; }
+h2 { font-size:18px; color:#808; padding:4px 0 2px 0px; margin: 0; }
+h3 { font-size:14px; color:#808; margin-top:10px; font-weight:normal; }
 p { line-height: 22px; }
 ol { margin:0; padding:0px 0 0 2em; list-style-position:inside; }
 ul { padding:4px 0 0 0; }

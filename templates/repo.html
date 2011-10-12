@@ -1,19 +1,25 @@
 {% extends "myhome_base.html" %}
+{% load seahub_tags %}
 
 {% block right_panel %}
 
-<h3>Basic Info</h3>
-<p><i>Name:</i> {{repo.props.name}}</p>
-<p><i>ID:</i> {{repo.props.id}}</p>
-<p><i>Description:</i> {{repo.props.desc}}</p>
+<h2>{{repo.props.name}}</h2>
+<table class="default">
+    <tr>
+        <td>ID</td>
+        <td>{{repo.props.id}}</td>
+    </tr>
+    <tr>
+        <td>描述</td>
+        <td>{{repo.props.desc}}</td>
+    </tr>
+</table>
 
-
-<h3>Branches</h3>
-Current branch:  {{repo.props.head_branch}}
+<h3>分支</h3>
 
 <table class="branch-list default">
     <tr>
-        <th>Name</th>
+        <th>分支名</th>
         <th>Head Commit</th>
     </tr>
     {% for branch in branches %}
@@ -34,7 +40,7 @@ Current branch:  {{repo.props.head_branch}}
     {% for commit in commits %}
     <tr>
         <td>{{ commit.props.id }}</td>
-        <td>{{ commit.props.ctime }}</td>
+        <td>{{ commit.props.ctime|tsstr_sec }}</td>
         <td>{{ commit.props.desc }}</td>
     </tr>
     {% endfor %}

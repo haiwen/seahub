@@ -1,5 +1,32 @@
 {% extends "myhome_base.html" %}
 
 {% block right_panel %}
-Ccnet ID: {{ ccnet_user_id }}
+<h3>基本信息</h3>
+<table class="default">
+    <tr>
+        <td>Seafile ID</td>
+        <td>{{ ccnet_user_id }}</td>
+    </tr>
+    <tr>
+        
+    </tr>
+</table>
+
+<h3>我的文件盒</h3>
+<table class="repo-list default">
+    <tr>
+        <th>名字</th>
+        <th>ID</th>
+        <th>描述</th>
+    </tr>
+
+    {% for repo in owned_repos %}
+    <tr>
+        <td><a href="/repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock %}

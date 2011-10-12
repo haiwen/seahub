@@ -14,35 +14,45 @@
 <body>
 
 <div id="wrapper">
-    <div id="header">
-        <div class="top_operation">
-            {% if request.user.is_authenticated %}
-            欢迎, {{ request.user }}.
-            <a href="{{ SITE_ROOT }}home/my/">我的页面</a>
-            <a href="{{ SITE_ROOT }}home/">社区</a>
-            <a href="{{ SITE_ROOT }}profile/">设置</a> 
-            {% if request.user.is_staff %}
-            <a href="{{ SITE_ROOT }}admin/">管理</a> 
-            {% endif %}
-            <a href="{{ SITE_ROOT }}accounts/logout/">退出</a>
-            {% else %}
-            <a href="{{ SITE_ROOT }}accounts/login/">登录</a> 
-            <a href="{{ SITE_ROOT }}accounts/register/">注册</a>
-            {% endif %}
+    <div id="top-bar">
+        <div class="top-bar">
+            <div class="top-bar-in">
+                {% if request.user.is_authenticated %}
+                欢迎, {{ request.user }}.
+                <a href="{{ SITE_ROOT }}home/my/">我的页面</a>
+                <a href="{{ SITE_ROOT }}home/">主页</a>
+                <a href="{{ SITE_ROOT }}profile/">设置</a>
+                {% if request.user.is_staff %}
+                <a href="{{ SITE_ROOT }}admin/">管理</a> 
+                {% endif %}
+                <a href="{{ SITE_ROOT }}accounts/logout/">退出</a>
+                {% else %}
+                <a href="{{ SITE_ROOT }}accounts/login/">登录</a> 
+                <a href="{{ SITE_ROOT }}accounts/register/">注册</a>
+                {% endif %}
+            </div>
         </div>
-        <img id="logo" src="{{ MEDIA_URL }}img/logo.png" title="Seafile" />
+    </div>
+    <div id="header">
+        <div class="logo">
+            <a href="/home/" id="logo"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
+        </div>
         <div class="navs">
             {% block nav %}
             <ul class="nav">
                 <li>
-                    <a href="{{ SITE_ROOT }}home/">Home</a>
+                    <a href="{{ SITE_ROOT }}home/">主页</a>
                 </li>
+                <!--
                 <li>
                     <a href="{{ SITE_ROOT }}peers/">Peers</a>
                 </li>
+                -->
+                <!--
                 <li>
                     <a href="{{ SITE_ROOT }}groups/">Groups</a>
                 </li>
+                -->
             </ul>
             {% endblock %}
         </div>

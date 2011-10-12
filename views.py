@@ -131,9 +131,14 @@ def myhome(request):
         ccnet_user_id = profile.ccnet_user_id
     except UserProfile.DoesNotExist:
         pass
-    
+
+    owned_repos = []
+    if ccnet_user_id:
+        owned_repos = seafile_rpc.list_owned_repos(ccnet_user_id)
+
     return render_to_response('myhome.html', {
             "ccnet_user_id": ccnet_user_id,
+            "owned_repos": owned_repos,
             }, context_instance=RequestContext(request))
 
 
