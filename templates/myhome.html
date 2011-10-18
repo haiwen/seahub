@@ -22,7 +22,7 @@
 
     {% for repo in owned_repos %}
     <tr>
-        <td><a href="/repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
     </tr>
