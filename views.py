@@ -103,15 +103,27 @@ def group_add_repo(request, group_id):
             }, context_instance=RequestContext(request))
 
 
+
 def repo(request, repo_id):
     # TODO: check permission
     repo = get_repo(repo_id)
     commits = get_commits(repo_id)
     branches = get_branches(repo_id)
+
+    token = ""
+    is_owner = False
+    if request.user.is_authenticated():
+        cid = get_user_cid(request.user)
+        if seafile_rpc.is_repo_owner(cid, repo_id):
+            is_owner = True
+            token = seafile_rpc.get_repo_token(repo_id)
+
     return render_to_response('repo.html', {
             "repo": repo,
             "commits": commits,
             "branches": branches,
+            "is_owner": is_owner,
+            "token": token,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -121,6 +133,19 @@ def repo_share(request, repo_id):
             "commits": commits,
             "branches": branches,
             }, context_instance=RequestContext(request))
+
+
+@login_required
+def modify_token(request, repo_id):
+    cid = get_user_cid(request.user)
+    if not seafile_rpc.is_repo_owner(cid, repo_id):
+        return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+
+    token = request.POST.get('token', '')
+    if token:
+        seafile_rpc.set_repo_token(repo_id, token)
+
+    return HttpResponseRedirect(reverse(repo, args=[repo_id]))
     
 
 @login_required
@@ -152,6 +177,7 @@ def mypeers(request):
 def myrepos(request):
     cid = get_user_cid(request.user)
     owned_repos = seafile_rpc.list_owned_repos(cid)
+
     return render_to_response('myrepos.html', {
             'owned_repos': owned_repos,
             }, context_instance=RequestContext(request))

@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from seahub.views import root, home, peers, groups, myhome, myrepos, \
-    repo, group, group_add_repo
+    repo, group, group_add_repo, modify_token
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     (r'^group/(?P<group_id>[^/]+)/addrepo/$', group_add_repo),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
     (r'^repos/my/$', myrepos),
+    (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
 
     (r'^avatar/', include('avatar.urls')),
     (r'^profile/', include('seahub.profile.urls')),

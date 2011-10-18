@@ -4,6 +4,13 @@
 {% block right_panel %}
 
 <h2>{{repo.props.name}}</h2>
+
+<form id="modify-token-form" action="{{ SITE_ROOT }}repo/token/modify/{{repo.props.id}}/" method="post">
+    <p>新口令:</p>
+    <input id="id_token" type="text" name="token" /><br/>
+    <input id="id_summit" type="submit" value="提交" />
+</form>
+
 <table class="default">
     <tr>
         <td>ID</td>
@@ -12,6 +19,14 @@
     <tr>
         <td>描述</td>
         <td>{{repo.props.desc}}</td>
+    </tr>
+    <tr>
+        <td>访问口令</td>
+        {% if is_owner %}
+        <td>{{token}} <input type="button" id="modify-token-btn" value="修改" /></td>
+        {% else %}
+        <td>只有拥有者可见</td>
+        {% endif %}
     </tr>
 </table>
 
@@ -46,4 +61,16 @@
     {% endfor %}
 </table>
 
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(function() {
+    $("#modify-token-btn").click(function() {
+        $("#modify-token-form").modal({appendTo: "#main"}); 
+    });
+    
+    $("#modify-token-form").hide();
+})
+</script>
 {% endblock %}

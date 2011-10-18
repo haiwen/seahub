@@ -80,3 +80,12 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 #main form label { display: inline-block; margin:2px 0px; }
 /* form */
 /* forms */
+
+/* popup dialog */
+#basic-modal-content {display:none;}
+#simplemodal-overlay {background-color:#000; cursor:wait;}
+#simplemodal-container { background-color:#fff; border:3px solid #080; padding: 8px; }
+#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
+#simplemodal-container a {color:#ddd;}
+#simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+#simplemodal-container h3 {color:#84b8d9;}

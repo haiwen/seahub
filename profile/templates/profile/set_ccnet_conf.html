@@ -1,0 +1,14 @@
+{% extends "profile/profile_base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+    {% endif %}
+    <label>Seafile 配置:</label><br/>
+    <textarea id="id_ccnet_profile" name="ccnet_profile">{{ ccnet_profile }}</textarea>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

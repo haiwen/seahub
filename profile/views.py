@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 import datetime
 
 from forms import SetUserProfileForm
-from models import UserProfile
+from models import UserProfile, UserCcnetConf
 from seaserv import ccnet_rpc
 
 @login_required
@@ -61,4 +61,45 @@ def set_profile(request):
     return render_to_response('profile/set_profile.html',
                               { 'error_msg': error_msg,
                                 'origin_id': origin_id },
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def get_ccnet_profile(request):
+    try:
+        ccnet_conf = UserCcnetConf.objects.get(user=request.user)
+        return HttpResponse(ccnet_conf.ccnet_profile)
+    except UserCcnetConf.DoesNotExist:
+        return HttpResponse("")
+
+
+@login_required
+def set_ccnet_profile(request):
+    try:
+        profile = request.user.get_profile()
+    except UserProfile.DoesNotExist:
+        return HttpResponse("Error: You have not set seafile id yet.")
+    ccnet_id = profile.ccnet_user_id
+
+    if request.method == 'POST':
+        ccnet_profile = request.POST.get('ccnet_profile', None)
+        try:
+            ccnet_conf = UserCcnetConf.objects.get(ccnet_user_id=ccnet_id)
+            ccnet_conf.ccnet_profile = ccnet_profile
+            ccnet_conf.save()
+        except UserCcnetConf.DoesNotExist:
+            ccnet_conf = UserCcnetConf(user=request.user,
+                                       ccnet_user_id=ccnet_id,
+                                       ccnet_profile=ccnet_profile)
+            ccnet_conf.save()
+        return HttpResponse("ok")
+    else:
+         try:
+             ccnet_conf = UserCcnetConf.objects.get(ccnet_user_id=ccnet_id)
+             ccnet_profile = ccnet_conf.ccnet_profile
+         except UserCcnetConf.DoesNotExist:
+             ccnet_profile = ""
+
+    return render_to_response('profile/set_ccnet_conf.html',
+                              { 'ccnet_profile': ccnet_profile },
                               context_instance=RequestContext(request))

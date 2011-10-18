@@ -3,7 +3,8 @@
 
 {% block left_panel %}
 <ul>
-  <li><a href="{% url profile_setting %}">修改 Ccnet 设置</a></li>
+  <li><a href="{% url profile_setting %}">修改 Seafile ID</a></li>
+  <li><a href="{% url ccnet_profile_setting %}">上传 Seafile 配置文件</a></li>
   <li><a href="{% url avatar_change %}">修改头像</a></li>
   <li><a href="{% url avatar_delete %}">删除不用的头像</a></li>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改密码</a></li>
