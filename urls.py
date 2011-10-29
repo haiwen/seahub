@@ -1,5 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.views.generic.simple import direct_to_template
+
 from seahub.views import root, home, peers, groups, myhome, myrepos, \
     repo, group, group_add_repo, modify_token
 
@@ -23,6 +25,7 @@ urlpatterns = patterns('',
     (r'^$', root),
     (r'^home/$', home),
     url(r'^home/my/$', myhome, name='myhome'),
+    (r'^help/$', direct_to_template, { 'template': 'help.html' } ),
     (r'^peers/$', peers),
     (r'^groups/$', groups),
     url(r'^group/(?P<group_id>[^/]+)/$', group, name='view_group'),

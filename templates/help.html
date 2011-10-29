@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block left_panel %}
+Welcome.
+{% endblock %}
+
+{% block right_panel %}
+
+<h2>工作原理</h2>
+<p>
+首先让我们来了解下 seafile 的几个基本概念。
+<ul>
+    <li>文件盒 (repo)</li>
+    <li>分支 (branch)</li>
+    <li>修改记录 (commit)</li>
+    <li>工作目录 (work directory)</li>
+</ul>
+
+<p>
+seafile 中基本的管理单位是文件盒 (repo)。 每个文件盒包含多个分支 (branch)， 一个分支表示一个修改历史， 它包含多个修改记录 (commit)。 当你每次做了修改并点击提交之后， 就会创建一个修改记录 (commit)。 每个文件盒有一个工作目录 (work directory), 修改操作均在工作目录进行。 
+</p>
+
+<p>
+下面我们来了解下 seafile 同步的工作原理。 seafile 的同步过程包含三个步骤
+<ul>
+    <li>上传 (upload)</li>
+    <li>下载 (fetch)</li>
+    <li>归并 (merge)</li>
+</ul>
+默认情况下， 一个文件盒在你的计算机上会包含两个分支, 一个叫做 local, 一个叫做 master。 你做的每次修改都会在 local 上创建一个修改记录。 当你选择上传 (upload) 的时候, 你的修改会被传到 seahub 上这个文件盒的 master 分支上。 当其他人对文件盒做了修改， 而你选择下载 (fetch) 的时候， seahub 上的 master 分支上的内容会被下载到你的计算机上的 master 分支上， 这时你就可以通过查看这两个分支的不同来看到别人做了什么修改。 然后你可以把 master 分支上的修改归并 (merge) 到你的本地分支上， 最后你就可以通过查看工作目录来查看最新内容了。
+</p>
+
+
+{% endblock %}
