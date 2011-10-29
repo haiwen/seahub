@@ -38,6 +38,7 @@ table.default tr.first { background-color: #00FF00; }
 #header .top_operation { float:right; margin:2px 10px 0 0; color:#ddd; font-size:13px; }
 #header .top_operation a { font-weight:normal; font-size:13px; margin-left:2px; text-decoration: none; }
 #header .top_operation a:hover { background:#0A0; color:#FFF; }
+div.logo { margin-top: -10px; }
 #logo { margin-top: 4px; }
 #user-info { float: right; font-size: 12px; color: #808; font-style:normal; margin-bottom:10px; }
 #user-info span { color: #888; display:inline-block; width:60px; text-align:right; margin-right:5px; }
