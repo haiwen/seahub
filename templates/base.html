@@ -38,6 +38,11 @@
     <div id="header">
         <div class="logo">
             <a href="/home/" id="logo"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
+            {% if request.user.is_authenticated %}
+            <div id="user-info">
+                <span>用户 ID:</span>{{user.user_id}}
+            </div>
+            {% endif %}
         </div>
         <div class="navs">
             {% block nav %}

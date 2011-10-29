@@ -18,11 +18,11 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 
-    (r'^accounts/', include('registration.backends.default.urls')),
+    (r'^accounts/', include('base.registration_urls')),
 
     (r'^$', root),
     (r'^home/$', home),
-    (r'^home/my/$', myhome),
+    url(r'^home/my/$', myhome, name='myhome'),
     (r'^peers/$', peers),
     (r'^groups/$', groups),
     url(r'^group/(?P<group_id>[^/]+)/$', group, name='view_group'),

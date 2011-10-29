@@ -10,7 +10,6 @@ from django.template import RequestContext
 
 from registration.backends import get_backend
 
-
 def activate(request, backend,
              template_name='registration/activate.html',
              success_url=None, extra_context=None, **kwargs):
@@ -191,7 +190,8 @@ def register(request, backend, success_url=None, form_class=None,
             else:
                 return redirect(success_url)
     else:
-        form = form_class()
+        userid = request.REQUEST.get('userid', '')
+        form = form_class(initial={'userid': userid })
     
     if extra_context is None:
         extra_context = {}
