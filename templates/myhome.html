@@ -1,5 +1,11 @@
 {% extends "myhome_base.html" %}
 
+{% block left_panel %}
+<h3>已用空间</h3>
+{{ quota_usage|filesizeformat }} / 4 GB
+{% endblock %}
+
+
 {% block right_panel %}
 
 <h3>我的文件盒</h3>
@@ -8,6 +14,7 @@
         <th>名字</th>
         <th>ID</th>
         <th>描述</th>
+        <th>操作</th>
     </tr>
 
     {% for repo in owned_repos %}
@@ -15,6 +22,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
     </tr>
     {% endfor %}
 </table>

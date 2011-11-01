@@ -15,6 +15,7 @@ User:
     user.props.role_list     The roles I give to this user.
     user.props.myrole_list   This roles this user gives to me.
     user.props.default_relay The user's default relay.
+    user.props.avatar_url The user's default relay.
 
 Group:
     group.props.id:          Group ID.
@@ -50,6 +51,21 @@ Branch:
     commit_id:
     repo_id:
 
+ShareItem:
+
+    id:
+    repo_id:
+    group_id:
+    user_id:
+    timestamp:
+
+SyncInfo:
+
+    repo_id:
+    head_commit:             The head_commit of master branch at seahub
+    deleted_on_relay:        True if repo is deleted on relay
+
+
 """
 
 
@@ -63,24 +79,33 @@ import ccnet
 import seamsg
 import seafile
 
-DEFAULT_CCNET_CONF_PATH = "~/.ccnet"
-
+if sys.platform == 'win32':
+    DEFAULT_CCNET_CONF_PATH = "C:\\ccnet"
+else:
+    DEFAULT_CCNET_CONF_PATH = "~/.ccnet"
 
 if 'CCNET_CONF_DIR' in os.environ:
     CCNET_CONF_PATH = os.environ['CCNET_CONF_DIR']
 else:
     CCNET_CONF_PATH = DEFAULT_CCNET_CONF_PATH
 
+CCNET_CONF_PATH = os.path.expanduser(CCNET_CONF_PATH)
+
 # this is not connect daemon, used for the web to display
 # (name, id) info
 cclient = ccnet.Client()
-cclient.load_confdir(CCNET_CONF_PATH)
+
+if os.path.exists(CCNET_CONF_PATH):
+    cclient.load_confdir(CCNET_CONF_PATH)
+    cclient.inited = True
+else:
+    cclient.inited = False
 
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool)
 seamsg_rpc = seamsg.RpcClient(pool)
 seafile_rpc = seafile.RpcClient(pool)
-
+monitor_rpc = seafile.MonitorRpcClient(pool)
 
 user_db = {}
 
@@ -114,8 +139,27 @@ def translate_peerid(peer_id):
     else:
         return peer_id[:8]
 
-user_db = {}
-def translate_userid(user_id):
+
+def get_peer_avatar_url(peer_id):
+    try:
+        peer = peer_db[peer_id]
+    except:
+        peer = ccnet_rpc.get_peer(peer_id)
+        if peer:
+            peer_db[peer_id] = peer
+        else:
+            return None
+    try:
+        user = user_db[peer.props.user_id]
+    except:
+        user = ccnet_rpc.get_user(user_id)
+        if user:
+            user_db[user_id] = user
+        else:
+            return None
+    return user.props.avatar_url
+
+def get_user_avatar_url(user_id):
     try:
         user = user_db[user_id]
     except:
@@ -123,11 +167,9 @@ def translate_userid(user_id):
         if user:
             user_db[user_id] = user
         else:
-            return user_id[:8]
-    if user.props.name:
-        return user.props.name + "(" + user_id[:4] + ")"
-    else:
-        return user_id[:8]
+            return None
+    return user.props.avatar_url
+
 
 group_db = {}
 
@@ -181,6 +223,20 @@ def get_peers_by_role(role):
         peers.append(peer)
     return peers
 
+def get_peers_by_myrole(myrole):
+    try:
+        peer_ids = ccnet_rpc.get_peers_by_myrole(myrole)
+    except SearpcError:
+        return []
+
+    peers = []
+    for peer_id in peer_ids.split("\n"):
+        # too handle the ending '\n'
+        if peer_id == '':
+            continue
+        peer = ccnet_rpc.get_peer(peer_id)
+        peers.append(peer)
+    return peers
 
 def get_users():
     user_ids = ccnet_rpc.list_users()
@@ -306,6 +362,9 @@ def get_repo_sinfo(repo_id):
 def get_commits(repo_id):
     return seafile_rpc.get_commit_list(repo_id, "", 100)
 
+def get_commit_tree_block_number(commit_id):
+    return seafile_rpc.get_commit_tree_block_number(commit_id);
+
 def checkout(repo_id, commit_id):
     return seafile_rpc.checkout(repo_id, commit_id)
 
@@ -321,6 +380,25 @@ def get_branches(repo_id):
 
 def list_share_info():
     return seafile_rpc.list_share_info(0, 100)
+
+def get_repo_status(repo_id):
+    status = seafile_rpc.get_repo_status(repo_id)
+    lists = ([], [], [], [])
+    cnt = 0
+    i = 0;
+    s = status.split("\n")
+    print s
+    while cnt < 4:
+        if int(s[i]) != 0:
+            tmpcnt = int(s[i]) + i
+            while i < tmpcnt:
+                i = i + 1
+                lists[cnt].append(s[i])
+
+        i = i + 1
+        cnt = cnt + 1
+
+    return lists
 
 
 ######## ccnet-applet API #####

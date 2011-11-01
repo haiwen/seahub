@@ -146,17 +146,31 @@ def modify_token(request, repo_id):
         seafile_rpc.set_repo_token(repo_id, token)
 
     return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+
+
+@login_required
+def remove_repo(request, repo_id):
+    cid = get_user_cid(request.user)
+    if not seafile_rpc.is_repo_owner(cid, repo_id):
+        return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+
+    seafile_rpc.remove_repo(repo_id)
+
+    return HttpResponseRedirect(reverse(myhome))
     
 
 @login_required
 def myhome(request):
     owned_repos = []
     user_id = request.user.user_id
+    quota_usage = 0
     if user_id:
         owned_repos = seafile_rpc.list_owned_repos(user_id)
+        quota_usage = seafile_rpc.get_user_quota_usage(user_id)
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
+            "quota_usage": quota_usage,
             }, context_instance=RequestContext(request))
 
 
