@@ -59,7 +59,7 @@ h3 { font-size:14px; color:#808; margin-top:10px; font-weight:normal; }
 p { line-height: 20px; margin: 2px 0 12px 0; }
 ol { margin:0; padding:0px 0 0 2em; list-style-position:inside; }
 ul { padding:0 0 0 0; margin: 0 0 8px 0; }
-ul > li { background:white url('../img/li.gif') no-repeat scroll; background-position:left 6px; padding-left:10px; }
+ul > li { background: url('../img/li.gif') no-repeat scroll; background-position:left 6px; padding-left:10px; }
 /* #main ul.ui-tabs-nav > li { background: none; } */
 #main ol > li { }
 #main li { line-height:20px; }
@@ -96,3 +96,33 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 /* home */
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
+#main-show { 
+    margin: 0 0 20px 0px; padding: 10px 10px; background: #FEFEFE;
+    border-radius: 3px; -moz-border-radius:3px;
+    border: 1px solid #808; -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+}
+#main-show #feature-list {
+    margin: 0 0 0 20px;
+    font-size: 16px;
+}
+#main-show #feature-list li {
+    background-position:left 11px;
+    line-height: 32px;
+}
+#seafile-what {
+    float: left;
+    width: 440px;
+}
+#seafile-history {
+    float: left;
+    margin: 0 0 0 70px;
+    width: 440px;
+}
+#seafile-feature {
+    clear: both;
+}
+#seafile-feature ul {
+    padding: 10px 40px;
+    border-radius: 3px; -moz-border-radius:3px;
+    background: #f0f0f0;
+}
