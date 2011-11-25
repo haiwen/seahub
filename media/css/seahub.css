@@ -21,7 +21,7 @@ table.default tr.even { background-color: #FAFAFA; }
 table.default tr.odd { background-color: #E0E0E0; }
 table.default tr.first { background-color: #00FF00; }
 /* container */
-#wrapper { font: 13px/1.5 宋体, Arial, Helvetica, sans-serif; }
+#wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 #header, #main, #footer { width:950px; }
 #header, #main { margin:0 auto; }
 #header { font-size: 14px; font-weight: bold;  }
