@@ -97,9 +97,11 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
 #main-show { 
-    margin: 0 0 20px 0px; padding: 10px 10px; background: #FEFEFE;
-    border-radius: 3px; -moz-border-radius:3px;
-    border: 1px solid #808; -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+    margin: 0 0 20px 0px; padding: 10px 10px; background: #F8E8F8;
+    border-radius: 3px; -moz-border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
 }
 #main-show #feature-list {
     margin: 0 0 0 20px;
