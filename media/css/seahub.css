@@ -128,3 +128,8 @@ strong { color:#808; font-weight: normal; }
     border-radius: 3px; -moz-border-radius:3px;
     background: #f0f0f0;
 }
+#seafile-design ul {
+    padding: 10px 40px;
+    border-radius: 3px; -moz-border-radius:3px;
+    background: #f0f0f0;
+}
