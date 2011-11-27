@@ -50,7 +50,7 @@ div.logo { margin-top: -10px; }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; background: none; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a:hover { color: #ff9933; text-decoration: underline; }
-div.nav-separator { clear: both; border-top: #AAA 1px solid; border-bottom: none; border-left: none; border-right: none; margin: 0px 0px 21px 0px; padding: 0px; }
+div.nav-separator { clear: both; border-top: #DDD 1px solid; border-bottom: none; border-left: none; border-right: none; margin: 0px 0px 21px 0px; padding: 0px; }
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
@@ -97,15 +97,17 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
 #main-show { 
-    margin: 0 0 20px 0px; padding: 10px 10px; background: #F8E8F8;
+    margin: 0 0 20px 50px; padding: 10px 10px; background: #F8E8F8;
     border-radius: 3px; -moz-border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
     -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
     -moz-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+    width: 800px;
 }
 #main-show #feature-list {
     margin: 0 0 0 20px;
     font-size: 16px;
+    color: #444;
 }
 #main-show #feature-list li {
     background-position:left 11px;
@@ -133,3 +135,4 @@ strong { color:#808; font-weight: normal; }
     border-radius: 3px; -moz-border-radius:3px;
     background: #f0f0f0;
 }
+div.home-page h2 { font-style: italic; }
