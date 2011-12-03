@@ -38,10 +38,11 @@ table.default tr.first { background-color: #00FF00; }
 #header .top_operation { float:right; margin:2px 10px 0 0; color:#ddd; font-size:13px; }
 #header .top_operation a { font-weight:normal; font-size:13px; margin-left:2px; text-decoration: none; }
 #header .top_operation a:hover { background:#0A0; color:#FFF; }
-div.logo { margin-top: -10px; }
+div.logo { margin-top: 0px; }
 #logo { margin-top: 4px; }
 #user-info { float: right; font-size: 12px; color: #808; font-style:normal; margin-bottom:10px; }
 #user-info span { color: #888; display:inline-block; width:60px; text-align:right; margin-right:5px; }
+#logo-info { float:right; font-size: 13px; color: #E83; font-style:italic; }
 #header #ident { margin-top: 8px; float: right; font-size: 12px; }
 #header #ident p { color: #808; }
 #header #ident label { color: #888; }
@@ -96,13 +97,16 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 /* home */
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
-#main-show { 
-    margin: 0 0 20px 50px; padding: 10px 10px; background: #F8E8F8;
+#main-show {
+
+
+    margin: 0 0 20px 50px; padding: 10px 10px;
     border-radius: 3px; -moz-border-radius: 3px;
-    box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
-    -moz-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 2px 4px;
+    box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
     width: 800px;
+    height: 235px; 
 }
 #main-show #feature-list {
     margin: 0 0 0 20px;
