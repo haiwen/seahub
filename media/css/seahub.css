@@ -98,9 +98,7 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
 #main-show {
-
-
-    margin: 0 0 20px 50px; padding: 10px 10px;
+    margin: 0 0 50px 50px; padding: 10px 10px;
     border-radius: 3px; -moz-border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
     -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
