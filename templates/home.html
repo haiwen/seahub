@@ -8,7 +8,7 @@
     <img src="{{ MEDIA_URL }}img/seafile-small.png" id="home-snapshot" />
 
     <h2>
-        Seafile: 专业的版本管理和同步共享工具
+        Seafile: 我自己的云存储
     </h2>
 
     <p>
@@ -23,6 +23,36 @@
     <div class="clear"></div>
 </div>
 
+<div id="seafile-show">
+    <div class="show-item">
+        <h2>P2P 同步</h2>
+        <img width="150px" src="{{ MEDIA_URL }}img/sync-cc.png" />
+        <p>用户可以创建<strong>多个文件盒</strong>。每个文件盒可以放置任意的文件和目。每个文件盒可以在任意两台计算机间同步，无需借助服务器。</p>
+    </div>
+
+    <div class="show-item2">
+        <h2>多服务器</h2>
+        <img width="150px" height="115px" src="{{ MEDIA_URL }}img/sync-cs.png" />
+        <p>每台计算机都可以配置成服务器。可为每个文件盒选择不同的服务器。每次同步会做一个新的版本记录，原来的文件状态得到<strong>完整的保存</strong>，不用担心同步过程丢失文件或丢失对文件的修改。</p>
+    </div>
+    
+    <div class="clear"></div>
+
+    <div class="show-item">
+        <h2>版本历史</h2>
+        <img width="150px" src="{{ MEDIA_URL }}img/history-back.png" />
+        <p>完整的本地版本历史。不用联网，用户就可以浏览文件的任意一个版本,可以找回任意一个删除的文件。也可以把整个目录恢复到任意一个历史状态。</li></p>
+    </div>
+
+    <div class="show-item2">
+        <h2>协同工作</h2>
+        <img width="150px" src="{{ MEDIA_URL }}img/sync-csc.png" />
+        <p>多人协作， 自动进行修改的合并, 完整的版本历史保证绝不会丢失自己的修改。</p>
+    </div>
+
+    <div class="clear"></div>
+</div>
+
 <div id="seafile-what">
     <h2>什么是 Ccnet/Seafile <img src="{{ MEDIA_URL }}img/information.png" width="24px" /></h2>
     <p>
@@ -32,14 +62,14 @@
     <p>
         Seafile 适合于以下的应用场合：
         <ul>
-            <li>对文件资料进行版本管理和压缩备份。</li>
+            <li>对文件资料进行版本管理。</li>
             <li>个人在多台电脑间同步数据。</li>
             <li>一个小组共同维护一个文件仓库， 比如建立一个电子书的仓库。 </li>
         </ul>
     </p>
 
     <p>
-        Seafile 采用了以用户<strong>个人计算机为中心的设计方法</strong>。 我们提供了一个本地的文件资料管理工具。 用户可以从任意一个文件夹创建一个 Seafile 文件盒。 文件盒记下了文件夹每一个历史状态， 可以压缩、加密、导出历史文件。 这些操作均无需联网。 
+        Seafile 采用了以用户<strong>个人计算机为中心的设计方法</strong>。 我们提供了一个本地的文件资料管理工具。 用户可以从任意一个文件夹创建一个 Seafile 文件盒。 文件盒记下了文件夹每一个历史状态， 可以加密、导出历史文件。 这些操作均无需联网。 
     </p>
 
     <p>联网后， 用户可以在<strong>任意两台计算机之间进行数据同步</strong>。 为了支持非同时在线的用户间的数据同步， 用户可以选择一台服务器为文件的中转站(我们也把服务器叫做<strong>中继</strong>)。 通过中继， 多个用户就可以更加方便的进行文件的同步。
@@ -55,33 +85,9 @@
 
     <p>Ccnet/Seafile 项目就是为了接近这样的一个目标： 只要我们能联网， 不一定要借助于服务器， 我们就能方便的进行信息的传递和数据同步。 Ccnet 解决按照用户所需进行互联的问题， Seafile 解决同步的问题。</p>
 
-    <p>从 2009 年开始， 经过三年多的摸索和开发， 我们终于做出了一个可以工作的系统。 虽然离原来的目标还有一段不小的距离， 但是已经可以作为一个能对大众开放使用的产品了。</p>
+    <p>从 2009 年开始， 经过三年多的摸索和开发， 我们终于做出了一个可以工作的产品， 并提供给大众使用。</p>
 </div>
 
-<div id="seafile-feature">
-<h2>Seafile 特色 <img src="{{ MEDIA_URL }}img/feature.png" width="24px" /></h2>
-
-<p>
-<ul>
-    <li><lable>用户可以创建<strong>多个文件盒</strong>。 每个文件盒可以放置任意的文件和目录， 可以单独的设置权限、加密、共享和同步参数。</li>
-    <li>完整的本地版本历史。 不用联网， 用户就可以浏览文件的<strong>任意一个版本</strong>, 可以找回任意一个删除的文件。</li>
-    <li>安全可靠的同步功能。 每次同步会做一个新的版本记录， 原来的文件状态得到<strong>完整的保存</strong>， 不用担心同步过程丢失文件或丢失对文件的修改。</li>
-    <li>安全的协同工作。 多人协作下， 可以看到他人所做的改动， 合并他人的修改(尚未完善)。 完整的版本历史保证绝不会丢失自己的修改。 </li>
-    <li>最后， 也是最重要的， <strong>数据的安全性</strong>。 服务器的功能只限于数据的中转， 你可以自己搭建服务器， <strong>随时把数据同步到另一台服务器</strong>。 </li>
-</ul>
-</p>
-</div>
-
-
-<div id="seafile-design">
-
-<h2>Seafile 设计理念 <img src="{{ MEDIA_URL }}img/design.png" width="24px" /></h2>
-
-<ul>
-    <li>专注于文件的个人管理和协同管理, 打造一件精巧好用的工具。</li>
-    <li>让用户完全自主的控制数据， 每一步对数据的操作用户都可以控制。</li>
-    <li>功能的丰富性和可扩展性， 满足用户在文件管理上的各种需求。</li>
-</ul>
 
 </div> <!-- home page -->
 

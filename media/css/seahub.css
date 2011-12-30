@@ -97,6 +97,7 @@ input[type=submit]:hover { border: 1px solid #80B0B0; background: #FFF; }
 /* home */
 #home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
 strong { color:#808; font-weight: normal; }
+.home-page h2 { color: #e83; }
 #main-show {
     margin: 0 0 50px 50px; padding: 10px 10px;
     border-radius: 3px; -moz-border-radius: 3px;
@@ -115,26 +116,30 @@ strong { color:#808; font-weight: normal; }
     background-position:left 11px;
     line-height: 32px;
 }
+#seafile-show .show-item { 
+    margin: 20px 0 0 0;
+    width: 420px; height: 140px; float: left;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 3px; -moz-border-radius: 3px;
+}
+#seafile-show .show-item2 { 
+    margin: 20px 0 0 50px; width: 420px; height: 140px; float: left; 
+    padding: 10px;
+    border: 1px solid #f8f8f8;
+    background: #f8f8f8;
+    border-radius: 3px; -moz-border-radius: 3px;    
+}
+#seafile-show img { float: left; margin: 0 8px 8px 0; }
+#seafile-show p { color: #333; font-size: 15px; margin-left: 10px; }
 #seafile-what {
+    margin-top: 20px;
     float: left;
     width: 440px;
 }
 #seafile-history {
     float: left;
-    margin: 0 0 0 70px;
+    margin: 20px 0 0 70px;
     width: 440px;
-}
-#seafile-feature {
-    clear: both;
-}
-#seafile-feature ul {
-    padding: 10px 40px;
-    border-radius: 3px; -moz-border-radius:3px;
-    background: #f0f0f0;
-}
-#seafile-design ul {
-    padding: 10px 40px;
-    border-radius: 3px; -moz-border-radius:3px;
-    background: #f0f0f0;
 }
 div.home-page h2 { font-style: italic; }
