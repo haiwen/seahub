@@ -142,3 +142,6 @@ strong { color:#808; font-weight: normal; }
     width: 440px;
 }
 div.home-page h2 { font-style: italic; }
+/* help pages */
+.help-page { width: 550px; }
+.help-page img { display: block; margin-left: auto; margin: 20px auto; }
