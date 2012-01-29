@@ -152,12 +152,12 @@ def modify_token(request, repo_id):
 @login_required
 def remove_repo(request, repo_id):
     cid = request.user.user_id
-    if not seafserv_rpc.is_repo_owner(cid, repo_id) or not request.user.is_staff:
-        return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+    if not seafserv_rpc.is_repo_owner(cid, repo_id) and not request.user.is_staff:
+        return render_to_response('permission_error.html', {
+            }, context_instance=RequestContext(request))
 
     seafserv_rpc.remove_repo(repo_id)
-
-    return HttpResponseRedirect(reverse(myhome))
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
 
 @login_required
