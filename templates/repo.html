@@ -30,12 +30,12 @@
     </tr>
 </table>
 
-<h3>分支</h3>
+<h3>版本</h3>
 
 <table class="branch-list default">
     <tr>
-        <th>分支名</th>
-        <th>Head Commit</th>
+        <th>版本名</th>
+        <th>最新提交记录</th>
     </tr>
     {% for branch in branches %}
     <tr>
@@ -45,12 +45,12 @@
     {% endfor %}
 </table>
 
-<h3>Commits</h3>
+<h3>提交记录</h3>
 <table class="commit-list default">
     <tr>
         <th>ID</th>
-        <th>Time</th>
-        <th>Discription</th>
+        <th>时间</th>
+        <th>描述</th>
     </tr>
     {% for commit in commits %}
     <tr>

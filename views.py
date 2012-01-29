@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
-    get_repo, get_commits, get_branches, seafile_rpc, get_group
+    get_repo, get_commits, get_branches, \
+    seafserv_rpc
 
 from seahub.profile.models import UserProfile
 from seahub.group.models import GroupRepo
@@ -107,16 +108,16 @@ def group_add_repo(request, group_id):
 def repo(request, repo_id):
     # TODO: check permission
     repo = get_repo(repo_id)
-    commits = get_commits(repo_id)
+    commits = get_commits(repo_id, 0, 1000)
     branches = get_branches(repo_id)
 
     token = ""
     is_owner = False
     if request.user.is_authenticated():
         cid = get_user_cid(request.user)
-        if seafile_rpc.is_repo_owner(cid, repo_id):
+        if seafserv_rpc.is_repo_owner(cid, repo_id):
             is_owner = True
-            token = seafile_rpc.get_repo_token(repo_id)
+            token = seafserv_rpc.get_repo_token(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -138,23 +139,23 @@ def repo_share(request, repo_id):
 @login_required
 def modify_token(request, repo_id):
     cid = get_user_cid(request.user)
-    if not seafile_rpc.is_repo_owner(cid, repo_id):
+    if not seafserv_rpc.is_repo_owner(cid, repo_id):
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
     token = request.POST.get('token', '')
     if token:
-        seafile_rpc.set_repo_token(repo_id, token)
+        seafserv_rpc.set_repo_token(repo_id, token)
 
     return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
 
 @login_required
 def remove_repo(request, repo_id):
-    cid = get_user_cid(request.user)
-    if not seafile_rpc.is_repo_owner(cid, repo_id):
+    cid = request.user.user_id
+    if not seafserv_rpc.is_repo_owner(cid, repo_id) or not request.user.is_staff:
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
-    seafile_rpc.remove_repo(repo_id)
+    seafserv_rpc.remove_repo(repo_id)
 
     return HttpResponseRedirect(reverse(myhome))
     
@@ -162,11 +163,12 @@ def remove_repo(request, repo_id):
 @login_required
 def myhome(request):
     owned_repos = []
-    user_id = request.user.user_id
     quota_usage = 0
+
+    user_id = request.user.user_id
     if user_id:
-        owned_repos = seafile_rpc.list_owned_repos(user_id)
-        quota_usage = seafile_rpc.get_user_quota_usage(user_id)
+        owned_repos = seafserv_rpc.list_owned_repos(user_id)
+        quota_usage = seafserv_rpc.get_user_quota_usage(user_id)
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -183,8 +185,22 @@ def mypeers(request):
 @login_required
 def myrepos(request):
     cid = request.user.user_id
-    owned_repos = seafile_rpc.list_owned_repos(cid)
+    owned_repos = seafserv_rpc.list_owned_repos(cid)
 
-    return render_to_response('myrepos.html', {
+    return render_to_response(
+        'myrepos.html', {
             'owned_repos': owned_repos,
-            }, context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request))
+    
+@login_required
+def seafadmin(request):
+    if not request.user.is_staff:
+        raise Http404
+
+    repos = seafserv_rpc.get_repo_list("", 1000)
+    return render_to_response(
+        'repos.html', {
+            'repos': repos,
+        },
+        context_instance=RequestContext(request))

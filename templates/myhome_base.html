@@ -4,6 +4,11 @@
     <li>
         <a href="{{ SITE_ROOT }}home/my/">我的页面</a>
     </li>
+    {% if request.user.is_staff %}
+    <li>
+        <a href="{{ SITE_ROOT }}seafadmin/">中继管理</a>
+    </li>
+    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}help/">使用帮助</a>
     </li>
