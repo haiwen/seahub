@@ -6,4 +6,4 @@ register = template.Library()
 @register.filter(name='tsstr_sec')
 def tsstr_sec(value):
     """Turn a timestamp to string"""
-    return datetime.utcfromtimestamp(value).strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.fromtimestamp(value).strftime("%Y-%m-%d %H:%M:%S")
