@@ -1,15 +1,16 @@
 {% extends "profile/profile_base.html" %}
 
 
-{% block content %}
+{% block right_panel %}
+<h2>绑定 Ccnet/Seafile 用户 ID</h2>
 
 <form action="" method="post">
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
-    <label>Ccnet User ID:</label><br/>
+    <label>用户 ID:</label><br/>
     <input id="id_ccnet_user_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" maxlength="40" /><br/>
-    <input type="submit" value="更新个人资料" />
+    <input type="submit" value="提交" />
 </form>
 
 {% endblock %}

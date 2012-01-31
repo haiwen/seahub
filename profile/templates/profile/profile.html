@@ -3,35 +3,16 @@
 
 {% block left_panel %}
 <ul>
-  <li><a href="{% url profile_setting %}">修改 Seafile ID</a></li>
-  <li><a href="{% url ccnet_profile_setting %}">上传 Seafile 配置文件</a></li>
-  <li><a href="{% url avatar_change %}">修改头像</a></li>
-  <li><a href="{% url avatar_delete %}">删除不用的头像</a></li>
-  <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改密码</a></li>
+  <li><a href="{% url profile_setting %}">绑定 Ccnet 用户 ID</a></li>
+  <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
 </ul>
 {% endblock %}
 
 
 {% block right_panel %}
 
-<h3>当前头像</h3>
-{% load avatar_tags %}
-{% avatar user 90 %}
-
-
-<h3>Ccnet 当前设置</h3>
+<h3>Ccnet/Seafile 当前设置</h3>
 <p>Ccnet ID: {{ profile.ccnet_user_id }}</p>
 
-
-{% if groups %}
-<h3>加入的组</h3>
-<div id="ccnet-groups">
-  <ul>
-  {% for group in groups %}
-    <li>{{ group.name }}</li>
-  {% endfor %}
-  </ul>
-</div>
-{% endif %}
 
 {% endblock %}

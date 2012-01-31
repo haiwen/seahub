@@ -13,15 +13,13 @@ from seaserv import ccnet_rpc
 
 @login_required
 def show_profile(request):
-    groups = []
     try:
         profile = request.user.get_profile()
     except UserProfile.DoesNotExist:
         profile = UserProfile(user=request.user)
         profile.save()
     return render_to_response('profile/profile.html',
-                              { 'groups': groups,
-                                'profile': profile, },
+                              { 'profile': profile, },
                               context_instance=RequestContext(request))
 
 

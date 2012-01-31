@@ -21,18 +21,9 @@ def get_user_cid(user):
     except UserProfile.DoesNotExist:
         return None
 
-
+@login_required
 def root(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse(myhome))
-    else:
-        return HttpResponseRedirect(reverse(home))
-
-
-def home(request):
-    return render_to_response('home.html', {
-            }, context_instance=RequestContext(request))
-
+    return HttpResponseRedirect(reverse(myhome))
 
 def peers(request):
     peer_type = request.REQUEST.get('type', 'all')
@@ -179,20 +170,8 @@ def myhome(request):
 @login_required
 def mypeers(request):
     cid = get_user_cid(request.user)
-    
 
 
-@login_required
-def myrepos(request):
-    cid = request.user.user_id
-    owned_repos = seafserv_rpc.list_owned_repos(cid)
-
-    return render_to_response(
-        'myrepos.html', {
-            'owned_repos': owned_repos,
-        },
-        context_instance=RequestContext(request))
-    
 @login_required
 def seafadmin(request):
     if not request.user.is_staff:
