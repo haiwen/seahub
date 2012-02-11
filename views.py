@@ -10,16 +10,9 @@ from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     seafserv_rpc
 
 from seahub.profile.models import UserProfile
-from seahub.group.models import GroupRepo
-from seahub.group.forms import GroupAddRepoForm
+from seahub.share.models import GroupShare, UserShare
+from seahub.share.forms import GroupAddRepoForm
 
-
-def get_user_cid(user):
-    try:
-        profile = user.get_profile()
-        return profile.ccnet_user_id
-    except UserProfile.DoesNotExist:
-        return None
 
 @login_required
 def root(request):
@@ -62,7 +55,7 @@ def group(request, group_id):
     """
 
     group = get_group(group_id)
-    shared_repos = GroupRepo.objects.filter(group_id=group_id)
+    shared_repos = GroupShare.objects.filter(group_id=group_id)
     return render_to_response('group.html', {
             'group': group, 'shared_repos': shared_repos,
             }, context_instance=RequestContext(request))
@@ -78,7 +71,7 @@ def group_add_repo(request, group_id):
     if request.method == 'POST':
         form = GroupAddRepoForm(request.POST)
         if form.is_valid():
-            group_repo = GroupRepo()
+            group_repo = GroupShare()
             group_repo.group_id = group_id
             group_repo.repo_id = form.cleaned_data['repo_id']
             try:
@@ -105,7 +98,7 @@ def repo(request, repo_id):
     token = ""
     is_owner = False
     if request.user.is_authenticated():
-        cid = get_user_cid(request.user)
+        cid = request.user.user_id
         if seafserv_rpc.is_repo_owner(cid, repo_id):
             is_owner = True
             token = seafserv_rpc.get_repo_token(repo_id)
@@ -129,7 +122,7 @@ def repo_share(request, repo_id):
 
 @login_required
 def modify_token(request, repo_id):
-    cid = get_user_cid(request.user)
+    cid = request.user.user_id
     if not seafserv_rpc.is_repo_owner(cid, repo_id):
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 

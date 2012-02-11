@@ -32,6 +32,9 @@ urlpatterns = patterns('',
     (r'^seafadmin/$', seafadmin),
     (r'^avatar/', include('avatar.urls')),
     (r'^profile/', include('seahub.profile.urls')),
+
+    (r'^contacts/', include('contacts.urls')),
+    (r'^share/', include('share.urls')),
 )
 
 if settings.DEBUG:

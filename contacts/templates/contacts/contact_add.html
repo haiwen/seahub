@@ -1,0 +1,22 @@
+{% extends "myhome_base.html" %}
+
+{% block left_panel %}
+<ul>
+    <li><a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a></li>
+</ul>
+{% endblock %}
+
+
+{% block right_panel %}
+
+<h2>添加联系人</h2>
+<form action="" method="post">
+    {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+    {% endif %}
+    <label>Email:</label><br/>
+    {{ form.email }}<br/>
+    <input type="submit" value="提交" />
+</form>
+
+{% endblock %}

@@ -20,7 +20,7 @@
         <div class="top-bar">
             <div class="top-bar-in">
                 {% if request.user.is_authenticated %}
-                欢迎, {{ request.user }}.
+                欢迎, {{ request.user.email }}
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
                 {% if request.user.is_staff %}
                 <a href="{{ SITE_ROOT }}admin/">管理</a> 

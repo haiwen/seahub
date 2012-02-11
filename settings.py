@@ -102,7 +102,9 @@ INSTALLED_APPS = (
     'avatar',
     'seahub.base',
     'seahub.profile',
+    'seahub.contacts',
     'seahub.group',
+    'seahub.share',
 )
 
 AUTHENTICATION_BACKENDS = (

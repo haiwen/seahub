@@ -1,0 +1,21 @@
+{% extends "myhome_base.html" %}
+
+{% block left_panel %}
+<ul>
+    <li><a href="{{ SITE_ROOT }}contacts/add/">添加联系人</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+
+<h2>联系人列表</h2>
+<table class="contact-list default">
+{% for contact in contacts %}
+    <tr>
+        <td>{{ contact.user.email }}</td>
+        <td><a href="{{ SITE_ROOT }}share/add/?user_email={{ contact.user.email|urlencode }}">共享</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
