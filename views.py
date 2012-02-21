@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.contrib.auth.models import User
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
@@ -176,3 +177,49 @@ def seafadmin(request):
             'repos': repos,
         },
         context_instance=RequestContext(request))
+
+@login_required
+def useradmin(request):
+    if not request.user.is_staff:
+        raise Http404
+
+    users = User.objects.all()
+    for user in users:
+        try:
+            user.profile = user.get_profile()
+            user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
+            user.role_list = user.ccnet_user.props.role_list.split(',')
+        except UserProfile.DoesNotExist:
+            user.profile = None
+            user.ccnet_user = None
+
+    return render_to_response(
+        'useradmin.html', {
+            'users': users,
+        },
+        context_instance=RequestContext(request))
+
+
+@login_required
+def role_add(request, user_id):
+    if not request.user.is_staff:
+        raise Http404
+
+    if request.method == 'POST':
+        role = request.POST.get('role', '')
+        if role and len(role) <= 16:
+            ccnet_rpc.add_role(user_id, role)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def role_remove(request, user_id):
+    if not request.user.is_staff:
+        raise Http404
+
+    role = request.REQUEST.get('role', '')
+    if role and len(role) <= 16:
+        ccnet_rpc.remove_role(user_id, role)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])

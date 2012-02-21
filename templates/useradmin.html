@@ -1,0 +1,59 @@
+{% extends "myhome_base.html" %}
+
+{% block right_panel %}
+
+<h2>所有用户</h2>
+<table class="user-list default">
+    <tr>
+        <th>邮件</th>
+        <td>激活</td>
+        <td>Ccnet ID</td>
+        <td>角色</td>
+        <td>操作</td>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td>{{ user.email }}</td>
+        <td>{{ user.is_active }}</td>
+        {% if user.profile %}
+        <td>{{ user.profile.ccnet_user_id }}</td>
+        <td>
+            {% for role in user.role_list %}
+            {{ role }}<span class="role-remove-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
+            {% endfor %}
+        </td>
+        <td><button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="hidden">
+
+    <form id="add-role-form" action="" method="post">
+        <p><span id="user_email"></span> 的新角色 (即 MyClient 等)：</p>
+        <input id="id_role" type="text" name="role" /><br/>
+        <input id="id_summit" type="submit" value="Submit" />
+    </form>
+
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+
+$(function() {
+
+$(".add-role-btn").each(function(index, item) {
+    item.onclick = function() {
+        url = "{{ SITE_ROOT }}useradmin/" + $(item).attr("userid") + "/role/add/";
+        $("#add-role-form").attr( { action: url } );
+        $("#add-role-form #user_email").html($(item).attr("email"));
+        $("#add-role-form").modal({appendTo: "#main"});
+    }
+});
+
+});
+</script>
+{% endblock %}

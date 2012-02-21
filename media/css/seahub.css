@@ -147,3 +147,5 @@ div.home-page h2 { font-style: italic; }
 .help-page img { display: block; margin: 20px auto; }
 
 #id_repo_id { width:300px; }
+
+span.role-remove-link { font-size: 9px; }

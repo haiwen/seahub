@@ -14,7 +14,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from seahub.profile.models import UserProfile
- 
+from seaserv import ccnet_rpc 
 
 class EmailOrUsernameModelBackend(object):
     def authenticate(self, username=None, password=None):
@@ -109,8 +109,9 @@ class RegistrationBackend(object):
                                                                     password, site)
         
         userid = kwargs['userid']
-        profile = UserProfile(user=new_user, ccnet_user_id=userid)
-        profile.save()
+        if userid:
+            profile = UserProfile(user=new_user, ccnet_user_id=userid)
+            profile.save()
 
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
@@ -136,6 +137,12 @@ class RegistrationBackend(object):
             # login the user
             activated.backend='django.contrib.auth.backends.ModelBackend' 
             login(request, activated)
+            try:
+                profile = request.user.get_profile()
+                if profile.ccnet_user_id:
+                    ccnet_rpc.add_client(ccnet_user_id)
+            except:
+                pass
 
         return activated
 
@@ -192,7 +199,8 @@ class RegistrationForm(forms.Form):
                              label=_("Email address"))
     userid = forms.RegexField(regex=r'^\w+$',
                               max_length=40,
-                              widget=forms.TextInput(attrs=attrs_dict),
+                              required=False,
+                              widget=forms.TextInput(),
                               label=_("Username"),
                               error_messages={ 'invalid': _("This value must be of length 40") })
 
@@ -209,12 +217,10 @@ class RegistrationForm(forms.Form):
 
         raise forms.ValidationError(_("A user with this email alread"))
 
-
     def clean_userid(self):
-        if len(self.cleaned_data['userid']) != 40:
+        if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:
             raise forms.ValidationError(_("Invalid user id."))
-
-        return self.cleaned_data['userid']        
+        return self.cleaned_data['userid']
 
     def clean(self):
         """

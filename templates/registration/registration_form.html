@@ -3,8 +3,8 @@
 {% block main_panel %}
 <h2>用户注册</h2>
   <form action="" method="post" class="reg">
-    <label for="id_username">用户 ID：</label>
-      {{ form.userid }}
+    <label for="id_username">Ccnet 公钥 ID：</label>
+      {{ form.userid }} (可以以后再绑定)
         {% if form.userid.errors %}
         {{ form.userid.errors }}
         {% endif %}<br />

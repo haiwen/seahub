@@ -1,0 +1,81 @@
+
+About Registration
+==================
+
+We use a customized registration process based on thirdpart/registration. 
+The customization begins with:
+
+   (r'^accounts/', include('base.registration_urls'))
+
+See base.registration_urls to follow the code.
+
+Registration is seperated into two phase: registration and activation.
+
+    Registration Page with Form -----> Registration Complete Page 
+                                      (Notify User to check mail)
+                                           |
+                                           |
+                                           V
+                                     User check email and click activate link
+                                           |
+                                           |
+                                           V
+       User Home Page          <----- Activate and login User.
+                                           
+
+The registration app provide two view functions, i.e., `register` and `activate`.
+
+### Register
+
+The actual registration of the account will be delegated to the
+backend; it will be used as follows:
+
+1. The backend's ``registration_allowed()`` method will be called,
+   passing the ``HttpRequest``, to determine whether registration of
+   an account is to be allowed; if not, a redirect is issued to the
+   view corresponding to the named URL pattern
+   ``registration_disallowed``.
+
+2. The form to use for account registration will be obtained by
+   calling the backend's ``get_form_class()`` method, passing the
+   ``HttpRequest``.
+
+3. If valid, the form's ``cleaned_data`` will be passed (as keyword
+   arguments, and along with the ``HttpRequest``) to the backend's
+   ``register()`` method, which should return the new ``User`` object.
+
+4. Upon successful registration, the backend's
+   ``post_registration_redirect()`` method will be called, passing the
+   ``HttpRequest`` and the new ``User``, to determine the URL to
+   redirect the user to.
+ 
+
+We use a customized backend: seahub.base.accounts.RegistrationBackend
+
+### Registration Process
+
+Process 1:
+1. User register
+2. Admin activate
+3. User login and bind ccnet ID
+
+To Enable this process, just set
+
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = '/tmp/app-messages'
+
+
+Process 2:
+1. User register and active account and bind ccnet ID
+
+
+About Authentication
+====================
+
+We use a custimized authentication method. See
+seahub.base.accounts.EmailOrUsernameModelBackend
+
+AUTHENTICATION_BACKENDS = (
+    'seahub.base.accounts.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
