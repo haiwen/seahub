@@ -223,3 +223,22 @@ def role_remove(request, user_id):
         ccnet_rpc.remove_role(user_id, role)
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def activate_user(request, user_id):
+    """The user id is django user id."""
+
+    if not request.user.is_staff:
+        raise Http404
+
+    try:
+        user = User.objects.get(pk=user_id)
+        user.is_active = True
+        user.save()
+    except User.DoesNotExist:
+        pass
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
+

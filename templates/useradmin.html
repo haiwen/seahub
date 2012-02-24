@@ -6,7 +6,7 @@
 <table class="user-list default">
     <tr>
         <th>邮件</th>
-        <td>激活</td>
+        <td>是否激活</td>
         <td>Ccnet ID</td>
         <td>角色</td>
         <td>操作</td>
@@ -15,12 +15,16 @@
     {% for user in users %}
     <tr>
         <td>{{ user.email }}</td>
-        <td>{{ user.is_active }}</td>
+        <td>{{ user.is_active }}
+            {% if not user.is_active %}
+            <span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/activate/{{ user.id }}/">激活</a>)</span> 
+            {% endif %}
+        </td>
         {% if user.profile %}
         <td>{{ user.profile.ccnet_user_id }}</td>
         <td>
             {% for role in user.role_list %}
-            {{ role }}<span class="role-remove-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
+            {{ role }}<span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
             {% endfor %}
         </td>
         <td><button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button></td>
