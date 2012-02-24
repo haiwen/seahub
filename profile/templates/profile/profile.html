@@ -3,7 +3,7 @@
 
 {% block left_panel %}
 <ul>
-  <li><a href="{% url profile_setting %}">绑定 Ccnet 用户 ID</a></li>
+  <li><a href="{% url profile_setting %}">绑定 Ccnet 公钥 ID</a></li>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
 </ul>
 {% endblock %}
@@ -11,8 +11,8 @@
 
 {% block right_panel %}
 
-<h3>Ccnet/Seafile 当前设置</h3>
-<p>Ccnet ID: {{ profile.ccnet_user_id }}</p>
+<h3>当前设置</h3>
+<p>Ccnet 公钥 ID: {{ profile.ccnet_user_id }}</p>
 
 
 {% endblock %}

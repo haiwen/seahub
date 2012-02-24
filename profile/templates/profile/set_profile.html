@@ -2,14 +2,14 @@
 
 
 {% block right_panel %}
-<h2>绑定 Ccnet/Seafile 用户 ID</h2>
+<h2>绑定 Ccnet/Seafile 公钥 ID</h2>
 
 <form action="" method="post">
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
-    <label>用户 ID:</label><br/>
-    <input id="id_ccnet_user_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" maxlength="40" /><br/>
+    <label>公钥 ID:</label><br/>
+    <input id="id_ccnet_user_id" class="ccnet_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" maxlength="40" /><br/>
     <input type="submit" value="提交" />
 </form>
 

@@ -8,7 +8,13 @@
 
 {% block right_panel %}
 
-<h3>我的文件盒</h3>
+{% if not user.user_id %}
+<div class="notification">
+你还没有绑定 Ccnet/Seafile 公钥 ID, 现在<a href="{{ SITE_ROOT }}profile/edit/">绑定</a>
+</div>
+{% endif %}
+
+<h3>我的同步目录</h3>
 <table class="repo-list default">
     <tr>
         <th>名字</th>

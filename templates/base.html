@@ -38,7 +38,7 @@
             <img src="{{ MEDIA_URL }}img/logo.png" id="logo-img" title="Seafile" alt="Seafile logo" />
             {% if request.user.is_authenticated %}
             <div id="user-info">
-                <span>用户 ID:</span>{{user.user_id}}
+                <span>公钥 ID:</span>{{user.user_id}}
             </div>
             {% else %}
             <div id="logo-info">
@@ -90,7 +90,7 @@
         <div class="clear"></div>
     </div>
     <div id="footer">
-        <p class="fleft">Copyright © 2012 GongGeng. All rights reserved.</p>
+        <p class="fleft">Copyright © 2012 海文互知. All rights reserved.</p>
         <p class="fright">Contact | About</p>
         <div class="clear"></div>
     </div>
