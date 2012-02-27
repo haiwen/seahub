@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_rpc
+    seafserv_threaded_rpc
 
 from seahub.profile.models import UserProfile
 from seahub.share.models import GroupShare, UserShare
@@ -100,9 +100,9 @@ def repo(request, repo_id):
     is_owner = False
     if request.user.is_authenticated():
         cid = request.user.user_id
-        if seafserv_rpc.is_repo_owner(cid, repo_id):
+        if seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
             is_owner = True
-            token = seafserv_rpc.get_repo_token(repo_id)
+            token = seafserv_threaded_rpc.get_repo_token(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -124,12 +124,12 @@ def repo_share(request, repo_id):
 @login_required
 def modify_token(request, repo_id):
     cid = request.user.user_id
-    if not seafserv_rpc.is_repo_owner(cid, repo_id):
+    if not seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
     token = request.POST.get('token', '')
     if token:
-        seafserv_rpc.set_repo_token(repo_id, token)
+        seafserv_threaded_rpc.set_repo_token(repo_id, token)
 
     return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
@@ -137,11 +137,11 @@ def modify_token(request, repo_id):
 @login_required
 def remove_repo(request, repo_id):
     cid = request.user.user_id
-    if not seafserv_rpc.is_repo_owner(cid, repo_id) and not request.user.is_staff:
+    if not seafserv_threaded_rpc.is_repo_owner(cid, repo_id) and not request.user.is_staff:
         return render_to_response('permission_error.html', {
             }, context_instance=RequestContext(request))
 
-    seafserv_rpc.remove_repo(repo_id)
+    seafserv_threaded_rpc.remove_repo(repo_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
 
@@ -152,8 +152,8 @@ def myhome(request):
 
     user_id = request.user.user_id
     if user_id:
-        owned_repos = seafserv_rpc.list_owned_repos(user_id)
-        quota_usage = seafserv_rpc.get_user_quota_usage(user_id)
+        owned_repos = seafserv_threaded_rpc.list_owned_repos(user_id)
+        quota_usage = seafserv_threaded_rpc.get_user_quota_usage(user_id)
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -171,7 +171,7 @@ def seafadmin(request):
     if not request.user.is_staff:
         raise Http404
 
-    repos = seafserv_rpc.get_repo_list("", 1000)
+    repos = seafserv_threaded_rpc.get_repo_list("", 1000)
     return render_to_response(
         'repos.html', {
             'repos': repos,
@@ -189,7 +189,7 @@ def useradmin(request):
             user.profile = user.get_profile()
             user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
             user.role_list = user.ccnet_user.props.role_list.split(',')
-        except UserProfile.DoesNotExist:
+        except:
             user.profile = None
             user.ccnet_user = None
 

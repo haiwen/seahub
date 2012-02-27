@@ -114,6 +114,7 @@ pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool)
 monitor_rpc = seafile.MonitorRpcClient(pool)
 seafserv_rpc = seafile.ServerRpcClient(pool)
+seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool)
 
 user_db = {}
 
@@ -350,146 +351,16 @@ def get_repos():
     Return repository list.
 
     """
-    return seafserv_rpc.get_repo_list("", 100)
+    return seafserv_threaded_rpc.get_repo_list("", 100)
 
 def get_repo(repo_id):
-    return seafserv_rpc.get_repo(repo_id)
-
-def get_repo_sinfo(repo_id):
-    return seafserv_rpc.get_repo_sinfo(repo_id)
+    return seafserv_threaded_rpc.get_repo(repo_id)
 
 def get_commits(repo_id, offset, limit):
     """Get commit lists."""
-    return seafserv_rpc.get_commit_list(repo_id, offset, limit)
-
-def get_commit_tree_block_number(commit_id):
-    return seafserv_rpc.get_commit_tree_block_number(commit_id);
-
-def checkout(repo_id, commit_id):
-    return seafile_threaded_rpc.checkout(repo_id, commit_id)
-
-def get_upload_task_list():
-    return seafserv_rpc.get_upload_task_list()
-
-def get_download_task_list():
-    return seafserv_rpc.get_download_task_list()
+    return seafserv_threaded_rpc.get_commit_list(repo_id, offset, limit)
 
 def get_branches(repo_id):
     """Get branches of a given repo"""
-    return seafserv_rpc.branch_gets(repo_id)
+    return seafserv_threaded_rpc.branch_gets(repo_id)
 
-def list_share_info():
-    return seafserv_rpc.list_share_info(0, 100)
-
-def get_filename(start, ent):
-    i = start + 1
-    lenidx = start - 1
-    while i <= len(ent):
-        tmp = " ".join(ent[start:i])
-        if len(tmp) == int(ent[lenidx]):
-            return (tmp, i)
-        i = i + 1
-    return ("", 0)
-
-def add_to_status_list(lists, status_ent):
-    if status_ent[1] == 'A':
-        filename, index = get_filename(4, status_ent)
-        lists[0].append(filename)
-    elif status_ent[1] == 'D':
-        filename, index = get_filename(4, status_ent)
-        lists[1].append(filename)
-    elif status_ent[1] == 'R':
-        filename1, index1 = get_filename(4, status_ent)
-        filename2, index2 = get_filename(index1 + 1, status_ent)
-        lists[2].append(filename1 + " was moved to " + filename2)
-    elif status_ent[1] == 'M':
-        filename, index = get_filename(4, status_ent)
-        lists[3].append(filename)
-    elif status_ent[1] == 'U':
-        if int(status_ent[2]) == 3:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": Modified by others but removed by me")
-        elif int(status_ent[2]) == 4:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": Modified by me but removed by others")
-        elif int(status_ent[2]) == 6:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": Others change it from directory to a "\
-                    "file while I modified files under that directory")
-        elif int(status_ent[2]) == 5:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": I change it from file to a "\
-                    "directory while others modified this file")
-        elif int(status_ent[2]) == 2:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": Newly added by me and others, with different content")
-        elif int(status_ent[2]) == 1:
-            filename, index = get_filename(4, status_ent)
-            lists[4].append(filename + ": Modified by me and others, with different content")
-
-def get_repo_status(repo_id):
-
-    # New Removed Renamed Modified Conflict
-    lists = ([], [], [], [], [])
-
-    fmt_status = seafile_threaded_rpc.get_repo_status(repo_id)
-    if fmt_status == "":
-        return lists
-
-    status_result = fmt_status[:len(fmt_status)-1]
-
-    for status_ent in status_result.split("\n"):
-        tmp = status_ent.split(" ")
-        # Only display changes in worktree
-        if tmp[0] == 'W':
-            add_to_status_list(lists, tmp)
-
-    return lists
-
-def get_diff(repo_id, arg1, arg2):
-
-    # New Removed Renamed Modified Conflict
-    # conflict is not used
-    lists = ([], [], [], [], [])
-
-    diff_result = seafserv_rpc.get_diff(repo_id, arg1, arg2)
-    if diff_result == "":
-        return lists;
-
-    diff_result = diff_result[:len(diff_result)-1]
-
-    for d in diff_result.split("\n"):
-        tmp = d.split(" ")
-        if tmp[0] == 'C':
-            add_to_status_list(lists, tmp)
-
-    return lists
-
-def list_dir(root_id):
-    dirent_list = seafserv_rpc.list_dir(root_id);
-
-    return dirent_list
-
-######## ccnet-applet API #####
-class CcnetError(Exception):
-
-    def __init__(self, msg):
-        self.msg = msg
-
-    def __str__(self):
-        return self.msg
-
-
-def open_dir(path):
-     """Call remote service `opendir`."""
-     client = pool.get_client()
-     req_id = client.get_request_id()
-     req = "applet-opendir " + os.path.normpath(path)
-     client.send_request(req_id, req)
-     if client.read_response() < 0:
-         raise NetworkError("Read response error")
-     
-     rsp = client.response
-     pool.return_client(client)
-     if rsp[0] != "200":
-         raise CcnetError("Error received: %s %s" % (rsp[0], rsp[1]))
