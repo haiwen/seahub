@@ -114,6 +114,7 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+REGISTRATION_SEND_MAIL = True
 
 try:
     import local_settings

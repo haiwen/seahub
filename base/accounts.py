@@ -106,7 +106,8 @@ class RegistrationBackend(object):
         else:
             site = RequestSite(request)
         new_user = RegistrationProfile.objects.create_inactive_user(username, email,
-                                                                    password, site)
+                                                                    password, site,
+                                                                    send_email=settings.REGISTRATION_SEND_MAIL)
         
         userid = kwargs['userid']
         if userid:
@@ -215,7 +216,7 @@ class RegistrationForm(forms.Form):
         except User.DoesNotExist:
             return self.cleaned_data['email']
 
-        raise forms.ValidationError(_("A user with this email alread"))
+        raise forms.ValidationError(_("A user with this email already"))
 
     def clean_userid(self):
         if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:

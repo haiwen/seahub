@@ -28,12 +28,12 @@ def set_profile(request):
     error_msg = None
     origin_id = None
     if request.method == 'POST':
-        ccnet_user_id = request.POST.get('ccnet_user_id', None)
+        ccnet_user_id = request.POST.get('ccnet_user_id', '').strip()
         origin_id = ccnet_user_id
         if not ccnet_user_id:
-            error_msg = "You must specify ccnet user id"
+            error_msg = "You must specify Key ID"
         elif len(ccnet_user_id) != 40:
-            error_msg = "Ccnet User ID must be of length 40"
+            error_msg = "Key ID must be of length 40"
         else:
             try:
                 profile = request.user.get_profile()
@@ -42,7 +42,7 @@ def set_profile(request):
                 profile.save()
             try:
                 ccnet_rpc.add_client(ccnet_user_id)
-            except:
+            except Exception, e:
                 error_msg = "Ccnet Deamon is not available, try again later"
             else:
                 profile.ccnet_user_id = ccnet_user_id

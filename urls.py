@@ -4,7 +4,7 @@ from django.views.generic.simple import direct_to_template
 
 from seahub.views import root, peers, groups, myhome, \
     repo, group, modify_token, remove_repo, seafadmin, useradmin, \
-    role_add, role_remove, activate_user
+    role_add, role_remove, activate_user, user_add
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -31,7 +31,8 @@ urlpatterns = patterns('',
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
 
     (r'^seafadmin/$', seafadmin),
-    (r'^useradmin/$', useradmin),
+    url(r'^useradmin/$', useradmin, name='useradmin'),
+    (r'^useradmin/add/$', user_add),
     (r'^useradmin/(?P<user_id>[^/]+)/role/add/$', role_add),
     (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),

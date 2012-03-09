@@ -13,7 +13,7 @@ from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
 from seahub.profile.models import UserProfile
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
-
+from forms import AddUserForm
 
 @login_required
 def root(request):
@@ -240,5 +240,28 @@ def activate_user(request, user_id):
         pass
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    
 
+
+@login_required
+def user_add(request):
+    """Add a user"""
+
+    if not request.user.is_staff:
+        raise Http404
+
+    if request.method == 'POST':
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            username = email
+            password = form.cleaned_data['password1']
+            new_user = User.objects.create_user(username, email, password)
+            new_user.is_active = True
+            new_user.save()
+            return HttpResponseRedirect(reverse('useradmin', args=[]))
+    else:
+        form = AddUserForm()
+    
+    return render_to_response("add_user_form.html",  {
+            'form': form, 
+            }, context_instance=RequestContext(request))

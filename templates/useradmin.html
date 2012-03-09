@@ -1,5 +1,13 @@
 {% extends "myhome_base.html" %}
 
+
+{% block left_panel %}
+<ul>
+    <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
+</ul>
+{% endblock %}
+
+
 {% block right_panel %}
 
 <h2>所有用户</h2>
@@ -7,7 +15,7 @@
     <tr>
         <th>邮件</th>
         <td>是否激活</td>
-        <td>Ccnet ID</td>
+        <td>公钥 ID</td>
         <td>角色</td>
         <td>操作</td>
     </tr>
