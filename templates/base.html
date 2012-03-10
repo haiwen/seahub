@@ -38,7 +38,7 @@
             <img src="{{ MEDIA_URL }}img/logo.png" id="logo-img" title="Seafile" alt="Seafile logo" />
             {% if request.user.is_authenticated %}
             <div id="user-info">
-                <span>公钥 ID:</span>{{user.user_id}}
+                <span>个人 ID:</span>{{user.user_id}}
             </div>
             {% else %}
             <div id="logo-info">
