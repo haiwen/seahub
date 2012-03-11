@@ -33,4 +33,23 @@
     {% endfor %}
 </table>
 
+<h3>我用过的同步目录</h3>
+<table class="repo-list default">
+    <tr>
+        <th>名字</th>
+        <th>ID</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+
+    {% for repo in fetched_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock %}
