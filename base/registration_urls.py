@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from django.conf import settings
 
 from registration.views import activate
 from registration.views import register
@@ -27,7 +28,8 @@ urlpatterns = patterns('',
                            name='registration_register'),
                        url(r'^register/complete/$',
                            direct_to_template,
-                           { 'template': 'registration/registration_complete.html' },
+                           { 'template': 'registration/registration_complete.html',
+                             'extra_context': { 'send_mail': settings.REGISTRATION_SEND_MAIL } },
                            name='registration_complete'),
                        url(r'^register/closed/$',
                            direct_to_template,

@@ -61,13 +61,15 @@ Process 1:
 
 To Enable this process, just set
 
-    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-    EMAIL_FILE_PATH = '/tmp/app-messages'
-
+    REGISTRATION_SEND_MAIL = False
 
 Process 2:
-1. User register and active account and bind ccnet ID
+1. User register and receive activation email
+2. User active account and bind ccnet ID
 
+Process 3:
+1. Admin add user
+2. User login and bind ccnet ID
 
 About Authentication
 ====================
