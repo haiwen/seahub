@@ -9,7 +9,7 @@ import datetime
 
 from forms import SetUserProfileForm
 from models import UserProfile, UserCcnetConf
-from seaserv import ccnet_rpc
+from seaserv import ccnet_rpc, translate_time_usec
 
 @login_required
 def show_profile(request):
@@ -18,8 +18,16 @@ def show_profile(request):
     except UserProfile.DoesNotExist:
         profile = UserProfile(user=request.user)
         profile.save()
+
+    try:
+        profile_timestamp = ccnet_rpc.get_user_profile_timestamp(profile.ccnet_user_id)
+        profile_timestamp = translate_time_usec(profile_timestamp)
+    except:
+        profile_timestamp = None
+        
     return render_to_response('profile/profile.html',
-                              { 'profile': profile, },
+                              { 'profile': profile,
+                                'profile_timestamp': profile_timestamp},
                               context_instance=RequestContext(request))
 
 
@@ -43,7 +51,7 @@ def set_profile(request):
             try:
                 ccnet_rpc.add_client(ccnet_user_id)
             except Exception, e:
-                error_msg = "Ccnet Deamon is not available, try again later"
+                error_msg = "Ccnet Daemon is not available, try again later"
             else:
                 profile.ccnet_user_id = ccnet_user_id
                 profile.save()
@@ -101,3 +109,20 @@ def set_ccnet_profile(request):
     return render_to_response('profile/set_ccnet_conf.html',
                               { 'ccnet_profile': ccnet_profile },
                               context_instance=RequestContext(request))
+    
+@login_required
+def download_profile(request):
+    user_id = request.GET.get('user_id', None)
+    err_msg = ''
+    try:
+        profile = ccnet_rpc.get_user_profile(user_id)
+    except Exception as e:
+        err_msg = str(e)
+        profile = None
+
+    if profile:
+        response = HttpResponse(profile, content_type='application/txt')
+        response['Content-Disposition'] = 'attachment; filename=ccnet.profile'
+        return response
+    else:
+        return HttpResponse("Error: " + err_msg)
