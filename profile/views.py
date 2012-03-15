@@ -42,6 +42,8 @@ def set_profile(request):
             error_msg = "You must specify Key ID"
         elif len(ccnet_user_id) != 40:
             error_msg = "Key ID must be of length 40"
+        elif UserProfile.objects.filter(ccnet_user_id=ccnet_user_id).count() != 0:
+            error_msg = "Key ID has been used"
         else:
             try:
                 profile = request.user.get_profile()
