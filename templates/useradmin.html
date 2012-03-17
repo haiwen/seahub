@@ -35,7 +35,10 @@
             {{ role }}<span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
             {% endfor %}
         </td>
-        <td><button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button></td>
+        <td>
+          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button>
+          <button class="remove-user-btn" userid="{{ user.profile.id }}">删除用户</button>
+        </td>
         {% endif %}
     </tr>
     {% endfor %}
@@ -63,6 +66,13 @@ $(".add-role-btn").each(function(index, item) {
         $("#add-role-form").attr( { action: url } );
         $("#add-role-form #user_email").html($(item).attr("email"));
         $("#add-role-form").modal({appendTo: "#main"});
+    }
+});
+
+$(".remove-user-btn").each(function(index, item) {
+    item.onclick = function() {
+        url = "{{ SITE_ROOT }}useradmin/" + $(item).attr("userid") + "/user/remove/";
+        window.location.href = url;
     }
 });
 

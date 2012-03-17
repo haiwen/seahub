@@ -227,6 +227,15 @@ def role_remove(request, user_id):
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required
+def user_remove(request, user_id):
+    if not request.user.is_staff:
+        raise Http404
+
+    user = User.objects.get(id=user_id)
+    user.delete()
+    
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def activate_user(request, user_id):
