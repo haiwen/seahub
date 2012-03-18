@@ -53,6 +53,13 @@
     </form>
 
 </div>
+
+<div id="dialog-delete-confirm" class="hide">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>确认要删除该用户？</p>
+    <button class="remove-user-confirm-btn" data="">删除</button>
+    <button class="simplemodal-close">取消</button>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -69,11 +76,17 @@ $(".add-role-btn").each(function(index, item) {
     }
 });
 
+//delete user dialog
+var del_user_id = "";
 $(".remove-user-btn").each(function(index, item) {
     item.onclick = function() {
-        url = "{{ SITE_ROOT }}useradmin/" + $(item).attr("userid") + "/user/remove/";
-        window.location.href = url;
+        del_user_id = $(item).attr("userid");
+        $("#dialog-delete-confirm").modal({appendTo: "#main"});
     }
+});
+
+$("button.remove-user-confirm-btn").click(function() {
+    location.href = "{{ SITE_ROOT }}useradmin/" + del_user_id + "/user/remove/";
 });
 
 });
