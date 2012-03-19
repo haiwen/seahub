@@ -14,7 +14,7 @@
     {% for repo in repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
-        <td>{{ repo.owner_id}}</td>
+        <td>{{ repo.owner}}</td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
