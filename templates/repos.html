@@ -6,6 +6,7 @@
 <table class="repo-list default">
     <tr>
         <th>名字</th>
+        <th>拥有者</th>
         <th>ID</th>
         <th>描述</th>
         <th>操作</th>
@@ -13,6 +14,7 @@
     {% for repo in repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.owner_id}}</td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>

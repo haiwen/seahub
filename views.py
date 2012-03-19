@@ -175,6 +175,9 @@ def seafadmin(request):
         raise Http404
 
     repos = seafserv_threaded_rpc.get_repo_list("", 1000)
+    for repo in repos:
+        repo.owner_id = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
+        
     return render_to_response(
         'repos.html', {
             'repos': repos,
