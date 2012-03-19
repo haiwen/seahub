@@ -35,11 +35,16 @@
             {{ role }}<span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
             {% endfor %}
         </td>
-        <td>
-          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button>
-          <button class="remove-user-btn" userid="{{ user.profile.id }}">删除用户</button>
-        </td>
+        {% else %}
+        <td></td>
+        <td></td>
         {% endif %}
+        <td>
+          {% if user.profile %}
+          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button>
+          {% endif %}
+          <button class="remove-user-btn" userid="{{ user.id }}">删除用户</button>
+        </td>
     </tr>
     {% endfor %}
 </table>
