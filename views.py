@@ -174,7 +174,22 @@ def seafadmin(request):
     if not request.user.is_staff:
         raise Http404
 
-    repos = seafserv_threaded_rpc.get_repo_list("", 1000)
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        page = 1
+        per_page = 25
+
+    repos_all = seafserv_threaded_rpc.get_repo_list(per_page * (current_page -1), per_page + 1)
+    repos = repos_all[:per_page]
+
+    if len(repos_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
     for repo in repos:
         try:
             owner_id = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
@@ -186,6 +201,11 @@ def seafadmin(request):
     return render_to_response(
         'repos.html', {
             'repos': repos,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
         },
         context_instance=RequestContext(request))
 
