@@ -163,11 +163,29 @@ def myhome(request):
             "fetched_repos": fetched_repos,
             }, context_instance=RequestContext(request))
 
+@login_required
+def ownerhome(request, owner_id):
+    owned_repos = []
+    fetched_repos = []
+    quota_usage = 0
+
+    owner = request.GET.get('owner')
+    if owner_id:
+        owned_repos = seafserv_threaded_rpc.list_owned_repos(owner_id)
+        quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_id)
+        fetched_repos = seafserv_threaded_rpc.list_fetched_repos(owner_id)
+
+    return render_to_response('myhome.html', {
+            "owned_repos": owned_repos,
+            "quota_usage": quota_usage,
+            "fetched_repos": fetched_repos,
+            "owner": owner,
+            }, context_instance=RequestContext(request))
+
 
 @login_required
 def mypeers(request):
     cid = get_user_cid(request.user)
-
 
 @login_required
 def seafadmin(request):
@@ -195,6 +213,7 @@ def seafadmin(request):
             owner_id = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
             owner = UserProfile.objects.get(ccnet_user_id=owner_id).user
             repo.owner = owner.email
+            repo.owner_id = owner_id
         except:
             repo.owner = None
             

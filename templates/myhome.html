@@ -14,7 +14,12 @@
 </div>
 {% endif %}
 
+{% if not owner %}
 <h3>我的同步目录</h3>
+{% else %}
+<h3>{{ owner }}的同步目录</h3>
+{% endif %}
+
 <table class="repo-list default">
     <tr>
         <th>名字</th>
@@ -33,7 +38,11 @@
     {% endfor %}
 </table>
 
+{% if not owner %}
 <h3>我用过的同步目录</h3>
+{% else %}
+<h3>{{ owner }}用过的同步目录</h3>
+{% endif %}
 <table class="repo-list default">
     <tr>
         <th>名字</th>
