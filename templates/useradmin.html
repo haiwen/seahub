@@ -1,6 +1,6 @@
 {% extends "myhome_base.html" %}
 
-
+{% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <ul>
     <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
@@ -11,23 +11,23 @@
 {% block right_panel %}
 
 <h2>所有用户</h2>
-<table class="user-list default">
+<table class="user-list">
     <tr>
-        <th>邮件</th>
-        <td>是否激活</td>
-        <td>个人 ID</td>
-        <td>角色</td>
-        <td>操作</td>
+        <th>邮箱</th>
+        <th>是否激活</th>
+        <th>个人 ID</th>
+        <th>角色</th>
+        <th>操作</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td>{{ user.email }}</td>
-        <td>{{ user.is_active }}
-            {% if not user.is_active %}
-            <span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/activate/{{ user.id }}/">激活</a>)</span> 
-            {% endif %}
-        </td>
+        {% if user.is_active %}
+        <td>已激活</td>
+        {% else %}
+        <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.id }}/" class="activate">激活</button></td>
+        {% endif %}
         {% if user.profile %}
         <td>{{ user.profile.ccnet_user_id }}</td>
         <td>
@@ -68,26 +68,30 @@
 {% endblock %}
 
 {% block extra_script %}
-<script>
-
+<script type="text/javascript">
+    $('.activate').each(function(){
+        $(this).click(function(){
+            location.href = $(this).attr('data');
+        });
+    });
 $(function() {
 
-$(".add-role-btn").each(function(index, item) {
-    item.onclick = function() {
-        url = "{{ SITE_ROOT }}useradmin/" + $(item).attr("userid") + "/role/add/";
-        $("#add-role-form").attr( { action: url } );
-        $("#add-role-form #user_email").html($(item).attr("email"));
+$(".add-role-btn").each(function() {
+    $(this).click(function() {
+        var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
+        $("#add-role-form").attr('action', url);
+        $("#add-role-form #user_email").html($(this).attr("email"));
         $("#add-role-form").modal({appendTo: "#main"});
-    }
+    });
 });
 
 //delete user dialog
 var del_user_id = "";
-$(".remove-user-btn").each(function(index, item) {
-    item.onclick = function() {
-        del_user_id = $(item).attr("userid");
+$(".remove-user-btn").each(function() {
+    $(this).click(function() {
+        del_user_id = $(this).attr("userid");
         $("#dialog-delete-confirm").modal({appendTo: "#main"});
-    }
+    });
 });
 
 $("button.remove-user-confirm-btn").click(function() {

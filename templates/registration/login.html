@@ -3,14 +3,12 @@
 {% block main_panel %}
 <h2>用户登录</h2>
 <form action="" method="post" class="login">
-  <label for="username">帐 号：</label>
-  <input type="text" name="username" value="" id="username"><br />
-  <label for="password">密 码：</label>
-   <input type="password" name="password" value="" id="password"><br />
-    {% if form.errors %}
-    <p class="error">抱歉，您输入的用户名或密码不正确</p>
-    {% endif %}
-    <input type="submit" value="提交" class="lo-reg" />
+  <label for="username">帐号：</label>
+  <input type="text" name="username" value="用户名或注册邮箱" style="color:#666;" /><br />
+  <label for="password">密码：</label>
+   <input type="password" name="password" value="" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="提交" class="submit" />
     <a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
     {% if next %}
     <input type="hidden" name="next" value="{{ next|escape }}" />
@@ -18,13 +16,27 @@
     <input type="hidden" name="next" value="{{ SITE_ROOT }}" />
     {% endif %}
   </form>
+{% endblock %}
+{% block extra_script %}
 <script type="text/javascript">
-  document.getElementById('username').value = '用户名或注册邮箱';
-  document.getElementById('username').style.color = '#666';
-  document.getElementById('username').onclick = function() {
-	document.getElementById('username').value = '';
-	document.getElementById('username').style.color = '#000';
-  }
+var Username_default = $.trim($('input[name="username"]').attr('value'));
+$('input[name="username"]').click(function(){
+        $(this).attr('value','');
+        $(this).removeAttr('style');
+    });
+$('input[type="submit"]').click(function(){
+        if ($.trim($('input[name="username"]').attr('value')) == Username_default || !$.trim($('input[name="username"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请输入帐号。');
+            return false;
+        }
+        if (!$.trim($('input[name="password"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请输入密码。');
+            return false;
+        }
+   });
+    {% if form.errors %}
+    $('.error').removeClass('hide').html('您输入的帐号或密码不正确');
+    {% endif %}
 </script>
 {% endblock %}
 
