@@ -8,9 +8,9 @@
 export PYTHONPATH=/usr/lib/python2.6/site-packages:thirdpart
 
 # The database configuration. Change to your config
-export DBNAME='seafile-meta'
-export DBUSER='seafile-user'
-export DBPASSWD='seafile'
+export DBNAME='seahub-meta'
+export DBUSER='root'
+export DBPASSWD='test'
 
 # Delete the exist seahub tables in database
 python batch-delete.py
@@ -18,7 +18,8 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 
-DUMP_FILE='dump_seahub.json'
+#DUMP_FILE='dump_seahub.json'
+DUMP_FILE='dump_seahub.xml'
 SETTINGS_COPY='mysqlsettings.py'
 SETTINGS_MODULE='mysqlsettings'
 
@@ -31,6 +32,6 @@ sed -i "/DATABASE_PASSWORD/c\DATABASE_PASSWORD = '$DBPASSWD'" $SETTINGS_COPY
 
 ./manage.py syncdb --settings=$SETTINGS_MODULE
 
-./manage.py dumpdata > $DUMP_FILE --settings=settings && ./manage.py loaddata $DUMP_FILE --settings=$SETTINGS_MODULE && echo '[DONE]' || echo '[FAILED]'
+./manage.py dumpdata --format=xml > $DUMP_FILE --settings=settings && ./manage.py loaddata $DUMP_FILE --settings=$SETTINGS_MODULE && echo '[DONE]' || echo '[FAILED]'
 
-rm $DUMP_FILE $SETTINGS_COPY 2> /dev/null
+#rm $DUMP_FILE $SETTINGS_COPY 2> /dev/null
