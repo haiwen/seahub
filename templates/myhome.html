@@ -15,11 +15,7 @@
 </div>
 {% endif %}
 
-{% if not owner %}
 <h3>我的同步目录</h3>
-{% else %}
-<h3>{{ owner }}的同步目录</h3>
-{% endif %}
 {% if owned_repos %}
 <table class="repo-list default">
     <tr>
@@ -42,11 +38,7 @@
 <p>暂无</p>
 {% endif %}
 
-{% if not owner %}
 <h3>我用过的同步目录</h3>
-{% else %}
-<h3>{{ owner }}用过的同步目录</h3>
-{% endif %}
 {% if fetched_repos %}
 <table class="repo-list default">
     <tr>
