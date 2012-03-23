@@ -1,8 +1,9 @@
 {% extends "myhome_base.html" %}
 
+{% block nav_home_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <h3>已用空间</h3>
-{{ quota_usage|filesizeformat }} / 4 GB
+<p>{{ quota_usage|filesizeformat }} / 4 GB</p>
 {% endblock %}
 
 
@@ -10,7 +11,7 @@
 
 {% if not user.user_id %}
 <div class="notification">
-你还没有绑定 Ccnet/Seafile 公钥 ID, 现在<a href="{{ SITE_ROOT }}profile/edit/">绑定</a>
+你还没有绑定 Ccnet/Seafile 公钥 ID。 现在<a href="{{ SITE_ROOT }}profile/edit/">绑定</a>
 </div>
 {% endif %}
 
@@ -19,7 +20,7 @@
 {% else %}
 <h3>{{ owner }}的同步目录</h3>
 {% endif %}
-
+{% if owned_repos %}
 <table class="repo-list default">
     <tr>
         <th>名字</th>
@@ -37,12 +38,16 @@
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<p>暂无</p>
+{% endif %}
 
 {% if not owner %}
 <h3>我用过的同步目录</h3>
 {% else %}
 <h3>{{ owner }}用过的同步目录</h3>
 {% endif %}
+{% if fetched_repos %}
 <table class="repo-list default">
     <tr>
         <th>名字</th>
@@ -60,5 +65,7 @@
     </tr>
     {% endfor %}
 </table>
-
+{% else %}
+<p>暂无</p>
+{% endif %}
 {% endblock %}
