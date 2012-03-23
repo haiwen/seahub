@@ -54,13 +54,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    if ($('.repo-delete-btn')) {
-        $('.repo-delete-btn').each(function() {
-                $(this).click(function() {
-                    location.href = $(this).attr('data');
-                    });
+    $('.repo-delete-btn').each(function() {
+        $(this).click(function() {
+            location.href = $(this).attr('data');
         });
-    }
+    });
 </script>
 {% endblock %}
  

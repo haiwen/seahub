@@ -32,7 +32,7 @@
         <td>{{ user.profile.ccnet_user_id }}</td>
         <td>
             {% for role in user.role_list %}
-            {{ role }}<span class="small-action-link">(<a href="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}">删除</a>)</span> 
+            {{ role }} <button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button><br /> 
             {% endfor %}
         </td>
         {% else %}
@@ -70,6 +70,11 @@
 {% block extra_script %}
 <script type="text/javascript">
     $('.activate').each(function(){
+        $(this).click(function(){
+            location.href = $(this).attr('data');
+        });
+    });
+    $('.role-delete-btn').each(function(){
         $(this).click(function(){
             location.href = $(this).attr('data');
         });
