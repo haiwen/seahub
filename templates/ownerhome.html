@@ -1,0 +1,65 @@
+{% extends "myhome_base.html" %}
+
+{% block nav_home_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<h3>已用空间</h3>
+<p>{{ quota_usage|filesizeformat }} / 4 GB</p>
+{% endblock %}
+
+
+{% block right_panel %}
+
+{% if not owner %}
+<h3>我的同步目录</h3>
+{% else %}
+<h3>{{ owner }}的同步目录</h3>
+{% endif %}
+{% if owned_repos %}
+<table class="repo-list default">
+    <tr>
+        <th>名字</th>
+        <th>ID</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+
+    {% for repo in owned_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+{% if not owner %}
+<h3>我用过的同步目录</h3>
+{% else %}
+<h3>{{ owner }}用过的同步目录</h3>
+{% endif %}
+{% if fetched_repos %}
+<table class="repo-list default">
+    <tr>
+        <th>名字</th>
+        <th>ID</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+
+    {% for repo in fetched_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+{% endblock %}
