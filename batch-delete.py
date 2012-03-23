@@ -16,12 +16,17 @@ except:
     sys.exit(1)
 
 def do_create():
-    conn = MySQLdb.Connect(host='localhost', user=dbuser, passwd=dbpasswd)
+    root_passwd = raw_input("Please enter root password to create database %s: " % dbname)
+
+    conn = MySQLdb.Connect(host='localhost', user='root', passwd=root_passwd)
     cursor = conn.cursor()
 
-    cmd = ( "CREATE DATABASE IF NOT EXISTS `%s` default charset utf8 COLLATE utf8_general_ci;") % (dbname)
+    create_cmd = ( "CREATE DATABASE IF NOT EXISTS `%s` default charset utf8 COLLATE utf8_general_ci;") % (dbname)
+    grant_cmd = ("grant all privileges on %s.* to '%s'@localhost identified by '%s';") % (dbname, dbuser, dbpasswd)
+    
     try:
-        cursor.execute(cmd)
+        cursor.execute(create_cmd)
+        cursor.execute(grant_cmd)
     except:
         pass
 
