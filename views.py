@@ -175,7 +175,7 @@ def ownerhome(request, owner_id):
         quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_id)
         fetched_repos = seafserv_threaded_rpc.list_fetched_repos(owner_id)
 
-    return render_to_response('myhome.html', {
+    return render_to_response('ownerhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "fetched_repos": fetched_repos,
