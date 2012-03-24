@@ -9,13 +9,11 @@
 
 {% block right_panel %}
 
-{% if not user.user_id %}
-<div class="notification">
-你还没有绑定 Ccnet/Seafile 公钥 ID。 现在<a href="{{ SITE_ROOT }}profile/edit/">绑定</a>
-</div>
-{% endif %}
-
+{% if not owner %}
 <h3>我的同步目录</h3>
+{% else %}
+<h3>{{ owner }}的同步目录</h3>
+{% endif %}
 {% if owned_repos %}
 <table class="repo-list default">
     <tr>
@@ -38,7 +36,11 @@
 <p>暂无</p>
 {% endif %}
 
+{% if not owner %}
 <h3>我用过的同步目录</h3>
+{% else %}
+<h3>{{ owner }}用过的同步目录</h3>
+{% endif %}
 {% if fetched_repos %}
 <table class="repo-list default">
     <tr>

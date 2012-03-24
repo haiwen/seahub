@@ -1,8 +1,9 @@
 {% extends "myhome_base.html" %}
 {% block title %}添加用户{% endblock %}
+{% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block main_panel %}
 <h2>添加用户</h2>
-  <form action="" method="post" class="reg">
+  <form action="" method="post" id="user-add-form">
       <label for="id_email">邮箱：</label>
       {{ form.email }}
         {% if form.email.errors %}

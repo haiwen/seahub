@@ -6,11 +6,8 @@
 <meta name="keywords" content="文件 共享" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.png" />
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
 
 {% block extra_style %}{% endblock %}
-
 
 </head>
 <body>
@@ -20,7 +17,7 @@
         <div class="top-bar">
             <div class="top-bar-in">
                 {% if request.user.is_authenticated %}
-                欢迎, {{ request.user.email }}
+                欢迎, {{ request.user }}
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
                 {% if request.user.is_staff %}
                 <a href="{{ SITE_ROOT }}admin/">管理</a> 
@@ -34,9 +31,9 @@
         </div>
     </div>
     <div id="header">
-        <div class="logo">
+        <div class="logo ovhd">
             <img src="{{ MEDIA_URL }}img/logo.png" id="logo-img" title="Seafile" alt="Seafile logo" />
-            {% if request.user.is_authenticated %}
+            {% if request.user.user_id %}
             <div id="user-info">
                 <span>个人 ID:</span>{{user.user_id}}
             </div>
@@ -83,20 +80,18 @@
         <div id="right-panel">
             {% block right_panel %}{% endblock %}
         </div>
-        <div id="main-panel">
+        <div id="main-panel" class="clear">
             {% block main_panel %}{% endblock %}
         </div>
-
-        <div class="clear"></div>
     </div>
-    <div id="footer">
+    <div id="footer" class="ovhd">
         <p class="fleft">Copyright © 2012 海文互知. All rights reserved.</p>
         <p class="fright">Contact | About</p>
-        <div class="clear"></div>
     </div>
 
 </div><!-- wrapper -->
-
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>
