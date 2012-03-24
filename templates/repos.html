@@ -1,9 +1,10 @@
 {% extends "myhome_base.html" %}
+ {% block nav_seafadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-
 <h2>所有同步目录</h2>
-<table class="repo-list default">
+{% if repos %}
+<table class="repo-list">
     <tr>
         <th>名字</th>
         <th>拥有者</th>
@@ -17,7 +18,7 @@
         <td><a href="{{ SITE_ROOT }}home/owner/{{ repo.owner_id }}/?owner={{ repo.owner }}">{{ repo.owner}}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+        <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
     </tr>
     {% endfor %}
 </table>
@@ -46,4 +47,18 @@
     <a href="{{ SITE_ROOT }}seafadmin/?per_page=100" class="per-page">100</a>
     {% endif %}
 </div>
+{% else %}
+<p>暂无</p>
+{% endif %}
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    $('.repo-delete-btn').each(function() {
+        $(this).click(function() {
+            location.href = $(this).attr('data');
+        });
+    });
+</script>
+{% endblock %}
+ 

@@ -58,7 +58,7 @@ div.nav-separator { clear: both; border-top: #DDD 1px solid; border-bottom: none
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
-h2 { font-size:18px; color:#808; }
+h2 { font-size:18px; color:#808; margin-bottom:8px; }
 h3 { font-size:14px; color:#808; font-weight:normal; }
 p { line-height: 20px; margin: 2px 0 12px 0; }
 ol { margin:0; padding:0px 0 0 2em; list-style-position:inside; }
@@ -102,6 +102,9 @@ label { display: inline-block; margin:2px 0px; }
 }
 .login .submit {
     margin-left:3em;
+}
+.login .error {
+    margin:3px 0 0 3em;
 }
 /* form */
 /* forms */
