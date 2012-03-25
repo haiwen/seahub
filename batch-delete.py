@@ -12,9 +12,14 @@ try:
     dbuser = os.environ['DBUSER']
     dbpasswd = os.environ['DBPASSWD']
 except:
-    print 'Environment not set! Exit'
+    sys.stderr.write('Environment not set! Exit\n')
     sys.exit(1)
 
+def check_settings():
+    if settings.DATABASE_ENGINE == 'mysql':
+        sys.stderr.write('[ERROR] Current settings is mysql, need sqlite settings\n')
+        sys.exit(1)
+        
 def do_create():
     root_passwd = raw_input("Please enter root password to create database %s: " % dbname)
 
@@ -41,6 +46,9 @@ def do_delete(prefix):
             pass
     
 if __name__=="__main__":
+    # check current settings.py
+    check_settings()
+    
     # create database if not exists
     do_create()
 
