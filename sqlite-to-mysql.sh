@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Before run the script, you should have created seafile-meta
-# database.
+# Before run the script, edit PYTHONPATH and database configuration
 # Choose NO when promote to create superuser.
 
 # The python path. Change to your path
@@ -12,20 +11,18 @@ export DBNAME='seahub-meta'
 export DBUSER='seafile-user'
 export DBPASSWD='seafile'
 
-# Save sqlite settings
-cp settings.py setting.py.sqlite
-
 # Delete the exist seahub tables in database
 python batch-delete.py
 if [ $? -eq 1 ]; then
     exit 1
 fi
 
-#DUMP_FILE='dump_seahub.json'
+# Save sqlite settings
+cp settings.py settings.py.sqlite
+
 DUMP_FILE='dump_seahub.xml'
 SETTINGS_COPY='mysqlsettings.py'
 SETTINGS_MODULE='mysqlsettings'
-
 
 cp settings.py $SETTINGS_COPY
 sed -i "/DATABASE_ENGINE/c\DATABASE_ENGINE = 'mysql'" $SETTINGS_COPY
