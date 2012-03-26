@@ -32,7 +32,7 @@
         <td>{{ user.profile.ccnet_user_id }}</td>
         <td>
             {% for role in user.role_list %}
-            {{ role }} <button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button><br /> 
+            {{ role }} <!--<button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button>--><br /> 
             {% endfor %}
         </td>
         {% else %}
@@ -41,7 +41,7 @@
         {% endif %}
         <td>
           {% if user.profile %}
-          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button>
+<!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->
           {% endif %}
           <button class="remove-user-btn" userid="{{ user.id }}">删除用户</button>
         </td>
