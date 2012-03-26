@@ -144,6 +144,12 @@ def remove_repo(request, repo_id):
     seafserv_threaded_rpc.remove_repo(repo_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
+@login_required
+def remove_fetched_repo(request, repo_id, user_id):
+    if user_id and repo_id:
+        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
+        
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def myhome(request):
@@ -156,7 +162,7 @@ def myhome(request):
         owned_repos = seafserv_threaded_rpc.list_owned_repos(user_id)
         quota_usage = seafserv_threaded_rpc.get_user_quota_usage(user_id)
         fetched_repos = seafserv_threaded_rpc.list_fetched_repos(user_id)
-
+        
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
