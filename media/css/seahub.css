@@ -12,6 +12,8 @@ ul > li { list-style:none; }
 .errorlist { color: red; }
 .ovhd { overflow:hidden; }
 .bold { font-weight:bold; }
+.mgb10 { margin-bottom:10px; }
+.center { text-align:center; }
 .label { color:#333; font-size:12px; font-style:normal; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
@@ -175,3 +177,6 @@ div.home-page h2 { font-style: italic; }
 span.small-action-link { font-size: 9px; }
 input.ccnet_id { width: 400px; }
 .notification { background:#FDF; width:580px; margin:10px 0; border:1px solid #faf; padding:10px; }
+.repo-list {
+    margin-bottom: 10px;
+}

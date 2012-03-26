@@ -43,7 +43,7 @@
           {% if user.profile %}
 <!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->
           {% endif %}
-          <button class="remove-user-btn" userid="{{ user.id }}">删除用户</button>
+          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/{{ user.id }}/user/remove/">删除用户</button>
         </td>
     </tr>
     {% endfor %}
@@ -59,9 +59,9 @@
 
 </div>
 
-<div id="dialog-delete-confirm" class="hide">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>确认要删除该用户？</p>
-    <button class="remove-user-confirm-btn" data="">删除</button>
+<div id="dialog-delete-confirm" class="center hide">
+    <p>确认要删除？</p>
+    <button id="yes-btn">删除</button>
     <button class="simplemodal-close">取消</button>
 </div>
 
@@ -74,13 +74,6 @@
             location.href = $(this).attr('data');
         });
     });
-    $('.role-delete-btn').each(function(){
-        $(this).click(function(){
-            location.href = $(this).attr('data');
-        });
-    });
-$(function() {
-
 $(".add-role-btn").each(function() {
     $(this).click(function() {
         var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
@@ -90,19 +83,24 @@ $(".add-role-btn").each(function() {
     });
 });
 
-//delete user dialog
-var del_user_id = "";
+//delete confirm
+var Del_url = "";
 $(".remove-user-btn").each(function() {
     $(this).click(function() {
-        del_user_id = $(this).attr("userid");
         $("#dialog-delete-confirm").modal({appendTo: "#main"});
+        Del_url = $(this).attr('data');
     });
 });
 
-$("button.remove-user-confirm-btn").click(function() {
-    location.href = "{{ SITE_ROOT }}useradmin/" + del_user_id + "/user/remove/";
+$('.role-delete-btn').each(function(){
+    $(this).click(function(){
+        $("#dialog-delete-confirm").modal({appendTo: "#main"});
+        Del_url = $(this).attr('data');
+    });
 });
 
+$('#yes-btn').click(function() {
+    location.href = Del_url;
 });
 </script>
 {% endblock %}
