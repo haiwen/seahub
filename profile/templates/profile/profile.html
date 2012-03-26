@@ -3,9 +3,7 @@
 
 {% block left_panel %}
 <ul>
-  {% if not profile.ccnet_user_id %}
   <li><a href="{% url profile_setting %}">绑定个人 ID</a></li>
-  {% endif %}
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
 </ul>
 {% endblock %}
