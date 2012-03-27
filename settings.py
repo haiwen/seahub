@@ -99,7 +99,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'registration',
-    'avatar',
+#    'avatar',
     'seahub.base',
     'seahub.profile',
 #    'seahub.contacts',
@@ -137,10 +137,10 @@ else:
             globals()[attr] = getattr(local_settings, attr)
 
 #avatar
-AVATAR_STORAGE_DIR = 'avatars'
+#AVATAR_STORAGE_DIR = 'avatars'
 
-AVATAR_GRAVATAR_BACKUP = False
-AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
+#AVATAR_GRAVATAR_BACKUP = False
+#AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 

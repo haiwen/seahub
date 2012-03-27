@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
     (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
-    (r'^avatar/', include('avatar.urls')),
+#    (r'^avatar/', include('avatar.urls')),
     (r'^profile/', include('seahub.profile.urls')),
 
     (r'^contacts/', include('contacts.urls')),
