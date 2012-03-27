@@ -62,25 +62,10 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
-<div id="delete-confirm" class="center hide">
-    <p>确定要删除吗？</p>
-    <button id="yes-btn">删除</button>
-    <button class="simplemodal-close">取消</button>
-</div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-var Del_url = '';
-$('.repo-delete-btn').each(function() {
-    $(this).click(function() {
-        $('#delete-confirm').modal({appendTo:'#main'});
-        Del_url = $(this).attr('data');
-    });
-});
-$('#yes-btn').click(function() {
-    location.href = Del_url;
-});
+addConfirmTo($('.repo-delete-btn'));
 </script>
 {% endblock %}

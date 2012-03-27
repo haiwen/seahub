@@ -83,6 +83,11 @@
         <div id="main-panel" class="clear">
             {% block main_panel %}{% endblock %}
         </div>
+        <div id="dialog-delete-confirm" class="center hide">
+            <p>确定要删除？</p>
+            <button id="yes-btn">确定</button>
+            <button class="simplemodal-close">取消</button>
+        </div>
     </div>
     <div id="footer" class="ovhd">
         <p class="fleft">Copyright © 2012 海文互知. All rights reserved.</p>
@@ -92,6 +97,7 @@
 </div><!-- wrapper -->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>
