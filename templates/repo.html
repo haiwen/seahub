@@ -5,36 +5,37 @@
 
 <h2>{{repo.props.name}}</h2>
 
-<form id="modify-token-form" action="{{ SITE_ROOT }}repo/token/modify/{{repo.props.id}}/" method="post">
-    <p>新口令:</p>
+<form id="modify-token-form" action="{{ SITE_ROOT }}repo/token/modify/{{repo.props.id}}/" method="post" class="hide">
+    <h3>新口令:</h3>
     <input id="id_token" type="text" name="token" /><br/>
     <input id="id_summit" type="submit" value="提交" />
 </form>
 
-<table class="default">
+<h3>基本信息</h3>
+<table class="mgb10">
     <tr>
-        <td>ID</td>
+        <th>ID</th>
         <td>{{repo.props.id}}</td>
     </tr>
     <tr>
-        <td>描述</td>
+        <th>描述</th>
         <td>{{repo.props.desc}}</td>
     </tr>
     <tr>
-        <td>访问口令</td>
+        <th>访问口令</th>
         {% if is_owner %}
-        <td>{{token}} <input type="button" id="modify-token-btn" value="修改" /></td>
+        <td>{{token}} <button id="modify-token-btn">修改</button></td>
         {% else %}
-        <td>只有拥有者可见</td>
+        <td>只有同步目录拥有者可见</td>
         {% endif %}
     </tr>
 </table>
 
-<h3>提交记录</h3>
-<table class="commit-list default">
+<h3>修改记录</h3>
+<table>
     <tr>
         <!-- <th>ID</th> -->
-        <th>时间</th>
+        <th>修改时间</th>
         <th>描述</th>
     </tr>
     {% for commit in commits %}
@@ -54,8 +55,6 @@ $(function() {
     $("#modify-token-btn").click(function() {
         $("#modify-token-form").modal({appendTo: "#main"}); 
     });
-    
-    $("#modify-token-form").hide();
 })
 </script>
 {% endblock %}

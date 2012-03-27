@@ -49,15 +49,11 @@
     {% endfor %}
 </table>
 
-<div class="hidden">
-
-    <form id="add-role-form" action="" method="post">
-        <p><span id="user_email"></span> 的新角色 (即 MyClient 等)：</p>
-        <input id="id_role" type="text" name="role" /><br/>
-        <input id="id_summit" type="submit" value="Submit" />
-    </form>
-
-</div>
+<form id="add-role-form" action="" method="post" class="hide">
+    <p><span id="user_email"></span> 的新角色 (即 MyClient 等)：</p>
+    <input id="id_role" type="text" name="role" /><br/>
+    <input id="id_summit" type="submit" value="提交" />
+</form>
 
 <div id="dialog-delete-confirm" class="center hide">
     <p>确认要删除？</p>

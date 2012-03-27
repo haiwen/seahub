@@ -15,7 +15,7 @@
 <h3>{{ owner }}的同步目录</h3>
 {% endif %}
 {% if owned_repos %}
-<table class="repo-list default">
+<table class="repo-list">
     <tr>
         <th>名字</th>
         <th>ID</th>
@@ -28,7 +28,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+        <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
     </tr>
     {% endfor %}
 </table>
@@ -42,7 +42,7 @@
 <h3>{{ owner }}用过的同步目录</h3>
 {% endif %}
 {% if fetched_repos %}
-<table class="repo-list default">
+<table class="repo-list">
     <tr>
         <th>名字</th>
         <th>ID</th>
@@ -55,11 +55,32 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a></td>
+        <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
     </tr>
     {% endfor %}
 </table>
 {% else %}
 <p>暂无</p>
 {% endif %}
+
+<div id="delete-confirm" class="center hide">
+    <p>确定要删除吗？</p>
+    <button id="yes-btn">删除</button>
+    <button class="simplemodal-close">取消</button>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+var Del_url = '';
+$('.repo-delete-btn').each(function() {
+    $(this).click(function() {
+        $('#delete-confirm').modal({appendTo:'#main'});
+        Del_url = $(this).attr('data');
+    });
+});
+$('#yes-btn').click(function() {
+    location.href = Del_url;
+});
+</script>
 {% endblock %}

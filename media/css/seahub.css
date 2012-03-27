@@ -2,7 +2,6 @@ body,div,h1,h2,h3,h4,h5,h6,p,ul,li,blockquote,form,input,button,img { margin:0; 
 ul > li { list-style:none; }
 .error { color:red; }
 .float_left { float:left; }
-.hidden { display:none }
 .clear { clear:both; }
 .fleft { float:left }
 .fright { float:right }
@@ -18,7 +17,7 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 /* table */
-table { border-spacing: 0; border-collapse: collapse; }
+table { border-spacing: 0; border-collapse: collapse; margin:3px 0 5px; }
 td, th { padding: 3px; border: 1px solid #aaa; }
 th { color:#808; }
 tr.even { background-color: #FAFAFA; }
@@ -178,5 +177,5 @@ span.small-action-link { font-size: 9px; }
 input.ccnet_id { width: 400px; }
 .notification { background:#FDF; width:580px; margin:10px 0; border:1px solid #faf; padding:10px; }
 .repo-list {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
