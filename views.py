@@ -270,11 +270,11 @@ def repo_list_dir(request, repo_id):
         repo = seafserv_threaded_rpc.get_repo(repo_id)
         if not request.GET.get('root_id'): # No root id..?
             # ..use HEAD commit's root id
-            commit = seafserv_threaded_rpc.get_commit(repo.props.head_cmmt_id)
+            commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
             root_id = commit.props.root_id
         else:
             root_id = request.GET.get('root_id')
-        dirs = seafserv_threaded_rpc.list_dir(root_id)
+        dirs = seafserv_rpc.list_dir(root_id)
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
                 dirent.is_dir = True
