@@ -36,6 +36,18 @@
                 <td>只有同步目录拥有者可见</td>
                 {% endif %}
             </tr>
+            <tr>
+              <td>公共访问</td>
+              {% if is_owner %}
+              {% if is_public %}
+              <td><input type="checkbox" id="public-access-ckbx" checked>允许任何人查看该同步目录</td>
+              {% else %}
+              <td><input type="checkbox" id="public-access-ckbx">允许任何人查看该同步目录</td>
+              {% endif %}
+              {% else %}
+              <td>只有拥有者可选</td>
+              {% endif %}
+            </tr>
         </table>
     </div>
 
@@ -98,5 +110,12 @@ $('#token-show-switch').click(function() {
         }
     });
 $('#tabs').tabs({cookie: {expires: 1}});
+$("#public-access-ckbx").click(function() {
+    if($("#public-access-ckbx").get(0).checked) {
+        location.href = "{{ SITE_ROOT }}repo/setpublic/{{ repo.props.id }}/";
+    } else {
+        location.href = "{{ SITE_ROOT }}repo/unsetpublic/{{ repo.props.id }}/";
+    }
+})
 </script>
 {% endblock %}

@@ -145,3 +145,6 @@ LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 # profile
 #AUTH_PROFILE_MODULE = "profile.UserProfile"
+
+# seafile httpserver address and port
+HTTP_SERVER_ROOT = "http://localhost:8082"
