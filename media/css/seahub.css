@@ -179,3 +179,7 @@ input.ccnet_id { width: 400px; }
 .repo-list {
     margin-bottom: 12px;
 }
+/*repo page*/
+#token-show-switch {
+    height:auto;
+}

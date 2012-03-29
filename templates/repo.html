@@ -24,7 +24,7 @@
     <tr>
         <th>访问口令</th>
         {% if is_owner %}
-        <td>{{token}} <button id="modify-token-btn">修改</button></td>
+        <td><span id="token">*****</span> <input type="checkbox" name="token-show-switch" id="token-show-switch" /><label for="token-show-switch">显示</label> <button id="modify-token-btn">修改</button></td>
         {% else %}
         <td>只有同步目录拥有者可见</td>
         {% endif %}
@@ -56,5 +56,12 @@ $(function() {
         $("#modify-token-form").modal({appendTo: "#main"}); 
     });
 })
+$('#token-show-switch').click(function() {
+        if ($(this).attr('checked')) {
+            $('#token').html('{{token}}');
+        } else {
+            $('#token').html('*****');
+        }
+    });
 </script>
 {% endblock %}
