@@ -11,3 +11,7 @@ function addConfirmTo(ele) {
 $('#yes-btn').click(function() {
     location.href = Del_url;
 });
+//handle table
+$("table tr:nth-child(even)").addClass("even");
+$("table tr:nth-child(odd)").addClass("odd");
+
