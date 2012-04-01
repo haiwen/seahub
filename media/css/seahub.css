@@ -17,8 +17,8 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 /* table */
-table { border-spacing: 0; border-collapse: collapse; width:740px; margin:3px 0 5px; }
-td, th { padding: 3px; /*border: 1px solid #aaa;*/ }
+table { border-spacing: 0; border-collapse: collapse; width:770px; margin:3px 0 5px; }
+td, th { padding: 3px; word-break:break-word; }
 th { /*color:#808;*/ color:#333; text-align:left; }
 tr.even { background-color: #FAFAFA; }
 tr.odd { background-color: #EBEBEB; }
