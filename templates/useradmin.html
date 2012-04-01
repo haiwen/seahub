@@ -54,13 +54,6 @@
     <input id="id_role" type="text" name="role" /><br/>
     <input id="id_summit" type="submit" value="提交" />
 </form>
-
-<div id="dialog-delete-confirm" class="center hide">
-    <p>确认要删除？</p>
-    <button id="yes-btn">删除</button>
-    <button class="simplemodal-close">取消</button>
-</div>
-
 {% endblock %}
 
 {% block extra_script %}
@@ -71,32 +64,15 @@
         });
     });
 $(".add-role-btn").each(function() {
-    $(this).click(function() {
-        var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
-        $("#add-role-form").attr('action', url);
-        $("#add-role-form #user_email").html($(this).attr("email"));
-        $("#add-role-form").modal({appendTo: "#main"});
-    });
-});
-
+        $(this).click(function() {
+            var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
+            $("#add-role-form").attr('action', url);
+            $("#add-role-form #user_email").html($(this).attr("email"));
+            $("#add-role-form").modal({appendTo: "#main"});
+            });
+        });
 //delete confirm
-var Del_url = "";
-$(".remove-user-btn").each(function() {
-    $(this).click(function() {
-        $("#dialog-delete-confirm").modal({appendTo: "#main"});
-        Del_url = $(this).attr('data');
-    });
-});
-
-$('.role-delete-btn').each(function(){
-    $(this).click(function(){
-        $("#dialog-delete-confirm").modal({appendTo: "#main"});
-        Del_url = $(this).attr('data');
-    });
-});
-
-$('#yes-btn').click(function() {
-    location.href = Del_url;
-});
+addConfirmTo($('.remove-user-btn'));
+addConfirmTo($('.role-delete-btn'));
 </script>
 {% endblock %}

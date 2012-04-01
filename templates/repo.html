@@ -11,42 +11,76 @@
     <input id="id_summit" type="submit" value="提交" />
 </form>
 
-<h3>基本信息</h3>
-<table class="mgb10">
-    <tr>
-        <th>ID</th>
-        <td>{{repo.props.id}}</td>
-    </tr>
-    <tr>
-        <th>描述</th>
-        <td>{{repo.props.desc}}</td>
-    </tr>
-    <tr>
-        <th>访问口令</th>
-        {% if is_owner %}
-        <td>{{token}} <button id="modify-token-btn">修改</button></td>
-        {% else %}
-        <td>只有同步目录拥有者可见</td>
-        {% endif %}
-    </tr>
-</table>
+<div id="tabs">
+    <ul>
+        <li><a href="#basic-info">基本信息</a></li>
+        <li><a href="#history">历史</a></li>
+    </ul>
 
-<h3>修改记录</h3>
-<table>
-    <tr>
-        <!-- <th>ID</th> -->
-        <th>修改时间</th>
-        <th>描述</th>
-    </tr>
-    {% for commit in commits %}
-    <tr>
-        <!-- <td>{{ commit.props.id }}</td> -->
-        <td>{{ commit.props.ctime|tsstr_sec }}</td>
-        <td>{{ commit.props.desc }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <div id="basic-info">
+        <h3>基本信息</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{repo.props.id}}</td>
+            </tr>
+            <tr>
+                <th>描述</th>
+                <td>{{repo.props.desc}}</td>
+            </tr>
+            <tr>
+                <th>访问口令</th>
+                {% if is_owner %}
+                <td><span id="token">*****</span> <input type="checkbox" name="token-show-switch" id="token-show-switch" /><label for="token-show-switch">显示</label> <button id="modify-token-btn">修改</button></td>
+                {% else %}
+                <td>只有同步目录拥有者可见</td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
 
+    <div id="history">
+        <h3>修改记录</h3>
+        <table>
+            <tr>
+                <!-- <th>ID</th> -->
+                <th>修改时间</th>
+                <th>描述</th>
+            </tr>
+            {% for commit in commits %}
+            <tr>
+                <!-- <td>{{ commit.props.id }}</td> -->
+                <td>{{ commit.props.ctime|tsstr_sec }}</td>
+                <td>{{ commit.props.desc }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div id="paginator">
+            {% if current_page != 1 %}
+            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+            {% endif %}
+            {% if page_next %}
+            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+            {% endif %}
+            <span>每页：</span> 
+            {% if per_page == 25 %}
+            <span> 25 </span> 
+            {% else %}
+            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=25" class="per-page">25</a>
+            {% endif %}
+            {% if per_page == 50 %}
+            <span> 50 </span> 
+            {% else %}
+            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=50" class="per-page">50</a>
+            {% endif %}
+            {% if per_page == 100 %}
+            <span> 100 </span> 
+            {% else %}
+            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=100" class="per-page">100</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
@@ -56,5 +90,13 @@ $(function() {
         $("#modify-token-form").modal({appendTo: "#main"}); 
     });
 })
+$('#token-show-switch').click(function() {
+        if ($(this).attr('checked')) {
+            $('#token').html('{{token}}');
+        } else {
+            $('#token').html('*****');
+        }
+    });
+$('#tabs').tabs({cookie: {expires: 1}});
 </script>
 {% endblock %}

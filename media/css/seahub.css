@@ -17,11 +17,13 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 /* table */
-table { border-spacing: 0; border-collapse: collapse; margin:3px 0 5px; }
-td, th { padding: 3px; border: 1px solid #aaa; }
-th { color:#808; }
+table { border-spacing: 0; border-collapse: collapse; width:740px; margin:3px 0 5px; }
+td, th { padding: 3px; /*border: 1px solid #aaa;*/ }
+th { /*color:#808;*/ color:#333; text-align:left; }
 tr.even { background-color: #FAFAFA; }
-tr.odd { background-color: #E0E0E0; }
+tr.odd { background-color: #EBEBEB; }
+.even th { background:#eee; }
+.odd th { background:#ddd; }
 tr.first { background-color: #00FF00; }
 /* container */
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
@@ -178,4 +180,15 @@ input.ccnet_id { width: 400px; }
 .notification { background:#FDF; width:580px; margin:10px 0; border:1px solid #faf; padding:10px; }
 .repo-list {
     margin-bottom: 12px;
+}
+/*repo page*/
+#token-show-switch {
+    height:auto;
+}
+.ui-tabs {
+    padding:1em;
+}
+.ui-tabs .ui-tabs-nav, 
+.ui-tabs .ui-tabs-panel {
+    padding: 0;
 }

@@ -93,7 +93,22 @@ def group_add_repo(request, group_id):
 def repo(request, repo_id):
     # TODO: check permission
     repo = get_repo(repo_id)
-    commits = get_commits(repo_id, 0, 1000)
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        page = 1
+        per_page = 25
+
+    commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+    commits = commits_all[:per_page]
+
+    if len(commits_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+
     branches = get_branches(repo_id)
 
     token = ""
@@ -107,6 +122,11 @@ def repo(request, repo_id):
     return render_to_response('repo.html', {
             "repo": repo,
             "commits": commits,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
             "branches": branches,
             "is_owner": is_owner,
             "token": token,
