@@ -28,17 +28,16 @@
         {% else %}
         <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.id }}/" class="activate">激活</button></td>
         {% endif %}
-        {% if user.profile %}
-        <td>{{ user.profile.ccnet_user_id }}</td>
+        {% if user.user_id %}
+        <td>{{ user.user_id }}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
         <td>
             {% for role in user.role_list %}
             {{ role }} <!--<button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button>--><br /> 
             {% endfor %}
         </td>
-        {% else %}
-        <td></td>
-        <td></td>
-        {% endif %}
         <td>
           {% if user.profile %}
 <!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->

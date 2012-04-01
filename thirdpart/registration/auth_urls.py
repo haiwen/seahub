@@ -27,6 +27,8 @@ from django.conf.urls.defaults import *
 
 from django.contrib.auth import views as auth_views
 
+from seahub.views import password_change
+
 
 urlpatterns = patterns('',
                        url(r'^login/$',
@@ -38,7 +40,7 @@ urlpatterns = patterns('',
                            {'template_name': 'registration/logout.html'},
                            name='auth_logout'),
                        url(r'^password/change/$',
-                           auth_views.password_change,
+                           password_change,
                            name='auth_password_change'),
                        url(r'^password/change/done/$',
                            auth_views.password_change_done,

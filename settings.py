@@ -145,4 +145,4 @@ else:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 # profile
-AUTH_PROFILE_MODULE = "profile.UserProfile"
+#AUTH_PROFILE_MODULE = "profile.UserProfile"

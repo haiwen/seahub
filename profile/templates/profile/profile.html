@@ -3,7 +3,6 @@
 
 {% block left_panel %}
 <ul>
-  <li><a href="{% url profile_setting %}">绑定个人 ID</a></li>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
 </ul>
 {% endblock %}
@@ -13,14 +12,12 @@
 
 <h2>当前设置</h2>
 <ul>
-    {% if profile.ccnet_user_id %}
-    <li><span class="bold">个人 ID：</span>{{ profile.ccnet_user_id }}</li>
-    {% else %}
-    <li><span class="bold">个人 ID：</span>您还没绑定。<a href="{% url profile_setting %}">现在绑定</a></li>
+    {% if user_id %}
+    <li><span class="bold">个人 ID：</span>{{ user_id }}</li>
     {% endif %}
 
 {% if profile_timestamp %} 
-<li><span class="bold">帐号文件：</span>您的加密后的帐号文件上传于{{ profile_timestamp }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{profile.ccnet_user_id}}">点此下载</a></li>
+<li><span class="bold">帐号文件：</span>您的加密后的帐号文件上传于{{ profile_timestamp }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{ user_id }}">点此下载</a></li>
 {% else %}
 <li><span class="bold">帐号文件：</span>您的帐号文件还未上传，请在本地 seafile 界面 "帐号" 标签下上传</li>
 {% endif %}

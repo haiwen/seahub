@@ -1,5 +1,4 @@
-
-from seahub.profile.models import UserProfile
+from seaserv import ccnet_rpc
 
 class UseridMiddleware(object):
     """Store ccnet user id in request.user.user_id"""
@@ -9,9 +8,8 @@ class UseridMiddleware(object):
             return None
 
         try:
-            profile = request.user.get_profile()
-            request.user.user_id = profile.ccnet_user_id
-        except UserProfile.DoesNotExist:
+            request.user.user_id = ccnet_rpc.get_binding_userid(request.user.username)
+        except:
             request.user.user_id = ''
 
         return None

@@ -8,16 +8,13 @@ from django.core.urlresolvers import reverse
 import datetime
 
 from forms import SetUserProfileForm
-from models import UserProfile, UserCcnetConf
+from models import UserCcnetConf
+
 from seaserv import ccnet_rpc, translate_time_usec
 
 @login_required
 def show_profile(request):
-    try:
-        profile = request.user.get_profile()
-    except UserProfile.DoesNotExist:
-        profile = UserProfile(user=request.user)
-        profile.save()
+    user_id = ccnet_rpc.get_binding_userid(request.user.username)
 
     try:
         profile_timestamp = ccnet_rpc.get_user_profile_timestamp(profile.ccnet_user_id)
@@ -25,51 +22,42 @@ def show_profile(request):
     except:
         profile_timestamp = None
         
-    return render_to_response('profile/profile.html',
-                              { 'profile': profile,
+    return render_to_response('profile/profile.html', {
+                                'user_id': user_id,
                                 'profile_timestamp': profile_timestamp},
                               context_instance=RequestContext(request))
 
 
-@login_required
-def set_profile(request):
-    error_msg = None
-    origin_id = None
-    if request.method == 'POST':
-        ccnet_user_id = request.POST.get('ccnet_user_id', '').strip()
-        origin_id = ccnet_user_id
-        if not ccnet_user_id:
-            error_msg = "You must specify Key ID"
-        elif len(ccnet_user_id) != 40:
-            error_msg = "Key ID must be of length 40"
-        elif UserProfile.objects.filter(ccnet_user_id=ccnet_user_id).count() != 0:
-            error_msg = "Key ID has been used"
-        else:
-            try:
-                profile = request.user.get_profile()
-            except UserProfile.DoesNotExist:
-                profile = UserProfile(user=request.user)
-                profile.save()
-            try:
-                ccnet_rpc.add_client(ccnet_user_id)
-            except Exception, e:
-                error_msg = "Ccnet Daemon is not available, try again later"
-            else:
-                profile.ccnet_user_id = ccnet_user_id
-                profile.save()
-                return HttpResponseRedirect(reverse(show_profile))
-    else:
-        try:
-            profile = request.user.get_profile()
-        except UserProfile.DoesNotExist:
-            profile = UserProfile(user=request.user)
-            profile.save()
-        origin_id = profile.ccnet_user_id
-
-    return render_to_response('profile/set_profile.html',
-                              { 'error_msg': error_msg,
-                                'origin_id': origin_id },
-                              context_instance=RequestContext(request))
+#@login_required
+#def set_profile(request):
+#    error_msg = None
+#    origin_id = None
+#    if request.method == 'POST':
+#        ccnet_user_id = request.POST.get('ccnet_user_id', '').strip()
+#        origin_id = ccnet_user_id
+#        if not ccnet_user_id:
+#            error_msg = "You must specify Key ID"
+#        elif len(ccnet_user_id) != 40:
+#            error_msg = "Key ID must be of length 40"
+#        elif ccnet_rpc.get_binding_email(ccnet_user_id) != None:
+#            email = ccnet_rpc.get_binding_email(ccnet_user_id)
+#            # user id has been binded by an email
+#            error_msg = ("Key ID has been used by %s" % email)
+#        else:
+#            try:
+#                ccnet_rpc.add_client(ccnet_user_id)
+#            except Exception, e:
+#                error_msg = "Ccnet Daemon is not available, try again later"
+#            else:
+#                ccnet_rpc.add_binding(request.user.username, ccnet_user_id)
+#                return HttpResponseRedirect(reverse(show_profile))
+#    else:
+#        origin_id = ccnet_rpc.get_binding_userid(request.user.username)
+# 
+#    return render_to_response('profile/set_profile.html',
+#                              { 'error_msg': error_msg,
+#                                'origin_id': origin_id },
+#                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -83,12 +71,8 @@ def get_ccnet_profile(request):
 
 @login_required
 def set_ccnet_profile(request):
-    try:
-        profile = request.user.get_profile()
-    except UserProfile.DoesNotExist:
-        return HttpResponse("Error: You have not set seafile id yet.")
-    ccnet_id = profile.ccnet_user_id
-
+    ccnet_id = request.user.user_id
+ 
     if request.method == 'POST':
         ccnet_profile = request.POST.get('ccnet_profile', None)
         try:
@@ -107,7 +91,7 @@ def set_ccnet_profile(request):
              ccnet_profile = ccnet_conf.ccnet_profile
          except UserCcnetConf.DoesNotExist:
              ccnet_profile = ""
-
+ 
     return render_to_response('profile/set_ccnet_conf.html',
                               { 'ccnet_profile': ccnet_profile },
                               context_instance=RequestContext(request))

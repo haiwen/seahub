@@ -9,12 +9,6 @@
 
 {% block right_panel %}
 
-{% if not user.user_id %}
-<div class="notification">
-你还没有绑定 Ccnet/Seafile 公钥 ID。 现在<a href="{{ SITE_ROOT }}profile/edit/">绑定</a>
-</div>
-{% endif %}
-
 <h3>我拥有的同步目录</h3>
 {% if owned_repos %}
 <table class="repo-list">

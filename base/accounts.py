@@ -13,7 +13,6 @@ from django import forms
 
 from django.utils.translation import ugettext_lazy as _
 
-from seahub.profile.models import UserProfile
 from seaserv import ccnet_rpc 
 
 class EmailOrUsernameModelBackend(object):
@@ -108,11 +107,12 @@ class RegistrationBackend(object):
         new_user = RegistrationProfile.objects.create_inactive_user(username, email,
                                                                     password, site,
                                                                     send_email=settings.REGISTRATION_SEND_MAIL)
+        # save email and password to EmailUser table
+        ccnet_rpc.add_emailuser(email, password)
         
         userid = kwargs['userid']
         if userid:
-            profile = UserProfile(user=new_user, ccnet_user_id=userid)
-            profile.save()
+            ccnet_rpc.add_binding(new_user.username, userid)
 
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
@@ -139,8 +139,7 @@ class RegistrationBackend(object):
             activated.backend='django.contrib.auth.backends.ModelBackend' 
             login(request, activated)
             try:
-                profile = request.user.get_profile()
-                if profile.ccnet_user_id:
+                if request.user.user_id:
                     ccnet_rpc.add_client(ccnet_user_id)
             except:
                 pass
