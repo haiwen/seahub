@@ -2,14 +2,14 @@
 
 
 {% block left_panel %}
+<h3>操作</h3>
 <ul>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
+  <li><a href="{{ SITE_ROOT}}profile/userids/">列出所有个人ID</a></li>
 </ul>
 {% endblock %}
 
-
 {% block right_panel %}
-
 <h2>当前设置</h2>
 <ul>
     {% if user_id %}
@@ -22,5 +22,4 @@
 <li><span class="bold">帐号文件：</span>您的帐号文件还未上传，请在本地 seafile 界面 "帐号" 标签下上传</li>
 {% endif %}
 </ul>
-
 {% endblock %}

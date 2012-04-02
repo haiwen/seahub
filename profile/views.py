@@ -10,11 +10,11 @@ import datetime
 from forms import SetUserProfileForm
 from models import UserCcnetConf
 
-from seaserv import ccnet_rpc, translate_time_usec
+from seaserv import ccnet_rpc, translate_time_usec, get_binding_userids
 
 @login_required
 def show_profile(request):
-    user_id = ccnet_rpc.get_binding_userid(request.user.username)
+    userid_list = get_binding_userids(request.user.username)
 
     try:
         profile_timestamp = ccnet_rpc.get_user_profile_timestamp(profile.ccnet_user_id)
@@ -23,7 +23,7 @@ def show_profile(request):
         profile_timestamp = None
         
     return render_to_response('profile/profile.html', {
-                                'user_id': user_id,
+                                'userid_list': userid_list,
                                 'profile_timestamp': profile_timestamp},
                               context_instance=RequestContext(request))
 
@@ -112,3 +112,11 @@ def download_profile(request):
         return response
     else:
         return HttpResponse("Error: " + err_msg)
+    
+@login_required
+def list_userids(request):
+    userid_list = get_binding_userids(request.user.username)
+
+    return render_to_response('profile/user_ids.html',
+                              {'userid_list': userid_list},
+                              context_instance=RequestContext(request))

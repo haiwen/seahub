@@ -47,7 +47,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
-        <td><button data="{{ SITE_ROOT }}repo/removefetched/{{ user.user_id }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
+        <td><button data="{{ SITE_ROOT }}repo/removefetched/{{ user.username }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
     </tr>
     {% endfor %}
 </table>

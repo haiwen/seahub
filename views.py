@@ -10,7 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, Set
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_threaded_rpc
+    seafserv_threaded_rpc, get_binding_userids
 
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
@@ -89,7 +89,14 @@ def group_add_repo(request, group_id):
             'form': form, 'group': group
             }, context_instance=RequestContext(request))
 
+def validate_owner(request, repo_id):
+    is_owner = False
+    cid_list = request.user.userid_list
+    for cid in cid_list:
+        if seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
+            is_owner = True
 
+    return is_owner
 
 def repo(request, repo_id):
     # TODO: check permission
@@ -114,11 +121,9 @@ def repo(request, repo_id):
 
     token = ""
     is_owner = False
-    if request.user.is_authenticated():
-        cid = request.user.user_id
-        if seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
-            is_owner = True
-            token = seafserv_threaded_rpc.get_repo_token(repo_id)
+    if request.user.is_authenticated() and validate_owner(request, repo_id):
+        is_owner = True
+        token = seafserv_threaded_rpc.get_repo_token(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -133,6 +138,7 @@ def repo(request, repo_id):
             "token": token,
             }, context_instance=RequestContext(request))
 
+
 @login_required
 def repo_share(request, repo_id):
     return render_to_response('repo_share.html', {
@@ -144,8 +150,7 @@ def repo_share(request, repo_id):
 
 @login_required
 def modify_token(request, repo_id):
-    cid = request.user.user_id
-    if not seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
+    if not validate_owner(request, repo_id):
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
 
     token = request.POST.get('token', '')
@@ -157,8 +162,7 @@ def modify_token(request, repo_id):
 
 @login_required
 def remove_repo(request, repo_id):
-    cid = request.user.user_id
-    if not seafserv_threaded_rpc.is_repo_owner(cid, repo_id) and not request.user.is_staff:
+    if not validate_owner(request, repo_id) and not request.user.is_staff:
         return render_to_response('permission_error.html', {
             }, context_instance=RequestContext(request))
 
@@ -166,9 +170,11 @@ def remove_repo(request, repo_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
 @login_required
-def remove_fetched_repo(request, repo_id, user_id):
-    if user_id and repo_id:
-        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
+def remove_fetched_repo(request, repo_id, username):
+    userid_list = get_binding_userids(username)
+    for user_id in userid_list:
+        if user_id and repo_id:
+            seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -178,12 +184,15 @@ def myhome(request):
     fetched_repos = []
     quota_usage = 0
 
-    user_id = request.user.user_id
-    if user_id:
-        owned_repos = seafserv_threaded_rpc.list_owned_repos(user_id)
-        quota_usage = seafserv_threaded_rpc.get_user_quota_usage(user_id)
-        fetched_repos = seafserv_threaded_rpc.list_fetched_repos(user_id)
-        
+    userid_list = get_binding_userids(request.user.username)
+    for user_id in userid_list:
+        try:
+            owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(user_id))
+            quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
+            fetched_repos.extend(seafserv_threaded_rpc.list_fetched_repos(user_id))
+        except:
+            pass
+
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
@@ -191,22 +200,26 @@ def myhome(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def ownerhome(request, owner_id):
+def ownerhome(request, owner_name):
     owned_repos = []
     fetched_repos = []
     quota_usage = 0
 
-    owner = request.GET.get('owner')
-    if owner_id:
-        owned_repos = seafserv_threaded_rpc.list_owned_repos(owner_id)
-        quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_id)
-        fetched_repos = seafserv_threaded_rpc.list_fetched_repos(owner_id)
+    ownerid_list = get_binding_userids(owner_name)
+    for owner_id in ownerid_list:
+        if owner_id:
+            try:
+                owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(owner_id))
+                quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(owner_id)
+                fetched_repos.extend(seafserv_threaded_rpc.list_fetched_repos(owner_id))
+            except:
+                pass
 
     return render_to_response('ownerhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "fetched_repos": fetched_repos,
-            "owner": owner,
+            "owner": owner_name,
             }, context_instance=RequestContext(request))
 
 
@@ -262,7 +275,7 @@ def useradmin(request):
     users = User.objects.all()
     for user in users:
         try:
-            user.user_id = ccnet_rpc.get_binding_userid(user.username)
+            user.userid_list = get_binding_userids(user.username)
             user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
             user.role_list = user.ccnet_user.props.role_list.split(',')
         except:

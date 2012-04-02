@@ -364,3 +364,16 @@ def get_branches(repo_id):
     """Get branches of a given repo"""
     return seafserv_threaded_rpc.branch_gets(repo_id)
 
+def get_binding_userids(email):
+    """Get user ids of a given email"""
+    try:
+        user_ids = ccnet_rpc.get_binding_userids(email)
+    except SearpcError:
+        return []
+
+    userid_list = []
+    for user_id in user_ids.split("\n"):
+        if user_id == '':
+            continue
+        userid_list.append(user_id)
+    return userid_list

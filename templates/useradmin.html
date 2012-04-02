@@ -28,8 +28,8 @@
         {% else %}
         <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.id }}/" class="activate">激活</button></td>
         {% endif %}
-        {% if user.user_id %}
-        <td>{{ user.user_id }}</td>
+        {% if user.userid_list %}
+        <td>{{ user.userid_list|first }}</td>
         {% else %}
         <td></td>
         {% endif %}

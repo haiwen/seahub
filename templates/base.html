@@ -34,15 +34,9 @@
     <div id="header">
         <div class="logo ovhd">
             <img src="{{ MEDIA_URL }}img/logo.png" id="logo-img" title="Seafile" alt="Seafile logo" />
-            {% if request.user.user_id %}
-            <div id="user-info">
-                <span>个人 ID:</span>{{user.user_id}}
-            </div>
-            {% else %}
             <div id="logo-info">
             Hope our efforts will bring you benefits.
             </div>
-            {% endif %}
         </div>
         <div class="navs">
             {% block nav %}

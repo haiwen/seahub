@@ -1,16 +1,16 @@
-from seaserv import ccnet_rpc
+from seaserv import get_binding_userids
 
 class UseridMiddleware(object):
-    """Store ccnet user id in request.user.user_id"""
+    """Store ccnet user ids in request.user.userid_list"""
 
     def process_request(self, request):
         if not request.user.is_authenticated():
             return None
 
         try:
-            request.user.user_id = ccnet_rpc.get_binding_userid(request.user.username)
+            request.user.userid_list = get_binding_userids(request.user.username)
         except:
-            request.user.user_id = ''
+            request.user.userid_list = []
 
         return None
 
