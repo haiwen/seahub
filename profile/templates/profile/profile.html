@@ -19,7 +19,7 @@
 {% if profile_timestamp %} 
 <li><span class="bold">帐号文件：</span>您的加密后的帐号文件上传于{{ profile_timestamp }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{ user_id }}">点此下载</a></li>
 {% else %}
-<li><span class="bold">帐号文件：</span>您的帐号文件还未上传，请在本地 seafile 界面 "帐号" 标签下上传</li>
+<li><span class="bold">配置文件：</span>您的配置文件还未上传，如需上传，请在本地 seafile 界面 "帐号" 标签下上传</li>
 {% endif %}
 </ul>
 {% endblock %}

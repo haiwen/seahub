@@ -1,0 +1,31 @@
+{% extends "profile/profile_base.html" %}
+
+
+{% block left_panel %}
+<h3>操作</h3>
+<ul>
+  <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
+  <li><a href="{{ SITE_ROOT}}profile/userids/">列出所有个人ID</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+<h2>所有个人ID</h2>
+{% if userid_list %}
+<table class="userid-list">
+  <tr>
+    <th>ID</th>
+    <th>操作</th>
+  </tr>
+
+  {% for user_id in userid_list %}
+  <tr>
+    <td>{{ user_id }}</td>
+    <td>查看详情</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+{% endblock %}
