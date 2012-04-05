@@ -1,6 +1,6 @@
 *.pyc
 *~
-seahub.db
+seahub.db*
 local_settings.py
 startserver.sh
 thirdpart/django
@@ -8,3 +8,7 @@ thirdpart/djblets
 thirdpart/flup
 use_mysql
 use_sqlite3
+restart.sh
+settings.py.mysql
+settings.py.sqlite
+
