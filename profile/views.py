@@ -16,48 +16,21 @@ from seaserv import ccnet_rpc, translate_time_usec, get_binding_userids
 def show_profile(request):
     userid_list = get_binding_userids(request.user.username)
 
-    try:
-        profile_timestamp = ccnet_rpc.get_user_profile_timestamp(profile.ccnet_user_id)
-        profile_timestamp = translate_time_usec(profile_timestamp)
-    except:
-        profile_timestamp = None
+    profile_dict = {}
+    
+    for user_id in userid_list:
+        try:
+            profile_timestamp = ccnet_rpc.get_user_profile_timestamp(user_id)
+            profile_timestamp = translate_time_usec(profile_timestamp)
+        except:
+            profile_timestamp = None
+        profile_dict[user_id] = profile_timestamp
         
     return render_to_response('profile/profile.html', {
                                 'userid_list': userid_list,
-                                'profile_timestamp': profile_timestamp},
+                                'profile_dict': profile_dict,
+                                },
                               context_instance=RequestContext(request))
-
-
-#@login_required
-#def set_profile(request):
-#    error_msg = None
-#    origin_id = None
-#    if request.method == 'POST':
-#        ccnet_user_id = request.POST.get('ccnet_user_id', '').strip()
-#        origin_id = ccnet_user_id
-#        if not ccnet_user_id:
-#            error_msg = "You must specify Key ID"
-#        elif len(ccnet_user_id) != 40:
-#            error_msg = "Key ID must be of length 40"
-#        elif ccnet_rpc.get_binding_email(ccnet_user_id) != None:
-#            email = ccnet_rpc.get_binding_email(ccnet_user_id)
-#            # user id has been binded by an email
-#            error_msg = ("Key ID has been used by %s" % email)
-#        else:
-#            try:
-#                ccnet_rpc.add_client(ccnet_user_id)
-#            except Exception, e:
-#                error_msg = "Ccnet Daemon is not available, try again later"
-#            else:
-#                ccnet_rpc.add_binding(request.user.username, ccnet_user_id)
-#                return HttpResponseRedirect(reverse(show_profile))
-#    else:
-#        origin_id = ccnet_rpc.get_binding_userid(request.user.username)
-# 
-#    return render_to_response('profile/set_profile.html',
-#                              { 'error_msg': error_msg,
-#                                'origin_id': origin_id },
-#                              context_instance=RequestContext(request))
 
 
 @login_required

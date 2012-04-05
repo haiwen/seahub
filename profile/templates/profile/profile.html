@@ -12,14 +12,31 @@
 {% block right_panel %}
 <h2>当前设置</h2>
 <ul>
-    {% if user_id %}
-    <li><span class="bold">个人 ID：</span>{{ user_id }}</li>
-    {% endif %}
+<li><span class="bold">提示：</span>如需上传配置文件，请在本地 seafile 界面 "配置" 标签下上传</li>
+</ur>
 
-{% if profile_timestamp %} 
-<li><span class="bold">帐号文件：</span>您的加密后的帐号文件上传于{{ profile_timestamp }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{ user_id }}">点此下载</a></li>
-{% else %}
-<li><span class="bold">配置文件：</span>您的配置文件还未上传，如需上传，请在本地 seafile 界面 "帐号" 标签下上传</li>
-{% endif %}
-</ul>
+<table class="profile-dict">
+  <tr>
+    <th width="33%">个人ID</th>
+    <th width="67">配置文件上传时间</th>
+  </tr>
+  {% if profile_dict %}
+    {% for user_id,profile_ts in profile_dict.items %}
+    <tr>
+      <td>{{ user_id }}</td>
+      {% if profile_ts %}
+      <td>上传于{{ profile_ts }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{ user_id }}">点此下载</a></td>
+      {% else %}
+      <td>未上传</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  {% else %}
+  <tr>
+    <td>暂无</td>
+    <td>—— ——</td>
+  </tr>
+  {% endif %}
+
+</table>
 {% endblock %}
