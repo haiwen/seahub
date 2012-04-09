@@ -109,6 +109,13 @@ label { display: inline-block; margin:2px 0px; }
 .login .error {
     margin:3px 0 0 3em;
 }
+.reg label {
+    width:5em;
+    text-align:right;
+}
+.reg .submit {
+    margin-left:5em;
+}
 /* form */
 /* forms */
 
