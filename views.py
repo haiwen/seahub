@@ -105,7 +105,7 @@ def repo(request, repo_id):
         current_page = int(request.GET.get('page', '1'))
         per_page= int(request.GET.get('per_page', '25'))
     except ValueError:
-        page = 1
+        current_page = 1
         per_page = 25
 
     commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
@@ -237,7 +237,7 @@ def seafadmin(request):
         current_page = int(request.GET.get('page', '1'))
         per_page= int(request.GET.get('per_page', '25'))
     except ValueError:
-        page = 1
+        current_page = 1
         per_page = 25
 
     repos_all = seafserv_threaded_rpc.get_repo_list(per_page * (current_page -1), per_page + 1)
