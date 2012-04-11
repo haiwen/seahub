@@ -1,11 +1,14 @@
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth.tokens import default_token_generator
+from auth.models import User
+from auth import authenticate
+from auth.tokens import default_token_generator
+
 from django.contrib.sites.models import Site
 from django.template import Context, loader
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
+
+from seaserv import get_ccnetuser
 
 class UserCreationForm(forms.ModelForm):
     """
@@ -111,9 +114,11 @@ class PasswordResetForm(forms.Form):
         Validates that a user exists with the given e-mail address.
         """
         email = self.cleaned_data["email"]
-        self.users_cache = User.objects.filter(email__iexact=email)
-        if len(self.users_cache) == 0:
+
+        self.users_cache = get_ccnetuser(username=email)
+        if not self.users_cache:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
+        
         return email
 
     def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
@@ -122,25 +127,27 @@ class PasswordResetForm(forms.Form):
         Generates a one-use only link for resetting password and sends to the user
         """
         from django.core.mail import send_mail
-        for user in self.users_cache:
-            if not domain_override:
-                current_site = Site.objects.get_current()
-                site_name = current_site.name
-                domain = current_site.domain
-            else:
-                site_name = domain = domain_override
-            t = loader.get_template(email_template_name)
-            c = {
-                'email': user.email,
-                'domain': domain,
-                'site_name': site_name,
-                'uid': int_to_base36(user.id),
-                'user': user,
-                'token': token_generator.make_token(user),
-                'protocol': use_https and 'https' or 'http',
-            }
-            send_mail(_("Password reset on %s") % site_name,
-                t.render(Context(c)), None, [user.email])
+
+        ccnetuser = self.users_cache
+        if not domain_override:
+            current_site = Site.objects.get_current()
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+        t = loader.get_template(email_template_name)
+
+        c = {
+            'email': ccnetuser.username,
+            'domain': domain,
+            'site_name': site_name,
+            'uid': int_to_base36(ccnetuser.id),
+            'user': ccnetuser,
+            'token': token_generator.make_token(ccnetuser),
+            'protocol': use_https and 'https' or 'http',
+        }
+        send_mail(_("Password reset on %s") % site_name,
+                  t.render(Context(c)), None, [ccnetuser.username])
 
 class SetPasswordForm(forms.Form):
     """
@@ -152,6 +159,7 @@ class SetPasswordForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
+        
         super(SetPasswordForm, self).__init__(*args, **kwargs)
 
     def clean_new_password2(self):

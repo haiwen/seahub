@@ -20,9 +20,11 @@
                 {% if request.user.is_authenticated %}
                 欢迎, {{ request.user }}
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
+                <!--
                 {% if request.user.is_staff %}
                 <a href="{{ SITE_ROOT }}admin/">管理</a> 
                 {% endif %}
+                -->
                 <a href="{{ SITE_ROOT }}accounts/logout/">退出</a>
                 {% else %}
                 <a href="{{ SITE_ROOT }}accounts/login/">登录</a> 
@@ -85,7 +87,7 @@
         </div>
     </div>
     <div id="footer" class="ovhd">
-        <p class="fleft">Copyright © 2012 海文网络. All rights reserved.</p>
+        <p class="fleft">Copyright © 2012 海文互知. All rights reserved.</p>
         <p class="fright">Contact | About</p>
     </div>
 

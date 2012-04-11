@@ -3,7 +3,7 @@ try:
 except ImportError:
     from django.utils.functional import update_wrapper, wraps  # Python 2.4 fallback.
 
-from django.contrib.auth import REDIRECT_FIELD_NAME
+from auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.http import urlquote

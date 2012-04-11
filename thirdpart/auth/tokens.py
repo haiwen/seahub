@@ -51,9 +51,12 @@ class PasswordResetTokenGenerator(object):
         # invalid as soon as it is used.
         # We limit the hash to 20 chars to keep URL short
         from django.utils.hashcompat import sha_constructor
+        import datetime
+        ctime = datetime.datetime.fromtimestamp(user.ctime/1000000)
         hash = sha_constructor(settings.SECRET_KEY + unicode(user.id) +
-                               user.password + user.last_login.strftime('%Y-%m-%d %H:%M:%S') +
+                               user.password + ctime.strftime('%Y-%m-%d %H:%M:%S') +
                                unicode(timestamp)).hexdigest()[::2]
+        
         return "%s-%s" % (ts_b36, hash)
 
     def _num_days(self, dt):

@@ -65,7 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.UseridMiddleware',
 )
 
@@ -93,11 +93,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
+    'auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
+#    'django.contrib.admin',
     'registration',
 #    'avatar',
     'seahub.base',
@@ -108,8 +108,7 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'seahub.base.accounts.EmailOrUsernameModelBackend',
-    'django.contrib.auth.backends.ModelBackend'
+    'auth.backends.ModelBackend',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

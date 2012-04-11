@@ -25,10 +25,7 @@ consult a specific backend's documentation for details.
 
 from django.conf.urls.defaults import *
 
-from django.contrib.auth import views as auth_views
-
-from seahub.views import password_change
-
+from auth import views as auth_views
 
 urlpatterns = patterns('',
                        url(r'^login/$',
@@ -40,7 +37,7 @@ urlpatterns = patterns('',
                            {'template_name': 'registration/logout.html'},
                            name='auth_logout'),
                        url(r'^password/change/$',
-                           password_change,
+                           auth_views.password_change,
                            name='auth_password_change'),
                        url(r'^password/change/done/$',
                            auth_views.password_change_done,

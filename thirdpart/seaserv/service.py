@@ -296,6 +296,20 @@ def get_user(user_id):
     user = ccnet_rpc.get_user(user_id)
     return user
 
+def get_ccnetuser(username=None, userid=None):
+    # Get emailuser from db
+    if username != None:
+        emailuser = ccnet_rpc.get_emailuser(username)
+    if userid != None:
+        emailuser = ccnet_rpc.get_emailuser_by_id(userid)
+    if emailuser == None:
+        return None
+    
+    # And convert to ccnetuser
+    from seahub.base.accounts import convert_to_ccnetuser
+    ccnetuser = convert_to_ccnetuser(emailuser)
+
+    return ccnetuser
 
 def get_groups():
     """Get group object list. """

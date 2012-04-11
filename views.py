@@ -1,19 +1,20 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from auth.decorators import login_required
 from django.db import IntegrityError
-from django.contrib.auth.models import User
+from auth.models import User
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_threaded_rpc, get_binding_userids
+    seafserv_threaded_rpc, get_binding_userids, get_ccnetuser
 
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
+from seahub.base.accounts import CcnetUser
 from forms import AddUserForm
 
 @login_required
@@ -272,11 +273,11 @@ def useradmin(request):
     if not request.user.is_staff:
         raise Http404
 
-    users = User.objects.all()
+    users = ccnet_rpc.get_emailusers(-1,-1)
     for user in users:
         try:
-            user.userid_list = get_binding_userids(user.username)
-            user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
+            user.userid_list = get_binding_userids(user.get_email())
+#            user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
             user.role_list = user.ccnet_user.props.role_list.split(',')
         except:
             user.ccnet_user = None
@@ -317,31 +318,23 @@ def user_remove(request, user_id):
     if not request.user.is_staff:
         raise Http404
 
-    user = User.objects.get(id=user_id)
-    user.delete()
-
-    # Also remove from ccnet EmailUser table and Binding table
-    ccnet_rpc.remove_emailuser(user.username)
-    ccnet_rpc.remove_binding(user.username)
+    ccnetuser = get_ccnetuser(userid=int(user_id))
+    ccnetuser.delete()
     
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def activate_user(request, user_id):
-    """The user id is django user id."""
+    """The user id is emailuser id."""
 
     if not request.user.is_staff:
         raise Http404
 
-    try:
-        user = User.objects.get(pk=user_id)
-        user.is_active = True
-        user.save()
-    except User.DoesNotExist:
-        pass
-
+    ccnetuser = get_ccnetuser(userid=int(user_id))
+    ccnetuser.is_active = True
+    ccnetuser.save()
+    
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
 
 @login_required
 def user_add(request):
@@ -354,14 +347,11 @@ def user_add(request):
         form = AddUserForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            username = email
             password = form.cleaned_data['password1']
-            new_user = User.objects.create_user(username, email, password)
-            new_user.is_active = True
-            new_user.save()
-            
-            # Also save to ccnet EmailUser table
-            ccnet_rpc.add_emailuser(username, password)
+
+            ccnetuser = CcnetUser(username=email, raw_password=password)
+            ccnetuser.is_active = True
+            ccnetuser.save()
             
             return HttpResponseRedirect(reverse('useradmin', args=[]))
     else:
@@ -370,32 +360,3 @@ def user_add(request):
     return render_to_response("add_user_form.html",  {
             'form': form, 
             }, context_instance=RequestContext(request))
-
-@csrf_protect
-@login_required
-def password_change(request,
-                    template_name='registration/password_change_form.html',
-                    post_change_redirect=None,
-                    password_change_form=PasswordChangeForm,
-                    current_app=None, extra_context=None):
-    if post_change_redirect is None:
-        post_change_redirect = reverse('django.contrib.auth.views.password_change_done')
-    if request.method == "POST":
-        form = password_change_form(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-
-            # Also change ccnet EmailUser table
-            email = request.user.username
-            passwd = request.POST.get('new_password1')
-            ccnet_rpc.change_emailuser(email, passwd)
-            
-            return HttpResponseRedirect(post_change_redirect)
-    else:
-        form = password_change_form(user=request.user)
-    context = {
-        'form': form,
-    }
-    context.update(extra_context or {})
-    return render_to_response(template_name, context,
-                              context_instance=RequestContext(request, current_app=current_app))

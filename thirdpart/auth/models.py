@@ -1,7 +1,7 @@
 import datetime
 import urllib
 
-from django.contrib import auth
+import auth
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models.manager import EmptyManager

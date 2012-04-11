@@ -3,13 +3,15 @@ import random
 import re
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from auth.models import User
+
 from django.db import models
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 
+from seaserv import ccnet_rpc, get_ccnetuser
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -51,12 +53,13 @@ class RegistrationManager(models.Manager):
             except self.model.DoesNotExist:
                 return False
             if not profile.activation_key_expired():
-                user = profile.user
-                user.is_active = True
-                user.save()
+                # Activate emailuser
+                ccnetuser = get_ccnetuser(userid=profile.emailuser_id)
+                ccnetuser.is_active = True
+                ccnetuser.save()
                 profile.activation_key = self.model.ACTIVATED
                 profile.save()
-                return user
+                return ccnetuser
         return False
     
     def create_inactive_user(self, username, email, password,
@@ -70,16 +73,19 @@ class RegistrationManager(models.Manager):
         user. To disable this, pass ``send_email=False``.
         
         """
-        new_user = User.objects.create_user(username, email, password)
-        new_user.is_active = False
-        new_user.save()
 
-        registration_profile = self.create_profile(new_user)
+        from seahub.base.accounts import CcnetUser
+
+        ccnetuser = CcnetUser.objects.create_user(username, password, False, False)
+        ccnetuser.is_active = False
+        ccnetuser.save()
+        
+        registration_profile = self.create_profile(ccnetuser)
 
         if send_email:
             registration_profile.send_activation_email(site)
 
-        return new_user
+        return ccnetuser
     create_inactive_user = transaction.commit_on_success(create_inactive_user)
 
     def create_profile(self, user):
@@ -97,7 +103,7 @@ class RegistrationManager(models.Manager):
         if isinstance(username, unicode):
             username = username.encode('utf-8')
         activation_key = sha_constructor(salt+username).hexdigest()
-        return self.create(user=user,
+        return self.create(emailuser_id=user.id,
                            activation_key=activation_key)
         
     def delete_expired_users(self):
@@ -142,10 +148,9 @@ class RegistrationManager(models.Manager):
         """
         for profile in self.all():
             if profile.activation_key_expired():
-                user = profile.user
-                if not user.is_active:
-                    user.delete()
-
+                ccnetuser = get_ccnetuser(userid=profile.emailuser_id)
+                if not ccnetuser.is_active:
+                    ccnet_rpc.remove_emailuser(ccnetuser.username)
 
 class RegistrationProfile(models.Model):
     """
@@ -165,7 +170,8 @@ class RegistrationProfile(models.Model):
     """
     ACTIVATED = u"ALREADY_ACTIVATED"
     
-    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
+#    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
+    emailuser_id = models.IntegerField()
     activation_key = models.CharField(_('activation key'), max_length=40)
     
     objects = RegistrationManager()
@@ -175,7 +181,7 @@ class RegistrationProfile(models.Model):
         verbose_name_plural = _('registration profiles')
     
     def __unicode__(self):
-        return u"Registration information for %s" % self.user
+        return u"Registration information for %s" % self.emailuser_id
     
     def activation_key_expired(self):
         """
@@ -200,8 +206,12 @@ class RegistrationProfile(models.Model):
         
         """
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
+        
+        ccnetuser = get_ccnetuser(userid=self.emailuser_id)
+
         return self.activation_key == self.ACTIVATED or \
-               (self.user.date_joined + expiration_date <= datetime.datetime.now())
+               (datetime.datetime.fromtimestamp(ccnetuser.ctime/1000000) + expiration_date <= datetime.datetime.now())
+
     activation_key_expired.boolean = True
 
     def send_activation_email(self, site):
@@ -254,5 +264,6 @@ class RegistrationProfile(models.Model):
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
         
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        ccnetuser = get_ccnetuser(userid=self.emailuser_id)
+        ccnetuser.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
     

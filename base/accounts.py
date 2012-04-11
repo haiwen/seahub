@@ -1,6 +1,11 @@
+from django import forms
+from django.utils.encoding import smart_str
+from django.utils.hashcompat import md5_constructor, sha_constructor
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+
+from auth.models import User, Permission, get_hexdigest
+from auth import authenticate, login
 
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
@@ -9,32 +14,131 @@ from registration import signals
 from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
 
-from django import forms
+from seaserv import ccnet_rpc, get_ccnetuser
 
-from django.utils.translation import ugettext_lazy as _
 
-from seaserv import ccnet_rpc 
+class UserManager(object):
+    def create_user(self, username, password=None, is_staff=False, is_active=False):
+        ccnet_rpc.add_emailuser(username, password, is_staff, is_active)
 
-class EmailOrUsernameModelBackend(object):
-    def authenticate(self, username=None, password=None):
-        if '@' in username:
-            kwargs = {'email': username}
+        ccnetuser = get_ccnetuser(username=username)
+        return ccnetuser
+
+def convert_to_ccnetuser(emailuser):
+    ccnetuser = CcnetUser(emailuser.get_email(),
+                          raw_password='')
+    ccnetuser.id = emailuser.get_id()
+    ccnetuser.email = emailuser.get_email()
+    ccnetuser.password = emailuser.get_passwd()
+    ccnetuser.is_staff = emailuser.get_is_staff()
+    ccnetuser.is_active = emailuser.get_is_active()
+    ccnetuser.ctime = emailuser.get_ctime()
+
+    return ccnetuser
+
+class CcnetUser(object):
+    is_staff = False
+    is_active = False
+    user_permissions = Permission()
+    objects = UserManager()
+    
+    def __init__(self, username, raw_password):
+        self.username = username
+        self.raw_password = raw_password
+
+    def __unicode__(self):
+        return self.username
+    
+    def validate_emailuser(self, email, raw_password):
+        self.set_password(raw_password)
+        return ccnet_rpc.validate_emailuser(email, raw_password)
+
+    def is_authenticated(self):
+        return True
+    
+    def is_anonymous(self):
+        """
+        Always returns False. This is a way of comparing User objects to
+        anonymous users.
+        """
+        return False
+
+    def save(self):
+        emailuser = ccnet_rpc.get_emailuser(self.username)
+        if emailuser:
+            ccnet_rpc.update_emailuser(self.id, self.password, self.is_staff,
+                                       self.is_active)
         else:
-            kwargs = {'username': username}
-        try:
-            user = User.objects.get(**kwargs)
-            if user.check_password(password):
-                return user
-        except User.DoesNotExist:
-            return None
- 
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
+            self.objects.create_user(username=self.username,
+                                     password=self.raw_password,
+                                     is_staff=self.is_staff,
+                                     is_active=self.is_active)
 
+    def delete(self):
+        """
+        Remove from ccnet EmailUser table and Binding table
+        """
+        ccnet_rpc.remove_emailuser(self.username)
+        ccnet_rpc.remove_binding(self.username)
 
+    def get_and_delete_messages(self):
+        messages = []
+        return messages
+    
+    def set_password(self, raw_password):
+        if raw_password is None:
+            self.set_unusable_password()
+        else:
+            algo = 'sha1'
+            hsh = get_hexdigest(algo, '', raw_password)
+            self.password = '%s' % hsh
+    
+    def check_password(self, raw_password):
+        """
+        Returns a boolean of whether the raw_password was correct. Handles
+        encryption formats behind the scenes.
+        """
+        # Backwards-compatibility check. Older passwords won't include the
+        # algorithm or salt.
+
+        if '$' not in self.password:
+            is_correct = (self.password == get_hexdigest('sha1', '', raw_password))
+            return is_correct
+        return check_password(raw_password, self.password)
+    
+    def email_user(self, subject, message, from_email=None):
+        "Sends an e-mail to this User."
+        from django.core.mail import send_mail
+        send_mail(subject, message, from_email, [self.username])
+
+    def has_perm(self, perm, obj=None):
+        """
+        Returns True if the user has the specified permission. This method
+        queries all available auth backends, but returns immediately if any
+        backend returns True. Thus, a user who has permission from a single
+        auth backend is assumed to have permission in general. If an object
+        is provided, permissions for this specific object are checked.
+        """
+
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        return _user_has_perm(self, perm, obj)
+    
+    def has_module_perms(self, app_label):
+        """
+        Returns True if the user has any permissions in the given app
+        label. Uses pretty much the same logic as has_perm, above.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+        
+        from auth.models import _user_has_module_perms
+        return _user_has_module_perms(self, app_label)
+    
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:
@@ -104,11 +208,10 @@ class RegistrationBackend(object):
             site = Site.objects.get_current()
         else:
             site = RequestSite(request)
+
         new_user = RegistrationProfile.objects.create_inactive_user(username, email,
                                                                     password, site,
                                                                     send_email=settings.REGISTRATION_SEND_MAIL)
-        # save email and password to EmailUser table
-        ccnet_rpc.add_emailuser(email, password)
         
         userid = kwargs['userid']
         if userid:
@@ -136,8 +239,9 @@ class RegistrationBackend(object):
                                         user=activated,
                                         request=request)
             # login the user
-            activated.backend='django.contrib.auth.backends.ModelBackend' 
+            activated.backend='auth.backends.ModelBackend' 
             login(request, activated)
+            # TODO: user.user_id should be change
             try:
                 if request.user.user_id:
                     ccnet_rpc.add_client(ccnet_user_id)
@@ -210,12 +314,12 @@ class RegistrationForm(forms.Form):
                                 label=_("Password (again)"))
 
     def clean_email(self):
-        try:
-            user = User.objects.get(email__iexact=self.cleaned_data['email'])
-        except User.DoesNotExist:
+        email = self.cleaned_data['email']
+        emailuser = ccnet_rpc.get_emailuser(email)
+        if not emailuser:
             return self.cleaned_data['email']
-
-        raise forms.ValidationError(_("A user with this email already"))
+        else:
+            raise forms.ValidationError(_("A user with this email already"))                        
 
     def clean_userid(self):
         if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:
@@ -234,3 +338,4 @@ class RegistrationForm(forms.Form):
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
+

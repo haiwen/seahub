@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 class LazyUser(object):
     def __get__(self, request, obj_type=None):
         if not hasattr(request, '_cached_user'):
-            from django.contrib.auth import get_user
+            from auth import get_user
             request._cached_user = get_user(request)
         return request._cached_user
 
