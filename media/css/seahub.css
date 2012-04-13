@@ -96,11 +96,14 @@ button {
     margin:0;
 }
 label { display: inline-block; margin:2px 0px; }
-#user-add-form label {
+#user-add-form label,
+.reg label,
+.pwd_change label {
     width:5em;
     text-align:right;
 }
-#user-add-form .submit {
+#user-add-form .submit,
+.reg .submit {
     margin-left:5em;
 }
 .login .submit {
@@ -108,6 +111,12 @@ label { display: inline-block; margin:2px 0px; }
 }
 .login .error {
     margin:3px 0 0 3em;
+}
+.pwd_change label {
+    width:6em;
+}
+.pwd_change .submit {
+    margin-left:6em;
 }
 /* form */
 /* forms */
