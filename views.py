@@ -278,7 +278,7 @@ def useradmin(request):
         try:
             user.userid_list = get_binding_userids(user.get_email())
 #            user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
-            user.role_list = user.ccnet_user.props.role_list.split(',')
+#            user.role_list = user.ccnet_user.props.role_list.split(',')
         except:
             user.ccnet_user = None
 
@@ -288,6 +288,26 @@ def useradmin(request):
         },
         context_instance=RequestContext(request))
 
+@login_required
+def user_info(request, email):
+    if not request.user.is_staff:
+        raise Http404
+
+    user_dict = {}
+    
+    userid_list = get_binding_userids(email)
+    for userid in userid_list:
+        try:
+            roles = ccnet_rpc.get_user(userid).props.role_list
+        except:
+            roles = ''
+        user_dict[userid] = roles
+        
+    return render_to_response(
+        'userinfo.html', {
+            'user_dict': user_dict,
+            },
+        context_instance=RequestContext(request))
 
 @login_required
 def role_add(request, user_id):

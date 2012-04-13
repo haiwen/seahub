@@ -13,21 +13,20 @@
 <h2>所有用户</h2>
 <table class="user-list">
     <tr>
-        <th width="30%">邮箱</th>
-        <th width="10%">是否激活</th>
-        <th width="40%">个人 ID</th>
-        <th width="10%">角色</th>
+        <th width="70%">邮箱</th>
+        <th width="20%">是否激活</th>
         <th width="10%">操作</th>
     </tr>
 
     {% for user in users %}
     <tr>
-        <td>{{ user.props.email }}</td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}">{{ user.props.email }}</a></td>
         {% if user.props.is_active %}
         <td>已激活</td>
         {% else %}
         <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate">激活</button></td>
         {% endif %}
+        <!--
         {% if user.userid_list %}
         <td>{{ user.userid_list|first }}</td>
         {% else %}
@@ -35,9 +34,10 @@
         {% endif %}
         <td>
             {% for role in user.role_list %}
-            {{ role }} <!--<button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button>--><br /> 
+            {{ role }} <button data="{{ SITE_ROOT }}useradmin/{{ user.profile.ccnet_user_id }}/role/remove/?role={{ role }}" class="role-delete-btn">删除</button><br /> 
             {% endfor %}
         </td>
+        -->
         <td>
           {% if user.profile %}
 <!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->
