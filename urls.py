@@ -6,7 +6,7 @@ from seahub.views import root, peers, groups, myhome, \
     repo, group, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
     ownerhome, remove_fetched_repo, repo_set_public, repo_unset_public, \
-    repo_list_dir
+    repo_list_dir, user_info
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
