@@ -301,6 +301,8 @@ def user_info(request, email):
         try:
             peernames = ccnet_rpc.get_peernames_by_userid(userid)
             for peername in peernames.split('\n'):
+                if not peername:
+                    continue
                 roles = ccnet_rpc.get_user(userid).props.role_list
                 user_dict[peername] = roles
         except:
