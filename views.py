@@ -17,6 +17,7 @@ from seahub.share.forms import GroupAddRepoForm
 from seahub.base.accounts import CcnetUser
 from forms import AddUserForm
 
+
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -297,11 +298,18 @@ def user_info(request, email):
     
     userid_list = get_binding_userids(email)
     for userid in userid_list:
+        user_list = []
         try:
             roles = ccnet_rpc.get_user(userid).props.role_list
         except:
             roles = ''
-        user_dict[userid] = roles
+        user_list.append(roles)
+        try:
+            peernames = ccnet_rpc.get_peernames_by_userid(userid)
+        except:
+            peernames = ''
+        user_list.append(peernames)
+        user_dict[userid] = user_list
         
     return render_to_response(
         'userinfo.html', {
