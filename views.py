@@ -298,22 +298,18 @@ def user_info(request, email):
     
     userid_list = get_binding_userids(email)
     for userid in userid_list:
-        user_list = []
-        try:
-            roles = ccnet_rpc.get_user(userid).props.role_list
-        except:
-            roles = ''
-        user_list.append(roles)
         try:
             peernames = ccnet_rpc.get_peernames_by_userid(userid)
+            for peername in peernames.split('\n'):
+                roles = ccnet_rpc.get_user(userid).props.role_list
+                user_dict[peername] = roles
         except:
-            peernames = ''
-        user_list.append(peernames)
-        user_dict[userid] = user_list
-        
+            pass
+
     return render_to_response(
         'userinfo.html', {
             'user_dict': user_dict,
+            'email': email
             },
         context_instance=RequestContext(request))
 

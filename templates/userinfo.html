@@ -10,7 +10,7 @@
 
 {% block right_panel %}
 
-<h2>用户信息</h2>
+<h3>{{ email }}的计算机：</h3>
 <table class="user-list">
     <tr>
         <th width="60%">计算机名</th>
@@ -18,25 +18,22 @@
         <th width="10%">状态</th>
     </tr>
 
-    {% for userid, list in user_dict.items %}
+    {% for username, roles in user_dict.items %}
     <tr>
-      {% if list|last %}
-      <td>{{ list|last }}</td>
+      {% if username %}
+      <td>{{ username }}</td>
       {% else %}
       <td>未知</td>
       {% endif %}
       
-      {% if list|first %}
-      <td>{{ list|first }}</td>
-      {% else %}
-      <td>无</td>
-      {% endif %}
-      
-      {% if list|first %}
+      {% if roles %}
+      <td>{{ roles }}</td>
       <td>已验证</td>
       {% else %}
+      <td>无</td>
       <td>未验证</td>
       {% endif %}
+      
     </tr>
     {% endfor %}
 </table>
