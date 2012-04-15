@@ -111,10 +111,10 @@ else:
     cclient.inited = False
 
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
-ccnet_rpc = ccnet.CcnetRpcClient(pool)
+ccnet_rpc = ccnet.CcnetRpcClient(pool, req_pool=True)
 monitor_rpc = seafile.MonitorRpcClient(pool)
-seafserv_rpc = seafile.ServerRpcClient(pool)
-seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool)
+seafserv_rpc = seafile.ServerRpcClient(pool, req_pool=True)
+seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool, req_pool=True)
 
 user_db = {}
 
