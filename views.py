@@ -281,10 +281,15 @@ def repo_list_dir(request, repo_id):
             else:
                 dirent.is_dir = False
                 
-        # Get user quota usage 
-        user_id = request.user.user_id
-        if user_id:
-            quota_usage = seafserv_threaded_rpc.get_user_quota_usage(user_id)
+        # Get user quota usage
+        quota_usage = 0
+        userid_list = get_binding_userids(request.user.username)
+        for user_id in userid_list:
+            try:
+                quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
+            except:
+                pass
+
 
         # Get seafile http server address and port from settings.py,
         # and cut out last '/'
