@@ -126,6 +126,7 @@ def repo(request, repo_id):
 
     token = ""
     is_owner = False
+    is_public = False
 
     if request.user.is_authenticated():
         if validate_owner(request, repo_id):
