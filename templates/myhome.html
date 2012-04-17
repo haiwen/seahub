@@ -25,10 +25,7 @@
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        {% if repo.is_public %}
-        <a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a>
-        {% endif %}
-        <a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a>
+        <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
     </tr>
     {% endfor %}
@@ -53,12 +50,7 @@
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        {% if repo.is_public %}
-        <a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">查看目录</a>
-        {% else %}
-        查看目录
-        {% endif %}
-        <button data="{{ SITE_ROOT }}repo/removefetched/{{ user.user_id }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
+        <button data="{{ SITE_ROOT }}repo/removefetched/{{ repo.userid }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
     </tr>
     {% endfor %}

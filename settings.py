@@ -115,6 +115,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 REGISTRATION_SEND_MAIL = True
 
+# seafile httpserver address and port
+HTTP_SERVER_ROOT = "http://localhost:8082"
+
 try:
     import local_settings
 except ImportError:
@@ -145,6 +148,3 @@ LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 # profile
 #AUTH_PROFILE_MODULE = "profile.UserProfile"
-
-# seafile httpserver address and port
-HTTP_SERVER_ROOT = "http://localhost:8082"

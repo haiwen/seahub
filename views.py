@@ -183,11 +183,9 @@ def remove_repo(request, repo_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
 @login_required
-def remove_fetched_repo(request, repo_id, username):
-    userid_list = get_binding_userids(username)
-    for user_id in userid_list:
-        if user_id and repo_id:
-            seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
+def remove_fetched_repo(request, user_id, repo_id):
+    if user_id and repo_id:
+        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -202,17 +200,20 @@ def myhome(request):
         try:
             owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(user_id))
             quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
-            fetched_repos.extend(seafserv_threaded_rpc.list_fetched_repos(user_id))
+
+            frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
+            for repo in frepos:
+                repo.userid = user_id	# associate a fetched repo with the user id
+                if seafserv_threaded_rpc.repo_is_public(repo.props.id):
+                    repo.is_public = True
+                else:
+                    repo.is_public = False
+                
+            fetched_repos.extend(frepos)
         except:
             pass
 
     for repo in owned_repos:
-        if seafserv_threaded_rpc.repo_is_public(repo.props.id):
-            repo.is_public = True
-        else:
-            repo.is_public = False
-            
-    for repo in fetched_repos:
         if seafserv_threaded_rpc.repo_is_public(repo.props.id):
             repo.is_public = True
         else:

@@ -1,6 +1,17 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
+{% block nav_home_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<ul>
+  {% if is_owner %}
+  {% if is_public %}
+  <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
+  {% endif %}
+  {% endif %}
+</ul>
+{% endblock %}
+
 {% block right_panel %}
 
 <h2>{{repo.props.name}}</h2>
