@@ -25,7 +25,10 @@
       <td></td>
       {% else %}
       <td>{{ dirent.props.obj_name }}</td>
-      <td><a href="{{ http_server_root }}/{{ repo_id }}?id={{ dirent.props.obj_id }}&filename={{ dirent.props.obj_name }}">下载</a></td>
+      <td>
+      <a href="#">查看</a>
+      <a href="{{ http_server_root }}/{{ repo_id }}?id={{ dirent.props.obj_id }}&filename={{ dirent.props.obj_name }}">下载</a>
+      </td>
       {% endif %}
     </tr>
     {% endfor %}

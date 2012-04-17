@@ -26,9 +26,7 @@
         <td>{{ repo.props.desc }}</td>
         <td>
         {% if repo.is_public %}
-        <a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">查看目录</a>
-        {% else %}
-        查看目录
+        <a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a>
         {% endif %}
         <a href="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/">删除</a>
         </td>
