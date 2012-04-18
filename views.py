@@ -10,13 +10,16 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, P
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_threaded_rpc, get_binding_userids, get_ccnetuser
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_userids, get_ccnetuser
 
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
 from seahub.base.accounts import CcnetUser
 from forms import AddUserForm
 
+import stat
+import time
+import settings
 
 @login_required
 def root(request):
@@ -123,9 +126,16 @@ def repo(request, repo_id):
 
     token = ""
     is_owner = False
-    if request.user.is_authenticated() and validate_owner(request, repo_id):
-        is_owner = True
-        token = seafserv_threaded_rpc.get_repo_token(repo_id)
+    is_public = False
+
+    if request.user.is_authenticated():
+        if validate_owner(request, repo_id):
+            is_owner = True
+            token = seafserv_threaded_rpc.get_repo_token(repo_id)
+        if seafserv_threaded_rpc.repo_is_public(repo_id) > 0:
+            is_public = True
+        else:
+            is_public = False
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -137,6 +147,7 @@ def repo(request, repo_id):
             'page_next': page_next,
             "branches": branches,
             "is_owner": is_owner,
+            "is_public": is_public,
             "token": token,
             }, context_instance=RequestContext(request))
 
@@ -172,11 +183,9 @@ def remove_repo(request, repo_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
 @login_required
-def remove_fetched_repo(request, repo_id, username):
-    userid_list = get_binding_userids(username)
-    for user_id in userid_list:
-        if user_id and repo_id:
-            seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
+def remove_fetched_repo(request, user_id, repo_id):
+    if user_id and repo_id:
+        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -191,9 +200,24 @@ def myhome(request):
         try:
             owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(user_id))
             quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
-            fetched_repos.extend(seafserv_threaded_rpc.list_fetched_repos(user_id))
+
+            frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
+            for repo in frepos:
+                repo.userid = user_id	# associate a fetched repo with the user id
+                if seafserv_threaded_rpc.repo_is_public(repo.props.id):
+                    repo.is_public = True
+                else:
+                    repo.is_public = False
+                
+            fetched_repos.extend(frepos)
         except:
             pass
+
+    for repo in owned_repos:
+        if seafserv_threaded_rpc.repo_is_public(repo.props.id):
+            repo.is_public = True
+        else:
+            repo.is_public = False
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -224,7 +248,53 @@ def ownerhome(request, owner_name):
             "owner": owner_name,
             }, context_instance=RequestContext(request))
 
+@login_required
+def repo_set_public(request, repo_id):
+    if repo_id:
+        seafserv_threaded_rpc.repo_set_public(repo_id)
+        
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required
+def repo_unset_public(request, repo_id):
+    if repo_id:
+        seafserv_threaded_rpc.repo_unset_public(repo_id)
+        
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+def repo_list_dir(request, repo_id):
+    if repo_id:
+        # Not public repo, go to 404 page
+        if not seafserv_threaded_rpc.repo_is_public(repo_id):
+            raise Http404
+        
+        repo = seafserv_threaded_rpc.get_repo(repo_id)
+        if not request.GET.get('root_id'): # No root id..?
+            # ..use HEAD commit's root id
+            commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
+            root_id = commit.props.root_id
+        else:
+            root_id = request.GET.get('root_id')
+        dirs = seafserv_rpc.list_dir(root_id)
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.props.mode):
+                dirent.is_dir = True
+            else:
+                dirent.is_dir = False
+                
+        # Get seafile http server address and port from settings.py,
+        # and cut out last '/'
+        if settings.HTTP_SERVER_ROOT[-1] == '/':
+            http_server_root = settings.HTTP_SERVER_ROOT[:-1]
+        else:
+            http_server_root = settings.HTTP_SERVER_ROOT
+    return render_to_response('repo_dir.html', {
+            "repo_id": repo_id,
+            "dirs": dirs,
+            "http_server_root": http_server_root,
+            },
+            context_instance=RequestContext(request))
+        
 @login_required
 def mypeers(request):
     cid = get_user_cid(request.user)

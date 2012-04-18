@@ -5,7 +5,8 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import root, peers, groups, myhome, \
     repo, group, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
-    ownerhome, remove_fetched_repo, user_info
+    ownerhome, remove_fetched_repo, repo_set_public, repo_unset_public, \
+    repo_list_dir, user_info
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -31,7 +32,10 @@ urlpatterns = patterns('',
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
     (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
-    (r'^repo/removefetched/(?P<username>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
+    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
+    (r'^repo/setpublic/(?P<repo_id>[^/]+)/$', repo_set_public),
+    (r'^repo/unsetpublic/(?P<repo_id>[^/]+)/$', repo_unset_public),
+    (r'^repo/dir/(?P<repo_id>[^/]+)/$', repo_list_dir),
 
     (r'^seafadmin/$', seafadmin),
     url(r'^useradmin/$', useradmin, name='useradmin'),

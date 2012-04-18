@@ -115,6 +115,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 REGISTRATION_SEND_MAIL = True
 
+# seafile httpserver address and port
+HTTP_SERVER_ROOT = "http://localhost:8082"
+
 try:
     import local_settings
 except ImportError:

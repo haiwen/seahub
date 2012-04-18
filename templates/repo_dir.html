@@ -1,0 +1,38 @@
+{% extends "myhome_base.html" %}
+
+{% block nav_home_class %}class="cur"{% endblock %}
+{% block left_panel %}
+{% endblock %}
+
+
+{% block right_panel %}
+
+
+<h3>文件及目录列表</h3>
+{% if dirs %}
+<table class="repo-list default">
+    <tr>
+        <th width="80%">名字</th>
+        <th width="20%">操作</th>
+    </tr>
+
+    {% for dirent in dirs %}
+    <tr>
+      {% if dirent.is_dir %}
+      <td><a href="{{ SITE_ROOT }}repo/dir/{{ repo_id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
+      <td></td>
+      {% else %}
+      <td>{{ dirent.props.obj_name }}</td>
+      <td>
+      <a href="{{ http_server_root }}/{{ repo_id }}?id={{ dirent.props.obj_id }}&filename={{ dirent.props.obj_name }}&op=open">查看</a>
+      <a href="{{ http_server_root }}/{{ repo_id }}?id={{ dirent.props.obj_id }}&filename={{ dirent.props.obj_name }}&op=download">下载</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+{% endblock %}

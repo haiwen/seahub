@@ -13,27 +13,6 @@ from models import UserCcnetConf
 from seaserv import ccnet_rpc, translate_time_usec, get_binding_userids
 
 @login_required
-def show_profile(request):
-    userid_list = get_binding_userids(request.user.username)
-
-    profile_dict = {}
-    
-    for user_id in userid_list:
-        try:
-            profile_timestamp = ccnet_rpc.get_user_profile_timestamp(user_id)
-            profile_timestamp = translate_time_usec(profile_timestamp)
-        except:
-            profile_timestamp = None
-        profile_dict[user_id] = profile_timestamp
-        
-    return render_to_response('profile/profile.html', {
-                                'userid_list': userid_list,
-                                'profile_dict': profile_dict,
-                                },
-                              context_instance=RequestContext(request))
-
-
-@login_required
 def get_ccnet_profile(request):
     try:
         ccnet_conf = UserCcnetConf.objects.get(user=request.user)
@@ -90,6 +69,17 @@ def download_profile(request):
 def list_userids(request):
     userid_list = get_binding_userids(request.user.username)
 
+    peer_list = []
+    for userid in userid_list:
+        try:
+            peernames = ccnet_rpc.get_peernames_by_userid(userid)
+            for peername in peernames.split('\n'):
+                if not peername:
+                    continue
+                peer_list.append(peername)
+        except:
+            pass
+
     return render_to_response('profile/user_ids.html',
-                              {'userid_list': userid_list},
+                              {'peer_list': peer_list},
                               context_instance=RequestContext(request))
