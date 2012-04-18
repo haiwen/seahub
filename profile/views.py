@@ -24,7 +24,15 @@ def show_profile(request):
             profile_timestamp = translate_time_usec(profile_timestamp)
         except:
             profile_timestamp = None
-        profile_dict[user_id] = profile_timestamp
+
+        try:
+            peernames = ccnet_rpc.get_peernames_by_userid(user_id)
+            for peername in peernames.split('\n'):
+                if not peername:
+                    continue
+                profile_dict[peername] = profile_timestamp
+        except:
+            pass
         
     return render_to_response('profile/profile.html', {
                                 'userid_list': userid_list,
@@ -90,6 +98,14 @@ def download_profile(request):
 def list_userids(request):
     userid_list = get_binding_userids(request.user.username)
 
+    peer_list = []
+    for userid in userid_list:
+        peernames = ccnet_rpc.get_peernames_by_userid(userid)
+        for peername in peernames.split('\n'):
+            if not peername:
+                continue
+            peer_list.append(peername)
+
     return render_to_response('profile/user_ids.html',
-                              {'userid_list': userid_list},
+                              {'peer_list': peer_list},
                               context_instance=RequestContext(request))

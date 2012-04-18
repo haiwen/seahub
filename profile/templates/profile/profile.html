@@ -5,7 +5,7 @@
 <h3>操作</h3>
 <ul>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
-  <li><a href="{{ SITE_ROOT}}profile/userids/">列出所有个人ID</a></li>
+  <li><a href="{{ SITE_ROOT}}profile/userids/">列出所有计算机</a></li>
 </ul>
 {% endblock %}
 
@@ -17,13 +17,13 @@
 
 <table class="profile-dict">
   <tr>
-    <th width="33%">个人ID</th>
+    <th width="33%">计算机</th>
     <th width="67">配置文件上传时间</th>
   </tr>
   {% if profile_dict %}
-    {% for user_id,profile_ts in profile_dict.items %}
+    {% for peername,profile_ts in profile_dict.items %}
     <tr>
-      <td>{{ user_id }}</td>
+      <td>{{ peername }}</td>
       {% if profile_ts %}
       <td>上传于{{ profile_ts }} <a href="{{ SITE_ROOT }}profile/download/?user_id={{ user_id }}">点此下载</a></td>
       {% else %}
