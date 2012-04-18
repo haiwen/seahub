@@ -262,7 +262,6 @@ def repo_unset_public(request, repo_id):
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-@login_required
 def repo_list_dir(request, repo_id):
     if repo_id:
         # Not public repo, go to 404 page
@@ -283,16 +282,6 @@ def repo_list_dir(request, repo_id):
             else:
                 dirent.is_dir = False
                 
-        # Get user quota usage
-        quota_usage = 0
-        userid_list = get_binding_userids(request.user.username)
-        for user_id in userid_list:
-            try:
-                quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
-            except:
-                pass
-
-
         # Get seafile http server address and port from settings.py,
         # and cut out last '/'
         if settings.HTTP_SERVER_ROOT[-1] == '/':
@@ -302,7 +291,6 @@ def repo_list_dir(request, repo_id):
     return render_to_response('repo_dir.html', {
             "repo_id": repo_id,
             "dirs": dirs,
-            "quota_usage": quota_usage,
             "http_server_root": http_server_root,
             },
             context_instance=RequestContext(request))
