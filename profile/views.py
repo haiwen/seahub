@@ -100,11 +100,14 @@ def list_userids(request):
 
     peer_list = []
     for userid in userid_list:
-        peernames = ccnet_rpc.get_peernames_by_userid(userid)
-        for peername in peernames.split('\n'):
-            if not peername:
-                continue
-            peer_list.append(peername)
+        try:
+            peernames = ccnet_rpc.get_peernames_by_userid(userid)
+            for peername in peernames.split('\n'):
+                if not peername:
+                    continue
+                peer_list.append(peername)
+        except:
+            pass
 
     return render_to_response('profile/user_ids.html',
                               {'peer_list': peer_list},
