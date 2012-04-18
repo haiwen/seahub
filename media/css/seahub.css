@@ -90,8 +90,22 @@ input {
     margin:2px 0;
     border: 1px solid #80B0B0;
 }
-input[type=submit], button { color: #080; height:25px; padding:3px 8px; background: #EEE; cursor:pointer; border: 1px solid #80B0B0; border-radius: 3px; -moz-border-radius:3px; margin-top:5px; }
-input[type=submit]:hover, button:hover { border: 1px solid #80B0B0; background: #FFF; }
+input[type=submit],
+button { 
+    color: #080;
+    height:23px;
+    padding:2px 3px;
+    background: #EEE;
+    border: 1px solid #80B0B0;
+    border-radius: 3px;
+    -moz-border-radius:3px;
+    margin-top:5px;
+}
+input[type=submit]:hover,
+button:hover { 
+    cursor:pointer;
+    background: #FFF;
+}
 button {
     margin:0;
 }
