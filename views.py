@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.db import IntegrityError
 from auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from auth.tokens import default_token_generator
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
@@ -21,6 +22,21 @@ import stat
 import time
 import settings
 
+def get_httpserver_root():
+    # Get seafile http server address and port from settings.py,
+    # and cut out last '/'
+    if settings.HTTP_SERVER_ROOT[-1] == '/':
+        http_server_root = settings.HTTP_SERVER_ROOT[:-1]
+    else:
+        http_server_root = settings.HTTP_SERVER_ROOT
+    return http_server_root
+    
+def gen_token():
+    # Generate short token used for owner to access repo file
+    from django.utils.hashcompat import sha_constructor
+    token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[::8]
+    return token
+    
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -126,16 +142,13 @@ def repo(request, repo_id):
 
     token = ""
     is_owner = False
-    is_public = False
-
+    repo_role = ""
+    
     if request.user.is_authenticated():
         if validate_owner(request, repo_id):
             is_owner = True
             token = seafserv_threaded_rpc.get_repo_token(repo_id)
-        if seafserv_threaded_rpc.repo_is_public(repo_id) > 0:
-            is_public = True
-        else:
-            is_public = False
+        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -147,7 +160,7 @@ def repo(request, repo_id):
             'page_next': page_next,
             "branches": branches,
             "is_owner": is_owner,
-            "is_public": is_public,
+            "repo_role": repo_role,
             "token": token,
             }, context_instance=RequestContext(request))
 
@@ -204,20 +217,20 @@ def myhome(request):
             frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
             for repo in frepos:
                 repo.userid = user_id	# associate a fetched repo with the user id
-                if seafserv_threaded_rpc.repo_is_public(repo.props.id):
-                    repo.is_public = True
-                else:
-                    repo.is_public = False
+#                if seafserv_threaded_rpc.repo_is_public(repo.props.id):
+#                    repo.is_public = True
+#                else:
+#                    repo.is_public = False
                 
             fetched_repos.extend(frepos)
         except:
             pass
 
-    for repo in owned_repos:
-        if seafserv_threaded_rpc.repo_is_public(repo.props.id):
-            repo.is_public = True
-        else:
-            repo.is_public = False
+#    for repo in owned_repos:
+#        if seafserv_threaded_rpc.repo_query_role(repo.props.id) == 'public':
+#            repo.is_public = True
+#        else:
+#            repo.is_public = False
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -262,12 +275,26 @@ def repo_unset_public(request, repo_id):
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+@login_required
+def repo_set_role(request, repo_id, role_name):
+    if repo_id and role_name:
+        seafserv_threaded_rpc.repo_set_role(repo_id, role_name)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
 def repo_list_dir(request, repo_id):
     if repo_id:
-        # Not public repo, go to 404 page
-        if not seafserv_threaded_rpc.repo_is_public(repo_id):
+        # any person visit private repo, go to 404 page
+        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
+        if repo_role == 'private':
             raise Http404
-        
+
+        # people who is not owner visits own repo, go to 404 page
+        if not validate_owner(request, repo_id):
+            if repo_role == 'own':
+                raise Http404
+            
         repo = seafserv_threaded_rpc.get_repo(repo_id)
         if not request.GET.get('root_id'): # No root id..?
             # ..use HEAD commit's root id
@@ -282,19 +309,38 @@ def repo_list_dir(request, repo_id):
             else:
                 dirent.is_dir = False
                 
-        # Get seafile http server address and port from settings.py,
-        # and cut out last '/'
-        if settings.HTTP_SERVER_ROOT[-1] == '/':
-            http_server_root = settings.HTTP_SERVER_ROOT[:-1]
-        else:
-            http_server_root = settings.HTTP_SERVER_ROOT
     return render_to_response('repo_dir.html', {
             "repo_id": repo_id,
             "dirs": dirs,
-            "http_server_root": http_server_root,
             },
             context_instance=RequestContext(request))
+
+@login_required
+def repo_operation_file(request, op, repo_id, obj_id, file_name):
+    if repo_id:
+        # any person visit private repo, go to 404 page
+        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
+        if repo_role == 'private':
+            raise Http404
+
+        token = ''        
+        if repo_role == 'own':
+            # people who is not owner visits own repo, go to 404 page            
+            if not validate_owner(request, repo_id):
+                raise Http404
+            else:
+                # owner should get a token to visit repo                
+                token = gen_token()
+                # put token into memory in seaf-server
+                seafserv_threaded_rpc.repo_save_access_token(token, obj_id)
+
+        http_server_root = get_httpserver_root()
         
+        return HttpResponseRedirect('%s/%s?id=%s&filename=%s&op=%s&t=%s' %
+                                    (http_server_root,
+                                     repo_id, obj_id,
+                                     file_name, op, token))
+
 @login_required
 def mypeers(request):
     cid = get_user_cid(request.user)
