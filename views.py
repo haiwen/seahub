@@ -142,13 +142,13 @@ def repo(request, repo_id):
 
     token = ""
     is_owner = False
-    repo_role = ""
+    repo_ap = ""
     
     if request.user.is_authenticated():
         if validate_owner(request, repo_id):
             is_owner = True
             token = seafserv_threaded_rpc.get_repo_token(repo_id)
-        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
+        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -160,7 +160,7 @@ def repo(request, repo_id):
             'page_next': page_next,
             "branches": branches,
             "is_owner": is_owner,
-            "repo_role": repo_role,
+            "repo_ap": repo_ap,
             "token": token,
             }, context_instance=RequestContext(request))
 
@@ -217,20 +217,10 @@ def myhome(request):
             frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
             for repo in frepos:
                 repo.userid = user_id	# associate a fetched repo with the user id
-#                if seafserv_threaded_rpc.repo_is_public(repo.props.id):
-#                    repo.is_public = True
-#                else:
-#                    repo.is_public = False
                 
             fetched_repos.extend(frepos)
         except:
             pass
-
-#    for repo in owned_repos:
-#        if seafserv_threaded_rpc.repo_query_role(repo.props.id) == 'public':
-#            repo.is_public = True
-#        else:
-#            repo.is_public = False
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -276,9 +266,9 @@ def repo_unset_public(request, repo_id):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
-def repo_set_role(request, repo_id, role_name):
-    if repo_id and role_name:
-        seafserv_threaded_rpc.repo_set_role(repo_id, role_name)
+def repo_set_access_property(request, repo_id, ap):
+    if repo_id and ap:
+        seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -286,13 +276,13 @@ def repo_set_role(request, repo_id, role_name):
 def repo_list_dir(request, repo_id):
     if repo_id:
         # any person visit private repo, go to 404 page
-        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
-        if repo_role == 'private':
+        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+        if repo_ap == 'private':
             raise Http404
 
         # people who is not owner visits own repo, go to 404 page
         if not validate_owner(request, repo_id):
-            if repo_role == 'own':
+            if repo_ap == 'own':
                 raise Http404
             
         repo = seafserv_threaded_rpc.get_repo(repo_id)
@@ -319,12 +309,12 @@ def repo_list_dir(request, repo_id):
 def repo_operation_file(request, op, repo_id, obj_id, file_name):
     if repo_id:
         # any person visit private repo, go to 404 page
-        repo_role = seafserv_threaded_rpc.repo_query_role(repo_id)
-        if repo_role == 'private':
+        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+        if repo_ap == 'private':
             raise Http404
 
         token = ''        
-        if repo_role == 'own':
+        if repo_ap == 'own':
             # people who is not owner visits own repo, go to 404 page            
             if not validate_owner(request, repo_id):
                 raise Http404
@@ -332,7 +322,7 @@ def repo_operation_file(request, op, repo_id, obj_id, file_name):
                 # owner should get a token to visit repo                
                 token = gen_token()
                 # put token into memory in seaf-server
-                seafserv_threaded_rpc.repo_save_access_token(token, obj_id)
+                seafserv_rpc.web_save_access_token(token, obj_id)
 
         http_server_root = get_httpserver_root()
         

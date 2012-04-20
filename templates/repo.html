@@ -5,11 +5,11 @@
 {% block left_panel %}
 <ul>
   {% if is_owner %}
-  {% if repo_role and repo_role != 'private' %}
+  {% if repo_ap and repo_ap != 'private' %}
   <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
   {% endif %}
   {% else %}
-  {% if repo_role == 'public' %}
+  {% if repo_ap == 'public' %}
   <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
   {% endif %}
   {% endif %}
@@ -55,19 +55,19 @@
               <th>公共访问</th>
               {% if is_owner %}
               <td>
-                {% if repo_role == 'public' %}
+                {% if repo_ap == 'public' %}
                 <input type="radio" id="repo-role" name="repo-role" value="public" checked>开启
                 {% else %}
                 <input type="radio" id="repo-role" name="repo-role" value="public">开启
                 {% endif %}
 
-                {% if repo_role == 'own' %}
+                {% if repo_ap == 'own' %}
                 <input type="radio" id="repo-role" name="repo-role" value="own" checked>只对自己开启
                 {% else %}
                 <input type="radio" id="repo-role" name="repo-role" value="own">只对自己开启
                 {% endif %}
                 
-                {% if not repo_role or repo_role == 'private'%}
+                {% if not repo_ap or repo_ap == 'private'%}
                 <input type="radio" id="repo-role" name="repo-role" value="private" checked>关闭
                 {% else %}
                 <input type="radio" id="repo-role" name="repo-role" value="private">关闭
@@ -144,7 +144,7 @@ $(function(){
 $("input[name='repo-role']").click(
 function(){
      var item = $("input[name='repo-role']:checked").val();
-     location.href = "{{ SITE_ROOT }}repo/setrole/{{ repo.props.id}}/"+item+"/";
+     location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/"+item+"/";
 });
 });
 
