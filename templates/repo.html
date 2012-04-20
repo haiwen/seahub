@@ -5,7 +5,7 @@
 {% block left_panel %}
 <ul>
   {% if is_owner %}
-  {% if repo_role != 'private' %}
+  {% if repo_role and repo_role != 'private' %}
   <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
   {% endif %}
   {% else %}
@@ -67,7 +67,7 @@
                 <input type="radio" id="repo-role" name="repo-role" value="own">只对自己开启
                 {% endif %}
                 
-                {% if repo_role == 'private' %}
+                {% if not repo_role or repo_role == 'private'%}
                 <input type="radio" id="repo-role" name="repo-role" value="private" checked>关闭
                 {% else %}
                 <input type="radio" id="repo-role" name="repo-role" value="private">关闭
