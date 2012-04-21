@@ -7,7 +7,6 @@ from registration.views import register
 
 from seahub.base.accounts import RegistrationForm
 
-
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
                            direct_to_template,
@@ -24,7 +23,9 @@ urlpatterns = patterns('',
                        url(r'^register/$',
                            register,
                            { 'backend': 'seahub.base.accounts.RegistrationBackend',
-                             'form_class': RegistrationForm },
+                             'form_class': RegistrationForm,
+                             'success_url': '/',
+                             },
                            name='registration_register'),
                        url(r'^register/complete/$',
                            direct_to_template,

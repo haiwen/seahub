@@ -113,7 +113,9 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-REGISTRATION_SEND_MAIL = True
+# this value should be false, since user will be activated after registration
+# since 0.9.2
+REGISTRATION_SEND_MAIL = False
 
 # seafile httpserver address and port
 HTTP_SERVER_ROOT = "http://localhost:8082"

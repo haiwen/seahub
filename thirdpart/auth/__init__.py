@@ -3,7 +3,7 @@ from warnings import warn
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
-SESSION_KEY = '_auth_user_id'
+SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend'
 REDIRECT_FIELD_NAME = 'next'
 

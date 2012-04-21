@@ -209,10 +209,14 @@ class RegistrationBackend(object):
         else:
             site = RequestSite(request)
 
-        new_user = RegistrationProfile.objects.create_inactive_user(username, email,
-                                                                    password, site,
-                                                                    send_email=settings.REGISTRATION_SEND_MAIL)
-        
+        new_user = RegistrationProfile.objects.create_active_user(username, email,
+                                                                  password, site,
+                                                                  send_email=settings.REGISTRATION_SEND_MAIL)
+
+        # login the user
+        new_user.backend='auth.backends.ModelBackend' 
+        login(request, new_user)
+
         userid = kwargs['userid']
         if userid:
             ccnet_rpc.add_binding(new_user.username, userid)

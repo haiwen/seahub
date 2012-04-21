@@ -382,13 +382,9 @@ def useradmin(request):
 
     users = ccnet_rpc.get_emailusers(-1,-1)
     for user in users:
-        try:
-            user.userid_list = get_binding_userids(user.get_email())
-#            user.ccnet_user = ccnet_rpc.get_user(user.profile.ccnet_user_id)
-#            user.role_list = user.ccnet_user.props.role_list.split(',')
-        except:
-            user.ccnet_user = None
-
+        if user.props.id == request.user.id:
+            user.is_self = True
+            
     return render_to_response(
         'useradmin.html', {
             'users': users,

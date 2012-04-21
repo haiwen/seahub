@@ -61,9 +61,9 @@ class RegistrationManager(models.Manager):
                 profile.save()
                 return ccnetuser
         return False
-    
-    def create_inactive_user(self, username, email, password,
-                             site, send_email=True):
+
+    def create_email_user(self, username, email, password,
+                          site, send_email=True, is_active=False):
         """
         Create a new, inactive ``User``, generate a
         ``RegistrationProfile`` and email its activation key to the
@@ -73,11 +73,10 @@ class RegistrationManager(models.Manager):
         user. To disable this, pass ``send_email=False``.
         
         """
-
         from seahub.base.accounts import CcnetUser
 
         ccnetuser = CcnetUser.objects.create_user(username, password, False, False)
-        ccnetuser.is_active = False
+        ccnetuser.is_active = is_active
         ccnetuser.save()
         
         registration_profile = self.create_profile(ccnetuser)
@@ -86,6 +85,19 @@ class RegistrationManager(models.Manager):
             registration_profile.send_activation_email(site)
 
         return ccnetuser
+    
+    def create_inactive_user(self, username, email, password,
+                             site, send_email=True):
+        
+        return self.create_email_user(username, email, password, site,
+                                      send_email, is_active=False)
+    create_inactive_user = transaction.commit_on_success(create_inactive_user)
+
+    def create_active_user(self, username, email, password,
+                           site, send_email=True):
+        
+        return self.create_email_user(username, email, password, site,
+                                      send_email, is_active=True)
     create_inactive_user = transaction.commit_on_success(create_inactive_user)
 
     def create_profile(self, user):
