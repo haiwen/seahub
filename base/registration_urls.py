@@ -7,6 +7,13 @@ from registration.views import register
 
 from seahub.base.accounts import RegistrationForm
 
+reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
+             'form_class': RegistrationForm,
+             }
+
+if settings.ACTIVATE_AFTER_REGISTRATION == True:
+    reg_dict['success_url'] = '/'
+
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
                            direct_to_template,
@@ -22,10 +29,7 @@ urlpatterns = patterns('',
                            name='registration_activate'),
                        url(r'^register/$',
                            register,
-                           { 'backend': 'seahub.base.accounts.RegistrationBackend',
-                             'form_class': RegistrationForm,
-                             'success_url': '/',
-                             },
+                           reg_dict,
                            name='registration_register'),
                        url(r'^register/complete/$',
                            direct_to_template,

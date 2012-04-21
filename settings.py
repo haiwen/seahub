@@ -113,8 +113,12 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# this value should be false, since user will be activated after registration
-# since 0.9.2
+# Set to True when user will be activaed after registration,
+# and no email sending
+ACTIVATE_AFTER_REGISTRATION = True
+
+# In order to use email sending,
+# ACTIVATE_AFTER_REGISTRATION MUST set to False
 REGISTRATION_SEND_MAIL = False
 
 # seafile httpserver address and port

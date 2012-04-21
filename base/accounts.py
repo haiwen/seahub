@@ -209,13 +209,21 @@ class RegistrationBackend(object):
         else:
             site = RequestSite(request)
 
-        new_user = RegistrationProfile.objects.create_active_user(username, email,
-                                                                  password, site,
-                                                                  send_email=settings.REGISTRATION_SEND_MAIL)
 
-        # login the user
-        new_user.backend='auth.backends.ModelBackend' 
-        login(request, new_user)
+        if settings.ACTIVATE_AFTER_REGISTRATION == True:
+            # since user will be activated after registration,
+            # so we will not use email sending, just create acitvated user
+            new_user = RegistrationProfile.objects.create_active_user(username, email,
+                                                                        password, site,
+                                                                        send_email=False)
+            # login the user
+            new_user.backend='auth.backends.ModelBackend' 
+            login(request, new_user)
+        else:
+            # create inactive user, user can be activated by admin, or through activated email
+            new_user = RegistrationProfile.objects.create_inactive_user(username, email,
+                                                                        password, site,
+                                                                        send_email=settings.REGISTRATION_SEND_MAIL)
 
         userid = kwargs['userid']
         if userid:
