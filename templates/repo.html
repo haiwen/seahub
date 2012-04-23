@@ -5,9 +5,7 @@
 {% block left_panel %}
 <ul>
   {% if is_owner %}
-  {% if repo_ap and repo_ap != 'private' %}
   <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-  {% endif %}
   {% else %}
   {% if repo_ap == 'public' %}
   <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
@@ -52,29 +50,19 @@
                 {% endif %}
             </tr>
             <tr>
-              <th>公共访问</th>
+              <th>HTTP访问</th>
               {% if is_owner %}
               <td>
                 {% if repo_ap == 'public' %}
-                <input type="radio" id="repo-role" name="repo-role" value="public" checked>开启
+                <input type="checkbox" name="repo-access-switch" id="repo-access-switch" value="public" checked />
                 {% else %}
-                <input type="radio" id="repo-role" name="repo-role" value="public">开启
+                <input type="checkbox" name="repo-access-switch" id="repo-access-switch" value="own" />
                 {% endif %}
-
-                {% if repo_ap == 'own' %}
-                <input type="radio" id="repo-role" name="repo-role" value="own" checked>只对自己开启
-                {% else %}
-                <input type="radio" id="repo-role" name="repo-role" value="own">只对自己开启
-                {% endif %}
-                
-                {% if not repo_ap or repo_ap == 'private'%}
-                <input type="radio" id="repo-role" name="repo-role" value="private" checked>关闭
-                {% else %}
-                <input type="radio" id="repo-role" name="repo-role" value="private">关闭
-                {% endif %}
+                <label for="repo-access-switch">开启</label>
+                <span id="repo-access-tips" style="color:#808080;">开启后，任何人都能够访问该目录。</span> 
               </td>
               {% else %}
-              <td>只有拥有者可选</td>
+              <td>只有同步目录拥有者可选</td>
               {% endif %}
             </tr>
         </table>
@@ -131,6 +119,15 @@ $(function() {
         $("#modify-token-form").modal({appendTo: "#main"}); 
     });
 })
+$('#repo-access-switch').click(function() {
+        var a = $("input[name='repo-access-switch']:checked").val();
+        if (a) {
+            location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/public/";
+        } else {
+            location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/own/";
+        }
+    });
+
 $('#token-show-switch').click(function() {
         if ($(this).attr('checked')) {
             $('#token').html('{{token}}');
@@ -138,15 +135,8 @@ $('#token-show-switch').click(function() {
             $('#token').html('*****');
         }
     });
-$('#tabs').tabs({cookie: {expires: 1}});
 
-$(function(){
-$("input[name='repo-role']").click(
-function(){
-     var item = $("input[name='repo-role']:checked").val();
-     location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/"+item+"/";
-});
-});
+$('#tabs').tabs({cookie: {expires: 1}});
 
 </script>
 {% endblock %}
