@@ -12,7 +12,7 @@ reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
              }
 
 if settings.ACTIVATE_AFTER_REGISTRATION == True:
-    reg_dict['success_url'] = '/'
+    reg_dict['success_url'] = settings.SITE_ROOT
 
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
