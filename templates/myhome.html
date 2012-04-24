@@ -13,18 +13,17 @@
 {% if owned_repos %}
 <table class="repo-list">
     <tr>
-        <th width="12%">名字</th>
-        <th width="33%">ID</th>
-        <th width="40%">描述</th>
-        <th width="15%">操作</th>
+        <th width="30%">名字</th>
+        <th width="50%">描述</th>
+        <th width="20%">操作</th>
     </tr>
 
     {% for repo in owned_repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
+        <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" class="repo-download-btn">下载</button>
         <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
         <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
@@ -39,18 +38,17 @@
 {% if fetched_repos %}
 <table class="repo-list">
     <tr>
-        <th width="12%">名字</th>
-        <th width="33%">ID</th>
-        <th width="40%">描述</th>
-        <th width="15%">操作</th>
+        <th width="30%">名字</th>
+        <th width="50%">描述</th>
+        <th width="20%">操作</th>
     </tr>
 
     {% for repo in fetched_repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
+        <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" class="repo-download-btn">下载</button>
         <button data="{{ SITE_ROOT }}repo/removefetched/{{ repo.userid }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
     </tr>
@@ -60,7 +58,7 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="repo-share-form" action="/repo/addshare/" method="post" name="repo-share-form" class="hide">
+<form id="repo-share-form" action="{{ SITE_ROOT }}shareadmin/addshare/" method="post" name="repo-share-form" class="hide">
     <label>邮箱</label><br />
     <input id="to_email" type="text" name="to_email" value="" maxlength="40" /><br/>
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
@@ -75,6 +73,10 @@ $(".repo-share-btn").click(function() {
     repo_id = $(this).attr("data");
     $("#share_repo_id").val(repo_id);
     $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
+});
+
+$(".repo-download-btn").click(function() {
+    location.href = $(this).attr("data");
 });
 
 addConfirmTo($('.repo-delete-btn'));

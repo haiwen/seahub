@@ -7,7 +7,7 @@ from seahub.views import root, peers, groups, myhome, \
     role_add, role_remove, activate_user, user_add, user_remove, \
     ownerhome, remove_fetched_repo, repo_set_public, repo_unset_public, \
     repo_list_dir, user_info, repo_set_access_property, repo_operation_file, \
-    repo_add_share, repo_list_share, repo_remove_share
+    repo_add_share, repo_list_share, repo_remove_share, repo_download
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -29,9 +29,9 @@ urlpatterns = patterns('',
     (r'^$', root),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
-    url(r'^repo/addshare/$', repo_add_share, name='repo_add_share'),       
+                       
     url(r'^shareadmin/$', repo_list_share, name='repo_list_share'),
-    (r'^shareadmin/remove/(?P<repo_id>[^/]+)/(?P<to_email>[^/]+)/$', repo_remove_share),
+    url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),                  (r'^shareadmin/remove/(?P<repo_id>[^/]+)/(?P<to_email>[^/]+)/$', repo_remove_share),
 
     (r'^download/$', direct_to_template, { 'template': 'download.html' } ),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     (r'^repo/setap/(?P<repo_id>[^/]+)/(?P<ap>[^/]+)/$', repo_set_access_property),
     (r'^repo/dir/(?P<repo_id>[^/]+)/$', repo_list_dir),
     (r'^repo/(?P<op>[^/]+)/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/(?P<file_name>[^/]+)/$', repo_operation_file),
+    (r'^repo/download/(?P<repo_id>[^/]+)/$', repo_download),                       
 
     (r'^seafadmin/$', seafadmin),
     url(r'^useradmin/$', useradmin, name='useradmin'),

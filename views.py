@@ -356,6 +356,15 @@ def repo_list_share(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+def repo_download(request, repo_id):
+    relay_id = cclient.props.id
+    token = 'default'
+
+    redirect_url = "http://localhost:8083/repo/download/?repo_id=%s&token=%s&relay_id=%s" % (repo_id, token, relay_id)
+    
+    return HttpResponseRedirect(redirect_url)
+    
+@login_required
 def repo_remove_share(request, repo_id, to_email):
     if not validate_owner(request, repo_id):
         raise Http404
