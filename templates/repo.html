@@ -1,22 +1,49 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
-{% block nav_home_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <ul>
-  {% if is_owner %}
-  <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-  {% else %}
-  {% if repo_ap == 'public' %}
-  <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-  {% endif %}
-  {% endif %}
+{% if is_owner %}
+    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
+{% else %}
+    {% if repo_ap == 'public' %}
+    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
+    {% endif %}
+{% endif %}
 </ul>
 {% endblock %}
 
 {% block right_panel %}
-
 <h2>{{repo.props.name}}</h2>
+<p class="repo-desc">{{repo.props.desc}}</p>
+<p>
+    <span class="item-name">WEB匿名访问:</span>
+    {% if is_owner %}
+        {% if repo_ap == 'public' %}
+    <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
+        {% else %}
+    <input type="checkbox" name="repo-access-switch" id="repo-access-switch" autocomplete="off" /><label for="repo-access-switch">开启</label>
+        {% endif %}
+    <span class="tip">开启后，任何人都能够访问该目录</span>
+    {% else %}
+    <span>只有同步目录拥有者可设置</span>
+    {% endif %}
+</p>
+
+<h3>最近修改</h3>
+<table>
+    <tr>
+        <th width="20%">修改时间</th>
+        <th width="80%">描述</th>
+    </tr>
+    {% for commit in recent_commits %}
+    <tr>
+        <td>{{ commit.props.ctime|tsstr_sec }}</td>
+        <td>{{ commit.props.desc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/">查看全部修改</a>
 
 <form id="modify-token-form" action="{{ SITE_ROOT }}repo/token/modify/{{repo.props.id}}/" method="post" class="hide">
     <h3>新口令:</h3>
@@ -24,119 +51,28 @@
     <input id="id_summit" type="submit" value="提交" />
 </form>
 
-<div id="tabs">
-    <ul>
-        <li><a href="#basic-info">基本信息</a></li>
-        <li><a href="#history">历史</a></li>
-    </ul>
-
-    <div id="basic-info">
-        <h3>基本信息</h3>
-        <table>
-            <tr>
-                <th width="12%">ID</th>
-                <td width="88%">{{repo.props.id}}</td>
-            </tr>
-            <tr>
-                <th>描述</th>
-                <td>{{repo.props.desc}}</td>
-            </tr>
-            <tr>
-                <th>访问口令</th>
-                {% if is_owner %}
-                <td><span id="token">*****</span> <input type="checkbox" name="token-show-switch" id="token-show-switch" /><label for="token-show-switch">显示</label> <button id="modify-token-btn">修改</button></td>
-                {% else %}
-                <td>只有同步目录拥有者可见</td>
-                {% endif %}
-            </tr>
-            <tr>
-              <th>HTTP访问</th>
-              {% if is_owner %}
-              <td>
-                {% if repo_ap == 'public' %}
-                <input type="checkbox" name="repo-access-switch" id="repo-access-switch" value="public" checked />
-                {% else %}
-                <input type="checkbox" name="repo-access-switch" id="repo-access-switch" value="own" />
-                {% endif %}
-                <label for="repo-access-switch">开启</label>
-                <span id="repo-access-tips" style="color:#808080;">开启后，任何人都能够访问该目录。</span> 
-              </td>
-              {% else %}
-              <td>只有同步目录拥有者可选</td>
-              {% endif %}
-            </tr>
-        </table>
-    </div>
-
-    <div id="history">
-        <h3>修改记录</h3>
-        <table>
-            <tr>
-                <!-- <th>ID</th> -->
-                <th width="20%">修改时间</th>
-                <th width="80%">描述</th>
-            </tr>
-            {% for commit in commits %}
-            <tr>
-                <!-- <td>{{ commit.props.id }}</td> -->
-                <td>{{ commit.props.ctime|tsstr_sec }}</td>
-                <td>{{ commit.props.desc }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <div id="paginator">
-            {% if current_page != 1 %}
-            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
-            {% endif %}
-            {% if page_next %}
-            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
-            {% endif %}
-            <span>每页：</span> 
-            {% if per_page == 25 %}
-            <span> 25 </span> 
-            {% else %}
-            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=25" class="per-page">25</a>
-            {% endif %}
-            {% if per_page == 50 %}
-            <span> 50 </span> 
-            {% else %}
-            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=50" class="per-page">50</a>
-            {% endif %}
-            {% if per_page == 100 %}
-            <span> 100 </span> 
-            {% else %}
-            <a href="{{ SITE_ROOT }}repo/{{repo.props.id}}/?per_page=100" class="per-page">100</a>
-            {% endif %}
-        </div>
-    </div>
+<div id="public-access-start-confirm" class="hide">
+    <p>确定要开启吗？</p>
+    <button id="public-access-start-btn">确定</button>
+    <button id="public-access-start-cancel-btn" class="simplemodal-close">取消</button>
 </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$(function() {
-    $("#modify-token-btn").click(function() {
-        $("#modify-token-form").modal({appendTo: "#main"}); 
-    });
-})
 $('#repo-access-switch').click(function() {
-        var a = $("input[name='repo-access-switch']:checked").val();
-        if (a) {
-            location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/public/";
-        } else {
-            location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/own/";
-        }
-    });
+    if ($(this).attr('checked')) {
+        $('#public-access-start-confirm').modal({appendTo:"#main", containerCss:{padding:18}});
+    } else {
+        location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/own/";
+    }
+});
 
-$('#token-show-switch').click(function() {
-        if ($(this).attr('checked')) {
-            $('#token').html('{{token}}');
-        } else {
-            $('#token').html('*****');
-        }
-    });
-
-$('#tabs').tabs({cookie: {expires: 1}});
-
+$('#public-access-start-btn').click(function() {
+    location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/public/";
+});
+$('#public-access-start-cancel-btn').click(function() {
+    $('#repo-access-switch').attr('checked', false);
+});
 </script>
 {% endblock %}
