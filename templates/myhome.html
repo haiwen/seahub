@@ -25,6 +25,7 @@
         <td>{{ repo.props.id }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
+        <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
         <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
     </tr>
@@ -58,10 +59,24 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
+
+<form id="repo-share-form" action="/repo/addshare/" method="post" name="repo-share-form" class="hide">
+    <label>邮箱</label><br />
+    <input id="to_email" type="text" name="to_email" value="" maxlength="40" /><br/>
+    <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
+    <input type="submit" value="提交" />
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+$(".repo-share-btn").click(function() {
+    repo_id = $(this).attr("data");
+    $("#share_repo_id").val(repo_id);
+    $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
+});
+
 addConfirmTo($('.repo-delete-btn'));
 </script>
 {% endblock %}

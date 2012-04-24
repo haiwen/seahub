@@ -4,6 +4,10 @@
     <li>
         <a href="{{ SITE_ROOT }}home/my/" {% block nav_home_class %}{% endblock %}>我的页面</a>
     </li>
+    <li>
+        <a href="{{ SITE_ROOT }}shareadmin/" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
+    </li>
+    
     {% if request.user.is_staff %}
     <li>
         <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>

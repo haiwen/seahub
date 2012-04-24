@@ -330,7 +330,41 @@ def repo_operation_file(request, op, repo_id, obj_id, file_name):
                                     (http_server_root,
                                      repo_id, obj_id,
                                      file_name, op, token))
+    
+@login_required
+def repo_add_share(request):
+    if request.method == 'POST':
+        from_email = request.user.username
+        repo_id = request.POST.get('share_repo_id', '')
+        to_email = request.POST.get('to_email', '')
 
+        if validate_owner(request, repo_id):
+            seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+def repo_list_share(request):
+    username = request.user.username
+
+    out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
+    in_repos = seafserv_threaded_rpc.list_share_repos(username, 'to_email', -1, -1)
+
+    return render_to_response('share_repos.html', {
+            "out_repos": out_repos,
+            "in_repos": in_repos,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def repo_remove_share(request, repo_id, to_email):
+    if not validate_owner(request, repo_id):
+        raise Http404
+
+    from_email = request.user.username
+    seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
 @login_required
 def mypeers(request):
     cid = get_user_cid(request.user)

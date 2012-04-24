@@ -1,0 +1,63 @@
+{% extends "myhome_base.html" %}
+
+{% block nav_shareadmin_class %}class="cur"{% endblock %}
+
+{% block right_panel %}
+
+<h3>我共享的同步目录</h3>
+{% if out_repos %}
+<table class="repo-list">
+    <tr>
+        <th width="12%">名字</th>
+        <th width="33%">邮箱</th>
+        <th width="40%">描述</th>
+        <th width="15%">操作</th>
+    </tr>
+
+    {% for repo in out_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.shared_email }}</td>
+        <td>{{ repo.props.desc }}</td>
+        <td>
+          <a href="{{ SITE_ROOT }}shareadmin/remove/{{ repo.props.id }}/{{ repo.props.shared_email }}/">取消共享</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+<h3>共享给我的同步目录</h3>
+{% if in_repos %}
+<table class="repo-list">
+    <tr>
+        <th width="12%">名字</th>
+        <th width="33%">邮箱</th>
+        <th width="40%">描述</th>
+        <th width="15%">操作</th>
+    </tr>
+
+    {% for repo in in_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.shared_email }}</td>
+        <td>{{ repo.props.desc }}</td>
+        <td>
+          <a href="#">下载</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($('.repo-delete-btn'));
+</script>
+{% endblock %}
