@@ -122,6 +122,7 @@ def group_add_repo(request, group_id):
             }, context_instance=RequestContext(request))
 
 def validate_owner(request, repo_id):
+    # check whether user in the request own the repo
     is_owner = False
     cid_list = request.user.userid_list
     for cid in cid_list:
@@ -129,6 +130,13 @@ def validate_owner(request, repo_id):
             is_owner = True
 
     return is_owner
+
+def validate_emailuser(email):
+    # check whether emailuser is in the database
+    if ccnet_rpc.get_emailuser(email) != None:
+        return True
+    
+    return False
 
 @login_required
 def repo(request, repo_id):
@@ -361,10 +369,11 @@ def repo_add_share(request):
     if request.method == 'POST':
         from_email = request.user.username
         repo_id = request.POST.get('share_repo_id', '')
-        to_email = request.POST.get('to_email', '')
-
-        if validate_owner(request, repo_id):
-            seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
+        to_emails = request.POST.get('to_email', '')
+        to_email_list = to_emails.split(';')
+        for to_email in to_email_list:
+            if validate_emailuser(to_email.strip()) and validate_owner(request, repo_id):
+                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email.strip(), 'rw')
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 

@@ -59,8 +59,9 @@
 {% endif %}
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}shareadmin/addshare/" method="post" name="repo-share-form" class="hide">
-    <label>邮箱</label><br />
-    <input id="to_email" type="text" name="to_email" value="" maxlength="40" /><br/>
+    <label>邮箱(多个邮箱以;分隔)</label><br />
+    <textarea id="to_email" name="to_email" value="" cols="30" rows="5" ></textarea>
+    <br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
     <input type="submit" value="提交" />
 </form>
