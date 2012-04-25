@@ -31,7 +31,8 @@ urlpatterns = patterns('',
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
                        
     url(r'^shareadmin/$', repo_list_share, name='repo_list_share'),
-    url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),                  (r'^shareadmin/remove/(?P<repo_id>[^/]+)/(?P<to_email>[^/]+)/$', repo_remove_share),
+    url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),
+    (r'^shareadmin/removeshare/(?P<repo_id>[^/]+)/(?P<to_email>[^/]+)/$', repo_remove_share),
 
     (r'^download/$', direct_to_template, { 'template': 'download.html' } ),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
