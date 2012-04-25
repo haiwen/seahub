@@ -8,6 +8,7 @@ from auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from auth.tokens import default_token_generator
+from django.utils.http import urlquote
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
@@ -382,11 +383,16 @@ def repo_list_share(request):
 @login_required
 def repo_download(request, repo_id):
     relay_id = cclient.props.id
-    token = 'default'
-
+    repo_name = request.GET.get('repo_name')
+    quote_repo_name = urlquote(repo_name)
+    encrypted = request.GET.get('enc')
+    enc = '1'
+    if cmp(encrypted,'False') == 0:
+        enc = ''
+    
     ccnet_applet_root = get_ccnetapplet_root()
-    redirect_url = "%s/repo/download/?repo_id=%s&token=%s&relay_id=%s" % (
-        ccnet_applet_root, repo_id, token, relay_id)
+    redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
+        ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
     
     return HttpResponseRedirect(redirect_url)
     
