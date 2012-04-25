@@ -137,6 +137,31 @@ def repo(request, repo_id):
 #        raise Http404
     
     repo = get_repo(repo_id)
+
+    recent_commits = get_commits(repo_id, 0, 3)
+
+    token = ""
+    is_owner = False
+    repo_ap = ""
+    
+    if request.user.is_authenticated():
+        if validate_owner(request, repo_id):
+            is_owner = True
+            token = seafserv_threaded_rpc.get_repo_token(repo_id)
+        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+
+    return render_to_response('repo.html', {
+            "repo": repo,
+            "recent_commits": recent_commits,
+            "is_owner": is_owner,
+            "repo_ap": repo_ap,
+            "token": token,
+            }, context_instance=RequestContext(request))
+
+
+def repo_history(request, repo_id):
+    # TODO: check permission
+    repo = get_repo(repo_id)
     try:
         current_page = int(request.GET.get('page', '1'))
         per_page= int(request.GET.get('per_page', '25'))
@@ -153,19 +178,7 @@ def repo(request, repo_id):
         page_next = False
 
 
-    branches = get_branches(repo_id)
-
-    token = ""
-    is_owner = False
-    repo_ap = ""
-    
-    if request.user.is_authenticated():
-        if validate_owner(request, repo_id):
-            is_owner = True
-            token = seafserv_threaded_rpc.get_repo_token(repo_id)
-        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-
-    return render_to_response('repo.html', {
+    return render_to_response('repo_history.html', {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
@@ -173,10 +186,6 @@ def repo(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            "branches": branches,
-            "is_owner": is_owner,
-            "repo_ap": repo_ap,
-            "token": token,
             }, context_instance=RequestContext(request))
 
 

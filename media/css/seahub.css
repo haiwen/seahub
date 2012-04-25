@@ -17,7 +17,7 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 /* table */
-table { border-spacing: 0; border-collapse: collapse; width:770px; margin:3px 0 5px; }
+table { border-spacing: 0; border-collapse: collapse; width:100%; margin:3px 0 5px; }
 td, th { padding: 3px; word-break:break-word; }
 th { /*color:#808;*/ color:#333; text-align:left; }
 tr.even { background-color: #FAFAFA; }
@@ -205,13 +205,16 @@ input.ccnet_id { width: 400px; }
     margin-bottom: 12px;
 }
 /*repo page*/
-#token-show-switch {
+.repo-desc {
+    margin:0;
+}
+#repo-access-switch {
     height:auto;
 }
-.ui-tabs {
-    padding:1em;
+.tip {
+    color:#808080;
+    font-size:12px;
 }
-.ui-tabs .ui-tabs-nav, 
-.ui-tabs .ui-tabs-panel {
-    padding: 0;
+.simplemodal-close {
+    margin-left:5px;
 }
