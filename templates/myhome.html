@@ -20,7 +20,7 @@
 
     {% for repo in owned_repos %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
         <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" class="repo-download-btn">下载</button>
@@ -45,7 +45,7 @@
 
     {% for repo in fetched_repos %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
         <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" class="repo-download-btn">下载</button>

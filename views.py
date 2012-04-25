@@ -30,13 +30,23 @@ def get_httpserver_root():
     else:
         http_server_root = settings.HTTP_SERVER_ROOT
     return http_server_root
+
+def get_ccnetapplet_root():
+    # Get ccnet applet address and port from settings.py,
+    # and cut out last '/'
+    if settings.CCNET_APPLET_ROOT[-1] == '/':
+        ccnet_applet_root = settings.CCNET_APPLET_ROOT[:-1]
+    else:
+        ccnet_applet_root = settings.CCNET_APPLET_ROOT
+    return ccnet_applet_root
+    
     
 def gen_token():
     # Generate short token used for owner to access repo file
     from django.utils.hashcompat import sha_constructor
     token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[::8]
     return token
-    
+
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -119,8 +129,13 @@ def validate_owner(request, repo_id):
 
     return is_owner
 
+@login_required
 def repo(request, repo_id):
-    # TODO: check permission
+    # TODO: if user is not staff and not owner and not fetch this repo
+    # and not shared this repo, then goto 404 page..
+#    if not validate_owner(request, repo_id):
+#        raise Http404
+    
     repo = get_repo(repo_id)
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -360,7 +375,9 @@ def repo_download(request, repo_id):
     relay_id = cclient.props.id
     token = 'default'
 
-    redirect_url = "http://localhost:8083/repo/download/?repo_id=%s&token=%s&relay_id=%s" % (repo_id, token, relay_id)
+    ccnet_applet_root = get_ccnetapplet_root()
+    redirect_url = "%s/repo/download/?repo_id=%s&token=%s&relay_id=%s" % (
+        ccnet_applet_root, repo_id, token, relay_id)
     
     return HttpResponseRedirect(redirect_url)
     

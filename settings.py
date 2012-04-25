@@ -124,6 +124,9 @@ REGISTRATION_SEND_MAIL = False
 # seafile httpserver address and port
 HTTP_SERVER_ROOT = "http://localhost:8082"
 
+# ccnet-applet address and port, used in repo download
+CCNET_APPLET_ROOT = "http://localhost:8081"
+
 try:
     import local_settings
 except ImportError:
