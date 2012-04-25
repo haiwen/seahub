@@ -23,7 +23,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/?repo_name={{ repo.props.name}}&enc={{ repo.props.encrypted}}" class="repo-download-btn">下载</button>
+        <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" class="repo-download-btn">下载</button>
         <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
         <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>

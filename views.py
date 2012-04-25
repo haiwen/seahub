@@ -392,17 +392,19 @@ def repo_list_share(request):
 @login_required
 def repo_download(request, repo_id):
     relay_id = cclient.props.id
-    repo_name = request.GET.get('repo_name')
+    repo = seafserv_threaded_rpc.get_repo(repo_id)
+    repo_name = repo.props.name
     quote_repo_name = quote(repo_name)
-    encrypted = request.GET.get('enc')
-    enc = '1'
-    if cmp(encrypted,'False') == 0:
+    encrypted = repo.props.encrypted
+    if encrypted:
+        enc = '1'
+    else:
         enc = ''
 
     ccnet_applet_root = get_ccnetapplet_root()
     redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
         ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
-    
+
     return HttpResponseRedirect(redirect_url)
     
 @login_required
