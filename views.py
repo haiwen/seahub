@@ -131,6 +131,27 @@ def validate_owner(request, repo_id):
 
     return is_owner
 
+def check_fetched_repo(request, repo_id):
+    # check whether user has fetched the repo
+    userid_list = get_binding_userids(request.user.username)
+    for user_id in userid_list:
+        repos = seafserv_threaded_rpc.list_fetched_repos(user_id)
+        for repo in repos:
+            if cmp(repo.props.id, repo_id):
+                return True
+
+    return False
+
+def check_shared_repo(request, repo_id):
+    # check whether user has been shared this repo
+    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    
+    for repo in repos:
+        if cmp(repo.props.id, repo_id) == 0:
+            return True
+
+    return False
+
 def validate_emailuser(email):
     # check whether emailuser is in the database
     if ccnet_rpc.get_emailuser(email) != None:
@@ -140,11 +161,12 @@ def validate_emailuser(email):
 
 @login_required
 def repo(request, repo_id):
-    # TODO: if user is not staff and not owner and not fetch this repo
+    # if user is not staff and not owner and not fetch this repo
     # and not shared this repo, then goto 404 page..
-#    if not validate_owner(request, repo_id):
-#        raise Http404
-    
+    if not validate_owner(request, repo_id) and not check_fetched_repo(request, repo_id)\
+             and not check_shared_repo(request, repo_id) and not request.user.is_staff:
+        raise Http404
+
     repo = get_repo(repo_id)
 
     recent_commits = get_commits(repo_id, 0, 3)
