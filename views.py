@@ -398,7 +398,7 @@ def repo_download(request, repo_id):
     enc = '1'
     if cmp(encrypted,'False') == 0:
         enc = ''
-    assert False
+
     ccnet_applet_root = get_ccnetapplet_root()
     redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
         ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
