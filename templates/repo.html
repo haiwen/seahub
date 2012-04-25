@@ -45,12 +45,6 @@
 </table>
 <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/">查看全部修改</a>
 
-<form id="modify-token-form" action="{{ SITE_ROOT }}repo/token/modify/{{repo.props.id}}/" method="post" class="hide">
-    <h3>新口令:</h3>
-    <input id="id_token" type="text" name="token" /><br/>
-    <input id="id_summit" type="submit" value="提交" />
-</form>
-
 <div id="public-access-start-confirm" class="hide">
     <p>确定要开启吗？</p>
     <button id="public-access-start-btn">确定</button>
@@ -60,14 +54,15 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#repo-access-switch').click(function() {
-    if ($(this).attr('checked')) {
-        $('#public-access-start-confirm').modal({appendTo:"#main", containerCss:{padding:18}});
-    } else {
+if ($('#repo-access-switch').attr('checked')) {
+    $('#repo-access-switch').click(function() {
         location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/own/";
-    }
-});
-
+    });
+} else {
+    $('#repo-access-switch').click(function() {
+        $('#public-access-start-confirm').modal({appendTo:"#main", containerCss:{padding:18}});
+    });
+}
 $('#public-access-start-btn').click(function() {
     location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/public/";
 });
