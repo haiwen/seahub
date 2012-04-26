@@ -20,7 +20,7 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <a href="{{ SITE_ROOT }}shareadmin/removeshare/{{ repo.props.id }}/{{ repo.props.shared_email }}/">取消共享</a>
+          <a href="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&to_email={{ repo.props.shared_email }}">取消共享</a>
         </td>
     </tr>
     {% endfor %}
@@ -45,7 +45,7 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <a href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/" target="_blank">下载</a>
+          <a href="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" target="_blank">下载</a>
         </td>
     </tr>
     {% endfor %}

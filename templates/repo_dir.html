@@ -24,8 +24,8 @@
       {% else %}
       <td>{{ dirent.props.obj_name }}</td>
       <td>
-      <a href="{{ SITE_ROOT }}repo/view/{{ repo_id }}/{{ dirent.props.obj_id }}/{{ dirent.props.obj_name }}/">查看</a>
-      <a href="{{ SITE_ROOT }}repo/download/{{ repo_id }}/{{ dirent.props.obj_id }}/{{ dirent.props.obj_name }}/">下载</a>
+      <a href="{{ SITE_ROOT }}repo/view/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
+      <a href="{{ SITE_ROOT }}repo/download/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
       </td>
       {% endif %}
     </tr>

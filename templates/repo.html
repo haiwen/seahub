@@ -64,12 +64,12 @@ $('#repo-access-switch').click(function() {
     if ($(this).attr('checked')) {
         $('#public-access-start-confirm').modal({appendTo:"#main", containerCss:{padding:18}});
     } else {
-        location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/own/";
+        location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=own";
     }
 });
 
 $('#public-access-start-btn').click(function() {
-    location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/public/";
+    location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=public";
 });
 $('#public-access-start-cancel-btn').click(function() {
     $('#repo-access-switch').attr('checked', false);

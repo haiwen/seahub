@@ -307,22 +307,9 @@ def ownerhome(request, owner_name):
             }, context_instance=RequestContext(request))
 
 @login_required
-def repo_set_public(request, repo_id):
+def repo_set_access_property(request, repo_id):
     if repo_id:
-        seafserv_threaded_rpc.repo_set_public(repo_id)
-        
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-@login_required
-def repo_unset_public(request, repo_id):
-    if repo_id:
-        seafserv_threaded_rpc.repo_unset_public(repo_id)
-        
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-@login_required
-def repo_set_access_property(request, repo_id, ap):
-    if repo_id and ap:
+        ap = request.GET.get('ap', '')
         seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -361,7 +348,7 @@ def repo_list_dir(request, repo_id):
             context_instance=RequestContext(request))
 
 @login_required
-def repo_operation_file(request, op, repo_id, obj_id, file_name):
+def repo_operation_file(request, op, repo_id, obj_id):
     if repo_id:
         # any person visit private repo, go to 404 page
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
@@ -380,7 +367,7 @@ def repo_operation_file(request, op, repo_id, obj_id, file_name):
                 seafserv_rpc.web_save_access_token(token, obj_id)
 
         http_server_root = get_httpserver_root()
-        
+        file_name = request.GET.get('file_name', '')
         return HttpResponseRedirect('%s/%s?id=%s&filename=%s&op=%s&t=%s' %
                                     (http_server_root,
                                      repo_id, obj_id,
@@ -412,9 +399,10 @@ def repo_list_share(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def repo_download(request, repo_id):
-    relay_id = cclient.props.id
-    repo = seafserv_threaded_rpc.get_repo(repo_id)
+def repo_download(request):
+    repo_id = request.GET.get('repo_id', '')
+
+    repo = seafserv_threaded_rpc.get_repo(repo_id)    
     repo_name = repo.props.name
     quote_repo_name = quote(repo_name)
     encrypted = repo.props.encrypted
@@ -422,6 +410,7 @@ def repo_download(request, repo_id):
         enc = '1'
     else:
         enc = ''
+    relay_id = cclient.props.id
 
     ccnet_applet_root = get_ccnetapplet_root()
     redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
@@ -430,10 +419,12 @@ def repo_download(request, repo_id):
     return HttpResponseRedirect(redirect_url)
     
 @login_required
-def repo_remove_share(request, repo_id, to_email):
+def repo_remove_share(request):
+    repo_id = request.GET.get('repo_id', '')
     if not validate_owner(request, repo_id):
         raise Http404
-
+    
+    to_email = request.GET.get('to_email', '')
     from_email = request.user.username
     seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
 

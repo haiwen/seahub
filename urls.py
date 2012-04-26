@@ -5,7 +5,7 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import root, peers, groups, myhome, \
     repo, repo_history, group, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
-    ownerhome, remove_fetched_repo, repo_set_public, repo_unset_public, \
+    ownerhome, remove_fetched_repo, \
     repo_list_dir, user_info, repo_set_access_property, repo_operation_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, back_local
 
@@ -32,7 +32,7 @@ urlpatterns = patterns('',
                        
     url(r'^shareadmin/$', repo_list_share, name='repo_list_share'),
     url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),
-    (r'^shareadmin/removeshare/(?P<repo_id>[^/]+)/(?P<to_email>[^/]+)/$', repo_remove_share),
+    (r'^shareadmin/removeshare/$', repo_remove_share),
 
     (r'^download/$', direct_to_template, { 'template': 'download.html' } ),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
@@ -40,12 +40,10 @@ urlpatterns = patterns('',
     (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
     (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
-    (r'^repo/setpublic/(?P<repo_id>[^/]+)/$', repo_set_public),
-    (r'^repo/unsetpublic/(?P<repo_id>[^/]+)/$', repo_unset_public),
-    (r'^repo/setap/(?P<repo_id>[^/]+)/(?P<ap>[^/]+)/$', repo_set_access_property),
+    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
     (r'^repo/dir/(?P<repo_id>[^/]+)/$', repo_list_dir),
-    (r'^repo/(?P<op>[^/]+)/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/(?P<file_name>[^/]+)/$', repo_operation_file),
-    (r'^repo/download/(?P<repo_id>[^/]+)/$', repo_download),                       
+    (r'^repo/(?P<op>[^/]+)/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_operation_file),
+    (r'^download/repo/$', repo_download),                       
 
     (r'^seafadmin/$', seafadmin),
     url(r'^useradmin/$', useradmin, name='useradmin'),
