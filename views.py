@@ -596,3 +596,11 @@ def user_add(request):
     return render_to_response("add_user_form.html",  {
             'form': form, 
             }, context_instance=RequestContext(request))
+
+@login_required
+def back_local(request):
+    ccnet_applt_root = get_ccnetapplet_root()
+
+    redirect_url = '%s/home/' % ccnet_applt_root
+
+    return HttpResponseRedirect(redirect_url)
