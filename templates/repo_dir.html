@@ -1,13 +1,8 @@
 {% extends "myhome_base.html" %}
 
 {% block nav_home_class %}class="cur"{% endblock %}
-{% block left_panel %}
-{% endblock %}
-
 
 {% block right_panel %}
-
-
 <h3>文件及目录列表</h3>
 {% if dirs %}
 <table class="repo-list default">
@@ -24,8 +19,8 @@
       {% else %}
       <td>{{ dirent.props.obj_name }}</td>
       <td>
-      <a href="{{ SITE_ROOT }}repo/view/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
-      <a href="{{ SITE_ROOT }}repo/download/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
+      <button data="{{ SITE_ROOT }}repo/view/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="view-btn">查看</button>
+      <button data="{{ SITE_ROOT }}repo/download/{{ repo_id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="download-btn">下载</button>
       </td>
       {% endif %}
     </tr>
@@ -34,5 +29,12 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
+{% endblock %}
 
+{% block extra_script %}
+<script type="text/javascript">
+$('.view-btn').click(function() {
+    location.href = $(this).attr('data');
+});
+</script> 
 {% endblock %}

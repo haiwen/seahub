@@ -23,7 +23,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="repo-download-btn">下载</button>
+        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
         <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
         <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
@@ -48,7 +48,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="repo-download-btn">下载</button>
+        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
         <button data="{{ SITE_ROOT }}repo/removefetched/{{ repo.userid }}/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
     </tr>
@@ -60,8 +60,7 @@
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}shareadmin/addshare/" method="post" name="repo-share-form" class="hide">
     <label>邮箱(多个邮箱以;分隔)</label><br />
-    <textarea id="to_email" name="to_email" value="" cols="30" rows="5" ></textarea>
-    <br />
+    <textarea id="to_email" name="to_email" value="" cols="30" rows="5" ></textarea><br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
     <input type="submit" value="提交" />
 </form>
@@ -74,10 +73,6 @@ $(".repo-share-btn").click(function() {
     repo_id = $(this).attr("data");
     $("#share_repo_id").val(repo_id);
     $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
-});
-
-$(".repo-download-btn").click(function() {
-    location.href = $(this).attr("data");
 });
 
 addConfirmTo($('.repo-delete-btn'));

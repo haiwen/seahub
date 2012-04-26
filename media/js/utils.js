@@ -14,4 +14,7 @@ $('#yes-btn').click(function() {
 //handle table
 $("table tr:nth-child(even)").addClass("even");
 $("table tr:nth-child(odd)").addClass("odd");
-
+//open download btn in new window or tab
+$(".download-btn").click(function() {
+    window.open($(this).attr("data"));
+});

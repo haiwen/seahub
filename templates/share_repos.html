@@ -3,7 +3,6 @@
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-
 <h3>我共享的同步目录</h3>
 {% if out_repos %}
 <table class="repo-list">
@@ -13,14 +12,13 @@
         <th width="40%">描述</th>
         <th width="15%">操作</th>
     </tr>
-
     {% for repo in out_repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <a href="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&to_email={{ repo.props.shared_email }}">取消共享</a>
+          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&to_email={{ repo.props.shared_email }}" class="cancel-share-btn">取消共享</button>
         </td>
     </tr>
     {% endfor %}
@@ -45,7 +43,7 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <a href="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" target="_blank">下载</a>
+          <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
         </td>
     </tr>
     {% endfor %}
@@ -53,11 +51,12 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.repo-delete-btn'));
+$('.cancel-share-btn').click(function() {
+    location.href = $(this).attr('data');
+});
 </script>
 {% endblock %}
