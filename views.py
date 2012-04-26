@@ -259,7 +259,7 @@ def remove_fetched_repo(request, user_id, repo_id):
 @login_required
 def myhome(request):
     owned_repos = []
-    fetched_repos = []
+#    fetched_repos = []
     quota_usage = 0
 
     userid_list = get_binding_userids(request.user.username)
@@ -268,18 +268,22 @@ def myhome(request):
             owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(user_id))
             quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
 
-            frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
-            for repo in frepos:
-                repo.userid = user_id	# associate a fetched repo with the user id
-                
-            fetched_repos.extend(frepos)
+#            frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
+#            for repo in frepos:
+#                repo.userid = user_id	# associate a fetched repo with the user id
+#                
+#            fetched_repos.extend(frepos)
         except:
             pass
+
+    # Repos that are share to me
+    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
-            "fetched_repos": fetched_repos,
+#            "fetched_repos": fetched_repos,
+            "in_repos": in_repos,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -390,11 +394,11 @@ def repo_list_share(request):
     username = request.user.username
 
     out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
-    in_repos = seafserv_threaded_rpc.list_share_repos(username, 'to_email', -1, -1)
+#    in_repos = seafserv_threaded_rpc.list_share_repos(username, 'to_email', -1, -1)
 
     return render_to_response('share_repos.html', {
             "out_repos": out_repos,
-            "in_repos": in_repos,
+#            "in_repos": in_repos,
             }, context_instance=RequestContext(request))
 
 @login_required
