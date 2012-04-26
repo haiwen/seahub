@@ -93,10 +93,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 INSTALLED_APPS = (
-    'auth',
+#    'auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+#    'django.contrib.sites',
 #    'django.contrib.admin',
     'registration',
 #    'avatar',

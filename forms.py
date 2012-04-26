@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from seaserv import ccnet_rpc
+
 class AddUserForm(forms.Form):
     """
     Form for adding a user.
@@ -12,13 +14,12 @@ class AddUserForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput())
 
     def clean_email(self):
-        try:
-            user = User.objects.get(email__iexact=self.cleaned_data['email'])
-        except User.DoesNotExist:
+        email = self.cleaned_data['email']
+        emailuser = ccnet_rpc.get_emailuser(email)
+        if not emailuser:
             return self.cleaned_data['email']
-
-        raise forms.ValidationError(_("A user with this email already"))
-
+        else:
+            raise forms.ValidationError(_("A user with this email already"))                    
     def clean(self):
         """
         Verifiy that the values entered into the two password fields

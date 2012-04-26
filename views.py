@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from auth.decorators import login_required
 from django.db import IntegrityError
-from auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from auth.tokens import default_token_generator

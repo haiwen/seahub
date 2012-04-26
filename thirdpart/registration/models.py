@@ -3,7 +3,6 @@ import random
 import re
 
 from django.conf import settings
-from auth.models import User
 
 from django.db import models
 from django.db import transaction

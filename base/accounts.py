@@ -4,7 +4,8 @@ from django.utils.hashcompat import md5_constructor, sha_constructor
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from auth.models import User, Permission, get_hexdigest
+from auth.models import get_hexdigest, check_password
+
 from auth import authenticate, login
 
 from django.contrib.sites.models import RequestSite
@@ -39,7 +40,6 @@ def convert_to_ccnetuser(emailuser):
 class CcnetUser(object):
     is_staff = False
     is_active = False
-    user_permissions = Permission()
     objects = UserManager()
     
     def __init__(self, username, raw_password):
@@ -54,6 +54,10 @@ class CcnetUser(object):
         return ccnet_rpc.validate_emailuser(email, raw_password)
 
     def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
         return True
     
     def is_anonymous(self):
@@ -111,33 +115,6 @@ class CcnetUser(object):
         from django.core.mail import send_mail
         send_mail(subject, message, from_email, [self.username])
 
-    def has_perm(self, perm, obj=None):
-        """
-        Returns True if the user has the specified permission. This method
-        queries all available auth backends, but returns immediately if any
-        backend returns True. Thus, a user who has permission from a single
-        auth backend is assumed to have permission in general. If an object
-        is provided, permissions for this specific object are checked.
-        """
-
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-
-        # Otherwise we need to check the backends.
-        return _user_has_perm(self, perm, obj)
-    
-    def has_module_perms(self, app_label):
-        """
-        Returns True if the user has any permissions in the given app
-        label. Uses pretty much the same logic as has_perm, above.
-        """
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-        
-        from auth.models import _user_has_module_perms
-        return _user_has_module_perms(self, app_label)
     
 class RegistrationBackend(object):
     """

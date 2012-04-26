@@ -17,7 +17,6 @@ from auth.decorators import login_required
 from auth.forms import AuthenticationForm
 from auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from auth.tokens import default_token_generator
-from auth.models import User
 
 from seaserv import get_ccnetuser
 
