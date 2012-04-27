@@ -11,7 +11,7 @@
 {% if output_msg %}
 {% for key, value in output_msg.items %}
 {% if key == 'info_msg' %}
-<span class="info-msg" style="background-color:lightgreen">{{ value }}, 前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看</span><br />
+<span class="info-msg" style="background-color:lightgreen">{{ value }} 前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看</span><br />
 {% endif %}
 {% if key == 'err_msg' %}
 <span class="err-msg" style="background-color:pink">{{ value }}</span><br />

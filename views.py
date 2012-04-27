@@ -412,9 +412,9 @@ def repo_add_share(request):
                 err_emails.append(to_email)
 
         if info_emails:
-            output_msg['info_msg'] = u'共享成功: %s' % list_to_string(info_emails)
+            output_msg['info_msg'] = u'共享给%s成功,' % list_to_string(info_emails)
         if err_emails:
-            output_msg['err_msg'] = u'共享失败: %s, 用户不存在' % list_to_string(err_emails)
+            output_msg['err_msg'] = u'共享给%s失败: 用户不存在' % list_to_string(err_emails)
 
     return output_msg
 
