@@ -620,7 +620,6 @@ def user_add(request):
             'form': form, 
             }, context_instance=RequestContext(request))
 
-@login_required
 def back_local(request):
     ccnet_applt_root = get_ccnetapplet_root()
 
