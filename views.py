@@ -1,3 +1,4 @@
+# encoding: utf-8
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
@@ -21,6 +22,14 @@ from urllib import quote
 import stat
 import time
 import settings
+
+def list_to_string(l):
+    tmp_str = ''
+    for e in l[:-1]:
+        tmp_str = tmp_str + e + ','
+    tmp_str = tmp_str + l[-1]
+    
+    return tmp_str
 
 def get_httpserver_root():
     # Get seafile http server address and port from settings.py,
@@ -261,7 +270,8 @@ def myhome(request):
     owned_repos = []
 #    fetched_repos = []
     quota_usage = 0
-
+    output_msg = {}
+    
     userid_list = get_binding_userids(request.user.username)
     for user_id in userid_list:
         try:
@@ -278,12 +288,16 @@ def myhome(request):
 
     # Repos that are share to me
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    
+    if request.method == 'POST':
+        output_msg = repo_add_share(request)
 
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
 #            "fetched_repos": fetched_repos,
             "in_repos": in_repos,
+            "output_msg": output_msg
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -378,16 +392,31 @@ def repo_operation_file(request, op, repo_id, obj_id):
     
 @login_required
 def repo_add_share(request):
+    output_msg = {}
+    
     if request.method == 'POST':
         from_email = request.user.username
         repo_id = request.POST.get('share_repo_id', '')
         to_emails = request.POST.get('to_email', '')
         to_email_list = to_emails.split(';')
+        info_emails = []
+        err_emails = []
         for to_email in to_email_list:
+            if not to_email:
+                continue
+            
             if validate_emailuser(to_email.strip()) and validate_owner(request, repo_id):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, to_email.strip(), 'rw')
+                info_emails.append(to_email)
+            else:
+                err_emails.append(to_email)
 
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        if info_emails:
+            output_msg['info_msg'] = u'共享成功: %s' % list_to_string(info_emails)
+        if err_emails:
+            output_msg['err_msg'] = u'共享失败: %s, 用户不存在' % list_to_string(err_emails)
+
+    return output_msg
 
 @login_required
 def repo_list_share(request):

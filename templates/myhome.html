@@ -8,6 +8,16 @@
 
 
 {% block right_panel %}
+{% if output_msg %}
+{% for key, value in output_msg.items %}
+{% if key == 'info_msg' %}
+<span class="info-msg" style="background-color:lightgreen">{{ value }}, 前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看</span><br />
+{% endif %}
+{% if key == 'err_msg' %}
+<span class="err-msg" style="background-color:pink">{{ value }}</span><br />
+{% endif %}
+{% endfor %}
+{% endif %}
 
 <h3>我拥有的同步目录</h3>
 {% if owned_repos %}
@@ -59,7 +69,7 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="repo-share-form" action="{{ SITE_ROOT }}shareadmin/addshare/" method="post" name="repo-share-form" class="hide">
+<form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
     <label>邮箱(多个邮箱以;分隔)</label><br />
     <textarea id="to_email" name="to_email" value="" cols="30" rows="5" ></textarea><br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
