@@ -373,7 +373,7 @@ def repo_operation_file(request, op, repo_id, obj_id):
             raise Http404
 
         token = ''        
-        if repo_ap == 'own':
+        if not repo_ap or repo_ap == 'own':
             # people who is not owner visits own repo, go to 404 page            
             if not validate_owner(request, repo_id):
                 raise Http404
