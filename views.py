@@ -188,12 +188,14 @@ def repo(request, repo_id):
             is_owner = True
             token = seafserv_threaded_rpc.get_repo_token(repo_id)
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+        repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
     return render_to_response('repo.html', {
             "repo": repo,
             "recent_commits": recent_commits,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
+            "repo_size": repo_size,
             "token": token,
             }, context_instance=RequestContext(request))
 

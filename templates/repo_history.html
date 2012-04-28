@@ -12,11 +12,17 @@
 <table>
     <tr>
         <th width="20%">修改时间</th>
+        <th width="20%">修改者</th>
         <th width="80%">描述</th>
     </tr>
     {% for commit in commits %}
     <tr>
         <td>{{ commit.props.ctime|tsstr_sec }}</td>
+        {% if commit.props.creator_name %}
+        <td>{{ commit.props.creator_name }}</td>
+        {% else %}
+        <td>未知</td>
+        {% endif %}
         <td>{{ commit.props.desc }}</td>
     </tr>
     {% endfor %}

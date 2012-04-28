@@ -16,6 +16,7 @@
 {% block right_panel %}
 <h2>{{repo.props.name}}</h2>
 <p class="repo-desc">{{repo.props.desc}}</p>
+<p class="repo-size">大小：{{ repo_size|filesizeformat }}</p>
 <p>
     <span class="item-name">WEB匿名访问:</span>
     {% if is_owner %}
@@ -34,11 +35,17 @@
 <table>
     <tr>
         <th width="20%">修改时间</th>
-        <th width="80%">描述</th>
+        <th widht="20%">修改者</th>
+        <th width="60%">描述</th>
     </tr>
     {% for commit in recent_commits %}
     <tr>
         <td>{{ commit.props.ctime|tsstr_sec }}</td>
+        {% if commit.props.creator_name %}
+        <td>{{ commit.props.creator_name }}</td>
+        {% else %}
+        <td>未知</td>
+        {% endif %}
         <td>{{ commit.props.desc }}</td>
     </tr>
     {% endfor %}
