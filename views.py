@@ -11,7 +11,7 @@ from auth.tokens import default_token_generator
 
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_userids, get_ccnetuser
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser
 
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
@@ -130,25 +130,19 @@ def group_add_repo(request, group_id):
             }, context_instance=RequestContext(request))
 
 def validate_owner(request, repo_id):
-    # check whether user in the request own the repo
-    is_owner = False
-    cid_list = request.user.userid_list
-    for cid in cid_list:
-        if seafserv_threaded_rpc.is_repo_owner(cid, repo_id):
-            is_owner = True
+    # check whether email in the request own the repo
+    return seafserv_threaded_rpc.is_repo_owner(request.user.username, repo_id)
 
-    return is_owner
-
-def check_fetched_repo(request, repo_id):
-    # check whether user has fetched the repo
-    userid_list = get_binding_userids(request.user.username)
-    for user_id in userid_list:
-        repos = seafserv_threaded_rpc.list_fetched_repos(user_id)
-        for repo in repos:
-            if cmp(repo.props.id, repo_id):
-                return True
-
-    return False
+#def check_fetched_repo(request, repo_id):
+#    # check whether user has fetched the repo
+#    peerid_list = get_binding_peerids(request.user.username)
+#    for peer_id in peerid_list:
+#        repos = seafserv_threaded_rpc.list_fetched_repos(peer_id)
+#        for repo in repos:
+#            if cmp(repo.props.id, repo_id):
+#                return True
+# 
+#    return False
 
 def check_shared_repo(request, repo_id):
     # check whether user has been shared this repo
@@ -171,8 +165,8 @@ def validate_emailuser(email):
 def repo(request, repo_id):
     # if user is not staff and not owner and not fetch this repo
     # and not shared this repo, then goto 404 page..
-    if not validate_owner(request, repo_id) and not check_fetched_repo(request, repo_id)\
-             and not check_shared_repo(request, repo_id) and not request.user.is_staff:
+    if not validate_owner(request, repo_id) and not check_shared_repo(request, repo_id) \
+            and not request.user.is_staff:
         raise Http404
 
     repo = get_repo(repo_id)
@@ -270,24 +264,13 @@ def remove_fetched_repo(request, user_id, repo_id):
 @login_required
 def myhome(request):
     owned_repos = []
-#    fetched_repos = []
     quota_usage = 0
     output_msg = {}
+
+    email = request.user.username
+    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     
-    userid_list = get_binding_userids(request.user.username)
-    for user_id in userid_list:
-        try:
-            owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(user_id))
-            quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(user_id)
-
-#            frepos = seafserv_threaded_rpc.list_fetched_repos(user_id)
-#            for repo in frepos:
-#                repo.userid = user_id	# associate a fetched repo with the user id
-#                
-#            fetched_repos.extend(frepos)
-        except:
-            pass
-
     # Repos that are share to me
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
     
@@ -297,7 +280,6 @@ def myhome(request):
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
-#            "fetched_repos": fetched_repos,
             "in_repos": in_repos,
             "output_msg": output_msg
             }, context_instance=RequestContext(request))
@@ -308,7 +290,7 @@ def ownerhome(request, owner_name):
     fetched_repos = []
     quota_usage = 0
 
-    ownerid_list = get_binding_userids(owner_name)
+    ownerid_list = get_binding_peerids(owner_name)
     for owner_id in ownerid_list:
         if owner_id:
             try:
@@ -491,9 +473,7 @@ def seafadmin(request):
 
     for repo in repos:
         try:
-            owner_id = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
-            repo.owner = ccnet_rpc.get_binding_email(owner_id)
-            repo.owner_id = owner_id
+            repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
         except:
             repo.owner = None
             
@@ -530,19 +510,18 @@ def user_info(request, email):
         raise Http404
 
     user_dict = {}
-    
-    userid_list = get_binding_userids(email)
-    for userid in userid_list:
-        try:
-            peernames = ccnet_rpc.get_peernames_by_userid(userid)
-            for peername in peernames.split('\n'):
-                if not peername:
-                    continue
-                roles = ccnet_rpc.get_user(userid).props.role_list
-                user_dict[peername] = roles
-        except:
-            pass
 
+    try:
+        peers = ccnet_rpc.get_peers_by_email(email)
+        for peer in peers:
+            if not peer:
+                continue
+            peername = peer.props.name
+            roles = peer.props.role_list
+            user_dict[peername] = roles
+    except:
+        pass
+    
     return render_to_response(
         'userinfo.html', {
             'user_dict': user_dict,
@@ -576,6 +555,8 @@ def role_remove(request, user_id):
 
 @login_required
 def user_remove(request, user_id):
+    """The user id is emailuser id."""
+    
     if not request.user.is_staff:
         raise Http404
 

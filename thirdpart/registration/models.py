@@ -75,6 +75,7 @@ class RegistrationManager(models.Manager):
         from seahub.base.accounts import CcnetUser
 
         ccnetuser = CcnetUser.objects.create_user(username, password, False, False)
+        #TODO: handle None type
         ccnetuser.is_active = is_active
         ccnetuser.save()
         

@@ -1,4 +1,4 @@
-from seaserv import get_binding_userids
+from seaserv import get_binding_peerids
 
 class UseridMiddleware(object):
     """Store ccnet user ids in request.user.userid_list"""
@@ -8,7 +8,7 @@ class UseridMiddleware(object):
             return None
 
         try:
-            request.user.userid_list = get_binding_userids(request.user.username)
+            request.user.userid_list = get_binding_peerids(request.user.username)
         except:
             request.user.userid_list = []
 

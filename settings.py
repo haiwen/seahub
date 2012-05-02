@@ -66,7 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'auth.middleware.AuthenticationMiddleware',
-    'seahub.base.middleware.UseridMiddleware',
+#    'seahub.base.middleware.UseridMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
