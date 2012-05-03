@@ -20,7 +20,7 @@
 
     {% for user in users %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}">{{ user.props.email }}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
         {% if user.props.is_active %}
         <td>已激活</td>
         {% else %}

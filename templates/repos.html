@@ -6,17 +6,15 @@
 {% if repos %}
 <table class="repo-list">
     <tr>
-        <th width="12%">名字</th>
+        <th width="20%">名字</th>
         <th width="20%">拥有者</th>
-        <th width="33%">ID</th>
-        <th width="27%">描述</th>
+        <th width="52%">描述</th>
         <th width="8%">操作</th>
     </tr>
     {% for repo in repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
-        <td><a href="{{ SITE_ROOT }}home/owner/{{ repo.owner }}/">{{ repo.owner}}</a></td>
-        <td>{{ repo.props.id }}</td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button></td>
     </tr>

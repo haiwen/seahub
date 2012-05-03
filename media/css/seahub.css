@@ -48,6 +48,7 @@ div.logo { margin-top: 0px; }
 #user-info { float: right; font-size: 12px; color: #808; font-style:normal; margin-bottom:10px; }
 #user-info span { color: #888; display:inline-block; width:60px; text-align:right; margin-right:5px; }
 #logo-info { float:right; font-size: 14px; color: #ccc; font-style:italic; }
+#version-info { float:right; font-size: 12px; color: #ccc; }
 #header #ident { margin-top: 8px; float: right; font-size: 12px; }
 #header #ident p { color: #808; }
 #header #ident label { color: #888; }

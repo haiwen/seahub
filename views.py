@@ -287,24 +287,18 @@ def myhome(request):
 @login_required
 def ownerhome(request, owner_name):
     owned_repos = []
-    fetched_repos = []
     quota_usage = 0
 
-    ownerid_list = get_binding_peerids(owner_name)
-    for owner_id in ownerid_list:
-        if owner_id:
-            try:
-                owned_repos.extend(seafserv_threaded_rpc.list_owned_repos(owner_id))
-                quota_usage = quota_usage + seafserv_threaded_rpc.get_user_quota_usage(owner_id)
-                fetched_repos.extend(seafserv_threaded_rpc.list_fetched_repos(owner_id))
-            except:
-                pass
+    owned_repos = seafserv_threaded_rpc.list_owned_repos(owner_name)
+    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_name)
 
+    user_dict = user_info(request, owner_name)
+    
     return render_to_response('ownerhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
-            "fetched_repos": fetched_repos,
             "owner": owner_name,
+            "user_dict": user_dict,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -510,6 +504,11 @@ def user_info(request, email):
         raise Http404
 
     user_dict = {}
+    owned_repos = []
+    quota_usage = 0
+
+    owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
     try:
         peers = ccnet_rpc.get_peers_by_email(email)
@@ -521,9 +520,15 @@ def user_info(request, email):
             user_dict[peername] = roles
     except:
         pass
-    
+
+    # Repos that are share to user
+    in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email', -1, -1)
+
     return render_to_response(
         'userinfo.html', {
+            'owned_repos': owned_repos,
+            'quota_usage': quota_usage,
+            "in_repos": in_repos,
             'user_dict': user_dict,
             'email': email
             },
