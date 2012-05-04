@@ -12,6 +12,7 @@ ul > li { list-style:none; }
 .ovhd { overflow:hidden; }
 .bold { font-weight:bold; }
 .mgb10 { margin-bottom:10px; }
+.mgt10 { margin-top:10px; }
 .center { text-align:center; }
 .label { color:#333; font-size:12px; font-style:normal; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
@@ -90,6 +91,9 @@ input {
     line-height:20px;
     margin:2px 0;
     border: 1px solid #80B0B0;
+}
+input[type=checkbox] {
+    height:auto;
 }
 input[type=submit],
 button { 
@@ -206,11 +210,30 @@ input.ccnet_id { width: 400px; }
     margin-bottom: 12px;
 }
 /*repo page*/
+#repo-page .side {
+    width:250px;
+}
+#repo-page .main {
+    width:680px;
+}
 .repo-desc {
     margin:0;
 }
-#repo-access-switch {
-    height:auto;
+.recent-commit {
+    margin:0;
+}
+.recent-commit li {
+    padding:0;
+    background:none;
+    color:#444;
+}
+.recent-commit .author {
+    font-style:italic;
+    margin-left:4px;
+}
+.recent-commit .time {
+    color:#666;
+    margin-left:2px;
 }
 .tip {
     color:#808080;

@@ -171,6 +171,8 @@ def repo(request, repo_id):
 
     repo = get_repo(repo_id)
 
+    recent_commits = get_commits(repo_id, 0, 3)
+
     token = ""
     is_owner = False
     repo_ap = ""
@@ -182,17 +184,28 @@ def repo(request, repo_id):
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
         repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
-    commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
-    root_id = commit.props.root_id
-    dirs = seafserv_rpc.list_dir(root_id)
-    for dirent in dirs:
-        if stat.S_ISDIR(dirent.props.mode):
-            dirent.is_dir = True
+    dirs = []
+    if not repo.props.encrypted:
+        if not request.GET.get('root_id'):
+            # ..use HEAD commit's root id
+            commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
+            root_id = commit.props.root_id
         else:
-            dirent.is_dir = False
+            root_id = request.GET.get('root_id')
+
+        try:
+            dirs = seafserv_rpc.list_dir(root_id)
+            for dirent in dirs:
+                if stat.S_ISDIR(dirent.props.mode):
+                    dirent.is_dir = True
+                else:
+                    dirent.is_dir = False
+        except:
+            pass
 
     return render_to_response('repo.html', {
             "repo": repo,
+            "recent_commits": recent_commits,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
