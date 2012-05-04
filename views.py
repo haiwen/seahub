@@ -323,22 +323,31 @@ def repo_list_dir(request, repo_id):
                 raise Http404
             
         repo = seafserv_threaded_rpc.get_repo(repo_id)
-        if not request.GET.get('root_id'): # No root id..?
-            # ..use HEAD commit's root id
-            commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
-            root_id = commit.props.root_id
-        else:
-            root_id = request.GET.get('root_id')
-        dirs = seafserv_rpc.list_dir(root_id)
-        for dirent in dirs:
-            if stat.S_ISDIR(dirent.props.mode):
-                dirent.is_dir = True
+
+        dirs = []
+        encrypted = repo.props.encrypted
+        if not encrypted:
+            if not request.GET.get('root_id'): # No root id..?
+                # ..use HEAD commit's root id
+                commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
+                root_id = commit.props.root_id
             else:
-                dirent.is_dir = False
+                root_id = request.GET.get('root_id')
+
+            try:
+                dirs = seafserv_rpc.list_dir(root_id)
+                for dirent in dirs:
+                    if stat.S_ISDIR(dirent.props.mode):
+                        dirent.is_dir = True
+                    else:
+                        dirent.is_dir = False
+            except:
+                pass
                 
     return render_to_response('repo_dir.html', {
             "repo_id": repo_id,
             "dirs": dirs,
+            "encrypted": encrypted,
             },
             context_instance=RequestContext(request))
 
@@ -401,11 +410,9 @@ def repo_list_share(request):
     username = request.user.username
 
     out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
-#    in_repos = seafserv_threaded_rpc.list_share_repos(username, 'to_email', -1, -1)
 
     return render_to_response('share_repos.html', {
             "out_repos": out_repos,
-#            "in_repos": in_repos,
             }, context_instance=RequestContext(request))
 
 @login_required
