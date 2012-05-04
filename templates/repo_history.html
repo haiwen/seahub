@@ -3,7 +3,7 @@
 
 {% block left_panel %}
 <ul>
-    <li><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">返回同步目录页面</a></li>
+    <li><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">返回同步目录</a></li>
 </ul>
 {% endblock %}
 
@@ -12,8 +12,8 @@
 <table>
     <tr>
         <th width="20%">修改时间</th>
-        <th width="20%">修改者</th>
-        <th width="80%">描述</th>
+        <th width="10%">修改者</th>
+        <th width="70%">描述</th>
     </tr>
     {% for commit in commits %}
     <tr>

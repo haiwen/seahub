@@ -1,6 +1,10 @@
 {% extends "myhome_base.html" %}
 
-{% block nav_home_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<ul>
+    <li><a href="{{ SITE_ROOT }}repo/{{repo_id}}/">返回同步目录</a></li>
+</ul>
+{% endblock %}
 
 {% block right_panel %}
 {% if encrypted %}
@@ -10,8 +14,8 @@
 {% if dirs %}
 <table class="repo-list default">
     <tr>
-        <th width="80%">名字</th>
-        <th width="20%">操作</th>
+        <th width="70%">名字</th>
+        <th width="30%">操作</th>
     </tr>
 
     {% for dirent in dirs %}

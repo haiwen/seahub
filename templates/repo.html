@@ -3,13 +3,7 @@
 
 {% block left_panel %}
 <ul>
-{% if is_owner %}
-    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-{% else %}
-    {% if repo_ap == 'public' %}
-    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-    {% endif %}
-{% endif %}
+    <li><a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/">历史</a></li>
 </ul>
 {% endblock %}
 
@@ -31,26 +25,32 @@
     {% endif %}
 </p>
 
-<h3>最近修改</h3>
-<table>
+<h3>文件及目录列表</h3>
+{% if dirs %}
+<table class="repo-list default">
     <tr>
-        <th width="20%">修改时间</th>
-        <th widht="20%">修改者</th>
-        <th width="60%">描述</th>
+        <th width="70%">名字</th>
+        <th width="30%">操作</th>
     </tr>
-    {% for commit in recent_commits %}
+
+    {% for dirent in dirs %}
     <tr>
-        <td>{{ commit.props.ctime|tsstr_sec }}</td>
-        {% if commit.props.creator_name %}
-        <td>{{ commit.props.creator_name }}</td>
-        {% else %}
-        <td>未知</td>
-        {% endif %}
-        <td>{{ commit.props.desc }}</td>
+      {% if dirent.is_dir %}
+      <td><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
+      <td></td>
+      {% else %}
+      <td>{{ dirent.props.obj_name }}</td>
+      <td>
+      <button data="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="view-btn">查看</button>
+      <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="download-btn">下载</button>
+      </td>
+      {% endif %}
     </tr>
     {% endfor %}
 </table>
-<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/">查看全部修改</a>
+{% else %}
+<p>暂无</p>
+{% endif %}
 
 <div id="public-access-start-confirm" class="hide">
     <p>确定要开启吗？</p>
@@ -76,6 +76,10 @@ $('#public-access-start-btn').click(function() {
 });
 $('#public-access-start-cancel-btn').click(function() {
     $('#repo-access-switch').attr('checked', false);
+});
+
+$('.view-btn').click(function() {
+    location.href = $(this).attr('data');
 });
 </script>
 {% endblock %}
