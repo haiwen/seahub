@@ -10,8 +10,8 @@
 
 {% block right_panel %}
 
-<h2>添加联系人</h2>
-<form action="{{ SITE_ROOT }}contacts/add/" method="post">
+<h2>编辑联系人</h2>
+<form action="" method="post">
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
@@ -22,6 +22,8 @@
     {{ form.contact_name }}<br />
     <label for="id_note">备注(可选):</label>
     {{ form.note }}<br />
+    <input type="hidden" name="contact_id" value="{{ contact_id }}" />
+    <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
     <input type="submit" value="提交" />
 </form>
 

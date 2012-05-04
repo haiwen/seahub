@@ -1,5 +1,6 @@
 {% extends "myhome_base.html" %}
 
+{% block nav_contacts_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <ul>
     <li><a href="{{ SITE_ROOT }}contacts/add/">添加联系人</a></li>
@@ -10,12 +11,35 @@
 
 <h2>联系人列表</h2>
 <table class="contact-list default">
-{% for contact in contacts %}
     <tr>
-        <td>{{ contact.user.email }}</td>
-        <td><a href="{{ SITE_ROOT }}share/add/?user_email={{ contact.user.email|urlencode }}">共享</a></td>
+        <th width="20%">邮箱</th>
+        <th width="20%">名字</th>
+        <th width="44%">备注</th>
+        <th width="16%">操作</th>
+    </tr>
+    {% for contact in contacts %}
+    <tr>
+        <td>{{ contact.contact_email }}</td>
+        <td>{{ contact.contact_name }}</td>
+        <td>{{ contact.note }}</td>
+        <td>
+        <button id="contact-edit-btn" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit-btn">编辑</button>
+        <button data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete-btn">删除</button>        
+        </td>
     </tr>
 {% endfor %}
 </table>
-
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.contact-edit-btn').each(function() {
+    $(this).click(function() {
+        location.href = $(this).attr('data');
+    });
+});
+
+addConfirmTo($('.contact-delete-btn'));
+</script>
+{% endblock %}
+
