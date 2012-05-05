@@ -3,9 +3,24 @@
 
 {% block main_panel %}
 <div id="repo-page" class="ovhd">
+    <h2>{{repo.props.name}}</h2>
     <div class="side fright">
         <p>{{repo.props.desc}}</p>
         <p>大小：{{ repo_size|filesizeformat }}</p>
+
+        <p class="latest-commit mgt10">
+            {{ latest_commit.props.desc }}<br />
+            <span class="author">by
+            {% if latest_commit.props.creator_name %}
+            {{ latest_commit.props.creator_name }}
+            {% else %}
+            未知
+           {% endif %}
+           </span>
+           <span class="time">{{ latest_commit.props.ctime|tsstr_sec }}</span>
+        </p>
+        <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">更多历史...</a>
+
         <p class="mgt10">
         <span class="item-name">WEB匿名访问:</span>
         {% if is_owner %}
@@ -21,25 +36,6 @@
         </p>
     </div>
     <div class="main fleft">
-        <h2>{{repo.props.name}}</h2>
-        <ul class="recent-commit">
-       {% for commit in recent_commits %}
-            <li>
-                {{ commit.props.desc }}
-                <span class="author">
-           {% if commit.props.creator_name %}
-           by {{ commit.props.creator_name }}
-           {% else %}
-           未知
-           {% endif %}
-           </span>
-           <span class="time">{{ commit.props.ctime|tsstr_sec }}</span>
-            </li>
-       {% endfor %}
-        </ul>
-        <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">更多...</a>
-        
-        <h3>子目录及文件</h3>
         {% if repo.props.encrypted %}
         <p>该同步目录已加密，不能在线查看。</p>
         {% else %}

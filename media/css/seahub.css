@@ -198,38 +198,28 @@ input.ccnet_id { width: 400px; }
     margin-bottom: 12px;
 }
 /*repo page*/
+#repo-page h2 {
+    margin-bottom:16px;
+}
 #repo-page .side {
     color:#333;
-    padding-top:33px;
-    width:230px;
+    width:260px;
 }
 #repo-page .main {
-    width:680px;
+    width:650px;
 }
 #repo-page .more {
     font-weight:normal;
     font-size:12px;
     color:#080;
 }
-#repo-page h2 {
-    margin-bottom:12px;
+.latest-commit {
+    word-wrap:break-word;
 }
-#repo-page h3 {
-    margin-top:24px;
-}
-.recent-commit {
-    margin:0;
-}
-.recent-commit li {
-    padding:0;
-    background:none;
-    color:#222;
-}
-.recent-commit .author {
+.latest-commit .author {
     font-style:italic;
-    margin-left:4px;
 }
-.recent-commit .time {
+.latest-commit .time {
     color:#666;
     margin-left:2px;
 }

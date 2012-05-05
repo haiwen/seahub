@@ -171,7 +171,7 @@ def repo(request, repo_id):
 
     repo = get_repo(repo_id)
 
-    recent_commits = get_commits(repo_id, 0, 3)
+    latest_commit = get_commits(repo_id, 0, 1)[0]
 
     token = ""
     is_owner = False
@@ -205,7 +205,7 @@ def repo(request, repo_id):
 
     return render_to_response('repo.html', {
             "repo": repo,
-            "recent_commits": recent_commits,
+            "latest_commit": latest_commit,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
