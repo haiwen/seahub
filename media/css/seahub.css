@@ -17,6 +17,7 @@ ul > li { list-style:none; }
 .label { color:#333; font-size:12px; font-style:normal; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
+img { border:none; }
 /* table */
 table { border-spacing: 0; border-collapse: collapse; width:100%; table-layout:fixed; margin:3px 0 5px; }
 td, th { padding: 3px; word-break:break-word; }
@@ -44,7 +45,7 @@ tr.first { background-color: #00FF00; }
 #other-info { color: #ccc; text-align:right; }
 #other-info .wish { font-style:italic; margin-bottom:10px; }
 #other-info .version { font-size: 12px; }
-#header .nav { border-bottom: 1px solid #ddd; }
+#header .nav { border-bottom: 1px solid #ddd; margin-top:8px; }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; background: none; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a.cur { color: #000; }
@@ -55,13 +56,11 @@ tr.first { background-color: #00FF00; }
 h2 { font-size:18px; color:#808; margin-bottom:8px; }
 h3 { font-size:14px; color:#808; font-weight:normal; }
 ol { margin:0; padding:0px 0 0 2em; list-style-position:inside; }
-ul { padding:0 0 0 0; margin: 8px 0 8px 0; }
 ul > li { background: url('../img/li.gif') no-repeat scroll; background-position:left 6px; padding-left:10px; }
 /* #main ul.ui-tabs-nav > li { background: none; } */
 #main ol > li { }
 #main li { line-height:20px; }
 #main img.click { margin-left:2px; cursor:pointer; }
-
 /* profile */
 .avatar_op .pic { float:left; margin-right:15px; }
 .avatar_op .text { float:left; }
@@ -198,38 +197,28 @@ input.ccnet_id { width: 400px; }
     margin-bottom: 12px;
 }
 /*repo page*/
+#repo-page h2 {
+    margin-bottom:16px;
+}
 #repo-page .side {
     color:#333;
-    padding-top:33px;
-    width:230px;
+    width:260px;
 }
 #repo-page .main {
-    width:680px;
+    width:650px;
 }
 #repo-page .more {
     font-weight:normal;
     font-size:12px;
     color:#080;
 }
-#repo-page h2 {
-    margin-bottom:12px;
+.latest-commit {
+    word-wrap:break-word;
 }
-#repo-page h3 {
-    margin-top:24px;
-}
-.recent-commit {
-    margin:0;
-}
-.recent-commit li {
-    padding:0;
-    background:none;
-    color:#222;
-}
-.recent-commit .author {
+.latest-commit .author {
     font-style:italic;
-    margin-left:4px;
 }
-.recent-commit .time {
+.latest-commit .time {
     color:#666;
     margin-left:2px;
 }
