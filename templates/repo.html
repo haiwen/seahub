@@ -1,61 +1,76 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
-{% block left_panel %}
-<ul>
-{% if is_owner %}
-    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-{% else %}
-    {% if repo_ap == 'public' %}
-    <li><a href="{{ SITE_ROOT }}repo/dir/{{ repo.props.id }}/">浏览</a></li>
-    {% endif %}
-{% endif %}
-</ul>
-{% endblock %}
-
-{% block right_panel %}
-<h2>{{repo.props.name}}</h2>
-<p class="repo-desc">{{repo.props.desc}}</p>
-<p class="repo-size">大小：{{ repo_size|filesizeformat }}</p>
-<p>
-    <span class="item-name">WEB匿名访问:</span>
-    {% if is_owner %}
+{% block main_panel %}
+<div id="repo-page" class="ovhd">
+    <div class="side fleft">
+        <p class="repo-desc">{{repo.props.desc}}</p>
+        <p class="repo-size">大小：{{ repo_size|filesizeformat }}</p>
+        <p>
+        <span class="item-name">WEB匿名访问:</span>
+        {% if is_owner %}
         {% if repo_ap == 'public' %}
-    <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
+        <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
         {% else %}
-    <input type="checkbox" name="repo-access-switch" id="repo-access-switch" autocomplete="off" /><label for="repo-access-switch">开启</label>
+        <input type="checkbox" name="repo-access-switch" id="repo-access-switch" autocomplete="off" /><label for="repo-access-switch">开启</label>
         {% endif %}
-    <span class="tip">开启后，任何人都能够访问该目录</span>
-    {% else %}
-    <span>只有同步目录拥有者可设置</span>
-    {% endif %}
-</p>
-
-<h3>最近修改</h3>
-<table>
-    <tr>
-        <th width="20%">修改时间</th>
-        <th widht="20%">修改者</th>
-        <th width="60%">描述</th>
-    </tr>
-    {% for commit in recent_commits %}
-    <tr>
-        <td>{{ commit.props.ctime|tsstr_sec }}</td>
-        {% if commit.props.creator_name %}
-        <td>{{ commit.props.creator_name }}</td>
+        <br /><span class="tip">开启后，任何人都能够访问该目录</span>
         {% else %}
-        <td>未知</td>
+        <span>只有同步目录拥有者可设置</span>
         {% endif %}
-        <td>{{ commit.props.desc }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/">查看全部修改</a>
+        </p>
+    </div>
+    <div class="main fright">
+        <h2>{{repo.props.name}}</h2>
+        <ul class="recent-commit">
+       {% for commit in recent_commits %}
+            <li>
+                {{ commit.props.desc }}
+                <span class="author">
+           {% if commit.props.creator_name %}
+           by {{ commit.props.creator_name }}
+           {% else %}
+           未知
+           {% endif %}
+           </span>
+           <span class="time">{{ commit.props.ctime|tsstr_sec }}</span>
+            </li>
+       {% endfor %}
+        </ul>
+        <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" style="font-weight:normal;font-size:12px;color:#333;">更多...</a>
+        
+        <h3 class="mgt10">子目录及文件</h3>
+        {% if repo.props.encrypted %}
+        <p>该同步目录已加密，不能在线查看。</p>
+        {% else %}
+        <table class="repo-list">
+            <tr>
+                <th width="60%">名字</th>
+                <th width="40%">操作</th>
+            </tr>
 
-<div id="public-access-start-confirm" class="hide">
-    <p>确定要开启吗？</p>
-    <button id="public-access-start-btn">确定</button>
-    <button id="public-access-start-cancel-btn" class="simplemodal-close">取消</button>
+            {% for dirent in dirs %}
+            <tr>
+                {% if dirent.is_dir %}
+                <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
+                <td></td>
+                {% else %}
+                <td>{{ dirent.props.obj_name }}</td>
+                <td>
+                    <button data="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="view-btn">查看</button>
+                    <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="download-btn">下载</button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+    <div id="public-access-start-confirm" class="hide">
+        <p>确定要开启吗？</p>
+        <button id="public-access-start-btn">确定</button>
+        <button id="public-access-start-cancel-btn" class="simplemodal-close">取消</button>
+    </div>
 </div>
 {% endblock %}
 
@@ -76,6 +91,10 @@ $('#public-access-start-btn').click(function() {
 });
 $('#public-access-start-cancel-btn').click(function() {
     $('#repo-access-switch').attr('checked', false);
+});
+
+$('.view-btn').click(function() {
+    location.href = $(this).attr('data');
 });
 </script>
 {% endblock %}

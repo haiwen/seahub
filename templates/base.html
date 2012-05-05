@@ -34,46 +34,39 @@
         </div>
     </div>
     <div id="header">
-        <div class="logo ovhd">
-            <img src="{{ MEDIA_URL }}img/logo.png" id="logo-img" title="Seafile" alt="Seafile logo" />
-            <div id="logo-info">
-            Hope our efforts will bring you benefits.
+        <div class="top-info ovhd">
+            <a href="{{ SITE_ROOT }}" class="fleft"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
+            <div id="other-info">
+                <p class="wish">Hope our efforts will bring you benefits.</p>
+                <p class="version">服务器版本: {{ seafile_version }}</p>
             </div>
         </div>
-        <div class="verson info">
-          <div id="version-info">
-            服务器版本: {{ seafile_version }}
-          </div>
-        </div>
-        <div class="navs">
-            {% block nav %}
-            <ul class="nav">
-                <li>
-                    <a href="{{ SITE_ROOT }}home/">主页</a>
-                </li>
-                <li>
-                    <a href="{{ SITE_ROOT }}help/">使用帮助</a>
-                </li>
-                <li>
-                    <a href="{{ SITE_ROOT }}download/">下载</a>
-                </li>
-                <li>
-                    <a href="/vanilla/">论坛</a>
-                </li>
-                <!--
-                <li>
-                    <a href="{{ SITE_ROOT }}peers/">Peers</a>
-                </li>
-                -->
-                <!--
-                <li>
-                    <a href="{{ SITE_ROOT }}groups/">Groups</a>
-                </li>
-                -->
-            </ul>
-            {% endblock %}
-        </div>
-        <div class="nav-separator"></div>
+        {% block nav %}
+        <ul class="nav ovhd">
+            <li>
+            <a href="{{ SITE_ROOT }}home/">主页</a>
+            </li>
+            <li>
+            <a href="{{ SITE_ROOT }}help/">使用帮助</a>
+            </li>
+            <li>
+            <a href="{{ SITE_ROOT }}download/">下载</a>
+            </li>
+            <li>
+            <a href="/vanilla/">论坛</a>
+            </li>
+            <!--
+            <li>
+            <a href="{{ SITE_ROOT }}peers/">Peers</a>
+            </li>
+            -->
+            <!--
+            <li>
+            <a href="{{ SITE_ROOT }}groups/">Groups</a>
+            </li>
+            -->
+        </ul>
+        {% endblock %}
     </div>
     <div id="main">
         <div id="left-panel">
