@@ -3,10 +3,10 @@
 
 {% block main_panel %}
 <div id="repo-page" class="ovhd">
-    <div class="side fleft">
-        <p class="repo-desc">{{repo.props.desc}}</p>
-        <p class="repo-size">大小：{{ repo_size|filesizeformat }}</p>
-        <p>
+    <div class="side fright">
+        <p>{{repo.props.desc}}</p>
+        <p>大小：{{ repo_size|filesizeformat }}</p>
+        <p class="mgt10">
         <span class="item-name">WEB匿名访问:</span>
         {% if is_owner %}
         {% if repo_ap == 'public' %}
@@ -20,7 +20,7 @@
         {% endif %}
         </p>
     </div>
-    <div class="main fright">
+    <div class="main fleft">
         <h2>{{repo.props.name}}</h2>
         <ul class="recent-commit">
        {% for commit in recent_commits %}
@@ -37,9 +37,9 @@
             </li>
        {% endfor %}
         </ul>
-        <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" style="font-weight:normal;font-size:12px;color:#333;">更多...</a>
+        <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">更多...</a>
         
-        <h3 class="mgt10">子目录及文件</h3>
+        <h3>子目录及文件</h3>
         {% if repo.props.encrypted %}
         <p>该同步目录已加密，不能在线查看。</p>
         {% else %}
