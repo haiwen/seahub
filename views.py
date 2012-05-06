@@ -178,8 +178,6 @@ def repo(request, repo_id):
     repo = get_repo(repo_id)
     if repo == None:
         raise Http404
-    
-    recent_commits = get_commits(repo_id, 0, 3)
 
     is_owner = False
     if request.user.is_authenticated():
@@ -188,8 +186,10 @@ def repo(request, repo_id):
 
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
+    latest_commit = {}
     dirs = []
     if not repo.props.encrypted:
+        latest_commit = get_commits(repo_id, 0, 1)[0]
         if not request.GET.get('root_id'):
             # use HEAD commit's root id
             commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
@@ -209,7 +209,7 @@ def repo(request, repo_id):
 
     return render_to_response('repo.html', {
             "repo": repo,
-            "recent_commits": recent_commits,
+            "latest_commit": latest_commit,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
