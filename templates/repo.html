@@ -9,6 +9,7 @@
         <p>大小：{{ repo_size|filesizeformat }}</p>
 
         {% if not repo.props.encrypted %}
+        {% if is_owner or repo_ap == 'public' or share_to_me %}
         <p class="latest-commit mgt10">
             {{ latest_commit.props.desc }}<br />
             <span class="author">by
@@ -36,32 +37,37 @@
             {% endif %}
         </p>
         {% endif %}
+        {% endif %}
     </div>
     <div class="main fleft">
-        {% if not repo.props.encrypted %}
-        <table class="repo-list">
-            <tr>
-                <th width="60%">名字</th>
-                <th width="40%">操作</th>
-            </tr>
-
-            {% for dirent in dirs %}
-            <tr>
-                {% if dirent.is_dir %}
-                <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
-                <td></td>
-                {% else %}
-                <td>{{ dirent.props.obj_name }}</td>
-                <td>
-                    <button data="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="view-btn">查看</button>
-                    <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="download-btn">下载</button>
-                </td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </table>
-        {% else %}
+        {% if repo.props.encrypted %}
         <p>该同步目录已加密，不能在线查看。</p>
+        {% else %}
+            {% if not is_owner and repo_ap == 'own' and not share_to_me %}
+            <p>该同步目录web匿名访问未开启，不能在线查看。</p>
+            {% else %}
+            <table class="repo-list">
+                <tr>
+                    <th width="60%">名字</th>
+                    <th width="40%">操作</th>
+                </tr>
+     
+                {% for dirent in dirs %}
+                <tr>
+                    {% if dirent.is_dir %}
+                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
+                    <td></td>
+                    {% else %}
+                    <td>{{ dirent.props.obj_name }}</td>
+                    <td>
+                        <button data="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="view-btn">查看</button>
+                        <button data="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="download-btn">下载</button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
         {% endif %}
     </div>
     <div id="public-access-start-confirm" class="hide">
