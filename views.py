@@ -20,6 +20,8 @@ from seahub.base.accounts import CcnetUser
 from forms import AddUserForm
 from urllib import quote
 
+from seahub.contacts.models import Contact
+
 import stat
 import time
 import settings
@@ -300,11 +302,14 @@ def myhome(request):
     if request.method == 'POST':
         output_msg = repo_add_share(request)
 
+    contacts = Contact.objects.filter(user_email=email)
+
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "in_repos": in_repos,
-            "output_msg": output_msg
+            "output_msg": output_msg,
+            "contacts": contacts,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -234,3 +234,14 @@ input.ccnet_id { width: 400px; }
     font-size:16px;
     margin-bottom:14px;
 }
+/*repo-share-form*/
+#to_email {
+    width:260px;
+    height:80px;
+}
+.text-core {
+    width:272px;
+}
+.text-suggestion {
+    background:none;
+}

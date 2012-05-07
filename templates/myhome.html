@@ -71,7 +71,7 @@
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
     <label>邮箱(多个邮箱以;分隔)</label><br />
-    <textarea id="to_email" name="to_email" value="" cols="30" rows="5" ></textarea><br />
+    <textarea id="to_email" name="to_email"></textarea>
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
     <input type="submit" value="提交" />
 </form>
@@ -87,5 +87,31 @@ $(".repo-share-btn").click(function() {
 });
 
 addConfirmTo($('.repo-delete-btn'));
+
+//repo-share-form email autocomplete
+$('#to_email').textext({
+    plugins: 'autocomplete',
+    autocomplete: {
+        dropdownPosition: 'below',
+        render: function(suggestion) {
+            return suggestion;
+        }
+    },
+    html: {
+        dropdown: '<div class="text-dropdown"><ul class="text-list"></ul></div>',
+        suggestion: '<li class="text-suggestion"><span class="text-label"></span></li>'
+    }
+})
+.bind('getSuggestions', function(e, data) {
+    var list = [],
+        textext = $(e.target).textext()[0],
+        query = (data ? data.query : '') || '';
+
+    {% for contact in contacts %}
+    list.push('{{ contact.contact_email }}');
+    {% endfor %}
+
+    $(this).trigger('setSuggestions', { result: textext.itemManager().filter(list, query) });
+});
 </script>
 {% endblock %}
