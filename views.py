@@ -433,9 +433,10 @@ def repo_add_share(request):
         for to_email in to_email_list:
             if not to_email:
                 continue
-            
-            if validate_emailuser(to_email.strip()) and validate_owner(request, repo_id):
-                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email.strip(), 'rw')
+
+            to_email = to_email.strip('" ')
+            if validate_emailuser(to_email) and validate_owner(request, repo_id):
+                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
                 info_emails.append(to_email)
             else:
                 err_emails.append(to_email)
