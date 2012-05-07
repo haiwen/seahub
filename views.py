@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from auth.tokens import default_token_generator
 
+from pysearpc import SearpcError
 from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser
@@ -18,6 +19,8 @@ from seahub.share.forms import GroupAddRepoForm
 from seahub.base.accounts import CcnetUser
 from forms import AddUserForm
 from urllib import quote
+
+from seahub.contacts.models import Contact
 
 import stat
 import time
@@ -161,33 +164,39 @@ def validate_emailuser(email):
     
     return False
 
-@login_required
 def repo(request, repo_id):
-    # if user is not staff and not owner and not fetch this repo
+    # get repo web access property, if no repo access property in db, then
+    # assume repo ap is 'own'
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if repo_ap == None:
+        repo_ap = 'own'
+        
+    # if repo is 'own' and user is not staff and is not owner
     # and not shared this repo, then goto 404 page..
-    if not validate_owner(request, repo_id) and not check_shared_repo(request, repo_id) \
-            and not request.user.is_staff:
+    if cmp(repo_ap, 'own') == 0 and not validate_owner(request, repo_id) \
+            and not check_shared_repo(request, repo_id) and not request.user.is_staff:
         raise Http404
 
     repo = get_repo(repo_id)
+    if repo == None:
+        raise Http404
 
     latest_commit = get_commits(repo_id, 0, 1)[0]
 
     token = ""
     is_owner = False
-    repo_ap = ""
-    
     if request.user.is_authenticated():
         if validate_owner(request, repo_id):
             is_owner = True
-            token = seafserv_threaded_rpc.get_repo_token(repo_id)
-        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-        repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
+    repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
+
+    latest_commit = {}
     dirs = []
     if not repo.props.encrypted:
+        latest_commit = get_commits(repo_id, 0, 1)[0]
         if not request.GET.get('root_id'):
-            # ..use HEAD commit's root id
+            # use HEAD commit's root id
             commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
             root_id = commit.props.root_id
         else:
@@ -203,14 +212,20 @@ def repo(request, repo_id):
         except:
             pass
 
+    # used to determin whether show repo content in repo.html
+    # if a repo is shared to me, then I can view repo content on the web
+    if check_shared_repo(request, repo_id):
+        share_to_me = True
+    else:
+        share_to_me = False
     return render_to_response('repo.html', {
             "repo": repo,
             "latest_commit": latest_commit,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
-            "token": token,
             "dirs": dirs,
+            "share_to_me": share_to_me,
             }, context_instance=RequestContext(request))
 
 
@@ -297,11 +312,14 @@ def myhome(request):
     if request.method == 'POST':
         output_msg = repo_add_share(request)
 
+    contacts = Contact.objects.filter(user_email=email)
+
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "in_repos": in_repos,
-            "output_msg": output_msg
+            "output_msg": output_msg,
+            "contacts": contacts,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -371,24 +389,31 @@ def repo_list_dir(request, repo_id):
             },
             context_instance=RequestContext(request))
 
-@login_required
 def repo_operation_file(request, op, repo_id, obj_id):
     if repo_id:
-        # any person visit private repo, go to 404 page
+        # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-        if repo_ap == 'private':
-            raise Http404
+        if not repo_ap:
+            repo_ap = 'own'
 
+        # if a repo is shared to me, then I can view and download file no mater whether
+        # repo's access property is 'own' or 'public'
+        if check_shared_repo(request, repo_id):
+            share_to_me = True
+        else:
+            share_to_me = False
+            
         token = ''        
-        if not repo_ap or repo_ap == 'own':
-            # people who is not owner visits own repo, go to 404 page            
-            if not validate_owner(request, repo_id):
-                raise Http404
-            else:
+        if repo_ap == 'own':
+            # people who is owner or this repo is shared to him, can visit the repo;
+            # others, just go to 404 page           
+            if validate_owner(request, repo_id) or share_to_me:
                 # owner should get a token to visit repo                
                 token = gen_token()
                 # put token into memory in seaf-server
                 seafserv_rpc.web_save_access_token(token, obj_id)
+            else:
+                raise Http404
 
         http_server_root = get_httpserver_root()
         file_name = request.GET.get('file_name', '')

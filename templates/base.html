@@ -36,7 +36,7 @@
     <div id="header">
         <div class="top-info ovhd">
             <a href="{{ SITE_ROOT }}" class="fleft"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
-            <div id="other-info">
+            <div id="other-info" class="fright">
                 <p class="wish">Hope our efforts will bring you benefits.</p>
                 <p class="version">服务器版本: {{ seafile_version }}</p>
             </div>
@@ -94,6 +94,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.textext.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 {% block extra_script %}{% endblock %}
 </body>
