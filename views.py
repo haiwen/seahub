@@ -207,6 +207,12 @@ def repo(request, repo_id):
         except:
             pass
 
+    # used to determin whether show repo content in repo.html
+    # if a repo is shared to me, then I can view repo content on the web
+    if check_shared_repo(request, repo_id):
+        share_to_me = True
+    else:
+        share_to_me = False
     return render_to_response('repo.html', {
             "repo": repo,
             "latest_commit": latest_commit,
@@ -214,6 +220,7 @@ def repo(request, repo_id):
             "repo_ap": repo_ap,
             "repo_size": repo_size,
             "dirs": dirs,
+            "share_to_me": share_to_me,
             }, context_instance=RequestContext(request))
 
 
@@ -376,21 +383,29 @@ def repo_list_dir(request, repo_id):
 
 def repo_operation_file(request, op, repo_id, obj_id):
     if repo_id:
-        # any person visit private repo, go to 404 page
+        # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-        if repo_ap == 'private':
-            raise Http404
+        if not repo_ap:
+            repo_ap = 'own'
 
+        # if a repo is shared to me, then I can view and download file no mater whether
+        # repo's access property is 'own' or 'public'
+        if check_shared_repo(request, repo_id):
+            share_to_me = True
+        else:
+            share_to_me = False
+            
         token = ''        
-        if not repo_ap or repo_ap == 'own':
-            # people who is not owner visits own repo, go to 404 page            
-            if not validate_owner(request, repo_id):
-                raise Http404
-            else:
+        if repo_ap == 'own':
+            # people who is owner or this repo is shared to him, can visit the repo;
+            # others, just go to 404 page           
+            if validate_owner(request, repo_id) or share_to_me:
                 # owner should get a token to visit repo                
                 token = gen_token()
                 # put token into memory in seaf-server
                 seafserv_rpc.web_save_access_token(token, obj_id)
+            else:
+                raise Http404
 
         http_server_root = get_httpserver_root()
         file_name = request.GET.get('file_name', '')
