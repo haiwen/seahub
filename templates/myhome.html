@@ -9,14 +9,14 @@
 
 {% block right_panel %}
 {% if output_msg %}
-{% for key, value in output_msg.items %}
-{% if key == 'info_msg' %}
-<span class="info-msg" style="background-color:lightgreen">{{ value }} 前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看</span><br />
-{% endif %}
-{% if key == 'err_msg' %}
-<span class="err-msg" style="background-color:pink">{{ value }}</span><br />
-{% endif %}
-{% endfor %}
+    {% for key, value in output_msg.items %}
+        {% if key == 'info_msg' %}
+<p class="notification">{{ value }} 请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</p>
+        {% endif %}
+        {% if key == 'err_msg' %}
+<p class="error">{{ value }}</p>
+        {% endif %}
+    {% endfor %}
 {% endif %}
 
 <h3>我拥有的同步目录</h3>
@@ -70,48 +70,74 @@
 {% endif %}
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
-    <label>邮箱(多个邮箱以;分隔)</label><br />
-    <textarea id="to_email" name="to_email"></textarea>
+    <label>邮箱：</label><br />
+    <textarea id="to_email" name="to_email"></textarea><br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
-    <input type="submit" value="提交" />
+    <p class="error hide">输入不能为空。</p>
+    <input type="submit" value="提交" id="share-submit-btn" />
 </form>
 
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$(".repo-share-btn").click(function() {
-    repo_id = $(this).attr("data");
-    $("#share_repo_id").val(repo_id);
-    $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
-});
-
-addConfirmTo($('.repo-delete-btn'));
-
-//repo-share-form email autocomplete
-$('#to_email').textext({
-    plugins: 'autocomplete',
-    autocomplete: {
-        dropdownPosition: 'below',
-        render: function(suggestion) {
-            return suggestion;
-        }
-    },
-    html: {
-        dropdown: '<div class="text-dropdown"><ul class="text-list"></ul></div>',
-        suggestion: '<li class="text-suggestion"><span class="text-label"></span></li>'
-    }
-})
-.bind('getSuggestions', function(e, data) {
-    var list = [],
-        textext = $(e.target).textext()[0],
-        query = (data ? data.query : '') || '';
-
+$(function() {
+    //repo-share-form email autocomplete
+    var contact_list = [];
     {% for contact in contacts %}
-    list.push('{{ contact.contact_email }}');
+    contact_list.push('{{ contact.contact_email }}');
     {% endfor %}
 
-    $(this).trigger('setSuggestions', { result: textext.itemManager().filter(list, query) });
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
+    $("#to_email")
+        .bind("keydown", function(event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                $(this).data("autocomplete").menu.active) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            appendTo: '#repo-share-form',
+            autoFocus: true,
+            delay: 100,
+            minLength: 0,
+            source: function(request, response) {
+                        response($.ui.autocomplete.filter(contact_list, extractLast(request.term)));
+                },
+            focus: function() {
+                        return false;
+                },
+            select: function(event, ui) {
+                var terms = split(this.value);
+                terms.pop();
+                terms.push(ui.item.value);
+                terms.push("");
+                this.value = terms.join(", ");
+                return false;
+            }
+        });
+
+    $(".repo-share-btn").click(function() {
+        $("#share_repo_id").val($(this).attr("data"));
+        $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
+    });
+
+    //check before post
+    $('#share-submit-btn').click(function() {
+        if (!$.trim($('#to_email').attr('value'))) {
+            $('#repo-share-form .error').removeClass('hide');
+            return false;
+        }
+        return true;
+    });
+
+    addConfirmTo($('.repo-delete-btn'));
 });
 </script>
 {% endblock %}

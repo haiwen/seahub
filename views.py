@@ -29,7 +29,7 @@ import settings
 def list_to_string(l):
     tmp_str = ''
     for e in l[:-1]:
-        tmp_str = tmp_str + e + ','
+        tmp_str = tmp_str + e + ', '
     tmp_str = tmp_str + l[-1]
     
     return tmp_str
@@ -426,15 +426,14 @@ def repo_add_share(request):
     if request.method == 'POST':
         from_email = request.user.username
         repo_id = request.POST.get('share_repo_id', '')
-        to_emails = request.POST.get('to_email', '')
-        to_email_list = to_emails.split(';')
+        to_email_list = request.POST.get('to_email', '').split(',')
         info_emails = []
         err_emails = []
         for to_email in to_email_list:
+            to_email = to_email.strip(' ')
             if not to_email:
                 continue
 
-            to_email = to_email.strip('" ')
             if validate_emailuser(to_email) and validate_owner(request, repo_id):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
                 info_emails.append(to_email)
@@ -442,9 +441,9 @@ def repo_add_share(request):
                 err_emails.append(to_email)
 
         if info_emails:
-            output_msg['info_msg'] = u'共享给%s成功,' % list_to_string(info_emails)
+            output_msg['info_msg'] = u'共享给%s成功，' % list_to_string(info_emails)
         if err_emails:
-            output_msg['err_msg'] = u'共享给%s失败: 用户不存在' % list_to_string(err_emails)
+            output_msg['err_msg'] = u'共享给%s失败：用户不存在' % list_to_string(err_emails)
 
     return output_msg
 

@@ -192,7 +192,12 @@ div.home-page h2 { font-style: italic; }
 
 span.small-action-link { font-size: 9px; }
 input.ccnet_id { width: 400px; }
-.notification { background:#FDF; width:580px; margin:10px 0; border:1px solid #faf; padding:10px; }
+.notification {
+    padding:5px;
+    width:580px;
+    background:#FDF;
+    margin:10px 0;
+}
 .repo-list {
     margin-bottom: 12px;
 }
@@ -239,9 +244,13 @@ input.ccnet_id { width: 400px; }
     width:260px;
     height:80px;
 }
-.text-core {
-    width:272px;
+#repo-share-form .ui-autocomplete {
+    background:#fff;
 }
-.text-suggestion {
-    background:none;
+#repo-share-form .ui-menu-item {
+    background-image:none;
+}
+#repo-share-form a {
+    color:#e83;
+    font-weight:normal;
 }
