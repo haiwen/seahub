@@ -15,6 +15,12 @@ ul > li { list-style:none; }
 .mgt10 { margin-top:10px; }
 .center { text-align:center; }
 .label { color:#333; font-size:12px; font-style:normal; }
+.notification {
+    padding:5px;
+    width:580px;
+    background:#FDF;
+    margin:10px 0;
+}
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
@@ -31,7 +37,12 @@ tr.first { background-color: #00FF00; }
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 #header, #main, #footer { width:950px; }
 #header, #main { margin:0 auto; }
-#header { font-size: 14px; font-weight: bold; margin-bottom:12px; }
+#header {
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 12px;
+}
 #left-panel { float:left; width:120px; }
 #right-panel { float:right; width:800px; }
 #footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
@@ -42,10 +53,11 @@ tr.first { background-color: #00FF00; }
 .top-bar a { color:#ddd; font-weight:normal; }
 .top-bar a:hover { background:#A0A; }
 /* #header */
+#header .top-info { margin-bottom:8px;}
 #other-info { color: #ccc; text-align:right; }
 #other-info .wish { font-style:italic; margin-bottom:10px; }
 #other-info .version { font-size: 12px; }
-#header .nav { border-bottom: 1px solid #ddd; margin-top:8px; }
+#header .nav { }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; background: none; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a.cur { color: #000; }
@@ -124,9 +136,6 @@ label { display: inline-block; margin:2px 0px; }
 .pwd_change .submit {
     margin-left:6em;
 }
-/* form */
-/* forms */
-
 /* popup dialog */
 #basic-modal-content {display:none;}
 #simplemodal-overlay {background-color:#000; cursor:wait;}
@@ -136,68 +145,7 @@ label { display: inline-block; margin:2px 0px; }
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
 #simplemodal-container h3 {color:#84b8d9;}
 
-/* home */
-#home-snapshot { border:1px solid #000; float:right; margin:0 0 0 20px; }
-strong { color:#808; font-weight: normal; }
-.home-page h2 { color: #e83; }
-#main-show {
-    margin: 0 0 25px 50px; padding: 10px 10px;
-    border-radius: 3px; -moz-border-radius: 3px;
-    box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
-    -moz-box-shadow: rgba(0, 0, 0, 0.0976562) 0px 8px 16px;
-    width: 800px;
-    height: 235px;
-}
-#main-show #feature-list {
-    margin: 0 0 0 20px;
-    font-size: 16px;
-    color: #808;
-}
-#main-show #feature-list li {
-    background-position:left 11px;
-    line-height: 32px;
-}
-#seafile-show .show-item { 
-    margin: 20px 0 0 0;
-    width: 420px; height: 140px; float: left;
-    padding: 10px;
-    border: 1px solid #f0f0f0;
-    border-radius: 10px; -moz-border-radius: 10px;
-}
-#seafile-show .show-item2 { 
-    margin: 20px 0 0 50px; width: 420px; height: 140px; float: left; 
-    padding: 10px;
-    border: 1px solid #f0f0f0;
-    border-radius: 10px; -moz-border-radius: 10px;
-}
-#seafile-show img { float: left; margin: 0 8px 8px 0; }
-#seafile-show p { color: #444; font-size: 15px; margin-left: 10px; }
-#seafile-what {
-    margin-top: 20px;
-    float: left;
-    width: 440px;
-}
-#seafile-history {
-    float: left;
-    margin: 20px 0 0 70px;
-    width: 440px;
-}
-div.home-page h2 { font-style: italic; }
-/* help pages */
-.help-page { width: 550px; }
-.help-page img { display: block; margin: 20px auto; }
-
-#id_repo_id { width:300px; }
-
-span.small-action-link { font-size: 9px; }
-input.ccnet_id { width: 400px; }
-.notification {
-    padding:5px;
-    width:580px;
-    background:#FDF;
-    margin:10px 0;
-}
+/*myhome*/
 .repo-list {
     margin-bottom: 12px;
 }
@@ -253,4 +201,12 @@ input.ccnet_id { width: 400px; }
 #repo-share-form a {
     color:#e83;
     font-weight:normal;
+}
+/*contact*/
+.contact-op-form label {
+    width:6em;
+    text-align:right;
+}
+.contact-op-form .submit {
+    margin-left:6em;
 }
