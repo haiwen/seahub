@@ -41,7 +41,7 @@ tr.first { background-color: #00FF00; }
     font-size: 14px;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 #left-panel { float:left; width:120px; }
 #right-panel { float:right; width:800px; }
@@ -53,11 +53,10 @@ tr.first { background-color: #00FF00; }
 .top-bar a { color:#ddd; font-weight:normal; }
 .top-bar a:hover { background:#A0A; }
 /* #header */
-#header .top-info { margin-bottom:8px;}
+#header .top-info { margin-bottom:5px;}
 #other-info { color: #ccc; text-align:right; }
 #other-info .wish { font-style:italic; margin-bottom:10px; }
 #other-info .version { font-size: 12px; }
-#header .nav { }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; background: none; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a.cur { color: #000; }
