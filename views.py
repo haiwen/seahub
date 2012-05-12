@@ -10,7 +10,7 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, P
 from auth.tokens import default_token_generator
 
 from pysearpc import SearpcError
-from seaserv import cclient, ccnet_rpc, get_groups, get_users, get_repos, \
+from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser
 
@@ -469,7 +469,11 @@ def repo_download(request):
         enc = '1'
     else:
         enc = ''
-    relay_id = cclient.props.id
+    relay_id = ccnet_rpc.get_session_info().props._dicts['id']
+    if not relay_id:
+        return render_to_response('error.html', {
+                "error_msg": u"下载失败：无法取得中继"
+                }, context_instance=RequestContext(request))
 
     ccnet_applet_root = get_ccnetapplet_root()
     redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
