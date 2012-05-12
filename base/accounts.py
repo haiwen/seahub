@@ -26,14 +26,14 @@ class UserManager(object):
         return ccnetuser
 
 def convert_to_ccnetuser(emailuser):
-    ccnetuser = CcnetUser(emailuser.get_email(),
+    ccnetuser = CcnetUser(emailuser.props.email,
                           raw_password='')
-    ccnetuser.id = emailuser.get_id()
-    ccnetuser.email = emailuser.get_email()
-    ccnetuser.password = emailuser.get_passwd()
-    ccnetuser.is_staff = emailuser.get_is_staff()
-    ccnetuser.is_active = emailuser.get_is_active()
-    ccnetuser.ctime = emailuser.get_ctime()
+    ccnetuser.id = emailuser.props.id
+    ccnetuser.email = emailuser.props.email
+    ccnetuser.password = emailuser.props.passwd
+    ccnetuser.is_staff = emailuser.props.is_staff
+    ccnetuser.is_active = emailuser.props.is_active
+    ccnetuser.ctime = emailuser.props.ctime
 
     return ccnetuser
 
