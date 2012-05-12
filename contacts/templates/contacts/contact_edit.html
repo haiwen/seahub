@@ -11,20 +11,20 @@
 {% block right_panel %}
 
 <h2>编辑联系人</h2>
-<form action="" method="post">
+<form action="" method="post" class="contact-op-form">
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
     {{ form.user_email.as_hidden }}
-    <label for="id_email">邮箱:</label>
+    <label>邮箱：</label>
     {{ form.contact_email }}<br />
-    <label for="id_name">名字(可选):</label>
+    <label>名字(可选)：</label>
     {{ form.contact_name }}<br />
-    <label for="id_note">备注(可选):</label>
+    <label>备注(可选)：</label>
     {{ form.note }}<br />
     <input type="hidden" name="contact_id" value="{{ contact_id }}" />
     <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
-    <input type="submit" value="提交" />
+    <input type="submit" value="提交" class="submit" />
 </form>
 
 {% endblock %}

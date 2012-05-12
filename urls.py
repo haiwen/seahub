@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('base.registration_urls')),
 
     (r'^$', root),
+    #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
                        
@@ -34,7 +35,6 @@ urlpatterns = patterns('',
     url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
 
-    (r'^download/$', direct_to_template, { 'template': 'download.html' } ),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
     (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),

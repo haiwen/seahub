@@ -41,32 +41,7 @@
                 <p class="version">服务器版本: {{ seafile_version }}</p>
             </div>
         </div>
-        {% block nav %}
-        <ul class="nav ovhd">
-            <li>
-            <a href="{{ SITE_ROOT }}home/">主页</a>
-            </li>
-            <li>
-            <a href="{{ SITE_ROOT }}help/">使用帮助</a>
-            </li>
-            <li>
-            <a href="{{ SITE_ROOT }}download/">下载</a>
-            </li>
-            <li>
-            <a href="/vanilla/">论坛</a>
-            </li>
-            <!--
-            <li>
-            <a href="{{ SITE_ROOT }}peers/">Peers</a>
-            </li>
-            -->
-            <!--
-            <li>
-            <a href="{{ SITE_ROOT }}groups/">Groups</a>
-            </li>
-            -->
-        </ul>
-        {% endblock %}
+        {% block nav %}{% endblock %}
     </div>
     <div id="main">
         <div id="left-panel">
