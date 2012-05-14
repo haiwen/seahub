@@ -1,0 +1,32 @@
+{% extends "myhome_base.html" %}
+
+{% block right_panel %}
+<p class="error hide">请确认本地Seafile程序已启动。</p>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(function() {
+    var req_success = false;
+    $.ajax({
+        url: 'http://localhost:8081/seafile_access_check/',
+        dataType: 'jsonp',
+        jsonpCallback: 'xx',
+        crossDomain: true,
+        error: function() {
+            $('.error').removeClass('hide');
+        },
+        success: function() {
+            req_success = true;
+            location.href = '/download/repo/?repo_id={{ repo_id }}';
+        }
+    });
+
+    setTimeout(function() {
+        if (!req_success) {
+            $('.error').removeClass('hide');
+        }
+    }, 300);
+});
+</script>
+{% endblock %}

@@ -100,5 +100,9 @@ $('#public-access-start-cancel-btn').click(function() {
 $('.view-btn').click(function() {
     location.href = $(this).attr('data');
 });
+
+$(".download-btn").click(function() {
+   window.open($(this).attr("data"));
+});
 </script>
 {% endblock %}
