@@ -31,56 +31,6 @@ from utils import go_permission_error, go_error, list_to_string, get_httpserver_
 import stat
 import settings
     
-
-def group_share_repo(request, repo_id, group_id, from_email):
-    """
-    share a repo to a group
-    
-    """
-    # check whether group exists
-    group = ccnet_rpc.get_group(group_id)
-    if not group:
-        return go_error(request, u'共享失败:小组不存在')
-    
-    # check whether user belong to the group
-    joined = False
-    groups = ccnet_rpc.get_groups(request.user.username)
-    for group in groups:
-        if group.props.id == group_id:
-            joined = True
-    if not joined:
-        return go_error(request, u'共享失败:未加入该小组')
-    
-    if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email) != 0:
-        return go_error(request, u'共享失败:内部错误')
-
-def group_unshare_repo(request, repo_id, group_id, from_email):
-    """
-    unshare a repo to a group
-    
-    """
-    # check whether group exists
-    group = ccnet_rpc.get_group(group_id)
-    if not group:
-        return go_error(request, u'共享失败:小组不存在')
-    
-    # check whether user belong to the group
-    joined = False
-    groups = ccnet_rpc.get_groups(from_email)
-    for group in groups:
-        if group.props.id == group_id:
-            joined = True
-    if not joined:
-        return go_error(request, u'共享失败:未加入该小组')
-
-    # check whether user is group staff or the one share the repo
-    if not ccnet_rpc.check_group_staff(group_id, from_email) and \
-            seafserv_threaded_rpc.get_group_repo_share_from(repo_id) != from_email:
-        return go_permission_error(request, u'取消共享失败:只有小组管理员或共享目录发布者有权取消共享')
-        
-    if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
-        return go_error(request, u'共享失败:内部错误')
-    
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -131,12 +81,20 @@ def check_shared_repo(request, repo_id):
 
     return False
 
-def validate_emailuser(email):
-    # check whether emailuser is in the database
-    if ccnet_rpc.get_emailuser(email) != None:
+def validate_emailuser(emailuser):
+    """
+    check whether emailuser is in the database
+
+    """
+    try:
+        user = ccnet_rpc.get_emailuser(emailuser)
+    except:
+        user = None
+        
+    if user:
         return True
-    
-    return False
+    else:
+        return False
 
 def repo(request, repo_id):
     # get repo web access property, if no repo access property in db, then
@@ -428,6 +386,7 @@ def repo_add_share(request):
                     for group in groups:
                         if group.props.group_name == group_name and \
                                 group_creator.find(group.props.creator_name) >= 0:
+                            from seahub.group.views import group_share_repo
                             group_share_repo(request, repo_id, int(group.props.id), from_email)
                             find = True
                             info_emails.append(group_name)
@@ -503,13 +462,9 @@ def repo_download(request):
 @login_required
 def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')
-    if not validate_owner(request, repo_id):
-        return go_permission_error(request, u'取消共享失败：不是目录拥有者')
-    
-    from_email = request.user.username
-
     group_id = request.GET.get('gid')
-
+    from_email = request.user.username
+    
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
     if not group_id:
@@ -519,8 +474,9 @@ def repo_remove_share(request):
         try:
             group_id_int = int(group_id)
         except:
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+            return go_error(request, u'group id 不是有效参数')
         
+        from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
         
     return HttpResponseRedirect(request.META['HTTP_REFERER'])        
@@ -702,3 +658,4 @@ def back_local(request):
     redirect_url = '%s/home/' % ccnet_applt_root
 
     return HttpResponseRedirect(redirect_url)
+

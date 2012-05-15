@@ -3,19 +3,19 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<ul>
-    <li>管理员</li>
+    <h3>管理员</h3>
     {% for member in members %}
     {% if member.props.is_staff == 1 %}
-    <p><a href="{{ SITE_ROOT }}useradmin/info/{{ member.props.user_name }}/">{{ member.props.user_name }}</a></p>
+    <p>{{ member.props.user_name }}</p>
     {% endif %}
     {% endfor %}
-    <li>成员</li>
+    <h3>成员</h3>
     {% for member in members %}
     {% if member.props.is_staff == 0 %}
-    <p><a href="{{ SITE_ROOT }}useradmin/info/{{ member.props.user_name }}/">{{ member.props.user_name }}</a></p>
+    <p>{{ member.props.user_name }}</p>
     {% endif %}
     {% endfor %}
+<ul>
     <li>操作</li>
     {% if is_creator %}
     <p><a id="add-member" href="#">添加成员</a></p>
