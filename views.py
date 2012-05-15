@@ -480,7 +480,19 @@ def repo_download(request):
         ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
 
     return HttpResponseRedirect(redirect_url)
-    
+
+def seafile_access_check(request):
+    repo_id = request.GET.get('repo_id', '')
+
+    return render_to_response(
+        'seafile_access_check.html', {
+            'repo_id': repo_id,
+        },
+        context_instance=RequestContext(request))
+
+
+
+
 @login_required
 def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')

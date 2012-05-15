@@ -33,7 +33,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
+        <button data="{{ repo.props.id }}" class="download-btn">下载</button>
         <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
         <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
         </td>
@@ -60,7 +60,7 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
+          <button data="{{ repo.props.id }}" class="download-btn">下载</button>
         </td>
     </tr>
     {% endfor %}
@@ -138,6 +138,11 @@ $(function() {
     });
 
     addConfirmTo($('.repo-delete-btn'));
+
+    $(".download-btn").click(function() {
+            window.open('/seafile_access_check/?repo_id=' + $(this).attr('data'));
+       });
+
 });
 </script>
 {% endblock %}
