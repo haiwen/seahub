@@ -385,9 +385,31 @@ def get_binding_peerids(email):
     except SearpcError:
         return []
 
+    if not peer_ids:
+        return []
+    
     peerid_list = []
     for peer_id in peer_ids.split("\n"):
         if peer_id == '':
             continue
         peerid_list.append(peer_id)
     return peerid_list
+
+def get_group_repoids(group_id=None):
+    """Get repo ids of a given group id or username"""
+    try:
+        repo_ids = seafserv_threaded_rpc.get_group_repoids(group_id)
+    except SearpcError:
+        return []
+
+    if not repo_ids:
+        return []
+    
+    repoid_list = []
+    for repo_id in repo_ids.split("\n"):
+        if repo_id == '':
+            continue
+        repoid_list.append(repo_id)
+    return repoid_list
+
+    

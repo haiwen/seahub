@@ -4,6 +4,22 @@
 {% block left_panel %}
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
+
+<h3>我管理的小组</h3>
+{% if groups %}
+{% for group in groups %}
+{% if group.my_create %}
+<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% endif %}
+{% endfor %}
+{% endif %}
+<h3>我参加的小组</h3>
+{% for group in groups %}
+{% if not group.my_create %}
+<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% endif %}
+{% endfor %}
+
 {% endblock %}
 
 
@@ -70,7 +86,7 @@
 {% endif %}
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
-    <label>邮箱：</label><br />
+    <label>邮箱或小组：</label><br />
     <textarea id="to_email" name="to_email"></textarea><br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
     <p class="error hide">输入不能为空。</p>
@@ -86,6 +102,10 @@ $(function() {
     var contact_list = [];
     {% for contact in contacts %}
     contact_list.push('{{ contact.contact_email }}');
+    {% endfor %}
+
+    {% for group in groups %}
+    contact_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
     {% endfor %}
 
     function split(val) {

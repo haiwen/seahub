@@ -1,0 +1,118 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+{% block left_panel %}
+    <h3>管理员</h3>
+    {% for member in members %}
+    {% if member.props.is_staff == 1 %}
+    <p>{{ member.props.user_name }}</p>
+    {% endif %}
+    {% endfor %}
+    <h3>成员</h3>
+    {% for member in members %}
+    {% if member.props.is_staff == 0 %}
+    <p>{{ member.props.user_name }}</p>
+    {% endif %}
+    {% endfor %}
+    <h3>操作</h3>
+<ul>    
+    {% if is_staff %}
+    <li><a id="add-member" href="#">添加成员</a></li>
+    <li><a id="remove-member" href="#">删除成员</a></li>
+    <li><a id="remove-group" href="#">解散小组</a></li>
+    {% else %}
+    <li><a id="quit-group" href="#">退出小组</a></li>
+    {% endif %}
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+
+<h3>小组里共享的同步目录</h3>
+{% if repos %}
+<table class="repo-list">
+    <tr>
+        <th width="30%">名字</th>
+        <th width="30%">描述</th>
+        <th width="20%">共享来源</th>
+        <th width="20%">操作</th>
+    </tr>
+
+    {% for repo in repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        <td>{{ repo.share_from }}</td>
+        <td>
+        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
+        {% if is_staff or repo.share_from_me  %}
+        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&gid={{ group_id }}" class="repo-delete-btn">删除</button>
+        {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+<form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
+    <label>邮箱</label><br />
+    <input id="user_name" name="user_name" value="" />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
+    <input type="submit" value="提交" />
+</form>
+<form id="member-remove-form" action="{{ SITE_ROOT }}group/memberrm/" method="post" name="member-remove-form" class="hide">
+    <label>邮箱</label><br />
+    <input id="user_name" name="user_name" value="" />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
+    <input type="submit" value="提交" />
+</form>
+
+<div id="dialog-remove-confirm" class="center hide">
+  <p>确定要解散？</p>
+  <button id="rm-yes-btn">确定</button>
+  <button class="simplemodal-close">取消</button>
+</div>
+
+<div id="dialog-quit-confirm" class="center hide">
+  <p>确定要退出？</p>
+  <button id="quit-yes-btn">确定</button>
+  <button class="simplemodal-close">取消</button>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$("#add-member").click(function() {
+    $("#member-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
+});
+
+$("#remove-member").click(function() {
+    $("#member-remove-form").modal({appendTo: "#main", containerCss:{padding:18}});
+});
+
+$("#remove-group").click(function() {
+    $('#dialog-remove-confirm').modal({appendTo:'#main'});
+});
+
+$("#quit-group").click(function() {
+    $('#dialog-quit-confirm').modal({appendTo:'#main'});
+});
+        
+$('#rm-yes-btn').click(function() {
+    location.href = "{{ SITE_ROOT }}group/rm/?gid={{ group_id }}";
+});
+
+$('#quit-yes-btn').click(function() {
+    location.href = "{{ SITE_ROOT }}group/quit/?gid={{ group_id }}";
+});
+                
+$('.repo-delete-btn').click(function() {
+    location.href = $(this).attr('data');
+});
+
+</script>
+{% endblock %}
