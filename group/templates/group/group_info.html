@@ -15,14 +15,14 @@
     <p>{{ member.props.user_name }}</p>
     {% endif %}
     {% endfor %}
-<ul>
-    <li>操作</li>
-    {% if is_creator %}
-    <p><a id="add-member" href="#">添加成员</a></p>
-    <p><a id="remove-member" href="#">删除成员</a></p>
-    <p><a id="remove-group" href="#">解散小组</a></p>
+    <h3>操作</h3>
+<ul>    
+    {% if is_staff %}
+    <li><a id="add-member" href="#">添加成员</a></li>
+    <li><a id="remove-member" href="#">删除成员</a></li>
+    <li><a id="remove-group" href="#">解散小组</a></li>
     {% else %}
-    <p><a id="quit-group" href="#">退出小组</a></p>
+    <li><a id="quit-group" href="#">退出小组</a></li>
     {% endif %}
 </ul>
 {% endblock %}
@@ -46,7 +46,7 @@
         <td>{{ repo.share_from }}</td>
         <td>
         <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.props.id }}" class="download-btn">下载</button>
-        {% if is_creator or repo.share_from_me  %}
+        {% if is_staff or repo.share_from_me  %}
         <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&gid={{ group_id }}" class="repo-delete-btn">删除</button>
         {% endif %}
         </td>

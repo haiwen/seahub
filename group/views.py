@@ -65,11 +65,11 @@ def group_info(request, group_id):
     group = ccnet_rpc.get_group(group_id_int)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
-    
-    if group.props.creator_name == request.user.username:
-        is_creator = True
+
+    if ccnet_rpc.check_group_staff(group.props.id, request.user.username):
+        is_staff = True
     else:
-        is_creator = False
+        is_staff = False
         
     members = ccnet_rpc.get_group_members(group_id_int)
     
@@ -92,7 +92,7 @@ def group_info(request, group_id):
             "members": members,
             "repos": repos,
             "group_id": group_id,
-            "is_creator": is_creator,
+            "is_staff": is_staff,
             }, context_instance=RequestContext(request));
 
 @login_required
