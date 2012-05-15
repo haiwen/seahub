@@ -41,32 +41,7 @@
                 <p class="version">服务器版本: {{ seafile_version }}</p>
             </div>
         </div>
-        {% block nav %}
-        <ul class="nav ovhd">
-            <li>
-            <a href="{{ SITE_ROOT }}home/">主页</a>
-            </li>
-            <li>
-            <a href="{{ SITE_ROOT }}help/">使用帮助</a>
-            </li>
-            <li>
-            <a href="{{ SITE_ROOT }}download/">下载</a>
-            </li>
-            <li>
-            <a href="/vanilla/">论坛</a>
-            </li>
-            <!--
-            <li>
-            <a href="{{ SITE_ROOT }}peers/">Peers</a>
-            </li>
-            -->
-            <!--
-            <li>
-            <a href="{{ SITE_ROOT }}groups/">Groups</a>
-            </li>
-            -->
-        </ul>
-        {% endblock %}
+        {% block nav %}{% endblock %}
     </div>
     <div id="main">
         <div id="left-panel">
@@ -78,8 +53,8 @@
         <div id="main-panel" class="clear">
             {% block main_panel %}{% endblock %}
         </div>
-        <div id="dialog-delete-confirm" class="center hide">
-            <p>确定要删除？</p>
+        <div id="dialog-delete-confirm" class="hide">
+            <p class="mgb5">确定要删除？</p>
             <button id="yes-btn">确定</button>
             <button class="simplemodal-close">取消</button>
         </div>
@@ -94,7 +69,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.textext.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 {% block extra_script %}{% endblock %}
 </body>

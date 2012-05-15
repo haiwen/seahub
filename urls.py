@@ -2,12 +2,12 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
-from seahub.views import root, peers, groups, myhome, \
-    repo, repo_history, group, modify_token, remove_repo, seafadmin, useradmin, \
+from seahub.views import root, peers, myhome, \
+    repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
     ownerhome, remove_fetched_repo, \
     repo_list_dir, user_info, repo_set_access_property, repo_operation_file, \
-    repo_add_share, repo_list_share, repo_remove_share, repo_download, back_local
+    repo_add_share, repo_list_share, repo_remove_share, repo_download, seafile_access_check, back_local
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('base.registration_urls')),
 
     (r'^$', root),
+    #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
                        
@@ -34,7 +35,6 @@ urlpatterns = patterns('',
     url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
 
-    (r'^download/$', direct_to_template, { 'template': 'download.html' } ),
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
     (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     (r'^repo/dir/(?P<repo_id>[^/]+)/$', repo_list_dir),
     (r'^repo/(?P<op>[^/]+)/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_operation_file),
     (r'^download/repo/$', repo_download),                       
+    (r'^seafile_access_check/$', seafile_access_check),                       
 
     (r'^seafadmin/$', seafadmin),
     url(r'^useradmin/$', useradmin, name='useradmin'),
@@ -54,6 +55,7 @@ urlpatterns = patterns('',
     (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
 #    (r'^avatar/', include('avatar.urls')),
+    (r'^group/', include('seahub.group.urls')),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^back/local/$', back_local),
 

@@ -10,12 +10,12 @@
 {% block right_panel %}
 
 <h2>联系人列表</h2>
-<table class="contact-list default">
+<table>
     <tr>
-        <th width="20%">邮箱</th>
+        <th width="25%">邮箱</th>
         <th width="20%">名字</th>
         <th width="44%">备注</th>
-        <th width="16%">操作</th>
+        <th width="11%">操作</th>
     </tr>
     {% for contact in contacts %}
     <tr>
@@ -23,7 +23,7 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td>
-        <button id="contact-edit-btn" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit-btn">编辑</button>
+        <button data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit-btn">编辑</button>
         <button data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete-btn">删除</button>        
         </td>
     </tr>

@@ -46,10 +46,10 @@
             {% if not is_owner and repo_ap == 'own' and not share_to_me %}
             <p>该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
-            <table class="repo-list">
+            <table>
                 <tr>
-                    <th width="60%">名字</th>
-                    <th width="40%">操作</th>
+                    <th width="70%">名字</th>
+                    <th width="30%">操作</th>
                 </tr>
      
                 {% for dirent in dirs %}
@@ -99,6 +99,10 @@ $('#public-access-start-cancel-btn').click(function() {
 
 $('.view-btn').click(function() {
     location.href = $(this).attr('data');
+});
+
+$(".download-btn").click(function() {
+   window.open($(this).attr("data"));
 });
 </script>
 {% endblock %}
