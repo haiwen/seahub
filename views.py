@@ -281,6 +281,11 @@ def myhome(request):
     
     # groups I join
     groups = ccnet_rpc.get_groups(email)
+    for group in groups:
+        if group.props.creator_name == request.user.username:
+            group.my_create = True
+        else:
+            group.my_create = False
     
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,

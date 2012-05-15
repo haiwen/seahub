@@ -79,6 +79,8 @@ def group_info(request, group_id):
         if not repo_id:
             continue
         repo = get_repo(repo_id)
+        if not repo:
+            continue
         repo.share_from = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
         if request.user.username == repo.share_from:
             repo.share_from_me = True

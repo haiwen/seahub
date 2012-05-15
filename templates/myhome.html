@@ -4,6 +4,22 @@
 {% block left_panel %}
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
+
+<h3>我创建的小组</h3>
+{% if groups %}
+{% for group in groups %}
+{% if group.my_create %}
+<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% endif %}
+{% endfor %}
+{% endif %}
+<h3>我参加的小组</h3>
+{% for group in groups %}
+{% if not group.my_create %}
+<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% endif %}
+{% endfor %}
+
 {% endblock %}
 
 
