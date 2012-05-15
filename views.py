@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
@@ -6,13 +7,15 @@ from django.template import RequestContext
 from auth.decorators import login_required
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_protect
-from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
+    PasswordChangeForm
 from auth.tokens import default_token_generator
 
 from pysearpc import SearpcError
 from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
+    get_group_repoids
 
 from seahub.share.models import GroupShare, UserShare
 from seahub.share.forms import GroupAddRepoForm
@@ -22,43 +25,62 @@ from urllib import quote
 
 from seahub.contacts.models import Contact
 
+from utils import go_permission_error, go_error, list_to_string, get_httpserver_root, \
+    get_ccnetapplet_root, gen_token
+
 import stat
-import time
 import settings
-
-def list_to_string(l):
-    tmp_str = ''
-    for e in l[:-1]:
-        tmp_str = tmp_str + e + ', '
-    tmp_str = tmp_str + l[-1]
     
-    return tmp_str
 
-def get_httpserver_root():
-    # Get seafile http server address and port from settings.py,
-    # and cut out last '/'
-    if settings.HTTP_SERVER_ROOT[-1] == '/':
-        http_server_root = settings.HTTP_SERVER_ROOT[:-1]
-    else:
-        http_server_root = settings.HTTP_SERVER_ROOT
-    return http_server_root
-
-def get_ccnetapplet_root():
-    # Get ccnet applet address and port from settings.py,
-    # and cut out last '/'
-    if settings.CCNET_APPLET_ROOT[-1] == '/':
-        ccnet_applet_root = settings.CCNET_APPLET_ROOT[:-1]
-    else:
-        ccnet_applet_root = settings.CCNET_APPLET_ROOT
-    return ccnet_applet_root
+def group_share_repo(request, repo_id, group_id, from_email):
+    """
+    share a repo to a group
     
+    """
+    # check whether group exists
+    group = ccnet_rpc.get_group(group_id)
+    if not group:
+        return go_error(request, u'共享失败:小组不存在')
     
-def gen_token():
-    # Generate short token used for owner to access repo file
-    from django.utils.hashcompat import sha_constructor
-    token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[::8]
-    return token
+    # check whether user belong to the group
+    joined = False
+    groups = ccnet_rpc.get_groups(request.user.username)
+    for group in groups:
+        if group.props.id == group_id:
+            joined = True
+    if not joined:
+        return go_error(request, u'共享失败:未加入该小组')
+    
+    if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email) != 0:
+        return go_error(request, u'共享失败:内部错误')
 
+def group_unshare_repo(request, repo_id, group_id, from_email):
+    """
+    unshare a repo to a group
+    
+    """
+    # check whether group exists
+    group = ccnet_rpc.get_group(group_id)
+    if not group:
+        return go_error(request, u'共享失败:小组不存在')
+    
+    # check whether user belong to the group
+    joined = False
+    groups = ccnet_rpc.get_groups(from_email)
+    for group in groups:
+        if group.props.id == group_id:
+            joined = True
+    if not joined:
+        return go_error(request, u'共享失败:未加入该小组')
+
+    # check whether user is group staff or the one share the repo
+    if not ccnet_rpc.check_group_staff(group_id, from_email) and \
+            seafserv_threaded_rpc.get_group_repo_share_from(repo_id) != from_email:
+        return go_permission_error(request, u'取消共享失败:只有小组管理员或共享目录发布者有权取消共享')
+        
+    if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
+        return go_error(request, u'共享失败:内部错误')
+    
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -84,75 +106,27 @@ def peers(request):
             'users': users,
             }, context_instance=RequestContext(request))
 
-
-def groups(request):
-    groups = get_groups()
-    return render_to_response('groups.html', { 
-            'groups': groups,
-            }, context_instance=RequestContext(request))
-
-
-def group(request, group_id):
-    """Show a group.
-
-    Login is not required, but permission check based on token should
-    be added later.
-    """
-
-    group = get_group(group_id)
-    shared_repos = GroupShare.objects.filter(group_id=group_id)
-    return render_to_response('group.html', {
-            'group': group, 'shared_repos': shared_repos,
-            }, context_instance=RequestContext(request))
-
-
-def group_add_repo(request, group_id):
-    """Add a repo to a group"""
-
-    group = get_group(group_id)
-    if not group:
-        raise Http404
-
-    if request.method == 'POST':
-        form = GroupAddRepoForm(request.POST)
-        if form.is_valid():
-            group_repo = GroupShare()
-            group_repo.group_id = group_id
-            group_repo.repo_id = form.cleaned_data['repo_id']
-            try:
-                group_repo.save()
-            except IntegrityError:
-                # catch the case repo added to group before
-                pass
-            return HttpResponseRedirect(reverse('view_group', args=[group_id]))
-    else:
-        form = GroupAddRepoForm()
-    
-    return render_to_response("group_add_repo.html",  {
-            'form': form, 'group': group
-            }, context_instance=RequestContext(request))
-
 def validate_owner(request, repo_id):
     # check whether email in the request own the repo
     return seafserv_threaded_rpc.is_repo_owner(request.user.username, repo_id)
 
-#def check_fetched_repo(request, repo_id):
-#    # check whether user has fetched the repo
-#    peerid_list = get_binding_peerids(request.user.username)
-#    for peer_id in peerid_list:
-#        repos = seafserv_threaded_rpc.list_fetched_repos(peer_id)
-#        for repo in repos:
-#            if cmp(repo.props.id, repo_id):
-#                return True
-# 
-#    return False
-
 def check_shared_repo(request, repo_id):
-    # check whether user has been shared this repo
-    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    """
+    check whether user has been shared this repo or
+    the repo share to the groups user join
     
+    """
+    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
     for repo in repos:
-        if cmp(repo.props.id, repo_id) == 0:
+        if repo.props.id == repo_id:
+            return True
+
+    groups = ccnet_rpc.get_groups(request.user.username)
+    # for every group that user joined...    
+    for group in groups:
+        # ...get repo ids in that group, and check whether repo ids contains that repo id 
+        repo_ids = get_group_repoids(group.props.id)
+        if repo_ids.__contains__(repo_id):
             return True
 
     return False
@@ -210,11 +184,13 @@ def repo(request, repo_id):
             pass
 
     # used to determin whether show repo content in repo.html
-    # if a repo is shared to me, then I can view repo content on the web
+    # if a repo is shared to me, or repo shared to the group I joined,
+    # then I can view repo content on the web
     if check_shared_repo(request, repo_id):
         share_to_me = True
     else:
         share_to_me = False
+
     return render_to_response('repo.html', {
             "repo": repo,
             "latest_commit": latest_commit,
@@ -257,15 +233,6 @@ def repo_history(request, repo_id):
 
 
 @login_required
-def repo_share(request, repo_id):
-    return render_to_response('repo_share.html', {
-            "repo": repo,
-            "commits": commits,
-            "branches": branches,
-            }, context_instance=RequestContext(request))
-
-
-@login_required
 def modify_token(request, repo_id):
     if not validate_owner(request, repo_id):
         return HttpResponseRedirect(reverse(repo, args=[repo_id]))
@@ -280,9 +247,8 @@ def modify_token(request, repo_id):
 @login_required
 def remove_repo(request, repo_id):
     if not validate_owner(request, repo_id) and not request.user.is_staff:
-        return render_to_response('permission_error.html', {
-            }, context_instance=RequestContext(request))
-
+        return go_permission_error(request, u'权限不足：无法查看该用户信息')
+    
     seafserv_threaded_rpc.remove_repo(repo_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
     
@@ -305,18 +271,24 @@ def myhome(request):
     
     # Repos that are share to me
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
-    
+
+    # handle share repo request
     if request.method == 'POST':
         output_msg = repo_add_share(request)
 
+    # my contacts
     contacts = Contact.objects.filter(user_email=email)
-
+    
+    # groups I join
+    groups = ccnet_rpc.get_groups(email)
+    
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "in_repos": in_repos,
             "output_msg": output_msg,
             "contacts": contacts,
+            "groups": groups,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -426,7 +398,13 @@ def repo_add_share(request):
     if request.method == 'POST':
         from_email = request.user.username
         repo_id = request.POST.get('share_repo_id', '')
-        to_email_list = request.POST.get('to_email', '').split(',')
+        
+        # Handle the diffent separator
+        to_email_str = request.POST.get('to_email', '').replace(';',',')
+        to_email_str = to_email_str.replace('\n',',')
+        to_email_str = to_email_str.replace('\r',',')
+
+        to_email_list = to_email_str.split(',')
         info_emails = []
         err_emails = []
         for to_email in to_email_list:
@@ -434,16 +412,36 @@ def repo_add_share(request):
             if not to_email:
                 continue
 
-            if validate_emailuser(to_email) and validate_owner(request, repo_id):
-                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
-                info_emails.append(to_email)
+            # if to_email is user name, the format is: 'example@mail.com';
+            # if to_email is group, the format is 'group_name <creator@mail.com>'
+            if (to_email.split(' ')[0].find('@') == -1):
+                group_name = to_email.split(' ')[0]
+                group_creator = to_email.split(' ')[1]
+                if validate_owner(request, repo_id):
+                    groups = ccnet_rpc.get_groups(request.user.username)
+                    find = False
+                    for group in groups:
+                        if group.props.group_name == group_name and \
+                                group_creator.find(group.props.creator_name) >= 0:
+                            group_share_repo(request, repo_id, int(group.props.id), from_email)
+                            find = True
+                            info_emails.append(group_name)
+
+                    if not find:
+                        err_emails.append(group_name)
+                else:
+                    err_emails.append(group_name)
             else:
-                err_emails.append(to_email)
+                if validate_emailuser(to_email) and validate_owner(request, repo_id):
+                    seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
+                    info_emails.append(to_email)
+                else:
+                    err_emails.append(to_email)
 
         if info_emails:
             output_msg['info_msg'] = u'共享给%s成功，' % list_to_string(info_emails)
         if err_emails:
-            output_msg['err_msg'] = u'共享给%s失败：用户不存在' % list_to_string(err_emails)
+            output_msg['err_msg'] = u'共享给%s失败：用户或组不存在' % list_to_string(err_emails)
 
     return output_msg
 
@@ -451,7 +449,22 @@ def repo_add_share(request):
 def repo_list_share(request):
     username = request.user.username
 
+    # repos that are share to user
     out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
+
+    # repos that are share to groups
+    group_repos = seafserv_threaded_rpc.get_group_my_share_repos(request.user.username)
+    for group_repo in group_repos:
+        repo_id = group_repo.props.repo_id
+        if not repo_id:
+            continue
+        repo = get_repo(repo_id)
+        group_id = group_repo.props.group_id
+        group = ccnet_rpc.get_group(int(group_id))
+        repo.props.shared_email = group.props.group_name
+        repo.gid = group_id
+        
+        out_repos.append(repo)
 
     return render_to_response('share_repos.html', {
             "out_repos": out_repos,
@@ -480,18 +493,32 @@ def repo_download(request):
         ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
 
     return HttpResponseRedirect(redirect_url)
+
     
 @login_required
 def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')
     if not validate_owner(request, repo_id):
-        raise Http404
+        return go_permission_error(request, u'取消共享失败：不是目录拥有者')
     
-    to_email = request.GET.get('to_email', '')
     from_email = request.user.username
-    seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
 
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    group_id = request.GET.get('gid')
+
+    # if request params don't have 'gid', then remove repos that share to
+    # to other person; else, remove repos that share to groups
+    if not group_id:
+        to_email = request.GET.get('to_email', '')
+        seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
+    else:
+        try:
+            group_id_int = int(group_id)
+        except:
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        
+        group_unshare_repo(request, repo_id, group_id_int, from_email)
+        
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])        
     
 @login_required
 def mypeers(request):
@@ -553,8 +580,11 @@ def useradmin(request):
 
 @login_required
 def user_info(request, email):
+    if request.user.username == email:
+        return HttpResponseRedirect(reverse(myhome))
+    
     if not request.user.is_staff:
-        raise Http404
+        return go_permission_error(request, u'权限不足：无法查看该用户信息')
 
     user_dict = {}
     owned_repos = []

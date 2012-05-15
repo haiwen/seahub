@@ -12,6 +12,7 @@ from service import get_users, get_user, get_events, count_event
 from service import get_repos, get_repo, get_commits, get_branches
 from service import get_binding_peerids
 from service import get_ccnetuser
+from service import get_group_repoids
 
 from service import CCNET_CONF_PATH
 

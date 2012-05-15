@@ -70,7 +70,7 @@
 {% endif %}
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
-    <label>邮箱：</label><br />
+    <label>邮箱或小组：</label><br />
     <textarea id="to_email" name="to_email"></textarea><br />
     <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
     <p class="error hide">输入不能为空。</p>
@@ -86,6 +86,10 @@ $(function() {
     var contact_list = [];
     {% for contact in contacts %}
     contact_list.push('{{ contact.contact_email }}');
+    {% endfor %}
+
+    {% for group in groups %}
+    contact_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
     {% endfor %}
 
     function split(val) {

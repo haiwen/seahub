@@ -2,8 +2,8 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
-from seahub.views import root, peers, groups, myhome, \
-    repo, repo_history, group, modify_token, remove_repo, seafadmin, useradmin, \
+from seahub.views import root, peers, myhome, \
+    repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
     ownerhome, remove_fetched_repo, \
     repo_list_dir, user_info, repo_set_access_property, repo_operation_file, \
@@ -54,6 +54,7 @@ urlpatterns = patterns('',
     (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
 #    (r'^avatar/', include('avatar.urls')),
+    (r'^group/', include('seahub.group.urls')),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^back/local/$', back_local),
 

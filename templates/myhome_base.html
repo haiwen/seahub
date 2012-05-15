@@ -10,7 +10,9 @@
     <li>
         <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>联系人</a>
     </li>
-    
+    <li>
+        <a href="{{ SITE_ROOT }}group/" {% block nav_group_class %}{% endblock %}>小组</a>
+    </li>
     {% if request.user.is_staff %}
     <li>
         <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
