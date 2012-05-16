@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
 import time
+import re
 import settings
 
 def go_permission_error(request, msg=None):
@@ -71,3 +72,11 @@ def gen_token():
 
     token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[::8]
     return token
+
+def validate_group_name(group_name):
+    """
+    Check whether group name is valid.
+    A valid group name only contains alphanumeric character
+
+    """
+    return re.match('^\w+$', group_name, re.U)
