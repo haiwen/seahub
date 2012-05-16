@@ -450,7 +450,7 @@ def repo_download(request):
 
     repo = seafserv_threaded_rpc.get_repo(repo_id)    
     repo_name = repo.props.name
-    quote_repo_name = quote(repo_name)
+    quote_repo_name = quote(repo_name.encode('utf-8'))
     encrypted = repo.props.encrypted
     if encrypted:
         enc = '1'

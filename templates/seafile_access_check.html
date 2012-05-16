@@ -18,7 +18,7 @@ $(function() {
         },
         success: function() {
             req_success = true;
-            location.href = '/download/repo/?repo_id={{ repo_id }}';
+            location.href = '{{ SITE_ROOT }}download/repo/?repo_id={{ repo_id }}';
         }
     });
 
