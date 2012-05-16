@@ -446,7 +446,7 @@ def repo_download(request):
         enc = '1'
     else:
         enc = ''
-    relay_id = ccnet_rpc.get_session_info().props._dicts['id']
+    relay_id = ccnet_rpc.get_session_info().id
     if not relay_id:
         return render_to_response('error.html', {
                 "error_msg": u"下载失败：无法取得中继"
