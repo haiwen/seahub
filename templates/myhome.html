@@ -160,7 +160,7 @@ $(function() {
     addConfirmTo($('.repo-delete-btn'));
 
     $(".download-btn").click(function() {
-            window.open('/seafile_access_check/?repo_id=' + $(this).attr('data'));
+            window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
        });
 
 });

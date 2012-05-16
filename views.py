@@ -381,9 +381,12 @@ def repo_add_share(request):
                 group_name = to_email.split(' ')[0]
                 group_creator = to_email.split(' ')[1]
                 if validate_owner(request, repo_id):
+                    # get all the groups the user joined
                     groups = ccnet_rpc.get_groups(request.user.username)
                     find = False
                     for group in groups:
+                        # for every group that user joined, if group name and
+                        # group creator matchs, then has find the group
                         if group.props.group_name == group_name and \
                                 group_creator.find(group.props.creator_name) >= 0:
                             from seahub.group.views import group_share_repo
@@ -423,8 +426,12 @@ def repo_list_share(request):
         if not repo_id:
             continue
         repo = get_repo(repo_id)
+        if not repo:
+            continue
         group_id = group_repo.props.group_id
         group = ccnet_rpc.get_group(int(group_id))
+        if not group:
+            continue
         repo.props.shared_email = group.props.group_name
         repo.gid = group_id
         

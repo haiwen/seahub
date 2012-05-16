@@ -1,0 +1,59 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<ul>
+    <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group_id }}/">返回小组</a></li>
+    <li><a id="group-remove" href="#">解散小组</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+
+<h3>小组管理</h3>
+{% if members %}
+<table class="member-list">
+    <tr>
+        <th width="70%">邮箱</th>
+        <th width="30%">操作</th>
+    </tr>
+
+    {% for member in members %}
+    <tr>
+        <td>{{ member.user_name }}</td>
+        {% if not member.is_staff %}
+        <td><button data="{{ member.user_name }}" class="member-remove-btn">删除</button></td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+<form id="member-remove-form" action="{{ SITE_ROOT }}group/memberrm/" method="post" name="member-remove-form" class="hide">
+    <label>邮箱</label><br />
+    <input id="user_name" name="user_name" value="" />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
+    <input type="submit" value="提交" />
+</form>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$("#group-remove").click(function() {
+    location.href = "{{ SITE_ROOT }}group/rm?gid={{ group_id }}";
+});
+
+$('.member-remove-btn').click(function() {
+    username = $(this).attr('data');
+    $("#user_name").val(username);
+    $("#member-remove-form").submit();
+});        
+</script>
+{% endblock %}
