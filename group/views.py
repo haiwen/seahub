@@ -85,8 +85,14 @@ def group_info(request, group_id):
         is_staff = False
         
     members = ccnet_rpc.get_group_members(group_id_int)
+    managers = []
+    common_members = []
     for member in members:
         member.short_username = member.user_name.split('@')[0]
+        if member.is_staff == 1:
+		    managers.append(member)
+        else:
+		    common_members.append(member)
     
     repos = []
     repo_ids = get_group_repoids(group_id=group_id_int)
@@ -104,7 +110,8 @@ def group_info(request, group_id):
         repos.append(repo)
 
     return render_to_response("group/group_info.html", {
-            "members": members,
+            "managers": managers,
+            "common_members": common_members,
             "repos": repos,
             "group_id": group_id,
             "is_staff": is_staff,

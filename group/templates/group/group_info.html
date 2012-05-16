@@ -2,38 +2,46 @@
 {% load seahub_tags %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
+
 {% block left_panel %}
-    <h3>管理员</h3>
-    {% for member in members %}
-    {% if member.is_staff == 1 %}
-    <p>{{ member.short_username }}</p>
-    {% endif %}
+
+<h3>管理员</h3>
+<ul>
+{% for member in managers %}
+<li>{{ member.short_username }}</li>
+{% endfor %}
+
+<h3>成员</h3>
+{% if common_members %}
+<ul>
+    {% for member in common_members %}
+	<li>{{ member.short_username }}</li>
     {% endfor %}
-    <h3>成员</h3>
-    {% for member in members %}
-    {% if member.is_staff == 0 %}
-    <p>{{ member.short_username }}</p>
-    {% endif %}
-    {% endfor %}
-    <h3>操作</h3>
-<ul>    
-    {% if is_staff %}
-    <li><a id="add-member" href="#">添加成员</a></li>
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group_id }}/">小组管理</a></li>
-    {% else %}
-    <li><a id="quit-group" href="#">退出小组</a></li>
-    {% endif %}
 </ul>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+<h3>操作</h3>
+<ul class="with-bg">
+{% if is_staff %}
+	<li><a id="add-member" href="#">添加成员</a></li>
+    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group_id }}/">小组管理</a></li>
+{% else %}
+	<li><a id="quit-group" href="#">退出小组</a></li>
+{% endif %}
+</ul>
+
 {% endblock %}
 
 {% block right_panel %}
 
 <h3>小组里共享的同步目录</h3>
 {% if repos %}
-<table class="repo-list">
+<table>
     <tr>
-        <th width="30%">名字</th>
-        <th width="30%">描述</th>
+        <th width="20%">名字</th>
+        <th width="40%">描述</th>
         <th width="20%">共享来源</th>
         <th width="20%">操作</th>
     </tr>
@@ -57,19 +65,13 @@
 {% endif %}
 
 <form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
-    <label>邮箱</label><br />
-    <input id="user_name" name="user_name" value="" />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
-    <input type="submit" value="提交" />
-</form>
-<form id="member-remove-form" action="{{ SITE_ROOT }}group/memberrm/" method="post" name="member-remove-form" class="hide">
-    <label>邮箱</label><br />
-    <input id="user_name" name="user_name" value="" />
+    <label>邮箱:</label><br />
+    <input id="user_name" name="user_name" value="" /><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
     <input type="submit" value="提交" />
 </form>
 
-<div id="dialog-quit-confirm" class="center hide">
+<div id="dialog-quit-confirm" class="hide">
   <p>确定要退出？</p>
   <button id="quit-yes-btn">确定</button>
   <button class="simplemodal-close">取消</button>
@@ -81,19 +83,25 @@
 <script type="text/javascript">
 $("#add-member").click(function() {
     $("#member-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
+	return false;
 });
 
 $("#quit-group").click(function() {
     $('#dialog-quit-confirm').modal({appendTo:'#main'});
+	return false;
 });
         
 $('#quit-yes-btn').click(function() {
     location.href = "{{ SITE_ROOT }}group/quit/?gid={{ group_id }}";
 });
-                
+
+addConfirmTo($('.repo-delete-btn'));
+
+/*                
 $('.repo-delete-btn').click(function() {
     location.href = $(this).attr('data');
 });
+*/
 
 $('.download-btn').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));

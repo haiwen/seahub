@@ -3,7 +3,7 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<ul>
+<ul class="with-bg">
     <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group_id }}/">返回小组</a></li>
     <li><a id="group-remove" href="#">解散小组</a></li>
 </ul>
@@ -51,8 +51,7 @@ $("#group-remove").click(function() {
 });
 
 $('.member-remove-btn').click(function() {
-    username = $(this).attr('data');
-    $("#user_name").val(username);
+    $("#user_name").val($(this).attr('data'));
     $("#member-remove-form").submit();
 });        
 </script>

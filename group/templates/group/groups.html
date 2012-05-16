@@ -3,16 +3,16 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<ul>
+<ul class="with-bg">
     <li><a id="group-add" href="#">添加小组</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
 
-<h3>我参加的小组</h3>
+<h3>我的小组</h3>
 {% if groups %}
-<table class="group-list">
+<table>
     <tr>
         <th width="30%">名字</th>
         <th width="40%">创建者</th>
@@ -32,8 +32,8 @@
 {% endif %}
 
 <form id="group-add-form" action="{{ SITE_ROOT }}group/add/" method="post" name="group-add-form" class="hide">
-    <label>小组名称</label><br />
-    <input id="group_name" name="group_name" value="" />
+    <label>小组名称：</label><br />
+    <input id="group_name" name="group_name" value="" /><br />
     <input type="submit" value="提交" />
 </form>
 
@@ -43,6 +43,7 @@
 <script type="text/javascript">
 $("#group-add").click(function() {
     $("#group-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
+	return false;
 });
 
 </script>

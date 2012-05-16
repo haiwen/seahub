@@ -60,8 +60,8 @@
                     {% else %}
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>
-                        <a href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="">查看</a>
-                        <a href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}" class="">下载</a>
+                        <a href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
+                        <a href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
                     </td>
                     {% endif %}
                 </tr>
@@ -95,14 +95,6 @@ $('#public-access-start-btn').click(function() {
 });
 $('#public-access-start-cancel-btn').click(function() {
     $('#repo-access-switch').attr('checked', false);
-});
-
-$('.view-btn').click(function() {
-    location.href = $(this).attr('data');
-});
-
-$(".download-btn").click(function() {
-   window.open($(this).attr("data"));
 });
 </script>
 {% endblock %}

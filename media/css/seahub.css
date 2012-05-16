@@ -13,6 +13,9 @@ ul > li { list-style:none; }
 .mgb10 { margin-bottom:10px; }
 .mgt10 { margin-top:10px; }
 .label { color:#333; font-size:12px; font-style:normal; }
+.w100 {
+	width: 100%;
+}
 .notification {
     padding:5px;
     width:580px;
@@ -27,7 +30,7 @@ a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
 h2 { font-size:18px; color:#808; margin-bottom:8px; }
-h3 { font-size:15px; color:#808; font-weight:normal; margin-bottom:6px; }
+h3 { font-size:15px; color:#808; font-weight:normal; margin:10px 0 6px; }
 ol { padding-left:2em; }
 /* table */
 table {
@@ -35,7 +38,7 @@ table {
     border-collapse: collapse;
     width:100%;
     table-layout:fixed;
-    margin:5px 0 25px;
+    margin:5px 0 20px;
 }
 td, th { padding: 3px; word-break:break-word; }
 th { color:#333; text-align:left; }
@@ -52,13 +55,13 @@ tr.first { background-color: #00FF00; }
     font-size: 14px;
     font-weight: bold;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
 }
 #main {
-    min-height:400px;
+    min-height: 400px;
+    padding-top: 10px;
 }
-#left-panel { float:left; width:120px; }
-#right-panel { float:right; width:800px; }
+#left-panel { float:left; width:220px; }
+#right-panel { float:right; width:700px; }
 #footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
 /* top-bar */
 #top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
@@ -78,8 +81,7 @@ tr.first { background-color: #00FF00; }
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
-.with-bg li,
-#left-panel li {
+.with-bg li {
     padding-left:10px;
     line-height:20px;
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
@@ -162,6 +164,12 @@ label { display: inline-block; margin:2px 0px; }
     text-align:center;
 }
 /*myhome*/
+.mygroup {
+	float:left;
+	width:70px;
+	text-align:center;
+	margin:0 3px 5px 0;
+}
 
 /*repo page*/
 #repo-page h2 {
@@ -174,7 +182,7 @@ label { display: inline-block; margin:2px 0px; }
 #repo-page .main {
     width:650px;
 }
-#repo-page .more {
+#repo-page a {
     font-weight:normal;
     font-size:12px;
     color:#080;
