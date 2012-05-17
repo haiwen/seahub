@@ -114,6 +114,7 @@ def group_info(request, group_id):
             "common_members": common_members,
             "repos": repos,
             "group_id": group_id,
+            "group" : group,
             "is_staff": is_staff,
             }, context_instance=RequestContext(request));
 
@@ -187,10 +188,14 @@ def group_manage(request, group_id):
     if not ccnet_rpc.check_group_staff(group_id_int, request.user.username):
         return go_permission_error(request, u'只有小组管理员有权管理小组')
 
+    group = ccnet_rpc.get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
     members = ccnet_rpc.get_group_members(group_id_int)
     
     return render_to_response('group/group_manage.html', {
-            'group_id': group_id_int,
+            'group' : group,
             'members': members,
             }, context_instance=RequestContext(request))
     

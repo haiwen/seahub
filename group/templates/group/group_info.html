@@ -26,7 +26,7 @@
 <ul class="with-bg">
 {% if is_staff %}
 	<li><a id="add-member" href="#">添加成员</a></li>
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group_id }}/">小组管理</a></li>
+    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group.id }}/">小组管理</a></li>
 {% else %}
 	<li><a id="quit-group" href="#">退出小组</a></li>
 {% endif %}
@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block right_panel %}
-
+<h2>{{ group.group_name }}</h2>
 <h3>小组里共享的同步目录</h3>
 {% if repos %}
 <table>
@@ -54,7 +54,7 @@
         <td>
         <button data="{{ repo.props.id }}" class="download-btn">下载</button>
         {% if is_staff or repo.share_from_me  %}
-        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&gid={{ group_id }}" class="repo-delete-btn">删除</button>
+        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&gid={{ group.id }}" class="repo-delete-btn">取消共享</button>
         {% endif %}
         </td>
     </tr>
@@ -67,7 +67,7 @@
 <form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
     <label>邮箱:</label><br />
     <input id="user_name" name="user_name" value="" /><br />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
     <input type="submit" value="提交" />
 </form>
 
@@ -92,7 +92,7 @@ $("#quit-group").click(function() {
 });
         
 $('#quit-yes-btn').click(function() {
-    location.href = "{{ SITE_ROOT }}group/quit/?gid={{ group_id }}";
+    location.href = "{{ SITE_ROOT }}group/quit/?gid={{ group.id }}";
 });
 
 addConfirmTo($('.repo-delete-btn'));

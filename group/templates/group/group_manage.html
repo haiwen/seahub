@@ -5,13 +5,13 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group_id }}/">返回小组</a></li>
+    <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
     <li><a id="group-remove" href="#">解散小组</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
-
+<h2>{{ group.group_name }}</h2>
 <h3>小组成员列表</h3>
 {% if members %}
 <table class="member-list">
@@ -39,7 +39,7 @@
 <form id="member-remove-form" action="{{ SITE_ROOT }}group/memberrm/" method="post" name="member-remove-form" class="hide">
     <label>邮箱</label><br />
     <input id="user_name" name="user_name" value="" />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group_id }}" />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
     <input type="submit" value="提交" />
 </form>
 
@@ -48,7 +48,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 $("#group-remove").click(function() {
-    location.href = "{{ SITE_ROOT }}group/rm?gid={{ group_id }}";
+    location.href = "{{ SITE_ROOT }}group/rm?gid={{ group.id }}";
 });
 
 $('.member-remove-btn').click(function() {
