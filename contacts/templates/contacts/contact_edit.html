@@ -2,7 +2,8 @@
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<ul>
+<h3>操作</h3>
+<ul class="with-bg">
     <li><a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a></li>
 </ul>
 {% endblock %}
@@ -10,7 +11,7 @@
 
 {% block right_panel %}
 
-<h2>编辑联系人</h2>
+<h3>编辑联系人</h3>
 <form action="" method="post" class="contact-op-form">
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>

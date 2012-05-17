@@ -6,19 +6,32 @@
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
 
 <h3>我管理的小组</h3>
-{% if groups %}
-{% for group in groups %}
-{% if group.my_create %}
-<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% if groups_manage %}
+<ul class="w100 ovhd">
+    {% for group in groups_manage %}
+    <li class="mygroup">
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/information.png" alt="" /></a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+	</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
 {% endif %}
-{% endfor %}
-{% endif %}
+
 <h3>我参加的小组</h3>
-{% for group in groups %}
-{% if not group.my_create %}
-<p><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></p>
+{% if groups_join %}
+<ul class="w100 ovhd">
+	{% for group in groups_join %}
+    <li class="mygroup">
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/information.png" alt="" /></a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+	</li>
+	{% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
 {% endif %}
-{% endfor %}
 
 {% endblock %}
 
@@ -37,7 +50,7 @@
 
 <h3>我拥有的同步目录</h3>
 {% if owned_repos %}
-<table class="repo-list">
+<table>
     <tr>
         <th width="30%">名字</th>
         <th width="50%">描述</th>
@@ -62,11 +75,11 @@
 
 <h3>共享给我的同步目录</h3>
 {% if in_repos %}
-<table class="repo-list">
+<table>
     <tr>
-        <th width="30%">名字</th>
+        <th width="25%">名字</th>
         <th width="20%">共享来源</th>
-        <th width="35%">描述</th>
+        <th width="40%">描述</th>
         <th width="15%">操作</th>
     </tr>
 
@@ -98,14 +111,14 @@
 {% block extra_script %}
 <script type="text/javascript">
 $(function() {
-    //repo-share-form email autocomplete
-    var contact_list = [];
+    //repo-share-form share-list autocomplete
+    var share_list = [];
     {% for contact in contacts %}
-    contact_list.push('{{ contact.contact_email }}');
+    share_list.push('{{ contact.contact_email }}');
     {% endfor %}
 
     {% for group in groups %}
-    contact_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+    share_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
     {% endfor %}
 
     function split(val) {
@@ -128,7 +141,7 @@ $(function() {
             delay: 100,
             minLength: 0,
             source: function(request, response) {
-                        response($.ui.autocomplete.filter(contact_list, extractLast(request.term)));
+                        response($.ui.autocomplete.filter(share_list, extractLast(request.term)));
                 },
             focus: function() {
                         return false;

@@ -240,13 +240,15 @@ def myhome(request):
     # my contacts
     contacts = Contact.objects.filter(user_email=email)
     
-    # groups I join
+    # my groups
     groups = ccnet_rpc.get_groups(email)
+    groups_manage = []
+    groups_join = []
     for group in groups:
         if group.props.creator_name == request.user.username:
-            group.my_create = True
+            groups_manage.append(group)
         else:
-            group.my_create = False
+            groups_join.append(group)
     
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
@@ -255,6 +257,8 @@ def myhome(request):
             "output_msg": output_msg,
             "contacts": contacts,
             "groups": groups,
+            "groups_manage": groups_manage,
+            "groups_join": groups_join,
             }, context_instance=RequestContext(request))
 
 @login_required
