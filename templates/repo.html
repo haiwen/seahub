@@ -44,6 +44,11 @@
             {% if not is_owner and repo_ap == 'own' and not share_to_me %}
             <p>该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
+            <div>
+              	{% for name, link in zipped %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?root_id={{ dirent.obj_id }}&p={{ link }}">{{ name }}</a> / 
+                {% endfor %}
+            </div>
             <table>
                 <tr>
                     <th width="70%">名字</th>
@@ -53,7 +58,7 @@
                 {% for dirent in dirs %}
                 <tr>
                     {% if dirent.is_dir %}
-                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?root_id={{ dirent.obj_id }}&p={{ path }}/{{ dirent.obj_name }}">{{ dirent.obj_name }}</a></td>
                     <td></td>
                     {% else %}
                     <td>{{ dirent.props.obj_name }}</td>
