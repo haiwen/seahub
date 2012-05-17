@@ -46,16 +46,19 @@
             {% else %}
             <table>
                 <tr>
-                    <th width="70%">名字</th>
+                    <th width="5%"></th>
+                    <th width="65%">名字</th>
                     <th width="30%">操作</th>
                 </tr>
      
                 {% for dirent in dirs %}
                 <tr>
                     {% if dirent.is_dir %}
+                    <td><img src="{{ MEDIA_URL }}/img/favicon.png" /></td>
                     <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/?root_id={{ dirent.props.obj_id }}">{{ dirent.props.obj_name }}</a></td>
                     <td></td>
                     {% else %}
+                    <td><img src="{{ MEDIA_URL }}/img/{{ dirent.obj_name|file_icon_filter }}" /></td>
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>
                         <a class="table-op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
