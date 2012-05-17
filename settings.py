@@ -129,6 +129,14 @@ CCNET_APPLET_ROOT = "http://localhost:8081"
 
 SEAFILE_VERSION = '0.9.2'
 
+# Add supported file extensions and file icon name.
+# Icons will show in repo page.
+SUPPORTED_FILE_EXT = {
+    'txt' : 'foo.jpg',
+    'pdf' : '',
+    'default' : '',
+}
+
 try:
     import local_settings
 except ImportError:
