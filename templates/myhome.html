@@ -10,7 +10,7 @@
 <ul class="w100 ovhd">
     {% for group in groups_manage %}
     <li class="mygroup">
-	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/information.png" alt="" /></a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
 	</li>
     {% endfor %}
@@ -24,7 +24,7 @@
 <ul class="w100 ovhd">
 	{% for group in groups_join %}
     <li class="mygroup">
-	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/information.png" alt="" /></a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
 	</li>
 	{% endfor %}
