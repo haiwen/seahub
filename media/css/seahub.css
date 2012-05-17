@@ -68,7 +68,7 @@ tr.first { background-color: #00FF00; }
 .top-bar { height:20px; color:#fff; text-align:right; font-weight:bold; background:#606; }
 .top-bar-in { width:950px; margin:0 auto; }
 .top-bar a { color:#ddd; font-weight:normal; }
-.top-bar a.cur { background:#A0A; }
+.top-bar a.cur { text-decoration:underline; }
 .top-bar a:hover { background:#A0A; }
 /* header */
 #header .top-info { margin-bottom:5px;}
