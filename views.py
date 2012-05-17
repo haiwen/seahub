@@ -131,7 +131,7 @@ def repo(request, repo_id):
         latest_commit = get_commits(repo_id, 0, 1)[0]
         path = request.GET.get('p', '')
         try:
-            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, path)
+            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
         except SearpcError, e:
             return go_error(request, e.msg)
         for dirent in dirs:
@@ -152,7 +152,7 @@ def repo(request, repo_id):
                 i = i + 1
                 links.append(link)
         paths.insert(0, repo.name)
-        links.insert(0, '/')
+        links.insert(0, '')
         
         zipped = zip(paths, links)
 
