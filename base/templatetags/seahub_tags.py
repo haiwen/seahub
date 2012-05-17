@@ -1,7 +1,7 @@
 from datetime import datetime
 from django import template
 
-from seahub.settings import SUPPORTED_FILE_EXT
+from seahub.settings import FILEEXT_ICON_MAP
 
 register = template.Library()
 
@@ -21,7 +21,7 @@ def file_icon_filter(value):
     else:
         file_ext = None
 
-    if file_ext and SUPPORTED_FILE_EXT.has_key(file_ext):
-        return SUPPORTED_FILE_EXT.get(file_ext)
+    if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
+        return FILEEXT_ICON_MAP.get(file_ext)
     else:
-        return SUPPORTED_FILE_EXT.get('default')
+        return FILEEXT_ICON_MAP.get('default')

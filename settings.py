@@ -131,10 +131,23 @@ SEAFILE_VERSION = '0.9.2'
 
 # Add supported file extensions and file icon name.
 # Icons will show in repo page.
-SUPPORTED_FILE_EXT = {
-    'txt' : 'foo.jpg',
-    'pdf' : '',
-    'default' : '',
+FILEEXT_ICON_MAP = {
+    # pdf file
+    'pdf' : 'file-extension-pdf-icon-24.png',
+    # document file
+    'doc' : 'document-word-icon-24.png',
+    'docx' : 'document-word-icon-24.png',
+    # ppt file
+    'ppt' : 'document-powerpoint-icon-24.png',
+    'pptx' : 'document-powerpoint-icon-24.png',
+    # music file
+    'mp3' : 'File-Music-icon-24.png',
+    # picture file
+    'jpg' : 'File-Pictures-icon-24.png',
+    'jpeg' : 'File-Pictures-icon-24.png',
+    'png' : 'File-Pictures-icon-24.png',
+    # normal file and unkown file
+    'default' : 'File-icon-default-24.png',
 }
 
 try:
