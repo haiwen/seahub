@@ -17,6 +17,10 @@
     <div id="top-bar">
         <div class="top-bar">
             <div class="top-bar-in">
+                {% if request.user.is_staff %}
+                <a href="{{ SITE_ROOT }}seafadmin/" class="adminconsole">管理员控制台</a>
+                <a href="{{ SITE_ROOT }}home/my/" class="myaccount">我的帐号</a>
+                {% endif %}
                 {% if request.user.is_authenticated %}
                 欢迎, {{ request.user }}
                 <a href="{{ SITE_ROOT }}profile/">设置</a>

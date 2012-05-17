@@ -13,14 +13,6 @@
     <li>
         <a href="{{ SITE_ROOT }}group/" {% block nav_group_class %}{% endblock %}>小组</a>
     </li>
-    {% if request.user.is_staff %}
-    <li>
-        <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
-    </li>
-    <li>
-        <a href="{{ SITE_ROOT }}useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
-    </li>
-    {% endif %}
     <li>
         <a href="{{ SITE_ROOT}}back/local/">回到本地</a>
     </li>
@@ -28,7 +20,6 @@
     <li>
         <a href="http://www.gonggeng.org/seasite/help/" target="_blank">使用帮助</a>
     </li>
-    
     <!--
     <li>
         <a href="{{ SITE_ROOT }}repos/my/">Files</a>

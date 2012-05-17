@@ -10,7 +10,7 @@ import settings
 
 def version(request):
     """
-    Adds seafile version to the context
+    Add seafile version to the context.
     
     """
     return {'seafile_version': settings.SEAFILE_VERSION}

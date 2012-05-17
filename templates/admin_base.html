@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block nav %}
+<ul class="nav ovhd">
+    {% if request.user.is_staff %}
+    <li>
+        <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
+    </li>
+    <li>
+        <a href="{{ SITE_ROOT }}useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+    </li>
+    {% endif %}
+</ul>
+{% endblock %}
+
