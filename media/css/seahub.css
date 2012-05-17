@@ -60,8 +60,8 @@ tr.first { background-color: #00FF00; }
     min-height: 400px;
     padding-top: 10px;
 }
-#left-panel { float:left; width:220px; }
-#right-panel { float:right; width:700px; }
+#left-panel { float:right; width:220px; }
+#right-panel { float:left; width:680px; }
 #footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
 /* top-bar */
 #top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
@@ -177,10 +177,10 @@ label { display: inline-block; margin:2px 0px; }
 }
 #repo-page .side {
     color:#333;
-    width:260px;
+    width:220px;
 }
 #repo-page .main {
-    width:650px;
+    width:680px;
 }
 #repo-page a {
     font-weight:normal;

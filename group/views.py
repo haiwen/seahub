@@ -90,9 +90,9 @@ def group_info(request, group_id):
     for member in members:
         member.short_username = member.user_name.split('@')[0]
         if member.is_staff == 1:
-		    managers.append(member)
+            managers.append(member)
         else:
-		    common_members.append(member)
+            common_members.append(member)
     
     repos = []
     repo_ids = get_group_repoids(group_id=group_id_int)
