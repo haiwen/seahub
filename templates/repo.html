@@ -24,16 +24,14 @@
         <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">更多历史...</a>
 
         <p class="mgt10">
-            <span class="item-name">WEB匿名访问:</span>
             {% if is_owner %}
+            <span class="item-name">WEB匿名访问:</span>
                 {% if repo_ap == 'public' %}
             <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
                 {% else %}
             <input type="checkbox" name="repo-access-switch" id="repo-access-switch" autocomplete="off" /><label for="repo-access-switch">开启</label>
                 {% endif %}
             <br /><span class="tip">开启后，任何人都能够访问该目录</span>
-            {% else %}
-            <span>只有同步目录拥有者可设置</span>
             {% endif %}
         </p>
         {% endif %}
