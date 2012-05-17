@@ -68,9 +68,7 @@ tr.first { background-color: #00FF00; }
 .top-bar { height:20px; color:#fff; text-align:right; font-weight:bold; background:#606; }
 .top-bar-in { width:950px; margin:0 auto; }
 .top-bar a { color:#ddd; font-weight:normal; }
-.top-bar a.adminconsole { float:left; color:#ddd; font-weight:normal; margin-right:1em; }
-.top-bar a.myaccount { float:left; color:#ddd; font-weight:normal; }
-
+.top-bar a.cur { background:#A0A; }
 .top-bar a:hover { background:#A0A; }
 /* header */
 #header .top-info { margin-bottom:5px;}
@@ -185,7 +183,7 @@ label { display: inline-block; margin:2px 0px; }
 #repo-page .main {
     width:680px;
 }
-#repo-page a {
+#repo-page .more {
     font-weight:normal;
     font-size:12px;
     color:#080;
@@ -227,4 +225,14 @@ label { display: inline-block; margin:2px 0px; }
 }
 .contact-op-form .submit {
     margin-left:6em;
+}
+/* group */
+.group-member-icon {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	margin-right:5px;
+}
+.group-member-icon,
+.group-member-name {
+	vertical-align:middle;
 }

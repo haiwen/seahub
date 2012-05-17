@@ -2,7 +2,8 @@
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<ul>
+<h3>操作</h3>
+<ul class="with-bg">
     <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
 </ul>
 {% endblock %}
@@ -10,8 +11,8 @@
 
 {% block right_panel %}
 
-<h2>所有用户</h2>
-<table class="user-list">
+<h3>所有用户</h3>
+<table>
     <tr>
         <th width="60%">邮箱</th>
         <th width="30%">是否激活</th>
@@ -56,7 +57,7 @@ $(".add-role-btn").each(function() {
         $(this).click(function() {
             var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
             $("#add-role-form").attr('action', url);
-            $("#add-role-form #user_email").html($(this).attr("email"));
+            $("#user_email").html($(this).attr("email"));
             $("#add-role-form").modal({appendTo: "#main"});
             });
         });

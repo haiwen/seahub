@@ -1,10 +1,10 @@
 {% extends "admin_base.html" %}
- {% block nav_seafadmin_class %}class="cur"{% endblock %}
+{% block nav_seafadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-<h2>所有同步目录</h2>
+<h3>所有同步目录</h3>
 {% if repos %}
-<table class="repo-list">
+<table>
     <tr>
         <th width="20%">名字</th>
         <th width="20%">拥有者</th>

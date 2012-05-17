@@ -1,6 +1,6 @@
-{% extends "myhome_base.html" %}
+{% extends "admin_base.html" %}
 
-{% block nav_useradmin_class %}class=""{% endblock %}
+{% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <!--
 <ul>
@@ -13,9 +13,9 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>{{ email }}拥有的同步目录</h3>
+<h3>{{ email }} 拥有的同步目录</h3>
 {% if owned_repos %}
-<table class="repo-list">
+<table>
     <tr>
         <th width="30%">名字</th>
         <th width="50%">描述</th>
@@ -36,7 +36,7 @@
 <p>暂无</p>
 {% endif %}
 
-<h3>共享给{{ email }}的同步目录</h3>
+<h3>共享给 {{ email }} 的同步目录</h3>
 {% if in_repos %}
 <table class="repo-list">
     <tr>
@@ -59,7 +59,7 @@
 <p>暂无</p>
 {% endif %}
 
-<h3>{{ email }}的计算机：</h3>
+<h3>{{ email }} 的计算机</h3>
 <table class="user-list">
     <tr>
         <th width="60%">计算机名</th>
@@ -87,7 +87,4 @@
     {% endfor %}
 </table>
 
-{% endblock %}
-
-{% block extra_script %}
 {% endblock %}
