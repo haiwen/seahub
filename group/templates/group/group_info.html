@@ -8,14 +8,14 @@
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
-<li>{{ member.short_username }}</li>
+<li><img src="{{MEDIA_URL}}img/default-person.png" alt="{{ member.short_username }}的图标" class="group-member-icon" width="20" /><span class="group-member-name">{{ member.short_username }}</span></li>
 {% endfor %}
 
 <h3>成员</h3>
 {% if common_members %}
 <ul>
     {% for member in common_members %}
-	<li><img src="{{MEDIA_URL}}img/favicon.png" alt="{{ member.short_username }}的图标" class="group-member-icon" /><span class="group-member-name">{{ member.short_username }}</span></li>
+	<li><img src="{{MEDIA_URL}}img/default-person.png" alt="{{ member.short_username }}的图标" class="group-member-icon" width="20" /><span class="group-member-name">{{ member.short_username }}</span></li>
     {% endfor %}
 </ul>
 {% else %}

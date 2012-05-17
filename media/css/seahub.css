@@ -28,6 +28,7 @@ ul > li { list-style:none; }
 }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
+a.table-op { color: #080; font-weight:normal; }
 img { border:none; }
 h2 { font-size:18px; color:#808; margin-bottom:8px; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:10px 0 6px; }
@@ -230,7 +231,7 @@ label { display: inline-block; margin:2px 0px; }
 .group-member-icon {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
-	margin-right:5px;
+	margin: 3px 3px 0 0;
 }
 .group-member-icon,
 .group-member-name {
