@@ -158,12 +158,23 @@ label { display: inline-block; margin:2px 0px; }
 #simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
 #simplemodal-container a {color:#ddd;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+#simplemodal-container .ui-menu-item a {/*for tip item of autocomplete*/
+    color:#e83;
+    font-weight:normal;
+}
 #simplemodal-container h3 {color:#84b8d9;}
 .simplemodal-close {
     margin-left:5px;
 }
 #dialog-delete-confirm {
     text-align:center;
+}
+/*ui-autocomplete*/
+.ui-autocomplete {
+    background:#fff;
+}
+.ui-menu-item {
+    background-image:none;
 }
 /*myhome*/
 .mygroup {
@@ -212,16 +223,6 @@ label { display: inline-block; margin:2px 0px; }
 #to_email {
     width:260px;
     height:80px;
-}
-#repo-share-form .ui-autocomplete {
-    background:#fff;
-}
-#repo-share-form .ui-menu-item {
-    background-image:none;
-}
-#repo-share-form a {
-    color:#e83;
-    font-weight:normal;
 }
 /*contact*/
 .contact-op-form label {

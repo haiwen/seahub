@@ -14,6 +14,8 @@ from seahub.utils import go_error, go_permission_error, validate_group_name
 
 from pysearpc import SearpcError
 
+from seahub.contacts.models import Contact
+
 @login_required
 def group_list(request):
     groups = ccnet_rpc.get_groups(request.user.username);
@@ -122,7 +124,7 @@ def group_info(request, group_id):
 def group_add_member(request):
     if request.method == 'POST':
         group_id = request.POST.get('group_id')
-        member_name = request.POST.get('user_name')
+        member_name = request.POST.get('user_name').split(',')[0]
         if not validate_emailuser(member_name):
             err_msg = u'用户不存在'
             return go_error(request, err_msg)
@@ -193,10 +195,13 @@ def group_manage(request, group_id):
         return HttpResponseRedirect(reverse('group_list', args=[]))
     
     members = ccnet_rpc.get_group_members(group_id_int)
+
+    contacts = Contact.objects.filter(user_email=request.user.username)
     
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members,
+            'contacts': contacts,
             }, context_instance=RequestContext(request))
     
 def group_share_repo(request, repo_id, group_id, from_email):
