@@ -59,11 +59,11 @@
                 {% for dirent in dirs %}
                 <tr>
                     {% if dirent.is_dir %}
-                    <td><img src="{{ MEDIA_URL }}/img/favicon.png" /></td>
+                    <td><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
                     <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?root_id={{ dirent.obj_id }}&p={{ path }}/{{ dirent.obj_name }}">{{ dirent.obj_name }}</a></td>
                     <td></td>
                     {% else %}
-                    <td><img src="{{ MEDIA_URL }}/img/{{ dirent.obj_name|file_icon_filter }}" /></td>
+                    <td><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>
                         <a class="op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
