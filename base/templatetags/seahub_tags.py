@@ -17,7 +17,7 @@ def tsstr_sec(value):
 def file_icon_filter(value):
     """Get file icon according to the file postfix"""
     if value.rfind('.') > 0:
-        file_ext = value.split('.')[-1]
+        file_ext = value.split('.')[-1].lower()
     else:
         file_ext = None
 

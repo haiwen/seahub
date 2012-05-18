@@ -125,24 +125,36 @@ def repo(request, repo_id):
 
     latest_commit = {}
     dirs = []
+    path = ''
+    zipped = []
     if not repo.props.encrypted:
         latest_commit = get_commits(repo_id, 0, 1)[0]
-        if not request.GET.get('root_id'):
-            # use HEAD commit's root id
-            commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
-            root_id = commit.props.root_id
-        else:
-            root_id = request.GET.get('root_id')
-
+        path = request.GET.get('p', '')
         try:
-            dirs = seafserv_rpc.list_dir(root_id)
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    dirent.is_dir = True
-                else:
-                    dirent.is_dir = False
-        except:
-            pass
+            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+        except SearpcError, e:
+            return go_error(request, e.msg)
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.props.mode):
+                dirent.is_dir = True
+            else:
+                dirent.is_dir = False
+
+        # generate path and link
+        paths = []
+        links = []
+        if path and path != '/':
+            paths = path[1:].split('/')
+
+            i=1
+            for name in paths:
+                link = '/' + '/'.join(paths[:i])
+                i = i + 1
+                links.append(link)
+        paths.insert(0, repo.name)
+        links.insert(0, '')
+        
+        zipped = zip(paths, links)
 
     # used to determin whether show repo content in repo.html
     # if a repo is shared to me, or repo shared to the group I joined,
@@ -160,6 +172,8 @@ def repo(request, repo_id):
             "repo_size": repo_size,
             "dirs": dirs,
             "share_to_me": share_to_me,
+            "path" : path,
+            "zipped" : zipped or None,
             }, context_instance=RequestContext(request))
 
 
