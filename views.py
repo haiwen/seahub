@@ -30,6 +30,7 @@ from utils import go_permission_error, go_error, list_to_string, get_httpserver_
 
 import stat
 import settings
+import urllib
     
 @login_required
 def root(request):
@@ -129,7 +130,10 @@ def repo(request, repo_id):
     zipped = []
     if not repo.props.encrypted:
         latest_commit = get_commits(repo_id, 0, 1)[0]
-        path = request.GET.get('p', '')
+        path = request.GET.get('p', '/')
+        if path[-1] != '/':
+            path = path + '/'
+
         try:
             dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
         except SearpcError, e:
@@ -144,15 +148,14 @@ def repo(request, repo_id):
         paths = []
         links = []
         if path and path != '/':
-            paths = path[1:].split('/')
-
+            paths = path[1:-1].split('/')
             i=1
             for name in paths:
                 link = '/' + '/'.join(paths[:i])
                 i = i + 1
                 links.append(link)
         paths.insert(0, repo.name)
-        links.insert(0, '')
+        links.insert(0, '/')
         
         zipped = zip(paths, links)
 
@@ -173,7 +176,7 @@ def repo(request, repo_id):
             "dirs": dirs,
             "share_to_me": share_to_me,
             "path" : path,
-            "zipped" : zipped or None,
+            "zipped" : zipped,
             }, context_instance=RequestContext(request))
 
 
