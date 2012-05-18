@@ -45,8 +45,11 @@
             <p>该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
             <div>
-              	{% for name, link in zipped %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?root_id={{ dirent.obj_id }}&p={{ link }}">{{ name }}</a> / 
+              	{% for name, link in zipped|slice:":-1" %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+                {% endfor %}
+                {% for name, link in zipped|slice:"-1:" %}
+                {{ name }}
                 {% endfor %}
             </div>
             <table>
@@ -58,7 +61,7 @@
                 {% for dirent in dirs %}
                 <tr>
                     {% if dirent.is_dir %}
-                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?root_id={{ dirent.obj_id }}&p={{ path }}/{{ dirent.obj_name }}">{{ dirent.obj_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
                     <td></td>
                     {% else %}
                     <td>{{ dirent.props.obj_name }}</td>
