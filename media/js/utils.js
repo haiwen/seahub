@@ -1,15 +1,18 @@
-//add delete confirm dialog
-var Del_url = '';
-function addConfirmTo(ele) {
+//add op confirm dialog
+var Op_url = '';
+function addConfirmTo(ele, confirm_con) {
     ele.each(function() {
         $(this).click(function() {
-            $('#dialog-delete-confirm').modal({appendTo:'#main'});
-            Del_url = $(this).attr('data');
+			if (confirm_con) {
+				$('#confirm-con').html(confirm_con);
+			}
+            $('#dialog-confirm').modal({appendTo:'#main'});
+            Op_url = $(this).attr('data');
         });
     });
 }
 $('#yes-btn').click(function() {
-    location.href = Del_url;
+    location.href = Op_url;
 });
 
 //handle table
