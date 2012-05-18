@@ -15,3 +15,13 @@ $('#yes-btn').click(function() {
 //handle table
 $("table tr:nth-child(even)").addClass("even");
 $("table tr:nth-child(odd)").addClass("odd");
+
+//highlight the tr when mouse hover on it
+$("table tr:gt(0)").hover(
+	function() {
+		$(this).addClass('hl');
+	},
+	function() {
+		$(this).removeClass('hl');
+	}
+);
