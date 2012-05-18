@@ -1,21 +1,23 @@
 {% extends "myhome_base.html" %}
 {% block title %}用户注册{% endblock %}
 {% block main_panel %}
-<h2>用户注册</h2>
-  <form action="" method="post" class="reg">
-     <label for="id_email">邮箱：</label>
+<div class="w350 center">
+    <h2>用户注册</h2>
+    <form action="" method="post" class="reg">
+        <label for="id_email">邮箱：</label>
         {{ form.email }}
         {% if form.email.errors %}
         {{ form.email.errors }}
         {% endif %}<br />
-     <label for="id_password1">密码：</label>
+        <label for="id_password1">密码：</label>
         {{ form.password1 }}
         {% if form.password1.errors %}
         {{ form.password1.errors }}
         {% endif %}<br />
-     <label for="id_password2">确认密码：</label>
+        <label for="id_password2">确认密码：</label>
         {{ form.password2 }}<br />
-      <input type="submit" value="提交" class="submit" />
-  </form>
+        <input type="submit" value="提交" class="submit" />
+    </form>
+</div>
 {% endblock %}
  

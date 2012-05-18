@@ -1,21 +1,23 @@
 {% extends "myhome_base.html" %}
 {% block title %}用户登录{% endblock %}
 {% block main_panel %}
+<div class="w350 center">
 <h2>用户登录</h2>
 <form action="" method="post" class="login">
-  <label for="username">邮箱：</label>
-  <input type="text" name="username" value="" style="color:#666;" autocomplete="off" /><br />
-  <label for="password">密码：</label>
-   <input type="password" name="password" value="" autocomplete="off" /><br />
-    <p class="error hide"></p>
-    <input type="submit" value="提交" class="submit" />
-    <a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
-    {% if next %}
+    <label for="username">邮箱：</label>
+	<input type="text" name="username" value="" style="color:#666;" autocomplete="off" /><br />
+	<label for="password">密码：</label>
+	<input type="password" name="password" value="" autocomplete="off" /><br />
+	<p class="error hide"></p>
+	<input type="submit" value="提交" class="submit" />
+	<a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
+{% if next %}
     <input type="hidden" name="next" value="{{ next|escape }}" />
-    {% else %}
+{% else %}
     <input type="hidden" name="next" value="{{ SITE_ROOT }}" />
-    {% endif %}
-  </form>
+{% endif %}
+</form>
+</div>
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">

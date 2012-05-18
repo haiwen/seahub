@@ -1,16 +1,9 @@
 {% extends "myhome_base.html" %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a></li>
-</ul>
-{% endblock %}
 
-
-{% block right_panel %}
-
+{% block main_panel %}
+<div class="w350 center">
 <h3>编辑联系人</h3>
 <form action="" method="post" class="contact-op-form">
     {% if error_msg %}
@@ -25,7 +18,7 @@
     {{ form.note }}<br />
     <input type="hidden" name="contact_id" value="{{ contact_id }}" />
     <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
-    <input type="submit" value="提交" class="submit" />
+    <input type="submit" value="提交" class="submit" /> <a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a>
 </form>
-
+</div>
 {% endblock %}
