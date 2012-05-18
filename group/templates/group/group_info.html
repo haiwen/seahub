@@ -25,7 +25,6 @@
 <h3>操作</h3>
 <ul class="with-bg">
 {% if is_staff %}
-	<li><a id="add-member" href="#">添加成员</a></li>
     <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group.id }}/">小组管理</a></li>
 {% else %}
 	<li><a id="quit-group" href="#">退出小组</a></li>
@@ -64,13 +63,6 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
-    <label>邮箱:</label><br />
-    <input id="user_name" name="user_name" value="" /><br />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    <input type="submit" value="提交" />
-</form>
-
 <div id="dialog-quit-confirm" class="hide">
   <p>确定要退出？</p>
   <button id="quit-yes-btn">确定</button>
@@ -81,14 +73,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("#add-member").click(function() {
-    $("#member-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
-	return false;
-});
-
 $("#quit-group").click(function() {
     $('#dialog-quit-confirm').modal({appendTo:'#main'});
-	return false;
+    return false;
 });
         
 $('#quit-yes-btn').click(function() {

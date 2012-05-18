@@ -5,14 +5,17 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
     <li><a id="group-remove" href="#">解散小组</a></li>
+    <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
 <h2>{{ group.group_name }}</h2>
-<h3>小组成员列表</h3>
+<h3>
+  小组成员列表
+  <button id="member-add">添加成员</button>
+</h3>
 {% if members %}
 <table class="member-list">
     <tr>
@@ -43,6 +46,13 @@
     <input type="submit" value="提交" />
 </form>
 
+<form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
+    <label>邮箱:</label><br />
+    <input id="user_name" name="user_name" value="" /><br />
+    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
+    <input type="submit" value="提交" />
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -54,6 +64,12 @@ $("#group-remove").click(function() {
 $('.member-remove-btn').click(function() {
     $("#user_name").val($(this).attr('data'));
     $("#member-remove-form").submit();
-});        
+});
+
+$("#member-add").click(function() {
+    $("#member-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
+    return false;
+});
+                
 </script>
 {% endblock %}

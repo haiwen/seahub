@@ -137,7 +137,7 @@ def group_add_member(request):
             except SearpcError, e:
                 return go_error(request, e.msg)
 
-    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
 @login_required
 def group_remove_member(request):
