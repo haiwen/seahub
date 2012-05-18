@@ -147,8 +147,10 @@ FILEEXT_ICON_MAP = {
     'jpeg' : 'pic-icon-24.png',
     'png' : 'pic-icon-24.png',
     'svg' : 'pic-icon-24.png',
+    'gif' : 'pic-icon-24.png',
+    'bmp' : 'pic-icon-24.png',
     # normal file and unkown file
-    'default' : 'File-icon-default-24.png',
+    'default' : 'file-icon-24.png',
 }
 
 try:
