@@ -58,8 +58,8 @@
                     {% else %}
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>
-                        <a class="table-op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
-                        <a class="table-op" href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
+                        <a class="op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
+                        <a class="op" href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
                     </td>
                     {% endif %}
                 </tr>
