@@ -143,6 +143,10 @@ def repo(request, repo_id):
                 dirent.is_dir = True
             else:
                 dirent.is_dir = False
+                try:
+                    dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
+                except:
+                    dirent.file_size = 0
 
         # generate path and link
         paths = []

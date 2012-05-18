@@ -55,7 +55,8 @@
             <table>
                 <tr>
                     <th width="5%"></th>
-                    <th width="65%">名字</th>
+                    <th width="55%">名字</th>
+                    <th width="10%">大小</th>
                     <th width="30%">操作</th>
                 </tr>
      
@@ -65,9 +66,11 @@
                     <td><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
                     <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
                     <td></td>
+                    <td></td>
                     {% else %}
                     <td><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
                     <td>{{ dirent.props.obj_name }}</td>
+                    <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
                         <a class="op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
                         <a class="op" href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
