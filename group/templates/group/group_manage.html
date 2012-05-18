@@ -5,17 +5,14 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a id="group-remove" href="#">解散小组</a></li>
+    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/rm?gid={{ group.id }}">解散小组</a></li>
     <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
-<h2>{{ group.group_name }}</h2>
-<h3>
-  小组成员列表
-  <button id="member-add">添加成员</button>
-</h3>
+<h2>{{ group.group_name }} 小组管理</h2>
+<h3> 小组成员列表<button id="member-add">添加成员</button></h3>
 {% if members %}
 <table class="member-list">
     <tr>
@@ -31,7 +28,6 @@
         {% else %}
         <td></td>
         {% endif %}
-        
     </tr>
     {% endfor %}
 </table>
@@ -58,7 +54,8 @@
 {% block extra_script %}
 <script type="text/javascript">
 $("#group-remove").click(function() {
-    location.href = "{{ SITE_ROOT }}group/rm?gid={{ group.id }}";
+	addConfirmTo($(this), '确定要解散该小组吗？');
+	return false;
 });
 
 $('.member-remove-btn').click(function() {
@@ -67,7 +64,7 @@ $('.member-remove-btn').click(function() {
 });
 
 $("#member-add").click(function() {
-    $("#member-add-form").modal({appendTo: "#main", containerCss:{padding:18}});
+    $("#member-add-form").modal({appendTo: "#main"});
     return false;
 });
                 
