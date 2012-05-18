@@ -1,16 +1,9 @@
 {% extends "myhome_base.html" %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a></li>
-</ul>
-{% endblock %}
 
-
-{% block right_panel %}
-
+{% block main_panel %}
+<div class="w350 center">
 <h3>添加联系人</h3>
 <form action="{{ SITE_ROOT }}contacts/add/" method="post" class="contact-op-form">
     {% if error_msg %}
@@ -23,7 +16,7 @@
     {{ form.contact_name }}<br />
     <label>备注(可选)：</label>
     {{ form.note }}<br />
-    <input type="submit" value="提交" class="submit" />
+    <input type="submit" value="提交" class="submit" /> <a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a>
 </form>
-
+</div>
 {% endblock %}

@@ -48,6 +48,13 @@ tr.hl { background-color: #ddddff; }/*highlight*/
 .even th { background:#eee; }
 .odd th { background:#ddd; }
 tr.first { background-color: #00FF00; }
+
+.w350 {
+    width:350px;
+}
+.center {
+    margin:0 auto;
+}
 /* container */
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 #header, #main, #footer { width:950px; }
