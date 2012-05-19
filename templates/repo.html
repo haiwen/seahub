@@ -72,8 +72,8 @@
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
-                        <a class="op" href="{{ SITE_ROOT }}repo/view/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">查看</a>
-                        <a class="op" href="{{ SITE_ROOT }}repo/download/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}">下载</a>
+                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
+                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
                     </td>
                     {% endif %}
                 </tr>

@@ -6,7 +6,7 @@ from seahub.views import root, peers, myhome, \
     repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
     ownerhome, remove_fetched_repo, \
-    repo_list_dir, user_info, repo_set_access_property, repo_operation_file, \
+    repo_list_dir, user_info, repo_set_access_property, repo_access_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, \
     seafile_access_check, back_local
 
@@ -43,7 +43,7 @@ urlpatterns = patterns('',
     (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
     (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
     (r'^repo/dir/(?P<repo_id>[^/]+)/$', repo_list_dir),
-    (r'^repo/(?P<op>[^/]+)/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_operation_file),
+    (r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file),
     (r'^download/repo/$', repo_download),                       
     (r'^seafile_access_check/$', seafile_access_check),                       
 

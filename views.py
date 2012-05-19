@@ -349,7 +349,7 @@ def repo_list_dir(request, repo_id):
             },
             context_instance=RequestContext(request))
 
-def repo_operation_file(request, op, repo_id, obj_id):
+def repo_access_file(request, repo_id, obj_id):
     if repo_id:
         # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
@@ -377,10 +377,12 @@ def repo_operation_file(request, op, repo_id, obj_id):
 
         http_server_root = get_httpserver_root()
         file_name = request.GET.get('file_name', '')
-        return HttpResponseRedirect('%s/%s?id=%s&filename=%s&op=%s&t=%s' %
-                                    (http_server_root,
-                                     repo_id, obj_id,
-                                     file_name, op, token))
+        op = request.GET.get('op', 'view')
+
+        redirect_url = '%s/%s?id=%s&filename=%s&op=%s&t=%s' % (http_server_root,
+                                                               repo_id, obj_id,
+                                                               file_name, op, token)
+        return HttpResponseRedirect(redirect_url)
     
 @login_required
 def repo_add_share(request):
