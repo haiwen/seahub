@@ -56,11 +56,11 @@ function addAutocomplete(ele_id, container_id, data) {
             delay: 100,
             minLength: 0,
             source: function(request, response) {
-                        response($.ui.autocomplete.filter(data, extractLast(request.term)));
-                },
+                response($.ui.autocomplete.filter(data, extractLast(request.term)));
+            },
             focus: function() {
-                        return false;
-                },
+                return false;
+            },
             select: function(event, ui) {
                 var terms = split(this.value);
                 terms.pop();

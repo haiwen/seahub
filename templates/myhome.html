@@ -121,11 +121,10 @@ $(function() {
     share_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
     {% endfor %}
 
-	addAutocomplete('#to_email', '#repo-share-form', share_list);
-
     $(".repo-share-btn").click(function() {
         $("#share_repo_id").val($(this).attr("data"));
-        $("#repo-share-form").modal({appendTo: "#main", containerCss:{padding:18}});
+        $("#repo-share-form").modal({appendTo: "#main"});
+        addAutocomplete('#to_email', '#repo-share-form', share_list);
     });
 
     //check before post

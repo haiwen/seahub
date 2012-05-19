@@ -68,10 +68,10 @@ var contact_list = [];
 {% for contact in contacts %}
 contact_list.push('{{ contact.contact_email }}');
 {% endfor %}
-addAutocomplete('#added-member-name', '#member-add-form', contact_list);
 
 $("#member-add").click(function() {
     $("#member-add-form").modal({appendTo: "#main"});
+    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;
 });
 
