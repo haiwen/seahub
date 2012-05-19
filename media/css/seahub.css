@@ -29,7 +29,7 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
-h2 { font-size:18px; color:#808; margin-bottom:8px; }
+h2 { font-size:18px; color:#808; margin:10px 0 8px; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:10px 0 6px; }
 ol { padding-left:2em; }
 /* table */
@@ -250,5 +250,9 @@ label { display: inline-block; margin:2px 0px; }
 	vertical-align:middle;
 }
 #member-add {
-	margin-left:10px;
+    font-size:13px;
+    padding-left:18px;
+    text-decoration:underline;
+    background:transparent url('../img/add.png') scroll no-repeat left 50%;
+    margin-top:2px;
 }
