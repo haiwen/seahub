@@ -128,6 +128,8 @@ def repo(request, repo_id):
     dirs = []
     path = ''
     zipped = []
+    dir_list = []
+    file_list = []
     if not repo.props.encrypted:
         latest_commit = get_commits(repo_id, 0, 1)[0]
         path = request.GET.get('p', '/')
@@ -141,12 +143,16 @@ def repo(request, repo_id):
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
                 dirent.is_dir = True
+                dir_list.append(dirent)
             else:
                 dirent.is_dir = False
+                file_list.append(dirent)
                 try:
                     dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
                 except:
                     dirent.file_size = 0
+        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
+        file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
 
         # generate path and link
         paths = []
@@ -177,7 +183,8 @@ def repo(request, repo_id):
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
-            "dirs": dirs,
+            "dir_list": dir_list,
+            "file_list": file_list,
             "share_to_me": share_to_me,
             "path" : path,
             "zipped" : zipped,
