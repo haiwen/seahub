@@ -142,10 +142,8 @@ def repo(request, repo_id):
             return go_error(request, e.msg)
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
-                dirent.is_dir = True
                 dir_list.append(dirent)
             else:
-                dirent.is_dir = False
                 file_list.append(dirent)
                 try:
                     dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
@@ -313,48 +311,6 @@ def repo_set_access_property(request, repo_id):
         seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-@login_required
-def repo_list_dir(request, repo_id):
-    if repo_id:
-        # any person visit private repo, go to 404 page
-        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-        if repo_ap == 'private':
-            raise Http404
-
-        # people who is not owner visits own repo, go to 404 page
-        if not validate_owner(request, repo_id):
-            if repo_ap == 'own':
-                raise Http404
-            
-        repo = seafserv_threaded_rpc.get_repo(repo_id)
-
-        dirs = []
-        encrypted = repo.props.encrypted
-        if not encrypted:
-            if not request.GET.get('root_id'): # No root id..?
-                # ..use HEAD commit's root id
-                commit = seafserv_rpc.get_commit(repo.props.head_cmmt_id)
-                root_id = commit.props.root_id
-            else:
-                root_id = request.GET.get('root_id')
-
-            try:
-                dirs = seafserv_rpc.list_dir(root_id)
-                for dirent in dirs:
-                    if stat.S_ISDIR(dirent.props.mode):
-                        dirent.is_dir = True
-                    else:
-                        dirent.is_dir = False
-            except:
-                pass
-                
-    return render_to_response('repo_dir.html', {
-            "repo_id": repo_id,
-            "dirs": dirs,
-            "encrypted": encrypted,
-            },
-            context_instance=RequestContext(request))
 
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
