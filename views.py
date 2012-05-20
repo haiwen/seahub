@@ -1,36 +1,31 @@
 # encoding: utf-8
-
+import settings
+import stat
+from urllib import quote
+from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
-from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from auth.decorators import login_required
-from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_protect
+
+from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
-
-from pysearpc import SearpcError
 from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids
+from pysearpc import SearpcError
 
-from seahub.share.models import GroupShare, UserShare
-from seahub.share.forms import GroupAddRepoForm
 from seahub.base.accounts import CcnetUser
-from forms import AddUserForm
-from urllib import quote
-
 from seahub.contacts.models import Contact
-
-from utils import go_permission_error, go_error, list_to_string, get_httpserver_root, \
-    get_ccnetapplet_root, gen_token
-
-import stat
-import settings
-import urllib
+from seahub.share.forms import GroupAddRepoForm
+from seahub.share.models import GroupShare, UserShare
+from forms import AddUserForm
+from utils import go_permission_error, go_error, list_to_string, \
+    get_httpserver_root, get_ccnetapplet_root, gen_token
     
 @login_required
 def root(request):

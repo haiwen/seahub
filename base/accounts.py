@@ -4,19 +4,14 @@ from django.utils.hashcompat import md5_constructor, sha_constructor
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from auth.models import get_hexdigest, check_password
-
-from auth import authenticate, login
-
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
-
+from auth.models import get_hexdigest, check_password
+from auth import authenticate, login
 from registration import signals
 from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
-
 from seaserv import ccnet_rpc, get_ccnetuser
-
 
 class UserManager(object):
     def create_user(self, username, password=None, is_staff=False, is_active=False):

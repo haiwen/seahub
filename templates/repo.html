@@ -11,7 +11,7 @@
         {% if not repo.props.encrypted %}
         {% if is_owner or repo_ap == 'public' or share_to_me %}
         <p class="latest-commit mgt10">
-            {{ latest_commit.props.desc }}<br />
+            {{ latest_commit.props.desc|translate_commit_desc }}<br />
             <span class="author">by
             {% if latest_commit.props.creator_name %}
             {{ latest_commit.props.creator_name }}

@@ -1,7 +1,12 @@
+# encoding: utf-8
+
 from datetime import datetime
 from django import template
 
+import re
+
 from seahub.settings import FILEEXT_ICON_MAP
+from seahub.po import TRANSLATION_MAP
 
 register = template.Library()
 
@@ -25,3 +30,13 @@ def file_icon_filter(value):
         return FILEEXT_ICON_MAP.get(file_ext)
     else:
         return FILEEXT_ICON_MAP.get('default')
+
+def desc_repl(matchobj):
+    if TRANSLATION_MAP.has_key(matchobj.group(0)):
+        return TRANSLATION_MAP.get(matchobj.group(0))
+
+@register.filter(name='translate_commit_desc')
+def translate_commit_desc(value):
+    reg = '|'.join(TRANSLATION_MAP.keys())
+
+    return re.sub(reg, desc_repl, value)

@@ -24,7 +24,7 @@
         {% else %}
         <td>未知</td>
         {% endif %}
-        <td>{{ commit.props.desc }}</td>
+        <td>{{ commit.props.desc|translate_commit_desc }}</td>
     </tr>
     {% endfor %}
 </table>

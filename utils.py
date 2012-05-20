@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
-from django.utils.hashcompat import sha_constructor
-
-import time
 import re
 import settings
+import time
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.utils.hashcompat import sha_constructor
 
 def go_permission_error(request, msg=None):
     """

@@ -1,20 +1,17 @@
 # encoding: utf-8
-
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
-from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from auth.decorators import login_required
 
+from auth.decorators import login_required
 from seaserv import ccnet_rpc, seafserv_threaded_rpc, get_repo, \
     get_group_repoids
-
-from seahub.views import validate_emailuser
-from seahub.utils import go_error, go_permission_error, validate_group_name
-
 from pysearpc import SearpcError
 
 from seahub.contacts.models import Contact
+from seahub.utils import go_error, go_permission_error, validate_group_name
+from seahub.views import validate_emailuser
 
 @login_required
 def group_list(request):
