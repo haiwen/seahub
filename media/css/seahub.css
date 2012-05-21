@@ -227,7 +227,8 @@ label { display: inline-block; margin:2px 0px; }
     margin-bottom:14px;
 }
 /*repo-share-form*/
-#to_email {
+#to_email,
+#added-member-name {
     width:260px;
     height:80px;
 }

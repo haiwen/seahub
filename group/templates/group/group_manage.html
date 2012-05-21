@@ -44,7 +44,7 @@
 
 <form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
     <label>邮箱:</label><br />
-    <input id="added-member-name" name="user_name" value="" /><br />
+    <textarea id="added-member-name" name="user_name"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
 	<p class="error hide" id="member-add-error">输入不能为空。</p>
     <input type="submit" value="提交" id="member-add-submit" />
