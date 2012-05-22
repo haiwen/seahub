@@ -7,7 +7,7 @@
 
 <h3>我管理的小组</h3>
 {% if groups_manage %}
-<ul class="w100 ovhd">
+<ul>
     {% for group in groups_manage %}
     <li class="mygroup">
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />
@@ -21,7 +21,7 @@
 
 <h3>我参加的小组</h3>
 {% if groups_join %}
-<ul class="w100 ovhd">
+<ul>
 	{% for group in groups_join %}
     <li class="mygroup">
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />

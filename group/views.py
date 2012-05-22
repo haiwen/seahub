@@ -121,15 +121,22 @@ def group_info(request, group_id):
 def group_add_member(request):
     if request.method == 'POST':
         group_id = request.POST.get('group_id')
-        member_name = request.POST.get('user_name').split(',')[0]
-        if not validate_emailuser(member_name):
-            err_msg = u'用户不存在'
-            return go_error(request, err_msg)
-        else:
-            try:
-                group_id_int = int(group_id)
-            except ValueError:
-                return go_error(request, u'group id 不是有效参数')
+        member_names = request.POST.get('user_name').split(',')
+
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return go_error(request, u'group id 不是有效参数')
+        
+        for member_name in member_names:
+            member_name = member_name.strip(' ')
+            if not member_name:
+                continue
+
+            if not validate_emailuser(member_name):
+                err_msg = u'用户不存在'
+                return go_error(request, err_msg)
+
             try:
                 ccnet_rpc.group_add_member(group_id_int, request.user.username,
                                            member_name)

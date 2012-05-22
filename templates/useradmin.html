@@ -48,19 +48,20 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    $('.activate').each(function(){
-        $(this).click(function(){
-            location.href = $(this).attr('data');
-        });
+$('.activate').each(function(){
+    $(this).click(function(){
+        location.href = $(this).attr('data');
     });
+});
 $(".add-role-btn").each(function() {
-        $(this).click(function() {
-            var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
-            $("#add-role-form").attr('action', url);
-            $("#user_email").html($(this).attr("email"));
-            $("#add-role-form").modal({appendTo: "#main"});
-            });
-        });
+     $(this).click(function() {
+         var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
+         $("#add-role-form").attr('action', url);
+         $("#user_email").html($(this).attr("email"));
+         $("#add-role-form").modal({appendTo: "#main"});
+     });
+});
+
 //delete confirm
 addConfirmTo($('.remove-user-btn'));
 addConfirmTo($('.role-delete-btn'));

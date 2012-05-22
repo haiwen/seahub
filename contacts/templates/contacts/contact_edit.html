@@ -3,22 +3,22 @@
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
-<div class="w350 center">
-<h3>编辑联系人</h3>
-<form action="" method="post" class="contact-op-form">
+<div class="narrow-panel">
+<h3>编辑联系人<a href="{{ SITE_ROOT }}contacts/list/" class="contact-list-link">（联系人列表）</a></h3>
+<form action="" method="post">
+    {{ form.user_email.as_hidden }}
+    <label>邮箱：</label>
+    {{ form.contact_email }}
+    <label>名字(可选)：</label>
+    {{ form.contact_name }}
+    <label>备注(可选)：</label>
+    {{ form.note }}
+    <input type="hidden" name="contact_id" value="{{ contact_id }}" />
+    <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
-    {{ form.user_email.as_hidden }}
-    <label>邮箱：</label>
-    {{ form.contact_email }}<br />
-    <label>名字(可选)：</label>
-    {{ form.contact_name }}<br />
-    <label>备注(可选)：</label>
-    {{ form.note }}<br />
-    <input type="hidden" name="contact_id" value="{{ contact_id }}" />
-    <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
-    <input type="submit" value="提交" class="submit" /> <a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a>
+    <input type="submit" value="提交" class="submit" />
 </form>
 </div>
 {% endblock %}
