@@ -45,9 +45,11 @@ input[type=checkbox] {
 }
 input[type=submit],
 button { 
+    font-size:13px;/*for ff*/
     color: #080;
     height:23px;
-    padding:2px 3px;
+    line-height:23px;
+    padding:0 3px;
     background: #EEE;
     border: 1px solid #80B0B0;
     border-radius: 3px;
@@ -131,7 +133,7 @@ tr.first { background-color: #00FF00; }
 .avatar { float:left; width:120px; }
 .ele_info { float:right; width:450px; }
 
-/*narrow-panel*/
+/*narrow-panel: for form pages*/
 .narrow-panel {
     width:25em;
     min-height:15em;
@@ -150,6 +152,12 @@ tr.first { background-color: #00FF00; }
     width:96%;
     height:1.8em;
     margin:0 0 0.6em;
+}
+/*text-panel: for pages with few text*/
+.text-panel {
+    font-size:16px;
+    text-align:center;
+    margin-top:7em;
 }
 /* popup dialog */
 #basic-modal-content {display:none;}
