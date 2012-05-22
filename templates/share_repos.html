@@ -18,7 +18,11 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
+          {% if repo.gid %}
           <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&to_email={{ repo.props.shared_email }}&gid={{ repo.gid }}" class="cancel-share-btn">取消共享</button>
+          {% else %}
+          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&to_email={{ repo.props.shared_email }}" class="cancel-share-btn">取消共享</button>
+          {% endif %}
         </td>
     </tr>
     {% endfor %}
