@@ -3,20 +3,33 @@
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
-<div class="w350 center">
-<h3>添加联系人</h3>
-<form action="{{ SITE_ROOT }}contacts/add/" method="post" class="contact-op-form">
+<div class="narrow-panel">
+<h3>添加联系人<a href="{{ SITE_ROOT }}contacts/list/" class="contact-list-link">（联系人列表）</a></h3>
+<form action="{{ SITE_ROOT }}contacts/add/" method="post">
+    {{ form.user_email.as_hidden }}
+    <label>邮箱：</label>
+    {{ form.contact_email }}
+    <label>名字(可选)：</label>
+    {{ form.contact_name }}
+    <label>备注(可选)：</label>
+    {{ form.note }}
     {% if error_msg %}
     <p class="error">{{ error_msg }}</p>
     {% endif %}
-    {{ form.user_email.as_hidden }}
-    <label>邮箱：</label>
-    {{ form.contact_email }}<br />
-    <label>名字(可选)：</label>
-    {{ form.contact_name }}<br />
-    <label>备注(可选)：</label>
-    {{ form.note }}<br />
-    <input type="submit" value="提交" class="submit" /> <a href="{{ SITE_ROOT }}contacts/list/">联系人列表</a>
+    <p class="error hide" id="error">请输入邮箱地址。</p>
+    <input type="submit" value="提交" />
 </form>
 </div>
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('input[type="submit"]').click(function() {
+    if(!$.trim($('input[name="contact_email"]').attr('value'))) {
+       $('#error').removeClass('hide') 
+        return false;
+    }
+});
+</script>
+{% endblock %}
+

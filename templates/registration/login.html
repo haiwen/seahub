@@ -1,15 +1,15 @@
 {% extends "myhome_base.html" %}
-{% block title %}用户登录{% endblock %}
+{% block title %}登录{% endblock %}
 {% block main_panel %}
-<div class="w350 center">
-<h2>用户登录</h2>
-<form action="" method="post" class="login">
+<div class="narrow-panel">
+<h2>登录</h2>
+<form action="" method="post">
     <label for="username">邮箱：</label>
-	<input type="text" name="username" value="" style="color:#666;" autocomplete="off" /><br />
+	<input type="text" name="username" value="" autocomplete="off" />
 	<label for="password">密码：</label>
-	<input type="password" name="password" value="" autocomplete="off" /><br />
+	<input type="password" name="password" value="" autocomplete="off" />
 	<p class="error hide"></p>
-	<input type="submit" value="提交" class="submit" />
+	<input type="submit" value="提交" />
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
 {% if next %}
     <input type="hidden" name="next" value="{{ next|escape }}" />
@@ -19,16 +19,12 @@
 </form>
 </div>
 {% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
-var Username_default = $.trim($('input[name="username"]').attr('value'));
-$('input[name="username"]').click(function(){
-        $(this).attr('value','');
-        $(this).removeAttr('style');
-    });
 $('input[type="submit"]').click(function(){
-        if ($.trim($('input[name="username"]').attr('value')) == Username_default || !$.trim($('input[name="username"]').attr('value'))) {
-            $('.error').removeClass('hide').html('请输入帐号。');
+        if (!$.trim($('input[name="username"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请输入邮箱。');
             return false;
         }
         if (!$.trim($('input[name="password"]').attr('value'))) {
@@ -37,8 +33,7 @@ $('input[type="submit"]').click(function(){
         }
    });
     {% if form.errors %}
-    $('.error').removeClass('hide').html('您输入的帐号或密码不正确');
+    $('.error').removeClass('hide').html('您输入的邮箱或密码不正确');
     {% endif %}
 </script>
 {% endblock %}
-
