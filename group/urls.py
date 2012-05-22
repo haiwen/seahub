@@ -1,16 +1,11 @@
 from django.conf.urls.defaults import *
 
-from views import group_list, group_add, group_info, \
-    group_add_member, group_remove_member, \
-    group_quit, group_remove, group_manage
+from views import group_list, group_operations, group_member_operations, \
+    group_members
 
 urlpatterns = patterns('',
     url(r'^$', group_list, name='group_list'),
-    (r'^add/$', group_add),
-    (r'^rm/$', group_remove),
-    (r'^memberadd/$', group_add_member),
-    (r'^memberrm/$', group_remove_member),
-    (r'^quit/$', group_quit),
-    url(r'^manage/(?P<group_id>[^/]+)/$', group_manage, name='group_manage'),
-    url(r'^(?P<group_id>[^/]+)/$', group_info, name='group_info'),
+    (r'^(?P<group_id>[\d]+)/$', group_operations),
+    url(r'^(?P<group_id>[\d]+)/members/$', group_members, name='group_members'),
+    (r'^(?P<group_id>[\d]+)/member/(?P<user_name>[^/]+)/$', group_member_operations),
 )

@@ -5,7 +5,7 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/rm?gid={{ group.id }}">解散小组</a></li>
+    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=delete">解散小组</a></li>
     <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
 </ul>
 {% endblock %}
@@ -24,7 +24,7 @@
     <tr>
         <td>{{ member.user_name }}</td>
         {% if not member.is_staff %}
-        <td><button data="{{ member.user_name }}" class="member-remove-btn">删除</button></td>
+        <td><button data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn">删除</button></td>
         {% else %}
         <td></td>
         {% endif %}
@@ -35,18 +35,18 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="member-remove-form" action="{{ SITE_ROOT }}group/memberrm/" method="post" name="member-remove-form" class="hide">
+<form id="member-remove-form" action="{{ SITE_ROOT }}grou/pmemberrm/" method="post" name="member-remove-form" class="hide">
     <label>邮箱</label><br />
     <input id="user_name" name="user_name" value="" />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
     <input type="submit" value="提交" />
 </form>
 
-<form id="member-add-form" action="{{ SITE_ROOT }}group/memberadd/" method="post" name="member-add-form" class="hide">
+<form id="member-add-form" action="{{ SITE_ROOT }}group/{{ group.id }}/members/" method="post" name="member-add-form" class="hide">
     <label>邮箱:</label><br />
     <textarea id="added-member-name" name="user_name"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-	<p class="error hide" id="member-add-error">输入不能为空。</p>
+    <p class="error hide" id="member-add-error">输入不能为空。</p>
     <input type="submit" value="提交" id="member-add-submit" />
 </form>
 
@@ -57,8 +57,8 @@
 addConfirmTo($("#group-remove"), '确定要解散该小组吗？');
 
 $('.member-remove-btn').click(function() {
-    $("#user_name").val($(this).attr('data'));
-    $("#member-remove-form").submit();
+    addConfirmTo($(this), '确定要删除该成员？');
+    return false;
 });
 
 var contact_list = [];

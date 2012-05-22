@@ -25,7 +25,7 @@
 <h3>操作</h3>
 <ul class="with-bg">
 {% if is_staff %}
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/manage/{{ group.id }}/">小组管理</a></li>
+    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">小组管理</a></li>
 {% else %}
 	<li><a id="quit-group" href="#">退出小组</a></li>
 {% endif %}
@@ -79,7 +79,7 @@ $("#quit-group").click(function() {
 });
         
 $('#quit-yes-btn').click(function() {
-    location.href = "{{ SITE_ROOT }}group/quit/?gid={{ group.id }}";
+    location.href = "{{ SITE_ROOT }}group/{{ group.id }}/?op=quit";
 });
 
 addConfirmTo($('.repo-delete-btn'));
