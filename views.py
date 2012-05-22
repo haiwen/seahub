@@ -92,6 +92,42 @@ def validate_emailuser(emailuser):
     else:
         return False
 
+def access_to_repo(request, repo_id, repo_ap):
+    """
+    Check whether user in the request can access to repo, which means user can
+    view directory entries on repo page, and repo_history_dir page.
+
+    """
+    # if repo is 'own' and user is not staff and is not owner
+    # and not shared this repo, then goto 404 page..
+    if repo_ap == 'own' and not validate_owner(request, repo_id) \
+            and not check_shared_repo(request, repo_id) and not request.user.is_staff:
+        return False
+    else:
+        return True
+
+def gen_path_link(path, repo_name):
+    """
+    Generate navigate paths and links in repo page and repo_history_dir page.
+    Note: `path` must be end with '/'.
+    
+    """
+    paths = []
+    links = []
+    if path and path != '/':
+        paths = path[1:-1].split('/')
+        i=1
+        for name in paths:
+            link = '/' + '/'.join(paths[:i])
+            i = i + 1
+            links.append(link)
+    paths.insert(0, repo_name)
+    links.insert(0, '/')
+        
+    zipped = zip(paths, links)
+    
+    return zipped
+    
 def repo(request, repo_id):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
@@ -99,19 +135,15 @@ def repo(request, repo_id):
     if repo_ap == None:
         repo_ap = 'own'
         
-    # if repo is 'own' and user is not staff and is not owner
-    # and not shared this repo, then goto 404 page..
-    if cmp(repo_ap, 'own') == 0 and not validate_owner(request, repo_id) \
-            and not check_shared_repo(request, repo_id) and not request.user.is_staff:
+    if not access_to_repo(request, repo_id, repo_ap):
         raise Http404
 
     repo = get_repo(repo_id)
-    if repo == None:
+    if not repo:
         raise Http404
 
     latest_commit = get_commits(repo_id, 0, 1)[0]
 
-    token = ""
     is_owner = False
     if request.user.is_authenticated():
         if validate_owner(request, repo_id):
@@ -119,20 +151,19 @@ def repo(request, repo_id):
 
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
-    latest_commit = {}
     dirs = []
     path = ''
     zipped = []
     dir_list = []
     file_list = []
     if not repo.props.encrypted:
-        latest_commit = get_commits(repo_id, 0, 1)[0]
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
 
         try:
-            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id,
+                                                 path.encode('utf-8'))
         except SearpcError, e:
             return go_error(request, e.msg)
         for dirent in dirs:
@@ -148,20 +179,8 @@ def repo(request, repo_id):
         file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
 
         # generate path and link
-        paths = []
-        links = []
-        if path and path != '/':
-            paths = path[1:-1].split('/')
-            i=1
-            for name in paths:
-                link = '/' + '/'.join(paths[:i])
-                i = i + 1
-                links.append(link)
-        paths.insert(0, repo.name)
-        links.insert(0, '/')
+        zipped = gen_path_link(path, repo.name)
         
-        zipped = zip(paths, links)
-
     # used to determin whether show repo content in repo.html
     # if a repo is shared to me, or repo shared to the group I joined,
     # then I can view repo content on the web
@@ -213,7 +232,81 @@ def repo_history(request, repo_id):
             'page_next': page_next,
             }, context_instance=RequestContext(request))
 
+def repo_history_dir(request, repo_id):
+    # get repo web access property, if no repo access property in db, then
+    # assume repo ap is 'own'
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if repo_ap == None:
+        repo_ap = 'own'
+        
+    if not access_to_repo(request, repo_id, repo_ap):
+        raise Http404
 
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    current_commit = None
+    commit_id = request.GET.get('commit_id', None)
+    if commit_id:
+        current_commit = seafserv_rpc.get_commit(commit_id)
+    if not current_commit:
+        raise Http404
+
+    is_owner = False
+    if request.user.is_authenticated():
+        if validate_owner(request, repo_id):
+            is_owner = True
+
+    dirs = []
+    path = ''
+    zipped = []
+    dir_list = []
+    file_list = []
+    if not repo.props.encrypted:
+        path = request.GET.get('p', '/')
+        if path[-1] != '/':
+            path = path + '/'
+        try:
+            dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
+                                                 path.encode('utf-8'))
+        except SearpcError, e:
+            return go_error(request, e.msg)
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.props.mode):
+                dir_list.append(dirent)
+            else:
+                file_list.append(dirent)
+                try:
+                    dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
+                except:
+                    dirent.file_size = 0
+        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
+        file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
+
+        # generate path and link
+        zipped = gen_path_link(path, repo.name)
+
+    # used to determin whether show repo content in repo.html
+    # if a repo is shared to me, or repo shared to the group I joined,
+    # then I can view repo content on the web
+    if check_shared_repo(request, repo_id):
+        share_to_me = True
+    else:
+        share_to_me = False
+
+    return render_to_response('repo_history_dir.html', {
+            "repo": repo,
+            "current_commit": current_commit,
+            "is_owner": is_owner,
+            "repo_ap": repo_ap,
+            "dir_list": dir_list,
+            "file_list": file_list,
+            "share_to_me": share_to_me,
+            "path" : path,
+            "zipped" : zipped,
+            }, context_instance=RequestContext(request))
+    
 @login_required
 def modify_token(request, repo_id):
     if not validate_owner(request, repo_id):
@@ -224,7 +317,6 @@ def modify_token(request, repo_id):
         seafserv_threaded_rpc.set_repo_token(repo_id, token)
 
     return HttpResponseRedirect(reverse(repo, args=[repo_id]))
-
 
 @login_required
 def remove_repo(request, repo_id):

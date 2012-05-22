@@ -5,7 +5,7 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import root, peers, myhome, \
     repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
     role_add, role_remove, activate_user, user_add, user_remove, \
-    ownerhome, remove_fetched_repo, \
+    ownerhome, remove_fetched_repo, repo_history_dir, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, \
     seafile_access_check, back_local
@@ -38,6 +38,7 @@ urlpatterns = patterns('',
 
     (r'^repo/(?P<repo_id>[^/]+)/$', repo),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
+    (r'^repo/history/dir/(?P<repo_id>[^/]+)/$', repo_history_dir),
     (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
     (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),

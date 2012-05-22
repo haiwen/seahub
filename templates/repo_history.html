@@ -14,7 +14,8 @@
     <tr>
         <th width="20%">修改时间</th>
         <th width="10%">修改者</th>
-        <th width="70%">描述</th>
+        <th width="60%">描述</th>
+        <th width="10%">操作</th>
     </tr>
     {% for commit in commits %}
     <tr>
@@ -25,6 +26,11 @@
         <td>未知</td>
         {% endif %}
         <td>{{ commit.props.desc|translate_commit_desc }}</td>
+        {% if not forloop.last %}
+        <td><a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}">浏览</a></td>
+        {% else %}
+        <td></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>

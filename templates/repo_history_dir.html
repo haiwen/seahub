@@ -1,0 +1,79 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block main_panel %}
+<div id="repo-page" class="ovhd">
+    <h2>{{repo.props.name}} 历史浏览</h2>
+    <div class="side fright">
+        {% if not repo.props.encrypted %}
+        {% if is_owner or repo_ap == 'public' or share_to_me %}
+        <p class="latest-commit mgt10">
+            {{ current_commit.props.desc|translate_commit_desc }}<br />
+            <span class="author">by
+            {% if current_commit.props.creator_name %}
+            {{ current_commit.props.creator_name }}
+            {% else %}
+            未知
+           {% endif %}
+           </span>
+           <span class="time">{{ current_commit.props.ctime|tsstr_sec }}</span>
+        </p>
+        {% endif %}
+        {% endif %}
+        <a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/"><p>返回历史列表</p></a>
+    </div>
+    <div class="main fleft">
+        {% if repo.props.encrypted %}
+        <p>该同步目录已加密，不能在线查看。</p>
+        {% else %}
+            {% if not is_owner and repo_ap == 'own' and not share_to_me %}
+            <p>该同步目录web匿名访问未开启，不能在线查看。</p>
+            {% else %}
+            <div>
+              	{% for name, link in zipped %}
+                {% if not forloop.last %}                
+                <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id}}&p={{ link|urlencode }}">{{ name }}</a> /
+                {% else %}
+                {{ name }}
+                {% endif %}
+                {% endfor %}
+            </div>
+            <table>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="55%">名字</th>
+                    <th width="10%">大小</th>
+                    <th width="30%">操作</th>
+                </tr>
+
+                {% for dirent in dir_list %}
+                <tr>
+                    <td><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
+                    <td><a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+
+                {% for dirent in file_list %}
+                <tr>
+                    <td><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
+                    <td>{{ dirent.props.obj_name }}</td>
+                    <td>{{ dirent.file_size|filesizeformat }}</td>
+                    <td>
+                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
+                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}
