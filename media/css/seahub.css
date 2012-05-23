@@ -81,7 +81,9 @@ tr.hl { background-color: #ddddff; }/*highlight*/
 .even th { background:#eee; }
 .odd th { background:#ddd; }
 tr.first { background-color: #00FF00; }
-
+table img {
+    vertical-align:middle;
+}
 /* container */
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 #header, #main, #footer { width:950px; }
@@ -213,6 +215,9 @@ tr.first { background-color: #00FF00; }
 }
 #repo-page .op {
     font-size:13px;
+}
+#repo-page .icon-container {
+    text-align:center;
 }
 .latest-commit {
     word-wrap:break-word;

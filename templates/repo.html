@@ -62,7 +62,7 @@
 
                 {% for dirent in dir_list %}
                 <tr>
-                    <td><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
                     <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
                     <td></td>
                     <td></td>
@@ -71,7 +71,7 @@
 
                 {% for dirent in file_list %}
                 <tr>
-                    <td><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
                     <td>{{ dirent.props.obj_name }}</td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
