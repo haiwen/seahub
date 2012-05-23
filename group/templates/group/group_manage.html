@@ -56,10 +56,7 @@
 <script type="text/javascript">
 addConfirmTo($("#group-remove"), '确定要解散该小组吗？');
 
-$('.member-remove-btn').click(function() {
-    addConfirmTo($(this), '确定要删除该成员？');
-    return false;
-});
+addConfirmTo($(".member-remove-btn"), '确定要删除该成员？');
 
 var contact_list = [];
 {% for contact in contacts %}
