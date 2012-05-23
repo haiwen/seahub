@@ -8,6 +8,7 @@ function addConfirmTo(ele, confirm_con) {
 			}
             $('#dialog-confirm').modal({appendTo:'#main'});
             Op_url = $(this).attr('data');
+            return false;//in case ele is '<a>'
         });
     });
 }

@@ -54,10 +54,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("#group-remove").click(function() {
-	addConfirmTo($(this), '确定要解散该小组吗？');
-	return false;
-});
+addConfirmTo($("#group-remove"), '确定要解散该小组吗？');
 
 $('.member-remove-btn').click(function() {
     $("#user_name").val($(this).attr('data'));
