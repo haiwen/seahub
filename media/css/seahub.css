@@ -159,7 +159,7 @@ table img {
 .text-panel {
     font-size:16px;
     text-align:center;
-    margin-top:7em;
+    padding-top:7em;
 }
 /* popup dialog */
 #basic-modal-content {display:none;}
