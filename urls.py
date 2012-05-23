@@ -55,13 +55,14 @@ urlpatterns = patterns('',
     (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
     (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
-#    (r'^avatar/', include('avatar.urls')),
+
+    (r'^avatar/', include('avatar.urls')),
+    (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
     (r'^profile/', include('seahub.profile.urls')),
-    (r'^back/local/$', back_local),
-
-    (r'^contacts/', include('contacts.urls')),
     (r'^share/', include('share.urls')),
+
+    (r'^back/local/$', back_local),
 )
 
 if settings.DEBUG:

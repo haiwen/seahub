@@ -99,7 +99,7 @@ INSTALLED_APPS = (
 #    'django.contrib.sites',
 #    'django.contrib.admin',
     'registration',
-#    'avatar',
+    'avatar',
     'seahub.base',
     'seahub.profile',
     'seahub.contacts',
