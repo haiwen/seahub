@@ -8,7 +8,8 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.encoding import smart_str
 from django.db.models import signals
 
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from seahub.base.accounts import CcnetUser
 
 try:
     from cStringIO import StringIO
@@ -33,9 +34,11 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     tmppath = [AVATAR_STORAGE_DIR]
     if AVATAR_HASH_USERDIRNAMES:
         tmp = md5_constructor(instance.user.username).hexdigest()
-        tmppath.extend([tmp[0], tmp[1], instance.user.username])
+#        tmppath.extend([tmp[0], tmp[1], instance.user.username])
+        tmppath.extend([tmp[0], tmp[1], instance.emailuser])
     else:
-        tmppath.append(instance.user.username)
+#        tmppath.append(instance.user.username)
+        tmppath.append(instance.emailuser)
     if not filename:
         # Filename already stored in database
         filename = instance.avatar.name
@@ -66,16 +69,17 @@ def find_extension(format):
     return format
 
 class Avatar(models.Model):
-    user = models.ForeignKey(User)
+#    user = models.ForeignKey(User)
+    emailuser = models.CharField(max_length=255)
     primary = models.BooleanField(default=False)
     avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
-        return _(u'Avatar for %s') % self.user
+        return _(u'Avatar for %s') % self.emailuser
     
     def save(self, *args, **kwargs):
-        avatars = Avatar.objects.filter(user=self.user)
+        avatars = Avatar.objects.filter(emailuser=self.emailuser)
         if self.pk:
             avatars = avatars.exclude(pk=self.pk)
         if AVATAR_MAX_AVATARS_PER_USER > 1:
@@ -84,11 +88,11 @@ class Avatar(models.Model):
                 avatars.update(primary=False)
         else:
             avatars.delete()
-        invalidate_cache(self.user)
+        invalidate_cache(self.emailuser)
         super(Avatar, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
-        invalidate_cache(self.user)
+        invalidate_cache(self.emailuser)
         super(Avatar, self).delete(*args, **kwargs)
     
     def thumbnail_exists(self, size):
@@ -96,7 +100,7 @@ class Avatar(models.Model):
     
     def create_thumbnail(self, size, quality=None):
         # invalidate the cache of the thumbnail with the given size first
-        invalidate_cache(self.user, size)
+        invalidate_cache(self.emailuser, size)
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
             image = Image.open(StringIO(orig))

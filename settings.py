@@ -26,7 +26,7 @@ TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'zh-CN'
+LANGUAGE_CODE = 'zh_CN'
 
 SITE_ID = 1
 
@@ -174,10 +174,10 @@ else:
             globals()[attr] = getattr(local_settings, attr)
 
 #avatar
-#AVATAR_STORAGE_DIR = 'avatars'
-
-#AVATAR_GRAVATAR_BACKUP = False
-#AVATAR_DEFAULT_URL = MEDIA_URL + '/avatars/default.png'
+AVATAR_STORAGE_DIR = 'avatars'
+AVATAR_GRAVATAR_BACKUP = False
+AVATAR_DEFAULT_URL = '/avatars/default.png'
+AUTO_GENERATE_AVATAR_SIZES = (80, 16)
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 

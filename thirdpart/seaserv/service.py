@@ -298,11 +298,11 @@ def get_user(user_id):
 
 def get_ccnetuser(username=None, userid=None):
     # Get emailuser from db
-    if username != None:
+    if username:
         emailuser = ccnet_rpc.get_emailuser(username)
-    if userid != None:
+    if userid:
         emailuser = ccnet_rpc.get_emailuser_by_id(userid)
-    if emailuser == None:
+    if not emailuser:
         return None
     
     # And convert to ccnetuser

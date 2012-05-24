@@ -22,7 +22,8 @@ class UploadAvatarForm(forms.Form):
     avatar = forms.ImageField()
     
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+#        self.user = kwargs.pop('user')
+        self.emailuser = kwargs.pop('user').email
         super(UploadAvatarForm, self).__init__(*args, **kwargs)
         
     def clean_avatar(self):
@@ -37,7 +38,7 @@ class UploadAvatarForm(forms.Form):
             raise forms.ValidationError(
                 _(u"Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s") %
                 { 'size' : filesizeformat(data.size), 'max_valid_size' : filesizeformat(AVATAR_MAX_SIZE)} )
-        count = Avatar.objects.filter(user=self.user).count()
+        count = Avatar.objects.filter(emailuser=self.emailuser).count()
         if AVATAR_MAX_AVATARS_PER_USER > 1 and \
            count >= AVATAR_MAX_AVATARS_PER_USER: 
             raise forms.ValidationError(

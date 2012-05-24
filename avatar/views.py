@@ -10,7 +10,8 @@ from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
 from avatar.models import Avatar
 from avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_SIZE
 from avatar.signals import avatar_updated
-from avatar.util import get_primary_avatar, get_default_avatar_url
+from avatar.util import get_primary_avatar, get_default_avatar_url, \
+    invalidate_cache
 
 
 def _get_next(request):
@@ -35,7 +36,8 @@ def _get_next(request):
 
 def _get_avatars(user):
     # Default set. Needs to be sliced, but that's it. Keep the natural order.
-    avatars = user.avatar_set.all()
+#    avatars = user.avatar_set.all()
+    avatars = Avatar.objects.filter(emailuser=user.email)
     
     # Current avatar
     primary_avatar = avatars.order_by('-primary')[:1]
@@ -62,14 +64,14 @@ def add(request, extra_context=None, next_override=None,
     if request.method == "POST" and 'avatar' in request.FILES:
         if upload_avatar_form.is_valid():
             avatar = Avatar(
-                user = request.user,
+                emailuser = request.user.username,
                 primary = True,
             )
             image_file = request.FILES['avatar']
             avatar.avatar.save(image_file.name, image_file)
             avatar.save()
-            request.user.message_set.create(
-                message=_("Successfully uploaded a new avatar."))
+#            request.user.message_set.create(
+#                message=_("Successfully uploaded a new avatar."))
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
             return HttpResponseRedirect(next_override or _get_next(request))
     return render_to_response(
@@ -106,8 +108,8 @@ def change(request, extra_context=None, next_override=None,
             avatar.primary = True
             avatar.save()
             updated = True
-            request.user.message_set.create(
-                message=_("Successfully updated your avatar."))
+#            request.user.message_set.create(
+#                message=_("Successfully updated your avatar."))
         if updated:
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
         return HttpResponseRedirect(next_override or _get_next(request))
@@ -142,9 +144,15 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
                         a.save()
                         avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
                         break
-            Avatar.objects.filter(id__in=ids).delete()
-            request.user.message_set.create(
-                message=_("Successfully deleted the requested avatars."))
+
+            # NOTE: `Avatar.objects.filter(id__in=ids).delete()` will NOT work
+            # correctly. Sinct delete() on QuerySet will not call delete 
+            # method on avatar object.
+            for a in Avatar.objects.filter(id__in=ids):
+                a.delete()
+            
+#            request.user.message_set.create(
+#                message=_("Successfully deleted the requested avatars."))
             return HttpResponseRedirect(next_override or _get_next(request))
     return render_to_response(
         'avatar/confirm_delete.html',

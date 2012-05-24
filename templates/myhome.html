@@ -1,7 +1,13 @@
 {% extends "myhome_base.html" %}
+{% load avatar_tags %}
 
 {% block nav_myhome_class %}class="cur"{% endblock %}
 {% block left_panel %}
+<h3>个人头像</h3>
+<a href="{{ SITE_ROOT }}avatar/change/">{% avatar request.user 80 %}</a>
+<p><a href="{{ SITE_ROOT }}avatar/change/">修改</a>
+<a href="{{ SITE_ROOT }}avatar/delete/">删除</a></p>
+
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
 

@@ -1,7 +1,10 @@
 from django.conf import settings
 from django.core.cache import cache
 
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from seahub.base.accounts import CcnetUser
+
+from seaserv import get_ccnetuser
 
 from avatar.settings import (AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,
                              AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE)
@@ -12,7 +15,7 @@ def get_cache_key(user_or_username, size, prefix):
     """
     Returns a cache key consisten of a username and image size.
     """
-    if isinstance(user_or_username, User):
+    if isinstance(user_or_username, CcnetUser):
         user_or_username = user_or_username.username
     return '%s_%s_%s' % (prefix, user_or_username, size)
 
@@ -44,6 +47,10 @@ def invalidate_cache(user, size=None):
             cache.delete(get_cache_key(user, size, prefix))
 
 def get_default_avatar_url():
+    """(e.g.)
+    base_url = '/media/'
+    AVATAR_DEFAULT_URL = '/avatars/default.png'
+    """
     base_url = getattr(settings, 'STATIC_URL', None)
     if not base_url:
         base_url = getattr(settings, 'MEDIA_URL', '')
@@ -60,17 +67,21 @@ def get_default_avatar_url():
     return '%s%s' % (base_url, AVATAR_DEFAULT_URL)
 
 def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
-    if not isinstance(user, User):
+    if not isinstance(user, CcnetUser):
         try:
-            user = User.objects.get(username=user)
-        except User.DoesNotExist:
+#            user = User.objects.get(username=user)
+            user = get_ccnetuser(username=user)
+#        except User.DoesNotExist:
+        except:
             return None
     try:
         # Order by -primary first; this means if a primary=True avatar exists
         # it will be first, and then ordered by date uploaded, otherwise a
         # primary=False avatar will be first.  Exactly the fallback behavior we
         # want.
-        avatar = user.avatar_set.order_by("-primary", "-date_uploaded")[0]
+#        avatar = user.avatar_set.order_by("-primary", "-date_uploaded")[0]
+        from seahub.avatar.models import Avatar
+        avatar = Avatar.objects.filter(emailuser=user.email, primary=1)[0]
     except IndexError:
         avatar = None
     if avatar:
