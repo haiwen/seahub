@@ -49,7 +49,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
     else:
         alt = unicode(user)
         url = avatar_url(user, size)
-    return """<img src="%s" alt="%s" width="%s" height="%s" />""" % (url, alt,
+    return """<img src="%s" alt="%s" width="%s" height="%s" class="avatar" />""" % (url, alt,
         size, size)
 
 @cache_result

@@ -24,8 +24,10 @@
 					<a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>我的帐号</a>
 				</div>
                 {% endif %}
+
+                <div class="fright">
                 {% if request.user.is_authenticated %}
-                欢迎, <a href="{% url avatar_change %}">{% avatar request.user 16 %}</a> {{ request.user }}
+                <span>欢迎,</span> <a href="{% url avatar_change %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
                 <!--
                 {% if request.user.is_staff %}
@@ -37,6 +39,7 @@
                 <a href="{{ SITE_ROOT }}accounts/login/">登录</a> 
                 <a href="{{ SITE_ROOT }}accounts/register/">注册</a>
                 {% endif %}
+                </div>
             </div>
         </div>
     </div>

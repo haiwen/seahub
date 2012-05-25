@@ -8,14 +8,15 @@
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
-<li>{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
 {% endfor %}
+</ul>
 
 <h3>成员</h3>
 {% if common_members %}
 <ul>
     {% for member in common_members %}
-	<li>{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+	<li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
     {% endfor %}
 </ul>
 {% else %}

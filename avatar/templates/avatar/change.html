@@ -3,7 +3,7 @@
 
 {% block main_panel %}
     <h2>修改头像</h2>
-    <p>{% trans "Your current avatar: " %}</p>
+    <h3>{% trans "Your current avatar: " %}</h3>
     {% avatar user %}
     
     {% comment %}
@@ -20,11 +20,12 @@
     {% endif %}
     {% endcomment %}
     
+    <h3 id="upload-new-avatar-hd">上传新头像：</h3>
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
-        <label for="id_avatar">上传新头像：</label>
         {% for boundfield in upload_avatar_form %}
         {{ boundfield }}
         {% endfor %}
-        <p>{% csrf_token %}<input type="submit" value="{% trans "Upload New Image" %}" /></p>
+        <br />
+        <input type="submit" value="{% trans "Upload New Image" %}" />
     </form>
 {% endblock %}
