@@ -557,15 +557,18 @@ def repo_add_share(request):
                     err_emails.append(group_name)
             else:
                 if validate_emailuser(to_email) and validate_owner(request, repo_id):
-                    seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
-                    info_emails.append(to_email)
+                    try:
+                        seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
+                        info_emails.append(to_email)
+                    except SearpcError, e:
+                        err_emails.append(to_email)
                 else:
                     err_emails.append(to_email)
 
         if info_emails:
             output_msg['info_msg'] = u'共享给%s成功，' % list_to_string(info_emails)
         if err_emails:
-            output_msg['err_msg'] = u'共享给%s失败：用户或组不存在' % list_to_string(err_emails)
+            output_msg['err_msg'] = u'共享给%s失败' % list_to_string(err_emails)
 
     return output_msg
 

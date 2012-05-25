@@ -1,28 +1,35 @@
 {% extends "profile/profile_base.html" %}
 
-
 {% block left_panel %}
 <h3>操作</h3>
-<ul>
+<ul class="with-bg">
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
-<h2>所有计算机</h2>
-{% if peer_list %}
+<h2>所有已登录的计算机</h2>
+{% if peers %}
 <table class="userid-list">
   <tr>
-    <th>计算机</th>
+    <th width="80%">计算机</th>
+    <th width="20%">操作</th>
   </tr>
 
-  {% for peer in peer_list %}
+  {% for peer in peers %}
   <tr>
-    <td>{{ peer }}</td>
+    <td>{{ peer.name }}</td>
+    <td><button data="{{ SITE_ROOT }}profile/logout/?peer_id={{ peer.id }}" class="logout-btn">退出登录</button></td>
   </tr>
   {% endfor %}
 </table>
 {% else %}
 <p>暂无</p>
 {% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($('.logout-btn'), '确定要退出登录？')
+</script>
 {% endblock %}

@@ -79,8 +79,8 @@
     <tr>
         <th width="25%">名字</th>
         <th width="20%">共享来源</th>
-        <th width="40%">描述</th>
-        <th width="15%">操作</th>
+        <th width="35%">描述</th>
+        <th width="20%">操作</th>
     </tr>
 
     {% for repo in in_repos %}
@@ -90,6 +90,8 @@
         <td>{{ repo.props.desc }}</td>
         <td>
           <button data="{{ repo.props.id }}" class="download-btn">下载</button>
+          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&to_email={{ request.user }}" class="unshare-btn">取消共享</button>
+
         </td>
     </tr>
     {% endfor %}
@@ -137,6 +139,8 @@ $(function() {
     });
 
     addConfirmTo($('.repo-delete-btn'));
+    
+    addConfirmTo($('.unshare-btn'), '确定要取消共享？');
 
     $(".download-btn").click(function() {
             window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));

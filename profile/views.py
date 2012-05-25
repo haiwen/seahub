@@ -4,19 +4,29 @@ from django.template import Context, RequestContext
 from django.contrib.auth.decorators import login_required
 
 from seaserv import ccnet_rpc, get_binding_peerids
+from pysearpc import SearpcError
+
+from utils import go_error
 
 @login_required
 def list_userids(request):
     peer_list = []
     try:
         peers = ccnet_rpc.get_peers_by_email(request.user.username)
-        for peer in peers:
-            if not peer:
-                continue
-            peer_list.append(peer.props.name)
     except:
-        pass
+        peers = None
     
     return render_to_response('profile/user_ids.html',
-                              {'peer_list': peer_list},
+                              {'peers': peers},
                               context_instance=RequestContext(request))
+
+def logout_relay(request):
+    peer_id = request.GET.get('peer_id', '')
+
+    try:
+        ccnet_rpc.remove_one_binding(request.user.username, peer_id)
+        ccnet_rpc.remove_role(peer_id, "MyClient")
+    except SearpcError, e:
+        return go_error(request, e.msg)
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
