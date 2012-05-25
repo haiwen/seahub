@@ -1,7 +1,9 @@
 {% extends "myhome_base.html" %}
+{% load avatar_tags %}
 
 {% block nav_myhome_class %}class="cur"{% endblock %}
 {% block left_panel %}
+
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
 
