@@ -365,6 +365,51 @@ def repo_history_dir(request, repo_id):
             "path" : path,
             "zipped" : zipped,
             }, context_instance=RequestContext(request))
+
+def repo_history_revert(request, repo_id):
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if repo_ap == None:
+        repo_ap = 'own'
+        
+    if not access_to_repo(request, repo_id, repo_ap):
+        raise Http404
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponseRedirect('/repo/%s/' % repo_id)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return go_error(request, u'请指定历史记录 ID')
+
+    res = request.user.username.split('@')
+    user_name = res[0]
+
+    try:
+        seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, user_name)
+    except SearpcError, e:
+        if e.msg == 'Bad arguments':
+            return go_error(request, u'非法参数')
+        elif e.msg == 'No such repo':
+            return go_error(request, u'同步目录不存在')
+        elif e.msg == "Commit doesn't exist":
+            return go_error(request, u'指定的历史记录不存在')
+        else:
+            return go_error(request, u'未知错误')
+
+    return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
     
 @login_required
 def modify_token(request, repo_id):
