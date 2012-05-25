@@ -36,7 +36,6 @@ def _get_next(request):
 
 def _get_avatars(user):
     # Default set. Needs to be sliced, but that's it. Keep the natural order.
-#    avatars = user.avatar_set.all()
     avatars = Avatar.objects.filter(emailuser=user.email)
     
     # Current avatar

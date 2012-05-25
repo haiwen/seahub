@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 from django.utils.hashcompat import md5_constructor
 from django.core.urlresolvers import reverse
 
-#from django.contrib.auth.models import User
 from seahub.base.accounts import CcnetUser
 from seaserv import get_ccnetuser
 
@@ -38,11 +37,9 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
 def avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, CcnetUser):
         try:
-#            user = User.objects.get(username=user)
             user = get_ccnetuser(username=user)
             alt = unicode(user)
             url = avatar_url(user, size)
-#        except User.DoesNotExist:
         except:
             url = get_default_avatar_url()
             alt = _("Default Avatar")

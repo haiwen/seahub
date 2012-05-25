@@ -22,7 +22,6 @@ class UploadAvatarForm(forms.Form):
     avatar = forms.ImageField()
     
     def __init__(self, *args, **kwargs):
-#        self.user = kwargs.pop('user')
         self.emailuser = kwargs.pop('user').email
         super(UploadAvatarForm, self).__init__(*args, **kwargs)
         

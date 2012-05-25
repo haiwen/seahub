@@ -34,10 +34,8 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     tmppath = [AVATAR_STORAGE_DIR]
     if AVATAR_HASH_USERDIRNAMES:
         tmp = md5_constructor(instance.user.username).hexdigest()
-#        tmppath.extend([tmp[0], tmp[1], instance.user.username])
         tmppath.extend([tmp[0], tmp[1], instance.emailuser])
     else:
-#        tmppath.append(instance.user.username)
         tmppath.append(instance.emailuser)
     if not filename:
         # Filename already stored in database
@@ -69,7 +67,6 @@ def find_extension(format):
     return format
 
 class Avatar(models.Model):
-#    user = models.ForeignKey(User)
     emailuser = models.CharField(max_length=255)
     primary = models.BooleanField(default=False)
     avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)

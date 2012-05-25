@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
 
-#from django.contrib.auth.models import User
 from seahub.base.accounts import CcnetUser
 
 from seaserv import get_ccnetuser
@@ -47,10 +46,6 @@ def invalidate_cache(user, size=None):
             cache.delete(get_cache_key(user, size, prefix))
 
 def get_default_avatar_url():
-    """(e.g.)
-    base_url = '/media/'
-    AVATAR_DEFAULT_URL = '/avatars/default.png'
-    """
     base_url = getattr(settings, 'STATIC_URL', None)
     if not base_url:
         base_url = getattr(settings, 'MEDIA_URL', '')
@@ -69,9 +64,7 @@ def get_default_avatar_url():
 def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, CcnetUser):
         try:
-#            user = User.objects.get(username=user)
             user = get_ccnetuser(username=user)
-#        except User.DoesNotExist:
         except:
             return None
     try:
@@ -79,7 +72,6 @@ def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
         # it will be first, and then ordered by date uploaded, otherwise a
         # primary=False avatar will be first.  Exactly the fallback behavior we
         # want.
-#        avatar = user.avatar_set.order_by("-primary", "-date_uploaded")[0]
         from seahub.avatar.models import Avatar
         avatar = Avatar.objects.filter(emailuser=user.email, primary=1)[0]
     except IndexError:
