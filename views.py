@@ -128,7 +128,7 @@ def gen_path_link(path, repo_name):
     
     return zipped
     
-def repo(request, repo_id):
+def render_repo(request, repo_id, error=''):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
@@ -149,6 +149,15 @@ def repo(request, repo_id):
         if validate_owner(request, repo_id):
             is_owner = True
 
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
 
     dirs = []
@@ -156,7 +165,7 @@ def repo(request, repo_id):
     zipped = []
     dir_list = []
     file_list = []
-    if not repo.props.encrypted:
+    if not repo.props.encrypted or password_set:
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
@@ -193,6 +202,7 @@ def repo(request, repo_id):
             "repo": repo,
             "latest_commit": latest_commit,
             "is_owner": is_owner,
+            "password_set": password_set,
             "repo_ap": repo_ap,
             "repo_size": repo_size,
             "dir_list": dir_list,
@@ -200,12 +210,49 @@ def repo(request, repo_id):
             "share_to_me": share_to_me,
             "path" : path,
             "zipped" : zipped,
+            "error" : error,
             }, context_instance=RequestContext(request))
 
+def repo(request, repo_id):
+    if request.method == 'GET':
+        return render_repo(request, repo_id)
+    elif request.method == 'POST':
+        password = request.POST.get('password', '')
+        if not password:
+            return render_repo(request, repo_id, u'密码不能为空')
+
+        try:
+            seafserv_threaded_rpc.set_passwd(repo_id, request.user.username, password)
+        except SearpcError, e:
+            if e.msg == 'Bad arguments':
+                return go_error(request, u'url 格式不正确')
+            elif e.msg == 'Repo is not encrypted':
+                return render_repo(request, repo_id)
+            elif e.msg == 'Incorrect password':
+                return render_repo(request, repo_id, u'密码不正确，请重新输入')
+            elif e.msg == 'Internal server error':
+                return go_error(request, u'服务器内部故障')
+            else:
+                return go_error(request, u'未知错误')
+
+        return render_repo(request, repo_id)
 
 def repo_history(request, repo_id):
     # TODO: check permission
     repo = get_repo(repo_id)
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponseRedirect('/repo/%s/' % repo_id)
+
     try:
         current_page = int(request.GET.get('page', '1'))
         per_page= int(request.GET.get('per_page', '25'))
@@ -245,6 +292,18 @@ def repo_history_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponseRedirect('/repo/%s/' % repo_id)
 
     current_commit = None
     commit_id = request.GET.get('commit_id', None)
@@ -401,6 +460,22 @@ def repo_set_access_property(request, repo_id):
 
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
+        repo = get_repo(repo_id)
+        if not repo:
+            raise Http404
+
+        password_set = False
+        if repo.props.encrypted:
+            try:
+                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+                if ret == 1:
+                    password_set = True
+            except SearpcError, e:
+                return go_error(request, e.msg)
+
+        if repo.props.encrypted and not password_set:
+            return HttpResponseRedirect('/repo/%s/' % repo_id)
+
         # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
         if not repo_ap:
@@ -429,9 +504,11 @@ def repo_access_file(request, repo_id, obj_id):
         file_name = request.GET.get('file_name', '')
         op = request.GET.get('op', 'view')
 
-        redirect_url = '%s/%s?id=%s&filename=%s&op=%s&t=%s' % (http_server_root,
-                                                               repo_id, obj_id,
-                                                               file_name, op, token)
+        redirect_url = '%s/%s?id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
+                                                                    repo_id, obj_id,
+                                                                    file_name, op, 
+                                                                    token,
+                                                                    request.user.username)
         return HttpResponseRedirect(redirect_url)
     
 @login_required
