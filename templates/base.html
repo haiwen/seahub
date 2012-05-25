@@ -25,7 +25,7 @@
 				</div>
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                欢迎, {% avatar request.user 16 %} {{ request.user }}
+                欢迎, <a href="{% url avatar_change %}">{% avatar request.user 16 %}</a> {{ request.user }}
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
                 <!--
                 {% if request.user.is_staff %}

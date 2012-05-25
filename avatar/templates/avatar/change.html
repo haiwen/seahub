@@ -2,9 +2,11 @@
 {% load i18n avatar_tags %}
 
 {% block main_panel %}
-    <h2>添加或修改头像</h2>
+    <h2>修改头像</h2>
     <p>{% trans "Your current avatar: " %}</p>
     {% avatar user %}
+    
+    {% comment %}
     {% if not avatars %}
         <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
     {% else %}
@@ -16,6 +18,8 @@
             <p>{% csrf_token %}<input type="submit" value="{% trans "Choose new Default" %}" /></p>
         </form>
     {% endif %}
+    {% endcomment %}
+    
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
         <label for="id_avatar">上传新头像：</label>
         {% for boundfield in upload_avatar_form %}
