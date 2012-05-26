@@ -114,6 +114,10 @@ table img {
     display:inline-block;
     height:16px;
 }
+.top-bar .avatar {
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+}
 .top-bar a.cur { text-decoration:underline; }
 .top-bar a,
 .top-bar span {
@@ -123,6 +127,9 @@ table img {
     margin-right:3px;
 }
 .top-bar a:hover { background:#A0A; }
+.top-bar a.avatar-link:hover {
+    background:none;
+}
 /* header */
 #header .top-info { margin-bottom:5px;}
 #other-info { color: #ccc; text-align:right; }
@@ -141,15 +148,17 @@ table img {
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
 /* profile */
-.avatar_op .pic { float:left; margin-right:15px; }
-.avatar_op .text { float:left; }
-#main .avatar_op ul { padding:0; }
-#main .avatar_op ul label { display:none; }
-#main .avatar_op ul ul label { display:block; }
-#main .avatar_op li { padding:0; background:none; }
-#main .avatar_op ul ul li { float:left; margin-right:5px; }
-.avatar {}
-.ele_info { float:right; width:450px; }
+#avatar-op {
+    width:321px;
+    margin:45px 0 0 300px;
+}
+#avatar-op h2 {
+    background:#E9F1F4;
+}
+#avatar-op .avatar {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+}
 #upload-new-avatar-hd {
     margin-top:15px;
 }
