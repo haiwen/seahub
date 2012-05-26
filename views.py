@@ -403,7 +403,8 @@ def myhome(request):
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     
     # Repos that are share to me
-    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
+                                                      'to_email', -1, -1)
 
     # handle share repo request
     if request.method == 'POST':
@@ -636,16 +637,27 @@ def seafile_access_check(request):
 
 @login_required
 def repo_remove_share(request):
+    """
+    If repo is shared from one person to another person, only these two peson
+    can remove share.
+    If repo is shared from one person to a group, then only the one share the
+    repo and group staff can remove share.
+    """
     repo_id = request.GET.get('repo_id', '')
     group_id = request.GET.get('gid')
-    from_email = request.user.username
+    from_email = request.GET.get('from', '')
     
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
     if not group_id:
-        to_email = request.GET.get('to_email', '')
+        to_email = request.GET.get('to', '')
+        if request.user.username != from_email and \
+                request.user.username != to_email:
+            return go_permission_error(request, u'取消共享失败')
         seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
     else:
+        if not request.user.is_staff and request.user.username != from_email:
+            return go_permission_error(request, u'取消共享失败')
         try:
             group_id_int = int(group_id)
         except:
