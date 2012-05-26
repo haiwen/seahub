@@ -16,7 +16,7 @@ from auth.tokens import default_token_generator
 from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
-    get_group_repoids
+    get_group_repoids, check_group_staff
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
@@ -656,13 +656,14 @@ def repo_remove_share(request):
             return go_permission_error(request, u'取消共享失败')
         seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
     else:
-        if not request.user.is_staff and request.user.username != from_email:
-            return go_permission_error(request, u'取消共享失败')
         try:
             group_id_int = int(group_id)
         except:
             return go_error(request, u'group id 不是有效参数')
-        
+
+        if not check_group_staff(group_id_int, request.user) \
+                and request.user.username != from_email: 
+            return go_permission_error(request, u'取消共享失败')        
         from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
         

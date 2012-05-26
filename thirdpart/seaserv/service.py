@@ -412,4 +412,10 @@ def get_group_repoids(group_id=None):
         repoid_list.append(repo_id)
     return repoid_list
 
-    
+def check_group_staff(group_id_int, user_or_username):
+    """Check where user is group staff"""
+    from seahub.base.accounts import CcnetUser
+    if isinstance(user_or_username, CcnetUser):
+        user_or_username = user_or_username.username
+        
+    return ccnet_rpc.check_group_staff(group_id_int, user_or_username)
