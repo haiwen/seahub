@@ -673,7 +673,9 @@ def seafadmin(request):
         current_page = 1
         per_page = 25
 
-    repos_all = seafserv_threaded_rpc.get_repo_list(per_page * (current_page -1), per_page + 1)
+    repos_all = seafserv_threaded_rpc.get_repo_list(per_page *
+                                                    (current_page -1),
+                                                    per_page + 1)
     repos = repos_all[:per_page]
 
     if len(repos_all) == per_page + 1:
@@ -834,3 +836,32 @@ def back_local(request):
 
     return HttpResponseRedirect(redirect_url)
 
+def group_admin(request):
+    if not request.user.is_staff:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+    
+    groups_plus_one = ccnet_rpc.get_all_groups(per_page * (current_page -1),
+                                               per_page +1)
+    groups = groups_plus_one[:per_page]
+
+    if len(groups_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response("group_admin.html", {
+            "groups": groups,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            }, context_instance=RequestContext(request))
