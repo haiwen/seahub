@@ -238,7 +238,17 @@ def repo(request, repo_id):
         return render_repo(request, repo_id)
 
 def repo_history(request, repo_id):
-    # TODO: check permission
+    """
+    If repo is public, anyone can view repo history;
+    If repo is not public, only persons who repo is share to can view.
+    """
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if not repo_ap:
+        repo_ap = 'own'
+        
+    if not access_to_repo(request, repo_id, repo_ap):
+        return go_permission_error(request, u'无法浏览该同步目录修改历史')
+    
     repo = get_repo(repo_id)
 
     password_set = False
@@ -251,7 +261,7 @@ def repo_history(request, repo_id):
             return go_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect('/repo/%s/' % repo_id)
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -260,7 +270,8 @@ def repo_history(request, repo_id):
         current_page = 1
         per_page = 25
 
-    commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+    commits_all = get_commits(repo_id, per_page * (current_page -1),
+                              per_page + 1)
     commits = commits_all[:per_page]
 
     if len(commits_all) == per_page + 1:
@@ -283,7 +294,7 @@ def repo_history_dir(request, repo_id):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if repo_ap == None:
+    if not repo_ap:
         repo_ap = 'own'
         
     if not access_to_repo(request, repo_id, repo_ap):
@@ -303,7 +314,7 @@ def repo_history_dir(request, repo_id):
             return go_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect('/repo/%s/' % repo_id)
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     current_commit = None
     commit_id = request.GET.get('commit_id', None)
@@ -367,13 +378,12 @@ def repo_history_dir(request, repo_id):
             }, context_instance=RequestContext(request))
 
 def repo_history_revert(request, repo_id):
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if repo_ap == None:
-        repo_ap = 'own'
-        
-    if not access_to_repo(request, repo_id, repo_ap):
-        raise Http404
-
+    """
+    Only repo owner can revert repo.
+    """
+    if not validate_owner(request, repo_id):
+        return go_permission_error(request, u'只有同步目录拥有者有权还原目录')
+    
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -388,7 +398,7 @@ def repo_history_revert(request, repo_id):
             return go_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect('/repo/%s/' % repo_id)
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -414,18 +424,18 @@ def repo_history_revert(request, repo_id):
 @login_required
 def modify_token(request, repo_id):
     if not validate_owner(request, repo_id):
-        return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     token = request.POST.get('token', '')
     if token:
         seafserv_threaded_rpc.set_repo_token(repo_id, token)
 
-    return HttpResponseRedirect(reverse(repo, args=[repo_id]))
+    return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 @login_required
 def remove_repo(request, repo_id):
     if not validate_owner(request, repo_id) and not request.user.is_staff:
-        return go_permission_error(request, u'权限不足：无法查看该用户信息')
+        return go_permission_error(request, u'删除同步目录失败')
     
     seafserv_threaded_rpc.remove_repo(repo_id)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -520,7 +530,7 @@ def repo_access_file(request, repo_id, obj_id):
                 return go_error(request, e.msg)
 
         if repo.props.encrypted and not password_set:
-            return HttpResponseRedirect('/repo/%s/' % repo_id)
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
         # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
