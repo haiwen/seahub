@@ -115,8 +115,8 @@ table img {
     height:16px;
 }
 .top-bar .avatar {
-	border-radius: 6px;
-	-moz-border-radius: 6px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
 }
 .top-bar a.cur { text-decoration:underline; }
 .top-bar a,
@@ -156,8 +156,8 @@ table img {
     background:#E9F1F4;
 }
 #avatar-op .avatar {
-	border-radius: 15px;
-	-moz-border-radius: 15px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
 }
 #upload-new-avatar-hd {
     margin-top:15px;
@@ -276,8 +276,8 @@ table img {
 }
 /* group */
 .group-member .avatar {
-	border-radius: 4px;
-	-moz-border-radius: 4px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
 	margin-right: 5px;
 }
 .group-member .avatar,

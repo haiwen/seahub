@@ -54,9 +54,9 @@
 {% if owned_repos %}
 <table>
     <tr>
-        <th width="30%">名字</th>
-        <th width="50%">描述</th>
-        <th width="20%">操作</th>
+        <th width="34%">名字</th>
+        <th width="54%">描述</th>
+        <th width="12%">操作</th>
     </tr>
 
     {% for repo in owned_repos %}
@@ -64,9 +64,9 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ repo.props.id }}" class="download-btn">下载</button>
-        <button data="{{ repo.props.id }}" class="repo-share-btn">共享</button>
-        <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn">删除</button>
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn hide" title="下载" alt="下载" />
+            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn hide" title="共享" alt="共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn hide" title="删除" alt="删除" />
         </td>
     </tr>
     {% endfor %}
@@ -91,9 +91,8 @@
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
-          <button data="{{ repo.props.id }}" class="download-btn">下载</button>
-          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&from={{ repo.shared_email }}&to={{ request.user }}" class="unshare-btn">取消共享</button>
-
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn hide" title="下载" alt="下载" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&from={{ repo.shared_email }}&to={{ request.user }}" class="unshare-btn hide" title="取消共享" alt="取消共享" />
         </td>
     </tr>
     {% endfor %}
@@ -148,6 +147,17 @@ $(function() {
             window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
        });
 
+//show op images when mouse hover on
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).addClass('hl');
+            $('td img').css('cursor', 'pointer').removeClass('hide');
+        },
+        function() {
+            $(this).removeClass('hl');
+            $('td img').addClass('hide');
+        }
+    );
 });
 </script>
 {% endblock %}
