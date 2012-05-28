@@ -6,7 +6,7 @@ from django.template import RequestContext
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, seafserv_threaded_rpc, get_repo, \
-    get_group_repoids
+    get_group_repoids, check_group_staff
 from pysearpc import SearpcError
 
 from seahub.contacts.models import Contact
@@ -53,8 +53,7 @@ def group_remove(request, group_id):
     except ValueError:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    # Check whether use is the group staff
-    if not ccnet_rpc.check_group_staff(group_id_int, request.user.username):
+    if not check_group_staff(group_id_int, request.user):
         return go_permission_error(request, u'只有小组管理员有权解散小组')
     
     try:
@@ -100,7 +99,7 @@ def group_info(request, group_id):
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    if ccnet_rpc.check_group_staff(group.props.id, request.user.username):
+    if check_group_staff(group.id, request.user):
         is_staff = True
     else:
         is_staff = False
@@ -146,8 +145,7 @@ def group_members(request, group_id):
     except ValueError:
         return go_error(request, u'group id 不是有效参数')        
 
-    # Check whether user is the group staff
-    if not ccnet_rpc.check_group_staff(group_id_int, request.user.username):
+    if not check_group_staff(group_id_int, request.user):
         return go_permission_error(request, u'只有小组管理员有权管理小组')
 
     group = ccnet_rpc.get_group(group_id_int)
@@ -207,8 +205,7 @@ def group_remove_member(request, group_id, user_name):
     except ValueError:
         return go_error(request, u'group id 不是有效参数')        
     
-    # Check whether user is the group staff
-    if not ccnet_rpc.check_group_staff(group_id_int, request.user.username):
+    if not check_group_staff(group_id_int, request.user):
         return go_permission_error(request, u'只有小组管理员有权删除成员')
     
     if not validate_emailuser(user_name):
@@ -270,7 +267,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         return go_error(request, u'共享失败:未加入该小组')
 
     # Check whether user is group staff or the one share the repo
-    if not ccnet_rpc.check_group_staff(group_id, from_email) and \
+    if not check_group_staff(group_id, from_email) and \
             seafserv_threaded_rpc.get_group_repo_share_from(repo_id) != from_email:
         return go_permission_error(request, u'取消共享失败:只有小组管理员或共享目录发布者有权取消共享')
         

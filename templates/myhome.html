@@ -92,7 +92,7 @@
         <td>{{ repo.props.desc }}</td>
         <td>
           <button data="{{ repo.props.id }}" class="download-btn">下载</button>
-          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&to_email={{ request.user }}" class="unshare-btn">取消共享</button>
+          <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&from={{ repo.shared_email }}&to={{ request.user }}" class="unshare-btn">取消共享</button>
 
         </td>
     </tr>

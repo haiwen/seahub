@@ -16,7 +16,7 @@ from auth.tokens import default_token_generator
 from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
-    get_group_repoids
+    get_group_repoids, check_group_staff
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
@@ -448,7 +448,8 @@ def myhome(request):
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     
     # Repos that are share to me
-    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
+                                                      'to_email', -1, -1)
 
     # handle share repo request
     if request.method == 'POST':
@@ -681,21 +682,33 @@ def seafile_access_check(request):
 
 @login_required
 def repo_remove_share(request):
+    """
+    If repo is shared from one person to another person, only these two peson
+    can remove share.
+    If repo is shared from one person to a group, then only the one share the
+    repo and group staff can remove share.
+    """
     repo_id = request.GET.get('repo_id', '')
     group_id = request.GET.get('gid')
-    from_email = request.user.username
+    from_email = request.GET.get('from', '')
     
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
     if not group_id:
-        to_email = request.GET.get('to_email', '')
+        to_email = request.GET.get('to', '')
+        if request.user.username != from_email and \
+                request.user.username != to_email:
+            return go_permission_error(request, u'取消共享失败')
         seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
     else:
         try:
             group_id_int = int(group_id)
         except:
             return go_error(request, u'group id 不是有效参数')
-        
+
+        if not check_group_staff(group_id_int, request.user) \
+                and request.user.username != from_email: 
+            return go_permission_error(request, u'取消共享失败')        
         from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
         

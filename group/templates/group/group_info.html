@@ -54,7 +54,7 @@
         <td>
         <button data="{{ repo.props.id }}" class="download-btn">下载</button>
         {% if is_staff or repo.share_from_me  %}
-        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&gid={{ group.id }}" class="repo-delete-btn">取消共享</button>
+        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.share_from }}&gid={{ group.id }}" class="repo-delete-btn">取消共享</button>
         {% endif %}
         </td>
     </tr>
