@@ -2,13 +2,16 @@
 {% load i18n avatar_tags %}
 
 {% block main_panel %}
-    <p>{% trans "Your current avatar: " %}</p>
+<div id="avatar-op">
+     <h2>修改头像</h2>
+    <h3>{% trans "Your current avatar: " %}</h3>
     {% avatar user %}
-    {% if not avatars %}
-        <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
-    {% endif %}
+
+    <h3 id="upload-new-avatar-hd">上传新头像：</h3>
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
-        {{ upload_avatar_form.as_p }}
-        <p>{% csrf_token %}<input type="submit" value="{% trans "Upload New Image" %}" /></p>
+        {{ upload_avatar_form.avatar }}<br />
+        {{ upload_avatar_form.avatar.errors }}
+        <input type="submit" value="{% trans "Upload New Image" %}" />
     </form>
+</div>
 {% endblock %}

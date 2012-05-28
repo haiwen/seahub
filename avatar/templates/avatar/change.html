@@ -2,6 +2,7 @@
 {% load i18n avatar_tags %}
 
 {% block main_panel %}
+<div id="avatar-op">
     <h2>修改头像</h2>
     <h3>{% trans "Your current avatar: " %}</h3>
     {% avatar user %}
@@ -22,10 +23,20 @@
     
     <h3 id="upload-new-avatar-hd">上传新头像：</h3>
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
-        {% for boundfield in upload_avatar_form %}
-        {{ boundfield }}
-        {% endfor %}
-        <br />
+        {{ upload_avatar_form.avatar }}<br />
+        <p class="error hide">您还没有上传新头像。</p>
         <input type="submit" value="{% trans "Upload New Image" %}" />
     </form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('input[type="submit"]').click(function() {
+    if (!$.trim($('#id_avatar').attr('value'))) {
+        $('.error').removeClass('hide');
+        return false;
+    }
+});
+</script>
 {% endblock %}
