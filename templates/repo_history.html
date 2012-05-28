@@ -27,7 +27,10 @@
         {% endif %}
         <td>{{ commit.props.desc|translate_commit_desc }}</td>
         {% if not forloop.last %}
-        <td><a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}">浏览</a></td>
+        <td>
+	    <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}">浏览</a>
+	    <a href="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}">还原</a>
+	</td>
         {% else %}
         <td></td>
         {% endif %}
