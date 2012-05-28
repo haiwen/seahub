@@ -25,7 +25,8 @@ def group_list(request):
             return go_error(request, u'小组名称只能包含中英文字符，数字及下划线')
         
         try:
-            ccnet_rpc.create_group(group_name.encode('utf-8'), request.user.username)
+            ccnet_rpc.create_group(group_name.encode('utf-8'),
+                                   request.user.username)
         except SearpcError, e:
             error_msg = e.msg
             return go_error(request, error_msg)
@@ -53,7 +54,9 @@ def group_remove(request, group_id):
     except ValueError:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    if not check_group_staff(group_id_int, request.user):
+    # Check whether user is the group staff or admin
+    if not ccnet_rpc.check_group_staff(group_id_int, request.user.username) \
+            and not request.user.is_staff:
         return go_permission_error(request, u'只有小组管理员有权解散小组')
     
     try:
@@ -62,7 +65,10 @@ def group_remove(request, group_id):
     except SearpcError, e:
         return go_error(request, e.msg)
 
-    return HttpResponseRedirect(reverse('group_list', args=[]))
+    if request.GET.get('src', '') == 'groupadmin':
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    else:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
 
 @login_required
 def group_quit(request, group_id):
@@ -73,7 +79,8 @@ def group_quit(request, group_id):
     
     try:
         ccnet_rpc.quit_group(group_id_int, request.user.username)
-        seafserv_threaded_rpc.remove_repo_group(group_id_int, request.user.username)
+        seafserv_threaded_rpc.remove_repo_group(group_id_int,
+                                                request.user.username)
     except SearpcError, e:
         return go_error(request, e.msg)
         
@@ -86,13 +93,13 @@ def group_info(request, group_id):
     except ValueError:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    # Check whether user belong to the group
+    # Check whether user belong to the group or admin
     joined = False
     groups = ccnet_rpc.get_groups(request.user.username)
     for group in groups:
         if group.id == group_id_int:
             joined = True
-    if not joined:
+    if not joined and not request.user.is_staff:
         return go_error(request, u'未加入该小组')
     
     group = ccnet_rpc.get_group(group_id_int)
@@ -136,6 +143,7 @@ def group_info(request, group_id):
             "group_id": group_id,
             "group" : group,
             "is_staff": is_staff,
+            "is_join": joined,
             }, context_instance=RequestContext(request));
 
 @login_required

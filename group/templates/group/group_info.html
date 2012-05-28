@@ -23,6 +23,7 @@
 <p>暂无</p>
 {% endif %}
 
+{% if is_join %}
 <h3>操作</h3>
 <ul class="with-bg">
 {% if is_staff %}
@@ -31,6 +32,7 @@
 	<li><a id="quit-group" href="#">退出小组</a></li>
 {% endif %}
 </ul>
+{% endif %}
 
 {% endblock %}
 
