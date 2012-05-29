@@ -12,14 +12,14 @@
 <h2 id="repo-history-hd">{{repo.props.name}} 修改历史</h2>
 <table>
     <tr>
-        <th width="20%">修改时间</th>
-        <th width="10%">修改者</th>
+        <th width="13%">修改时间</th>
+        <th width="17%">修改者</th>
         <th width="60%">描述</th>
         <th width="10%">操作</th>
     </tr>
     {% for commit in commits %}
     <tr>
-        <td>{{ commit.props.ctime|tsstr_sec }}</td>
+        <td>{{ commit.props.ctime|translate_commit_time }}</td>
         {% if commit.props.creator_name %}
         <td>{{ commit.props.creator_name }}</td>
         {% else %}
@@ -29,7 +29,9 @@
         {% if not forloop.last %}
         <td>
 	    <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}">浏览</a>
-	    <a href="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}">还原</a>
+            {% if is_owner %}
+	    <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert">还原</a>
+            {% endif %}
 	</td>
         {% else %}
         <td></td>
@@ -61,4 +63,10 @@
     <a href="?per_page=100" class="per-page">100</a>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($(".repo-revert"), '确定要还原该目录？');
+</script>
 {% endblock %}

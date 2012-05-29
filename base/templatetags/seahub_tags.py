@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import datetime as dt
 from datetime import datetime
 from django import template
 
@@ -40,3 +41,24 @@ def translate_commit_desc(value):
     reg = '|'.join(TRANSLATION_MAP.keys())
 
     return re.sub(reg, desc_repl, value)
+
+@register.filter(name='translate_commit_time')
+def translate_commit_time(value):
+    """Translate commit time to human frindly format instead of timestamp"""
+    limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
+    val = datetime.fromtimestamp(value)
+    now = datetime.now()
+    delta = now - (val - dt.timedelta(0, 0, val.microsecond))
+
+    seconds = delta.seconds
+    days = delta.days
+    if days * 24 * 60 * 60 + seconds > limit:
+        return val.strftime("%Y-%m-%d")
+    elif days > 0:
+        return u'%d 天前' % (days)
+    elif seconds > 60 * 60:
+        return u'%d 小时前' % (seconds/3600)
+    elif seconds > 60:
+        return u'%d 分钟前' % (seconds/60)
+    else:
+        return u'%d 秒前' % (seconds)
