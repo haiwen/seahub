@@ -13,10 +13,10 @@
 <h3>联系人列表</h3>
 <table>
     <tr>
-        <th width="25%">邮箱</th>
+        <th width="35%">邮箱</th>
         <th width="20%">名字</th>
         <th width="30%">备注</th>
-        <th width="25%">操作</th>
+        <th width="15%">操作</th>
     </tr>
     {% for contact in contacts %}
     <tr>
@@ -24,8 +24,8 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit-btn">编辑</button>
-        <button data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete-btn">删除</button>        
+            <img src="{{ MEDIA_URL }}img/edit-blue-20.png" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit vh" alt="编辑" title="编辑" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete vh" alt="删除" title="删除" />        
         </td>
     </tr>
 {% endfor %}
@@ -34,13 +34,19 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.contact-edit-btn').each(function() {
-    $(this).click(function() {
+$('.contact-edit').click(function() {
         location.href = $(this).attr('data');
-    });
 });
 
-addConfirmTo($('.contact-delete-btn'));
+addConfirmTo($('.contact-delete'));
+
+$("table tr:gt(0)").hover(
+    function() {
+        $(this).find('img').css('cursor', 'pointer').removeClass('vh');
+    },
+    function() {
+        $(this).find('img').addClass('vh');
+    }
+);
 </script>
 {% endblock %}
-
