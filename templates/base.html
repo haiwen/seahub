@@ -7,13 +7,11 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.png" />
-
 {% block extra_style %}{% endblock %}
 {% load avatar_tags %}
-
 </head>
-<body>
 
+<body>
 <div id="wrapper">
     <div id="top-bar">
         <div class="top-bar">
@@ -43,6 +41,7 @@
             </div>
         </div>
     </div>
+
     <div id="header">
         <div class="top-info ovhd">
             <a href="{{ SITE_ROOT }}" class="fleft"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
@@ -52,6 +51,7 @@
         </div>
         {% block nav %}{% endblock %}
     </div>
+
     <div id="main">
         <div id="left-panel">
             {% block left_panel %}{% endblock %}
@@ -63,11 +63,12 @@
             {% block main_panel %}{% endblock %}
         </div>
         <div id="dialog-confirm" class="hide">
-            <p class="mgb5" id="confirm-con">确定要删除？</p>
+            <p id="confirm-con">确定要删除？</p>
             <button id="yes-btn">确定</button>
             <button class="simplemodal-close">取消</button>
         </div>
     </div>
+
     <div id="footer" class="ovhd">
         <p class="fleft">Copyright © 2012 海文互知. 服务器版本：{{ seafile_version }}</p>
         <p class="fright">Contact | About</p>

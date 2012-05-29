@@ -3,7 +3,9 @@
 
 {% block main_panel %}
 <div id="repo-page" class="ovhd">
+
     <h2>{{repo.props.name}}</h2>
+
     <div class="side fright">
         <h3>基本信息</h3>
         <p>{{repo.props.desc}}</p>
@@ -33,7 +35,7 @@
                 {% if repo_ap == 'public' %}
             <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
                 {% else %}
-            <input type="checkbox" name="repo-access-switch" id="repo-access-switch" autocomplete="off" /><label for="repo-access-switch">开启</label>
+            <input type="checkbox" name="repo-access-switch" id="repo-access-switch" data="{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=public" autocomplete="off" /><label for="repo-access-switch">开启</label>
                 {% endif %}
             <br /><span class="tip">开启后，任何人都能够访问该目录</span>
             {% endif %}
@@ -41,65 +43,66 @@
         {% endif %}
         {% endif %}
     </div>
+
     <div class="main fleft">
         {% if repo.props.encrypted and not password_set %}
         <p>该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
-	<form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
-	<p><label>密码：</label><input id="id_password" type="password" name="password" maxlength="64" /></p>
-	{% if error %}
-	<p>{{ error }}</p>
-	{% endif %}
-	<p><input type="submit" value="提交"></p>
-	</form>
+	    <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
+            <label>密码：</label>
+            <input id="id_password" type="password" name="password" maxlength="64" /><br />
+	        {% if error %}
+	        <p class="error">{{ error }}</p>
+	        {% endif %}
+	        <input type="submit" value="提交" />
+	    </form>
+
         {% else %}
             {% if not is_owner and repo_ap == 'own' and not share_to_me %}
-            <p>该同步目录web匿名访问未开启，不能在线查看。</p>
+        <p>该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
-            <div>
-              	{% for name, link in zipped|slice:":-1" %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+        <p class="path">
+            当前路径：
+                {% for name, link in zipped %}
+                    {% if not forloop.last %}
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+                    {% else %}
+            {{ name }}
+	                {% endif %}
                 {% endfor %}
-                {% for name, link in zipped|slice:"-1:" %}
-                {{ name }}
-                {% endfor %}
-            </div>
-            <table>
-                <tr>
-                    <th width="5%"></th>
-                    <th width="55%">名字</th>
-                    <th width="10%">大小</th>
-                    <th width="30%">操作</th>
-                </tr>
+        </p>
+        <table>
+            <tr>
+                <th width="5%"></th>
+                <th width="60%">名字</th>
+                <th width="15%">大小</th>
+                <th width="20%">操作</th>
+            </tr>
 
                 {% for dirent in dir_list %}
-                <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
-                    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tr>
+                <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
+                <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+                <td></td>
+                <td></td>
+            </tr>
                 {% endfor %}
 
                 {% for dirent in file_list %}
-                <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
-                    <td>{{ dirent.props.obj_name }}</td>
-                    <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td>
-                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
-                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
-                    </td>
-                </tr>
+            <tr>
+                <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
+                <td>{{ dirent.props.obj_name }}</td>
+                <td>{{ dirent.file_size|filesizeformat }}</td>
+                <td>
+                    <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
+                    <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
+                </td>
+            </tr>
                 {% endfor %}
-            </table>
+        </table>
             {% endif %}
         {% endif %}
     </div>
-    <div id="public-access-start-confirm" class="hide">
-        <p>确定要开启吗？</p>
-        <button id="public-access-start-btn">确定</button>
-        <button id="public-access-start-cancel-btn" class="simplemodal-close">取消</button>
-    </div>
+
 </div>
 {% endblock %}
 
@@ -111,15 +114,9 @@ if ($('#repo-access-switch').attr('checked')) {
     });
 } else {
     $('#repo-access-switch').click(function() {
-        $('#public-access-start-confirm').modal({appendTo:"#main", containerCss:{padding:18}});
+            $(this).attr('checked', false);
     });
+    addConfirmTo($('#repo-access-switch'), '确定要开启吗？');
 }
-
-$('#public-access-start-btn').click(function() {
-    location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=public";
-});
-$('#public-access-start-cancel-btn').click(function() {
-    $('#repo-access-switch').attr('checked', false);
-});
 </script>
 {% endblock %}

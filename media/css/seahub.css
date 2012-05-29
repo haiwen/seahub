@@ -18,7 +18,6 @@ ul > li { list-style:none; }
 }
 .notification {
     padding:5px;
-    width:580px;
     background:#FDF;
     margin:10px 0;
 }
@@ -54,7 +53,7 @@ button {
     font-size:13px;/*for ff*/
     color: #080;
     height:23px;
-    line-height:23px;
+    line-height:21px;
     padding:0 3px;
     background: #EEE;
     border: 1px solid #80B0B0;
@@ -217,6 +216,9 @@ table img {
 }
 #dialog-delete-confirm {
     text-align:center;
+}
+#confirm-con {
+    margin-bottom:6px;
 }
 /*ui-autocomplete*/
 .ui-autocomplete {
