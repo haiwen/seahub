@@ -19,7 +19,7 @@
             未知
            {% endif %}
            </span>
-           <span class="time">{{ latest_commit.props.ctime|tsstr_sec }}</span>
+           <span class="time">{{ latest_commit.props.ctime|translate_commit_time }}</span>
         </p>
         <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">更多历史...</a>
 

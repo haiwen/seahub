@@ -12,14 +12,14 @@
 <h2 id="repo-history-hd">{{repo.props.name}} 修改历史</h2>
 <table>
     <tr>
-        <th width="20%">修改时间</th>
-        <th width="10%">修改者</th>
+        <th width="13%">修改时间</th>
+        <th width="17%">修改者</th>
         <th width="60%">描述</th>
         <th width="10%">操作</th>
     </tr>
     {% for commit in commits %}
     <tr>
-        <td>{{ commit.props.ctime|tsstr_sec }}</td>
+        <td>{{ commit.props.ctime|translate_commit_time }}</td>
         {% if commit.props.creator_name %}
         <td>{{ commit.props.creator_name }}</td>
         {% else %}
