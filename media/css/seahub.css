@@ -151,18 +151,24 @@ table img {
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
 /* profile */
-#avatar-op {
+.avatar-op {
     width:321px;
     margin:45px 0 0 300px;
 }
-#avatar-op h2 {
+.avatar-op h2 {
+    padding:2px 5px;
     background:#E9F1F4;
+    border-radius:3px;
+    -moz-border-radius:3px;
 }
-#avatar-op .avatar {
+.avatar-op-con {
+    padding-left:5px;
+}
+.avatar-op .avatar {
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 }
-#upload-new-avatar-hd {
+.upload-new-avatar-hd {
     margin-top:15px;
 }
 /*narrow-panel: for form pages*/
