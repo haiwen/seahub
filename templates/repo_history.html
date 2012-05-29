@@ -29,7 +29,9 @@
         {% if not forloop.last %}
         <td>
 	    <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}">浏览</a>
-	    <a href="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}">还原</a>
+            {% if is_owner %}
+	    <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert">还原</a>
+            {% endif %}
 	</td>
         {% else %}
         <td></td>
@@ -61,4 +63,10 @@
     <a href="?per_page=100" class="per-page">100</a>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($(".repo-revert"), '确定要还原该目录？');
+</script>
 {% endblock %}
