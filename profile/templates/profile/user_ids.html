@@ -31,6 +31,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.logout-btn'), '确定要退出登录？')
+$('.logout-btn').click(function(){
+    location.href = $(this).attr('data');
+});
 </script>
 {% endblock %}

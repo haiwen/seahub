@@ -25,7 +25,6 @@ def logout_relay(request):
 
     try:
         ccnet_rpc.remove_one_binding(request.user.username, peer_id)
-        ccnet_rpc.remove_role(peer_id, "MyClient")
     except SearpcError, e:
         return go_error(request, e.msg)
 
