@@ -25,7 +25,12 @@
         {% else %}
         <td>未知</td>
         {% endif %}
-        <td>{{ commit.props.desc|translate_commit_desc }}</td>
+        <td>
+	  {{ commit.props.desc|translate_commit_desc }}
+	  {% if not forloop.last %}
+	  <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}">详情</a>
+	  {% endif %}
+	</td>
         {% if not forloop.last %}
         <td>
             <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}" class="op">浏览</a>
@@ -63,10 +68,57 @@
     <a href="?per_page=100" class="per-page">100</a>
     {% endif %}
 </div>
+
+<div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($(".repo-revert"), '确定要还原该目录？');
+//list modification made by a commit;for repo,repo_history
+$('.lsch').each(function() {
+        $(this).click(function() {
+            $.ajax({
+                url: $(this).attr('href'),
+                dataType: 'json',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    var str_title =  '<h3>修改详情</h3>';
+                    var str_con = ''; 
+                    var show = function(data_) {
+                            str_con += '<ul>';
+                            for (var i = 0, len = data_.length; i < len; i++) {
+                                str_con += '<li>' + data_[i] + '</li>';
+                            }   
+                            str_con += '</ul>';
+                    };  
+                    if (data['new'].length > 0) {
+                        str_con += '<h4 id="ls-ch-new">新文件</h4>';
+                        show(data['new']);
+                    }   
+                    if (data['removed'].length > 0) {
+                        str_con += '<h4 id="ls-ch-rm">删除的文件</h4>';
+                        show(data['removed']);
+                    }   
+                    if (data['renamed'].length > 0) {
+                        str_con += '<h4 id="ls-ch-rn">移动的文件</h4>';
+                        show(data['renamed']);
+                    }   
+                    if (data['modified'].length > 0) {
+                        str_con += '<h4 id="ls-ch-modi">修改的文件</h4>';
+                        show(data['modified']);
+                    }
+                    if (!str_con) {
+                        str_con = '<p>没有文件被改动</p>';
+                    }
+                    $('#ls-ch').html(str_title + str_con);
+                    $('#ls-ch').modal({appendTo:'#main'});
+                }
+            });
+            return false;
+        });
+    });
 </script>
+
+addConfirmTo($(".repo-revert"), '确定要还原该目录？');
 {% endblock %}

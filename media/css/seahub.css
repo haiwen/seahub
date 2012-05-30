@@ -277,6 +277,21 @@ table img {
     font-size:16px;
     margin-bottom:14px;
 }
+.lsch {
+    font-size:12px;
+    color:#666;
+    text-decoration:underline;
+}
+#ls-ch {/*repo commit details container*/
+    min-width:300px;
+    min-height:300px; 
+    max-width:850px;
+    max-height:550px;
+    overflow:auto;
+}
+#ls-ch ul {
+    padding:0 0 6px 0;
+}
 /*repo-share-form*/
 #to_email,
 #added-member-name {

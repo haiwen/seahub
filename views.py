@@ -1,6 +1,7 @@
 # encoding: utf-8
 import settings
 import stat
+import simplejson as json
 from urllib import quote
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
@@ -425,6 +426,88 @@ def repo_history_revert(request, repo_id):
             return go_error(request, u'未知错误')
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
+
+def get_filename(start, ent):
+    i = start + 1
+    lenidx = start - 1
+    while i <= len(ent):
+        tmp = " ".join(ent[start:i])
+        if len(tmp) == int(ent[lenidx]):
+            return (tmp, i)
+        i = i + 1
+    return ("", 0)
+
+def add_to_status_list(lists, status_ent):
+    if status_ent[1] == 'A':
+        filename, index = get_filename(4, status_ent)
+        lists['new'].append(filename)
+    elif status_ent[1] == 'D':
+        filename, index = get_filename(4, status_ent)
+        lists['removed'].append(filename)
+    elif status_ent[1] == 'R':
+        filename1, index1 = get_filename(4, status_ent)
+        filename2, index2 = get_filename(index1 + 1, status_ent)
+        lists['renamed'].append(filename1 + u' 被移动到 ' + filename2)
+    elif status_ent[1] == 'M':
+        filename, index = get_filename(4, status_ent)
+        lists['modified'].append(filename)
+
+def get_diff(repo_id, arg1, arg2):
+    lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : []}
+
+    diff_result = seafserv_threaded_rpc.get_diff(repo_id, arg1, arg2)
+    if diff_result == "":
+        return lists;
+
+    diff_result = diff_result[:len(diff_result)-1]
+
+    for d in diff_result.split("\n"):
+        tmp = d.split(" ")
+        if tmp[0] == 'C':
+            add_to_status_list(lists, tmp)
+
+    return lists
+
+def repo_history_changes(request, repo_id):
+    changes = {}
+    content_type = 'application/json; charset=utf-8'
+
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if repo_ap == None:
+        repo_ap = 'own'
+        
+    if not access_to_repo(request, repo_id, repo_ap):
+        return HttpResponse(json.dumps(changes),
+                            content_type=content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        return HttpResponse(json.dumps(changes),
+                            content_type=content_type)
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except:
+            return HttpResponse(json.dumps(changes),
+                                content_type=content_type)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponse(json.dumps(changes),
+                            content_type=content_type)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return HttpResponse(json.dumps(changes),
+                            content_type=content_type)
+
+    changes = get_diff(repo_id, '', commit_id)
+
+    return HttpResponse(json.dumps(changes),
+                        content_type=content_type)
     
 @login_required
 def modify_token(request, repo_id):
