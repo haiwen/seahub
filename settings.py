@@ -88,7 +88,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'djblets.util.context_processors.siteRoot',
     'django.core.context_processors.request',
-    'seahub.base.context_processors.version',
+    'seahub.base.context_processors.base',
 )
 
 
@@ -128,6 +128,8 @@ HTTP_SERVER_ROOT = "http://localhost:8082"
 CCNET_APPLET_ROOT = "http://localhost:8081"
 
 SEAFILE_VERSION = '0.9.2'
+
+SEAHUB_TITLE = 'SeaHub'
 
 # Add supported file extensions and file icon name.
 # Icons will show in repo page.
@@ -179,6 +181,7 @@ AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.png'
 AUTO_GENERATE_AVATAR_SIZES = (80, 16)
 AVATAR_MAX_AVATARS_PER_USER = 1
+AVATAR_CACHE_TIMEOUT = 0
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 

@@ -137,18 +137,11 @@ def render_repo(request, repo_id, error=''):
         repo_ap = 'own'
         
     if not access_to_repo(request, repo_id, repo_ap):
-        raise Http404
+        return go_permission_error(request, u'该同步目录未公开')
 
     repo = get_repo(repo_id)
     if not repo:
-        raise Http404
-
-    latest_commit = get_commits(repo_id, 0, 1)[0]
-
-    is_owner = False
-    if request.user.is_authenticated():
-        if validate_owner(request, repo_id):
-            is_owner = True
+        return go_error(request, u'该同步目录不存在')
 
     password_set = False
     if repo.props.encrypted:
@@ -160,6 +153,7 @@ def render_repo(request, repo_id, error=''):
             return go_error(request, e.msg)
 
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
+    latest_commit = get_commits(repo_id, 0, 1)[0]
 
     dirs = []
     path = ''
@@ -170,27 +164,38 @@ def render_repo(request, repo_id, error=''):
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
-
-        try:
-            dirs = seafserv_rpc.list_dir_by_path(latest_commit.id,
-                                                 path.encode('utf-8'))
-        except SearpcError, e:
-            return go_error(request, e.msg)
-        for dirent in dirs:
-            if stat.S_ISDIR(dirent.props.mode):
-                dir_list.append(dirent)
-            else:
-                file_list.append(dirent)
-                try:
-                    dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
-                except:
-                    dirent.file_size = 0
-        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
-        file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
-
-        # generate path and link
-        zipped = gen_path_link(path, repo.name)
         
+        if latest_commit.root_id == '0000000000000000000000000000000000000000':
+            dirs = []
+        else:
+            try:
+                dirs = seafserv_rpc.list_dir_by_path(latest_commit.id,
+                                                     path.encode('utf-8'))
+            except SearpcError, e:
+                return go_error(request, e.msg)
+            for dirent in dirs:
+                if stat.S_ISDIR(dirent.props.mode):
+                    dir_list.append(dirent)
+                else:
+                    file_list.append(dirent)
+                    try:
+                        dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
+                    except:
+                        dirent.file_size = 0
+            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                            y.obj_name.lower()))
+            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                             y.obj_name.lower()))
+
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
+
+    # check whether use is repo owner
+    is_owner = False
+    if request.user.is_authenticated():
+        if validate_owner(request, repo_id):
+            is_owner = True
+
     # used to determin whether show repo content in repo.html
     # if a repo is shared to me, or repo shared to the group I joined,
     # then I can view repo content on the web

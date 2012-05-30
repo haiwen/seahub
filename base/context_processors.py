@@ -8,9 +8,12 @@ RequestContext.
 """
 import settings
 
-def version(request):
+def base(request):
     """
-    Add seafile version to the context.
+    Add seahub base configure to the context.
     
     """
-    return {'seafile_version': settings.SEAFILE_VERSION}
+    return {
+        'seafile_version': settings.SEAFILE_VERSION,
+        'seahub_title': settings.SEAHUB_TITLE,        
+        }
