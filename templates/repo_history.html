@@ -28,9 +28,9 @@
         <td>{{ commit.props.desc|translate_commit_desc }}</td>
         {% if not forloop.last %}
         <td>
-	        <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}" class="op">浏览</a>
+            <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}" class="op">浏览</a>
             {% if is_owner %}
-	        <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
+            <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
             {% endif %}
 	    </td>
         {% else %}
