@@ -29,11 +29,10 @@
 {% if is_staff %}
     <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">小组管理</a></li>
 {% else %}
-	<li><a id="quit-group" href="#">退出小组</a></li>
+	<li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出小组</a></li>
 {% endif %}
 </ul>
 {% endif %}
-
 {% endblock %}
 
 {% block right_panel %}
@@ -43,9 +42,9 @@
 <table>
     <tr>
         <th width="20%">名字</th>
-        <th width="40%">描述</th>
+        <th width="48%">描述</th>
         <th width="20%">共享来源</th>
-        <th width="20%">操作</th>
+        <th width="12%">操作</th>
     </tr>
 
     {% for repo in repos %}
@@ -54,9 +53,9 @@
         <td>{{ repo.props.desc }}</td>
         <td>{{ repo.share_from }}</td>
         <td>
-        <button data="{{ repo.props.id }}" class="download-btn">下载</button>
+            <img src="{{ MEDIA_URL }}img/download-20.png" class="download vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载" />
         {% if is_staff or repo.share_from_me  %}
-        <button data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.share_from }}&gid={{ group.id }}" class="repo-delete-btn">取消共享</button>
+            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.share_from }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
         {% endif %}
         </td>
     </tr>
@@ -65,36 +64,24 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
-<div id="dialog-quit-confirm" class="hide">
-  <p>确定要退出？</p>
-  <button id="quit-yes-btn">确定</button>
-  <button class="simplemodal-close">取消</button>
-</div>
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$("#quit-group").click(function() {
-    $('#dialog-quit-confirm').modal({appendTo:'#main'});
-    return false;
-});
-        
-$('#quit-yes-btn').click(function() {
-    location.href = "{{ SITE_ROOT }}group/{{ group.id }}/?op=quit";
-});
+    addConfirmTo($('#quit-group'), '确定要退出？');
+    addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
 
-addConfirmTo($('.repo-delete-btn'));
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).find('img').css('cursor', 'pointer').removeClass('vh');
+        },
+        function() {
+            $(this).find('img').addClass('vh');
+        }
+    );
 
-/*                
-$('.repo-delete-btn').click(function() {
-    location.href = $(this).attr('data');
-});
-*/
-
-$('.download-btn').click(function() {
-    window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
-});        
+    $('.download').click(function() {
+        window.open($(this).attr('data'));
+    });
 </script>
 {% endblock %}
