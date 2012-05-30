@@ -12,35 +12,35 @@
         <p>大小：{{ repo_size|filesizeformat }}</p>
 
         {% if not repo.props.encrypted or password_set %}
-        {% if is_owner or repo_ap == 'public' or share_to_me %}
+            {% if is_owner or repo_ap == 'public' or share_to_me %}
         <div class="latest-commit">
             <h3>最新修改<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">（更多）</a></h3>
             <p>{{ latest_commit.props.desc|translate_commit_desc }}</p>
             <p class="al-rt">
                 <span class="author">by
-            {% if latest_commit.props.creator_name %}
+                {% if latest_commit.props.creator_name %}
                 {{ latest_commit.props.creator_name }}
-            {% else %}
+                {% else %}
                 未知
-            {% endif %}
+                {% endif %}
                 </span>
                 <span class="time">{{ latest_commit.props.ctime|translate_commit_time }}</span>
             </p>
         </div>
         
+                {% if is_owner %}
         <h3>设置</h3>
         <p>
-            {% if is_owner %}
             <span class="item-name">WEB匿名访问:</span>
-                {% if repo_ap == 'public' %}
+                    {% if repo_ap == 'public' %}
             <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
-                {% else %}
+                    {% else %}
             <input type="checkbox" name="repo-access-switch" id="repo-access-switch" data="{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=public" autocomplete="off" /><label for="repo-access-switch">开启</label>
-                {% endif %}
+                    {% endif %}
             <br /><span class="tip">开启后，任何人都能够访问该目录</span>
-            {% endif %}
         </p>
-        {% endif %}
+                {% endif %}
+            {% endif %}
         {% endif %}
     </div>
 
