@@ -1,14 +1,13 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
-{% block main_panel %}
-<div id="repo-page" class="ovhd">
-    <h2>{{repo.props.name}} 历史浏览</h2>
-    <div class="side fright">
-        {% if not repo.props.encrypted %}
-        {% if is_owner or repo_ap == 'public' or share_to_me %}
-        <p class="latest-commit mgt10">
-            {{ current_commit.props.desc|translate_commit_desc }}<br />
+{% block left_panel %}
+{% if not repo.props.encrypted %}
+    {% if is_owner or repo_ap == 'public' or share_to_me %}
+    <div class="latest-commit">
+        <h3>最新修改</h3>
+        <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
+        <p class="al-rt">
             <span class="author">by
             {% if current_commit.props.creator_name %}
             {{ current_commit.props.creator_name }}
@@ -16,34 +15,41 @@
             未知
            {% endif %}
            </span>
-           <span class="time">{{ current_commit.props.ctime|tsstr_sec }}</span>
+           <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
         </p>
-        {% endif %}
-        {% endif %}
-        <a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/"><p>返回历史列表</p></a>
     </div>
-    <div class="main fleft">
+    {% endif %}
+{% endif %}
+    <h3>操作</h3>
+    <ul class="with-bg">
+        <li><a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/">返回历史列表</a></li>
+    </ul>
+{% endblock%}
+
+{% block right_panel %}
+    <h3>{{repo.props.name}} 历史浏览</h3>
         {% if repo.props.encrypted %}
         <p>该同步目录已加密，不能在线查看。</p>
         {% else %}
             {% if not is_owner and repo_ap == 'own' and not share_to_me %}
             <p>该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
-            <div>
+            <p>
+                当前路径：
               	{% for name, link in zipped %}
-                {% if not forloop.last %}                
+                    {% if not forloop.last %}                
                 <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id}}&p={{ link|urlencode }}">{{ name }}</a> /
-                {% else %}
+                    {% else %}
                 {{ name }}
-                {% endif %}
+                    {% endif %}
                 {% endfor %}
-            </div>
+            </p>
             <table>
                 <tr>
                     <th width="5%"></th>
-                    <th width="55%">名字</th>
-                    <th width="10%">大小</th>
-                    <th width="30%">操作</th>
+                    <th width="60%">名字</th>
+                    <th width="15%">大小</th>
+                    <th width="20%">操作</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -69,11 +75,4 @@
             </table>
             {% endif %}
         {% endif %}
-    </div>
-</div>
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-</script>
 {% endblock %}
