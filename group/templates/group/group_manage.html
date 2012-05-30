@@ -24,7 +24,9 @@
     <tr>
         <td>{{ member.user_name }}</td>
         {% if not member.is_staff %}
-        <td><button data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn">删除</button></td>
+        <td>
+            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</button>
+        </td>
         {% else %}
         <td></td>
         {% endif %}
@@ -34,13 +36,6 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
-<form id="member-remove-form" action="{{ SITE_ROOT }}grou/pmemberrm/" method="post" name="member-remove-form" class="hide">
-    <label>邮箱</label><br />
-    <input id="user_name" name="user_name" value="" />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    <input type="submit" value="提交" />
-</form>
 
 <form id="member-add-form" action="{{ SITE_ROOT }}group/{{ group.id }}/members/" method="post" name="member-add-form" class="hide">
     <label>邮箱:</label><br />
