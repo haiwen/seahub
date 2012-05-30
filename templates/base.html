@@ -27,7 +27,7 @@
 
                 <div class="fright">
                 {% if request.user.is_authenticated %}
-                <span>欢迎,</span> <a href="{% url avatar_change %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
+                <span>欢迎,</span> <a href="{% url avatar_add %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
                 <!--
                 {% if request.user.is_staff %}
