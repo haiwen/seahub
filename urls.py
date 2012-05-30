@@ -8,7 +8,7 @@ from seahub.views import root, peers, myhome, \
     ownerhome, remove_fetched_repo, repo_history_dir, repo_history_revert, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, \
-    seafile_access_check, back_local, group_admin
+    seafile_access_check, back_local, group_admin, repo_history_changes
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     (r'^repo/history/dir/(?P<repo_id>[^/]+)/$', repo_history_dir),
     (r'^repo/history/revert/(?P<repo_id>[^/]+)/$', repo_history_revert),
 #    (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
+    (r'^repo/history/changes/(?P<repo_id>[^/]+)/$', repo_history_changes),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
 #    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
     (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
