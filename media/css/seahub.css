@@ -3,7 +3,7 @@ ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
-h2 { font-size:18px; color:#808; margin:12px 0 8px; }
+h2 { font-size:18px; color:#808; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
 h4 { font-size:14px; color:#000; margin:2px 0 0; }
 ol { padding-left:2em; }
@@ -119,9 +119,6 @@ table img {
 #left-panel { float:right; width:220px; }
 #right-panel { float:left; width:680px; }
 #main-panel { width:100%; }
-.subject {
-    margin-bottom:16px;
-}
 .side {
     color:#333;
     width:220px;
@@ -167,6 +164,8 @@ table img {
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
+h2.subject {}
+p.path { margin: 12px 0 6px 0; color:#333; }
 .with-bg li {
     padding-left:10px;
     line-height:20px;
@@ -281,10 +280,10 @@ table img {
     color:#666;
     margin-left:2px;
 }
-.repo-history-hd {
+h2.repo-history {
     font-weight:normal;
     font-size:16px;
-    margin-bottom:14px;
+    margin: 4px 0 12px 0;
 }
 .lsch {
     font-size:12px;
