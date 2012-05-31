@@ -5,6 +5,7 @@ a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
 h2 { font-size:18px; color:#808; margin:12px 0 8px; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
+h4 { font-size:14px; color:#000; margin:2px 0 0; }
 ol { padding-left:2em; }
 /* input button */
 textarea { border: 1px solid #80B0B0; }
@@ -219,7 +220,7 @@ table img {
     font-weight:normal;
 }
 #simplemodal-container h3 {
-    margin:0 0 4px;
+    margin-top:0;
 }
 .simplemodal-close {
     margin-left:5px;
@@ -264,6 +265,10 @@ table img {
 #repo-page .icon-container {
     text-align:center;
 }
+.latest-commit-time-author {
+    color:#333;
+    margin-bottom:4px;
+}
 .latest-commit {
     word-wrap:break-word;
 }
@@ -274,13 +279,14 @@ table img {
     color:#666;
     margin-left:2px;
 }
-#repo-history-hd {
+.repo-history-hd {
     font-weight:normal;
     font-size:16px;
     margin-bottom:14px;
 }
 .lsch {
-    font-size:11px;
+    font-size:12px;
+    font-weight:normal;
     color:#666;
     text-decoration:underline;
 }

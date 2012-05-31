@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block right_panel %}
-<h2 id="repo-history-hd">{{repo.props.name}} 修改历史</h2>
+<h2 class="repo-history-hd">{{repo.props.name}} 修改历史</h2>
 <table>
     <tr>
         <th width="14%">修改时间</th>
@@ -17,20 +17,24 @@
         <th width="63%">描述</th>
         <th width="13%">操作</th>
     </tr>
+
     {% for commit in commits %}
     <tr>
         <td>{{ commit.props.ctime|translate_commit_time }}</td>
+
         {% if commit.props.creator_name %}
         <td>{{ commit.props.creator_name }}</td>
         {% else %}
         <td>未知</td>
         {% endif %}
+
         <td>
-	  {{ commit.props.desc|translate_commit_desc }}
-	  {% if not forloop.last %}
-	  <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}">详情</a>
-	  {% endif %}
-	</td>
+	    {{ commit.props.desc|translate_commit_desc }}
+	    {% if not forloop.last %}
+	    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+	    {% endif %}
+	    </td>
+
         {% if not forloop.last %}
         <td>
             <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ commit.id }}" class="op">浏览</a>
@@ -74,16 +78,17 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-//list modification made by a commit;for repo,repo_history
-$('.lsch').each(function() {
+    //list modification made by a commit
+    $('.lsch').each(function() {
         $(this).click(function() {
+            var str_time_author = '<p class="latest-commit-time-author">' + $(this).attr('data') + ' by ' + $(this).parent().prev().html() + '</p>';
             $.ajax({
                 url: $(this).attr('href'),
                 dataType: 'json',
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
-                    var str_title =  '<h3>修改详情</h3>';
+                    var str_title = '<h3>修改详情</h3>';
                     var str_con = ''; 
                     var show = function(data_) {
                             str_con += '<ul>';
@@ -111,7 +116,7 @@ $('.lsch').each(function() {
                     if (!str_con) {
                         str_con = '<p>没有文件被改动</p>';
                     }
-                    $('#ls-ch').html(str_title + str_con);
+                    $('#ls-ch').html(str_title + str_time_author + str_con);
                     $('#ls-ch').modal({appendTo:'#main'});
                 }
             });
@@ -119,7 +124,6 @@ $('.lsch').each(function() {
         });
     });
 
-addConfirmTo($(".repo-revert"), '确定要还原该目录？');
+    addConfirmTo($(".repo-revert"), '确定要还原该目录？');
 </script>
-
 {% endblock %}

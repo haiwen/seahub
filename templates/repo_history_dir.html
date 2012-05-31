@@ -27,7 +27,7 @@
 {% endblock%}
 
 {% block right_panel %}
-<h3>{{repo.props.name}} 历史浏览</h3>
+<h2 class="repo-history-hd">{{repo.props.name}} 历史浏览</h2>
 {% if repo.props.encrypted %}
 <p>该同步目录已加密，不能在线查看。</p>
 {% else %}
