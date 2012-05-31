@@ -218,7 +218,9 @@ table img {
     color:#e83;
     font-weight:normal;
 }
-#simplemodal-container h3 {color:#84b8d9;}
+#simplemodal-container h3 {
+    margin:0 0 4px;
+}
 .simplemodal-close {
     margin-left:5px;
 }
@@ -278,7 +280,7 @@ table img {
     margin-bottom:14px;
 }
 .lsch {
-    font-size:12px;
+    font-size:11px;
     color:#666;
     text-decoration:underline;
 }
