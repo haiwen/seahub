@@ -1,7 +1,13 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
-{% block left_panel %}
+{% block main_panel %}
+<h2 class="subject">
+    {{repo.props.name}} 历史浏览
+    <span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
+</h2>
+
+<div class="side fright">
 {% if not repo.props.encrypted %}
     {% if is_owner or repo_ap == 'public' or share_to_me %}
 <div class="latest-commit">
@@ -24,10 +30,9 @@
 <ul class="with-bg">
     <li><a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/">返回历史列表</a></li>
 </ul>
-{% endblock%}
+</div>
 
-{% block right_panel %}
-<h2 class="repo-history-hd">{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
+<div class="main fleft">
 {% if repo.props.encrypted %}
 <p>该同步目录已加密，不能在线查看。</p>
 {% else %}
@@ -74,4 +79,5 @@
 </table>
     {% endif %}
 {% endif %}
+</div>
 {% endblock %}

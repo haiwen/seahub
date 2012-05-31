@@ -2,9 +2,7 @@
 {% load seahub_tags %}
 
 {% block main_panel %}
-<div id="repo-page" class="ovhd">
-
-    <h2>
+    <h2 class="subject">
         {{repo.props.name}}
         <span class="latest-commit-time-author">({{ latest_commit.props.ctime|tsstr_sec }})</span>
     </h2>
@@ -105,8 +103,6 @@
             {% endif %}
         {% endif %}
     </div>
-
-</div>
 {% endblock %}
 
 {% block extra_script %}

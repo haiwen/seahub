@@ -118,6 +118,17 @@ table img {
 }
 #left-panel { float:right; width:220px; }
 #right-panel { float:left; width:680px; }
+#main-panel { width:100%; }
+.subject {
+    margin-bottom:16px;
+}
+.side {
+    color:#333;
+    width:220px;
+}
+.main {
+    width:680px;
+}
 #footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
 /* top-bar */
 #top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
@@ -249,20 +260,10 @@ table img {
 }
 
 /*repo page*/
-#repo-page h2 {
-    margin-bottom:16px;
-}
-#repo-page .side {
-    color:#333;
-    width:220px;
-}
-#repo-page .main {
-    width:680px;
-}
-#repo-page .latest-commit .more:hover {
+.latest-commit .more:hover {
     text-decoration:none;
 }
-#repo-page .icon-container {
+.icon-container {
     text-align:center;
 }
 .latest-commit-time-author {
