@@ -220,7 +220,7 @@ table img {
     font-weight:normal;
 }
 #simplemodal-container h3 {
-    margin-top:0;
+    margin:0 0 4px;
 }
 .simplemodal-close {
     margin-left:5px;
@@ -267,7 +267,8 @@ table img {
 }
 .latest-commit-time-author {
     color:#333;
-    margin-bottom:4px;
+    font-size:13px;
+    font-weight:normal;
 }
 .latest-commit {
     word-wrap:break-word;

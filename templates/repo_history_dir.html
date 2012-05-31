@@ -5,7 +5,7 @@
 {% if not repo.props.encrypted %}
     {% if is_owner or repo_ap == 'public' or share_to_me %}
 <div class="latest-commit">
-    <h3>最新修改</h3>
+    <h3>修改信息</h3>
     <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
     <p class="al-rt">
         <span class="author">by
@@ -27,7 +27,7 @@
 {% endblock%}
 
 {% block right_panel %}
-<h2 class="repo-history-hd">{{repo.props.name}} 历史浏览</h2>
+<h2 class="repo-history-hd">{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
 {% if repo.props.encrypted %}
 <p>该同步目录已加密，不能在线查看。</p>
 {% else %}
