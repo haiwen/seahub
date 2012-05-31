@@ -4,7 +4,6 @@
 {% block main_panel %}
     <h2 class="subject">
         {{repo.props.name}}
-        <span class="latest-commit-time-author">({{ latest_commit.props.ctime|tsstr_sec }})</span>
     </h2>
 
     <div class="side fright">
@@ -47,7 +46,7 @@
 
     <div class="main fleft">
         {% if repo.props.encrypted and not password_set %}
-        <p>该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
+        <p class="access-notice">该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
         <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
             <label>密码：</label>
             <input id="id_password" type="password" name="password" maxlength="64" /><br />
@@ -59,7 +58,7 @@
 
         {% else %}
             {% if not is_owner and repo_ap == 'own' and not share_to_me %}
-        <p>该同步目录web匿名访问未开启，不能在线查看。</p>
+        <p class="access-notice">该同步目录web匿名访问未开启，不能在线查看。</p>
             {% else %}
         <p class="path">
             当前路径：

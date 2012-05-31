@@ -34,12 +34,12 @@
 
 <div class="main fleft">
 {% if repo.props.encrypted %}
-<p>该同步目录已加密，不能在线查看。</p>
+<p class="access-notice">该同步目录已加密，不能在线查看。</p>
 {% else %}
     {% if not is_owner and repo_ap == 'own' and not share_to_me %}
-<p>该同步目录web匿名访问未开启，不能在线查看。</p>
+<p class="access-notice">该同步目录web匿名访问未开启，不能在线查看。</p>
     {% else %}
-<p>当前路径：
+<p class="path">当前路径：
         {% for name, link in zipped %}
             {% if not forloop.last %}                
     <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id}}&p={{ link|urlencode }}">{{ name }}</a> /

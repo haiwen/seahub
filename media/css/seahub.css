@@ -165,7 +165,7 @@ table img {
 #footer a { color:#333; text-decoration:none; }
 /* main */
 h2.subject {}
-p.path { margin: 12px 0 6px 0; color:#333; }
+p.path, p.access-notice { margin: 12px 0 6px 0; }
 .with-bg li {
     padding-left:10px;
     line-height:20px;
