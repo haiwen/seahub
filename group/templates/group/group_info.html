@@ -3,8 +3,9 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
-{% block left_panel %}
-
+{% block main_panel %}
+<h2>{{ group.group_name }}</h2>
+<div class="side fright">
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
@@ -33,10 +34,9 @@
 {% endif %}
 </ul>
 {% endif %}
-{% endblock %}
+</div>
 
-{% block right_panel %}
-<h2>{{ group.group_name }}</h2>
+<div class="main fleft">
 <h3>小组里共享的同步目录</h3>
 {% if repos %}
 <table>
@@ -64,6 +64,7 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
+</div>
 {% endblock %}
 
 {% block extra_script %}

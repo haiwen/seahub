@@ -2,16 +2,20 @@
 {% load seahub_tags %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
-{% block left_panel %}
+
+{% block main_panel %}
+
+<h2>{{ group.group_name }} 小组管理</h2>
+
+<div class="side fright">
 <h3>操作</h3>
 <ul class="with-bg">
     <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=delete">解散小组</a></li>
     <li><a id="group-info" href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
 </ul>
-{% endblock %}
+</div>
 
-{% block right_panel %}
-<h2>{{ group.group_name }} 小组管理</h2>
+<div class="main fleft">
 <h3>小组成员列表<a id="member-add" href="#" class="fright">添加成员</a></h3>
 {% if members %}
 <table class="member-list">
@@ -45,6 +49,7 @@
     <input type="submit" value="提交" id="member-add-submit" />
 </form>
 
+</div>
 {% endblock %}
 
 {% block extra_script %}
