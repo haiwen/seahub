@@ -1,0 +1,18 @@
+{% extends "admin_base.html" %}
+{% block title %}添加通知{% endblock %}
+{% block nav_notificationadmin_class %}class="cur"{% endblock %}
+{% block main_panel %}
+<div class="narrow-panel">
+<h3>添加通知</h3>
+<form action="" method="post">
+  <label for="id_message">通知：</label>
+  {{ form.message }}
+  <input type="submit" value="提交" />
+</form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}

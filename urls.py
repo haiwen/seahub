@@ -9,6 +9,7 @@ from seahub.views import root, peers, myhome, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, \
     seafile_access_check, back_local, group_admin, repo_history_changes
+from seahub.notifications.views import notification_list
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -59,6 +60,8 @@ urlpatterns = patterns('',
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
 
     (r'^avatar/', include('avatar.urls')),
+    (r'^notification/', include('notifications.urls')),
+    url(r'^notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
     url(r'^groupadmin/$', group_admin, name='group_admin'),

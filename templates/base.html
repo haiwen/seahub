@@ -13,14 +13,21 @@
 
 <body>
 <div id="wrapper">
+    {% if request.user.is_authenticated and request.cur_note %}
+    <div id="info-bar">
+      <span class="info">{{ request.cur_note.message|urlize }}</span>
+      <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/"><span class="close"></span></a>
+    </div>
+    {% endif %}
+    
     <div id="top-bar">
         <div class="top-bar">
             <div class="top-bar-in ovhd">
                 {% if request.user.is_staff %}
-				<div class="fleft">
-					<a href="{{ SITE_ROOT }}seafadmin/"{% block top_bar_manager_class %}{% endblock %}>管理员控制台</a>
-					<a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>我的帐号</a>
-				</div>
+                <div class="fleft">
+                    <a href="{{ SITE_ROOT }}seafadmin/"{% block top_bar_manager_class %}{% endblock %}>管理员控制台</a>
+                    <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>我的帐号</a>
+                </div>
                 {% endif %}
 
                 <div class="fright">

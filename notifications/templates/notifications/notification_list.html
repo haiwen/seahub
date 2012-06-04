@@ -1,0 +1,74 @@
+{% extends "admin_base.html" %}
+{% block nav_notificationadmin_class %}class="cur"{% endblock %}
+
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+    <li><a href="{{ SITE_ROOT }}notification/add/">添加新通知</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+<h3>所有通知</h3>
+{% if notes %}
+<table>
+    <tr>
+        <th width="75%">内容</th>
+        <th width="25%">操作</th>
+    </tr>
+    {% for note in notes %}
+    <tr>
+        <td>{{ note.message }}
+        {% if note.primary == 1 %}
+        <span class="cur-note">（当前通知）</span>
+        {% endif %}
+        <td>
+          {% if note.primary != 1 %}
+          <button data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn">设为当前通知</button>
+          {% endif %}
+          <button data="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" class="note-delete-btn">删除</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<!--
+<div id="paginator">
+    {% if current_page != 1 %}
+    <a href="{{ SITE_ROOT }}seafadmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+    {% endif %}
+    {% if page_next %}
+    <a href="{{ SITE_ROOT }}seafadmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+    {% endif %}
+    <span>每页：</span> 
+    {% if per_page == 25 %}
+    <span> 25 </span> 
+    {% else %}
+    <a href="{{ SITE_ROOT }}seafadmin/?per_page=25" class="per-page">25</a>
+    {% endif %}
+    {% if per_page == 50 %}
+    <span> 50 </span> 
+    {% else %}
+    <a href="{{ SITE_ROOT }}seafadmin/?per_page=50" class="per-page">50</a>
+    {% endif %}
+    {% if per_page == 100 %}
+    <span> 100 </span> 
+    {% else %}
+    <a href="{{ SITE_ROOT }}seafadmin/?per_page=100" class="per-page">100</a>
+    {% endif %}
+</div>
+-->
+{% else %}
+<p>暂无</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($('.note-delete-btn'));
+
+$('.note-change-btn').click(function() {
+window.location = $(this).attr('data');
+})
+</script>
+{% endblock %}
+ 

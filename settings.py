@@ -66,6 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'auth.middleware.AuthenticationMiddleware',
+    'seahub.base.middleware.InfobarMiddleware',
 #    'seahub.base.middleware.UseridMiddleware',
 )
 
@@ -100,6 +101,7 @@ INSTALLED_APPS = (
 #    'django.contrib.admin',
     'registration',
     'avatar',
+    'seahub.notifications',
     'seahub.base',
     'seahub.profile',
     'seahub.contacts',

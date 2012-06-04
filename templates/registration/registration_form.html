@@ -2,6 +2,9 @@
 {% block title %}注册{% endblock %}
 {% block main_panel %}
 <div class="narrow-panel">
+{% if request.user.is_authenticated %}
+    <h2>欢迎回来，您已登录。</h2>
+{% else %}
     <h2>注册</h2>
     <form action="" method="post">
         <label for="id_email">邮箱：</label>
@@ -16,6 +19,7 @@
         {{ form.password2.errors }}
         <input type="submit" value="提交" />
     </form>
+{% endif %}
 </div>
 {% endblock %}
 
