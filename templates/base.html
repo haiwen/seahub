@@ -16,7 +16,7 @@
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
       <span class="info">{{ request.cur_note.message|urlize }}</span>
-      <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/"><span class="close"></span></a>
+      <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/?next={{ request.path }}"><span class="close"></span></a>
     </div>
     {% endif %}
     

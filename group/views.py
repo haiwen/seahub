@@ -66,7 +66,7 @@ def group_remove(request, group_id):
         return go_error(request, e.msg)
 
     if request.GET.get('src', '') == 'groupadmin':
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(reverse('group_admin'))
     else:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 

@@ -14,10 +14,11 @@ def notification_close(request, note_id):
     note_id += ','
     topinfo_close = request.COOKIES.get('topinfo', '')
     topinfo_close += note_id
-
-    res = HttpResponseRedirect(request.META['HTTP_REFERER'])
+ 
+    next = request.GET.get('next', '/')
+    res = HttpResponseRedirect(next)
     res.set_cookie("topinfo", topinfo_close, max_age=14*24*60*60)
-
+ 
     return res
 
 @login_required

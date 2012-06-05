@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext
@@ -28,4 +29,4 @@ def logout_relay(request):
     except SearpcError, e:
         return go_error(request, e.msg)
 
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect(reverse('list_userids'))

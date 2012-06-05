@@ -531,14 +531,15 @@ def remove_repo(request, repo_id):
         return go_permission_error(request, u'删除同步目录失败')
     
     seafserv_threaded_rpc.remove_repo(repo_id)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    next = request.GET.get('next', '/')
+    return HttpResponseRedirect(next)
     
-@login_required
-def remove_fetched_repo(request, user_id, repo_id):
-    if user_id and repo_id:
-        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
-        
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+#@login_required
+#def remove_fetched_repo(request, user_id, repo_id):
+#    if user_id and repo_id:
+#        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
+#        
+#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def myhome(request):
@@ -601,11 +602,10 @@ def ownerhome(request, owner_name):
 
 @login_required
 def repo_set_access_property(request, repo_id):
-    if repo_id:
-        ap = request.GET.get('ap', '')
-        seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
-
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    ap = request.GET.get('ap', '')
+    seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
+        
+    return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
@@ -814,8 +814,13 @@ def repo_remove_share(request):
             return go_permission_error(request, u'取消共享失败')        
         from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
-        
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])        
+
+    referer = request.META.get('HTTP_REFERER', None)
+    if not referer:
+        referer = 'repo_list_share'
+        return HttpResponseRedirect(reverse(referer))
+    else:
+        return HttpResponseRedirect(referer)
     
 @login_required
 def mypeers(request):
@@ -916,29 +921,28 @@ def user_info(request, email):
             },
         context_instance=RequestContext(request))
 
-@login_required
-def role_add(request, user_id):
-    if not request.user.is_staff:
-        raise Http404
+#@login_required
+#def role_add(request, user_id):
+#    if not request.user.is_staff:
+#        raise Http404
+# 
+#    if request.method == 'POST':
+#        role = request.POST.get('role', '')
+#        if role and len(role) <= 16:
+#            ccnet_rpc.add_role(user_id, role)
+# 
+#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-    if request.method == 'POST':
-        role = request.POST.get('role', '')
-        if role and len(role) <= 16:
-            ccnet_rpc.add_role(user_id, role)
-
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-@login_required
-def role_remove(request, user_id):
-    if not request.user.is_staff:
-        raise Http404
-
-    role = request.REQUEST.get('role', '')
-    if role and len(role) <= 16:
-        ccnet_rpc.remove_role(user_id, role)
-
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+#@login_required
+#def role_remove(request, user_id):
+#    if not request.user.is_staff:
+#        raise Http404
+# 
+#    role = request.REQUEST.get('role', '')
+#    if role and len(role) <= 16:
+#        ccnet_rpc.remove_role(user_id, role)
+# 
+#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def user_remove(request, user_id):
@@ -950,7 +954,7 @@ def user_remove(request, user_id):
     ccnetuser = get_ccnetuser(userid=int(user_id))
     ccnetuser.delete()
     
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect(reverse('useradmin'))
 
 @login_required
 def activate_user(request, user_id):
@@ -962,8 +966,8 @@ def activate_user(request, user_id):
     ccnetuser = get_ccnetuser(userid=int(user_id))
     ccnetuser.is_active = True
     ccnetuser.save()
-    
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    return HttpResponseRedirect(reverse('useradmin'))
 
 @login_required
 def user_add(request):

@@ -4,8 +4,8 @@ from django.views.generic.simple import direct_to_template
 
 from seahub.views import root, peers, myhome, \
     repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
-    role_add, role_remove, activate_user, user_add, user_remove, \
-    ownerhome, remove_fetched_repo, repo_history_dir, repo_history_revert, \
+    activate_user, user_add, user_remove, \
+    ownerhome, repo_history_dir, repo_history_revert, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_add_share, repo_list_share, repo_remove_share, repo_download, \
     seafile_access_check, back_local, group_admin, repo_history_changes
@@ -54,8 +54,8 @@ urlpatterns = patterns('',
     url(r'^useradmin/$', useradmin, name='useradmin'),
     (r'^useradmin/add/$', user_add),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
-    (r'^useradmin/(?P<user_id>[^/]+)/role/add/$', role_add),
-    (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
+#    (r'^useradmin/(?P<user_id>[^/]+)/role/add/$', role_add),
+#    (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
     (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
 

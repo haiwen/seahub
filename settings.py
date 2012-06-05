@@ -127,7 +127,7 @@ REGISTRATION_SEND_MAIL = False
 HTTP_SERVER_ROOT = "http://localhost:8082"
 
 # ccnet-applet address and port, used in repo download
-CCNET_APPLET_ROOT = "http://localhost:8081"
+CCNET_APPLET_ROOT = "http://localhost:13420"
 
 SEAFILE_VERSION = '0.9.2'
 
