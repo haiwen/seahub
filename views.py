@@ -344,29 +344,28 @@ def repo_history_dir(request, repo_id):
     zipped = []
     dir_list = []
     file_list = []
-    if not repo.props.encrypted:
-        path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
-        try:
-            dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
-                                                 path.encode('utf-8'))
-        except SearpcError, e:
-            return go_error(request, e.msg)
-        for dirent in dirs:
-            if stat.S_ISDIR(dirent.props.mode):
-                dir_list.append(dirent)
-            else:
-                file_list.append(dirent)
-                try:
-                    dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
-                except:
-                    dirent.file_size = 0
-        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
-        file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+    try:
+        dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
+                                             path.encode('utf-8'))
+    except SearpcError, e:
+        return go_error(request, e.msg)
+    for dirent in dirs:
+        if stat.S_ISDIR(dirent.props.mode):
+            dir_list.append(dirent)
+        else:
+            file_list.append(dirent)
+            try:
+                dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
+            except:
+                dirent.file_size = 0
+    dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
+    file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
 
-        # generate path and link
-        zipped = gen_path_link(path, repo.name)
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
 
     # used to determin whether show repo content in repo.html
     # if a repo is shared to me, or repo shared to the group I joined,

@@ -8,8 +8,7 @@
 </h2>
 
 <div class="side fright">
-{% if not repo.props.encrypted %}
-    {% if is_owner or repo_ap == 'public' or share_to_me %}
+{% if is_owner or repo_ap == 'public' or share_to_me %}
 <div class="latest-commit">
     <h3>修改信息</h3>
     <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
@@ -24,7 +23,6 @@
         <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
     </p>
 </div>
-    {% endif %}
 {% endif %}
 <h3>操作</h3>
 <ul class="with-bg">
@@ -33,20 +31,17 @@
 </div>
 
 <div class="main fleft">
-{% if repo.props.encrypted %}
-<p class="access-notice">该同步目录已加密，不能在线查看。</p>
-{% else %}
-    {% if not is_owner and repo_ap == 'own' and not share_to_me %}
+{% if not is_owner and repo_ap == 'own' and not share_to_me %}
 <p class="access-notice">该同步目录web匿名访问未开启，不能在线查看。</p>
-    {% else %}
+{% else %}
 <p class="path">当前路径：
-        {% for name, link in zipped %}
-            {% if not forloop.last %}                
+    {% for name, link in zipped %}
+        {% if not forloop.last %}                
     <a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id}}&p={{ link|urlencode }}">{{ name }}</a> /
-            {% else %}
+        {% else %}
     {{ name }}
-            {% endif %}
-        {% endfor %}
+        {% endif %}
+    {% endfor %}
 </p>
 <table>
     <tr>
@@ -56,16 +51,16 @@
         <th width="15%">操作</th>
     </tr>
 
-        {% for dirent in dir_list %}
+    {% for dirent in dir_list %}
     <tr>
         <td><img src="{{ MEDIA_URL }}img/folder-icon-24.png" /></td>
         <td><a href="{{ SITE_ROOT }}repo/history/dir/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
         <td></td>
         <td></td>
     </tr>
-        {% endfor %}
+    {% endfor %}
 
-        {% for dirent in file_list %}
+    {% for dirent in file_list %}
     <tr>
         <td><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" /></td>
         <td>{{ dirent.props.obj_name }}</td>
@@ -75,9 +70,8 @@
             <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
         </td>
     </tr>
-        {% endfor %}
+    {% endfor %}
 </table>
-    {% endif %}
 {% endif %}
 </div>
 {% endblock %}
