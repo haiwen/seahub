@@ -12,7 +12,7 @@
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
         {{ upload_avatar_form.avatar }}<br />
         {{ upload_avatar_form.avatar.errors }}
-        <input type="submit" value="{% trans "Upload New Image" %}" />
+        <input type="submit" value="{% trans "Upload New Image" %}" class="submit" />
     </form>
 </div>
 </div>

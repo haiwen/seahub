@@ -10,6 +10,7 @@ ol { padding-left:2em; }
 /* input button */
 textarea { border: 1px solid #80B0B0; }
 input { 
+    display:inline-block;/*for ie*/
     height:20px;
     line-height:20px;
     margin:3px 0;
@@ -19,6 +20,7 @@ input[type=checkbox] {
     height:auto;
 }
 input[type=submit],
+input.submit,
 button { 
     font-size:13px;/*for ff*/
     color: #080;
@@ -32,6 +34,7 @@ button {
     margin-top:8px;
 }
 button {
+    display:inline-block;/*for ie*/
     margin:0;
 }
 input[type=submit]:hover,
@@ -105,8 +108,8 @@ table img {
 
 /* container */
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
-#header, #main, #footer { width:950px; }
-#header, #main { margin:0 auto; }
+#header, #main, #footer, .top-bar-in { width:950px; }
+#header, #main, .top-bar-in { margin:0 auto; }
 #header {
     font-size: 14px;
     font-weight: bold;
@@ -114,6 +117,7 @@ table img {
 }
 #main {
     min-height: 400px;
+    _height: 400px;
     padding-top: 10px;
 }
 #left-panel { float:right; width:220px; }
@@ -136,7 +140,6 @@ table img {
 /* top-bar */
 #top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
 .top-bar { height:20px; color:#fff; text-align:right; font-weight:bold; background:#606; }
-.top-bar-in { width:950px; margin:0 auto; }
 .top-bar a { color:#ddd; font-weight:normal; }
 .top-bar a.avatar-link {
     display:inline-block;
@@ -159,13 +162,13 @@ table img {
     background:none;
 }
 /* header */
-#header .top-info { margin-bottom:5px;}
+#header .top-info { margin-bottom:13px;}
 #other-info { color: #ccc; text-align:right; }
 #other-info .wish { font-style:italic; margin-bottom:10px; }
 #other-info .version { font-size: 12px; }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
-#header .nav a.cur { color: #000; }
+#header .nav a.cur { color:#000; }
 #header .nav a:hover { color: #ff9933; text-decoration: underline; }
 /* footer */
 #footer a { color:#333; text-decoration:none; }
@@ -212,12 +215,25 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 .narrow-panel h3 {
     margin-top:0;
 }
-.narrow-panel input[type="text"],
-.narrow-panel input[type="password"] {
-    width:96%;
+.narrow-panel input {
+    width:24em;
     height:1.8em;
     margin:0 0 0.6em;
 }
+.narrow-panel input.submit {
+    width:3em;
+    color: #080;
+    height:23px;
+    line-height:21px;
+    padding:0 3px;
+    background: #EEE;
+    border: 1px solid #80B0B0;
+    margin:8px 0 3px;
+}
+.login-form a {
+    vertical-align:middle;
+}
+
 /*text-panel: for pages with few text*/
 .text-panel {
     font-size:16px;

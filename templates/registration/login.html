@@ -3,13 +3,13 @@
 {% block main_panel %}
 <div class="narrow-panel">
 <h2>登录</h2>
-<form action="" method="post">
+<form action="" method="post" class="login-form">
     <label for="username">邮箱：</label>
 	<input type="text" name="username" value="" autocomplete="off" />
 	<label for="password">密码：</label>
 	<input type="password" name="password" value="" autocomplete="off" />
 	<p class="error hide"></p>
-	<input type="submit" value="提交" />
+	<input type="submit" value="提交" class="submit" />
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
 {% if next %}
     <input type="hidden" name="next" value="{{ next|escape }}" />

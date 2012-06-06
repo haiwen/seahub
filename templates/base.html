@@ -22,7 +22,7 @@
     
     <div id="top-bar">
         <div class="top-bar">
-            <div class="top-bar-in ovhd">
+            <div class="top-bar-in w100 ovhd">
                 {% if request.user.is_staff %}
                 <div class="fleft">
                     <a href="{{ SITE_ROOT }}seafadmin/"{% block top_bar_manager_class %}{% endblock %}>管理员控制台</a>
@@ -50,8 +50,8 @@
     </div>
 
     <div id="header">
-        <div class="top-info ovhd">
-            <a href="{{ SITE_ROOT }}" class="fleft"><img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" /></a>
+        <div class="top-info w100 ovhd">
+            <img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" class="fleft" />
             <div id="other-info" class="fright">
                 <p class="wish">Hope our efforts will bring you benefits.</p>
             </div>
