@@ -11,12 +11,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'seahub.db')             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '../..'))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME' : os.path.join(install_topdir, 'seahub.db')
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -132,6 +134,7 @@ INSTALLED_APPS = (
     'seahub.share',
     'seahub.subdomain',
     'seahub.api',
+    'gunicorn',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -194,7 +197,9 @@ SITE_NAME = 'Seafile'
 SERVE_STATIC = True
 
 try:
-    import local_settings
+    import sys
+    sys.path.insert(0, install_topdir)
+    import seahub_settings as local_settings
 except ImportError:
     pass
 else:
