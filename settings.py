@@ -1,6 +1,8 @@
 # encoding: utf-8
 # Django settings for seahub project.
+import sys
 import os
+import re
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -11,12 +13,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'seahub.db')             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'seahub.db')
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -67,16 +65,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',
     'auth.middleware.AuthenticationMiddleware',
-    'base.middleware.BaseMiddleware',    
+    'base.middleware.BaseMiddleware',
     'base.middleware.InfobarMiddleware',
     'seahub.subdomain.middleware.SubdomainMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'djblets.util.rooturl'
- 
+
 SITE_ROOT = '/'
 
 TEMPLATE_DIRS = (
@@ -118,14 +116,14 @@ INSTALLED_APPS = (
 #    'django.contrib.sites',
 #    'django.contrib.admin',
     'django.contrib.messages',
-    
+
     # 'auth',
-    'avatar',    
+    'avatar',
     'registration',
 
     'seahub.base',
     'seahub.contacts',
-    'seahub.group',    
+    'seahub.group',
     'seahub.notifications',
     'seahub.organizations',
     'seahub.profile',
@@ -196,30 +194,52 @@ SERVE_STATIC = True
 
 # Enalbe or disalbe registration on web.
 ENABLE_SIGNUP = False
-
-try:
-    import local_settings
-except ImportError:
-    pass
-else:
-  # Import any symbols that begin with A-Z. Append to lists any symbols that
-  # begin with "EXTRA_".
-    import re
-    for attr in dir(local_settings):
-        match = re.search('^EXTRA_(\w+)', attr)
-        if match:
-            name = match.group(1)
-            value = getattr(local_settings, attr)
-            try:
-                globals()[name] += value
-            except KeyError:
-                globals()[name] = value
-        elif re.search('^[A-Z]', attr):
-            globals()[attr] = getattr(local_settings, attr)
-
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 SEAFILE_VERSION = '1.3.0'
 
 USE_SUBDOMAIN = False
 
+def load_local_settings(module):
+    '''Import any symbols that begin with A-Z. Append to lists any symbols
+    that begin with "EXTRA_".
+
+    '''
+    for attr in dir(module):
+        match = re.search('^EXTRA_(\w+)', attr)
+        if match:
+            name = match.group(1)
+            value = getattr(module, attr)
+            try:
+                globals()[name] += value
+            except KeyError:
+                globals()[name] = value
+        elif re.search('^[A-Z]', attr):
+            globals()[attr] = getattr(module, attr)
+
+# Load local_settngs.py
+try:
+    import local_settings
+except ImportError:
+    pass
+else:
+    load_local_settings(local_settings)
+    del local_settings
+
+# Load seahub_settings.py in server release
+try:
+    install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..'))
+    sys.path.insert(0, install_topdir)
+    import seahub_settings
+except ImportError:
+    pass
+else:
+    # In server release, sqlite3 db file is <topdir>/seahub.db 
+    DATABASE_NAME = os.path.join(install_topdir, 'seahub.db')
+    # In server release, gunicorn is used to deploy seahub
+    INSTALLED_APPS += ('gunicorn', )
+    load_local_settings(seahub_settings)
+    del seahub_settings
+
+# Remove install_topdir from path
+sys.path.pop()
