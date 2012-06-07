@@ -5,9 +5,9 @@ local_settings.py
 startserver.sh
 thirdpart/django
 thirdpart/djblets
-thirdpart/flup
-use_mysql
-use_sqlite3
+thirdpart/gunicorn*
+thirdpart/*.pth
+thirdpart/site.*
 restart.sh
 settings.py.mysql
 settings.py.sqlite
