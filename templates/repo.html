@@ -27,19 +27,6 @@
                 <span class="time">{{ latest_commit.props.ctime|translate_commit_time }}</span>
             </p>
         </div>
-        
-                {% if is_owner %}
-        <h3>设置</h3>
-        <p>
-            <span class="item-name">WEB匿名访问:</span>
-                    {% if repo_ap == 'public' %}
-            <input type="checkbox" name="repo-access-switch" id="repo-access-switch" checked="checked" autocomplete="off" /><label for="repo-access-switch">开启</label>
-                    {% else %}
-            <input type="checkbox" name="repo-access-switch" id="repo-access-switch" data="{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=public" autocomplete="off" /><label for="repo-access-switch">开启</label>
-                    {% endif %}
-            <br /><span class="tip">开启后，任何人都能够访问该目录</span>
-        </p>
-                {% endif %}
             {% endif %}
         {% endif %}
     </div>
@@ -106,15 +93,5 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-if ($('#repo-access-switch').attr('checked')) {
-    $('#repo-access-switch').click(function() {
-        location.href = "{{ SITE_ROOT }}repo/setap/{{ repo.props.id}}/?ap=own";
-    });
-} else {
-    $('#repo-access-switch').click(function() {
-            $(this).attr('checked', false);
-    });
-    addConfirmTo($('#repo-access-switch'), '确定要开启吗？');
-}
 </script>
 {% endblock %}
