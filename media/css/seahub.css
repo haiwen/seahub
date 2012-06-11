@@ -10,11 +10,15 @@ ol { padding-left:2em; }
 /* input button */
 textarea { border: 1px solid #80B0B0; }
 input { 
-    display:inline-block;/*for ie*/
     height:20px;
     line-height:20px;
     margin:3px 0;
     border: 1px solid #80B0B0;
+}
+input,
+button {
+    font-size:13px;/*for ff*/
+    display:inline-block;/*for ie*/
 }
 input[type=checkbox] {
     height:auto;
@@ -22,7 +26,6 @@ input[type=checkbox] {
 input[type=submit],
 input.submit,
 button { 
-    font-size:13px;/*for ff*/
     color: #080;
     height:23px;
     line-height:21px;
@@ -34,7 +37,6 @@ button {
     margin-top:8px;
 }
 button {
-    display:inline-block;/*for ie*/
     margin:0;
 }
 input[type=submit]:hover,
