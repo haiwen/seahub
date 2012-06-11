@@ -217,6 +217,9 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 .narrow-panel h3 {
     margin-top:0;
 }
+.narrow-panel h2 {
+    margin-bottom:10px;
+}
 .narrow-panel input {
     width:24em;
     height:1.8em;
