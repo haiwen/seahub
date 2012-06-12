@@ -58,7 +58,10 @@ table {
     table-layout:fixed;
     margin:5px 0 20px;
 }
-td, th { padding:4px 3px; word-break:break-word; }
+td, th {
+    padding:4px 3px;
+    word-wrap:break-word;
+}
 th { color:#333; text-align:left; }
 tr.even { background-color: #FAFAFA; }
 tr.odd { background-color: #EBEBEB; }
