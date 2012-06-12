@@ -1,4 +1,5 @@
 {% extends "myhome_base.html" %}
+{% load seahub_tags %}
 
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
 
@@ -30,6 +31,37 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
+
+<h3>我管理的共享链接</h3>
+{% if out_links %}
+<table class="link-list">
+  <tr>
+    <th width="20%">名字</th>
+    <th width="30%">共享给</th>
+    <th width="30%">有效期</th>    
+    <th width="20%">操作</th>
+  </tr>
+  {% for link in out_links %}
+  <tr>
+    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}">{{ link.repo_name }}</a></td>
+    <td>{{ link.anonymous_email }}</td>
+    {% if link.remain_time %}
+    <td>{{ link.remain_time|translate_remain_time }}</td>
+    {% else %}
+    <td>已过期</td>
+    {% endif %}
+    <td><a class="op" href="#" class="view-link" data="{{ link.token }}">查看链接</a>
+    <a class="op" href="{{ SITE_ROOT }}share/remove/{{ link.token }}/">删除</a></td>
+  </tr>
+  {% endfor %}
+  
+</table>
+{% endif %}
+
+<form id="view-link-form" name="view-link-form" class="hide">
+  <textarea id="share-link" name="share-link"></textarea>
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -46,5 +78,14 @@ $("table tr:gt(0)").hover(
         $(this).find('img').addClass('vh');
     }
 );
+
+$(".view-link").click(function() {
+    var t = $(this).attr('data');
+    var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}share/' + t + '/';
+    $('textarea[name="share-link"]').val(l);
+    $("#view-link-form").modal({appendTo: "#main", containerCss:{padding:18}});
+    return false;
+});
+
 </script>
 {% endblock %}

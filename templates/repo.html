@@ -1,93 +1,103 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
+{% block info_bar_message %}
+{% if request.user.is_authenticated %}
+  {{ block.super }}
+{% else %}
+  <div id="info-bar">
+    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  </div>
+{% endif %}
+{% endblock %}
+
 {% block main_panel %}
     <h2 class="subject">
         {{repo.props.name}}
     </h2>
 
     <div class="side fright">
-        <h3>基本信息</h3>
-        <p>{{repo.props.desc}}</p>
-        <p>大小：{{ repo_size|filesizeformat }}</p>
-
-        {% if not repo.props.encrypted or password_set %}
-            {% if is_owner or repo_ap == 'public' or share_to_me %}
-        <div class="latest-commit">
+      <h3>基本信息</h3>
+      <p>{{repo.props.desc}}</p>
+      <p>大小：{{ repo_size|filesizeformat }}</p>
+      
+      {% if not repo.props.encrypted or password_set %}
+          {% if can_access %}
+          <div class="latest-commit">
             <h3>最新修改<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">（更多）</a></h3>
             <p>{{ latest_commit.props.desc|translate_commit_desc }}</p>
             <p class="al-rt">
-                <span class="author">by
-                {% if latest_commit.props.creator_name %}
-                {{ latest_commit.props.creator_name }}
-                {% else %}
-                未知
-                {% endif %}
-                </span>
-                <span class="time">{{ latest_commit.props.ctime|translate_commit_time }}</span>
+              <span class="author">by
+              {% if latest_commit.props.creator_name %}
+              {{ latest_commit.props.creator_name }}
+              {% else %}
+              未知
+              {% endif %}
+              </span>
+              <span class="time">{{ latest_commit.props.ctime|translate_commit_time }}</span>
             </p>
-        </div>
-            {% endif %}
-        {% endif %}
+          </div>
+          {% endif %}
+      {% endif %}
     </div>
 
     <div class="main fleft">
-        {% if repo.props.encrypted and not password_set %}
-        <p class="access-notice">该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
-        <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
-            <label>密码：</label>
-            <input id="id_password" type="password" name="password" maxlength="64" /><br />
-            {% if error %}
-            <p class="error">{{ error }}</p>
-            {% endif %}
-            <input type="submit" value="提交" />
-        </form>
-
-        {% else %}
-            {% if not is_owner and repo_ap == 'own' and not share_to_me %}
-        <p class="access-notice">该同步目录web匿名访问未开启，不能在线查看。</p>
-            {% else %}
-        <p class="path">
-            当前路径：
-                {% for name, link in zipped %}
-                    {% if not forloop.last %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
-                    {% else %}
-            {{ name }}
-	                {% endif %}
-                {% endfor %}
-        </p>
-        <table>
-            <tr>
-                <th width="5%"></th>
-                <th width="69%">名字</th>
-                <th width="13%">大小</th>
-                <th width="13%">操作</th>
-            </tr>
-
-                {% for dirent in dir_list %}
-            <tr>
-                <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
-                <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
-                <td></td>
-                <td></td>
-            </tr>
-                {% endfor %}
-
-                {% for dirent in file_list %}
-            <tr>
-                <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-                <td>{{ dirent.props.obj_name }}</td>
-                <td>{{ dirent.file_size|filesizeformat }}</td>
-                <td>
-                    <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
-                    <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
-                </td>
-            </tr>
-                {% endfor %}
-        </table>
-            {% endif %}
+      {% if repo.props.encrypted and not password_set %}
+      <p class="access-notice">该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
+      <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
+        <label>密码：</label>
+        <input id="id_password" type="password" name="password" maxlength="64" /><br />
+        {% if error %}
+        <p class="error">{{ error }}</p>
         {% endif %}
+        <input type="submit" value="提交" />
+      </form>
+
+      {% else %}
+          {% if not can_access %}
+          <p class="access-notice">无法在线查看该同步目录。</p>
+          {% else %}
+          <p class="path">
+            当前路径：
+            {% for name, link in zipped %}
+            {% if not forloop.last %}
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+            {% else %}
+            {{ name }}
+            {% endif %}
+            {% endfor %}
+          </p>
+          <table>
+            <tr>
+              <th width="5%"></th>
+              <th width="69%">名字</th>
+              <th width="13%">大小</th>
+              <th width="13%">操作</th>
+            </tr>
+
+            {% for dirent in dir_list %}
+            <tr>
+              <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
+              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+              <td></td>
+              <td></td>
+            </tr>
+            {% endfor %}
+
+            {% for dirent in file_list %}
+            <tr>
+              <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
+              <td>{{ dirent.props.obj_name }}</td>
+              <td>{{ dirent.file_size|filesizeformat }}</td>
+              <td>
+                <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
+                <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+      {% endif %}
     </div>
 {% endblock %}
 

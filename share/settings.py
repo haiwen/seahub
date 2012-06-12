@@ -1,0 +1,4 @@
+from django.conf import settings
+
+ANONYMOUS_SHARE_COOKIE_TIMEOUT = getattr(settings, 'ANONYMOUS_SHARE_COOKIE_TIMEOUT', 24*60*60)
+ANONYMOUS_SHARE_LINK_TIMEOUT = getattr(settings, 'ANONYMOUS_SHARE_LINK_TIMEOUT', 2)

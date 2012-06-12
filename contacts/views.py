@@ -32,7 +32,7 @@ def contact_add(request):
             emailuser = ccnet_rpc.get_emailuser(contact_email)
             if not emailuser:
                 error_msg = u"用户不存在"
-            elif cmp(contact_email, request.user.username) == 0:
+            elif contact_email == request.user.username:
                 error_msg = u"不能添加自己为联系人"
             elif Contact.objects.filter(user_email=request.user.username,
                                            contact_email=contact_email).count() > 0:

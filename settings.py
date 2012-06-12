@@ -65,6 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',    
     'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
 #    'seahub.base.middleware.UseridMiddleware',
@@ -89,6 +90,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'djblets.util.context_processors.siteRoot',
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
     'seahub.base.context_processors.base',
 )
 
@@ -99,6 +101,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
 #    'django.contrib.sites',
 #    'django.contrib.admin',
+    'django.contrib.messages',
     'registration',
     'avatar',
     'seahub.notifications',
@@ -106,7 +109,7 @@ INSTALLED_APPS = (
     'seahub.profile',
     'seahub.contacts',
     'seahub.group',
-#    'seahub.share',
+    'seahub.share',
 )
 
 AUTHENTICATION_BACKENDS = (

@@ -4,6 +4,7 @@ import stat
 import simplejson as json
 from urllib import quote
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
@@ -22,8 +23,6 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
 from seahub.contacts.models import Contact
-from seahub.share.forms import GroupAddRepoForm
-from seahub.share.models import GroupShare, UserShare
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token
@@ -54,29 +53,11 @@ def peers(request):
             }, context_instance=RequestContext(request))
 
 def validate_owner(request, repo_id):
-    # check whether email in the request own the repo
-    return seafserv_threaded_rpc.is_repo_owner(request.user.username, repo_id)
-
-def check_shared_repo(request, repo_id):
     """
-    check whether user has been shared this repo or
-    the repo share to the groups user join
+    Check whether email in the request own the repo
     
     """
-    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
-    for repo in repos:
-        if repo.props.id == repo_id:
-            return True
-
-    groups = ccnet_rpc.get_groups(request.user.username)
-    # for every group that user joined...    
-    for group in groups:
-        # ...get repo ids in that group, and check whether repo ids contains that repo id 
-        repo_ids = get_group_repoids(group.props.id)
-        if repo_ids.__contains__(repo_id):
-            return True
-
-    return False
+    return seafserv_threaded_rpc.is_repo_owner(request.user.username, repo_id)
 
 def validate_emailuser(emailuser):
     """
@@ -93,14 +74,41 @@ def validate_emailuser(emailuser):
     else:
         return False
 
+def check_shared_repo(request, repo_id):
+    """
+    Check whether user has been shared this repo or
+    the repo share to the groups user join or
+    got token if user is not logged in
+    
+    """
+    if not request.user.is_authenticated():
+        token = request.COOKIES.get('anontoken', None)
+        if token:
+            return True
+        else:
+            return False
+
+    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
+    for repo in repos:
+        if repo.props.id == repo_id:
+            return True
+
+    groups = ccnet_rpc.get_groups(request.user.username)
+    # for every group that user joined...    
+    for group in groups:
+        # ...get repo ids in that group, and check whether repo ids contains that repo id 
+        repo_ids = get_group_repoids(group.props.id)
+        if repo_id in repo_ids:
+            return True
+
+    return False
+
 def access_to_repo(request, repo_id, repo_ap):
     """
     Check whether user in the request can access to repo, which means user can
     view directory entries on repo page, and repo_history_dir page.
 
     """
-    # if repo is 'own' and user is not staff and is not owner
-    # and not shared this repo, then goto 404 page..
     if repo_ap == 'own' and not validate_owner(request, repo_id) \
             and not check_shared_repo(request, repo_id) and not request.user.is_staff:
         return False
@@ -133,16 +141,26 @@ def render_repo(request, repo_id, error=''):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if repo_ap == None:
+    if not repo_ap:
         repo_ap = 'own'
-        
-    if not access_to_repo(request, repo_id, repo_ap):
-        return go_permission_error(request, u'该同步目录未公开')
 
+    # check whether user can view repo
+    if access_to_repo(request, repo_id, repo_ap):
+        can_access = True
+    else:
+        can_access = False
+
+    # check whether use is repo owner
+    if validate_owner(request, repo_id):
+        is_owner = True
+    else:
+        is_owner = False
+    
     repo = get_repo(repo_id)
     if not repo:
         return go_error(request, u'该同步目录不存在')
 
+    # query whether set password if repo is encrypted
     password_set = False
     if repo.props.encrypted:
         try:
@@ -152,9 +170,11 @@ def render_repo(request, repo_id, error=''):
         except SearpcError, e:
             return go_error(request, e.msg)
 
+    # query repo infomation
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
     latest_commit = get_commits(repo_id, 0, 1)[0]
 
+    # get repo dirents
     dirs = []
     path = ''
     zipped = []
@@ -190,22 +210,9 @@ def render_repo(request, repo_id, error=''):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
-    # check whether use is repo owner
-    is_owner = False
-    if request.user.is_authenticated():
-        if validate_owner(request, repo_id):
-            is_owner = True
-
-    # used to determin whether show repo content in repo.html
-    # if a repo is shared to me, or repo shared to the group I joined,
-    # then I can view repo content on the web
-    if check_shared_repo(request, repo_id):
-        share_to_me = True
-    else:
-        share_to_me = False
-
     return render_to_response('repo.html', {
             "repo": repo,
+            "can_access": can_access,
             "latest_commit": latest_commit,
             "is_owner": is_owner,
             "password_set": password_set,
@@ -213,7 +220,6 @@ def render_repo(request, repo_id, error=''):
             "repo_size": repo_size,
             "dir_list": dir_list,
             "file_list": file_list,
-            "share_to_me": share_to_me,
             "path" : path,
             "zipped" : zipped,
             "error" : error,
@@ -307,14 +313,24 @@ def repo_history_dir(request, repo_id):
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
     if not repo_ap:
         repo_ap = 'own'
-        
-    if not access_to_repo(request, repo_id, repo_ap):
-        raise Http404
 
+    # check whether user can view repo
+    if access_to_repo(request, repo_id, repo_ap):
+        can_access = True
+    else:
+        can_access = False
+
+    # check whether use is repo owner
+    if validate_owner(request, repo_id):
+        is_owner = True
+    else:
+        is_owner = False
+        
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
 
+    # query whether set password if repo is encrypted
     password_set = False
     if repo.props.encrypted:
         try:
@@ -334,11 +350,7 @@ def repo_history_dir(request, repo_id):
     if not current_commit:
         raise Http404
 
-    is_owner = False
-    if request.user.is_authenticated():
-        if validate_owner(request, repo_id):
-            is_owner = True
-
+    # get repo dirents
     dirs = []
     path = ''
     zipped = []
@@ -367,22 +379,14 @@ def repo_history_dir(request, repo_id):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
-    # used to determin whether show repo content in repo.html
-    # if a repo is shared to me, or repo shared to the group I joined,
-    # then I can view repo content on the web
-    if check_shared_repo(request, repo_id):
-        share_to_me = True
-    else:
-        share_to_me = False
-
     return render_to_response('repo_history_dir.html', {
             "repo": repo,
+            "can_access": can_access,
             "current_commit": current_commit,
             "is_owner": is_owner,
             "repo_ap": repo_ap,
             "dir_list": dir_list,
             "file_list": file_list,
-            "share_to_me": share_to_me,
             "path" : path,
             "zipped" : zipped,
             }, context_instance=RequestContext(request))
@@ -554,10 +558,6 @@ def myhome(request):
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
                                                       'to_email', -1, -1)
 
-    # handle share repo request
-    if request.method == 'POST':
-        output_msg = repo_add_share(request)
-
     # my contacts
     contacts = Contact.objects.filter(user_email=email)
     
@@ -570,12 +570,11 @@ def myhome(request):
             groups_manage.append(group)
         else:
             groups_join.append(group)
-    
+            
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "in_repos": in_repos,
-            "output_msg": output_msg,
             "contacts": contacts,
             "groups": groups,
             "groups_manage": groups_manage,
@@ -658,96 +657,6 @@ def repo_access_file(request, repo_id, obj_id):
                                                                     token,
                                                                     request.user.username)
         return HttpResponseRedirect(redirect_url)
-    
-@login_required
-def repo_add_share(request):
-    output_msg = {}
-    
-    if request.method == 'POST':
-        from_email = request.user.username
-        repo_id = request.POST.get('share_repo_id', '')
-        
-        # Handle the diffent separator
-        to_email_str = request.POST.get('to_email', '').replace(';',',')
-        to_email_str = to_email_str.replace('\n',',')
-        to_email_str = to_email_str.replace('\r',',')
-
-        to_email_list = to_email_str.split(',')
-        info_emails = []
-        err_emails = []
-        for to_email in to_email_list:
-            to_email = to_email.strip(' ')
-            if not to_email:
-                continue
-
-            # if to_email is user name, the format is: 'example@mail.com';
-            # if to_email is group, the format is 'group_name <creator@mail.com>'
-            if (to_email.split(' ')[0].find('@') == -1):
-                group_name = to_email.split(' ')[0]
-                group_creator = to_email.split(' ')[1]
-                if validate_owner(request, repo_id):
-                    # get all the groups the user joined
-                    groups = ccnet_rpc.get_groups(request.user.username)
-                    find = False
-                    for group in groups:
-                        # for every group that user joined, if group name and
-                        # group creator matchs, then has find the group
-                        if group.props.group_name == group_name and \
-                                group_creator.find(group.props.creator_name) >= 0:
-                            from seahub.group.views import group_share_repo
-                            group_share_repo(request, repo_id, int(group.props.id), from_email)
-                            find = True
-                            info_emails.append(group_name)
-
-                    if not find:
-                        err_emails.append(group_name)
-                else:
-                    err_emails.append(group_name)
-            else:
-                if validate_emailuser(to_email) and validate_owner(request, repo_id):
-                    try:
-                        seafserv_threaded_rpc.add_share(repo_id, from_email, to_email, 'rw')
-                        info_emails.append(to_email)
-                    except SearpcError, e:
-                        err_emails.append(to_email)
-                else:
-                    err_emails.append(to_email)
-
-        if info_emails:
-            output_msg['info_msg'] = u'共享给%s成功，' % list_to_string(info_emails)
-        if err_emails:
-            output_msg['err_msg'] = u'共享给%s失败' % list_to_string(err_emails)
-
-    return output_msg
-
-@login_required
-def repo_list_share(request):
-    username = request.user.username
-
-    # repos that are share to user
-    out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
-
-    # repos that are share to groups
-    group_repos = seafserv_threaded_rpc.get_group_my_share_repos(request.user.username)
-    for group_repo in group_repos:
-        repo_id = group_repo.props.repo_id
-        if not repo_id:
-            continue
-        repo = get_repo(repo_id)
-        if not repo:
-            continue
-        group_id = group_repo.props.group_id
-        group = ccnet_rpc.get_group(int(group_id))
-        if not group:
-            continue
-        repo.props.shared_email = group.props.group_name
-        repo.gid = group_id
-        
-        out_repos.append(repo)
-
-    return render_to_response('share_repos.html', {
-            "out_repos": out_repos,
-            }, context_instance=RequestContext(request))
 
 @login_required
 def repo_download(request):
@@ -816,7 +725,7 @@ def repo_remove_share(request):
 
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:
-        referer = 'repo_list_share'
+        referer = 'share_admin'
         return HttpResponseRedirect(reverse(referer))
     else:
         return HttpResponseRedirect(referer)

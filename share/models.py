@@ -1,19 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-class UserShare(models.Model):
-    """Record a repo shared to a user."""
-
-    from_user = models.ForeignKey(User, related_name="myshare_items")
-    to_user = models.ForeignKey(User, related_name="share2me_items")
+class AnonymousShare(models.Model):
+    repo_owner = models.EmailField(max_length=255)
     repo_id = models.CharField(max_length=36)
-
-
-class GroupShare(models.Model):
-    """A repo shared to a group."""
-
-    group_id = models.CharField(max_length=36)
-    repo_id = models.CharField(max_length=36)
-
-    class Meta:
-        unique_together = ("group_id", "repo_id")
+    anonymous_email = models.EmailField(max_length=255)
+    token = models.CharField(max_length=25, unique=True)
+        

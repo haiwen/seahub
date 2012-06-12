@@ -2,10 +2,8 @@ from django.conf.urls.defaults import *
 
 from views import *
 
-
 urlpatterns = patterns('',
-    url(r'^$', list_shared_repos),
-    url(r'^list/$', list_shared_repos, name='shared_repo_list'),
     url(r'^add/$', share_repo),
-    url(r'^delete/(?P<item_id>[^/]+)/$', delete_share_item),
+    url('^remove/(?P<token>.+)/$', remove_anonymous_share, name='remove_anonymous_share'),
+    url('^(?P<token>.+)/$', anonymous_share_confirm, name='anonymous_share_confirm'),
 )

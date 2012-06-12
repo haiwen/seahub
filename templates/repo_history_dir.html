@@ -8,7 +8,7 @@
 </h2>
 
 <div class="side fright">
-{% if is_owner or repo_ap == 'public' or share_to_me %}
+{% if can_access %}
 <div class="latest-commit">
     <h3>修改信息</h3>
     <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
@@ -24,6 +24,7 @@
     </p>
 </div>
 {% endif %}
+
 <h3>操作</h3>
 <ul class="with-bg">
     <li><a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/">返回历史列表</a></li>
@@ -31,8 +32,8 @@
 </div>
 
 <div class="main fleft">
-{% if not is_owner and repo_ap == 'own' and not share_to_me %}
-<p class="access-notice">该同步目录web匿名访问未开启，不能在线查看。</p>
+{% if not can_access %}
+<p class="access-notice">无法在线查看该同步目录。</p>
 {% else %}
 <p class="path">当前路径：
     {% for name, link in zipped %}

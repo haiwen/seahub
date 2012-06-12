@@ -39,6 +39,20 @@
 
 
 {% block right_panel %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  {% if message.tags == 'info' %}
+  <li class="notification">共享给 {{ message }} 成功，请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</li>  
+  {% endif %}
+  {% if message.tags == 'error' %}
+  <li class="error">共享给 {{ message }} 失败</li>  
+  {% endif %}
+  {% endfor %}
+  
+</ul>
+{% endif %}
+
 {% if output_msg %}
     {% for key, value in output_msg.items %}
         {% if key == 'info_msg' %}
@@ -101,10 +115,10 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="repo-share-form" action="{{ SITE_ROOT }}home/my/" method="post" name="repo-share-form" class="hide">
+<form id="repo-share-form" action="{{ SITE_ROOT }}share/add/" method="post" name="repo-share-form" class="hide">
     <label>邮箱或小组：</label><br />
-    <textarea id="to_email" name="to_email"></textarea><br />
-    <input id="share_repo_id" type="hidden" name="share_repo_id" value="" />
+    <textarea id="email_or_group" name="email_or_group"></textarea><br />
+    <input id="repo_id" type="hidden" name="repo_id" value="" />
     <p class="error hide">输入不能为空。</p>
     <input type="submit" value="提交" id="share-submit-btn" />
 </form>
@@ -125,14 +139,14 @@ $(function() {
     {% endfor %}
 
     $(".repo-share-btn").click(function() {
-        $("#share_repo_id").val($(this).attr("data"));
+        $("#repo_id").val($(this).attr("data"));
         $("#repo-share-form").modal({appendTo: "#main"});
-        addAutocomplete('#to_email', '#repo-share-form', share_list);
+        addAutocomplete('#email_or_group', '#repo-share-form', share_list);
     });
 
     //check before post
     $('#share-submit-btn').click(function() {
-        if (!$.trim($('#to_email').attr('value'))) {
+        if (!$.trim($('#email_or_group').attr('value'))) {
             $('#repo-share-form .error').removeClass('hide');
             return false;
         }

@@ -7,9 +7,10 @@ from seahub.views import root, peers, myhome, \
     activate_user, user_add, user_remove, \
     ownerhome, repo_history_dir, repo_history_revert, \
     user_info, repo_set_access_property, repo_access_file, \
-    repo_add_share, repo_list_share, repo_remove_share, repo_download, \
+    repo_remove_share, repo_download, \
     seafile_access_check, back_local, group_admin, repo_history_changes
 from seahub.notifications.views import notification_list
+from seahub.share.views import share_admin
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -32,9 +33,9 @@ urlpatterns = patterns('',
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
-                       
-    url(r'^shareadmin/$', repo_list_share, name='repo_list_share'),
-    url(r'^shareadmin/addshare/$', repo_add_share, name='repo_add_share'),
+
+    (r'^share/', include('share.urls')),
+    url(r'^shareadmin/$', share_admin, name='share_admin'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
 
     url(r'^repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
@@ -66,7 +67,6 @@ urlpatterns = patterns('',
     (r'^group/', include('seahub.group.urls')),
     url(r'^groupadmin/$', group_admin, name='group_admin'),
     (r'^profile/', include('seahub.profile.urls')),
-    (r'^share/', include('share.urls')),
 
     (r'^back/local/$', back_local),
 )

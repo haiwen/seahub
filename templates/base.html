@@ -13,13 +13,15 @@
 
 <body>
 <div id="wrapper">
+  {% block info_bar_message %}
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
       <span class="info">{{ request.cur_note.message|urlize }}</span>
       <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/?next={{ request.path }}"><span class="close"></span></a>
     </div>
     {% endif %}
-    
+  {% endblock info_bar_message %}
+
     <div id="top-bar">
         <div class="top-bar">
             <div class="top-bar-in w100 ovhd">
