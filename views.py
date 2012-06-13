@@ -435,44 +435,22 @@ def repo_history_revert(request, repo_id):
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
-def get_filename(start, ent):
-    i = start + 1
-    lenidx = start - 1
-    while i <= len(ent):
-        tmp = " ".join(ent[start:i])
-        if len(tmp) == int(ent[lenidx]):
-            return (tmp, i)
-        i = i + 1
-    return ("", 0)
-
-def add_to_status_list(lists, status_ent):
-    if status_ent[1] == 'A':
-        filename, index = get_filename(4, status_ent)
-        lists['new'].append(filename)
-    elif status_ent[1] == 'D':
-        filename, index = get_filename(4, status_ent)
-        lists['removed'].append(filename)
-    elif status_ent[1] == 'R':
-        filename1, index1 = get_filename(4, status_ent)
-        filename2, index2 = get_filename(index1 + 1, status_ent)
-        lists['renamed'].append(filename1 + u' 被移动到 ' + filename2)
-    elif status_ent[1] == 'M':
-        filename, index = get_filename(4, status_ent)
-        lists['modified'].append(filename)
-
 def get_diff(repo_id, arg1, arg2):
     lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : []}
 
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, arg1, arg2)
-    if diff_result == "":
-        return lists;
+    if not diff_result:
+        return lists
 
-    diff_result = diff_result[:len(diff_result)-1]
-
-    for d in diff_result.split("\n"):
-        tmp = d.split(" ")
-        if tmp[0] == 'C':
-            add_to_status_list(lists, tmp)
+    for d in diff_result:
+        if d.status == "add":
+            lists['new'].append(d.name)
+        elif d.status == "del":
+            lists['removed'].append(d.name)
+        elif d.status == "mov":
+            lists['renamed'].append(d.name + " ==> " + d.new_name)
+        elif d.status == "mod":
+            lists['modified'].append(d.name)
 
     return lists
 
