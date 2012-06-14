@@ -15,7 +15,7 @@ from seaserv import ccnet_rpc, get_ccnetuser
 
 class UserManager(object):
     def create_user(self, username, password=None, is_staff=False, is_active=False):
-        ccnet_rpc.add_emailuser(username, password, is_staff, is_active)
+        ccnet_rpc.add_emailuser(username, password, int(is_staff), int(is_active))
 
         ccnetuser = get_ccnetuser(username=username)
         return ccnetuser
@@ -65,8 +65,8 @@ class CcnetUser(object):
     def save(self):
         emailuser = ccnet_rpc.get_emailuser(self.username)
         if emailuser:
-            ccnet_rpc.update_emailuser(self.id, self.password, self.is_staff,
-                                       self.is_active)
+            ccnet_rpc.update_emailuser(self.id, self.password,
+                                       int(self.is_staff), int(self.is_active))
         else:
             self.objects.create_user(username=self.username,
                                      password=self.raw_password,
