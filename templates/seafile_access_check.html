@@ -1,7 +1,9 @@
 {% extends "myhome_base.html" %}
 
-{% block right_panel %}
-<p class="error hide">请确认本地Seafile程序已启动。</p>
+{% block main_panel %}
+<div class="text-panel">
+    <p class="error hide">请确认本地Seafile程序已启动。</p>
+</div>
 {% endblock %}
 
 {% block extra_script %}
@@ -26,7 +28,7 @@ $(function() {
         if (!req_success) {
             $('.error').removeClass('hide');
         }
-    }, 300);
+    }, 1000);
 });
 </script>
 {% endblock %}
