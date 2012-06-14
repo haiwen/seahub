@@ -652,11 +652,11 @@ def repo_access_file(request, repo_id, obj_id):
         file_name = request.GET.get('file_name', '')
         op = request.GET.get('op', 'view')
 
-        redirect_url = '%s/%s?id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
-                                                                    repo_id, obj_id,
-                                                                    file_name, op, 
-                                                                    token,
-                                                                    request.user.username)
+        redirect_url = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
+                                                                             repo_id, obj_id,
+                                                                             file_name, op, 
+                                                                             token,
+                                                                             request.user.username)
         return HttpResponseRedirect(redirect_url)
     
 @login_required
