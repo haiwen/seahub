@@ -35,8 +35,12 @@ def contact_add(request):
             elif contact_email == request.user.username:
                 error_msg = u"不能添加自己为联系人"
             elif Contact.objects.filter(user_email=request.user.username,
-                                           contact_email=contact_email).count() > 0:
+                                        contact_email=contact_email).count() > 0:
                 error_msg = u"联系人列表中已有该用户"
+            elif request.user.org and \
+                not ccnet_rpc.org_user_exists(request.user.org.org_id,
+                                              contact_email):
+                error_msg = u"当前企业不存在该用户"
             else:
                 contact = Contact()
                 contact.user_email = request.user.username
@@ -69,9 +73,9 @@ def contact_edit(request):
             emailuser = ccnet_rpc.get_emailuser(contact_email)
             if not emailuser:
                 error_msg = u"用户不存在"
-            elif cmp(contact_email, request.user.username) == 0:
+            elif contact_email == request.user.username:
                 error_msg = u"不能添加自己为联系人"
-            elif cmp(old_contact_email, contact_email) != 0 and \
+            elif old_contact_email != contact_email and \
                     Contact.objects.filter(user_email=request.user.username,
                                            contact_email=contact_email).count() > 0:
                 error_msg = u"联系人列表中已有该用户"

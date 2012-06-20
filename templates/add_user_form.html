@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %}
+{% extends base_template %}
 {% block title %}添加用户{% endblock %}
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block main_panel %}
@@ -15,9 +15,9 @@
 	{{ form.email.errors }}
 	{{ form.password1.errors }}
 	{{ form.password2.errors }}
-    <p class="error hide" id="error"></p>
+        <p class="error hide" id="error"></p>
 
-	<input type="submit" value="提交" class="submit" />
+	<input type="submit" value="添加" class="submit" />
 </form>
 </div>
 {% endblock %}

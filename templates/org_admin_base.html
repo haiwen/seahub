@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block top_bar_manager_class %} class="cur"{% endblock %}
+{% block nav %}
+<ul class="nav w100 ovhd">
+    {% if request.user.org.is_staff %}
+    <li>
+        <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
+    </li>
+    <li>
+        <a href="{{ SITE_ROOT }}useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+    </li>
+    <li>
+        <a href="{{ SITE_ROOT }}groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
+    </li>
+    {% endif %}
+
+</ul>
+{% endblock %}

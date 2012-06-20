@@ -8,7 +8,7 @@
 <form action="" method="post">
     {{ form.user_email.as_hidden }}
     <label>邮箱：</label>
-    {{ form.contact_email }}
+    <input id="id_contact_email" type="text" maxlength="255" value="{{ old_contact_email }}" name="contact_email" readonly="readonly">    
     <label>名字(可选)：</label>
     {{ form.contact_name }}
     <label>备注(可选)：</label>

@@ -4,16 +4,19 @@
 <ul class="nav w100 ovhd">
     {% if request.user.is_staff %}
     <li>
-        <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
+        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+        <a href="{{ SITE_ROOT }}sys/useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
+        <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>通知管理</a>
+        <a href="{{ SITE_ROOT }}sys/orgadmin/" {% block nav_orgadmin_class %}{% endblock %}>企业管理</a>
+    </li>
+    <li>
+        <a href="{{ SITE_ROOT }}sys/notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>通知管理</a>
     </li>
     {% endif %}
 </ul>

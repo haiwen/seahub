@@ -5,6 +5,11 @@
     <li>
         <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>我的页面</a>
     </li>
+    {% if request.user.org %}
+    <li>
+        <a href="{{ SITE_ROOT }}org/" {% block nav_org_class %}{% endblock %}>企业</a>
+    </li>
+    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}group/" {% block nav_group_class %}{% endblock %}>小组</a>
     </li>

@@ -1,0 +1,19 @@
+{% autoescape off %}
+亲爱的 {{ email }}：
+{% if org %}
+{{ user }} 在 SeaCloud 云存储上将您加入到企业 {{ org.org_name }}！
+{% else %}
+{{ user }} 将您加入 SeaCloud 云存储！
+{% endif %}
+以下是您的登录信息：
+用户名： {{ email }}
+密码： {{ password }}
+
+请点击以下链接登录：
+{{ protocol }}://{{ domain }}{% url auth_login %}
+
+感谢使用我们的网站！
+
+Seafile团队
+
+{% endautoescape %}

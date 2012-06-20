@@ -50,7 +50,6 @@ def login(request, template_name='registration/login.html',
             # Okay, security checks complete. Log the user in.
             auth_login(request, form.get_user())
 
-
             if request.session.test_cookie_worked():
                 request.session.delete_test_cookie()
 

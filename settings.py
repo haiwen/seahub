@@ -68,6 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',    
     'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
+    'seahub.subdomain.middleware.SubdomainMiddleware',
 #    'seahub.base.middleware.UseridMiddleware',
 )
 
@@ -110,6 +111,7 @@ INSTALLED_APPS = (
     'seahub.contacts',
     'seahub.group',
     'seahub.share',
+    'seahub.subdomain',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -159,6 +161,13 @@ FILEEXT_ICON_MAP = {
     # normal file and unkown file
     'default' : 'file-icon-24.png',
 }
+
+SITE_SUBDOMAIN = 'cloud'
+SITE_BASE_NAME = 'seafile.com.cn' if not DEBUG else 'localhost.localdomain'
+SESSION_COOKIE_DOMAIN = '.' + SITE_BASE_NAME
+
+# account type is `personal` or `business`
+ACCOUNT_TYPE = 'personal'
 
 try:
     import local_settings

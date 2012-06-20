@@ -15,5 +15,6 @@ def base(request):
     """
     return {
         'seafile_version': settings.SEAFILE_VERSION,
-        'seahub_title': settings.SEAHUB_TITLE,        
+        'seahub_title': settings.SEAHUB_TITLE,
+        'account_type': settings.ACCOUNT_TYPE,
         }

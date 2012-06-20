@@ -365,3 +365,14 @@ h2.repo-history {
 
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
+
+/* org */
+.org-member .avatar {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    margin-right: 5px;
+}
+.org-member .avatar,
+.org-member-name {
+    vertical-align:middle;
+}

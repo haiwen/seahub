@@ -2,13 +2,16 @@
 import settings
 import stat
 import simplejson as json
+import sys
 from urllib import quote
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.contrib import messages
+from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
+from django.template import Context, loader, RequestContext
 from django.views.decorators.csrf import csrf_protect
 
 from auth.decorators import login_required
@@ -713,7 +716,7 @@ def mypeers(request):
     cid = get_user_cid(request.user)
 
 @login_required
-def seafadmin(request):
+def sys_seafadmin(request):
     if not request.user.is_staff:
         raise Http404
 
@@ -728,6 +731,7 @@ def seafadmin(request):
     repos_all = seafserv_threaded_rpc.get_repo_list(per_page *
                                                     (current_page -1),
                                                     per_page + 1)
+        
     repos = repos_all[:per_page]
 
     if len(repos_all) == per_page + 1:
@@ -742,7 +746,7 @@ def seafadmin(request):
             repo.owner = None
             
     return render_to_response(
-        'repos.html', {
+        'sys_seafadmin.html', {
             'repos': repos,
             'current_page': current_page,
             'prev_page': current_page-1,
@@ -753,17 +757,80 @@ def seafadmin(request):
         context_instance=RequestContext(request))
 
 @login_required
-def useradmin(request):
+def org_seafadmin(request):
+    if not request.user.org:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    repos_all = seafserv_threaded_rpc.get_org_repo_list(request.user.org.org_id,
+                                                        per_page * (current_page -1),
+                                                        per_page + 1)
+        
+    repos = repos_all[:per_page]
+
+    if len(repos_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    for repo in repos:
+        try:
+            repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
+        except:
+            repo.owner = None
+            
+    return render_to_response(
+        'org_seafadmin.html', {
+            'repos': repos,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+def sys_useradmin(request):
     if not request.user.is_staff:
         raise Http404
 
     users = ccnet_rpc.get_emailusers(-1,-1)
+        
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
+        # TODO: may add new is_org_user rpc
+        user.is_org_user = True if ccnet_rpc.get_org_by_user(user.email) else False
             
     return render_to_response(
-        'useradmin.html', {
+        'sys_useradmin.html', {
+            'users': users,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+def org_useradmin(request):
+    if not request.user.org.is_staff:
+        raise Http404
+
+    users = ccnet_rpc.get_org_emailusers(request.user.org.url_prefix,
+                                         0, sys.maxint)
+        
+    for user in users:
+        if user.props.id == request.user.id:
+            user.is_self = True
+            user.is_org_user = True
+            
+    return render_to_response(
+        'org_useradmin.html', {
             'users': users,
         },
         context_instance=RequestContext(request))
@@ -834,13 +901,18 @@ def user_info(request, email):
 def user_remove(request, user_id):
     """The user id is emailuser id."""
     
-    if not request.user.is_staff:
+    if not request.user.is_staff and not request.user.org.is_staff:
         raise Http404
 
     ccnetuser = get_ccnetuser(userid=int(user_id))
+    if ccnetuser.org:
+        ccnet_rpc.remove_org_user(ccnetuser.org.org_id, ccnetuser.username)
     ccnetuser.delete()
-    
-    return HttpResponseRedirect(reverse('useradmin'))
+
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('sys_useradmin'))
+    else:
+        return HttpResponseRedirect(reverse('org_useradmin'))
 
 @login_required
 def activate_user(request, user_id):
@@ -855,13 +927,37 @@ def activate_user(request, user_id):
 
     return HttpResponseRedirect(reverse('useradmin'))
 
+def send_user_add_mail(request, email, password):
+    """ Send email when add new user """
+    
+    use_https = request.is_secure()
+    domain = RequestSite(request).domain
+    
+    t = loader.get_template('user_add_email.html')
+    c = {
+        'user': request.user.username,
+        'org': request.user.org,
+        'email': email,
+        'password': password,
+        'domain': domain,
+        'protocol': use_https and 'https' or 'http',
+        }
+    try:
+        send_mail(u'SeaCloud注册信息', t.render(Context(c)),
+                  None, [email], fail_silently=False)
+        messages.add_message(request, messages.INFO, email)
+    except:
+        messages.add_message(request, messages.ERROR, email)
+
 @login_required
 def user_add(request):
     """Add a user"""
 
-    if not request.user.is_staff:
+    if not request.user.is_staff and not request.user.org.is_staff:
         raise Http404
 
+    base_template = 'org_admin_base.html' if request.user.org else 'admin_base.html'
+    
     if request.method == 'POST':
         form = AddUserForm(request.POST)
         if form.is_valid():
@@ -872,12 +968,24 @@ def user_add(request):
             ccnetuser.is_active = True
             ccnetuser.save()
             
-            return HttpResponseRedirect(reverse('useradmin', args=[]))
+            if request.user.org:
+                org_id = request.user.org.org_id
+                ccnet_rpc.add_org_user(org_id, email, 0)
+                if hasattr(settings, 'EMAIL_HOST'):
+                    send_user_add_mail(request, email, password)
+                    
+                return HttpResponseRedirect(reverse('org_useradmin'))
+            else:
+                if hasattr(settings, 'EMAIL_HOST'):
+                    send_user_add_mail(request, email, password)
+                
+                return HttpResponseRedirect(reverse('sys_useradmin', args=[]))
     else:
         form = AddUserForm()
     
     return render_to_response("add_user_form.html",  {
-            'form': form, 
+            'form': form,
+            'base_template': base_template,
             }, context_instance=RequestContext(request))
 
 def back_local(request):
@@ -887,7 +995,7 @@ def back_local(request):
 
     return HttpResponseRedirect(redirect_url)
 
-def group_admin(request):
+def sys_group_admin(request):
     if not request.user.is_staff:
         raise Http404
 
@@ -898,9 +1006,10 @@ def group_admin(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    
+
     groups_plus_one = ccnet_rpc.get_all_groups(per_page * (current_page -1),
                                                per_page +1)
+        
     groups = groups_plus_one[:per_page]
 
     if len(groups_plus_one) == per_page + 1:
@@ -908,11 +1017,90 @@ def group_admin(request):
     else:
         page_next = False
 
-    return render_to_response("group_admin.html", {
-            "groups": groups,
+    return render_to_response('sys_group_admin.html', {
+            'groups': groups,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            }, context_instance=RequestContext(request))
+
+def sys_org_admin(request):
+    if not request.user.is_staff:
+        raise Http404
+
+    orgs = ccnet_rpc.get_all_orgs(0, sys.maxint)
+
+    return render_to_response('sys_org_admin.html', {
+            'orgs': orgs,
+            }, context_instance=RequestContext(request))
+    
+def org_group_admin(request):
+    if not request.user.is_staff and not request.user.org.is_staff:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    groups_plus_one = ccnet_rpc.get_org_groups (request.user.org.org_id,
+                                                per_page * (current_page -1),
+                                                per_page +1)
+        
+    groups = groups_plus_one[:per_page]
+
+    if len(groups_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response('org_group_admin.html', {
+            'groups': groups,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            }, context_instance=RequestContext(request))
+
+def org_remove(request, org_id):
+    if not request.user.is_staff:
+        raise Http404
+
+    try:
+        org_id_int = int(org_id)
+    except ValueError:
+        return HttpResponseRedirect(reverse('sys_org_admin'))
+
+    # Remove repos in that org
+    seafserv_threaded_rpc.remove_org_repo_by_org_id(org_id_int)
+    
+    # TODO: Remove repos in org's groups
+    
+    ccnet_rpc.remove_org(org_id_int)
+    
+    return HttpResponseRedirect(reverse('sys_org_admin'))
+
+@login_required
+def org_info(request):
+    if not request.user.org:
+        raise Http404
+
+    org = request.user.org
+    
+    org_members = ccnet_rpc.get_org_emailusers(org.url_prefix, 0, sys.maxint)
+    for member in org_members:
+        member.short_username = member.email.split('@')[0]
+
+    groups = ccnet_rpc.get_org_groups(org.org_id, 0, sys.maxint)
+    
+    return render_to_response('org_info.html', {
+            'org': org,
+            'org_users': org_members,
+            'groups': groups,
             }, context_instance=RequestContext(request))

@@ -1,0 +1,81 @@
+{% extends "org_admin_base.html" %}
+
+{% block nav_useradmin_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+    <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
+</ul>
+{% endblock %}
+
+
+{% block right_panel %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  {% if message.tags == 'info' %}
+  <li class="notification">邮件发送成功。</li>  
+  {% endif %}
+  {% if message.tags == 'error' %}
+  <li class="error">邮件发送失败。</li>  
+  {% endif %}
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h3>所有用户</h3>
+<table>
+    <tr>
+        <th width="60%">邮箱</th>
+        <th width="30%">是否激活</th>
+        <th width="10%">操作</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
+        {% if user.props.is_active %}
+        <td>已激活</td>
+        {% else %}
+        <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate">激活</button></td>
+        {% endif %}
+        <td>
+          {% if user.profile %}
+<!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->
+          {% endif %}
+          {% if not user.is_self %}
+          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</button>
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<form id="add-role-form" action="" method="post" class="hide">
+    <p><span id="user_email"></span> 的新角色 (即 MyClient 等)：</p>
+    <input id="id_role" type="text" name="role" /><br/>
+    <input id="id_summit" type="submit" value="提交" />
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.activate').each(function(){
+    $(this).click(function(){
+        location.href = $(this).attr('data');
+    });
+});
+$(".add-role-btn").each(function() {
+     $(this).click(function() {
+         var url = "{{ SITE_ROOT }}useradmin/" + $(this).attr("userid") + "/role/add/";
+         $("#add-role-form").attr('action', url);
+         $("#user_email").html($(this).attr("email"));
+         $("#add-role-form").modal({appendTo: "#main"});
+     });
+});
+
+//delete confirm
+addConfirmTo($('.remove-user-btn'));
+addConfirmTo($('.role-delete-btn'));
+</script>
+{% endblock %}

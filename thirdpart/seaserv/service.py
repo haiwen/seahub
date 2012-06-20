@@ -304,6 +304,10 @@ def get_ccnetuser(username=None, userid=None):
         emailuser = ccnet_rpc.get_emailuser_by_id(userid)
     if not emailuser:
         return None
+
+    # Check whether is business account
+    org = ccnet_rpc.get_org_by_user(emailuser.email)
+    emailuser.org = org
     
     # And convert to ccnetuser
     from seahub.base.accounts import convert_to_ccnetuser

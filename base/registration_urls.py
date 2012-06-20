@@ -6,13 +6,20 @@ from registration.views import activate
 from registration.views import register
 
 from seahub.base.accounts import RegistrationForm
+from seahub.base.accounts import OrgRegistrationForm
 
 reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
              'form_class': RegistrationForm,
              }
 
+org_reg_dict = { 'backend': 'seahub.base.accounts.OrgRegistrationBackend',
+                 'form_class': OrgRegistrationForm,
+                 'template_name': 'registration/org_registration_form.html',
+                 }
+
 if settings.ACTIVATE_AFTER_REGISTRATION == True:
     reg_dict['success_url'] = settings.SITE_ROOT
+    org_reg_dict['success_url'] = settings.SITE_ROOT
 
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
@@ -40,5 +47,11 @@ urlpatterns = patterns('',
                            direct_to_template,
                            { 'template': 'registration/registration_closed.html' },
                            name='registration_disallowed'),
+                       
+                       url(r'^business/register/$',
+                           register,
+                           org_reg_dict,
+                           name='registration_register'),
+
                        (r'', include('registration.auth_urls')),
                        )

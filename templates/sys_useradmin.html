@@ -10,12 +10,25 @@
 
 
 {% block right_panel %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  {% if message.tags == 'info' %}
+  <li class="notification">邮件发送成功。</li>  
+  {% endif %}
+  {% if message.tags == 'error' %}
+  <li class="error">邮件发送失败。</li>  
+  {% endif %}
+  {% endfor %}
+</ul>
+{% endif %}
 
 <h3>所有用户</h3>
 <table>
     <tr>
-        <th width="60%">邮箱</th>
-        <th width="30%">是否激活</th>
+        <th width="50%">邮箱</th>
+        <th width="20%">是否激活</th>
+	<th width="20%">是否企业帐号</th>        
         <th width="10%">操作</th>
     </tr>
 
@@ -27,12 +40,17 @@
         {% else %}
         <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate">激活</button></td>
         {% endif %}
+        {% if user.is_org_user %}
+        <td>是</td>
+        {% else %}
+        <td></td>
+        {% endif %}
         <td>
           {% if user.profile %}
 <!--          <button class="add-role-btn" userid="{{ user.profile.ccnet_user_id }}" email="{{ user.email }}">添加角色</button> -->
           {% endif %}
           {% if not user.is_self %}
-          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/{{ user.props.id }}/user/remove/">删除</button>
+          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</button>
           {% endif %}
         </td>
     </tr>

@@ -3,12 +3,13 @@ from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
 from seahub.views import root, peers, myhome, \
-    repo, repo_history, modify_token, remove_repo, seafadmin, useradmin, \
-    activate_user, user_add, user_remove, \
+    repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
+    org_seafadmin, org_useradmin, org_group_admin, org_remove, \
+    activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
     ownerhome, repo_history_dir, repo_history_revert, \
     user_info, repo_set_access_property, repo_access_file, \
-    repo_remove_share, repo_download, \
-    seafile_access_check, back_local, group_admin, repo_history_changes
+    repo_remove_share, repo_download, org_info, \
+    seafile_access_check, back_local, repo_history_changes
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 
@@ -50,25 +51,33 @@ urlpatterns = patterns('',
     (r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file),
     (r'^download/repo/$', repo_download),                       
     (r'^seafile_access_check/$', seafile_access_check),                       
+    url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
+    (r'^org/$', org_info),                       
+    (r'^back/local/$', back_local),
 
-    (r'^seafadmin/$', seafadmin),
-    url(r'^useradmin/$', useradmin, name='useradmin'),
     (r'^useradmin/add/$', user_add),
+    (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
-#    (r'^useradmin/(?P<user_id>[^/]+)/role/add/$', role_add),
-#    (r'^useradmin/(?P<user_id>[^/]+)/role/remove/$', role_remove),
-    (r'^useradmin/(?P<user_id>[^/]+)/user/remove/$', user_remove),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
 
+    ### Apps ###                       
     (r'^avatar/', include('avatar.urls')),
     (r'^notification/', include('notifications.urls')),
-    url(r'^notificationadmin/', notification_list, name='notification_list'),
+    url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groupadmin/$', group_admin, name='group_admin'),
     (r'^profile/', include('seahub.profile.urls')),
 
-    (r'^back/local/$', back_local),
+    ### SeaHub admin ###                       
+    (r'^sys/seafadmin/$', sys_seafadmin),
+    url(r'^sys/useradmin/$', sys_useradmin, name='sys_useradmin'),
+    url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
+    url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+
+    ### Org admin ###                       
+    (r'^seafadmin/$', org_seafadmin),
+    url(r'^useradmin/$', org_useradmin, name='org_useradmin'),
+    url(r'^groupadmin/$', org_group_admin, name='org_group_admin'),
 )
 
 if settings.DEBUG:

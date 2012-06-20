@@ -25,8 +25,12 @@ def group_list(request):
             return go_error(request, u'小组名称只能包含中英文字符，数字及下划线')
         
         try:
-            ccnet_rpc.create_group(group_name.encode('utf-8'),
+            group_id = ccnet_rpc.create_group(group_name.encode('utf-8'),
                                    request.user.username)
+            # TODO: transaction?
+            if request.user.org and group_id > 0:
+                ccnet_rpc.add_org_group(request.user.org.org_id,
+                                        group_id)
         except SearpcError, e:
             error_msg = e.msg
             return go_error(request, error_msg)
@@ -62,11 +66,17 @@ def group_remove(request, group_id):
     try:
         ccnet_rpc.remove_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
+
+        if request.user.org:
+            ccnet_rpc.remove_org_group(request.user.org.org_id,
+                                       group_id_int)
     except SearpcError, e:
         return go_error(request, e.msg)
 
-    if request.GET.get('src', '') == 'groupadmin':
-        return HttpResponseRedirect(reverse('group_admin'))
+    if request.GET.get('src', '') == 'orggroupadmin':
+        return HttpResponseRedirect(reverse('org_group_admin'))
+    elif request.GET.get('src', '') == 'sysgroupadmin':
+        return HttpResponseRedirect(reverse('sys_group_admin'))
     else:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
@@ -178,17 +188,31 @@ def group_members(request, group_id):
                 continue
             member_name_dict[member_name] = member_name
 
-        for member_name in member_name_dict.keys():
-            if not validate_emailuser(member_name):
-                err_msg = u'用户 %s 不存在' % member_name
-                return go_error(request, err_msg)
-            else:
-                try:
-                    ccnet_rpc.group_add_member(group_id_int,
-                                               request.user.username,
-                                               member_name)
-                except SearpcError, e:
-                    return go_error(request, e.msg)
+        if request.user.org:
+            for member_name in member_name_dict.keys():
+                if not ccnet_rpc.org_user_exists(request.user.org.org_id,
+                                                 member_name):
+                    err_msg = u'当前企业不存在 %s 用户' % member_name
+                    return go_error(request, err_msg)
+                else:
+                    try:
+                        ccnet_rpc.group_add_member(group_id_int,
+                                                   request.user.username,
+                                                   member_name)
+                    except SearpcError, e:
+                        return go_error(request, e.msg)
+        else:
+            for member_name in member_name_dict.keys():
+                if not validate_emailuser(member_name):
+                    err_msg = u'用户 %s 不存在' % member_name
+                    return go_error(request, err_msg)
+                else:
+                    try:
+                        ccnet_rpc.group_add_member(group_id_int,
+                                                   request.user.username,
+                                                   member_name)
+                    except SearpcError, e:
+                        return go_error(request, e.msg)
             
     members = ccnet_rpc.get_group_members(group_id_int)
     contacts = Contact.objects.filter(user_email=request.user.username)
