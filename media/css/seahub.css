@@ -373,14 +373,17 @@ h2.repo-history {
 .contact-list-link:hover {
     text-decoration:none;
 }
-/* group */
-.group-member .avatar {
+/* group, org */
+.group-member .avatar,
+.org-member .avatar {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	margin-right: 5px;
 }
 .group-member .avatar,
-.group-member-name {
+.group-member-name,
+.org-member .avatar,
+.org-member-name {
 	vertical-align:middle;
 }
 #member-add {
@@ -394,13 +397,26 @@ h2.repo-history {
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
 
-/* org */
-.org-member .avatar {
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    margin-right: 5px;
+/*user-profile*/
+.user-profile .pic {
+    width:80px;
+    text-align:center;
+    margin-right:20px;
 }
-.org-member .avatar,
-.org-member-name {
-    vertical-align:middle;
+.user-profile .avatar {
+    border-radius:4px;
+    -moz-border-radius:4px;
+    margin-bottom:5px;
+}
+.user-profile .txt {
+    width:225px;
+    word-wrap:break-word;
+}
+.user-profile .txt p {
+    margin-bottom:4px;
+}
+.user-profile .intro {
+    color:#444;
+    font-size:12px;
+    margin-top:10px;
 }

@@ -9,7 +9,11 @@
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
+    {% if member.user_name != request.user.username %}
+    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name"><a href="{{ SITE_ROOT }}profile/user/?user={{ member.user_name }}">{{ member.short_username }}</a></span></li>
+    {% else %}
     <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+    {% endif %}
 {% endfor %}
 </ul>
 
@@ -17,7 +21,11 @@
 {% if common_members %}
 <ul>
     {% for member in common_members %}
+    {% if member.user_name != request.user.username %}
+    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name"><a href="{{ SITE_ROOT }}profile/user/?user={{ member.user_name }}">{{ member.short_username }}</a></span></li>
+    {% else %}
 	<li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+    {% endif %}
     {% endfor %}
 </ul>
 {% else %}
