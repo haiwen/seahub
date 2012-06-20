@@ -8,6 +8,7 @@ from seaserv import ccnet_rpc, get_binding_peerids
 from pysearpc import SearpcError
 
 from utils import go_error
+from models import Profile
 
 @login_required
 def list_userids(request):
@@ -30,3 +31,30 @@ def logout_relay(request):
         return go_error(request, e.msg)
 
     return HttpResponseRedirect(reverse('list_userids'))
+
+def edit_profile(request):
+    profile = Profile.objects.filter(user=request.user.username)
+    if not profile:
+        Profile.objects.create(user=request.user.username, nickname='', intro='')
+
+    profile = Profile.objects.filter(user=request.user.username)[0]
+    if request.method == 'GET':
+        pass
+    
+    if request.method == 'POST':
+        new_nickname = request.POST.get('nickname', '')
+        new_intro = request.POST.get('intro', '')
+
+        if new_nickname != profile.nickname:
+            profile.nickname = new_nickname
+            profile.save()
+
+        if new_intro != profile.intro:
+            profile.intro = new_intro
+            profile.save()
+
+    return render_to_response('profile/set_profile.html', {
+                                'nickname':profile.nickname,
+                                'intro':profile.intro,
+                                  },
+                              context_instance=RequestContext(request))

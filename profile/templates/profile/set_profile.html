@@ -1,16 +1,21 @@
 {% extends "profile/profile_base.html" %}
 
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+  <li><a href="{{ SITE_ROOT }}avatar/add/">上传头像</a></li>
+  <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
+  <li><a href="{{ SITE_ROOT }}profile/list_user/">所有已登录的计算机</a></li>
+</ul>
+{% endblock %}
 
 {% block right_panel %}
-<h2>绑定个人 ID</h2>
-
+<div id="user-basic-info">
+<h2>个人基本信息修改</h2>
 <form action="" method="post">
-    {% if error_msg %}
-    <p class="error">{{ error_msg }}</p>
-    {% endif %}
-    <label>个人 ID:</label><br/>
-    <input id="id_ccnet_user_id" class="ccnet_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" /><br/>
-    <input type="submit" value="提交" />
+    <label>昵称:</label><input type="text" name="nickname" value="{{ nickname }}" class="text-input" /><br/>
+    <label>自我介绍:</label><textarea name="intro">{{ intro }}</textarea><br />
+    <input type="submit" value="提交" class="submit" />
 </form>
-
+</div>
 {% endblock %}

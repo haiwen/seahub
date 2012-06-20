@@ -4,13 +4,19 @@
 {% block nav_myhome_class %}class="cur"{% endblock %}
 {% block left_panel %}
 
+<h3>我的基本信息</h3>
+<div class="home-profile w100 ovhd">
+{% avatar myname 80 %}
+<p class="fleft">昵称：{{ nickname }}</p>
+</div>
+
+<h3>已用空间</h3>
+<p>{{ quota_usage|filesizeformat }} / 2 GB</p>
+
 {% if request.user.org %}
 <h3>所属企业</h3>
 <p>{{ request.user.org.org_name }}</p>
 {% endif %}
-
-<h3>已用空间</h3>
-<p>{{ quota_usage|filesizeformat }} / 2 GB</p>
 
 <h3>我管理的小组</h3>
 {% if groups_manage %}
