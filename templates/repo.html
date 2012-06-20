@@ -24,7 +24,11 @@
       {% if not repo.props.encrypted or password_set %}
           {% if can_access %}
           <div class="latest-commit">
-            <h3>最新修改<a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">（更多）</a></h3>
+            <h3>最新修改
+            {% if request.user.is_authenticated %}
+            <a href="{{ SITE_ROOT }}repo/history/{{repo.props.id}}/" class="more">（更多）</a>
+            {% endif %}
+            </h3>
             <p>{{ latest_commit.props.desc|translate_commit_desc }}</p>
             <p class="al-rt">
               <span class="author">by

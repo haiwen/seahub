@@ -50,7 +50,7 @@
     {% else %}
     <td>已过期</td>
     {% endif %}
-    <td><a class="op" href="#" class="view-link" data="{{ link.token }}">查看链接</a>
+    <td><a href="#" class="op view-link" data="{{ link.token }}">查看链接</a>
     <a class="op" href="{{ SITE_ROOT }}share/remove/{{ link.token }}/">删除</a></td>
   </tr>
   {% endfor %}
@@ -58,9 +58,9 @@
 </table>
 {% endif %}
 
-<form id="view-link-form" name="view-link-form" class="hide">
-  <textarea id="share-link" name="share-link"></textarea>
-</form>
+<div id="view-link" name="view-link" class="hide">
+  <p><span class="view-link-alert" style="float:left; margin-left: 120px; "></span></p>
+</div>
 
 {% endblock %}
 
@@ -80,10 +80,11 @@ $("table tr:gt(0)").hover(
 );
 
 $(".view-link").click(function() {
+
     var t = $(this).attr('data');
     var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}share/' + t + '/';
-    $('textarea[name="share-link"]').val(l);
-    $("#view-link-form").modal({appendTo: "#main", containerCss:{padding:18}});
+    $('.view-link-alert').text("共享链接为：" + l);
+    $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
     return false;
 });
 

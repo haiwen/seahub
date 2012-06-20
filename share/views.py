@@ -87,16 +87,6 @@ def share_repo(request):
                     messages.add_message(request, messages.INFO, to_email)
                 except SearpcError, e:
                     messages.add_message(request, messages.ERROR, to_email)
-#                else:
-#                    # add email to contacts if not in contacts list
-#                    # TODO: condition should be removed
-#                    if from_email != to_email and Contact.objects.filter(user_email=from_email, contact_email=to_email).count() = 0:
-#                        contact = Contact()
-#                        contact.user_email = from_email
-#                        contact.contact_email = to_email
-#                        contact.contact_name = ''
-#                        contact.note = ''
-#                        contact.save()
             else:
                 # share repo to anonymous user
                 kwargs = {'repo_id': repo_id,

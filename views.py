@@ -252,10 +252,10 @@ def repo(request, repo_id):
 
         return render_repo(request, repo_id)
 
+@login_required
 def repo_history(request, repo_id):
     """
-    If repo is public, anyone can view repo history;
-    If repo is not public, only persons who repo is share to can view.
+    View repo history
     """
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
     if not repo_ap:
@@ -310,6 +310,7 @@ def repo_history(request, repo_id):
             'is_owner': is_owner,
             }, context_instance=RequestContext(request))
 
+@login_required
 def repo_history_dir(request, repo_id):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
