@@ -162,9 +162,10 @@ FILEEXT_ICON_MAP = {
     'default' : 'file-icon-24.png',
 }
 
-SITE_SUBDOMAIN = 'cloud'
-SITE_BASE_NAME = 'seafile.com.cn' if not DEBUG else 'localhost.localdomain'
-SESSION_COOKIE_DOMAIN = '.' + SITE_BASE_NAME
+USE_SUBDOMAIN = False
+#SITE_SUBDOMAIN = 'cloud'
+#SITE_BASE_NAME = 'seafile.com.cn'
+#SESSION_COOKIE_DOMAIN = '.' + SITE_BASE_NAME
 
 # account type is `personal` or `business`
 ACCOUNT_TYPE = 'personal'

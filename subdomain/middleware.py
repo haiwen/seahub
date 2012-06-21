@@ -1,13 +1,23 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect, Http404
 
-from seahub.settings import SITE_BASE_NAME, SITE_SUBDOMAIN
+from seahub.settings import USE_SUBDOMAIN
 
 class SubdomainMiddleware(object):
 
     def process_request(self, request):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated() or not USE_SUBDOMAIN:
             return None
 
+        try:
+            from seahub.settings import SITE_BASE_NAME
+        except ImportError, e:
+            raise ImproperlyConfigured('Error importing SITE_BASE_NAME. Is SITE_BASE_NAME correctly defined?')
+        try:
+            from seahub.settings import SITE_SUBDOMAIN
+        except ImportError, e:
+            raise ImproperlyConfigured('Error importing SITE_SUBDOMAIN. Is SITE_SUBDOMAIN correctly defined?')
+            
         host = request.META.get('HTTP_HOST', '')
         http_or_https = request.is_secure() and 'https://' or 'http://'
         has_subdomain = True if host.replace(SITE_BASE_NAME, '', 1).find('.') >= 0 else False
