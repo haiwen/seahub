@@ -4,8 +4,8 @@ from django import forms
 from seahub.utils import validate_group_name
 
 class ProfileForm(forms.Form):
-    nickname = forms.CharField(max_length=64)
-    intro = forms.CharField(max_length=256)
+    nickname = forms.CharField(max_length=64, required=False)
+    intro = forms.CharField(max_length=256, required=False)
 
     def clean_nickname(self):
         nickname = self.cleaned_data['nickname']
