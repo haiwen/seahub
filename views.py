@@ -556,12 +556,10 @@ def myhome(request):
     
     #get nickname
     if not Profile.objects.filter(user=request.user.username):
-        nickname = '暂无'
+        nickname = ''
     else:
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
-        if not nickname:
-            nickname = '暂无'
             
     return render_to_response('myhome.html', {
             "myname": email,

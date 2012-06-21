@@ -6,8 +6,12 @@
 
 <h3>我的基本信息</h3>
 <div class="home-profile w100 ovhd">
-{% avatar myname 80 %}
-<p class="fleft">昵称：{{ nickname }}</p>
+{% avatar myname 48 %}
+{% if nickname %}
+<p class="fleft">{{ nickname }}</p>
+{% else %}
+<p class="fleft">暂无昵称 <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="编辑" title="编辑" /></a></p>
+{% endif %}
 </div>
 
 <h3>已用空间</h3>
