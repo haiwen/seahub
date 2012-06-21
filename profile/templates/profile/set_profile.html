@@ -3,6 +3,7 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
+  <li><a href="{{ SITE_ROOT }}profile/">修改昵称等基本信息</a></li>
   <li><a href="{{ SITE_ROOT }}avatar/add/">上传头像</a></li>
   <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
   <li><a href="{{ SITE_ROOT }}profile/list_user/">所有已登录的计算机</a></li>
@@ -13,8 +14,10 @@
 <div id="user-basic-info">
 <h2>个人基本信息修改</h2>
 <form action="" method="post">
-    <label>昵称:</label><input type="text" name="nickname" value="{{ nickname }}" class="text-input" /><br/>
-    <label>自我介绍:</label><textarea name="intro">{{ intro }}</textarea><br />
+    <label>昵称:</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" /><br/>
+    {{ form.nickname.errors }}
+    <label>自我介绍:</label><textarea name="intro">{{ form.data.intro }}</textarea><br />
+    {{ form.intro.errors }}
     <input type="submit" value="提交" class="submit" />
 </form>
 </div>

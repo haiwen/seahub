@@ -10,7 +10,7 @@
 {% if org_users %}
 <ul>
     {% for member in org_users %}
-	<li class="org-member">{% avatar member.user_name 16 %}<span class="org-member-name">{{ member.short_username }}</span></li>
+	<li class="org-member">{% avatar member.user_name 16 %}<span class="org-member-name"><a href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a></span></li>
     {% endfor %}
 </ul>
 {% else %}

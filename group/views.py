@@ -125,7 +125,7 @@ def group_info(request, group_id):
     managers = []
     common_members = []
     for member in members:
-        member.short_username = member.user_name.split('@')[0]
+#        member.short_username = member.user_name.split('@')[0]
         if member.is_staff == 1:
             managers.append(member)
         else:
