@@ -37,10 +37,11 @@ def logout_relay(request):
 
 @login_required
 def edit_profile(request):
+    modified = False
     if request.method == 'POST':
-        modified = True
         form = ProfileForm(request.POST)
         if form.is_valid():
+            modified = True
             nickname = form.cleaned_data['nickname']
             intro = form.cleaned_data['intro']
             try:
@@ -53,7 +54,6 @@ def edit_profile(request):
             profile.intro = intro
             profile.save()
     else:
-        modified = False
         try:
             profile = Profile.objects.get(user=request.user.username)
             form = ProfileForm({
