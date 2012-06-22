@@ -554,7 +554,7 @@ def myhome(request):
         else:
             groups_join.append(group)
     
-    #get nickname
+    # get nickname
     if not Profile.objects.filter(user=request.user.username):
         nickname = ''
     else:

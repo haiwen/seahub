@@ -1,13 +1,13 @@
 # encoding: utf-8
-
 import datetime as dt
-from datetime import datetime
-from django import template
-
 import re
+from datetime import datetime
+
+from django import template
 
 from seahub.settings import FILEEXT_ICON_MAP
 from seahub.po import TRANSLATION_MAP
+from seahub.profile.models import Profile
 
 register = template.Library()
 
@@ -73,3 +73,11 @@ def translate_remain_time(value):
         return u'%d 分钟' % (value/60)
     else:
         return u'%d 秒' % (value)
+
+@register.filter(name='email2nickname')
+def email2nickname(value):
+    try:
+        profile = Profile.objects.get(user=value)
+        return profile.nickname
+    except Profile.DoesNotExist:
+        return value.split('@')[0]

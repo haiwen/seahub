@@ -6,7 +6,9 @@
 <div class="user-profile narrow-panel ovhd">
     <div class="pic fleft">
         {% avatar email 80 %}
+        {% if new_user %}
         <button id="add">加为联系人</button>
+        {% endif %}
     </div>
 
     <div class="txt fright">
