@@ -212,19 +212,28 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     margin:12px 0 15px;
 }
 #user-basic-info label {
-    width:5em;
+    text-align:right;
+    width:5.5em;
+    margin-right:1em;
+}
+#user-basic-info .avatar,
+#user-basic-info textarea {
+    vertical-align:text-top;
+}
+#user-basic-info .avatar,
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    margin-bottom:8px;
 }
 #user-basic-info .text-input,
 #user-basic-info textarea {
     width:260px;
-    margin-bottom:5px;
 }
 #user-basic-info textarea {
-    vertical-align:text-top;
-    height:150px;
+    height:70px;
 }
 #user-basic-info .submit {
-    margin-left:5em;
+    margin-left:6.5em;
 }
 
 /*narrow-panel: for form pages*/

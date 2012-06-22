@@ -1,14 +1,5 @@
 {% extends "profile/profile_base.html" %}
 
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-  <li><a href="{{ SITE_ROOT }}profile/">修改昵称等基本信息</a></li>
-  <li><a href="{{ SITE_ROOT }}avatar/add/">上传头像</a></li>
-  <li><a href="{{ SITE_ROOT }}accounts/password/change/">修改网站帐号密码</a></li>
-</ul>
-{% endblock %}
-
 {% block right_panel %}
 <h2>所有已登录的计算机</h2>
 {% if peers %}

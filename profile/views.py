@@ -40,9 +40,10 @@ def edit_profile(request):
 
     profile = Profile.objects.filter(user=request.user.username)[0]
     if request.method == 'GET':
-        pass
+        modified = False
     
     if request.method == 'POST':
+        modified = True
         new_nickname = request.POST.get('nickname', '')
         new_intro = request.POST.get('intro', '')
 
@@ -57,6 +58,7 @@ def edit_profile(request):
     return render_to_response('profile/set_profile.html', {
                                 'nickname':profile.nickname,
                                 'intro':profile.intro,
+                                'modified':modified,
                                   },
                               context_instance=RequestContext(request))
 
