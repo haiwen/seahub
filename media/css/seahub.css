@@ -201,7 +201,7 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 }
 .avatar-op .avatar,
 .home-profile .avatar {
-	border-radius: 10px;
+	border-radius: 4px;
 	-moz-border-radius: 10px;
 }
 .upload-new-avatar-hd {
