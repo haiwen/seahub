@@ -1,0 +1,50 @@
+{% extends "profile/profile_base.html" %}
+{% load avatar_tags %}
+
+{% block main_panel %}
+{% if not err_msg %}
+<div class="user-profile narrow-panel ovhd">
+    <div class="pic fleft">
+        {% avatar email 80 %}
+        {% if new_user %}
+        <button id="add">加为联系人</button>
+        {% endif %}
+    </div>
+
+    <div class="txt fright">
+        {% if nickname %}
+        <p>{{ nickname }}</p>
+        {% endif %}
+
+        <p>{{ email }}</p>
+
+        {% if intro %}
+        <p class="intro">{{ intro }}</p>
+        {% endif %}
+    </div>
+
+    <form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+        <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+        <label>邮箱：</label><br />
+        <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{{ email }}" /><br />
+        <label>名字(可选)：</label><br />
+        <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+        <label>备注(可选)：</label><br />
+        <input id="id_note" type="text" name="note" maxlength="255" /><br />
+        <input type="submit" value="提交"  class="submit" />
+    </form>
+</div>
+{% else %}
+<div class="text-panel">
+    <p class="error">{{ err_msg }}</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#add').click(function() {
+    $('#add-as-contact').modal({appendTo: '#main'});
+});
+</script>
+{% endblock %}

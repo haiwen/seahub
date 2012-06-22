@@ -29,6 +29,7 @@ from seahub.contacts.models import Contact
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token
+from seahub.profile.models import Profile
     
 @login_required
 def root(request):
@@ -552,8 +553,17 @@ def myhome(request):
             groups_manage.append(group)
         else:
             groups_join.append(group)
+    
+    # get nickname
+    if not Profile.objects.filter(user=request.user.username):
+        nickname = ''
+    else:
+        profile = Profile.objects.filter(user=request.user.username)[0]
+        nickname = profile.nickname
             
     return render_to_response('myhome.html', {
+            "myname": email,
+            "nickname": nickname,
             "owned_repos": owned_repos,
             "quota_usage": quota_usage,
             "in_repos": in_repos,

@@ -1,16 +1,34 @@
 {% extends "profile/profile_base.html" %}
+{% load avatar_tags %}
 
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+  <li><a href="{{ SITE_ROOT }}profile/list_user/">所有已登录的计算机</a></li>
+</ul>
+{% endblock %}
 
 {% block right_panel %}
-<h2>绑定个人 ID</h2>
-
+<div id="user-basic-info">
+<h2>个人基本信息修改</h2>
+{% if modified %}
+<p class="notification">修改成功。</p>
+{% endif %}
 <form action="" method="post">
-    {% if error_msg %}
-    <p class="error">{{ error_msg }}</p>
-    {% endif %}
-    <label>个人 ID:</label><br/>
-    <input id="id_ccnet_user_id" class="ccnet_id" type="text" name="ccnet_user_id" value="{{ origin_id }}" /><br/>
-    <input type="submit" value="提交" />
+    <label>头像:</label>{% avatar request.user.username 60 %}
+    <a href="{{ SITE_ROOT }}avatar/add/">更改</a><br />
+    <label>密码:</label><a href="{{ SITE_ROOT }}accounts/password/change/">更改</a><br/>
+    <label>昵称:</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
+    {% for error in form.nickname.errors %}
+    <span class="error">{{ error|escape }}</span>
+    {% endfor %}
+    <br/>
+    <label>一句话介绍:</label><textarea name="intro">{{ form.data.intro }}</textarea>
+    {% for error in form.intro.errors %}
+    <span class="error">{{ error|escape }}</span>
+    {% endfor %}
+    <br/>
+    <input type="submit" value="提交" class="submit" />
 </form>
-
+</div>
 {% endblock %}

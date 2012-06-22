@@ -9,7 +9,7 @@
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
-    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name"><a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></span></li>
 {% endfor %}
 </ul>
 
@@ -17,7 +17,9 @@
 {% if common_members %}
 <ul>
     {% for member in common_members %}
-	<li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name">{{ member.short_username }}</span></li>
+    <li class="group-member">{% avatar member.user_name 16 %}
+    <span class="group-member-name"><a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></span>
+    </li>
     {% endfor %}
 </ul>
 {% else %}

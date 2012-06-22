@@ -1,4 +1,4 @@
-body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,form,input,button,img { margin:0; padding:0; }
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
 ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
@@ -185,7 +185,7 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     line-height:20px;
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
-/* profile */
+/* avatar */
 .avatar-op {
     width:321px;
     margin:45px 0 0 300px;
@@ -199,13 +199,43 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 .avatar-op-con {
     padding-left:5px;
 }
-.avatar-op .avatar {
+.avatar-op .avatar,
+.home-profile .avatar {
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 }
 .upload-new-avatar-hd {
     margin-top:15px;
 }
+/*user-basic-info*/
+#user-basic-info h2 {
+    margin:12px 0 15px;
+}
+#user-basic-info label {
+    text-align:right;
+    width:5.5em;
+    margin-right:1em;
+}
+#user-basic-info .avatar,
+#user-basic-info textarea {
+    vertical-align:text-top;
+}
+#user-basic-info .avatar,
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    margin-bottom:8px;
+}
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    width:260px;
+}
+#user-basic-info textarea {
+    height:70px;
+}
+#user-basic-info .submit {
+    margin-left:6.5em;
+}
+
 /*narrow-panel: for form pages*/
 .narrow-panel {
     width:25em;
@@ -279,6 +309,13 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     background-image:none;
 }
 /*myhome*/
+.home-profile {
+    margin:3px 0 15px;
+}
+.home-profile .avatar {
+    float:left;
+    margin:0 15px 0 11px;
+}
 .mygroup {
     display:inline-block;
 	width:70px;
@@ -345,14 +382,17 @@ h2.repo-history {
 .contact-list-link:hover {
     text-decoration:none;
 }
-/* group */
-.group-member .avatar {
+/* group, org */
+.group-member .avatar,
+.org-member .avatar {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	margin-right: 5px;
 }
 .group-member .avatar,
-.group-member-name {
+.group-member-name,
+.org-member .avatar,
+.org-member-name {
 	vertical-align:middle;
 }
 #member-add {
@@ -366,13 +406,26 @@ h2.repo-history {
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
 
-/* org */
-.org-member .avatar {
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    margin-right: 5px;
+/*user-profile*/
+.user-profile .pic {
+    width:80px;
+    text-align:center;
+    margin-right:20px;
 }
-.org-member .avatar,
-.org-member-name {
-    vertical-align:middle;
+.user-profile .avatar {
+    border-radius:4px;
+    -moz-border-radius:4px;
+    margin-bottom:5px;
+}
+.user-profile .txt {
+    width:225px;
+    word-wrap:break-word;
+}
+.user-profile .txt p {
+    margin-bottom:4px;
+}
+.user-profile .intro {
+    color:#444;
+    font-size:12px;
+    margin-top:10px;
 }
