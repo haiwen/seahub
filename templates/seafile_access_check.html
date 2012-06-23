@@ -11,7 +11,7 @@
 $(function() {
     var req_success = false;
     $.ajax({
-        url: 'http://localhost:13420/seafile_access_check/',
+        url: '{{ applet_root }}/seafile_access_check/',
         dataType: 'jsonp',
         jsonpCallback: 'xx',
         crossDomain: true,

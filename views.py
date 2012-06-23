@@ -676,10 +676,12 @@ def repo_download(request):
 
 def seafile_access_check(request):
     repo_id = request.GET.get('repo_id', '')
-
+    applet_root = get_ccnetapplet_root()
+    
     return render_to_response(
         'seafile_access_check.html', {
             'repo_id': repo_id,
+            'applet_root': applet_root,
         },
         context_instance=RequestContext(request))
 
