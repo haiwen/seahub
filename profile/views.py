@@ -1,4 +1,5 @@
 # encoding: utf-8
+import simplejson as json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -103,3 +104,36 @@ def user_profile(request, user):
                                 'err_msg': err_msg,
                                   },
                               context_instance=RequestContext(request))
+
+def get_user_profile(request, user):
+    data = {
+            'email': user,
+            'user_nickname': '',
+            'user_intro': '',
+            'err_msg': '',
+            'new_user': ''
+        } 
+    content_type = 'application/json; charset=utf-8'
+    
+    try:
+        user_check = ccnet_rpc.get_emailuser(user)
+    except:
+        user_check = None
+        
+    if user_check:
+        profile = Profile.objects.filter(user=user)
+        if profile:
+            profile = profile[0]
+            data['user_nickname'] = profile.nickname
+            data['user_intro'] = profile.intro
+    else:
+        data['err_msg'] = '该用户不存在'
+
+    if user == request.user.username or \
+            Contact.objects.filter(user_email=request.user.username,
+                                   contact_email=user).count() > 0:
+        data['new_user'] = False
+    else:
+        data['new_user'] = True
+
+    return HttpResponse(json.dumps(data), content_type=content_type)

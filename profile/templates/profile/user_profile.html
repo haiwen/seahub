@@ -22,18 +22,21 @@
         <p class="intro">{{ intro }}</p>
         {% endif %}
     </div>
-
-    <form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
-        <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
-        <label>邮箱：</label><br />
-        <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{{ email }}" /><br />
-        <label>名字(可选)：</label><br />
-        <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
-        <label>备注(可选)：</label><br />
-        <input id="id_note" type="text" name="note" maxlength="255" /><br />
-        <input type="submit" value="提交"  class="submit" />
-    </form>
 </div>
+
+{% if new_user %}
+<form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <label>邮箱：</label><br />
+    <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{{ email }}" /><br />
+    <label>名字(可选)：</label><br />
+    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <label>备注(可选)：</label><br />
+    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="submit" value="提交"  class="submit" />
+</form>
+{% endif %}
+
 {% else %}
 <div class="text-panel">
     <p class="error">{{ err_msg }}</p>
@@ -42,9 +45,11 @@
 {% endblock %}
 
 {% block extra_script %}
+{% if new_user %}
 <script type="text/javascript">
 $('#add').click(function() {
     $('#add-as-contact').modal({appendTo: '#main'});
 });
 </script>
+{% endif %}
 {% endblock %}
