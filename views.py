@@ -18,7 +18,7 @@ from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
-from seaserv import ccnet_rpc, get_groups, get_users, get_repos, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids, check_group_staff
@@ -69,7 +69,7 @@ def validate_emailuser(emailuser):
 
     """
     try:
-        user = ccnet_rpc.get_emailuser(emailuser)
+        user = ccnet_threaded_rpc.get_emailuser(emailuser)
     except:
         user = None
         
@@ -97,7 +97,7 @@ def check_shared_repo(request, repo_id):
         if repo.props.id == repo_id:
             return True
 
-    groups = ccnet_rpc.get_groups(request.user.username)
+    groups = ccnet_threaded_rpc.get_groups(request.user.username)
     # for every group that user joined...    
     for group in groups:
         # ...get repo ids in that group, and check whether repo ids contains that repo id 
@@ -545,7 +545,7 @@ def myhome(request):
     contacts = Contact.objects.filter(user_email=email)
     
     # my groups
-    groups = ccnet_rpc.get_groups(email)
+    groups = ccnet_threaded_rpc.get_groups(email)
     groups_manage = []
     groups_join = []
     for group in groups:
@@ -815,13 +815,13 @@ def sys_useradmin(request):
     if not request.user.is_staff:
         raise Http404
 
-    users = ccnet_rpc.get_emailusers(-1,-1)
+    users = ccnet_threaded_rpc.get_emailusers(-1,-1)
         
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
         # TODO: may add new is_org_user rpc
-        user.is_org_user = True if ccnet_rpc.get_org_by_user(user.email) else False
+        user.is_org_user = True if ccnet_threaded_rpc.get_org_by_user(user.email) else False
             
     return render_to_response(
         'sys_useradmin.html', {
@@ -834,7 +834,7 @@ def org_useradmin(request):
     if not request.user.org.is_staff:
         raise Http404
 
-    users = ccnet_rpc.get_org_emailusers(request.user.org.url_prefix,
+    users = ccnet_threaded_rpc.get_org_emailusers(request.user.org.url_prefix,
                                          0, sys.maxint)
         
     for user in users:
@@ -864,7 +864,7 @@ def user_info(request, email):
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
     try:
-        peers = ccnet_rpc.get_peers_by_email(email)
+        peers = ccnet_threaded_rpc.get_peers_by_email(email)
         for peer in peers:
             if not peer:
                 continue
@@ -919,7 +919,7 @@ def user_remove(request, user_id):
 
     ccnetuser = get_ccnetuser(userid=int(user_id))
     if ccnetuser.org:
-        ccnet_rpc.remove_org_user(ccnetuser.org.org_id, ccnetuser.username)
+        ccnet_threaded_rpc.remove_org_user(ccnetuser.org.org_id, ccnetuser.username)
     ccnetuser.delete()
 
     if request.user.is_staff:
@@ -983,7 +983,7 @@ def user_add(request):
             
             if request.user.org:
                 org_id = request.user.org.org_id
-                ccnet_rpc.add_org_user(org_id, email, 0)
+                ccnet_threaded_rpc.add_org_user(org_id, email, 0)
                 if hasattr(settings, 'EMAIL_HOST'):
                     send_user_add_mail(request, email, password)
                     
@@ -1020,7 +1020,7 @@ def sys_group_admin(request):
         current_page = 1
         per_page = 25
 
-    groups_plus_one = ccnet_rpc.get_all_groups(per_page * (current_page -1),
+    groups_plus_one = ccnet_threaded_rpc.get_all_groups(per_page * (current_page -1),
                                                per_page +1)
         
     groups = groups_plus_one[:per_page]
@@ -1043,7 +1043,7 @@ def sys_org_admin(request):
     if not request.user.is_staff:
         raise Http404
 
-    orgs = ccnet_rpc.get_all_orgs(0, sys.maxint)
+    orgs = ccnet_threaded_rpc.get_all_orgs(0, sys.maxint)
 
     return render_to_response('sys_org_admin.html', {
             'orgs': orgs,
@@ -1061,7 +1061,7 @@ def org_group_admin(request):
         current_page = 1
         per_page = 25
 
-    groups_plus_one = ccnet_rpc.get_org_groups (request.user.org.org_id,
+    groups_plus_one = ccnet_threaded_rpc.get_org_groups (request.user.org.org_id,
                                                 per_page * (current_page -1),
                                                 per_page +1)
         
@@ -1095,7 +1095,7 @@ def org_remove(request, org_id):
     
     # TODO: Remove repos in org's groups
     
-    ccnet_rpc.remove_org(org_id_int)
+    ccnet_threaded_rpc.remove_org(org_id_int)
     
     return HttpResponseRedirect(reverse('sys_org_admin'))
 
@@ -1106,11 +1106,11 @@ def org_info(request):
 
     org = request.user.org
     
-    org_members = ccnet_rpc.get_org_emailusers(org.url_prefix, 0, sys.maxint)
+    org_members = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, 0, sys.maxint)
     for member in org_members:
         member.short_username = member.email.split('@')[0]
 
-    groups = ccnet_rpc.get_org_groups(org.org_id, 0, sys.maxint)
+    groups = ccnet_threaded_rpc.get_org_groups(org.org_id, 0, sys.maxint)
     
     return render_to_response('org_info.html', {
             'org': org,

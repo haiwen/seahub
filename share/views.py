@@ -9,7 +9,7 @@ from auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
-from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc
+from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, ccnet_threaded_rpc
 
 from forms import RepoShareForm
 from models import AnonymousShare
@@ -63,7 +63,7 @@ def share_repo(request):
             group_name = to_email.split(' ')[0]
             group_creator = to_email.split(' ')[1]
             # get all the groups the user joined
-            groups = ccnet_rpc.get_groups(request.user.username)
+            groups = ccnet_threaded_rpc.get_groups(request.user.username)
             find = False
             for group in groups:
                 # for every group that user joined, if group name and
@@ -117,7 +117,7 @@ def share_admin(request):
         if not repo:
             continue
         group_id = group_repo.props.group_id
-        group = ccnet_rpc.get_group(int(group_id))
+        group = ccnet_threaded_rpc.get_group(int(group_id))
         if not group:
             continue
         repo.props.shared_email = group.props.group_name

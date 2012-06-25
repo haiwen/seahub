@@ -112,6 +112,7 @@ else:
 
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool, req_pool=True)
+ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True)
 monitor_rpc = seafile.MonitorRpcClient(pool)
 seafserv_rpc = seafile.ServerRpcClient(pool, req_pool=True)
 seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool, req_pool=True)
@@ -122,7 +123,7 @@ def translate_userid(user_id):
     try:
         user = user_db[user_id]
     except:
-        user = ccnet_rpc.get_user(user_id)
+        user = ccnet_threaded_rpc.get_user(user_id)
         if user:
             user_db[user_id] = user
         else:
@@ -137,7 +138,7 @@ def translate_userid_simple(user_id):
     try:
         user = user_db[user_id]
     except:
-        user = ccnet_rpc.get_user(user_id)
+        user = ccnet_threaded_rpc.get_user(user_id)
         if user:
             user_db[user_id] = user
         else:
@@ -192,7 +193,7 @@ def get_peer_avatar_url(peer_id):
     try:
         user = user_db[peer.props.user_id]
     except:
-        user = ccnet_rpc.get_user(user_id)
+        user = ccnet_threaded_rpc.get_user(user_id)
         if user:
             user_db[user_id] = user
         else:
@@ -203,7 +204,7 @@ def get_user_avatar_url(user_id):
     try:
         user = user_db[user_id]
     except:
-        user = ccnet_rpc.get_user(user_id)
+        user = ccnet_threaded_rpc.get_user(user_id)
         if user:
             user_db[user_id] = user
         else:
@@ -217,7 +218,7 @@ def translate_groupid(group_id):
     try:
         group = group_db[group_id]
     except:
-        group = ccnet_rpc.get_group(group_id)
+        group = ccnet_threaded_rpc.get_group(group_id)
         if group:
             group_db[group_id] = group
         else:
@@ -279,7 +280,7 @@ def get_peers_by_myrole(myrole):
     return peers
 
 def get_users():
-    user_ids = ccnet_rpc.list_users()
+    user_ids = ccnet_threaded_rpc.list_users()
     if not user_ids:
         return []
     users = []
@@ -287,26 +288,26 @@ def get_users():
         # too handle the ending '\n'
         if user_id == '':
             continue
-        user = ccnet_rpc.get_user(user_id)
+        user = ccnet_threaded_rpc.get_user(user_id)
         users.append(user)
     return users
 
 
 def get_user(user_id):
-    user = ccnet_rpc.get_user(user_id)
+    user = ccnet_threaded_rpc.get_user(user_id)
     return user
 
 def get_ccnetuser(username=None, userid=None):
     # Get emailuser from db
     if username:
-        emailuser = ccnet_rpc.get_emailuser(username)
+        emailuser = ccnet_threaded_rpc.get_emailuser(username)
     if userid:
-        emailuser = ccnet_rpc.get_emailuser_by_id(userid)
+        emailuser = ccnet_threaded_rpc.get_emailuser_by_id(userid)
     if not emailuser:
         return None
 
     # Check whether is business account
-    org = ccnet_rpc.get_org_by_user(emailuser.email)
+    org = ccnet_threaded_rpc.get_org_by_user(emailuser.email)
     emailuser.org = org
     
     # And convert to ccnetuser
@@ -317,7 +318,7 @@ def get_ccnetuser(username=None, userid=None):
 
 def get_groups():
     """Get group object list. """
-    group_ids = ccnet_rpc.list_groups()
+    group_ids = ccnet_threaded_rpc.list_groups()
     if not group_ids:
         return []
     groups = []
@@ -325,13 +326,13 @@ def get_groups():
         # too handle the ending '\n'
         if group_id == '':
             continue
-        group = ccnet_rpc.get_group(group_id)
+        group = ccnet_threaded_rpc.get_group(group_id)
         groups.append(group)
     return groups
 
 
 def get_group(group_id):
-    group = ccnet_rpc.get_group(group_id)
+    group = ccnet_threaded_rpc.get_group(group_id)
     if not group:
         return None
     group.members = group.props.members.split(" ")
@@ -385,7 +386,7 @@ def get_branches(repo_id):
 def get_binding_peerids(email):
     """Get peer ids of a given email"""
     try:
-        peer_ids = ccnet_rpc.get_binding_peerids(email)
+        peer_ids = ccnet_threaded_rpc.get_binding_peerids(email)
     except SearpcError:
         return []
 
@@ -422,4 +423,4 @@ def check_group_staff(group_id_int, user_or_username):
     if isinstance(user_or_username, CcnetUser):
         user_or_username = user_or_username.username
         
-    return ccnet_rpc.check_group_staff(group_id_int, user_or_username)
+    return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)

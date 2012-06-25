@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import ccnet_rpc, get_ccnetuser
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_ccnetuser
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -162,7 +162,7 @@ class RegistrationManager(models.Manager):
             if profile.activation_key_expired():
                 ccnetuser = get_ccnetuser(userid=profile.emailuser_id)
                 if not ccnetuser.is_active:
-                    ccnet_rpc.remove_emailuser(ccnetuser.username)
+                    ccnet_threaded_rpc.remove_emailuser(ccnetuser.username)
 
 class RegistrationProfile(models.Model):
     """

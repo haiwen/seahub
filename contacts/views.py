@@ -10,7 +10,7 @@ from django.forms.models import modelformset_factory
 from models import Contact
 from models import AddContactForm
 
-from seaserv import ccnet_rpc
+from seaserv import ccnet_rpc, ccnet_threaded_rpc
 
 @login_required
 def contact_list(request):
@@ -29,7 +29,7 @@ def contact_add(request):
             contact_email = form.cleaned_data['contact_email']
             contact_name = form.cleaned_data['contact_name']
             note = form.cleaned_data['note']
-            emailuser = ccnet_rpc.get_emailuser(contact_email)
+            emailuser = ccnet_threaded_rpc.get_emailuser(contact_email)
             if not emailuser:
                 error_msg = u"用户不存在"
             elif contact_email == request.user.username:
@@ -38,7 +38,7 @@ def contact_add(request):
                                         contact_email=contact_email).count() > 0:
                 error_msg = u"联系人列表中已有该用户"
             elif request.user.org and \
-                not ccnet_rpc.org_user_exists(request.user.org.org_id,
+                not ccnet_threaded_rpc.org_user_exists(request.user.org.org_id,
                                               contact_email):
                 error_msg = u"当前企业不存在该用户"
             else:
@@ -70,7 +70,7 @@ def contact_edit(request):
             contact_email = form.cleaned_data['contact_email']
             contact_name = form.cleaned_data['contact_name']
             note = form.cleaned_data['note']
-            emailuser = ccnet_rpc.get_emailuser(contact_email)
+            emailuser = ccnet_threaded_rpc.get_emailuser(contact_email)
             if not emailuser:
                 error_msg = u"用户不存在"
             elif contact_email == request.user.username:

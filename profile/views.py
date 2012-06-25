@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext
 from django.contrib.auth.decorators import login_required
 
-from seaserv import ccnet_rpc, get_binding_peerids
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids
 from pysearpc import SearpcError
 
 from forms import ProfileForm
@@ -18,7 +18,7 @@ from seahub.contacts.models import Contact
 def list_userids(request):
     peer_list = []
     try:
-        peers = ccnet_rpc.get_peers_by_email(request.user.username)
+        peers = ccnet_threaded_rpc.get_peers_by_email(request.user.username)
     except:
         peers = None
     
@@ -30,7 +30,7 @@ def logout_relay(request):
     peer_id = request.GET.get('peer_id', '')
 
     try:
-        ccnet_rpc.remove_one_binding(request.user.username, peer_id)
+        ccnet_threaded_rpc.remove_one_binding(request.user.username, peer_id)
     except SearpcError, e:
         return go_error(request, e.msg)
 
@@ -76,7 +76,7 @@ def user_profile(request, user):
     err_msg = ''
     
     try:
-        user_check = ccnet_rpc.get_emailuser(user)
+        user_check = ccnet_threaded_rpc.get_emailuser(user)
     except:
         user_check = None
         

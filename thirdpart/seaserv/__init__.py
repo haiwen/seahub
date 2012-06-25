@@ -1,7 +1,7 @@
 
 import service
 from service import cclient, ccnet_rpc, monitor_rpc, seafserv_rpc, \
-    seafserv_threaded_rpc
+    seafserv_threaded_rpc, ccnet_threaded_rpc
 from service import translate_peerid, translate_msgtime, translate_groupid, \
     translate_userid, translate_msgtime2, translate_time_sec, \
     translate_time_usec, get_peer_avatar_url, get_user_avatar_url, \

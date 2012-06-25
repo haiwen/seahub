@@ -11,11 +11,11 @@ from auth import authenticate, login
 from registration import signals
 #from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
-from seaserv import ccnet_rpc, get_ccnetuser
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_ccnetuser
 
 class UserManager(object):
     def create_user(self, username, password=None, is_staff=False, is_active=False):
-        ccnet_rpc.add_emailuser(username, password, int(is_staff), int(is_active))
+        ccnet_threaded_rpc.add_emailuser(username, password, int(is_staff), int(is_active))
 
         ccnetuser = get_ccnetuser(username=username)
         return ccnetuser
@@ -48,7 +48,7 @@ class CcnetUser(object):
     
     def validate_emailuser(self, email, raw_password):
         self.set_password(raw_password)
-        return ccnet_rpc.validate_emailuser(email, raw_password)
+        return ccnet_threaded_rpc.validate_emailuser(email, raw_password)
 
     def is_authenticated(self):
         """
@@ -65,9 +65,9 @@ class CcnetUser(object):
         return False
 
     def save(self):
-        emailuser = ccnet_rpc.get_emailuser(self.username)
+        emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
         if emailuser:
-            ccnet_rpc.update_emailuser(self.id, self.password,
+            ccnet_threaded_rpc.update_emailuser(self.id, self.password,
                                        int(self.is_staff), int(self.is_active))
         else:
             self.objects.create_user(username=self.username,
@@ -79,8 +79,8 @@ class CcnetUser(object):
         """
         Remove from ccnet EmailUser table and Binding table
         """
-        ccnet_rpc.remove_emailuser(self.username)
-        ccnet_rpc.remove_binding(self.username)
+        ccnet_threaded_rpc.remove_emailuser(self.username)
+        ccnet_threaded_rpc.remove_binding(self.username)
 
     def get_and_delete_messages(self):
         messages = []
@@ -201,7 +201,7 @@ class RegistrationBackend(object):
 
         userid = kwargs['userid']
         if userid:
-            ccnet_rpc.add_binding(new_user.username, userid)
+            ccnet_threaded_rpc.add_binding(new_user.username, userid)
 
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
@@ -295,7 +295,7 @@ class RegistrationForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        emailuser = ccnet_rpc.get_emailuser(email)
+        emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             return self.cleaned_data['email']
         else:
@@ -336,7 +336,7 @@ class OrgRegistrationForm(RegistrationForm):
 
     def clean_url_prefix(self):
         url_prefix = self.cleaned_data['url_prefix']
-        org = ccnet_rpc.get_org_by_url_prefix(url_prefix)
+        org = ccnet_threaded_rpc.get_org_by_url_prefix(url_prefix)
         if not org:
             return url_prefix
         else:
@@ -385,7 +385,7 @@ class OrgRegistrationBackend(object):
                                                                         send_email=False)
             # create orgnization account
             try:
-                ccnet_rpc.create_org(org_name, url_prefix, username)
+                ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
             except SearpcError, e:
                 pass
             else:

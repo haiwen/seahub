@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from auth.decorators import login_required
-from seaserv import ccnet_rpc, seafserv_threaded_rpc, get_repo, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
     get_group_repoids, check_group_staff
 from pysearpc import SearpcError
 
@@ -25,17 +25,17 @@ def group_list(request):
             return go_error(request, u'小组名称只能包含中英文字符，数字及下划线')
         
         try:
-            group_id = ccnet_rpc.create_group(group_name.encode('utf-8'),
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
                                    request.user.username)
             # TODO: transaction?
             if request.user.org and group_id > 0:
-                ccnet_rpc.add_org_group(request.user.org.org_id,
+                ccnet_threaded_rpc.add_org_group(request.user.org.org_id,
                                         group_id)
         except SearpcError, e:
             error_msg = e.msg
             return go_error(request, error_msg)
     
-    groups = ccnet_rpc.get_groups(request.user.username);
+    groups = ccnet_threaded_rpc.get_groups(request.user.username);
     
     return render_to_response("group/groups.html", {
             "groups": groups,
@@ -59,16 +59,16 @@ def group_remove(request, group_id):
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
     # Check whether user is the group staff or admin
-    if not ccnet_rpc.check_group_staff(group_id_int, request.user.username) \
+    if not ccnet_threaded_rpc.check_group_staff(group_id_int, request.user.username) \
             and not request.user.is_staff:
         return go_permission_error(request, u'只有小组管理员有权解散小组')
     
     try:
-        ccnet_rpc.remove_group(group_id_int, request.user.username)
+        ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
 
         if request.user.org:
-            ccnet_rpc.remove_org_group(request.user.org.org_id,
+            ccnet_threaded_rpc.remove_org_group(request.user.org.org_id,
                                        group_id_int)
     except SearpcError, e:
         return go_error(request, e.msg)
@@ -88,7 +88,7 @@ def group_quit(request, group_id):
         return go_error(request, u'group id 不是有效参数')
     
     try:
-        ccnet_rpc.quit_group(group_id_int, request.user.username)
+        ccnet_threaded_rpc.quit_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int,
                                                 request.user.username)
     except SearpcError, e:
@@ -105,14 +105,14 @@ def group_info(request, group_id):
 
     # Check whether user belong to the group or admin
     joined = False
-    groups = ccnet_rpc.get_groups(request.user.username)
+    groups = ccnet_threaded_rpc.get_groups(request.user.username)
     for group in groups:
         if group.id == group_id_int:
             joined = True
     if not joined and not request.user.is_staff:
         return go_error(request, u'未加入该小组')
     
-    group = ccnet_rpc.get_group(group_id_int)
+    group = ccnet_threaded_rpc.get_group(group_id_int)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
@@ -121,7 +121,7 @@ def group_info(request, group_id):
     else:
         is_staff = False
         
-    members = ccnet_rpc.get_group_members(group_id_int)
+    members = ccnet_threaded_rpc.get_group_members(group_id_int)
     managers = []
     common_members = []
     for member in members:
@@ -166,7 +166,7 @@ def group_members(request, group_id):
     if not check_group_staff(group_id_int, request.user):
         return go_permission_error(request, u'只有小组管理员有权管理小组')
 
-    group = ccnet_rpc.get_group(group_id_int)
+    group = ccnet_threaded_rpc.get_group(group_id_int)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
     
@@ -190,13 +190,13 @@ def group_members(request, group_id):
 
         if request.user.org:
             for member_name in member_name_dict.keys():
-                if not ccnet_rpc.org_user_exists(request.user.org.org_id,
+                if not ccnet_threaded_rpc.org_user_exists(request.user.org.org_id,
                                                  member_name):
                     err_msg = u'当前企业不存在 %s 用户' % member_name
                     return go_error(request, err_msg)
                 else:
                     try:
-                        ccnet_rpc.group_add_member(group_id_int,
+                        ccnet_threaded_rpc.group_add_member(group_id_int,
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
@@ -208,13 +208,13 @@ def group_members(request, group_id):
                     return go_error(request, err_msg)
                 else:
                     try:
-                        ccnet_rpc.group_add_member(group_id_int,
+                        ccnet_threaded_rpc.group_add_member(group_id_int,
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
                         return go_error(request, e.msg)
             
-    members = ccnet_rpc.get_group_members(group_id_int)
+    members = ccnet_threaded_rpc.get_group_members(group_id_int)
     contacts = Contact.objects.filter(user_email=request.user.username)
     
     return render_to_response('group/group_manage.html', {
@@ -249,7 +249,7 @@ def group_remove_member(request, group_id, user_name):
         except ValueError:
             return go_error(request, u'group id 不是有效参数')
         try:
-            ccnet_rpc.group_remove_member(group_id_int, request.user.username,
+            ccnet_threaded_rpc.group_remove_member(group_id_int, request.user.username,
                                           user_name)
             seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
         except SearpcError, e:
@@ -263,13 +263,13 @@ def group_share_repo(request, repo_id, group_id, from_email):
     
     """
     # Check whether group exists
-    group = ccnet_rpc.get_group(group_id)
+    group = ccnet_threaded_rpc.get_group(group_id)
     if not group:
         return go_error(request, u'共享失败:小组不存在')
     
     # Check whether user belong to the group
     joined = False
-    groups = ccnet_rpc.get_groups(request.user.username)
+    groups = ccnet_threaded_rpc.get_groups(request.user.username)
     for group in groups:
         if group.props.id == group_id:
             joined = True
@@ -285,13 +285,13 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     
     """
     # Check whether group exists
-    group = ccnet_rpc.get_group(group_id)
+    group = ccnet_threaded_rpc.get_group(group_id)
     if not group:
         return go_error(request, u'共享失败:小组不存在')
     
     # Check whether user belong to the group
     joined = False
-    groups = ccnet_rpc.get_groups(from_email)
+    groups = ccnet_threaded_rpc.get_groups(from_email)
     for group in groups:
         if group.props.id == group_id:
             joined = True
