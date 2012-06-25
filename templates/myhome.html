@@ -29,6 +29,9 @@
     <li class="mygroup">
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+        {% if group.new_msg %}
+        <span class="tips">（新留言）</span>
+        {% endif %}
 	</li>
     {% endfor %}
 </ul>
@@ -43,6 +46,9 @@
     <li class="mygroup">
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/"><img src="{{ MEDIA_URL }}img/group.jpg" alt="" /></a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+        {% if group.new_msg %}
+        <span class="tips">（新留言）</span>
+        {% endif %}
 	</li>
 	{% endfor %}
 </ul>

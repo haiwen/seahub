@@ -26,6 +26,7 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
 from seahub.contacts.models import Contact
+from seahub.notifications.models import UserNotification
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token
@@ -543,12 +544,23 @@ def myhome(request):
 
     # my contacts
     contacts = Contact.objects.filter(user_email=email)
-    
+
+    # user notifications
+    l = []
+    notes = UserNotification.objects.filter(email=request.user.username)
+    for n in notes:
+        if n.note_type == 'group_msg':
+            l.append(n.detail)
+
     # my groups
     groups = ccnet_threaded_rpc.get_groups(email)
     groups_manage = []
     groups_join = []
     for group in groups:
+        if str(group.id) in l:
+            group.new_msg = True
+        else:
+            group.new_msg = False
         if group.props.creator_name == request.user.username:
             groups_manage.append(group)
         else:
@@ -560,7 +572,7 @@ def myhome(request):
     else:
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
-            
+
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,

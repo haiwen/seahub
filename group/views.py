@@ -13,6 +13,7 @@ from pysearpc import SearpcError
 from models import GroupMessage, MessageReply
 from forms import MessageForm
 from seahub.contacts.models import Contact
+from seahub.notifications.models import UserNotification
 from seahub.utils import go_error, go_permission_error, validate_group_name
 from seahub.views import validate_emailuser
 
@@ -138,6 +139,10 @@ def render_group_info(request, group_id, form):
             repo.share_from_me = False
         repos.append(repo)
 
+    # remove user notifications
+    UserNotification.objects.filter(email=request.user.username,
+                                    detail=str(group_id)).delete()
+    
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -225,8 +230,22 @@ def group_info(request, group_id):
             message.from_email = request.user.username
             message.message = msg
             message.save()
+
             # clear form data
             form = MessageForm()
+            
+            # add user notification if not exists
+            l = UserNotification.objects.filter(note_type='group_msg',
+                                                detail=group_id)
+            if len(l) == 0:
+                group_members = ccnet_rpc.get_group_members(int(group_id))
+                for m in group_members:
+                    if request.user.username == m.user_name:
+                        continue
+                    n = UserNotification(email=m.user_name,
+                                         note_type='group_msg', detail=group_id)
+                    n.save()
+                
     else:
         form = MessageForm()
         

@@ -318,13 +318,17 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 }
 .mygroup {
     display:inline-block;
-	width:70px;
-	text-align:center;
+    width:70px;
+    text-align:center;
     word-wrap:break-word;
     vertical-align:top;
-	margin:0 0px 5px 0;
+    margin:0 0px 5px 0;
 }
-
+.mygroup .tips {
+    display: inline-block;
+    font-size: 0.9em;
+    color: red;
+}
 /*repo page*/
 .latest-commit .more:hover {
     text-decoration:none;
