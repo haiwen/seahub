@@ -1,3 +1,14 @@
+import datetime
 from django.db import models
 
-# Create your models here.
+class GroupMessage(models.Model):
+    group_id = models.IntegerField()
+    from_email = models.EmailField()
+    message = models.CharField(max_length=150)
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
+
+class MessageReply(models.Model):
+    reply_to = models.ForeignKey(GroupMessage)
+    from_email = models.EmailField()
+    message = models.CharField(max_length=150)
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
