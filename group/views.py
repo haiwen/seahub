@@ -238,7 +238,7 @@ def group_info(request, group_id):
             l = UserNotification.objects.filter(note_type='group_msg',
                                                 detail=group_id)
             if len(l) == 0:
-                group_members = ccnet_rpc.get_group_members(int(group_id))
+                group_members = ccnet_threaded_rpc.get_group_members(int(group_id))
                 for m in group_members:
                     if request.user.username == m.user_name:
                         continue
