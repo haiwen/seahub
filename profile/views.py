@@ -116,7 +116,7 @@ def get_user_profile(request, user):
     content_type = 'application/json; charset=utf-8'
     
     try:
-        user_check = ccnet_rpc.get_emailuser(user)
+        user_check = ccnet_threaded_rpc.get_emailuser(user)
     except:
         user_check = None
         
