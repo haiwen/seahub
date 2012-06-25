@@ -1,5 +1,6 @@
 # encoding: utf-8
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -9,6 +10,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_re
     get_group_repoids, check_group_staff
 from pysearpc import SearpcError
 
+from models import GroupMessage, MessageReply
+from forms import MessageForm
 from seahub.contacts.models import Contact
 from seahub.utils import go_error, go_permission_error, validate_group_name
 from seahub.views import validate_emailuser
@@ -40,16 +43,6 @@ def group_list(request):
     return render_to_response("group/groups.html", {
             "groups": groups,
             }, context_instance=RequestContext(request))
-
-@login_required
-def group_operations(request, group_id):
-    op = request.GET.get('op', '')
-    if op == 'delete':
-        return group_remove(request, group_id)
-    elif op == 'quit':
-        return group_quit(request, group_id)
-    else:
-        return group_info(request, group_id )
 
 @login_required
 def group_remove(request, group_id):
@@ -96,8 +89,7 @@ def group_quit(request, group_id):
         
     return HttpResponseRedirect(reverse('group_list', args=[]))
 
-@login_required
-def group_info(request, group_id):
+def render_group_info(request, group_id, form):
     try:
         group_id_int = int(group_id)
     except ValueError:
@@ -146,6 +138,29 @@ def group_info(request, group_id):
             repo.share_from_me = False
         repos.append(repo)
 
+    """group messages"""
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '15'))
+    except ValueError:
+        current_page = 1
+        per_page = 15
+
+    msgs_plus_one = GroupMessage.objects.filter(group_id=group_id).order_by('-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
+
+    if len(msgs_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    group_msgs = msgs_plus_one[:per_page]
+    for msg in group_msgs:
+        msg.reply_list = MessageReply.objects.filter(reply_to=msg)
+        msg.reply_cnt = len(msg.reply_list)
+        
+    msg_cnt = GroupMessage.objects.filter(group_id=group_id).count()
+
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
@@ -154,7 +169,74 @@ def group_info(request, group_id):
             "group" : group,
             "is_staff": is_staff,
             "is_join": joined,
+            "group_msgs": group_msgs,
+            "msg_cnt": msg_cnt,
+            "form": form,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
             }, context_instance=RequestContext(request));
+
+@login_required
+def msg_reply(request, msg_id):
+    """Show group message replies, and process message reply in ajax"""
+    if request.is_ajax():
+        if request.method == 'POST':
+            form = MessageForm(request.POST)
+
+            # TODO: invalid form
+            if form.is_valid():
+                msg = form.cleaned_data['message']
+                try:
+                    group_msg = GroupMessage.objects.get(id=msg_id)
+                except GroupMessage.DoesNotExist:
+                    return HttpResponse(status=400)
+            
+                msg_reply = MessageReply()
+                msg_reply.reply_to = group_msg
+                msg_reply.from_email = request.user.username
+                msg_reply.message = msg
+                msg_reply.save()
+            
+        format = 'json'
+        mimetype = 'application/javascript'
+        try:
+            msg = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            raise HttpResponse(status=400)
+        
+        data = serializers.serialize(format, MessageReply.objects.filter(reply_to=msg))
+        
+        return HttpResponse(data,mimetype)
+    else:
+        return HttpResponse(status=400)
+
+@login_required
+def group_info(request, group_id):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            msg = form.cleaned_data['message']
+            message = GroupMessage()
+            message.group_id = group_id
+            message.from_email = request.user.username
+            message.message = msg
+            message.save()
+            # clear form data
+            form = MessageForm()
+    else:
+        form = MessageForm()
+        
+        op = request.GET.get('op', '')
+        if op == 'delete':
+            return group_remove(request, group_id)
+        elif op == 'quit':
+            return group_quit(request, group_id)
+
+    return render_group_info(request, group_id, form)
 
 @login_required
 def group_members(request, group_id):

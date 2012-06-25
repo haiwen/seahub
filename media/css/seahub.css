@@ -442,3 +442,31 @@ h2.repo-history {
     font-size:12px;
     margin-top:10px;
 }
+
+/* group message and replies */
+#group-reply textarea{
+    width: 680px;
+    height: 100px;
+}
+#group-reply ul {
+    margin-top: 20px;
+}
+#group-reply li {
+    border-bottom: 1px dashed #999;
+    overflow: hidden;
+    min-height: 55px;
+}
+#group-reply .reply-list {
+    padding-bottom: 6px;
+}
+#group-reply .from {
+    color: #880088;
+}
+#group-reply .ts {
+    color: #808080;
+    font-size: 10px;
+}
+#group-reply .msg-op .msg {
+    display: inline-block;
+}
+

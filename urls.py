@@ -12,6 +12,7 @@ from seahub.views import root, peers, myhome, \
     seafile_access_check, back_local, repo_history_changes
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
+from seahub.group.views import group_list
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -59,13 +60,14 @@ urlpatterns = patterns('',
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
-
+                       
     ### Apps ###                       
     (r'^avatar/', include('avatar.urls')),
     (r'^notification/', include('notifications.urls')),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
+    url(r'^groups/', group_list, name='group_list'),
     (r'^profile/', include('seahub.profile.urls')),
 
     ### SeaHub admin ###                       
