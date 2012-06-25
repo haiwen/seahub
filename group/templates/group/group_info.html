@@ -9,7 +9,7 @@
 <h3>管理员</h3>
 <ul>
 {% for member in managers %}
-    <li class="group-member">{% avatar member.user_name 16 %}<span class="group-member-name"><a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></span></li>
+    <li class="group-member">{% avatar member.user_name 16 %}<a class="group-member-name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
 {% endfor %}
 </ul>
 
@@ -17,9 +17,7 @@
 {% if common_members %}
 <ul>
     {% for member in common_members %}
-    <li class="group-member">{% avatar member.user_name 16 %}
-    <span class="group-member-name"><a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></span>
-    </li>
+    <li class="group-member">{% avatar member.user_name 16 %}<a class="group-member-name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
@@ -36,6 +34,7 @@
 {% endif %}
 </ul>
 {% endif %}
+
 </div>
 
 <div class="main fleft">
@@ -67,9 +66,52 @@
 <p>暂无</p>
 {% endif %}
 </div>
+
+<div id="user-profile" class="user-profile ovhd hide"></div>
+<textarea id="jtemplate" class="hide">
+{#if !$T.err_msg}
+<div class="pic fleft">
+    <img class="avatar" width="80" height="80" alt="{$T.email}" />
+    {#if $T.new_user}
+    <button id="add-as-contact">加为联系人</button>
+    {#/if}
+</div>
+
+<div class="txt fright">
+    {#if $T.user_nickname}
+    <p>{$T.user_nickname}</p>
+    {#/if}
+
+    <p>{$T.email}</p>
+
+    {#if $T.user_intro}
+    <p class="intro">{$T.user_intro}</p>
+    {#/if}
+</div>
+
+{#if $T.new_user}
+<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <label>邮箱：</label><br />
+    <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{$T.email}" /><br />
+    <label>名字(可选)：</label><br />
+    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <label>备注(可选)：</label><br />
+    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="submit" value="提交"  class="submit" />
+</form>
+{#/if}
+
+{#else}
+<p class="error">{$T.err_msg}</p>
+{#/if}
+
+</textarea>
+
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-jtemplates.js"></script>
 <script type="text/javascript">
     addConfirmTo($('#quit-group'), '确定要退出？');
     addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
@@ -86,5 +128,55 @@
     $('.download').click(function() {
         window.open($(this).attr('data'));
     });
+
+//show profile when  mouse over
+var Hide_profile = '';
+$('.group-member').hover(
+    function() {
+        var this_top = $(this).offset().top - $('#main').offset().top;
+        $(this).css('background', '#eee');
+        var avatar_url = $(this).children('.avatar').attr('src'),
+            avatar_url_array = avatar_url.split('/');
+        if (avatar_url_array.length > 4) {//not default avatar
+            avatar_url_array[5] = 80;//choose avatar size 
+            avatar_url = avatar_url_array.join('/');
+        }
+        $.ajax({
+            url: $(this).children('.group-member-name').attr('href') + 'get/',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $('#user-profile').setTemplateElement('jtemplate').processTemplate(data);
+                $('#user-profile .avatar').attr('src', avatar_url);
+                $('#user-profile').removeClass('hide');
+                $('#main').css('position', 'relative');
+                $('#add-as-contact').click(function() {
+                    $('#add-as-contact-form').modal({appendTo: '#main'});
+                });
+                if (this_top + $('#user-profile').height() < $('#main').height()) {
+                    $('#user-profile').css('top', this_top - 10);
+                } else {
+                    $('#user-profile').css('top', $('#main').height() - $('#user-profile').height() - 5);
+                }
+            }
+        });
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).css('background', '#fff');
+        Hide_profile = setTimeout(function() { $('#user-profile').addClass('hide'); }, 3000);
+    }
+);
+
+$('#user-profile').hover(
+    function() {
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).addClass('hide');
+    }
+);
+
 </script>
 {% endblock %}

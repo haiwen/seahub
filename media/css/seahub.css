@@ -395,6 +395,20 @@ h2.repo-history {
 .org-member-name {
 	vertical-align:middle;
 }
+#user-profile {
+    width:318px;
+    position:absolute;
+    left:365px;
+    top:50px;
+    z-index:10;
+    padding:15px;;
+    min-height:130px;
+    border:1px solid #ddd;
+    background:#fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 #member-add {
     font-size:13px;
     padding-left:18px;
@@ -410,7 +424,6 @@ h2.repo-history {
 .user-profile .pic {
     width:80px;
     text-align:center;
-    margin-right:20px;
 }
 .user-profile .avatar {
     border-radius:4px;
