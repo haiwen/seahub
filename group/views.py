@@ -15,6 +15,7 @@ from forms import MessageForm
 from signals import grpmsg_added
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
+from seahub.profile.models import Profile
 from seahub.utils import go_error, go_permission_error, validate_group_name
 from seahub.views import validate_emailuser
 
@@ -213,8 +214,16 @@ def msg_reply(request, msg_id):
             msg = GroupMessage.objects.get(id=msg_id)
         except GroupMessage.DoesNotExist:
             raise HttpResponse(status=400)
-        
-        data = serializers.serialize(format, MessageReply.objects.filter(reply_to=msg))
+
+        replies = MessageReply.objects.filter(reply_to=msg)
+        for e in replies:
+            try:
+                p = Profile.objects.get(user=e.from_email)
+                e.from_email = p.nickname
+            except Profile.DoesNotExist:
+                pass
+                
+        data = serializers.serialize(format, replies)
         
         return HttpResponse(data,mimetype)
     else:
