@@ -187,8 +187,8 @@ $('.group-member').hover(
         $(this).css('background', '#eee');
         var avatar_url = $(this).children('.avatar').attr('src'),
             avatar_url_array = avatar_url.split('/');
-        if (avatar_url_array.length > 4) {//not default avatar
-            avatar_url_array[5] = 80;//choose avatar size 
+        if (avatar_url_array[avatar_url_array.length-2] == 16) {//not default avatar
+            avatar_url_array[avatar_url_array.length-2] = 80;//choose avatar size 
             avatar_url = avatar_url_array.join('/');
         }
         $.ajax({
