@@ -67,60 +67,54 @@
 {% endif %}
 
 <div id="group-reply">
-<h3>留言板 （全部{{ msg_cnt }}条）</h3>
-<form action="" method="post">
-  <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
-  <input type="submit" value="留言" class="submit" />  
-  {% for error in form.message.errors %}
-  <span class="error">{{ error|escape }}</span>
-  {% endfor %}
-</form>
+    <h3>留言板<span class="msg-num">（全部{{ msg_cnt }}条）</span></h3>
+    <form action="" method="post">
+        <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
+        {% for error in form.message.errors %}
+        <p class="error">{{ error|escape }}</p>
+        {% endfor %}
+        <input type="submit" value="提交" class="submit" />
+    </form>
 
 {% if group_msgs %}
-<ul class="replies">
-  {% for msg in group_msgs %}
-  
-  {% avatar msg.from_email 48 %}
-  
-  <li id="li{{ msg.id }}">
-    <span class="from">
-    {{ msg.from_email }}
-    </span>
-    
-    <span class="ts">
-    {{ msg.timestamp|date:"Y-m-d H:i" }}
-    </span>
-    
-    <div class="msg-op">
-      <span class="msg">{{ msg.message }}</span>
-      <span>
-        <a class="op reply" href="#" data="{{ msg.id }}" >回复（{{ msg.reply_cnt }}）</a>
-        <a class="op replyclose" href="#" data="{{ msg.id }}" style="display:none; " >收起回复</a>        
-      </span>
-    </div>
-    
-    <div class="reply-list"></div>
-    
-    <form class="hide reply-form" method="post" action="">
-      <input type="hidden" name="msg_id" value="{{ msg.id }}"/>
-      <input type="text" name="message" />
-      <input type="submit" value="回复" />
-    </form>
-  </li>
-  {% endfor %}
-</ul>
+    <ul class="msg-list">
+    {% for msg in group_msgs %}
+        <li id="li{{ msg.id }}" class="msg w100 ovhd">
+        <div class="pic fleft">
+            <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{% avatar msg.from_email 48 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="msg-hd">
+                <span class="time">{{ msg.timestamp|date:"Y-m-d H:i" }}</span>
+                <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
+            </div>
+            <div class="msg-bd">
+                <p>{{ msg.message }}</p>
+                <a class="reply op" href="#" data="{{ msg.id }}" >回复（{{ msg.reply_cnt }}）</a>
+                <a class="replyclose op hide" href="#" data="{{ msg.id }}">收起回复</a>
+                <ul class="reply-list hide"></ul>
+                <form class="reply-form hide" method="post" action="">
+                    <input type="hidden" name="msg_id" value="{{ msg.id }}" />
+                    <input type="text" name="message" class="text-input" />
+                    <input type="submit" class="submit" value="回复" />
+                    <p class="error hide">输入不能为空且应少于150个字符。</p>
+                </form>
+            </div>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
 {% endif %}
-</div>
 
-<div id="paginator">
-    {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}group/{{ group.id}}/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
-    {% endif %}
-    {% if page_next %}
-    <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
-    {% endif %}
+    <div id="paginator">
+        {% if current_page != 1 %}
+        <a href="{{ SITE_ROOT }}group/{{ group.id}}/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+        {% endif %}
+        {% if page_next %}
+        <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+        {% endif %}
+    </div>
 </div>
-
 </div>
 
 <div id="user-profile" class="user-profile ovhd hide"></div>
@@ -185,7 +179,7 @@
         window.open($(this).attr('data'));
     });
 
-//show profile when  mouse over
+//show profile when mouse over
 var Hide_profile = '';
 $('.group-member').hover(
     function() {
@@ -234,55 +228,37 @@ $('#user-profile').hover(
     }
 );
 
-    $('.reply').each(function() {
-        $(this).click(function() {
-            var msg_id = $(this).attr('data');
-            $.ajax({
-                url: "{{ SITE_ROOT }}group/reply/"+msg_id+"/",
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    var str_con = '';
-                    var show = function(data_) {
-                        for (var i = 0, len = data_.length; i < len; i++) {
-                            var msg = data_[i]['fields']['message'];
-                            str_con += '<p>';
-                            str_con += msg;
-                            str_con += '</p>';
-                        }
-                    };
-                    show(data);
-                    var s = '#li' + msg_id + ' > .reply-list';
-                    var s1 = '#li' + msg_id + ' > form';
-                    $(s).html(str_con);
-                    $(s).show();
-                    $(s1).removeClass('hide');
+    $('.reply').click(function() {
+        var msg_id = $(this).attr('data');
+        var msg_bd = $(this).parent();
+        $.ajax({
+            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+               if (data.length > 0) {
+                    var str = '';
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        str += '<li>' + data[i]['fields']['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['fields']['from_email'] + '/">' + data[i]['fields']['from_email'] + '</a></li>';
+                    }
+                    msg_bd.children('.reply-list').html(str).removeClass('hide');
                 }
-            });
-            $(this).hide();
-            
-            var s3 = '#li' + msg_id + ' a~a';
-            $(s3).show();
-            
-            return false;
+            }
         });
+        msg_bd.children('.reply-form').removeClass('hide');
+        $(this).addClass('hide');
+        msg_bd.children('.replyclose').removeClass('hide');
+        return false;
     });
 
-    $('.replyclose').each(function() {
-        $(this).click(function() {
-            var msg_id = $(this).attr('data');
-            var s1 = '#li' + msg_id + ' a';
-            var s2 = '#li' + msg_id + ' > .reply-list';
-            var s3 = '#li' + msg_id + ' > form';
-            var s4 = '#li' + msg_id + ' a~a';
-
-            $(s2).hide();
-            $(s3).addClass('hide');
-            $(s1).show();
-            $(s4).hide();
-            return false;
-        });
+    $('.replyclose').click(function() {
+        var msg_bd = $(this).parent();
+        msg_bd.children('.reply-list').addClass('hide');
+        msg_bd.children('.reply-form').addClass('hide');
+        $(this).addClass('hide');
+        msg_bd.children('.reply').removeClass('hide');
+        return false;
     });
     
     $('.reply-form').each(function(){
@@ -293,59 +269,51 @@ $('#user-profile').hover(
                     function getCookie(name) {
                         var cookieValue = null;
                         if (document.cookie && document.cookie != '') {
-                        var cookies = document.cookie.split(';');
-                        for (var i = 0; i < cookies.length; i++) {
-                            var cookie = jQuery.trim(cookies[i]);
-                            // Does this cookie string begin with the name we want?
-                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
                             }
-                         }
-                         }
-                         return cookieValue;
+                        }
+                        return cookieValue;
                     }
                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                    // Only send the token to relative URLs i.e. locally.
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                     }
                 } 
             });
 
-            var $form = $( this ),
-                m_id = $form.find( 'input[name="msg_id"]' ).val(),
-                m = $form.find( 'input[name="message"]' ).val();
-
-            $.ajax({
-                type: "POST",
-                url: "{{ SITE_ROOT }}group/reply/"+m_id+"/",
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: "message="+m,
-                success: function(data) {
-
-                    var str_con = '';
-                    var show = function(data_) {
-                        for (var i = 0, len = data_.length; i < len; i++) {
-                            var msg = data_[i]['fields']['message'];
-                            str_con += '<p>';
-                            str_con += msg;
-                            str_con += '</p>';
+            var form = $(this), 
+                m_id = form.children('input[name="msg_id"]').val(),
+                m = $.trim(form.children('input[name="message"]').val()),
+                msg_bd = form.parent();
+            if (m && m.length <= 150) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ SITE_ROOT }}group/reply/"+m_id+"/",
+                    dataType: 'json',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: "message="+m,
+                    success: function(data) {
+                        var str = '';
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            str += '<li>' + data[i]['fields']['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['fields']['from_email'] + '/">' + data[i]['fields']['from_email'] + '</a></li>';
                         }
-                    };
-                    show(data);
-                    var s = '#li' + m_id + ' > .reply-list';
-                    var s1 = '#li' + m_id + ' > form';
-                    $(s1).removeClass('hide');
-                    $(s).html(str_con);
-
-                    var s2 = '#li' + m_id + ' .reply';
-                    var t = '回复（' + data.length+ '）';
-                    $(s2).text(t);
-                    $form.find('input[name="message"]').val("");
-                }
-            });
+                        msg_bd.children('.reply-list').html(str).attr('class', 'reply-list');
+                        form.children('input[name="message"]').val('');
+                        form.children('.error').attr('Class' , 'error hide');
+                        msg_bd.children('.reply').html('回复（' + data.length+ '）');
+                    }
+                });
+            } else {
+                form.children('.error').removeClass('hide');
+            }
             return false;
         });
     });

@@ -448,29 +448,55 @@ h2.repo-history {
 }
 
 /* group message and replies */
-#group-reply textarea{
-    width: 680px;
-    height: 100px;
+#group-reply {
+    margin-top:50px;
 }
-#group-reply ul {
-    margin-top: 20px;
+.msg-num {
+    font-size:12px;
+    color:#333;
 }
-#group-reply li {
-    border-bottom: 1px dashed #999;
-    overflow: hidden;
-    min-height: 55px;
+#message {
+    width: 600px;
+    height: 80px;
+    margin-top: 4px;
 }
-#group-reply .reply-list {
-    padding-bottom: 6px;
+#group-reply .submit {
+    margin-top:3px;
 }
-#group-reply .from {
-    color: #880088;
+.msg-list {
+    width:602px;
+    margin-top: 10px;
 }
-#group-reply .ts {
+.msg {
+    word-wrap: break-word;
+    padding: 10px 0 5px;
+    min-height: 48px;
+    _min-height: 48px;
+}
+.msg .txt {
+    width:540px;
+}
+.msg-hd {
+    padding:2px 3px;
+    background:#fafafa;
+    margin-bottom:2px;
+}
+.msg-hd .time {
     color: #808080;
-    font-size: 10px;
 }
-#group-reply .msg-op .msg {
-    display: inline-block;
+.msg-bd .op:hover {
+    text-decoration:none;
 }
-
+.reply-list {
+    color:#444;
+    width:90%;
+    padding:2px 0 2px 0;
+}
+.reply-list a {
+    color:#666;
+    font-weight:normal;
+    font-size:12px;
+}
+.reply-form .text-input {
+    width:82%;
+}
