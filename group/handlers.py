@@ -18,10 +18,3 @@ def grpmsg_added_cb(sender, **kwargs):
             n = UserNotification(to_user=m.user_name, msg_type='group_msg',
                                  detail=group_id)
             n.save()
-            
-    
-
-            
-            
-
-    

@@ -1,8 +1,6 @@
 import datetime
 from django.db import models
 
-from seahub.notifications.models import UserNotification
-
 class GroupMessage(models.Model):
     group_id = models.IntegerField()
     from_email = models.EmailField()
