@@ -547,9 +547,9 @@ def myhome(request):
 
     # user notifications
     l = []
-    notes = UserNotification.objects.filter(email=request.user.username)
+    notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
-        if n.note_type == 'group_msg':
+        if n.msg_type == 'group_msg':
             l.append(n.detail)
 
     # my groups

@@ -6,9 +6,9 @@ class Notification(models.Model):
     primary = models.BooleanField(default=False)
 
 class UserNotification(models.Model):
-    email = models.EmailField(max_length=255)
-    note_type = models.CharField(max_length=30)
-    detail = models.CharField(max_length=100)
+    to_user = models.EmailField(max_length=255)
+    msg_type = models.CharField(max_length=30)
+    detail = models.TextField()
     
 class NotificationForm(ModelForm):
     """
