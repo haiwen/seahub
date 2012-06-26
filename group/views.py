@@ -142,6 +142,7 @@ def render_group_info(request, group_id, form):
 
     # remove user notifications
     UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='group_msg',
                                     detail=str(group_id)).delete()
     
     """group messages"""
