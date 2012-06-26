@@ -240,7 +240,7 @@ $('#user-profile').hover(
                if (data.length > 0) {
                     var str = '';
                     for (var i = 0, len = data.length; i < len; i++) {
-                        str += '<li>' + data[i]['fields']['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['fields']['from_email'] + '/">' + data[i]['fields']['from_email'] + '</a></li>';
+                        str += '<li>' + data[i]['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['from_email'] + '/">' + data[i]['nickname'] + '</a></li>';
                     }
                     msg_bd.children('.reply-list').html(str).removeClass('hide');
                 }
@@ -303,7 +303,7 @@ $('#user-profile').hover(
                     success: function(data) {
                         var str = '';
                         for (var i = 0, len = data.length; i < len; i++) {
-                            str += '<li>' + data[i]['fields']['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['fields']['from_email'] + '/">' + data[i]['fields']['from_email'] + '</a></li>';
+                            str += '<li>' + data[i]['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['from_email'] + '/">' + data[i]['nickname'] + '</a></li>';
                         }
                         msg_bd.children('.reply-list').html(str).attr('class', 'reply-list');
                         form.children('input[name="message"]').val('');

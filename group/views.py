@@ -1,6 +1,6 @@
 # encoding: utf-8
+import simplejson as json
 from django.core.urlresolvers import reverse
-from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -208,24 +208,29 @@ def msg_reply(request, msg_id):
                 msg_reply.message = msg
                 msg_reply.save()
             
-        format = 'json'
-        mimetype = 'application/javascript'
+        content_type = 'application/json; charset=utf-8'
+        
         try:
             msg = GroupMessage.objects.get(id=msg_id)
         except GroupMessage.DoesNotExist:
             raise HttpResponse(status=400)
 
-        replies = MessageReply.objects.filter(reply_to=msg)
+        l = []
+        replies = MessageReply.objects.filter(reply_to=msg)        
         for e in replies:
             try:
                 p = Profile.objects.get(user=e.from_email)
-                e.from_email = p.nickname
+                e.nickname = p.nickname
             except Profile.DoesNotExist:
-                pass
+                e.nickname = e.from_email
                 
-        data = serializers.serialize(format, replies)
-        
-        return HttpResponse(data,mimetype)
+            d = {}
+            d['from_email'] = e.from_email
+            d['nickname'] = e.nickname
+            d['message'] = e.message
+            l.append(d)
+                
+        return HttpResponse(json.dumps(l), content_type=content_type)
     else:
         return HttpResponse(status=400)
 
