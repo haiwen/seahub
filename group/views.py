@@ -251,6 +251,10 @@ def msg_reply_new(request):
     for msg_id in grpmsg_reply_list:
         try:
             m = GroupMessage.objects.get(id=msg_id)
+            # get group name
+            group = ccnet_threaded_rpc.get_group(int(m.group_id))
+            m.group_name = group.group_name
+            
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
             # get nickname

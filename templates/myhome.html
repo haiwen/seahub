@@ -14,6 +14,10 @@
 {% endif %}
 </div>
 
+{% if has_grpmsg_reply %}
+<span class="new-reply"><a href="{{ SITE_ROOT }}group/reply/new/">新回复</a></span>
+{% endif %}
+
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} / 2 GB</p>
 
@@ -55,14 +59,6 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
-<h3>留言回复</h3>
-{% if has_grpmsg_reply %}
-<a class="op" href="{{ SITE_ROOT }}group/reply/new/">新回复</a>
-{% else %}
-</p>暂无</p>
-{% endif %}
-
 
 {% endblock %}
 

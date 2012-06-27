@@ -4,10 +4,7 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
-<h2>新回复</h2>
-
 <div class="main fleft">
-<div id="group-reply">
 {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs %}
@@ -19,6 +16,7 @@
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|date:"Y-m-d H:i" }}</span>
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
+                所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a>
             </div>
             <div class="msg-bd">
                 <p>{{ msg.message }}</p>
@@ -50,7 +48,6 @@
 <p>暂无</p>    
 {% endif %}
 
-</div>
 </div>
 
 {% endblock %}
@@ -155,7 +152,7 @@ $('#user-profile').hover(
         msg_bd.children('.reply').removeClass('hide');
         return false;
     });
-    
+
     $('.reply-form').each(function(){
         $(this).submit(function(event) {
             // prepare django csrf token

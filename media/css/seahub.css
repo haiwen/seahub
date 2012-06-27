@@ -329,6 +329,15 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     font-size: 0.9em;
     color: red;
 }
+.new-reply {
+    padding: 5px;
+    background-color: #FDF;
+}
+.new-reply a {
+    color: #000;
+    font-weight: normal;
+}
+
 /*repo page*/
 .latest-commit .more:hover {
     text-decoration:none;
