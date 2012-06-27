@@ -67,7 +67,7 @@
 {% endif %}
 
 <div id="group-reply">
-    <h3>留言板<span class="msg-num">（全部{{ msg_cnt }}条）</span></h3>
+    <h3>留言板</h3>
     <form action="" method="post">
         <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
         {% for error in form.message.errors %}
@@ -79,7 +79,7 @@
 {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs %}
-        <li id="li{{ msg.id }}" class="msg w100 ovhd">
+        <li class="msg w100 ovhd">
         <div class="pic fleft">
             <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{% avatar msg.from_email 48 %}</a>
         </div>
@@ -90,8 +90,12 @@
             </div>
             <div class="msg-bd">
                 <p>{{ msg.message }}</p>
-                <a class="reply op" href="#" data="{{ msg.id }}" >回复（{{ msg.reply_cnt }}）</a>
-                <a class="replyclose op hide" href="#" data="{{ msg.id }}">收起回复</a>
+                {% if msg.reply_cnt == 0 %}
+                <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
+                {% else %}
+                <a class="reply op" href="#" data="{{ msg.id }}">{{ msg.reply_cnt }} 回复</a>
+                {% endif %}
+                <a class="replyclose op hide" href="#">收起回复</a>
                 <ul class="reply-list hide"></ul>
                 <form class="reply-form hide" method="post" action="">
                     <input type="hidden" name="msg_id" value="{{ msg.id }}" />
@@ -215,7 +219,7 @@ $('.group-member').hover(
     },
     function() {
         $(this).css('background', '#fff');
-        Hide_profile = setTimeout(function() { $('#user-profile').addClass('hide'); }, 3000);
+        Hide_profile = setTimeout(function() { $('#user-profile').addClass('hide'); }, 1000);
     }
 );
 
@@ -229,8 +233,8 @@ $('#user-profile').hover(
 );
 
     $('.reply').click(function() {
-        var msg_id = $(this).attr('data');
-        var msg_bd = $(this).parent();
+        var msg_id = $(this).attr('data'),
+            msg_bd = $(this).parent();
         $.ajax({
             url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
             dataType: 'json',
@@ -308,7 +312,7 @@ $('#user-profile').hover(
                         msg_bd.children('.reply-list').html(str).attr('class', 'reply-list');
                         form.children('input[name="message"]').val('');
                         form.children('.error').attr('Class' , 'error hide');
-                        msg_bd.children('.reply').html('回复（' + data.length+ '）');
+                        msg_bd.children('.reply').html(data.length + ' 回复');
                     }
                 });
             } else {
