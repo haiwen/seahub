@@ -167,7 +167,6 @@ def render_group_info(request, group_id, form):
         msg.reply_list = MessageReply.objects.filter(reply_to=msg)
         msg.reply_cnt = len(msg.reply_list)
         
-    msg_cnt = GroupMessage.objects.filter(group_id=group_id).count()
 
     return render_to_response("group/group_info.html", {
             "managers": managers,
@@ -178,7 +177,6 @@ def render_group_info(request, group_id, form):
             "is_staff": is_staff,
             "is_join": joined,
             "group_msgs": group_msgs,
-            "msg_cnt": msg_cnt,
             "form": form,
             'current_page': current_page,
             'prev_page': current_page-1,
