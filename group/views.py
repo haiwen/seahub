@@ -11,7 +11,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_re
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
-from forms import MessageForm
+from forms import MessageForm, MessageReplyForm
 from signals import grpmsg_added
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
@@ -192,7 +192,7 @@ def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
     if request.is_ajax():
         if request.method == 'POST':
-            form = MessageForm(request.POST)
+            form = MessageReplyForm(request.POST)
 
             # TODO: invalid form
             if form.is_valid():
