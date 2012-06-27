@@ -1,0 +1,216 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags avatar_tags %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block main_panel %}
+<h2>新回复</h2>
+
+<div class="main fleft">
+<div id="group-reply">
+{% if group_msgs %}
+    <ul class="msg-list">
+    {% for msg in group_msgs %}
+        <li class="msg w100 ovhd">
+        <div class="pic fleft">
+            <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{% avatar msg.from_email 48 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="msg-hd">
+                <span class="time">{{ msg.timestamp|date:"Y-m-d H:i" }}</span>
+                <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
+            </div>
+            <div class="msg-bd">
+                <p>{{ msg.message }}</p>
+                {% if msg.reply_cnt == 0 %}
+                <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
+                {% else %}
+                <a class="reply op hide" href="#" data="{{ msg.id }}">{{ msg.reply_cnt }} 回复</a>
+                {% endif %}
+                <a class="replyclose op" href="#">收起回复</a>
+                <ul class="reply-list">
+                  {% if msg.reply_list %}
+                  {% for reply in msg.reply_list %}
+                  <li>{{ reply.message }} -- <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/">{{ reply.nickname }}</a></li>
+                  {% endfor %}
+                  {% endif %}
+                </ul>
+                <form class="reply-form" method="post" action="">
+                    <input type="hidden" name="msg_id" value="{{ msg.id }}" />
+                    <input type="text" name="message" class="text-input" />
+                    <input type="submit" class="submit" value="回复" />
+                    <p class="error hide">输入不能为空且应少于150个字符。</p>
+                </form>
+            </div>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+<p>暂无</p>    
+{% endif %}
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-jtemplates.js"></script>
+<script type="text/javascript">
+    addConfirmTo($('#quit-group'), '确定要退出？');
+    addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
+
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).find('img').css('cursor', 'pointer').removeClass('vh');
+        },
+        function() {
+            $(this).find('img').addClass('vh');
+        }
+    );
+
+    $('.download').click(function() {
+        window.open($(this).attr('data'));
+    });
+
+//show profile when mouse over
+var Hide_profile = '';
+$('.group-member').hover(
+    function() {
+        var this_top = $(this).offset().top - $('#main').offset().top;
+        $(this).css('background', '#eee');
+        var avatar_url = $(this).children('.avatar').attr('src'),
+            avatar_url_array = avatar_url.split('/');
+        if (avatar_url_array[avatar_url_array.length-2] == 16) {//not default avatar
+            avatar_url_array[avatar_url_array.length-2] = 80;//choose avatar size 
+            avatar_url = avatar_url_array.join('/');
+        }
+        $.ajax({
+            url: $(this).children('.group-member-name').attr('href') + 'get/',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $('#user-profile').setTemplateElement('jtemplate').processTemplate(data);
+                $('#user-profile .avatar').attr('src', avatar_url);
+                $('#user-profile').removeClass('hide');
+                $('#main').css('position', 'relative');
+                $('#add-as-contact').click(function() {
+                    $('#add-as-contact-form').modal({appendTo: '#main'});
+                });
+                if (this_top + $('#user-profile').height() < $('#main').height()) {
+                    $('#user-profile').css('top', this_top - 10);
+                } else {
+                    $('#user-profile').css('top', $('#main').height() - $('#user-profile').height() - 5);
+                }
+            }
+        });
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).css('background', '#fff');
+        Hide_profile = setTimeout(function() { $('#user-profile').addClass('hide'); }, 1000);
+    }
+);
+
+$('#user-profile').hover(
+    function() {
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).addClass('hide');
+    }
+);
+
+    $('.reply').click(function() {
+        var msg_id = $(this).attr('data'),
+            msg_bd = $(this).parent();
+        $.ajax({
+            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+               if (data.length > 0) {
+                    var str = '';
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        str += '<li>' + data[i]['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['from_email'] + '/">' + data[i]['nickname'] + '</a></li>';
+                    }
+                    msg_bd.children('.reply-list').html(str).removeClass('hide');
+                }
+            }
+        });
+        msg_bd.children('.reply-form').removeClass('hide');
+        $(this).addClass('hide');
+        msg_bd.children('.replyclose').removeClass('hide');
+        return false;
+    });
+
+    $('.replyclose').click(function() {
+        var msg_bd = $(this).parent();
+        msg_bd.children('.reply-list').addClass('hide');
+        msg_bd.children('.reply-form').addClass('hide');
+        $(this).addClass('hide');
+        msg_bd.children('.reply').removeClass('hide');
+        return false;
+    });
+    
+    $('.reply-form').each(function(){
+        $(this).submit(function(event) {
+            // prepare django csrf token
+            $.ajaxSetup({ 
+                beforeSend: function(xhr, settings) {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                } 
+            });
+
+            var form = $(this), 
+                m_id = form.children('input[name="msg_id"]').val(),
+                m = $.trim(form.children('input[name="message"]').val()),
+                msg_bd = form.parent();
+            if (m && m.length <= 150) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ SITE_ROOT }}group/reply/"+m_id+"/",
+                    dataType: 'json',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: "message="+m,
+                    success: function(data) {
+                        var str = '';
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            str += '<li>' + data[i]['message'] + ' -- ' + '<a href="{{ SITE_ROOT }}profile/' + data[i]['from_email'] + '/">' + data[i]['nickname'] + '</a></li>';
+                        }
+                        msg_bd.children('.reply-list').html(str).attr('class', 'reply-list');
+                        form.children('input[name="message"]').val('');
+                        form.children('.error').attr('Class' , 'error hide');
+                        msg_bd.children('.reply').html(data.length + ' 回复');
+                    }
+                });
+            } else {
+                form.children('.error').removeClass('hide');
+            }
+            return false;
+        });
+    });
+</script>
+{% endblock %}

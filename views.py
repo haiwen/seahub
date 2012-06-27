@@ -546,18 +546,21 @@ def myhome(request):
     contacts = Contact.objects.filter(user_email=email)
 
     # user notifications
-    l = []
+    grpmsg_list = []
+    has_grpmsg_reply = False
     notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
         if n.msg_type == 'group_msg':
-            l.append(n.detail)
+            grpmsg_list.append(n.detail)
+        elif n.msg_type == 'grpmsg_reply':
+            has_grpmsg_reply = True
 
     # my groups
     groups = ccnet_threaded_rpc.get_groups(email)
     groups_manage = []
     groups_join = []
     for group in groups:
-        if str(group.id) in l:
+        if str(group.id) in grpmsg_list:
             group.new_msg = True
         else:
             group.new_msg = False
@@ -581,6 +584,7 @@ def myhome(request):
             "in_repos": in_repos,
             "contacts": contacts,
             "groups": groups,
+            "has_grpmsg_reply": has_grpmsg_reply,
             "groups_manage": groups_manage,
             "groups_join": groups_join,
             }, context_instance=RequestContext(request))

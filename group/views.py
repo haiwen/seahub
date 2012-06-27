@@ -12,7 +12,7 @@ from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
 from forms import MessageForm, MessageReplyForm
-from signals import grpmsg_added
+from signals import grpmsg_added, grpmsg_reply_added
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
@@ -205,6 +205,13 @@ def msg_reply(request, msg_id):
                 msg_reply.from_email = request.user.username
                 msg_reply.message = msg
                 msg_reply.save()
+
+                # send signal if reply other's message
+                if group_msg.from_email != request.user.username:
+                    grpmsg_reply_added.send(sender=MessageReply,
+                                            msg_id=msg_id,
+                                            from_email=request.user.username)
+                
             
         content_type = 'application/json; charset=utf-8'
         
@@ -231,6 +238,41 @@ def msg_reply(request, msg_id):
         return HttpResponse(json.dumps(l), content_type=content_type)
     else:
         return HttpResponse(status=400)
+
+@login_required
+def msg_reply_new(request):
+    grpmsg_reply_list = []
+    notes = UserNotification.objects.filter(to_user=request.user.username)
+    for n in notes:
+        if n.msg_type == 'grpmsg_reply':
+            grpmsg_reply_list.append(n.detail)
+
+    group_msgs = []
+    for msg_id in grpmsg_reply_list:
+        try:
+            m = GroupMessage.objects.get(id=msg_id)
+            # get message replies
+            reply_list = MessageReply.objects.filter(reply_to=m)
+            # get nickname
+            for reply in reply_list:
+                try:
+                    p = Profile.objects.get(user=reply.from_email)
+                    reply.nickname = p.nickname
+                except Profile.DoesNotExist:
+                    reply.nickname = reply.from_email
+
+            m.reply_list = reply_list
+            group_msgs.append(m)
+        except GroupMessage.DoesNotExist:
+            continue
+
+    # remove new group msg reply notification
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='grpmsg_reply').delete()
+    
+    return render_to_response("group/new_msg_reply.html", {
+            'group_msgs': group_msgs,
+            }, context_instance=RequestContext(request))
 
 @login_required
 def group_info(request, group_id):

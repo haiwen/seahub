@@ -56,6 +56,14 @@
 <p>暂无</p>
 {% endif %}
 
+<h3>留言回复</h3>
+{% if has_grpmsg_reply %}
+<a class="op" href="{{ SITE_ROOT }}group/reply/new/">新回复</a>
+{% else %}
+</p>暂无</p>
+{% endif %}
+
+
 {% endblock %}
 
 
