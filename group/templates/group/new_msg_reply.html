@@ -14,7 +14,7 @@
         </div>
         <div class="txt fright">
             <div class="msg-hd">
-                <span class="time">{{ msg.timestamp|date:"Y-m-d H:i" }}</span>
+                <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
                 所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a>
             </div>

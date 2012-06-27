@@ -46,7 +46,11 @@ def translate_commit_desc(value):
 def translate_commit_time(value):
     """Translate commit time to human frindly format instead of timestamp"""
     limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
-    val = datetime.fromtimestamp(value)
+    if hasattr(value, 'strftime'):
+        val = datetime.fromtimestamp(int(value.strftime("%s")))
+    else:
+        val = datetime.fromtimestamp(value)
+
     now = datetime.now()
     delta = now - (val - dt.timedelta(0, 0, val.microsecond))
 
