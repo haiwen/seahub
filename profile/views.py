@@ -14,17 +14,17 @@ from models import Profile
 from utils import go_error
 from seahub.contacts.models import Contact
 
-@login_required
-def list_userids(request):
-    peer_list = []
-    try:
-        peers = ccnet_threaded_rpc.get_peers_by_email(request.user.username)
-    except:
-        peers = None
-    
-    return render_to_response('profile/user_ids.html',
-                              {'peers': peers},
-                              context_instance=RequestContext(request))
+#@login_required
+#def list_userids(request):
+#    peer_list = []
+#    try:
+#        peers = ccnet_threaded_rpc.get_peers_by_email(request.user.username)
+#    except:
+#        peers = None
+#    
+#    return render_to_response('profile/user_ids.html',
+#                              {'peers': peers},
+#                              context_instance=RequestContext(request))
 
 def logout_relay(request):
     peer_id = request.GET.get('peer_id', '')
