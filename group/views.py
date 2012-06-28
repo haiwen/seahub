@@ -136,7 +136,7 @@ def render_group_info(request, group_id, form):
             continue
         
         repo.share_from = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
-        repo.share_from_me = True if request.user.username == repo.share_from else False:
+        repo.share_from_me = True if request.user.username == repo.share_from else False
 
         try:
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
