@@ -14,8 +14,8 @@
 {% endif %}
 </div>
 
-{% if has_grpmsg_reply %}
-<span class="new-reply"><a href="{{ SITE_ROOT }}group/reply/new/">新回复</a></span>
+{% if grpmsg_reply_list %}
+<span class="new-reply"><a href="{{ SITE_ROOT }}group/reply/new/">{{ grpmsg_reply_list|length }}条留言有新回复</a></span>
 {% endif %}
 
 <h3>已用空间</h3>
