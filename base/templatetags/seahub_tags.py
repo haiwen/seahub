@@ -48,7 +48,7 @@ def translate_commit_time(value):
     
     if type(value) == type(1):	# check whether value is int
         val = datetime.fromtimestamp(value)
-    elif isinstance(value, dt):
+    elif isinstance(value, datetime):
         val = datetime.fromtimestamp(int(value.strftime("%s")))
     else:
         return value
