@@ -7,6 +7,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
+from seaserv import get_commits
+
 def go_permission_error(request, msg=None):
     """
     Return permisson error page.
@@ -72,3 +74,16 @@ def validate_group_name(group_name):
 
     """
     return re.match('^\w+$', group_name, re.U)
+
+def calculate_repo_last_modify(repo_list):
+    """
+    Get last modify time for repo. 
+    
+    """
+    for repo in repo_list:
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+            continue
+

@@ -1,5 +1,5 @@
 {% extends "myhome_base.html" %}
-{% load avatar_tags %}
+{% load seahub_tags avatar_tags %}
 
 {% block nav_myhome_class %}class="cur"{% endblock %}
 {% block left_panel %}
@@ -94,7 +94,8 @@
 <table>
     <tr>
         <th width="34%">名字</th>
-        <th width="54%">描述</th>
+        <th width="34%">描述</th>
+        <th width="20%">最后更新时间</th>
         <th width="12%">操作</th>
     </tr>
 
@@ -102,6 +103,11 @@
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>—— ——</td>
+        {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="下载" alt="下载" />
             <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" />
@@ -120,7 +126,8 @@
     <tr>
         <th width="25%">名字</th>
         <th width="20%">共享来源</th>
-        <th width="45%">描述</th>
+        <th width="25%">描述</th>
+        <th width="20%">最后更新时间</th>
         <th width="10%">操作</th>
     </tr>
 
@@ -129,6 +136,11 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>—— ——</td>
+        {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="下载" alt="下载" />
             <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.id }}&from={{ repo.shared_email }}&to={{ request.user }}" class="unshare-btn vh" title="取消共享" alt="取消共享" />

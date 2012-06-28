@@ -7,7 +7,7 @@ from django.template import RequestContext
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
-    get_group_repoids, check_group_staff
+    get_group_repoids, check_group_staff, get_commits
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
@@ -139,6 +139,12 @@ def render_group_info(request, group_id, form):
             repo.share_from_me = True
         else:
             repo.share_from_me = False
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+            continue
+
         repos.append(repo)
 
     # remove user notifications

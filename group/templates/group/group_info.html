@@ -43,7 +43,8 @@
 <table>
     <tr>
         <th width="20%">名字</th>
-        <th width="48%">描述</th>
+        <th width="28%">描述</th>
+        <th width="20">最后更新时间</th>
         <th width="22%">共享来源</th>
         <th width="10%">操作</th>
     </tr>
@@ -52,6 +53,11 @@
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>—— ——</td>
+        {% endif %}
         <td>{{ repo.share_from }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载" />

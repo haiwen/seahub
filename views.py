@@ -29,7 +29,8 @@ from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, gen_token
+    get_httpserver_root, get_ccnetapplet_root, gen_token, \
+    calculate_repo_last_modify
 from seahub.profile.models import Profile
     
 @login_required
@@ -536,11 +537,15 @@ def myhome(request):
 
     email = request.user.username
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+
+    # Repos that I own
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+    calculate_repo_last_modify(owned_repos)
     
     # Repos that are share to me
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
                                                       'to_email', -1, -1)
+    calculate_repo_last_modify(in_repos)
 
     # my contacts
     contacts = Contact.objects.filter(user_email=email)
@@ -1133,3 +1138,4 @@ def org_info(request):
             'org_users': org_members,
             'groups': groups,
             }, context_instance=RequestContext(request))
+
