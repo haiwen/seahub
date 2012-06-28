@@ -134,18 +134,17 @@ def render_group_info(request, group_id, form):
         repo = get_repo(repo_id)
         if not repo:
             continue
+        
         repo.share_from = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
-        if request.user.username == repo.share_from:
-            repo.share_from_me = True
-        else:
-            repo.share_from_me = False
+        repo.share_from_me = True if request.user.username == repo.share_from else False:
+
         try:
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
         except:
             repo.latest_modify = None
-            continue
 
         repos.append(repo)
+    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # remove user notifications
     UserNotification.objects.filter(to_user=request.user.username,
@@ -172,7 +171,6 @@ def render_group_info(request, group_id, form):
     for msg in group_msgs:
         msg.reply_list = MessageReply.objects.filter(reply_to=msg)
         msg.reply_cnt = len(msg.reply_list)
-        
 
     return render_to_response("group/group_info.html", {
             "managers": managers,

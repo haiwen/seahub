@@ -541,11 +541,13 @@ def myhome(request):
     # Repos that I own
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     calculate_repo_last_modify(owned_repos)
+    owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Repos that are share to me
     in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
                                                       'to_email', -1, -1)
     calculate_repo_last_modify(in_repos)
+    in_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # my contacts
     contacts = Contact.objects.filter(user_email=email)

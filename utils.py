@@ -85,5 +85,3 @@ def calculate_repo_last_modify(repo_list):
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
         except:
             repo.latest_modify = None
-            continue
-
