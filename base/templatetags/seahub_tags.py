@@ -32,16 +32,41 @@ def file_icon_filter(value):
     else:
         return FILEEXT_ICON_MAP.get('default')
 
-def desc_repl(matchobj):
-    if TRANSLATION_MAP.has_key(matchobj.group(0)):
-        return TRANSLATION_MAP.get(matchobj.group(0))
-
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
-    reg = '|'.join(TRANSLATION_MAP.keys())
+    """Translate commit description."""
+    if value.startswith('Reverted'):
+        return value.replace('Reverted repo to status at', u'同步目录内容还原到')
+    elif value.startswith('Merged'):
+        return u'合并了其他人的修改'
+    else:
+        operations = '|'.join(TRANSLATION_MAP.keys())
+        patt = r'(%s) "(.*)"\s?(and ([0-9]+) more files)?' % operations
 
-    return re.sub(reg, desc_repl, value)
+        ret_list = []
+        for e in value.split('.\n'):
+            if not e:
+                continue
 
+            m = re.match(patt, e)
+            if not m:
+                ret_list.append(e)
+                continue
+        
+            op = m.group(1)
+            op_trans = TRANSLATION_MAP.get(op)
+            file_name = m.group(2)
+            more_files = m.group(3)
+            n_files = m.group(4)
+    
+            if not more_files:
+                ret = op_trans + u' "' + file_name + u'".'
+            else:
+                ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个文件.'
+            ret_list.append(ret)
+
+        return ' '.join(ret_list)
+    
 @register.filter(name='translate_commit_time')
 def translate_commit_time(value):
     """Translate commit time to human frindly format instead of timestamp"""
