@@ -44,7 +44,7 @@ def translate_commit_desc(value):
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more files)?' % operations
 
         ret_list = []
-        for e in value.split('.\n'):
+        for e in value.split('\n'):
             if not e:
                 continue
 
@@ -65,7 +65,7 @@ def translate_commit_desc(value):
                 ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个文件.'
             ret_list.append(ret)
 
-        return ' '.join(ret_list)
+        return '\n'.join(ret_list)
     
 @register.filter(name='translate_commit_time')
 def translate_commit_time(value):
