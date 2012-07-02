@@ -61,7 +61,7 @@
       });
       return false;
   } else if (can_preview == 'True' && filetype == 'Image') {
-      $('#file-content').replaceWith('<img src="{{ raw_path }}" width="550" height="450"></img>');
+      $('#file-content').replaceWith('<img class="img-preview" src="{{ raw_path }}"></img>');
   } else {
       $('#file-content').html('无法识别该文件格式，<a class="op" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a>。');
   }
