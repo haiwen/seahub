@@ -112,7 +112,6 @@ INSTALLED_APPS = (
     'seahub.group',
     'seahub.share',
     'seahub.subdomain',
-    'gunicorn',
 )
 
 AUTHENTICATION_BACKENDS = (

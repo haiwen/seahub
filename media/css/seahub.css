@@ -354,11 +354,13 @@ table img {
 }
 .repo-op .upload-file {
     padding-left:17px;
-    background-image:url('../img/upload.jpg');
+    background-image:url('../img/upload.png');
+    font-weight: normal;
 }
 #add-new-dir {
     padding-left:20px;
-    background-image:url('../img/add-new-folder.jpg');
+    background-image:url('../img/folder-add.png');
+    font-weight: normal;
 }
 .more-op {
     cursor:pointer;
