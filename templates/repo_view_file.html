@@ -1,0 +1,71 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block info_bar_message %}
+{% if request.user.is_authenticated %}
+  {{ block.super }}
+{% else %}
+  <div id="info-bar">
+    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block main_panel %}
+    <h2 class="subject">
+        {{repo.props.name}}
+    </h2>
+
+    <div class="side fright">
+      <h3>操作</h3>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
+    </div>
+
+    <div class="main fleft">
+          <p class="path">
+            当前路径：
+            {% for name, link in zipped %}
+            {% if not forloop.last %}
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+            {% else %}
+            {{ name }}
+            {% endif %}
+            {% endfor %}
+          </p>
+          <pre id="file-content">正在读取文件内容...</pre>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    $(window).load(function() {
+    var can_preview = "{{ can_preview }}";
+    var filetype = "{{ filetype }}";
+    
+    if (can_preview == 'True' && filetype == 'Document') {
+      $.ajax({
+          url: '{{ SITE_ROOT }}repo/{{ repo.id }}/view/{{ obj_id }}/?file_name={{ file_name }}&t={{ token }}',
+          dataType: 'json',
+          cache: false,
+          contentType: 'application/json; charset=utf-8',
+          success: function(data) {
+              if (data.length > 0) {
+                    $('#file-content').html(data[0]['content']);
+              }
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+              var jsonVal = jQuery.parseJSON(xhr.responseText);
+              $('#file-content').html(jsonVal[0]['error']);
+          }
+      });
+      return false;
+  } else if (can_preview == 'True' && filetype == 'Image') {
+      $('#file-content').replaceWith('<img src="{{ raw_path }}" width="550" height="450"></img>');
+  } else {
+      $('#file-content').html('无法识别该文件格式，<a class="op" href="">下载文件</a>。');
+  }
+  });
+
+</script>
+{% endblock %}

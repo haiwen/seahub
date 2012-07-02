@@ -104,7 +104,7 @@
             {% for dirent in file_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">{{ dirent.props.obj_name }}</a></td>
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
                   <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />

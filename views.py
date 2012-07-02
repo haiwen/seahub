@@ -3,7 +3,9 @@ import settings
 import os
 import stat
 import simplejson as json
+import re
 import sys
+import urllib2
 from urllib import quote
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -34,9 +36,10 @@ from seahub.notifications.models import UserNotification
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
-    calculate_repo_last_modify, \
+    calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1
 from seahub.profile.models import Profile
+from settings import FILE_PREVIEW_MAX_SIZE
 
 @login_required
 def root(request):
@@ -751,6 +754,104 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
 
+@login_required
+def repo_view_file(request, repo_id, obj_id):
+    http_server_root = get_httpserver_root()
+    filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
+
+    if request.is_ajax():
+        content_type = 'application/json; charset=utf-8'
+        token = request.GET.get('t')
+        tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
+        redirect_url = tmp_str % (http_server_root,
+                                  repo_id, obj_id,
+                                  filename, 'view', 
+                                  token,
+                                  request.user.username)
+        try:
+            proxied_request = urllib2.urlopen(redirect_url)
+            if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
+                data = json.dumps([{'error': '文件超过10M，无法在线查看。'}])
+                return HttpResponse(data, status=400, content_type=content_type)
+            else:
+                content = proxied_request.read()
+        except urllib2.HTTPError, e:
+            err = 'HTTPError: 无法在线打开该文件'
+            data = json.dumps([{'error': err}])
+            return HttpResponse(data, status=400, content_type=content_type)
+        except urllib2.URLError as e:
+            err = 'URLError: 无法在线打开该文件'
+            data = json.dumps([{'error': err}])
+            return HttpResponse(data, status=400, content_type=content_type)
+        else:
+            l, d = [], {}
+            try:
+                # XXX: file in windows is encoded in gbk
+                u_content = content.decode('gbk')                
+            except:
+                u_content = content.decode('utf-8')
+            from django.utils.html import escape
+            d['content'] = re.sub("\r\n|\n", "<br />", escape(u_content))
+            l.append(d)
+            data = json.dumps(l)
+            return HttpResponse(data, status=200, content_type=content_type)
+    
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # if a repo doesn't have access property in db, then assume it's 'own'
+    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    if not repo_ap:
+        repo_ap = 'own'
+
+    # if a repo is shared to me, then I can view and download file no mater whether
+    # repo's access property is 'own' or 'public'
+    if check_shared_repo(request, repo_id):
+        share_to_me = True
+    else:
+        share_to_me = False
+            
+    token = ''        
+    if repo_ap == 'own':
+        # people who is owner or this repo is shared to him, can visit the repo;
+        # others, just go to 404 page           
+        if validate_owner(request, repo_id) or share_to_me:
+            # owner should get a token to visit repo                
+            token = gen_token()
+            # put token into memory in seaf-server
+            seafserv_rpc.web_save_access_token(token, obj_id)
+        else:
+            raise Http404
+
+    # generate path and link
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+    zipped = gen_path_link(path, repo.name)
+
+    # filename
+    can_preview, filetype = valid_previewed_file(filename)
+
+    # raw path
+    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
+    raw_path = tmp_str % (http_server_root,
+                          repo_id, obj_id,
+                          filename, 'view', 
+                          token,
+                          request.user.username)
+    
+    return render_to_response('repo_view_file.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'file_name': filename,
+            'zipped': zipped,
+            'token': token,
+            'can_preview': can_preview,
+            'filetype': filetype,
+            'raw_path': raw_path,
+            }, context_instance=RequestContext(request))
+ 
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
         repo = get_repo(repo_id)
@@ -807,7 +908,7 @@ def repo_access_file(request, repo_id, obj_id):
                                                                              token,
                                                                              request.user.username)
         return HttpResponseRedirect(redirect_url)
-
+ 
 @login_required
 def repo_download(request):
     repo_id = request.GET.get('repo_id', '')
