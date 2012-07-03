@@ -120,7 +120,7 @@ def check_shared_repo(request, repo_id):
 def access_to_repo(request, repo_id, repo_ap):
     """
     Check whether user in the request can access to repo, which means user can
-    view directory entries on repo page, and repo_history_dir page.
+    view directory entries on repo page.
 
     """
     if repo_ap == 'own' and not validate_owner(request, repo_id) \
@@ -131,7 +131,7 @@ def access_to_repo(request, repo_id, repo_ap):
 
 def gen_path_link(path, repo_name):
     """
-    Generate navigate paths and links in repo page and repo_history_dir page.
+    Generate navigate paths and links in repo page.
     Note: `path` must be end with '/'.
     
     """
@@ -184,9 +184,16 @@ def render_repo(request, repo_id, error=''):
         except SearpcError, e:
             return go_error(request, e.msg)
 
+    # view newest worktree or history worktree
+    current_commit = seafserv_rpc.get_commit(request.GET.get('commit_id', ''))
+    if not current_commit:
+        current_commit = get_commits(repo_id, 0, 1)[0]
+
+    view_history = request.GET.get('history', '')
+    
     # query repo infomation
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
-    latest_commit = get_commits(repo_id, 0, 1)[0]
+#    latest_commit = get_commits(repo_id, 0, 1)[0]
 
     # get repo dirents
     dirs = []
@@ -199,11 +206,11 @@ def render_repo(request, repo_id, error=''):
         if path[-1] != '/':
             path = path + '/'
         
-        if latest_commit.root_id == EMPTY_SHA1:
+        if current_commit.root_id == EMPTY_SHA1:
             dirs = []
         else:
             try:
-                dirs = seafserv_rpc.list_dir_by_path(latest_commit.id,
+                dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
                                                      path.encode('utf-8'))
             except SearpcError, e:
                 return go_error(request, e.msg)
@@ -233,7 +240,8 @@ def render_repo(request, repo_id, error=''):
     return render_to_response('repo.html', {
             "repo": repo,
             "can_access": can_access,
-            "latest_commit": latest_commit,
+            "current_commit": current_commit,
+            "view_history": view_history,
             "is_owner": is_owner,
             "password_set": password_set,
             "repo_ap": repo_ap,
@@ -432,91 +440,6 @@ def repo_history(request, repo_id):
             'per_page': per_page,
             'page_next': page_next,
             'is_owner': is_owner,
-            }, context_instance=RequestContext(request))
-
-@login_required
-def repo_history_dir(request, repo_id):
-    # get repo web access property, if no repo access property in db, then
-    # assume repo ap is 'own'
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if not repo_ap:
-        repo_ap = 'own'
-
-    # check whether user can view repo
-    if access_to_repo(request, repo_id, repo_ap):
-        can_access = True
-    else:
-        can_access = False
-
-    # check whether use is repo owner
-    if validate_owner(request, repo_id):
-        is_owner = True
-    else:
-        is_owner = False
-        
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # query whether set password if repo is encrypted
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return go_error(request, e.msg)
-
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-    current_commit = None
-    commit_id = request.GET.get('commit_id', None)
-    if commit_id:
-        current_commit = seafserv_rpc.get_commit(commit_id)
-    if not current_commit:
-        raise Http404
-
-    # get repo dirents
-    dirs = []
-    path = ''
-    zipped = []
-    dir_list = []
-    file_list = []
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
-    try:
-        dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
-                                             path.encode('utf-8'))
-    except SearpcError, e:
-        return go_error(request, e.msg)
-    for dirent in dirs:
-        if stat.S_ISDIR(dirent.props.mode):
-            dir_list.append(dirent)
-        else:
-            file_list.append(dirent)
-            try:
-                dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
-            except:
-                dirent.file_size = 0
-    dir_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
-    file_list.sort(lambda x, y : cmp(x.obj_name.lower(), y.obj_name.lower()))
-
-    # generate path and link
-    zipped = gen_path_link(path, repo.name)
-
-    return render_to_response('repo_history_dir.html', {
-            "repo": repo,
-            "can_access": can_access,
-            "current_commit": current_commit,
-            "is_owner": is_owner,
-            "repo_ap": repo_ap,
-            "dir_list": dir_list,
-            "file_list": file_list,
-            "path" : path,
-            "zipped" : zipped,
             }, context_instance=RequestContext(request))
 
 def repo_history_revert(request, repo_id):
@@ -758,6 +681,7 @@ def repo_del_file(request, repo_id):
 def repo_view_file(request, repo_id, obj_id):
     http_server_root = get_httpserver_root()
     filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
+    view_history = request.GET.get('history', '')
 
     if request.is_ajax():
         content_type = 'application/json; charset=utf-8'
@@ -824,6 +748,12 @@ def repo_view_file(request, repo_id, obj_id):
         else:
             raise Http404
 
+    # query commit info
+    commit_id = request.GET.get('commit_id', None)
+    current_commit = seafserv_rpc.get_commit(commit_id)
+    if not current_commit:
+        current_commit = get_commits(repo.id, 0, 1)[0]
+        
     # generate path and link
     path = request.GET.get('p', '/')
     if path[-1] != '/':
@@ -846,6 +776,8 @@ def repo_view_file(request, repo_id, obj_id):
             'obj_id': obj_id,
             'file_name': filename,
             'zipped': zipped,
+            'view_history': view_history,
+            'current_commit': current_commit,
             'token': token,
             'can_preview': can_preview,
             'filetype': filetype,

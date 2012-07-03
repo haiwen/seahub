@@ -14,8 +14,12 @@
 {% block main_panel %}
     <h2 class="subject">
         {{repo.props.name}}
+        {% if view_history %}
+        历史浏览
+        <span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        {% endif %}
     </h2>
-
+    
     <div class="side fright">
       <h3>操作</h3>
       <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
@@ -27,7 +31,7 @@
             当前路径：
             {% for name, link in zipped %}
             {% if not forloop.last %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}&history={{ view_history }}">{{ name }}</a> / 
             {% else %}
             {{ name }}
             {% endif %}
