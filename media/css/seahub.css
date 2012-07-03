@@ -546,6 +546,7 @@ table img {
 }
 .msg-bd p a {
     color: #666666;
+    font-weight: normal;
 }
 .reply-list {
     color:#444;
