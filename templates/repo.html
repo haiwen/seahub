@@ -12,9 +12,7 @@
 {% endblock %}
 
 {% block main_panel %}
-    <h2 class="subject">
-        {{repo.props.name}}
-    </h2>
+    <h2>{{repo.props.name}}</h2>
 
     <div class="side fright">
       <h3>基本信息</h3>
@@ -61,22 +59,29 @@
           {% if not can_access %}
           <p class="access-notice">无法在线查看该同步目录。</p>
           {% else %}
-          <p class="path">
-            当前路径：
-            {% for name, link in zipped %}
-            {% if not forloop.last %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
-            {% else %}
-            {{ name }}
-            {% endif %}
-            {% endfor %}
-          </p>
+          <div class="repo-top-bar w100 ovhd">
+              <p class="path fleft">
+              当前路径：
+              {% for name, link in zipped %}
+              {% if not forloop.last %}
+              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+              {% else %}
+              {{ name }}
+              {% endif %}
+              {% endfor %}
+              </p>
+              <div class="repo-op fright">
+                  <a href="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path }}" class="upload-file">上传</a>
+                  <a id="add-new-dir" href="#">新建目录</a>
+              </div>
+          </div>
+
           <table>
             <tr>
               <th width="5%"></th>
-              <th width="69%">名字</th>
+              <th width="67%">名字</th>
               <th width="13%">大小</th>
-              <th width="13%">操作</th>
+              <th width="15%">操作</th>
             </tr>
 
             {% for dirent in dir_list %}
@@ -84,18 +89,32 @@
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
               <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
               <td></td>
-              <td></td>
+              <td>
+                  <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                  <ul class="op-list hide">
+                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
+                      <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
+                      <li><a class="op dir-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
+                      <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
+                  </ul>
+              </td>
             </tr>
             {% endfor %}
 
             {% for dirent in file_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-              <td>{{ dirent.props.obj_name }}</td>
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">{{ dirent.props.obj_name }}</a></td>
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
-                <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=view">查看</a>
-                <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
+                  <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                  <ul class="op-list hide">
+                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
+                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
+                      <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
+                      <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
+                      <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
+                  </ul>
               </td>
             </tr>
             {% endfor %}
@@ -103,9 +122,206 @@
           {% endif %}
       {% endif %}
     </div>
+
+    <form id="add-new-dir-form" action="{{ SITE_ROOT}}repo/new_dir/" method="post" class="hide">
+        <h4>新目录名称：</h4>
+        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+        <input type="hidden" name="parent_dir" value="{{ path }}" />
+        <input type="text" name="new_dir_name" value="" /><br />
+        <p class="error hide">输入不能为空。</p>
+        <input type="submit" value="提交" class="submit" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+
+    <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
+        <p id="mv-hd"></p>
+        <div id="dirs"></div>
+        <input type="hidden" name="operation" id="operation" value="" />
+        <input type="hidden" name="src_repo" value="{{ repo.id }}" />
+        <input type="hidden" name="src_path" value="{{ path }}" />
+        <input type="hidden" name="obj_name" value="" />
+        <input type="hidden" name="obj_type" value="" />
+        <input type="hidden" name="dst_repo" value="" />
+        <input type="hidden" name="dst_path" value="" />
+        <p class="error hide">请点击选择目标目录。</p>
+        <input type="submit" value="提交" class="submit" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+
+    <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="hide">
+        <p>将 <span id="rename-target" class="op-target"></span> 重命名为：</p>
+        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+        <input type="hidden" name="parent_dir" value="{{ path }}" />
+        <input type="hidden" name="oldname" value="" />
+        <input type="text" name="newname" value="" class="new-name" /><br />
+        <p class="error hide">输入不能为空。</p>
+        <input type="submit" value="提交" class="submit" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+    
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 <script type="text/javascript">
+$('#add-new-dir').click(function () {
+    $('#add-new-dir-form').modal({appendTo:'#main'});
+    return false;
+});
+
+$("table tr:gt(0)").hover(
+    function() {
+        $(this).find('.more-op').removeClass('hide');
+    },
+    function() {
+        $(this).find('.more-op').addClass('hide');
+    }
+);
+
+var Hide = '';
+$('.more-op').hover(
+    function() {
+        $(this).parent().css('position','relative');
+        $('.op-list').attr('class', 'op-list hide');
+        if ($(this).offset().top + $(this).next().height() > $('#main').offset().top + $('#main').height()) {
+            $(this).next().css('bottom', 25);
+        }
+        $(this).next().removeClass('hide');
+        clearTimeout(Hide);
+        return false;
+    },
+    function() {
+        var op_list = $(this).next();
+        Hide = setTimeout(function() { op_list.addClass('hide'); }, 1000);
+    }
+);
+
+$('.op-list').hover(
+    function(){
+        clearTimeout(Hide);
+    },
+    function(){
+        $(this).addClass('hide');
+    }
+);
+
+$('.op-list li').hover(
+    function() {
+        $(this).css('background', '#eee');
+    },
+    function() {
+        $(this).css('background', '#fff');
+    }
+);
+
+$('.file-rename, .dir-rename').click(function () {
+    var type = $(this).hasClass('file-rename') ? '文件 ' : '目录 ',
+        name = $(this).attr('data');
+    $('#rename-target').html(type + name);
+    $('input[name="oldname"]').val(name);
+    $('#rename-form').modal({appendTo:'#main'});
+    return false;
+});
+  
+var accessible_repos = [];
+{% for repo in accessible_repos %}
+    {% if repo.props.has_subdir %} 
+    accessible_repos.push({
+        'data': '{{ repo.props.name }}',
+        'attr': {'repo_id': '{{ repo.props.id }}'},
+        'state': 'closed'
+    });  
+    {% else %}
+    accessible_repos.push({
+        'data': '{{ repo.props.name }}',
+        'attr': {'repo_id': '{{ repo.props.id }}'}
+    });
+    {% endif %}
+{% endfor %}
+
+$('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
+    var obj_name = $(this).attr('data'),
+        mv_type = '',
+        file_type = '';
+    if ($(this).hasClass('file-cp') || $(this).hasClass('dir-cp')) {
+        $('#operation').val('cp');
+        mv_type = '复制';
+    } else {
+        $('#operation').val('mv');
+        mv_type = '移动';
+    }
+
+    if ($(this).hasClass('file-cp') || $(this).hasClass('file-mv')) {
+        file_type = '文件';
+        $('input[name="obj_type"]').val('file');
+    } else {
+        file_type = '目录';
+        $('input[name="obj_type"]').val('dir');
+    }
+
+    $('input[name="obj_name"]').val(obj_name);
+    $('#mv-hd').html('将 <span class="op-target">' + file_type + ' ' + obj_name + '</span> ' + mv_type + '到：');
+
+    $('#dirs')
+        .bind('loaded.jstree', function(event,data) {
+            $('#mv-form').modal({appendTo:'#main'});
+        })
+        .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
+            //resize the popup when open/close/focus a dir
+            $('#simplemodal-container').css('height', $('#mv-form').height()).css('width', $('#mv-form').width());
+            })
+        .bind('select_node.jstree', function(event,data) {
+            var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
+            $('input[name="dst_repo"]').attr('value', repo_id);
+            var path = data.inst.get_path(data.rslt.obj);
+            var mv_dst_path = '';
+            if (path.length == 1) {
+                mv_dst_path = '/';
+            } else {
+                path.shift();
+                mv_dst_path = '/' + path.join('/') + '/';
+            }
+            $('input[name="dst_path"]').attr('value', mv_dst_path);
+        })
+        .jstree({
+            'json_data': {
+                'data': accessible_repos,
+                'ajax': {
+                    'url': function(data) {
+                        var path = this.get_path(data);
+                        var repo_id = data.attr('repo_id');
+                        if (path.length == 1) {
+                            path = '/';
+                        } else {
+                            path.shift();
+                            path = '/' + path.join('/') + '/';
+                        }
+                        return '{{ SITE_ROOT }}file/move/get_subdir/?repo_id=' + encodeURIComponent(repo_id) + '&path=' + encodeURIComponent(path);    
+                    }
+                }
+            },
+            'core': {
+                'animation': 100
+            },
+            'plugins': ['themes', 'json_data', 'ui']
+        });
+    return false;
+});
+
+$('#add-new-dir-form .submit, #rename-form .submit').click(function() {
+    if (!$.trim($(this).prev().prev().prev().val())) {//if the input is empty
+        $(this).prev().removeClass('hide');//show error msg
+        $('#simplemodal-container').css('height', $(this).parent().height()).css('width', $(this).parent().width());
+        return false;
+    }
+});
+$('#mv-form .submit').click(function() {
+    if (!$.trim($(this).prev().prev().val())) {//if the input is empty
+        $(this).prev().removeClass('hide');//show error msg
+        $('#simplemodal-container').css('height', $(this).parent().height()).css('width', $(this).parent().width());
+        return false;
+    }
+});
+
 </script>
 {% endblock %}

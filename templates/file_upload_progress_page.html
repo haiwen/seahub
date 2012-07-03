@@ -1,0 +1,27 @@
+{% extends "myhome_base.html" %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    // Update progress bar
+    function update_progress_info() {
+        $.ajax({
+            url: '{{ SITE_ROOT }}file_upload_progress/?X-Progress-ID=' + '{{ uuid }}', 
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data) {
+                    $('#upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $('#task-progress-bar', window.parent.document).removeClass('hide').progressbar({
+                            value: data.uploaded / data.length * 100
+                    });
+                }
+            }
+        });
+        setTimeout(update_progress_info, 1000);
+    };
+    update_progress_info();
+
+</script>
+{% endblock %}
+

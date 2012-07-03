@@ -203,5 +203,27 @@ NOTIFICATION_CACHE_TIMEOUT = 0
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 0
+
+FILE_UPLOAD_TEMP_DIR = "/tmp/seafile-upload"
+
+if not os.access(FILE_UPLOAD_TEMP_DIR, os.F_OK):
+    os.mkdir(FILE_UPLOAD_TEMP_DIR)
+
+FILE_UPLOAD_HANDLERS = (
+    "seahub.utils.UploadProgressCachedHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
+
 # profile
 #AUTH_PROFILE_MODULE = "profile.UserProfile"
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/seahub_cache',
+    }
+}
+
+MAX_UPLOAD_FILE_SIZE        = 1024 * 1024 * 1024 # 1GB
+MAX_UPLOAD_FILE_NAME_LEN    = 256

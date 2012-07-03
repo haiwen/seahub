@@ -5,7 +5,7 @@ a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
 h2 { font-size:18px; color:#808; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
-h4 { font-size:14px; color:#000; margin:2px 0 0; }
+h4 { font-size:14px; color:#000; font-weight:normal; margin:2px 0 0; }
 ol { padding-left:2em; }
 /* input button */
 textarea { border: 1px solid #80B0B0; }
@@ -127,7 +127,6 @@ table img {
 }
 #left-panel { float:right; width:220px; }
 #right-panel { float:left; width:680px; }
-#main-panel { width:100%; }
 .side {
     color:#333;
     width:220px;
@@ -178,8 +177,7 @@ table img {
 /* footer */
 #footer a { color:#333; text-decoration:none; }
 /* main */
-h2.subject {}
-p.path, p.access-notice { margin: 12px 0 6px 0; }
+.path, .access-notice { margin: 12px 0 6px 0; }
 .with-bg li {
     padding-left:10px;
     line-height:20px;
@@ -190,7 +188,8 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     width:321px;
     margin:45px 0 0 300px;
 }
-.avatar-op h2 {
+.avatar-op h2,
+.upload-file-panel h3 {
     padding:2px 5px;
     background:#E9F1F4;
     border-radius:3px;
@@ -289,6 +288,10 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     color:#e83;
     font-weight:normal;
 }
+#simplemodal-container .jstree a {
+    color:#000;
+    font-weight:normal;
+}
 #simplemodal-container h3 {
     margin:0 0 4px;
 }
@@ -339,6 +342,47 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
 }
 
 /*repo page*/
+.repo-top-bar {
+    margin-bottom:-5px;
+}
+.repo-op {
+    margin-top:12px;
+}
+.repo-op a {
+    margin-left:8px;
+    background:#fff scroll no-repeat left 50%;
+}
+.repo-op .upload-file {
+    padding-left:17px;
+    background-image:url('../img/upload.png');
+    font-weight: normal;
+}
+#add-new-dir {
+    padding-left:20px;
+    background-image:url('../img/folder-add.png');
+    font-weight: normal;
+}
+.more-op {
+    cursor:pointer;
+}
+.op-list {
+    position:absolute;
+    background:#fff;
+    padding:6px 1px;
+    border:1px solid #eee;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    z-index:10;
+}
+.op-list li {
+    padding:0 12px;
+}
+.op-target {
+    color:#c39;
+}
+#rename-form .new-name {
+    margin-top:8px;
+}
 .latest-commit .more:hover {
     text-decoration:none;
 }
@@ -360,7 +404,7 @@ p.path, p.access-notice { margin: 12px 0 6px 0; }
     color:#666;
     margin-left:2px;
 }
-h2.repo-history {
+.repo-history {
     font-weight:normal;
     font-size:16px;
     margin: 4px 0 12px 0;
@@ -380,6 +424,10 @@ h2.repo-history {
 }
 #ls-ch ul {
     padding:0 0 6px 0;
+}
+/*file mv*/
+#dirs {
+    margin-top:8px;
 }
 /*repo-share-form*/
 #email_or_group,
@@ -508,4 +556,25 @@ h2.repo-history {
 }
 .reply-form .text-input {
     width:82%;
+}
+
+/*file upload*/
+.upload-file-panel {
+    width:400px;
+    margin:70px auto 0;
+}
+#upload-file-form {
+    margin-top:10px;
+}
+#task-progress-bar {/*for progress container*/
+    width:95%;
+    height:1em;
+}
+#task-progress-bar .ui-progressbar-value {/*for progress*/
+    background:#e83;
+    margin:0;
+}
+#task-progress-bar,
+#upload-cancel {
+    margin-top:8px;
 }

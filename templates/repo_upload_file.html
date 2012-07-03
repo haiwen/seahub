@@ -1,0 +1,106 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block info_bar_message %}
+{% if request.user.is_authenticated %}
+  {{ block.super }}
+{% else %}
+  <div id="info-bar">
+    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block main_panel %}
+{% if used_space < total_space %}
+<div class="upload-file-panel">
+    <h3>上传文件到
+            {% for name, link in zipped %}
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+            {% endfor %}
+    </h3>
+    <form id="upload-file-form" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
+        <input type="file" name="file" id="file" /><br />
+        <p id="error-msg" class="error">{{ error_msg }}</p>
+        <input id="upload-submit" type="submit" value="提交" />
+    </form>
+    
+    <div id="upload-progress" class="hide">
+        <p>上传进度: <span id="upload-progress-text">获取中，请稍侯...</span></p>
+        <div id="task-progress-bar" class="hide"></div>
+        <button id="upload-cancel">取消</button>
+    </div>
+    <iframe id="request-progress" class="hide"><!--for chrome--></iframe>
+</div>
+{% else %}
+<div class="text-panel">
+    <p class="error">您的空间已经用完。</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+function gen_uuid() {
+    var uuid = "";
+    for (var i=0; i < 32; i++) {
+        uuid += Math.floor(Math.random() * 16).toString(16); 
+    }
+    return uuid;
+}
+
+// NOTE: In order to real time show upload progress, we must deploy seahub in
+// ngnix or gunicorn, since we need more than one seahub process to be
+// running: one for receiving file, one for handling ajax request.
+function submit_and_real_time_show () {
+    var form = $('#upload-file-form')[0],
+        uuid = gen_uuid(); // id for this upload so we can fetch progress info.
+    $('#upload-progress').removeClass('hide');
+
+    // Append X-Progress-ID uuid form action
+    form.action += (form.action.indexOf('?') == -1 ? '?' : '&') + 'X-Progress-ID=' + uuid;
+    form.submit();
+    $('#upload-submit').addClass('hide');
+
+    // Update progress bar: not work in chrome. for ff.
+    function update_progress_info() {
+        $.ajax({
+            url: '{{ SITE_ROOT }}file_upload_progress/?X-Progress-ID=' + uuid, 
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data) {
+                    $('#upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $('#task-progress-bar').removeClass('hide').progressbar({
+                            value: data.uploaded / data.length * 100
+                    });
+                }
+            }
+        });
+        setTimeout(update_progress_info, 1000);
+    };
+    update_progress_info();
+
+    // Update progress bar: for chrome 
+    $('#request-progress').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid);
+
+    return false;
+};
+
+$('#upload-submit').click(function () {
+    if (!$.trim($('#file').val())) {
+        $('#error-msg').html('请先选择一个文件');
+        return false;
+    }
+    $('#error-msg').addClass('hide');
+    submit_and_real_time_show();
+    return false;
+});
+
+$('#upload-cancel').click(function() {
+    location.reload(true);
+});
+</script>
+{% endblock %}

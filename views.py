@@ -1,5 +1,6 @@
 # encoding: utf-8
 import settings
+import os
 import stat
 import simplejson as json
 import sys
@@ -13,6 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.views.decorators.csrf import csrf_protect
+
+from django.core.cache import cache
+from django.http import HttpResponse, HttpResponseServerError 
 
 from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
@@ -30,9 +34,10 @@ from seahub.notifications.models import UserNotification
 from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
-    calculate_repo_last_modify
+    calculate_repo_last_modify, \
+    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1
 from seahub.profile.models import Profile
-    
+
 @login_required
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
@@ -191,7 +196,7 @@ def render_repo(request, repo_id, error=''):
         if path[-1] != '/':
             path = path + '/'
         
-        if latest_commit.root_id == '0000000000000000000000000000000000000000':
+        if latest_commit.root_id == EMPTY_SHA1:
             dirs = []
         else:
             try:
@@ -213,6 +218,12 @@ def render_repo(request, repo_id, error=''):
             file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                              y.obj_name.lower()))
 
+    try:
+        accessible_repos = get_accessible_repos(request, repo)
+    except SearpcError, e:
+        error_msg = e.msg
+        return go_error(request, error_msg)
+
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
@@ -229,8 +240,115 @@ def render_repo(request, repo_id, error=''):
             "path" : path,
             "zipped" : zipped,
             "error" : error,
+            "accessible_repos" : accessible_repos,
             }, context_instance=RequestContext(request))
 
+@login_required    
+def repo_upload_file(request, repo_id):
+    repo = get_repo(repo_id)
+    total_space = pow(2,30)
+    used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
+    ############ GET ############
+    if request.method == 'GET':
+        parent_dir = request.GET.get('p', '/')
+        zipped = gen_path_link (parent_dir, repo.name)
+        # TODO: per user quota
+        return render_to_response ('repo_upload_file.html', {
+            "repo": repo,
+            "parent_dir": parent_dir,
+            "used_space": used_space,
+            "total_space": total_space,
+            "zipped": zipped,
+            }, context_instance=RequestContext(request))
+        
+    ############ POST ############
+    parent_dir = request.POST.get('parent_dir', '/')
+    def render_upload_error(error_msg):
+        zipped = gen_path_link (parent_dir, repo.name)
+        return render_to_response ('repo_upload_file.html', {
+            "error_msg": error_msg,
+            "repo": repo,
+            "used_space": used_space,
+            "total_space": total_space,
+            "zipped": zipped,
+            "parent_dir": parent_dir,
+            }, context_instance=RequestContext(request))
+        
+    try:
+        tmp_file = request.FILES['file']
+    except:
+        error_msg = u'请选择一个文件'
+        return render_upload_error(error_msg)
+
+    tmp_file_path = tmp_file.temporary_file_path()
+    if not os.access(tmp_file_path, os.F_OK):
+        error_msg = u'上传文件失败'
+        return render_upload_error(error_msg)
+
+    # rename the file if there is name conflicts
+    filename = check_filename_with_rename(repo_id, parent_dir, tmp_file.name)
+    if len(filename) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+        error_msg = u"您上传的文件名称太长"
+        return go_error(request, error_msg)
+
+    if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
+        error_msg = u"您上传的文件太大"
+        return go_error(request, error_msg)
+
+    try:
+        seafserv_threaded_rpc.put_file (repo_id, tmp_file_path, parent_dir,
+                                        filename, request.user.username);
+    except SearpcError, e:
+        error_msg = e.msg
+        return render_upload_error(error_msg)
+
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    return HttpResponseRedirect(url)
+    
+def get_subdir(request):
+    repo_id = request.GET.get('repo_id', '')
+    path = request.GET.get('path', '')
+
+    if not (repo_id and path):
+        return go_error(request)
+
+    latest_commit = get_commits(repo_id, 0, 1)[0]
+    try:
+        dirents = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+    except SearpcError, e:
+        return go_error(request, e.msg)
+
+    subdirs = []
+    for dirent in dirents:
+        if not stat.S_ISDIR(dirent.props.mode):
+            continue
+
+        dirent.has_subdir = False
+        path_ = os.path.join (path, dirent.obj_name)
+        try:
+            dirs_ = seafserv_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
+        for dirent_ in dirs_:
+            if stat.S_ISDIR(dirent_.props.mode):
+                dirent.has_subdir = True
+                break
+
+        if dirent.has_subdir:
+            subdir = {
+                'data': dirent.obj_name,
+                'attr': {'repo_id': repo_id },
+                'state': 'closed'
+                    }
+            subdirs.append(subdir)
+        else:
+            subdirs.append(dirent.obj_name)
+
+    content_type = 'application/json; charset=utf-8'
+    return HttpResponse(json.dumps(subdirs),
+                            content_type=content_type)
+ 
 def repo(request, repo_id):
     if request.method == 'GET':
         return render_repo(request, repo_id)
@@ -544,7 +662,7 @@ def myhome(request):
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Repos that are share to me
-    in_repos = seafserv_threaded_rpc.list_share_repos(request.user.username,
+    in_repos = seafserv_threaded_rpc.list_share_repos(email,
                                                       'to_email', -1, -1)
     calculate_repo_last_modify(in_repos)
     in_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
@@ -620,6 +738,19 @@ def repo_set_access_property(request, repo_id):
         
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
+@login_required    
+def repo_del_file(request, repo_id):
+    parent_dir = request.GET.get("p", "/")
+    file_name = request.GET.get("file_name")
+    user = request.user.username
+    try:
+        seafserv_threaded_rpc.del_file(repo_id, parent_dir,file_name, user)
+    except Exception, e:
+        pass
+
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    return HttpResponseRedirect(url)
+
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
         repo = get_repo(repo_id)
@@ -637,6 +768,12 @@ def repo_access_file(request, repo_id, obj_id):
 
         if repo.props.encrypted and not password_set:
             return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+
+        op = request.GET.get('op', 'view')
+        file_name = request.GET.get('file_name', '')
+
+        if op == 'del':
+            return repo_del_file(request, repo_id)
 
         # if a repo doesn't have access property in db, then assume it's 'own'
         repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
@@ -663,8 +800,6 @@ def repo_access_file(request, repo_id, obj_id):
                 raise Http404
 
         http_server_root = get_httpserver_root()
-        file_name = request.GET.get('file_name', '')
-        op = request.GET.get('op', 'view')
 
         redirect_url = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
                                                                              repo_id, obj_id,
@@ -696,6 +831,53 @@ def repo_download(request):
         ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
 
     return HttpResponseRedirect(redirect_url)
+
+@login_required    
+def file_move(request):
+    src_repo_id = request.POST.get('src_repo')
+    src_path    = request.POST.get('src_path')
+    dst_repo_id = request.POST.get('dst_repo')
+    dst_path    = request.POST.get('dst_path')
+    obj_name    = request.POST.get('obj_name')
+    obj_type    = request.POST.get('obj_type') # dir or file
+    op          = request.POST.get('operation')
+
+    if not (src_repo_id and src_path and dst_repo_id \
+            and dst_path and obj_name and obj_type and op):
+        return go_error(request)
+
+    # do nothing when dst is the same as src
+    if src_repo_id == dst_repo_id and src_path == dst_path:
+        url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % src_path)
+        return HttpResponseRedirect(url)
+
+    # Error when moving/copying a dir to its subdir
+    if obj_type == 'dir':
+        src_dir = os.path.join(src_path, obj_name)
+        if dst_path.startswith(src_dir):
+            error_msg = u"不能把目录 %s %s到它的子目录 %s" \
+                        % (src_dir, u"复制" if op == 'cp' else u"移动", dst_path)
+            return go_error(request, error_msg)
+
+    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+
+    try:
+        if op == 'cp':
+            seafserv_threaded_rpc.copy_file (src_repo_id, src_path, obj_name,
+                                             dst_repo_id, dst_path, new_obj_name,
+                                             request.user.username)
+        elif op == 'mv':
+            seafserv_threaded_rpc.move_file (src_repo_id, src_path, obj_name,
+                                             dst_repo_id, dst_path, new_obj_name,
+                                             request.user.username)
+    except Exception, e:
+        return go_error(request, str(e))
+
+    url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % src_path)
+
+    return HttpResponseRedirect(url)
+
+        
 
 def seafile_access_check(request):
     repo_id = request.GET.get('repo_id', '')
@@ -1141,3 +1323,117 @@ def org_info(request):
             'groups': groups,
             }, context_instance=RequestContext(request))
 
+@login_required    
+def file_upload_progress(request):
+    """
+    Return JSON object with information about the progress of an upload.
+    """
+    progress_id = None
+    if 'X-Progress-ID' in request.GET:
+        progress_id = request.GET['X-Progress-ID']
+    elif 'X-Progress-ID' in request.META:
+        progress_id = request.META['X-Progress-ID']
+
+    if progress_id:
+        cache_key = "%s_%s" % (request.user.username, progress_id)
+        data = cache.get(cache_key)
+        return HttpResponse(json.dumps(data))
+    else:
+        return HttpResponseServerError('Server Error: You must provide X-Progress-ID header or query param.')
+
+@login_required
+def file_upload_progress_page(request):
+    '''
+    As iframe in repo_upload_file.html, for solving problem in chrome.
+
+    '''
+    uuid = request.GET.get('uuid', '')
+
+    return render_to_response('file_upload_progress_page.html', {
+        'uuid': uuid,
+            }, context_instance=RequestContext(request))
+
+@login_required        
+def repo_new_dir(request):        
+    repo_id         = request.POST.get("repo_id")
+    parent_dir      = request.POST.get("parent_dir")
+    new_dir_name    = request.POST.get("new_dir_name")
+    user            = request.user.username
+
+    if not new_dir_name:
+        error_msg = u"请输入新目录名"
+        return go_error(request, error_msg)
+
+    if not (repo_id and parent_dir and user):
+        return go_error(request)
+
+    if len(new_dir_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+        error_msg = u"您输入的目录名称过长"
+        return go_error (request, error_msg)
+
+    try:
+        if not seafserv_threaded_rpc.is_valid_filename(repo_id, new_dir_name):
+            error_msg = (u"您输入的目录名称 %s 包含非法字符" % new_dir_name)
+            return go_error (request, error_msg)
+    except SearpcError,e:
+            return go_error (request, e.msg)
+
+    new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
+
+    try:
+        seafserv_threaded_rpc.put_dir(repo_id, parent_dir, new_dir_name, user)
+    except Exception, e:
+        return go_error(request, str(e))
+        
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    return HttpResponseRedirect(url)
+
+@login_required    
+def repo_rename_file(request):
+    repo_id         = request.POST.get("repo_id")
+    parent_dir      = request.POST.get("parent_dir")
+    oldname         = request.POST.get("oldname")
+    newname         = request.POST.get("newname")
+    user            = request.user.username
+
+    # print repo_id, parent_dir, oldname, newname, user
+
+    if not newname:
+        error_msg = u"新文件名不能为空"
+        return go_error(request, error_msg)
+
+    if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+        error_msg = u"新文件名太长"
+        return go_error(request, error_msg)
+
+    if not (repo_id and parent_dir and oldname):
+        return go_error(request)
+
+    try:
+        seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
+                                           oldname, newname, user)
+    except Exception, e:
+        return go_error(request, str(e))
+
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    return HttpResponseRedirect(url)
+
+@login_required    
+def validate_filename(request):
+    repo_id     = request.GET.get('repo_id')
+    filename    = request.GET.get('filename')
+
+    if not (repo_id and filename):
+        return go_error(request)
+
+    result = {'ret':'yes'}
+
+    try:
+        ret = seafserv_threaded_rpc.is_valid_filename (repo_id, filename);
+    except SearpcError:
+        result['ret'] = 'error'
+    else:
+        result['ret'] = 'yes' if ret == 1 else 'no'
+
+    content_type = 'application/json; charset=utf-8'
+    return HttpResponse(json.dumps(result), content_type=content_type)
