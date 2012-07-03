@@ -444,6 +444,25 @@ table img {
     text-decoration:none;
 }
 /* group, org */
+.group-list {
+    margin-top:20px;
+}
+.group {
+    width:315px;
+    margin:0 25px 15px 0;
+}
+.group .txt {
+    color:#333;
+    width:250px;
+}
+.group h4 {
+    margin:0 0 4px;
+}
+.group .item-name {
+    display:inline-block;
+    width:5em;
+    color:#666;
+}
 .group-member .avatar,
 .org-member .avatar {
 	border-radius: 2px;
