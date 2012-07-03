@@ -43,7 +43,7 @@
   </tr>
   {% for link in out_links %}
   <tr>
-    <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}">{{ link.repo_name }}</a></td>
+    <td><a href="{{ SITE_ROOT }}repo/{{ link.repo_id }}/">{{ link.repo_name }}</a></td>
     <td>{{ link.anonymous_email }}</td>
     {% if link.remain_time %}
     <td>{{ link.remain_time|translate_remain_time }}</td>
