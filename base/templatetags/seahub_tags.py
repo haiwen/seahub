@@ -113,3 +113,8 @@ def email2nickname(value):
         return profile.nickname
     except Profile.DoesNotExist:
         return value.split('@')[0]
+
+@register.filter(name='url_target_blank')
+def url_target_blank(text):
+    return text.replace('<a ', '<a target="_blank" ')
+url_target_blank.is_safe=True

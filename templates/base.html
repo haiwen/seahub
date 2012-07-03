@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.png" />
 {% block extra_style %}{% endblock %}
-{% load avatar_tags %}
+{% load seahub_tags avatar_tags %}
 </head>
 
 <body>
@@ -16,7 +16,7 @@
   {% block info_bar_message %}
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
-      <span class="info">{{ request.cur_note.message|urlize }}</span>
+      <span class="info">{{ request.cur_note.message|urlize|url_target_blank }}</span>
       <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/?next={{ request.path }}"><span class="close"></span></a>
     </div>
     {% endif %}
