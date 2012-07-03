@@ -113,7 +113,7 @@ class UploadProgressCachedHandler(FileUploadHandler):
             self.progress_id = self.request.GET['X-Progress-ID']
         elif 'X-Progress-ID' in self.request.META:
             self.progress_id = self.request.META['X-Progress-ID']
-        print "handle_raw_input: ", self.progress_id
+        # print "handle_raw_input: ", self.progress_id
         if self.progress_id:
             self.cache_key = "%s_%s" % (self.request.user.username, self.progress_id )
             # make cache expiring in 30 seconds
@@ -126,7 +126,6 @@ class UploadProgressCachedHandler(FileUploadHandler):
         pass
 
     def receive_data_chunk(self, raw_data, start):
-        time.sleep(1)
         if self.cache_key:
             data = cache.get(self.cache_key)
             data['uploaded'] += self.chunk_size

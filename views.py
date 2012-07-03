@@ -1396,7 +1396,7 @@ def repo_rename_file(request):
     newname         = request.POST.get("newname")
     user            = request.user.username
 
-    print repo_id, parent_dir, oldname, newname, user
+    # print repo_id, parent_dir, oldname, newname, user
 
     if not newname:
         error_msg = u"新文件名不能为空"
