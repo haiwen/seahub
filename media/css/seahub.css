@@ -544,6 +544,9 @@ table img {
 .msg-bd .op:hover {
     text-decoration:none;
 }
+.msg-bd p a {
+    color: #666666;
+}
 .reply-list {
     color:#444;
     width:90%;
