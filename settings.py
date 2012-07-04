@@ -120,24 +120,6 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# Set to True when user will be activaed after registration,
-# and no email sending
-ACTIVATE_AFTER_REGISTRATION = True
-
-# In order to use email sending,
-# ACTIVATE_AFTER_REGISTRATION MUST set to False
-REGISTRATION_SEND_MAIL = False
-
-# seafile httpserver address and port
-HTTP_SERVER_ROOT = "http://localhost:8082"
-
-# ccnet-applet address and port, used in repo download
-CCNET_APPLET_ROOT = "http://localhost:13420"
-
-SEAFILE_VERSION = '0.9.2'
-
-SEAHUB_TITLE = 'SeaHub'
-
 # Add supported file extensions and file icon name.
 # Icons will show in repo page.
 FILEEXT_ICON_MAP = {
@@ -162,20 +144,74 @@ FILEEXT_ICON_MAP = {
     'default' : 'file-icon-24.png',
 }
 
-USE_SUBDOMAIN = False
-#SITE_SUBDOMAIN = 'cloud'
-#SITE_BASE_NAME = 'seafile.com.cn'
-#SESSION_COOKIE_DOMAIN = '.' + SITE_BASE_NAME
 
-# account type is `personal` or `business`
-ACCOUNT_TYPE = 'personal'
-
+# File preview
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
 
 PREVIEW_FILEEXT = {
     'Document': ('ac', 'am', 'as', 'as3', 'asm', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'csv', 'cxx', 'diff', 'erb', 'groovy', 'gsheet', 'h', 'haml', 'hh', 'htm', 'html', 'java', 'js', 'less', 'm', 'make', 'ml', 'mm', 'ods', 'odt', 'php', 'pl', 'properties', 'py', 'rb', 'rtf', 'sass', 'scala', 'scm', 'script', 'sh', 'sml', 'sql', 'txt', 'vi', 'vim', 'wpd', 'xls', 'xlsm', 'xlsx', 'xml', 'xsd', 'xsl', 'xslt', 'yaml'),
     'Image': ('ai', 'bmp', 'eps', 'gif', 'ind', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'svg', 'tif', 'tiff'),
 }
+
+# Avatar
+AVATAR_STORAGE_DIR = 'avatars'
+AVATAR_GRAVATAR_BACKUP = False
+AVATAR_DEFAULT_URL = '/avatars/default.jpg'
+AUTO_GENERATE_AVATAR_SIZES = (80, 60, 48, 16)
+AVATAR_MAX_AVATARS_PER_USER = 1
+AVATAR_CACHE_TIMEOUT = 0
+
+# Info-bar notification cache
+NOTIFICATION_CACHE_TIMEOUT = 0
+
+
+# File upload
+FILE_UPLOAD_MAX_MEMORY_SIZE = 0
+
+FILE_UPLOAD_TEMP_DIR = "/tmp/seafile-upload"
+
+if not os.access(FILE_UPLOAD_TEMP_DIR, os.F_OK):
+    os.mkdir(FILE_UPLOAD_TEMP_DIR)
+
+FILE_UPLOAD_HANDLERS = (
+    "seahub.utils.UploadProgressCachedHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/seahub_cache',
+    }
+}
+
+MAX_UPLOAD_FILE_SIZE        = 1024 * 1024 * 1024 # 1GB
+MAX_UPLOAD_FILE_NAME_LEN    = 256
+
+# Base url and name used in email sending
+SITE_BASE = 'http://gonggeng.org/'
+SITE_NAME = 'gonggeng'
+
+# Set to True when user will be activaed after registration,
+# and no email sending
+ACTIVATE_AFTER_REGISTRATION = True
+
+# In order to use email sending,
+# ACTIVATE_AFTER_REGISTRATION MUST set to False
+REGISTRATION_SEND_MAIL = False
+
+# Seafile httpserver address and port
+HTTP_SERVER_ROOT = "http://localhost:8082"
+
+# Seafile-applet address and port, used in repo download
+CCNET_APPLET_ROOT = "http://localhost:13420"
+
+SEAFILE_VERSION = '0.9.2'
+SEAHUB_TITLE = 'SeaHub'
+
+USE_SUBDOMAIN = False
+ACCOUNT_TYPE = 'personal'
 
 try:
     import local_settings
@@ -197,40 +233,4 @@ else:
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(local_settings, attr)
 
-#avatar
-AVATAR_STORAGE_DIR = 'avatars'
-AVATAR_GRAVATAR_BACKUP = False
-AVATAR_DEFAULT_URL = '/avatars/default.jpg'
-AUTO_GENERATE_AVATAR_SIZES = (80, 60, 48, 16)
-AVATAR_MAX_AVATARS_PER_USER = 1
-AVATAR_CACHE_TIMEOUT = 0
-
-#info-bar notification
-NOTIFICATION_CACHE_TIMEOUT = 0
-
 LOGIN_URL = SITE_ROOT + 'accounts/login'
-
-FILE_UPLOAD_MAX_MEMORY_SIZE = 0
-
-FILE_UPLOAD_TEMP_DIR = "/tmp/seafile-upload"
-
-if not os.access(FILE_UPLOAD_TEMP_DIR, os.F_OK):
-    os.mkdir(FILE_UPLOAD_TEMP_DIR)
-
-FILE_UPLOAD_HANDLERS = (
-    "seahub.utils.UploadProgressCachedHandler",
-    "django.core.files.uploadhandler.MemoryFileUploadHandler",
-    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-)
-
-# profile
-#AUTH_PROFILE_MODULE = "profile.UserProfile"
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/seahub_cache',
-    }
-}
-
-MAX_UPLOAD_FILE_SIZE        = 1024 * 1024 * 1024 # 1GB
-MAX_UPLOAD_FILE_NAME_LEN    = 256

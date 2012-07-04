@@ -15,12 +15,17 @@ ${msg_url}
 
 感谢使用我们的网站！
 
-Seafile团队
+${site_name}团队
 '''
 
 today = datetime.now()
-subject = u'SeaCloud：新消息'
-url = 'http://localhost:8000/home/my/'
+site_name = settings.SITE_NAME
+subject = u'%s：新消息' % site_name
+
+site_base = settings.SITE_BASE
+if site_base[-1] != '/':
+    site_base += '/'
+url = site_base + 'home/my/'
 
 notifications = UserNotification.objects.all()
 
@@ -39,7 +44,8 @@ for k in d.keys():
     cnt = d[k]
  
     template = string.Template(email_template)
-    content = template.substitute(username=to_user, cnt=cnt, msg_url=url)
+    content = template.substitute(username=to_user, cnt=cnt, msg_url=url, \
+                                      site_name=site_name)
     send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [to_user], \
                    fail_silently=False)
     
