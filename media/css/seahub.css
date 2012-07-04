@@ -194,14 +194,11 @@ table img {
 }
 #footer .item h4 {
     font-size:12px;
-    font-weight:bold;
     color:#636363;
-    padding-bottom:5px;
-    border-bottom:1px solid #e1e1e1;
-    margin-bottom:5px;
+    padding-bottom:3px;
 }
 #footer a {
-    color:#444;
+    color:#080;
     font-weight:normal;
 }
 /* main */
