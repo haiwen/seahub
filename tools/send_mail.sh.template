@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export PYTHONPATH=thirdpart
+export DJANGO_SETTINGS_MODULE=settings
+
+./user_notification.py
