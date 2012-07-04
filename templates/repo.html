@@ -126,13 +126,15 @@
               <td></td>
               <td>
                 {% if not view_history %}
-                  <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
-                  <ul class="op-list hide">
-                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
-                      <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
-                      <li><a class="op dir-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
-                      <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
-                  </ul>
+                  <div>
+                      <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                      <ul class="op-list hide">
+                          <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
+                          <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
+                          <li><a class="op dir-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
+                          <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
+                      </ul>
+                  </div>
                 {% endif %}
               </td>
             </tr>
@@ -144,16 +146,18 @@
               <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?commit_id={{ current_commit.id }}&file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&history={{ view_history }}">{{ dirent.props.obj_name }}</a></td>
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
-                  <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
-                  <ul class="op-list hide">
-                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
-                      {% if not view_history %}
-                      <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
-                      <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
-                      <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
-                      <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
-                      {% endif %}
-                  </ul>
+                  <div>
+                      <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                      <ul class="op-list hide">
+                          <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
+                          {% if not view_history %}
+                          <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
+                          <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
+                          <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
+                          <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
+                          {% endif %}
+                      </ul>
+                  </div>
               </td>
             </tr>
             {% endfor %}
@@ -222,8 +226,10 @@ $('.more-op').hover(
     function() {
         $(this).parent().css('position','relative');
         $('.op-list').attr('class', 'op-list hide');
-        if ($(this).offset().top + $(this).next().height() > $('#main').offset().top + $('#main').height()) {
-            $(this).next().css('bottom', 25);
+        if ($(this).offset().top + $(this).next().height() <= $('#main-panel').offset().top + $('#main-panel').height()) {
+            $(this).next().css('top', 6);
+        } else {
+            $(this).next().css('bottom', 2);
         }
         $(this).next().removeClass('hide');
         clearTimeout(Hide);
@@ -335,7 +341,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
-                        return '{{ SITE_ROOT }}file/move/get_subdir/?repo_id=' + encodeURIComponent(repo_id) + '&path=' + encodeURIComponent(path);    
+                        return '{{ SITE_ROOT }}file/move/get_subdir/?repo_id=' + e(repo_id) + '&path=' + e(path);
                     }
                 }
             },

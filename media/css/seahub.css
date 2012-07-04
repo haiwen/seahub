@@ -134,7 +134,6 @@ table img {
 .main {
     width:680px;
 }
-#footer { color:#999; padding-top:2px; margin:25px auto; border-top:1px solid #DDD; }
 
 /* info-bar */
 #info-bar { height: 30px; color: #fff; background: #000; }
@@ -175,7 +174,36 @@ table img {
 #header .nav a.cur { color:#000; }
 #header .nav a:hover { color: #ff9933; text-decoration: underline; }
 /* footer */
-#footer a { color:#333; text-decoration:none; }
+#footer { 
+    color:#636363;
+    font-size:12px;
+    padding:20px 0 10px;
+    margin:25px auto;
+    border-top:1px solid #DDD;
+}
+#footer .items {
+    width:65%;
+}
+#footer .other-info {
+    width:30%;
+}
+#footer .item {
+    float:left;
+    width:28%;
+    padding:0 3% 0 2%;
+}
+#footer .item h4 {
+    font-size:12px;
+    font-weight:bold;
+    color:#636363;
+    padding-bottom:5px;
+    border-bottom:1px solid #e1e1e1;
+    margin-bottom:5px;
+}
+#footer a {
+    color:#444;
+    font-weight:normal;
+}
 /* main */
 .path, .access-notice { margin: 12px 0 6px 0; }
 .with-bg li {
@@ -349,24 +377,24 @@ table img {
     margin-top:12px;
 }
 .repo-op a {
+    font-weight: normal;
     margin-left:8px;
     background:#fff scroll no-repeat left 50%;
 }
 .repo-op .upload-file {
     padding-left:17px;
     background-image:url('../img/upload.png');
-    font-weight: normal;
 }
 #add-new-dir {
     padding-left:20px;
     background-image:url('../img/folder-add.png');
-    font-weight: normal;
 }
 .more-op {
     cursor:pointer;
 }
 .op-list {
     position:absolute;
+    left:18px;
     background:#fff;
     padding:6px 1px;
     border:1px solid #eee;

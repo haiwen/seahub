@@ -77,7 +77,7 @@
         <div id="right-panel">
             {% block right_panel %}{% endblock %}
         </div>
-        <div id="main-panel" class="clear w100">
+        <div id="main-panel" class="clear w100 ovhd">
             {% block main_panel %}{% endblock %}
         </div>
         <div id="dialog-confirm" class="hide">
@@ -88,14 +88,39 @@
     </div>
 
     <div id="footer" class="ovhd">
-        <p class="fleft">Copyright © 2012 海文互知. 服务器版本：{{ seafile_version }}</p>
-        <p class="fright">Contact | About</p>
+        <div class="items fleft">
+            <div class="item">
+                <h4>SeaCloud</h4>
+                <ul>
+                    <li>About</li>
+                    <li><a href="http://wiki.seafile.com.cn/" target="_blank">Wiki</a></li>
+                    <li><a href="http://gonggeng.org/vanilla/" target="_blank">论坛</a></li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+            <div class="item">
+                <h4>客户端</h4>
+                <ul>
+                    <li><a href="http://www.seafile.com/download/">Seafile for Windows</a></li>
+                </ul>
+            </div>
+            <div class="item">
+                <h4>文档</h4>
+                <ul>
+                    <li><a href="http://www.seafile.com/help/" target="_blank">使用帮助</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="other-info fright">
+            <p>服务器版本：{{ seafile_version }}</p>
+            <p>© 2012 海文互知.</p>
+        </div>
     </div>
 
 </div><!-- wrapper -->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
+<!--script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script-->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 {% block extra_script %}{% endblock %}
