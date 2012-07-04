@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import settings
+import os
 import re
 import time
 import os
@@ -16,6 +17,9 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
+
+import settings
+from settings import PREVIEW_FILEEXT
 
 def go_permission_error(request, msg=None):
     """
@@ -225,3 +229,14 @@ def get_accessible_repos(request, repo):
                 repo.props.has_subdir = check_has_subdir(repo)
 
     return accessible_repos
+
+def valid_previewed_file(filename):
+    """
+    Check whether file can preview on web
+    
+    """
+    fileExt = os.path.splitext(filename)[1][1:]
+    for filetype in PREVIEW_FILEEXT.keys():
+        if fileExt in PREVIEW_FILEEXT.get(filetype):
+            return (True, filetype)
+    return (False, '')

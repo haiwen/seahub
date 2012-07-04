@@ -170,6 +170,13 @@ USE_SUBDOMAIN = False
 # account type is `personal` or `business`
 ACCOUNT_TYPE = 'personal'
 
+FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
+
+PREVIEW_FILEEXT = {
+    'Document': ('ac', 'am', 'as', 'as3', 'asm', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'csv', 'cxx', 'diff', 'erb', 'groovy', 'gsheet', 'h', 'haml', 'hh', 'htm', 'html', 'java', 'js', 'less', 'm', 'make', 'ml', 'mm', 'ods', 'odt', 'php', 'pl', 'properties', 'py', 'rb', 'rtf', 'sass', 'scala', 'scm', 'script', 'sh', 'sml', 'sql', 'txt', 'vi', 'vim', 'wpd', 'xls', 'xlsm', 'xlsx', 'xml', 'xsd', 'xsl', 'xslt', 'yaml'),
+    'Image': ('ai', 'bmp', 'eps', 'gif', 'ind', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'svg', 'tif', 'tiff'),
+}
+
 try:
     import local_settings
 except ImportError:
