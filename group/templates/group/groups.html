@@ -13,21 +13,22 @@
 
 <h3>我的小组</h3>
 {% if groups %}
-<table>
-    <tr>
-        <th width="30%">名字</th>
-        <th width="40%">创建者</th>
-        <th width="30%">创建时间</th>
-    </tr>
-
+<ul class="group-list w100 ovhd">
     {% for group in groups %}
-    <tr>
-        <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></td>
-        <td>{{ group.props.creator_name }}</td>
-        <td>{{ group.props.timestamp|tsstr_sec }}</td>
-    </tr>
+    <li class="group fleft">
+    <div class="pic fleft">
+        <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">
+            <img src="{{ MEDIA_URL }}img/group.jpg" alt="小组图标" />
+        </a>
+    </div>
+    <div class="txt fright">
+        <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
+        <p><span class="item-name">创建者：</span>{{ group.props.creator_name }}</p>
+        <p><span class="item-name">创建时间：</span>{{ group.props.timestamp|tsstr_sec }}</p>
+    </div>
+    </li>
     {% endfor %}
-</table>
+</ul>
 {% else %}
 <p>暂无</p>
 {% endif %}
