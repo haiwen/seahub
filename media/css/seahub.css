@@ -110,6 +110,7 @@ table img {
 .op {
     font-size:13px;
 }
+#paginator { margin-top:10px; }
 
 /* container */
 #wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
@@ -178,7 +179,7 @@ table img {
     color:#636363;
     font-size:12px;
     padding:20px 0 10px;
-    margin:25px auto;
+    margin:80px auto 25px;
     border-top:1px solid #DDD;
 }
 #footer .items {
