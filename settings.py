@@ -186,7 +186,7 @@ CACHES = {
     }
 }
 
-MAX_UPLOAD_FILE_SIZE        = 1024 * 1024 * 1024 # 1GB
+MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
 MAX_UPLOAD_FILE_NAME_LEN    = 256
 
 # Base url and name used in email sending
