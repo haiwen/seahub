@@ -26,15 +26,15 @@ from seahub.contacts.models import Contact
 #                              {'peers': peers},
 #                              context_instance=RequestContext(request))
 
-def logout_relay(request):
-    peer_id = request.GET.get('peer_id', '')
-
-    try:
-        ccnet_threaded_rpc.remove_one_binding(request.user.username, peer_id)
-    except SearpcError, e:
-        return go_error(request, e.msg)
-
-    return HttpResponseRedirect(reverse('list_userids'))
+#def logout_relay(request):
+#    peer_id = request.GET.get('peer_id', '')
+# 
+#    try:
+#        ccnet_threaded_rpc.remove_one_binding(request.user.username, peer_id)
+#    except SearpcError, e:
+#        return go_error(request, e.msg)
+# 
+#    return HttpResponseRedirect(reverse('list_userids'))
 
 @login_required
 def edit_profile(request):

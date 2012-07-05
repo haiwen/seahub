@@ -5,5 +5,5 @@ urlpatterns = patterns('profile.views',
     url(r'^$', 'edit_profile', name="edit_profile"),
     url(r'^(?P<user>[^/]+)/$', 'user_profile', name="user_profile"),
     url(r'^(?P<user>[^/]+)/get/$', 'get_user_profile', name="get_user_profile"),
-    url(r'^logout/$', 'logout_relay', name="logout_relay"),
+#    url(r'^logout/$', 'logout_relay', name="logout_relay"),
 )

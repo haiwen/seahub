@@ -104,7 +104,8 @@ def render_group_info(request, group_id, form):
     for group in groups:
         if group.id == group_id_int:
             joined = True
-    if not joined and not request.user.is_staff:
+    if not joined and not request.user.is_staff and \
+            not request.user.org.is_staff:
         return go_error(request, u'未加入该小组')
     
     group = ccnet_threaded_rpc.get_group(group_id_int)

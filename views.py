@@ -1091,26 +1091,26 @@ def user_info(request, email):
     if request.user.username == email:
         return HttpResponseRedirect(reverse(myhome))
     
-    if not request.user.is_staff:
+    if not request.user.is_staff and not request.user.org.is_staff:
         return go_permission_error(request, u'权限不足：无法查看该用户信息')
 
-    user_dict = {}
+#    user_dict = {}
     owned_repos = []
     quota_usage = 0
 
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
-    try:
-        peers = ccnet_threaded_rpc.get_peers_by_email(email)
-        for peer in peers:
-            if not peer:
-                continue
-            peername = peer.props.name
-            roles = peer.props.role_list
-            user_dict[peername] = roles
-    except:
-        pass
+#    try:
+#        peers = ccnet_threaded_rpc.get_peers_by_email(email)
+#        for peer in peers:
+#            if not peer:
+#                continue
+#            peername = peer.props.name
+#            roles = peer.props.role_list
+#            user_dict[peername] = roles
+#    except:
+#        pass
 
     # Repos that are share to user
     in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email', -1, -1)
@@ -1120,7 +1120,7 @@ def user_info(request, email):
             'owned_repos': owned_repos,
             'quota_usage': quota_usage,
             "in_repos": in_repos,
-            'user_dict': user_dict,
+#            'user_dict': user_dict,
             'email': email
             },
         context_instance=RequestContext(request))
