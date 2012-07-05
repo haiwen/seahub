@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import settings
 import os
 import re
 import time
-import os
 import stat
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
@@ -15,11 +14,10 @@ from django.core.cache import cache
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids
-
-EMPTY_SHA1 = '0000000000000000000000000000000000000000'
-
 import settings
 from settings import PREVIEW_FILEEXT
+
+EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 
 def go_permission_error(request, msg=None):
     """

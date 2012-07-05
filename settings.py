@@ -235,3 +235,11 @@ else:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 SEAFILE_VERSION = '0.9.4'
+
+try:
+    from secret_key import *
+except ImportError:
+    SETTINGS_DIR = os.path.abspath(os.path.dirname(__file__))
+    from secret_key_generator import generate_secret_key
+    generate_secret_key(os.path.join(SETTINGS_DIR, 'secret_key.py'))
+    from secret_key import *
