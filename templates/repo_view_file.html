@@ -31,7 +31,11 @@
             当前路径：
             {% for name, link in zipped %}
             {% if not forloop.last %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}&history={{ view_history }}">{{ name }}</a> / 
+              {% if view_history %}
+              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /               
+              {% else %}
+              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+              {% endif %}
             {% else %}
             {{ name }}
             {% endif %}

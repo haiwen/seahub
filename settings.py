@@ -207,7 +207,6 @@ HTTP_SERVER_ROOT = "http://localhost:8082"
 # Seafile-applet address and port, used in repo download
 CCNET_APPLET_ROOT = "http://localhost:13420"
 
-SEAFILE_VERSION = '0.9.2'
 SEAHUB_TITLE = 'SeaHub'
 
 USE_SUBDOMAIN = False
@@ -234,3 +233,5 @@ else:
             globals()[attr] = getattr(local_settings, attr)
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
+
+SEAFILE_VERSION = '0.9.4'

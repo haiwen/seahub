@@ -185,11 +185,11 @@ def render_repo(request, repo_id, error=''):
             return go_error(request, e.msg)
 
     # view newest worktree or history worktree
-    current_commit = seafserv_rpc.get_commit(request.GET.get('commit_id', ''))
+    commit_id = request.GET.get('commit_id', '')
+    view_history = True if commit_id else False
+    current_commit = seafserv_rpc.get_commit(commit_id)
     if not current_commit:
         current_commit = get_commits(repo_id, 0, 1)[0]
-
-    view_history = request.GET.get('history', '')
     
     # query repo infomation
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
@@ -695,7 +695,11 @@ def repo_del_file(request, repo_id):
 def repo_view_file(request, repo_id, obj_id):
     http_server_root = get_httpserver_root()
     filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
-    view_history = request.GET.get('history', '')
+    commit_id = request.GET.get('commit_id', '')
+    view_history = True if commit_id else False
+    current_commit = seafserv_rpc.get_commit(commit_id)
+    if not current_commit:
+        current_commit = get_commits(repo_id, 0, 1)[0]
 
     if request.is_ajax():
         content_type = 'application/json; charset=utf-8'

@@ -97,7 +97,11 @@
               当前路径：
               {% for name, link in zipped %}
               {% if not forloop.last %}
-              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}&history={{ view_history }}">{{ name }}</a> / 
+                {% if view_history %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
+                {% else %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /                
+                {% endif %}
               {% else %}
               {{ name }}
               {% endif %}
@@ -122,7 +126,12 @@
             {% for dirent in dir_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
-              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&history={{ view_history }}">{{ dirent.obj_name }}</a></td>
+              {% if view_history %}
+              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
+              {% else %}
+              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+              {% endif %}
+
               <td></td>
               <td>
                 {% if not view_history and request.user.is_authenticated %}
@@ -143,7 +152,12 @@
             {% for dirent in file_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?commit_id={{ current_commit.id }}&file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&history={{ view_history }}">{{ dirent.props.obj_name }}</a></td>
+              {% if view_history %}
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?commit_id={{ current_commit.id }}&file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
+              {% else %}
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>
+              {% endif %}
+
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
                   <div>
