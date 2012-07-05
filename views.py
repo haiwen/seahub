@@ -228,11 +228,14 @@ def render_repo(request, repo_id, error=''):
             file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                              y.obj_name.lower()))
 
-    try:
-        accessible_repos = get_accessible_repos(request, repo)
-    except SearpcError, e:
-        error_msg = e.msg
-        return go_error(request, error_msg)
+    if request.user.is_authenticated() and not view_history:
+        try:
+            accessible_repos = get_accessible_repos(request, repo)
+        except SearpcError, e:
+            error_msg = e.msg
+            return go_error(request, error_msg)
+    else:
+         accessible_repos = []   
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -677,7 +680,6 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
 
-@login_required
 def repo_view_file(request, repo_id, obj_id):
     http_server_root = get_httpserver_root()
     filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
