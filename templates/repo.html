@@ -323,7 +323,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
 
     $('#dirs')
         .bind('loaded.jstree', function(event,data) {
-            $('#mv-form').modal({appendTo:'#main'});
+            $('#mv-form').modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
         })
         .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
             //resize the popup when open/close/focus a dir
