@@ -154,8 +154,9 @@
 
 <form id="repo-share-form" action="{{ SITE_ROOT }}share/add/" method="post" name="repo-share-form" class="hide">
     <label>邮箱或小组：</label><br />
-    <textarea id="email_or_group" name="email_or_group"></textarea><br />
+    <textarea id="email_or_group" name="email_or_group"></textarea>
     <input id="repo_id" type="hidden" name="repo_id" value="" />
+    <p class="tip">可共享给任意邮箱，包括未注册的。</p>
     <p class="error hide">输入不能为空。</p>
     <input type="submit" value="提交" id="share-submit-btn" />
 </form>
