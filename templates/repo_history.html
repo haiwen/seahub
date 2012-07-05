@@ -113,6 +113,14 @@
                         con += '<h4 id="ls-ch-modi">修改的文件</h4>';
                         show(data['modified']);
                     }
+                    if (data['newdir'].length > 0) {
+                        con += '<h4 id="ls-ch-newdir">新目录</h4>';
+                        show(data['newdir']);
+                    }
+                    if (data['deldir'].length > 0) {
+                        con += '<h4 id="ls-ch-deldir">删除的目录</h4>';
+                        show(data['deldir']);
+                    }
                     if (!con) {
                         con = '<p>没有文件被改动</p>';
                     }

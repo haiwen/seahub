@@ -502,7 +502,8 @@ def repo_history_revert(request, repo_id):
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
 def get_diff(repo_id, arg1, arg2):
-    lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : []}
+    lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : [], \
+                 'newdir' : [], 'deldir' : []}
 
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, arg1, arg2)
     if not diff_result:
@@ -517,6 +518,10 @@ def get_diff(repo_id, arg1, arg2):
             lists['renamed'].append(d.name + " ==> " + d.new_name)
         elif d.status == "mod":
             lists['modified'].append(d.name)
+        elif d.status == "newdir":
+            lists['newdir'].append(d.name)
+        elif d.status == "deldir":
+            lists['deldir'].append(d.name)
 
     return lists
 
