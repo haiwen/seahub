@@ -149,7 +149,7 @@ FILEEXT_ICON_MAP = {
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
 
 PREVIEW_FILEEXT = {
-    'Document': ('ac', 'am', 'as', 'as3', 'asm', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'csv', 'cxx', 'diff', 'erb', 'groovy', 'gsheet', 'h', 'haml', 'hh', 'htm', 'html', 'java', 'js', 'less', 'm', 'make', 'ml', 'mm', 'ods', 'odt', 'php', 'pl', 'properties', 'py', 'rb', 'rtf', 'sass', 'scala', 'scm', 'script', 'sh', 'sml', 'sql', 'txt', 'vi', 'vim', 'wpd', 'xls', 'xlsm', 'xlsx', 'xml', 'xsd', 'xsl', 'xslt', 'yaml'),
+    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'java', 'js', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'vi', 'vim', 'xml'),
     'Image': ('ai', 'bmp', 'eps', 'gif', 'ind', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'svg', 'tif', 'tiff'),
 }
 
