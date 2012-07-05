@@ -81,43 +81,42 @@
     //list modification made by a commit
     $('.lsch').each(function() {
         $(this).click(function() {
-            var str_time_author = '<span class="latest-commit-time-author">(' + $(this).attr('data') + ')</span>';
+            var time = '<span class="latest-commit-time-author">(' + $(this).attr('data') + ')</span>';
             $.ajax({
                 url: $(this).attr('href'),
                 dataType: 'json',
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
-                    var str_title = '<h3>修改详情' + str_time_author + '</h3>';
-                    var str_con = ''; 
+                    var title = '<h3>修改详情' + time + '</h3>',
+                        con = ''; 
                     var show = function(data_) {
-                            str_con += '<ul>';
+                            con += '<ul>';
                             for (var i = 0, len = data_.length; i < len; i++) {
-                                str_con += '<li>' + data_[i] + '</li>';
+                                con += '<li>' + data_[i] + '</li>';
                             }   
-                            str_con += '</ul>';
+                            con += '</ul>';
                     };  
                     if (data['new'].length > 0) {
-                        str_con += '<h4 id="ls-ch-new">新文件</h4>';
+                        con += '<h4 id="ls-ch-new">新文件</h4>';
                         show(data['new']);
                     }   
                     if (data['removed'].length > 0) {
-                        str_con += '<h4 id="ls-ch-rm">删除的文件</h4>';
+                        con += '<h4 id="ls-ch-rm">删除的文件</h4>';
                         show(data['removed']);
                     }   
                     if (data['renamed'].length > 0) {
-                        str_con += '<h4 id="ls-ch-rn">重命名或移动的文件</h4>';
+                        con += '<h4 id="ls-ch-rn">重命名或移动的文件</h4>';
                         show(data['renamed']);
                     }   
                     if (data['modified'].length > 0) {
-                        str_con += '<h4 id="ls-ch-modi">修改的文件</h4>';
+                        con += '<h4 id="ls-ch-modi">修改的文件</h4>';
                         show(data['modified']);
                     }
-                    if (!str_con) {
-                        str_con = '<p>没有文件被改动</p>';
+                    if (!con) {
+                        con = '<p>没有文件被改动</p>';
                     }
-                    $('#ls-ch').html(str_title + str_con);
-                    $('#ls-ch').modal({appendTo:'#main'});
+                    $('#ls-ch').html(title + con).modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
                 }
             });
             return false;
