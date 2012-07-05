@@ -109,7 +109,6 @@ class UploadProgressCachedHandler(FileUploadHandler):
         super(UploadProgressCachedHandler, self).__init__(request)
         self.progress_id = None
         self.cache_key = None
-        self.chunk_size = 1024
 
     def handle_raw_input(self, input_data, META, content_length, boundary, encoding=None):
         self.content_length = content_length

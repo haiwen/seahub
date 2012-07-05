@@ -270,6 +270,7 @@ def repo_upload_file(request, repo_id):
             "used_space": used_space,
             "total_space": total_space,
             "zipped": zipped,
+            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
         
     ############ POST ############
@@ -283,6 +284,7 @@ def repo_upload_file(request, repo_id):
             "total_space": total_space,
             "zipped": zipped,
             "parent_dir": parent_dir,
+            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
         
     try:
@@ -296,25 +298,35 @@ def repo_upload_file(request, repo_id):
         error_msg = u'上传文件失败'
         return render_upload_error(error_msg)
 
+    def remove_tmp_file():
+        try:
+            os.remove(tmp_file.temporary_file_path())
+        except:
+            pass
+
     # rename the file if there is name conflicts
     filename = check_filename_with_rename(repo_id, parent_dir, tmp_file.name)
     if len(filename) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+        remove_tmp_file()
         error_msg = u"您上传的文件名称太长"
         return go_error(request, error_msg)
 
     if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
         error_msg = u"您上传的文件太大"
+        remove_tmp_file()
         return go_error(request, error_msg)
 
     try:
         seafserv_threaded_rpc.put_file (repo_id, tmp_file_path, parent_dir,
                                         filename, request.user.username);
     except SearpcError, e:
+        remove_tmp_file()
         error_msg = e.msg
         return render_upload_error(error_msg)
-
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
-    return HttpResponseRedirect(url)
+    else:
+        remove_tmp_file()
+        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+        return HttpResponseRedirect(url)
     
 def get_subdir(request):
     repo_id = request.GET.get('repo_id', '')
