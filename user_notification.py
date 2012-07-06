@@ -23,8 +23,8 @@ site_name = settings.SITE_NAME
 subject = u'%s：新消息' % site_name
 
 site_base = settings.SITE_BASE
-if site_base[-1] != '/':
-    site_base += '/'
+if site_base[-1] == '/':
+    site_base = site_base[:-1]
 site_root = settings.SITE_ROOT
 if site_root[-1] != '/':
     site_root += '/'
