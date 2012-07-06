@@ -25,6 +25,6 @@ def generate_key(max_length, data, encoder=b64encode, digester=md5):
     return key[:max_length]
 
 def generate_secret_key(file_name):
-    f = open(file_name, 'w')
+    f = open(file_name, 'a')
     f.write("SECRET_KEY = '%s'" % generate_key(40, (random_string(),)))
     f.close()
