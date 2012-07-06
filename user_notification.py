@@ -25,7 +25,10 @@ subject = u'%s：新消息' % site_name
 site_base = settings.SITE_BASE
 if site_base[-1] != '/':
     site_base += '/'
-url = site_base + 'home/my/'
+site_root = settings.SITE_ROOT
+if site_root[-1] != '/':
+    site_root += '/'
+url = site_base + site_root + 'home/my/'
 
 notifications = UserNotification.objects.all()
 
