@@ -213,13 +213,6 @@ USE_SUBDOMAIN = False
 ACCOUNT_TYPE = 'personal'
 
 try:
-    from local_settings import SECRET_KEY
-except ImportError:
-    SETTINGS_DIR = os.path.abspath(os.path.dirname(__file__))
-    from secret_key_generator import generate_secret_key
-    generate_secret_key(os.path.join(SETTINGS_DIR, 'local_settings.py'))
-
-try:
     import local_settings
 except ImportError:
     pass
