@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export CCNET_CONF_DIR=/home/plt/dev/ccnet/seafile/tests/basic/conf2
-export PYTHONPATH=/opt/lib/python2.6/site-packages:thirdpart
+. setenv.sh
 
 ./manage.py runserver
