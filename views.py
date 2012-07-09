@@ -77,7 +77,7 @@ def validate_owner(request, repo_id):
     except:
         ret = 0
 
-    if ret == 0:
+    if ret == 0 or ret is None:
         return False
     else:
         return True
@@ -1129,8 +1129,11 @@ def user_info(request, email):
     if request.user.username == email:
         return HttpResponseRedirect(reverse(myhome))
     
-    if not request.user.is_staff and not request.user.org.is_staff:
+    if not request.user.is_staff:
         return go_permission_error(request, u'权限不足：无法查看该用户信息')
+
+    # if request.user.org and not request.user.org.is_staff:
+    #     return go_permission_error(request, u'权限不足：无法查看该用户信息')
 
 #    user_dict = {}
     owned_repos = []
