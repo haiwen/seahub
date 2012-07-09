@@ -1,0 +1,50 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block info_bar_message %}
+{% if request.user.is_authenticated %}
+  {{ block.super }}
+{% else %}
+  <div id="info-bar">
+    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block main_panel %}
+<div>
+    <div>
+        <p class="error">{{ error_msg }}</p>
+    </div>
+    <form id="create-repo-form" action="{{ SITE_ROOT }}repo/create/" method="post">
+        <label>新同步目录名称</label><br/>
+        <input id="repo-name" type="text" name="repo_name" value="{{ repo_name }}" /><br />
+        <label>简短描述</label><br/>
+        <textarea id="repo-desc" name="repo_desc">{{ repo_desc }}</textarea>
+        <div class="repo-create-encryption">
+            <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
+            <label>密码</label><br />
+            <input type="password" name="passwd" disabled="disabled" id="passwd" class="input-disabled" /><br />
+            <label>再次输入密码</label><br />
+            <input type="password" name="passwd_again" disabled="disabled" id="passwd-again" class="input-disabled" />
+        </div>
+        <input type="submit" id="repo-create-submit" value="提交" class="submit" />
+    </form>
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#encrypt-switch').click(function () {
+    if ($(this).attr('checked')) {
+        $('[type="password"]').attr('disabled', false);
+        $('[type="password"]').removeClass('input-disabled');
+    } else {
+        $('[type="password"]').attr('disabled', true);
+        $('[type="password"]').addClass('input-disabled');
+    }
+});
+
+</script>
+{% endblock %}
