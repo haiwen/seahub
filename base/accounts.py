@@ -1,3 +1,4 @@
+# encoding: utf-8
 from django import forms
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor, sha_constructor
@@ -299,7 +300,7 @@ class RegistrationForm(forms.Form):
         if not emailuser:
             return self.cleaned_data['email']
         else:
-            raise forms.ValidationError(_("A user with this email already"))                        
+            raise forms.ValidationError("该邮箱已被注册")
 
     def clean_userid(self):
         if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:
@@ -316,7 +317,7 @@ class RegistrationForm(forms.Form):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields didn't match."))
+                raise forms.ValidationError("两次输入的密码不一致")
         return self.cleaned_data
 
 class OrgRegistrationForm(RegistrationForm):
@@ -332,7 +333,7 @@ class OrgRegistrationForm(RegistrationForm):
                                label=_("Organization Name"))
     url_prefix = forms.RegexField(label=_("Url Prefix"), max_length=20,
                                   regex=r'^[a-z0-9]+$',
-                                  error_message=_("This value must contain only letters or numbers."))
+                                  error_message="域名前缀只能包含字母或数字")
 
     def clean_url_prefix(self):
         url_prefix = self.cleaned_data['url_prefix']
@@ -340,7 +341,7 @@ class OrgRegistrationForm(RegistrationForm):
         if not org:
             return url_prefix
         else:
-            raise forms.ValidationError(_("A organization with this url prefix already"))
+            raise forms.ValidationError("该域名前缀已被注册")
         
 class OrgRegistrationBackend(object):
     def register(self, request, **kwargs):

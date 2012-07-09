@@ -71,7 +71,16 @@ def validate_owner(request, repo_id):
     Check whether email in the request own the repo
     
     """
-    return seafserv_threaded_rpc.is_repo_owner(request.user.username, repo_id)
+    try:
+        ret = seafserv_threaded_rpc.is_repo_owner(request.user.username,
+                                                   repo_id)
+    except:
+        ret = 0
+
+    if ret == 0:
+        return False
+    else:
+        return True
 
 def validate_emailuser(emailuser):
     """
@@ -95,6 +104,7 @@ def check_shared_repo(request, repo_id):
     got token if user is not logged in
     
     """
+    # Not logged-in user
     if not request.user.is_authenticated():
         token = request.COOKIES.get('anontoken', None)
         if token:
@@ -102,6 +112,7 @@ def check_shared_repo(request, repo_id):
         else:
             return False
 
+    # Logged-in user
     repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
     for repo in repos:
         if repo.props.id == repo_id:
@@ -120,11 +131,12 @@ def check_shared_repo(request, repo_id):
 def access_to_repo(request, repo_id, repo_ap):
     """
     Check whether user in the request can access to repo, which means user can
-    view directory entries on repo page.
+    view directory entries on repo page. Only repo owner or person who is shared
+   can access to repo.
 
     """
     if repo_ap == 'own' and not validate_owner(request, repo_id) \
-            and not check_shared_repo(request, repo_id) and not request.user.is_staff:
+            and not check_shared_repo(request, repo_id):
         return False
     else:
         return True
@@ -154,17 +166,20 @@ def gen_path_link(path, repo_name):
 def render_repo(request, repo_id, error=''):
     # get repo web access property, if no repo access property in db, then
     # assume repo ap is 'own'
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if not repo_ap:
-        repo_ap = 'own'
+    # repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    # if not repo_ap:
+    #     repo_ap = 'own'
 
-    # check whether user can view repo
-    if access_to_repo(request, repo_id, repo_ap):
-        can_access = True
-    else:
-        can_access = False
+    # Since repo web access property is removed since 0.9.4, we assume all repo
+    # is 'own' for compatibility
+    repo_ap = 'own'
+    
+    # Check whether user can view repo page
+    can_access = access_to_repo(request, repo_id, repo_ap)
+    if not can_access:
+        return go_permission_error(request, '无法访问该同步目录')
 
-    # check whether use is repo owner
+    # Check whether use is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
@@ -1304,7 +1319,10 @@ def sys_org_admin(request):
     if not request.user.is_staff:
         raise Http404
 
-    orgs = ccnet_threaded_rpc.get_all_orgs(0, sys.maxint)
+    try:
+        orgs = ccnet_threaded_rpc.get_all_orgs(0, sys.maxint)
+    except:
+        orgs = []
 
     return render_to_response('sys_org_admin.html', {
             'orgs': orgs,

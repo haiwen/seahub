@@ -397,20 +397,13 @@ def group_remove_member(request, group_id, user_name):
     if not check_group_staff(group_id_int, request.user):
         return go_permission_error(request, u'只有小组管理员有权删除成员')
     
-    if not validate_emailuser(user_name):
-        err_msg = u'用户不存在'
-        return go_error(request, err_msg)
-    else:
-        try:
-            group_id_int = int(group_id)
-        except ValueError:
-            return go_error(request, u'group id 不是有效参数')
-        try:
-            ccnet_threaded_rpc.group_remove_member(group_id_int, request.user.username,
-                                          user_name)
-            seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
-        except SearpcError, e:
-            return go_error(request, e.msg)
+    try:
+        ccnet_threaded_rpc.group_remove_member(group_id_int,
+                                               request.user.username,
+                                               user_name)
+        seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
+    except SearpcError, e:
+        return go_error(request, e.msg)
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
     
