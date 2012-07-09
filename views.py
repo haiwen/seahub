@@ -275,7 +275,7 @@ def render_repo(request, repo_id, error=''):
 @login_required    
 def repo_upload_file(request, repo_id):
     repo = get_repo(repo_id)
-    total_space = pow(2,30)
+    total_space = settings.USER_TOTAL_SPACE
     used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
     ############ GET ############
     if request.method == 'GET':

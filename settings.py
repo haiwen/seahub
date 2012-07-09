@@ -164,6 +164,7 @@ AVATAR_CACHE_TIMEOUT = 0
 # Info-bar notification cache
 NOTIFICATION_CACHE_TIMEOUT = 0
 
+USER_TOTAL_SPACE = 2 * pow(2,30)
 
 # File upload
 FILE_UPLOAD_MAX_MEMORY_SIZE = 0
