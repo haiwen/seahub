@@ -144,9 +144,10 @@ def access_to_repo(request, repo_id, repo_ap):
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
-    Note: `path` must be end with '/'.
     
     """
+    if path[-1:] != '/':
+        path += '/'
     paths = []
     links = []
     if path and path != '/':
@@ -279,9 +280,9 @@ def repo_upload_file(request, repo_id):
     used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
     ############ GET ############
     if request.method == 'GET':
-        parent_dir = request.GET.get('p', '/')
+        parent_dir  = request.GET.get('p', '/')
         zipped = gen_path_link (parent_dir, repo.name)
-        # TODO: per user quota
+        # TODO: per user quota, org user quota
         return render_to_response ('repo_upload_file.html', {
             "repo": repo,
             "parent_dir": parent_dir,
@@ -335,12 +336,87 @@ def repo_upload_file(request, repo_id):
         return go_error(request, error_msg)
 
     try:
-        seafserv_threaded_rpc.put_file (repo_id, tmp_file_path, parent_dir,
-                                        filename, request.user.username);
+        seafserv_threaded_rpc.post_file (repo_id, tmp_file_path, parent_dir,
+                                         filename, request.user.username);
     except SearpcError, e:
         remove_tmp_file()
         error_msg = e.msg
         return render_upload_error(error_msg)
+    else:
+        remove_tmp_file()
+        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+        return HttpResponseRedirect(url)
+
+@login_required
+def repo_update_file(request, repo_id):
+    repo = get_repo(repo_id)
+    total_space = settings.USER_TOTAL_SPACE
+    used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
+    ############ GET ############
+    if request.method == 'GET':
+        target_file  = request.GET.get('p')
+        if not target_file:
+            return go_error(request)
+        zipped = gen_path_link (target_file, repo.name)
+        # TODO: per user quota, org user quota
+        return render_to_response ('repo_update_file.html', {
+            "repo": repo,
+            "target_file": target_file,
+            "used_space": used_space,
+            "total_space": total_space,
+            "zipped": zipped,
+            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
+            }, context_instance=RequestContext(request))
+        
+    ############ POST ############
+    target_file = request.POST.get('target_file')
+    if not target_file:
+        return go_error(request)
+
+    def render_update_file_error(error_msg):
+        zipped = gen_path_link (target_file, repo.name)
+        return render_to_response ('repo_update.html', {
+            "error_msg": error_msg,
+            "repo": repo,
+            "used_space": used_space,
+            "total_space": total_space,
+            "zipped": zipped,
+            "target_file": target_file,
+            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
+            }, context_instance=RequestContext(request))
+        
+    try:
+        tmp_file = request.FILES['file']
+    except:
+        error_msg = u'请选择一个文件'
+        return render_update_file_error(error_msg)
+
+    tmp_file_path = tmp_file.temporary_file_path()
+    if not os.access(tmp_file_path, os.F_OK):
+        error_msg = u'上传文件失败'
+        return render_update_file_error(error_msg)
+
+    def remove_tmp_file():
+        try:
+            os.remove(tmp_file.temporary_file_path())
+        except:
+            pass
+
+    if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
+        error_msg = u"您上传的文件太大"
+        remove_tmp_file()
+        return go_error(request, error_msg)
+
+    parent_dir = os.path.dirname(target_file)
+    filename   = os.path.basename(target_file)
+
+    try:
+        seafserv_threaded_rpc.put_file (repo_id, tmp_file_path, parent_dir,
+                                         filename, request.user.username);
+    except SearpcError, e:
+        remove_tmp_file()
+        error_msg = e.msg
+        return render_update_file_error(error_msg)
     else:
         remove_tmp_file()
         url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
@@ -794,8 +870,6 @@ def repo_view_file(request, repo_id, obj_id):
         
     # generate path and link
     path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
     zipped = gen_path_link(path, repo.name)
 
     # filename
@@ -1458,7 +1532,7 @@ def repo_new_dir(request):
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
     try:
-        seafserv_threaded_rpc.put_dir(repo_id, parent_dir, new_dir_name, user)
+        seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name, user)
     except Exception, e:
         return go_error(request, str(e))
         
@@ -1540,13 +1614,19 @@ def repo_create(request):
     error_msg = ""
     if not repo_name:
         error_msg = u"目录名不能为空"
+    elif len(repo_name) > 50:
+        error_msg = u"目录名太长"
     elif not repo_desc:
         error_msg = u"描述不能为空"
+    elif len(repo_desc) > 100:
+        error_msg = u"描述太长"
     elif encrypted == 'on':
         if not passwd:
             error_msg = u"密码不能为空"
         elif not passwd_again:
             error_msg = u"确认密码不能为空"
+        elif len(passwd) < 3:
+            error_msg = u"密码太短"
         elif len(passwd) > 15:
             error_msg = u"密码太长"
         elif passwd != passwd_again:
@@ -1556,10 +1636,13 @@ def repo_create(request):
         return render_repo_create_error(error_msg)
 
     try:
-        seafserv_threaded_rpc.create_repo(repo_name, repo_desc, 
-                                          request.user.username, passwd)
+        repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc, 
+                                            request.user.username, passwd)
     except:
-        error_msg = u"两次输入的密码不相同"
+        error_msg = u"创建目录失败"
         return render_repo_create_error(error_msg)
     else:
+        if not repo_id:
+            error_msg = u"创建目录失败"
+            return render_repo_create_error(error_msg)
         return HttpResponseRedirect(reverse(myhome))

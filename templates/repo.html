@@ -169,6 +169,7 @@
                           <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
                           <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                           <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
+                          <li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path }}{{dirent.obj_name}}">更新</a></li>
                           {% endif %}
                       </ul>
                   </div>
@@ -281,7 +282,7 @@ $('.file-rename, .dir-rename').click(function () {
     $('#rename-form').modal({appendTo:'#main'});
     return false;
 });
-  
+
 var accessible_repos = [];
 {% for repo in accessible_repos %}
     {% if repo.props.has_subdir %} 
