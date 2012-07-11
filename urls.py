@@ -6,13 +6,14 @@ from seahub.views import root, peers, myhome, \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
     org_seafadmin, org_useradmin, org_group_admin, org_remove, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
-    ownerhome, repo_history_revert, \
+    ownerhome, repo_history_revert, repo_file_get, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, org_info, repo_view_file, \
     seafile_access_check, back_local, repo_history_changes, \
-    repo_upload_file, file_upload_progress, file_upload_progress_page, get_subdir, file_move, \
-    repo_new_dir, repo_rename_file, validate_filename, \
-    repo_create, repo_update_file, file_revisions
+    repo_upload_file, file_upload_progress, file_upload_progress_page, \
+    get_subdir, file_move, repo_new_dir, repo_rename_file, validate_filename, \
+    repo_create, repo_update_file, file_revisions, \
+    get_shared_link, view_shared_file, remove_shared_link, send_shared_link
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 from seahub.group.views import group_list
@@ -42,7 +43,11 @@ urlpatterns = patterns('',
     (r'^share/', include('share.urls')),
     url(r'^shareadmin/$', share_admin, name='share_admin'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
-
+    (r'^sharedlink/get/$', get_shared_link),
+    (r'^sharedlink/remove/$', remove_shared_link),
+    (r'^sharedlink/send/$', send_shared_link),
+    (r'^f/(?P<token>[^/]+)/$', view_shared_file),
+                       
     (r'^file_upload_progress/$', file_upload_progress),
     (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^repo/new_dir/$', repo_new_dir),
@@ -61,7 +66,8 @@ urlpatterns = patterns('',
 #    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
 #    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
-    (r'^repo/(?P<repo_id>[^/]+)/view/(?P<obj_id>[^/]+)/$', repo_view_file),
+    (r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file),
+    (r'^repo/(?P<repo_id>[^/]+)/file/get/$', repo_file_get),
                        
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       

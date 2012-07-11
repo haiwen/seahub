@@ -1,0 +1,54 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block main_panel %}
+    <h2 class="subject">
+        {{ file_name }}<br />
+        <span class="latest-commit-time-author">共享者：{{ username }}</span>
+    </h2>
+    
+    <div class="side fright">
+      <h3>操作</h3>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
+    </div>
+
+    <div class="main fleft">
+      <pre id="file-content">正在读取文件内容...</pre>
+    </div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(window).load(function() {
+    var can_preview = "{{ can_preview }}";
+    var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path }}&u={{ username }}";
+    var filetype = "{{ filetype }}";
+    
+    if (can_preview == 'True' && filetype == 'Document') {
+      $.ajax({
+          url: url,
+          dataType: 'json',
+          cache: false,
+          contentType: 'application/json; charset=utf-8',
+          success: function(data) {
+              if (data.length > 0) {
+                    $('#file-content').html(data[0]['content']);
+              }
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+              var jsonVal = jQuery.parseJSON(xhr.responseText);
+              $('#file-content').html(jsonVal[0]['error']);
+          }
+      });
+      return false;
+    } else if (can_preview == 'True' && filetype == 'Image') {
+      $('#file-content').replaceWith('<img class="img-preview" src="{{ raw_path }}"></img>');
+    } else {
+      $('#file-content').html('无法识别该文件格式，<a class="op" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a>。');
+    }
+});
+
+</script>
+{% endblock %}

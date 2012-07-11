@@ -153,9 +153,9 @@
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
               {% if view_history %}
-              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?commit_id={{ current_commit.id }}&file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
               {% else %}
-              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/view/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>
+              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>
               {% endif %}
 
               <td>{{ dirent.file_size|filesizeformat }}</td>

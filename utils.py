@@ -68,13 +68,13 @@ def get_ccnetapplet_root():
         ccnet_applet_root = settings.CCNET_APPLET_ROOT
     return ccnet_applet_root
 
-def gen_token():
+def gen_token(max_length=5):
     """
-    Generate short token used for owner to access repo file.
+    Generate a random token.
 
     """
 
-    token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[:5]
+    token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[:max_length]
     return token
 
 def validate_group_name(group_name):

@@ -466,6 +466,7 @@ table img {
     margin-top:8px;
 }
 /*repo-share-form*/
+#email,
 #email_or_group,
 #share-link,
 #added-member-name {
@@ -653,3 +654,4 @@ table img {
     max-width: 550px;
     max-height: 550px;
 }
+

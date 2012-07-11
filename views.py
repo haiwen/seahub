@@ -24,6 +24,7 @@ from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
+from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
@@ -33,7 +34,7 @@ from pysearpc import SearpcError
 from seahub.base.accounts import CcnetUser
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
-from forms import AddUserForm
+from forms import AddUserForm, FileLinkShareForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -147,8 +148,9 @@ def gen_path_link(path, repo_name):
     Generate navigate paths and links in repo page.
     
     """
-    if path[-1:] != '/':
+    if path and path[-1] != '/':
         path += '/'
+
     paths = []
     links = []
     if path and path != '/':
@@ -210,7 +212,6 @@ def render_repo(request, repo_id, error=''):
     
     # query repo infomation
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
-#    latest_commit = get_commits(repo_id, 0, 1)[0]
 
     # get repo dirents
     dirs = []
@@ -789,60 +790,36 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
 
-def repo_view_file(request, repo_id, obj_id):
+def repo_view_file(request, repo_id):
+    """
+    Preview file on web, including files in current worktree and history.
+    """
     http_server_root = get_httpserver_root()
-    filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+    filename = urllib2.quote(os.path.basename(path[:-1]).encode('utf-8'))
+
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
     current_commit = seafserv_threaded_rpc.get_commit(commit_id)
     if not current_commit:
         current_commit = get_commits(repo_id, 0, 1)[0]
 
-    if request.is_ajax():
-        content_type = 'application/json; charset=utf-8'
-        token = request.GET.get('t')
-        tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
-        redirect_url = tmp_str % (http_server_root,
-                                  repo_id, obj_id,
-                                  filename, 'view', 
-                                  token,
-                                  request.user.username)
+    if view_history:
+        obj_id = request.GET.get('obj_id', '')
+    else:
         try:
-            proxied_request = urllib2.urlopen(redirect_url)
-            if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-                data = json.dumps([{'error': '文件超过10M，无法在线查看。'}])
-                return HttpResponse(data, status=400, content_type=content_type)
-            else:
-                content = proxied_request.read()
-        except urllib2.HTTPError, e:
-            err = 'HTTPError: 无法在线打开该文件'
-            data = json.dumps([{'error': err}])
-            return HttpResponse(data, status=400, content_type=content_type)
-        except urllib2.URLError as e:
-            err = 'URLError: 无法在线打开该文件'
-            data = json.dumps([{'error': err}])
-            return HttpResponse(data, status=400, content_type=content_type)
-        else:
-            l, d = [], {}
-            try:
-                # XXX: file in windows is encoded in gbk
-                u_content = content.decode('gbk')                
-            except:
-                u_content = content.decode('utf-8')
-            from django.utils.html import escape
-            d['content'] = re.sub("\r\n|\n", "<br />", escape(u_content))
-            l.append(d)
-            data = json.dumps(l)
-            return HttpResponse(data, status=200, content_type=content_type)
+            obj_id = seafserv_rpc.get_file_by_path(repo_id, path[:-1])
+        except:
+            obj_id = None
+
+    if not obj_id:
+        return go_error(request, '文件不存在')
     
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
-
-    # if a repo doesn't have access property in db, then assume it's 'own'
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if not repo_ap:
-        repo_ap = 'own'
 
     # if a repo is shared to me, then I can view and download file no mater whether
     # repo's access property is 'own' or 'public'
@@ -852,30 +829,22 @@ def repo_view_file(request, repo_id, obj_id):
         share_to_me = False
             
     token = ''        
-    if repo_ap == 'own':
-        # people who is owner or this repo is shared to him, can visit the repo;
-        # others, just go to 404 page           
-        if validate_owner(request, repo_id) or share_to_me:
-            # owner should get a token to visit repo                
-            token = gen_token()
-            # put token into memory in seaf-server
-            seafserv_rpc.web_save_access_token(token, obj_id)
-        else:
-            raise Http404
+    # people who is owner or this repo is shared to him, can visit the repo;
+    # others, just go to 404 page           
+    if validate_owner(request, repo_id) or share_to_me:
+        # owner should get a token to visit repo                
+        token = gen_token()
+        # put token into memory in seaf-server
+        seafserv_rpc.web_save_access_token(token, obj_id)
+    else:
+        raise Http404
 
-    # query commit info
-    commit_id = request.GET.get('commit_id', None)
-    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
-    if not current_commit:
-        current_commit = get_commits(repo.id, 0, 1)[0]
-        
     # generate path and link
-    path = request.GET.get('p', '/')
     zipped = gen_path_link(path, repo.name)
 
-    # filename
+    # determin whether file can preview on web
     can_preview, filetype = valid_previewed_file(filename)
-
+    
     # raw path
     tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
     raw_path = tmp_str % (http_server_root,
@@ -883,12 +852,26 @@ def repo_view_file(request, repo_id, obj_id):
                           filename, 'view', 
                           token,
                           request.user.username)
-    
+
+    # file share link
+    l = FileShare.objects.filter(repo_id=repo_id).filter(path=path[:-1])
+    fileshare = l[0] if len(l) > 0 else None
+
+    http_or_https = request.is_secure() and 'https' or 'http'
+    domain = RequestSite(request).domain
+    if fileshare:
+        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
+                                               settings.SITE_ROOT,
+                                               fileshare.token)
+    else:
+        file_shared_link = ''
+
     return render_to_response('repo_view_file.html', {
             'repo': repo,
             'path': path,
             'obj_id': obj_id,
             'file_name': filename,
+            'path': path,
             'zipped': zipped,
             'view_history': view_history,
             'current_commit': current_commit,
@@ -896,8 +879,76 @@ def repo_view_file(request, repo_id, obj_id):
             'can_preview': can_preview,
             'filetype': filetype,
             'raw_path': raw_path,
+            'fileshare': fileshare,
+            'protocol': http_or_https,
+            'domain': domain,
+            'file_shared_link': file_shared_link,
             }, context_instance=RequestContext(request))
- 
+
+def repo_file_get(request, repo_id):
+    """
+    Handle ajax request to get file content from httpserver.
+    If get current worktree file, need access_token, path and username from
+    url params.
+    If get history file, need access_token, path username and obj_id from
+    url params.
+    """
+    if not request.is_ajax():
+        return Http404
+
+    http_server_root = get_httpserver_root()
+    content_type = 'application/json; charset=utf-8'
+    access_token = request.GET.get('t')
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+        
+    filename = urllib2.quote(os.path.basename(path).encode('utf-8'))
+    obj_id = request.GET.get('obj_id', '')
+    if not obj_id:
+        try:
+            obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
+        except:
+            obj_id = None
+    if not obj_id:
+        data = json.dumps([{'error': '获取文件数据失败'}])
+        return HttpResponse(data, status=400, content_type=content_type)
+
+    username = request.GET.get('u', '')
+    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
+    redirect_url = tmp_str % (http_server_root,
+                              repo_id, obj_id,
+                              filename, 'view', 
+                              access_token,
+                              username)
+    try:
+        proxied_request = urllib2.urlopen(redirect_url)
+        if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
+            data = json.dumps([{'error': '文件超过10M，无法在线查看。'}])
+            return HttpResponse(data, status=400, content_type=content_type)
+        else:
+            content = proxied_request.read()
+    except urllib2.HTTPError, e:
+        err = 'HTTPError: 无法在线打开该文件'
+        data = json.dumps([{'error': err}])
+        return HttpResponse(data, status=400, content_type=content_type)
+    except urllib2.URLError as e:
+        err = 'URLError: 无法在线打开该文件'
+        data = json.dumps([{'error': err}])
+        return HttpResponse(data, status=400, content_type=content_type)
+    else:
+        l, d = [], {}
+        try:
+            # XXX: file in windows is encoded in gbk
+            u_content = content.decode('gbk')                
+        except:
+            u_content = content.decode('utf-8')
+        from django.utils.html import escape
+        d['content'] = re.sub("\r\n|\n", "<br />", escape(u_content))
+        l.append(d)
+        data = json.dumps(l)
+        return HttpResponse(data, status=200, content_type=content_type)
+    
 def repo_access_file(request, repo_id, obj_id):
     if repo_id:
         repo = get_repo(repo_id)
@@ -1756,3 +1807,163 @@ def file_revisions(request, repo_id):
                % (commit_id, file_name, path)
         return HttpResponseRedirect(url)
 
+@login_required
+def get_shared_link(request):
+    """
+    Handle ajax request to generate file shared link.
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    
+    repo_id = request.GET.get('repo_id')
+    obj_id = request.GET.get('obj_id')
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+
+    l = FileShare.objects.filter(repo_id=repo_id).filter(path=path)
+    if len(l) > 0:
+        fileshare = l[0]
+        token = fileshare.token
+    else:
+        token = gen_token(max_length=10)
+        
+        fs = FileShare()
+        fs.username = request.user.username
+        fs.repo_id = repo_id
+        fs.path = path
+        fs.token = token
+
+        try:
+            fs.save()
+        except IntegrityError, e:
+            err = '获取分享链接失败，请重新获取'
+            data = json.dumps([{'error': err}])
+            return HttpResponse(data, status=500, content_type=content_type)
+    
+    data = json.dumps([{'token': token}])
+    return HttpResponse(data, status=200, content_type=content_type)
+
+def view_shared_file(request, token):
+    """
+    Preview file via shared link.
+    """
+    assert token is not None    # Checked by URLconf
+
+    try:
+        fileshare = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        raise Http404
+
+    username = fileshare.username
+    repo_id = fileshare.repo_id
+    path = fileshare.path
+
+    http_server_root = get_httpserver_root()
+    if path[-1] == '/':
+        path = path[:-1]
+    filename = os.path.basename(path)
+    quote_filename = urllib2.quote(filename.encode('utf-8'))
+
+    try:
+        obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
+    except:
+        obj_id = None
+
+    if not obj_id:
+        return go_error(request, '文件不存在')
+    
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    access_token = gen_token()
+    seafserv_rpc.web_save_access_token(access_token, obj_id)
+    
+    can_preview, filetype = valid_previewed_file(filename)
+    
+    # raw path
+    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
+    raw_path = tmp_str % (http_server_root,
+                          repo_id, obj_id,
+                          quote_filename, 'view', 
+                          access_token,
+                          username)
+
+    return render_to_response('view_shared_file.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'path': path,
+            'file_name': filename,
+            'token': token,
+            'access_token': access_token,
+            'can_preview': can_preview,
+            'filetype': filetype,
+            'raw_path': raw_path,
+            'username': username,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def remove_shared_link(request):
+    """
+    Handle ajax request to remove file shared link.
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    
+    token = request.GET.get('t', '')
+    FileShare.objects.filter(token=token).delete()
+
+    msg = '删除成功'
+    data = json.dumps([{'msg': msg}])
+    return HttpResponse(data, status=200, content_type=content_type)
+    
+@login_required
+def send_shared_link(request):
+    """
+    Handle ajax post request to share file shared link.
+    """
+    if not request.is_ajax() and not request.method == 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    
+    form = FileLinkShareForm(request.POST)
+    if not form.is_valid():
+        err = '发送失败'
+        data = json.dumps([{'error':err}])
+        return HttpResponse(data, status=400, content_type=content_type)
+
+    email = form.cleaned_data['email']
+    file_shared_link = form.cleaned_data['file_shared_link']
+
+    # Handle the diffent separator
+    to_email_str = email.replace(';',',')
+    to_email_str = to_email_str.replace('\n',',')
+    to_email_str = to_email_str.replace('\r',',')
+    to_email_list = to_email_str.split(',')
+
+    t = loader.get_template('shared_link_email.html')
+    for to_email in to_email_list:
+        c = {
+            'email': request.user.username,
+            'to_email': to_email,
+            'file_shared_link': file_shared_link,
+            }
+        
+        try:
+            send_mail('您的好友通过SeaCloud分享了一个文件给您',
+                      t.render(Context(c)), None, [to_email],
+                      fail_silently=False)
+        except:
+            err = '发送失败'
+            data = json.dumps([{'error':err}])
+            return HttpResponse(data, status=400, content_type=content_type)
+            
+    msg = '发送成功。'
+    data = json.dumps([{'msg': msg}])
+    return HttpResponse(data, status=200, content_type=content_type)

@@ -25,6 +25,17 @@
       <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
       <p><a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path|urlencode }}">查看所有历史版本</a></p>
       <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
+
+      {% if not view_history %}
+      <h3>共享</h3>
+      <p class="shared-link">
+        <span class="hide">链接：{{ file_shared_link }}</span>
+        <a href="#" data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" class="get-shared-link">获取分享链接</a></p>
+      <div class="link-op hide">      
+        <a href="#" class="send-shared-link">发送</a>
+        <a href="#" data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" class="remove-shared-link">删除</a>
+      </div>
+      {% endif %}
     </div>
 
     <div class="main fleft">
@@ -44,17 +55,53 @@
           </p>
           <pre id="file-content">正在读取文件内容...</pre>
     </div>
+
+    <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
+      <label>邮箱：</label><br />
+      <textarea id="email" name="email"></textarea><br />
+      <input id="file_shared_link" type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
+      <p class="error hide">输入不能为空。</p>
+      <p class="success hide"></p>
+      <p class="sending hide">发送中...</p>
+      <input type="submit" value="提交" id="share-submit-btn" />
+    </form>
+
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-    $(window).load(function() {
+function showLink() {
+    $('.shared-link a').addClass('hide');
+    $('.shared-link span').removeClass('hide');
+    $('.link-op').removeClass('hide');
+}
+function hideLink() {
+    $('.shared-link span').addClass('hide');
+    $('.link-op').addClass('hide');
+    $('.shared-link a').removeClass('hide');
+}
+
+$(window).load(function() {
     var can_preview = "{{ can_preview }}";
+    var view_history = "{{ view_history }}";
+    var url = "";
+    if (view_history == 'True') {
+        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path }}&t={{ token }}&u={{ request.user.username }}";
+    } else {
+        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path }}&t={{ token }}&u={{ request.user.username }}";
+    }
+
     var filetype = "{{ filetype }}";
+    var t = "{{ fileshare.token }}";
+    if (t) {
+        showLink();
+    } else {
+        hideLink();
+    }
     
     if (can_preview == 'True' && filetype == 'Document') {
       $.ajax({
-          url: '{{ SITE_ROOT }}repo/{{ repo.id }}/view/{{ obj_id }}/?file_name={{ file_name }}&t={{ token }}',
+          url: url,
           dataType: 'json',
           cache: false,
           contentType: 'application/json; charset=utf-8',
@@ -69,12 +116,119 @@
           }
       });
       return false;
-  } else if (can_preview == 'True' && filetype == 'Image') {
+    } else if (can_preview == 'True' && filetype == 'Image') {
       $('#file-content').replaceWith('<img class="img-preview" src="{{ raw_path }}"></img>');
-  } else {
+    } else {
       $('#file-content').html('无法识别该文件格式，<a class="op" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a>。');
-  }
-  });
-  
+    }
+});
+
+$('.get-shared-link').click(function() {
+    var url = $(this).attr('data');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            if (data.length > 0) {
+                var t = data[0]['token'];
+                var shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
+                $('.shared-link span').html('链接：' + shared_link);
+                $('.remove-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
+                showLink();
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            $('.get-shared-link').html(jsonVal[0]['error']);
+        }
+    });
+    return false;
+});
+
+$('.remove-shared-link').click(function() {
+    var url = $(this).attr('data');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            hideLink();
+        }
+    });
+    return false;
+});
+
+$('.send-shared-link').click(function() {
+    $("#link-send-form").modal({appendTo: "#main"});
+});
+
+$("#link-send-form").submit(function(event) {
+    // clear error and sucess msg
+    $('.error').html("").addClass('hide');
+    $('.success').html("").addClass('hide');
+    $('.sending').removeClass('hide');
+    $('#simplemodal-container').css('height', $('#link-send-form').height());
+
+    var form = $(this), 
+        file_shared_link = form.children('input[name="file_shared_link"]').val(),
+        email = form.children('textarea[name="email"]').val();
+       
+   if (email && email.length <= 512) {
+       // prepare django csrf token
+       $.ajaxSetup({ 
+           beforeSend: function(xhr, settings) {
+               function getCookie(name) {
+               var cookieValue = null;
+               if (document.cookie && document.cookie != '') {
+                   var cookies = document.cookie.split(';');
+                   for (var i = 0; i < cookies.length; i++) {
+                       var cookie = jQuery.trim(cookies[i]);
+                       // Does this cookie string begin with the name we want?
+                       if (cookie.substring(0, name.length + 1) == (name + '='))        {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                       }
+                   }
+               }
+               return cookieValue;
+               }
+               if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                  // Only send the token to relative URLs i.e. locally.
+                  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+               }
+           } 
+       });   
+       $.ajax({
+           type: "POST",
+           url: "{{ SITE_ROOT }}sharedlink/send/",
+           dataType: 'json',
+           cache: false,
+           contentType: 'application/json; charset=utf-8',
+           data: "file_shared_link="+file_shared_link+"&email="+email,
+           success: function(data) {
+               form.children('.error').addClass('hide');
+               form.children('.sending').addClass('hide');
+               form.children('.success').html(data[0]['msg']).removeClass('hide');
+               $('#simplemodal-container').css('height', $('#link-send-form').height());
+           },
+           error: function(xhr, ajaxOptions, thrownError) {
+               var jsonVal = jQuery.parseJSON(xhr.responseText);
+               form.children('.success').addClass('hide');
+               form.children('.sending').addClass('hide');
+               form.children('.error').html(jsonVal[0]['error']).removeClass('hide');
+               $('#simplemodal-container').css('height', $('#link-send-form').height());
+           }
+       });
+   } else {
+       form.children('.success').html("").addClass('hide');
+       form.children('.sending').addClass('hide');
+       form.children('.error').removeClass('hide');
+   }
+   return false;
+});
+
 </script>
 {% endblock %}

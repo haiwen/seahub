@@ -32,3 +32,13 @@ class AddUserForm(forms.Form):
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
+
+class FileLinkShareForm(forms.Form):
+    """
+    Form for sharing file shared link to emails.
+    """
+
+    email = forms.CharField(max_length=512)
+    file_shared_link = forms.CharField(max_length=40)
+
+        
