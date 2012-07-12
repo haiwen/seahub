@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory
+from django.contrib import messages
 
 from models import Contact
 from models import AddContactForm
@@ -25,6 +26,8 @@ def contact_add(request):
     error_msg = None
     if request.method == 'POST':
         form = AddContactForm(request.POST)
+        # for request from contact_add form in group_info.html
+        group_id = int(request.GET.get('group_id', 0))
         if form.is_valid():
             contact_email = form.cleaned_data['contact_email']
             contact_name = form.cleaned_data['contact_name']
@@ -48,7 +51,16 @@ def contact_add(request):
                 contact.contact_name = contact_name
                 contact.note = note
                 contact.save()
-                return HttpResponseRedirect(reverse("contact_list"))
+                if not group_id:
+                    return HttpResponseRedirect(reverse("contact_list"))
+                else:
+                    messages.success(request, u"您已成功添加%s为联系人" % contact_email)
+                    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
+
+            if error_msg and group_id:
+                messages.error(request, error_msg)
+                return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
+
     else:
         form = AddContactForm({'user_email':request.user.username})
     return render_to_response('contacts/contact_add.html', {

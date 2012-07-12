@@ -4,7 +4,14 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
+{% if messages %}
+    {% for message in messages %}
+    <p class="notification">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
 <h2>{{ group.group_name }}</h2>
+
 <div class="side fright">
 <h3>管理员</h3>
 <ul>
@@ -150,7 +157,7 @@
 </div>
 
 {#if $T.new_user}
-<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/?group_id={{ group.id }}" method="post">
     <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
     <label>邮箱：</label><br />
     <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{$T.email}" /><br />
