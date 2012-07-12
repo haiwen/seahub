@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block top_bar_manager_class %} class="cur"{% endblock %}
 {% block nav %}
-<ul class="nav ovhd">
+<ul class="nav">
     {% if request.user.org.is_staff %}
     <li>
         <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>

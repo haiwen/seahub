@@ -119,6 +119,10 @@ table img {
 #header {
     font-size: 14px;
     font-weight: bold;
+    overflow:hidden;
+    padding-bottom:8px;
+    border-bottom:1px solid #ddd;
+    margin-bottom:15px;
 }
 #main {
     min-height: 400px;
@@ -165,12 +169,18 @@ table img {
     background:none;
 }
 /* header */
-#header .top-info { margin-bottom:13px;}
-#other-info { color: #ccc; text-align:right; }
-#other-info .wish { font-style:italic; margin-bottom:10px; }
-#other-info .version { font-size: 12px; }
-#header .nav { padding: 20px 20px 0 40px; }
-#header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; }
+#logo {
+    margin-right:30px;
+}
+#header .nav {
+    float:left;
+    padding-top:16px;
+}
+#header .nav li {
+    float: left;
+    height:21px;
+    margin:0 10px;
+}
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a.cur { color:#000; }
 #header .nav a:hover { color: #ff9933; text-decoration: underline; }
