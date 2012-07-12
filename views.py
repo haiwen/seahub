@@ -796,9 +796,9 @@ def repo_view_file(request, repo_id):
     """
     http_server_root = get_httpserver_root()
     path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
-    filename = urllib2.quote(os.path.basename(path[:-1]).encode('utf-8'))
+    if path[-1] == '/':
+        path = path[:-1]
+    filename = urllib2.quote(os.path.basename(path).encode('utf-8'))
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -810,7 +810,7 @@ def repo_view_file(request, repo_id):
         obj_id = request.GET.get('obj_id', '')
     else:
         try:
-            obj_id = seafserv_rpc.get_file_by_path(repo_id, path[:-1])
+            obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
         except:
             obj_id = None
 
@@ -854,7 +854,8 @@ def repo_view_file(request, repo_id):
                           request.user.username)
 
     # file share link
-    l = FileShare.objects.filter(repo_id=repo_id).filter(path=path[:-1])
+    l = FileShare.objects.filter(repo_id=repo_id).filter(\
+        username=request.user.username).filter(path=path)
     fileshare = l[0] if len(l) > 0 else None
 
     http_or_https = request.is_secure() and 'https' or 'http'
@@ -940,7 +941,7 @@ def repo_file_get(request, repo_id):
         l, d = [], {}
         try:
             # XXX: file in windows is encoded in gbk
-            u_content = content.decode('gbk')                
+            u_content = content.decode('gbk')
         except:
             u_content = content.decode('utf-8')
         from django.utils.html import escape
@@ -1833,7 +1834,8 @@ def get_shared_link(request):
     if path[-1] == '/':
         path = path[:-1]
 
-    l = FileShare.objects.filter(repo_id=repo_id).filter(path=path)
+    l = FileShare.objects.filter(repo_id=repo_id).filter(\
+        username=request.user.username).filter(path=path)
     if len(l) > 0:
         fileshare = l[0]
         token = fileshare.token

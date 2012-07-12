@@ -14,7 +14,7 @@ class FileShare(models.Model):
     """
     Model used for file share link.
     """
-    username = models.EmailField(max_length=255)
+    username = models.EmailField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
     token = models.CharField(max_length=10, unique=True)
