@@ -950,61 +950,71 @@ def repo_file_get(request, repo_id):
         return HttpResponse(data, status=200, content_type=content_type)
     
 def repo_access_file(request, repo_id, obj_id):
-    if repo_id:
-        repo = get_repo(repo_id)
-        if not repo:
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return go_error(request, e.msg)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+
+    op = request.GET.get('op', 'view')
+    file_name = request.GET.get('file_name', '')
+
+    if op == 'del':
+        return repo_del_file(request, repo_id)
+
+    # if a repo doesn't have access property in db, then assume it's 'own'
+    # repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
+    # if not repo_ap:
+    #     repo_ap = 'own'
+    repo_ap = 'own'
+
+    # if a repo is shared to me, then I can view and download file no mater whether
+    # repo's access property is 'own' or 'public'
+    if check_shared_repo(request, repo_id):
+        share_to_me = True
+    else:
+        share_to_me = False
+
+    # If vistor's file shared token in url params matches the token in db,
+    # then we know the vistor is from file shared link.
+    share_token = request.GET.get('t', '')
+    path = '/' + file_name
+    if FileShare.objects.filter(token=share_token).filter(path=path) > 0:
+        from_shared_link = True
+    else:
+        from_shared_link = False
+
+    token = ''        
+    if repo_ap == 'own':
+        # people who is owner or this repo is shared to him, can visit the repo;
+        # others, just go to 404 page           
+        if validate_owner(request, repo_id) or share_to_me or from_shared_link:
+            # owner should get a token to visit repo                
+            token = gen_token()
+            # put token into memory in seaf-server
+            seafserv_rpc.web_save_access_token(token, obj_id)
+        else:
             raise Http404
 
-        password_set = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return go_error(request, e.msg)
+    http_server_root = get_httpserver_root()
 
-        if repo.props.encrypted and not password_set:
-            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-        op = request.GET.get('op', 'view')
-        file_name = request.GET.get('file_name', '')
-
-        if op == 'del':
-            return repo_del_file(request, repo_id)
-
-        # if a repo doesn't have access property in db, then assume it's 'own'
-        repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-        if not repo_ap:
-            repo_ap = 'own'
-
-        # if a repo is shared to me, then I can view and download file no mater whether
-        # repo's access property is 'own' or 'public'
-        if check_shared_repo(request, repo_id):
-            share_to_me = True
-        else:
-            share_to_me = False
-            
-        token = ''        
-        if repo_ap == 'own':
-            # people who is owner or this repo is shared to him, can visit the repo;
-            # others, just go to 404 page           
-            if validate_owner(request, repo_id) or share_to_me:
-                # owner should get a token to visit repo                
-                token = gen_token()
-                # put token into memory in seaf-server
-                seafserv_rpc.web_save_access_token(token, obj_id)
-            else:
-                raise Http404
-
-        http_server_root = get_httpserver_root()
-
-        redirect_url = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
-                                                                             repo_id, obj_id,
-                                                                             file_name, op, 
-                                                                             token,
-                                                                             request.user.username)
-        return HttpResponseRedirect(redirect_url)
+    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
+    redirect_url = tmp_str % (http_server_root,
+                              repo_id, obj_id,
+                              file_name, op, 
+                              token,
+                              request.user.username)
+    return HttpResponseRedirect(redirect_url)
  
 @login_required
 def repo_download(request):
@@ -1897,7 +1907,7 @@ def view_shared_file(request, token):
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
-            'token': token,
+            'shared_token': token,
             'access_token': access_token,
             'can_preview': can_preview,
             'filetype': filetype,
@@ -1948,7 +1958,12 @@ def send_shared_link(request):
     to_email_list = to_email_str.split(',')
 
     t = loader.get_template('shared_link_email.html')
+
     for to_email in to_email_list:
+        to_email = to_email.strip(' ')
+        if not to_email:
+            continue
+
         c = {
             'email': request.user.username,
             'to_email': to_email,
@@ -1962,7 +1977,7 @@ def send_shared_link(request):
         except:
             err = '发送失败'
             data = json.dumps([{'error':err}])
-            return HttpResponse(data, status=400, content_type=content_type)
+            return HttpResponse(data, status=500, content_type=content_type)
             
     msg = '发送成功。'
     data = json.dumps([{'msg': msg}])

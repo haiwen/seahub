@@ -9,8 +9,8 @@
     
     <div class="side fright">
       <h3>操作</h3>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" target="_blank">查看原始文件</a></p>
+      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" target="_blank">下载文件</a></p>
     </div>
 
     <div class="main fleft">
@@ -23,7 +23,7 @@
 <script type="text/javascript">
 $(window).load(function() {
     var can_preview = "{{ can_preview }}";
-    var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path }}&u={{ username }}";
+    var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}";
     var filetype = "{{ filetype }}";
     
     if (can_preview == 'True' && filetype == 'Document') {

@@ -134,6 +134,7 @@ table img {
 .side {
     color:#333;
     width:220px;
+    word-wrap: break-word;
 }
 .main {
     width:680px;
@@ -654,4 +655,3 @@ table img {
     max-width: 550px;
     max-height: 550px;
 }
-

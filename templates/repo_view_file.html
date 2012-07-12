@@ -57,7 +57,7 @@
     </div>
 
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
-      <label>邮箱：</label><br />
+      <label>邮箱（多个邮箱以;分隔）：</label><br />
       <textarea id="email" name="email"></textarea><br />
       <input id="file_shared_link" type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
       <p class="error hide">输入不能为空。</p>
@@ -86,9 +86,9 @@ $(window).load(function() {
     var view_history = "{{ view_history }}";
     var url = "";
     if (view_history == 'True') {
-        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path }}&t={{ token }}&u={{ request.user.username }}";
+        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
     } else {
-        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path }}&t={{ token }}&u={{ request.user.username }}";
+        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
     }
 
     var filetype = "{{ filetype }}";
@@ -136,6 +136,7 @@ $('.get-shared-link').click(function() {
                 var shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
                 $('.shared-link span').html('链接：' + shared_link);
                 $('.remove-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
+                $('#link-send-form #file_shared_link').val(shared_link);
                 showLink();
             }
         },
@@ -167,7 +168,7 @@ $('.send-shared-link').click(function() {
 
 $("#link-send-form").submit(function(event) {
     // clear error and sucess msg
-    $('.error').html("").addClass('hide');
+    $('.error').addClass('hide');
     $('.success').html("").addClass('hide');
     $('.sending').removeClass('hide');
     $('#simplemodal-container').css('height', $('#link-send-form').height());
@@ -207,7 +208,7 @@ $("#link-send-form").submit(function(event) {
            dataType: 'json',
            cache: false,
            contentType: 'application/json; charset=utf-8',
-           data: "file_shared_link="+file_shared_link+"&email="+email,
+           data: {file_shared_link: file_shared_link, email: email},
            success: function(data) {
                form.children('.error').addClass('hide');
                form.children('.sending').addClass('hide');
