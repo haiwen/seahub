@@ -119,7 +119,6 @@ table img {
 #header {
     font-size: 14px;
     font-weight: bold;
-    border-bottom: 1px solid #ddd;
 }
 #main {
     min-height: 400px;
@@ -170,6 +169,7 @@ table img {
 #other-info { color: #ccc; text-align:right; }
 #other-info .wish { font-style:italic; margin-bottom:10px; }
 #other-info .version { font-size: 12px; }
+#header .nav { padding: 20px 20px 0 40px; }
 #header .nav li { float: left; height: 18px; padding: 0px 25px 4px 0; }
 #header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
 #header .nav a.cur { color:#000; }

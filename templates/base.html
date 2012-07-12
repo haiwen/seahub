@@ -62,12 +62,9 @@
 
     <div id="header">
         <div class="top-info w100 ovhd">
-            <img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" class="fleft" />
-            <div id="other-info" class="fright">
-                <p class="wish">Hope our efforts will bring you benefits.</p>
-            </div>
+            <img src="{{ MEDIA_URL }}img/logo.png" title="Seafile" alt="Seafile logo" class="fleft" height="48" />
+            {% block nav %}{% endblock %}
         </div>
-        {% block nav %}{% endblock %}
     </div>
 
     <div id="main">
