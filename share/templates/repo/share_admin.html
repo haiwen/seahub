@@ -36,9 +36,9 @@
 {% if out_links %}
 <table class="link-list">
   <tr>
-    <th width="20%">名字</th>
-    <th width="30%">共享给</th>
-    <th width="30%">有效期</th>    
+    <th width="25%">目录名</th>
+    <th width="35%">共享给</th>
+    <th width="20%">有效期</th>    
     <th width="20%">操作</th>
   </tr>
   {% for link in out_links %}
@@ -58,8 +58,31 @@
 </table>
 {% else %}
 <p>暂无</p>
-{% endif %}
+n{% endif %}
 
+<h3>我管理的文件外链</h3>
+{% if fileshares %}
+<table class="sharelink-list">
+  <tr>
+    <th width="25%">文件名</th>
+    <th width="35%">所属目录</th>
+    <th width="20%">查看次数</th>
+    <th width="20%">操作</th>
+  </tr>
+  {% for fs in fileshares %}
+  <tr>
+    <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/files/?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
+    <td>{{ fs.view_cnt }}</td>
+    <td><a href="#" class="op view-file-link" data="{{ fs.token }}">查看链接</a>
+    <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">删除</a></td>
+  </tr>
+  {% endfor %}
+  
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
 <div id="view-link" name="view-link" class="hide">
   <p><span class="view-link-alert" style="float:left; margin-left: 120px; "></span></p>
 </div>
@@ -86,6 +109,15 @@ $(".view-link").click(function() {
     var t = $(this).attr('data');
     var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}share/' + t + '/';
     $('.view-link-alert').text("共享链接为：" + l);
+    $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
+    return false;
+});
+
+$(".view-file-link").click(function() {
+
+    var t = $(this).attr('data');
+    var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
+    $('.view-link-alert').text("该文件外链为：" + l);
     $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
     return false;
 });

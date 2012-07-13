@@ -19,3 +19,4 @@ class FileShare(models.Model):
     path = models.TextField()
     token = models.CharField(max_length=10, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
+    view_cnt = models.IntegerField(default=0)

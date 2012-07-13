@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
@@ -1896,7 +1897,7 @@ def view_shared_file(request, token):
     
     can_preview, filetype = valid_previewed_file(filename)
     
-    # raw path
+    # Raw path
     tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
     raw_path = tmp_str % (http_server_root,
                           repo_id, obj_id,
@@ -1904,6 +1905,11 @@ def view_shared_file(request, token):
                           access_token,
                           username)
 
+    # Increase file shared link view_cnt, this operation should be atomic
+    fileshare = FileShare.objects.get(token=token)
+    fileshare.view_cnt = F('view_cnt') + 1
+    fileshare.save()
+    
     return render_to_response('view_shared_file.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -1920,14 +1926,16 @@ def view_shared_file(request, token):
 @login_required
 def remove_shared_link(request):
     """
-    Handle ajax request to remove file shared link.
+    Handle request to remove file shared link.
     """
+    token = request.GET.get('t', '')
+    
     if not request.is_ajax():
-        raise Http404
+        FileShare.objects.filter(token=token).delete()
+        return HttpResponseRedirect(reverse('share_admin'))
 
     content_type = 'application/json; charset=utf-8'
     
-    token = request.GET.get('t', '')
     FileShare.objects.filter(token=token).delete()
 
     msg = '删除成功'

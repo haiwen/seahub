@@ -14,6 +14,7 @@ from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, ccnet_threaded_r
 from forms import RepoShareForm
 from models import AnonymousShare
 #from seahub.contacts.models import Contact
+from seahub.share.models import FileShare
 from seahub.views import validate_owner, validate_emailuser
 from seahub.utils import go_permission_error
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
@@ -100,7 +101,8 @@ def share_repo(request):
 @login_required
 def share_admin(request):
     """
-    List repos I share to others or groups, and list my anonymous share links
+    List repos I share to others, include groups and emails. And also list
+    file shared links I generated.
     """
     username = request.user.username
 
@@ -125,16 +127,23 @@ def share_admin(request):
         
         out_repos.append(repo)
 
-    # anonymous share links
+    # Repo anonymous share links
     out_links = AnonymousShare.objects.filter(repo_owner=request.user.username)
     for link in out_links:
         repo = get_repo(link.repo_id)
         link.repo_name = repo.name
         link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
-    
+
+    # File shared links
+    fileshares = FileShare.objects.filter(username=request.user.username)
+    for fs in fileshares:
+        fs.filename = fs.path[1:]
+        fs.repo = get_repo(fs.repo_id)
+        
     return render_to_response('repo/share_admin.html', {
             "out_repos": out_repos,
             "out_links": out_links,
+            "fileshares": fileshares,
             "protocol": request.is_secure() and 'https' or 'http',
             "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
