@@ -23,6 +23,7 @@
     <div class="side fright">
       <h3>操作</h3>
       <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
+      <p><a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path|urlencode }}">查看所有历史版本</a></p>
       <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
     </div>
 

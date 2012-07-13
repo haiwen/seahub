@@ -35,8 +35,12 @@ def file_icon_filter(value):
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
     """Translate commit description."""
-    if value.startswith('Reverted'):
+    if value.startswith('Reverted repo'):
         return value.replace('Reverted repo to status at', u'同步目录内容还原到')
+    elif value.startswith('Reverted file'):
+        value = value.replace('Reverted file', u'还原文件')
+        value = value.replace('to status at', u'内容到')
+        return value
     elif value.startswith('Merged'):
         return u'合并了其他人的修改'
     else:

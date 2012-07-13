@@ -109,7 +109,7 @@
               </p>
               {% if not view_history and request.user.is_authenticated %}
               <div class="repo-op fright">
-                  <a href="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path }}" class="upload-file">上传</a>
+                  <a href="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" class="upload-file">上传</a>
                   <a id="add-new-dir" href="#">新建目录</a>
               </div>
               {% endif %}
@@ -169,7 +169,8 @@
                           <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
                           <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                           <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
-                          <li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path }}{{dirent.obj_name}}">更新</a></li>
+                          <li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li>
+                          <li><a class="op list-revisions" href="{{ SITE_ROOT }}repo/file_revisions/{{repo.id}}/?p={{ path|urlencode}}{{dirent.obj_name|urlencode}}">历史</a></li>
                           {% endif %}
                       </ul>
                   </div>

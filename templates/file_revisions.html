@@ -1,0 +1,59 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags %}
+
+{% block info_bar_message %}
+{% if request.user.is_authenticated %}
+  {{ block.super }}
+{% else %}
+  <div id="info-bar">
+    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block main_panel %}
+<h2>文件修改历史</h2>
+<h3 class="file-revisions"><span class="file-name">{{ repo.props.name }} {{path}}</span></h3>
+<table>
+    <tr>
+        <th width="30%">修改时间</th>
+        <th width="20%">修改者</th>
+        <th width="20%">大小</th>
+        <th width="30%">操作</th>
+    </tr>
+    {% for commit in commits %}
+    <tr>
+        <td>
+            {{ commit.props.ctime|tsstr_sec }}
+            {% if commit.is_current_version %}
+            (当前版本)
+            {% endif %}
+        </td>
+
+        {% if commit.props.creator_name %}
+        <td>{{ commit.props.creator_name }}</td>
+        {% else %}
+        <td>未知</td>
+        {% endif %}
+
+        <td>{{ commit.revision_file_size|filesizeformat }} </td>
+
+        <td>
+            {% if not forloop.first %}
+            {% if is_owner %}
+            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=revert" class="file-revert op">还原</a>
+            {% endif %}
+            {% endif %}
+            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="file-download op">下载</a>
+            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=view" class="file-download op">查看</a>
+	    </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}

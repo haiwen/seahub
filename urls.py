@@ -12,7 +12,7 @@ from seahub.views import root, peers, myhome, \
     seafile_access_check, back_local, repo_history_changes, \
     repo_upload_file, file_upload_progress, file_upload_progress_page, get_subdir, file_move, \
     repo_new_dir, repo_rename_file, validate_filename, \
-    repo_create, repo_update_file
+    repo_create, repo_update_file, file_revisions
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 from seahub.group.views import group_list
@@ -51,6 +51,7 @@ urlpatterns = patterns('',
     (r'^repo/file_rename/$', repo_rename_file),
     url(r'^repo/upload_file/(?P<repo_id>[^/]+)/$', repo_upload_file, name='repo_upload_file'),
     url(r'^repo/update_file/(?P<repo_id>[^/]+)/$', repo_update_file, name='repo_update_file'),
+    url(r'^repo/file_revisions/(?P<repo_id>[^/]+)/$', file_revisions, name='file_revisions'),
     url(r'^repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
     (r'^repo/history/revert/(?P<repo_id>[^/]+)/$', repo_history_revert),
@@ -59,7 +60,7 @@ urlpatterns = patterns('',
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
 #    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
 #    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
-    (r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file),
+    url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
     (r'^repo/(?P<repo_id>[^/]+)/view/(?P<obj_id>[^/]+)/$', repo_view_file),
                        
     (r'^download/repo/$', repo_download),                       

@@ -37,7 +37,8 @@ from forms import AddUserForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
-    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1
+    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
+    get_file_revision_id_size
 from seahub.profile.models import Profile
 from settings import FILE_PREVIEW_MAX_SIZE
 
@@ -203,7 +204,7 @@ def render_repo(request, repo_id, error=''):
     # view newest worktree or history worktree
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
-    current_commit = seafserv_rpc.get_commit(commit_id)
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
     if not current_commit:
         current_commit = get_commits(repo_id, 0, 1)[0]
     
@@ -226,7 +227,7 @@ def render_repo(request, repo_id, error=''):
             dirs = []
         else:
             try:
-                dirs = seafserv_rpc.list_dir_by_path(current_commit.id,
+                dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id,
                                                      path.encode('utf-8'))
             except SearpcError, e:
                 return go_error(request, e.msg)
@@ -236,7 +237,7 @@ def render_repo(request, repo_id, error=''):
                 else:
                     file_list.append(dirent)
                     try:
-                        dirent.file_size = seafserv_rpc.get_file_size(dirent.obj_id)
+                        dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
                     except:
                         dirent.file_size = 0
             dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
@@ -431,7 +432,7 @@ def get_subdir(request):
 
     latest_commit = get_commits(repo_id, 0, 1)[0]
     try:
-        dirents = seafserv_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+        dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
     except SearpcError, e:
         return go_error(request, e.msg)
 
@@ -443,7 +444,7 @@ def get_subdir(request):
         dirent.has_subdir = False
         path_ = os.path.join (path, dirent.obj_name)
         try:
-            dirs_ = seafserv_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
+            dirs_ = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
         except SearpcError, e:
             return go_error(request, e.msg)
 
@@ -793,7 +794,7 @@ def repo_view_file(request, repo_id, obj_id):
     filename = urllib2.quote(request.GET.get('file_name', '').encode('utf-8'))
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
-    current_commit = seafserv_rpc.get_commit(commit_id)
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
     if not current_commit:
         current_commit = get_commits(repo_id, 0, 1)[0]
 
@@ -864,7 +865,7 @@ def repo_view_file(request, repo_id, obj_id):
 
     # query commit info
     commit_id = request.GET.get('commit_id', None)
-    current_commit = seafserv_rpc.get_commit(commit_id)
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
     if not current_commit:
         current_commit = get_commits(repo.id, 0, 1)[0]
         
@@ -885,6 +886,7 @@ def repo_view_file(request, repo_id, obj_id):
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
+            'path': path,
             'obj_id': obj_id,
             'file_name': filename,
             'zipped': zipped,
@@ -1547,8 +1549,6 @@ def repo_rename_file(request):
     newname         = request.POST.get("newname")
     user            = request.user.username
 
-    # print repo_id, parent_dir, oldname, newname, user
-
     if not newname:
         error_msg = u"新文件名不能为空"
         return go_error(request, error_msg)
@@ -1646,3 +1646,113 @@ def repo_create(request):
             error_msg = u"创建目录失败"
             return render_repo_create_error(error_msg)
         return HttpResponseRedirect(reverse(myhome))
+
+def render_file_revisions (request, repo_id):
+    """List all history versions of a file."""
+    target_file = request.GET.get('p')
+    if not target_file:
+        return go_error(request)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        error_msg = u"同步目录不存在"
+        return go_error(request, error_msg)
+
+    try:
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, target_file)
+    except SearpcError, e:
+        return go_error(request, e.msg)
+
+    if not commits:
+        return go_error(request)
+        
+    # Check whether use is repo owner
+    if validate_owner(request, repo_id):
+        is_owner = True
+    else:
+        is_owner = False
+
+    try:
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        current_file_id = get_file_revision_id_size (current_commit.id, target_file)[0]
+        for commit in commits:
+            file_id, file_size = get_file_revision_id_size (commit.id, target_file)
+            if not file_id or not file_size:
+                return go_error(request)
+            commit.revision_file_size = file_size
+            if file_id == current_file_id:
+                commit.is_current_version = True
+            else:
+                commit.is_current_version = False
+    except Exception, e:
+        return go_error(request, str(e))
+
+    return render_to_response('file_revisions.html', {
+        'repo': repo,
+        'path': target_file,
+        'commits': commits,
+        'is_owner': is_owner,
+        }, context_instance=RequestContext(request))
+
+@login_required        
+def file_revisions(request, repo_id):
+    if request.method != 'GET':
+        return go_error(request)
+
+    op = request.GET.get('op')
+    if not op:
+        return render_file_revisions(request, repo_id)
+    elif op != 'revert' and op != 'download' and op != 'view':
+        return go_error(request)
+
+    commit_id   = request.GET.get('commit')
+    path        = request.GET.get('p')
+
+    if not (commit_id and path):
+        return go_error(request)
+
+    if op == 'revert':
+        try:
+            seafserv_threaded_rpc.revert_file (repo_id, commit_id,
+                                               path, request.user.username)
+        except Exception, e:
+            return go_error(request, str(e))
+        else:
+            parent_dir = os.path.dirname(path)
+            url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+            return HttpResponseRedirect(url)
+
+    elif op == 'download':
+        def handle_download():
+            parent_dir = os.path.dirname(path)
+            file_name  = os.path.basename(path)
+            seafdir = seafserv_threaded_rpc.list_dir_by_path (commit_id, \
+                                        parent_dir.encode('utf-8'))
+            if not seafdir:
+                return go_error(request)
+
+            # for ...  else ...
+            for dirent in seafdir:
+                if dirent.obj_name == file_name:
+                    break
+            else:
+                return go_error(request)
+
+            url = reverse('repo_access_file', args=[repo_id, dirent.obj_id])
+            url += '?file_name=%s&op=download' % file_name
+            return HttpResponseRedirect(url)
+
+        try:
+            return handle_download()
+        except Exception, e:
+            return go_error(request, str(e))
+    elif op == 'view':
+        seafile_id = get_file_revision_id_size (commit_id, path)[0]
+        if not seafile_id:
+            return go_error(request)
+        file_name = os.path.basename(path)
+        url = reverse(repo_view_file, args=[repo_id, seafile_id])
+        url += u'?commit_id=%s&file_name=%s&p=%s' \
+               % (commit_id, file_name, path)
+        return HttpResponseRedirect(url)
+

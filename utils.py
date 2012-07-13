@@ -142,7 +142,7 @@ class UploadProgressCachedHandler(FileUploadHandler):
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
     latest_commit = get_commits(repo_id, 0, 1)[0]
-    dirents = seafserv_rpc.list_dir_by_path(latest_commit.id,
+    dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id,
                                          parent_dir.encode('utf-8'))
 
     def no_duplicate(name):
@@ -183,7 +183,7 @@ def get_accessible_repos(request, repo):
         if latest_commit.root_id == EMPTY_SHA1:
             return False
 
-        dirs = seafserv_rpc.list_dir_by_path(latest_commit.id, '/')
+        dirs = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, '/')
 
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
@@ -237,3 +237,20 @@ def valid_previewed_file(filename):
         if fileExt in PREVIEW_FILEEXT.get(filetype):
             return (True, filetype)
     return (False, '')
+
+def get_file_revision_id_size (commit_id, path):
+    """Given a commit and a file path in that commit, return the seafile id
+    and size of the file blob
+
+    """
+    dirname  = os.path.dirname(path)
+    filename = os.path.basename(path)
+    seafdir = seafserv_threaded_rpc.list_dir_by_path (commit_id, dirname)
+    for dirent in seafdir:
+        if dirent.obj_name == filename:
+            file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+            return dirent.obj_id, file_size
+
+    return None, None
+
+    
