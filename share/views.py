@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -137,7 +138,7 @@ def share_admin(request):
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
     for fs in fileshares:
-        fs.filename = fs.path[1:]
+        fs.filename = os.path.basename(fs.path)
         fs.repo = get_repo(fs.repo_id)
         
     return render_to_response('repo/share_admin.html', {
