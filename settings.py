@@ -149,8 +149,9 @@ FILEEXT_ICON_MAP = {
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
 
 PREVIEW_FILEEXT = {
-    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'java', 'js', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'vi', 'vim', 'xml'),
-    'Image': ('ai', 'bmp', 'eps', 'gif', 'ind', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'svg', 'tif', 'tiff'),
+    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'xhtml', 'java', 'js', 'json', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim', 'xml'),
+    'Image': ('gif', 'jpeg', 'jpg', 'png'),
+    'SVG':('svg',),
 }
 
 # Avatar

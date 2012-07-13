@@ -1,4 +1,4 @@
-body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,pre,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
 ul > li { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
@@ -26,12 +26,12 @@ input[type=checkbox] {
 input[type=submit],
 input.submit,
 button { 
-    color: #080;
+    color: #333;
     height:23px;
     line-height:21px;
     padding:0 3px;
-    background: #EEE;
-    border: 1px solid #80B0B0;
+    background: #efefef;
+    border: 1px solid #ddd;
     border-radius: 3px;
     -moz-border-radius:3px;
     margin-top:8px;
@@ -641,17 +641,42 @@ table img {
 }
 
 /* file preview */
-#file-content {
-    border: 1px solid #999;
+.file-op {
+    color:#444;
+    margin-top:12px;
+    text-align:right;
+}
+.file-op a {
+    font-weight:normal;
+    margin-right:2px;
+}
+.file-op button {
+    color:#444;
+    margin-top:3px;
+}
+#file-view {
+    margin-top:20px;
+    padding:5px;
+    background:#dedede;
+    border-radius:3px;
+    -moz-border-radius:3px;
+}
+#docu-view {
+    word-wrap: break-word;
+    width:928px;
     padding: 5px;
     min-height: 200px;
-    white-space: pre-wrap;       /* css-3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    border: 1px solid #ccc;
 }
-.img-preview {
-    max-width: 550px;
-    max-height: 550px;
+#image-view {
+    padding:1px;
+    background:#fff;
+    border:1px solid #eee;
+}
+#docu-view,
+#svg-view {
+    background:#fff;
+}
+#svg-view {
+    min-height:500px;/*for ff*/
 }

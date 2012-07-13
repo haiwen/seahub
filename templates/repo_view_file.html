@@ -12,58 +12,54 @@
 {% endblock %}
 
 {% block main_panel %}
-    <h2 class="subject">
-        {{repo.props.name}}
-        {% if view_history %}
-        历史浏览
-        <span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
+    <h2>
+        {% if not view_history %}
+        {{ u_filename }}
+        {% else %}
+        {{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
         {% endif %}
     </h2>
-    
-    <div class="side fright">
-      <h3>操作</h3>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a></p>
-      <p><a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path|urlencode }}">查看所有历史版本</a></p>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a></p>
+    <div class="w100 ovhd">
+    <p class="path fleft">
+         当前路径：
+         {% for name, link in zipped %}
+            {% if not forloop.last %}
+                {% if view_history %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+                {% endif %}
+            {% else %}
+                {{ name }}
+            {% endif %}
+         {% endfor %}
+    </p>
 
-      {% if not view_history %}
-      <h3>共享</h3>
-      <p class="shared-link">
-        <span class="hide">链接：{{ file_shared_link }}</span>
-        <a href="#" data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" class="get-shared-link">获取分享链接</a></p>
-      <div class="link-op hide">      
-        <a href="#" class="send-shared-link">发送</a>
-        <a href="#" data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" class="remove-shared-link">删除</a>
-      </div>
-      {% endif %}
+    <div class="file-op fright">
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a>
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a>
+        <br />
+
+        {% if not view_history %}
+        <span id="shared-link" class="hide">{{ file_shared_link }}</span>
+        <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
+        <button id="send-shared-link" class="hide">发送</button>
+        <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
+        {% endif %}
+    </div>
     </div>
 
-    <div class="main fleft">
-          <p class="path">
-            当前路径：
-            {% for name, link in zipped %}
-            {% if not forloop.last %}
-              {% if view_history %}
-              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /               
-              {% else %}
-              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
-              {% endif %}
-            {% else %}
-            {{ name }}
-            {% endif %}
-            {% endfor %}
-          </p>
-          <pre id="file-content">正在读取文件内容...</pre>
+    <div id="file-view">
+        <p>文件内容读取中...</p>
     </div>
 
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
-      <label>邮箱（多个邮箱以;分隔）：</label><br />
-      <textarea id="email" name="email"></textarea><br />
-      <input id="file_shared_link" type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
-      <p class="error hide">输入不能为空。</p>
-      <p class="success hide"></p>
-      <p class="sending hide">发送中...</p>
-      <input type="submit" value="提交" id="share-submit-btn" />
+        <label>邮箱(多个邮箱以,分隔)：</label><br />
+        <textarea id="email" name="email"></textarea><br />
+        <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
+        <p id="error" class="hide">输入不能为空。</p>
+        <input type="submit" value="提交" class="submit" />
+        <p id="sending" class="hide">发送中...</p>
+        <p id="success" class="hide"></p> 
     </form>
 
 {% endblock %}
@@ -71,59 +67,58 @@
 {% block extra_script %}
 <script type="text/javascript">
 function showLink() {
-    $('.shared-link a').addClass('hide');
-    $('.shared-link span').removeClass('hide');
-    $('.link-op').removeClass('hide');
+    $('#get-shared-link').addClass('hide');
+    $('#shared-link, #send-shared-link, #rm-shared-link').removeClass('hide');
 }
 function hideLink() {
-    $('.shared-link span').addClass('hide');
-    $('.link-op').addClass('hide');
-    $('.shared-link a').removeClass('hide');
+    $('#shared-link, #send-shared-link, #rm-shared-link').addClass('hide');
+    $('#get-shared-link').removeClass('hide');
 }
 
 $(window).load(function() {
-    var can_preview = "{{ can_preview }}";
-    var view_history = "{{ view_history }}";
-    var url = "";
+    var view_history = '{{ view_history }}',
+        url = '',
+        filetype = '{{ filetype }}',
+        t = '{{ fileshare.token }}';
+
     if (view_history == 'True') {
         url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
     } else {
         url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
     }
 
-    var filetype = "{{ filetype }}";
-    var t = "{{ fileshare.token }}";
     if (t) {
         showLink();
     } else {
         hideLink();
     }
     
-    if (can_preview == 'True' && filetype == 'Document') {
-      $.ajax({
-          url: url,
-          dataType: 'json',
-          cache: false,
-          contentType: 'application/json; charset=utf-8',
-          success: function(data) {
-              if (data.length > 0) {
-                    $('#file-content').html(data[0]['content']);
-              }
-          },
-          error: function(xhr, ajaxOptions, thrownError) {
-              var jsonVal = jQuery.parseJSON(xhr.responseText);
-              $('#file-content').html(jsonVal[0]['error']);
-          }
-      });
-      return false;
-    } else if (can_preview == 'True' && filetype == 'Image') {
-      $('#file-content').replaceWith('<img class="img-preview" src="{{ raw_path }}"></img>');
+    if (filetype == 'Document') {
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data.length > 0) {
+                    $('#file-view').html('<pre id="docu-view">' + data[0]['content'] + '</pre>');
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            }
+        });
+    } else if (filetype == 'Image') {
+        $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
+    } else if (filetype == 'SVG') {
+        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" width="940" id="svg-view"></iframe>');
     } else {
-      $('#file-content').html('无法识别该文件格式，<a class="op" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a>。');
+        $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
     }
 });
 
-$('.get-shared-link').click(function() {
+$('#get-shared-link').click(function() {
     var url = $(this).attr('data');
     $.ajax({
         url: url,
@@ -132,23 +127,22 @@ $('.get-shared-link').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             if (data.length > 0) {
-                var t = data[0]['token'];
-                var shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
-                $('.shared-link span').html('链接：' + shared_link);
-                $('.remove-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
-                $('#link-send-form #file_shared_link').val(shared_link);
+                var t = data[0]['token'],
+                    shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
+                $('#shared-link').html(shared_link);
+                $('#rm-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
+                $('input[name="file_shared_link"]').val(shared_link);
                 showLink();
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('.get-shared-link').html(jsonVal[0]['error']);
+            $('#get-shared-link').replaceWith('<span class="error">' + jsonVal[0]['error'] + '</span>');
         }
     });
-    return false;
 });
 
-$('.remove-shared-link').click(function() {
+$('#rm-shared-link').click(function() {
     var url = $(this).attr('data');
     $.ajax({
         url: url,
@@ -157,27 +151,32 @@ $('.remove-shared-link').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             hideLink();
+            $('#shared-link').html('');
         }
     });
-    return false;
 });
 
-$('.send-shared-link').click(function() {
+$('#send-shared-link').click(function() {
+    $('#error, #sending, #success').attr('class', 'hide');
     $("#link-send-form").modal({appendTo: "#main"});
 });
 
 $("#link-send-form").submit(function(event) {
-    // clear error and sucess msg
-    $('.error').addClass('hide');
-    $('.success').html("").addClass('hide');
-    $('.sending').removeClass('hide');
-    $('#simplemodal-container').css('height', $('#link-send-form').height());
-
+    $('#error, #sending, #success').attr('class', 'hide');
     var form = $(this), 
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
-        email = form.children('textarea[name="email"]').val();
-       
-   if (email && email.length <= 512) {
+        email = $.trim(form.children('textarea[name="email"]').val());
+
+    if (!email) {
+        $('#error').attr('class', 'error');
+        $('#simplemodal-container').css('height', $('#link-send-form').height());
+        return false;
+    }
+   
+   $('#sending').removeClass('hide');
+   $('#simplemodal-container').css('height', $('#link-send-form').height());
+
+   if (email.length <= 512) {
        // prepare django csrf token
        $.ajaxSetup({ 
            beforeSend: function(xhr, settings) {
@@ -210,26 +209,19 @@ $("#link-send-form").submit(function(event) {
            contentType: 'application/json; charset=utf-8',
            data: {file_shared_link: file_shared_link, email: email},
            success: function(data) {
-               form.children('.error').addClass('hide');
-               form.children('.sending').addClass('hide');
-               form.children('.success').html(data[0]['msg']).removeClass('hide');
+               $('#sending').attr('class', 'hide');
+               $('#success').html(data[0]['msg']).removeClass('hide');
                $('#simplemodal-container').css('height', $('#link-send-form').height());
            },
            error: function(xhr, ajaxOptions, thrownError) {
                var jsonVal = jQuery.parseJSON(xhr.responseText);
-               form.children('.success').addClass('hide');
-               form.children('.sending').addClass('hide');
-               form.children('.error').html(jsonVal[0]['error']).removeClass('hide');
+               $('#sending').attr('class', 'hide');
+               $('#error').html(jsonVal[0]['error']).attr('class','error');
                $('#simplemodal-container').css('height', $('#link-send-form').height());
            }
        });
-   } else {
-       form.children('.success').html("").addClass('hide');
-       form.children('.sending').addClass('hide');
-       form.children('.error').removeClass('hide');
-   }
+   } 
    return false;
 });
-
 </script>
 {% endblock %}

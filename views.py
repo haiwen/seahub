@@ -799,7 +799,8 @@ def repo_view_file(request, repo_id):
     path = request.GET.get('p', '/')
     if path[-1] == '/':
         path = path[:-1]
-    filename = urllib2.quote(os.path.basename(path).encode('utf-8'))
+    u_filename = os.path.basename(path)
+    filename = urllib2.quote(u_filename.encode('utf-8'))
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -872,6 +873,7 @@ def repo_view_file(request, repo_id):
             'repo': repo,
             'path': path,
             'obj_id': obj_id,
+            'u_filename': u_filename,
             'file_name': filename,
             'path': path,
             'zipped': zipped,
