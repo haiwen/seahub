@@ -4,12 +4,14 @@ from views import *
 
 
 urlpatterns = patterns('',
-    url(r'^/$', list_repo),
-    url(r'^repo/list/$', list_repo),
-    url(r'^repo/(?P<repo_id>[^/]+)/$', get_repo_info),
-    url(r'^dir/(?P<repo_id>[^/]+)/root/$', get_repo_dir_path),
-    url(r'^dir/(?P<repo_id>[^/]+)/$', get_repo_dir_path),
-    url(r'^dir/(?P<repo_id>[^/]+)/(?P<dir_id>[^/]+)/$', get_repo_dir_id),
-    url(r'^file/(?P<repo_id>[^/]+)/(?P<file_id>[^/]+)/$', get_repo_file_id),
+    url(r'^$', ReposView.as_view()),
+    url(r'^/$', ReposView.as_view()),
+    url(r'^repo/list/$', ReposView.as_view(), name='repos'),
+    url(r'^repo/(?P<repo_id>[^/]+)/$', RepoView.as_view(), name='repo'),
+
+    url(r'^dir/(?P<repo_id>[^/]+)/root/$', RepoDirPathView.as_view()),
+    url(r'^dir/(?P<repo_id>[^/]+)/$', RepoDirPathView.as_view(), name='repo-dir-path'),
+    url(r'^dir/(?P<repo_id>[^/]+)/(?P<dir_id>[^/]+)/$', RepoDirIdView.as_view(), name='repo-dirr-id'),
+    url(r'^file/(?P<repo_id>[^/]+)/(?P<file_id>[^/]+)/$', RepoFileView.as_view(), name='repo-file'),
 )
 

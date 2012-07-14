@@ -43,7 +43,6 @@ urlpatterns = patterns('',
 
     (r'^share/', include('share.urls')),
     (r'^api/', include('api.urls')),
-    (r'^rest/', include('djangorestframework.urls')),
     url(r'^shareadmin/$', share_admin, name='share_admin'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
     (r'^sharedlink/get/$', get_shared_link),
