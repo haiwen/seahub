@@ -42,6 +42,7 @@ urlpatterns = patterns('',
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
     (r'^share/', include('share.urls')),
+    (r'^api/', include('api.urls')),
     url(r'^shareadmin/$', share_admin, name='share_admin'),
     (r'^shareadmin/removeshare/$', repo_remove_share),
     (r'^sharedlink/get/$', get_shared_link),
