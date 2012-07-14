@@ -44,7 +44,23 @@ class UploadAvatarForm(forms.Form):
                 _(u"You already have %(nb_avatars)d avatars, and the maximum allowed is %(nb_max_avatars)d.") %
                 { 'nb_avatars' : count, 'nb_max_avatars' : AVATAR_MAX_AVATARS_PER_USER})
         return        
-        
+
+class GroupAvatarForm(forms.Form):
+    avatar = forms.ImageField()
+
+    def clean_avatar(self):
+        data = self.cleaned_data['avatar']
+        if AVATAR_ALLOWED_FILE_EXTS:
+            (root, ext) = os.path.splitext(data.name.lower())
+            if ext not in AVATAR_ALLOWED_FILE_EXTS:
+                raise forms.ValidationError(
+                    _(u"%(ext)s is an invalid file extension. Authorized extensions are : %(valid_exts_list)s") % 
+                    { 'ext' : ext, 'valid_exts_list' : ", ".join(AVATAR_ALLOWED_FILE_EXTS) })  
+            if data.size > AVATAR_MAX_SIZE:
+                raise forms.ValidationError(
+                    _(u"Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s") %
+                    { 'size' : filesizeformat(data.size), 'max_valid_size' : filesizeformat(AVATAR_MAX_SIZE)})
+    
 
 class PrimaryAvatarForm(forms.Form):
     

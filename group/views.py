@@ -10,8 +10,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_re
     get_group_repoids, check_group_staff, get_commits
 from pysearpc import SearpcError
 
-from models import GroupMessage, MessageReply, Avatar
-from forms import MessageForm, MessageReplyForm, AvatarForm
+from models import GroupMessage, MessageReply
+from forms import MessageForm, MessageReplyForm
 from signals import grpmsg_added, grpmsg_reply_added
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
@@ -457,32 +457,3 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
         return go_error(request, u'共享失败:内部错误')
-
-@login_required
-def set_avatar(request, group_id):
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return go_error(request, u'group id 不是有效参数')        
-
-    if not check_group_staff(group_id_int, request.user):
-        return go_permission_error(request, u'只有小组管理员有权设置小组图标')
-
-    group = ccnet_threaded_rpc.get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-
-    form = AvatarForm(request.POST or None, request.FILES or None)
-
-    if request.method == 'POST' and 'avatar' in request.FILES:
-        if form.is_valid():
-            image_file = request.FILES['avatar']
-            avatar = Avatar()
-            avatar.avatar.save(image_file.name, image_file)
-            avatar.group_id = group_id
-            avatar.save()
- 
-    return render_to_response('group/set_avatar.html', {
-            'group' : group,
-            'form' : form,
-            }, context_instance=RequestContext(request))

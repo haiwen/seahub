@@ -1,18 +1,21 @@
+# encoding: utf-8
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
-from django.contrib.auth.decorators import login_required
-
-from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
-from avatar.models import Avatar
+from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm,\
+    GroupAvatarForm
+from avatar.models import Avatar, GroupAvatar
 from avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_SIZE
 from avatar.signals import avatar_updated
 from avatar.util import get_primary_avatar, get_default_avatar_url, \
     invalidate_cache
+from seahub.utils import go_error, go_permission_error
 
+from auth.decorators import login_required
+from seaserv import ccnet_threaded_rpc, check_group_staff
 
 def _get_next(request):
     """
@@ -84,6 +87,36 @@ def add(request, extra_context=None, next_override=None,
                   'next': next_override or _get_next(request), }
             )
         )
+
+@login_required
+def group_add(request):
+    group_id = request.GET.get('gid', '')
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return go_error(request, u'group id 不是有效参数')        
+
+    if not check_group_staff(group_id_int, request.user):
+        return go_permission_error(request, u'只有小组管理员有权设置小组图标')
+
+    group = ccnet_threaded_rpc.get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    form = GroupAvatarForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST' and 'avatar' in request.FILES:
+        if form.is_valid():
+            image_file = request.FILES['avatar']
+            avatar = GroupAvatar()
+            avatar.group_id = group_id
+            avatar.avatar.save(image_file.name, image_file)
+            avatar.save()
+ 
+    return render_to_response('avatar/set_avatar.html', {
+            'group' : group,
+            'form' : form,
+            }, context_instance=RequestContext(request))
 
 @login_required
 def change(request, extra_context=None, next_override=None,
