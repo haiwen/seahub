@@ -1883,7 +1883,7 @@ def view_shared_file(request, token):
     quote_filename = urllib2.quote(filename.encode('utf-8'))
 
     try:
-        obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
+        obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
     except:
         obj_id = None
 
