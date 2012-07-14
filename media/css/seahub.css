@@ -662,6 +662,7 @@ table img {
     -moz-border-radius:3px;
 }
 #docu-view {
+    white-space:pre-wrap;
     word-wrap: break-word;
     width:928px;
     padding: 5px;
