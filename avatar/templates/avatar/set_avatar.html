@@ -5,7 +5,7 @@
 
 {% block main_panel %}
 <div class="avatar-op">
-    <h2>修改小组 {{ group.group_name }} 的图标</h2>
+    <h2>修改小组 <a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a> 的图标</h2>
     <div class="avatar-op-con">
     <h3>当前图标：</h3>
     <img src="{% grp_avatar_url group.id %}" alt="当前图标" class="avatar" />
