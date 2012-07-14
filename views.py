@@ -812,7 +812,7 @@ def repo_view_file(request, repo_id):
         obj_id = request.GET.get('obj_id', '')
     else:
         try:
-            obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
+            obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
         except:
             obj_id = None
 
@@ -911,7 +911,7 @@ def repo_file_get(request, repo_id):
     obj_id = request.GET.get('obj_id', '')
     if not obj_id:
         try:
-            obj_id = seafserv_rpc.get_file_by_path(repo_id, path)
+            obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
         except:
             obj_id = None
     if not obj_id:
