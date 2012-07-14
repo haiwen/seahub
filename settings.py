@@ -81,6 +81,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(os.path.dirname(__file__), "templates"),
+    os.path.join(os.path.dirname(__file__),'thirdpart/djangorestframework/templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -111,6 +112,7 @@ INSTALLED_APPS = (
     'seahub.group',
     'seahub.share',
     'seahub.subdomain',
+    'seahub.api',
 )
 
 AUTHENTICATION_BACKENDS = (
