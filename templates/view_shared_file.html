@@ -2,31 +2,27 @@
 {% load seahub_tags %}
 
 {% block main_panel %}
-    <h2 class="subject">
-        {{ file_name }}<br />
-        <span class="latest-commit-time-author">共享者：{{ username }}</span>
-    </h2>
-    
-    <div class="side fright">
-      <h3>操作</h3>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" target="_blank">查看原始文件</a></p>
-      <p><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" target="_blank">下载文件</a></p>
+    <h2>{{ file_name }}</h2>
+    <div class="w100 ovhd">
+        <p class="file-share-from fleft">共享者：{{ username }}</p>
+        <div class="file-op fright">
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" target="_blank">查看原始文件</a>
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" target="_blank">下载文件</a>
+        </div>
     </div>
 
-    <div class="main fleft">
-      <pre id="file-content">正在读取文件内容...</pre>
+    <div id="file-view">
+      <p>文件内容读取中...</p>
     </div>
 
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$(window).load(function() {
-    var can_preview = "{{ can_preview }}";
-    var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}";
-    var filetype = "{{ filetype }}";
+    var url = '{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}',
+        filetype = '{{ filetype }}';
     
-    if (can_preview == 'True' && filetype == 'Document') {
+    if (filetype == 'Document') {
       $.ajax({
           url: url,
           dataType: 'json',
@@ -34,21 +30,20 @@ $(window).load(function() {
           contentType: 'application/json; charset=utf-8',
           success: function(data) {
               if (data.length > 0) {
-                    $('#file-content').html(data[0]['content']);
+                  $('#file-view').html('<pre id="docu-view">' + data[0]['content'] + '</pre>');
               }
           },
           error: function(xhr, ajaxOptions, thrownError) {
               var jsonVal = jQuery.parseJSON(xhr.responseText);
-              $('#file-content').html(jsonVal[0]['error']);
+              $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
           }
       });
-      return false;
-    } else if (can_preview == 'True' && filetype == 'Image') {
-      $('#file-content').replaceWith('<img class="img-preview" src="{{ raw_path }}"></img>');
+    } else if (filetype == 'Image') {
+        $('#file-view').html('<img id="image-view" src="{{ raw_path }}" alt="{{ file_name }}" />').css({'text-align':'center', 'padding':'30px 0'});
+    } else if (filetype == 'SVG') {
+        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" width="940" id="svg-view"></iframe>');
     } else {
-      $('#file-content').html('无法识别该文件格式，<a class="op" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a>。');
+      $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载文件</a><p>');
     }
-});
-
 </script>
 {% endblock %}

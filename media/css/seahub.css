@@ -643,8 +643,11 @@ table img {
 /* file preview */
 .file-op {
     color:#444;
-    margin-top:12px;
     text-align:right;
+}
+.file-op,
+.file-share-from {
+    margin-top:12px;
 }
 .file-op a {
     font-weight:normal;
