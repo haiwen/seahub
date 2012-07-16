@@ -1656,61 +1656,59 @@ def validate_filename(request):
 
 @login_required    
 def repo_create(request):
-    ############ GET ############
-    if request.method == 'GET':
-        return render_to_response('repo_create.html', {
-        }, context_instance=RequestContext(request))
-
+    '''
+    Handle ajax post.
     
-    ############ POST ############
-    repo_name       = request.POST.get("repo_name")
-    repo_desc       = request.POST.get("repo_desc")
-    encrypted       = request.POST.get("encryption")
-    passwd          = request.POST.get("passwd")
-    passwd_again    = request.POST.get("passwd_again")
+    '''
+    if request.method == 'POST':
+        repo_name  = request.POST.get("repo_name")
+        repo_desc  = request.POST.get("repo_desc")
+        encrypted  = request.POST.get("encryption")
+        passwd     = request.POST.get("passwd")
+        passwd_again    = request.POST.get("passwd_again")
 
-    def render_repo_create_error(error_msg):
-        return render_to_response('repo_create.html', {
-            'error_msg': error_msg,
-            'repo_name': repo_name,
-            'repo_desc': repo_desc,
-            }, context_instance=RequestContext(request))
+        result = {}
+        content_type = 'application/json; charset=utf-8'
 
-    error_msg = ""
-    if not repo_name:
-        error_msg = u"目录名不能为空"
-    elif len(repo_name) > 50:
-        error_msg = u"目录名太长"
-    elif not repo_desc:
-        error_msg = u"描述不能为空"
-    elif len(repo_desc) > 100:
-        error_msg = u"描述太长"
-    elif encrypted == 'on':
-        if not passwd:
-            error_msg = u"密码不能为空"
-        elif not passwd_again:
-            error_msg = u"确认密码不能为空"
-        elif len(passwd) < 3:
-            error_msg = u"密码太短"
-        elif len(passwd) > 15:
-            error_msg = u"密码太长"
-        elif passwd != passwd_again:
-            error_msg = u"两次输入的密码不相同"
+        error_msg = ""
+        if not repo_name:
+            error_msg = u"目录名不能为空"
+        elif len(repo_name) > 50:
+            error_msg = u"目录名太长"
+        elif not seafserv_threaded_rpc.is_valid_filename('', repo_name):
+            error_msg = (u"您输入的目录名 %s 包含非法字符" % repo_name)
+        elif not repo_desc:
+            error_msg = u"描述不能为空"
+        elif len(repo_desc) > 100:
+            error_msg = u"描述太长"
+        elif encrypted == 'on':
+            if not passwd:
+                error_msg = u"密码不能为空"
+            elif not passwd_again:
+                error_msg = u"确认密码不能为空"
+            elif len(passwd) < 3:
+                error_msg = u"密码太短"
+            elif len(passwd) > 15:
+                error_msg = u"密码太长"
+            elif passwd != passwd_again:
+                error_msg = u"两次输入的密码不相同"
 
-    if error_msg:
-        return render_repo_create_error(error_msg)
+        if error_msg:
+            result['error'] = error_msg
+            return HttpResponse(json.dumps(result), content_type=content_type)
 
-    try:
-        repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc, 
-                                            request.user.username, passwd)
-    except:
-        error_msg = u"创建目录失败"
-        return render_repo_create_error(error_msg)
-    else:
-        if not repo_id:
-            error_msg = u"创建目录失败"
-            return render_repo_create_error(error_msg)
-        return HttpResponseRedirect(reverse(myhome))
+        try:
+            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc, request.user.username, passwd)
+            result['success'] = True
+
+        except:
+            result['error'] = u"创建目录失败"
+
+        else:
+            if not repo_id:
+                result['error'] = u"创建目录失败"
+
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""

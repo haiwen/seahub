@@ -93,8 +93,11 @@
     {% endfor %}
 {% endif %}
 
-<h3>我拥有的同步目录</h3>
-<a id="create-repo" class="fright" href="{{ SITE_ROOT }}repo/create/">创建同步目录</a>
+<div class="w100 ovhd">
+    <h3 class="fleft">我拥有的同步目录</h3>
+    <a id="repo-create" class="fright" href="#">创建同步目录</a>
+</div>
+
 {% if owned_repos %}
 <table>
     <tr>
@@ -166,6 +169,23 @@
     <input type="submit" value="提交" id="share-submit-btn" />
 </form>
 
+<form id="repo-create-form" action="{{ SITE_ROOT }}repo/create/" method="post" class="hide">
+    <h3>创建新同步目录</h3>
+    <label>名称：</label><br/>
+    <input id="repo-name" type="text" name="repo_name" value="" /><br />
+    <label>描述：</label><br/>
+    <textarea id="repo-desc" name="repo_desc"></textarea>
+    <div class="repo-create-encryption">
+        <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
+        <label>密码：</label><span class="tip">(少于或等于15个字符)</span><br />
+        <input type="password" name="passwd" disabled="disabled" class="passwd input-disabled" /><br />
+        <label>密码确认：</label><br />
+        <input type="password" name="passwd_again" disabled="disabled" class="passwd input-disabled" />
+    </div>
+    <p class="error hide"></p>
+    <input type="submit" id="repo-create-submit" value="提交" class="submit" />
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -191,9 +211,9 @@ $(function() {
     $('#share-submit-btn').click(function() {
         if (!$.trim($('#email_or_group').attr('value'))) {
             $('#repo-share-form .error').removeClass('hide');
+            $('#simplemodal-container').css('height', $('#repo-share-form').height());
             return false;
         }
-        return true;
     });
 
     addConfirmTo($('.repo-delete-btn'));
@@ -213,6 +233,104 @@ $(function() {
             $(this).find('img').addClass('vh');
         }
     );
+});
+
+//repo-create-form
+$('#repo-create').click(function() {
+    $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
+    return false;
+});
+$('#encrypt-switch').click(function () {
+    if ($(this).attr('checked')) {
+        $('#repo-create-form input[type="password"]').attr('disabled', false).removeClass('input-disabled');
+    } else {
+        $('#repo-create-form input[type="password"]').attr('disabled', true).addClass('input-disabled');
+    }
+});
+function showError(err) {
+    $('#repo-create-form .error').html(err).attr('class','error');
+    $('#simplemodal-container').css('height', $('#repo-create-form').height());
+}
+$('#repo-create-submit').click(function() {
+    var passwd = $('#repo-create-form input[name="passwd"]'),
+        passwd_again = $('#repo-create-form input[name="passwd_again"]');
+
+    if (!$.trim($('#repo-name').val())) {
+        showError('目录名不能为空。');
+        return false;
+    }
+     if (!$.trim($('#repo-desc').val())) {
+        showError('描述不能为空。');
+        return false;
+    }   
+
+    if ($('#encrypt-switch').attr('checked')) {
+        if (!$.trim(passwd.val())) {
+            showError('密码不能为空。');
+            return false;
+        }   
+        if (!$.trim(passwd_again.val())) {
+            showError('请确认密码。');
+            return false;
+        }   
+        if (passwd.val().length > 15) {
+            showError('密码太长。');
+            return false;
+        }
+        if (passwd.val() != passwd_again.val()) {
+            showError('两次输入的密码不一致。');
+            return false;
+        }
+    }
+
+    // prepare django csrf token
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '='))        {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+    }); 
+
+    $.ajax({
+        url: '{{ SITE_ROOT }}repo/create/',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        data: {
+            'repo_name': $('#repo-name').val(),
+            'repo_desc': $('#repo-desc').val(),
+            'encryption': $('encrypt-switch').val(),
+            'passwd': passwd.val(),
+            'passwd_again': passwd_again.val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                showError(data['error']);
+            }
+        }
+    });
+
+    return false;
 });
 </script>
 {% endblock %}

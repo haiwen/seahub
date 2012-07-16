@@ -377,6 +377,14 @@ table img {
     color: #000;
     font-weight: normal;
 }
+#repo-name,
+#repo-desc,
+.repo-create-encryption .passwd {
+    width:210px;
+}
+#repo-desc {
+    height:70px;
+}
 
 /*repo page*/
 .repo-top-bar {
@@ -527,12 +535,16 @@ table img {
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+#repo-create,
 #member-add {
     font-size:13px;
     padding-left:18px;
     text-decoration:underline;
     background:transparent url('../img/add.png') scroll no-repeat left 50%;
     margin-top:2px;
+}
+#repo-create {
+    margin-top:12px;
 }
 
 /* notification admin */
@@ -684,3 +696,5 @@ table img {
 #svg-view {
     min-height:500px;/*for ff*/
 }
+
+
