@@ -80,8 +80,7 @@ function filesizeformat(bytes, precision)
     var gigabyte = megabyte * 1024;
     var terabyte = gigabyte * 1024;
 
-    if (precision === undefined)
-        precision = 0;
+    precision = precision || 0;
    
     if ((bytes >= 0) && (bytes < kilobyte)) {
         return bytes + ' B';
@@ -105,4 +104,26 @@ function filesizeformat(bytes, precision)
 
 function e(str) {
     return encodeURIComponent(str);
+}
+
+function prepareCSRFToken(xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
 }
