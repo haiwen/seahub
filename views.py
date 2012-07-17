@@ -40,7 +40,7 @@ from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    get_file_revision_id_size, gen_file_get_url
+    get_file_revision_id_size, get_ccnet_server_addr_port, gen_file_get_url
 from seahub.profile.models import Profile
 from settings import FILE_PREVIEW_MAX_SIZE
 
@@ -740,7 +740,6 @@ def myhome(request):
     else:
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
-
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -785,7 +784,7 @@ def repo_del_file(request, repo_id):
     user = request.user.username
     try:
         seafserv_threaded_rpc.del_file(repo_id, parent_dir,file_name, user)
-    except Exception, e:
+    except:
         pass
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
@@ -1022,11 +1021,27 @@ def repo_download(request):
                 "error_msg": u"下载失败：无法取得中继"
                 }, context_instance=RequestContext(request))
 
-    ccnet_applet_root = get_ccnetapplet_root()
-    redirect_url = "%s/repo/download/?repo_id=%s&relay_id=%s&repo_name=%s&encrypted=%s" % (
-        ccnet_applet_root, repo_id, relay_id, quote_repo_name, enc)
+    try:
+        token = seafserv_threaded_rpc.get_repo_token_nonnull \
+                (repo_id, request.user.username)
+    except Exception, e:
+        return go_error(request, str(e))
 
-    return HttpResponseRedirect(redirect_url)
+    addr, port = get_ccnet_server_addr_port ()
+
+    if not (addr and port):
+        return go_error(request, u"服务器设置错误")
+
+    ccnet_applet_root = get_ccnetapplet_root()
+    email = urllib2.quote(request.user.username)
+
+    url = ccnet_applet_root + "/repo/download/"
+    
+    url += "?relay_id=%s&relay_addr=%s&relay_port=%s" % (relay_id, addr, port)
+    url += "&email=%s&token=%s" % (email, token)
+    url += "&repo_id=%s&repo_name=%s&encrypted=%s" % (repo_id, quote_repo_name, enc)
+
+    return HttpResponseRedirect(url)
 
 @login_required    
 def file_move(request):
@@ -1798,9 +1813,8 @@ def file_revisions(request, repo_id):
         if not seafile_id:
             return go_error(request)
         file_name = os.path.basename(path)
-        url = reverse(repo_view_file, args=[repo_id, seafile_id])
-        url += u'?commit_id=%s&file_name=%s&p=%s' \
-               % (commit_id, file_name, path)
+        url = reverse(repo_view_file, args=[repo_id])
+        url += '?obj_id=%s&commit_id=%s&p=%s' % (seafile_id, commit_id, path)
         return HttpResponseRedirect(url)
 
 @login_required

@@ -274,3 +274,10 @@ def gen_file_get_url(token, filename):
     Format: http://<domain:port>/files/<token>/<filename>
     """
     return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
+
+def get_ccnet_server_addr_port():
+    """Return ccnet <ip or domain>:<port>"""
+    try:
+        return settings.CCNET_SERVER_ADDR, settings.CCNET_SERVER_PORT
+    except:
+        return None, None

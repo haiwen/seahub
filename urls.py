@@ -65,7 +65,7 @@ urlpatterns = patterns('',
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
 #    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
 #    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
-    (r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file),
+    url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
     (r'^repo/(?P<repo_id>[^/]+)/file/get/$', repo_file_get),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
                        

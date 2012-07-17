@@ -2,7 +2,8 @@
 
 {% block main_panel %}
 <div class="text-panel">
-    <p class="error hide">请确认本地Seafile程序已启动。</p>
+    <p id="msg-client"  class="error hide">请确认本地Seafile程序已启动。</p>
+    <p id="msg-version" class="error hide">你的 Seafile 客户端版本太旧，请升级到最新版本。<a href="http://www.seafile.com/download">点击下载</a></p>
 </div>
 {% endblock %}
 
@@ -10,6 +11,7 @@
 <script type="text/javascript">
 $(function() {
     var req_success = false;
+    var version_mismatch = false;
     $.ajax({
         url: '{{ applet_root }}/seafile_access_check/',
         dataType: 'jsonp',
@@ -18,15 +20,21 @@ $(function() {
         error: function() {
             $('.error').removeClass('hide');
         },
-        success: function() {
-            req_success = true;
-            location.href = '{{ SITE_ROOT }}download/repo/?repo_id={{ repo_id }}';
+        success: function(version) {
+            if (version !== 2) {
+                version_mismatch = true;
+            } else {
+                req_success = true;
+                location.href = '{{ SITE_ROOT }}download/repo/?repo_id={{ repo_id }}';
+            }
         }
     });
 
     setTimeout(function() {
-        if (!req_success) {
-            $('.error').removeClass('hide');
+        if (version_mismatch) {
+            $('#msg-version').removeClass('hide');
+        } else if (!req_success) {
+            $('#msg-client').removeClass('hide');
         }
     }, 1000);
 });
