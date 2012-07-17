@@ -49,6 +49,9 @@ input[type="file"] {
     height:24px;
     line-height:24px;
 }
+.input-disabled {
+    background:#ebebe4;
+}
 label { display: inline-block; margin:2px 0px; }
 /* table */
 table {
@@ -291,12 +294,8 @@ table img {
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
-    width:3em;
     color: #080;
-    height:23px;
-    line-height:21px;
-    padding:0 3px;
-    background: #EEE;
+    width:3em;
     border: 1px solid #80B0B0;
     margin:8px 0 3px;
 }
@@ -376,7 +375,8 @@ table img {
 #repo-name,
 #repo-desc,
 .repo-create-encryption .passwd {
-    width:210px;
+    width:240px;
+    margin-bottom:5px;
 }
 #repo-desc {
     height:70px;

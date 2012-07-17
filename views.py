@@ -1661,11 +1661,11 @@ def repo_create(request):
     
     '''
     if request.method == 'POST':
-        repo_name  = request.POST.get("repo_name")
-        repo_desc  = request.POST.get("repo_desc")
-        encrypted  = request.POST.get("encryption")
-        passwd     = request.POST.get("passwd")
-        passwd_again    = request.POST.get("passwd_again")
+        repo_name = request.POST.get("repo_name")
+        repo_desc = request.POST.get("repo_desc")
+        encrypted = int(request.POST.get("encryption"))
+        passwd = request.POST.get("passwd")
+        passwd_again = request.POST.get("passwd_again")
 
         result = {}
         content_type = 'application/json; charset=utf-8'
@@ -1681,7 +1681,7 @@ def repo_create(request):
             error_msg = u"描述不能为空"
         elif len(repo_desc) > 100:
             error_msg = u"描述太长"
-        elif encrypted == 'on':
+        elif encrypted == 1:
             if not passwd:
                 error_msg = u"密码不能为空"
             elif not passwd_again:
