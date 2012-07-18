@@ -13,10 +13,7 @@
 
 {% block main_panel %}
   {% if view_history %}
-    <h2 class="subject">
-    {{repo.props.name}} 历史浏览
-    <span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
-    </h2>
+    <h2>{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
   {% else %}
     <h2>{{repo.props.name}}</h2>
   {% endif %}
@@ -237,12 +234,13 @@ $("table tr:gt(0)").hover(
     }
 );
 
+$('#main-panel').removeClass('ovhd');
 var Hide = '';
 $('.more-op').hover(
     function() {
         $(this).parent().css('position','relative');
         $('.op-list').attr('class', 'op-list hide');
-        if ($(this).offset().top + $(this).next().height() <= $('#main-panel').offset().top + $('#main-panel').height()) {
+        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
             $(this).next().css('top', 6);
         } else {
             $(this).next().css('bottom', 2);
