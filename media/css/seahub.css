@@ -8,12 +8,12 @@ h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
 h4 { font-size:14px; color:#000; font-weight:normal; margin:2px 0 0; }
 ol { padding-left:2em; }
 /* input button */
-textarea { border: 1px solid #80B0B0; }
+textarea { border: 1px solid #ddd; }
 input { 
     height:20px;
     line-height:20px;
     margin:3px 0;
-    border: 1px solid #80B0B0;
+    border: 1px solid #ddd;
 }
 input,
 button {
@@ -273,10 +273,10 @@ table img {
 
 /*narrow-panel: for form pages*/
 .narrow-panel {
-    width:25em;
+    width:320px;
     min-height:15em;
-    padding:2.5em;
-    background:#E9F1F4;
+    padding:30px;
+    border: 1px solid #ddd;
     border-radius:4px;
     -moz-border-radius:4px;
     margin:5em auto 0;
@@ -284,22 +284,22 @@ table img {
 .narrow-panel h2,
 .narrow-panel h3 {
     margin-top:0;
+    border-bottom:1px solid #ddd;
 }
 .narrow-panel h2 {
     margin-bottom:10px;
 }
 .narrow-panel input {
-    width:24em;
+    width:318px;
     height:1.8em;
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
-    color: #080;
     width:3em;
-    border: 1px solid #80B0B0;
-    margin:8px 0 3px;
+    margin:8px 0 0;
 }
 .login-form a {
+    font-size:12px;
     vertical-align:middle;
 }
 
@@ -312,7 +312,12 @@ table img {
 /* popup dialog */
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
-#simplemodal-container { background-color:#fff; border:3px solid #080; padding: 18px; }
+#simplemodal-container {
+    padding: 20px; 
+    background-color:#fff; 
+    border-radius:4px;
+    -moz-border-radius:4px;
+}
 #simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
 #simplemodal-container a {color:#ddd;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
