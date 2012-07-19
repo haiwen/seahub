@@ -319,21 +319,16 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     }
 
     $('input[name="obj_name"]').val(obj_name);
-    $('#mv-hd').html('将 <span class="op-target">' + file_type + ' ' + obj_name + '</span> ' + mv_type + '到：');
+    $('#mv-hd').html('将' + file_type + ' <span class="op-target">' + obj_name + '</span> ' + mv_type + '到：');
 
     $('#dirs')
         .bind('loaded.jstree', function(event,data) {
             $('#mv-form').modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
         })
         .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
-            //resize the popup when open/close/focus a dir
-                $('#mv-form')
-                .css('max-height', window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57)
-                .css('overflow', 'auto');
-                $('#simplemodal-container')
-                .css('height', $('#mv-form').height())
-                .css('width', $('#mv-form').width());
-            })
+            $('#mv-form').css({'max-height': window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57, 'overflow': 'auto'});
+            $('#simplemodal-container').css({'height': $('#mv-form').height(), 'width': $('#mv-form').width()});
+        })
         .bind('select_node.jstree', function(event,data) {
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
             $('input[name="dst_repo"]').attr('value', repo_id);
