@@ -13,7 +13,7 @@
 
 {% block main_panel %}
 {% if used_space < total_space %}
-<div class="upload-file-panel">
+<div class="narrow-panel">
     <h3>上传文件到
             {% for name, link in zipped %}
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
@@ -24,7 +24,7 @@
         <input type="file" name="file" id="file" />
         <p>(文件应小于 {{ max_upload_file_size|filesizeformat }})</p>
         <p id="error-msg" class="error">{{ error_msg }}</p>
-        <input id="upload-submit" type="submit" value="提交" />
+        <input id="upload-submit" type="submit" value="提交" class="submit" />
     </form>
     
     <div id="upload-progress" class="hide">

@@ -219,58 +219,6 @@ table img {
     line-height:20px;
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
-/* avatar */
-.avatar-op {
-    width:321px;
-    margin:45px 0 0 300px;
-}
-.avatar-op h2,
-.upload-file-panel h3 {
-    padding:2px 5px;
-    background:#E9F1F4;
-    border-radius:3px;
-    -moz-border-radius:3px;
-}
-.avatar-op-con {
-    padding-left:5px;
-}
-.avatar-op .avatar,
-.home-profile .avatar {
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-}
-.upload-new-avatar-hd {
-    margin-top:15px;
-}
-/*user-basic-info*/
-#user-basic-info h2 {
-    margin:12px 0 15px;
-}
-#user-basic-info label {
-    text-align:right;
-    width:5.5em;
-    margin-right:1em;
-}
-#user-basic-info .avatar,
-#user-basic-info textarea {
-    vertical-align:text-top;
-}
-#user-basic-info .avatar,
-#user-basic-info .text-input,
-#user-basic-info textarea {
-    margin-bottom:8px;
-}
-#user-basic-info .text-input,
-#user-basic-info textarea {
-    width:260px;
-}
-#user-basic-info textarea {
-    height:70px;
-}
-#user-basic-info .submit {
-    margin-left:6.5em;
-}
-
 /*narrow-panel: for form pages*/
 .narrow-panel {
     width:320px;
@@ -283,11 +231,8 @@ table img {
 }
 .narrow-panel h2,
 .narrow-panel h3 {
-    margin-top:0;
+    margin:0 0 12px;
     border-bottom:1px solid #ddd;
-}
-.narrow-panel h2 {
-    margin-bottom:10px;
 }
 .narrow-panel input {
     width:318px;
@@ -388,6 +333,47 @@ table img {
 }
 #repo-desc {
     height:70px;
+}
+/* avatar */
+.avatar-op .avatar,
+.home-profile .avatar {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+.avatar-op h3 {
+    border:none;
+    margin-bottom:2px;
+}
+.avatar-op .upload-new-avatar-hd {
+    margin-top:15px;
+}
+/*user-basic-info*/
+#user-basic-info h2 {
+    margin:12px 0 15px;
+}
+#user-basic-info label {
+    text-align:right;
+    width:5.5em;
+    margin-right:1em;
+}
+#user-basic-info .avatar,
+#user-basic-info textarea {
+    vertical-align:text-top;
+}
+#user-basic-info .avatar,
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    margin-bottom:8px;
+}
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    width:260px;
+}
+#user-basic-info textarea {
+    height:70px;
+}
+#user-basic-info .submit {
+    margin-left:6.5em;
 }
 
 /*repo page*/

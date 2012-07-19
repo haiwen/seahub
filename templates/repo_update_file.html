@@ -13,7 +13,7 @@
 
 {% block main_panel %}
 {% if used_space < total_space %}
-<div class="upload-file-panel">
+<div class="narrow-panel">
     <h3>更新文件
             {% for name, link in zipped %}
               {% if not forloop.last %}
@@ -28,7 +28,7 @@
         <input type="file" name="file" id="file" />
         <p>(文件应小于 {{ max_upload_file_size|filesizeformat }})</p>
         <p id="error-msg" class="error">{{ error_msg }}</p>
-        <input id="upload-submit" type="submit" value="提交" />
+        <input id="upload-submit" type="submit" value="提交" class="submit" />
     </form>
     
     <div id="upload-progress" class="hide">
