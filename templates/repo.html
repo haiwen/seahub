@@ -13,10 +13,7 @@
 
 {% block main_panel %}
   {% if view_history %}
-    <h2 class="subject">
-    {{repo.props.name}} 历史浏览
-    <span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
-    </h2>
+    <h2>{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
   {% else %}
     <h2>{{repo.props.name}}</h2>
   {% endif %}
@@ -237,12 +234,13 @@ $("table tr:gt(0)").hover(
     }
 );
 
+$('#main-panel').removeClass('ovhd');
 var Hide = '';
 $('.more-op').hover(
     function() {
         $(this).parent().css('position','relative');
         $('.op-list').attr('class', 'op-list hide');
-        if ($(this).offset().top + $(this).next().height() <= $('#main-panel').offset().top + $('#main-panel').height()) {
+        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
             $(this).next().css('top', 6);
         } else {
             $(this).next().css('bottom', 2);
@@ -321,21 +319,16 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     }
 
     $('input[name="obj_name"]').val(obj_name);
-    $('#mv-hd').html('将 <span class="op-target">' + file_type + ' ' + obj_name + '</span> ' + mv_type + '到：');
+    $('#mv-hd').html('将' + file_type + ' <span class="op-target">' + obj_name + '</span> ' + mv_type + '到：');
 
     $('#dirs')
         .bind('loaded.jstree', function(event,data) {
             $('#mv-form').modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
         })
         .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
-            //resize the popup when open/close/focus a dir
-                $('#mv-form')
-                .css('max-height', window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57)
-                .css('overflow', 'auto');
-                $('#simplemodal-container')
-                .css('height', $('#mv-form').height())
-                .css('width', $('#mv-form').width());
-            })
+            $('#mv-form').css({'max-height': window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57, 'overflow': 'auto'});
+            $('#simplemodal-container').css({'height': $('#mv-form').height(), 'width': $('#mv-form').width()});
+        })
         .bind('select_node.jstree', function(event,data) {
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
             $('input[name="dst_repo"]').attr('value', repo_id);

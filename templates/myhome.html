@@ -177,7 +177,7 @@
     <textarea id="repo-desc" name="repo_desc"></textarea>
     <div class="repo-create-encryption">
         <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
-        <label>密码：</label><span class="tip">(少于或等于15个字符)</span><br />
+        <label>密码：</label><span class="tip">(3到15个字符)</span><br />
         <input type="password" name="passwd" disabled="disabled" class="passwd input-disabled" /><br />
         <label>密码确认：</label><br />
         <input type="password" name="passwd_again" disabled="disabled" class="passwd input-disabled" />
@@ -255,24 +255,28 @@ $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
 
-    if (!$.trim($('#repo-name').val())) {
+    if (!$('#repo-name').val()) {
         showError('目录名不能为空。');
         return false;
     }
-     if (!$.trim($('#repo-desc').val())) {
+     if (!$('#repo-desc').val()) {
         showError('描述不能为空。');
         return false;
     }   
 
     if ($('#encrypt-switch').attr('checked')) {
-        if (!$.trim(passwd.val())) {
+        if (!passwd.val()) {
             showError('密码不能为空。');
             return false;
         }   
-        if (!$.trim(passwd_again.val())) {
+        if (!passwd_again.val()) {
             showError('请确认密码。');
             return false;
         }   
+        if (passwd.val().length < 3) {
+            showError('密码太短。');
+            return false;
+        }
         if (passwd.val().length > 15) {
             showError('密码太长。');
             return false;
@@ -283,41 +287,17 @@ $('#repo-create-submit').click(function() {
         }
     }
 
-    // prepare django csrf token
-    $.ajaxSetup({ 
-        beforeSend: function(xhr, settings) {
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie != '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) == (name + '='))        {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                // Only send the token to relative URLs i.e. locally.
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-            }
-        } 
-    }); 
-
     $.ajax({
         url: '{{ SITE_ROOT }}repo/create/',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
         contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
         data: {
             'repo_name': $('#repo-name').val(),
             'repo_desc': $('#repo-desc').val(),
-            'encryption': $('encrypt-switch').val(),
+            'encryption': $('#encrypt-switch').attr('checked') ? 1 : 0,
             'passwd': passwd.val(),
             'passwd_again': passwd_again.val()
         },

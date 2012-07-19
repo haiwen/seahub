@@ -8,12 +8,12 @@ h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
 h4 { font-size:14px; color:#000; font-weight:normal; margin:2px 0 0; }
 ol { padding-left:2em; }
 /* input button */
-textarea { border: 1px solid #80B0B0; }
+textarea { border: 1px solid #ddd; }
 input { 
     height:20px;
     line-height:20px;
     margin:3px 0;
-    border: 1px solid #80B0B0;
+    border: 1px solid #ddd;
 }
 input,
 button {
@@ -48,6 +48,9 @@ input[type="file"] {
     border:none;
     height:24px;
     line-height:24px;
+}
+.input-disabled {
+    background:#ebebe4;
 }
 label { display: inline-block; margin:2px 0px; }
 /* table */
@@ -216,91 +219,32 @@ table img {
     line-height:20px;
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
-/* avatar */
-.avatar-op {
-    width:321px;
-    margin:45px 0 0 300px;
-}
-.avatar-op h2,
-.upload-file-panel h3 {
-    padding:2px 5px;
-    background:#E9F1F4;
-    border-radius:3px;
-    -moz-border-radius:3px;
-}
-.avatar-op-con {
-    padding-left:5px;
-}
-.avatar-op .avatar,
-.home-profile .avatar {
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-}
-.upload-new-avatar-hd {
-    margin-top:15px;
-}
-/*user-basic-info*/
-#user-basic-info h2 {
-    margin:12px 0 15px;
-}
-#user-basic-info label {
-    text-align:right;
-    width:5.5em;
-    margin-right:1em;
-}
-#user-basic-info .avatar,
-#user-basic-info textarea {
-    vertical-align:text-top;
-}
-#user-basic-info .avatar,
-#user-basic-info .text-input,
-#user-basic-info textarea {
-    margin-bottom:8px;
-}
-#user-basic-info .text-input,
-#user-basic-info textarea {
-    width:260px;
-}
-#user-basic-info textarea {
-    height:70px;
-}
-#user-basic-info .submit {
-    margin-left:6.5em;
-}
-
 /*narrow-panel: for form pages*/
 .narrow-panel {
-    width:25em;
+    width:320px;
     min-height:15em;
-    padding:2.5em;
-    background:#E9F1F4;
+    padding:30px;
+    border: 1px solid #ddd;
     border-radius:4px;
     -moz-border-radius:4px;
     margin:5em auto 0;
 }
 .narrow-panel h2,
 .narrow-panel h3 {
-    margin-top:0;
-}
-.narrow-panel h2 {
-    margin-bottom:10px;
+    margin:0 0 12px;
+    border-bottom:1px solid #ddd;
 }
 .narrow-panel input {
-    width:24em;
+    width:318px;
     height:1.8em;
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
     width:3em;
-    color: #080;
-    height:23px;
-    line-height:21px;
-    padding:0 3px;
-    background: #EEE;
-    border: 1px solid #80B0B0;
-    margin:8px 0 3px;
+    margin:8px 0 0;
 }
 .login-form a {
+    font-size:12px;
     vertical-align:middle;
 }
 
@@ -313,7 +257,12 @@ table img {
 /* popup dialog */
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
-#simplemodal-container { background-color:#fff; border:3px solid #080; padding: 18px; }
+#simplemodal-container {
+    padding: 20px; 
+    background-color:#fff; 
+    border-radius:4px;
+    -moz-border-radius:4px;
+}
 #simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
 #simplemodal-container a {color:#ddd;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
@@ -373,13 +322,58 @@ table img {
     color: #000;
     font-weight: normal;
 }
+#repo-create-form {
+    padding:0 20px;
+}
 #repo-name,
 #repo-desc,
 .repo-create-encryption .passwd {
-    width:210px;
+    width:260px;
+    margin-bottom:5px;
 }
 #repo-desc {
     height:70px;
+}
+/* avatar */
+.avatar-op .avatar,
+.home-profile .avatar {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+.avatar-op h3 {
+    border:none;
+    margin-bottom:2px;
+}
+.avatar-op .upload-new-avatar-hd {
+    margin-top:15px;
+}
+/*user-basic-info*/
+#user-basic-info h2 {
+    margin:12px 0 15px;
+}
+#user-basic-info label {
+    text-align:right;
+    width:5.5em;
+    margin-right:1em;
+}
+#user-basic-info .avatar,
+#user-basic-info textarea {
+    vertical-align:text-top;
+}
+#user-basic-info .avatar,
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    margin-bottom:8px;
+}
+#user-basic-info .text-input,
+#user-basic-info textarea {
+    width:260px;
+}
+#user-basic-info textarea {
+    height:70px;
+}
+#user-basic-info .submit {
+    margin-left:6.5em;
 }
 
 /*repo page*/
@@ -390,13 +384,14 @@ table img {
     margin-top:12px;
 }
 .repo-op a {
+    float:left;
     font-weight: normal;
-    margin-left:8px;
     background:#fff scroll no-repeat left 50%;
 }
 .repo-op .upload-file {
-    padding-left:17px;
+    padding-left:16px;
     background-image:url('../img/upload.png');
+    margin-right:10px;
 }
 #add-new-dir {
     padding-left:20px;
@@ -534,12 +529,9 @@ table img {
 #repo-create,
 #member-add {
     font-size:13px;
+    font-weight:normal;
     padding-left:18px;
     background:transparent url('../img/add.png') scroll no-repeat left 40%;
-    margin-top:2px;
-    font-weight:normal;
-}
-#repo-create {
     margin-top:16px;
 }
 
