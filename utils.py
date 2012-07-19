@@ -237,7 +237,6 @@ def valid_previewed_file(filename):
     Check whether file can preview on web
     
     """
-    from urls import FILEEXT_TYPE_MAP
     fileExt = os.path.splitext(filename)[1][1:]
     return FILEEXT_TYPE_MAP.get(fileExt)
 
@@ -267,3 +266,4 @@ def gen_fileext_type_map():
             d[fileext] = filetype
 
     return d
+FILEEXT_TYPE_MAP = gen_fileext_type_map()
