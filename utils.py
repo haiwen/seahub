@@ -24,7 +24,6 @@ PREVIEW_FILEEXT = {
     'SVG': ('svg',),
 }
 
-FILEEXT_PREFIX = 'FILEEXT_'
 def go_permission_error(request, msg=None):
     """
     Return permisson error page.
@@ -238,16 +237,9 @@ def valid_previewed_file(filename):
     Check whether file can preview on web
     
     """
+    from urls import FILEEXT_TYPE_MAP
     fileExt = os.path.splitext(filename)[1][1:]
-    filetype = cache.get(FILEEXT_PREFIX + fileExt)
-    if filetype:
-        return filetype
-    else:
-        for k in PREVIEW_FILEEXT.keys():
-            if fileExt in PREVIEW_FILEEXT.get(k):
-                cache.set(FILEEXT_PREFIX + fileExt, k)
-                return k
-        return None
+    return FILEEXT_TYPE_MAP.get(fileExt)
 
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
@@ -264,13 +256,14 @@ def get_file_revision_id_size (commit_id, path):
 
     return None, None
 
-def set_file_ext_cache():
+def gen_fileext_type_map():
     """
-    Put previewed file extension and file type to cache.
+    Generate previewed file extension and file type relation map.
     
     """
+    d = {}
     for filetype in PREVIEW_FILEEXT.keys():
         for fileext in PREVIEW_FILEEXT.get(filetype):
-            key = FILEEXT_PREFIX + fileext
-            value = filetype
-            cache.set(key, value)
+            d[fileext] = filetype
+
+    return d

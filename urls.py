@@ -17,7 +17,7 @@ from seahub.views import root, peers, myhome, \
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 from seahub.group.views import group_list
-from seahub.utils import set_file_ext_cache
+from seahub.utils import gen_fileext_type_map
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -110,6 +110,6 @@ if settings.DEBUG:
         (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     )
 
-# Set file extension cache at django startup, this function should be
-# called only once. 
-set_file_ext_cache()
+# Add file extension and type to dictionary at django startup,
+# this function should be called only once. 
+FILEEXT_TYPE_MAP = gen_fileext_type_map()
