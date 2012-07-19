@@ -845,7 +845,7 @@ def repo_view_file(request, repo_id):
     zipped = gen_path_link(path, repo.name)
 
     # determin whether file can preview on web
-    can_preview, filetype = valid_previewed_file(filename)
+    filetype = valid_previewed_file(filename)
     
     # raw path
     tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
@@ -880,7 +880,6 @@ def repo_view_file(request, repo_id):
             'view_history': view_history,
             'current_commit': current_commit,
             'token': token,
-            'can_preview': can_preview,
             'filetype': filetype,
             'raw_path': raw_path,
             'fileshare': fileshare,
@@ -1895,7 +1894,7 @@ def view_shared_file(request, token):
     access_token = gen_token()
     seafserv_rpc.web_save_access_token(access_token, obj_id)
     
-    can_preview, filetype = valid_previewed_file(filename)
+    filetype = valid_previewed_file(filename)
     
     # Raw path
     tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
@@ -1917,7 +1916,6 @@ def view_shared_file(request, token):
             'file_name': filename,
             'shared_token': token,
             'access_token': access_token,
-            'can_preview': can_preview,
             'filetype': filetype,
             'raw_path': raw_path,
             'username': username,

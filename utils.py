@@ -19,12 +19,12 @@ import settings
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 
 PREVIEW_FILEEXT = {
-    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'xhtml', 'java', 'js', 'json', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim', 'xml'),
+    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'markdown', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
-    'SVG':('svg',),
+    'SVG': ('svg',),
 }
 
-
+FILEEXT_PREFIX = 'FILEEXT_'
 def go_permission_error(request, msg=None):
     """
     Return permisson error page.
@@ -239,10 +239,15 @@ def valid_previewed_file(filename):
     
     """
     fileExt = os.path.splitext(filename)[1][1:]
-    for filetype in PREVIEW_FILEEXT.keys():
-        if fileExt in PREVIEW_FILEEXT.get(filetype):
-            return (True, filetype)
-    return (False, '')
+    filetype = cache.get(FILEEXT_PREFIX + fileExt)
+    if filetype:
+        return filetype
+    else:
+        for k in PREVIEW_FILEEXT.keys():
+            if fileExt in PREVIEW_FILEEXT.get(k):
+                cache.set(FILEEXT_PREFIX + fileExt, k)
+                return k
+        return None
 
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
@@ -259,4 +264,13 @@ def get_file_revision_id_size (commit_id, path):
 
     return None, None
 
+def set_file_ext_cache():
+    """
+    Put previewed file extension and file type to cache.
     
+    """
+    for filetype in PREVIEW_FILEEXT.keys():
+        for fileext in PREVIEW_FILEEXT.get(filetype):
+            key = FILEEXT_PREFIX + fileext
+            value = filetype
+            cache.set(key, value)
