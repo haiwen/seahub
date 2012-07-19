@@ -943,10 +943,10 @@ def repo_file_get(request, repo_id):
     else:
         l, d = [], {}
         try:
+            u_content = content.decode('utf-8')
+        except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
-        except:
-            u_content = content.decode('utf-8')
         from django.utils.html import escape
         d['content'] = re.sub("\r\n|\n", "<br />", escape(u_content))
         l.append(d)
