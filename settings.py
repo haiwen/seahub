@@ -124,13 +124,16 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # Icons will show in repo page.
 FILEEXT_ICON_MAP = {
     # pdf file
-    'pdf' : 'pdf-icon-24.png',
+    'pdf' : 'pdf.png',
     # document file
-    'doc' : 'word-icon-24.png',
-    'docx' : 'word-icon-24.png',
-    # ppt file
-    'ppt' : 'ppt-icon-24.png',
-    'pptx' : 'ppt-icon-24.png',
+    'doc' : 'ms-word.png',
+    'docx' : 'ms-word.png',
+    'ppt' : 'ms-ppt.png',
+    'pptx' : 'ms-ppt.png',
+    'xls' : 'ms-excel.png',
+    'xlsx' : 'ms-excel.png',
+    'txt' : 'txt.png',
+    'odf' : 'odf.png',
     # music file
     'mp3' : 'music-icon-24.png',
     # picture file

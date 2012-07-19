@@ -59,7 +59,7 @@ table {
     margin:8px 0 20px;
 }
 td, th {
-    padding:4px 3px;
+    padding:5px 3px;
     word-wrap:break-word;
 }
 th { text-align:left; border-top:1px solid #f8f8f8; }
