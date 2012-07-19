@@ -693,4 +693,7 @@ table img {
     min-height:500px;/*for ff*/
 }
 
-
+/* shareadmin */
+.view-link-alert p {
+    display: inline-block;
+}

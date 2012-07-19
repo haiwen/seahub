@@ -93,29 +93,7 @@ $(window).load(function() {
         hideLink();
     }
     
-    if (filetype == 'Document') {
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                if (data.length > 0) {
-                    $('#file-view').html('<pre id="docu-view">' + data[0]['content'] + '</pre>');
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
-            }
-        });
-    } else if (filetype == 'Image') {
-        $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
-    } else if (filetype == 'SVG') {
-        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" width="940" id="svg-view"></iframe>');
-    } else {
-        $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
-    }
+    {% include "repo_file_get.html" %}
 });
 
 $('#get-shared-link').click(function() {

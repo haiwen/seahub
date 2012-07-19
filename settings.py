@@ -69,7 +69,6 @@ MIDDLEWARE_CLASSES = (
     'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.subdomain.middleware.SubdomainMiddleware',
-#    'seahub.base.middleware.UseridMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -147,15 +146,8 @@ FILEEXT_ICON_MAP = {
     'default' : 'file-icon-24.png',
 }
 
-
 # File preview
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
-
-PREVIEW_FILEEXT = {
-    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'xhtml', 'java', 'js', 'json', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim', 'xml'),
-    'Image': ('gif', 'jpeg', 'jpg', 'png'),
-    'SVG':('svg',),
-}
 
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
@@ -165,11 +157,6 @@ AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 0
-
-# Info-bar notification cache
-NOTIFICATION_CACHE_TIMEOUT = 0
-
-USER_TOTAL_SPACE = 2 * pow(2,30)
 
 # File upload
 FILE_UPLOAD_MAX_MEMORY_SIZE = 0
@@ -239,5 +226,7 @@ else:
             globals()[attr] = getattr(local_settings, attr)
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
+
+USER_TOTAL_SPACE = 2 * pow(2,30)
 
 SEAFILE_VERSION = '0.9.4'

@@ -15,9 +15,15 @@ from django.core.cache import cache
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids
 import settings
-from settings import PREVIEW_FILEEXT
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
+
+PREVIEW_FILEEXT = {
+    'Document': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'htm', 'html', 'xhtml', 'java', 'js', 'json', 'less', 'make', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim', 'xml'),
+    'Image': ('gif', 'jpeg', 'jpg', 'png'),
+    'SVG':('svg',),
+}
+
 
 def go_permission_error(request, msg=None):
     """

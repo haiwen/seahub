@@ -84,7 +84,7 @@
 <p>暂无</p>
 {% endif %}
 <div id="view-link" name="view-link" class="hide">
-  <p><span class="view-link-alert" style="float:left; margin-left: 120px; "></span></p>
+  <span class="view-link-alert" style="float:left; margin-left: 120px; "></span>
 </div>
 
 {% endblock %}
@@ -108,7 +108,7 @@ $(".view-link").click(function() {
 
     var t = $(this).attr('data');
     var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}share/' + t + '/';
-    $('.view-link-alert').text("共享链接为：" + l);
+    $('.view-link-alert').html("共享链接为：<p>" + l + "</p>");
     $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
     return false;
 });
@@ -117,7 +117,7 @@ $(".view-file-link").click(function() {
 
     var t = $(this).attr('data');
     var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
-    $('.view-link-alert').text("该文件外链为：" + l);
+    $('.view-link-alert').html("该文件外链为：<p>" + l + "</p>");
     $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
     return false;
 });
