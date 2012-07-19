@@ -372,6 +372,9 @@ table img {
     color: #000;
     font-weight: normal;
 }
+#repo-create-form {
+    padding:0 20px;
+}
 #repo-name,
 #repo-desc,
 .repo-create-encryption .passwd {
