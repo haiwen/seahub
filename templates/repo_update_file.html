@@ -21,12 +21,12 @@
               {% else %}
                 {{ name }}
               {% endif %}
-            {% endfor %} <br />
-            (最大不得超过 {{ max_upload_file_size|filesizeformat }})
+            {% endfor %}
     </h3>
     <form id="upload-file-form" enctype="multipart/form-data" method="post">
         <input type="hidden" name="target_file" value="{{ target_file }}" />
-        <input type="file" name="file" id="file" /><br />
+        <input type="file" name="file" id="file" />
+        <p>(文件应小于 {{ max_upload_file_size|filesizeformat }})</p>
         <p id="error-msg" class="error">{{ error_msg }}</p>
         <input id="upload-submit" type="submit" value="提交" />
     </form>

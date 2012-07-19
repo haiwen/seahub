@@ -390,13 +390,14 @@ table img {
     margin-top:12px;
 }
 .repo-op a {
+    float:left;
     font-weight: normal;
-    margin-left:8px;
     background:#fff scroll no-repeat left 50%;
 }
 .repo-op .upload-file {
-    padding-left:17px;
+    padding-left:16px;
     background-image:url('../img/upload.png');
+    margin-right:10px;
 }
 #add-new-dir {
     padding-left:20px;
@@ -534,12 +535,9 @@ table img {
 #repo-create,
 #member-add {
     font-size:13px;
+    font-weight:normal;
     padding-left:18px;
     background:transparent url('../img/add.png') scroll no-repeat left 40%;
-    margin-top:2px;
-    font-weight:normal;
-}
-#repo-create {
     margin-top:16px;
 }
 
