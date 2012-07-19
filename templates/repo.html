@@ -326,8 +326,13 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
             $('#mv-form').modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
         })
         .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
-            $('#mv-form').css({'max-height': window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57, 'overflow': 'auto'});
-            $('#simplemodal-container').css({'height': $('#mv-form').height(), 'width': $('#mv-form').width()});
+             $('#mv-form').css({'max-height': window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57, 'max-width':window.innerWidth - $('#mv-form').offset().left - 40, 'overflow': 'auto'});
+             $('#simplemodal-container').css('height', $('#mv-form').height());
+        })
+        .bind('after_open.jstree set_focus.jstree', function(event,data) {
+            if ($('#mv-form').width() < $('#mv-form')[0].scrollWidth) {
+                $('#simplemodal-container').css('width', $('#mv-form')[0].scrollWidth + 15);
+            }
         })
         .bind('select_node.jstree', function(event,data) {
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
@@ -370,17 +375,16 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
 $('#add-new-dir-form .submit, #rename-form .submit').click(function() {
     if (!$.trim($(this).prev().prev().prev().val())) {//if the input is empty
         $(this).prev().removeClass('hide');//show error msg
-        $('#simplemodal-container').css('height', $(this).parent().height()).css('width', $(this).parent().width());
+        $('#simplemodal-container').css('height', $(this).parent().height());
         return false;
     }
 });
 $('#mv-form .submit').click(function() {
     if (!$.trim($(this).prev().prev().val())) {//if the input is empty
         $(this).prev().removeClass('hide');//show error msg
-        $('#simplemodal-container').css('height', $(this).parent().height()).css('width', $(this).parent().width());
+        $('#simplemodal-container').css('height', $(this).parent().height());
         return false;
     }
 });
-
 </script>
 {% endblock %}
