@@ -93,12 +93,8 @@
     {% endfor %}
 {% endif %}
 
-<div class="w100 ovhd">
-    <h3 class="fleft">我拥有的同步目录</h3>
-    <a id="repo-create" class="fright" href="#">新建同步目录</a>
-</div>
-
-{% if owned_repos %}
+<h3>我拥有的同步目录</h3>
+<button id="repo-create">新建同步目录</button>
 <table>
     <tr>
         <th width="25%">名字</th>
@@ -106,7 +102,7 @@
         <th width="20%">更新时间</th>
         <th width="12%">操作</th>
     </tr>
-
+{% if owned_repos %}
     {% for repo in owned_repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
@@ -123,10 +119,8 @@
         </td>
     </tr>
     {% endfor %}
-</table>
-{% else %}
-<p>暂无</p>
 {% endif %}
+</table>
 
 <h3>共享给我的同步目录</h3>
 {% if in_repos %}
@@ -236,9 +230,16 @@ $(function() {
 });
 
 //repo-create-form
+$('#repo-create').hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
 $('#repo-create').click(function() {
     $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
-    return false;
 });
 $('#encrypt-switch').click(function () {
     if ($(this).attr('checked')) {

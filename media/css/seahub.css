@@ -322,6 +322,12 @@ table img {
     color: #000;
     font-weight: normal;
 }
+#repo-create {
+    padding-left:21px;
+    height:27px;
+    background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
+    margin:5px 0 6px;
+}
 #repo-create-form {
     padding:0 20px;
 }
@@ -526,7 +532,6 @@ table img {
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-#repo-create,
 #member-add {
     font-size:13px;
     font-weight:normal;
