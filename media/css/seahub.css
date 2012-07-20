@@ -486,6 +486,17 @@ table img {
 .contact-list-link:hover {
     text-decoration:none;
 }
+#contact-add-form h4 {
+    border-bottom:1px solid #ddd;
+    margin-bottom:12px;
+}
+#contact-add-form label {
+    width:6em;
+}
+#contact-add-form .error,
+#contact-add-form .submit {
+    margin-left:6em;
+}
 /* group, org */
 .group-list {
     margin-top:20px;

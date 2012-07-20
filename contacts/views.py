@@ -1,5 +1,6 @@
 # encoding: utf-8
-from django.http import HttpResponseRedirect
+import simplejson as json
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -16,8 +17,10 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc
 @login_required
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
+    form = AddContactForm({'user_email':request.user.username})
     return render_to_response('contacts/contact_list.html', {
         'contacts': contacts,
+        'form': form,
         }, context_instance=RequestContext(request))
 
 
@@ -28,6 +31,8 @@ def contact_add(request):
         form = AddContactForm(request.POST)
         # for request from contact_add form in group_info.html
         group_id = int(request.GET.get('group_id', 0))
+        # for ajax request from contact_add in contact_list.html
+        result = {}
         if form.is_valid():
             contact_email = form.cleaned_data['contact_email']
             contact_name = form.cleaned_data['contact_name']
@@ -52,22 +57,19 @@ def contact_add(request):
                 contact.note = note
                 contact.save()
                 if not group_id:
-                    return HttpResponseRedirect(reverse("contact_list"))
+                    result['success'] = True
+                    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf-8')
                 else:
                     messages.success(request, u"您已成功添加%s为联系人" % contact_email)
                     return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
 
-            if error_msg and group_id:
-                messages.error(request, error_msg)
-                return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
-
-    else:
-        form = AddContactForm({'user_email':request.user.username})
-    return render_to_response('contacts/contact_add.html', {
-        'form': form,
-        'error_msg':error_msg,
-        'user_email': request.user.username,
-        }, context_instance=RequestContext(request))
+            if error_msg:
+                if not group_id:
+                    result['error'] = error_msg
+                    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf-8')
+                else:
+                    messages.error(request, error_msg)
+                    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
 
 @login_required
 def contact_edit(request):

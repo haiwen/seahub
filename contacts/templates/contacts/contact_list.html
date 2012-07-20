@@ -4,8 +4,17 @@
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}contacts/add/">添加联系人</a></li>
+    <li><a href="#" id="contact-add">添加联系人</a></li>
 </ul>
+<form action="{{ SITE_ROOT }}contacts/add/" method="post" id="contact-add-form" class="hide">
+    <h4>添加联系人</h4>
+    {{ form.user_email.as_hidden }}
+    <label>邮箱：</label>{{ form.contact_email }}<br />
+    <label>名字(可选)：</label>{{ form.contact_name }}<br />
+    <label>备注(可选)：</label>{{ form.note }}<br />
+    <p class="error hide" id="contact-add-error">请输入邮箱地址。</p>
+    <input type="submit" value="提交"  class="submit" />
+</form>
 {% endblock %}
 
 {% block right_panel %}
@@ -35,7 +44,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('.contact-edit').click(function() {
-        location.href = $(this).attr('data');
+    location.href = $(this).attr('data');
 });
 
 addConfirmTo($('.contact-delete'));
@@ -48,5 +57,42 @@ $("table tr:gt(0)").hover(
         $(this).find('img').addClass('vh');
     }
 );
+
+$('#contact-add').click(function() {
+    $('#contact-add-form').modal({appendTo: '#main'});
+    return false;
+});
+$('#contact-add-form').submit(function() {
+    if(!$.trim($('input[name="contact_email"]').val())) {
+       $('#contact-add-error').removeClass('hide') 
+       $('#simplemodal-container').css('height', $(this).height());
+        return false;
+    }
+    
+    $.ajax({
+        url: '{{ SITE_ROOT }}contacts/add/',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_email': $('#contact-add-form input[name="user_email"]').val(),
+            'contact_email': $('#contact-add-form input[name="contact_email"]').val(),
+            'contact_name': $('#contact-add-form input[name="contact_name"]').val(),
+            'note': $('#contact-add-form input[name="note"]').val()
+       },  
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                $('#contact-add-error').html(data['error']).attr('class', 'error');
+                $('#simplemodal-container').css('height', $('#contact-add-form').height());
+            }   
+        }   
+    });
+
+    return false;
+});
 </script>
 {% endblock %}
