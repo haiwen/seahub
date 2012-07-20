@@ -59,7 +59,7 @@ table {
     border-collapse: collapse;
     width:100%;
     table-layout:fixed;
-    margin:8px 0 20px;
+    margin:8px 0 40px;
 }
 td, th {
     padding:5px 3px;
