@@ -219,7 +219,8 @@ $('.group-member').hover(
                 $('#user-profile').removeClass('hide');
                 $('#main').css('position', 'relative');
                 $('#add-as-contact').click(function() {
-                    $('#add-as-contact-form').modal({appendTo: '#main'});
+                    //$('#add-as-contact-form').modal({appendTo: '#main'});
+                    $('#add-as-contact-form')[0].submit();
                 });
                 if (this_top + $('#user-profile').height() < $('#main').height()) {
                     $('#user-profile').css('top', this_top - 10);
@@ -280,31 +281,6 @@ $('#user-profile').hover(
     
     $('.reply-form').each(function(){
         $(this).submit(function(event) {
-            // prepare django csrf token
-            $.ajaxSetup({ 
-                beforeSend: function(xhr, settings) {
-                    function getCookie(name) {
-                        var cookieValue = null;
-                        if (document.cookie && document.cookie != '') {
-                            var cookies = document.cookie.split(';');
-                            for (var i = 0; i < cookies.length; i++) {
-                                var cookie = jQuery.trim(cookies[i]);
-                                // Does this cookie string begin with the name we want?
-                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                    break;
-                                }
-                            }
-                        }
-                        return cookieValue;
-                    }
-                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                        // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                    }
-                } 
-            });
-
             var form = $(this), 
                 m_id = form.children('input[name="msg_id"]').val(),
                 m = $.trim(form.children('input[name="message"]').val()),
@@ -312,10 +288,11 @@ $('#user-profile').hover(
             if (m && m.length <= 150) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ SITE_ROOT }}group/reply/"+m_id+"/",
+                    url: '{{ SITE_ROOT }}group/reply/' + m_id + '/',
                     dataType: 'json',
                     cache: false,
                     contentType: 'application/json; charset=utf-8',
+                    beforeSend: prepareCSRFToken,
                     data: "message="+m,
                     success: function(data) {
                         var str = '';
