@@ -133,7 +133,7 @@
               <td>
                 {% if not view_history and request.user.is_authenticated %}
                   <div>
-                      <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op hide" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                           <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
@@ -158,7 +158,7 @@
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
                   <div>
-                      <img src="{{ MEDIA_URL }}img/more-option.png" alt="更多操作" class="more-op hide" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op hide" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
                           {% if not view_history and request.user.is_authenticated %}
