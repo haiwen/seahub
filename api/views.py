@@ -27,6 +27,9 @@ from djangorestframework.mixins import ResponseMixin
 from djangorestframework.response import Response
 from django.core.urlresolvers import reverse
 
+from auth.forms import AuthenticationForm
+from auth import login as auth_login
+from django.views.decorators.csrf import csrf_exempt
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -97,6 +100,30 @@ def get_dir_entrys_by_id(reqquest, dir_id):
     return HttpResponse(json.dumps(dentrys), status=200,
                         content_type=json_content_type)
 
+@csrf_exempt
+def api_login(request):
+    if request.method == "POST" :
+        form = AuthenticationForm(data=request.POST)
+    else:
+        return api_error(request, 400, "method not supported")
+
+    if form.is_valid():
+        auth_login(request, form.get_user())
+        print ">>",request.session.session_key
+        return HttpResponse(json.dumps(request.session.session_key), status=200,
+            content_type=json_content_type)
+    else:
+        return HttpResponse(json.dumps("failed"), status=401,
+            content_type=json_content_type)
+
+class Ping(ResponseMixin, View):
+    renderers = (JSONRenderer,)
+
+    @api_login_required
+    def get(self, request):
+        response = Response(200, "pong")
+        return self.render(response)
+
 class ReposView(ResponseMixin, View):
     renderers = (JSONRenderer,)
 
@@ -137,6 +164,7 @@ class ReposView(ResponseMixin, View):
         response = Response(200, repos_json)
         return self.render(response)
 
+
 class RepoView(ResponseMixin, View):
     renderers = (JSONRenderer,)
 
@@ -169,7 +197,7 @@ class RepoView(ResponseMixin, View):
                 if ret == 1:
                     password_set = True
             except SearpcError, e:
-                    return api_error(request, '403', e.msg)
+                return api_error(request, '403', e.msg)
 
         # query repo infomation
         repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)

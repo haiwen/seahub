@@ -13,3 +13,6 @@ restart.sh
 settings.py.mysql
 settings.py.sqlite
 secret_key.py
+run-seahub.sh
+setenv.sh
+.DS_Store
