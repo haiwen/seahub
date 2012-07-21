@@ -40,7 +40,7 @@ from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    get_file_revision_id_size
+    get_file_revision_id_size, gen_file_get_url
 from seahub.profile.models import Profile
 from settings import FILE_PREVIEW_MAX_SIZE
 
@@ -837,7 +837,8 @@ def repo_view_file(request, repo_id):
         # owner should get a token to visit repo                
         token = gen_token()
         # put token into memory in seaf-server
-        seafserv_rpc.web_save_access_token(token, obj_id)
+        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                           'view', request.user.username)
     else:
         raise Http404
 
@@ -848,13 +849,8 @@ def repo_view_file(request, repo_id):
     filetype = valid_previewed_file(filename)
     
     # raw path
-    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
-    raw_path = tmp_str % (http_server_root,
-                          repo_id, obj_id,
-                          filename, 'view', 
-                          token,
-                          request.user.username)
-
+    raw_path = gen_file_get_url(token, filename)
+    
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
         username=request.user.username).filter(path=path)
@@ -899,7 +895,7 @@ def repo_file_get(request, repo_id):
     if not request.is_ajax():
         return Http404
 
-    http_server_root = get_httpserver_root()
+    # http_server_root = get_httpserver_root()
     content_type = 'application/json; charset=utf-8'
     access_token = request.GET.get('t')
     path = request.GET.get('p', '/')
@@ -917,13 +913,8 @@ def repo_file_get(request, repo_id):
         data = json.dumps([{'error': '获取文件数据失败'}])
         return HttpResponse(data, status=400, content_type=content_type)
 
-    username = request.GET.get('u', '')
-    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
-    redirect_url = tmp_str % (http_server_root,
-                              repo_id, obj_id,
-                              filename, 'view', 
-                              access_token,
-                              username)
+    # username = request.GET.get('u', '')
+    redirect_url = gen_file_get_url(access_token, filename)
     try:
         proxied_request = urllib2.urlopen(redirect_url)
         if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
@@ -1005,18 +996,12 @@ def repo_access_file(request, repo_id, obj_id):
             # owner should get a token to visit repo                
             token = gen_token()
             # put token into memory in seaf-server
-            seafserv_rpc.web_save_access_token(token, obj_id)
+            seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                               op, request.user.username)
         else:
             raise Http404
 
-    http_server_root = get_httpserver_root()
-
-    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
-    redirect_url = tmp_str % (http_server_root,
-                              repo_id, obj_id,
-                              file_name, op, 
-                              token,
-                              request.user.username)
+    redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
  
 @login_required
@@ -1892,18 +1877,14 @@ def view_shared_file(request, token):
         raise Http404
 
     access_token = gen_token()
-    seafserv_rpc.web_save_access_token(access_token, obj_id)
+    seafserv_rpc.web_save_access_token(access_token, repo.id, obj_id,
+                                       'view', '')
     
     filetype = valid_previewed_file(filename)
     
     # Raw path
-    tmp_str = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s'
-    raw_path = tmp_str % (http_server_root,
-                          repo_id, obj_id,
-                          quote_filename, 'view', 
-                          access_token,
-                          username)
-
+    raw_path = gen_file_get_url(access_token, quote_filename)
+    
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
     fileshare.view_cnt = F('view_cnt') + 1

@@ -267,3 +267,10 @@ def gen_fileext_type_map():
 
     return d
 FILEEXT_TYPE_MAP = gen_fileext_type_map()
+
+def gen_file_get_url(token, filename):
+    """
+    Generate httpserver file url.
+    Format: http://<domain:port>/files/<token>/<filename>
+    """
+    return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
