@@ -6,7 +6,7 @@
 
 <h3>我的基本信息</h3>
 <div class="home-profile w100 ovhd">
-{% avatar myname 48 %}
+    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar myname 48 %}</a>
 {% if nickname %}
 <p class="fleft">{{ nickname }}</p>
 {% else %}
@@ -31,8 +31,8 @@
 <ul>
     {% for group in groups_manage %}
     <li class="mygroup">
-    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" />
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
     </a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
         {% if group.new_msg %}

@@ -23,6 +23,7 @@ PREVIEW_FILEEXT = {
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
     'SVG': ('svg',),
     'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
+    'PDF': ('pdf',),
 }
 
 def go_permission_error(request, msg=None):
