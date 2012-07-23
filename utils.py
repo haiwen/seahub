@@ -22,7 +22,7 @@ PREVIEW_FILEEXT = {
     'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'markdown', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
     'SVG': ('svg',),
-    'Document': ('doc', 'docx', 'ppt', 'pptx'),
+    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
 }
 
 def go_permission_error(request, msg=None):

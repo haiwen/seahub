@@ -52,18 +52,20 @@
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
                     if (data.length > 0) {
-                    var status = data[0]['status']
-                    if (status == 'QUEUED') {
-                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
-                        tid = setTimeout(check_status, 1000);                                     } else if (status == 'PROCESSING') {
-                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
-                        tid = setTimeout(check_status, 1000);                                     } else if (status == 'DONE') {
-                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
-                        abortTimer();
-                        create_session();
-                    } else {
-                        abortTimer();
-                    }
+                        var status = data[0]['status']
+                        if (status == 'QUEUED') {
+                            $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                            tid = setTimeout(check_status, 1000);
+                        } else if (status == 'PROCESSING') {
+                            $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                            tid = setTimeout(check_status, 1000);
+                        } else if (status == 'DONE') {
+                            $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
+                            abortTimer();
+                            create_session();
+                        } else {
+                            abortTimer();
+                        }
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {

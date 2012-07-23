@@ -884,7 +884,6 @@ def repo_view_file(request, repo_id):
             'protocol': http_or_https,
             'domain': domain,
             'file_shared_link': file_shared_link,
-            # 'doc_src': doc_src,
             }, context_instance=RequestContext(request))
 
 def repo_file_get(request, repo_id):
