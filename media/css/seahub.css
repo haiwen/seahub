@@ -114,6 +114,9 @@ table img {
 .op {
     font-size:13px;
 }
+.no-deco, .no-deco:hover {
+    text-decoration:none;
+}
 #paginator { margin-top:10px; }
 
 /* container */
@@ -347,7 +350,9 @@ table img {
 }
 /* avatar */
 .avatar-op .avatar,
-.home-profile .avatar {
+.home-profile .avatar,
+.mygroup .avatar,
+.group .avatar {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 }
