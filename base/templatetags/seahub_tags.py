@@ -122,3 +122,13 @@ def email2nickname(value):
 def url_target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')
 url_target_blank.is_safe=True
+
+@register.filter(name='short_email')
+def short_email(email):
+    """
+    Return short email which is the string before '@'.
+    """
+    if email.find('@') <= 0:
+        return email
+    else:
+        return email[:email.find('@')]

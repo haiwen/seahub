@@ -27,7 +27,7 @@
         <p class="al-rt">
           <span class="author">by
           {% if current_commit.props.creator_name %}
-          {{ current_commit.props.creator_name }}
+          {{ current_commit.props.creator_name|short_email }}
           {% else %}
           未知
           {% endif %}

@@ -23,7 +23,7 @@
         <td>{{ commit.props.ctime|translate_commit_time }}</td>
 
         {% if commit.props.creator_name %}
-        <td>{{ commit.props.creator_name }}</td>
+        <td>{{ commit.props.creator_name|short_email }}</td>
         {% else %}
         <td>未知</td>
         {% endif %}
