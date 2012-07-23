@@ -21,7 +21,7 @@
     } else if (filetype == 'PDF') {
         $.getScript('{{MEDIA_URL}}js/pdf.js', function() {
         PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-        $('#file-view').html('<div id="pdf-op-bar"><button id="prev">Prev</button> <button id="next">Next</button><label for="page-number">Page:</label><input type="number" id="page-number" value="1" min="1"></input> of <span id="page-nums"></span><button id="full-screen">Full Screen</button></div><canvas data="{{ raw_path }}" id="pdf-view"></canvas>').css({'text-align':'center', 'padding':'30px 0'});
+        $('#file-view').html('<div id="pdf-op-bar" class="vh"><button id="prev">Prev</button> <button id="next">Next</button><label for="page-number">Page:</label><input type="number" id="page-number" value="1" min="1"></input> of <span id="page-nums"></span><button id="full-screen">Full Screen</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas>').css({'text-align':'center', 'padding':'30px 0'});
         var seahub_getPage = function (pdf, page_number) {
             pdf.getPage(page_number).then(function(page) {
                 var scale = 1.5;
@@ -41,6 +41,7 @@
             $('#page-nums').html(pdf.numPages);
             $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
             seahub_getPage(pdf, 1);
+            $('#pdf-op-bar, #pdf-view').removeClass('vh');
 
             $('#page-number').change(function() {
                 seahub_getPage(pdf, $(this).val());
@@ -65,11 +66,9 @@
             });
             
             $('#full-screen').click(function() {
-                window.open('{{ SITE_ROOT }}pdf_full_view/?file_src=' + e($('#pdf-view').attr('data')));
+                window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
             });
-
       });
-            $('#pdf-view').css('background', '#fff');
       });
     } else {
         $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');

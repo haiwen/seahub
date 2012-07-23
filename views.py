@@ -944,7 +944,14 @@ def repo_file_get(request, repo_id):
 
 
 def pdf_full_view(request):
-    file_src = request.GET.get('file_src', '')
+    repo_id = request.GET.get('repo_id', '')
+    obj_id = request.GET.get('obj_id', '')
+    file_name = request.GET.get('file_name', '')
+
+    token = gen_token()
+    seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                           'view', request.user.username)
+    file_src = gen_file_get_url(token, file_name)
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,
                 }, context_instance=RequestContext(request))

@@ -699,7 +699,8 @@ table img {
     border:1px solid #eee;
 }
 #docu-view,
-#svg-view {
+#svg-view,
+#pdf-view {
     background:#fff;
 }
 #svg-view {
