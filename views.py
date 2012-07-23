@@ -5,6 +5,7 @@ import stat
 import simplejson as json
 import re
 import sys
+import urllib
 import urllib2
 from urllib import quote
 from django.core.urlresolvers import reverse
@@ -33,6 +34,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_re
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
+from seahub.base.models import UuidOjbidMap
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
 from forms import AddUserForm, FileLinkShareForm
@@ -40,9 +42,10 @@ from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    get_file_revision_id_size, get_ccnet_server_addr_port, gen_file_get_url
+    get_file_revision_id_size, get_ccnet_server_addr_port, \
+    gen_file_get_url
 from seahub.profile.models import Profile
-from settings import FILE_PREVIEW_MAX_SIZE
+from seahub.settings import FILE_PREVIEW_MAX_SIZE, CROCODOC_API_TOKEN
 
 @login_required
 def root(request):
@@ -846,7 +849,7 @@ def repo_view_file(request, repo_id):
 
     # determin whether file can preview on web
     filetype = valid_previewed_file(filename)
-    
+        
     # raw path
     raw_path = gen_file_get_url(token, filename)
     
@@ -881,6 +884,7 @@ def repo_view_file(request, repo_id):
             'protocol': http_or_https,
             'domain': domain,
             'file_shared_link': file_shared_link,
+            # 'doc_src': doc_src,
             }, context_instance=RequestContext(request))
 
 def repo_file_get(request, repo_id):
@@ -1984,4 +1988,127 @@ def send_shared_link(request):
             
     msg = '发送成功。'
     data = json.dumps([{'msg': msg}])
+    return HttpResponse(data, status=200, content_type=content_type)
+
+def crocodoc_upload(request):
+    """
+    Handle ajax request to upload document to crocodoc.com.
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    raw_path = request.GET.get('raw_path', '')
+
+    # Fetch obj_id according token, if this obj_id already has uuid,
+    # send uuid; else, upload file.
+    obj_id = seafserv_rpc.web_query_access_token(raw_path.split('/files/')[1][:5]).obj_id
+    if not obj_id:
+        # Should nerver reach here.
+        data = json.dumps([{'error': '缺少obj_id'}])
+        return HttpResponse(data, status=500, content_type=content_type)
+    try:
+        uo = UuidOjbidMap.objects.get(obj_id=obj_id)
+    except UuidOjbidMap.DoesNotExist:
+        uo = None
+    if uo:
+        data = json.dumps([{'uuid': uo.uuid, 'obj_id': obj_id}])
+        return HttpResponse(data, status=200, content_type=content_type)
+        
+    curl = "https://crocodoc.com/api/v2/document/upload"
+    data = {'token': CROCODOC_API_TOKEN,
+            'url': raw_path}
+    try:
+        f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
+    except urllib2.URLError, e:
+        data = json.dumps([{'error': e.msg}])
+        return HttpResponse(data, status=500, content_type=content_type)
+    else:
+        ret = f.read()
+        ret_dict = json.loads(ret)
+        if ret_dict.has_key('error'):
+            data = json.dumps([{'error': ret_dict['error']}])
+            return HttpResponse(data, status=500, content_type=content_type)
+        else:
+            data = json.dumps([{'uuid': ret_dict['uuid'], 'obj_id': obj_id}])
+            return HttpResponse(data, status=200, content_type=content_type)
+    
+def crocodoc_status(request):
+    """
+    Handle ajax request to get status of the document from crocodoc.com.
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    uuids = request.GET.get('uuids', '')
+    obj_id = request.GET.get('obj_id', '')
+    
+    curl = 'https://crocodoc.com/api/v2/document/status?token=%s&uuids=%s' % (
+        CROCODOC_API_TOKEN, uuids
+        )
+    
+    f = urllib2.urlopen(url=curl)
+    ret = f.read()
+    ret_list = json.loads(ret)
+    ret_dict = ret_list[0]
+    if ret_dict.has_key('error'):
+        # Delete obj_id-uuid in db
+        UuidOjbidMap.objects.filter(obj_id=obj_id).delete()
+        
+        data = json.dumps([{'error': '文档转换出错：' + ret_dict['error']}])
+        return HttpResponse(data, status=500, content_type=content_type)
+        
+    viewable = ret_dict['viewable'] # TODO: this may used in large file preview
+    status = ret_dict['status']
+    if status == 'QUEUED':
+        data = json.dumps([{'status': status}])
+        return HttpResponse(data, status=200, content_type=content_type)
+    elif status == 'PROCESSING':
+        data = json.dumps([{'status': status}])
+        return HttpResponse(data, status=200, content_type=content_type)
+    elif status == 'DONE':
+        # Cache obj_id and uuid in db
+        uo = UuidOjbidMap(uuid=uuids, obj_id=obj_id)
+        try:
+            uo.save()
+        except IntegrityError, e:
+            pass
+        
+        data = json.dumps([{'status': status}])
+        return HttpResponse(data, status=200, content_type=content_type)
+    elif status == 'ERROR':
+        # Delete obj_id-uuid in db
+        UuidOjbidMap.objects.filter(obj_id=obj_id).delete()
+
+        err_msg = '文档转换出错:' + ret_dict['error'] if ret_dict.has_key('error') \
+            else '文档转换出错'
+        data = json.dumps([{'error': err_msg}])
+        return HttpResponse(data, status=500, content_type=content_type)
+
+def crocodoc_session(request):
+    """
+    Handle ajax reqeust to create session.
+    Session expires 60 minutes after it's generated.
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    uuid = request.GET.get('uuid', '')
+    
+    curl = 'https://crocodoc.com/api/v2/session/create'
+    data = {'token': CROCODOC_API_TOKEN,
+            'uuid': uuid,
+            'editable': 'true',
+            'user': '1337,Peter', # TODO: Fake user, should be changed
+            'downloadable': 'true',
+            }
+    f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
+    ret = f.read()
+    ret_dict = json.loads(ret)
+    session = ret_dict['session']
+    doc_src = 'https://crocodoc.com/view/%s' % session
+
+    data = json.dumps([{'doc_src': doc_src}])
     return HttpResponse(data, status=200, content_type=content_type)

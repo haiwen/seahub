@@ -1,4 +1,4 @@
-    if (filetype == 'Document') {
+    if (filetype == 'Text') {
         $.ajax({
             url: url,
             dataType: 'json',
@@ -18,6 +18,82 @@
         $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
     } else if (filetype == 'SVG') {
         $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" width="940" id="svg-view"></iframe>');
-    } else {
+    } else if (filetype == 'Document' ) {
+        var tid= 0;
+        var uuid = '';
+        var obj_id = '';
+        function create_session() {
+            $.ajax({
+                url: '{{ SITE_ROOT }}crocodoc/session/?uuid=' + uuid,
+                dataType: 'json',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                if (data.length > 0) {
+                var doc_src = data[0]['doc_src'];
+                var iframe_src = '<iframe src="' + doc_src + '" frameborder="0" width="940" id="svg-view"></iframe>' 
+                $('#file-view').html(iframe_src);
+                }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                }
+           });            
+        }
+        function abortTimer () {
+            clearTimeout(tid);
+        }
+        function check_status () {
+            $.ajax({
+                url: '{{ SITE_ROOT }}crocodoc/status/?uuids='+ uuid + '&obj_id=' + obj_id,
+                dataType: 'json',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    if (data.length > 0) {
+                    var status = data[0]['status']
+                    if (status == 'QUEUED') {
+                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                        tid = setTimeout(check_status, 1000);                                     } else if (status == 'PROCESSING') {
+                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                        tid = setTimeout(check_status, 1000);                                     } else if (status == 'DONE') {
+                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
+                        abortTimer();
+                        create_session();
+                    } else {
+                        abortTimer();
+                    }
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                abortTimer();
+                return false;
+                }
+            });
+        }
+        $.ajax({
+            url: '{{ SITE_ROOT }}crocodoc/upload/?raw_path={{ raw_path|urlencode }}',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data.length > 0) {
+                uuid = data[0]['uuid'];
+                obj_id = data[0]['obj_id'];
+                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>');
+
+                tid = setTimeout(check_status, 1000);
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            }
+        });
+    }
+    else {
         $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
     }

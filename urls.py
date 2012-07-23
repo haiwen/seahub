@@ -13,7 +13,8 @@ from seahub.views import root, peers, myhome, \
     repo_upload_file, file_upload_progress, file_upload_progress_page, \
     get_subdir, file_move, repo_new_dir, repo_rename_file, validate_filename, \
     repo_create, repo_update_file, file_revisions, \
-    get_shared_link, view_shared_file, remove_shared_link, send_shared_link
+    get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
+    crocodoc_upload, crocodoc_status, crocodoc_session
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 from seahub.group.views import group_list
@@ -68,7 +69,7 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
     (r'^repo/(?P<repo_id>[^/]+)/file/get/$', repo_file_get),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
-                       
+
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
     (r'^file/move/$', file_move),                       
@@ -81,6 +82,11 @@ urlpatterns = patterns('',
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
+
+    ### Document previewd ###
+    (r'^crocodoc/upload/$', crocodoc_upload),                       
+    (r'^crocodoc/status/$', crocodoc_status),                       
+    (r'^crocodoc/session/$', crocodoc_session),                       
                        
     ### Apps ###                       
     (r'^avatar/', include('avatar.urls')),
