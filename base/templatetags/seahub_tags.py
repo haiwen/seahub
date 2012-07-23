@@ -128,7 +128,8 @@ def short_email(email):
     """
     Return short email which is the string before '@'.
     """
-    if email.find('@') <= 0:
+    idx = email.find('@')
+    if idx <= 0:
         return email
     else:
-        return email[:email.find('@')]
+        return email[:idx]
