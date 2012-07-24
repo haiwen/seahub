@@ -172,8 +172,7 @@ def render_group_info(request, group_id, form):
 
     group_msgs = msgs_plus_one[:per_page]
     for msg in group_msgs:
-        msg.reply_list = MessageReply.objects.filter(reply_to=msg)
-        msg.reply_cnt = len(msg.reply_list)
+        msg.reply_cnt = len(MessageReply.objects.filter(reply_to=msg))
 
     return render_to_response("group/group_info.html", {
             "managers": managers,

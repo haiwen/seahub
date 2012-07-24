@@ -37,6 +37,4 @@ def grpmsg_reply_added_cb(sender, **kwargs):
                              msg_type='grpmsg_reply',
                              detail=msg_id)
         n.save()
-    
-    
-    
+

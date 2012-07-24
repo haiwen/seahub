@@ -644,6 +644,9 @@ table img {
 .reply-form .text-input {
     width:82%;
 }
+.at-in-msg {
+    color:#e83;
+}
 
 /*file upload*/
 .upload-file-panel {

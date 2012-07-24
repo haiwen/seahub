@@ -102,7 +102,7 @@
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
             </div>
             <div class="msg-bd">
-                <p>{{ msg.message|urlize|url_target_blank }}</p>
+                <p>{{ msg.message|urlize|url_target_blank|find_at }}</p>
                 {% if msg.reply_cnt == 0 %}
                 <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
                 {% else %}
