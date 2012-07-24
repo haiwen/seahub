@@ -2115,7 +2115,7 @@ def crocodoc_session(request):
     data = {'token': CROCODOC_API_TOKEN,
             'uuid': uuid,
             'editable': 'true',
-            'user': '1337,Peter', # TODO: Fake user, should be changed
+            'user': '1337,备注',
             'downloadable': 'true',
             }
     f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
