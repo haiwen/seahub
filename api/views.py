@@ -4,7 +4,7 @@ import sys
 import os
 import stat
 import simplejson as json
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseServerError
 
 from auth.decorators import login_required, api_login_required
 
@@ -15,7 +15,6 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_re
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
-    calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1
 
 from seahub.views import access_to_repo, validate_owner
@@ -34,6 +33,31 @@ from django.views.decorators.csrf import csrf_exempt
 
 json_content_type = 'application/json; charset=utf-8'
 
+def calculate_repo_info(repo_list, username):
+    """
+    Get some info for repo.
+
+    """
+    for repo in repo_list:
+        try:
+            commit = get_commits(repo.id, 0, 1)[0]
+            repo.latest_modify = commit.ctime
+            repo.commit = commit.id
+            repo.size = seafserv_threaded_rpc.server_repo_size(repo.id),
+            password_need = False
+            if repo.props.encrypted:
+                try:
+                    ret = seafserv_rpc.is_passwd_set(repo.id, username)
+                    if ret != 1:
+                        password_need = True
+                except SearpcErroe, e:
+                    pass
+            repo.password_need = password_need
+        except:
+            repo.latest_modify = None
+            repo.commit = None
+            repo.size = -1
+            repo.password_need = None
 
 def api_error(request, code='404', msg=None):
     err_resp = {'error_msg':msg}
@@ -61,16 +85,16 @@ def get_dir_entrys_by_path(reqquest, commit, path):
         except SearpcError, e:
             return api_error(request, "404", e.msg)
         for dirent in dirs:
-            is_dir = False
+            dtype = "file"
             entry={}
             if stat.S_ISDIR(dirent.props.mode):
-                is_dir = True
+                dtype = "dir"
             else:
                 try:
-                    entry["size"] = seafserv_rpc.get_file_size(dirent.obj_id)
+                    entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
                 except:
                     entry["size"]=0
-            entry["is_dir"]=is_dir
+            entry["type"]=dtype
             entry["name"]=dirent.obj_name
             entry["id"]=dirent.obj_id
             dentrys.append(entry)
@@ -84,16 +108,16 @@ def get_dir_entrys_by_id(reqquest, dir_id):
     except SearpcError, e:
         return api_error(request, "404", e.msg)
     for dirent in dirs:
-        is_dir = False
+        dtype = "file"
         entry={}
         if stat.S_ISDIR(dirent.props.mode):
-            is_dir = True
+            dtype = "dir"
         else:
             try:
-                entry["size"] = seafserv_rpc.get_file_size(dirent.obj_id)
-            except:
+                entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+            except Exception, e:
                 entry["size"]=0
-        entry["is_dir"]=is_dir
+        entry["type"]=dtype
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
         dentrys.append(entry)
@@ -109,7 +133,6 @@ def api_login(request):
 
     if form.is_valid():
         auth_login(request, form.get_user())
-        print ">>",request.session.session_key
         return HttpResponse(json.dumps(request.session.session_key), status=200,
             content_type=json_content_type)
     else:
@@ -132,32 +155,40 @@ class ReposView(ResponseMixin, View):
         email = request.user.username
 
         owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
-        calculate_repo_last_modify(owned_repos)
+        calculate_repo_info (owned_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
         n_repos = seafserv_threaded_rpc.list_share_repos(email,
                                                          'to_email', -1, -1)
-        calculate_repo_last_modify(owned_repos)
+        calculate_repo_info (n_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
         repos_json = []
         for r in owned_repos:
             repo = {
+                "type":"repo",
                 "id":r.props.id,
-                "owner":"self",
+                "owner":email,
                 "name":r.props.name,
                 "desc":r.props.desc,
                 "mtime":r.lastest_modify,
+                "commit":r.commit,
+                "size":r.size,
+                "password_need":r.password_need,
                 }
             repos_json.append(repo)
 
         for r in n_repos:
             repo = {
+                "type":"repo",
                 "id":r.props.id,
                 "owner":r.props.shared_email,
                 "name":r.props.name,
                 "desc":r.props.desc,
                 "mtime":r.lastest_modify,
+                "commit":r.commit,
+                "size":r.size,
+                "password_need":r.password_need,
                 }
             repos_json.append(repo)
 
@@ -190,12 +221,12 @@ class RepoView(ResponseMixin, View):
             repo.latest_modify = None
 
         # query whether set password if repo is encrypted
-        password_set = False
+        password_need = False
         if repo.props.encrypted:
             try:
                 ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
+                if ret != 1:
+                    password_need = True
             except SearpcError, e:
                 return api_error(request, '403', e.msg)
 
@@ -204,12 +235,13 @@ class RepoView(ResponseMixin, View):
         current_commit = get_commits(repo_id, 0, 1)[0]
 
         repo_json = {
+            "type":"repo",
             "id":repo.props.id,
             "owner":owner,
             "name":repo.props.name,
             "desc":repo.props.desc,
             "mtime":repo.lastest_modify,
-            "password_set":password_set,
+            "password_need":password_need,
             "size":repo_size,
             "commit":current_commit.id,
             }
@@ -310,7 +342,7 @@ class RepoFileView(ResponseMixin, View):
                                                                              file_name, op,
                                                                              token,
                                                                              request.user.username)
-
-        return HttpResponseRedirect(redirect_url)
+        response = Response(200, redirect_url)
+        return self.render(response)
 
 
