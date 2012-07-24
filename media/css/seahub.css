@@ -719,6 +719,9 @@ table img {
 #svg-view {
     min-height:500px;/*for ff*/
 }
+#doc-view {
+    min-height:800px;
+}
 #pdf {
     border:1px solid #cbcbcb;
 }

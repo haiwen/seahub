@@ -29,15 +29,13 @@
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
-                if (data.length > 0) {
-                var doc_src = data[0]['doc_src'];
-                var iframe_src = '<iframe src="' + doc_src + '" frameborder="0" width="940" id="svg-view"></iframe>' 
-                $('#file-view').html(iframe_src);
-                }
+                    if (data.length > 0) {
+                        $('#file-view').html('<iframe src="' + data[0]['doc_src'] + '" frameborder="0" width="940" id="doc-view"></iframe>');
+                    }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                    var jsonVal = jQuery.parseJSON(xhr.responseText);
+                    $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
                 }
            });            
         }
@@ -69,10 +67,10 @@
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
-                abortTimer();
-                return false;
+                    var jsonVal = jQuery.parseJSON(xhr.responseText);
+                    $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                    abortTimer();
+                    return false;
                 }
             });
         }
@@ -83,11 +81,10 @@
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data.length > 0) {
-                uuid = data[0]['uuid'];
-                obj_id = data[0]['obj_id'];
-                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>');
-
-                tid = setTimeout(check_status, 1000);
+                    uuid = data[0]['uuid'];
+                    obj_id = data[0]['obj_id'];
+                    $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>');
+                    tid = setTimeout(check_status, 1000);
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -98,7 +95,7 @@
     } else if (filetype == 'PDF') {
         $.getScript('{{MEDIA_URL}}js/pdf.js', function() {
         PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-        $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center', 'padding':'3px'});
+        $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center', 'padding':'3px'});
         var seahub_getPage = function (pdf, page_number) {
             pdf.getPage(page_number).then(function(page) {
                 var scale = 1.5;
@@ -118,6 +115,7 @@
             $('#page-nums').html(pdf.numPages);
             $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
             seahub_getPage(pdf, 1);
+            $('#pdf-loading').addClass('hide');
             $('#pdf-op-bar, #pdf-view').removeClass('vh');
 
             $('#page-number').change(function() {
