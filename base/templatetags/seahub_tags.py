@@ -125,7 +125,7 @@ url_target_blank.is_safe=True
 
 @register.filter(name='find_at')
 def find_at(text):
-    return re.sub('(@\S+)', r'<span class="at-in-msg">\1</span>', text)
+    return re.sub('(@\w+)', r'<span class="at-in-msg">\1</span>', text)
 find_at.is_safe=True
 
 @register.filter(name='short_email')
