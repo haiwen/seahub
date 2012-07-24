@@ -98,7 +98,7 @@
     } else if (filetype == 'PDF') {
         $.getScript('{{MEDIA_URL}}js/pdf.js', function() {
         PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-        $('#file-view').html('<div id="pdf-op-bar" class="vh"><button id="prev">Prev</button> <button id="next">Next</button><label for="page-number">Page:</label><input type="number" id="page-number" value="1" min="1"></input> of <span id="page-nums"></span><button id="full-screen">Full Screen</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas>').css({'text-align':'center', 'padding':'30px 0'});
+        $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center', 'padding':'3px'});
         var seahub_getPage = function (pdf, page_number) {
             pdf.getPage(page_number).then(function(page) {
                 var scale = 1.5;

@@ -708,15 +708,27 @@ table img {
 }
 #docu-view,
 #svg-view,
-#pdf-view {
+#pdf {
     background:#fff;
 }
 #svg-view {
     min-height:500px;/*for ff*/
 }
-#pdf-op-bar button,
-#pdf-op-bar label {
+#pdf {
+    border:1px solid #cbcbcb;
+}
+#pdf-op-bar {
+    padding:10px 0 7px;
+    margin-bottom:3px;
+    border-bottom:1px solid #ddd;
+}
+#pdf-op-bar button {
+    color:#000;
+    border-color:#aaa;
     margin:0 5px;
+}
+#pdf-page {
+    margin:0 25px 0 15px;
 }
 #page-number {
     padding:0 3px;
