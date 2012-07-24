@@ -28,6 +28,12 @@ input::-webkit-inner-spin-button {/*for input type="number" in chrome: to hide u
     -webkit-appearance: none;
     margin: 0;
 }
+input::-moz-focus-inner,
+button::-moz-focus-inner {/*Remove button padding in FF*/
+    border: 0;
+    padding: 0;
+}
+
 input[type=submit],
 input.submit,
 button { 
@@ -397,20 +403,19 @@ table img {
     margin-bottom:-5px;
 }
 .repo-op {
-    margin-top:12px;
+    margin-top:3px;
 }
-.repo-op a {
-    float:left;
-    font-weight: normal;
-    background:#fff scroll no-repeat left 50%;
+.repo-op button {
+    height:25px;
+    background:#f5f5f5 scroll no-repeat 3px 48%;
 }
-.repo-op .upload-file {
-    padding-left:16px;
+#upload-file {
+    padding-left:19px;
     background-image:url('../img/upload.png');
-    margin-right:10px;
+    margin-right:5px;
 }
 #add-new-dir {
-    padding-left:20px;
+    padding-left:23px;
     background-image:url('../img/folder-add.png');
 }
 .more-op {

@@ -106,8 +106,8 @@
               </p>
               {% if not view_history and request.user.is_authenticated %}
               <div class="repo-op fright">
-                  <a href="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" class="upload-file">上传</a>
-                  <a id="add-new-dir" href="#">新建目录</a>
+                  <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">上传</button>
+                  <button id="add-new-dir" class="op-btn">新建目录</button>
               </div>
               {% endif %}
           </div>
@@ -220,10 +220,22 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 <script type="text/javascript">
+$('#upload-file').click(function () {
+    location.href = $(this).attr('data');
+});
+
 $('#add-new-dir').click(function () {
     $('#add-new-dir-form').modal({appendTo:'#main'});
-    return false;
 });
+
+$('#upload-file, #add-new-dir').hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
 
 $("table tr:gt(0)").hover(
     function() {
