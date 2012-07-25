@@ -30,8 +30,13 @@ from auth.forms import AuthenticationForm
 from auth import login as auth_login
 from django.views.decorators.csrf import csrf_exempt
 
+from mime import MIME_MAP
 
 json_content_type = 'application/json; charset=utf-8'
+
+def get_file_mime(name):
+    sufix = os.path.splitext(name)[1][1:]
+    return MIME_MAP[sufix]
 
 def calculate_repo_info(repo_list, username):
     """
@@ -90,6 +95,10 @@ def get_dir_entrys_by_path(reqquest, commit, path):
             if stat.S_ISDIR(dirent.props.mode):
                 dtype = "dir"
             else:
+                mime = get_file_mime (dirent.obj_name)
+                if mime:
+                    entry["mime"] = mime
+
                 try:
                     entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
                 except:
@@ -113,6 +122,9 @@ def get_dir_entrys_by_id(reqquest, dir_id):
         if stat.S_ISDIR(dirent.props.mode):
             dtype = "dir"
         else:
+            mime = get_file_mime (dirent.obj_name)
+            if mime:
+                entry["mime"] = mime
             try:
                 entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
             except Exception, e:
