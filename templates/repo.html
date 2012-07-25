@@ -89,8 +89,7 @@
           {% if not can_access %}
           <p class="access-notice">无法在线查看该同步目录。</p>
           {% else %}
-          <div class="repo-top-bar w100 ovhd">
-              <p class="path fleft">
+              <p class="path">
               当前路径：
               {% for name, link in zipped %}
               {% if not forloop.last %}
@@ -105,12 +104,11 @@
               {% endfor %}
               </p>
               {% if not view_history and request.user.is_authenticated %}
-              <div class="repo-op fright">
+              <div class="repo-op">
                   <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">上传</button>
                   <button id="add-new-dir" class="op-btn">新建目录</button>
               </div>
               {% endif %}
-          </div>
 
           <table>
             <tr>

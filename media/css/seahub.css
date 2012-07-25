@@ -399,12 +399,6 @@ table img {
 }
 
 /*repo page*/
-.repo-top-bar {
-    margin-bottom:-5px;
-}
-.repo-op {
-    margin-top:3px;
-}
 .repo-op button {
     height:25px;
     background:#f5f5f5 scroll no-repeat 3px 48%;
