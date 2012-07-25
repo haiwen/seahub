@@ -36,7 +36,9 @@ json_content_type = 'application/json; charset=utf-8'
 
 def get_file_mime(name):
     sufix = os.path.splitext(name)[1][1:]
-    return MIME_MAP[sufix]
+    if sufix:
+        return MIME_MAP[sufix]
+    return None
 
 def calculate_repo_info(repo_list, username):
     """
@@ -47,7 +49,7 @@ def calculate_repo_info(repo_list, username):
         try:
             commit = get_commits(repo.id, 0, 1)[0]
             repo.latest_modify = commit.ctime
-            repo.commit = commit.id
+            repo.root = commit.root_id
             repo.size = seafserv_threaded_rpc.server_repo_size(repo.id),
             password_need = False
             if repo.props.encrypted:
@@ -184,7 +186,7 @@ class ReposView(ResponseMixin, View):
                 "name":r.props.name,
                 "desc":r.props.desc,
                 "mtime":r.lastest_modify,
-                "commit":r.commit,
+                "root":r.root,
                 "size":r.size,
                 "password_need":r.password_need,
                 }
@@ -198,7 +200,7 @@ class ReposView(ResponseMixin, View):
                 "name":r.props.name,
                 "desc":r.props.desc,
                 "mtime":r.lastest_modify,
-                "commit":r.commit,
+                "root":r.root,
                 "size":r.size,
                 "password_need":r.password_need,
                 }
@@ -255,7 +257,7 @@ class RepoView(ResponseMixin, View):
             "mtime":repo.lastest_modify,
             "password_need":password_need,
             "size":repo_size,
-            "commit":current_commit.id,
+            "root":current_commit.root_id,
             }
 
         response = Response(200, repo_json)
