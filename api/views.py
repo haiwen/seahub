@@ -50,7 +50,9 @@ def calculate_repo_info(repo_list, username):
             commit = get_commits(repo.id, 0, 1)[0]
             repo.latest_modify = commit.ctime
             repo.root = commit.root_id
-            repo.size = seafserv_threaded_rpc.server_repo_size(repo.id),
+            repo.size = seafserv_threaded_rpc.server_repo_size(repo.id)
+            if not repo.size :
+                repo.size = 0;
             password_need = False
             if repo.props.encrypted:
                 try:
@@ -79,6 +81,13 @@ def can_access_repo(request, repo_id):
     # check whether user can view repo
     return access_to_repo(request, repo_id, repo_ap)
 
+def get_file_size (id):
+    size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+    if size:
+        return size
+    else:
+        return 0
+
 
 def get_dir_entrys_by_path(reqquest, commit, path):
     dentrys = []
@@ -102,7 +111,7 @@ def get_dir_entrys_by_path(reqquest, commit, path):
                     entry["mime"] = mime
 
                 try:
-                    entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+                    entry["size"] = get_file_size(dirent.obj_id)
                 except:
                     entry["size"]=0
             entry["type"]=dtype
@@ -128,7 +137,7 @@ def get_dir_entrys_by_id(reqquest, dir_id):
             if mime:
                 entry["mime"] = mime
             try:
-                entry["size"] = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+                entry["size"] = get_file_size(dirent.obj_id)
             except Exception, e:
                 entry["size"]=0
         entry["type"]=dtype
@@ -247,7 +256,6 @@ class RepoView(ResponseMixin, View):
         # query repo infomation
         repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
-
         repo_json = {
             "type":"repo",
             "id":repo.props.id,
