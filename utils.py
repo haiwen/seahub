@@ -240,7 +240,7 @@ def valid_previewed_file(filename):
     
     """
     fileExt = os.path.splitext(filename)[1][1:]
-    return FILEEXT_TYPE_MAP.get(fileExt) or 'Unkown'
+    return FILEEXT_TYPE_MAP.get(fileExt) or 'Unknown'
 
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
