@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseServerError
 
 from auth.decorators import login_required, api_login_required
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_repos, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids, check_group_staff

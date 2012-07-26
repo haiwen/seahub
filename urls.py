@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
-from seahub.views import root, peers, myhome, \
+from seahub.views import root, myhome, \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
     org_seafadmin, org_useradmin, org_group_admin, org_remove, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \

@@ -27,7 +27,7 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
 from share.models import FileShare
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_users, get_repos, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids, check_group_staff
@@ -51,26 +51,6 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, CROCODOC_API_TOKEN
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
 
-def peers(request):
-    peer_type = request.REQUEST.get('type', 'all')
-    peer_ids = ccnet_rpc.list_peers()
-    peers = []
-    for peer_id in peer_ids.split("\n"):
-        # too handle the ending '\n'
-        if peer_id == '':
-            continue
-        peer = ccnet_rpc.get_peer(peer_id)
-        if peer_type == 'all':
-            peers.append(peer)
-        if peer_type == 'mypeer':
-            if peer.props.role_list.find('MyPeer') != -1:
-                peers.append(peer)
-
-    users = get_users()
-    return render_to_response('peers.html', { 
-            'peers': peers,
-            'users': users,
-            }, context_instance=RequestContext(request))
 
 def validate_owner(request, repo_id):
     """
