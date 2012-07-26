@@ -150,6 +150,6 @@
       });
       });
 {% endif %}
-{% if filetype != 'Text' and filetype != 'Image' and filetype != 'SVG' and filetype != 'Document' and filetype != 'PDF' %}
+{% if filetype == 'Unkown' %}
         $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
 {% endif %}
