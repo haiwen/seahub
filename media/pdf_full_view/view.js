@@ -781,7 +781,7 @@ var PDFView = {
     // 2 if last scrolled up page before the visible pages
     var numVisible = visibleViews.length;
     if (numVisible === 0) {
-      info('No visible views.');
+      //info('No visible views.');
       return false;
     }
     for (var i = 0; i < numVisible; ++i) {
