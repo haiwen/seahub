@@ -1,0 +1,20 @@
+{% extends base_template %}
+{% block main_panel %}
+<div class="narrow-panel">
+    <h2>创建企业帐号</h2>
+    <form action="" method="post">
+        <label for="id_org_name">企业名称：</label>
+        {{ form.org_name}}
+        <lable for="id_url_prefix">域名前缀：</label>
+        {{ form.url_prefix }}
+        <p class="error hide"></p>
+        {{ form.url_prefix.errors }}
+        <input type="submit" value="提交" class="submit" />
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}

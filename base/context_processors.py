@@ -18,3 +18,4 @@ def base(request):
         'seahub_title': settings.SEAHUB_TITLE,
         'account_type': settings.ACCOUNT_TYPE,
         }
+

@@ -2,12 +2,13 @@
 {% load avatar_tags %}
 
 {% block left_panel %}
-<!--
+
 <h3>操作</h3>
 <ul class="with-bg">
-  <li><a href="{{ SITE_ROOT }}profile/list_user/">所有已登录的计算机</a></li>
+  <li><a href="{% url organizations.views.create_org %}">创建企业帐号</a></li>
+  <li><a href="{% url organizations.views.change_account %}">切换帐号</a></li>
 </ul>
--->
+
 {% endblock %}
 
 {% block right_panel %}

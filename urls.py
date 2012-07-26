@@ -97,6 +97,7 @@ urlpatterns = patterns('',
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
     url(r'^groups/', group_list, name='group_list'),
+    (r'^organizations/', include('seahub.organizations.urls')),
     (r'^profile/', include('seahub.profile.urls')),
 
     ### SeaHub admin ###                       
@@ -105,10 +106,6 @@ urlpatterns = patterns('',
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
 
-    ### Org admin ###                       
-    (r'^seafadmin/$', org_seafadmin),
-    url(r'^useradmin/$', org_useradmin, name='org_useradmin'),
-    url(r'^groupadmin/$', org_group_admin, name='org_group_admin'),
 )
 
 if settings.DEBUG:

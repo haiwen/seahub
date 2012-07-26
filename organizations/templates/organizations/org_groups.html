@@ -1,0 +1,52 @@
+{% extends "org_base.html" %}
+{% load seahub_tags group_avatar_tags %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+    <li><a id="group-add" href="#">添加小组</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+
+<h3>{{ org.org_name }} 的小组</h3>
+{% if groups %}
+<ul class="group-list w100 ovhd">
+    {% for group in groups %}
+    <li class="group fleft">
+    <div class="pic fleft">
+        <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
+            <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
+        </a>
+    </div>
+    <div class="txt fright">
+        <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
+        <p><span class="item-name">创建者：</span>{{ group.props.creator_name }}</p>
+        <p><span class="item-name">创建时间：</span>{{ group.props.timestamp|tsstr_sec }}</p>
+    </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
+<form id="group-add-form" action="" method="post" name="group-add-form" class="hide">
+    <label>小组名称：</label><br />
+    <input id="group_name" name="group_name" value="" /><br />
+    <input type="submit" value="提交" />
+</form>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$("#group-add").click(function() {
+    $("#group-add-form").modal({appendTo: "#main"});
+	return false;
+});
+
+</script>
+{% endblock %}

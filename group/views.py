@@ -64,8 +64,11 @@ def group_remove(request, group_id):
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
 
         if request.user.org:
-            ccnet_threaded_rpc.remove_org_group(request.user.org.org_id,
-                                       group_id_int)
+            org_id = request.user.org['org_id']
+            url_prefix = request.user.org['url_prefix']
+            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
+            return HttpResponseRedirect(reverse('org_groups',
+                                                args=[url_prefix]))
     except SearpcError, e:
         return go_error(request, e.msg)
 

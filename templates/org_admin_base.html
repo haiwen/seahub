@@ -4,13 +4,13 @@
 <ul class="nav">
     {% if request.user.org.is_staff %}
     <li>
-        <a href="{{ SITE_ROOT }}seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
+        <a href="{% url org_seafadmin request.user.org.url_prefix %}" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+        <a href="{% url org_useradmin request.user.org.url_prefix %}" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
+        <a href="{% url org_groupadmin request.user.org.url_prefix %}" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
     </li>
     {% endif %}
 

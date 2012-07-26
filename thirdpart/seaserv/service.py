@@ -75,8 +75,8 @@ def get_ccnetuser(username=None, userid=None):
         return None
 
     # Check whether is business account
-    org = ccnet_threaded_rpc.get_org_by_user(emailuser.email)
-    emailuser.org = org
+    # orgs = ccnet_threaded_rpc.get_orgs_by_user(emailuser.email)
+    # emailuser.org = org
     
     # And convert to ccnetuser
     from seahub.base.accounts import convert_to_ccnetuser
@@ -108,7 +108,32 @@ def get_group(group_id):
     group.maintainers = group.props.maintainers.split(" ")
     return group
 
+def create_org(org_name, url_prefix, username):
+    ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
 
+def get_orgs_by_user(user):
+    try:
+        orgs = ccnet_threaded_rpc.get_orgs_by_user(user)
+    except SearpcError:
+        orgs = []
+
+    return orgs
+
+def get_org_by_url_prefix(url_prefix):
+    try:
+        org = ccnet_threaded_rpc.get_org_by_url_prefix(url_prefix)
+    except SearpcError:
+        org = None
+
+    return org
+
+def get_user_current_org(user, url_prefix):
+    orgs = get_orgs_by_user(user)
+    for org in orgs:
+        if org.url_prefix == url_prefix:
+            return org
+    return None
+    
 def send_command(command):
     client = pool.get_client()
     client.send_cmd(command)
@@ -126,6 +151,16 @@ def get_repos():
     """
     return seafserv_threaded_rpc.get_repo_list("", 100)
 
+def get_org_repos(org_id, start, limit):
+    """
+    """
+    try:
+        repos = seafserv_threaded_rpc.get_org_repo_list(org_id, start, limit)
+    except SearpcError:
+        repos = []
+
+    return repos
+    
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 
@@ -178,3 +213,4 @@ def check_group_staff(group_id_int, user_or_username):
         user_or_username = user_or_username.username
         
     return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)
+

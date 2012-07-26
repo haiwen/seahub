@@ -37,6 +37,7 @@ from seahub.base.accounts import CcnetUser
 from seahub.base.models import UuidOjbidMap
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
+from seahub.organizations.utils import clear_org_ctx
 from forms import AddUserForm, FileLinkShareForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
@@ -723,6 +724,10 @@ def myhome(request):
     else:
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
+
+    # clear org context in cache and set request.user.org to None
+    clear_org_ctx(request)
+    
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -1184,7 +1189,7 @@ def sys_seafadmin(request):
         context_instance=RequestContext(request))
 
 @login_required
-def org_seafadmin(request):
+def org_seafadmin(request, url_prefix):
     if not request.user.org:
         raise Http404
 
@@ -1196,7 +1201,7 @@ def org_seafadmin(request):
         current_page = 1
         per_page = 25
 
-    repos_all = seafserv_threaded_rpc.get_org_repo_list(request.user.org.org_id,
+    repos_all = seafserv_threaded_rpc.get_org_repo_list(request.user.org['org_id'],
                                                         per_page * (current_page -1),
                                                         per_page + 1)
         
@@ -1244,11 +1249,11 @@ def sys_useradmin(request):
         context_instance=RequestContext(request))
 
 @login_required
-def org_useradmin(request):
-    if not request.user.org.is_staff:
+def org_useradmin(request, url_prefix):
+    if not request.user.org['is_staff']:
         raise Http404
 
-    users = ccnet_threaded_rpc.get_org_emailusers(request.user.org.url_prefix,
+    users = ccnet_threaded_rpc.get_org_emailusers(request.user.org['url_prefix'],
                                          0, sys.maxint)
         
     for user in users:
@@ -1383,7 +1388,7 @@ def send_user_add_mail(request, email, password):
 def user_add(request):
     """Add a user"""
 
-    if not request.user.is_staff and not request.user.org.is_staff:
+    if not request.user.is_staff and not request.user.org['is_staff']:
         raise Http404
 
     base_template = 'org_admin_base.html' if request.user.org else 'admin_base.html'
@@ -1399,7 +1404,7 @@ def user_add(request):
             ccnetuser.save()
             
             if request.user.org:
-                org_id = request.user.org.org_id
+                org_id = request.user.org['org_id']
                 ccnet_threaded_rpc.add_org_user(org_id, email, 0)
                 if hasattr(settings, 'EMAIL_HOST'):
                     send_user_add_mail(request, email, password)
@@ -1469,8 +1474,8 @@ def sys_org_admin(request):
             'orgs': orgs,
             }, context_instance=RequestContext(request))
     
-def org_group_admin(request):
-    if not request.user.is_staff and not request.user.org.is_staff:
+def org_group_admin(request, url_prefix):
+    if not request.user.is_staff and not request.user.org['is_staff']:
         raise Http404
 
     # Make sure page request is an int. If not, deliver first page.
@@ -1481,7 +1486,7 @@ def org_group_admin(request):
         current_page = 1
         per_page = 25
 
-    groups_plus_one = ccnet_threaded_rpc.get_org_groups (request.user.org.org_id,
+    groups_plus_one = ccnet_threaded_rpc.get_org_groups (request.user.org['org_id'],
                                                 per_page * (current_page -1),
                                                 per_page +1)
         

@@ -69,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.subdomain.middleware.SubdomainMiddleware',
+    'seahub.organizations.middleware.OrganizationMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -93,6 +94,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'seahub.base.context_processors.base',
+    'seahub.organizations.context_processors.org',
 )
 
 
@@ -105,11 +107,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'registration',
     'avatar',
-    'seahub.notifications',
     'seahub.base',
-    'seahub.profile',
     'seahub.contacts',
-    'seahub.group',
+    'seahub.group',    
+    'seahub.notifications',
+    'seahub.organizations',
+    'seahub.profile',
     'seahub.share',
     'seahub.subdomain',
     'seahub.api',
