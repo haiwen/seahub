@@ -24,10 +24,15 @@
 
     <div id="top-bar">
         <div class="top-bar">
-            <div class="top-bar-in w100 ovhd">
-                {% if request.user.is_staff or request.user.org.is_staff %}
+            <div class="top-bar-in">
                 <div class="fleft">
-                  {% if request.user.is_staff %}
+                    <a href="#" id="team-account" data="no-popup">团体帐号<span class="bg"></span></a>
+                    <ul class="hide" id="team-list">
+                        <li><a href="#">xx</a></li>
+                        <li><a href="#">xxx</a></li>
+                    </ul>
+                {% if not request.user.is_staff or request.user.org.is_staff %}
+                  {% if not request.user.is_staff %}
                   <a href="{{ SITE_ROOT }}sys/seafadmin/"
                   {% else %}
                   <a href="{% url org_seafadmin request.user.org.url_prefix %}"
@@ -123,6 +128,19 @@
 <!--script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script-->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
+<script type="text/javascript">
+    $('#team-account').click(function() {
+        if ($(this).attr('data') == 'no-popup') {
+            $(this).parent().css('position', 'relative');
+            $('#team-list').removeClass('hide');
+            $(this).attr('data', 'has-popup');
+        } else {
+            $('#team-list').addClass('hide');
+            $(this).attr('data', 'no-popup');
+        }
+        return false;
+    }).focus(function() { $(this).blur(); });    
+</script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>

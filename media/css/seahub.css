@@ -172,17 +172,24 @@ table img {
 
 /* top-bar */
 #top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
-.top-bar { height:20px; color:#fff; text-align:right; font-weight:bold; background:#606; }
-.top-bar a { color:#ddd; font-weight:normal; }
-.top-bar a.avatar-link {
+.top-bar { height:20px; color:#fff; font-weight:bold; background:#606; }
+.top-bar a {
+    color:#ddd;
+    font-weight:normal;
     display:inline-block;
+    height:20px;
+    padding:0 2px;
+}
+.top-bar a.avatar-link {
     height:16px;
 }
 .top-bar .avatar {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 }
-.top-bar a.cur { text-decoration:underline; }
+.top-bar a.cur {
+    background:#000;
+}
 .top-bar a,
 .top-bar span {
     vertical-align:middle;
@@ -190,9 +197,44 @@ table img {
 .top-bar span {
     margin-right:3px;
 }
-.top-bar a:hover { background:#A0A; }
+.top-bar a:hover {
+    text-decoration:none;
+    background:#A0A;
+}
 .top-bar a.avatar-link:hover {
     background:none;
+}
+#team-list {
+    position:absolute;
+    left:2px;
+    border:1px solid #bbb;
+    background:#fff;
+    min-width:65px;
+    padding:5px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+#team-list a {
+    color:#000;
+    display:block;
+    padding-left:6px;
+}
+#team-list a:hover {
+    background:#eee;
+}
+#team-account .bg {
+    display:inline-block;
+    margin-left:1px;
+    font-size:0;
+    width:0;
+    height:0;
+    line-height: 0;
+    border-width: 3px 3px 0;
+    padding-top: 1px;
+    border-style: solid dashed dashed;
+    border-color: transparent;
+    border-top-color: #bbb;
 }
 /* header */
 #logo {
