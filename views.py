@@ -1336,18 +1336,19 @@ def user_info(request, email):
 def user_remove(request, user_id):
     """The user id is emailuser id."""
     
-    if not request.user.is_staff and not request.user.org.is_staff:
+    if not request.user.is_staff and not request.user.org['is_staff']:
         raise Http404
 
     ccnetuser = get_ccnetuser(userid=int(user_id))
-    if ccnetuser.org:
-        ccnet_threaded_rpc.remove_org_user(ccnetuser.org.org_id, ccnetuser.username)
     ccnetuser.delete()
+    
+    if request.user.org:
+        org_id = request.user.org['org_id']
+        url_prefix = request.user.org['url_prefix']
+        ccnet_threaded_rpc.remove_org_user(org_id, ccnetuser.username)
+        return HttpResponseRedirect(reverse('org_useradmin', args=[url_prefix]))
 
-    if request.user.is_staff:
-        return HttpResponseRedirect(reverse('sys_useradmin'))
-    else:
-        return HttpResponseRedirect(reverse('org_useradmin'))
+    return HttpResponseRedirect(reverse('sys_useradmin'))
 
 @login_required
 def activate_user(request, user_id):
@@ -1405,11 +1406,13 @@ def user_add(request):
             
             if request.user.org:
                 org_id = request.user.org['org_id']
+                url_prefix = request.user.org['url_prefix']
                 ccnet_threaded_rpc.add_org_user(org_id, email, 0)
                 if hasattr(settings, 'EMAIL_HOST'):
                     send_user_add_mail(request, email, password)
                     
-                return HttpResponseRedirect(reverse('org_useradmin'))
+                return HttpResponseRedirect(reverse('org_useradmin',
+                                                    args=[url_prefix]))
             else:
                 if hasattr(settings, 'EMAIL_HOST'):
                     send_user_add_mail(request, email, password)
