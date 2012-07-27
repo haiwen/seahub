@@ -1,10 +1,10 @@
-{% extends "admin_base.html" %}
+{% extends "org_admin_base.html" %}
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
+    <li><a href="" class="user-add">添加用户</a></li>
 </ul>
 {% endblock %}
 
@@ -26,22 +26,16 @@
 <h3>所有用户</h3>
 <table>
     <tr>
-        <th width="70%">邮箱</th>
-        <th width="20%">是否激活</th>
+        <th width="90%">邮箱</th>
         <th width="10%">操作</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
-        {% if user.props.is_active %}
-        <td>已激活</td>
-        {% else %}
-        <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate">激活</button></td>
-        {% endif %}
         <td>
           {% if not user.is_self %}
-          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</button>
+          <button class="remove-user-btn" data="{% url org_user_remove org.url_prefix user.email %}">删除</button>
           {% endif %}
         </td>
     </tr>
@@ -50,28 +44,36 @@
 
 <div id="paginator">
     {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
     {% endif %}
     {% if page_next %}
-    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
     {% endif %}
     <span>每页：</span> 
     {% if per_page == 25 %}
     <span> 25 </span> 
     {% else %}
-    <a href="{{ SITE_ROOT}}sys/useradmin/?per_page=25" class="per-page">25</a>
+    <a href="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/useradmin/?per_page=25" class="per-page">25</a>
     {% endif %}
     {% if per_page == 50 %}
     <span> 50 </span> 
     {% else %}
-    <a href="{{ SITE_ROOT}}sys/useradmin/?per_page=50" class="per-page">50</a>
+    <a href="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/useradmin/?per_page=50" class="per-page">50</a>
     {% endif %}
     {% if per_page == 100 %}
     <span> 100 </span> 
     {% else %}
-    <a href="{{ SITE_ROOT}}sys/useradmin/?per_page=100" class="per-page">100</a>
+    <a href="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/useradmin/?per_page=100" class="per-page">100</a>
     {% endif %}
 </div>
+
+<form id="user-add-form" action="" method="post" name="user-add-form" class="hide">
+    <label>邮箱：</label><br />
+    <textarea id="emails" name="emails"></textarea>
+    <p class="tip">可以是非网站注册用户，我们会以邮件通知对方。</p>
+    <p class="error hide">输入不能为空。</p>
+    <input type="submit" value="提交" />
+</form>
 
 {% endblock %}
 
@@ -81,6 +83,11 @@ $('.activate').each(function(){
     $(this).click(function(){
         location.href = $(this).attr('data');
     });
+});
+
+$('.user-add').click(function() {
+    $("#user-add-form").modal({appendTo: "#main"});
+    return false;
 });
 
 //delete confirm

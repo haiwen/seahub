@@ -7,7 +7,7 @@ from django.template import RequestContext
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
-    get_group_repoids, check_group_staff, get_commits
+    get_group_repoids, check_group_staff, get_commits, get_personal_groups
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
@@ -41,7 +41,7 @@ def group_list(request):
             error_msg = e.msg
             return go_error(request, error_msg)
     
-    groups = ccnet_threaded_rpc.get_groups(request.user.username);
+    groups = get_personal_groups(request.user.username);
     
     return render_to_response("group/groups.html", {
             "groups": groups,

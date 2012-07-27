@@ -284,3 +284,11 @@ def get_ccnet_server_addr_port():
         return settings.CCNET_SERVER_ADDR, settings.CCNET_SERVER_PORT
     except:
         return None, None
+
+def emails2list(emails):
+    """
+    Split email string contacted with diffent separator.
+    """
+    email_str = emails.replace(';', ',').replace('\n', ',').replace('\r', ',')
+    return email_str.split(',')
+    

@@ -27,10 +27,10 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
 from share.models import FileShare
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_groups, get_repos, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
-    get_group_repoids, check_group_staff
+    get_group_repoids, check_group_staff, get_personal_groups
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
@@ -44,7 +44,7 @@ from utils import go_permission_error, go_error, list_to_string, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url
+    gen_file_get_url, emails2list
 from seahub.profile.models import Profile
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, CROCODOC_API_TOKEN
 
@@ -705,7 +705,8 @@ def myhome(request):
             grpmsg_reply_list.append(n.detail)
 
     # my groups
-    groups = ccnet_threaded_rpc.get_groups(email)
+    groups = get_personal_groups(email)
+
     groups_manage = []
     groups_join = []
     for group in groups:
@@ -1234,36 +1235,32 @@ def sys_useradmin(request):
     if not request.user.is_staff:
         raise Http404
 
-    users = ccnet_threaded_rpc.get_emailusers(-1,-1)
-        
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+    users_plus_one = get_emailusers(per_page * (current_page - 1), per_page + 1)
+    if len(users_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    users = users_plus_one[:per_page]
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
-        # TODO: may add new is_org_user rpc
-        user.is_org_user = True if ccnet_threaded_rpc.get_org_by_user(user.email) else False
             
     return render_to_response(
         'sys_useradmin.html', {
             'users': users,
-        },
-        context_instance=RequestContext(request))
-
-@login_required
-def org_useradmin(request, url_prefix):
-    if not request.user.org['is_staff']:
-        raise Http404
-
-    users = ccnet_threaded_rpc.get_org_emailusers(request.user.org['url_prefix'],
-                                         0, sys.maxint)
-        
-    for user in users:
-        if user.props.id == request.user.id:
-            user.is_self = True
-            user.is_org_user = True
-            
-    return render_to_response(
-        'org_useradmin.html', {
-            'users': users,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
         },
         context_instance=RequestContext(request))
 
@@ -1960,18 +1957,14 @@ def send_shared_link(request):
     email = form.cleaned_data['email']
     file_shared_link = form.cleaned_data['file_shared_link']
 
-    # Handle the diffent separator
-    to_email_str = email.replace(';',',')
-    to_email_str = to_email_str.replace('\n',',')
-    to_email_str = to_email_str.replace('\r',',')
-    to_email_list = to_email_str.split(',')
+    to_email_list = emails2list(email)
 
     t = loader.get_template('shared_link_email.html')
 
     for to_email in to_email_list:
-        to_email = to_email.strip(' ')
         if not to_email:
             continue
+        to_email = to_email.strip(' ')
 
         c = {
             'email': request.user.username,

@@ -84,30 +84,57 @@ def get_ccnetuser(username=None, userid=None):
 
     return ccnetuser
 
-def get_groups():
-    """Get group object list. """
-    group_ids = ccnet_threaded_rpc.list_groups()
-    if not group_ids:
-        return []
-    groups = []
-    for group_id in group_ids.split("\n"):
-        # too handle the ending '\n'
-        if group_id == '':
-            continue
-        group = ccnet_threaded_rpc.get_group(group_id)
-        groups.append(group)
+def get_emailusers(start, limit):
+    try:
+        users = ccnet_threaded_rpc.get_emailusers(start, limit)
+    except SearpcError:
+        users = []
+    return users
+    
+# def get_groups():
+#     """Get group object list. """
+#     group_ids = ccnet_threaded_rpc.list_groups()
+#     if not group_ids:
+#         return []
+#     groups = []
+#     for group_id in group_ids.split("\n"):
+#         # too handle the ending '\n'
+#         if group_id == '':
+#             continue
+#         group = ccnet_threaded_rpc.get_group(group_id)
+#         groups.append(group)
+#     return groups
+
+
+# def get_group(group_id):
+#     group = ccnet_threaded_rpc.get_group(group_id)
+#     if not group:
+#         return None
+#     group.members = group.props.members.split(" ")
+#     group.followers = group.props.followers.split(" ")
+#     group.maintainers = group.props.maintainers.split(" ")
+#     return group
+
+def get_org_groups(org_id, start, limit):
+    try:
+        groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, sys.maxint)
+    except SearpcError:
+        groups = []
     return groups
 
+def get_personal_groups(email):
+    try:
+        groups_all = ccnet_threaded_rpc.get_groups(email)
+    except SearpcError:
+        return []
 
-def get_group(group_id):
-    group = ccnet_threaded_rpc.get_group(group_id)
-    if not group:
-        return None
-    group.members = group.props.members.split(" ")
-    group.followers = group.props.followers.split(" ")
-    group.maintainers = group.props.maintainers.split(" ")
-    return group
-
+    personal_groups = []
+    for group in groups_all:
+        if not ccnet_threaded_rpc.is_org_group(group.id):
+            personal_groups.append(group)
+            
+    return personal_groups
+    
 def create_org(org_name, url_prefix, username):
     ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
 
@@ -133,6 +160,18 @@ def get_user_current_org(user, url_prefix):
         if org.url_prefix == url_prefix:
             return org
     return None
+
+def add_org_user(org_id, email, is_staff):
+    try:
+        ccnet_threaded_rpc.add_org_user(org_id, email, is_staff)
+    except SearpcError:
+        pass
+
+def remove_org_user(org_id, email):
+    try:
+        ccnet_threaded_rpc.remove_org_user(org_id, email)
+    except SearpcError:
+        pass
     
 def send_command(command):
     client = pool.get_client()
