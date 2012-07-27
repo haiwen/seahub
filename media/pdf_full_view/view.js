@@ -22,7 +22,7 @@ var RenderingStates = {
 
 
 var mozL10n = document.mozL10n || document.webL10n;
-location.hash = '#locale=zh-CN';//enable l10n
+//location.hash = '#locale=zh-CN';//enable l10n
 
 function getFileName(url) {
   var anchor = url.indexOf('#');

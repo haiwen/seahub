@@ -1,8 +1,12 @@
 body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,pre,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
-ul > li { list-style:none; }
+ul { list-style:none; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
+h1 {
+    font-size:24px;
+    margin:15px 0 8px;
+}
 h2 { font-size:18px; color:#808; }
 h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
 h4 { font-size:14px; color:#000; font-weight:normal; margin:2px 0 0; }
@@ -64,6 +68,14 @@ input[type="file"] {
     background:#ebebe4;
 }
 label { display: inline-block; margin:2px 0px; }
+iframe {
+    display:block;
+    width:100%;
+}
+pre {
+    white-space:pre-wrap;
+    word-wrap: break-word;
+}
 /* table */
 table {
     border-spacing: 0;
@@ -687,15 +699,12 @@ table img {
 }
 #file-view {
     margin-top:20px;
-    padding:5px;
+    padding:3px;
     background:#dedede;
     border-radius:3px;
     -moz-border-radius:3px;
 }
 #docu-view {
-    white-space:pre-wrap;
-    word-wrap: break-word;
-    width:928px;
     padding: 5px;
     min-height: 200px;
     border: 1px solid #ccc;
@@ -707,7 +716,8 @@ table img {
 }
 #docu-view,
 #svg-view,
-#pdf {
+#pdf,
+#md-view {
     background:#fff;
 }
 #svg-view {
@@ -740,6 +750,54 @@ table img {
     border-radius:3px;
     -moz-border-radius:3px;
 }
+#md-view {
+    padding:30px;
+    border:1px solid #ccc;
+}
+#md-view h3 {
+    color:#000;
+    font-weight:bold;
+    margin:10px 0 4px;
+}
+#md-view p {
+    margin-bottom:3px;
+}
+#md-view ul {
+    list-style-type:disc;
+    padding-left:2em;
+    margin:4px 0;
+}
+#md-view code {
+    font-size:12px;
+    white-space: nowrap;
+    padding: 1px 5px 0;
+    background-color: #F8F8F8;
+    border: 1px solid #dadada;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    margin: 0 2px;
+}
+#md-view pre {
+    font-size:13px;
+    padding:5px 10px;
+    background:#f8f8f8;
+    border:1px solid #ddd;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    margin:5px 0;
+}
+#md-view pre code {
+    white-space:pre-wrap;
+    padding:0;
+    margin:0;
+    border:none;
+}
+#md-view a {
+    font-weight:normal;
+}
+
 /* shareadmin */
 .view-link-alert p {
     display: inline-block;

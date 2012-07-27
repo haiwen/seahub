@@ -19,7 +19,7 @@
         $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
 {% endif %}
 {% if filetype == 'SVG' %}
-        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" width="940" id="svg-view"></iframe>');
+$('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
 {% endif %}
 {% if filetype == 'Document' %}
         var uuid = '';
@@ -32,7 +32,7 @@
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
                     if (data.length > 0) {
-                        $('#file-view').html('<iframe src="' + data[0]['doc_src'] + '" frameborder="0" width="940" id="doc-view"></iframe>');
+                        $('#file-view').html('<div><iframe src="' + data[0]['doc_src'] + '" frameborder="0" id="doc-view"></iframe></div>');
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
@@ -92,7 +92,7 @@
         $.ajaxSetup({cache:true});
         $.getScript('{{MEDIA_URL}}js/pdf.js', function() {
         PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-        $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center', 'padding':'3px'});
+        $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
         var seahub_getPage = function (pdf, page_number) {
             pdf.getPage(page_number).then(function(page) {
                 var scale = 1.5;
@@ -143,6 +143,23 @@
       });
       });
 {% endif %}
+
+{% if filetype == 'Markdown' %}
+$.ajaxSetup({cache:true});
+$.getScript('{{MEDIA_URL}}js/showdown.js', function() {
+    $.ajax({
+        url: '{{ raw_path }}',
+        dataType: 'text',
+        cache: false,
+        success: function(data) {
+            var converter = new Showdown.converter();
+            $('#file-view').html('<div id="md-view">' + converter.makeHtml(data) + '</div>');
+            $('#md-view').children(':first').css('margin-top', '0');
+        }
+    });
+})
+{% endif %}
+
 {% if filetype == 'Unknown' %}
-        $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
+$('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
 {% endif %}

@@ -19,11 +19,12 @@ import settings
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 
 PREVIEW_FILEEXT = {
-    'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'markdown', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
+    'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
     'SVG': ('svg',),
     'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
     'PDF': ('pdf',),
+    'Markdown': ('markdown', 'md'),
 }
 
 def go_permission_error(request, msg=None):
