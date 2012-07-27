@@ -26,19 +26,30 @@
         <div class="top-bar">
             <div class="top-bar-in">
                 <div class="fleft">
+                {% if request.user.is_authenticated %}
                     <a href="#" id="team-account" data="no-popup">团体帐号<span class="bg"></span></a>
                     <ul class="hide" id="team-list">
-                        <li><a href="#">xx</a></li>
-                        <li><a href="#">xxx</a></li>
+                        <li><a href="{% url myhome %}">个人帐号</a></li>
+                        {% for org in request.user.orgs %}
+                        <li><a href="{% url org_info org.url_prefix %}">{{ org.org_name }}</a></li>
+                        {% endfor %}
+                        <li><a href="{% url create_org %}">新建团体</a></li>
                     </ul>
+                {% endif %}
+                
                 {% if request.user.is_staff or request.user.org.is_staff %}
                   {% if request.user.is_staff %}
-                  <a href="{{ SITE_ROOT }}sys/seafadmin/"
+                  <a href="{{ SITE_ROOT }}sys/useradmin/"
                   {% else %}
-                  <a href="{% url org_seafadmin request.user.org.url_prefix %}"
+                  <a href="{% url org_useradmin request.user.org.url_prefix %}"
                   {% endif %}
-                    {% block top_bar_manager_class %}{% endblock %}>管理员控制台</a>
-                  <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>我的帐号</a>
+                    {% block top_bar_manager_class %}{% endblock %}>管理员工作台</a>
+                  {% if request.user.is_staff %}
+                  <a href="{{ SITE_ROOT }}home/my/"                  
+                  {% else %}
+                  <a href="{% url organizations.views.org_info org.url_prefix %}"
+                  {% endif %}
+                    {% block top_bar_myaccount_class %}{% endblock %}>个人工作台</a>
                 {% endif %}
                 </div>
 

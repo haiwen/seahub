@@ -5,9 +5,9 @@ from seahub.views import repo, repo_history, org_seafadmin, \
     org_group_admin
 
 urlpatterns = patterns('',
-    (r'^create/$', create_org),
+    url(r'^create/$', create_org, name='create_org'),
     (r'^change_account/$', change_account),
-    (r'^(?P<url_prefix>[^/]+)/$', org_info),
+    url(r'^(?P<url_prefix>[^/]+)/$', org_info, name='org_info'),
     url(r'^(?P<url_prefix>[^/]+)/groups/$', org_groups, name='org_groups'),
 
     url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),

@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 
-from seaserv import get_org_by_url_prefix
+from seaserv import get_org_by_url_prefix, get_orgs_by_user
 
 from settings import ORG_CACHE_PREFIX
 
@@ -14,15 +14,13 @@ class OrganizationMiddleware(object):
     def process_request(self, request):
         """
         """
+        # Get current org context
         org = cache.get(ORG_CACHE_PREFIX + request.user.username)
         request.user.org = org
-            
-        # full_path = request.get_full_path()
-        # if full_path.startswith('/organizations/'):
-        #     url_prefix = full_path.split('/')[2]
-        #     org = get_org_by_url_prefix(url_prefix)
-        #     if org:
-        #         request.org = org
+
+        # Get all orgs user created.
+        orgs = get_orgs_by_user(request.user.username)
+        request.user.orgs = orgs
             
         return None
 

@@ -3,7 +3,7 @@
 {% block nav %}
 <ul class="nav">
     <li>
-        <a href="{% url organizations.views.org_info org.url_prefix %}" {% block nav_org_class %}{% endblock %}>企业</a>
+        <a href="{% url organizations.views.org_info org.url_prefix %}" {% block nav_org_class %}{% endblock %}>{{ org.org_name }}</a>
     </li>
     <li>
         <a href="{% url organizations.views.org_groups org.url_prefix %}" {% block nav_group_class %}{% endblock %}>小组</a>
