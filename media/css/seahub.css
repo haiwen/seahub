@@ -385,6 +385,8 @@ table img {
 .new-reply {
     padding: 5px;
     background-color: #FDF;
+    margin-bottom: 5px;
+    display: block;
 }
 .new-reply a {
     color: #000;

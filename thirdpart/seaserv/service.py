@@ -154,6 +154,14 @@ def get_org_by_url_prefix(url_prefix):
 
     return org
 
+def get_org_by_id(org_id):
+    try:
+        org = ccnet_threaded_rpc.get_org_by_id(org_id)
+    except SearpcError:
+        org = None
+
+    return org
+
 def get_user_current_org(user, url_prefix):
     orgs = get_orgs_by_user(user)
     for org in orgs:

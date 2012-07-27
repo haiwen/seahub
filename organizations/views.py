@@ -15,8 +15,10 @@ from seaserv import ccnet_threaded_rpc, get_orgs_by_user, get_org_repos, \
     get_ccnetuser, remove_org_user, get_org_groups
 
 from forms import OrgCreateForm
+from signals import org_user_added
 from settings import ORG_CACHE_PREFIX
 from utils import set_org_ctx
+from notifications.models import UserNotification
 from registration.models import RegistrationProfile
 import seahub.settings as seahub_settings
 from seahub.utils import go_error, go_permission_error, validate_group_name, \
@@ -142,7 +144,7 @@ def org_useradmin(request, url_prefix):
         raise Http404
 
     if request.method == 'POST':
-        emails = request.POST.get('emails')
+        emails = request.POST.get('added-member-name')
 
         email_list = emails2list(emails)
         for email in email_list:
@@ -154,6 +156,11 @@ def org_useradmin(request, url_prefix):
                 email = email.strip(' ')
                 org_id = request.user.org['org_id']
                 add_org_user(org_id, email, 0)
+                
+                # send signal
+                org_user_added.send(sender=None, org_id=org_id,
+                                    from_email=request.user.username,
+                                    to_email=email)
             else:
                 # User is not registered, just create account and
                 # add that account to org
@@ -211,3 +218,22 @@ def org_user_remove(request, user):
     remove_org_user(org_id, user)
 
     return HttpResponseRedirect(reverse('org_useradmin', args=[url_prefix]))
+
+def org_msg(request):
+    """
+    Show organization user added messages
+    """
+    orgmsg_list = []
+    notes = UserNotification.objects.filter(to_user=request.user.username)
+    for n in notes:
+        if n.msg_type == 'org_msg':
+            orgmsg_list.append(n.detail)
+
+    # remove new org msg notification
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='org_msg').delete()
+    print orgmsg_list
+    return render_to_response('organizations/new_msg.html', {
+            'orgmsg_list': orgmsg_list,
+            }, context_instance=RequestContext(request))
+    

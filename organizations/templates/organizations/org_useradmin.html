@@ -32,7 +32,7 @@
 
     {% for user in users %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
+        <td><a href="{% url user_profile user.email %}">{{ user.props.email }}</a></td>
         <td>
           {% if not user.is_self %}
           <button class="remove-user-btn" data="{% url org_user_remove org.url_prefix user.email %}">删除</button>
@@ -69,8 +69,9 @@
 
 <form id="user-add-form" action="" method="post" name="user-add-form" class="hide">
     <label>邮箱：</label><br />
-    <textarea id="emails" name="emails"></textarea>
+    <textarea id="added-member-name" name="added-member-name"></textarea>
     <p class="tip">可以是非网站注册用户，我们会以邮件通知对方。</p>
+    <p class="tip">（如未收到，请检查垃圾邮件）</p>
     <p class="error hide">输入不能为空。</p>
     <input type="submit" value="提交" />
 </form>

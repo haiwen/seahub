@@ -697,12 +697,15 @@ def myhome(request):
     # user notifications
     grpmsg_list = []
     grpmsg_reply_list = []
+    orgmsg_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
         if n.msg_type == 'group_msg':
             grpmsg_list.append(n.detail)
         elif n.msg_type == 'grpmsg_reply':
             grpmsg_reply_list.append(n.detail)
+        elif n.msg_type == 'org_msg':
+            orgmsg_list.append(n.detail)
 
     # my groups
     groups = get_personal_groups(email)
@@ -738,6 +741,7 @@ def myhome(request):
             "contacts": contacts,
             "groups": groups,
             "grpmsg_reply_list": grpmsg_reply_list,
+            "orgmsg_list": orgmsg_list,
             "groups_manage": groups_manage,
             "groups_join": groups_join,
             }, context_instance=RequestContext(request))

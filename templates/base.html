@@ -27,7 +27,9 @@
             <div class="top-bar-in">
                 <div class="fleft">
                 {% if request.user.is_authenticated %}
-                    <a href="#" id="team-account" data="no-popup">团体帐号<span class="bg"></span></a>
+                    <a href="#" id="team-account" data="no-popup">
+                      {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
+                    <span class="bg"></span></a>
                     <ul class="hide" id="team-list">
                         <li><a href="{% url myhome %}">个人帐号</a></li>
                         {% for org in request.user.orgs %}
