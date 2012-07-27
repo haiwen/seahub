@@ -1,0 +1,25 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags %}
+
+{% block main_panel %}
+<div class="main fleft">
+{% if orgmsg_list %}
+    <ul class="msg-list">
+    {% for msg in orgmsg_list %}
+        <li class="">
+        <div class="msg-bd">
+            <p>{{ msg }}</p>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+<p>暂无</p>    
+{% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+{% endblock %}
