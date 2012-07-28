@@ -183,13 +183,13 @@ p {
 #info-bar .close { margin: 7px 5px auto 0;  float: right; background: url(../img/close-16.png); height: 16px; width:16px; }
 
 /* top-bar */
-#top-bar { height:20px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
-.top-bar { height:20px; color:#fff; font-weight:bold; background:#606; }
+#top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
+.top-bar { height:21px; color:#fff; font-weight:bold; background:#606; }
 .top-bar a {
     color:#ddd;
     font-weight:normal;
     display:inline-block;
-    height:20px;
+    height:21px;
     padding:0 2px;
 }
 .top-bar a.avatar-link {
