@@ -1,0 +1,16 @@
+<form id="repo-create-form" action="{{ SITE_ROOT }}repo/create/" method="post" class="hide">
+    <h3>新建同步目录</h3>
+    <label>名称：</label><br/>
+    <input id="repo-name" type="text" name="repo_name" value="" /><br />
+    <label>描述：</label><br/>
+    <textarea id="repo-desc" name="repo_desc"></textarea>
+    <div class="repo-create-encryption">
+        <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
+        <label>密码：</label><span class="tip">(3到15个字符)</span><br />
+        <input type="password" name="passwd" disabled="disabled" class="passwd input-disabled" /><br />
+        <label>密码确认：</label><br />
+        <input type="password" name="passwd_again" disabled="disabled" class="passwd input-disabled" />
+    </div>
+    <p class="error hide"></p>
+    <input type="submit" id="repo-create-submit" value="提交" class="submit" />
+</form>

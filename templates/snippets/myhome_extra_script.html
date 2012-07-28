@@ -1,0 +1,130 @@
+$(function() {
+    //repo-share-form share-list autocomplete
+    var share_list = [];
+    {% for contact in contacts %}
+    share_list.push('{{ contact.contact_email }}');
+    {% endfor %}
+
+    {% for group in groups %}
+    share_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+    {% endfor %}
+
+    $(".repo-share-btn").click(function() {
+        $("#repo_id").val($(this).attr("data"));
+        $("#repo-share-form").modal({appendTo: "#main"});
+        addAutocomplete('#email_or_group', '#repo-share-form', share_list);
+    });
+
+    //check before post
+    $('#share-submit-btn').click(function() {
+        if (!$.trim($('#email_or_group').attr('value'))) {
+            $('#repo-share-form .error').removeClass('hide');
+            $('#simplemodal-container').css('height', $('#repo-share-form').height());
+            return false;
+        }
+    });
+
+    addConfirmTo($('.repo-delete-btn'));
+    
+    addConfirmTo($('.unshare-btn'), '确定要取消共享？');
+
+    $(".download-btn").click(function() {
+            window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
+       });
+
+//show op images when mouse hover on
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).find('img').css('cursor', 'pointer').removeClass('vh');
+        },
+        function() {
+            $(this).find('img').addClass('vh');
+        }
+    );
+});
+
+//repo-create-form
+$('#repo-create').hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
+$('#repo-create').click(function() {
+    $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
+});
+$('#encrypt-switch').click(function () {
+    if ($(this).attr('checked')) {
+        $('#repo-create-form input[type="password"]').attr('disabled', false).removeClass('input-disabled');
+    } else {
+        $('#repo-create-form input[type="password"]').attr('disabled', true).addClass('input-disabled');
+    }
+});
+function showError(err) {
+    $('#repo-create-form .error').html(err).attr('class','error');
+    $('#simplemodal-container').css('height', $('#repo-create-form').height());
+}
+$('#repo-create-submit').click(function() {
+    var passwd = $('#repo-create-form input[name="passwd"]'),
+        passwd_again = $('#repo-create-form input[name="passwd_again"]');
+
+    if (!$('#repo-name').val()) {
+        showError('目录名不能为空。');
+        return false;
+    }
+     if (!$('#repo-desc').val()) {
+        showError('描述不能为空。');
+        return false;
+    }   
+
+    if ($('#encrypt-switch').attr('checked')) {
+        if (!passwd.val()) {
+            showError('密码不能为空。');
+            return false;
+        }   
+        if (!passwd_again.val()) {
+            showError('请确认密码。');
+            return false;
+        }   
+        if (passwd.val().length < 3) {
+            showError('密码太短。');
+            return false;
+        }
+        if (passwd.val().length > 15) {
+            showError('密码太长。');
+            return false;
+        }
+        if (passwd.val() != passwd_again.val()) {
+            showError('两次输入的密码不一致。');
+            return false;
+        }
+    }
+
+    $.ajax({
+        url: '{{ url }}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_name': $('#repo-name').val(),
+            'repo_desc': $('#repo-desc').val(),
+            'encryption': $('#encrypt-switch').attr('checked') ? 1 : 0,
+            'passwd': passwd.val(),
+            'passwd_again': passwd_again.val()
+        },
+        success: function(data) {
+        alert(data);
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                showError(data['error']);
+            }
+        }
+    });
+
+    return false;
+});

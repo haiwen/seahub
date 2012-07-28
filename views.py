@@ -28,7 +28,7 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
 from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
-    get_repo, get_commits, get_branches, \
+    get_repo, get_commits, get_branches, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids, check_group_staff, get_personal_groups
 from pysearpc import SearpcError
@@ -744,6 +744,7 @@ def myhome(request):
             "orgmsg_list": orgmsg_list,
             "groups_manage": groups_manage,
             "groups_join": groups_join,
+            "url": settings.SITE_ROOT + 'repo/create/',
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1596,7 +1597,7 @@ def repo_new_dir(request):
         return go_error (request, error_msg)
 
     try:
-        if not seafserv_threaded_rpc.is_valid_filename(repo_id, new_dir_name):
+        if not is_valid_filename(new_dir_name):
             error_msg = (u"您输入的目录名称 %s 包含非法字符" % new_dir_name)
             return go_error (request, error_msg)
     except SearpcError,e:
@@ -1651,7 +1652,7 @@ def validate_filename(request):
     result = {'ret':'yes'}
 
     try:
-        ret = seafserv_threaded_rpc.is_valid_filename (repo_id, filename);
+        ret = is_valid_filename(filename);
     except SearpcError:
         result['ret'] = 'error'
     else:
@@ -1681,7 +1682,7 @@ def repo_create(request):
             error_msg = u"目录名不能为空"
         elif len(repo_name) > 50:
             error_msg = u"目录名太长"
-        elif not seafserv_threaded_rpc.is_valid_filename('', repo_name):
+        elif not is_valid_filename(repo_name):
             error_msg = (u"您输入的目录名 %s 包含非法字符" % repo_name)
         elif not repo_desc:
             error_msg = u"描述不能为空"

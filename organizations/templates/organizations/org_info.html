@@ -41,7 +41,7 @@
 {% if repos %}
     {% for repo in repos %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
         <td>{{ repo.latest_modify|translate_commit_time }}</td>
@@ -50,33 +50,22 @@
         {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
-            <!-- <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" /> -->
+            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" />
             <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
         </td>
     </tr>
     {% endfor %}
 {% endif %}
 </table>
-
 </div>
+
+{% include "snippets/repo_share_form.html" %}
+{% include "snippets/repo_create_form.html" %}
+
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-    addConfirmTo($('#quit-group'), '确定要退出？');
-    addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
-
-    $("table tr:gt(0)").hover(
-        function() {
-            $(this).find('img').css('cursor', 'pointer').removeClass('vh');
-        },
-        function() {
-            $(this).find('img').addClass('vh');
-        }
-    );
-
-    $('.download').click(function() {
-        window.open($(this).attr('data'));
-    });
+{% include "snippets/myhome_extra_script.html" %}
 </script>
 {% endblock %}

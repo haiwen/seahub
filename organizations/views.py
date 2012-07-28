@@ -12,7 +12,7 @@ from auth.decorators import login_required
 from pysearpc import SearpcError
 from seaserv import ccnet_threaded_rpc, get_orgs_by_user, get_org_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
-    get_ccnetuser, remove_org_user, get_org_groups
+    get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename
 
 from forms import OrgCreateForm
 from signals import org_user_added
@@ -25,11 +25,10 @@ from seahub.utils import go_error, go_permission_error, validate_group_name, \
     emails2list, gen_token
 from seahub.views import myhome
 
-
 @login_required
 def create_org(request):
     """
-    
+    Create org account.
     """
     if request.method == 'POST':
         form = OrgCreateForm(request.POST)
@@ -54,19 +53,9 @@ def create_org(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def change_account(request):
-    """
-    
-    """
-    orgs = get_orgs_by_user(request.user.username)
-        
-    return render_to_response('organizations/change_account.html', {
-            'orgs': orgs,
-            }, context_instance=RequestContext(request))
-
-@login_required
 def org_info(request, url_prefix):
     """
+    Show org info page.
     """
     org = get_user_current_org(request.user.username, url_prefix)
     if not org:
@@ -77,16 +66,19 @@ def org_info(request, url_prefix):
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
                                                         0, sys.maxint)
     repos = get_org_repos(org.org_id, 0, sys.maxint)
+
+    url = 'organizations/%s/repo/create/' % org.url_prefix
     return render_to_response('organizations/org_info.html', {
             'org': org,
             'org_users': org_members,
             'repos': repos,
+            'url': seahub_settings.SITE_ROOT + url,
             }, context_instance=RequestContext(request))
 
 @login_required
 def org_groups(request, url_prefix):
     """
-    
+    List org groups and add org group.
     """
     org = get_user_current_org(request.user.username, url_prefix)
     if not org:
@@ -232,8 +224,64 @@ def org_msg(request):
     # remove new org msg notification
     UserNotification.objects.filter(to_user=request.user.username,
                                     msg_type='org_msg').delete()
-    print orgmsg_list
+
     return render_to_response('organizations/new_msg.html', {
             'orgmsg_list': orgmsg_list,
             }, context_instance=RequestContext(request))
+
+@login_required    
+def org_repo_create(request):
+    '''
+    Handle ajax post to create org repo.
     
+    '''
+    if request.method != 'POST':
+        return Http404
+    repo_name = request.POST.get("repo_name")
+    repo_desc = request.POST.get("repo_desc")
+    encrypted = int(request.POST.get("encryption"))
+    passwd = request.POST.get("passwd")
+    passwd_again = request.POST.get("passwd_again")
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    error_msg = ""
+    if not repo_name:
+        error_msg = u"目录名不能为空"
+    elif len(repo_name) > 50:
+        error_msg = u"目录名太长"
+    elif not is_valid_filename(repo_name):
+        error_msg = (u"您输入的目录名 %s 包含非法字符" % repo_name)
+    elif not repo_desc:
+        error_msg = u"描述不能为空"
+    elif len(repo_desc) > 100:
+        error_msg = u"描述太长"
+    elif encrypted == 1:
+        if not passwd:
+            error_msg = u"密码不能为空"
+        elif not passwd_again:
+            error_msg = u"确认密码不能为空"
+        elif len(passwd) < 3:
+            error_msg = u"密码太短"
+        elif len(passwd) > 15:
+            error_msg = u"密码太长"
+        elif passwd != passwd_again:
+            error_msg = u"两次输入的密码不相同"
+
+    if error_msg:
+        result['error'] = error_msg
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    try:
+        user = request.user.username
+        org_id = request.user.org['org_id']
+        repo_id = create_org_repo(repo_name, repo_desc, user, passwd, org_id)
+        result['success'] = True
+    except:
+        result['error'] = u"创建目录失败"
+    else:
+        if not repo_id:
+            result['error'] = u"创建目录失败"
+            
+    return HttpResponse(json.dumps(result), content_type=content_type)

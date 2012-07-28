@@ -115,6 +115,14 @@ def get_emailusers(start, limit):
 #     group.maintainers = group.props.maintainers.split(" ")
 #     return group
 
+def check_group_staff(group_id_int, user_or_username):
+    """Check where user is group staff"""
+    from seahub.base.accounts import CcnetUser
+    if isinstance(user_or_username, CcnetUser):
+        user_or_username = user_or_username.username
+        
+    return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)
+
 def get_org_groups(org_id, start, limit):
     try:
         groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, sys.maxint)
@@ -198,6 +206,18 @@ def get_repos():
     """
     return seafserv_threaded_rpc.get_repo_list("", 100)
 
+def create_org_repo(repo_name, repo_desc, user, passwd, org_id):
+    """
+    Create org repo, return valid repo id if success.
+    """
+    try:
+        repo_id = seafserv_threaded_rpc.create_org_repo(repo_name, repo_desc,
+                                                        user, passwd, org_id)
+    except SearpcError:
+        repo_id = None
+        
+    return repo_id
+    
 def get_org_repos(org_id, start, limit):
     """
     """
@@ -253,11 +273,13 @@ def get_group_repoids(group_id=None):
         repoid_list.append(repo_id)
     return repoid_list
 
-def check_group_staff(group_id_int, user_or_username):
-    """Check where user is group staff"""
-    from seahub.base.accounts import CcnetUser
-    if isinstance(user_or_username, CcnetUser):
-        user_or_username = user_or_username.username
-        
-    return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)
+def is_valid_filename(file_or_dir):
+    """
+    Check whether file name or directory name is valid.
+    """
+    try:
+        ret = seafserv_threaded_rpc.is_valid_filename('', file_or_dir)
+    except SearpcError:
+        ret = 0
 
+    return ret

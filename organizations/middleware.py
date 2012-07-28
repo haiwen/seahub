@@ -12,8 +12,6 @@ class OrganizationMiddleware(object):
     """
     
     def process_request(self, request):
-        """
-        """
         # Get current org context
         org = cache.get(ORG_CACHE_PREFIX + request.user.username)
         request.user.org = org
