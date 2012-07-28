@@ -1,17 +1,26 @@
+html {
+    background:#fff;
+}
 body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,pre,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
+body {
+    font: 13px/1.5 Arial, Helvetica, sans-serif;
+}
+h1 {
+    font-size:1.9em;
+    margin:1.1em 0 0.5em;
+}
+h2 { font-size:1.5em; color:#808;}
+h3 { font-size:1.2em; color:#808; font-weight:normal; margin:0.95em 0 0.4em; }
+h4 { font-size:1.1em; color:#000; font-weight:normal; margin:0.5em 0 0.2em; }
+h5, h6 {
+    font-size:1em;
+    margin:0.4em 0 0.15em;
+}
 ul { list-style:none; }
+ol { padding-left:2em; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
-h1 {
-    font-size:24px;
-    margin:15px 0 8px;
-}
-h2 { font-size:18px; color:#808; }
-h3 { font-size:15px; color:#808; font-weight:normal; margin:12px 0 2px; }
-h4 { font-size:14px; color:#000; font-weight:normal; margin:2px 0 0; }
-ol { padding-left:2em; }
-/* input button */
 textarea { border: 1px solid #ddd; }
 input { 
     height:20px;
@@ -37,7 +46,6 @@ button::-moz-focus-inner {/*Remove button padding in FF*/
     border: 0;
     padding: 0;
 }
-
 input[type=submit],
 input.submit,
 button { 
@@ -64,19 +72,18 @@ input[type="file"] {
     height:24px;
     line-height:24px;
 }
-.input-disabled {
-    background:#ebebe4;
-}
 label { display: inline-block; margin:2px 0px; }
 iframe {
     display:block;
     width:100%;
 }
+pre, code {
+    font-family: "Courier New", Courier, monospace;
+}
 pre {
     white-space:pre-wrap;
     word-wrap: break-word;
 }
-/* table */
 table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -84,23 +91,26 @@ table {
     table-layout:fixed;
     margin:8px 0 40px;
 }
+th { text-align:left; }
 td, th {
     padding:5px 3px;
     word-wrap:break-word;
+    border-bottom:1px solid #eee;
 }
-th { text-align:left; }
-tr { border-bottom:1px solid #eee; }
 tr.hl { background-color: #f8f8f8; }/*highlight*/
 table img {
     vertical-align:middle;
 }
+p {
+    margin:0.5em 0;
+}
 /*common class*/
-.error { color:red; }
 .fleft { float:left }
 .fright { float:right }
 .clear { clear:both; }
 .show { display:block }
 .hide { display:none }
+.error { color:red; }
 .errorlist { color: red; }
 .ovhd { overflow:hidden; }
 .bold { font-weight:bold; }
@@ -135,10 +145,12 @@ table img {
 .no-deco, .no-deco:hover {
     text-decoration:none;
 }
+.input-disabled {
+    background:#ebebe4;
+}
 #paginator { margin-top:10px; }
 
 /* container */
-#wrapper { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 #header, #main, #footer, .top-bar-in { width:950px; }
 #header, #main, .top-bar-in { margin:0 auto; }
 #header {
@@ -281,7 +293,7 @@ table img {
     font-weight:normal;
 }
 /* main */
-.path, .access-notice { margin: 12px 0 6px 0; }
+.path, .access-notice { margin: 0.8em 0 0.4em; }
 .with-bg li {
     padding-left:10px;
     line-height:20px;
@@ -299,8 +311,11 @@ table img {
 }
 .narrow-panel h2,
 .narrow-panel h3 {
-    margin:0 0 12px;
+    margin:0 0 0.9em;
     border-bottom:1px solid #ddd;
+}
+.narrow-panel h2 {
+    font-size:1.3em;
 }
 .narrow-panel input {
     width:318px;
@@ -362,9 +377,6 @@ table img {
     background-image:none;
 }
 /*myhome*/
-.home-profile {
-    margin:3px 0 15px;
-}
 .home-profile .avatar {
     float:left;
     margin:0 15px 0 11px;
@@ -396,7 +408,6 @@ table img {
     padding-left:21px;
     height:27px;
     background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
-    margin:5px 0 6px;
 }
 #repo-create-form {
     padding:0 20px;
@@ -577,6 +588,9 @@ table img {
 .group h4 {
     margin:0 0 4px;
 }
+.group p {
+    margin:0;
+}
 .group .item-name {
     display:inline-block;
     width:5em;
@@ -731,7 +745,7 @@ table img {
 }
 .file-op,
 .file-share-from {
-    margin-top:12px;
+    margin-top:0.8em;
 }
 .file-op a {
     font-weight:normal;
@@ -742,11 +756,11 @@ table img {
     margin-top:3px;
 }
 #file-view {
-    margin-top:20px;
     padding:3px;
     background:#dedede;
     border-radius:3px;
     -moz-border-radius:3px;
+    margin-top:13px;
 }
 #docu-view {
     padding: 5px;
@@ -801,10 +815,10 @@ table img {
 #md-view h3 {
     color:#000;
     font-weight:bold;
-    margin:10px 0 4px;
+    margin:0.82em 0 0.4em;
 }
 #md-view p {
-    margin-bottom:3px;
+    margin:0.8em 0;
 }
 #md-view ul {
     list-style-type:disc;
