@@ -809,8 +809,11 @@ p {
     -moz-border-radius:3px;
 }
 #md-view {
-    padding:30px;
+    padding:40px;
     border:1px solid #ccc;
+    font-size:14px;
+    line-height:1.6;
+    color:#333;
 }
 #md-view h3 {
     color:#000;
