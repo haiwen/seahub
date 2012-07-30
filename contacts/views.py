@@ -1,6 +1,7 @@
 # encoding: utf-8
 import simplejson as json
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, \
+    HttpResponseRedirect
 from django.shortcuts import render_to_response, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -9,15 +10,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory
 from django.contrib import messages
 
-from models import Contact
-from models import AddContactForm
+from models import Contact, ContactAddForm, ContactEditForm
+from utils import go_error
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
 
 @login_required
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
-    form = AddContactForm({'user_email':request.user.username})
+    form = ContactAddForm({'user_email':request.user.username})
     return render_to_response('contacts/contact_list.html', {
         'contacts': contacts,
         'form': form,
@@ -25,104 +26,100 @@ def contact_list(request):
 
 
 @login_required
-def contact_add(request):
-    error_msg = None
-    if request.method == 'POST':
-        form = AddContactForm(request.POST)
-        # for request from contact_add form in group_info.html
-        group_id = int(request.GET.get('group_id', 0))
-        # for ajax request from contact_add in contact_list.html
-        result = {}
-        if form.is_valid():
-            contact_email = form.cleaned_data['contact_email']
-            contact_name = form.cleaned_data['contact_name']
-            note = form.cleaned_data['note']
-            emailuser = ccnet_threaded_rpc.get_emailuser(contact_email)
-            if not emailuser:
-                error_msg = u"用户不存在"
-            elif contact_email == request.user.username:
-                error_msg = u"不能添加自己为联系人"
-            elif Contact.objects.filter(user_email=request.user.username,
-                                        contact_email=contact_email).count() > 0:
-                error_msg = u"联系人列表中已有该用户"
-            elif request.user.org and \
-                not ccnet_threaded_rpc.org_user_exists(request.user.org.org_id,
-                                              contact_email):
-                error_msg = u"当前企业不存在该用户"
-            else:
-                contact = Contact()
-                contact.user_email = request.user.username
-                contact.contact_email = contact_email
-                contact.contact_name = contact_name
-                contact.note = note
-                contact.save()
-                if not group_id:
-                    result['success'] = True
-                    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf-8')
-                else:
-                    messages.success(request, u"您已成功添加%s为联系人" % contact_email)
-                    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
+def contact_add_post(request):
+    """
+    Handle ajax post to add a contact.
+    """
 
-            if error_msg:
-                if not group_id:
-                    result['error'] = error_msg
-                    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf-8')
-                else:
-                    messages.error(request, error_msg)
-                    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
+    if not request.is_ajax() and not request.method == 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    form = ContactAddForm(request.POST)
+    if form.is_valid():
+        contact = Contact()
+        contact.user_email = form.cleaned_data['user_email']
+        contact.contact_email = form.cleaned_data['contact_email']
+        contact.contact_name = form.cleaned_data['contact_name']
+        contact.note = form.cleaned_data['note']
+        contact.save()
+
+        result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
+    
+@login_required
+def contact_add(request):
+    """
+    Handle normal request to add a contact.
+    """
+    if request.method != 'POST':
+        raise Http404
+    
+    group_id = request.GET.get('group_id', '0')
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return go_error('小组ID必须为整数')
+        
+    form = ContactAddForm(request.POST)
+    if form.is_valid():
+        contact_email = form.cleaned_data['contact_email']
+        
+        contact = Contact()
+        contact.user_email = form.cleaned_data['user_email']
+        contact.contact_email = contact_email
+        contact.contact_name = form.cleaned_data['contact_name']
+        contact.note = form.cleaned_data['note']
+        contact.save()
+            
+        messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
+    else:
+        messages.error(request, '操作失败')
+    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
 
 @login_required
 def contact_edit(request):
-    error_msg = None
-    contact_id = None
-    old_contact_email = None
+    """
+    Edit contact info.
+    """
+    
     if request.method == 'POST':
-        form = AddContactForm(request.POST)
+        form = ContactEditForm(request.POST)
         if form.is_valid():
-            contact_id = request.POST.get('contact_id')
-            old_contact_email = request.POST.get('old_contact_email')
+            user_email = form.cleaned_data['user_email']
             contact_email = form.cleaned_data['contact_email']
             contact_name = form.cleaned_data['contact_name']
             note = form.cleaned_data['note']
-            emailuser = ccnet_threaded_rpc.get_emailuser(contact_email)
-            if not emailuser:
-                error_msg = u"用户不存在"
-            elif contact_email == request.user.username:
-                error_msg = u"不能添加自己为联系人"
-            elif old_contact_email != contact_email and \
-                    Contact.objects.filter(user_email=request.user.username,
-                                           contact_email=contact_email).count() > 0:
-                error_msg = u"联系人列表中已有该用户"
+            try:
+                contact = Contact.objects.get(user_email=user_email,
+                                              contact_email=contact_email)
+            except Contact.DoesNotExist:
+                return go_error(request, '用户不存在')
             else:
-                contact = Contact(id=contact_id)
-                contact.user_email = request.user.username
-                contact.contact_email = contact_email
                 contact.contact_name = contact_name
                 contact.note = note
                 contact.save()
-                return HttpResponseRedirect(reverse("contact_list"))
-        
+                return HttpResponseRedirect(reverse('contact_list'))
     else:
-        contact_email = request.GET.get('email')
+        contact_email = request.GET.get('email', '')
         c = Contact.objects.filter(user_email=request.user.username,
                                    contact_email=contact_email)
         if not c:
-            error_msg = u'用户不存在'
-            form = AddContactForm({'contact_email': contact_email})
+            return go_error(request, '用户不存在')
         else:
             init_data = {'user_email':request.user.username,
                          'contact_email':contact_email,
                          'contact_name':c.get().contact_name,
                          'note':c.get().note}
-            contact_id = c.get().id
-            old_contact_email = c.get().contact_email
-            form = AddContactForm(init_data)
-
+            form = ContactEditForm(init_data)
+        
     return render_to_response('contacts/contact_edit.html', {
             'form': form,
-            'error_msg': error_msg,
-            'contact_id': contact_id,
-            'old_contact_email': old_contact_email,
             }, context_instance=RequestContext(request))
         
         

@@ -8,16 +8,17 @@
 <form action="" method="post">
     {{ form.user_email.as_hidden }}
     <label>邮箱：</label>
-    <input id="id_contact_email" type="text" maxlength="255" value="{{ old_contact_email }}" name="contact_email" readonly="readonly">    
+    {{ form.contact_email }}
     <label>名字(可选)：</label>
     {{ form.contact_name }}
     <label>备注(可选)：</label>
     {{ form.note }}
-    <input type="hidden" name="contact_id" value="{{ contact_id }}" />
-    <input type="hidden" name="old_contact_email" value="{{ old_contact_email }}" />
-    {% if error_msg %}
-    <p class="error">{{ error_msg }}</p>
-    {% endif %}
+    <p class="error">
+      {% for field in form %}
+          {{ field.errors }}
+      {% endfor %}
+      {{ form.non_field_errors }}
+    </p>
     <input type="submit" value="提交" class="submit" class="submit" />
 </form>
 </div>

@@ -127,3 +127,11 @@ function prepareCSRFToken(xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 }
+
+function apply_form_error(formid, error_msg) {
+    var form_err = $("#" + formid + " .error"),
+        container = $("#simplemodal-container");
+
+    form_err.html(error_msg).attr('class', 'error');
+    container.css('height', $('#'+formid).height());
+}

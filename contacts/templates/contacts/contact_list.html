@@ -6,7 +6,7 @@
 <ul class="with-bg">
     <li><a href="#" id="contact-add">添加联系人</a></li>
 </ul>
-<form action="{{ SITE_ROOT }}contacts/add/" method="post" id="contact-add-form" class="hide">
+<form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
     <h4>添加联系人</h4>
     {{ form.user_email.as_hidden }}
     <label>邮箱：</label>{{ form.contact_email }}<br />
@@ -68,9 +68,11 @@ $('#contact-add-form').submit(function() {
        $('#simplemodal-container').css('height', $(this).height());
         return false;
     }
-    
+
+    var self = $(this),
+        url = self.attr("action");
     $.ajax({
-        url: '{{ SITE_ROOT }}contacts/add/',
+        url: url,
         type: 'POST',
         dataType: 'json',
         cache: 'false',
@@ -86,10 +88,15 @@ $('#contact-add-form').submit(function() {
             if (data['success']) {
                 location.reload(true);
             } else {
-                $('#contact-add-error').html(data['error']).attr('class', 'error');
-                $('#simplemodal-container').css('height', $('#contact-add-form').height());
+                apply_form_error('contact-add-form', data['error']);
             }   
-        }   
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('contact-add-form', value[0]);
+            });
+        }
     });
 
     return false;

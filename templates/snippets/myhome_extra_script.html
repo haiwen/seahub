@@ -62,41 +62,37 @@ $('#encrypt-switch').click(function () {
         $('#repo-create-form input[type="password"]').attr('disabled', true).addClass('input-disabled');
     }
 });
-function showError(err) {
-    $('#repo-create-form .error').html(err).attr('class','error');
-    $('#simplemodal-container').css('height', $('#repo-create-form').height());
-}
 $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
 
     if (!$('#repo-name').val()) {
-        showError('目录名不能为空。');
+        apply_form_error('repo-create-form', '目录名不能为空。');
         return false;
     }
      if (!$('#repo-desc').val()) {
-        showError('描述不能为空。');
+        apply_form_error('repo-create-form', '描述不能为空。');
         return false;
     }   
     if ($('#encrypt-switch').attr('checked')) {
         if (!passwd.val()) {
-            showError('密码不能为空。');
+            apply_form_error('repo-create-form', '密码不能为空。');
             return false;
         }   
         if (!passwd_again.val()) {
-            showError('请确认密码。');
+            apply_form_error('repo-create-form', '请确认密码。');
             return false;
         }   
         if (passwd.val().length < 3) {
-            showError('密码太短。');
+            apply_form_error('repo-create-form', '密码太短。');
             return false;
         }
         if (passwd.val().length > 15) {
-            showError('密码太长。');
+            apply_form_error('repo-create-form', '密码太长。');
             return false;
         }
         if (passwd.val() != passwd_again.val()) {
-            showError('两次输入的密码不一致。');
+            apply_form_error('repo-create-form', '两次输入的密码不一致。');
             return false;
         }
     }
@@ -118,13 +114,13 @@ $('#repo-create-submit').click(function() {
             if (data['success']) {
                 location.reload(true);
             } else {
-                showError(data['error']);
+                apply_form_error('repo-create-form', data['error']);
             }
         },
         error: function(data, textStatus, jqXHR) {
             var errors = $.parseJSON(data.responseText);
             $.each(errors, function(index, value) {
-                showError(value[0]);
+                apply_form_error('repo-create-form', value[0]);
             });
         }
     });
