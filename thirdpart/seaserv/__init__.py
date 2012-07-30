@@ -5,7 +5,7 @@ from service import ccnet_rpc, monitor_rpc, seafserv_rpc, \
 from service import send_command
 from service import get_ccnetuser, get_emailusers
 from service import get_org_groups, get_personal_groups, get_group_repoids, \
-    check_group_staff
+    check_group_staff, remove_group_user
 from service import get_repos, get_repo, get_commits, get_branches, \
     get_org_repos, is_repo_owner, create_org_repo
 from service import get_binding_peerids, is_valid_filename

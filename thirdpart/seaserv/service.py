@@ -123,6 +123,12 @@ def check_group_staff(group_id_int, user_or_username):
         
     return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)
 
+def remove_group_user(user):
+    """
+    Remove group user relationship.
+    """
+    return ccnet_threaded_rpc.remove_group_user(user)
+
 def get_org_groups(org_id, start, limit):
     try:
         groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, sys.maxint)

@@ -69,7 +69,7 @@ function showError(err) {
 $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
-/*
+
     if (!$('#repo-name').val()) {
         showError('目录名不能为空。');
         return false;
@@ -100,7 +100,7 @@ $('#repo-create-submit').click(function() {
             return false;
         }
     }
-*/
+
     $.ajax({
         url: '{{ url }}',
         type: 'POST',

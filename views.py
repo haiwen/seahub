@@ -29,7 +29,7 @@ from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
 from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
-    get_repo, get_commits, get_branches, is_valid_filename, \
+    get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner
 from pysearpc import SearpcError
@@ -641,13 +641,6 @@ def remove_repo(request, repo_id):
     next = request.GET.get('next', '/')
     return HttpResponseRedirect(next)
     
-#@login_required
-#def remove_fetched_repo(request, user_id, repo_id):
-#    if user_id and repo_id:
-#        seafserv_threaded_rpc.remove_fetched_repo (user_id, repo_id)
-#        
-#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
 @login_required
 def myhome(request):
     owned_repos = []
@@ -1227,79 +1220,36 @@ def user_info(request, email):
     if not request.user.is_staff:
         return go_permission_error(request, u'权限不足：无法查看该用户信息')
 
-    # if request.user.org and not request.user.org.is_staff:
-    #     return go_permission_error(request, u'权限不足：无法查看该用户信息')
-
-#    user_dict = {}
     owned_repos = []
     quota_usage = 0
 
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
-#    try:
-#        peers = ccnet_threaded_rpc.get_peers_by_email(email)
-#        for peer in peers:
-#            if not peer:
-#                continue
-#            peername = peer.props.name
-#            roles = peer.props.role_list
-#            user_dict[peername] = roles
-#    except:
-#        pass
-
     # Repos that are share to user
-    in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email', -1, -1)
+    in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email',
+                                                      -1, -1)
 
     return render_to_response(
         'userinfo.html', {
             'owned_repos': owned_repos,
             'quota_usage': quota_usage,
             "in_repos": in_repos,
-#            'user_dict': user_dict,
             'email': email
             },
         context_instance=RequestContext(request))
 
-#@login_required
-#def role_add(request, user_id):
-#    if not request.user.is_staff:
-#        raise Http404
-# 
-#    if request.method == 'POST':
-#        role = request.POST.get('role', '')
-#        if role and len(role) <= 16:
-#            ccnet_rpc.add_role(user_id, role)
-# 
-#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-#@login_required
-#def role_remove(request, user_id):
-#    if not request.user.is_staff:
-#        raise Http404
-# 
-#    role = request.REQUEST.get('role', '')
-#    if role and len(role) <= 16:
-#        ccnet_rpc.remove_role(user_id, role)
-# 
-#    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
 @login_required
 def user_remove(request, user_id):
-    """The user id is emailuser id."""
+    """Remove user, also remove group relationship."""
     
-    if not request.user.is_staff and not request.user.org['is_staff']:
+    if not request.user.is_staff:
         raise Http404
 
     ccnetuser = get_ccnetuser(userid=int(user_id))
+    remove_group_user(ccnetuser.email)    
     ccnetuser.delete()
     
-    if request.user.org:
-        org_id = request.user.org['org_id']
-        url_prefix = request.user.org['url_prefix']
-        ccnet_threaded_rpc.remove_org_user(org_id, ccnetuser.username)
-        return HttpResponseRedirect(reverse('org_useradmin', args=[url_prefix]))
-
     return HttpResponseRedirect(reverse('sys_useradmin'))
 
 @login_required
