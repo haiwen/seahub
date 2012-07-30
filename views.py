@@ -35,7 +35,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
-from seahub.base.models import UuidOjbidMap
+from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
 from seahub.organizations.utils import clear_org_ctx, access_org_repo
@@ -1887,8 +1887,8 @@ def crocodoc_upload(request):
         data = json.dumps([{'error': '缺少obj_id'}])
         return HttpResponse(data, status=500, content_type=content_type)
     try:
-        uo = UuidOjbidMap.objects.get(obj_id=obj_id)
-    except UuidOjbidMap.DoesNotExist:
+        uo = UuidObjidMap.objects.get(obj_id=obj_id)
+    except UuidObjidMap.DoesNotExist:
         uo = None
     if uo:
         data = json.dumps([{'uuid': uo.uuid, 'obj_id': obj_id}])
@@ -1933,7 +1933,7 @@ def crocodoc_status(request):
     ret_dict = ret_list[0]
     if ret_dict.has_key('error'):
         # Delete obj_id-uuid in db
-        UuidOjbidMap.objects.filter(obj_id=obj_id).delete()
+        UuidObjidMap.objects.filter(obj_id=obj_id).delete()
         
         data = json.dumps([{'error': '文档转换出错：' + ret_dict['error']}])
         return HttpResponse(data, status=500, content_type=content_type)
@@ -1948,7 +1948,7 @@ def crocodoc_status(request):
         return HttpResponse(data, status=200, content_type=content_type)
     elif status == 'DONE':
         # Cache obj_id and uuid in db
-        uo = UuidOjbidMap(uuid=uuids, obj_id=obj_id)
+        uo = UuidObjidMap(uuid=uuids, obj_id=obj_id)
         try:
             uo.save()
         except IntegrityError, e:
@@ -1958,7 +1958,7 @@ def crocodoc_status(request):
         return HttpResponse(data, status=200, content_type=content_type)
     elif status == 'ERROR':
         # Delete obj_id-uuid in db
-        UuidOjbidMap.objects.filter(obj_id=obj_id).delete()
+        UuidObjidMap.objects.filter(obj_id=obj_id).delete()
 
         err_msg = '文档转换出错:' + ret_dict['error'] if ret_dict.has_key('error') \
             else '文档转换出错'

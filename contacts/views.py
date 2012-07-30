@@ -99,7 +99,7 @@ def contact_edit(request):
                 contact = Contact.objects.get(user_email=user_email,
                                               contact_email=contact_email)
             except Contact.DoesNotExist:
-                return go_error(request, '用户不存在')
+                return go_error(request, '联系人不存在')
             else:
                 contact.contact_name = contact_name
                 contact.note = note
@@ -110,7 +110,7 @@ def contact_edit(request):
         c = Contact.objects.filter(user_email=request.user.username,
                                    contact_email=contact_email)
         if not c:
-            return go_error(request, '用户不存在')
+            return go_error(request, '联系人不存在')
         else:
             init_data = {'user_email':request.user.username,
                          'contact_email':contact_email,

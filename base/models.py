@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class UuidOjbidMap(models.Model):    
+class UuidObjidMap(models.Model):    
     """
     Model used for store crocdoc uuid and file object id mapping.
     """

@@ -4,7 +4,7 @@ import os
 from django.db import models
 
 class GroupMessage(models.Model):
-    group_id = models.IntegerField()
+    group_id = models.IntegerField(db_index=True)
     from_email = models.EmailField()
     message = models.CharField(max_length=500)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
