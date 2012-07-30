@@ -11,7 +11,7 @@ from pysearpc import SearpcError
 
 from forms import ProfileForm
 from models import Profile
-from utils import go_error
+from utils import render_error
 from seahub.contacts.models import Contact
 
 #@login_required
@@ -32,7 +32,7 @@ from seahub.contacts.models import Contact
 #    try:
 #        ccnet_threaded_rpc.remove_one_binding(request.user.username, peer_id)
 #    except SearpcError, e:
-#        return go_error(request, e.msg)
+#        return render_error(request, e.msg)
 # 
 #    return HttpResponseRedirect(reverse('list_userids'))
 

@@ -27,7 +27,7 @@ PREVIEW_FILEEXT = {
     'Markdown': ('markdown', 'md'),
 }
 
-def go_permission_error(request, msg=None):
+def render_permission_error(request, msg=None):
     """
     Return permisson error page.
 
@@ -36,7 +36,7 @@ def go_permission_error(request, msg=None):
             'error_msg': msg or u'权限错误',
             }, context_instance=RequestContext(request))
 
-def go_error(request, msg=None):
+def render_error(request, msg=None):
     """
     Return normal error page.
 

@@ -12,7 +12,7 @@ from avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_SIZE
 from avatar.signals import avatar_updated
 from avatar.util import get_primary_avatar, get_default_avatar_url, \
     invalidate_cache
-from seahub.utils import go_error, go_permission_error
+from seahub.utils import render_error, render_permission_error
 
 from auth.decorators import login_required
 from seaserv import ccnet_threaded_rpc, check_group_staff
@@ -94,10 +94,10 @@ def group_add(request):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return go_error(request, u'group id 不是有效参数')        
+        return render_error(request, u'group id 不是有效参数')        
 
     if not check_group_staff(group_id_int, request.user):
-        return go_permission_error(request, u'只有小组管理员有权设置小组图标')
+        return render_permission_error(request, u'只有小组管理员有权设置小组图标')
 
     group = ccnet_threaded_rpc.get_group(group_id_int)
     if not group:

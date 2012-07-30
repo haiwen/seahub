@@ -17,7 +17,7 @@ from models import AnonymousShare
 #from seahub.contacts.models import Contact
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, validate_emailuser
-from seahub.utils import go_permission_error
+from seahub.utils import render_permission_error
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
 
@@ -40,7 +40,7 @@ def share_repo(request):
 
     # Test whether user is the repo owner
     if not validate_owner(request, repo_id):
-        return go_permission_error(request, u'只有目录拥有者有权共享目录')
+        return render_permission_error(request, u'只有目录拥有者有权共享目录')
     
     # Handle the diffent separator
     to_email_str = email_or_group.replace(';',',')

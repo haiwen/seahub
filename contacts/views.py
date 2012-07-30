@@ -11,7 +11,7 @@ from django.forms.models import modelformset_factory
 from django.contrib import messages
 
 from models import Contact, ContactAddForm, ContactEditForm
-from utils import go_error
+from utils import render_error
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
 
@@ -64,7 +64,7 @@ def contact_add(request):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return go_error('小组ID必须为整数')
+        return render_error('小组ID必须为整数')
         
     form = ContactAddForm(request.POST)
     if form.is_valid():
@@ -99,7 +99,7 @@ def contact_edit(request):
                 contact = Contact.objects.get(user_email=user_email,
                                               contact_email=contact_email)
             except Contact.DoesNotExist:
-                return go_error(request, '联系人不存在')
+                return render_error(request, '联系人不存在')
             else:
                 contact.contact_name = contact_name
                 contact.note = note
@@ -110,7 +110,7 @@ def contact_edit(request):
         c = Contact.objects.filter(user_email=request.user.username,
                                    contact_email=contact_email)
         if not c:
-            return go_error(request, '联系人不存在')
+            return render_error(request, '联系人不存在')
         else:
             init_data = {'user_email':request.user.username,
                          'contact_email':contact_email,

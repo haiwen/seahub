@@ -40,7 +40,7 @@ from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
 from seahub.organizations.utils import clear_org_ctx, access_org_repo
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm
-from utils import go_permission_error, go_error, list_to_string, \
+from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
@@ -150,7 +150,7 @@ def render_repo(request, repo_id, error=''):
     # Check whether user can view repo page
     can_access = access_to_repo(request, repo_id, '')
     if not can_access:
-        return go_permission_error(request, '无法访问该同步目录')
+        return render_permission_error(request, '无法访问该同步目录')
 
     # Check whether use is repo owner
     if validate_owner(request, repo_id):
@@ -160,7 +160,7 @@ def render_repo(request, repo_id, error=''):
     
     repo = get_repo(repo_id)
     if not repo:
-        return go_error(request, u'该同步目录不存在')
+        return render_error(request, u'该同步目录不存在')
 
     # query whether set password if repo is encrypted
     password_set = False
@@ -170,7 +170,7 @@ def render_repo(request, repo_id, error=''):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return go_error(request, e.msg)
+            return render_error(request, e.msg)
 
     # view newest worktree or history worktree
     commit_id = request.GET.get('commit_id', '')
@@ -200,7 +200,7 @@ def render_repo(request, repo_id, error=''):
                 dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id,
                                                      path.encode('utf-8'))
             except SearpcError, e:
-                return go_error(request, e.msg)
+                return render_error(request, e.msg)
             for dirent in dirs:
                 if stat.S_ISDIR(dirent.props.mode):
                     dir_list.append(dirent)
@@ -220,7 +220,7 @@ def render_repo(request, repo_id, error=''):
             accessible_repos = get_accessible_repos(request, repo)
         except SearpcError, e:
             error_msg = e.msg
-            return go_error(request, error_msg)
+            return render_error(request, error_msg)
     else:
          accessible_repos = []   
 
@@ -298,12 +298,12 @@ def repo_upload_file(request, repo_id):
     if len(filename) > settings.MAX_UPLOAD_FILE_NAME_LEN:
         remove_tmp_file()
         error_msg = u"您上传的文件名称太长"
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
         error_msg = u"您上传的文件太大"
         remove_tmp_file()
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     try:
         seafserv_threaded_rpc.post_file (repo_id, tmp_file_path, parent_dir,
@@ -326,7 +326,7 @@ def repo_update_file(request, repo_id):
     if request.method == 'GET':
         target_file  = request.GET.get('p')
         if not target_file:
-            return go_error(request)
+            return render_error(request)
         zipped = gen_path_link (target_file, repo.name)
         # TODO: per user quota, org user quota
         return render_to_response ('repo_update_file.html', {
@@ -341,7 +341,7 @@ def repo_update_file(request, repo_id):
     ############ POST ############
     target_file = request.POST.get('target_file')
     if not target_file:
-        return go_error(request)
+        return render_error(request)
 
     def render_update_file_error(error_msg):
         zipped = gen_path_link (target_file, repo.name)
@@ -375,7 +375,7 @@ def repo_update_file(request, repo_id):
     if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
         error_msg = u"您上传的文件太大"
         remove_tmp_file()
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     parent_dir = os.path.dirname(target_file)
     filename   = os.path.basename(target_file)
@@ -397,13 +397,13 @@ def get_subdir(request):
     path = request.GET.get('path', '')
 
     if not (repo_id and path):
-        return go_error(request)
+        return render_error(request)
 
     latest_commit = get_commits(repo_id, 0, 1)[0]
     try:
         dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
     except SearpcError, e:
-        return go_error(request, e.msg)
+        return render_error(request, e.msg)
 
     subdirs = []
     for dirent in dirents:
@@ -415,7 +415,7 @@ def get_subdir(request):
         try:
             dirs_ = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
         except SearpcError, e:
-            return go_error(request, e.msg)
+            return render_error(request, e.msg)
 
         for dirent_ in dirs_:
             if stat.S_ISDIR(dirent_.props.mode):
@@ -448,15 +448,15 @@ def repo(request, repo_id):
             seafserv_threaded_rpc.set_passwd(repo_id, request.user.username, password)
         except SearpcError, e:
             if e.msg == 'Bad arguments':
-                return go_error(request, u'url 格式不正确')
+                return render_error(request, u'url 格式不正确')
             elif e.msg == 'Repo is not encrypted':
                 return render_repo(request, repo_id)
             elif e.msg == 'Incorrect password':
                 return render_repo(request, repo_id, u'密码不正确，请重新输入')
             elif e.msg == 'Internal server error':
-                return go_error(request, u'服务器内部故障')
+                return render_error(request, u'服务器内部故障')
             else:
-                return go_error(request, u'未知错误')
+                return render_error(request, u'未知错误')
 
         return render_repo(request, repo_id)
 
@@ -466,7 +466,7 @@ def repo_history(request, repo_id):
     View repo history
     """
     if not access_to_repo(request, repo_id, ''):
-        return go_permission_error(request, u'无法浏览该同步目录修改历史')
+        return render_permission_error(request, u'无法浏览该同步目录修改历史')
     
     repo = get_repo(repo_id)
 
@@ -477,7 +477,7 @@ def repo_history(request, repo_id):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return go_error(request, e.msg)
+            return render_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
         return HttpResponseRedirect(reverse('repo', args=[repo_id]))
@@ -519,7 +519,7 @@ def repo_history_revert(request, repo_id):
     Only repo owner can revert repo.
     """
     if not validate_owner(request, repo_id):
-        return go_permission_error(request, u'只有同步目录拥有者有权还原目录')
+        return render_permission_error(request, u'只有同步目录拥有者有权还原目录')
     
     repo = get_repo(repo_id)
     if not repo:
@@ -532,14 +532,14 @@ def repo_history_revert(request, repo_id):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return go_error(request, e.msg)
+            return render_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
         return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return go_error(request, u'请指定历史记录 ID')
+        return render_error(request, u'请指定历史记录 ID')
 
     res = request.user.username.split('@')
     user_name = res[0]
@@ -548,13 +548,13 @@ def repo_history_revert(request, repo_id):
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, user_name)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
-            return go_error(request, u'非法参数')
+            return render_error(request, u'非法参数')
         elif e.msg == 'No such repo':
-            return go_error(request, u'同步目录不存在')
+            return render_error(request, u'同步目录不存在')
         elif e.msg == "Commit doesn't exist":
-            return go_error(request, u'指定的历史记录不存在')
+            return render_error(request, u'指定的历史记录不存在')
         else:
-            return go_error(request, u'未知错误')
+            return render_error(request, u'未知错误')
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
@@ -635,7 +635,7 @@ def remove_repo(request, repo_id):
     if not validate_owner(request, repo_id) and not request.user.is_staff \
             and not request.user.org['is_staff']:
         err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
-        return go_permission_error(request, err_msg)
+        return render_permission_error(request, err_msg)
     
     seafserv_threaded_rpc.remove_repo(repo_id)
     next = request.GET.get('next', '/')
@@ -780,7 +780,7 @@ def repo_view_file(request, repo_id):
             obj_id = None
 
     if not obj_id:
-        return go_error(request, '文件不存在')
+        return render_error(request, '文件不存在')
     
     repo = get_repo(repo_id)
     if not repo:
@@ -793,7 +793,7 @@ def repo_view_file(request, repo_id):
         seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
                                            'view', request.user.username)
     else:
-        go_permission_error(request, '无法查看该文件')
+        render_permission_error(request, '无法查看该文件')
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -923,7 +923,7 @@ def repo_access_file(request, repo_id, obj_id):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return go_error(request, e.msg)
+            return render_error(request, e.msg)
 
     if repo.props.encrypted and not password_set:
         return HttpResponseRedirect(reverse('repo', args=[repo_id]))
@@ -950,7 +950,7 @@ def repo_access_file(request, repo_id, obj_id):
         seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
                                            op, request.user.username)
     else:
-        go_permission_error(request, '无法访问文件')
+        render_permission_error(request, '无法访问文件')
 
     redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
@@ -977,12 +977,12 @@ def repo_download(request):
         token = seafserv_threaded_rpc.get_repo_token_nonnull \
                 (repo_id, request.user.username)
     except Exception, e:
-        return go_error(request, str(e))
+        return render_error(request, str(e))
 
     addr, port = get_ccnet_server_addr_port ()
 
     if not (addr and port):
-        return go_error(request, u"服务器设置错误")
+        return render_error(request, u"服务器设置错误")
 
     ccnet_applet_root = get_ccnetapplet_root()
     email = urllib2.quote(request.user.username)
@@ -1007,7 +1007,7 @@ def file_move(request):
 
     if not (src_repo_id and src_path and dst_repo_id \
             and dst_path and obj_name and obj_type and op):
-        return go_error(request)
+        return render_error(request)
 
     # do nothing when dst is the same as src
     if src_repo_id == dst_repo_id and src_path == dst_path:
@@ -1020,7 +1020,7 @@ def file_move(request):
         if dst_path.startswith(src_dir):
             error_msg = u"不能把目录 %s %s到它的子目录 %s" \
                         % (src_dir, u"复制" if op == 'cp' else u"移动", dst_path)
-            return go_error(request, error_msg)
+            return render_error(request, error_msg)
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
@@ -1034,7 +1034,7 @@ def file_move(request):
                                              dst_repo_id, dst_path, new_obj_name,
                                              request.user.username)
     except Exception, e:
-        return go_error(request, str(e))
+        return render_error(request, str(e))
 
     url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % src_path)
 
@@ -1071,17 +1071,17 @@ def repo_remove_share(request):
         to_email = request.GET.get('to', '')
         if request.user.username != from_email and \
                 request.user.username != to_email:
-            return go_permission_error(request, u'取消共享失败')
+            return render_permission_error(request, u'取消共享失败')
         seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
     else:
         try:
             group_id_int = int(group_id)
         except:
-            return go_error(request, u'group id 不是有效参数')
+            return render_error(request, u'group id 不是有效参数')
 
         if not check_group_staff(group_id_int, request.user) \
                 and request.user.username != from_email: 
-            return go_permission_error(request, u'取消共享失败')        
+            return render_permission_error(request, u'取消共享失败')        
         from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
 
@@ -1218,7 +1218,7 @@ def user_info(request, email):
         return HttpResponseRedirect(reverse(myhome))
     
     if not request.user.is_staff:
-        return go_permission_error(request, u'权限不足：无法查看该用户信息')
+        return render_permission_error(request, u'权限不足：无法查看该用户信息')
 
     owned_repos = []
     quota_usage = 0
@@ -1487,28 +1487,28 @@ def repo_new_dir(request):
 
     if not new_dir_name:
         error_msg = u"请输入新目录名"
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     if not (repo_id and parent_dir and user):
-        return go_error(request)
+        return render_error(request)
 
     if len(new_dir_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
         error_msg = u"您输入的目录名称过长"
-        return go_error (request, error_msg)
+        return render_error (request, error_msg)
 
     try:
         if not is_valid_filename(new_dir_name):
             error_msg = (u"您输入的目录名称 %s 包含非法字符" % new_dir_name)
-            return go_error (request, error_msg)
+            return render_error (request, error_msg)
     except SearpcError,e:
-            return go_error (request, e.msg)
+            return render_error (request, e.msg)
 
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
     try:
         seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name, user)
     except Exception, e:
-        return go_error(request, str(e))
+        return render_error(request, str(e))
         
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
@@ -1523,20 +1523,20 @@ def repo_rename_file(request):
 
     if not newname:
         error_msg = u"新文件名不能为空"
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
         error_msg = u"新文件名太长"
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     if not (repo_id and parent_dir and oldname):
-        return go_error(request)
+        return render_error(request)
 
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
     except Exception, e:
-        return go_error(request, str(e))
+        return render_error(request, str(e))
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
@@ -1547,7 +1547,7 @@ def validate_filename(request):
     filename    = request.GET.get('filename')
 
     if not (repo_id and filename):
-        return go_error(request)
+        return render_error(request)
 
     result = {'ret':'yes'}
 
@@ -1600,20 +1600,20 @@ def render_file_revisions (request, repo_id):
     """List all history versions of a file."""
     target_file = request.GET.get('p')
     if not target_file:
-        return go_error(request)
+        return render_error(request)
 
     repo = get_repo(repo_id)
     if not repo:
         error_msg = u"同步目录不存在"
-        return go_error(request, error_msg)
+        return render_error(request, error_msg)
 
     try:
         commits = seafserv_threaded_rpc.list_file_revisions(repo_id, target_file)
     except SearpcError, e:
-        return go_error(request, e.msg)
+        return render_error(request, e.msg)
 
     if not commits:
-        return go_error(request)
+        return render_error(request)
         
     # Check whether use is repo owner
     if validate_owner(request, repo_id):
@@ -1627,14 +1627,14 @@ def render_file_revisions (request, repo_id):
         for commit in commits:
             file_id, file_size = get_file_revision_id_size (commit.id, target_file)
             if not file_id or not file_size:
-                return go_error(request)
+                return render_error(request)
             commit.revision_file_size = file_size
             if file_id == current_file_id:
                 commit.is_current_version = True
             else:
                 commit.is_current_version = False
     except Exception, e:
-        return go_error(request, str(e))
+        return render_error(request, str(e))
 
     return render_to_response('file_revisions.html', {
         'repo': repo,
@@ -1646,26 +1646,26 @@ def render_file_revisions (request, repo_id):
 @login_required        
 def file_revisions(request, repo_id):
     if request.method != 'GET':
-        return go_error(request)
+        return render_error(request)
 
     op = request.GET.get('op')
     if not op:
         return render_file_revisions(request, repo_id)
     elif op != 'revert' and op != 'download' and op != 'view':
-        return go_error(request)
+        return render_error(request)
 
     commit_id   = request.GET.get('commit')
     path        = request.GET.get('p')
 
     if not (commit_id and path):
-        return go_error(request)
+        return render_error(request)
 
     if op == 'revert':
         try:
             seafserv_threaded_rpc.revert_file (repo_id, commit_id,
                                                path, request.user.username)
         except Exception, e:
-            return go_error(request, str(e))
+            return render_error(request, str(e))
         else:
             parent_dir = os.path.dirname(path)
             url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
@@ -1678,14 +1678,14 @@ def file_revisions(request, repo_id):
             seafdir = seafserv_threaded_rpc.list_dir_by_path (commit_id, \
                                         parent_dir.encode('utf-8'))
             if not seafdir:
-                return go_error(request)
+                return render_error(request)
 
             # for ...  else ...
             for dirent in seafdir:
                 if dirent.obj_name == file_name:
                     break
             else:
-                return go_error(request)
+                return render_error(request)
 
             url = reverse('repo_access_file', args=[repo_id, dirent.obj_id])
             url += '?file_name=%s&op=download' % file_name
@@ -1694,11 +1694,11 @@ def file_revisions(request, repo_id):
         try:
             return handle_download()
         except Exception, e:
-            return go_error(request, str(e))
+            return render_error(request, str(e))
     elif op == 'view':
         seafile_id = get_file_revision_id_size (commit_id, path)[0]
         if not seafile_id:
-            return go_error(request)
+            return render_error(request)
         file_name = os.path.basename(path)
         url = reverse(repo_view_file, args=[repo_id])
         url += '?obj_id=%s&commit_id=%s&p=%s' % (seafile_id, commit_id, path)
@@ -1771,7 +1771,7 @@ def view_shared_file(request, token):
         obj_id = None
 
     if not obj_id:
-        return go_error(request, '文件不存在')
+        return render_error(request, '文件不存在')
     
     repo = get_repo(repo_id)
     if not repo:

@@ -25,7 +25,7 @@ from notifications.models import UserNotification
 from registration.models import RegistrationProfile
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
-from seahub.utils import go_error, go_permission_error, validate_group_name, \
+from seahub.utils import render_error, render_permission_error, validate_group_name, \
     emails2list, gen_token
 from seahub.views import myhome
 
@@ -47,7 +47,7 @@ def create_org(request):
                 return HttpResponseRedirect(\
                     reverse(org_info, args=[url_prefix]))
             except SearpcError, e:
-                return go_error(request, e.msg)
+                return render_error(request, e.msg)
             
     else:
         form = OrgCreateForm()
@@ -91,7 +91,7 @@ def org_groups(request, url_prefix):
     if request.method == 'POST':
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            return go_error(request, u'小组名称只能包含中英文字符，数字及下划线')
+            return render_error(request, u'小组名称只能包含中英文字符，数字及下划线')
         
         try:
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
@@ -99,7 +99,7 @@ def org_groups(request, url_prefix):
             ccnet_threaded_rpc.add_org_group(org.org_id, group_id)
         except SearpcError, e:
             error_msg = e.msg
-            return go_error(request, error_msg)
+            return render_error(request, error_msg)
         
     groups = get_org_groups(org.org_id, 0, sys.maxint)
     return render_to_response('organizations/org_groups.html', {
