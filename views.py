@@ -14,7 +14,8 @@ from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
+    HttpResponseRedirect 
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.views.decorators.csrf import csrf_protect
@@ -30,15 +31,15 @@ from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
-    get_group_repoids, check_group_staff, get_personal_groups
+    get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner
 from pysearpc import SearpcError
 
 from seahub.base.accounts import CcnetUser
 from seahub.base.models import UuidOjbidMap
 from seahub.contacts.models import Contact
 from seahub.notifications.models import UserNotification
-from seahub.organizations.utils import clear_org_ctx
-from forms import AddUserForm, FileLinkShareForm
+from seahub.organizations.utils import clear_org_ctx, access_org_repo
+from forms import AddUserForm, FileLinkShareForm, RepoCreateForm
 from utils import go_permission_error, go_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -52,26 +53,18 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, CROCODOC_API_TOKEN
 def root(request):
     return HttpResponseRedirect(reverse(myhome))
 
-
 def validate_owner(request, repo_id):
     """
-    Check whether email in the request own the repo
+    Check whether user in the request owns the repo.
     
     """
-    try:
-        ret = seafserv_threaded_rpc.is_repo_owner(request.user.username,
-                                                   repo_id)
-    except:
-        ret = 0
+    ret = is_repo_owner(request.user.username, repo_id)
 
-    if ret == 0 or ret is None:
-        return False
-    else:
-        return True
+    return True if ret else False
 
 def validate_emailuser(emailuser):
     """
-    check whether emailuser is in the database
+    Check whether user is registerd.
 
     """
     try:
@@ -119,14 +112,15 @@ def access_to_repo(request, repo_id, repo_ap):
     """
     Check whether user in the request can access to repo, which means user can
     view directory entries on repo page. Only repo owner or person who is shared
-   can access to repo.
+    can access to repo.
+    NOTE: `repo_ap` may be used in future.
 
     """
-    if repo_ap == 'own' and not validate_owner(request, repo_id) \
-            and not check_shared_repo(request, repo_id):
-        return False
-    else:
+    if validate_owner(request, repo_id) or check_shared_repo(request, repo_id)\
+            or access_org_repo(request, repo_id):
         return True
+    else:
+        return False
 
 def gen_path_link(path, repo_name):
     """
@@ -153,18 +147,8 @@ def gen_path_link(path, repo_name):
     return zipped
     
 def render_repo(request, repo_id, error=''):
-    # get repo web access property, if no repo access property in db, then
-    # assume repo ap is 'own'
-    # repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    # if not repo_ap:
-    #     repo_ap = 'own'
-
-    # Since repo web access property is removed since 0.9.4, we assume all repo
-    # is 'own' for compatibility
-    repo_ap = 'own'
-    
     # Check whether user can view repo page
-    can_access = access_to_repo(request, repo_id, repo_ap)
+    can_access = access_to_repo(request, repo_id, '')
     if not can_access:
         return go_permission_error(request, '无法访问该同步目录')
 
@@ -250,7 +234,6 @@ def render_repo(request, repo_id, error=''):
             "view_history": view_history,
             "is_owner": is_owner,
             "password_set": password_set,
-            "repo_ap": repo_ap,
             "repo_size": repo_size,
             "dir_list": dir_list,
             "file_list": file_list,
@@ -482,11 +465,7 @@ def repo_history(request, repo_id):
     """
     View repo history
     """
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if not repo_ap:
-        repo_ap = 'own'
-        
-    if not access_to_repo(request, repo_id, repo_ap):
+    if not access_to_repo(request, repo_id, ''):
         return go_permission_error(request, u'无法浏览该同步目录修改历史')
     
     repo = get_repo(repo_id)
@@ -607,11 +586,7 @@ def repo_history_changes(request, repo_id):
     changes = {}
     content_type = 'application/json; charset=utf-8'
 
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if repo_ap == None:
-        repo_ap = 'own'
-        
-    if not access_to_repo(request, repo_id, repo_ap):
+    if not access_to_repo(request, repo_id, ''):
         return HttpResponse(json.dumps(changes),
                             content_type=content_type)
 
@@ -657,8 +632,10 @@ def modify_token(request, repo_id):
 
 @login_required
 def remove_repo(request, repo_id):
-    if not validate_owner(request, repo_id) and not request.user.is_staff:
-        return go_permission_error(request, u'删除同步目录失败')
+    if not validate_owner(request, repo_id) and not request.user.is_staff \
+            and not request.user.org['is_staff']:
+        err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
+        return go_permission_error(request, err_msg)
     
     seafserv_threaded_rpc.remove_repo(repo_id)
     next = request.GET.get('next', '/')
@@ -816,24 +793,14 @@ def repo_view_file(request, repo_id):
     if not repo:
         raise Http404
 
-    # if a repo is shared to me, then I can view and download file no mater whether
-    # repo's access property is 'own' or 'public'
-    if check_shared_repo(request, repo_id):
-        share_to_me = True
-    else:
-        share_to_me = False
-            
     token = ''        
-    # people who is owner or this repo is shared to him, can visit the repo;
-    # others, just go to 404 page           
-    if validate_owner(request, repo_id) or share_to_me:
-        # owner should get a token to visit repo                
+    if access_to_repo(request, repo_id, ''):
+        # Get a token to visit file
         token = gen_token()
-        # put token into memory in seaf-server
         seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
                                            'view', request.user.username)
     else:
-        raise Http404
+        go_permission_error(request, '无法查看该文件')
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -974,19 +941,6 @@ def repo_access_file(request, repo_id, obj_id):
     if op == 'del':
         return repo_del_file(request, repo_id)
 
-    # if a repo doesn't have access property in db, then assume it's 'own'
-    # repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    # if not repo_ap:
-    #     repo_ap = 'own'
-    repo_ap = 'own'
-
-    # if a repo is shared to me, then I can view and download file no mater whether
-    # repo's access property is 'own' or 'public'
-    if check_shared_repo(request, repo_id):
-        share_to_me = True
-    else:
-        share_to_me = False
-
     # If vistor's file shared token in url params matches the token in db,
     # then we know the vistor is from file shared link.
     share_token = request.GET.get('t', '')
@@ -997,17 +951,13 @@ def repo_access_file(request, repo_id, obj_id):
         from_shared_link = False
 
     token = ''        
-    if repo_ap == 'own':
-        # people who is owner or this repo is shared to him, can visit the repo;
-        # others, just go to 404 page           
-        if validate_owner(request, repo_id) or share_to_me or from_shared_link:
-            # owner should get a token to visit repo                
-            token = gen_token()
-            # put token into memory in seaf-server
-            seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
-                                               op, request.user.username)
-        else:
-            raise Http404
+    if access_to_repo(request, repo_id, '') or from_shared_link:
+        # Get a token to access file
+        token = gen_token()
+        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                           op, request.user.username)
+    else:
+        go_permission_error(request, '无法访问文件')
 
     redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
@@ -1667,55 +1617,34 @@ def repo_create(request):
     Handle ajax post.
     
     '''
-    if request.method == 'POST':
-        repo_name = request.POST.get("repo_name")
-        repo_desc = request.POST.get("repo_desc")
-        encrypted = int(request.POST.get("encryption"))
-        passwd = request.POST.get("passwd")
-        passwd_again = request.POST.get("passwd_again")
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
 
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        error_msg = ""
-        if not repo_name:
-            error_msg = u"目录名不能为空"
-        elif len(repo_name) > 50:
-            error_msg = u"目录名太长"
-        elif not is_valid_filename(repo_name):
-            error_msg = (u"您输入的目录名 %s 包含非法字符" % repo_name)
-        elif not repo_desc:
-            error_msg = u"描述不能为空"
-        elif len(repo_desc) > 100:
-            error_msg = u"描述太长"
-        elif encrypted == 1:
-            if not passwd:
-                error_msg = u"密码不能为空"
-            elif not passwd_again:
-                error_msg = u"确认密码不能为空"
-            elif len(passwd) < 3:
-                error_msg = u"密码太短"
-            elif len(passwd) > 15:
-                error_msg = u"密码太长"
-            elif passwd != passwd_again:
-                error_msg = u"两次输入的密码不相同"
-
-        if error_msg:
-            result['error'] = error_msg
-            return HttpResponse(json.dumps(result), content_type=content_type)
-
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    
+    form = RepoCreateForm(request.POST)
+    if form.is_valid():
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        encrypted = form.cleaned_data['encryption']
+        passwd = form.cleaned_data['passwd']
+        passwd_again = form.cleaned_data['passwd_again']
+        user = request.user.username
+        
         try:
-            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc, request.user.username, passwd)
-            result['success'] = True
-
+            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
+                                                        user, passwd)
         except:
+            repo_id = None
+        if not repo_id:
             result['error'] = u"创建目录失败"
-
         else:
-            if not repo_id:
-                result['error'] = u"创建目录失败"
-
+            result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""

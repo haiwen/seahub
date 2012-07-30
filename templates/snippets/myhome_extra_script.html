@@ -69,7 +69,7 @@ function showError(err) {
 $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
-
+/*
     if (!$('#repo-name').val()) {
         showError('目录名不能为空。');
         return false;
@@ -78,7 +78,6 @@ $('#repo-create-submit').click(function() {
         showError('描述不能为空。');
         return false;
     }   
-
     if ($('#encrypt-switch').attr('checked')) {
         if (!passwd.val()) {
             showError('密码不能为空。');
@@ -101,13 +100,12 @@ $('#repo-create-submit').click(function() {
             return false;
         }
     }
-
+*/
     $.ajax({
         url: '{{ url }}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {
             'repo_name': $('#repo-name').val(),
@@ -117,12 +115,17 @@ $('#repo-create-submit').click(function() {
             'passwd_again': passwd_again.val()
         },
         success: function(data) {
-        alert(data);
             if (data['success']) {
                 location.reload(true);
             } else {
                 showError(data['error']);
             }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                showError(value[0]);
+            });
         }
     });
 

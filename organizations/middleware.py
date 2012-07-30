@@ -10,7 +10,7 @@ class OrganizationMiddleware(object):
     Middleware that add organization info to request when user in organization
     context.
     """
-    
+
     def process_request(self, request):
         # Get current org context
         org = cache.get(ORG_CACHE_PREFIX + request.user.username)

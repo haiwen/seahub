@@ -9,9 +9,9 @@ urlpatterns = patterns('',
     url(r'^messages/$', org_msg, name='org_msg'),
     url(r'^(?P<url_prefix>[^/]+)/$', org_info, name='org_info'),
     url(r'^(?P<url_prefix>[^/]+)/groups/$', org_groups, name='org_groups'),
-    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
-    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),
     url(r'^([^/]+)/repo/create/$', org_repo_create, name='org_repo_create'),
+    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),                       
+    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
                        
     ### Org admin ###                       
     url(r'^([^/]+)/seafadmin/$', org_seafadmin, name='org_seafadmin'),

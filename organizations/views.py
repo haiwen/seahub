@@ -1,10 +1,12 @@
 # encoding: utf-8
+import simplejson as json
 import sys
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site, RequestSite
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
+    HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 
@@ -12,7 +14,8 @@ from auth.decorators import login_required
 from pysearpc import SearpcError
 from seaserv import ccnet_threaded_rpc, get_orgs_by_user, get_org_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
-    get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename
+    get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename, \
+    create_org_repo
 
 from forms import OrgCreateForm
 from signals import org_user_added
@@ -20,6 +23,7 @@ from settings import ORG_CACHE_PREFIX
 from utils import set_org_ctx
 from notifications.models import UserNotification
 from registration.models import RegistrationProfile
+from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import go_error, go_permission_error, validate_group_name, \
     emails2list, gen_token
@@ -230,58 +234,34 @@ def org_msg(request):
             }, context_instance=RequestContext(request))
 
 @login_required    
-def org_repo_create(request):
+def org_repo_create(request, url_prefix):
     '''
     Handle ajax post to create org repo.
     
     '''
-    if request.method != 'POST':
+    if not request.is_ajax() or request.method != 'POST':
         return Http404
-    repo_name = request.POST.get("repo_name")
-    repo_desc = request.POST.get("repo_desc")
-    encrypted = int(request.POST.get("encryption"))
-    passwd = request.POST.get("passwd")
-    passwd_again = request.POST.get("passwd_again")
 
     result = {}
     content_type = 'application/json; charset=utf-8'
-
-    error_msg = ""
-    if not repo_name:
-        error_msg = u"目录名不能为空"
-    elif len(repo_name) > 50:
-        error_msg = u"目录名太长"
-    elif not is_valid_filename(repo_name):
-        error_msg = (u"您输入的目录名 %s 包含非法字符" % repo_name)
-    elif not repo_desc:
-        error_msg = u"描述不能为空"
-    elif len(repo_desc) > 100:
-        error_msg = u"描述太长"
-    elif encrypted == 1:
-        if not passwd:
-            error_msg = u"密码不能为空"
-        elif not passwd_again:
-            error_msg = u"确认密码不能为空"
-        elif len(passwd) < 3:
-            error_msg = u"密码太短"
-        elif len(passwd) > 15:
-            error_msg = u"密码太长"
-        elif passwd != passwd_again:
-            error_msg = u"两次输入的密码不相同"
-
-    if error_msg:
-        result['error'] = error_msg
-        return HttpResponse(json.dumps(result), content_type=content_type)
-
-    try:
+    
+    form = RepoCreateForm(request.POST)
+    if form.is_valid():
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        encrypted = form.cleaned_data['encryption']
+        passwd = form.cleaned_data['passwd']
+        passwd_again = form.cleaned_data['passwd_again']
+        
         user = request.user.username
         org_id = request.user.org['org_id']
+
         repo_id = create_org_repo(repo_name, repo_desc, user, passwd, org_id)
-        result['success'] = True
-    except:
-        result['error'] = u"创建目录失败"
-    else:
         if not repo_id:
             result['error'] = u"创建目录失败"
-            
-    return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
+            result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)

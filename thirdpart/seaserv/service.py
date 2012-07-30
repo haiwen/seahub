@@ -220,6 +220,7 @@ def create_org_repo(repo_name, repo_desc, user, passwd, org_id):
     
 def get_org_repos(org_id, start, limit):
     """
+    List repos created in org.
     """
     try:
         repos = seafserv_threaded_rpc.get_org_repo_list(org_id, start, limit)
@@ -227,10 +228,30 @@ def get_org_repos(org_id, start, limit):
         repos = []
 
     return repos
-    
+
+def get_org_id_by_repo_id(repo_id):
+    """
+    Get org id according repo id.
+    """
+    try:
+        org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
+    except SearpcError:
+        org_id = ''
+    return org_id
+
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 
+def is_repo_owner(user, repo_id):
+    """
+    Check whether user is repo owner.
+    """
+    try:
+        ret = seafserv_threaded_rpc.is_repo_owner(user, repo_id)
+    except SearpcError:
+        ret = 0
+    return ret
+    
 def get_commits(repo_id, offset, limit):
     """Get commit lists."""
     return seafserv_threaded_rpc.get_commit_list(repo_id, offset, limit)
