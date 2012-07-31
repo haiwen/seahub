@@ -86,28 +86,16 @@ def share_repo(request):
                 messages.add_message(request, messages.ERROR, to_email)
                 continue
             
-            # Send mail if user has not registered.
             if not validate_emailuser(to_email):
-                use_https = request.is_secure()
-                site_name = domain = RequestSite(request).domain
-
-                t = loader.get_template('repo/repo_share_mail.html')
-                c = {
-                    'user': request.user.username,
-                    'to_email': to_email,
-                    'domain': domain,
-                    'site_name': site_name,
-                    'protocol': use_https and 'https' or 'http',
-                    }
-                try:
-                    send_mail(u'您在SeaCloud上收到一个同步目录',
-                              t.render(Context(c)), None,
-                              [to_email], fail_silently=False)
-                except:
-                    messages.add_message(request, messages.ERROR, to_email)
-                    continue
-            messages.add_message(request, messages.INFO, to_email)
-
+                # Generate shared link and send mail if user has not registered.
+                kwargs = {'repo_id': repo_id,
+                          'repo_owner': from_email,
+                          'anon_email': to_email
+                          }
+                anonymous_share(request, **kwargs)
+            else: 
+                messages.add_message(request, messages.INFO, to_email)
+               
     return HttpResponseRedirect(reverse('myhome'))
 
 @login_required
@@ -214,17 +202,11 @@ def anonymous_share_confirm(request, token=None):
         anon_share = AnonymousShare.objects.get(token=token)
     except AnonymousShare.DoesNotExist:
         raise Http404
-
-    context_instance = RequestContext(request)
-    context_instance['repo_owner'] = anon_share.repo_owner
-    if anon_share_token_generator.check_token(token):
+    else:
         res = HttpResponseRedirect(reverse('repo', args=[anon_share.repo_id]))
         res.set_cookie("anontoken", token,
                        max_age=ANONYMOUS_SHARE_COOKIE_TIMEOUT)
         return res
-    else:
-        return render_to_response('repo/anonymous_share_confirm.html',
-                                  context_instance=context_instance)
 
 def remove_anonymous_share(request, token):
     AnonymousShare.objects.filter(token=token).delete()
