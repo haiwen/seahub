@@ -48,10 +48,10 @@ urlpatterns = patterns('',
                            { 'template': 'registration/registration_closed.html' },
                            name='registration_disallowed'),
                        
-                       url(r'^business/register/$',
-                           register,
-                           org_reg_dict,
-                           name='registration_register'),
+                       # url(r'^business/register/$',
+                       #     register,
+                       #     org_reg_dict,
+                       #     name='registration_register'),
 
                        (r'', include('registration.auth_urls')),
                        )

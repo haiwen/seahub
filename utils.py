@@ -287,8 +287,15 @@ def get_ccnet_server_addr_port():
 
 def emails2list(emails):
     """
-    Split email string contacted with diffent separator.
+    Split email strings contacted with diffent separator.
     """
     email_str = emails.replace(';', ',').replace('\n', ',').replace('\r', ',')
-    return email_str.split(',')
-    
+    # Remove empty strings and duplicate emails
+    s = set()
+    for e in email_str.split(','):
+        e = e.strip(' ')
+        if not e:
+            continue
+        s.add(e)
+    return [ x for x in s ]
+        

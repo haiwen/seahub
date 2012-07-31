@@ -8,8 +8,9 @@ class Contact(models.Model):
 
     user_email = models.CharField(max_length=255)
     contact_email = models.CharField(max_length=255)
-    contact_name = models.CharField(max_length=255, blank=True, null=True)
-    note = models.CharField(max_length=255, blank=True, null=True)
+    contact_name = models.CharField(max_length=255, blank=True, null=True, \
+                                        default='')
+    note = models.CharField(max_length=255, blank=True, null=True, default='')
 
     class Meta:
         unique_together = ("user_email", "contact_email")

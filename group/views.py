@@ -14,9 +14,11 @@ from models import GroupMessage, MessageReply
 from forms import MessageForm, MessageReplyForm
 from signals import grpmsg_added, grpmsg_reply_added
 from seahub.contacts.models import Contact
+from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.utils import render_error, render_permission_error, validate_group_name
+from seahub.utils import render_error, render_permission_error, \
+    validate_group_name, emails2list
 from seahub.views import validate_emailuser
 
 @login_required
@@ -337,21 +339,14 @@ def group_members(request, group_id):
         Add group members.
         """
         member_name_str = request.POST.get('user_name', '')
-        # Handle the diffent separator
-        member_name_str = member_name_str.replace('\n',',')
-        member_name_str = member_name_str.replace('\r',',')
-        member_name_list = member_name_str.split(',')
 
-        # Remove same member name
-        member_name_dict = {}
-        for member_name in member_name_list:
-            member_name = member_name.strip(' ')
-            if not member_name:
-                continue
-            member_name_dict[member_name] = member_name
+        member_list = emails2list(member_name_str)
 
         if request.user.org:
-            for member_name in member_name_dict.keys():
+            for member_name in member_list:
+                # Add email to contacts
+                mail_sended.send(sender=None, user=request.user.username,
+                                  email=member_name)
                 if not ccnet_threaded_rpc.org_user_exists(request.user.org.org_id,
                                                  member_name):
                     err_msg = u'当前企业不存在 %s 用户' % member_name
@@ -364,7 +359,11 @@ def group_members(request, group_id):
                     except SearpcError, e:
                         return render_error(request, e.msg)
         else:
-            for member_name in member_name_dict.keys():
+            for member_name in member_list:
+                # Add email to contacts
+                mail_sended.send(sender=None, user=request.user.username,
+                                  email=member_name)
+                
                 if not validate_emailuser(member_name):
                     err_msg = u'用户 %s 不存在' % member_name
                     return render_error(request, err_msg)

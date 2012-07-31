@@ -32,34 +32,6 @@
 <p>暂无</p>
 {% endif %}
 
-<h3>我管理的共享链接</h3>
-{% if out_links %}
-<table class="link-list">
-  <tr>
-    <th width="25%">目录名</th>
-    <th width="35%">共享给</th>
-    <th width="20%">有效期</th>    
-    <th width="20%">操作</th>
-  </tr>
-  {% for link in out_links %}
-  <tr>
-    <td><a href="{{ SITE_ROOT }}repo/{{ link.repo_id }}/">{{ link.repo_name }}</a></td>
-    <td>{{ link.anonymous_email }}</td>
-    {% if link.remain_time %}
-    <td>{{ link.remain_time|translate_remain_time }}</td>
-    {% else %}
-    <td>已过期</td>
-    {% endif %}
-    <td><a href="#" class="op view-link" data="{{ link.token }}">查看链接</a>
-    <a class="op" href="{{ SITE_ROOT }}share/remove/{{ link.token }}/">删除</a></td>
-  </tr>
-  {% endfor %}
-  
-</table>
-{% else %}
-<p>暂无</p>
-{% endif %}
-
 <h3>我管理的文件外链</h3>
 {% if fileshares %}
 <table class="sharelink-list">
@@ -84,7 +56,7 @@
 <p>暂无</p>
 {% endif %}
 <div id="view-link" name="view-link" class="hide">
-  <span class="view-link-alert" style="float:left; margin-left: 120px; "></span>
+  <span class="view-link-alert" style="float:left; "></span>
 </div>
 
 {% endblock %}
@@ -103,15 +75,6 @@ $("table tr:gt(0)").hover(
         $(this).find('img').addClass('vh');
     }
 );
-
-$(".view-link").click(function() {
-
-    var t = $(this).attr('data');
-    var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}share/' + t + '/';
-    $('.view-link-alert').html("共享链接为：<p>" + l + "</p>");
-    $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
-    return false;
-});
 
 $(".view-file-link").click(function() {
 

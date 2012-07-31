@@ -18,8 +18,7 @@ $(function() {
     //check before post
     $('#share-submit-btn').click(function() {
         if (!$.trim($('#email_or_group').attr('value'))) {
-            $('#repo-share-form .error').removeClass('hide');
-            $('#simplemodal-container').css('height', $('#repo-share-form').height());
+            apply_form_error('repo-share-form', '输入不能为空。');
             return false;
         }
     });

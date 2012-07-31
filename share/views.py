@@ -10,16 +10,17 @@ from auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
-from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, ccnet_threaded_rpc
+from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
+    ccnet_threaded_rpc
 
 from forms import RepoShareForm
 from models import AnonymousShare
-#from seahub.contacts.models import Contact
-from seahub.share.models import FileShare
-from seahub.views import validate_owner, validate_emailuser
-from seahub.utils import render_permission_error
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
+from seahub.contacts.signals import mail_sended
+from seahub.share.models import FileShare
+from seahub.views import validate_owner, validate_emailuser
+from seahub.utils import render_permission_error, emails2list
 
 @login_required
 def share_repo(request):
@@ -42,21 +43,12 @@ def share_repo(request):
     if not validate_owner(request, repo_id):
         return render_permission_error(request, u'只有目录拥有者有权共享目录')
     
-    # Handle the diffent separator
-    to_email_str = email_or_group.replace(';',',')
-    to_email_str = to_email_str.replace('\n',',')
-    to_email_str = to_email_str.replace('\r',',')
-    to_email_list = to_email_str.split(',')
-
+    to_email_list = emails2list(email_or_group)
     for to_email in to_email_list:
-        to_email = to_email.strip(' ')
-        if not to_email:
-            continue
-
         # if to_email is user name, the format is: 'example@mail.com';
         # if to_email is group, the format is 'group_name <creator@mail.com>'
         if (to_email.split(' ')[0].find('@') == -1):
-            # share repo to group
+            ''' Share repo to group '''
             # TODO: if we know group id, then we can simplly call group_share_repo
             if len(to_email.split(' ')) < 2:
                 messages.add_message(request, messages.ERROR, to_email)
@@ -81,34 +73,54 @@ def share_repo(request):
             if not find:
                 messages.add_message(request, messages.ERROR, group_name)
         else:
-            if validate_emailuser(to_email):
-                # share repo to registered user 
+            ''' Share repo to user '''
+            # Add email to contacts.
+            mail_sended.send(sender=None, user=request.user.username,
+                             email=to_email)
+
+            # Record share info to db.
+            try:
+                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
+                                                'rw')
+            except SearpcError, e:
+                messages.add_message(request, messages.ERROR, to_email)
+                continue
+            
+            # Send mail if user has not registered.
+            if not validate_emailuser(to_email):
+                use_https = request.is_secure()
+                site_name = domain = RequestSite(request).domain
+
+                t = loader.get_template('repo/repo_share_mail.html')
+                c = {
+                    'user': request.user.username,
+                    'to_email': to_email,
+                    'domain': domain,
+                    'site_name': site_name,
+                    'protocol': use_https and 'https' or 'http',
+                    }
                 try:
-                    seafserv_threaded_rpc.add_share(repo_id, from_email,
-                                                    to_email, 'rw')
-                    messages.add_message(request, messages.INFO, to_email)
-                except SearpcError, e:
+                    send_mail(u'您在SeaCloud上收到一个同步目录',
+                              t.render(Context(c)), None,
+                              [to_email], fail_silently=False)
+                except:
                     messages.add_message(request, messages.ERROR, to_email)
-            else:
-                # share repo to anonymous user
-                kwargs = {'repo_id': repo_id,
-                          'repo_owner': from_email,
-                          'anon_email': to_email
-                          }
-                anonymous_share(request, **kwargs)
-        
+                    continue
+            messages.add_message(request, messages.INFO, to_email)
+
     return HttpResponseRedirect(reverse('myhome'))
 
 @login_required
 def share_admin(request):
     """
-    List repos I share to others, include groups and emails. And also list
+    List repos I share to others, include groups and users. And also list
     file shared links I generated.
     """
     username = request.user.username
 
     # repos that are share to user
-    out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email', -1, -1)
+    out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email',
+                                                       -1, -1)
 
     # repos that are share to groups
     group_repos = seafserv_threaded_rpc.get_group_my_share_repos(request.user.username)
@@ -129,11 +141,11 @@ def share_admin(request):
         out_repos.append(repo)
 
     # Repo anonymous share links
-    out_links = AnonymousShare.objects.filter(repo_owner=request.user.username)
-    for link in out_links:
-        repo = get_repo(link.repo_id)
-        link.repo_name = repo.name
-        link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
+    # out_links = AnonymousShare.objects.filter(repo_owner=request.user.username)
+    # for link in out_links:
+    #     repo = get_repo(link.repo_id)
+    #     link.repo_name = repo.name
+    #     link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
 
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
@@ -143,7 +155,7 @@ def share_admin(request):
         
     return render_to_response('repo/share_admin.html', {
             "out_repos": out_repos,
-            "out_links": out_links,
+            # "out_links": out_links,
             "fileshares": fileshares,
             "protocol": request.is_secure() and 'https' or 'http',
             "domain": RequestSite(request).domain,

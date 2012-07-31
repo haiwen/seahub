@@ -37,6 +37,7 @@ from pysearpc import SearpcError
 from seahub.base.accounts import CcnetUser
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
+from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.organizations.utils import clear_org_ctx, access_org_repo
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm
@@ -1841,14 +1842,12 @@ def send_shared_link(request):
     email = form.cleaned_data['email']
     file_shared_link = form.cleaned_data['file_shared_link']
 
-    to_email_list = emails2list(email)
-
     t = loader.get_template('shared_link_email.html')
-
+    to_email_list = emails2list(email)
     for to_email in to_email_list:
-        if not to_email:
-            continue
-        to_email = to_email.strip(' ')
+        # Add email to contacts
+        mail_sended.send(sender=None, user=request.user.username,
+                         email=to_email)
 
         c = {
             'email': request.user.username,
