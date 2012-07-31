@@ -763,7 +763,7 @@ p {
     margin-top:13px;
 }
 #docu-view {
-    padding: 5px;
+    font-size:13px;/*override '12px' from ace_editor*/
     min-height: 200px;
     border: 1px solid #ccc;
 }

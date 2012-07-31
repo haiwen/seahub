@@ -19,8 +19,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    var url = '{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}',
-    
+    var url = '{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}';
     {% include "repo_file_get.html" %}
 </script>
 {% endblock %}

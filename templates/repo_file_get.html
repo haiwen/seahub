@@ -3,10 +3,48 @@
             url: url,
             dataType: 'json',
             cache: false,
-            contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data.length > 0) {
-                    $('#file-view').html('<pre id="docu-view">' + data[0]['content'] + '</pre>');
+                    $('#file-view').html('<pre id="docu-view" class="vh">' + data[0]['content'] + '</pre>');
+                    $.ajaxSetup({cache:true});
+                    $.getScript('{{MEDIA_URL}}ace/ace.js', function() {
+                        $('#docu-view').css({'position': 'relative', 'width': $('#docu-view').width(), 'height': $('#docu-view').height()}).html($('#docu-view').html());
+                        var editor = ace.edit("docu-view");
+                        $('#docu-view').removeClass('vh');
+                        editor.setReadOnly(true);
+                        editor.setHighlightActiveLine(false);
+                        editor.setShowPrintMargin(false);//rm the vertical line in the center
+                        $('#docu-view .ace_cursor-layer').hide();//rm cursor
+                        $('#docu-view .ace_sb').hide();//rm right scrollbar
+
+                        $.getScript('{{MEDIA_URL}}ace/theme-chrome.js', function() {
+                            editor.setTheme("ace/theme/chrome");
+                        });
+
+                        function setMode(mode) {
+                            $.getScript('{{MEDIA_URL}}ace/mode-' + mode + '.js', function() {
+                                editor.session.setMode('ace/mode/' + mode);
+                            });
+                        }
+                        switch('{{ fileext }}') {
+                            case 'html':
+                            case 'xhtml':
+                            case 'htm': setMode('html');break;
+                            case 'css': setMode('css');break;
+                            case 'java': setMode('java');break;
+                            case 'js': setMode('javascript');break;
+                            case 'c':
+                            case 'cpp':
+                            case 'cc': setMode('c_cpp');break;
+                            case 'tex': setMode('latex');break;
+                            case 'pl': setMode('perl');break;
+                            case 'php': setMode('php');break;
+                            case 'py': setMode('python');break;
+                            case 'rb': setMode('ruby');break;
+                            case 'sh': setMode('sh');break;
+                            case 'xml': setMode('xml');break;
+                        }
+                    });
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {

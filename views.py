@@ -804,7 +804,7 @@ def repo_view_file(request, repo_id):
     zipped = gen_path_link(path, repo.name)
 
     # determin whether file can preview on web
-    filetype = valid_previewed_file(filename)
+    filetype, fileext = valid_previewed_file(filename)
         
     # raw path
     raw_path = gen_file_get_url(token, filename)
@@ -835,6 +835,7 @@ def repo_view_file(request, repo_id):
             'current_commit': current_commit,
             'token': token,
             'filetype': filetype,
+            'fileext': fileext,
             'raw_path': raw_path,
             'fileshare': fileshare,
             'protocol': http_or_https,
@@ -896,7 +897,7 @@ def repo_file_get(request, repo_id):
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
         from django.utils.html import escape
-        d['content'] = re.sub("\r\n|\n", "<br />", escape(u_content))
+        d['content'] = escape(u_content)
         l.append(d)
         data = json.dumps(l)
         return HttpResponse(data, status=200, content_type=content_type)
@@ -1786,7 +1787,7 @@ def view_shared_file(request, token):
     seafserv_rpc.web_save_access_token(access_token, repo.id, obj_id,
                                        'view', '')
     
-    filetype = valid_previewed_file(filename)
+    filetype, fileext = valid_previewed_file(filename)
     
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
@@ -1804,6 +1805,7 @@ def view_shared_file(request, token):
             'shared_token': token,
             'access_token': access_token,
             'filetype': filetype,
+            'fileext': fileext,
             'raw_path': raw_path,
             'username': username,
             }, context_instance=RequestContext(request))
