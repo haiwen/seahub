@@ -241,7 +241,8 @@ def msg_reply(request, msg_id):
             d = {}
             d['from_email'] = e.from_email
             d['nickname'] = e.nickname
-            d['message'] = e.message
+            from django.utils.html import escape
+            d['message'] = escape(e.message)
             l.append(d)
                 
         return HttpResponse(json.dumps(l), content_type=content_type)
