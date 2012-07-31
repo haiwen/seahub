@@ -78,7 +78,7 @@ iframe {
     width:100%;
 }
 pre, code {
-    font-family: "Courier New", Courier, monospace;
+    font-family: Consolas,"Liberation Mono",Courier,monospace;
 }
 pre {
     white-space:pre-wrap;
@@ -763,7 +763,8 @@ p {
     margin-top:13px;
 }
 #docu-view {
-    font-size:13px;/*override '12px' from ace_editor*/
+    font-size:13px;/*override .ace_editor*/
+    font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
     border: 1px solid #ccc;
 }
