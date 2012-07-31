@@ -43,7 +43,11 @@ $(function() {
 });
 
 //repo-create-form
-$('#repo-create').hover(
+$('#repo-create')
+.click(function() {
+    $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
+})
+.hover(
     function() {
         $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
     },
@@ -51,9 +55,6 @@ $('#repo-create').hover(
         $(this).css('background-color', '#f5f5f5');
     }
 );
-$('#repo-create').click(function() {
-    $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
-});
 $('#encrypt-switch').click(function () {
     if ($(this).attr('checked')) {
         $('#repo-create-form input[type="password"]').attr('disabled', false).removeClass('input-disabled');

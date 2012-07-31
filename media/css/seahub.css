@@ -404,7 +404,8 @@ p {
     color: #000;
     font-weight: normal;
 }
-#repo-create {
+#repo-create,
+#contact-add{
     padding-left:21px;
     height:27px;
     background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
@@ -414,7 +415,10 @@ p {
 }
 #repo-name,
 #repo-desc,
-.repo-create-encryption .passwd {
+.repo-create-encryption .passwd,
+#id_contact_email,
+#id_contact_name,
+#id_note {
     width:260px;
     margin-bottom:5px;
 }
@@ -561,17 +565,6 @@ p {
 }
 .contact-list-link:hover {
     text-decoration:none;
-}
-#contact-add-form h4 {
-    border-bottom:1px solid #ddd;
-    margin-bottom:12px;
-}
-#contact-add-form label {
-    width:6em;
-}
-#contact-add-form .error,
-#contact-add-form .submit {
-    margin-left:6em;
 }
 /* group, org */
 .group-list {
