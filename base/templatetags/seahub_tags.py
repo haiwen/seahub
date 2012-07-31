@@ -4,10 +4,12 @@ import re
 from datetime import datetime
 
 from django import template
+from django.utils.safestring import mark_safe
 
 from seahub.settings import FILEEXT_ICON_MAP
 from seahub.po import TRANSLATION_MAP
 from seahub.profile.models import Profile
+
 
 register = template.Library()
 
@@ -123,11 +125,11 @@ def url_target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')
 url_target_blank.is_safe=True
 
-at_pattern = re.compile('(@\w+)', flags=re.U)
+at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
 
 @register.filter(name='find_at')
 def find_at(text):
-    return at_pattern.sub(r'<span class="at-in-msg">\1</span>', text)
+    return at_pattern.sub(r'\1<span class="at-in-msg">\2</span>', text)
 find_at.is_safe=True
 
 @register.filter(name='short_email')
@@ -140,3 +142,11 @@ def short_email(email):
         return email
     else:
         return email[:idx]
+
+@register.filter(name='seahub_urlize')
+def seahub_urlize(value, autoescape=None):
+    """Converts URLs in plain text into clickable links."""
+    from seahub.base.utils import urlize
+    return mark_safe(urlize(value, nofollow=True, autoescape=autoescape))
+seahub_urlize.is_safe=True
+seahub_urlize.needs_autoescape = True
