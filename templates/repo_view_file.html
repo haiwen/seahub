@@ -65,6 +65,7 @@
 {% endblock %}
 
 {% block extra_script %}
+{% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
 function showLink() {
     $('#get-shared-link').addClass('hide');
@@ -92,7 +93,7 @@ $(window).load(function() {
         hideLink();
     }
     
-    {% include "repo_file_get.html" %}
+    {% include "snippets/repo_file_get.html" %}
 });
 
 $('#get-shared-link').click(function() {

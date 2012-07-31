@@ -1,0 +1,196 @@
+{% if filetype == 'Text' %}
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            if (data.length > 0) {
+                $('#file-view').html('<pre id="docu-view" class="vh">' + data[0]['content'] + '</pre>');
+                $('#docu-view').css({'position': 'relative', 'width': $('#docu-view').width(), 'height': $('#docu-view').height()}).html($('#docu-view').html());
+                var editor = ace.edit("docu-view");
+                $('#docu-view').removeClass('vh');
+                editor.setReadOnly(true);
+                editor.setHighlightActiveLine(false);
+                editor.setShowPrintMargin(false);//rm the vertical line in the center
+                $('#docu-view .ace_cursor-layer').hide();//rm cursor
+                $('#docu-view .ace_sb').hide();//rm right scrollbar
+                editor.setTheme("ace/theme/chrome");
+
+                {% if fileext = 'html' or fileext == 'xhtml' or fileext == 'htm' %}
+                editor.session.setMode('ace/mode/html');
+                {% endif %}
+                {% if fileext = 'css' %}
+                editor.session.setMode('ace/mode/css');
+                {% endif %}
+                {% if fileext = 'java' %}
+                editor.session.setMode('ace/mode/java');
+                {% endif %}
+                {% if fileext = 'js' %}
+                editor.session.setMode('ace/mode/javascript');
+                {% endif %}
+                {% if fileext = 'c' or fileext == 'cpp' or fileext == 'cc' %}
+                editor.session.setMode('ace/mode/c_cpp');
+                {% endif %}
+                {% if fileext = 'tex' %}
+                editor.session.setMode('ace/mode/latex');
+                {% endif %}
+                {% if fileext = 'pl' %}
+                editor.session.setMode('ace/mode/perl');
+                {% endif %}
+                {% if fileext = 'php' %}
+                editor.session.setMode('ace/mode/php');
+                {% endif %}
+                {% if fileext = 'py' %}
+                editor.session.setMode('ace/mode/python');
+                {% endif %}
+                {% if fileext = 'rb' %}
+                editor.session.setMode('ace/mode/ruby');
+                {% endif %}
+                {% if fileext = 'sh' %}
+                editor.session.setMode('ace/mode/sh');
+                {% endif %}
+                {% if fileext = 'xml' %}
+                editor.session.setMode('ace/mode/xml');
+                {% endif %}
+             }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+        }
+    });
+{% endif %}
+{% if filetype == 'Image' %}
+    $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
+{% endif %}
+{% if filetype == 'SVG' %}
+    $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
+{% endif %}
+{% if filetype == 'Document' %}
+    var uuid = '',
+        obj_id = '';
+    function create_session() {
+        $.ajax({
+            url: '{{ SITE_ROOT }}crocodoc/session/?uuid=' + uuid,
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data.length > 0) {
+                    $('#file-view').html('<div><iframe src="' + data[0]['doc_src'] + '" frameborder="0" id="doc-view"></iframe></div>');
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            }
+        });            
+    }
+    function check_status () {
+        $.ajax({
+            url: '{{ SITE_ROOT }}crocodoc/status/?uuids='+ uuid + '&obj_id=' + obj_id,
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data.length > 0) {
+                    var status = data[0]['status'];
+                    if (status == 'QUEUED') {
+                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                        setTimeout(check_status, 1000);
+                    } else if (status == 'PROCESSING') {
+                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                        setTimeout(check_status, 1000);
+                    } else {
+                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
+                        create_session();
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            }
+        });
+    }
+    $.ajax({
+        url: '{{ SITE_ROOT }}crocodoc/upload/?raw_path={{ raw_path|urlencode }}',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            if (data.length > 0) {
+                uuid = data[0]['uuid'];
+                obj_id = data[0]['obj_id'];
+                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>');
+                check_status();
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+        }
+    });
+{% endif %}
+{% if filetype == 'PDF' %}
+    PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
+    $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
+    var seahub_getPage = function (pdf, page_number) {
+        pdf.getPage(page_number).then(function(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+            var canvas = $('#pdf-view')[0];
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = { 
+                canvasContext: context,
+                viewport: viewport
+            };  
+            page.render(renderContext);
+        }); 
+    };
+    PDFJS.getDocument($('#pdf-view').attr('data')).then(function(pdf) {
+        $('#page-nums').html(pdf.numPages);
+        $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
+        seahub_getPage(pdf, 1);
+        $('#pdf-loading').addClass('hide');
+        $('#pdf-op-bar, #pdf-view').removeClass('vh');
+
+        $('#page-number').change(function() {
+            seahub_getPage(pdf, $(this).val());
+        });
+
+        $('#prev').click(function() {
+            var current = $('#page-number').val();
+            if (current > 1) {
+                seahub_getPage(pdf, --current);
+                $('#page-number').val(current);
+            }
+        });
+
+        $('#next').click(function() {
+            var current = $('#page-number').val();
+            if (current < pdf.numPages) {
+                seahub_getPage(pdf, ++current);
+                $('#page-number').val(current);
+            }
+        });
+
+        $('#full-screen').click(function() {
+            window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
+        });
+    });
+{% endif %}
+{% if filetype == 'Markdown' %}
+    $.ajax({
+        url: '{{ raw_path }}',
+        dataType: 'text',
+        cache: false,
+        success: function(data) {
+            var converter = new Showdown.converter();
+            $('#file-view').html('<div id="md-view">' + converter.makeHtml(data) + '</div>');
+            $('#md-view').children(':first').css('margin-top', '0');
+        }
+    });
+{% endif %}
+{% if filetype == 'Unknown' %}
+    $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
+{% endif %}
