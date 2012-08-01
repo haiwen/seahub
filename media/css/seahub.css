@@ -185,6 +185,12 @@ p {
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
 .top-bar { height:21px; color:#fff; font-weight:bold; background:#606; }
+.top-bar .left, .top-bar .right {
+    display:inline-block;
+}
+.top-bar .right {
+    margin-left:25px;
+}
 .top-bar a {
     color:#ddd;
     font-weight:normal;
@@ -230,7 +236,7 @@ p {
 #team-list a {
     color:#000;
     display:block;
-    padding-left:6px;
+    padding:0 5px;
 }
 #team-list a:hover {
     background:#eee;
