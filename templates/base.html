@@ -139,7 +139,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 <script type="text/javascript">
     $('.top-bar-in .left').css('width', $('.top-bar-in').width() - $('.top-bar-in .right').width() - 30);
-{% if request.user.is_authenticated and request.use_org %}
+{% if request.user.is_authenticated and request.official_mode %}
     $('#team-account').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
