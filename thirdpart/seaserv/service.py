@@ -106,14 +106,13 @@ def get_emailusers(start, limit):
 #     return groups
 
 
-# def get_group(group_id):
-#     group = ccnet_threaded_rpc.get_group(group_id)
-#     if not group:
-#         return None
-#     group.members = group.props.members.split(" ")
-#     group.followers = group.props.followers.split(" ")
-#     group.maintainers = group.props.maintainers.split(" ")
-#     return group
+def get_group(group_id):
+    group_id_int = int(group_id)
+    try:
+        group = ccnet_threaded_rpc.get_group(group_id_int)
+    except SearpcError:
+        group = None
+    return group
 
 def check_group_staff(group_id_int, user_or_username):
     """Check where user is group staff"""

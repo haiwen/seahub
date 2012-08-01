@@ -7,7 +7,8 @@ from django.template import RequestContext
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
-    get_group_repoids, check_group_staff, get_commits, get_personal_groups
+    get_group_repoids, check_group_staff, get_commits, get_personal_groups, \
+    get_group
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
@@ -115,7 +116,7 @@ def render_group_info(request, group_id, form):
     # if request.user.org and not request.user.org.is_staff:
     #     return render_error(request, u'未加入该小组')
 
-    group = ccnet_threaded_rpc.get_group(group_id_int)
+    group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
@@ -264,7 +265,9 @@ def msg_reply_new(request):
         try:
             m = GroupMessage.objects.get(id=msg_id)
             # get group name
-            group = ccnet_threaded_rpc.get_group(int(m.group_id))
+            group = get_group(m.group_id)
+            if not group:
+                continue
             m.group_name = group.group_name
             
             # get message replies
@@ -330,7 +333,7 @@ def group_members(request, group_id):
     if not check_group_staff(group_id_int, request.user):
         return render_permission_error(request, u'只有小组管理员有权管理小组')
 
-    group = ccnet_threaded_rpc.get_group(group_id_int)
+    group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
     
@@ -417,7 +420,7 @@ def group_share_repo(request, repo_id, group_id, from_email):
     
     """
     # Check whether group exists
-    group = ccnet_threaded_rpc.get_group(group_id)
+    group = get_group(group_id)
     if not group:
         return render_error(request, u'共享失败:小组不存在')
     
@@ -439,7 +442,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     
     """
     # Check whether group exists
-    group = ccnet_threaded_rpc.get_group(group_id)
+    group = get_group(group_id)
     if not group:
         return render_error(request, u'共享失败:小组不存在')
     

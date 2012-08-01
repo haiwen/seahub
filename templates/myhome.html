@@ -21,7 +21,7 @@
 <li>
     小组
     {% for grp in grpmsg_list %}
-    <a href="{{ SITE_ROOT }}group/{{ grp.id }}/" class="no-bold">{{ grp.group_name }}</a> 
+    <a href="{% url group_info grp.id %}" class="no-bold">{{ grp.group_name }}</a> 
     {% endfor %}
     有新留言
 </li>
