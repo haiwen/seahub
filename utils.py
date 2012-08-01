@@ -14,6 +14,11 @@ from django.core.cache import cache
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids
+try:
+    from settings import CROCODOC_API_TOKEN
+except ImportError:
+    CROCODOC_API_TOKEN = None
+    
 import settings
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
@@ -22,11 +27,12 @@ PREVIEW_FILEEXT = {
     'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
     'SVG': ('svg',),
-    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
     'PDF': ('pdf',),
     'Markdown': ('markdown', 'md'),
 }
-
+if CROCODOC_API_TOKEN:
+    PREVIEW_FILEEXT['Document'] = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx')
+    
 def render_permission_error(request, msg=None):
     """
     Return permisson error page.

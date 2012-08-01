@@ -48,7 +48,11 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, emails2list
 from seahub.profile.models import Profile
-from seahub.settings import FILE_PREVIEW_MAX_SIZE, CROCODOC_API_TOKEN
+try:
+    from settings import CROCODOC_API_TOKEN
+except ImportError:
+    CROCODOC_API_TOKEN = None
+from settings import FILE_PREVIEW_MAX_SIZE
 
 @login_required
 def root(request):

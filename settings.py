@@ -209,9 +209,6 @@ SEAHUB_TITLE = 'SeaHub'
 
 USE_SUBDOMAIN = False
 
-# Replace this with your Crocodoc.com api token
-CROCODOC_API_TOKEN = ''
-
 try:
     import local_settings
 except ImportError:
