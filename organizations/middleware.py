@@ -5,9 +5,9 @@ from seaserv import get_org_by_url_prefix, get_orgs_by_user
 
 from settings import ORG_CACHE_PREFIX
 try:
-    from seahub.settings import OFFICIAL_MODE
+    from seahub.settings import CLOUD_MODE
 except ImportError:
-    OFFICIAL_MODE = False
+    CLOUD_MODE = False
     
 class OrganizationMiddleware(object):
     """
@@ -16,8 +16,8 @@ class OrganizationMiddleware(object):
     """
 
     def process_request(self, request):
-        if OFFICIAL_MODE:
-            request.official_mode = True
+        if CLOUD_MODE:
+            request.cloud_mode = True
             
             # Get current org context
             org = cache.get(ORG_CACHE_PREFIX + request.user.username)
@@ -27,7 +27,7 @@ class OrganizationMiddleware(object):
             orgs = get_orgs_by_user(request.user.username)
             request.user.orgs = orgs
         else:
-            request.official_mode = False
+            request.cloud_mode = False
             request.user.org = None
             request.user.orgs = None
             

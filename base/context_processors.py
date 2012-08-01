@@ -17,7 +17,7 @@ def base(request):
     return {
         'seafile_version': SEAFILE_VERSION,
         'seahub_title': SEAHUB_TITLE,
-        'official_mode': request.official_mode,
+        'cloud_mode': request.cloud_mode,
         # 'account_type': settings.ACCOUNT_TYPE,
         }
 

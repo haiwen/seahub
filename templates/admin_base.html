@@ -12,7 +12,7 @@
     <li>
         <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>小组管理</a>
     </li>
-    {% if request.official_mode %}
+    {% if request.cloud_mode %}
     <li>
         <a href="{{ SITE_ROOT }}sys/orgadmin/" {% block nav_orgadmin_class %}{% endblock %}>团体管理</a>
     </li>

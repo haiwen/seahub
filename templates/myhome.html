@@ -35,7 +35,7 @@
 {% endif %}
 
 <h3>已用空间</h3>
-<p>{{ quota_usage|filesizeformat }} {% if official_mode %}/ 2 GB {% endif %}</p>
+<p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
 
 <h3>我管理的小组</h3>
 {% if groups_manage %}

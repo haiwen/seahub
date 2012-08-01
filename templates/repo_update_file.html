@@ -2,7 +2,7 @@
 {% load seahub_tags %}
 
 {% block main_panel %}
-{% if not official_mode or used_space < total_space %}
+{% if not cloud_mode or used_space < total_space %}
 <div class="narrow-panel">
     <h3>更新文件
             {% for name, link in zipped %}
