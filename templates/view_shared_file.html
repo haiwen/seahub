@@ -10,17 +10,15 @@
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" target="_blank">下载文件</a>
         </div>
     </div>
-
     <div id="file-view">
       <p>文件内容读取中...</p>
     </div>
-
 {% endblock %}
 
 {% block extra_script %}
+{% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-    var url = '{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}',
-    
-    {% include "repo_file_get.html" %}
+    var url = '{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?t={{ access_token }}&p={{ path|urlencode }}&u={{ username }}';
+    {% include "snippets/repo_file_get.html" %}
 </script>
 {% endblock %}

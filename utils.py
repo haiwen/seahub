@@ -24,7 +24,7 @@ import settings
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 
 PREVIEW_FILEEXT = {
-    'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'vi', 'vim'),
+    'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html',  'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
     'SVG': ('svg',),
     'PDF': ('pdf',),
@@ -247,7 +247,11 @@ def valid_previewed_file(filename):
     
     """
     fileExt = os.path.splitext(filename)[1][1:]
-    return FILEEXT_TYPE_MAP.get(fileExt) or 'Unknown'
+    filetype = FILEEXT_TYPE_MAP.get(fileExt)
+    if filetype:
+        return (filetype, fileExt)
+    else:
+        return ('Unknown', fileExt)
 
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id

@@ -1,25 +1,10 @@
 {% extends "myhome_base.html" %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="#" id="contact-add">添加联系人</a></li>
-</ul>
-<form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
-    <h4>添加联系人</h4>
-    {{ form.user_email.as_hidden }}
-    <label>邮箱：</label>{{ form.contact_email }}<br />
-    <label>名字(可选)：</label>{{ form.contact_name }}<br />
-    <label>备注(可选)：</label>{{ form.note }}<br />
-    <p class="error hide" id="contact-add-error">请输入邮箱地址。</p>
-    <input type="submit" value="提交"  class="submit" />
-</form>
-{% endblock %}
 
 {% block right_panel %}
-
 <h3>联系人列表</h3>
+<button id="contact-add">添加联系人</button>
 <table>
     <tr>
         <th width="38%">邮箱</th>
@@ -39,6 +24,16 @@
     </tr>
 {% endfor %}
 </table>
+<form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
+    <h3>添加联系人</h3>
+    {{ form.user_email.as_hidden }}
+    <label>邮箱：</label><br />
+    {{ form.contact_email }}<br />
+    <label>名字(可选)：</label><br />{{ form.contact_name }}<br />
+    <label>备注(可选)：</label><br />{{ form.note }}<br />
+    <p class="error hide" id="contact-add-error">请输入邮箱地址。</p>
+    <input type="submit" value="提交"  class="submit" />
+</form>
 {% endblock %}
 
 {% block extra_script %}
@@ -58,10 +53,18 @@ $("table tr:gt(0)").hover(
     }
 );
 
-$('#contact-add').click(function() {
+$('#contact-add')
+.click(function() {
     $('#contact-add-form').modal({appendTo: '#main'});
-    return false;
-});
+})
+.hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },  
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }   
+);
 $('#contact-add-form').submit(function() {
     if(!$.trim($('input[name="contact_email"]').val())) {
        $('#contact-add-error').removeClass('hide') 
@@ -69,10 +72,8 @@ $('#contact-add-form').submit(function() {
         return false;
     }
 
-    var self = $(this),
-        url = self.attr("action");
     $.ajax({
-        url: url,
+        url: $('#contact-add-form').attr('action'),
         type: 'POST',
         dataType: 'json',
         cache: 'false',
@@ -83,7 +84,7 @@ $('#contact-add-form').submit(function() {
             'contact_email': $('#contact-add-form input[name="contact_email"]').val(),
             'contact_name': $('#contact-add-form input[name="contact_name"]').val(),
             'note': $('#contact-add-form input[name="note"]').val()
-       },  
+        },  
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
