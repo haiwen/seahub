@@ -27,7 +27,7 @@
             <div class="top-bar-in">
                 <div class="left">
                 {% if request.user.is_authenticated %}
-                      {% if request.use_org %}
+                      {% if official_mode %}
                       <a href="#" id="team-account" data="no-popup">
                       {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
                       {% endif %}

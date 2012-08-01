@@ -6,7 +6,8 @@ and returns a dictionary to add to the context.
 These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
-import settings
+from settings import SEAFILE_VERSION
+from settings import SEAHUB_TITLE
 
 def base(request):
     """
@@ -14,8 +15,9 @@ def base(request):
     
     """
     return {
-        'seafile_version': settings.SEAFILE_VERSION,
-        'seahub_title': settings.SEAHUB_TITLE,
+        'seafile_version': SEAFILE_VERSION,
+        'seahub_title': SEAHUB_TITLE,
+        'official_mode': request.official_mode,
         # 'account_type': settings.ACCOUNT_TYPE,
         }
 

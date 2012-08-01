@@ -1,18 +1,8 @@
 {% extends base_template %}
 {% load seahub_tags %}
 
-{% block info_bar_message %}
-{% if request.user.is_authenticated %}
-  {{ block.super }}
-{% else %}
-  <div id="info-bar">
-    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
-  </div>
-{% endif %}
-{% endblock %}
-
 {% block main_panel %}
-{% if used_space < total_space %}
+{% if not official_mode or used_space < total_space %}
 <div class="narrow-panel">
     <h3>上传文件到
             {% for name, link in zipped %}
