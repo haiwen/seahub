@@ -26,13 +26,25 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 PREVIEW_FILEEXT = {
     'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html',  'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
+    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
     'SVG': ('svg',),
     'PDF': ('pdf',),
     'Markdown': ('markdown', 'md'),
 }
-if CROCODOC_API_TOKEN:
-    PREVIEW_FILEEXT['Document'] = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx')
+
+def gen_fileext_type_map():
+    """
+    Generate previewed file extension and file type relation map.
     
+    """
+    d = {}
+    for filetype in PREVIEW_FILEEXT.keys():
+        for fileext in PREVIEW_FILEEXT.get(filetype):
+            d[fileext] = filetype
+
+    return d
+FILEEXT_TYPE_MAP = gen_fileext_type_map()
+
 def render_permission_error(request, msg=None):
     """
     Return permisson error page.
@@ -249,7 +261,12 @@ def valid_previewed_file(filename):
     fileExt = os.path.splitext(filename)[1][1:]
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
-        return (filetype, fileExt)
+        # Check whether this kind of file can be previewd.
+        if filetype == 'Document':
+            return (filetype, fileExt) if CROCODOC_API_TOKEN \
+                else ('Unknown', fileExt)
+        else:
+            return (filetype, fileExt)
     else:
         return ('Unknown', fileExt)
 
@@ -267,19 +284,6 @@ def get_file_revision_id_size (commit_id, path):
             return dirent.obj_id, file_size
 
     return None, None
-
-def gen_fileext_type_map():
-    """
-    Generate previewed file extension and file type relation map.
-    
-    """
-    d = {}
-    for filetype in PREVIEW_FILEEXT.keys():
-        for fileext in PREVIEW_FILEEXT.get(filetype):
-            d[fileext] = filetype
-
-    return d
-FILEEXT_TYPE_MAP = gen_fileext_type_map()
 
 def gen_file_get_url(token, filename):
     """
