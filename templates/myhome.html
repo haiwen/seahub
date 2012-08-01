@@ -33,6 +33,7 @@
 <li><a href="{% url org_msg %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
 {% endif %}
 {% endif %}
+</ul>
 
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
