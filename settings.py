@@ -208,7 +208,6 @@ CCNET_APPLET_ROOT = "http://localhost:13420"
 SEAHUB_TITLE = 'SeaHub'
 
 USE_SUBDOMAIN = False
-ACCOUNT_TYPE = 'personal'
 
 # Replace this with your Crocodoc.com api token
 CROCODOC_API_TOKEN = ''
