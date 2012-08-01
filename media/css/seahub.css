@@ -148,6 +148,9 @@ p {
 .input-disabled {
     background:#ebebe4;
 }
+.no-bold {
+    font-weight:normal;
+}
 #paginator { margin-top:10px; }
 
 /* container */
@@ -395,20 +398,9 @@ p {
     vertical-align:top;
     margin:0 0px 5px 0;
 }
-.mygroup .tips {
-    display: inline-block;
+.mygroup .tip {
     font-size: 0.9em;
-    color: red;
-}
-.new-reply {
-    padding: 5px;
-    background-color: #FDF;
-    margin-bottom: 5px;
-    display: block;
-}
-.new-reply a {
-    color: #000;
-    font-weight: normal;
+    color: #333;
 }
 #repo-create,
 #contact-add{
@@ -689,8 +681,12 @@ p {
     background:#fafafa;
     margin-bottom:2px;
 }
-.msg-hd .time {
+.msg-hd .time,
+.msg-hd .group {
     color: #808080;
+}
+.msg-hd .group {
+    margin-left:30px;
 }
 .msg-bd .op:hover {
     text-decoration:none;

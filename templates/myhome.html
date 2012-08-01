@@ -14,11 +14,24 @@
 {% endif %}
 </div>
 
+{% if notes %}
+<h3>提醒...</h3>
+<ul>
+{% if grpmsg_list %}
+<li>
+    小组
+    {% for grp in grpmsg_list %}
+    <a href="{{ SITE_ROOT }}group/{{ grp.id }}/" class="no-bold">{{ grp.group_name }}</a> 
+    {% endfor %}
+    有新留言
+</li>
+{% endif %}
 {% if grpmsg_reply_list %}
-<span class="new-reply"><a href="{{ SITE_ROOT }}group/reply/new/">{{ grpmsg_reply_list|length }}条留言有新回复</a></span>
+<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条留言有新回复</a></li>
 {% endif %}
 {% if orgmsg_list %}
-<span class="new-reply"><a href="{% url org_msg %}">你有{{ orgmsg_list|length }}条团体消息</a></span>
+<li><a href="{% url org_msg %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
+{% endif %}
 {% endif %}
 
 <h3>已用空间</h3>
@@ -33,9 +46,6 @@
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
     </a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
-        {% if group.new_msg %}
-        <span class="tips">（新留言）</span>
-        {% endif %}
 	</li>
     {% endfor %}
 </ul>
@@ -52,9 +62,6 @@
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
     </a><br />
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
-        {% if group.new_msg %}
-        <span class="tips">（新留言）</span>
-        {% endif %}
 	</li>
 	{% endfor %}
 </ul>

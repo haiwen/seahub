@@ -27,10 +27,9 @@
             <div class="top-bar-in">
                 <div class="left">
                 {% if request.user.is_authenticated %}
-                      {% if official_mode %}
-                      <a href="#" id="team-account" data="no-popup">
-                      {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
-                      {% endif %}
+                    {% if official_mode %}
+                    <a href="#" id="team-account" data="no-popup">
+                    {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
                     <span class="bg"></span></a>
                     <ul class="hide" id="team-list">
                         <li><a href="{% url myhome %}">个人帐号</a></li>
@@ -39,6 +38,7 @@
                         {% endfor %}
                         <li><a href="{% url create_org %}">新建团体</a></li>
                     </ul>
+                    {% endif %}
                 {% endif %}
                 
                 {% if request.user.is_staff or request.user.org.is_staff %}
@@ -139,6 +139,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 <script type="text/javascript">
     $('.top-bar-in .left').css('width', $('.top-bar-in').width() - $('.top-bar-in .right').width() - 30);
+{% if request.user.is_authenticated and request.use_org %}
     $('#team-account').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -158,6 +159,7 @@ $(document).click(function(e) {
         $('#team-account').attr('data', 'no-popup');
     }
 });
+{% endif %}
 </script>
 {% block extra_script %}{% endblock %}
 </body>

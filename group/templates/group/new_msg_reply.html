@@ -1,8 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags avatar_tags %}
 
-{% block nav_group_class %}class="cur"{% endblock %}
-
 {% block main_panel %}
 <div class="main fleft">
 {% if group_msgs %}
@@ -16,7 +14,7 @@
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
-                所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a>
+                <span class="group">所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a></span>
             </div>
             <div class="msg-bd">
                 <p>{{ msg.message }}</p>

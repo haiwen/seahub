@@ -660,7 +660,7 @@ def myhome(request):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
-    # Repos that are share to me
+    # Repos shared with me
     in_repos = seafserv_threaded_rpc.list_share_repos(email,
                                                       'to_email', -1, -1)
     calculate_repo_last_modify(in_repos)
@@ -676,7 +676,7 @@ def myhome(request):
     notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
         if n.msg_type == 'group_msg':
-            grpmsg_list.append(n.detail)
+            grpmsg_list.append(ccnet_threaded_rpc.get_group(int(n.detail)))
         elif n.msg_type == 'grpmsg_reply':
             grpmsg_reply_list.append(n.detail)
         elif n.msg_type == 'org_msg':
@@ -688,10 +688,6 @@ def myhome(request):
     groups_manage = []
     groups_join = []
     for group in groups:
-        if str(group.id) in grpmsg_list:
-            group.new_msg = True
-        else:
-            group.new_msg = False
         if group.props.creator_name == request.user.username:
             groups_manage.append(group)
         else:
@@ -715,6 +711,8 @@ def myhome(request):
             "in_repos": in_repos,
             "contacts": contacts,
             "groups": groups,
+            "notes": notes,
+            "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
             "groups_manage": groups_manage,
