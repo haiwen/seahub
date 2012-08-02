@@ -4,8 +4,7 @@
         dataType: 'json',
         cache: false,
         success: function(data) {
-                $('#file-view').html('<pre id="docu-view" class="vh">' + data['content'] + '</pre>');
-                $('#docu-view').css({'position': 'relative', 'width': $('#docu-view').width(), 'height': $('#docu-view').height()}).html($('#docu-view').html());
+                $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
                 var editor = ace.edit("docu-view");
                 $('#docu-view').removeClass('vh');
                 editor.setReadOnly(true);
@@ -51,6 +50,10 @@
                 {% if fileext = 'xml' %}
                 editor.session.setMode('ace/mode/xml');
                 {% endif %}
+
+                editor.session.getDocument().setValue(data['content']);
+                $('#docu-view').css({'position': 'relative', 'width': '100%', 'height': editor.session.getScreenLength() * 20 });
+                editor.resize(); // this line is needed to work in ie
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);

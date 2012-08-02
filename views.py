@@ -896,7 +896,7 @@ def repo_file_get(request, repo_id):
         from django.utils.html import escape
         # d['content'] = escape(u_content)
         # l.append(d)
-        data = json.dumps({'content': escape(u_content)})
+        data = json.dumps({'content': u_content})
         return HttpResponse(data, status=200, content_type=content_type)
 
 
