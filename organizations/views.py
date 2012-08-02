@@ -19,14 +19,12 @@ from seaserv import ccnet_threaded_rpc, get_orgs_by_user, get_org_repos, \
 
 from forms import OrgCreateForm
 from signals import org_user_added
-from settings import ORG_CACHE_PREFIX
-from utils import set_org_ctx
 from notifications.models import UserNotification
 from registration.models import RegistrationProfile
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
-from seahub.utils import render_error, render_permission_error, validate_group_name, \
-    emails2list, gen_token
+from seahub.utils import render_error, render_permission_error, gen_token, \
+    validate_group_name, emails2list, set_cur_ctx, calculate_repo_last_modify
 from seahub.views import myhome
 
 @login_required
@@ -65,11 +63,15 @@ def org_info(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    set_org_ctx(request, org._dict)
+    ctx_dict = {'base_template': 'org_base.html',
+                'org_dict': org._dict}
+    set_cur_ctx(request, ctx_dict)
     
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
                                                         0, sys.maxint)
     repos = get_org_repos(org.org_id, 0, sys.maxint)
+    calculate_repo_last_modify(repos)
+    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     url = 'organizations/%s/repo/create/' % org.url_prefix
     return render_to_response('organizations/org_info.html', {
@@ -139,6 +141,10 @@ def org_useradmin(request, url_prefix):
     if not request.user.org['is_staff']:
         raise Http404
 
+    ctx_dict = {'base_template': 'org_admin_base.html',
+                'org_dict': request.user.org}
+    set_cur_ctx(request, ctx_dict)
+    
     if request.method == 'POST':
         emails = request.POST.get('added-member-name')
 

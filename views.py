@@ -40,14 +40,14 @@ from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
-from seahub.organizations.utils import clear_org_ctx, access_org_repo
+from seahub.organizations.utils import access_org_repo
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, emails2list
+    gen_file_get_url, emails2list, set_cur_ctx
 from seahub.profile.models import Profile
 try:
     from settings import CROCODOC_API_TOKEN
@@ -701,8 +701,9 @@ def myhome(request):
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
 
-    # clear org context in cache and set request.user.org to None
-    clear_org_ctx(request)
+    ctx_dict = {'base_template': 'myhome_base.html',
+                'org_dict': None}
+    set_cur_ctx(request, ctx_dict)
     
     return render_to_response('myhome.html', {
             "myname": email,

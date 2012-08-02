@@ -313,3 +313,13 @@ def emails2list(emails):
         s.add(e)
     return [ x for x in s ]
         
+def get_cur_ctx(request):
+    ctx_dict = request.session.get('current_context', {
+            'base_template': 'myhome_base.html',
+            'org_dict': None})
+    return ctx_dict
+
+def set_cur_ctx(request, ctx_dict):
+    request.session['current_context'] = ctx_dict
+    request.user.org = ctx_dict.get('org_dict', None)
+

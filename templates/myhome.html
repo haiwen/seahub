@@ -116,7 +116,7 @@
         {% if repo.latest_modify %}
         <td>{{ repo.latest_modify|translate_commit_time }}</td>
         {% else %}
-        <td>—— ——</td>
+        <td>--</tdb>
         {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
@@ -147,7 +147,7 @@
         {% if repo.latest_modify %}
         <td>{{ repo.latest_modify|translate_commit_time }}</td>
         {% else %}
-        <td>—— ——</td>
+        <td>--</td>
         {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
