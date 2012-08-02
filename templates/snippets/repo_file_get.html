@@ -4,8 +4,7 @@
         dataType: 'json',
         cache: false,
         success: function(data) {
-            if (data.length > 0) {
-                $('#file-view').html('<pre id="docu-view" class="vh">' + data[0]['content'] + '</pre>');
+                $('#file-view').html('<pre id="docu-view" class="vh">' + data['content'] + '</pre>');
                 $('#docu-view').css({'position': 'relative', 'width': $('#docu-view').width(), 'height': $('#docu-view').height()}).html($('#docu-view').html());
                 var editor = ace.edit("docu-view");
                 $('#docu-view').removeClass('vh');
@@ -52,11 +51,10 @@
                 {% if fileext = 'xml' %}
                 editor.session.setMode('ace/mode/xml');
                 {% endif %}
-             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
         }
     });
 {% endif %}

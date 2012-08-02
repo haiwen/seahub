@@ -866,7 +866,7 @@ def repo_file_get(request, repo_id):
         except:
             obj_id = None
     if not obj_id:
-        data = json.dumps([{'error': '获取文件数据失败'}])
+        data = json.dumps({'error': '获取文件数据失败'})
         return HttpResponse(data, status=400, content_type=content_type)
 
     # username = request.GET.get('u', '')
@@ -874,29 +874,29 @@ def repo_file_get(request, repo_id):
     try:
         proxied_request = urllib2.urlopen(redirect_url)
         if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            data = json.dumps([{'error': '文件超过10M，无法在线查看。'}])
+            data = json.dumps({'error': '文件超过10M，无法在线查看。'})
             return HttpResponse(data, status=400, content_type=content_type)
         else:
             content = proxied_request.read()
     except urllib2.HTTPError, e:
         err = 'HTTPError: 无法在线打开该文件'
-        data = json.dumps([{'error': err}])
+        data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
     except urllib2.URLError as e:
         err = 'URLError: 无法在线打开该文件'
-        data = json.dumps([{'error': err}])
+        data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
     else:
-        l, d = [], {}
+        # l, d = [], {}
         try:
             u_content = content.decode('utf-8')
         except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
         from django.utils.html import escape
-        d['content'] = escape(u_content)
-        l.append(d)
-        data = json.dumps(l)
+        # d['content'] = escape(u_content)
+        # l.append(d)
+        data = json.dumps({'content': escape(u_content)})
         return HttpResponse(data, status=200, content_type=content_type)
 
 

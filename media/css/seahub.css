@@ -581,6 +581,9 @@ p {
     width:5em;
     color:#666;
 }
+.group-member {
+    _height:21px;
+}
 .group-member .avatar,
 .org-member .avatar {
 	border-radius: 2px;
@@ -772,7 +775,8 @@ p {
     min-height:500px;/*for ff*/
 }
 #doc-view {
-    min-height:800px;
+    min-height:700px;
+    _height:700px;
 }
 #pdf {
     border:1px solid #cbcbcb;
