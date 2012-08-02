@@ -271,3 +271,71 @@ def org_repo_create(request, url_prefix):
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
+
+@login_required
+def org_seafadmin(request, url_prefix):
+    if not request.user.org:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    repos_all = get_org_repos(request.user.org['org_id'],
+                              per_page * (current_page -1),
+                              per_page + 1)
+        
+    repos = repos_all[:per_page]
+
+    if len(repos_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+            
+    return render_to_response(
+        'organizations/org_seafadmin.html', {
+            'repos': repos,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        },
+        context_instance=RequestContext(request))
+    
+def org_group_admin(request, url_prefix):
+    if not request.user.org['is_staff']:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    groups_plus_one = get_org_groups (request.user.org['org_id'],
+                                      per_page * (current_page -1),
+                                      per_page +1)
+        
+    groups = groups_plus_one[:per_page]
+
+    if len(groups_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response('organizations/org_group_admin.html', {
+            'groups': groups,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            }, context_instance=RequestContext(request))
+

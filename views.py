@@ -1144,47 +1144,6 @@ def sys_seafadmin(request):
         context_instance=RequestContext(request))
 
 @login_required
-def org_seafadmin(request, url_prefix):
-    if not request.user.org:
-        raise Http404
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-
-    repos_all = seafserv_threaded_rpc.get_org_repo_list(request.user.org['org_id'],
-                                                        per_page * (current_page -1),
-                                                        per_page + 1)
-        
-    repos = repos_all[:per_page]
-
-    if len(repos_all) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    for repo in repos:
-        try:
-            repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
-        except:
-            repo.owner = None
-            
-    return render_to_response(
-        'org_seafadmin.html', {
-            'repos': repos,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-        },
-        context_instance=RequestContext(request))
-
-@login_required
 def sys_useradmin(request):
     if not request.user.is_staff:
         raise Http404
@@ -1383,38 +1342,6 @@ def sys_org_admin(request):
 
     return render_to_response('sys_org_admin.html', {
             'orgs': orgs,
-            }, context_instance=RequestContext(request))
-    
-def org_group_admin(request, url_prefix):
-    if not request.user.is_staff and not request.user.org['is_staff']:
-        raise Http404
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-
-    groups_plus_one = ccnet_threaded_rpc.get_org_groups (request.user.org['org_id'],
-                                                per_page * (current_page -1),
-                                                per_page +1)
-        
-    groups = groups_plus_one[:per_page]
-
-    if len(groups_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    return render_to_response('org_group_admin.html', {
-            'groups': groups,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
             }, context_instance=RequestContext(request))
 
 def org_remove(request, org_id):

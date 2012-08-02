@@ -4,9 +4,8 @@ from django.views.generic.simple import direct_to_template
 
 from seahub.views import root, myhome, \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
-    org_seafadmin, org_group_admin, org_remove, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
-    ownerhome, repo_history_revert, repo_file_get, \
+    ownerhome, repo_history_revert, repo_file_get, org_remove, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
     seafile_access_check, back_local, repo_history_changes, \

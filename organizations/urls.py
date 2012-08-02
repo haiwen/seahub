@@ -1,8 +1,7 @@
 from django.conf.urls.defaults import *
 
 from views import *
-from seahub.views import repo, repo_history, org_seafadmin, \
-    org_group_admin
+from seahub.views import repo, repo_history
 
 urlpatterns = patterns('',
     url(r'^create/$', create_org, name='create_org'),
