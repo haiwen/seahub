@@ -36,10 +36,6 @@ def group_list(request):
         try:
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
                                    request.user.username)
-            # TODO: transaction?
-            if request.user.org and group_id > 0:
-                ccnet_threaded_rpc.add_org_group(request.user.org.org_id,
-                                        group_id)
         except SearpcError, e:
             error_msg = e.msg
             return render_error(request, error_msg)
