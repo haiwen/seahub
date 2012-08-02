@@ -25,7 +25,7 @@
     <div id="top-bar">
         <div class="top-bar">
             <div class="top-bar-in">
-                <div class="left">
+                <div class="manage fleft">
                 {% if request.user.is_authenticated %}
                     {% if cloud_mode %}
                     <a href="#" id="team-account" data="no-popup">
@@ -52,15 +52,10 @@
                 {% endif %}
                 </div>
 
-                <div class="right al-rt">
+                <div class="account fright">
                 {% if request.user.is_authenticated %}
                 <span>欢迎,</span> <a href="{% url avatar_add %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
                 <a href="{{ SITE_ROOT }}profile/">设置</a>
-                <!--
-                {% if request.user.is_staff %}
-                <a href="{{ SITE_ROOT }}admin/">管理</a> 
-                {% endif %}
-                -->
                 <a href="{{ SITE_ROOT }}accounts/logout/">退出</a>
                 {% else %}
                 <a href="{{ SITE_ROOT }}accounts/login/">登录</a>
@@ -133,7 +128,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 <script type="text/javascript">
-    $('.top-bar-in .left').css('width', $('.top-bar-in').width() - $('.top-bar-in .right').width() - 30);
+    $('.top-bar-in .manage').css('width', $('.top-bar-in').width() - $('.top-bar-in .account').width() - 30);
 {% if request.user.is_authenticated and request.cloud_mode %}
     $('#team-account').click(function() {
         if ($(this).attr('data') == 'no-popup') {

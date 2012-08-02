@@ -188,12 +188,6 @@ p {
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
 .top-bar { height:21px; color:#fff; font-weight:bold; background:#606; }
-.top-bar .left, .top-bar .right {
-    display:inline-block;
-}
-.top-bar .right {
-    margin-left:25px;
-}
 .top-bar a {
     color:#ddd;
     font-weight:normal;
@@ -228,6 +222,7 @@ p {
 #team-list {
     position:absolute;
     left:2px;
+    top:21px;
     border:1px solid #bbb;
     background:#fff;
     min-width:65px;
@@ -246,16 +241,16 @@ p {
 }
 #team-account .bg {
     display:inline-block;
-    margin-left:1px;
     font-size:0;
+    line-height: 0;
     width:0;
     height:0;
-    line-height: 0;
-    border-width: 3px 3px 0;
     padding-top: 1px;
+    border-width: 3px 3px 0;
     border-style: solid dashed dashed;
     border-color: transparent;
     border-top-color: #bbb;
+    margin-left:1px;
 }
 /* header */
 #logo {
