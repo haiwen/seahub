@@ -34,12 +34,61 @@
     <p class="error hide" id="contact-add-error">请输入邮箱地址。</p>
     <input type="submit" value="提交"  class="submit" />
 </form>
+<form action="{% url contact_edit %}" method="post" id="contact-edit-form" class="hide">
+    <h3>编辑联系人</h3>
+    {{ edit_form.user_email.as_hidden }}
+    <label>邮箱：</label><br />
+    {{ edit_form.contact_email }}<br />
+    <label>名字(可选)：</label><br />{{ edit_form.contact_name }}<br />
+    <label>备注(可选)：</label><br />{{ edit_form.note }}<br />
+    <p class="error hide" id="contact-edit-error"></p>
+    <input type="submit" value="提交"  class="submit" />
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
 $('.contact-edit').click(function() {
-    location.href = $(this).attr('data');
+    var note_container = $(this).parent().prev(),
+        contact_note = note_container.html(),
+        contact_name = note_container.prev().html(),
+        contact_email = note_container.prev().prev().html();
+    $('#contact-edit-form [name="contact_email"]').val(contact_email);
+    $('#contact-edit-form [name="contact_name"]').val(contact_name);
+    $('#contact-edit-form [name="contact_note"]').val(contact_note);
+    $('#contact-edit-form').modal({appendTo: '#main'});
+});
+$('#contact-edit-form').submit(function() {
+    $.ajax({
+        url: $('#contact-edit-form').attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_email': $('#contact-edit-form input[name="user_email"]').val(),
+            'contact_email': $('#contact-edit-form input[name="contact_email"]').val(),
+            'contact_name': $('#contact-edit-form input[name="contact_name"]').val(),
+            'note': $('#contact-edit-form input[name="note"]').val()
+        },  
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('contact-edit-form', data['error']);
+            }   
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('contact-edit-form', value[0]);
+            });
+        }
+    });
+
+    return false;
 });
 
 addConfirmTo($('.contact-delete'));

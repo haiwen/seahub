@@ -563,13 +563,6 @@ p {
     width:260px;
     height:80px;
 }
-/*contact*/
-.contact-list-link {
-    font-size:13px;
-}
-.contact-list-link:hover {
-    text-decoration:none;
-}
 /* group, org */
 .group-list {
     margin-top:20px;
