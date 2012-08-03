@@ -191,9 +191,13 @@ p {
 .top-bar a {
     color:#ddd;
     font-weight:normal;
+    padding:0 2px;
+}
+.top-bar a,
+.top-bar span {
+    vertical-align:middle;
     display:inline-block;
     height:21px;
-    padding:0 2px;
 }
 .top-bar a.avatar-link {
     height:16px;
@@ -204,10 +208,6 @@ p {
 }
 .top-bar a.cur {
     background:#000;
-}
-.top-bar a,
-.top-bar span {
-    vertical-align:middle;
 }
 .top-bar span {
     margin-right:3px;
