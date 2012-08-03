@@ -13,8 +13,8 @@ urlpatterns = patterns('',
     url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
                        
     ### Org admin ###                       
-    url(r'^([^/]+)/seafadmin/$', org_seafadmin, name='org_seafadmin'),
-    url(r'^([^/]+)/useradmin/$', org_useradmin, name='org_useradmin'),
-    url(r'^([^/]+)/useradmin/remove/(?P<user>[^/]+)/$', org_user_remove, name='org_user_remove'),
-    url(r'^([^/]+)/groupadmin/$', org_group_admin, name='org_groupadmin'),
+    url(r'^(?P<url_prefix>[^/]+)/seafadmin/$', org_seafadmin, name='org_seafadmin'),
+    url(r'^(?P<url_prefix>[^/]+)/useradmin/$', org_useradmin, name='org_useradmin'),
+    url(r'^(?P<url_prefix>[^/]+)/useradmin/remove/(?P<user>[^/]+)/$', org_user_remove, name='org_user_remove'),
+    url(r'^(?P<url_prefix>[^/]+)/groupadmin/$', org_group_admin, name='org_groupadmin'),
 )

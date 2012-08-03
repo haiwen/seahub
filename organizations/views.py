@@ -17,6 +17,7 @@ from seaserv import ccnet_threaded_rpc, get_orgs_by_user, get_org_repos, \
     get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename, \
     create_org_repo
 
+from decorators import org_staff_required
 from forms import OrgCreateForm
 from signals import org_user_added
 from notifications.models import UserNotification
@@ -134,12 +135,14 @@ def send_org_user_add_mail(request, email, password, org_name):
         messages.add_message(request, messages.ERROR, email)
     
 @login_required
+@org_staff_required
 def org_useradmin(request, url_prefix):
     """
     List and add org users.
     """
-    if not request.user.org['is_staff']:
-        raise Http404
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
 
     ctx_dict = {'base_template': 'org_admin_base.html',
                 'org_dict': request.user.org}
@@ -211,9 +214,10 @@ def org_useradmin(request, url_prefix):
         context_instance=RequestContext(request))
 
 @login_required
-def org_user_remove(request, user):
+@org_staff_required
+def org_user_remove(request, url_prefix, user):
     """
-    Remove org user
+    Remove org user.
     """
     org_id = request.user.org['org_id']
     url_prefix = request.user.org['url_prefix']
@@ -223,7 +227,7 @@ def org_user_remove(request, user):
 
 def org_msg(request):
     """
-    Show organization user added messages
+    Show organization user added messages.
     """
     orgmsg_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
@@ -273,10 +277,8 @@ def org_repo_create(request, url_prefix):
                                       content_type=content_type)
 
 @login_required
+@org_staff_required
 def org_seafadmin(request, url_prefix):
-    if not request.user.org:
-        raise Http404
-
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -306,11 +308,10 @@ def org_seafadmin(request, url_prefix):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
-    
-def org_group_admin(request, url_prefix):
-    if not request.user.org['is_staff']:
-        raise Http404
 
+@login_required
+@org_staff_required
+def org_group_admin(request, url_prefix):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
