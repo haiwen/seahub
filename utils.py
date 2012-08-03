@@ -13,7 +13,7 @@ from django.core.files.uploadhandler import FileUploadHandler, StopFutureHandler
 from django.core.cache import cache
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_repo, get_commits, get_group_repoids
+    get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 try:
     from settings import CROCODOC_API_TOKEN
 except ImportError:
@@ -293,11 +293,8 @@ def gen_file_get_url(token, filename):
     return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
 
 def get_ccnet_server_addr_port():
-    """Return ccnet <ip or domain>:<port>"""
-    try:
-        return settings.CCNET_SERVER_ADDR, settings.CCNET_SERVER_PORT
-    except:
-        return None, None
+    """get ccnet server host and port"""
+    return CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 
 def emails2list(emails):
     """

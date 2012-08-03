@@ -13,5 +13,5 @@ from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
     get_user_current_org, add_org_user, remove_org_user, get_org_by_id, \
     get_org_id_by_repo_id
 
-from service import CCNET_CONF_PATH
+from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 

@@ -36,6 +36,7 @@ from datetime import datetime
 import json
 import os
 import sys
+import ConfigParser
 
 import ccnet
 import seafile
@@ -60,6 +61,26 @@ ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True)
 monitor_rpc = seafile.MonitorRpcClient(pool)
 seafserv_rpc = seafile.ServerRpcClient(pool, req_pool=True)
 seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool, req_pool=True)
+
+# load ccnet server addr and port from ccnet.conf.
+# 'addr:port' is used when downloading a repo
+ccnet_config = ConfigParser.ConfigParser()
+ccnet_config.read(os.path.join(CCNET_CONF_PATH, 'ccnet.conf'))
+
+if ccnet_config.has_option('General', 'SERVICE_URL') and \
+   ccnet_config.has_option('Network', 'PORT'):
+    service_url = ccnet_config.get('General', 'SERVICE_URL').lstrip('http://')
+    if ':' in service_url:
+        # strip http port such as ':8000' in 'http://192.168.1.101:8000'
+        idx = service_url.rindex(':')
+        service_url = service_url[:idx]
+
+    CCNET_SERVER_ADDR = service_url
+    CCNET_SERVER_PORT = ccnet_config.get('Network', 'PORT')
+else:
+    print "Warning: SERVICE_URL not set in ccnet.conf"
+    CCNET_SERVER_ADDR = None
+    CCNET_SERVER_PORT = None
     
 
 #### Basic ccnet API ####
