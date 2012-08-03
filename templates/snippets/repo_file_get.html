@@ -9,9 +9,10 @@
                 $('#docu-view').removeClass('vh');
                 editor.setReadOnly(true);
                 editor.setHighlightActiveLine(false);
-                editor.setShowPrintMargin(false);//rm the vertical line in the center
-                $('#docu-view .ace_cursor-layer').hide();//rm cursor
-                $('#docu-view .ace_sb').hide();//rm right scrollbar
+                $('#docu-view .ace_cursor-layer').hide(); // rm cursor
+                editor.setShowPrintMargin(false); // rm the vertical line in the center
+                editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
+                editor.renderer.scrollBar.width = 0; // enlarge ace_content width
                 editor.setTheme("ace/theme/chrome");
 
                 {% if fileext = 'html' or fileext == 'xhtml' or fileext == 'htm' %}
@@ -52,8 +53,9 @@
                 {% endif %}
 
                 editor.session.getDocument().setValue(data['content']);
-                $('#docu-view').css({'position': 'relative', 'width': '100%', 'height': editor.session.getScreenLength() * 20 });
+                $('#docu-view').css({'position': 'relative', 'height': editor.session.getScreenLength() * parseInt($('#docu-view').css('line-height'))});
                 editor.resize(); // this line is needed to work in ie
+                editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
