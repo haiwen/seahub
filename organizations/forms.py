@@ -8,7 +8,7 @@ class OrgCreateForm(forms.Form):
                                label="Organization Name")
     url_prefix = forms.RegexField(label="Url Prefix", max_length=20,
                                   regex=r'^[a-z0-9]+$',
-                                  error_message="域名前缀只能包含字母或数字")
+                                  error_message="个性域名只能包含字母或数字")
 
     def clean_url_prefix(self):
         url_prefix = self.cleaned_data['url_prefix']
@@ -16,4 +16,4 @@ class OrgCreateForm(forms.Form):
         if not org:
             return url_prefix
         else:
-            raise forms.ValidationError("该域名前缀已被注册")
+            raise forms.ValidationError("该个性域名已被注册")
