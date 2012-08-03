@@ -191,6 +191,7 @@ p {
 .top-bar a {
     color:#ddd;
     font-weight:normal;
+    line-height:21px;
     padding:0 2px;
 }
 .top-bar a,
