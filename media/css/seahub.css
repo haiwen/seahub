@@ -756,6 +756,7 @@ p {
 }
 #docu-view {
     font-size:13px;/*override .ace_editor*/
+    line-height:19px;/*using 'px' as unit, for ie8 to get the right line-height*/
     font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
     border: 1px solid #ccc;

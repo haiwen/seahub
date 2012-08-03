@@ -54,7 +54,6 @@
 
                 editor.session.getDocument().setValue(data['content']);
                 $('#docu-view').css({'position': 'relative', 'height': editor.session.getScreenLength() * parseInt($('#docu-view').css('line-height'))});
-                editor.resize(); // this line is needed to work in ie
                 editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
         },
         error: function(xhr, ajaxOptions, thrownError) {
