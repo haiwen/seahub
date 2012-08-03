@@ -12,8 +12,6 @@ def org_staff_required(func):
         user = request.user.username
         url_prefix = kwargs.get('url_prefix', '')
         org = get_user_current_org(user, url_prefix)
-        print url_prefix
-        print org._dict
         if org and org.is_staff:
             return func(request, *args, **kwargs)
         return HttpResponseRedirect(reverse('myhome'))    
