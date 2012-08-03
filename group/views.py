@@ -392,7 +392,7 @@ def group_members(request, group_id):
                                   email=member_name)
                 if not ccnet_threaded_rpc.org_user_exists(request.user.org['org_id'],
                                                  member_name):
-                    err_msg = u'当前企业不存在 %s 用户' % member_name
+                    err_msg = u'无法添加成员，当前企业不存在 %s 用户' % member_name
                     return render_error(request, err_msg)
                 else:
                     try:
@@ -408,7 +408,7 @@ def group_members(request, group_id):
                                   email=member_name)
                 
                 if not validate_emailuser(member_name):
-                    err_msg = u'用户 %s 不存在' % member_name
+                    err_msg = u'无法添加成员，用户 %s 不存在' % member_name
                     return render_error(request, err_msg)
                 else:
                     try:

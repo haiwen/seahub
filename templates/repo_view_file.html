@@ -76,6 +76,7 @@ function hideLink() {
     $('#get-shared-link').removeClass('hide');
 }
 
+
 $(window).load(function() {
     var view_history = '{{ view_history }}',
         url = '',
@@ -136,6 +137,13 @@ $('#rm-shared-link').click(function() {
 
 $('#send-shared-link').click(function() {
     $("#link-send-form").modal({appendTo: "#main"});
+    
+    // link-send-form email autocomplete
+    var share_list = [];    
+    {% for contact in contacts %}
+    share_list.push('{{ contact.contact_email }}');
+    {% endfor %}
+    addAutocomplete('#email', '#link-send-form', share_list);
 });
 
 $("#link-send-form").submit(function(event) {

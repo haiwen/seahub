@@ -157,12 +157,6 @@ def render_repo(request, repo_id, error=''):
     can_access = access_to_repo(request, repo_id, '')
     if not can_access:
         return render_permission_error(request, '无法访问该同步目录')
-
-    # Check whether use is repo owner
-    # if validate_owner(request, repo_id):
-    #     is_owner = True
-    # else:
-    #     is_owner = False
     
     repo = get_repo(repo_id)
     if not repo:
@@ -238,7 +232,6 @@ def render_repo(request, repo_id, error=''):
             "can_access": can_access,
             "current_commit": current_commit,
             "view_history": view_history,
-            # "is_owner": is_owner,
             "password_set": password_set,
             "repo_size": repo_size,
             "dir_list": dir_list,
@@ -823,6 +816,9 @@ def repo_view_file(request, repo_id):
     else:
         file_shared_link = ''
 
+    # my constacts
+    contacts = Contact.objects.filter(user_email=request.user.username)
+    
     return render_to_response('repo_view_file.html', {
             'repo': repo,
             'path': path,
@@ -841,6 +837,7 @@ def repo_view_file(request, repo_id):
             'protocol': http_or_https,
             'domain': domain,
             'file_shared_link': file_shared_link,
+            'contacts': contacts,
             }, context_instance=RequestContext(request))
 
 def repo_file_get(request, repo_id):
