@@ -159,10 +159,10 @@ def render_repo(request, repo_id, error=''):
         return render_permission_error(request, '无法访问该同步目录')
 
     # Check whether use is repo owner
-    if validate_owner(request, repo_id):
-        is_owner = True
-    else:
-        is_owner = False
+    # if validate_owner(request, repo_id):
+    #     is_owner = True
+    # else:
+    #     is_owner = False
     
     repo = get_repo(repo_id)
     if not repo:
@@ -238,7 +238,7 @@ def render_repo(request, repo_id, error=''):
             "can_access": can_access,
             "current_commit": current_commit,
             "view_history": view_history,
-            "is_owner": is_owner,
+            # "is_owner": is_owner,
             "password_set": password_set,
             "repo_size": repo_size,
             "dir_list": dir_list,

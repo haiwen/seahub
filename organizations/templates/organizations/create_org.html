@@ -7,6 +7,7 @@
         {{ form.org_name}}
         <lable for="id_url_prefix">个性域名：</label>
         {{ form.url_prefix }}
+        <p class="note">域名前缀只能包含字母或数字</p>
         <p class="error hide"></p>
         {{ form.url_prefix.errors }}
         <input type="submit" value="提交" class="submit" />

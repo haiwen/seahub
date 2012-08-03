@@ -335,6 +335,12 @@ p {
     width:3em;
     margin:8px 0 0;
 }
+.narrow-panel .note {
+    color: #666666;
+    font-size: 11px;
+    margin: 2px 0 5px;
+}
+
 .login-form a {
     font-size:12px;
     vertical-align:middle;
@@ -859,3 +865,4 @@ p {
 .view-link-alert p {
     display: inline-block;
 }
+

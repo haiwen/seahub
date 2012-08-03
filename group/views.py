@@ -18,6 +18,7 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
+from seahub.settings import SITE_ROOT
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, emails2list
 from seahub.views import validate_emailuser
@@ -48,18 +49,63 @@ def group_list(request):
 
 @login_required
 def group_remove(request, group_id):
+    """
+    Remove group from groupadmin page. Only sys admin or org admin can perform
+    this operation.
+    """
+    # Request header may missing HTTP_REFERER, we need to handle that case.
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
+        return HttpResponseRedirect(next)
 
-    # Check whether user is the group staff or admin
-    if not ccnet_threaded_rpc.check_group_staff(group_id_int, request.user.username) \
-            and not request.user.is_staff:
-        return render_permission_error(request, u'只有小组管理员有权解散小组')
-    
+    # Check whether user is sys_admin or org_admin
+    is_sys_staff = request.user.is_staff
+    if request.user.org and request.user.org['is_staff']:
+        is_org_staff = True
+    else:
+        is_org_staff = False
+        
+    if not is_sys_staff and not is_org_staff:
+        return render_permission_error(request, u'只有管理员有权删除小组')
+
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
+        seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
+
+        if request.user.org:
+            org_id = request.user.org['org_id']
+            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
+    except SearpcError, e:
+        return render_error(request, e.msg)
+
+    return HttpResponseRedirect(next)
+
+@login_required
+def group_dismiss(request, group_id):
+    """
+    Dismiss a group, only group staff can perform this operation.
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return HttpResponseRedirect(next)
+
+    # Check whether user is group staff
+    user = request.user.username
+    if not ccnet_threaded_rpc.check_group_staff(group_id_int, user):
+        return render_permission_error(request, u'只有小组管理员有权解散小组')
+
+    try:
+        ccnet_threaded_rpc.remove_group(group_id_int, user)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
 
         if request.user.org:
@@ -68,15 +114,11 @@ def group_remove(request, group_id):
             ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
             return HttpResponseRedirect(reverse('org_groups',
                                                 args=[url_prefix]))
+
     except SearpcError, e:
         return render_error(request, e.msg)
-
-    if request.GET.get('src', '') == 'orggroupadmin':
-        return HttpResponseRedirect(reverse('org_group_admin'))
-    elif request.GET.get('src', '') == 'sysgroupadmin':
-        return HttpResponseRedirect(reverse('sys_group_admin'))
-    else:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    return HttpResponseRedirect(reverse('group_list'))
 
 @login_required
 def group_quit(request, group_id):
@@ -314,6 +356,8 @@ def group_info(request, group_id):
         op = request.GET.get('op', '')
         if op == 'delete':
             return group_remove(request, group_id)
+        elif op == 'dismiss':
+            return group_dismiss(request, group_id)
         elif op == 'quit':
             return group_quit(request, group_id)
 
@@ -346,7 +390,7 @@ def group_members(request, group_id):
                 # Add email to contacts
                 mail_sended.send(sender=None, user=request.user.username,
                                   email=member_name)
-                if not ccnet_threaded_rpc.org_user_exists(request.user.org.org_id,
+                if not ccnet_threaded_rpc.org_user_exists(request.user.org['org_id'],
                                                  member_name):
                     err_msg = u'当前企业不存在 %s 用户' % member_name
                     return render_error(request, err_msg)
