@@ -22,6 +22,7 @@ from forms import OrgCreateForm
 from signals import org_user_added
 from notifications.models import UserNotification
 from registration.models import RegistrationProfile
+from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
@@ -201,10 +202,14 @@ def org_useradmin(request, url_prefix):
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
+
+    # My contacts
+    contacts = Contact.objects.filter(user_email=request.user.username)
             
     return render_to_response(
         'organizations/org_useradmin.html', {
             'users': users,
+            'contacts': contacts,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,
