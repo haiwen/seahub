@@ -183,12 +183,12 @@
 {% endif %}
 {% if filetype == 'Markdown' %}
     $.ajax({
-        url: '{{ raw_path }}',
-        dataType: 'text',
+        url: url,
+        dataType: 'json',
         cache: false,
         success: function(data) {
             var converter = new Showdown.converter();
-            $('#file-view').html('<div id="md-view">' + converter.makeHtml(data) + '</div>');
+            $('#file-view').html('<div id="md-view">' + converter.makeHtml(data['content']) + '</div>');
             $('#md-view').children(':first').css('margin-top', '0');
         }
     });
