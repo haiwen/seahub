@@ -362,7 +362,7 @@ def org_group_remove(request, url_prefix, group_id):
     # Check whether is the org group.
     org_id = is_org_group(group_id_int)
     if request.user.org['org_id'] != org_id:
-        return render_permission_error('该小组不属于当前团体')
+        return render_permission_error(request, '该小组不属于当前团体')
 
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
