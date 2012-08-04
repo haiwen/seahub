@@ -20,6 +20,9 @@ class ContactAddForm(ModelForm):
         model = Contact
 
     def clean(self):
+        if not 'contact_email' in self.cleaned_data:
+            raise forms.ValidationError('请输入邮箱地址。')
+            
         user_email = self.cleaned_data['user_email']
         contact_email = self.cleaned_data['contact_email']
         if user_email == contact_email:

@@ -115,7 +115,8 @@ $('#contact-add')
     }   
 );
 $('#contact-add-form').submit(function() {
-    if(!$.trim($('input[name="contact_email"]').val())) {
+
+    if(!$.trim($('#contact-add-form input[name="contact_email"]').val())) {
        $('#contact-add-error').removeClass('hide') 
        $('#simplemodal-container').css('height', $(this).height());
         return false;
