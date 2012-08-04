@@ -16,7 +16,7 @@ from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_orgs_by_user, get_org_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename, \
-    create_org_repo, is_org_group
+    create_org_repo, get_org_id_by_group
 
 from decorators import org_staff_required
 from forms import OrgCreateForm
@@ -360,7 +360,7 @@ def org_group_remove(request, url_prefix, group_id):
         return HttpResponseRedirect(next)
 
     # Check whether is the org group.
-    org_id = is_org_group(group_id_int)
+    org_id = get_org_id_by_group(group_id_int)
     if request.user.org['org_id'] != org_id:
         return render_permission_error(request, '该小组不属于当前团体')
 
