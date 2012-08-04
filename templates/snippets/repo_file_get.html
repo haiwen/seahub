@@ -67,7 +67,11 @@
     $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
 {% endif %}
 {% if filetype == 'SVG' %}
+if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
+    $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>');
+} else {
     $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
+}
 {% endif %}
 {% if filetype == 'Document' %}
     var uuid = '',
@@ -133,6 +137,9 @@
     });
 {% endif %}
 {% if filetype == 'PDF' %}
+if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
+    $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>');
+} else {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
     $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
     var seahub_getPage = function (pdf, page_number) {
@@ -181,6 +188,7 @@
             window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
         });
     });
+}
 {% endif %}
 {% if filetype == 'Markdown' %}
     $.ajax({
