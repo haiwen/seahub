@@ -2,8 +2,18 @@
 # encoding: utf-8
 
 import sqlite3
+import os
+import sys
 
-conn = sqlite3.connect('/home/xiez/seahub/seahub.db')
+if len(sys.argv) != 2:
+    print("usage: update.py <dbname>")
+    sys.exit(-1)
+
+if not os.access(sys.argv[1], os.F_OK):
+    print("%s does not exist" % sys.argv[1])
+    sys.exit(-1)
+
+conn = sqlite3.connect(sys.argv[1])
 
 c = conn.cursor()
 
