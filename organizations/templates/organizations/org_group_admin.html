@@ -18,7 +18,7 @@
         <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></td>
         <td>{{ group.props.creator_name }}</td>
         <td>{{ group.props.timestamp|tsstr_sec }}</td>
-        <td><button data="{{ SITE_ROOT}}group/{{ group.id }}/?op=delete&src=orggroupadmin" class="group-remove-btn">删除</button></td>
+        <td><button data="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/group/remove/{{ group.id }}/" class="group-remove-btn">删除</button></td>
     </tr>
     {% endfor %}
 </table>

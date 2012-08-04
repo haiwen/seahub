@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^(?P<url_prefix>[^/]+)/useradmin/$', org_useradmin, name='org_useradmin'),
     url(r'^(?P<url_prefix>[^/]+)/useradmin/remove/(?P<user>[^/]+)/$', org_user_remove, name='org_user_remove'),
     url(r'^(?P<url_prefix>[^/]+)/groupadmin/$', org_group_admin, name='org_groupadmin'),
+    url(r'^(?P<url_prefix>[^/]+)/group/remove/(?P<group_id>[\d]+)/$', org_group_remove, name='org_group_remove'),
 )

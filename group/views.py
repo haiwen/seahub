@@ -50,9 +50,13 @@ def group_list(request):
 @login_required
 def group_remove(request, group_id):
     """
-    Remove group from groupadmin page. Only sys admin or org admin can perform
-    this operation.
+    Remove group from groupadmin page. Only system admin can perform this
+    operation.
     """
+    # Check whether user is system admin.
+    if not request.user.is_staff:
+        return render_permission_error(request, u'只有管理员有权删除小组')
+        
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -63,23 +67,9 @@ def group_remove(request, group_id):
     except ValueError:
         return HttpResponseRedirect(next)
 
-    # Check whether user is sys_admin or org_admin
-    is_sys_staff = request.user.is_staff
-    if request.user.org and request.user.org['is_staff']:
-        is_org_staff = True
-    else:
-        is_org_staff = False
-        
-    if not is_sys_staff and not is_org_staff:
-        return render_permission_error(request, u'只有管理员有权删除小组')
-
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
-
-        if request.user.org:
-            org_id = request.user.org['org_id']
-            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
     except SearpcError, e:
         return render_error(request, e.msg)
 

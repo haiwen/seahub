@@ -168,7 +168,19 @@ def get_personal_groups(email):
             personal_groups.append(group)
             
     return personal_groups
-    
+
+def is_org_group(group_id):
+    """
+    If a group is org group, returns org id which is > 0.
+    Arguments:
+    - `group_id`:
+    """
+    try:
+        org_id = ccnet_threaded_rpc.is_org_group(group_id)
+    except SearpcError:
+        org_id = 0
+    return org_id
+
 def create_org(org_name, url_prefix, username):
     ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
 
