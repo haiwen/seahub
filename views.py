@@ -47,7 +47,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, emails2list, set_cur_ctx
+    gen_file_get_url, emails2list, set_cur_ctx, MAX_INT
 from seahub.profile.models import Profile
 try:
     from settings import CROCODOC_API_TOKEN
@@ -1333,7 +1333,7 @@ def sys_org_admin(request):
         raise Http404
 
     try:
-        orgs = ccnet_threaded_rpc.get_all_orgs(0, sys.maxint)
+        orgs = ccnet_threaded_rpc.get_all_orgs(0, MAX_INT)
     except:
         orgs = []
 
@@ -1366,11 +1366,11 @@ def org_info(request):
 
     org = request.user.org
     
-    org_members = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, 0, sys.maxint)
+    org_members = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, 0, MAX_INT)
     for member in org_members:
         member.short_username = member.email.split('@')[0]
 
-    groups = ccnet_threaded_rpc.get_org_groups(org.org_id, 0, sys.maxint)
+    groups = ccnet_threaded_rpc.get_org_groups(org.org_id, 0, MAX_INT)
     
     return render_to_response('org_info.html', {
             'org': org,

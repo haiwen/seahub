@@ -54,6 +54,7 @@ else:
 
 print "Load config from " + CCNET_CONF_PATH
 CCNET_CONF_PATH = os.path.normpath(os.path.expanduser(CCNET_CONF_PATH))
+MAX_INT = 2147483647
 
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool, req_pool=True)
@@ -151,7 +152,7 @@ def remove_group_user(user):
 
 def get_org_groups(org_id, start, limit):
     try:
-        groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, sys.maxint)
+        groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, MAX_INT)
     except SearpcError:
         groups = []
     return groups

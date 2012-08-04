@@ -27,7 +27,8 @@ from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
-    validate_group_name, emails2list, set_cur_ctx, calculate_repo_last_modify
+    validate_group_name, emails2list, set_cur_ctx, calculate_repo_last_modify,\
+    MAX_INT
 from seahub.views import myhome
 
 @login_required
@@ -71,8 +72,8 @@ def org_info(request, url_prefix):
     set_cur_ctx(request, ctx_dict)
     
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
-                                                        0, sys.maxint)
-    repos = get_org_repos(org.org_id, 0, sys.maxint)
+                                                        0, MAX_INT)
+    repos = get_org_repos(org.org_id, 0, MAX_INT)
     calculate_repo_last_modify(repos)
     repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
@@ -106,7 +107,7 @@ def org_groups(request, url_prefix):
             error_msg = e.msg
             return render_error(request, error_msg)
         
-    groups = get_org_groups(org.org_id, 0, sys.maxint)
+    groups = get_org_groups(org.org_id, 0, MAX_INT)
     return render_to_response('organizations/org_groups.html', {
             'org': org,
             'groups': groups,

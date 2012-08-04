@@ -22,6 +22,7 @@ except ImportError:
 import settings
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
+MAX_INT = 2147483647 
 
 PREVIEW_FILEEXT = {
     'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'h', 'html',  'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt','text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
