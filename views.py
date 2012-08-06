@@ -34,7 +34,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_group, get_shared_groups_by_repo, is_group_user
 from pysearpc import SearpcError
 
-from seahub.base.accounts import User
+from base.accounts import User
+from base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -1105,10 +1106,8 @@ def mypeers(request):
     cid = get_user_cid(request.user)
 
 @login_required
+@sys_staff_required
 def sys_seafadmin(request):
-    if not request.user.is_staff:
-        raise Http404
-
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -1146,10 +1145,8 @@ def sys_seafadmin(request):
         context_instance=RequestContext(request))
 
 @login_required
+@sys_staff_required
 def sys_useradmin(request):
-    if not request.user.is_staff:
-        raise Http404
-
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -1180,13 +1177,8 @@ def sys_useradmin(request):
         context_instance=RequestContext(request))
 
 @login_required
+@sys_staff_required
 def user_info(request, email):
-    if request.user.username == email:
-        return HttpResponseRedirect(reverse(myhome))
-    
-    if not request.user.is_staff:
-        return render_permission_error(request, u'权限不足：无法查看该用户信息')
-
     owned_repos = []
     quota_usage = 0
 
@@ -1203,16 +1195,12 @@ def user_info(request, email):
             'quota_usage': quota_usage,
             "in_repos": in_repos,
             'email': email
-            },
-        context_instance=RequestContext(request))
+            }, context_instance=RequestContext(request))
 
 @login_required
+@sys_staff_required
 def user_remove(request, user_id):
     """Remove user, also remove group relationship."""
-    
-    if not request.user.is_staff:
-        raise Http404
-
     try:
         user = User.objects.get(id=int(user_id))
         user.delete()
@@ -1222,10 +1210,8 @@ def user_remove(request, user_id):
     return HttpResponseRedirect(reverse('sys_useradmin'))
 
 @login_required
+@sys_staff_required
 def activate_user(request, user_id):
-    if not request.user.is_staff:
-        raise Http404
-
     try:
         user = User.objects.get(id=int(user_id))
         user.is_active = True
@@ -1299,10 +1285,9 @@ def user_add(request):
             }, context_instance=RequestContext(request))
 
 
+@login_required
+@sys_staff_required
 def sys_group_admin(request):
-    if not request.user.is_staff:
-        raise Http404
-
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -1330,10 +1315,9 @@ def sys_group_admin(request):
             'page_next': page_next,
             }, context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
 def sys_org_admin(request):
-    if not request.user.is_staff:
-        raise Http404
-
     try:
         orgs = ccnet_threaded_rpc.get_all_orgs(0, MAX_INT)
     except:
@@ -1343,10 +1327,9 @@ def sys_org_admin(request):
             'orgs': orgs,
             }, context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
 def org_remove(request, org_id):
-    if not request.user.is_staff:
-        raise Http404
-
     try:
         org_id_int = int(org_id)
     except ValueError:
