@@ -37,6 +37,9 @@
     <div class="file-op fright">
         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a>
         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a>
+        {% if filetype == 'Text' %}
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}">编辑文件</a>
+        {% endif %}
         <br />
 
         {% if not view_history %}
@@ -76,26 +79,19 @@ function hideLink() {
     $('#get-shared-link').removeClass('hide');
 }
 
+{% if view_history %}
+var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
+{% else %}
+var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
+{% endif %}
 
-$(window).load(function() {
-    var view_history = '{{ view_history }}',
-        url = '',
-        t = '{{ fileshare.token }}';
+{% if fileshare.token %}
+showLink();
+{% else %}
+hideLink();
+{% endif %}
 
-    if (view_history == 'True') {
-        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-    } else {
-        url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-    }
-
-    if (t) {
-        showLink();
-    } else {
-        hideLink();
-    }
-    
-    {% include "snippets/repo_file_get.html" %}
-});
+{% include "snippets/repo_file_get.html" %}
 
 $('#get-shared-link').click(function() {
     var url = $(this).attr('data');

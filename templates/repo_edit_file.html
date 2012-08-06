@@ -1,0 +1,71 @@
+{% extends base_template %}
+{% load seahub_tags %}
+
+{% block main_panel %}
+    <h2>{{ u_filename }}</h2>
+    <div class="w100 ovhd">
+    <p class="path fleft">
+         当前路径：
+         {% for name, link in zipped %}
+            {% if not forloop.last %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+            {% else %}
+                {{ name }}
+            {% endif %}
+         {% endfor %}
+    </p>
+
+    <div class="file-op fright">
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}">返回</a>
+    </div>
+    </div>
+
+    <div id="file-view">
+        <p>文件内容读取中...</p>
+    </div>
+
+    <form action="post" method="post" id="file-edit-form">
+        <input type="hidden" name="modified-file" />
+        <label>修改信息：</label><br />
+        <input type="text" name="commit-msg" id="file-edit-commit-msg" /><br />
+        <label>更多描述：</label><br />
+        <textarea name="commit-details" id="file-edit-commit-details"></textarea><br />
+        <input type="submit" class="submit" value="提交" />
+    </form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}ace/ace.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}ace/theme-twilight.js"></script>
+{% include "snippets/file_view_js.html" %}
+<script type="text/javascript">
+var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
+$.ajax({
+    url: url,
+    dataType: 'json',
+    cache: false,
+    success: function(data) {
+        $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
+        editor = ace.edit("docu-view");
+        $('#docu-view').removeClass('vh');
+        editor.setShowPrintMargin(false); // rm the vertical line in the center
+        editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
+        editor.renderer.scrollBar.width = 0; // enlarge ace_content width
+        editor.setTheme("ace/theme/twilight");
+        {% include "snippets/editor_set_mode.html" %}
+        editor.session.getDocument().setValue(data['content']);
+        $('#docu-view').css({'position': 'relative', 'height': editor.session.getScreenLength() * parseInt($('#docu-view').css('line-height'))});
+        editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
+        editor.resize(); // fix some problem for showing some file in ie8
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+        var jsonVal = jQuery.parseJSON(xhr.responseText);
+        $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
+    }
+});
+
+$('#file-edit-form').submit(function() {
+     $(this).find('[name="modified-file"]').val(editor.session.getValue());
+});
+</script>
+{% endblock %}

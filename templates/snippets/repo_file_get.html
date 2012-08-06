@@ -14,44 +14,7 @@
                 editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
                 editor.renderer.scrollBar.width = 0; // enlarge ace_content width
                 editor.setTheme("ace/theme/chrome");
-
-                {% if fileext = 'html' or fileext == 'xhtml' or fileext == 'htm' %}
-                editor.session.setMode('ace/mode/html');
-                {% endif %}
-                {% if fileext = 'css' %}
-                editor.session.setMode('ace/mode/css');
-                {% endif %}
-                {% if fileext = 'java' %}
-                editor.session.setMode('ace/mode/java');
-                {% endif %}
-                {% if fileext = 'js' %}
-                editor.session.setMode('ace/mode/javascript');
-                {% endif %}
-                {% if fileext = 'c' or fileext == 'cpp' or fileext == 'cc' %}
-                editor.session.setMode('ace/mode/c_cpp');
-                {% endif %}
-                {% if fileext = 'tex' %}
-                editor.session.setMode('ace/mode/latex');
-                {% endif %}
-                {% if fileext = 'pl' %}
-                editor.session.setMode('ace/mode/perl');
-                {% endif %}
-                {% if fileext = 'php' %}
-                editor.session.setMode('ace/mode/php');
-                {% endif %}
-                {% if fileext = 'py' %}
-                editor.session.setMode('ace/mode/python');
-                {% endif %}
-                {% if fileext = 'rb' %}
-                editor.session.setMode('ace/mode/ruby');
-                {% endif %}
-                {% if fileext = 'sh' %}
-                editor.session.setMode('ace/mode/sh');
-                {% endif %}
-                {% if fileext = 'xml' %}
-                editor.session.setMode('ace/mode/xml');
-                {% endif %}
-
+                {% include "snippets/editor_set_mode.html" %}
                 editor.session.getDocument().setValue(data['content']);
                 $('#docu-view').css({'position': 'relative', 'height': editor.session.getScreenLength() * parseInt($('#docu-view').css('line-height'))});
                 editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most

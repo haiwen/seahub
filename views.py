@@ -818,7 +818,6 @@ def repo_view_file(request, repo_id):
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
-            'path': path,
             'obj_id': obj_id,
             'u_filename': u_filename,
             'file_name': filename,
@@ -910,7 +909,54 @@ def pdf_full_view(request):
             'file_src': file_src,
                 }, context_instance=RequestContext(request))
 
-    
+
+def repo_file_edit(request, repo_id):
+
+    if request.method == 'POST':
+        pass
+
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+    u_filename = os.path.basename(path)
+    filename = urllib2.quote(u_filename.encode('utf-8'))
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    try:
+        obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
+    except:
+        obj_id = None
+    if not obj_id:
+        return render_error(request, '文件不存在')
+
+    token = ''        
+    if access_to_repo(request, repo_id, ''):
+        # Get a token to visit file
+        token = gen_token()
+        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                           'view', request.user.username)
+    else:
+        render_permission_error(request, '无法查看该文件')
+
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
+
+    filetype, fileext = valid_previewed_file(filename)
+
+    return render_to_response('repo_edit_file.html', {
+        'repo':repo,
+        'u_filename':u_filename,
+        'path':path,
+        'zipped':zipped,
+        'token':token,
+        'fileext':fileext,
+                }, context_instance=RequestContext(request))
+
+
+
 def repo_access_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
     if not repo:
