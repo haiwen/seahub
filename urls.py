@@ -5,7 +5,7 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import root, myhome, \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
-    ownerhome, repo_history_revert, repo_file_edit, org_remove, \
+    ownerhome, repo_history_revert, repo_file_edit, org_remove, user_reset, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
     seafile_access_check, repo_history_changes, \
@@ -82,6 +82,7 @@ urlpatterns = patterns('',
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
+    (r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset),
 
     ### Document previewd ###
     (r'^crocodoc/upload/$', crocodoc_upload),                       

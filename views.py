@@ -55,7 +55,7 @@ try:
     from settings import CROCODOC_API_TOKEN
 except ImportError:
     CROCODOC_API_TOKEN = None
-from settings import FILE_PREVIEW_MAX_SIZE
+from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
 
 @login_required
 def root(request):
@@ -1219,10 +1219,27 @@ def activate_user(request, user_id):
     except User.DoesNotExist:
         pass
 
-    return HttpResponseRedirect(reverse('useradmin'))
+    return HttpResponseRedirect(reverse('sys_useradmin'))
+
+@login_required
+@sys_staff_required
+def user_reset(request, user_id):
+    """Reset password for user."""
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.password = INIT_PASSWD
+        user.save()
+
+        msg  =u'密码重置成功。初始密码为%s，请联系该用户更改密码。' % INIT_PASSWD
+        messages.add_message(request, messages.INFO, msg)
+    except User.DoesNotExist:
+        msg  =u'密码重置失败，用户不存在。'
+        messages.add_message(request, messages.ERROR, msg)
+
+    return HttpResponseRedirect(reverse('sys_useradmin'))
 
 def send_user_add_mail(request, email, password):
-    """ Send email when add new user """
+    """Send email when add new user."""
     
     use_https = request.is_secure()
     domain = RequestSite(request).domain
@@ -1239,9 +1256,9 @@ def send_user_add_mail(request, email, password):
     try:
         send_mail(u'SeaCloud注册信息', t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, email)
+        messages.add_message(request, messages.INFO, '邮件发送成功。')
     except:
-        messages.add_message(request, messages.ERROR, email)
+        messages.add_message(request, messages.ERROR, '邮件发送失败。')
 
 @login_required
 def user_add(request):

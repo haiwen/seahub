@@ -13,12 +13,7 @@
 {% if messages %}
 <ul class="messages hide">
   {% for message in messages %}
-  {% if message.tags == 'info' %}
-  <li class="info">邮件发送成功。</li>  
-  {% endif %}
-  {% if message.tags == 'error' %}
-  <li class="info">邮件发送失败。</li>  
-  {% endif %}
+  <li class="info">{{ message }}</li>  
   {% endfor %}
 </ul>
 {% endif %}
@@ -26,9 +21,9 @@
 <h3>所有用户</h3>
 <table>
     <tr>
-        <th width="70%">邮箱</th>
+        <th width="65%">邮箱</th>
         <th width="20%">是否激活</th>
-        <th width="10%">操作</th>
+        <th width="15%">操作</th>
     </tr>
 
     {% for user in users %}
@@ -42,6 +37,7 @@
         <td>
           {% if not user.is_self %}
           <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</button>
+          <button class="reset-user-btn" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">密码重置</button>
           {% endif %}
         </td>
     </tr>
@@ -83,7 +79,7 @@ $('.activate').each(function(){
     });
 });
 
-//delete confirm
 addConfirmTo($('.remove-user-btn'));
+addConfirmTo($('.reset-user-btn'), '确定要重置？');
 </script>
 {% endblock %}

@@ -208,6 +208,9 @@ HTTP_SERVER_ROOT = "http://localhost:8082"
 # Seafile-applet address and port, used in repo download
 CCNET_APPLET_ROOT = "http://localhost:13420"
 
+# Account initial password, for password resetting.
+INIT_PASSWD = '123456'
+
 SEAHUB_TITLE = 'SeaHub'
 
 USE_SUBDOMAIN = False
