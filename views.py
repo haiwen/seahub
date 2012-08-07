@@ -883,15 +883,12 @@ def repo_file_get(request, repo_id):
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
     else:
-        # l, d = [], {}
         try:
             u_content = content.decode('utf-8')
         except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
         from django.utils.html import escape
-        # d['content'] = escape(u_content)
-        # l.append(d)
         data = json.dumps({'content': u_content})
         return HttpResponse(data, status=200, content_type=content_type)
 
@@ -934,7 +931,6 @@ def repo_file_edit(request, repo_id):
 
     token = ''        
     if access_to_repo(request, repo_id, ''):
-        # Get a token to visit file
         token = gen_token()
         seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
                                            'view', request.user.username)

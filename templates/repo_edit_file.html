@@ -2,7 +2,7 @@
 {% load seahub_tags %}
 
 {% block main_panel %}
-    <h2>{{ u_filename }}</h2>
+    <h2>编辑 {{ u_filename }}</h2>
     <div class="w100 ovhd">
     <p class="path fleft">
          当前路径：
@@ -24,10 +24,10 @@
         <p>文件内容读取中...</p>
     </div>
 
-    <form action="post" method="post" id="file-edit-form">
+    <form action="post" method="post" id="file-edit-form" class="hide">
         <input type="hidden" name="modified-file" />
         <label>修改信息：</label><br />
-        <input type="text" name="commit-msg" id="file-edit-commit-msg" /><br />
+        <input type="text" name="commit-msg" id="file-edit-commit-msg" value="修改了 {{ u_filename }}" /><br />
         <label>更多描述：</label><br />
         <textarea name="commit-details" id="file-edit-commit-details"></textarea><br />
         <input type="submit" class="submit" value="提交" />
@@ -57,12 +57,17 @@ $.ajax({
         $('#docu-view').css({'position': 'relative', 'height': editor.session.getScreenLength() * parseInt($('#docu-view').css('line-height'))});
         editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
         editor.resize(); // fix some problem for showing some file in ie8
+        $('#file-edit-form').removeClass('hide');
     },
     error: function(xhr, ajaxOptions, thrownError) {
         var jsonVal = jQuery.parseJSON(xhr.responseText);
         $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
     }
 });
+
+$('#file-edit-commit-msg').css('color', '#666').click(function() {
+    $(this).val('').css('color', '#000');
+    });
 
 $('#file-edit-form').submit(function() {
      $(this).find('[name="modified-file"]').val(editor.session.getValue());
