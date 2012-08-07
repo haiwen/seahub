@@ -1,12 +1,12 @@
-from django.contrib.auth.tests.auth_backends import BackendTest, RowlevelBackendTest, AnonymousUserBackendTest, NoAnonymousUserBackendTest
-from django.contrib.auth.tests.basic import BASIC_TESTS
-from django.contrib.auth.tests.decorators import LoginRequiredTestCase
-from django.contrib.auth.tests.forms import UserCreationFormTest, AuthenticationFormTest, SetPasswordFormTest, PasswordChangeFormTest, UserChangeFormTest, PasswordResetFormTest
-from django.contrib.auth.tests.remote_user \
+from auth.tests.auth_backends import BackendTest, RowlevelBackendTest, AnonymousUserBackendTest, NoAnonymousUserBackendTest
+from auth.tests.basic import BASIC_TESTS
+from auth.tests.decorators import LoginRequiredTestCase
+from auth.tests.forms import UserCreationFormTest, AuthenticationFormTest, SetPasswordFormTest, PasswordChangeFormTest, UserChangeFormTest, PasswordResetFormTest
+from auth.tests.remote_user \
         import RemoteUserTest, RemoteUserNoCreateTest, RemoteUserCustomTest
-from django.contrib.auth.tests.models import ProfileTestCase
-from django.contrib.auth.tests.tokens import TOKEN_GENERATOR_TESTS
-from django.contrib.auth.tests.views \
+from auth.tests.models import ProfileTestCase
+from auth.tests.tokens import TOKEN_GENERATOR_TESTS
+from auth.tests.views \
         import PasswordResetTest, ChangePasswordTest, LoginTest, LogoutTest
 
 # The password for the fixture data users is 'password'

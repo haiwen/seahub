@@ -99,14 +99,16 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 INSTALLED_APPS = (
-#    'auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
 #    'django.contrib.sites',
 #    'django.contrib.admin',
     'django.contrib.messages',
+    
+    'auth',
+    'avatar',    
     'registration',
-    'avatar',
+
     'seahub.base',
     'seahub.contacts',
     'seahub.group',    
