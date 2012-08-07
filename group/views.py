@@ -21,7 +21,7 @@ from seahub.profile.models import Profile
 from seahub.settings import SITE_ROOT
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, emails2list
-from seahub.views import validate_emailuser
+from seahub.views import is_registered_user
 
 @login_required
 def group_list(request):
@@ -397,7 +397,7 @@ def group_members(request, group_id):
                 mail_sended.send(sender=None, user=request.user.username,
                                   email=member_name)
                 
-                if not validate_emailuser(member_name):
+                if not is_registered_user(member_name):
                     err_msg = u'无法添加成员，用户 %s 不存在' % member_name
                     return render_error(request, err_msg)
                 else:

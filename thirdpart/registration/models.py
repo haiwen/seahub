@@ -10,7 +10,6 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_ccnetuser
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -52,13 +51,16 @@ class RegistrationManager(models.Manager):
             except self.model.DoesNotExist:
                 return False
             if not profile.activation_key_expired():
-                # Activate emailuser
-                ccnetuser = get_ccnetuser(userid=profile.emailuser_id)
-                ccnetuser.is_active = True
-                ccnetuser.save()
-                profile.activation_key = self.model.ACTIVATED
-                profile.save()
-                return ccnetuser
+                # Activate user
+                try:
+                    user = User.objects.get(id=profile.emailuser_id)
+                    user.is_active = True
+                    user.save()
+                    profile.activation_key = self.model.ACTIVATED
+                    profile.save()
+                    return user
+                except User.DoesNotExist:
+                    return False
         return False
 
     def create_email_user(self, username, email, password,
@@ -72,19 +74,17 @@ class RegistrationManager(models.Manager):
         user. To disable this, pass ``send_email=False``.
         
         """
-        from seahub.base.accounts import CcnetUser
 
-        ccnetuser = CcnetUser.objects.create_user(username, password, False, False)
-        #TODO: handle None type
-        ccnetuser.is_active = is_active
-        ccnetuser.save()
+        user = User.objects.create_user(username, password, False, False)
+        user.is_active = is_active
+        user.save()
         
-        registration_profile = self.create_profile(ccnetuser)
+        registration_profile = self.create_profile(user)
 
         if send_email:
             registration_profile.send_activation_email(site)
 
-        return ccnetuser
+        return user
     
     def create_inactive_user(self, username, email, password,
                              site, send_email=True):
@@ -160,9 +160,13 @@ class RegistrationManager(models.Manager):
         """
         for profile in self.all():
             if profile.activation_key_expired():
-                ccnetuser = get_ccnetuser(userid=profile.emailuser_id)
-                if not ccnetuser.is_active:
-                    ccnet_threaded_rpc.remove_emailuser(ccnetuser.username)
+                try:
+                    user = User.objects.get(id=profile.emailuser_id)
+                    if not user.is_active:
+                        user.delete()
+                except User.DoesNotExist:
+                    pass
+
 
 class RegistrationProfile(models.Model):
     """
@@ -218,11 +222,14 @@ class RegistrationProfile(models.Model):
         
         """
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        
-        ccnetuser = get_ccnetuser(userid=self.emailuser_id)
+
+        try:
+            user = User.objects.get(id=self.emailuser_id)
+        except User.DoesNotExist:
+            return False
 
         return self.activation_key == self.ACTIVATED or \
-               (datetime.datetime.fromtimestamp(ccnetuser.ctime/1000000) + expiration_date <= datetime.datetime.now())
+               (datetime.datetime.fromtimestamp(user.ctime/1000000) + expiration_date <= datetime.datetime.now())
 
     activation_key_expired.boolean = True
 
@@ -276,6 +283,11 @@ class RegistrationProfile(models.Model):
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
         
-        ccnetuser = get_ccnetuser(userid=self.emailuser_id)
-        ccnetuser.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
-    
+        try:
+            user = User.objects.get(id=self.emailuser_id)
+            user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        except User.DoesNotExist:
+            pass
+
+# We put this import here to prevent circular import
+from seahub.base.accounts import User

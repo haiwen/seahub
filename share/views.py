@@ -19,7 +19,7 @@ from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
-from seahub.views import validate_owner, validate_emailuser
+from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, emails2list
 
 @login_required
@@ -86,7 +86,7 @@ def share_repo(request):
                 messages.add_message(request, messages.ERROR, to_email)
                 continue
             
-            if not validate_emailuser(to_email):
+            if not is_registered_user(to_email):
                 # Generate shared link and send mail if user has not registered.
                 kwargs = {'repo_id': repo_id,
                           'repo_owner': from_email,

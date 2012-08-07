@@ -1,8 +1,6 @@
 from django.db import connection
 
-from seahub.base.accounts import CcnetUser
-from seaserv import ccnet_rpc, get_ccnetuser
-
+from seahub.base.accounts import User
 
 class ModelBackend(object):
     """
@@ -14,11 +12,12 @@ class ModelBackend(object):
     # TODO: Model, login attribute name and password attribute name should be
     # configurable.
     def authenticate(self, username=None, password=None):
-        ccnetuser = get_ccnetuser(username=username)
-        if ccnetuser and ccnetuser.check_password(password):
-            return ccnetuser
-
-        return None
+        try:
+            user = User.objects.get(email=username)
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
 
     def get_group_permissions(self, user_obj):
         """
@@ -53,5 +52,9 @@ class ModelBackend(object):
         return False
 
     def get_user(self, username):
-        return get_ccnetuser(username=username)
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        return user
 

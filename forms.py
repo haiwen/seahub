@@ -1,9 +1,10 @@
 # encoding: utf-8
 from django import forms
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, is_valid_filename
+
+from seahub.base.accounts import User
 
 class AddUserForm(forms.Form):
     """
@@ -16,11 +17,12 @@ class AddUserForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        emailuser = ccnet_threaded_rpc.get_emailuser(email)
-        if not emailuser:
-            return self.cleaned_data['email']
-        else:
-            raise forms.ValidationError(_("A user with this email already"))                    
+        try:
+            user = User.objects.get(email=email)
+            raise forms.ValidationError(_("A user with this email already"))
+        except User.DoesNotExist:
+            return self.cleaned_data['email']            
+
     def clean(self):
         """
         Verifiy that the values entered into the two password fields

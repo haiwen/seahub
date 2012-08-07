@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 
-from seahub.base.accounts import CcnetUser
-
-from seaserv import get_ccnetuser
+from seahub.base.accounts import User
 
 from avatar.settings import (AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,
                              AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE)
@@ -14,7 +12,7 @@ def get_cache_key(user_or_username, size, prefix):
     """
     Returns a cache key consisten of a username and image size.
     """
-    if isinstance(user_or_username, CcnetUser):
+    if isinstance(user_or_username, User):
         user_or_username = user_or_username.username
     return '%s_%s_%s' % (prefix, user_or_username, size)
 
@@ -62,10 +60,10 @@ def get_default_avatar_url():
     return '%s%s' % (base_url, AVATAR_DEFAULT_URL)
 
 def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
-    if not isinstance(user, CcnetUser):
+    if not isinstance(user, User):
         try:
-            user = get_ccnetuser(username=user)
-        except:
+            user = User.objects.get(email=user)
+        except User.DoesNotExist:
             return None
     try:
         # Order by -primary first; this means if a primary=True avatar exists

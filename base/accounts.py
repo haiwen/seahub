@@ -12,76 +12,98 @@ from auth import authenticate, login
 from registration import signals
 #from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_ccnetuser
+from seaserv import ccnet_threaded_rpc
 
 class UserManager(object):
-    def create_user(self, username, password=None, is_staff=False, is_active=False):
-        ccnet_threaded_rpc.add_emailuser(username, password, int(is_staff), int(is_active))
+    def create_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a User with given username and password.
+        """
+        # Normalize the address by lowercasing the domain part of the email
+        # address.
+        try:
+            email_name, domain_part = email.strip().split('@', 1)
+        except ValueError:
+            pass
+        else:
+            email = '@'.join([email_name, domain_part.lower()])
 
-        ccnetuser = get_ccnetuser(username=username)
-        return ccnetuser
+        user = User(email=email)
+        user.password = password
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.save()
 
-def convert_to_ccnetuser(emailuser):
-    ccnetuser = CcnetUser(emailuser.props.email,
-                          raw_password='')
-    ccnetuser.id = emailuser.props.id
-    ccnetuser.email = emailuser.props.email
-    ccnetuser.password = emailuser.props.passwd
-    ccnetuser.is_staff = emailuser.props.is_staff
-    ccnetuser.is_active = emailuser.props.is_active
-    ccnetuser.ctime = emailuser.props.ctime
-    ccnetuser.org = emailuser.org
+        return self.get(email=email)
+
+    def get(self, email=None, id=None):
+        if email:
+            emailuser = ccnet_threaded_rpc.get_emailuser(email)
+        if id:
+            emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
+        if not emailuser:
+            raise User.DoesNotExist, 'User matching query does not exits.'
     
-    return ccnetuser
+        user = User(emailuser.email)
+        user.id = emailuser.id
+        user.password = emailuser.passwd
+        user.is_staff = emailuser.is_staff
+        user.is_active = emailuser.is_active
+        user.ctime = emailuser.ctime
+        user.org = emailuser.org
+        return user
 
-class CcnetUser(object):
+class User(object):
     is_staff = False
     is_active = False
-    objects = UserManager()
+    is_superuser = False
+    groups = []
     org = None
+    objects = UserManager()
+
+    class DoesNotExist(Exception):
+        pass
     
-    def __init__(self, username, raw_password):
-        self.username = username
-        self.raw_password = raw_password
+    def __init__(self, email):
+        self.username = email
+        self.email = email
 
     def __unicode__(self):
         return self.username
-    
-    def validate_emailuser(self, email, raw_password):
-        self.set_password(raw_password)
-        return ccnet_threaded_rpc.validate_emailuser(email, raw_password)
 
-    def is_authenticated(self):
-        """
-        Always return True. This is a way to tell if the user has been
-        authenticated in templates.
-        """
-        return True
-    
     def is_anonymous(self):
         """
         Always returns False. This is a way of comparing User objects to
         anonymous users.
         """
         return False
+    
+    def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
+        return True
 
     def save(self):
         emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
         if emailuser:
-            ccnet_threaded_rpc.update_emailuser(self.id, self.password,
-                                       int(self.is_staff), int(self.is_active))
+            ccnet_threaded_rpc.update_emailuser(emailuser.id, self.password,
+                                                int(self.is_staff),
+                                                int(self.is_active))
         else:
-            self.objects.create_user(username=self.username,
-                                     password=self.raw_password,
-                                     is_staff=self.is_staff,
-                                     is_active=self.is_active)
+            ccnet_threaded_rpc.add_emailuser(self.username, self.password,
+                                             int(self.is_staff),
+                                             int(self.is_active))
 
     def delete(self):
         """
-        Remove from ccnet EmailUser table and Binding table
+        When delete user, we should also delete group relationships.
         """
+        # TODO: what about repo and org?
         ccnet_threaded_rpc.remove_emailuser(self.username)
         ccnet_threaded_rpc.remove_binding(self.username)
+        ccnet_threaded_rpc.remove_group_user(self.username)
 
     def get_and_delete_messages(self):
         messages = []
@@ -104,15 +126,15 @@ class CcnetUser(object):
         # algorithm or salt.
 
         if '$' not in self.password:
-            is_correct = (self.password == get_hexdigest('sha1', '', raw_password))
+            is_correct = (self.password == \
+                              get_hexdigest('sha1', '', raw_password))
             return is_correct
         return check_password(raw_password, self.password)
     
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
         from django.core.mail import send_mail
-        send_mail(subject, message, from_email, [self.username])
-
+        send_mail(subject, message, from_email, [self.email])
     
 class RegistrationBackend(object):
     """

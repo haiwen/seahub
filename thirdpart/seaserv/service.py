@@ -86,47 +86,12 @@ else:
 
 #### Basic ccnet API ####
 
-
-def get_ccnetuser(username=None, userid=None):
-    # Get emailuser from db
-    if username:
-        emailuser = ccnet_threaded_rpc.get_emailuser(username)
-    if userid:
-        emailuser = ccnet_threaded_rpc.get_emailuser_by_id(userid)
-    if not emailuser:
-        return None
-
-    # Check whether is business account
-    # orgs = ccnet_threaded_rpc.get_orgs_by_user(emailuser.email)
-    # emailuser.org = org
-    
-    # And convert to ccnetuser
-    from seahub.base.accounts import convert_to_ccnetuser
-    ccnetuser = convert_to_ccnetuser(emailuser)
-
-    return ccnetuser
-
 def get_emailusers(start, limit):
     try:
         users = ccnet_threaded_rpc.get_emailusers(start, limit)
     except SearpcError:
         users = []
     return users
-    
-# def get_groups():
-#     """Get group object list. """
-#     group_ids = ccnet_threaded_rpc.list_groups()
-#     if not group_ids:
-#         return []
-#     groups = []
-#     for group_id in group_ids.split("\n"):
-#         # too handle the ending '\n'
-#         if group_id == '':
-#             continue
-#         group = ccnet_threaded_rpc.get_group(group_id)
-#         groups.append(group)
-#     return groups
-
 
 def get_group(group_id):
     group_id_int = int(group_id)
@@ -138,8 +103,8 @@ def get_group(group_id):
 
 def check_group_staff(group_id_int, user_or_username):
     """Check where user is group staff"""
-    from seahub.base.accounts import CcnetUser
-    if isinstance(user_or_username, CcnetUser):
+    from seahub.base.accounts import User
+    if isinstance(user_or_username, User):
         user_or_username = user_or_username.username
         
     return ccnet_threaded_rpc.check_group_staff(group_id_int, user_or_username)

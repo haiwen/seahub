@@ -9,7 +9,7 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.encoding import smart_str
 from django.db.models import signals
 
-from seahub.base.accounts import CcnetUser
+from seahub.base.accounts import User
 
 try:
     from cStringIO import StringIO

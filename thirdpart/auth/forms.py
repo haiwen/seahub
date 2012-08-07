@@ -7,8 +7,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
 
-from seaserv import get_ccnetuser
-
+from seahub.base.accounts import User
 
 class AuthenticationForm(forms.Form):
     """
@@ -64,8 +63,10 @@ class PasswordResetForm(forms.Form):
         """
         email = self.cleaned_data["email"]
 
-        self.users_cache = get_ccnetuser(username=email)
-        if not self.users_cache:
+        # TODO: add filter method to UserManager
+        try:
+            self.users_cache = User.objects.get(email=email)
+        except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
         
         return email
@@ -77,7 +78,7 @@ class PasswordResetForm(forms.Form):
         """
         from django.core.mail import send_mail
 
-        ccnetuser = self.users_cache
+        user = self.users_cache
         if not domain_override:
             current_site = Site.objects.get_current()
             site_name = current_site.name
@@ -87,16 +88,16 @@ class PasswordResetForm(forms.Form):
         t = loader.get_template(email_template_name)
 
         c = {
-            'email': ccnetuser.username,
+            'email': user.username,
             'domain': domain,
             'site_name': site_name,
-            'uid': int_to_base36(ccnetuser.id),
-            'user': ccnetuser,
-            'token': token_generator.make_token(ccnetuser),
+            'uid': int_to_base36(user.id),
+            'user': user,
+            'token': token_generator.make_token(user),
             'protocol': use_https and 'https' or 'http',
         }
         send_mail(_("Password reset on %s") % site_name,
-                  t.render(Context(c)), None, [ccnetuser.username])
+                  t.render(Context(c)), None, [user.username])
 
 class SetPasswordForm(forms.Form):
     """

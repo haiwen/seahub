@@ -12,6 +12,7 @@ from pysearpc import SearpcError
 from forms import ProfileForm
 from models import Profile
 from utils import render_error
+from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 
 #@login_required
@@ -74,10 +75,10 @@ def user_profile(request, user):
     user_nickname = ''
     user_intro = ''
     err_msg = ''
-    
+
     try:
-        user_check = ccnet_threaded_rpc.get_emailuser(user)
-    except:
+        user_check = User.objects.get(email=user)
+    except User.DoesNotExist:
         user_check = None
         
     if user_check:
@@ -114,10 +115,10 @@ def get_user_profile(request, user):
             'new_user': ''
         } 
     content_type = 'application/json; charset=utf-8'
-    
+
     try:
-        user_check = ccnet_threaded_rpc.get_emailuser(user)
-    except:
+        user_check = User.objects.get(email=user)
+    except User.DoesNotExist:
         user_check = None
         
     if user_check:

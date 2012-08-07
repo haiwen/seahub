@@ -30,12 +30,12 @@ from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, get_ccnetuser, \
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
     get_group
 from pysearpc import SearpcError
 
-from seahub.base.accounts import CcnetUser
+from seahub.base.accounts import User
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -68,20 +68,17 @@ def validate_owner(request, repo_id):
 
     return True if ret else False
 
-def validate_emailuser(emailuser):
+def is_registered_user(email):
     """
     Check whether user is registerd.
 
     """
     try:
-        user = ccnet_threaded_rpc.get_emailuser(emailuser)
-    except:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
         user = None
-        
-    if user:
-        return True
-    else:
-        return False
+
+    return True if user else False
 
 def check_shared_repo(request, repo_id):
     """
@@ -1208,22 +1205,25 @@ def user_remove(request, user_id):
     if not request.user.is_staff:
         raise Http404
 
-    ccnetuser = get_ccnetuser(userid=int(user_id))
-    remove_group_user(ccnetuser.email)    
-    ccnetuser.delete()
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.delete()
+    except User.DoesNotExist:
+        pass
     
     return HttpResponseRedirect(reverse('sys_useradmin'))
 
 @login_required
 def activate_user(request, user_id):
-    """The user id is emailuser id."""
-
     if not request.user.is_staff:
         raise Http404
 
-    ccnetuser = get_ccnetuser(userid=int(user_id))
-    ccnetuser.is_active = True
-    ccnetuser.save()
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_active = True
+        user.save()
+    except User.DoesNotExist:
+        pass
 
     return HttpResponseRedirect(reverse('useradmin'))
 
@@ -1264,9 +1264,9 @@ def user_add(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
 
-            ccnetuser = CcnetUser(username=email, raw_password=password)
-            ccnetuser.is_active = True
-            ccnetuser.save()
+            user = User(email=email, raw_password=password)
+            user.is_active = True
+            user.save()
             
             if request.user.org:
                 org_id = request.user.org['org_id']

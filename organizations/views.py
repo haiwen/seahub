@@ -15,7 +15,7 @@ from pysearpc import SearpcError
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_orgs_by_user, get_org_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
-    get_ccnetuser, remove_org_user, get_org_groups, is_valid_filename, \
+    remove_org_user, get_org_groups, is_valid_filename, \
     create_org_repo, get_org_id_by_group
 
 from decorators import org_staff_required
@@ -23,6 +23,7 @@ from forms import OrgCreateForm
 from signals import org_user_added
 from notifications.models import UserNotification
 from registration.models import RegistrationProfile
+from seahub.base.accounts import User
 from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
@@ -160,7 +161,8 @@ def org_useradmin(request, url_prefix):
                 continue
             
             org_id = request.user.org['org_id']
-            if get_ccnetuser(username=email):
+            try:
+                User.objects.get(email=email)
                 email = email.strip(' ')
                 org_id = request.user.org['org_id']
                 add_org_user(org_id, email, 0)
@@ -169,7 +171,7 @@ def org_useradmin(request, url_prefix):
                 org_user_added.send(sender=None, org_id=org_id,
                                     from_email=request.user.username,
                                     to_email=email)
-            else:
+            except User.DoesNotExist:
                 # User is not registered, just create account and
                 # add that account to org
                 password = gen_token(max_length=6)
