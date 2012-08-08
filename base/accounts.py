@@ -11,7 +11,6 @@ from auth.models import get_hexdigest, check_password
 from auth import authenticate, login
 from registration import signals
 #from registration.forms import RegistrationForm
-from registration.models import RegistrationProfile
 from seaserv import ccnet_threaded_rpc
 
 class UserManager(object):
@@ -206,7 +205,7 @@ class RegistrationBackend(object):
         else:
             site = RequestSite(request)
 
-
+        from registration.models import RegistrationProfile
         if settings.ACTIVATE_AFTER_REGISTRATION == True:
             # since user will be activated after registration,
             # so we will not use email sending, just create acitvated user

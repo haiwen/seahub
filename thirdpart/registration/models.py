@@ -10,6 +10,8 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 
+from seahub.base.accounts import User
+
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -289,5 +291,3 @@ class RegistrationProfile(models.Model):
         except User.DoesNotExist:
             pass
 
-# We put this import here to prevent circular import
-from seahub.base.accounts import User
