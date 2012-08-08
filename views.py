@@ -4,6 +4,7 @@ import os
 import stat
 import simplejson as json
 import re
+import tempfile
 import sys
 import urllib
 import urllib2
@@ -803,7 +804,7 @@ def repo_view_file(request, repo_id):
     err = ''
     file_content = ''
     if filetype == 'Text' or filetype == 'Markdown':
-        err, file_content = repo_file_get(raw_path)
+        err, file_content, encoding = repo_file_get(raw_path)
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -847,6 +848,7 @@ def repo_view_file(request, repo_id):
 def repo_file_get(raw_path):
     err = ''
     file_content = ''
+    encoding = ''
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
@@ -860,11 +862,13 @@ def repo_file_get(raw_path):
     else:
         try:
             u_content = content.decode('utf-8')
+            encoding = 'utf-8'
         except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
+            encoding = 'gbk'
         file_content = u_content
-    return err, file_content 
+    return err, file_content, encoding
 
 
 def pdf_full_view(request):
@@ -880,11 +884,63 @@ def pdf_full_view(request):
             'file_src': file_src,
                 }, context_instance=RequestContext(request))
 
+def update_file_after_edit(request, repo_id):
+    content_type = 'application/json; charset=utf-8'
+    def error_json(error_msg=u"内部错误"):
+        return HttpResponse(json.dumps({'error': error_msg}),
+                            status=400,
+                            content_type=content_type)
+    def ok_json():
+        return HttpResponse(json.dumps({'status': 'ok'}),
+                            content_type=content_type)
+        
+    content = request.POST.get('content')
+    encoding = request.POST.get('encoding')
+    path = request.GET.get('p')
+    if content is None or not path:
+        return error_json(u"参数错误")
 
+    if encoding not in ["gbk", "utf-8"]:
+        return error_json(u"参数错误")
+
+    content = content.encode(encoding)
+
+    # first dump the file content to a tmp file, then update the file
+    fd, tmpfile = tempfile.mkstemp()
+    def remove_tmp_file():
+        try:
+            os.remove(tmpfile_name)
+        except:
+            pass
+
+    try:
+        bytesWritten = os.write(fd, content)
+    except:
+        bytesWritten = -1
+    finally:
+        os.close(fd)
+
+    if bytesWritten != len(content):
+        remove_tmp_file()
+        return error_json()
+
+    parent_dir = os.path.dirname(path).encode('utf-8')
+    filename = os.path.basename(path).encode('utf-8')
+    try:
+        seafserv_threaded_rpc.put_file (repo_id, tmpfile, parent_dir,
+                                 filename, request.user.username);
+        remove_tmp_file()
+        return ok_json()
+    except SearpcError, e:
+        remove_tmp_file()
+        return error_json(str(e))
+
+
+@login_required
 def repo_file_edit(request, repo_id):
 
     if request.method == 'POST':
-        pass
+        return update_file_after_edit(request, repo_id)
 
     path = request.GET.get('p', '/')
     if path[-1] == '/':
@@ -918,7 +974,7 @@ def repo_file_edit(request, repo_id):
 
     # get file content
     raw_path = gen_file_get_url(token, filename)
-    err, file_content = repo_file_get(raw_path)
+    err, file_content, encoding = repo_file_get(raw_path)
 
     return render_to_response('repo_edit_file.html', {
         'repo':repo,
@@ -928,8 +984,8 @@ def repo_file_edit(request, repo_id):
         'fileext':fileext,
         'err':err,
         'file_content':file_content,
+        'encoding': encoding,
                 }, context_instance=RequestContext(request))
-
 
 
 def repo_access_file(request, repo_id, obj_id):
@@ -1735,7 +1791,7 @@ def view_shared_file(request, token):
     err = ''
     file_content = ''
     if filetype == 'Text' or filetype == 'Markdown':
-        err, file_content = repo_file_get(raw_path)
+        err, file_content, encoding = repo_file_get(raw_path)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)

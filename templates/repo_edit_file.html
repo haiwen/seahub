@@ -23,11 +23,7 @@
     <div id="file-view">
         <div id="docu-view" class="vh"></div>
     </div>
-
-    <form action="" method="post" id="file-edit-form" class="hide">
-        <input type="hidden" name="modified-file" />
-        <input type="submit" class="submit" value="提交" />
-    </form>
+    <button id="file-edit-submit" class="hide">提交</button>
 {% endblock %}
 
 {% block extra_script %}
@@ -50,9 +46,29 @@ editor.session.getDocument().setValue('{{ file_content|escapejs }}');
 $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
 editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
 editor.resize(); // fix some problem for showing some file in ie8
-$('#file-edit-form').removeClass('hide');
-$('#file-edit-form').submit(function() {
-     $(this).find('[name="modified-file"]').val(editor.session.getValue());
+$('#file-edit-submit').removeClass('hide');
+
+var edit_url = "{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}";
+var view_url = "{{ SITE_ROOT }}repo/{{repo.id}}/files/?p={{path|urlencode}}";
+$('#file-edit-submit').click(function () {
+    var content = editor.session.getValue();
+    $.ajax({
+        type: "POST",
+        url: edit_url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {content: content, encoding: '{{ encoding }}'},
+        success: function(data) {
+            location.href = view_url;
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
+            $('#file-edit-submit').addClass('hide');
+        }
+    });
 });
 {% endif %}
 

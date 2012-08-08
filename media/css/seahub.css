@@ -861,8 +861,8 @@ p {
     border-left: 4px solid #DDD; 
     margin: 10px 0;
 }
-#file-edit-form {
-    margin-top:10px;
+#file-edit-submit {
+    margin-top:18px;
 }
 /* shareadmin */
 .view-link-alert p {
