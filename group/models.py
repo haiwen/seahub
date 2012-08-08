@@ -37,20 +37,23 @@ def msgreply_save_handler(sender, instance, **kwargs):
     m = re.match(at_pattern, reply_msg)
     if m:
         nickname_or_emailprefix = m.group()[1:]
-        p = get_first_object_or_none(\
-            Profile.objects.filter(nickname=nickname_or_emailprefix))
-        if p:
-            to_user = p.user
-        else:
-            # Match email prefix in group members.
-            group_members = get_group_members(group_msg.group_id)
-            for m in group_members:
-                if m.user_name.startswith(nickname_or_emailprefix):
-                    to_user = m.user_name
-                    break
-                
-        if to_user and to_user != from_email:
-            # Send notification to the user if user replies someone else'
+        for member in get_group_members(group_msg.group_id):
+            # For every group member, get his username and nickname if
+            # it exists, check whether match.
+            username = member.user_name
+            if username == from_email:
+                continue
+            
+            p = get_first_object_or_none(\
+                Profile.objects.filter(user=username))
+            nickname = p.nickname if p else ''
+            if nickname == nickname_or_emailprefix or \
+                    username.split('@')[0] == nickname_or_emailprefix:
+                to_user = username
+                break
+
+        if to_user:
+            # Send notification to the user if he replies someone else'
             # message.
             try:
                 UserNotification.objects.get(to_user=to_user,
@@ -61,6 +64,4 @@ def msgreply_save_handler(sender, instance, **kwargs):
                                      msg_type='grpmsg_reply',
                                      detail=group_msg.id)
                 n.save()
-
-
-            
+                
