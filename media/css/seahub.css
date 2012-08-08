@@ -862,4 +862,8 @@ p {
 .view-link-alert p {
     display: inline-block;
 }
-
+/*bottom bar*/
+#bottom-bar button {
+    color:#fff;
+    background:#646464;
+}
