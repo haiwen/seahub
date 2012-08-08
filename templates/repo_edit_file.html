@@ -26,10 +26,6 @@
 
     <form action="post" method="post" id="file-edit-form" class="hide">
         <input type="hidden" name="modified-file" />
-        <label>修改信息：</label><br />
-        <input type="text" name="commit-msg" id="file-edit-commit-msg" value="修改了 {{ u_filename }}" /><br />
-        <label>更多描述：</label><br />
-        <textarea name="commit-details" id="file-edit-commit-details"></textarea><br />
         <input type="submit" class="submit" value="提交" />
     </form>
 {% endblock %}
@@ -38,6 +34,9 @@
 <script type="text/javascript" src="{{MEDIA_URL}}ace/ace.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}ace/theme-twilight.js"></script>
 {% include "snippets/file_view_js.html" %}
+{% if fileext == 'markdown' or fileext == 'md' %}
+<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-markdown.js"></script>
+{% endif %}
 <script type="text/javascript">
 var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
 $.ajax({
@@ -64,10 +63,6 @@ $.ajax({
         $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
     }
 });
-
-$('#file-edit-commit-msg').css('color', '#666').click(function() {
-    $(this).val('').css('color', '#000');
-    });
 
 $('#file-edit-form').submit(function() {
      $(this).find('[name="modified-file"]').val(editor.session.getValue());

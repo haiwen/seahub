@@ -857,16 +857,6 @@ p {
 #file-edit-form {
     margin-top:10px;
 }
-#file-edit-form label {
-    margin:5px 0;
-}
-#file-edit-commit-msg,
-#file-edit-commit-details {
-    width:75%;
-}
-#file-edit-commit-details {
-    height:50px;
-}
 /* shareadmin */
 .view-link-alert p {
     display: inline-block;
