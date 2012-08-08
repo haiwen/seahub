@@ -1,14 +1,15 @@
 # encoding: utf-8
 import simplejson as json
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, \
+    HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from auth.decorators import login_required
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
-    get_group_repoids, check_group_staff, get_commits, get_personal_groups, \
-    get_group
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
+    get_repo, get_group_repoids, check_group_staff, get_commits, \
+    get_personal_groups, get_group, get_group_members
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply
@@ -153,7 +154,7 @@ def render_group_info(request, group_id, form):
     else:
         is_staff = False
         
-    members = ccnet_threaded_rpc.get_group_members(group_id_int)
+    members = get_group_members(group_id_int)
     managers = []
     common_members = []
     for member in members:
@@ -228,6 +229,8 @@ def render_group_info(request, group_id, form):
 @login_required
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
+    
+    content_type = 'application/json; charset=utf-8'
     if request.is_ajax():
         if request.method == 'POST':
             form = MessageReplyForm(request.POST)
@@ -238,7 +241,7 @@ def msg_reply(request, msg_id):
                 try:
                     group_msg = GroupMessage.objects.get(id=msg_id)
                 except GroupMessage.DoesNotExist:
-                    return HttpResponse(status=400)
+                    return HttpResponseBadRequest(content_type=content_type)
             
                 msg_reply = MessageReply()
                 msg_reply.reply_to = group_msg
@@ -251,10 +254,6 @@ def msg_reply(request, msg_id):
                     grpmsg_reply_added.send(sender=MessageReply,
                                             msg_id=msg_id,
                                             from_email=request.user.username)
-                
-            
-        content_type = 'application/json; charset=utf-8'
-        
         try:
             msg = GroupMessage.objects.get(id=msg_id)
         except GroupMessage.DoesNotExist:

@@ -139,6 +139,14 @@ def get_personal_groups(email):
             
     return personal_groups
 
+def get_group_members(group_id):
+    group_id_int = int(group_id)
+    try:
+        members = ccnet_threaded_rpc.get_group_members(group_id_int)
+    except SearpcError:
+        members = []
+    return members
+
 def get_org_id_by_group(group_id):
     try:
         org_id = ccnet_threaded_rpc.get_org_id_by_group(group_id)
