@@ -178,6 +178,7 @@
       {% endif %}
     </div>
 
+{% if not view_history %}
     <form id="add-new-dir-form" action="{{ SITE_ROOT}}repo/new_dir/" method="post" class="hide">
         <h4>新目录名称：</h4>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
@@ -213,29 +214,21 @@
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
-    
+
+    <form action="" method="post" id="recommend-form" class="hide">
+        <p>推荐 {{repo.props.name}}：</p>
+        <textarea name="recommend-msg" id="recommend-msg"></textarea><br />
+        <input type="submit" class="submit" value="提交" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
+{% if not view_history %}
 <script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
+{% endif %}
 <script type="text/javascript">
-$('#upload-file').click(function () {
-    location.href = $(this).attr('data');
-});
-
-$('#add-new-dir').click(function () {
-    $('#add-new-dir-form').modal({appendTo:'#main'});
-});
-
-$('#upload-file, #add-new-dir').hover(
-    function() {
-        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
-    },
-    function() {
-        $(this).css('background-color', '#f5f5f5');
-    }
-);
-
 $("table tr:gt(0)").hover(
     function() {
         $(this).find('.more-op').removeClass('hide');
@@ -284,6 +277,7 @@ $('.op-list li').hover(
     }
 );
 
+{% if not view_history %}
 $('.file-rename, .dir-rename').click(function () {
     var type = $(this).hasClass('file-rename') ? '文件 ' : '目录 ',
         name = $(this).attr('data');
@@ -397,5 +391,25 @@ $('#mv-form .submit').click(function() {
         return false;
     }
 });
+
+$('#upload-file').click(function () {
+    location.href = $(this).attr('data');
+});
+
+$('#add-new-dir').click(function () {
+    $('#add-new-dir-form').modal({appendTo:'#main'});
+});
+
+$('#upload-file, #add-new-dir').hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
+
+{% include "snippets/bottom_bar.html" %}
+{% endif %}
 </script>
 {% endblock %}

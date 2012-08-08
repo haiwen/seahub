@@ -37,8 +37,10 @@
     <div class="file-op fright">
         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a>
         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a>
-        {% if filetype == 'Text' or filetype == 'Markdown' %}
+        {% if not view_history and request.user.is_authenticated %}
+            {% if filetype == 'Text' or filetype == 'Markdown' %}
         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}">编辑文件</a>
+            {% endif %}
         {% endif %}
         <br />
 
@@ -55,6 +57,7 @@
         <p>文件内容读取中...</p>
     </div>
 
+{% if not view_history %}
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
         <label>邮箱(多个邮箱以,分隔)：</label><br />
         <textarea id="email" name="email"></textarea><br />
@@ -65,11 +68,36 @@
         <p id="success" class="hide"></p> 
     </form>
 
+    <form action="" method="post" id="recommend-form" class="hide">
+        <p>推荐
+         {% for name, link in zipped %}
+            {% if not forloop.last %}
+               {{ name }} /               
+            {% else %}
+                {{ name }}
+            {% endif %}
+        {% endfor %} :
+        </p>
+        <textarea name="recommend-msg" id="recommend-msg"></textarea><br />
+        <input type="submit" class="submit" value="提交" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+ 
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
+{% if view_history %}
+var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
+{% else %}
+var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
+{% endif %}
+
+{% include "snippets/repo_file_get.html" %}
+
+{% if not view_history %}
 function showLink() {
     $('#get-shared-link').addClass('hide');
     $('#shared-link, #send-shared-link, #rm-shared-link').removeClass('hide');
@@ -79,19 +107,11 @@ function hideLink() {
     $('#get-shared-link').removeClass('hide');
 }
 
-{% if view_history %}
-var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-{% else %}
-var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-{% endif %}
-
 {% if fileshare.token %}
 showLink();
 {% else %}
 hideLink();
 {% endif %}
-
-{% include "snippets/repo_file_get.html" %}
 
 $('#get-shared-link').click(function() {
     var url = $(this).attr('data');
@@ -181,5 +201,8 @@ $("#link-send-form").submit(function(event) {
    } 
    return false;
 });
+
+{% include "snippets/bottom_bar.html" %}
+{% endif %}
 </script>
 {% endblock %}

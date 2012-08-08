@@ -555,7 +555,8 @@ p {
 #email,
 #email_or_group,
 #share-link,
-#added-member-name {
+#added-member-name,
+#recommend-msg {
     width:260px;
     height:80px;
 }
