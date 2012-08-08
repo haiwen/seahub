@@ -15,27 +15,6 @@ from utils import render_error
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 
-#@login_required
-#def list_userids(request):
-#    peer_list = []
-#    try:
-#        peers = ccnet_threaded_rpc.get_peers_by_email(request.user.username)
-#    except:
-#        peers = None
-#    
-#    return render_to_response('profile/user_ids.html',
-#                              {'peers': peers},
-#                              context_instance=RequestContext(request))
-
-#def logout_relay(request):
-#    peer_id = request.GET.get('peer_id', '')
-# 
-#    try:
-#        ccnet_threaded_rpc.remove_one_binding(request.user.username, peer_id)
-#    except SearpcError, e:
-#        return render_error(request, e.msg)
-# 
-#    return HttpResponseRedirect(reverse('list_userids'))
 
 @login_required
 def edit_profile(request):

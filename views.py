@@ -1290,12 +1290,6 @@ def user_add(request):
             'base_template': base_template,
             }, context_instance=RequestContext(request))
 
-def back_local(request):
-    ccnet_applt_root = get_ccnetapplet_root()
-
-    redirect_url = '%s/home/' % ccnet_applt_root
-
-    return HttpResponseRedirect(redirect_url)
 
 def sys_group_admin(request):
     if not request.user.is_staff:

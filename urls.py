@@ -8,7 +8,7 @@ from seahub.views import root, myhome, \
     ownerhome, repo_history_revert, repo_file_get, org_remove, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
-    seafile_access_check, back_local, repo_history_changes, \
+    seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress, file_upload_progress_page, \
     get_subdir, file_move, repo_new_dir, repo_rename_file, validate_filename, \
     repo_create, repo_update_file, file_revisions, \
@@ -76,8 +76,7 @@ urlpatterns = patterns('',
     (r'^file/move/$', file_move),                       
     (r'^seafile_access_check/$', seafile_access_check),                       
     url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
-    (r'^org/$', org_info),                       
-    (r'^back/local/$', back_local),
+    (r'^org/$', org_info),
 
     (r'^useradmin/add/$', user_add),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
