@@ -1,0 +1,10 @@
+{% load seahub_tags %}
+
+<ul>
+{% for reply in replies %}
+<li>
+  {{ reply.message|seahub_urlize|find_at }} -- <a href="{% url user_profile reply.from_email %}">{{ reply.nickname }}</a>
+  <a href="javascript:void(0);" class="" onclick="reply_at('@{{ reply.nickname }} ', {{ msg.id }})">回复</a>
+</li>
+{% endfor %}
+</ul>

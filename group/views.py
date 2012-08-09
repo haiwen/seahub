@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -259,25 +260,22 @@ def msg_reply(request, msg_id):
         except GroupMessage.DoesNotExist:
             raise HttpResponse(status=400)
 
-        l = []
-        replies = MessageReply.objects.filter(reply_to=msg)        
+        ctx = {}
+        replies = MessageReply.objects.filter(reply_to=msg)
         for e in replies:
             try:
                 p = Profile.objects.get(user=e.from_email)
                 e.nickname = p.nickname
             except Profile.DoesNotExist:
-                e.nickname = e.from_email
-                
-            d = {}
-            d['from_email'] = e.from_email
-            d['nickname'] = e.nickname
-            from django.utils.html import escape
-            d['message'] = escape(e.message)
-            l.append(d)
-                
-        return HttpResponse(json.dumps(l), content_type=content_type)
+                e.nickname = e.from_email.split('@')[0]
+        ctx['replies'] = replies
+        ctx['msg'] = msg
+        html = render_to_string("group/group_reply_list.html", ctx)
+        serialized_data = json.dumps({"html": html,
+                                      "reply_cnt": len(replies)})
+        return HttpResponse(serialized_data, content_type=content_type)
     else:
-        return HttpResponse(status=400)
+        return HttpResponseBadRequest(content_type=content_type)
 
 @login_required
 def msg_reply_new(request):
