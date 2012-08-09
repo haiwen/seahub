@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "group.groupmessage", "fields": {"timestamp": "2012-06-27 11:24:30", "message": "hello", "group_id": 1, "from_email": "groupuser1@foo.com"}}]

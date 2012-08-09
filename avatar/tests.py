@@ -32,7 +32,6 @@ class AvatarTestCase(TestCase):
     def setUp(self):
         self.testdatapath = os.path.join(os.path.dirname(__file__), "testdata")
         self.user = User.objects.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
-        self.user.save()
 
         response = self.client.post('/accounts/login/', {
             'username': 'lennon@thebeatles.com',

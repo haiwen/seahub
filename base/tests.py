@@ -20,7 +20,6 @@ class BaseTestCase(TestCase):
     """
     def setUp(self):
         self.user = User.objects.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
-        self.user.save()
 
     def tearDown(self):
         self.user.delete()

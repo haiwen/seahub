@@ -2,7 +2,7 @@
 
 . setenv.sh
 
-./manage.py test base -v 2
-./manage.py test avatar -v 2
+./manage.py test base avatar group -v 2
+
 echo $?
 
