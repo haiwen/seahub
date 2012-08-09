@@ -23,17 +23,18 @@ class MessageReply(models.Model):
     message = models.CharField(max_length=150)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
+at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
+
 @receiver(post_save, sender=MessageReply)
 def msgreply_save_handler(sender, instance, **kwargs):
     """
-    Handl sending notification to '@<user>' when reply messages.
+    Handle sending notification to '@<user>' when reply messages.
     """
     from_email = instance.from_email
     reply_msg =  instance.message
     group_msg =  instance.reply_to
     to_user = ''
     
-    at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
     m = re.match(at_pattern, reply_msg)
     if m:
         nickname_or_emailprefix = m.group()[1:]
@@ -44,7 +45,7 @@ def msgreply_save_handler(sender, instance, **kwargs):
             if username == from_email:
                 continue
             
-            p = get_first_object_or_none(\
+            p = get_first_object_or_none(
                 Profile.objects.filter(user=username))
             nickname = p.nickname if p else ''
             if nickname == nickname_or_emailprefix or \
