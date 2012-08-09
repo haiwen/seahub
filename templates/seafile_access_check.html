@@ -17,9 +17,6 @@ $(function() {
         dataType: 'jsonp',
         jsonpCallback: 'xx',
         crossDomain: true,
-        error: function() {
-            $('.error').removeClass('hide');
-        },
         success: function(version) {
             if (version !== 2) {
                 version_mismatch = true;

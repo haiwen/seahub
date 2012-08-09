@@ -75,6 +75,10 @@ if ccnet_config.has_option('General', 'SERVICE_URL') and \
         # strip http port such as ':8000' in 'http://192.168.1.101:8000'
         idx = service_url.rindex(':')
         service_url = service_url[:idx]
+    if '/' in service_url:
+        # strip url suffix like the '/seahub' part of www.gonggeng.org/seahub
+        idx = service_url.rindex(':')
+        service_url = service_url[:idx]
 
     CCNET_SERVER_ADDR = service_url
     CCNET_SERVER_PORT = ccnet_config.get('Network', 'PORT')
