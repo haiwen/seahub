@@ -798,6 +798,12 @@ def repo_view_file(request, repo_id):
         
     # raw path
     raw_path = gen_file_get_url(token, filename)
+   
+    # get file content
+    err = ''
+    file_content = ''
+    if filetype == 'Text' or filetype == 'Markdown':
+        err, file_content = repo_file_get(raw_path)
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -834,63 +840,31 @@ def repo_view_file(request, repo_id):
             'domain': domain,
             'file_shared_link': file_shared_link,
             'contacts': contacts,
+            'err': err,
+            'file_content': file_content,
             }, context_instance=RequestContext(request))
 
-def repo_file_get(request, repo_id):
-    """
-    Handle ajax request to get file content from httpserver.
-    If get current worktree file, need access_token, path and username from
-    url params.
-    If get history file, need access_token, path username and obj_id from
-    url params.
-    """
-    if not request.is_ajax():
-        return Http404
-
-    # http_server_root = get_httpserver_root()
-    content_type = 'application/json; charset=utf-8'
-    access_token = request.GET.get('t')
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
-        
-    filename = urllib2.quote(os.path.basename(path).encode('utf-8'))
-    obj_id = request.GET.get('obj_id', '')
-    if not obj_id:
-        try:
-            obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
-        except:
-            obj_id = None
-    if not obj_id:
-        data = json.dumps({'error': '获取文件数据失败'})
-        return HttpResponse(data, status=400, content_type=content_type)
-
-    # username = request.GET.get('u', '')
-    redirect_url = gen_file_get_url(access_token, filename)
+def repo_file_get(raw_path):
+    err = ''
+    file_content = ''
     try:
-        proxied_request = urllib2.urlopen(redirect_url)
-        if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            data = json.dumps({'error': '文件超过10M，无法在线查看。'})
-            return HttpResponse(data, status=400, content_type=content_type)
+        file_response = urllib2.urlopen(raw_path)
+        if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
+            err = '文件超过10M，无法在线查看。'
         else:
-            content = proxied_request.read()
+            content = file_response.read()
     except urllib2.HTTPError, e:
         err = 'HTTPError: 无法在线打开该文件'
-        data = json.dumps({'error': err})
-        return HttpResponse(data, status=400, content_type=content_type)
     except urllib2.URLError as e:
         err = 'URLError: 无法在线打开该文件'
-        data = json.dumps({'error': err})
-        return HttpResponse(data, status=400, content_type=content_type)
     else:
         try:
             u_content = content.decode('utf-8')
         except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
-        from django.utils.html import escape
-        data = json.dumps({'content': u_content})
-        return HttpResponse(data, status=200, content_type=content_type)
+        file_content = u_content
+    return err, file_content 
 
 
 def pdf_full_view(request):
@@ -942,13 +916,18 @@ def repo_file_edit(request, repo_id):
 
     filetype, fileext = valid_previewed_file(filename)
 
+    # get file content
+    raw_path = gen_file_get_url(token, filename)
+    err, file_content = repo_file_get(raw_path)
+
     return render_to_response('repo_edit_file.html', {
         'repo':repo,
         'u_filename':u_filename,
         'path':path,
         'zipped':zipped,
-        'token':token,
         'fileext':fileext,
+        'err':err,
+        'file_content':file_content,
                 }, context_instance=RequestContext(request))
 
 
@@ -1751,6 +1730,12 @@ def view_shared_file(request, token):
     
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
+
+    # get file content
+    err = ''
+    file_content = ''
+    if filetype == 'Text' or filetype == 'Markdown':
+        err, file_content = repo_file_get(raw_path)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -1768,6 +1753,8 @@ def view_shared_file(request, token):
             'fileext': fileext,
             'raw_path': raw_path,
             'username': username,
+            'err': err,
+            'file_content': file_content,
             }, context_instance=RequestContext(request))
 
 @login_required

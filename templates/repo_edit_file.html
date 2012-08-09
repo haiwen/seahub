@@ -21,10 +21,10 @@
     </div>
 
     <div id="file-view">
-        <p>文件内容读取中...</p>
+        <div id="docu-view" class="vh"></div>
     </div>
 
-    <form action="post" method="post" id="file-edit-form" class="hide">
+    <form action="" method="post" id="file-edit-form" class="hide">
         <input type="hidden" name="modified-file" />
         <input type="submit" class="submit" value="提交" />
     </form>
@@ -38,34 +38,26 @@
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-markdown.js"></script>
 {% endif %}
 <script type="text/javascript">
-var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-$.ajax({
-    url: url,
-    dataType: 'json',
-    cache: false,
-    success: function(data) {
-        $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
-        editor = ace.edit("docu-view");
-        $('#docu-view').removeClass('vh');
-        editor.setShowPrintMargin(false); // rm the vertical line in the center
-        editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
-        editor.renderer.scrollBar.width = 0; // enlarge ace_content width
-        editor.setTheme("ace/theme/twilight");
-        {% include "snippets/editor_set_mode.html" %}
-        editor.session.getDocument().setValue(data['content']);
-        $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
-        editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
-        editor.resize(); // fix some problem for showing some file in ie8
-        $('#file-edit-form').removeClass('hide');
-    },
-    error: function(xhr, ajaxOptions, thrownError) {
-        var jsonVal = jQuery.parseJSON(xhr.responseText);
-        $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
-    }
-});
-
+{% if file_content %}
+editor = ace.edit("docu-view");
+$('#docu-view').removeClass('vh');
+editor.setShowPrintMargin(false); // rm the vertical line in the center
+editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
+editor.renderer.scrollBar.width = 0; // enlarge ace_content width
+editor.setTheme("ace/theme/twilight");
+{% include "snippets/editor_set_mode.html" %}
+editor.session.getDocument().setValue('{{ file_content|escapejs }}');
+$('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
+editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
+editor.resize(); // fix some problem for showing some file in ie8
+$('#file-edit-form').removeClass('hide');
 $('#file-edit-form').submit(function() {
      $(this).find('[name="modified-file"]').val(editor.session.getValue());
 });
+{% endif %}
+
+{% if err %}
+$('#file-view').html('<p class="error">{{ err }}</p>');
+{% endif %}
 </script>
 {% endblock %}

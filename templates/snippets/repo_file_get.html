@@ -1,41 +1,39 @@
 {% if filetype == 'Text' %}
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-                $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
-                var editor = ace.edit("docu-view");
-                $('#docu-view').removeClass('vh');
-                editor.setReadOnly(true);
-                editor.setHighlightActiveLine(false);
-                $('#docu-view .ace_cursor-layer').hide(); // rm cursor
-                editor.setShowPrintMargin(false); // rm the vertical line in the center
-                editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
-                editor.renderer.scrollBar.width = 0; // enlarge ace_content width
-                editor.setTheme("ace/theme/chrome");
-                {% include "snippets/editor_set_mode.html" %}
-                editor.session.getDocument().setValue(data['content']);
-                $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
-                editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
-                editor.resize(); // fix some problem for showing some file in ie8
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
-        }
-    });
+    {% if file_content %}
+    $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
+    var editor = ace.edit("docu-view");
+    $('#docu-view').removeClass('vh');
+    editor.setReadOnly(true);
+    editor.setHighlightActiveLine(false);
+    $('#docu-view .ace_cursor-layer').hide(); // rm cursor
+    editor.setShowPrintMargin(false); // rm the vertical line in the center
+    editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
+    editor.renderer.scrollBar.width = 0; // enlarge ace_content width
+    editor.setTheme("ace/theme/chrome");
+    {% include "snippets/editor_set_mode.html" %}
+    editor.session.getDocument().setValue('{{ file_content|escapejs }}');
+    $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
+    editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
+    editor.resize(); // fix some problem for showing some file in ie8
+    {% endif %}
+
+    {% if err %}
+    $('#file-view').html('<p class="error">{{ err }}</p>');
+    {% endif %}
 {% endif %}
+
 {% if filetype == 'Image' %}
     $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
 {% endif %}
+
 {% if filetype == 'SVG' %}
-if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-    $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>');
-} else {
-    $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
-}
+    if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
+        $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>');
+    } else {
+        $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
+    }
 {% endif %}
+
 {% if filetype == 'Document' %}
     var uuid = '',
         obj_id = '';
@@ -104,6 +102,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
     });
 }
 {% endif %}
+
 {% if filetype == 'PDF' %}
 if (!$.browser.mozilla && !$.browser.safari) {
     $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>');
@@ -158,18 +157,19 @@ if (!$.browser.mozilla && !$.browser.safari) {
     });
 }
 {% endif %}
+
 {% if filetype == 'Markdown' %}
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            var converter = new Showdown.converter();
-            $('#file-view').html('<div id="md-view">' + converter.makeHtml(data['content']) + '</div>');
-            $('#md-view').children(':first').css('margin-top', '0');
-        }
-    });
+    {% if file_content %}
+    var converter = new Showdown.converter();
+    $('#file-view').html('<div id="md-view">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
+    $('#md-view').children(':first').css('margin-top', '0');
+    {% endif %}
+
+    {% if err %}
+    $('#file-view').html('<p class="error">{{ err }}</p>');
+    {% endif %}
 {% endif %}
+
 {% if filetype == 'Unknown' %}
     $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
 {% endif %}

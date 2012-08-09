@@ -89,14 +89,7 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-{% if view_history %}
-var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?obj_id={{ obj_id }}&p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-{% else %}
-var url = "{{ SITE_ROOT }}repo/{{ repo.id }}/file/get/?p={{ path|urlencode }}&t={{ token }}&u={{ request.user.username }}";
-{% endif %}
-
 {% include "snippets/repo_file_get.html" %}
-
 {% if not view_history %}
 function showLink() {
     $('#get-shared-link').addClass('hide');

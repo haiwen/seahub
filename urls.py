@@ -5,7 +5,7 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import root, myhome, \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
-    ownerhome, repo_history_revert, repo_file_get, repo_file_edit, org_remove, \
+    ownerhome, repo_history_revert, repo_file_edit, org_remove, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
     seafile_access_check, repo_history_changes, \
@@ -67,7 +67,6 @@ urlpatterns = patterns('',
 #    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
 #    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
-    (r'^repo/(?P<repo_id>[^/]+)/file/get/$', repo_file_get),
     (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
