@@ -855,6 +855,12 @@ p {
 #md-view a {
     font-weight:normal;
 }
+#md-view blockquote {
+    color: #777;
+    padding: 0 15px; 
+    border-left: 4px solid #DDD; 
+    margin: 10px 0;
+}
 #file-edit-form {
     margin-top:10px;
 }
