@@ -1630,7 +1630,8 @@ def render_file_revisions (request, repo_id):
         current_file_id = get_file_revision_id_size (current_commit.id, target_file)[0]
         for commit in commits:
             file_id, file_size = get_file_revision_id_size (commit.id, target_file)
-            if not file_id or not file_size:
+            if not file_id or file_size is None:
+                # do not use no file_size, since it's ok to have file_size = 0
                 return render_error(request)
             commit.revision_file_size = file_size
             if file_id == current_file_id:
