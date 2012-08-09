@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags avatar_tags %}
 
 {% block info_bar_message %}
 {% if request.user.is_authenticated %}
@@ -30,8 +30,10 @@
             {% endif %}
         </td>
 
-        {% if commit.props.creator_name %}
-        <td>{{ commit.props.creator_name }}</td>
+        {% if commit.creator_name %}
+        <td>
+            {% avatar commit.creator_name 16 %}<a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
+        </td>
         {% else %}
         <td>未知</td>
         {% endif %}

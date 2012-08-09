@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags avatar_tags %}
 
 {% block left_panel %}
 <h3>操作</h3>
@@ -20,10 +20,12 @@
 
     {% for commit in commits %}
     <tr>
-        <td>{{ commit.props.ctime|translate_commit_time }}</td>
+        <td>{{ commit.ctime|translate_commit_time }}</td>
 
-        {% if commit.props.creator_name %}
-        <td>{{ commit.props.creator_name|short_email }}</td>
+        {% if commit.creator_name %}
+        <td>
+            {% avatar commit.creator_name 16 %}<a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
+        </td>
         {% else %}
         <td>未知</td>
         {% endif %}
