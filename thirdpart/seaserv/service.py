@@ -77,7 +77,7 @@ if ccnet_config.has_option('General', 'SERVICE_URL') and \
         service_url = service_url[:idx]
     if '/' in service_url:
         # strip url suffix like the '/seahub' part of www.gonggeng.org/seahub
-        idx = service_url.rindex(':')
+        idx = service_url.rindex('/')
         service_url = service_url[:idx]
 
     CCNET_SERVER_ADDR = service_url
