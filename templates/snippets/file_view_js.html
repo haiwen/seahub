@@ -6,12 +6,14 @@
 {% endif %}
 {% if fileext == 'css' %}
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-css.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}ace/worker-css.js"></script>
 {% endif %}
 {% if fileext == 'java' %}
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-java.js"></script>
 {% endif %}
 {% if fileext == 'js' %}
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-javascript.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}ace/worker-javascript.js"></script>
 {% endif %}
 {% if fileext == 'c' or fileext == 'cpp' or fileext == 'cc' %}
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-c_cpp.js"></script>

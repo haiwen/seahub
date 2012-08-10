@@ -4,6 +4,7 @@ import os
 import stat
 import simplejson as json
 import re
+import tempfile
 import sys
 import urllib
 import urllib2
@@ -798,6 +799,12 @@ def repo_view_file(request, repo_id):
         
     # raw path
     raw_path = gen_file_get_url(token, filename)
+   
+    # get file content
+    err = ''
+    file_content = ''
+    if filetype == 'Text' or filetype == 'Markdown':
+        err, file_content, encoding = repo_file_get(raw_path)
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -818,7 +825,6 @@ def repo_view_file(request, repo_id):
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
-            'path': path,
             'obj_id': obj_id,
             'u_filename': u_filename,
             'file_name': filename,
@@ -835,66 +841,34 @@ def repo_view_file(request, repo_id):
             'domain': domain,
             'file_shared_link': file_shared_link,
             'contacts': contacts,
+            'err': err,
+            'file_content': file_content,
             }, context_instance=RequestContext(request))
 
-def repo_file_get(request, repo_id):
-    """
-    Handle ajax request to get file content from httpserver.
-    If get current worktree file, need access_token, path and username from
-    url params.
-    If get history file, need access_token, path username and obj_id from
-    url params.
-    """
-    if not request.is_ajax():
-        return Http404
-
-    # http_server_root = get_httpserver_root()
-    content_type = 'application/json; charset=utf-8'
-    access_token = request.GET.get('t')
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
-        
-    filename = urllib2.quote(os.path.basename(path).encode('utf-8'))
-    obj_id = request.GET.get('obj_id', '')
-    if not obj_id:
-        try:
-            obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
-        except:
-            obj_id = None
-    if not obj_id:
-        data = json.dumps({'error': '获取文件数据失败'})
-        return HttpResponse(data, status=400, content_type=content_type)
-
-    # username = request.GET.get('u', '')
-    redirect_url = gen_file_get_url(access_token, filename)
+def repo_file_get(raw_path):
+    err = ''
+    file_content = ''
+    encoding = ''
     try:
-        proxied_request = urllib2.urlopen(redirect_url)
-        if long(proxied_request.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            data = json.dumps({'error': '文件超过10M，无法在线查看。'})
-            return HttpResponse(data, status=400, content_type=content_type)
+        file_response = urllib2.urlopen(raw_path)
+        if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
+            err = '文件超过10M，无法在线查看。'
         else:
-            content = proxied_request.read()
+            content = file_response.read()
     except urllib2.HTTPError, e:
         err = 'HTTPError: 无法在线打开该文件'
-        data = json.dumps({'error': err})
-        return HttpResponse(data, status=400, content_type=content_type)
     except urllib2.URLError as e:
         err = 'URLError: 无法在线打开该文件'
-        data = json.dumps({'error': err})
-        return HttpResponse(data, status=400, content_type=content_type)
     else:
-        # l, d = [], {}
         try:
             u_content = content.decode('utf-8')
+            encoding = 'utf-8'
         except:
             # XXX: file in windows is encoded in gbk
             u_content = content.decode('gbk')
-        from django.utils.html import escape
-        # d['content'] = escape(u_content)
-        # l.append(d)
-        data = json.dumps({'content': u_content})
-        return HttpResponse(data, status=200, content_type=content_type)
+            encoding = 'gbk'
+        file_content = u_content
+    return err, file_content, encoding
 
 
 def pdf_full_view(request):
@@ -910,7 +884,110 @@ def pdf_full_view(request):
             'file_src': file_src,
                 }, context_instance=RequestContext(request))
 
-    
+def update_file_after_edit(request, repo_id):
+    content_type = 'application/json; charset=utf-8'
+    def error_json(error_msg=u"内部错误"):
+        return HttpResponse(json.dumps({'error': error_msg}),
+                            status=400,
+                            content_type=content_type)
+    def ok_json():
+        return HttpResponse(json.dumps({'status': 'ok'}),
+                            content_type=content_type)
+        
+    content = request.POST.get('content')
+    encoding = request.POST.get('encoding')
+    path = request.GET.get('p')
+    if content is None or not path:
+        return error_json(u"参数错误")
+
+    if encoding not in ["gbk", "utf-8"]:
+        return error_json(u"参数错误")
+
+    content = content.encode(encoding)
+
+    # first dump the file content to a tmp file, then update the file
+    fd, tmpfile = tempfile.mkstemp()
+    def remove_tmp_file():
+        try:
+            os.remove(tmpfile_name)
+        except:
+            pass
+
+    try:
+        bytesWritten = os.write(fd, content)
+    except:
+        bytesWritten = -1
+    finally:
+        os.close(fd)
+
+    if bytesWritten != len(content):
+        remove_tmp_file()
+        return error_json()
+
+    parent_dir = os.path.dirname(path).encode('utf-8')
+    filename = os.path.basename(path).encode('utf-8')
+    try:
+        seafserv_threaded_rpc.put_file (repo_id, tmpfile, parent_dir,
+                                 filename, request.user.username);
+        remove_tmp_file()
+        return ok_json()
+    except SearpcError, e:
+        remove_tmp_file()
+        return error_json(str(e))
+
+
+@login_required
+def repo_file_edit(request, repo_id):
+
+    if request.method == 'POST':
+        return update_file_after_edit(request, repo_id)
+
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+    u_filename = os.path.basename(path)
+    filename = urllib2.quote(u_filename.encode('utf-8'))
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    try:
+        obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
+    except:
+        obj_id = None
+    if not obj_id:
+        return render_error(request, '文件不存在')
+
+    token = ''        
+    if access_to_repo(request, repo_id, ''):
+        token = gen_token()
+        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
+                                           'view', request.user.username)
+    else:
+        render_permission_error(request, '无法查看该文件')
+
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
+
+    filetype, fileext = valid_previewed_file(filename)
+
+    # get file content
+    raw_path = gen_file_get_url(token, filename)
+    err, file_content, encoding = repo_file_get(raw_path)
+
+    return render_to_response('repo_edit_file.html', {
+        'repo':repo,
+        'u_filename':u_filename,
+        'path':path,
+        'zipped':zipped,
+        'fileext':fileext,
+        'err':err,
+        'file_content':file_content,
+        'encoding': encoding,
+                }, context_instance=RequestContext(request))
+
+
 def repo_access_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -1709,6 +1786,12 @@ def view_shared_file(request, token):
     
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
+
+    # get file content
+    err = ''
+    file_content = ''
+    if filetype == 'Text' or filetype == 'Markdown':
+        err, file_content, encoding = repo_file_get(raw_path)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -1726,6 +1809,8 @@ def view_shared_file(request, token):
             'fileext': fileext,
             'raw_path': raw_path,
             'username': username,
+            'err': err,
+            'file_content': file_content,
             }, context_instance=RequestContext(request))
 
 @login_required

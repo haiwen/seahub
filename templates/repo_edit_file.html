@@ -1,0 +1,79 @@
+{% extends base_template %}
+{% load seahub_tags %}
+
+{% block main_panel %}
+    <h2>编辑 {{ u_filename }}</h2>
+    <div class="w100 ovhd">
+    <p class="path fleft">
+         当前路径：
+         {% for name, link in zipped %}
+            {% if not forloop.last %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+            {% else %}
+                {{ name }}
+            {% endif %}
+         {% endfor %}
+    </p>
+
+    <div class="file-op fright">
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}">返回</a>
+    </div>
+    </div>
+
+    <div id="file-view">
+        <div id="docu-view" class="vh"></div>
+    </div>
+    <button id="file-edit-submit" class="hide">提交</button>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}ace/ace.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}ace/theme-twilight.js"></script>
+{% include "snippets/file_view_js.html" %}
+{% if fileext == 'markdown' or fileext == 'md' %}
+<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-markdown.js"></script>
+{% endif %}
+<script type="text/javascript">
+{% if file_content %}
+editor = ace.edit("docu-view");
+$('#docu-view').removeClass('vh');
+editor.setShowPrintMargin(false); // rm the vertical line in the center
+editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
+editor.renderer.scrollBar.width = 0; // enlarge ace_content width
+editor.setTheme("ace/theme/twilight");
+{% include "snippets/editor_set_mode.html" %}
+editor.session.getDocument().setValue('{{ file_content|escapejs }}');
+$('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
+editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
+editor.resize(); // fix some problem for showing some file in ie8
+$('#file-edit-submit').removeClass('hide');
+
+var edit_url = "{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}";
+var view_url = "{{ SITE_ROOT }}repo/{{repo.id}}/files/?p={{path|urlencode}}";
+$('#file-edit-submit').click(function () {
+    var content = editor.session.getValue();
+    $.ajax({
+        type: "POST",
+        url: edit_url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {content: content, encoding: '{{ encoding }}'},
+        success: function(data) {
+            location.href = view_url;
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
+            $('#file-edit-submit').addClass('hide');
+        }
+    });
+});
+{% endif %}
+
+{% if err %}
+$('#file-view').html('<p class="error">{{ err }}</p>');
+{% endif %}
+</script>
+{% endblock %}
