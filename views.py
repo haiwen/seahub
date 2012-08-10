@@ -853,12 +853,15 @@ def repo_file_get(raw_path):
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
             err = '文件超过10M，无法在线查看。'
+            return err, '', ''
         else:
             content = file_response.read()
     except urllib2.HTTPError, e:
         err = 'HTTPError: 无法在线打开该文件'
+        return err, '', ''
     except urllib2.URLError as e:
         err = 'URLError: 无法在线打开该文件'
+        return err, '', ''
     else:
         try:
             u_content = content.decode('utf-8')
