@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
 from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
-    ccnet_threaded_rpc
+    ccnet_threaded_rpc, get_personal_groups
 
 from forms import RepoShareForm
 from models import AnonymousShare
@@ -20,7 +20,7 @@ from tokens import anon_share_token_generator
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
-from seahub.utils import render_permission_error, emails2list
+from seahub.utils import render_permission_error, string2list
 
 @login_required
 def share_repo(request):
@@ -43,7 +43,7 @@ def share_repo(request):
     if not validate_owner(request, repo_id):
         return render_permission_error(request, u'只有目录拥有者有权共享目录')
     
-    to_email_list = emails2list(email_or_group)
+    to_email_list = string2list(email_or_group)
     for to_email in to_email_list:
         # if to_email is user name, the format is: 'example@mail.com';
         # if to_email is group, the format is 'group_name <creator@mail.com>'
@@ -57,7 +57,7 @@ def share_repo(request):
             group_name = to_email.split(' ')[0]
             group_creator = to_email.split(' ')[1]
             # get all the groups the user joined
-            groups = ccnet_threaded_rpc.get_groups(request.user.username)
+            groups = get_personal_groups(request.user.username)
             find = False
             for group in groups:
                 # for every group that user joined, if group name and

@@ -297,14 +297,15 @@ def get_ccnet_server_addr_port():
     """get ccnet server host and port"""
     return CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 
-def emails2list(emails):
+def string2list(string):
     """
-    Split email strings contacted with diffent separator.
+    Split strings contacted with diffent separator to a list, and remove
+    duplicated string.
     """
-    email_str = emails.replace(';', ',').replace('\n', ',').replace('\r', ',')
-    # Remove empty strings and duplicate emails
+    tmp_str = string.replace(';', ',').replace('\n', ',').replace('\r', ',')
+    # Remove empty and duplicate strings
     s = set()
-    for e in email_str.split(','):
+    for e in tmp_str.split(','):
         e = e.strip(' ')
         if not e:
             continue

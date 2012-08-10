@@ -11,6 +11,16 @@
 {% endif %}
 {% endblock %}
 
+{% block right_panel %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
 {% block main_panel %}
     <h2>
         {% if not view_history %}
@@ -68,17 +78,20 @@
         <p id="success" class="hide"></p> 
     </form>
 
-    <form action="" method="post" id="recommend-form" class="hide">
+    <form action="{% url group_recommend %}" method="post" id="recommend-form" class="hide">
         <p>推荐
-         {% for name, link in zipped %}
+        {% for name, link in zipped %}
             {% if not forloop.last %}
                {{ name }} /               
             {% else %}
                 {{ name }}
             {% endif %}
-        {% endfor %} :
+        {% endfor %} 到小组:
         </p>
-        <textarea name="recommend-msg" id="recommend-msg"></textarea><br />
+        <input type="input" name="groups" id="groups" value="" />
+        <textarea name="message" id="recommend-msg"></textarea><br />
+        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+        <input type="hidden" name="file_path" value="{{ path }}" />
         <input type="submit" class="submit" value="提交" />
         <button class="simplemodal-close">取消</button>
     </form>
@@ -195,6 +208,16 @@ $("#link-send-form").submit(function(event) {
    return false;
 });
 
+$(function() {
+    // recommend form autocomplete
+    var group_list = []
+    {% for group in groups %}
+        group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+    {% endfor %}
+    addAutocomplete('#groups', '#recommend-form', group_list);
+    $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
+    
+});        
 {% include "snippets/bottom_bar.html" %}
 {% endif %}
 </script>

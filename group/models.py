@@ -23,6 +23,17 @@ class MessageReply(models.Model):
     message = models.CharField(max_length=150)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
+class MessageAttachment(models.Model):
+    """
+    
+    """
+    group_message = models.ForeignKey(GroupMessage)
+    repo_id = models.CharField(max_length=40)
+    file_path = models.TextField()
+        
+
+
+    
 at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
 
 @receiver(post_save, sender=MessageReply)
