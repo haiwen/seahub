@@ -1,3 +1,4 @@
+# encoding: utf-8
 from datetime import datetime
 import os
 
@@ -105,3 +106,29 @@ class ReplyMessageTest(GroupTestCase):
 
     def test_no_notification_when_at_user_not_in_group(self):
         pass
+
+class GroupRecommendTest(GroupTestCase):
+    def test_recommend_file_with_error_format_group_name(self):
+        response = self.client.post('/group/recommend/', {
+                'groups': 'unparticipated_group,',
+                'repo_id': '0b21f61f-3015-4736-bd3f-9fd10cbff3c8',
+                'file_path': '/test.c',
+                'message': 'hello',
+                }, follow=True)
+
+        self.assertEquals(len(response.context['messages']), 1)
+        for message in response.context['messages']:
+            self.assert_('请检查小组名称' in str(message))
+            
+        
+    def test_recommend_file_to_unparticipated_group(self):
+        response = self.client.post('/group/recommend/', {
+                'groups': 'unparticipated_group <nobody@none.com>,',
+                'repo_id': '0b21f61f-3015-4736-bd3f-9fd10cbff3c8',
+                'file_path': '/test.c',
+                'message': 'hello',
+                }, follow=True)
+
+        self.assertEquals(len(response.context['messages']), 1)
+        for message in response.context['messages']:
+            self.assert_('请检查是否参加了该小组' in str(message))

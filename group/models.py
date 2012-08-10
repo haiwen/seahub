@@ -25,14 +25,11 @@ class MessageReply(models.Model):
 
 class MessageAttachment(models.Model):
     """
-    
+    A model used to represents a file attachment related to a group message.
     """
     group_message = models.ForeignKey(GroupMessage)
     repo_id = models.CharField(max_length=40)
     file_path = models.TextField()
-        
-
-
     
 at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
 

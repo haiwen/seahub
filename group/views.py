@@ -520,7 +520,7 @@ def group_recommend(request):
                 group_creator = e.split(' ')[1]
             except IndexError:
                 messages.add_message(request, messages.ERROR,
-                                     u'推荐到 %s 失败，请检查是否参加了该小组。' % \
+                                     u'推荐到 %s 失败，请检查小组名称。' % \
                                          group_name)
                 continue
             
