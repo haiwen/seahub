@@ -238,6 +238,7 @@ def render_repo(request, repo_id, error=''):
             "zipped" : zipped,
             "error" : error,
             "accessible_repos" : accessible_repos,
+            "applet_root": get_ccnetapplet_root()
             }, context_instance=RequestContext(request))
 
 @login_required    
