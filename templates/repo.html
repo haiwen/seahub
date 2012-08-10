@@ -230,14 +230,12 @@
 {% endif %}
 
     <div id="open-local-file-error-dlg" class="hide">
-        <p id="open-local-file-error" class="error">请确认本地 Seafile 程序已启动</p>
-        <buton class="simplemodal-close">关闭</button>
+        <p id="open-local-file-error" class="error"></p>
     </div>
 
     <div id="redirect-download" class="hide">
         <p>您还没有将同步目录 {{repo.name}} 同步到本地</p>
         <p><a id="redirect-download-url" href="">点此同步</a></p>
-        <buton class="simplemodal-close">关闭</button>
     </div>
     
 {% endblock %}
@@ -441,42 +439,74 @@ function send_open_local_file_request(repo_id, path) {
         jsonpCallback: callback,
         crossDomain: true,
         success: function(data) {
-            // nothing to do
-        },
+            if (data['error']) {
+                if (data['no_assoc']) {
+                    $('#open-local-file-error').html('找不到打开该类型文件的程序');
+                } else {
+                    $('#open-local-file-error').html('打开本地文件时出错');
+                }
+                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+            } else {
+                // open file successfully, nothing to do
+            }
+        }
     });
 }
 
-// when user clicks 'open local file', first check whether repo exists
-// on local machine, then:
-//  - if exists, send an open requst
-//  - if not exits, redirect to repo download page
-// if local seafile client is not running, show a dialog to tell the user
+// When user clicks 'open local file':
+//
+// - First, check client version to determine is this operation supported by client
+// - second check whether repo exists on local machine, then:
+//   - if exists, send an open local file requst
+//   - if not exits, redirect to repo download page
+
 
 $('a.open-local-file').click(function () {
     var repo_id = '{{repo.id}}';
     var path = $(this).attr('data');
 
+    function check_repo_exist() {
+        var callback = 'xx';
+        url = '{{ applet_root }}/repo-query/?repo_id=' + repo_id;
+        url += '&callback=' + callback;
+        $.ajax({
+            url: url,
+            dataType: 'jsonp',
+            jsonpCallback: callback,
+            crossDomain: true,
+            success: function(data) {
+                if (data['error']) {
+                    $('#open-local-file-error').html('打开本地文件时出错');
+                    $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+                    
+                } else if (data['exists'] === true) {
+                    send_open_local_file_request(repo_id, path);
+                    
+                } else if (data['exists'] === false) {
+                    // this repo does not exist on local machine, redirect to
+                    // download page
+                    download_url = '{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}';
+                    $('#redirect-download-url').attr('href', download_url);
+                    $('#redirect-download').modal({appendTo:'#main'});
+                }
+            },
+        });
+    }
+
     var local_applet_running = false;
-    var callback = 'xx';
-
-    url = '{{ applet_root }}/repo-query/?repo_id=' + repo_id
-    url += '&callback=' + callback;
     $.ajax({
-        url: url,
+        url: '{{ applet_root }}/seafile_access_check/',
         dataType: 'jsonp',
-        jsonpCallback: callback,
+        jsonpCallback: 'xx',
         crossDomain: true,
-        success: function(data) {
+        success: function(version) {
             local_applet_running = true;
-
-            if (data['exists']) {
-                send_open_local_file_request(repo_id, path);
+            if (version < 3) {
+                update_url = '<a href="http://www.seafile.com/download/">升级</a>';
+                $('#open-local-file-error').html('您的 Seafile 客户端版本太低，请' + update_url + '到最新版本');
+                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
             } else {
-                // this repo does not exist on local machine, redirect to
-                // download page
-                download_url = '{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}';
-                $('#redirect-download-url').attr('href', download_url);
-                $('#redirect-download').modal({appendTo:'#main'});
+                check_repo_exist();
             }
         },
     });
@@ -485,6 +515,7 @@ $('a.open-local-file').click(function () {
     // is not running yet.
     setTimeout(function() {
         if (!local_applet_running) {
+            $('#open-local-file-error').html('请确认本地 Seafile 程序已启动');
             $('#open-local-file-error-dlg').modal({appendTo:'#main'});
         }
     }, 2000);
