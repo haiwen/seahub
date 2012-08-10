@@ -35,15 +35,6 @@
     </p>
 
     <div class="file-op fright">
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" target="_blank">查看原始文件</a>
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" target="_blank">下载文件</a>
-        {% if not view_history and request.user.is_authenticated %}
-            {% if filetype == 'Text' or filetype == 'Markdown' %}
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}">编辑文件</a>
-            {% endif %}
-        {% endif %}
-        <br />
-
         {% if not view_history %}
         <span id="shared-link" class="hide">{{ file_shared_link }}</span>
         <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
@@ -52,9 +43,20 @@
         {% endif %}
     </div>
     </div>
-
-    <div id="file-view">
-        <p>文件内容读取中...</p>
+    
+    <div id="file">
+        <div id="file-op">
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">查看原始</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">下载</button>
+            {% if not view_history and request.user.is_authenticated %}
+            {% if filetype == 'Text' or filetype == 'Markdown' %}
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div id="file-view">
+            <p>文件内容读取中...</p>
+        </div>
     </div>
 
 {% if not view_history %}
@@ -90,7 +92,13 @@
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
 {% include "snippets/repo_file_get.html" %}
+$('#view-original, #download').click(function() {
+    window.open($(this).attr('data'));
+});
 {% if not view_history %}
+$('#edit').click(function() {
+    location.href = $(this).attr('data');
+});
 function showLink() {
     $('#get-shared-link').addClass('hide');
     $('#shared-link, #send-shared-link, #rm-shared-link').removeClass('hide');

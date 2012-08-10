@@ -18,8 +18,9 @@
     {% endif %}
 
     {% if err %}
-    $('#file-view').html('<p class="error">{{ err }}</p>');
+    $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
     {% endif %}
+
 {% endif %}
 
 {% if filetype == 'Image' %}
@@ -28,7 +29,7 @@
 
 {% if filetype == 'SVG' %}
     if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-        $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>');
+        $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>').addClass('file-view-tip');
     } else {
         $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
     }
@@ -49,7 +50,7 @@
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
             }
         });            
     }
@@ -62,26 +63,26 @@
                 if (data.length > 0) {
                     var status = data[0]['status'];
                     if (status == 'QUEUED') {
-                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>').addClass('file-view-tip');
                         setTimeout(check_status, 1000);
                     } else if (status == 'PROCESSING') {
-                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>').addClass('file-view-tip');
                         setTimeout(check_status, 1000);
                     } else {
-                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
+                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>').addClass('file-view-tip');
                         create_session();
                     }
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
             }
         });
     }
 
 if (!$.browser.mozilla && !$.browser.safari) {
-    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>');
+    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>').addClass('file-view-tip');
 } else {
     $.ajax({
         url: '{{ SITE_ROOT }}crocodoc/upload/?raw_path={{ raw_path|urlencode }}',
@@ -91,24 +92,27 @@ if (!$.browser.mozilla && !$.browser.safari) {
             if (data.length > 0) {
                 uuid = data[0]['uuid'];
                 obj_id = data[0]['obj_id'];
-                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>');
+                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>').addClass('file-view-tip');
                 check_status();
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
         }
     });
 }
 {% endif %}
 
 {% if filetype == 'PDF' %}
+$('#view-original').addClass('hide');
 if (!$.browser.mozilla && !$.browser.safari) {
-    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>');
+    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>').addClass('file-view-tip');
 } else {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
     $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
+    $('#file-op').addClass('hide');
+    $('#pdf-op-bar').append($('#download'));
     var seahub_getPage = function (pdf, page_number) {
         pdf.getPage(page_number).then(function(page) {
             var scale = 1.5;
@@ -166,10 +170,10 @@ if (!$.browser.mozilla && !$.browser.safari) {
     {% endif %}
 
     {% if err %}
-    $('#file-view').html('<p class="error">{{ err }}</p>');
+    $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
     {% endif %}
 {% endif %}
 
 {% if filetype == 'Unknown' %}
-    $('#file-view').html('<p>该类型文件无法在线查看。<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download">下载</a></p>');
+$('#file-view').html('<p>该类型文件无法在线查看。</p>').addClass('file-view-tip');
 {% endif %}

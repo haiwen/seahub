@@ -751,19 +751,36 @@ p {
     color:#444;
     margin-top:3px;
 }
-#file-view {
+#file {
     padding:3px;
     background:#dedede;
     border-radius:3px;
     -moz-border-radius:3px;
-    margin-top:13px;
+    margin-top:23px;
+}
+#file-op {
+    padding:8px 10px;
+    background:#fff;
+    text-align:right;
+    border:1px solid #ccc;
+}
+#file-op button {
+    padding:0 8px;
+}
+#file-view {
+    border: 1px solid #ccc;
+    border-top:none;
+}
+.file-view-tip {
+    height: 150px;
+    padding:10px;
+    background:#fff;
 }
 #docu-view {
     font-size:13px;/*override .ace_editor*/
     line-height:19px;/*using 'px' as unit, for ie8 to get the right line-height*/
     font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
-    border: 1px solid #ccc;
 }
 #image-view {
     padding:1px;
@@ -782,9 +799,6 @@ p {
 #doc-view {
     min-height:700px;
     _height:700px;
-}
-#pdf {
-    border:1px solid #cbcbcb;
 }
 #pdf-op-bar {
     padding:10px 0 7px;
@@ -809,7 +823,6 @@ p {
 }
 #md-view {
     padding:40px;
-    border:1px solid #ccc;
     font-size:14px;
     line-height:1.6;
     color:#333;
