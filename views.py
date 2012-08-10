@@ -1586,7 +1586,7 @@ def repo_create(request):
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
         encrypted = form.cleaned_data['encryption']
-        passwd = form.cleasened_data['passwd']
+        passwd = form.cleaned_data['passwd']
         passwd_again = form.cleaned_data['passwd_again']
         user = request.user.username
         
