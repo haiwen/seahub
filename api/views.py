@@ -165,9 +165,12 @@ def api_login(request):
 class Ping(ResponseMixin, View):
     renderers = (JSONRenderer,)
 
-    @api_login_required
     def get(self, request):
-        response = Response(200, "pong")
+        response = None
+        if request.user.is_authenticated():
+            response = Response(200, "logined")
+        else:
+            response = Response(200, "pong")
         return self.render(response)
 
 class ReposView(ResponseMixin, View):
