@@ -15,7 +15,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
-    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1
+    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
+    gen_file_get_url
 
 from seahub.views import access_to_repo, validate_owner
 from pysearpc import SearpcError
@@ -88,40 +89,7 @@ def get_file_size (id):
     else:
         return 0
 
-
-def get_dir_entrys_by_path(reqquest, commit, path):
-    dentrys = []
-    if path[-1] != '/':
-        path = path + '/'
-
-    if not commit.root_id == EMPTY_SHA1:
-        try:
-            dirs = seafserv_threaded_rpc.list_dir_by_path(commit.id,
-                                                          path.encode('utf-8'))
-        except SearpcError, e:
-            return api_error(request, "404", e.msg)
-        for dirent in dirs:
-            dtype = "file"
-            entry={}
-            if stat.S_ISDIR(dirent.props.mode):
-                dtype = "dir"
-            else:
-                mime = get_file_mime (dirent.obj_name)
-                if mime:
-                    entry["mime"] = mime
-
-                try:
-                    entry["size"] = get_file_size(dirent.obj_id)
-                except:
-                    entry["size"]=0
-            entry["type"]=dtype
-            entry["name"]=dirent.obj_name
-            entry["id"]=dirent.obj_id
-            dentrys.append(entry)
-        return HttpResponse(json.dumps(dentrys), status=200,
-                            content_type=json_content_type)
-
-def get_dir_entrys_by_id(reqquest, dir_id):
+def get_dir_entrys_by_id(request, dir_id):
     dentrys = []
     try:
         dirs = seafserv_threaded_rpc.list_dir(dir_id)
@@ -144,8 +112,25 @@ def get_dir_entrys_by_id(reqquest, dir_id):
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
         dentrys.append(entry)
-    return HttpResponse(json.dumps(dentrys), status=200,
-                        content_type=json_content_type)
+    response = HttpResponse(json.dumps(dentrys), status=200,
+                            content_type=json_content_type)
+    response["oid"] = dir_id
+    return response
+
+def get_dir_entrys_by_path(request, commit, path):
+    dentrys = []
+    if path[-1] != '/':
+        path = path + '/'
+
+    dir_id = None
+    try:
+        dir_id = seafserv_threaded_rpc.get_dirid_by_path(commit.id,
+                                                         path.encode('utf-8'))
+    except SearpcError, e:
+        return api_error(request, "404", e.msg)
+
+    return get_dir_entrys_by_id(request, dir_id)
+
 
 @csrf_exempt
 def api_login(request):
@@ -163,15 +148,14 @@ def api_login(request):
             content_type=json_content_type)
 
 class Ping(ResponseMixin, View):
-    renderers = (JSONRenderer,)
 
     def get(self, request):
-        response = None
+        response = HttpResponse(json.dumps("pong"), status=200, content_type=json_content_type)
         if request.user.is_authenticated():
-            response = Response(200, "logined")
+            response["logined"] = True
         else:
-            response = Response(200, "pong")
-        return self.render(response)
+            response["logined"] = False
+        return response
 
 class ReposView(ResponseMixin, View):
     renderers = (JSONRenderer,)
@@ -332,17 +316,29 @@ class RepoDirIdView(ResponseMixin, View):
         return get_dir_entrys_by_id(request, dir_id)
 
 
-class RepoFileView(ResponseMixin, View):
+def get_repo_file(request, repo_id, file_id, file_name):
+    token = gen_token()
+    op='download'
+    seafserv_rpc.web_save_access_token(token, repo_id, file_id,
+                                       op, request.user.username)
+    redirect_url = gen_file_get_url(token, file_name)
+
+    response = HttpResponse(json.dumps(redirect_url), status=200,
+                            content_type=json_content_type)
+    response["oid"] = file_id
+    return response
+
+class RepoFileIdView(ResponseMixin, View):
     renderers = (JSONRenderer,)
 
     @api_login_required
     def get(self, request, repo_id, file_id):
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
-
         repo = get_repo(repo_id)
         if not repo:
             return api_error(request, '404', "repo not found")
+
+        if not can_access_repo(request, repo_id):
+            return api_error(request, '403', "can not access repo")
 
         password_set = False
         if repo.props.encrypted:
@@ -355,19 +351,48 @@ class RepoFileView(ResponseMixin, View):
 
         if repo.props.encrypted and not password_set:
             return api_error(request, '403', "password needed")
+
         file_name = request.GET.get('file_name', file_id)
-        token = gen_token()
-        # put token into memory in seaf-server
-        seafserv_rpc.web_save_access_token(token, file_id)
+        return get_repo_file (request, repo_id, file_id, file_name)
 
-        http_server_root = get_httpserver_root()
-        op='download'
-        redirect_url = '%s/access?repo_id=%s&id=%s&filename=%s&op=%s&t=%s&u=%s' % (http_server_root,
-                                                                             repo_id, file_id,
-                                                                             file_name, op,
-                                                                             token,
-                                                                             request.user.username)
-        response = Response(200, redirect_url)
-        return self.render(response)
 
+class RepoFilePathView(ResponseMixin, View):
+
+    @api_login_required
+    def get(self, request, repo_id):
+        path = request.GET.get('p', '/')
+        if not path:
+            return api_error(request, '404', "Path invalid")
+
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(request, '404', "repo not found")
+
+        if not can_access_repo(request, repo_id):
+            return api_error(request, '403', "can not access repo")
+
+        password_set = False
+        if repo.props.encrypted:
+            try:
+                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+                if ret == 1:
+                    password_set = True
+            except SearpcError, e:
+                return api_error(request, '403', e.msg)
+
+        if repo.props.encrypted and not password_set:
+            return api_error(request, '403', "password needed")
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_by_path(commit.id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(request, '403', e.msg)
+
+        if not file_id:
+            return api_error(request, '400', "Path invalid")
+
+        file_name = request.GET.get('file_name', file_id)
+        return get_repo_file(request, repo_id, file_id)
 

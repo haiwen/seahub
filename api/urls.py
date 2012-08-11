@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^dir/(?P<repo_id>[^/]+)/root/$', RepoDirPathView.as_view()),
     url(r'^dir/(?P<repo_id>[^/]+)/$', RepoDirPathView.as_view(), name='repo-dir-path'),
     url(r'^dir/(?P<repo_id>[^/]+)/(?P<dir_id>[^/]+)/$', RepoDirIdView.as_view(), name='repo-dir-id'),
-    url(r'^file/(?P<repo_id>[^/]+)/(?P<file_id>[^/]+)/$', RepoFileView.as_view(), name='repo-file'),
+    url(r'^file/(?P<repo_id>[^/]+)/$', RepoFilePathView.as_view(), name='repo-file-path'),
+    url(r'^file/(?P<repo_id>[^/]+)/(?P<file_id>[^/]+)/$', RepoFileIdView.as_view(), name='repo-file-id'),
 )
 
