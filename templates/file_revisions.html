@@ -12,7 +12,17 @@
 {% endblock %}
 
 {% block main_panel %}
-<h3><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/files/?p={{ path }}">{{ repo.props.name }} {{path}}</a> 修改历史</h3>
+<h2>{{ u_filename }} 修改历史</h2>
+<p class="path">
+         当前路径：
+         {% for name, link in zipped %}
+            {% if not forloop.last %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /    
+            {% else %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path|urlencode }}">{{ name }}</a>
+            {% endif %}
+         {% endfor %}
+</p>
 <table>
     <tr>
         <th width="30%">修改时间</th>

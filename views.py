@@ -1602,8 +1602,13 @@ def repo_create(request):
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""
-    target_file = request.GET.get('p')
-    if not target_file:
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+    u_filename = os.path.basename(path)
+    filename = urllib2.quote(u_filename.encode('utf-8'))
+
+    if not path:
         return render_error(request)
 
     repo = get_repo(repo_id)
@@ -1612,7 +1617,7 @@ def render_file_revisions (request, repo_id):
         return render_error(request, error_msg)
 
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, target_file)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path)
     except SearpcError, e:
         return render_error(request, e.msg)
 
@@ -1627,9 +1632,9 @@ def render_file_revisions (request, repo_id):
 
     try:
         current_commit = get_commits(repo_id, 0, 1)[0]
-        current_file_id = get_file_revision_id_size (current_commit.id, target_file)[0]
+        current_file_id = get_file_revision_id_size (current_commit.id, path)[0]
         for commit in commits:
-            file_id, file_size = get_file_revision_id_size (commit.id, target_file)
+            file_id, file_size = get_file_revision_id_size (commit.id, path)
             if not file_id or file_size is None:
                 # do not use no file_size, since it's ok to have file_size = 0
                 return render_error(request)
@@ -1641,9 +1646,13 @@ def render_file_revisions (request, repo_id):
     except Exception, e:
         return render_error(request, str(e))
 
+    zipped = gen_path_link(path, repo.name)
+
     return render_to_response('file_revisions.html', {
         'repo': repo,
-        'path': target_file,
+        'path': path,
+        'u_filename': u_filename,
+        'zipped': zipped,
         'commits': commits,
         'is_owner': is_owner,
         }, context_instance=RequestContext(request))
