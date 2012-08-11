@@ -45,10 +45,11 @@
     </div>
     
     <div id="file">
-        <div id="file-op">
+        <div id="file-op" class="hide">
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">下载</button>
             {% if not view_history and request.user.is_authenticated %}
+            <button data="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" id="history">历史</button>
             {% if filetype == 'Text' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
             {% endif %}
@@ -96,7 +97,10 @@ $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
 {% if not view_history %}
-$('#edit').click(function() {
+{% if filetype == 'PDF' %}
+$('#pdf-op-bar').append($('#history'));
+{% endif %}
+$('#edit, #history').click(function() {
     location.href = $(this).attr('data');
 });
 function showLink() {

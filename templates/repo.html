@@ -166,7 +166,6 @@
                           <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                           <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                           <li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li>
-                          <li><a class="op list-revisions" href="{{ SITE_ROOT }}repo/file_revisions/{{repo.id}}/?p={{ path|urlencode}}{{dirent.obj_name|urlencode}}">历史</a></li>
                           {% endif %}
                       </ul>
                   </div>
