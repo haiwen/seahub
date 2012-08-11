@@ -690,25 +690,27 @@ p {
 .msg-bd .op:hover {
     text-decoration:none;
 }
-.msg-bd p a {
-    color: #666666;
+.msg-bd a {
     font-weight: normal;
+}
+.msg-bd .at {
+    color:#808;
 }
 .reply-list {
     color:#444;
     width:90%;
-    padding:2px 0 2px 0;
+}
+.reply-list li {
+    margin:5px 0;
+}
+.reply-list .txt {
+    width: 93%;
 }
 .reply-list a {
-    color:#666;
-    font-weight:normal;
     font-size:12px;
 }
 .reply-form .text-input {
     width:82%;
-}
-.at-in-msg {
-    color:#e83;
 }
 
 /*file upload*/

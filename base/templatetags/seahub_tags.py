@@ -129,7 +129,7 @@ at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
 
 @register.filter(name='find_at')
 def find_at(text):
-    return at_pattern.sub(r'\1<span class="at-in-msg">\2</span>', text)
+    return at_pattern.sub(r'\1<span class="at">\2</span>', text)
 find_at.is_safe=True
 
 @register.filter(name='short_email')
