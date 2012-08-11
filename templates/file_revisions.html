@@ -11,9 +11,15 @@
 {% endif %}
 {% endblock %}
 
-{% block main_panel %}
-<h2>文件修改历史</h2>
-<h3 class="file-revisions"><span class="file-name">{{ repo.props.name }} {{path}}</span></h3>
+{% block left_panel %}
+<h3>操作</h3>
+<ul class="with-bg">
+    <li><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/files/?p={{ path }}">返回</a></li>
+</ul>
+{% endblock %}
+
+{% block right_panel %}
+<h2><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/">{{ repo.props.name }}</a> {{path}} 修改历史</h2>
 <table>
     <tr>
         <th width="30%">修改时间</th>
@@ -24,7 +30,7 @@
     {% for commit in commits %}
     <tr>
         <td>
-            {{ commit.props.ctime|tsstr_sec }}
+            {{ commit.props.ctime|translate_commit_time }}
             {% if commit.is_current_version %}
             (当前版本)
             {% endif %}
@@ -32,7 +38,8 @@
 
         {% if commit.creator_name %}
         <td>
-            {% avatar commit.creator_name 16 %}<a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
+            <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{% avatar commit.creator_name 16 %}</a>
+            <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
         </td>
         {% else %}
         <td>未知</td>
