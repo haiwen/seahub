@@ -45,12 +45,12 @@
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data.length > 0) {
-                    $('#file-view').html('<div><iframe src="' + data[0]['doc_src'] + '" frameborder="0" id="doc-view"></iframe></div>');
+                    $('#file-view').html('<div><iframe src="' + data[0]['doc_src'] + '" frameborder="0" id="doc-view"></iframe></div>').attr('class', '');
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
             }
         });            
     }
@@ -63,20 +63,20 @@
                 if (data.length > 0) {
                     var status = data[0]['status'];
                     if (status == 'QUEUED') {
-                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>').addClass('file-view-tip');
+                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
                         setTimeout(check_status, 1000);
                     } else if (status == 'PROCESSING') {
-                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>').addClass('file-view-tip');
+                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
                         setTimeout(check_status, 1000);
                     } else {
-                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>').addClass('file-view-tip');
+                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
                         create_session();
                     }
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
+                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
             }
         });
     }

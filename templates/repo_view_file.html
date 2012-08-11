@@ -46,7 +46,7 @@
     
     <div id="file">
         <div id="file-op">
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">查看原始</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">下载</button>
             {% if not view_history and request.user.is_authenticated %}
             {% if filetype == 'Text' or filetype == 'Markdown' %}
