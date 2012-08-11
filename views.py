@@ -1516,6 +1516,41 @@ def repo_new_dir(request):
         
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
+    
+@login_required        
+def repo_new_file(request):        
+    repo_id         = request.POST.get("repo_id")
+    parent_dir      = request.POST.get("parent_dir")
+    new_file_name   = request.POST.get("new_file_name")
+    user            = request.user.username
+
+    if not new_file_name:
+        error_msg = u"请输入文件名"
+        return render_error(request, error_msg)
+
+    if not (repo_id and parent_dir and user):
+        return render_error(request)
+
+    if len(new_file_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+        error_msg = u"您输入的文件名过长"
+        return render_error (request, error_msg)
+
+    try:
+        if not is_valid_filename(new_file_name):
+            error_msg = (u"您输入的文件 %s 包含非法字符" % new_file_name)
+            return render_error (request, error_msg)
+    except SearpcError,e:
+            return render_error (request, e.msg)
+
+    new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+
+    try:
+        seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir, new_file_name, user)
+    except Exception, e:
+        return render_error(request, str(e))
+        
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    return HttpResponseRedirect(url)
 
 @login_required    
 def repo_rename_file(request):

@@ -10,7 +10,7 @@ from seahub.views import root, myhome, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
     seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress, file_upload_progress_page, \
-    get_subdir, file_move, repo_new_dir, repo_rename_file, validate_filename, \
+    get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, validate_filename, \
     repo_create, repo_update_file, file_revisions, \
     get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
     crocodoc_upload, crocodoc_status, crocodoc_session
@@ -52,6 +52,7 @@ urlpatterns = patterns('',
     (r'^file_upload_progress/$', file_upload_progress),
     (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^repo/new_dir/$', repo_new_dir),
+    (r'^repo/new_file/$', repo_new_file),
     (r'^repo/create/$', repo_create),
     (r'^repo/upload_check/$', validate_filename),
     (r'^repo/file_rename/$', repo_rename_file),
