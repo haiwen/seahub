@@ -11,15 +11,8 @@
 {% endif %}
 {% endblock %}
 
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/files/?p={{ path }}">返回</a></li>
-</ul>
-{% endblock %}
-
-{% block right_panel %}
-<h2><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/">{{ repo.props.name }}</a> {{path}} 修改历史</h2>
+{% block main_panel %}
+<h3><a href="{{ SITE_ROOT }}repo/{{ repo.props.id}}/files/?p={{ path }}">{{ repo.props.name }} {{path}}</a> 修改历史</h3>
 <table>
     <tr>
         <th width="30%">修改时间</th>
