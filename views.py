@@ -844,6 +844,7 @@ def repo_view_file(request, repo_id):
             'contacts': contacts,
             'err': err,
             'file_content': file_content,
+            "applet_root": get_ccnetapplet_root(),
             }, context_instance=RequestContext(request))
 
 def repo_file_get(raw_path):

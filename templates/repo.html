@@ -127,7 +127,6 @@
               {% else %}
               <td>
                   <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
-                  <a href="#" class="open-local-file" data="{{path}}{{dirent.obj_name}}">打开本地文件</a>
               </td>
               {% endif %}
 
@@ -156,7 +155,6 @@
               {% else %}
               <td>
                   <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
-                  <a href="#" class="open-local-file" data="{{path}}{{dirent.obj_name}}">打开本地文件</a>
               </td>
               {% endif %}
 
@@ -227,10 +225,6 @@
         <button class="simplemodal-close">取消</button>
     </form>
 {% endif %}
-
-    <div id="open-local-file-error-dlg" class="hide">
-        <p id="open-local-file-error" class="error"></p>
-    </div>
 
     <div id="redirect-download" class="hide">
         <p>您还没有将同步目录 {{repo.name}} 同步到本地</p>
@@ -427,76 +421,6 @@ $('#upload-file, #add-new-dir').hover(
 {% include "snippets/bottom_bar.html" %}
 {% endif %}
 
-function send_open_local_file_request(path) {
-    var callback = 'xx';
-    url = '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}';
-    url += '&path=' + encodeURIComponent(path);
-    url += '&callback=' + callback;
-    $.ajax({
-        url: url,
-        dataType: 'jsonp',
-        jsonpCallback: callback,
-        crossDomain: true,
-        success: function(data) {
-            if (data['exists'] === false) {
-                // repo doesn't exist on local machine
-                $('#redirect-download').modal({appendTo:'#main'});
-                
-            } else if (data['no_assoc'] === true) {
-                // no application to open the file
-                $('#open-local-file-error').html('找不到打开该类型文件的程序。\nSeafile 将为你打开该文件所在目录');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
-
-            } else if (data['error']) {
-                // other error
-                $('#open-local-file-error').html('打开本地文件时出错');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
-
-            } else {
-                // open file successfully, nothing to do
-            }
-        }
-    });
-}
-
-// When user clicks 'open local file':
-//
-// - First, check client version to determine is this operation supported by client
-// - second check whether repo exists on local machine, then:
-//   - if exists, send an open local file requst
-//   - if not exits, redirect to repo download page
-
-
-$('a.open-local-file').click(function () {
-    var path = $(this).attr('data');
-    var local_applet_running = false;
-
-    $.ajax({
-        url: '{{ applet_root }}/seafile_access_check/',
-        dataType: 'jsonp',
-        jsonpCallback: 'xx',
-        crossDomain: true,
-        success: function(version) {
-            local_applet_running = true;
-            if (version < 3) {
-                update_url = '<a href="http://www.seafile.com/download/">升级</a>';
-                $('#open-local-file-error').html('您的 Seafile 客户端版本太低，请' + update_url + '到最新版本');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
-            } else {
-                send_open_local_file_request(path);
-            }
-        },
-    });
-
-    // if jsonp response doesn't arrive in 2 seconds, we can say local client
-    // is not running yet.
-    setTimeout(function() {
-        if (!local_applet_running) {
-            $('#open-local-file-error').html('请确认本地 Seafile 程序已启动');
-            $('#open-local-file-error-dlg').modal({appendTo:'#main'});
-        }
-    }, 2000);
-});
 
 </script>
 {% endblock %}
