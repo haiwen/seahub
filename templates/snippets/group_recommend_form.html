@@ -1,15 +1,17 @@
 {% load url from future %}
     <form action="{% url 'group_recommend' %}" method="post" id="recommend-form" class="hide">{% csrf_token %}
-        <p>推荐
+        <h3>推荐
         {% for name, link in zipped %}
             {% if not forloop.last %}
                {{ name }} /               
             {% else %}
                 {{ name }}
             {% endif %}
-        {% endfor %} 到小组:
-        </p>
-        <input type="input" name="groups" id="groups" value="" />
+        {% endfor %} 到小组
+        </h3>
+        <label>小组名称：</label><br />
+        <input type="input" name="groups" id="groups" value="" /><br />
+        <label>推荐语：</label><br />
         <textarea name="message" id="recommend-msg"></textarea><br />
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="path" value="{{ path }}" />

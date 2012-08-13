@@ -103,23 +103,19 @@
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/" title="{{ msg.from_email }}">{{ msg.from_email|email2nickname }}</a>
             </div>
             <div class="msg-bd">
-                {% if msg.attachment %}
-                <span class="recommend">（推荐)</span>
-                {% endif %}
                 <p>
-                  {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
-                </p>
                 {% if msg.attachment %}
-                <span>
-                  附件:
+                <span class="recommend">推荐
                   {% if msg.attachment.attach_type == 'file' %}
                   <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
                   {% else %}
                   <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
                   {% endif %}
-                  查看</a>
+                  {{ msg.attachment.file_path }}</a> :
                 </span>
-                {% endif %}                
+                {% endif %}
+                {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
+                </p>
                 {% if msg.reply_cnt == 0 %}
                 <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
                 {% else %}
