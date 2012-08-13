@@ -33,7 +33,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
-    get_group
+    get_group, check_group_repo
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -225,9 +225,13 @@ def render_repo(request, repo_id, error=''):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
-    # my groups
-    groups = get_personal_groups(request.user.username)
-    
+    # get groups this repo is shared to
+    groups = []
+    personal_groups = get_personal_groups(request.user.username)
+    for group in personal_groups:
+        if check_group_repo(group.id, repo_id, request.user.username):
+            groups.append(group)
+
     return render_to_response('repo.html', {
             "repo": repo,
             "can_access": can_access,
@@ -237,10 +241,10 @@ def render_repo(request, repo_id, error=''):
             "repo_size": repo_size,
             "dir_list": dir_list,
             "file_list": file_list,
-            "path" : path,
-            "zipped" : zipped,
-            "error" : error,
-            "accessible_repos" : accessible_repos,
+            "path": path,
+            "zipped": zipped,
+            "error": error,
+            "accessible_repos": accessible_repos,
             "applet_root": get_ccnetapplet_root(),
             "groups": groups,
             }, context_instance=RequestContext(request))
@@ -818,8 +822,12 @@ def repo_view_file(request, repo_id):
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
 
-    # my groups
-    groups = get_personal_groups(request.user.username)
+    # get groups this repo is shared to
+    groups = []
+    personal_groups = get_personal_groups(request.user.username)
+    for group in personal_groups:
+        if check_group_repo(group.id, repo_id, request.user.username):
+            groups.append(group)
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,

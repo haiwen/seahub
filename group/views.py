@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 import simplejson as json
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -211,8 +212,24 @@ def render_group_info(request, group_id, form):
     group_msgs = msgs_plus_one[:per_page]
     for msg in group_msgs:
         msg.reply_cnt = len(MessageReply.objects.filter(reply_to=msg))
-        msg.attachment = get_first_object_or_none(
+        # Get message attachment if exists.
+        attachment = get_first_object_or_none(
             MessageAttachment.objects.filter(group_message=msg))
+        if not attachment:
+            continue
+        # Attachment name is file name or directory name.
+        # If is top directory, use repo name instead.
+        path = attachment.path
+        if path == '/':
+            repo = get_repo(attachment.repo_id)
+            if not repo:
+                # TODO: what should we do here, tell user the repo is no longer
+                # exists?
+                continue
+            attachment.name = repo.name
+        else:
+            attachment.name = os.path.basename(path)
+        msg.attachment = attachment
         
     return render_to_response("group/group_info.html", {
             "managers": managers,

@@ -111,7 +111,7 @@
                   {% else %}
                   <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
                   {% endif %}
-                  {{ msg.attachment.path }}</a> :
+                  {{ msg.attachment.name }}</a> :
                 </span>
                 {% endif %}
                 {{ msg.message|linebreaksbr|seahub_urlize|find_at }}

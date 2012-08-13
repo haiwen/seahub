@@ -147,6 +147,16 @@ def get_group_members(group_id):
         members = []
     return members
 
+def check_group_repo(group_id, repo_id, user):
+    group_id_int = int(group_id)
+    
+    try:
+        ret = seafserv_threaded_rpc.check_group_repo(group_id_int, repo_id,
+                                                     user)
+    except SearpcError:
+        ret = 0
+    return ret
+
 def get_org_id_by_group(group_id):
     try:
         org_id = ccnet_threaded_rpc.get_org_id_by_group(group_id)

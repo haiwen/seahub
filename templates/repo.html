@@ -273,6 +273,9 @@ $(function() {
     {% for group in groups %}
         group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
     {% endfor %}
+    if (group_list.length == 1) {
+       $('#recommend-form #groups').val(group_list[0]);
+    }
     addAutocomplete('#groups', '#recommend-form', group_list);
     $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
     
