@@ -1,5 +1,5 @@
 {% if filetype == 'Text' %}
-    {% if file_content %}
+    {% ifnotequal file_content None %}
     $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
     var editor = ace.edit("docu-view");
     $('#docu-view').removeClass('vh');
@@ -15,7 +15,7 @@
     $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
     editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
     editor.resize(); // fix some problem for showing some file in ie8
-    {% endif %}
+    {% endifnotequal %}
 
     {% if err %}
     $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
@@ -165,11 +165,11 @@ if (!$.browser.mozilla && !$.browser.safari) {
 {% endif %}
 
 {% if filetype == 'Markdown' %}
-    {% if file_content %}
+    {% ifnotequal file_content None %}
     var converter = new Showdown.converter();
     $('#file-view').html('<div id="md-view">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
     $('#md-view').children(':first').css('margin-top', '0');
-    {% endif %}
+    {% endifnotequal %}
 
     {% if err %}
     $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');

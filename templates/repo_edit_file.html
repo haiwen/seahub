@@ -34,7 +34,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}ace/mode-markdown.js"></script>
 {% endif %}
 <script type="text/javascript">
-{% if file_content %}
+{% ifnotequal file_content None %}
 editor = ace.edit("docu-view");
 $('#docu-view').removeClass('vh');
 editor.setShowPrintMargin(false); // rm the vertical line in the center
@@ -70,7 +70,7 @@ $('#file-edit-submit').click(function () {
         }
     });
 });
-{% endif %}
+{% endifnotequal %}
 
 {% if err %}
 $('#file-view').html('<p class="error">{{ err }}</p>');

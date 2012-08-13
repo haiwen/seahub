@@ -108,6 +108,7 @@
               <div class="repo-op">
                   <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">上传</button>
                   <button id="add-new-dir" class="op-btn">新建目录</button>
+                  <button id="add-new-file" class="op-btn">新建文件</button>
               </div>
               {% endif %}
 
@@ -187,6 +188,16 @@
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_dir_name" value="" /><br />
+        <p class="error hide">输入不能为空。</p>
+        <input type="submit" value="提交" class="submit" />
+        <button class="simplemodal-close">取消</button>
+    </form>
+
+    <form id="add-new-file-form" action="{{ SITE_ROOT}}repo/new_file/" method="post" class="hide">
+        <h4>新文件名称：</h4>
+        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+        <input type="hidden" name="parent_dir" value="{{ path }}" />
+        <input type="text" name="new_file_name" value="" /><br />
         <p class="error hide">输入不能为空。</p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
@@ -386,7 +397,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     return false;
 });
 
-$('#add-new-dir-form .submit, #rename-form .submit').click(function() {
+$('#add-new-dir-form .submit, #add-new-file-form .submit, #rename-form .submit').click(function() {
     if (!$.trim($(this).prev().prev().prev().val())) {//if the input is empty
         $(this).prev().removeClass('hide');//show error msg
         $('#simplemodal-container').css('height', $(this).parent().height());
@@ -407,6 +418,10 @@ $('#upload-file').click(function () {
 
 $('#add-new-dir').click(function () {
     $('#add-new-dir-form').modal({appendTo:'#main'});
+});
+  
+$('#add-new-file').click(function () {
+    $('#add-new-file-form').modal({appendTo:'#main'});
 });
 
 $('#upload-file, #add-new-dir').hover(
