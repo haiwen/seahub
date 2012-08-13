@@ -38,10 +38,10 @@
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
 
-<h3>我管理的小组</h3>
-{% if groups_manage %}
+<h3>我的小组</h3>
+{% if groups %}
 <ul>
-    {% for group in groups_manage %}
+    {% for group in groups %}
     <li class="mygroup">
     <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
@@ -49,22 +49,6 @@
 	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
 	</li>
     {% endfor %}
-</ul>
-{% else %}
-<p>暂无</p>
-{% endif %}
-
-<h3>我参加的小组</h3>
-{% if groups_join %}
-<ul>
-	{% for group in groups_join %}
-    <li class="mygroup">
-    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
-    </a><br />
-	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
-	</li>
-	{% endfor %}
 </ul>
 {% else %}
 <p>暂无</p>

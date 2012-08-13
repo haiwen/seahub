@@ -678,14 +678,6 @@ def myhome(request):
     # my groups
     groups = get_personal_groups(email)
 
-    groups_manage = []
-    groups_join = []
-    for group in groups:
-        if group.props.creator_name == request.user.username:
-            groups_manage.append(group)
-        else:
-            groups_join.append(group)
-    
     # get nickname
     if not Profile.objects.filter(user=request.user.username):
         nickname = ''
@@ -709,8 +701,6 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
-            "groups_manage": groups_manage,
-            "groups_join": groups_join,
             "url": settings.SITE_ROOT + 'repo/create/',
             }, context_instance=RequestContext(request))
 
