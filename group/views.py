@@ -544,10 +544,10 @@ def group_recommend(request):
                     ma = MessageAttachment(group_message=gm, repo_id=repo_id,
                                            attach_type=attach_type, path=path)
                     ma.save()
-                    
+
+                    group_url = reverse('group_info', args=[group.id])
                     msg = u'推荐到 <a href="%s" target="_blank">%s</a> 成功。' %\
                         (group_url, group_name)
-                    group_url = reverse('group_info', args=[group.id])
                     messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
