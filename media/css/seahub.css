@@ -484,6 +484,10 @@ p {
     padding-left:23px;
     background-image:url('../img/folder-add.png');
 }
+#add-new-file {
+    padding-left:23px;
+    background-image:url('../img/file-add.jpg');
+}
 .more-op {
     cursor:pointer;
 }
