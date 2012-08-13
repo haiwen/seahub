@@ -486,7 +486,7 @@ p {
 }
 #add-new-file {
     padding-left:23px;
-    background-image:url('../img/file-add.jpg');
+    background-image:url('../img/new-file-icon.png');
 }
 .more-op {
     cursor:pointer;
