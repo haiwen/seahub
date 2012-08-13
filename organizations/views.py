@@ -28,7 +28,7 @@ from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
-    validate_group_name, emails2list, set_cur_ctx, calculate_repo_last_modify,\
+    validate_group_name, string2list, set_cur_ctx, calculate_repo_last_modify,\
     MAX_INT
 from seahub.views import myhome
 
@@ -155,7 +155,7 @@ def org_useradmin(request, url_prefix):
     if request.method == 'POST':
         emails = request.POST.get('added-member-name')
 
-        email_list = emails2list(emails)
+        email_list = string2list(emails)
         for email in email_list:
             if not email or email.find('@') <= 0 :
                 continue

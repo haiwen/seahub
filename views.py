@@ -48,7 +48,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, emails2list, set_cur_ctx, MAX_INT
+    gen_file_get_url, string2list, set_cur_ctx, MAX_INT
 from seahub.profile.models import Profile
 try:
     from settings import CROCODOC_API_TOKEN
@@ -823,6 +823,9 @@ def repo_view_file(request, repo_id):
 
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
+
+    # my groups
+    groups = get_personal_groups(request.user.username)
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
@@ -845,6 +848,7 @@ def repo_view_file(request, repo_id):
             'err': err,
             'file_content': file_content,
             "applet_root": get_ccnetapplet_root(),
+            'groups': groups,
             }, context_instance=RequestContext(request))
 
 def repo_file_get(raw_path):
@@ -1867,7 +1871,7 @@ def send_shared_link(request):
     file_shared_link = form.cleaned_data['file_shared_link']
 
     t = loader.get_template('shared_link_email.html')
-    to_email_list = emails2list(email)
+    to_email_list = string2list(email)
     for to_email in to_email_list:
         # Add email to contacts
         mail_sended.send(sender=None, user=request.user.username,

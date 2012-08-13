@@ -1,6 +1,7 @@
 # encoding: utf-8
 import simplejson as json
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
@@ -13,16 +14,17 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_personal_groups, get_group, get_group_members
 from pysearpc import SearpcError
 
-from models import GroupMessage, MessageReply
-from forms import MessageForm, MessageReplyForm
+from models import GroupMessage, MessageReply, MessageAttachment
+from forms import MessageForm, MessageReplyForm, FileRecommendForm
 from signals import grpmsg_added, grpmsg_reply_added
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 from seahub.settings import SITE_ROOT
+from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
-    validate_group_name, emails2list
+    validate_group_name, string2list
 from seahub.views import is_registered_user
 
 @login_required
@@ -209,7 +211,9 @@ def render_group_info(request, group_id, form):
     group_msgs = msgs_plus_one[:per_page]
     for msg in group_msgs:
         msg.reply_cnt = len(MessageReply.objects.filter(reply_to=msg))
-
+        msg.attachment = get_first_object_or_none(
+            MessageAttachment.objects.filter(group_message=msg))
+        
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
@@ -370,7 +374,7 @@ def group_members(request, group_id):
         """
         member_name_str = request.POST.get('user_name', '')
 
-        member_list = emails2list(member_name_str)
+        member_list = string2list(member_name_str)
 
         if request.user.org:
             for member_name in member_list:
@@ -489,3 +493,65 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
         return render_error(request, u'共享失败:内部错误')
+
+@login_required
+def group_recommend(request):
+    """
+    Recommend a file to a group.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    
+    form = FileRecommendForm(request.POST)
+    if form.is_valid():
+        groups = form.cleaned_data['groups']
+        repo_id = form.cleaned_data['repo_id']
+        file_path = form.cleaned_data['file_path']
+        message = form.cleaned_data['message']
+
+        group_list = string2list(groups)
+        for e in group_list:
+            group_name = e.split(' ')[0]
+            try:
+                group_creator = e.split(' ')[1]
+            except IndexError:
+                messages.add_message(request, messages.ERROR,
+                                     u'推荐到 %s 失败，请检查小组名称。' % \
+                                         group_name)
+                continue
+            
+            # get all the groups the user joined
+            groups = get_personal_groups(request.user.username)
+            find = False
+            for group in groups:
+                # for every group that user joined, if group name and
+                # group creator matchs, then has find the group
+                if group.group_name == group_name and \
+                        group_creator.find(group.creator_name) >= 0:
+                    find = True
+                    # save message to group
+                    gm = GroupMessage(group_id=int(group.id),
+                                      from_email=request.user.username,
+                                      message=message)
+                    gm.save()
+
+                    # save attachment
+                    ma = MessageAttachment(group_message=gm, repo_id=repo_id,
+                                           file_path=file_path)
+                    ma.save()
+        
+                    messages.add_message(request, messages.INFO,
+                                         u'推荐成功，请到该小组页面查看。')
+                    break
+            if not find:
+                messages.add_message(request, messages.ERROR,
+                                     u'推荐到 %s 失败，请检查是否参加了该小组。' % \
+                                         group_name)
+    else:
+        # TODO: need more clear error message
+        messages.add_message(request, messages.ERROR, '推荐失败')
+    return HttpResponseRedirect(next)                                     
