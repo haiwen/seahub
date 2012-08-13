@@ -5,6 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, is_valid_filename
 
 from seahub.base.accounts import User
+from pysearpc import SearpcError
+
+import settings
 
 class AddUserForm(forms.Form):
     """
@@ -95,4 +98,51 @@ class RepoCreateForm(forms.Form):
                 if passwd != passwd_again:
                     raise forms.ValidationError("两次输入的密码不一致")
         return self.cleaned_data
-    
+
+
+class RepoNewFileForm(forms.Form):
+    """
+    Form for create a new empty file
+    """
+    repo_id = forms.CharField(error_messages={'required': '参数错误'})
+    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
+    new_file_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+                                error_messages={
+                                    'max_length': '新文件名太长',
+                                    'required': '新文件名不能为空',
+                                })
+
+    def clean_new_file_name(self):
+        new_file_name = self.cleaned_data['new_file_name']
+        try:
+            if not is_valid_filename(new_file_name):
+                error_msg = u"您输入的文件名 %s 包含非法字符" % new_file_name
+                raise forms.ValidationError(error_msg)
+            else:
+                return new_file_name
+        except SearpcError, e:
+            raise forms.ValidationError(str(e))
+
+class RepoNewDirForm(forms.Form):
+    """
+    Form for create a new empty dir
+    """
+    repo_id = forms.CharField(error_messages={'required': '参数错误'})
+    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
+    new_dir_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+                                error_messages={
+                                    'max_length': '新目录名太长',
+                                    'required': '新目录名不能为空',
+                            })
+
+    def clean_new_dir_name(self):
+        new_dir_name = self.cleaned_data['new_dir_name']
+        try:
+            if not is_valid_filename(new_dir_name):
+                error_msg = u"您输入的目录名 %s 包含非法字符" % new_dir_name
+                raise forms.ValidationError(error_msg)
+            else:
+                return new_dir_name
+        except SearpcError, e:
+            raise forms.ValidationError(str(e))
+

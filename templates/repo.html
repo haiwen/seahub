@@ -196,12 +196,12 @@
     </div>
 
 {% if not view_history %}
-    <form id="add-new-dir-form" action="{{ SITE_ROOT}}repo/new_dir/" method="post" class="hide">
+    <form id="add-new-dir-form" action="{{ SITE_ROOT}}repo/new_dir/" method="post" class="hide">{% csrf_token %}
         <h4>新目录名称：</h4>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_dir_name" value="" /><br />
-        <p class="error hide">输入不能为空。</p>
+        <p class="error hide">输入不能为空</p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
@@ -211,7 +211,7 @@
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_file_name" value="" /><br />
-        <p class="error hide">输入不能为空。</p>
+        <p class="error hide">输入不能为空</p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>

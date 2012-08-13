@@ -42,7 +42,7 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.organizations.utils import access_org_repo
-from forms import AddUserForm, FileLinkShareForm, RepoCreateForm
+from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -1484,28 +1484,15 @@ def file_upload_progress_page(request):
 
 @login_required        
 def repo_new_dir(request):        
-    repo_id         = request.POST.get("repo_id")
-    parent_dir      = request.POST.get("parent_dir")
-    new_dir_name    = request.POST.get("new_dir_name")
-    user            = request.user.username
 
-    if not new_dir_name:
-        error_msg = u"请输入新目录名"
-        return render_error(request, error_msg)
-
-    if not (repo_id and parent_dir and user):
-        return render_error(request)
-
-    if len(new_dir_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-        error_msg = u"您输入的目录名称过长"
-        return render_error (request, error_msg)
-
-    try:
-        if not is_valid_filename(new_dir_name):
-            error_msg = (u"您输入的目录名称 %s 包含非法字符" % new_dir_name)
-            return render_error (request, error_msg)
-    except SearpcError,e:
-            return render_error (request, e.msg)
+    form = RepoNewDirForm(request.POST)
+    if form.is_valid():
+        repo_id       = form.cleaned_data["repo_id"]
+        parent_dir    = form.cleaned_data["parent_dir"]
+        new_dir_name = form.cleaned_data["new_dir_name"]
+        user          = request.user.username
+    else:
+        return render_error(request, form.errors.values()[0])
 
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
@@ -1519,29 +1506,16 @@ def repo_new_dir(request):
     
 @login_required        
 def repo_new_file(request):        
-    repo_id         = request.POST.get("repo_id")
-    parent_dir      = request.POST.get("parent_dir")
-    new_file_name   = request.POST.get("new_file_name")
-    user            = request.user.username
 
-    if not new_file_name:
-        error_msg = u"请输入文件名"
-        return render_error(request, error_msg)
-
-    if not (repo_id and parent_dir and user):
-        return render_error(request)
-
-    if len(new_file_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-        error_msg = u"您输入的文件名过长"
-        return render_error (request, error_msg)
-
-    try:
-        if not is_valid_filename(new_file_name):
-            error_msg = (u"您输入的文件 %s 包含非法字符" % new_file_name)
-            return render_error (request, error_msg)
-    except SearpcError,e:
-            return render_error (request, e.msg)
-
+    form = RepoNewFileForm(request.POST)
+    if form.is_valid():
+        repo_id       = form.cleaned_data["repo_id"]
+        parent_dir    = form.cleaned_data["parent_dir"]
+        new_file_name = form.cleaned_data["new_file_name"]
+        user          = request.user.username
+    else:
+        return render_error(request, form.errors.values()[0])
+        
     new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
     try:
