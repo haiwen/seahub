@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags %}
+{% load url from future %}
 
 {% block info_bar_message %}
 {% if request.user.is_authenticated %}
@@ -81,24 +82,10 @@
         <p id="sending" class="hide">发送中...</p>
         <p id="success" class="hide"></p> 
     </form>
-
-    <form action="{% url group_recommend %}" method="post" id="recommend-form" class="hide">
-        <p>推荐
-        {% for name, link in zipped %}
-            {% if not forloop.last %}
-               {{ name }} /               
-            {% else %}
-                {{ name }}
-            {% endif %}
-        {% endfor %} 到小组:
-        </p>
-        <input type="input" name="groups" id="groups" value="" />
-        <textarea name="message" id="recommend-msg"></textarea><br />
-        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-        <input type="hidden" name="file_path" value="{{ path }}" />
-        <input type="submit" class="submit" value="提交" />
-        <button class="simplemodal-close">取消</button>
-    </form>
+    
+    {% with attach_type='file' %}
+    {% include "snippets/group_recommend_form.html" %}
+    {% endwith %}
 {% endif %}
 
     <div id="open-local-file-error-dlg" class="hide">

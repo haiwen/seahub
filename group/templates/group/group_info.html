@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags avatar_tags %}
+{% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
@@ -110,7 +111,13 @@
                 </p>
                 {% if msg.attachment %}
                 <span>
-                  附件: <a href="{% url repo_view_file msg.attachment.repo_id %}?p={{ msg.attachment.file_path }}" target="_blank">查看</a>
+                  附件:
+                  {% if msg.attachment.attach_type == 'file' %}
+                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
+                  {% else %}
+                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
+                  {% endif %}
+                  查看</a>
                 </span>
                 {% endif %}                
                 {% if msg.reply_cnt == 0 %}

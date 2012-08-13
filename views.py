@@ -225,6 +225,9 @@ def render_repo(request, repo_id, error=''):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
+    # my groups
+    groups = get_personal_groups(request.user.username)
+    
     return render_to_response('repo.html', {
             "repo": repo,
             "can_access": can_access,
@@ -238,7 +241,8 @@ def render_repo(request, repo_id, error=''):
             "zipped" : zipped,
             "error" : error,
             "accessible_repos" : accessible_repos,
-            "applet_root": get_ccnetapplet_root()
+            "applet_root": get_ccnetapplet_root(),
+            "groups": groups,
             }, context_instance=RequestContext(request))
 
 @login_required    

@@ -15,7 +15,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment
-from forms import MessageForm, MessageReplyForm, FileRecommendForm
+from forms import MessageForm, MessageReplyForm, GroupRecommendForm
 from signals import grpmsg_added, grpmsg_reply_added
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -497,7 +497,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
 @login_required
 def group_recommend(request):
     """
-    Recommend a file to a group.
+    Recommend a file or directory to a group.
     """
     if request.method != 'POST':
         raise Http404
@@ -506,11 +506,12 @@ def group_recommend(request):
     if not next:
         next = SITE_ROOT
     
-    form = FileRecommendForm(request.POST)
+    form = GroupRecommendForm(request.POST)
     if form.is_valid():
         groups = form.cleaned_data['groups']
         repo_id = form.cleaned_data['repo_id']
-        file_path = form.cleaned_data['file_path']
+        attach_type = form.cleaned_data['attach_type']
+        path = form.cleaned_data['path']
         message = form.cleaned_data['message']
 
         group_list = string2list(groups)
@@ -541,11 +542,13 @@ def group_recommend(request):
 
                     # save attachment
                     ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                           file_path=file_path)
+                                           attach_type=attach_type, path=path)
                     ma.save()
-        
-                    messages.add_message(request, messages.INFO,
-                                         u'推荐成功，请到该小组页面查看。')
+                    
+                    msg = u'推荐到 <a href="%s" target="_blank">%s</a> 成功。' %\
+                        (group_url, group_name)
+                    group_url = reverse('group_info', args=[group.id])
+                    messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
                 messages.add_message(request, messages.ERROR,

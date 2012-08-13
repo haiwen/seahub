@@ -8,10 +8,11 @@ class MessageForm(forms.Form):
 class MessageReplyForm(forms.Form):
     message = forms.CharField(max_length=150)
 
-class FileRecommendForm(MessageForm):
+class GroupRecommendForm(MessageForm):
     """
-    A form used to recommend a file.
+    A form used to recommend a file or directory.
     """
     groups = forms.CharField()
     repo_id = forms.CharField(max_length=40)
-    file_path = forms.CharField()
+    path = forms.CharField()
+    attach_type = forms.CharField(max_length=5)

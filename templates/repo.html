@@ -1,6 +1,7 @@
 {% extends base_template %}
 
 {% load seahub_tags %}
+{% load url from future %}
 
 {% block info_bar_message %}
 {% if request.user.is_authenticated %}
@@ -10,6 +11,18 @@
     <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
   </div>
 {% endif %}
+{% endblock %}
+
+{% block right_panel %}
+{% autoescape off %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endautoescape %}
 {% endblock %}
 
 {% block main_panel %}
@@ -54,7 +67,7 @@
           <div class="latest-commit">
             <h3>最新修改
             {% if request.user.is_authenticated %}
-            <a href="{% url seahub.views.repo_history repo.id %}" class="more">（更多）</a>
+            <a href="{% url 'seahub.views.repo_history' repo.id %}" class="more">（更多）</a>
             {% endif %}
             </h3>
             <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
@@ -228,13 +241,9 @@
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
-
-    <form action="" method="post" id="recommend-form" class="hide">
-        <p>推荐 {{repo.props.name}}：</p>
-        <textarea name="recommend-msg" id="recommend-msg"></textarea><br />
-        <input type="submit" class="submit" value="提交" />
-        <button class="simplemodal-close">取消</button>
-    </form>
+    {% with attach_type='dir' %}
+    {% include "snippets/group_recommend_form.html" %}
+    {% endwith %}
 {% endif %}
 
     <div id="redirect-download" class="hide">
@@ -257,6 +266,17 @@ $("table tr:gt(0)").hover(
         $(this).find('.more-op').addClass('hide');
     }
 );
+
+$(function() {
+    // recommend form autocomplete
+    var group_list = []
+    {% for group in groups %}
+        group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+    {% endfor %}
+    addAutocomplete('#groups', '#recommend-form', group_list);
+    $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
+    
+});        
 
 $('#main-panel').removeClass('ovhd');
 var Hide = '';
