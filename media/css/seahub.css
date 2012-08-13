@@ -484,6 +484,10 @@ p {
     padding-left:23px;
     background-image:url('../img/folder-add.png');
 }
+#add-new-file {
+    padding-left:23px;
+    background-image:url('../img/new-file-icon.png');
+}
 .more-op {
     cursor:pointer;
 }
@@ -560,7 +564,6 @@ p {
 #recommend-msg {
     width:260px;
     height:80px;
-    display:block;
 }
 #groups {
     width:260px;
