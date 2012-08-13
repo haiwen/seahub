@@ -16,9 +16,9 @@
 {% block right_panel %}
 {% autoescape off %}
 {% if messages %}
-<ul class="messages">
+<ul class="messages hide">
   {% for message in messages %}
-  <li class="{{ message.tags }}">{{ message }}</li>
+  <li class="info">{{ message }}</li>
   {% endfor %}
 </ul>
 {% endif %}

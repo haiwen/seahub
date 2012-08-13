@@ -299,6 +299,19 @@ p {
     font-weight:normal;
 }
 /* main */
+.messages {
+    position:absolute;
+    min-width:300px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.messages .info {
+    margin:0;
+}
 .path, .access-notice { margin: 0.8em 0 0.4em; }
 .with-bg li {
     padding-left:10px;
