@@ -59,13 +59,13 @@
 
 {% block right_panel %}
 {% if messages %}
-<ul class="messages">
+<ul class="messages hide">
   {% for message in messages %}
   {% if message.tags == 'info' %}
-  <li class="notification">共享给 {{ message }} 成功，请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</li>  
+  <li class="info">共享给 {{ message }} 成功，请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</li>  
   {% endif %}
   {% if message.tags == 'error' %}
-  <li class="error">共享给 {{ message }} 失败</li>  
+  <li class="info">共享给 {{ message }} 失败</li>  
   {% endif %}
   {% endfor %}
   

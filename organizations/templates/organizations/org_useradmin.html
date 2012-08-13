@@ -11,13 +11,13 @@
 
 {% block right_panel %}
 {% if messages %}
-<ul class="messages">
+<ul class="messages hide">
   {% for message in messages %}
   {% if message.tags == 'info' %}
-  <li class="notification">邮件发送成功。</li>  
+  <li class="info">邮件发送成功。</li>  
   {% endif %}
   {% if message.tags == 'error' %}
-  <li class="error">邮件发送失败。</li>  
+  <li class="info">邮件发送失败。</li>  
   {% endif %}
   {% endfor %}
 </ul>
