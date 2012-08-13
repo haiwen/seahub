@@ -14,7 +14,6 @@
 {% endblock %}
 
 {% block right_panel %}
-{% autoescape off %}
 {% if messages %}
 <ul class="messages hide">
   {% for message in messages %}
@@ -22,7 +21,6 @@
   {% endfor %}
 </ul>
 {% endif %}
-{% endautoescape %}
 {% endblock %}
 
 {% block main_panel %}
@@ -455,6 +453,17 @@ $('#upload-file, #add-new-dir, #add-new-file').hover(
         $(this).css('background-color', '#f5f5f5');
     }
 );
+
+$('#recommend-submit').click(function() {
+    if (!$('#groups').val()) {
+        apply_form_error('recommend-form', '小组名称不能为空。');
+        return false;    
+    }
+    if (!$('#recommend-msg').val()) {
+        apply_form_error('recommend-form', '推荐语不能为空。');
+        return false;   
+    }
+});
 
 {% include "snippets/bottom_bar.html" %}
 {% endif %}
