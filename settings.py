@@ -163,7 +163,7 @@ AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AVATAR_MAX_AVATARS_PER_USER = 1
-AVATAR_CACHE_TIMEOUT = 0
+AVATAR_CACHE_TIMEOUT = 24 * 60 * 60
 AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 
 # File upload

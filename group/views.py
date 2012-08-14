@@ -228,9 +228,11 @@ def render_group_info(request, group_id, form):
                 continue
             attachment.name = repo.name
         else:
+            # cut out last '/'
+            if path[-1] == '/':
+                path = path[:-1]
             attachment.name = os.path.basename(path)
         msg.attachment = attachment
-        
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
