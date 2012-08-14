@@ -211,10 +211,9 @@ def render_group_info(request, group_id, form):
 
     group_msgs = msgs_plus_one[:per_page]
     for msg in group_msgs:
-        msg.reply_cnt = len(MessageReply.objects.filter(reply_to=msg))
-        # Get message attachment if exists.
-        attachment = get_first_object_or_none(
-            MessageAttachment.objects.filter(group_message=msg))
+        msg.reply_cnt = msg.messagereply_set.all().count()
+         # Get message attachment if exists.
+        attachment = get_first_object_or_none(msg.messageattachment_set.all())
         if not attachment:
             continue
         # Attachment name is file name or directory name.
