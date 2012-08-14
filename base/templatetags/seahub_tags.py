@@ -4,11 +4,14 @@ import re
 from datetime import datetime
 
 from django import template
+from django.core.cache import cache
 from django.utils.safestring import mark_safe
 
+from profile.models import Profile
+from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
 from seahub.settings import FILEEXT_ICON_MAP
 from seahub.po import TRANSLATION_MAP
-from seahub.profile.models import Profile
+from seahub.shortcuts import get_first_object_or_none
 
 
 register = template.Library()
@@ -114,12 +117,13 @@ def translate_remain_time(value):
 
 @register.filter(name='email2nickname')
 def email2nickname(value):
-    try:
-        profile = Profile.objects.get(user=value)
-        return profile.nickname
-    except Profile.DoesNotExist:
-        return value.split('@')[0]
-
+    nickname = cache.get(NICKNAME_CACHE_PREFIX+value)
+    if not nickname:
+        profile = get_first_object_or_none(Profile.objects.filter(user=value))
+        nickname = profile.nickname if profile else value.split('@')[0]
+        cache.set(NICKNAME_CACHE_PREFIX+value, nickname, NICKNAME_CACHE_TIMEOUT)
+    return nickname
+    
 @register.filter(name='url_target_blank')
 def url_target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')

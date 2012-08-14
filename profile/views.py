@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids
@@ -11,18 +12,20 @@ from pysearpc import SearpcError
 
 from forms import ProfileForm
 from models import Profile
-from utils import render_error
+from utils import refresh_cache
+from seahub.utils import render_error
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 
 
 @login_required
 def edit_profile(request):
-    modified = False
+    """
+    Show and edit user profile.
+    """
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
-            modified = True
             nickname = form.cleaned_data['nickname']
             intro = form.cleaned_data['intro']
             try:
@@ -34,6 +37,13 @@ def edit_profile(request):
             profile.nickname = nickname
             profile.intro = intro
             profile.save()
+            messages.add_message(request, messages.INFO, u'修改成功')
+            # refresh nickname cache
+            refresh_cache(request.user.username)
+            
+            return HttpResponseRedirect(reverse('edit_profile'))
+        else:
+            messages.add_message(request, messages.ERROR, u'修改失败')
     else:
         try:
             profile = Profile.objects.get(user=request.user.username)
@@ -46,7 +56,6 @@ def edit_profile(request):
 
     return render_to_response('profile/set_profile.html', {
             'form': form,
-            'modified': modified,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -7,9 +7,14 @@
 {% block right_panel %}
 <div id="user-basic-info">
 <h2>个人基本信息修改</h2>
-{% if modified %}
-<p class="notification">修改成功。</p>
+{% if messages %}
+<ul class="messages hide">
+  {% for message in messages %}
+  <li class="info">{{ message }}</li>  
+  {% endfor %}
+</ul>
 {% endif %}
+
 <form action="" method="post">
     <label>头像:</label>{% avatar request.user.username 60 %}
     <a href="{{ SITE_ROOT }}avatar/add/">更改</a><br />
