@@ -53,7 +53,7 @@
         <td>
             {% if not commit.is_current_version %}
             {% if is_owner %}
-            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=revert" class="file-revert op">还原</a>
+            <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}" class="file-revert op">还原</a>
             {% endif %}
             {% endif %}
             <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="file-download op">下载</a>

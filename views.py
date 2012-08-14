@@ -468,11 +468,8 @@ def repo_history_revert(request, repo_id):
     if not commit_id:
         return render_error(request, u'请指定历史记录 ID')
 
-    res = request.user.username.split('@')
-    user_name = res[0]
-
     try:
-        seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, user_name)
+        seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return render_error(request, u'非法参数')
@@ -1599,6 +1596,30 @@ def render_file_revisions (request, repo_id):
         'is_owner': is_owner,
         }, context_instance=RequestContext(request))
 
+@login_required
+def repo_revert_file (request, repo_id):
+    commit_id = request.GET.get('commit')
+    path      = request.GET.get('p')
+
+    if not (commit_id and path):
+        return render_error(request, u"参数错误")
+
+    try:
+        ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
+                            path.encode('utf-8'), request.user.username)
+    except Exception, e:
+        return render_error(request, str(e))
+    else:
+        url = reverse('repo', args=[repo_id])
+        if ret == 1:
+            msg = u"已经还原被删除的文件 %s 到根目录下" % path.lstrip('/')
+            messages.add_message(request, messages.INFO, msg)
+        else:
+            msg = u"已经还原文件 %s" % path.lstrip('/')
+            messages.add_message(request, messages.INFO, msg)
+            url += u'?p=%s' % os.path.dirname(path)
+        return HttpResponseRedirect(url)
+
 @login_required        
 def file_revisions(request, repo_id):
     if request.method != 'GET':
@@ -1607,7 +1628,7 @@ def file_revisions(request, repo_id):
     op = request.GET.get('op')
     if not op:
         return render_file_revisions(request, repo_id)
-    elif op != 'revert' and op != 'download' and op != 'view':
+    elif op != 'download' and op != 'view':
         return render_error(request)
 
     commit_id   = request.GET.get('commit')
@@ -1616,18 +1637,7 @@ def file_revisions(request, repo_id):
     if not (commit_id and path):
         return render_error(request)
 
-    if op == 'revert':
-        try:
-            seafserv_threaded_rpc.revert_file (repo_id, commit_id,
-                                               path, request.user.username)
-        except Exception, e:
-            return render_error(request, str(e))
-        else:
-            parent_dir = os.path.dirname(path)
-            url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
-            return HttpResponseRedirect(url)
-
-    elif op == 'download':
+    if op == 'download':
         def handle_download():
             parent_dir = os.path.dirname(path)
             file_name  = os.path.basename(path)

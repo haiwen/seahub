@@ -11,7 +11,7 @@ from seahub.views import root, myhome, \
     seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress_page, \
     get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, validate_filename, \
-    repo_create, repo_update_file, file_revisions, \
+    repo_create, repo_update_file, repo_revert_file, file_revisions, \
     get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
     crocodoc_upload, crocodoc_status, crocodoc_session
 from seahub.notifications.views import notification_list
@@ -55,6 +55,7 @@ urlpatterns = patterns('',
     (r'^repo/create/$', repo_create),
     (r'^repo/upload_check/$', validate_filename),
     (r'^repo/file_rename/$', repo_rename_file),
+    url(r'^repo/revert_file/(?P<repo_id>[^/]+)/$', repo_revert_file, name='repo_revert_file'),
     url(r'^repo/upload_file/(?P<repo_id>[^/]+)/$', repo_upload_file, name='repo_upload_file'),
     url(r'^repo/update_file/(?P<repo_id>[^/]+)/$', repo_update_file, name='repo_update_file'),
     url(r'^repo/file_revisions/(?P<repo_id>[^/]+)/$', file_revisions, name='file_revisions'),
