@@ -6,9 +6,11 @@
 
 {% block main_panel %}
 {% if messages %}
+<ul class="messages hide">
     {% for message in messages %}
-    <p class="notification">{{ message }}</p>
+    <li class="info">{{ message }}</li>
     {% endfor %}
+</ul>
 {% endif %}
 
 <h2>{{ group.group_name }}</h2>
@@ -116,19 +118,9 @@
                 {% endif %}
                 {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
                 </p>
-                {% if msg.reply_cnt == 0 %}
-                <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
-                {% else %}
-                <a class="reply op" href="#" data="{{ msg.id }}">{{ msg.reply_cnt }} 回复</a>
-                {% endif %}
-                <a class="replyclose op hide" href="#">收起回复</a>
-                <div class="reply-list hide"></div>
-                <form id="form{{ msg.id }}" class="reply-form hide" method="post" action="">
-                  <input type="hidden" name="msg_id" value="{{ msg.id }}" />
-                  <input type="text" name="message" class="text-input" value=""/>
-                  <input type="submit" class="submit" value="回复" />
-                  <p class="error hide">输入不能为空且应少于150个字符。</p>
-                </form>
+                <button class="reply op" data="{{ msg.id }}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
+                <button class="replyclose op hide">收起回复</button>
+                <div class="reply-bd"></div>
             </div>
         </div>
         </li>
@@ -258,7 +250,14 @@ $('#user-profile').hover(
         $(this).addClass('hide');
     }
 );
-
+$('.reply, .replyclose').hover(
+    function() {
+        $(this).css('color', '#f93');
+    },
+    function() {
+        $(this).css('color', '#080');
+    }
+);
 $('.reply').click(function() {
     var msg_id = $(this).attr('data'),
         msg_bd = $(this).parent();
@@ -268,59 +267,46 @@ $('.reply').click(function() {
         cache: false,
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
-            msg_bd.children('.reply-list').html(data['html']).removeClass('hide');
-        }
-    });
-    msg_bd.children('.reply-form').removeClass('hide');
-    $(this).addClass('hide');
-    msg_bd.children('.replyclose').removeClass('hide');
-    return false;
-});
-
-function reply_at(nickname, msgID) {
-   var form_selector = '#form'+msgID+' .text-input';
-    $(form_selector).focus();
-    $(form_selector).val(nickname);
-    return false;
-}
-
-$('.replyclose').click(function() {
-    var msg_bd = $(this).parent();
-    msg_bd.children('.reply-list').addClass('hide');
-    msg_bd.children('.reply-form').addClass('hide');
-    $(this).addClass('hide');
-    msg_bd.children('.reply').removeClass('hide');
-    return false;
-});
-
-$('.reply-form').each(function(){
-    $(this).submit(function(event) {
-        var form = $(this), 
-            m_id = form.children('input[name="msg_id"]').val(),
-            m = $.trim(form.children('input[name="message"]').val()),
-            msg_bd = form.parent();
-        if (m && m.length <= 150) {
-            $.ajax({
-                type: "POST",
-                url: '{{ SITE_ROOT }}group/reply/' + m_id + '/',
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                beforeSend: prepareCSRFToken,
-                data: "message="+m,
-                success: function(data) {
-                    msg_bd.children('.reply-list').html(data['html']).attr('class', 'reply-list');
-                    form.children('input[name="message"]').val('');
-                    form.children('.error').attr('Class' , 'error hide');
-                    msg_bd.children('.reply').html(data['reply_cnt'] + ' 回复');
+            msg_bd.children('.reply-bd').html(data['html']).attr('class', 'reply-bd');
+            msg_bd.find('.reply-at').click(function() {
+                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
+            });
+            msg_bd.find('.submit').click(function() {
+                var reply = $.trim(msg_bd.find('.reply-input').val());
+                if (reply && reply.length <= 150) {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+                        dataType: 'json',
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        beforeSend: prepareCSRFToken,
+                        data: "message=" + reply,
+                        success: function(data) {
+                            msg_bd.find('.reply-list').append(data['html']);
+                            msg_bd.find('.reply-input').val('');
+                            msg_bd.find('.error').attr('class', 'error hide');
+                            var reply_cnt = parseInt(msg_bd.find('.reply-cnt').html()) + 1 || 1; 
+                            msg_bd.find('.reply-cnt').html(reply_cnt + ' ');
+                            msg_bd.find('.reply-at').click(function() {
+                                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
+                            });
+                        }
+                    });
+                } else {
+                    msg_bd.find('.error').removeClass('hide');
                 }
             });
-        } else {
-            form.children('.error').removeClass('hide');
         }
-        return false;
     });
+    $(this).addClass('hide');
+    $(this).next().removeClass('hide'); // show 'replyclose'
 });
 
+$('.replyclose').click(function() {
+    $(this).parent().children('.reply-bd').addClass('hide');
+    $(this).addClass('hide');
+    $(this).prev().removeClass('hide'); // show 'reply'
+});
 </script>
 {% endblock %}

@@ -708,20 +708,21 @@ p {
 .msg-hd .group {
     margin-left:30px;
 }
-.msg-bd .op:hover {
-    text-decoration:none;
-}
 .msg-bd a {
     font-weight: normal;
 }
-.msg-bd .recommend {
-    color: #880088;
+.msg-bd .op {
+    padding:0;
+    background:none;
+    border:none;
 }
+.msg-bd .recommend,
 .msg-bd .at {
     color:#808;
 }
 .reply-list {
     color:#444;
+    font-size:12px;
     width:90%;
 }
 .reply-list li {
@@ -730,13 +731,15 @@ p {
 .reply-list .txt {
     width: 93%;
 }
-.reply-list a {
-    font-size:12px;
-}
-.reply-form .text-input {
+.reply-input {
     width:82%;
 }
-
+.reply-at {
+    font-size:12px;
+}
+.reply-at:hover {
+    color:#f93;
+}
 /*file upload*/
 .upload-file-panel {
     width:400px;

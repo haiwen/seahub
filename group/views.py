@@ -285,18 +285,27 @@ def msg_reply(request, msg_id):
             raise HttpResponse(status=400)
 
         ctx = {}
-        replies = MessageReply.objects.filter(reply_to=msg)
-        for e in replies:
+        if request.method == 'POST':
+            e = msg_reply
             try:
                 p = Profile.objects.get(user=e.from_email)
                 e.nickname = p.nickname
             except Profile.DoesNotExist:
                 e.nickname = e.from_email.split('@')[0]
-        ctx['replies'] = replies
-        ctx['msg'] = msg
+            ctx['request'] = 'POST'
+            ctx['reply'] = e
+        else:
+            replies = MessageReply.objects.filter(reply_to=msg)
+            for e in replies:
+                try:
+                    p = Profile.objects.get(user=e.from_email)
+                    e.nickname = p.nickname
+                except Profile.DoesNotExist:
+                    e.nickname = e.from_email.split('@')[0]
+            ctx['replies'] = replies
+
         html = render_to_string("group/group_reply_list.html", ctx)
-        serialized_data = json.dumps({"html": html,
-                                      "reply_cnt": len(replies)})
+        serialized_data = json.dumps({"html": html})
         return HttpResponse(serialized_data, content_type=content_type)
     else:
         return HttpResponseBadRequest(content_type=content_type)
