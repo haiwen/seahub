@@ -105,6 +105,13 @@ def get_group(group_id):
         group = None
     return group
 
+def is_group_user(group_id, user):
+    try:
+        ret = ccnet_threaded_rpc.is_group_user(group_id, user)
+    except SearpcError:
+        ret = 0
+    return ret
+
 def check_group_staff(group_id_int, user_or_username):
     """Check where user is group staff"""
     from seahub.base.accounts import User
@@ -147,16 +154,23 @@ def get_group_members(group_id):
         members = []
     return members
 
-def check_group_repo(group_id, repo_id, user):
-    group_id_int = int(group_id)
-    
+def get_shared_groups_by_repo(repo_id):
     try:
-        ret = seafserv_threaded_rpc.check_group_repo(group_id_int, repo_id,
-                                                     user)
+        group_ids = seafserv_threaded_rpc.get_shared_groups_by_repo(repo_id)
+        if not group_ids:
+            return []
     except SearpcError:
-        ret = 0
-    return ret
+        return []
 
+    groups = []
+    for group_id in group_ids.split('\n'):
+        if not group_id:
+            continue
+        group = get_group(group_id)
+        if group:
+            groups.append(group)
+    return groups
+    
 def get_org_id_by_group(group_id):
     try:
         org_id = ccnet_threaded_rpc.get_org_id_by_group(group_id)

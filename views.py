@@ -33,7 +33,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
-    get_group, check_group_repo
+    get_group, get_shared_groups_by_repo, is_group_user
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -225,11 +225,12 @@ def render_repo(request, repo_id, error=''):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
-    # get groups this repo is shared to
+    # get groups this repo is shared     
     groups = []
-    personal_groups = get_personal_groups(request.user.username)
-    for group in personal_groups:
-        if check_group_repo(group.id, repo_id, request.user.username):
+    repo_shared_groups = get_shared_groups_by_repo(repo_id)
+    for group in repo_shared_groups:
+        # check whether user joined this group
+        if is_group_user(group.id, request.user.username):
             groups.append(group)
 
     return render_to_response('repo.html', {
@@ -822,11 +823,12 @@ def repo_view_file(request, repo_id):
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
 
-    # get groups this repo is shared to
+    # get groups this repo is shared     
     groups = []
-    personal_groups = get_personal_groups(request.user.username)
-    for group in personal_groups:
-        if check_group_repo(group.id, repo_id, request.user.username):
+    repo_shared_groups = get_shared_groups_by_repo(repo_id)
+    for group in repo_shared_groups:
+        # check whether user joined this group
+        if is_group_user(group.id, request.user.username):
             groups.append(group)
     
     return render_to_response('repo_view_file.html', {

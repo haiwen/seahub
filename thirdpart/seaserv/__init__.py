@@ -6,7 +6,7 @@ from service import send_command
 from service import get_emailusers
 from service import get_org_groups, get_personal_groups, get_group_repoids, \
     check_group_staff, remove_group_user, get_group, get_org_id_by_group, \
-    get_group_members, check_group_repo
+    get_group_members, get_shared_groups_by_repo, is_group_user
 from service import get_repos, get_repo, get_commits, get_branches, \
     get_org_repos, is_repo_owner, create_org_repo
 from service import get_binding_peerids, is_valid_filename

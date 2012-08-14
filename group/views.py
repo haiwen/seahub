@@ -202,7 +202,9 @@ def render_group_info(request, group_id, form):
         current_page = 1
         per_page = 15
 
-    msgs_plus_one = GroupMessage.objects.filter(group_id=group_id).order_by('-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
+    msgs_plus_one = GroupMessage.objects.filter(\
+        group_id=group_id).order_by(\
+        '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
 
     if len(msgs_plus_one) == per_page + 1:
         page_next = True
@@ -212,7 +214,7 @@ def render_group_info(request, group_id, form):
     group_msgs = msgs_plus_one[:per_page]
     for msg in group_msgs:
         msg.reply_cnt = msg.messagereply_set.all().count()
-         # Get message attachment if exists.
+        # Get message attachment if exists.
         attachment = get_first_object_or_none(msg.messageattachment_set.all())
         if not attachment:
             continue
