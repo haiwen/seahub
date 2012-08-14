@@ -15,11 +15,13 @@
 
 {% block right_panel %}
 {% if messages %}
+{% autoescape off %}
 <ul class="messages hide">
   {% for message in messages %}
   <li class="info">{{ message }}</li>
   {% endfor %}
 </ul>
+{% endautoescape %}
 {% endif %}
 {% endblock %}
 
