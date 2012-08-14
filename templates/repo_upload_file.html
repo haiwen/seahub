@@ -9,7 +9,7 @@
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
             {% endfor %}
     </h3>
-    <form id="upload-file-form" enctype="multipart/form-data" method="post">
+    <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">
         <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
         <input type="file" name="file" id="file" />
         <p>(文件应小于 {{ max_upload_file_size|filesizeformat }})</p>
@@ -41,9 +41,6 @@ function gen_uuid() {
     return uuid;
 }
 
-// NOTE: In order to real time show upload progress, we must deploy seahub in
-// ngnix or gunicorn, since we need more than one seahub process to be
-// running: one for receiving file, one for handling ajax request.
 function submit_and_real_time_show () {
     var form = $('#upload-file-form')[0],
         uuid = gen_uuid(); // id for this upload so we can fetch progress info.
@@ -57,10 +54,9 @@ function submit_and_real_time_show () {
     // Update progress bar: not work in chrome. for ff.
     function update_progress_info() {
         $.ajax({
-            url: '{{ SITE_ROOT }}file_upload_progress/?X-Progress-ID=' + uuid, 
-            dataType: 'json',
+            url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + uuid + '&callback=?', 
+            dataType: 'jsonp',
             cache: false,
-            contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data) {
                     $('#upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));

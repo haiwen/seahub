@@ -293,6 +293,9 @@ def gen_file_get_url(token, filename):
     """
     return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
 
+def gen_file_upload_url(token, op):
+    return '%s/%s/%s' % (get_httpserver_root(), op, token)
+
 def get_ccnet_server_addr_port():
     """get ccnet server host and port"""
     return CCNET_SERVER_ADDR, CCNET_SERVER_PORT

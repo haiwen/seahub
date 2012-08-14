@@ -48,7 +48,8 @@ from utils import render_permission_error, render_error, list_to_string, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, string2list, set_cur_ctx, MAX_INT
+    gen_file_get_url, string2list, set_cur_ctx, MAX_INT, \
+    gen_file_upload_url
 from seahub.profile.models import Profile
 try:
     from settings import CROCODOC_API_TOKEN
@@ -255,149 +256,68 @@ def repo_upload_file(request, repo_id):
     repo = get_repo(repo_id)
     total_space = settings.USER_TOTAL_SPACE
     used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
-    ############ GET ############
     if request.method == 'GET':
         parent_dir  = request.GET.get('p', '/')
         zipped = gen_path_link (parent_dir, repo.name)
+
+        token = ''        
+        if access_to_repo(request, repo_id, ''):
+            token = gen_token()
+            seafserv_rpc.web_save_access_token(token, repo_id,
+                                               'dummy', 'upload',
+                                               request.user.username)
+        else:
+            render_permission_error(request, '无法访问该目录')
+
+        upload_url = gen_file_upload_url(token, 'upload')
+        httpserver_root = get_httpserver_root()
+
         # TODO: per user quota, org user quota
         return render_to_response ('repo_upload_file.html', {
             "repo": repo,
+            "upload_url": upload_url,
+            "httpserver_root": httpserver_root,
             "parent_dir": parent_dir,
             "used_space": used_space,
             "total_space": total_space,
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
-        
-    ############ POST ############
-    parent_dir = request.POST.get('parent_dir', '/')
-    def render_upload_error(error_msg):
-        zipped = gen_path_link (parent_dir, repo.name)
-        return render_to_response ('repo_upload_file.html', {
-            "error_msg": error_msg,
-            "repo": repo,
-            "used_space": used_space,
-            "total_space": total_space,
-            "zipped": zipped,
-            "parent_dir": parent_dir,
-            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
-            }, context_instance=RequestContext(request))
-        
-    try:
-        tmp_file = request.FILES['file']
-    except:
-        error_msg = u'请选择一个文件'
-        return render_upload_error(error_msg)
-
-    tmp_file_path = tmp_file.temporary_file_path()
-    if not os.access(tmp_file_path, os.F_OK):
-        error_msg = u'上传文件失败'
-        return render_upload_error(error_msg)
-
-    def remove_tmp_file():
-        try:
-            os.remove(tmp_file.temporary_file_path())
-        except:
-            pass
-
-    # rename the file if there is name conflicts
-    filename = check_filename_with_rename(repo_id, parent_dir, tmp_file.name)
-    if len(filename) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-        remove_tmp_file()
-        error_msg = u"您上传的文件名称太长"
-        return render_error(request, error_msg)
-
-    if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
-        error_msg = u"您上传的文件太大"
-        remove_tmp_file()
-        return render_error(request, error_msg)
-
-    try:
-        seafserv_threaded_rpc.post_file (repo_id, tmp_file_path, parent_dir,
-                                         filename, request.user.username);
-    except SearpcError, e:
-        remove_tmp_file()
-        error_msg = e.msg
-        return render_upload_error(error_msg)
-    else:
-        remove_tmp_file()
-        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
-        return HttpResponseRedirect(url)
 
 @login_required
 def repo_update_file(request, repo_id):
     repo = get_repo(repo_id)
     total_space = settings.USER_TOTAL_SPACE
     used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
-    ############ GET ############
     if request.method == 'GET':
         target_file  = request.GET.get('p')
         if not target_file:
             return render_error(request)
         zipped = gen_path_link (target_file, repo.name)
+
+        token = ''        
+        if access_to_repo(request, repo_id, ''):
+            token = gen_token()
+            seafserv_rpc.web_save_access_token(token, repo_id,
+                                               'dummy', 'update',
+                                               request.user.username)
+        else:
+            render_permission_error(request, '无法访问该目录')
+
+        update_url = gen_file_upload_url(token, 'update')
+        httpserver_root = get_httpserver_root()
+
         # TODO: per user quota, org user quota
         return render_to_response ('repo_update_file.html', {
             "repo": repo,
+            "update_url": update_url,
+            "httpserver_root": httpserver_root,
             "target_file": target_file,
             "used_space": used_space,
             "total_space": total_space,
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
-        
-    ############ POST ############
-    target_file = request.POST.get('target_file')
-    if not target_file:
-        return render_error(request)
-
-    def render_update_file_error(error_msg):
-        zipped = gen_path_link (target_file, repo.name)
-        return render_to_response ('repo_update.html', {
-            "error_msg": error_msg,
-            "repo": repo,
-            "used_space": used_space,
-            "total_space": total_space,
-            "zipped": zipped,
-            "target_file": target_file,
-            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
-            }, context_instance=RequestContext(request))
-        
-    try:
-        tmp_file = request.FILES['file']
-    except:
-        error_msg = u'请选择一个文件'
-        return render_update_file_error(error_msg)
-
-    tmp_file_path = tmp_file.temporary_file_path()
-    if not os.access(tmp_file_path, os.F_OK):
-        error_msg = u'上传文件失败'
-        return render_update_file_error(error_msg)
-
-    def remove_tmp_file():
-        try:
-            os.remove(tmp_file.temporary_file_path())
-        except:
-            pass
-
-    if tmp_file.size > settings.MAX_UPLOAD_FILE_SIZE:
-        error_msg = u"您上传的文件太大"
-        remove_tmp_file()
-        return render_error(request, error_msg)
-
-    parent_dir = os.path.dirname(target_file)
-    filename   = os.path.basename(target_file)
-
-    try:
-        seafserv_threaded_rpc.put_file (repo_id, tmp_file_path, parent_dir,
-                                         filename, request.user.username);
-    except SearpcError, e:
-        remove_tmp_file()
-        error_msg = e.msg
-        return render_update_file_error(error_msg)
-    else:
-        remove_tmp_file()
-        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
-        return HttpResponseRedirect(url)
     
 def get_subdir(request):
     repo_id = request.GET.get('repo_id', '')
@@ -1462,24 +1382,6 @@ def org_info(request):
             'groups': groups,
             }, context_instance=RequestContext(request))
 
-@login_required    
-def file_upload_progress(request):
-    """
-    Return JSON object with information about the progress of an upload.
-    """
-    progress_id = None
-    if 'X-Progress-ID' in request.GET:
-        progress_id = request.GET['X-Progress-ID']
-    elif 'X-Progress-ID' in request.META:
-        progress_id = request.META['X-Progress-ID']
-
-    if progress_id:
-        cache_key = "%s_%s" % (request.user.username, progress_id)
-        data = cache.get(cache_key)
-        return HttpResponse(json.dumps(data))
-    else:
-        return HttpResponseServerError('Server Error: You must provide X-Progress-ID header or query param.')
-
 @login_required
 def file_upload_progress_page(request):
     '''
@@ -1487,9 +1389,11 @@ def file_upload_progress_page(request):
 
     '''
     uuid = request.GET.get('uuid', '')
+    httpserver_root = get_httpserver_root()
 
     return render_to_response('file_upload_progress_page.html', {
         'uuid': uuid,
+        'httpserver_root': httpserver_root,
             }, context_instance=RequestContext(request))
 
 @login_required        

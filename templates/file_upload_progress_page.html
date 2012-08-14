@@ -5,10 +5,9 @@
     // Update progress bar
     function update_progress_info() {
         $.ajax({
-            url: '{{ SITE_ROOT }}file_upload_progress/?X-Progress-ID=' + '{{ uuid }}', 
-            dataType: 'json',
+            url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + '{{ uuid }}' + '&callback=?', 
+            dataType: 'jsonp',
             cache: false,
-            contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data) {
                     $('#upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
