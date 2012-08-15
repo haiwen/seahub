@@ -9,6 +9,7 @@ import sys
 import urllib
 import urllib2
 from urllib import quote
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -16,13 +17,10 @@ from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect 
+    HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.views.decorators.csrf import csrf_protect
-
-from django.core.cache import cache
-from django.http import HttpResponse, HttpResponseServerError 
 
 from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
@@ -42,7 +40,8 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.organizations.utils import access_org_repo
-from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm
+from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
+    RepoNewDirForm, RepoNewFileForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -572,7 +571,6 @@ def remove_repo(request, repo_id):
 def myhome(request):
     owned_repos = []
     quota_usage = 0
-    output_msg = {}
 
     email = request.user.username
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)

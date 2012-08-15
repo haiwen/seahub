@@ -53,9 +53,7 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
 {% endblock %}
-
 
 {% block right_panel %}
 {% if messages %}
@@ -66,17 +64,6 @@
   {% endfor %}
 </ul>
 {% endautoescape %}
-{% endif %}
-
-{% if output_msg %}
-    {% for key, value in output_msg.items %}
-        {% if key == 'info_msg' %}
-<p class="notification">{{ value }} 请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</p>
-        {% endif %}
-        {% if key == 'err_msg' %}
-<p class="error">{{ value }}</p>
-        {% endif %}
-    {% endfor %}
 {% endif %}
 
 <h3>我拥有的同步目录</h3>
