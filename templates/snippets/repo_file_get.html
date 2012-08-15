@@ -20,12 +20,10 @@
     {% if err %}
     $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
     {% endif %}
-    $('#file-op').removeClass('hide');
 {% endif %}
 
 {% if filetype == 'Image' %}
     $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
-    $('#file-op').removeClass('hide');
 {% endif %}
 
 {% if filetype == 'SVG' %}
@@ -34,7 +32,6 @@
     } else {
         $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
     }
-    $('#file-op').removeClass('hide');
 {% endif %}
 
 {% if filetype == 'Document' %}
@@ -104,17 +101,15 @@ if (!$.browser.mozilla && !$.browser.safari) {
         }
     });
 }
-$('#file-op').removeClass('hide');
 {% endif %}
 
 {% if filetype == 'PDF' %}
-$('#view-original').addClass('hide');
 if (!$.browser.mozilla && !$.browser.safari) {
     $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>').addClass('file-view-tip');
 } else {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
     $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
-    $('#pdf-op-bar').append($('#download'));
+    $('#pdf-op-bar').append($('#file-op').html());
     var seahub_getPage = function (pdf, page_number) {
         pdf.getPage(page_number).then(function(page) {
             var scale = 1.5;
@@ -134,7 +129,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
         $('#page-nums').html(pdf.numPages);
         $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
         seahub_getPage(pdf, 1);
-        $('#pdf-loading').addClass('hide');
+        $('#file-op, #pdf-loading').addClass('hide');
         $('#pdf-op-bar, #pdf-view').removeClass('vh');
 
         $('#page-number').change(function() {
@@ -174,10 +169,8 @@ if (!$.browser.mozilla && !$.browser.safari) {
     {% if err %}
     $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
     {% endif %}
-    $('#file-op').removeClass('hide');
 {% endif %}
 
 {% if filetype == 'Unknown' %}
     $('#file-view').html('<p>该类型文件无法在线查看。</p>').addClass('file-view-tip');
-    $('#file-op').removeClass('hide');
 {% endif %}
