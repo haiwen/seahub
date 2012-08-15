@@ -51,7 +51,8 @@ def share_repo(request):
             ''' Share repo to group '''
             # TODO: if we know group id, then we can simplly call group_share_repo
             if len(to_email.split(' ')) < 2:
-                messages.add_message(request, messages.ERROR, to_email)
+                msg = u'共享给 %s 失败。' % to_email                
+                messages.add_message(request, messages.ERROR, msg)
                 continue
             
             group_name = to_email.split(' ')[0]
@@ -68,10 +69,14 @@ def share_repo(request):
                     group_share_repo(request, repo_id, int(group.props.id),
                                      from_email)
                     find = True
-                    messages.add_message(request, messages.INFO, group_name)
+                    msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                        (group_name, reverse('share_admin'))
+                    
+                    messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
-                messages.add_message(request, messages.ERROR, group_name)
+                msg = u'共享到 %s 失败。' % group_name
+                messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''
             # Add email to contacts.
@@ -83,7 +88,8 @@ def share_repo(request):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
                                                 'rw')
             except SearpcError, e:
-                messages.add_message(request, messages.ERROR, to_email)
+                msg = u'共享给 %s 失败。' % to_email
+                messages.add_message(request, messages.ERROR, msg)
                 continue
             
             if not is_registered_user(to_email):
@@ -93,8 +99,10 @@ def share_repo(request):
                           'anon_email': to_email
                           }
                 anonymous_share(request, **kwargs)
-            else: 
-                messages.add_message(request, messages.INFO, to_email)
+            else:
+                msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                    (to_email, reverse('share_admin'))
+                messages.add_message(request, messages.INFO, msg)
                
     return HttpResponseRedirect(reverse('myhome'))
 
@@ -169,7 +177,8 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
     try:
         anon_share.save()
     except:
-        messages.add_message(request, messages.ERROR, kwargs['anon_email'])
+        msg = u'共享给 %s 失败。' % anon_email
+        messages.add_message(request, messages.ERROR, msg)
     else:
         # send mail
         use_https = request.is_secure()
@@ -190,9 +199,12 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
                       [anon_email], fail_silently=False)
         except:
             AnonymousShare.objects.filter(token=token).delete()
-            messages.add_message(request, messages.ERROR, anon_email)
+            msg = u'共享给 %s 失败。' % anon_email
+            messages.add_message(request, messages.ERROR, msg)
         else:
-            messages.add_message(request, messages.INFO, anon_email)
+            msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                (anon_email, reverse('share_admin'))
+            messages.add_message(request, messages.INFO, msg)
 
 def anonymous_share_confirm(request, token=None):
     assert token is not None # checked by URLconf

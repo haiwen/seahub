@@ -59,17 +59,13 @@
 
 {% block right_panel %}
 {% if messages %}
+{% autoescape off %}
 <ul class="messages hide">
   {% for message in messages %}
-  {% if message.tags == 'info' %}
-  <li class="info">共享给 {{ message }} 成功，请前往<a href="{{ SITE_ROOT }}shareadmin/">共享管理</a>查看。</li>  
-  {% endif %}
-  {% if message.tags == 'error' %}
-  <li class="info">共享给 {{ message }} 失败</li>  
-  {% endif %}
+  <li class="info">{{ message }}</li>  
   {% endfor %}
-  
 </ul>
+{% endautoescape %}
 {% endif %}
 
 {% if output_msg %}
