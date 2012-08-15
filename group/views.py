@@ -212,28 +212,33 @@ def render_group_info(request, group_id, form):
         page_next = False
 
     group_msgs = msgs_plus_one[:per_page]
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs).order_by('-id')
     for msg in group_msgs:
         msg.reply_cnt = msg.messagereply_set.all().count()
-        # Get message attachment if exists.
-        attachment = get_first_object_or_none(msg.messageattachment_set.all())
-        if not attachment:
-            continue
-        # Attachment name is file name or directory name.
-        # If is top directory, use repo name instead.
-        path = attachment.path
-        if path == '/':
-            repo = get_repo(attachment.repo_id)
-            if not repo:
-                # TODO: what should we do here, tell user the repo is no longer
-                # exists?
-                continue
-            attachment.name = repo.name
-        else:
-            # cut out last '/'
-            if path[-1] == '/':
-                path = path[:-1]
-            attachment.name = os.path.basename(path)
-        msg.attachment = attachment
+        for att in attachments:
+            if msg.id == att.group_message_id:
+                # Attachment name is file name or directory name.
+                # If is top directory, use repo name instead.
+                path = att.path
+                if path == '/':
+                    repo = get_repo(att.repo_id)
+                    if not repo:
+                        # TODO: what should we do here, tell user the repo
+                        # is no longer exists?
+                        continue
+                    att.name = repo.name
+                else:
+                    # cut out last '/'
+                    if path[-1] == '/':
+                        path = path[:-1]
+                    att.name = os.path.basename(path)
+                msg.attachment = att
+                # Since message and attachment is one-to-one relationship,
+                # if a attachment belongs to a message, then it's not useful
+                # in following loops, thus we can forward one step to decrease
+                # loop times.
+                attachments = attachments[1:]
+                
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
