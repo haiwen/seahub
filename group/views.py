@@ -212,9 +212,16 @@ def render_group_info(request, group_id, form):
         page_next = False
 
     group_msgs = msgs_plus_one[:per_page]
-    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs).order_by('-id')
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
+
+    reply_to_list = []
+    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
+    for r in msg_replies:
+        reply_to_list.append(r.reply_to_id)
+    
     for msg in group_msgs:
-        msg.reply_cnt = msg.messagereply_set.all().count()
+        msg.reply_cnt = reply_to_list.count(msg.id)
+            
         for att in attachments:
             if msg.id == att.group_message_id:
                 # Attachment name is file name or directory name.
@@ -233,11 +240,6 @@ def render_group_info(request, group_id, form):
                         path = path[:-1]
                     att.name = os.path.basename(path)
                 msg.attachment = att
-                # Since message and attachment is one-to-one relationship,
-                # if a attachment belongs to a message, then it's not useful
-                # in following loops, thus we can forward one step to decrease
-                # loop times.
-                attachments = attachments[1:]
                 
     return render_to_response("group/group_info.html", {
             "managers": managers,
