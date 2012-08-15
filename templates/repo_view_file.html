@@ -213,19 +213,6 @@ $("#link-send-form").submit(function(event) {
    return false;
 });
 
-$(function() {
-    // recommend form autocomplete
-    var group_list = []
-    {% for group in groups %}
-        group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
-    {% endfor %}
-    if (group_list.length == 1) {
-       $('#recommend-form #groups').val(group_list[0]);
-    }
-    addAutocomplete('#groups', '#recommend-form', group_list);
-    $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
-    
-});        
 {% include "snippets/bottom_bar.html" %}
 {% endif %}
 
@@ -298,18 +285,6 @@ $('#open-local').click(function () {
             $('#open-local-file-error-dlg').modal({appendTo:'#main'});
         }
     }, 2000);
-});
-
-
-$('#recommend-submit').click(function() {
-    if (!$('#groups').val()) {
-        apply_form_error('recommend-form', '小组名称不能为空。');
-        return false;    
-    }
-    if (!$('#recommend-msg').val()) {
-        apply_form_error('recommend-form', '推荐语不能为空。');
-        return false;   
-    }
 });
 </script>
 {% endblock %}
