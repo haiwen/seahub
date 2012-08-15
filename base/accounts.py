@@ -36,6 +36,9 @@ class UserManager(object):
         return self.get(email=email)
 
     def get(self, email=None, id=None):
+        if not email and not id:
+            raise User.DoesNotExist, 'User matching query does not exits.'
+            
         if email:
             emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if id:
