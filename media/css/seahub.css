@@ -573,13 +573,19 @@ p {
 #email,
 #email_or_group,
 #share-link,
-#added-member-name,
-#recommend-msg {
+#added-member-name {
     width:260px;
     height:80px;
 }
-#groups {
-    width:260px;
+#recommend-msg,
+#recommend-groups {
+    width:450px;
+}
+#recommend-groups {
+    margin-bottom:5px;
+}
+#recommend-msg {
+    height:55px;
 }
 /* group, org */
 .group-list {

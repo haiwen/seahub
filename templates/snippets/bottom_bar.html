@@ -1,13 +1,30 @@
-{% if groups %}
-var Bottom_bar = '<div id="bottom-bar"><button id="recommend">推荐到小组</button> <button>发送到私信</button></div>';
-{% else %}
-var Bottom_bar = '<div id="bottom-bar"><button>发送到私信</button></div>';
-{% endif %}
-
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> {% endif %}<button>发送到私信</button></div>';
 $('#wrapper').append(Bottom_bar);
-$('#bottom-bar').css({'position':'fixed', 'bottom':0, 'left':$('#main').offset().left + $('#main').width() + 15});
-$('#recommend').click(function() {
-    $('#recommend-form').modal({appendTo: '#main'});
-});
+$('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');
 $('#footer').addClass('hide');
+
+{% if groups %}
+var group_list = []
+{% for group in groups %}
+group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+{% endfor %}
+if (group_list.length == 1) {
+    $('#recommend-groups').val(group_list[0]);
+}
+$('#recommend').click(function() {
+    $('#recommend-form').modal({appendTo: '#main'});
+    addAutocomplete('#recommend-groups', '#recommend-form', group_list);
+    $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
+});
+$('#recommend-submit').click(function() {
+    if (!$.trim($('#recommend-groups').val())) {
+        apply_form_error('recommend-form', '小组名称不能为空。');
+        return false;    
+    }
+    if (!$.trim($('#recommend-msg').val())) {
+        apply_form_error('recommend-form', '推荐语不能为空。');
+        return false;   
+    }
+});
+{% endif %}
