@@ -1,8 +1,8 @@
 {% extends base_template %}
 {% load seahub_tags avatar_tags %}
+{% load url from future %}
 
-{% block main_panel %}
-<div class="main fleft">
+{% block right_panel %}
 {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs %}
@@ -17,27 +17,37 @@
                 <span class="group">所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a></span>
             </div>
             <div class="msg-bd">
-                <p>{{ msg.message }}</p>
-                {% if msg.reply_cnt == 0 %}
-                <a class="reply op" href="#" data="{{ msg.id }}">回复</a>
-                {% else %}
-                <a class="reply op hide" href="#" data="{{ msg.id }}">{{ msg.reply_cnt }} 回复</a>
+                <p>
+                {% if msg.attachment %}
+                <span class="recommend">推荐
+                  {% if msg.attachment.attach_type == 'file' %}
+                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
+                  {% else %}
+                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
+                  {% endif %}
+                  {{ msg.attachment.name }}</a> :
+                </span>
                 {% endif %}
-                <a class="replyclose op" href="#">收起回复</a>
-                <ul class="reply-list">
-                  {% for reply in msg.reply_list %}
-                  <li>{{ reply.message|seahub_urlize|find_at }} --
-                  <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/">{{ reply.nickname }}</a>
-                  <a href="javascript:void(0);" class="" onclick="reply_at('@{{ reply.nickname }} ', {{ msg.id }})">回复</a>
-                  </li>
-                  {% endfor %}
-                </ul>
-                <form id="form{{ msg.id }}" class="reply-form" method="post" action="">
-                    <input type="hidden" name="msg_id" value="{{ msg.id }}" />
-                    <input type="text" name="message" class="text-input" />
-                    <input type="submit" class="submit" value="回复" />
+                {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
+                </p>
+                <button class="reply op hide" data="{{ msg.id }}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
+                <button class="replyclose op">收起回复</button>
+                <div class="reply-bd">
+                    <ul class="reply-list">
+                        {% for reply in msg.reply_list %}
+                        <li class="w100 ovhd">
+                        <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/" class="pic fleft">{% avatar reply.from_email 28 %}</a>
+                        <div class="txt fright">
+                            <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/">{{ reply.nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --
+                            <button class="reply-at op" data="{{ reply.nickname }}">回复</button>
+                        </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <input type="text" name="message" class="reply-input" value="" />
+                    <button class="submit">回复</button>
                     <p class="error hide">输入不能为空且应少于150个字符。</p>
-                </form>
+                </div>
             </div>
         </div>
         </li>
@@ -46,91 +56,41 @@
 {% else %}
 <p>暂无</p>    
 {% endif %}
-
-</div>
-
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-jtemplates.js"></script>
 <script type="text/javascript">
-addConfirmTo($('#quit-group'), '确定要退出？');
-addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
-
-$("table tr:gt(0)").hover(
-    function() {
-        $(this).find('img').css('cursor', 'pointer').removeClass('vh');
-    },
-    function() {
-        $(this).find('img').addClass('vh');
+{% include 'group/msg_reply_js.html' %}
+$('.reply-at').click(function() {
+    $(this).parent().parent().parent().next().val('@' + $(this).attr('data') + ' ').focus();
+});
+$('.reply-bd .submit').click(function() {
+    var msg_bd = $(this).parent().parent(),
+        msg_id = msg_bd.find('.reply').attr('data'),
+        reply = $.trim($(this).prev().val());
+    if (reply && reply.length <= 150) {
+        $.ajax({
+            type: "POST",
+            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: prepareCSRFToken,
+            data: "message=" + reply,
+            success: function(data) {
+                msg_bd.find('.reply-list').append(data['html']);
+                msg_bd.find('.reply-input').val('');
+                msg_bd.find('.error').attr('class', 'error hide');
+                var reply_cnt = parseInt(msg_bd.find('.reply-cnt').html()) + 1 || 1; 
+                msg_bd.find('.reply-cnt').html(reply_cnt + ' ');
+                msg_bd.find('.reply-at').click(function() {
+                    msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
+                });
+            }
+        });
+    } else {
+        $(this).next().removeClass('hide'); // show 'error'
     }
-);
-
-$('.download').click(function() {
-    window.open($(this).attr('data'));
-});
-
-$('.reply').click(function() {
-    var msg_id = $(this).attr('data'),
-        msg_bd = $(this).parent();
-    $.ajax({
-        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-        dataType: 'json',
-        cache: false,
-        contentType: 'application/json; charset=utf-8',
-        success: function(data) {
-            msg_bd.children('.reply-list').html(data['html']).removeClass('hide');
-        }
-    });
-    msg_bd.children('.reply-form').removeClass('hide');
-    $(this).addClass('hide');
-    msg_bd.children('.replyclose').removeClass('hide');
-    return false;
-});
-
-function reply_at(nickname, msgID) {
-    var form_selector = '#form'+msgID+' .text-input';
-    $(form_selector).focus();
-    $(form_selector).val(nickname);
-    return false;
-}
-
-$('.replyclose').click(function() {
-    var msg_bd = $(this).parent();
-    msg_bd.children('.reply-list').addClass('hide');
-    msg_bd.children('.reply-form').addClass('hide');
-    $(this).addClass('hide');
-    msg_bd.children('.reply').removeClass('hide');
-    return false;
-});
-
-$('.reply-form').each(function(){
-    $(this).submit(function(event) {
-        var form = $(this), 
-            m_id = form.children('input[name="msg_id"]').val(),
-            m = $.trim(form.children('input[name="message"]').val()),
-            msg_bd = form.parent();
-        if (m && m.length <= 150) {
-            $.ajax({
-                type: "POST",
-                url: "{{ SITE_ROOT }}group/reply/"+m_id+"/",
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: "message="+m,
-                beforeSend: prepareCSRFToken,
-                success: function(data) {
-                    msg_bd.children('.reply-list').html(data['html']).attr('class', 'reply-list');
-                    form.children('input[name="message"]').val('');
-                    form.children('.error').attr('Class' , 'error hide');
-                    msg_bd.children('.reply').html(data['reply_cnt'] + ' 回复');
-                }
-            });
-        } else {
-            form.children('.error').removeClass('hide');
-        }
-        return false;
-    });
 });
 </script>
 {% endblock %}

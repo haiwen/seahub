@@ -335,6 +335,19 @@ def msg_reply_new(request):
                 continue
             m.group_name = group.group_name
             
+            # get attachement
+            attachment = get_first_object_or_none(m.messageattachment_set.all())
+            if attachment:
+                path = attachment.path
+                if path == '/':
+                    repo = get_repo(attachment.repo_id)
+                    if not repo:
+                        continue
+                    attachment.name = repo.name
+                else:
+                    attachment.name = os.path.basename(path)
+                m.attachment = attachment
+
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
             # get nickname
@@ -343,9 +356,10 @@ def msg_reply_new(request):
                     p = Profile.objects.get(user=reply.from_email)
                     reply.nickname = p.nickname
                 except Profile.DoesNotExist:
-                    reply.nickname = reply.from_email
+                    reply.nickname = reply.from_email.split('@')[0]
 
             m.reply_list = reply_list
+            m.reply_cnt = len(reply_list)
             group_msgs.append(m)
         except GroupMessage.DoesNotExist:
             continue

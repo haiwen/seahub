@@ -250,63 +250,6 @@ $('#user-profile').hover(
         $(this).addClass('hide');
     }
 );
-$('.reply, .replyclose').hover(
-    function() {
-        $(this).css('color', '#f93');
-    },
-    function() {
-        $(this).css('color', '#080');
-    }
-);
-$('.reply').click(function() {
-    var msg_id = $(this).attr('data'),
-        msg_bd = $(this).parent();
-    $.ajax({
-        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-        dataType: 'json',
-        cache: false,
-        contentType: 'application/json; charset=utf-8',
-        success: function(data) {
-            msg_bd.children('.reply-bd').html(data['html']).attr('class', 'reply-bd');
-            msg_bd.find('.reply-at').click(function() {
-                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
-            });
-            msg_bd.find('.submit').click(function() {
-                var reply = $.trim(msg_bd.find('.reply-input').val());
-                if (reply && reply.length <= 150) {
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-                        dataType: 'json',
-                        cache: false,
-                        contentType: 'application/json; charset=utf-8',
-                        beforeSend: prepareCSRFToken,
-                        data: "message=" + reply,
-                        success: function(data) {
-                            msg_bd.find('.reply-list').append(data['html']);
-                            msg_bd.find('.reply-input').val('');
-                            msg_bd.find('.error').attr('class', 'error hide');
-                            var reply_cnt = parseInt(msg_bd.find('.reply-cnt').html()) + 1 || 1; 
-                            msg_bd.find('.reply-cnt').html(reply_cnt + ' ');
-                            msg_bd.find('.reply-at').click(function() {
-                                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
-                            });
-                        }
-                    });
-                } else {
-                    msg_bd.find('.error').removeClass('hide');
-                }
-            });
-        }
-    });
-    $(this).addClass('hide');
-    $(this).next().removeClass('hide'); // show 'replyclose'
-});
-
-$('.replyclose').click(function() {
-    $(this).parent().children('.reply-bd').addClass('hide');
-    $(this).addClass('hide');
-    $(this).prev().removeClass('hide'); // show 'reply'
-});
+{% include 'group/msg_reply_js.html' %}
 </script>
 {% endblock %}
