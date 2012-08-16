@@ -303,12 +303,6 @@ def msg_reply(request, msg_id):
             ctx['reply'] = e
         else:
             replies = MessageReply.objects.filter(reply_to=msg)
-            for e in replies:
-                try:
-                    p = Profile.objects.get(user=e.from_email)
-                    e.nickname = p.nickname
-                except Profile.DoesNotExist:
-                    e.nickname = e.from_email.split('@')[0]
             ctx['replies'] = replies
 
         html = render_to_string("group/group_reply_list.html", ctx)
