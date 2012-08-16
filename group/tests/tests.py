@@ -57,7 +57,7 @@ class GroupMessageTest(GroupTestCase):
                 'message': message,
                 })
         # Redirect only if it worked
-        # self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(GroupMessage.objects.all().count(), 1)
     
     def test_leave_501_chars_msg(self):
@@ -108,12 +108,13 @@ class ReplyMessageTest(GroupTestCase):
         pass
 
 class GroupRecommendTest(GroupTestCase):
-    def test_recommend_file_with_error_format_group_name(self):
+    def test_recommend_file_with_wrong_format_group_name(self):
         response = self.client.post('/group/recommend/', {
                 'groups': 'unparticipated_group,',
                 'repo_id': '0b21f61f-3015-4736-bd3f-9fd10cbff3c8',
-                'file_path': '/test.c',
+                'path': '/test.c',
                 'message': 'hello',
+                'attach_type': 'file',
                 }, follow=True)
 
         self.assertEquals(len(response.context['messages']), 1)
@@ -125,8 +126,9 @@ class GroupRecommendTest(GroupTestCase):
         response = self.client.post('/group/recommend/', {
                 'groups': 'unparticipated_group <nobody@none.com>,',
                 'repo_id': '0b21f61f-3015-4736-bd3f-9fd10cbff3c8',
-                'file_path': '/test.c',
+                'path': '/test.c',
                 'message': 'hello',
+                'attach_type': 'file',
                 }, follow=True)
 
         self.assertEquals(len(response.context['messages']), 1)
