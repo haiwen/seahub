@@ -10,6 +10,7 @@ from seahub.views import root, myhome, \
     repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
     seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress_page, \
+    upload_file_error, update_file_error, \
     get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, validate_filename, \
     repo_create, repo_update_file, file_revisions, \
     get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
@@ -57,6 +58,8 @@ urlpatterns = patterns('',
     (r'^repo/file_rename/$', repo_rename_file),
     url(r'^repo/upload_file/(?P<repo_id>[^/]+)/$', repo_upload_file, name='repo_upload_file'),
     url(r'^repo/update_file/(?P<repo_id>[^/]+)/$', repo_update_file, name='repo_update_file'),
+    (r'^repo/upload_error/(?P<repo_id>[^/]+)/$', upload_file_error),
+    (r'^repo/update_error/(?P<repo_id>[^/]+)/$', update_file_error),
     url(r'^repo/file_revisions/(?P<repo_id>[^/]+)/$', file_revisions, name='file_revisions'),
     url(r'^repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
