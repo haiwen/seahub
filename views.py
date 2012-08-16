@@ -1221,6 +1221,25 @@ def activate_user(request, user_id):
 
     return HttpResponseRedirect(reverse('sys_useradmin'))
 
+def send_user_reset_email(request, email, password):
+    """
+    Send email when reset user password.
+    """
+    use_https = request.is_secure()
+    domain = RequestSite(request).domain
+    
+    t = loader.get_template('user_reset_email.html')
+    c = {
+        'email': email,
+        'password': password,
+        }
+    try:
+        send_mail(u'密码重置', t.render(Context(c)),
+                  None, [email], fail_silently=False)
+        messages.add_message(request, messages.INFO, '通知邮件已成功。')
+    except:
+        messages.add_message(request, messages.ERROR, '邮件发送失败。')
+
 @login_required
 @sys_staff_required
 def user_reset(request, user_id):
@@ -1230,14 +1249,16 @@ def user_reset(request, user_id):
         user.set_password(INIT_PASSWD)
         user.save()
 
-        msg  =u'密码重置成功。初始密码为%s，请联系该用户更改密码。' % INIT_PASSWD
-        messages.add_message(request, messages.INFO, msg)
+        messages.add_message(request, messages.INFO, u'密码重置成功。')
+
+        if hasattr(settings, 'EMAIL_HOST'):
+            send_user_reset_email(request, user.email, INIT_PASSWD)
     except User.DoesNotExist:
         msg  =u'密码重置失败，用户不存在。'
         messages.add_message(request, messages.ERROR, msg)
 
     return HttpResponseRedirect(reverse('sys_useradmin'))
-
+    
 def send_user_add_mail(request, email, password):
     """Send email when add new user."""
     
