@@ -264,6 +264,7 @@ def msg_reply(request, msg_id):
     
     content_type = 'application/json; charset=utf-8'
     if request.is_ajax():
+        ctx = {}
         if request.method == 'POST':
             form = MessageReplyForm(request.POST)
 
@@ -286,26 +287,20 @@ def msg_reply(request, msg_id):
                     grpmsg_reply_added.send(sender=MessageReply,
                                             msg_id=msg_id,
                                             from_email=request.user.username)
-        try:
-            msg = GroupMessage.objects.get(id=msg_id)
-        except GroupMessage.DoesNotExist:
-            raise HttpResponse(status=400)
 
-        ctx = {}
-        if request.method == 'POST':
-            e = msg_reply
-            try:
-                p = Profile.objects.get(user=e.from_email)
-                e.nickname = p.nickname
-            except Profile.DoesNotExist:
-                e.nickname = e.from_email.split('@')[0]
-            ctx['request'] = 'POST'
-            ctx['reply'] = e
+                ctx['reply'] = msg_reply
+                html = render_to_string("group/group_reply_new.html", ctx)
+
         else:
+            try:
+                msg = GroupMessage.objects.get(id=msg_id)
+            except GroupMessage.DoesNotExist:
+                raise HttpResponse(status=400)
+
             replies = MessageReply.objects.filter(reply_to=msg)
             ctx['replies'] = replies
+            html = render_to_string("group/group_reply_list.html", ctx)
 
-        html = render_to_string("group/group_reply_list.html", ctx)
         serialized_data = json.dumps({"html": html})
         return HttpResponse(serialized_data, content_type=content_type)
     else:
