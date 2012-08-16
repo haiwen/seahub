@@ -24,6 +24,11 @@
 
 {% if filetype == 'Image' %}
     $('#file-view').html('<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />').css({'text-align':'center', 'padding':'30px 0'});
+    window.onload = function() {
+        if ($('#image-view').width() > $('#file-view').width()) {
+            $('#image-view').css('width', $('#file-view').width() - 4);
+        }
+    }
 {% endif %}
 
 {% if filetype == 'SVG' %}
