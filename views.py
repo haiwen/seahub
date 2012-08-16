@@ -1101,9 +1101,9 @@ def repo_remove_share(request):
     else:
         return HttpResponseRedirect(referer)
     
-@login_required
-def mypeers(request):
-    cid = get_user_cid(request.user)
+# @login_required
+# def mypeers(request):
+#     cid = get_user_cid(request.user)
 
 @login_required
 @sys_staff_required
@@ -1227,7 +1227,7 @@ def user_reset(request, user_id):
     """Reset password for user."""
     try:
         user = User.objects.get(id=int(user_id))
-        user.password = INIT_PASSWD
+        user.set_password(INIT_PASSWD)
         user.save()
 
         msg  =u'密码重置成功。初始密码为%s，请联系该用户更改密码。' % INIT_PASSWD

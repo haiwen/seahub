@@ -28,9 +28,9 @@ class UserManager(object):
             email = '@'.join([email_name, domain_part.lower()])
 
         user = User(email=email)
-        user.password = password
         user.is_staff = is_staff
         user.is_active = is_active
+        user.set_password(password)
         user.save()
 
         return self.get(email=email)
@@ -244,6 +244,7 @@ class RegistrationBackend(object):
         the class of this backend as the sender.
         
         """
+        from registration.models import RegistrationProfile
         activated = RegistrationProfile.objects.activate_user(activation_key)
         if activated:
             signals.user_activated.send(sender=self.__class__,

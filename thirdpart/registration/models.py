@@ -77,9 +77,7 @@ class RegistrationManager(models.Manager):
         
         """
 
-        user = User.objects.create_user(username, password, False, False)
-        user.is_active = is_active
-        user.save()
+        user = User.objects.create_user(username, password, False, is_active)
         
         registration_profile = self.create_profile(user)
 
