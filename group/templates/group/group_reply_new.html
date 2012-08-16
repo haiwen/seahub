@@ -1,0 +1,10 @@
+{% load seahub_tags avatar_tags %}
+{% load url from future %}
+
+<li class="w100 ovhd">
+<a href="{% url 'user_profile' reply.from_email %}" class="pic fleft">{% avatar reply.from_email 28 %}</a>
+<div class="txt fright">
+<a href="{% url 'user_profile' reply.from_email %}">{{ reply.from_email|email2nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --  
+<button class="reply-at op" data="{{ reply.from_email|email2nickname }}">回复</button>
+</div>
+</li>
