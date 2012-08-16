@@ -8,13 +8,13 @@
     {% for msg in group_msgs %}
         <li class="msg w100 ovhd">
         <div class="pic fleft">
-            <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{% avatar msg.from_email 48 %}</a>
+            <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
         </div>
         <div class="txt fright">
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
-                <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{{ msg.from_email|email2nickname }}</a>
-                <span class="group">所在小组：<a href="{{ SITE_ROOT }}group/{{ msg.group_id }}/">{{ msg.group_name }}</a></span>
+                <a href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
+                <span class="group">所在小组：<a href="{% url 'group_info' msg.group_id %}">{{ msg.group_name }}</a></span>
             </div>
             <div class="msg-bd">
                 <p>
@@ -36,10 +36,10 @@
                     <ul class="reply-list">
                         {% for reply in msg.reply_list %}
                         <li class="w100 ovhd">
-                        <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/" class="pic fleft">{% avatar reply.from_email 28 %}</a>
+                        <a href="{% url 'user_profile' reply.from_email %}" class="pic fleft">{% avatar reply.from_email 28 %}</a>
                         <div class="txt fright">
-                            <a href="{{ SITE_ROOT }}profile/{{ reply.from_email }}/">{{ reply.nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --
-                            <button class="reply-at op" data="{{ reply.nickname }}">回复</button>
+                            <a href="{% url 'user_profile' reply.from_email %}">{{ reply.from_email|email2nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --
+                            <button class="reply-at op" data="{{ reply.from_email|email2nickname }}">回复</button>
                         </div>
                         </li>
                         {% endfor %}

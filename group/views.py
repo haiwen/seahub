@@ -329,6 +329,9 @@ def msg_reply_new(request):
     for msg_id in grpmsg_reply_list:
         try:
             m = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            continue
+        else:
             # get group name
             group = get_group(m.group_id)
             if not group:
@@ -350,19 +353,10 @@ def msg_reply_new(request):
 
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
-            # get nickname
-            for reply in reply_list:
-                try:
-                    p = Profile.objects.get(user=reply.from_email)
-                    reply.nickname = p.nickname
-                except Profile.DoesNotExist:
-                    reply.nickname = reply.from_email.split('@')[0]
 
             m.reply_list = reply_list
-            m.reply_cnt = len(reply_list)
+            m.reply_cnt = reply_list.count()
             group_msgs.append(m)
-        except GroupMessage.DoesNotExist:
-            continue
 
     # remove new group msg reply notification
     UserNotification.objects.filter(to_user=request.user.username,
@@ -590,6 +584,10 @@ def group_recommend(request):
                                       message=message)
                     gm.save()
 
+                    # send signal
+                    grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                                      from_email=request.user.username)
+                    
                     # save attachment
                     ma = MessageAttachment(group_message=gm, repo_id=repo_id,
                                            attach_type=attach_type, path=path)
