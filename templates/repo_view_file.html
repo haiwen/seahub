@@ -261,13 +261,13 @@ $('#open-local').click(function () {
     var local_applet_running = false;
 
     $.ajax({
-        url: '{{ applet_root }}/seafile_access_check/',
+        url: '{{ applet_root }}/seafile_rpc_version/',
         dataType: 'jsonp',
         jsonpCallback: 'xx',
         crossDomain: true,
         success: function(version) {
             local_applet_running = true;
-            if (version < 3) {
+            if (version < 1) {
                 update_url = '<a href="http://www.seafile.com/download/">升级</a>';
                 $('#open-local-file-error').html('您的 Seafile 客户端版本太低，请' + update_url + '到最新版本');
                 $('#open-local-file-error-dlg').modal({appendTo:'#main'});
@@ -281,7 +281,7 @@ $('#open-local').click(function () {
     // is not running yet.
     setTimeout(function() {
         if (!local_applet_running) {
-            $('#open-local-file-error').html('请确认本地 Seafile 程序已启动');
+            $('#open-local-file-error').html('Seafile 客户端程序未启动或者版本过低');
             $('#open-local-file-error-dlg').modal({appendTo:'#main'});
         }
     }, 2000);
