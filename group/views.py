@@ -373,12 +373,12 @@ def group_info(request, group_id):
             message.message = msg
             message.save()
 
-            # clear form data
-            form = MessageForm()
-
             # send signal
             grpmsg_added.send(sender=GroupMessage, group_id=group_id,
                               from_email=request.user.username)
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data.
+            return HttpResponseRedirect(reverse('group_info', args=[group_id]))
     else:
         form = MessageForm()
         
