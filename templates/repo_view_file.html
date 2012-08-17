@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block main_panel %}
-{% autoescape off %}
 {% if messages %}
 {% autoescape off %}
 <ul class="messages hide">
@@ -23,7 +22,6 @@
 </ul>
 {% endautoescape %}
 {% endif %}
-{% endautoescape %}
 
     <h2>
         {% if not view_history %}
