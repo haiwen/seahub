@@ -118,7 +118,6 @@ p {
 .w100 {
 	width: 100%;
 }
-.info,
 .notification {
     padding:5px;
     background:#FDF;
@@ -310,6 +309,8 @@ p {
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 .messages .info {
+    padding:5px;
+    background:#FDF;
     margin:0;
 }
 .path, .access-notice { margin: 0.8em 0 0.4em; }
