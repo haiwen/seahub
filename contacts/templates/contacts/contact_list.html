@@ -56,7 +56,7 @@ $('.contact-edit').click(function() {
         contact_email = note_container.prev().prev().html();
     $('#contact-edit-form [name="contact_email"]').val(contact_email);
     $('#contact-edit-form [name="contact_name"]').val(contact_name);
-    $('#contact-edit-form [name="contact_note"]').val(contact_note);
+    $('#contact-edit-form [name="note"]').val(contact_note);
     $('#contact-edit-form').modal({appendTo: '#main'});
 });
 $('#contact-edit-form').submit(function() {
