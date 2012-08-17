@@ -165,20 +165,21 @@ GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 24 * 60 * 60
 AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
+AUTO_GENERATE_AVATAR_SIZES = (16, 28, 48, 80)
 
 # File upload
-FILE_UPLOAD_MAX_MEMORY_SIZE = 0
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
-FILE_UPLOAD_TEMP_DIR = "/tmp/seafile-upload"
+# FILE_UPLOAD_TEMP_DIR = "/tmp/seafile-upload"
 
-if not os.access(FILE_UPLOAD_TEMP_DIR, os.F_OK):
-    os.mkdir(FILE_UPLOAD_TEMP_DIR)
+# if not os.access(FILE_UPLOAD_TEMP_DIR, os.F_OK):
+#     os.mkdir(FILE_UPLOAD_TEMP_DIR)
 
-FILE_UPLOAD_HANDLERS = (
-    "seahub.utils.UploadProgressCachedHandler",
-    "django.core.files.uploadhandler.MemoryFileUploadHandler",
-    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-)
+# FILE_UPLOAD_HANDLERS = (
+#     "seahub.utils.UploadProgressCachedHandler",
+#     "django.core.files.uploadhandler.MemoryFileUploadHandler",
+#     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+# )
 
 CACHES = {
     'default': {
