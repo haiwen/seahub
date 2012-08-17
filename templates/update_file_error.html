@@ -1,0 +1,14 @@
+{% extends base_template %}
+{% load seahub_tags %}
+
+{% block main_panel %}
+<div class="narrow-panel">
+    <h3>更新文件
+            {% for name, link in zipped %}
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+            {% endfor %}
+        失败：
+    </h3>
+    <p>{{ err_msg }}</p>
+</div>
+{% endblock %}

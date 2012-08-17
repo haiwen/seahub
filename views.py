@@ -254,8 +254,6 @@ def render_repo(request, repo_id, error=''):
 @login_required    
 def repo_upload_file(request, repo_id):
     repo = get_repo(repo_id)
-    total_space = settings.USER_TOTAL_SPACE
-    used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
     if request.method == 'GET':
         parent_dir  = request.GET.get('p', '/')
         zipped = gen_path_link (parent_dir, repo.name)
@@ -267,32 +265,32 @@ def repo_upload_file(request, repo_id):
                                                'dummy', 'upload',
                                                request.user.username)
         else:
-            render_permission_error(request, '无法访问该目录')
+            return render_permission_error(request, u'无法访问该目录')
+
+        no_quota = False
+        if seafserv_threaded_rpc.check_quota(repo_id) < 0:
+            no_quota = True
 
         upload_url = gen_file_upload_url(token, 'upload')
         httpserver_root = get_httpserver_root()
 
-        # TODO: per user quota, org user quota
         return render_to_response ('repo_upload_file.html', {
             "repo": repo,
             "upload_url": upload_url,
             "httpserver_root": httpserver_root,
             "parent_dir": parent_dir,
-            "used_space": used_space,
-            "total_space": total_space,
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
+            "no_quota": no_quota,
             }, context_instance=RequestContext(request))
 
 @login_required
 def repo_update_file(request, repo_id):
     repo = get_repo(repo_id)
-    total_space = settings.USER_TOTAL_SPACE
-    used_space = seafserv_threaded_rpc.get_user_quota_usage(request.user.username)
     if request.method == 'GET':
         target_file  = request.GET.get('p')
         if not target_file:
-            return render_error(request)
+            return render_error(request, u'非法链接')
         zipped = gen_path_link (target_file, repo.name)
 
         token = ''        
@@ -302,22 +300,80 @@ def repo_update_file(request, repo_id):
                                                'dummy', 'update',
                                                request.user.username)
         else:
-            render_permission_error(request, '无法访问该目录')
+            return render_permission_error(request, u'无法访问该目录')
+
+        no_quota = False
+        if seafserv_threaded_rpc.check_quota(repo_id) < 0:
+            no_quota = True
 
         update_url = gen_file_upload_url(token, 'update')
         httpserver_root = get_httpserver_root()
 
-        # TODO: per user quota, org user quota
         return render_to_response ('repo_update_file.html', {
             "repo": repo,
             "update_url": update_url,
             "httpserver_root": httpserver_root,
             "target_file": target_file,
-            "used_space": used_space,
-            "total_space": total_space,
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
+            "no_quota": no_quota,
             }, context_instance=RequestContext(request))
+
+def upload_error_msg (code):
+    err_msg = u'服务器内部错误'
+    if (code == 0):
+        err_msg = u'上传的文件名包含非法字符'
+    elif (code == 1):
+        err_msg = u'已存在同名的文件'
+    elif (code == 2):
+        err_msg = u'文件不存在'
+    elif (code == 3):
+        err_msg = u'文件大小超过限制'
+    elif (code == 4):
+        err_msg = u'该同步目录所有者的空间已用完，无法上传'
+    elif (code == 5):
+        err_msg = u'文件传输出错'
+    return err_msg
+
+def upload_file_error(request, repo_id):
+    if request.method == 'GET':
+        repo = get_repo(repo_id)
+        parent_dir = request.GET.get('p')
+        filename = request.GET.get('fn')
+        err = request.GET.get('err')
+        if not parent_dir or not filename or not err:
+            return render_error(request, u'非法链接')
+
+        zipped = gen_path_link (parent_dir, repo.name)
+
+        code = int(err)
+        err_msg = upload_error_msg(code)
+
+        return render_to_response('upload_file_error.html', {
+                'repo': repo,
+                'zipped': zipped,
+                'filename': filename,
+                'err_msg': err_msg
+                }, context_instance=RequestContext(request))
+
+def update_file_error(request, repo_id):
+    if request.method == 'GET':
+        repo = get_repo(repo_id)
+        target_file = request.GET.get('p')
+        err = request.GET.get('err')
+        if not target_file or not err:
+            return render_error(request, u'非法链接')
+
+        zipped = gen_path_link (target_file, repo.name)
+
+        code = int(err)
+        err_msg = upload_error_msg(code)
+
+        return render_to_response('upload_file_error.html', {
+                'repo': repo,
+                'zipped': zipped,
+                'err_msg': err_msg
+                }, context_instance=RequestContext(request))
     
 def get_subdir(request):
     repo_id = request.GET.get('repo_id', '')

@@ -2,7 +2,7 @@
 {% load seahub_tags %}
 
 {% block main_panel %}
-{% if not cloud_mode or used_space < total_space %}
+{% if not cloud_mode or not no_quota %}
 <div class="narrow-panel">
     <h3>上传文件到
             {% for name, link in zipped %}
@@ -26,12 +26,13 @@
 </div>
 {% else %}
 <div class="text-panel">
-    <p class="error">您的空间已经用完。</p>
+    <p class="error">该同步目录所有者的空间已用完，无法上传</p>
 </div>
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}
+{% if not cloud_mode or not no_quota %}
 <script type="text/javascript">
 function gen_uuid() {
     var uuid = "";
@@ -90,4 +91,5 @@ $('#upload-cancel').click(function() {
     location.reload(true);
 });
 </script>
+{% endif %}
 {% endblock %}
