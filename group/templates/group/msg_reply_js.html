@@ -8,7 +8,8 @@ $('.reply, .replyclose').hover(
 );
 $('.reply').click(function() {
     var msg_id = $(this).attr('data'),
-        msg_bd = $(this).parent();
+        msg_bd = $(this).parent(),
+        reply_cnt = msg_bd.find('.reply-cnt');
     $.ajax({
         url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
         dataType: 'json',
@@ -16,11 +17,16 @@ $('.reply').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             msg_bd.children('.reply-bd').html(data['html']).attr('class', 'reply-bd');
-            msg_bd.find('.reply-at').click(function() {
-                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
-            });
+            var reply_input = msg_bd.find('.reply-input'),
+                error = msg_bd.find('.error');
+            function handleReplyInput() {
+                reply_input.val('@' + $(this).attr('data') + ' ');
+                var pos = reply_input.val().length;
+                setSelectionRange(reply_input[0], pos, pos);
+            }
+            msg_bd.find('.reply-at').click(handleReplyInput);
             msg_bd.find('.submit').click(function() {
-                var reply = $.trim(msg_bd.find('.reply-input').val());
+                var reply = $.trim(reply_input.val());
                 if (reply && reply.length <= 150) {
                     $.ajax({
                         type: "POST",
@@ -32,17 +38,14 @@ $('.reply').click(function() {
                         data: "message=" + reply,
                         success: function(data) {
                             msg_bd.find('.reply-list').append(data['html']);
-                            msg_bd.find('.reply-input').val('');
-                            msg_bd.find('.error').attr('class', 'error hide');
-                            var reply_cnt = parseInt(msg_bd.find('.reply-cnt').html()) + 1 || 1; 
-                            msg_bd.find('.reply-cnt').html(reply_cnt + ' ');
-                            msg_bd.find('.reply-at').click(function() {
-                                msg_bd.find('.reply-input').val('@' + $(this).attr('data') + ' ').focus();
-                            });
+                            reply_input.val('');
+                            error.attr('class', 'error hide');
+                            reply_cnt.html((parseInt(reply_cnt.html()) + 1 || 1) + ' ');
+                            msg_bd.find('.reply-at').click(handleReplyInput);
                         }
                     });
                 } else {
-                    msg_bd.find('.error').removeClass('hide');
+                    error.removeClass('hide');
                 }
             });
         }
@@ -56,3 +59,17 @@ $('.replyclose').click(function() {
     $(this).addClass('hide');
     $(this).prev().removeClass('hide'); // show 'reply'
 });
+
+function setSelectionRange(input, selectionStart, selectionEnd) {
+  if (input.setSelectionRange) {
+    input.focus();
+    input.setSelectionRange(selectionStart, selectionEnd);
+  }
+  else if (input.createTextRange) {
+    var range = input.createTextRange();
+    range.collapse(true);
+    range.moveEnd('character', selectionEnd);
+    range.moveStart('character', selectionStart);
+    range.select();
+  }
+}
