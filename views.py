@@ -30,7 +30,7 @@ from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_public_repo, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
     get_group, get_shared_groups_by_repo, is_group_user
 from pysearpc import SearpcError
@@ -125,7 +125,7 @@ def access_to_repo(request, repo_id, repo_ap):
 
     """
     if validate_owner(request, repo_id) or check_shared_repo(request, repo_id)\
-            or access_org_repo(request, repo_id):
+            or access_org_repo(request, repo_id) or is_public_repo(repo_id):
         return True
     else:
         return False
@@ -685,6 +685,56 @@ def myhome(request):
             "orgmsg_list": orgmsg_list,
             "url": settings.SITE_ROOT + 'repo/create/',
             }, context_instance=RequestContext(request))
+
+@login_required
+def public_home(request):
+    """
+    Show public home page when CLOUD_MODE is False.
+    """
+    users = get_emailusers(-1, -1)
+    public_repos = seafserv_threaded_rpc.list_public_repos()
+    calculate_repo_last_modify(public_repos)
+    public_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    
+    return render_to_response('public_home.html', {
+            'users': users,
+            'public_repos': public_repos,
+            "url": settings.SITE_ROOT + 'publicrepo/create/',
+            }, context_instance=RequestContext(request))
+
+@login_required    
+def public_repo_create(request):
+    '''
+    Handle ajax post to create public repo.
+    
+    '''
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    
+    form = RepoCreateForm(request.POST)
+    if form.is_valid():
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        passwd = form.cleaned_data['passwd']
+        user = request.user.username
+
+        try:
+            repo_id = seafserv_threaded_rpc.create_public_repo(repo_name,
+                                                               repo_desc,
+                                                               user, passwd)
+        except:
+            repo_id = None
+        if not repo_id:
+            result['error'] = u"创建目录失败"
+        else:
+            result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
 
 @login_required
 def ownerhome(request, owner_name):
@@ -1656,9 +1706,7 @@ def repo_create(request):
     if form.is_valid():
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
-        encrypted = form.cleaned_data['encryption']
         passwd = form.cleaned_data['passwd']
-        passwd_again = form.cleaned_data['passwd_again']
         user = request.user.username
         
         try:

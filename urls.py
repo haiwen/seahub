@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
-from seahub.views import root, myhome, \
+from seahub.views import root, myhome, public_home,  \
     repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
     ownerhome, repo_history_revert, repo_file_edit, org_remove, user_reset, \
@@ -15,7 +15,7 @@ from seahub.views import root, myhome, \
     validate_filename, \
     repo_create, repo_update_file, repo_revert_file, file_revisions, \
     get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
-    crocodoc_upload, crocodoc_status, crocodoc_session
+    crocodoc_upload, crocodoc_status, crocodoc_session, public_repo_create
 from seahub.notifications.views import notification_list
 from seahub.share.views import share_admin
 from seahub.group.views import group_list
@@ -40,6 +40,7 @@ urlpatterns = patterns('',
     (r'^$', root),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
+    url(r'^home/public/$', public_home, name='public_home'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
     (r'^share/', include('share.urls')),
@@ -55,6 +56,7 @@ urlpatterns = patterns('',
     (r'^repo/new_dir/$', repo_new_dir),
     (r'^repo/new_file/$', repo_new_file),
     (r'^repo/create/$', repo_create),
+    (r'^publicrepo/create/$', public_repo_create),
     (r'^repo/upload_check/$', validate_filename),
     (r'^repo/file_rename/$', repo_rename_file),
     url(r'^repo/revert_file/(?P<repo_id>[^/]+)/$', repo_revert_file, name='repo_revert_file'),
