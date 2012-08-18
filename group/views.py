@@ -257,6 +257,7 @@ def render_group_info(request, group_id, form):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'url': reverse('create_group_repo', args=[group_id]),
             }, context_instance=RequestContext(request));
 
 @login_required

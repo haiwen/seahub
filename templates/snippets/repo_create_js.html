@@ -22,39 +22,8 @@ $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
 
-    if (!$('#repo-name').val()) {
-        apply_form_error('repo-create-form', '目录名不能为空。');
-        return false;
-    }
-     if (!$('#repo-desc').val()) {
-        apply_form_error('repo-create-form', '描述不能为空。');
-        return false;
-    }
-    if ($('#encrypt-switch').attr('checked')) {
-        if (!passwd.val()) {
-            apply_form_error('repo-create-form', '密码不能为空。');
-            return false;
-        }
-        if (!passwd_again.val()) {
-            apply_form_error('repo-create-form', '请确认密码。');
-            return false;
-        }
-        if (passwd.val().length < 3) {
-            apply_form_error('repo-create-form', '密码太短。');
-            return false;
-        }
-        if (passwd.val().length > 15) {
-            apply_form_error('repo-create-form', '密码太长。');
-            return false;
-        }
-        if (passwd.val() != passwd_again.val()) {
-            apply_form_error('repo-create-form', '两次输入的密码不一致。');
-            return false;
-        }
-    }
-
     $.ajax({
-        url: '{{ SITE_ROOT }}group/{{group_id}}/create-repo/',
+        url: '{{ url }}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
