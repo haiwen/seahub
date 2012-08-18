@@ -27,6 +27,7 @@ from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list
 from seahub.views import is_registered_user
+from seahub.forms import RepoCreateForm
 
 @login_required
 def group_list(request):
@@ -595,3 +596,58 @@ def group_recommend(request):
         # TODO: need more clear error message
         messages.add_message(request, messages.ERROR, '推荐失败')
     return HttpResponseRedirect(next)                                     
+
+@login_required
+def create_group_repo(request, group_id):
+    """Create a repo and share it to current group"""
+
+    content_type = 'application/json; charset=utf-8'
+
+    def json_error(err_msg):
+        result = {'error': [err_msg]}
+        return HttpResponseBadRequest(json.dumps(result),
+                                      content_type=content_type)
+    group_id = int(group_id)
+    if not get_group(group_id):
+        return json_error(u'共享失败:小组不存在')
+
+    # Check whether user belong to the group
+    groups = ccnet_threaded_rpc.get_groups(request.user.username)
+    for group in groups:
+        if group.props.id == group_id:
+            break
+    else:
+        return json_error(u"共享失败:未加入该小组")
+
+    form = RepoCreateForm(request.POST)
+    if not form.is_valid():
+        return json_error(form.errors)
+    else:
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        encrypted = form.cleaned_data['encryption']
+        passwd = form.cleaned_data['passwd']
+        user = request.user.username
+        try:
+            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
+                                                        user, passwd)
+        except:
+            repo_id = None
+        if not repo_id:
+            return json_error(u"创建目录失败")
+
+        try:
+            status = seafserv_threaded_rpc.group_share_repo(repo_id, group_id, user, 'rw')
+        except SearpcError, e:
+            # if share failed, remove the newly created repo
+            seafserv_threaded_rpc.remove_repo(repo_id)
+
+            return json_error(u'共享失败:内部错误')
+        else:
+            if status != 0:
+                seafserv_threaded_rpc.remove_repo(repo_id)
+                return json_error(u'共享失败:内部错误')
+            else:
+                result = {'success': True}
+                return HttpResponse(json.dumps(result),
+                                    content_type=content_type)

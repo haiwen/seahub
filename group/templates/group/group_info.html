@@ -49,6 +49,7 @@
 
 <div class="main fleft">
 <h3>小组里共享的同步目录</h3>
+<button id="repo-create">新建共享目录</button>
 {% if repos %}
 <table>
     <tr>
@@ -180,6 +181,8 @@
 
 </textarea>
 
+{% include "snippets/repo_create_form.html" %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -251,5 +254,6 @@ $('#user-profile').hover(
     }
 );
 {% include 'group/msg_reply_js.html' %}
+{% include 'group/create_group_repo_js.html' %}
 </script>
 {% endblock %}
