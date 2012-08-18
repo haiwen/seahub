@@ -48,7 +48,7 @@ urlpatterns = patterns('',
     (r'^sharedlink/get/$', get_shared_link),
     (r'^sharedlink/remove/$', remove_shared_link),
     (r'^sharedlink/send/$', send_shared_link),
-    (r'^f/(?P<token>[^/]+)/$', view_shared_file),
+    url(r'^f/(?P<token>[^/]+)/$', view_shared_file, name='view_shared_file'),
                        
     (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^repo/new_dir/$', repo_new_dir),

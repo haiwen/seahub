@@ -1,13 +1,26 @@
-# Create your views here.
+# encoding: utf-8
 import re
 import sys
 import os
 import stat
 import simplejson as json
+import settings
+
 from django.http import HttpResponse, HttpResponseServerError
+from django.contrib.sites.models import RequestSite
+from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.template import loader
 
-from auth.decorators import login_required, api_login_required
+from djangorestframework.renderers import JSONRenderer
+from djangorestframework.compat import View
+from djangorestframework.mixins import ResponseMixin
+from djangorestframework.response import Response
 
+from auth.decorators import api_login_required
+from auth import login as auth_login
+
+from pysearpc import SearpcError
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
@@ -16,20 +29,12 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    gen_file_get_url
+    gen_file_get_url, string2list
 
 from seahub.views import access_to_repo, validate_owner
-from pysearpc import SearpcError
+from seahub.contacts.signals import mail_sended
 
-from djangorestframework.renderers import JSONRenderer
-from djangorestframework.compat import View
-from djangorestframework.mixins import ResponseMixin
-from djangorestframework.response import Response
-from django.core.urlresolvers import reverse
-
-from auth.forms import AuthenticationForm
-from auth import login as auth_login
-from django.views.decorators.csrf import csrf_exempt
+from share.models import FileShare
 
 from mime import MIME_MAP
 
@@ -107,7 +112,6 @@ def get_dir_entrys_by_id(request, dir_id):
             try:
                 entry["size"] = get_file_size(dirent.obj_id)
             except Exception, e:
-                print e
                 entry["size"]=0
 
         entry["type"]=dtype
@@ -298,18 +302,92 @@ class RepoDirIdView(ResponseMixin, View):
 
         return get_dir_entrys_by_id(request, dir_id)
 
+def get_shared_link(request, repo_id, path):
+    l = FileShare.objects.filter(repo_id=repo_id).filter(\
+        username=request.user.username).filter(path=path)
+    token = None
+    if len(l) > 0:
+        fileshare = l[0]
+        token = fileshare.token
+    else:
+        token = gen_token(max_length=10)
 
-def get_repo_file(request, repo_id, file_id, file_name):
-    token = gen_token()
-    op='download'
-    seafserv_rpc.web_save_access_token(token, repo_id, file_id,
-                                       op, request.user.username)
-    redirect_url = gen_file_get_url(token, file_name)
+        fs = FileShare()
+        fs.username = request.user.username
+        fs.repo_id = repo_id
+        fs.path = path
+        fs.token = token
 
-    response = HttpResponse(json.dumps(redirect_url), status=200,
-                            content_type=json_content_type)
-    response["oid"] = file_id
-    return response
+        try:
+            fs.save()
+        except IntegrityError, e:
+            err = '获取分享链接失败，请重新获取'
+            return api_err(request, '500', err)
+
+    domain = RequestSite(request).domain
+    file_shared_link = 'http://%s%sf/%s/' % (domain,
+                                           settings.SITE_ROOT, token)
+    return HttpResponse(json.dumps(file_shared_link), status=200, content_type=json_content_type)
+
+def get_repo_file(request, repo_id, file_id, file_name, op):
+    if op == 'download':
+        token = gen_token()
+        seafserv_rpc.web_save_access_token(token, repo_id, file_id,
+                                           op, request.user.username)
+        redirect_url = gen_file_get_url(token, file_name)
+        response = HttpResponse(json.dumps(redirect_url), status=200,
+                                content_type=json_content_type)
+        response["oid"] = file_id
+        return response
+
+    if op == 'sharelink':
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+        return get_shared_link(request, repo_id, path)
+
+def send_share_link(request, repo_id, path, emails):
+    l = FileShare.objects.filter(repo_id=repo_id).filter(\
+        username=request.user.username).filter(path=path)
+    if len(l) > 0:
+        fileshare = l[0]
+        token = fileshare.token
+    else:
+        token = gen_token(max_length=10)
+
+        fs = FileShare()
+        fs.username = request.user.username
+        fs.repo_id = repo_id
+        fs.path = path
+        fs.token = token
+
+        try:
+            fs.save()
+        except IntegrityError, e:
+            err = '获取分享链接失败，请重新获取'
+            return api_err(request, '500', err)
+
+    domain = RequestSite(request).domain
+    file_shared_link = 'http://%s%sf/%s/' % (domain,
+                                           settings.SITE_ROOT, token)
+
+    t = loader.get_template('shared_link_email.html')
+    to_email_list = string2list(emails)
+    for to_email in to_email_list:
+        mail_sended.send(sender=None, user=request.user.username,
+                         email=to_email)
+        c = {
+            'email': request.user.username,
+            'to_email': to_email,
+            'file_shared_link': file_shared_link,
+            }
+        try:
+            send_mail('您的好友通过SeaCloud分享了一个文件给您',
+                      t.render(Context(c)), None, [to_email],
+                      fail_silently=False)
+        except:
+            err = 'Failed to send'
+            return api_error(request, '406', err)
+    return HttpResponse(json.dumps(file_shared_link), status=200, content_type=json_content_type)
 
 class RepoFileIdView(ResponseMixin, View):
     renderers = (JSONRenderer,)
@@ -322,7 +400,7 @@ class RepoFileIdView(ResponseMixin, View):
             return resp
 
         file_name = request.GET.get('file_name', file_id)
-        return get_repo_file (request, repo_id, file_id, file_name)
+        return get_repo_file (request, repo_id, file_id, file_name, 'download')
 
 
 class RepoFilePathView(ResponseMixin, View):
@@ -340,17 +418,37 @@ class RepoFilePathView(ResponseMixin, View):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_by_path(commit.id,
+            file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error(request, '403', e.msg)
+            return api_error(request, '404', e.msg)
 
         if not file_id:
             return api_error(request, '400', "Path invalid")
 
         file_name = request.GET.get('file_name', file_id)
-        return get_repo_file(request, repo_id, file_name)
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)
 
     @api_login_required
     def post(self, request, repo_id):
-        pass
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        path = request.GET.get('p', None)
+        if not path:
+            return api_error(request, '404', "Path invalid")
+
+        op = request.GET.get('op', 'delete')
+        if op == 'delete':
+            pass
+        if op == 'sendsharelink':
+            emails = request.POST.get('email', None)
+            if not emails:
+                return api_error(request, '400', 'emails required')
+            return send_share_link(request, path, emails)
+
+        return api_error(request, '404', 'operation not support')
+
