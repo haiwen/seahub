@@ -97,6 +97,7 @@ td, th {
     word-wrap:break-word;
     border-bottom:1px solid #eee;
 }
+td { color: #333; }
 tr.hl { background-color: #f8f8f8; }/*highlight*/
 table img {
     vertical-align:middle;
