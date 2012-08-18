@@ -167,7 +167,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
 {% if filetype == 'Markdown' %}
     {% ifnotequal file_content None %}
     var converter = new Showdown.converter();
-    $('#file-view').html('<div id="md-view">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
+    $('#file-view').html('<div id="md-view" class="article">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
     $('#md-view').children(':first').css('margin-top', '0');
     {% endifnotequal %}
 

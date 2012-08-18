@@ -17,8 +17,10 @@
         <p id="file-fetching-tip">文件内容读取中...</p>
         <div id="docu-view" class="hide"></div>
     </div>
-    <button id="file-edit-submit" class="hide">提交</button>
-    <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="back" class="hide">返回</a>
+    <div id="op-after-edit" class="w100 ovhd hide">
+        <button id="file-edit-submit" class="fleft">提交</button>
+        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel" class="fright">取消修改</button>
+    </div>
 {% endblock %}
 
 {% block extra_script %}
@@ -41,8 +43,8 @@ $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreen
 editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
 editor.resize(); // fix some problem for showing some file in ie8
 $('#file-fetching-tip').addClass('hide');
-$('#docu-view, #file-edit-submit, #back').removeClass('hide');
-$('#file-edit-submit').removeClass('hide').click(function () {
+$('#docu-view, #op-after-edit').removeClass('hide');
+$('#file-edit-submit').click(function () {
     var content = editor.session.getValue();
     $.ajax({
         type: "POST",
@@ -53,7 +55,7 @@ $('#file-edit-submit').removeClass('hide').click(function () {
         beforeSend: prepareCSRFToken,
         data: {content: content, encoding: '{{ encoding }}'},
         success: function(data) {
-            location.href = $('#back').attr('href');
+            location.href = $('#file-edit-cancel').attr('data');
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
@@ -61,6 +63,9 @@ $('#file-edit-submit').removeClass('hide').click(function () {
             $('#file-edit-submit').addClass('hide');
         }
     });
+});
+$('#file-edit-cancel').click(function() {
+    location.href = $(this).attr('data');
 });
 {% endifnotequal %}
 

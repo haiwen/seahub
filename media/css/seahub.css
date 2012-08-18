@@ -859,32 +859,38 @@ p {
     border-radius:3px;
     -moz-border-radius:3px;
 }
-#md-view {
+.article {
     padding:40px;
     font-size:14px;
     line-height:1.6;
     color:#333;
 }
-#md-view h2 {
+.article h2 {
     margin:0.9em 0 0.45em;
 }
-#md-view h3 {
-    color:#000;
-    font-weight:bold;
+.article h3 {
     margin:0.82em 0 0.4em;
 }
-#md-view p {
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+    color:#000;
+    font-weight:bold;
+}
+.article p {
     margin:0.8em 0;
 }
-#md-view ul {
+.article ul {
     list-style-type:disc;
     padding-left:2em;
 }
-#md-view ul,
-#md-view ol {
-    margin:5px 0;
+.article ul,
+.article ol {
+    margin:0.5em 0;
 }
-#md-view code {
+.article code {
     font-size:12px;
     white-space: nowrap;
     padding: 1px 5px 0;
@@ -895,7 +901,7 @@ p {
     -webkit-border-radius: 2px;
     margin: 0 2px;
 }
-#md-view pre {
+.article pre {
     font-size:13px;
     padding:5px 10px;
     background:#f8f8f8;
@@ -905,25 +911,25 @@ p {
     -webkit-border-radius:3px;
     margin:5px 0;
 }
-#md-view pre code {
+.article pre code {
     white-space:pre-wrap;
     padding:0;
     margin:0;
     border:none;
 }
-#md-view a {
+.article a {
     font-weight:normal;
 }
-#md-view blockquote {
+.article blockquote {
     color: #777;
     padding: 0 15px; 
     border-left: 4px solid #DDD; 
     margin: 10px 0;
 }
-#md-view table {
-    margin:10px 0;
+.article table {
+    margin:0.8em 0;
 }
-#file-edit-submit {
+#op-after-edit {
     margin-top:18px;
 }
 /* shareadmin */
