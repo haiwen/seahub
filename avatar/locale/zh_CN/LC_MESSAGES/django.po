@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 11:16+0800\n"
+"POT-Creation-Date: 2012-08-18 10:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,61 +18,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: forms.py:35
+#: forms.py:34 forms.py:57
 #, python-format
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
-msgstr ""
+msgstr "%(ext)s 不是有效文件后缀。有效的文件后缀为：%(valid_exts_list)s"
 
-#: forms.py:39
+#: forms.py:38 forms.py:61
 #, python-format
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
 msgstr "您的文件过大（%(size)s），允许最大文件为 %(max_valid_size)s"
 
-#: forms.py:45
+#: forms.py:44
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
 msgstr ""
 
-#: forms.py:57
-msgid "choice"
-msgstr "从已有头像中选择"
-
-#: forms.py:68
-msgid "choices"
-msgstr "从已有头像中选择"
-
-#: models.py:79
+#: models.py:136 models.py:161
 #, python-format
 msgid "Avatar for %s"
 msgstr ""
 
-#: templates/avatar/add.html:5 templates/avatar/change.html:6
+#: views.py:76
+msgid "Successfully uploaded a new avatar."
+msgstr "上传成功。"
+
+#: views.py:143
+msgid "Successfully updated your avatar."
+msgstr "更新成功。"
+
+#: views.py:185
+msgid "Successfully deleted the requested avatars."
+msgstr "删除成功。"
+
+#: templates/avatar/add.html:19 templates/avatar/change.html:8
 msgid "Your current avatar: "
 msgstr "当前头像："
 
-#: templates/avatar/add.html:8 templates/avatar/change.html:9
-msgid "You haven't uploaded an avatar yet. Please upload one now."
-msgstr "您还没有上传自己的头像。请上传。"
-
-#: templates/avatar/add.html:12 templates/avatar/change.html:20
+#: templates/avatar/add.html:25 templates/avatar/change.html:30
 msgid "Upload New Image"
 msgstr "提交"
-
-#: templates/avatar/change.html:15
-msgid "Choose new Default"
-msgstr "确定"
 
 #: templates/avatar/confirm_delete.html:6
 msgid "Please select the avatars that you would like to delete."
 msgstr "请选择要删除的头像。"
 
-#: templates/avatar/confirm_delete.html:9
+#: templates/avatar/confirm_delete.html:11
 #, python-format
 msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
@@ -80,7 +76,7 @@ msgid ""
 msgstr ""
 "您还没有上传自己的头像。现在 <a href=\"%(avatar_change_url)s\">上传一个</a>。"
 
-#: templates/avatar/confirm_delete.html:15
+#: templates/avatar/confirm_delete.html:18
 msgid "Delete These"
 msgstr "删除"
 
@@ -96,6 +92,18 @@ msgstr ""
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
 
-#: templatetags/avatar_tags.py:48
+#: templatetags/avatar_tags.py:44
 msgid "Default Avatar"
 msgstr ""
+
+#~ msgid "choice"
+#~ msgstr "从已有头像中选择"
+
+#~ msgid "choices"
+#~ msgstr "从已有头像中选择"
+
+#~ msgid "You haven't uploaded an avatar yet. Please upload one now."
+#~ msgstr "您还没有上传自己的头像。请上传。"
+
+#~ msgid "Choose new Default"
+#~ msgstr "确定"
