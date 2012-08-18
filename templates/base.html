@@ -134,7 +134,7 @@
 {% if request.cur_note %}
 $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
-    if (document.cookie) {
+    if (navigator.cookieEnabled) {
         var cookies = document.cookie.split('; '),
             topinfo_exist = false;
         for (var i = 0, len = cookies.length; i < len; i++) {
@@ -146,9 +146,9 @@ $('#info-bar .close').click(function() {
             }
         }
         if (!topinfo_exist) {
-            document.cookie += 'topinfo=' + $(this).attr('data') + ',';
+            document.cookie += '; topinfo=' + $(this).attr('data') + ',';
         }
-        document.cookie += 'max-age=' + 14*24*60*60;
+        document.cookie += '; max-age=' + 14*24*60*60;
     }
 });
 {% endif %}
