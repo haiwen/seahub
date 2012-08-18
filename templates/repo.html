@@ -7,8 +7,8 @@
 {% if request.user.is_authenticated %}
   {{ block.super }}
 {% else %}
-  <div id="info-bar">
-    <span class="info">当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</span>
+  <div id="sharelink-infobar">
+    <p>当前链接会在短期内失效，欢迎您 <a href="http://seafile.com/" target="_blank">加入Seafile </a>体验更多功能。</p>
   </div>
 {% endif %}
 {% endblock %}

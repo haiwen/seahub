@@ -16,8 +16,8 @@
   {% block info_bar_message %}
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
-      <span class="info">{{ request.cur_note.message|urlize|url_target_blank }}</span>
-      <a href="{{ SITE_ROOT }}notification/close/{{ request.cur_note.id }}/?next={{ request.path }}"><span class="close"></span></a>
+      <p>{{ request.cur_note.message|urlize|url_target_blank }}</p>
+      <img src="{{ MEDIA_URL }}img/close-16.png" class="close" />
     </div>
     {% endif %}
   {% endblock info_bar_message %}
@@ -129,7 +129,15 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
 <script type="text/javascript">
     $('.top-bar-in .manage').css('width', $('.top-bar-in').width() - $('.top-bar-in .account').width() - 30);
-{% if request.user.is_authenticated and request.cloud_mode %}
+{% if request.user.is_authenticated %}
+
+{% if request.cur_note %}
+$('#info-bar .close').click(function() {
+    $('#info-bar').addClass('hide');
+});
+{% endif %}
+
+{% if request.cloud_mode %}
     $('#team-account').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -149,6 +157,8 @@ $(document).click(function(e) {
         $('#team-account').attr('data', 'no-popup');
     }
 });
+{% endif %}
+
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}

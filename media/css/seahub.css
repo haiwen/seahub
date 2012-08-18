@@ -182,9 +182,21 @@ p {
 }
 
 /* info-bar */
-#info-bar { height: 30px; color: #fff; background: #000; }
-#info-bar .info { margin: 5px 0 auto 1em; float: left; }
-#info-bar .close { margin: 7px 5px auto 0;  float: right; background: url(../img/close-16.png); height: 16px; width:16px; }
+#info-bar,
+#sharelink-infobar {
+    color: #fff;
+    padding:2px 25px 2px 10px;
+    background: #000;
+}
+#info-bar {
+    position:relative;
+}
+#info-bar .close {
+    cursor:pointer;
+    position:absolute;
+    right:5px;
+    top:5px;
+}
 
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
