@@ -28,7 +28,7 @@
                   {{ msg.attachment.name }}</a> :
                 </span>
                 {% endif %}
-                {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
+                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
                 <button class="reply op hide" data="{{ msg.id }}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
                 <button class="replyclose op">收起回复</button>

@@ -116,7 +116,7 @@
                   {{ msg.attachment.name }}</a> :
                 </span>
                 {% endif %}
-                {{ msg.message|linebreaksbr|seahub_urlize|find_at }}
+                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
                 <button class="reply op" data="{{ msg.id }}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
                 <button class="replyclose op hide">收起回复</button>
