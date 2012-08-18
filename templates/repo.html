@@ -249,11 +249,6 @@
     {% endwith %}
 {% endif %}
 
-    <div id="redirect-download" class="hide">
-        <p>您还没有将同步目录 {{repo.name}} 同步到本地</p>
-        <p> <a id="redirect-download-url" href="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}"> 点此同步 </a> </p>
-    </div>
-    
 {% endblock %}
 
 {% block extra_script %}
