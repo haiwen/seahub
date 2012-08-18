@@ -865,6 +865,9 @@ p {
     line-height:1.6;
     color:#333;
 }
+#md-view h2 {
+    margin:0.9em 0 0.45em;
+}
 #md-view h3 {
     color:#000;
     font-weight:bold;
@@ -876,7 +879,10 @@ p {
 #md-view ul {
     list-style-type:disc;
     padding-left:2em;
-    margin:4px 0;
+}
+#md-view ul,
+#md-view ol {
+    margin:5px 0;
 }
 #md-view code {
     font-size:12px;
@@ -913,6 +919,9 @@ p {
     padding: 0 15px; 
     border-left: 4px solid #DDD; 
     margin: 10px 0;
+}
+#md-view table {
+    margin:10px 0;
 }
 #file-edit-submit {
     margin-top:18px;
