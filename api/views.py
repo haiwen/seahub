@@ -55,7 +55,7 @@ def calculate_repo_info(repo_list, username):
             if not repo.size :
                 repo.size = 0;
             password_need = False
-            if repo.props.encrypted:
+            if repo.encrypted:
                 try:
                     ret = seafserv_rpc.is_passwd_set(repo.id, username)
                     if ret != 1:
@@ -83,7 +83,7 @@ def can_access_repo(request, repo_id):
     return access_to_repo(request, repo_id, repo_ap)
 
 def get_file_size (id):
-    size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+    size = seafserv_threaded_rpc.get_file_size(id)
     if size:
         return size
     else:
@@ -98,7 +98,7 @@ def get_dir_entrys_by_id(request, dir_id):
     for dirent in dirs:
         dtype = "file"
         entry={}
-        if stat.S_ISDIR(dirent.props.mode):
+        if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
             mime = get_file_mime (dirent.obj_name)
@@ -107,7 +107,9 @@ def get_dir_entrys_by_id(request, dir_id):
             try:
                 entry["size"] = get_file_size(dirent.obj_id)
             except Exception, e:
+                print e
                 entry["size"]=0
+
         entry["type"]=dtype
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
@@ -117,19 +119,25 @@ def get_dir_entrys_by_id(request, dir_id):
     response["oid"] = dir_id
     return response
 
-def get_dir_entrys_by_path(request, commit, path):
-    dentrys = []
-    if path[-1] != '/':
-        path = path + '/'
 
-    dir_id = None
-    try:
-        dir_id = seafserv_threaded_rpc.get_dirid_by_path(commit.id,
-                                                         path.encode('utf-8'))
-    except SearpcError, e:
-        return api_error(request, "404", e.msg)
+def check_repo_access_permission(request, repo):
+    if not repo:
+        return api_error(request, '404', "repo not found")
 
-    return get_dir_entrys_by_id(request, dir_id)
+    if not can_access_repo(request, repo.id):
+        return api_error(request, '403', "can not access repo")
+
+    password_set = False
+    if repo.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo.id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return api_error(request, '403', e.msg)
+
+    if repo.encrypted and not password_set:
+        return api_error(request, '403', "password needed")
 
 
 @csrf_exempt
@@ -177,10 +185,10 @@ class ReposView(ResponseMixin, View):
         for r in owned_repos:
             repo = {
                 "type":"repo",
-                "id":r.props.id,
+                "id":r.id,
                 "owner":email,
-                "name":r.props.name,
-                "desc":r.props.desc,
+                "name":r.name,
+                "desc":r.desc,
                 "mtime":r.lastest_modify,
                 "root":r.root,
                 "size":r.size,
@@ -191,10 +199,10 @@ class ReposView(ResponseMixin, View):
         for r in n_repos:
             repo = {
                 "type":"repo",
-                "id":r.props.id,
-                "owner":r.props.shared_email,
-                "name":r.props.name,
-                "desc":r.props.desc,
+                "id":r.id,
+                "owner":r.shared_email,
+                "name":r.name,
+                "desc":r.desc,
                 "mtime":r.lastest_modify,
                 "root":r.root,
                 "size":r.size,
@@ -212,8 +220,10 @@ class RepoView(ResponseMixin, View):
     @api_login_required
     def get_repo_info(request, repo_id):
         # check whether user can view repo
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
 
         # check whether use is repo owner
         if validate_owner(request, repo_id):
@@ -221,34 +231,20 @@ class RepoView(ResponseMixin, View):
         else:
             owner = "share"
 
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(request, '404', "repo not found")
-
         try:
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
         except:
             repo.latest_modify = None
-
-        # query whether set password if repo is encrypted
-        password_need = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret != 1:
-                    password_need = True
-            except SearpcError, e:
-                return api_error(request, '403', e.msg)
 
         # query repo infomation
         repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
         repo_json = {
             "type":"repo",
-            "id":repo.props.id,
+            "id":repo.id,
             "owner":owner,
-            "name":repo.props.name,
-            "desc":repo.props.desc,
+            "name":repo.name,
+            "desc":repo.desc,
             "mtime":repo.lastest_modify,
             "password_need":password_need,
             "size":repo_size,
@@ -264,28 +260,29 @@ class RepoDirPathView(ResponseMixin, View):
 
     @api_login_required
     def get(self, request, repo_id):
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
-        current_commit = get_commits(repo_id, 0, 1)[0]
-
         repo = get_repo(repo_id)
-        if not repo:
-            return api_error(request, '404', "repo not found")
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
 
-        password_set = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return api_error(request, '403', e.msg)
-
-        if repo.props.encrypted and not password_set:
-            return api_error(request, '403', "password needed")
-
+        current_commit = get_commits(repo_id, 0, 1)[0]
         path = request.GET.get('p', '/')
-        return get_dir_entrys_by_path(request, current_commit, path)
+        if path[-1] != '/':
+            path = path + '/'
+
+        dir_id = None
+        try:
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(request, "404", e.msg)
+
+        old_oid = request.GET.get('oid', None)
+        if old_oid and old_oid == dir_id :
+            return HttpResponse(json.dumps("uptodate"), status=304,
+                                content_type=json_content_type)
+        else:
+            return get_dir_entrys_by_id(request, dir_id)
 
 
 
@@ -294,24 +291,10 @@ class RepoDirIdView(ResponseMixin, View):
 
     @api_login_required
     def get(self, request, repo_id, dir_id):
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
-
         repo = get_repo(repo_id)
-        if not repo:
-            return api_error(request, '404', "repo not found")
-
-        password_set = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return api_error(request, '403', e.msg)
-
-        if repo.props.encrypted and not password_set:
-            return api_error(request, '403', "password needed")
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
 
         return get_dir_entrys_by_id(request, dir_id)
 
@@ -334,23 +317,9 @@ class RepoFileIdView(ResponseMixin, View):
     @api_login_required
     def get(self, request, repo_id, file_id):
         repo = get_repo(repo_id)
-        if not repo:
-            return api_error(request, '404', "repo not found")
-
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
-
-        password_set = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return api_error(request, '403', e.msg)
-
-        if repo.props.encrypted and not password_set:
-            return api_error(request, '403', "password needed")
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
 
         file_name = request.GET.get('file_name', file_id)
         return get_repo_file (request, repo_id, file_id, file_name)
@@ -360,28 +329,14 @@ class RepoFilePathView(ResponseMixin, View):
 
     @api_login_required
     def get(self, request, repo_id):
-        path = request.GET.get('p', '/')
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        path = request.GET.get('p', None)
         if not path:
             return api_error(request, '404', "Path invalid")
-
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(request, '404', "repo not found")
-
-        if not can_access_repo(request, repo_id):
-            return api_error(request, '403', "can not access repo")
-
-        password_set = False
-        if repo.props.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return api_error(request, '403', e.msg)
-
-        if repo.props.encrypted and not password_set:
-            return api_error(request, '403', "password needed")
 
         file_id = None
         try:
@@ -394,5 +349,8 @@ class RepoFilePathView(ResponseMixin, View):
             return api_error(request, '400', "Path invalid")
 
         file_name = request.GET.get('file_name', file_id)
-        return get_repo_file(request, repo_id, file_id)
+        return get_repo_file(request, repo_id, file_name)
 
+    @api_login_required
+    def post(self, request, repo_id):
+        pass
