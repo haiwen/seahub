@@ -17,7 +17,7 @@
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
       <p>{{ request.cur_note.message|urlize|url_target_blank }}</p>
-      <img src="{{ MEDIA_URL }}img/close-16.png" class="close" />
+      <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
     </div>
     {% endif %}
   {% endblock info_bar_message %}
@@ -134,6 +134,22 @@
 {% if request.cur_note %}
 $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
+    if (document.cookie) {
+        var cookies = document.cookie.split('; '),
+            topinfo_exist = false;
+        for (var i = 0, len = cookies.length; i < len; i++) {
+            if (cookies[i].split('=')[0] == 'topinfo') {
+                cookies[i] += $(this).attr('data') + ',';
+                topinfo_exist = true;
+                document.cookie = cookies.join('; ');
+                break;
+            }
+        }
+        if (!topinfo_exist) {
+            document.cookie += 'topinfo=' + $(this).attr('data') + ',';
+        }
+        document.cookie += 'max-age=' + 14*24*60*60;
+    }
 });
 {% endif %}
 
