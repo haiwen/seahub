@@ -104,8 +104,10 @@ function addAtAutocomplete(ele_id, container_id, data) {
             source: function(request, response) {
                     var lastTerm = extractLast(request.term);
                     var lastIndex = lastTerm.lastIndexOf('@');
-                    if (lastIndex >= 0) {
+                    if (lastIndex == 0) {
                         response($.ui.autocomplete.filter(data, lastTerm.substring(lastIndex+1)));
+                    } else {
+                        response();
                     }
             },
             focus: function() {
@@ -113,8 +115,8 @@ function addAtAutocomplete(ele_id, container_id, data) {
             },
             select: function(event, ui) {
                     var terms = split(this.value);
-                    var popTerm = terms.pop();
-                    terms.push(popTerm.concat(ui.item.value));
+                    terms.pop();
+                    terms.push('@'.concat(ui.item.value));
                     terms.push("");
                     this.value = terms.join(" ");
                     return false;
