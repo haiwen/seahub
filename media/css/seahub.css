@@ -182,9 +182,21 @@ p {
 }
 
 /* info-bar */
-#info-bar { height: 30px; color: #fff; background: #000; }
-#info-bar .info { margin: 5px 0 auto 1em; float: left; }
-#info-bar .close { margin: 7px 5px auto 0;  float: right; background: url(../img/close-16.png); height: 16px; width:16px; }
+#info-bar,
+#sharelink-infobar {
+    color: #fff;
+    padding:1px 25px 2px 10px;
+    background: #000;
+}
+#info-bar {
+    position:relative;
+}
+#info-bar .close {
+    cursor:pointer;
+    position:absolute;
+    right:5px;
+    top:5px;
+}
 
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
@@ -866,19 +878,20 @@ p {
     line-height:1.6;
     color:#333;
 }
-.article h2 {
-    margin:0.9em 0 0.45em;
-}
-.article h3 {
-    margin:0.82em 0 0.4em;
-}
 .article h2,
 .article h3,
 .article h4,
 .article h5,
 .article h6 {
+    margin: 1.2em 0 0.4em;
     color:#333;
     font-weight:bold;
+}
+.article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p, 
+.article h1 + pre, .article h2 + pre, .article h3 + pre, .article h4 + pre, .article h5 + pre, .article h6 + pre, 
+.article h1 + ul, .article h2 + ul, .article h3 + ul, .article h4 + ul, .article h5 + ul, .article h6 + ul,
+.article h1 + ol, .article h2 + ol, .article h3 + ol, .article h4 + ol, .article h5 + ol, .article h6 + ol {
+    margin-top: 0;
 }
 .article p {
     margin:0.8em 0;
