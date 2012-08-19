@@ -35,6 +35,10 @@ class UserManager(object):
 
         return self.get(email=email)
 
+    def create_superuser(self, email, password):
+        u = self.create_user(email, password, is_staff=True, is_active=True)
+        return u
+    
     def get(self, email=None, id=None):
         if not email and not id:
             raise User.DoesNotExist, 'User matching query does not exits.'
