@@ -245,6 +245,7 @@ def render_group_info(request, group_id, form):
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
+            "members": members,
             "repos": repos,
             "group_id": group_id,
             "group" : group,

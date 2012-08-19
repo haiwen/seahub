@@ -85,7 +85,7 @@
 
 <div id="group-reply">
     <h3>信息栏</h3>
-    <form action="" method="post">
+    <form id="group-message-form" action="" method="post">
         <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
@@ -190,6 +190,15 @@
 <script type="text/javascript">
 addConfirmTo($('#quit-group'), '确定要退出？');
 addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
+
+$(function() {
+    var member_list = [];
+    {% for member in members %}
+    member_list.push('{{ member.user_name|email2nickname}}');
+    {% endfor %}
+
+    addAtAutocomplete('#message', '#group-message-form', member_list);
+});
 
 $("table tr:gt(0)").hover(
     function() {
