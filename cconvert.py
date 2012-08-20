@@ -25,7 +25,7 @@ class CConvert:
 		self.spliter = '-'
 		"Load data table"
 		try:
-			fp=open('convert-utf-8.txt')
+			fp=open(os.path.join(os.path.dirname(__file__), 'convert-utf-8.txt'))
 		except IOError:
 			print "Can't load data from convert-utf-8.txt\nPlease make sure this file exists."
 			sys.exit(1)
