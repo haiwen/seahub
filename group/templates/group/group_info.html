@@ -194,9 +194,11 @@ addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
 $(function() {
     var member_list = [];
     {% for member in members %}
-    member_list.push('{{ member.user_name|email2nickname}}');
+    var nickname = "{{ member.user_name|email2nickname }}";
+    var pinyin = "{{ member.user_name|email2nickname|char2pinyin }}";
+    
+    member_list.push({value:nickname + pinyin, label:nickname});
     {% endfor %}
-
     addAtAutocomplete('#message', '#group-message-form', member_list);
 });
 

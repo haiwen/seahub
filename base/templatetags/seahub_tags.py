@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 
 from profile.models import Profile
 from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
+from seahub.cconvert import CConvert
 from seahub.settings import FILEEXT_ICON_MAP
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
@@ -154,3 +155,9 @@ def seahub_urlize(value, autoescape=None):
     return mark_safe(urlize(value, nofollow=True, autoescape=autoescape))
 seahub_urlize.is_safe=True
 seahub_urlize.needs_autoescape = True
+
+cc = CConvert()
+@register.filter(name='char2pinyin')
+def char2pinyin(value):
+    """Convert Chinese character to pinyin."""
+    return cc.convert(value)

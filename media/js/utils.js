@@ -105,18 +105,22 @@ function addAtAutocomplete(ele_id, container_id, data) {
                     var lastTerm = extractLast(request.term);
                     var lastIndex = lastTerm.lastIndexOf('@');
                     if (lastIndex == 0) {
-                        response($.ui.autocomplete.filter(data, lastTerm.substring(lastIndex+1)));
+                        var matcher = new RegExp($.ui.autocomplete.escapeRegex(lastTerm.substring(lastIndex+1)), "i");
+                        response($.grep(data, function(value) {
+                            return matcher.test(value.value);
+                        }));
                     } else {
                         response();
                     }
             },
             focus: function() {
+                   this.value = ui.item.label;
                    return false;
             },
             select: function(event, ui) {
                     var terms = split(this.value);
                     terms.pop();
-                    terms.push('@'.concat(ui.item.value));
+                    terms.push('@'.concat(ui.item.label));
                     terms.push("");
                     this.value = terms.join(" ");
                     return false;
