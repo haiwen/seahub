@@ -958,6 +958,13 @@ p {
 #op-after-edit {
     margin-top:18px;
 }
+#op-after-edit button {
+    padding:3px 10px;
+    height:auto;
+}
+#file-edit-cancel {
+    color:#900;
+}
 /* shareadmin */
 .view-link-alert p {
     display: inline-block;
