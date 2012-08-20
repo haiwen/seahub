@@ -157,6 +157,7 @@ seahub_urlize.is_safe=True
 seahub_urlize.needs_autoescape = True
 
 cc = CConvert()
+cc.spliter = ''
 @register.filter(name='char2pinyin')
 def char2pinyin(value):
     """Convert Chinese character to pinyin."""
