@@ -136,19 +136,18 @@ $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
     if (navigator.cookieEnabled) {
         var cookies = document.cookie.split('; '),
-            topinfo_exist = false;
+            topinfo_exist = false,
+            topinfo_new_value = $(this).attr('data') + ',' + '; max-age=' + 14*24*60*60 + '; path=' + '{{ SITE_ROOT }}'; 
         for (var i = 0, len = cookies.length; i < len; i++) {
             if (cookies[i].split('=')[0] == 'topinfo') {
-                cookies[i] += $(this).attr('data') + ',';
                 topinfo_exist = true;
-                document.cookie = cookies.join('; ');
+                document.cookie = 'topinfo=' + cookies[i].split('=')[1] + topinfo_new_value; 
                 break;
             }
         }
         if (!topinfo_exist) {
-            document.cookie += '; topinfo=' + $(this).attr('data') + ',';
+            document.cookie = 'topinfo=' + topinfo_new_value; 
         }
-        document.cookie += '; max-age=' + 14*24*60*60;
     }
 });
 {% endif %}
