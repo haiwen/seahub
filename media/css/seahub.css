@@ -926,7 +926,7 @@ p {
     border-radius:3px;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
-    margin:5px 0;
+    margin:1em 0;
 }
 .article pre code {
     white-space:pre-wrap;
