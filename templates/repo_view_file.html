@@ -85,8 +85,8 @@
     </div>
 
     <div id="redirect-download" class="hide">
-        <p>您还没有将同步目录 {{repo.name}} 同步到本地</p>
-        <p> <a id="redirect-download-url" href="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}"> 点此同步 </a> </p>
+        <p class="error">您还没有将同步目录 {{repo.name}} 同步到本地</p>
+        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">点此同步</button>
     </div>
 
 {% endblock %}
@@ -240,6 +240,9 @@ function send_open_local_file_request(path) {
         }
     });
 }
+$('#download-repo').click(function() {
+    location.href = $(this).attr('data');
+});
 
 // When user clicks 'open local file':
 //
