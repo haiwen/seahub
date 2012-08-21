@@ -18,6 +18,7 @@ from djangorestframework.mixins import ResponseMixin
 from djangorestframework.response import Response
 
 from auth.decorators import api_login_required
+from auth.forms import AuthenticationForm
 from auth import login as auth_login
 
 from pysearpc import SearpcError
