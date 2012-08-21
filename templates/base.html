@@ -136,17 +136,17 @@ $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
     if (navigator.cookieEnabled) {
         var cookies = document.cookie.split('; '),
-            topinfo_exist = false,
-            topinfo_new_value = $(this).attr('data') + ',' + '; max-age=' + 14*24*60*60 + '; path=' + '{{ SITE_ROOT }}'; 
+            note_id_exist = false,
+            new_note_id = $(this).attr('data') + ',' + '; max-age=' + 14*24*60*60 + '; path=' + '{{ SITE_ROOT }}'; 
         for (var i = 0, len = cookies.length; i < len; i++) {
-            if (cookies[i].split('=')[0] == 'topinfo') {
-                topinfo_exist = true;
-                document.cookie = 'topinfo=' + cookies[i].split('=')[1] + topinfo_new_value; 
+            if (cookies[i].split('=')[0] == 'note_id') {
+                note_id_exist = true;
+                document.cookie = 'note_id=' + cookies[i].split('=')[1] + new_note_id; 
                 break;
             }
         }
-        if (!topinfo_exist) {
-            document.cookie = 'topinfo=' + topinfo_new_value; 
+        if (!note_id_exist) {
+            document.cookie = 'note_id=' + new_note_id; 
         }
     }
 });

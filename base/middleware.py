@@ -31,7 +31,7 @@ class InfobarMiddleware(object):
         return ret
 
     def process_request(self, request):
-        topinfo_close = request.COOKIES.get('topinfo', '')
+        topinfo_close = request.COOKIES.get('note_id', '')
 
         cur_note = cache.get('CUR_TOPINFO') if cache.get('CUR_TOPINFO') else \
             self.get_from_db()
