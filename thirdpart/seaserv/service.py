@@ -340,12 +340,12 @@ def is_valid_filename(file_or_dir):
 
     return ret
 
-def is_public_repo(repo_id):
+def is_innerpub_repo(repo_id):
     """
     Check whether a repo is public.
     """
     try:
-        ret = seafserv_threaded_rpc.is_public_repo(repo_id)
+        ret = seafserv_threaded_rpc.is_innerpub_repo(repo_id)
     except SearpcError:
         ret = 0
 

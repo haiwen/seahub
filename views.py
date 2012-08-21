@@ -30,7 +30,7 @@ from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_public_repo, \
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_innerpub_repo, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
     get_group, get_shared_groups_by_repo, is_group_user
 from pysearpc import SearpcError
@@ -125,7 +125,7 @@ def access_to_repo(request, repo_id, repo_ap):
 
     """
     if validate_owner(request, repo_id) or check_shared_repo(request, repo_id)\
-            or access_org_repo(request, repo_id) or is_public_repo(repo_id):
+            or access_org_repo(request, repo_id) or is_innerpub_repo(repo_id):
         return True
     else:
         return False
@@ -692,7 +692,7 @@ def public_home(request):
     Show public home page when CLOUD_MODE is False.
     """
     users = get_emailusers(-1, -1)
-    public_repos = seafserv_threaded_rpc.list_public_repos()
+    public_repos = seafserv_threaded_rpc.list_innerpub_repos()
     calculate_repo_last_modify(public_repos)
     public_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
@@ -722,7 +722,7 @@ def public_repo_create(request):
         user = request.user.username
 
         try:
-            repo_id = seafserv_threaded_rpc.create_public_repo(repo_name,
+            repo_id = seafserv_threaded_rpc.create_innerpub_repo(repo_name,
                                                                repo_desc,
                                                                user, passwd)
         except:
