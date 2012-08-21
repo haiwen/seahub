@@ -91,7 +91,10 @@ table {
     table-layout:fixed;
     margin:8px 0 40px;
 }
-th { text-align:left; }
+th {
+    text-align:left;
+    font-weight:bold;
+}
 td, th {
     padding:5px 3px;
     word-wrap:break-word;
@@ -942,6 +945,15 @@ p {
 }
 .article table {
     margin:0.8em 0;
+    width:auto;
+}
+.article tr:nth-child(2n) {
+    background-color: #F8F8F8;
+}
+.article th,
+.article td {
+    padding:6px 13px;
+    border:1px solid #ccc;
 }
 #op-after-edit {
     margin-top:18px;
