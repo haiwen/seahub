@@ -284,9 +284,10 @@ class RepoDirPathView(ResponseMixin, View):
 
         old_oid = request.GET.get('oid', None)
         if old_oid and old_oid == dir_id :
+            response = HttpResponse(json.dumps("uptodate"), status=200,
+                                    content_type=json_content_type)
             response["oid"] = dir_id
-            return HttpResponse(json.dumps("uptodate"), status=200,
-                                content_type=json_content_type)
+            return response
         else:
             return get_dir_entrys_by_id(request, dir_id)
 
