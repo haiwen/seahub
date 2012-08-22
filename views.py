@@ -1666,14 +1666,14 @@ def repo_revert_file (request, repo_id):
     except Exception, e:
         return render_error(request, str(e))
     else:
-        url = reverse('repo', args=[repo_id])
+        url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
+        file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + path
         if ret == 1:
-            msg = u"已经还原被删除的文件 %s 到根目录下" % path.lstrip('/')
+            msg = u'<a href="%s">%s</a> 已还原到根目录下' % (file_view_url, path.lstrip('/'))
             messages.add_message(request, messages.INFO, msg)
         else:
-            msg = u"已经还原文件 %s" % path.lstrip('/')
+            msg = u'<a href="%s">%s</a> 已经还原' % (file_view_url, path.lstrip('/'))
             messages.add_message(request, messages.INFO, msg)
-            url += u'?p=%s' % os.path.dirname(path)
         return HttpResponseRedirect(url)
 
 @login_required        
