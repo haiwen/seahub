@@ -135,9 +135,12 @@
 $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
     if (navigator.cookieEnabled) {
-        var cookies = document.cookie.split('; '),
+        var date = new Date(),
+            cookies = document.cookie.split('; '),
             note_id_exist = false,
-            new_note_id = $(this).attr('data') + ',' + '; max-age=' + 14*24*60*60 + '; path=' + '{{ SITE_ROOT }}'; 
+            new_note_id = $(this).attr('data') + ',';
+        date.setTime(date.getTime() + 14*24*60*60*1000);
+        new_note_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}'; 
         for (var i = 0, len = cookies.length; i < len; i++) {
             if (cookies[i].split('=')[0] == 'note_id') {
                 note_id_exist = true;
