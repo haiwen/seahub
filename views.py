@@ -776,7 +776,7 @@ def repo_view_file(request, repo_id):
     err = ''
     file_content = ''
     if filetype == 'Text' or filetype == 'Markdown':
-        err, file_content, encoding = repo_file_get(raw_path)
+        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -831,29 +831,43 @@ def repo_file_get(raw_path):
     err = ''
     file_content = ''
     encoding = ''
+    newline_mode = ''
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
             err = '文件超过10M，无法在线查看。'
-            return err, '', ''
+            return err, '', '', ''
         else:
             content = file_response.read()
     except urllib2.HTTPError, e:
         err = 'HTTPError: 无法在线打开该文件'
-        return err, '', ''
+        return err, '', '', ''
     except urllib2.URLError as e:
         err = 'URLError: 无法在线打开该文件'
-        return err, '', ''
+        return err, '', '', ''
     else:
         try:
             u_content = content.decode('utf-8')
             encoding = 'utf-8'
-        except:
+        except UnicodeDecodeError:
             # XXX: file in windows is encoded in gbk
-            u_content = content.decode('gbk')
-            encoding = 'gbk'
+            try:
+                u_content = content.decode('gbk')
+                encoding = 'gbk'
+            except UnicodeDecodeError:
+                err = u'文件编码无法识别'
+                return err, '', '', ''
+
         file_content = u_content
-    return err, file_content, encoding
+
+    # detect newline mode for ace editor
+    if '\r\n' in u_content:
+        newline_mode = 'windows'
+    elif '\n' in u_content:
+        newline_mode = 'unix'
+    else:
+        newline_mode = 'windows'
+    return err, file_content, encoding, newline_mode
 
 
 def pdf_full_view(request):
@@ -959,7 +973,7 @@ def repo_file_edit(request, repo_id):
 
     # get file content
     raw_path = gen_file_get_url(token, filename)
-    err, file_content, encoding = repo_file_get(raw_path)
+    err, file_content, encoding, newline_mode = repo_file_get(raw_path)
 
     return render_to_response('repo_edit_file.html', {
         'repo':repo,
@@ -970,7 +984,8 @@ def repo_file_edit(request, repo_id):
         'err':err,
         'file_content':file_content,
         'encoding': encoding,
-                }, context_instance=RequestContext(request))
+        'newline_mode': newline_mode
+    }, context_instance=RequestContext(request))
 
 
 def repo_access_file(request, repo_id, obj_id):
@@ -1812,7 +1827,7 @@ def view_shared_file(request, token):
     err = ''
     file_content = ''
     if filetype == 'Text' or filetype == 'Markdown':
-        err, file_content, encoding = repo_file_get(raw_path)
+        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)

@@ -51,6 +51,7 @@ editor.renderer.scrollBar.width = 0; // enlarge ace_content width
 editor.setTheme("ace/theme/twilight");
 {% include "snippets/editor_set_mode.html" %}
 editor.session.getDocument().setValue('{{ file_content|escapejs }}');
+editor.session.getDocument().setNewLineMode('{{ newline_mode }}'); 
 $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
 editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
 editor.resize(); // fix some problem for showing some file in ie8
