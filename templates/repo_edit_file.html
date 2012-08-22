@@ -15,21 +15,21 @@
     </p>
     <div id="file">
         <p id="file-fetching-tip">文件内容读取中...</p>
-        {% if fileext == 'markdown' or fileext == 'md' %}
-        <div id="file-op" class="hide">
-            <button id="source-code">源码</button>
-            <button id="preview">预览</button>
-        </div>
-        <div id="file-view">
-            <div id="docu-view" class="hide"></div>
-            <div id="md-view" class="article hide"></div>
-        </div>
-        {% else %}
         <div id="docu-view" class="hide"></div>
+        {% if fileext == 'markdown' or fileext == 'md' %}
+        <div id="md-view" class="article hide"></div>
         {% endif %}
     </div>
     <div id="op-after-edit" class="w100 ovhd hide">
+        {% if fileext == 'markdown' or fileext == 'md' %}
+        <div class="fleft">
+            <button id="file-edit-submit">提交</button>
+            <button id="source-code" class="hide">源码</button>
+            <button id="preview">预览</button>
+        </div>
+        {% else %}
         <button id="file-edit-submit" class="fleft">提交</button>
+        {% endif %}
         <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel" class="fright">取消修改</button>
     </div>
 {% endblock %}
@@ -56,19 +56,23 @@ editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-mo
 editor.resize(); // fix some problem for showing some file in ie8
 $('#file-fetching-tip').addClass('hide');
 $('#docu-view, #op-after-edit').removeClass('hide');
+
 {% if fileext == 'markdown' or fileext == 'md' %}
-$('#file-op').css('text-align', 'left').removeClass('hide');
+$('#file-edit-submit').css('margin-right', '8px');
 $('#source-code').click(function() {
-    $('#docu-view').removeClass('hide');
-    $('#md-view').addClass('hide');
+    $('#md-view, #source-code').addClass('hide');
+    $('#docu-view, #preview').removeClass('hide');
 });
 $('#preview').click(function() {
     var content = editor.session.getValue();
     var converter = new Showdown.converter();
-    $('#docu-view').addClass('hide');
+    $('#docu-view, #preview').addClass('hide');
     $('#md-view').html(converter.makeHtml(content)).removeClass('hide');
+    $('#md-view').children(':first').css('margin-top', '0');
+    $('#source-code').removeClass('hide');
 });
 {% endif %}
+
 $('#file-edit-submit').click(function () {
     var content = editor.session.getValue();
     $.ajax({
