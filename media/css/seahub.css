@@ -1,7 +1,14 @@
 html {
     background:#fff;
 }
-body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,pre,blockquote,form,input,textarea,button,img { margin:0; padding:0; }
+body,
+h1,h2,h3,h4,h5,h6,
+ul,ol,li,dl,dt,dd,
+p,pre,blockquote,
+form,input,textarea,button,img {
+    padding:0;
+    margin:0;
+}
 body {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
 }
@@ -25,8 +32,8 @@ textarea { border: 1px solid #ddd; }
 input { 
     height:20px;
     line-height:20px;
-    margin:3px 0;
     border: 1px solid #ddd;
+    margin:3px 0;
 }
 input,
 button {
@@ -57,10 +64,10 @@ button {
     border: 1px solid #ddd;
     border-radius: 3px;
     -moz-border-radius:3px;
-    margin-top:8px;
 }
-button {
-    margin:0;
+input[type=submit],
+input.submit {
+    margin-top:8px;
 }
 input[type=submit]:hover,
 button:hover { 
@@ -72,7 +79,10 @@ input[type="file"] {
     height:24px;
     line-height:24px;
 }
-label { display: inline-block; margin:2px 0px; }
+label {
+    display: inline-block;
+    margin:2px 0px;
+}
 iframe {
     display:block;
     width:100%;
@@ -146,7 +156,8 @@ p {
 .op {
     font-size:13px;
 }
-.no-deco, .no-deco:hover {
+.no-deco,
+.no-deco:hover {
     text-decoration:none;
 }
 .input-disabled {
@@ -155,11 +166,16 @@ p {
 .no-bold {
     font-weight:normal;
 }
+ul.with-bg li {
+    padding-left:10px;
+    line-height:20px;
+    background: #fff url('../img/li.gif') no-repeat scroll left 6px;
+}
 #paginator { margin-top:10px; }
 
 /* container */
-#header, #main, #footer, .top-bar-in { width:950px; }
-#header, #main, .top-bar-in { margin:0 auto; }
+#header, #main, #footer { width:950px; }
+#header, #main { margin:0 auto; }
 #header {
     font-size: 14px;
     font-weight: bold;
@@ -175,12 +191,12 @@ p {
 }
 #left-panel { float:right; width:220px; }
 #right-panel { float:left; width:680px; }
-.side {
+#main-panel .side { /*side panel in main-panel*/
     color:#333;
     width:220px;
     word-wrap: break-word;
 }
-.main {
+#main-panel .main { /*main panel in main-panel*/
     width:680px;
 }
 
@@ -203,60 +219,46 @@ p {
 
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
-.top-bar { height:21px; color:#fff; font-weight:bold; background:#606; }
-.top-bar a {
+.top-bar-inner { height:21px; background:#606; }
+.top-bar-con {
+    color:#fff;
+    font-weight:bold;
+    width:950px;
+    margin:0 auto;
+}
+.top-bar-con a {
     color:#ddd;
     font-weight:normal;
     line-height:21px;
     padding:0 2px;
 }
-.top-bar a,
-.top-bar span {
+.top-bar-con a,
+.top-bar-con span {
     vertical-align:middle;
     display:inline-block;
     height:21px;
 }
-.top-bar a.avatar-link {
+.top-bar-con a.avatar-link {
     height:16px;
 }
-.top-bar .avatar {
+.top-bar-con .avatar {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 }
-.top-bar a.cur {
+.top-bar-con a.cur {
     background:#000;
 }
-.top-bar span {
+.top-bar-con span {
     margin-right:3px;
 }
-.top-bar a:hover {
+.top-bar-con a:hover {
     text-decoration:none;
     background:#A0A;
 }
-.top-bar a.avatar-link:hover {
+.top-bar-con a.avatar-link:hover {
     background:none;
 }
-#team-list {
-    position:absolute;
-    left:2px;
-    top:21px;
-    border:1px solid #bbb;
-    background:#fff;
-    min-width:65px;
-    padding:5px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
-    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
-    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
-}
-#team-list a {
-    color:#000;
-    display:block;
-    padding:0 5px;
-}
-#team-list a:hover {
-    background:#eee;
-}
-#team-account .bg {
+#account-context .bg {
     display:inline-block;
     font-size:0;
     line-height: 0;
@@ -269,6 +271,27 @@ p {
     border-top-color: #bbb;
     margin-left:1px;
 }
+#account-context-selector {
+    position:absolute;
+    left:2px;
+    top:21px;
+    border:1px solid #bbb;
+    background:#fff;
+    min-width:65px;
+    padding:5px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+#account-context-selector a {
+    color:#000;
+    display:block;
+    padding:0 5px;
+}
+#account-context-selector a:hover {
+    background:#eee;
+}
+
 /* header */
 #logo {
     margin-right:30px;
@@ -282,9 +305,20 @@ p {
     height:21px;
     margin:0 10px;
 }
-#header .nav a, #header .nav a:visited { color:#8A948F; font-weight:bold; text-decoration:none; }
-#header .nav a.cur { color:#000; }
-#header .nav a:hover { color: #ff9933; text-decoration: underline; }
+#header .nav a,
+#header .nav a:visited {
+    color:#8A948F;
+    font-weight:bold;
+    text-decoration:none;
+}
+#header .nav a.cur {
+    color:#000;
+}
+#header .nav a:hover {
+    color: #ff9933;
+    text-decoration: underline;
+}
+
 /* footer */
 #footer { 
     color:#636363;
@@ -313,10 +347,9 @@ p {
     color:#888;
     font-weight:normal;
 }
-/* main */
+/* for messages like 'contact added successfully' */
 .messages {
     position:absolute;
-    min-width:300px;
     border-radius: 2px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -329,13 +362,7 @@ p {
     background:#FDF;
     margin:0;
 }
-.path, .access-notice { margin: 0.8em 0 0.4em; }
-.with-bg li {
-    padding-left:10px;
-    line-height:20px;
-    background: #fff url('../img/li.gif') no-repeat scroll left 6px;
-}
-/*narrow-panel: for form pages*/
+/* narrow-panel: for pages like 'login' */
 .narrow-panel {
     width:320px;
     min-height:15em;
@@ -379,7 +406,7 @@ p {
     text-align:center;
     padding-top:7em;
 }
-/* popup dialog */
+/* simplemodal popup */
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
 #simplemodal-container {
@@ -411,6 +438,7 @@ p {
 #confirm-con {
     margin-bottom:6px;
 }
+
 /*ui-autocomplete*/
 .ui-autocomplete {
     background:#fff;
@@ -418,6 +446,89 @@ p {
 .ui-menu-item {
     background-image:none;
 }
+/* for article */
+.article {
+    padding:40px;
+    font-size:14px;
+    line-height:1.6;
+    color:#333;
+}
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+    margin: 1.2em 0 0.4em;
+    color:#333;
+    font-weight:bold;
+}
+.article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p,
+.article h1 + pre, .article h2 + pre, .article h3 + pre, .article h4 + pre, .article h5 + pre, .article h6 + pre,
+.article h1 + ul, .article h2 + ul, .article h3 + ul, .article h4 + ul, .article h5 + ul, .article h6 + ul,
+.article h1 + ol, .article h2 + ol, .article h3 + ol, .article h4 + ol, .article h5 + ol, .article h6 + ol {
+    margin-top: 0;
+}
+.article p {
+    margin:0.8em 0;
+}
+.article ul {
+    list-style-type:disc;
+    padding-left:2em;
+}
+.article ul,
+.article ol {
+    margin:0.5em 0;
+}
+.article code {
+    font-size:12px;
+    white-space: nowrap;
+    padding: 1px 5px 0;
+    background-color: #F8F8F8;
+    border: 1px solid #dadada;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    margin: 0 2px;
+}
+.article pre {
+    font-size:13px;
+    padding:5px 10px;
+    background:#f8f8f8;
+    border:1px solid #ddd;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    margin:1em 0;
+}
+.article pre code {
+    white-space:pre-wrap;
+    padding:0;
+    margin:0;
+    border:none;
+}
+.article a {
+    font-weight:normal;
+}
+.article blockquote {
+    color: #777;
+    padding: 0 15px; 
+    border-left: 4px solid #DDD; 
+    margin: 10px 0;
+}
+.article table {
+    margin:0.8em 0;
+    width:auto;
+}
+.article tr:nth-child(2n) {
+    background-color: #F8F8F8;
+}
+.article th,
+.article td {
+    padding:6px 13px;
+    border:1px solid #ccc;
+}
+
+/* for separate pages */
 /*myhome*/
 .home-profile .avatar {
     float:left;
@@ -501,6 +612,7 @@ p {
 }
 
 /*repo page*/
+.path, .access-notice { margin: 0.8em 0 0.4em; }
 .repo-op button {
     height:25px;
     background:#f5f5f5 scroll no-repeat 3px 48%;
@@ -582,8 +694,7 @@ p {
 #ls-ch ul {
     padding:0 0 6px 0;
 }
-/*file mv*/
-#dirs {
+#dirs { /* file mv */
     margin-top:8px;
 }
 /*repo-share-form*/
@@ -788,7 +899,7 @@ p {
     margin-top:8px;
 }
 
-/* file preview */
+/* file view online, file edit */
 .file-op {
     color:#444;
     text-align:right;
@@ -875,86 +986,6 @@ p {
     border-radius:3px;
     -moz-border-radius:3px;
 }
-.article {
-    padding:40px;
-    font-size:14px;
-    line-height:1.6;
-    color:#333;
-}
-.article h2,
-.article h3,
-.article h4,
-.article h5,
-.article h6 {
-    margin: 1.2em 0 0.4em;
-    color:#333;
-    font-weight:bold;
-}
-.article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p, 
-.article h1 + pre, .article h2 + pre, .article h3 + pre, .article h4 + pre, .article h5 + pre, .article h6 + pre, 
-.article h1 + ul, .article h2 + ul, .article h3 + ul, .article h4 + ul, .article h5 + ul, .article h6 + ul,
-.article h1 + ol, .article h2 + ol, .article h3 + ol, .article h4 + ol, .article h5 + ol, .article h6 + ol {
-    margin-top: 0;
-}
-.article p {
-    margin:0.8em 0;
-}
-.article ul {
-    list-style-type:disc;
-    padding-left:2em;
-}
-.article ul,
-.article ol {
-    margin:0.5em 0;
-}
-.article code {
-    font-size:12px;
-    white-space: nowrap;
-    padding: 1px 5px 0;
-    background-color: #F8F8F8;
-    border: 1px solid #dadada;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    margin: 0 2px;
-}
-.article pre {
-    font-size:13px;
-    padding:5px 10px;
-    background:#f8f8f8;
-    border:1px solid #ddd;
-    border-radius:3px;
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
-    margin:1em 0;
-}
-.article pre code {
-    white-space:pre-wrap;
-    padding:0;
-    margin:0;
-    border:none;
-}
-.article a {
-    font-weight:normal;
-}
-.article blockquote {
-    color: #777;
-    padding: 0 15px; 
-    border-left: 4px solid #DDD; 
-    margin: 10px 0;
-}
-.article table {
-    margin:0.8em 0;
-    width:auto;
-}
-.article tr:nth-child(2n) {
-    background-color: #F8F8F8;
-}
-.article th,
-.article td {
-    padding:6px 13px;
-    border:1px solid #ccc;
-}
 #op-after-edit {
     margin-top:18px;
 }
@@ -979,15 +1010,10 @@ p {
 /* scroll result for autocomplete  */
 .ui-autocomplete {
     max-height: 200px;
+    _height: 100px; /* for ie 6 */
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
-}
-/* IE 6 doesn't support max-height
- * we use height instead, but this forces the menu to always be this tall
- */
-* html .ui-autocomplete {
-    height: 100px;
 }
