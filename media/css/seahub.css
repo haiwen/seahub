@@ -448,8 +448,8 @@ ul.with-bg li {
 }
 /* for article */
 .article {
-    padding:40px;
-    font-size:14px;
+    padding:40px 120px 40px 120px;
+    font-size:15px;
     line-height:1.6;
     color:#333;
 }
@@ -942,8 +942,8 @@ ul.with-bg li {
     background:#fff;
 }
 #docu-view {
-    font-size:13px;/*override .ace_editor*/
-    line-height:19px;/*using 'px' as unit, for ie8 to get the right line-height*/
+    font-size:14px;/*override .ace_editor*/
+    line-height:1.6em;/*using 'px' as unit, for ie8 to get the right line-height*/
     font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
 }
@@ -1004,7 +1004,7 @@ ul.with-bg li {
 #bottom-bar button {
     color:#fff;
     background:#646464;
-    font-size:14px;
+    font-size:15px;
 }
 
 /* scroll result for autocomplete  */
