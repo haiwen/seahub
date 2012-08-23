@@ -497,16 +497,14 @@ def repo_history(request, repo_id):
             'is_owner': is_owner,
             }, context_instance=RequestContext(request))
 
+@login_required
 def repo_history_revert(request, repo_id):
-    """
-    Only repo owner can revert repo.
-    """
-    if not validate_owner(request, repo_id):
-        return render_permission_error(request, u'只有同步目录拥有者有权还原目录')
-    
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    if not access_to_repo(request, repo_id):
+        return render_permission_error(request, u'您没有权限进行还原操作')
 
     password_set = False
     if repo.props.encrypted:
