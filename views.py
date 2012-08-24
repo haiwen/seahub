@@ -717,8 +717,9 @@ def repo_del_file(request, repo_id):
     user = request.user.username
     try:
         seafserv_threaded_rpc.del_file(repo_id, parent_dir,file_name, user)
+        messages.add_message(request, messages.INFO, u'%s 删除成功。' % file_name)
     except:
-        pass
+        messages.add_message(request, messages.ERROR, u'内部错误。%s 删除失败。' % file_name)
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
@@ -1162,14 +1163,17 @@ def file_move(request):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
+        msg_url = reverse('repo', args=[dst_repo_id]) + u'?p=' + dst_path
         if op == 'cp':
             seafserv_threaded_rpc.copy_file (src_repo_id, src_path, obj_name,
                                              dst_repo_id, dst_path, new_obj_name,
                                              request.user.username)
+            messages.add_message(request, messages.INFO, u'%s 复制成功：<a href="%s">查看</a>' % (obj_name, msg_url))
         elif op == 'mv':
             seafserv_threaded_rpc.move_file (src_repo_id, src_path, obj_name,
                                              dst_repo_id, dst_path, new_obj_name,
                                              request.user.username)
+            messages.add_message(request, messages.INFO, u'%s 移动成功：<a href="%s">查看</a>' % (obj_name, msg_url))
     except Exception, e:
         return render_error(request, str(e))
 
@@ -1609,6 +1613,7 @@ def repo_rename_file(request):
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
+        messages.add_message(request, messages.INFO, u'%s 已重命名为 %s。' % (oldname, newname))
     except Exception, e:
         return render_error(request, str(e))
 
