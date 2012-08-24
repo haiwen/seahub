@@ -52,7 +52,7 @@ function submit_and_real_time_show () {
     form.submit();
     $('#upload-submit').addClass('hide');
 
-    // Update progress bar: not work in chrome. for ff.
+    // Update progress bar: not work in chrome.
     function update_progress_info() {
         $.ajax({
             url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + uuid + '&callback=?', 
@@ -72,7 +72,9 @@ function submit_and_real_time_show () {
     update_progress_info();
 
     // Update progress bar: for chrome 
-    $('#request-progress').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid);
+    if ($.browser.safari) {
+        $('#request-progress').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid);
+    }
 
     return false;
 };

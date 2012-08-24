@@ -889,7 +889,6 @@ ul.with-bg li {
 #task-progress-bar {/*for progress container*/
     width:95%;
     height:1em;
-    overflow:hidden;/*to solve ie's double height problem*/
 }
 #task-progress-bar .ui-progressbar-value {/*for progress*/
     background:#e83;
