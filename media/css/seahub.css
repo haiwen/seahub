@@ -944,9 +944,12 @@ ul.with-bg li {
 }
 #docu-view {
     font-size:14px;/*override .ace_editor*/
-    line-height:1.6em;/*using 'px' as unit, for ie8 to get the right line-height*/
+    line-height:1.6em;
     font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
+}
+#docu-view .ace_gutter {
+    height:auto;/*for ie8, in case that docu has only a few lines*/
 }
 #image-view {
     padding:1px;
