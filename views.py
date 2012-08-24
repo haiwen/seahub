@@ -1362,9 +1362,9 @@ def user_add(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
 
-            user = User(email=email, raw_password=password)
-            user.is_active = True
-            user.save()
+            user = User.objects.create_user(email, password,
+                                            is_staff=False,
+                                            is_active=True)
             
             if request.user.org:
                 org_id = request.user.org['org_id']
