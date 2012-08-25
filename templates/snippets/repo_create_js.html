@@ -33,10 +33,9 @@ $('#repo-create-submit').click(function() {
             'repo_desc': $('#repo-desc').val(),
             'encryption': $('#encrypt-switch').attr('checked') ? 1 : 0,
             'passwd': passwd.val(),
-            'passwd_again': passwd_again.val(),
+            'passwd_again': passwd_again.val()
         },
         success: function(data) {
-            console.log(data);
             if (data['success']) {
                 location.reload(true);
             } else {
