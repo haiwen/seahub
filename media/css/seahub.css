@@ -958,6 +958,9 @@ ul.with-bg li {
 #md-view {
     background:#fff;
 }
+#md-view {
+    min-height:120px;
+}
 #svg-view {
     min-height:500px;/*for ff*/
 }
