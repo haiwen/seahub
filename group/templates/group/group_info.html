@@ -69,7 +69,7 @@
         {% else %}
         <td>—— ——</td>
         {% endif %}
-        <td>{{ repo.share_from }}</td>
+        <td>{{ repo.share_from|email2nickname }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" class="download vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="同步" title="同步到本地" />
         {% if is_staff or repo.share_from_me  %}
