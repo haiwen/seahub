@@ -237,7 +237,6 @@ $('.group-member').hover(
         $.ajax({
             url: $(this).children('.group-member-name').attr('href') + 'get/',
             dataType: 'json',
-            cache: false,
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 $('#user-profile').setTemplateElement('jtemplate').processTemplate(data);
