@@ -1,0 +1,62 @@
+{% if not cloud_mode or not no_quota %}
+<script type="text/javascript">
+function gen_uuid() {
+    var uuid = "";
+    for (var i=0; i < 32; i++) {
+        uuid += Math.floor(Math.random() * 16).toString(16); 
+    }
+    return uuid;
+}
+
+function submit_and_real_time_show () {
+    var form = $('#upload-file-form')[0],
+        uuid = gen_uuid(); // id for this upload so we can fetch progress info.
+    $('#upload-progress').removeClass('hide');
+
+    // Append X-Progress-ID uuid form action
+    form.action += (form.action.indexOf('?') == -1 ? '?' : '&') + 'X-Progress-ID=' + uuid;
+    form.submit();
+    $('#upload-submit').addClass('hide');
+
+    // Update progress bar: not work in chrome.
+    function update_progress_info() {
+        $.ajax({
+            url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + uuid + '&callback=?', 
+            dataType: 'jsonp',
+            cache: false,
+            success: function(data) {
+                if (data) {
+                    $('#upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $('#task-progress-bar').removeClass('hide').progressbar({
+                            value: data.uploaded / data.length * 100
+                    });
+                }
+            }
+        });
+        setTimeout(update_progress_info, 1000);
+    };
+    update_progress_info();
+
+    // Update progress bar: for chrome 
+    if ($.browser.safari) {
+        $('#request-progress').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid);
+    }
+
+    return false;
+};
+
+$('#upload-submit').click(function () {
+    if (!$.trim($('#file').val())) {
+        $('#error-msg').html('请先选择一个文件');
+        return false;
+    }
+    $('#error-msg').addClass('hide');
+    submit_and_real_time_show();
+    return false;
+});
+
+$('#upload-cancel').click(function() {
+    location.reload(true);
+});
+</script>
+{% endif %}
