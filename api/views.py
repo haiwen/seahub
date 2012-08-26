@@ -124,6 +124,23 @@ def get_dir_entrys_by_id(request, dir_id):
     response["oid"] = dir_id
     return response
 
+def set_repo_password(request, repo):
+    if not password:
+        return api_error(request, '400', 'password should not be empty')
+
+    try:
+        seafserv_threaded_rpc.set_passwd(repo_id, request.user.username, password)
+    except SearpcError, e:
+        if e.msg == 'Bad arguments':
+            return api_error(request, '400', e.msg)
+        elif e.msg == 'Repo is not encrypted':
+            return api_error(request, '400', e.msg)
+        elif e.msg == 'Incorrect password':
+            return api_error(request, '400', 'Wrong password')
+        elif e.msg == 'Internal server error':
+            return api_error(request, '500', e.msg)
+        else:
+            return api_error(request, '400', e.msg)
 
 def check_repo_access_permission(request, repo):
     if not repo:
@@ -141,8 +158,12 @@ def check_repo_access_permission(request, repo):
         except SearpcError, e:
             return api_error(request, '403', e.msg)
 
-    if repo.encrypted and not password_set:
-        return api_error(request, '403', "password needed")
+        if not password_set:
+            password = request.REQUEST['password']
+            if not password:
+                return api_error(request, '403', "password needed")
+
+            return set_repo_password(request, password)
 
 
 @csrf_exempt
@@ -226,9 +247,11 @@ class RepoView(ResponseMixin, View):
     def get_repo_info(request, repo_id):
         # check whether user can view repo
         repo = get_repo(repo_id)
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
+        if not repo:
+            return api_error(request, '404', "repo not found")
+
+        if not can_access_repo(request, repo.id):
+            return api_error(request, '403', "can not access repo")
 
         # check whether use is repo owner
         if validate_owner(request, repo_id):
@@ -242,7 +265,7 @@ class RepoView(ResponseMixin, View):
             repo.latest_modify = None
 
         # query repo infomation
-        repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
+        repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
         repo_json = {
             "type":"repo",
@@ -251,14 +274,26 @@ class RepoView(ResponseMixin, View):
             "name":repo.name,
             "desc":repo.desc,
             "mtime":repo.lastest_modify,
-            "password_need":password_need,
-            "size":repo_size,
+            "password_need":repo.password_need,
+            "size":repo.size,
             "root":current_commit.root_id,
             }
 
         response = Response(200, repo_json)
         return self.render(response)
 
+    @api_login_required
+    def post(self, request, repo_id):
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+        op = request.GET.get('op', 'setpassword')
+        if op == 'setpassword':
+            return HttpResponse(json.dumps("success"), status=200,
+                                content_type=json_content_type)
+
+        return HttpResponse(json.dumps("unsupported operation"), status=200,
+                            content_type=json_content_type)
 
 class RepoDirPathView(ResponseMixin, View):
     renderers = (JSONRenderer,)
