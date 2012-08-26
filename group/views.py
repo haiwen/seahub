@@ -207,7 +207,7 @@ def render_group_info(request, group_id, form):
         group_id=group_id).order_by(\
         '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
 
-    if len(msgs_plus_one) == per_page + 1:
+    if msgs_plus_one.count() == per_page + 1:
         page_next = True
     else:
         page_next = False
@@ -582,7 +582,8 @@ def group_recommend(request):
                     
                     # save attachment
                     ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                           attach_type=attach_type, path=path)
+                                           attach_type=attach_type, path=path,
+                                           src='recommend')
                     ma.save()
 
                     group_url = reverse('group_info', args=[group.id])

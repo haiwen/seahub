@@ -1023,3 +1023,7 @@ ul.with-bg li {
     /* add padding to account for vertical scrollbar */
     padding-right: 20px;
 }
+
+#shared-link {
+    display: inline-block;
+}

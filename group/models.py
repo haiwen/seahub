@@ -25,13 +25,14 @@ class MessageReply(models.Model):
 
 class MessageAttachment(models.Model):
     """
-    A model used to represents a message attachment related to a group message.
+    Model used to represents a message attachment related to a group message.
     """
     group_message = models.ForeignKey(GroupMessage)
     repo_id = models.CharField(max_length=40)
-    attach_type = models.CharField(max_length=5)
+    attach_type = models.CharField(max_length=5) # `file` or `dir`
     path = models.TextField()
-    
+    src = models.TextField(max_length=20) # `recommend` or `filecomment`
+
 at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
 
 @receiver(post_save, sender=MessageReply)
