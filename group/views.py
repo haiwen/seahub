@@ -207,7 +207,7 @@ def render_group_info(request, group_id, form):
         group_id=group_id).order_by(\
         '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
 
-    if msgs_plus_one.count() == per_page + 1:
+    if len(msgs_plus_one) == per_page + 1:
         page_next = True
     else:
         page_next = False
