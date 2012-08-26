@@ -124,12 +124,12 @@ def get_dir_entrys_by_id(request, dir_id):
     response["oid"] = dir_id
     return response
 
-def set_repo_password(request, repo):
+def set_repo_password(request, repo, password):
     if not password:
         return api_error(request, '400', 'password should not be empty')
 
     try:
-        seafserv_threaded_rpc.set_passwd(repo_id, request.user.username, password)
+        seafserv_threaded_rpc.set_passwd(repo.id, request.user.username, password)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return api_error(request, '400', e.msg)
@@ -163,7 +163,7 @@ def check_repo_access_permission(request, repo):
             if not password:
                 return api_error(request, '403', "password needed")
 
-            return set_repo_password(request, password)
+            return set_repo_password(request, repo, password)
 
 
 @csrf_exempt
