@@ -1027,3 +1027,7 @@ ul.with-bg li {
 #shared-link {
     display: inline-block;
 }
+/* File comment */
+#file-comment {
+    margin-top: 60px;
+}

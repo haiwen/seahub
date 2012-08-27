@@ -91,6 +91,7 @@
 
 {% if request.user.is_authenticated %}
 <div id="file-comment">
+    <h3>评论</h3>
     <form id="file-comment-form" action="" method="post">
         <input name="repo_id" type="hidden" value="{{ repo.id }}"/>
         <input name="file_path" type="hidden" value="{{ path|urlencode }}" />
@@ -98,7 +99,7 @@
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}
-        <input type="submit" value="评注" class="submit" />
+        <input type="submit" value="提交" class="submit" />
     </form>
 </div>
 {% endif %}
