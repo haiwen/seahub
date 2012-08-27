@@ -11,7 +11,8 @@ from seahub.views import root, myhome, \
     seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress_page, \
     upload_file_error, update_file_error, \
-    get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, validate_filename, \
+    get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, \
+    validate_filename, \
     repo_create, repo_update_file, repo_revert_file, file_revisions, \
     get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
     crocodoc_upload, crocodoc_status, crocodoc_session
@@ -77,7 +78,7 @@ urlpatterns = patterns('',
 
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
-    (r'^file/move/$', file_move),                       
+    (r'^file/move/$', file_move),
     (r'^seafile_access_check/$', seafile_access_check),                       
     url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
     (r'^org/$', org_info),

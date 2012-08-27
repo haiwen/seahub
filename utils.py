@@ -3,6 +3,7 @@
 import os
 import re
 import time
+import random
 import stat
 
 from django.shortcuts import render_to_response
@@ -101,7 +102,9 @@ def gen_token(max_length=5):
 
     """
 
-    token = sha_constructor(settings.SECRET_KEY + unicode(time.time())).hexdigest()[:max_length]
+    secret_key = settings.SECRET_KEY
+    rstr = str(random.random())
+    token = sha_constructor(secret_key + rstr).hexdigest()[:max_length]
     return token
 
 def validate_group_name(group_name):

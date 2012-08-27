@@ -582,7 +582,8 @@ def group_recommend(request):
                     
                     # save attachment
                     ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                           attach_type=attach_type, path=path)
+                                           attach_type=attach_type, path=path,
+                                           src='recommend')
                     ma.save()
 
                     group_url = reverse('group_info', args=[group.id])

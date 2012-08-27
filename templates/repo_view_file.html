@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags avatar_tags%}
 {% load url from future %}
 
 {% block main_panel %}
@@ -37,7 +37,7 @@
 
     <div class="file-op fright">
         {% if not view_history %}
-        <span id="shared-link" class="hide">{{ file_shared_link }}</span>
+        <p id="shared-link" class="hide">{{ file_shared_link }}</p>
         <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
         <button id="send-shared-link" class="hide">发送</button>
         <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
@@ -88,6 +88,53 @@
         <p class="error">您还没有将同步目录 {{repo.name}} 同步到本地</p>
         <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">点此同步</button>
     </div>
+
+{% if request.user.is_authenticated %}
+<div id="file-comment">
+    <h3>评论</h3>
+    <form id="file-comment-form" action="" method="post">
+        <input name="repo_id" type="hidden" value="{{ repo.id }}"/>
+        <input name="file_path" type="hidden" value="{{ path|urlencode }}" />
+        <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
+        {% for error in form.message.errors %}
+        <p class="error">{{ error|escape }}</p>
+        {% endfor %}
+        <input type="submit" value="提交" class="submit" />
+    </form>
+</div>
+{% endif %}
+
+{% if comments %}
+<!-- file comments list -->
+<ul class="msg-list">
+  {% for comment in comments %}
+  <li class="msg w100 ovhd">
+    <div class="pic fleft">
+      <a href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
+    </div>
+    <div id="filecomment-{{comment.id}}" class="txt fright">
+      <div class="msg-hd">
+        <span class="time">{{ comment.timestamp|translate_commit_time }}</span>
+        <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}">{{ comment.from_email|email2nickname }}</a>
+      </div>
+      <div class="msg-bd">
+        <p>
+          {{ comment.message|seahub_urlize|find_at|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+<div id="paginator">
+  {% if current_page != 1 %}
+  <a href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+  {% endif %}
+  {% if page_next %}
+  <a href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}&page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+  {% endif %}
+</div>
 
 {% endblock %}
 
