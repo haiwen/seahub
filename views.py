@@ -30,9 +30,9 @@ from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_innerpub_repo, \
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
     get_group_repoids, check_group_staff, get_personal_groups, is_repo_owner, \
-    get_group, get_shared_groups_by_repo, is_group_user
+    get_group, get_shared_groups_by_repo, is_group_user, check_permission
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -85,38 +85,7 @@ def is_registered_user(email):
 
     return True if user else False
 
-def check_shared_repo(request, repo_id):
-    """
-    Check whether user has been shared this repo or
-    the repo share to the groups user join or
-    got token if user is not logged in
-    
-    """
-    # Not logged-in user
-    if not request.user.is_authenticated():
-        token = request.COOKIES.get('anontoken', None)
-        if token:
-            return True
-        else:
-            return False
-
-    # Logged-in user
-    repos = seafserv_threaded_rpc.list_share_repos(request.user.username, 'to_email', -1, -1)
-    for repo in repos:
-        if repo.props.id == repo_id:
-            return True
-
-    groups = ccnet_threaded_rpc.get_groups(request.user.username)
-    # for every group that user joined...    
-    for group in groups:
-        # ...get repo ids in that group, and check whether repo ids contains that repo id 
-        repo_ids = get_group_repoids(group.props.id)
-        if repo_id in repo_ids:
-            return True
-
-    return False
-
-def access_to_repo(request, repo_id, repo_ap):
+def access_to_repo(request, repo_id, repo_ap=None):
     """
     Check whether user in the request can access to repo, which means user can
     view directory entries on repo page. Only repo owner or person who is shared
@@ -124,12 +93,12 @@ def access_to_repo(request, repo_id, repo_ap):
     NOTE: `repo_ap` may be used in future.
 
     """
-    if validate_owner(request, repo_id) or check_shared_repo(request, repo_id)\
-            or access_org_repo(request, repo_id) or is_innerpub_repo(repo_id):
-        return True
+    if not request.user.is_authenticated():
+        token = request.COOKIES.get('anontoken', None)
+        return True if token else False
     else:
-        return False
-
+        return check_permission(repo_id, request.user.username)
+    
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
@@ -692,7 +661,7 @@ def public_home(request):
     Show public home page when CLOUD_MODE is False.
     """
     users = get_emailusers(-1, -1)
-    public_repos = seafserv_threaded_rpc.list_innerpub_repos()
+    public_repos = seafserv_threaded_rpc.list_inner_pub_repos()
     calculate_repo_last_modify(public_repos)
     public_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
@@ -722,9 +691,11 @@ def public_repo_create(request):
         user = request.user.username
 
         try:
-            repo_id = seafserv_threaded_rpc.create_innerpub_repo(repo_name,
-                                                               repo_desc,
-                                                               user, passwd)
+            # create a repo 
+            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
+                                                        user, passwd)
+            # set this repo as inner pub
+            seafserv_threaded_rpc.set_inner_pub_repo(repo_id)
         except:
             repo_id = None
         if not repo_id:

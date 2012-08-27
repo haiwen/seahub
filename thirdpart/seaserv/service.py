@@ -340,13 +340,25 @@ def is_valid_filename(file_or_dir):
 
     return ret
 
-def is_innerpub_repo(repo_id):
+def is_inner_pub_repo(repo_id):
     """
     Check whether a repo is public.
+    Return 0 if repo is not inner public, otherwise non-zero.
     """
     try:
-        ret = seafserv_threaded_rpc.is_innerpub_repo(repo_id)
+        ret = seafserv_threaded_rpc.is_inner_pub_repo(repo_id)
     except SearpcError:
         ret = 0
 
     return ret
+
+def check_permission(repo_id, user):
+    """
+    Check whether user has permission to access repo.
+    Return true if user has permission otherwise false.
+    """
+    try:
+        ret = seafserv_threaded_rpc.check_permission(repo_id, user)
+    except SearpcError:
+        ret = -1
+    return True if ret == 0 else False
