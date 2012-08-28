@@ -82,13 +82,7 @@ function addAutocomplete(ele_id, container_id, data) {
  * @param data: tip data in array, e.g- ['xx', 'yy']
  */
 function addAtAutocomplete(ele_id, container_id, data) {
-    function split(val) {
-        return val.split(/\ \s*/);
-    }
-    function extractLast(term) {
-        return split(term).pop();
-    }
-
+    var pos = '';
     $(ele_id)
         .bind("keydown", function(event) {
             if (event.keyCode === $.ui.keyCode.TAB &&
@@ -96,40 +90,113 @@ function addAtAutocomplete(ele_id, container_id, data) {
                 event.preventDefault();
             }
         })
+        .bind('keypress', function(e) {
+            if (String.fromCharCode(e.keyCode || e.charCode) == '@') {
+               //$(this).autocomplete( "option", "disabled", false);
+                pos = getCaretPos($(ele_id)[0]); // get cursor position
+                if (pos == $(this).val().length) {
+                    cursor_at_end = true;
+                } else {
+                    cursor_at_end = false;
+                    end_str = $(this).val().substring(pos);
+                }
+            }
+        })
         .autocomplete({
+            //disabled:true,
             appendTo: container_id,
             autoFocus: true,
             delay: 100,
             minLength: 0,
             source: function(request, response) {
-                    var lastTerm = extractLast(request.term);
-                    var lastIndex = lastTerm.lastIndexOf('@');
-                    if (lastIndex == 0) {
-                        var matcher = new RegExp($.ui.autocomplete.escapeRegex(lastTerm.substring(lastIndex+1)), "i");
-                        response($.grep(data, function(value) {
-                            return matcher.test(value.value);
-                        }));
+                if (pos === '') {
+                    return false;
+                }
+                if (getCaretPos($(ele_id)[0]) > pos) { // cursor is at the right of the current @
+                    var request_term = '';
+                    if (cursor_at_end) {
+                        request_term = request.term.substring(pos + 1);
                     } else {
-                        response();
+                        request_term = request.term.slice(pos + 1, - end_str.length);
                     }
+                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request_term), "i");
+                    response($.grep(data, function(value) {
+                        return matcher.test(value.value);
+                    }));
+                } else {
+                    response(null); // when cursor is at the left of current @ or @ is deleted
+                }
             },
-            focus: function() {
-                   this.value = ui.item.label;
+            focus: function(event, ui) {
                    return false;
             },
             select: function(event, ui) {
-                    var terms = split(this.value);
-                    terms.pop();
-                    terms.push('@'.concat(ui.item.label));
-                    terms.push("");
-                    this.value = terms.join(" ");
-                    return false;
+                var str = $(this).val().substring(0, pos - 1),
+                    add_space = false,
+                    pos_set = pos + ui.item.label.length + 2;
+
+                if (pos == 0) {
+                    str += $(this).val().charAt(pos - 1) + '@';
+                } else {
+                    if ($(this).val().charAt(pos - 1) != ' ') {
+                        str += $(this).val().charAt(pos - 1) + ' @';
+                        add_space = true;
+                    } else {
+                        str += $(this).val().charAt(pos - 1) + '@';
+                    }
+                }
+                str += ui.item.label + ' ';
+                if (cursor_at_end) {
+                    $(this).val(str);
+                } else {
+                    $(this).val(str + end_str);
+                    if (add_space) {
+                        pos_set += 1;
+                    }
+                    setCaretPos($(this)[0], pos_set);
+                }
+                return false;
             }
         });
 }
 
-function filesizeformat(bytes, precision)
-{  
+function getCaretPos(inputor) {
+    var end, endRange, len, normalizedValue, pos, range, start, textInputRange;
+    if (document.selection) {
+        range = document.selection.createRange();
+        pos = 0;
+        if (range && range.parentElement() === inputor) {
+            normalizedValue = inputor.value.replace(/\r\n/g, "\n");
+            len = normalizedValue.length;
+            textInputRange = inputor.createTextRange();
+            textInputRange.moveToBookmark(range.getBookmark());
+            endRange = inputor.createTextRange();
+            endRange.collapse(false);
+            if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+                start = end = len;
+            } else {
+                start = -textInputRange.moveStart("character", -len);
+                end = -textInputRange.moveEnd("character", -len);
+            }
+        }
+    } else {
+        start = inputor.selectionStart;
+    }
+    return start;
+}
+
+function setCaretPos(inputor, pos) {
+    var range;
+    if (document.selection) {
+        range = inputor.createTextRange();
+        range.move("character", pos);
+        return range.select();
+    } else {
+        return inputor.setSelectionRange(pos, pos);
+    }   
+}
+
+function filesizeformat(bytes, precision) {  
     var kilobyte = 1024;
     var megabyte = kilobyte * 1024;
     var gigabyte = megabyte * 1024;
