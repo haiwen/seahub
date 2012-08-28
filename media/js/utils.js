@@ -92,7 +92,6 @@ function addAtAutocomplete(ele_id, container_id, data) {
         })
         .bind('keypress', function(e) {
             if (String.fromCharCode(e.keyCode || e.charCode) == '@') {
-               //$(this).autocomplete( "option", "disabled", false);
                 pos = getCaretPos($(ele_id)[0]); // get cursor position
                 if (pos == $(this).val().length) {
                     cursor_at_end = true;
@@ -103,7 +102,6 @@ function addAtAutocomplete(ele_id, container_id, data) {
             }
         })
         .autocomplete({
-            //disabled:true,
             appendTo: container_id,
             autoFocus: true,
             delay: 100,
@@ -112,7 +110,7 @@ function addAtAutocomplete(ele_id, container_id, data) {
                 if (pos === '') {
                     return false;
                 }
-                if (getCaretPos($(ele_id)[0]) > pos) { // cursor is at the right of the current @
+                if ($(ele_id).val().charAt(pos) == '@' && getCaretPos($(ele_id)[0]) > pos) { // cursor is at the right of the current @
                     var request_term = '';
                     if (cursor_at_end) {
                         request_term = request.term.substring(pos + 1);
@@ -131,29 +129,12 @@ function addAtAutocomplete(ele_id, container_id, data) {
                    return false;
             },
             select: function(event, ui) {
-                var str = $(this).val().substring(0, pos - 1),
-                    add_space = false,
-                    pos_set = pos + ui.item.label.length + 2;
-
-                if (pos == 0) {
-                    str += $(this).val().charAt(pos - 1) + '@';
-                } else {
-                    if ($(this).val().charAt(pos - 1) != ' ') {
-                        str += $(this).val().charAt(pos - 1) + ' @';
-                        add_space = true;
-                    } else {
-                        str += $(this).val().charAt(pos - 1) + '@';
-                    }
-                }
-                str += ui.item.label + ' ';
+                var str = $(this).val().substring(0, pos + 1) + ui.item.label + ' ';
                 if (cursor_at_end) {
                     $(this).val(str);
                 } else {
                     $(this).val(str + end_str);
-                    if (add_space) {
-                        pos_set += 1;
-                    }
-                    setCaretPos($(this)[0], pos_set);
+                    setCaretPos($(this)[0], pos + ui.item.label.length + 2);
                 }
                 return false;
             }
