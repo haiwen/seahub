@@ -264,6 +264,25 @@ def get_org_repos(org_id, start, limit):
 
     return repos
 
+def list_org_inner_pub_repos(org_id, start=None, limit=None):
+    """
+    List org inner pub repos, which can be access by all org members.
+    """
+    try:
+        repos = seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
+    except SearpcError:
+        repos = []
+        
+    # calculate repo's lastest modify time
+    for repo in repos:
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+    # sort repos by latest modify time
+    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    return repos
+        
 def get_org_id_by_repo_id(repo_id):
     """
     Get org id according repo id.

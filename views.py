@@ -639,7 +639,7 @@ def myhome(request):
     ctx_dict = {'base_template': 'myhome_base.html',
                 'org_dict': None}
     set_cur_ctx(request, ctx_dict)
-    
+
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -652,7 +652,7 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
-            "url": settings.SITE_ROOT + 'repo/create/',
+            "url": reverse(repo_create),
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -668,7 +668,7 @@ def public_home(request):
     return render_to_response('public_home.html', {
             'users': users,
             'public_repos': public_repos,
-            "url": settings.SITE_ROOT + 'publicrepo/create/',
+            "url": reverse(public_repo_create),
             }, context_instance=RequestContext(request))
 
 @login_required    

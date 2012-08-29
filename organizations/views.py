@@ -13,7 +13,7 @@ from django.template import Context, loader, RequestContext
 from auth.decorators import login_required
 from pysearpc import SearpcError
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_orgs_by_user, get_org_repos, \
+    get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     remove_org_user, get_org_groups, is_valid_filename, \
     create_org_repo, get_org_id_by_group
@@ -62,7 +62,7 @@ def create_org(request):
 @login_required
 def org_info(request, url_prefix):
     """
-    Show org info page.
+    Show org info page, list org inner pub repos.
     """
     org = get_user_current_org(request.user.username, url_prefix)
     if not org:
@@ -74,18 +74,75 @@ def org_info(request, url_prefix):
     
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
                                                         0, MAX_INT)
-    repos = get_org_repos(org.org_id, 0, MAX_INT)
-    calculate_repo_last_modify(repos)
-    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    repos = list_org_inner_pub_repos(org.org_id)
 
-    url = 'organizations/%s/repo/create/' % org.url_prefix
     return render_to_response('organizations/org_info.html', {
             'org': org,
             'org_users': org_members,
             'repos': repos,
-            'url': seahub_settings.SITE_ROOT + url,
+            'url': reverse(org_inner_pub_repo_create, args=[url_prefix]),
             }, context_instance=RequestContext(request))
 
+@login_required
+def org_personal(request, url_prefix):
+    """
+    Show org personal page.
+    """
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
+
+    user = request.user.username
+
+    # Org repos that I own
+    owned_repos = seafserv_threaded_rpc.list_org_repos_by_owner(org.org_id,
+                                                                user)
+    calculate_repo_last_modify(owned_repos)
+    owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+
+    return render_to_response('organizations/personal.html', {
+            'owned_repos': owned_repos,
+            'url': reverse('org_repo_create', args=[url_prefix]),
+            }, context_instance=RequestContext(request))
+
+@login_required
+def org_inner_pub_repo_create(request, url_prefix):
+    """
+    Handle ajax post to create org inner pub repo, this repo is accessiable by
+    all org members.
+    """    
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    form = RepoCreateForm(request.POST)
+    if form.is_valid():
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        passwd = form.cleaned_data['passwd']
+        user = request.user.username
+        org_id = request.user.org['org_id']
+        
+        try:
+            # create a org repo 
+            repo_id = seafserv_threaded_rpc.create_org_repo(repo_name,
+                                                            repo_desc,
+                                                            user, passwd,org_id)
+            # set org inner pub
+            seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id)
+        except:
+            repo_id = None
+        if not repo_id:
+            result['error'] = u"创建目录失败"
+        else:
+            result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
+    
 @login_required
 def org_groups(request, url_prefix):
     """
@@ -254,10 +311,9 @@ def org_msg(request):
 
 @login_required    
 def org_repo_create(request, url_prefix):
-    '''
-    Handle ajax post to create org repo.
-    
-    '''
+    """
+    Handle ajax post to create org repo, this repo is only accessiable by owner.
+    """
     if not request.is_ajax() or request.method != 'POST':
         return Http404
 

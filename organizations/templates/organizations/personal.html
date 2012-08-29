@@ -1,0 +1,77 @@
+{% extends "org_base.html" %}
+{% load seahub_tags avatar_tags group_avatar_tags %}
+
+{% block nav_org_personal_class %}class="cur"{% endblock %}
+{% block left_panel %}
+
+<h3>我的基本信息</h3>
+<div class="home-profile w100 ovhd">
+    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
+{% if nickname %}
+<p class="fleft">{{ nickname }}</p>
+{% else %}
+<p class="fleft">暂无昵称 <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="编辑" title="编辑" /></a></p>
+{% endif %}
+</div>
+
+<h3>已用空间</h3>
+<p></p>
+
+<h3>我的小组</h3>
+{% if groups %}
+<ul>
+    {% for group in groups %}
+    <li class="mygroup">
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
+    </a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+	</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
+{% endif %}
+{% endblock %}
+
+{% block right_panel %}
+
+<h3>我拥有的同步目录</h3>
+<button id="repo-create">新建同步目录</button>
+<table>
+    <tr>
+        <th width="25%">名字</th>
+        <th width="43%">描述</th>
+        <th width="20%">更新时间</th>
+        <th width="12%">操作</th>
+    </tr>
+{% if owned_repos %}
+    {% for repo in owned_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>--</tdb>
+        {% endif %}
+        <td>
+            <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
+            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
+        </td>
+    </tr>
+    {% endfor %}
+{% endif %}
+</table>
+
+{% include "snippets/repo_create_form.html" %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include "snippets/myhome_extra_script.html" %}
+{% include "snippets/repo_create_js.html" %}
+</script>
+{% endblock %}
