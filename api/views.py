@@ -60,6 +60,7 @@ def calculate_repo_info(repo_list, username):
             repo.size = seafserv_threaded_rpc.server_repo_size(repo.id)
             if not repo.size :
                 repo.size = 0;
+
             password_need = False
             if repo.encrypted:
                 try:
@@ -69,8 +70,8 @@ def calculate_repo_info(repo_list, username):
                 except SearpcErroe, e:
                     pass
             repo.password_need = password_need
-        except:
-            repo.latest_modify = None
+        except Exception,e:
+            repo.latest_modify = 0
             repo.commit = None
             repo.size = -1
             repo.password_need = None
@@ -215,7 +216,7 @@ class ReposView(ResponseMixin, View):
                 "owner":email,
                 "name":r.name,
                 "desc":r.desc,
-                "mtime":r.lastest_modify,
+                "mtime":r.latest_modify,
                 "root":r.root,
                 "size":r.size,
                 "password_need":r.password_need,
@@ -229,7 +230,7 @@ class ReposView(ResponseMixin, View):
                 "owner":r.shared_email,
                 "name":r.name,
                 "desc":r.desc,
-                "mtime":r.lastest_modify,
+                "mtime":r.latest_modify,
                 "root":r.root,
                 "size":r.size,
                 "password_need":r.password_need,
