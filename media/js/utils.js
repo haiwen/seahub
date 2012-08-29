@@ -78,11 +78,16 @@ function addAutocomplete(ele_id, container_id, data) {
 /*
  * func: add autocomplete for `@` to some input ele
  * @param ele_id: autocomplete is added to this ele(ment), e.g-'#xxx'
+ * @param ele_css: {'xx':'xxx'}, to be added to ele_cp(a cp of ele)
  * @param container_id: id of autocomplete's container, often container of element above
- * @param data: tip data in array, e.g- ['xx', 'yy']
  */
-function addAtAutocomplete(ele_id, container_id, data) {
+function addAtAutocomplete(ele_id, container_id, data, ele_css) {
     var pos = '';
+    var ele_cp = '<div id="' + ele_id.substring(1) + '-cp"></div>';
+    $('#main').append(ele_cp);
+    ele_cp = $(ele_id + '-cp');
+    ele_cp.css({'position':'absolute', 'left':0, 'bottom':0, 'z-index':-10000, 'visibility':'hidden', 'white-space':'pre-wrap'}).css(ele_css);
+
     $(ele_id)
         .bind("keydown", function(event) {
             if (event.keyCode === $.ui.keyCode.TAB &&
@@ -92,13 +97,22 @@ function addAtAutocomplete(ele_id, container_id, data) {
         })
         .bind('keypress', function(e) {
             if (String.fromCharCode(e.keyCode || e.charCode) == '@') {
+                var str = '';
                 pos = getCaretPos($(ele_id)[0]); // get cursor position
                 if (pos == $(this).val().length) {
                     cursor_at_end = true;
+                    str = $(this).val();
                 } else {
                     cursor_at_end = false;
                     end_str = $(this).val().substring(pos);
+                    str = $(this).val().substring(0, pos);
                 }
+                ele_cp.html(str + '<span id="' + ele_id.substring(1) + '-at">@</span>');
+                at_pos = $(ele_id + '-at').position();
+                var x = at_pos.left,
+                    y = at_pos.top + parseInt(ele_cp.css('line-height')) - 2 - $(ele_id).scrollTop();
+                $(ele_id).autocomplete("option", "position", { my : "left top", at: "left top", offset: x + ' ' + y, collision: 'fit'});
+                ele_scrollTop = $(ele_id).scrollTop();
             }
         })
         .autocomplete({
@@ -125,10 +139,10 @@ function addAtAutocomplete(ele_id, container_id, data) {
                     response(null); // when cursor is at the left of current @ or @ is deleted
                 }
             },
-            focus: function(event, ui) {
+            focus: function(e, ui) {
                    return false;
             },
-            select: function(event, ui) {
+            select: function(e, ui) {
                 var str = $(this).val().substring(0, pos + 1) + ui.item.label + ' ';
                 if (cursor_at_end) {
                     $(this).val(str);
@@ -136,6 +150,7 @@ function addAtAutocomplete(ele_id, container_id, data) {
                     $(this).val(str + end_str);
                     setCaretPos($(this)[0], pos + ui.item.label.length + 2);
                 }
+                $(ele_id).scrollTop(ele_scrollTop); // fix ff problem: ele scrolls to the top most.
                 return false;
             }
         });

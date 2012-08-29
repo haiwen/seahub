@@ -810,6 +810,8 @@ ul.with-bg li {
     color:#333;
 }
 #message {
+    font: 13px/1.5 Arial, Helvetica, sans-serif;
+    word-wrap: break-word;
     width: 600px;
     height: 80px;
     margin-top: 4px;

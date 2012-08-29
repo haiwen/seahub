@@ -206,7 +206,7 @@ $(function() {
     
     member_list.push({value:nickname + pinyin, label:nickname});
     {% endfor %}
-    addAtAutocomplete('#message', '#group-message-form', member_list);
+    addAtAutocomplete('#message', '#group-message-form', member_list, {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto'});
 });
 
 $("table tr:gt(0)").hover(
