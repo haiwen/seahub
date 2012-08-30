@@ -25,7 +25,7 @@ from pysearpc import SearpcError
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
-    get_group_repoids, check_group_staff
+    check_group_staff
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \

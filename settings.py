@@ -94,7 +94,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'seahub.base.context_processors.base',
-    'seahub.organizations.context_processors.org',
+#    'seahub.organizations.context_processors.org',
 )
 
 

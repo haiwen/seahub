@@ -1,4 +1,5 @@
 {% extends base_template %}
+
 {% load seahub_tags avatar_tags %}
 {% load url from future %}
 
@@ -69,11 +70,11 @@
         {% else %}
         <td>—— ——</td>
         {% endif %}
-        <td>{{ repo.share_from|email2nickname }}</td>
+        <td>{{ repo.owner|email2nickname }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" class="download vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="同步" title="同步到本地" />
         {% if is_staff or repo.share_from_me  %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.share_from }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
         {% endif %}
         </td>
     </tr>

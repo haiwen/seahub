@@ -13,7 +13,8 @@ from avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_SIZE
 from avatar.signals import avatar_updated
 from avatar.util import get_primary_avatar, get_default_avatar_url, \
     invalidate_cache
-from seahub.utils import render_error, render_permission_error
+from seahub.utils import render_error, render_permission_error, \
+    check_and_get_org_by_group
 
 from auth.decorators import login_required
 from seaserv import ccnet_threaded_rpc, check_group_staff
@@ -103,6 +104,9 @@ def group_add(request):
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
+    # change navigator when user in diffent context
+    org, base_template = check_and_get_org_by_group(group_id_int)
+    
     form = GroupAvatarForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST' and 'avatar' in request.FILES:
@@ -116,6 +120,8 @@ def group_add(request):
     return render_to_response('avatar/set_avatar.html', {
             'group' : group,
             'form' : form,
+            'org': org,
+            'base_template': base_template,
             }, context_instance=RequestContext(request))
 
 @login_required

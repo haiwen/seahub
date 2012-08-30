@@ -14,7 +14,9 @@ from django.core.files.uploadhandler import FileUploadHandler, StopFutureHandler
 from django.core.cache import cache
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
+    get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
+    CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, \
+    get_org_id_by_group
 try:
     from settings import CROCODOC_API_TOKEN
 except ImportError:
@@ -47,23 +49,37 @@ def gen_fileext_type_map():
     return d
 FILEEXT_TYPE_MAP = gen_fileext_type_map()
 
-def render_permission_error(request, msg=None):
+def render_permission_error(request, msg=None, extra_ctx=None):
     """
     Return permisson error page.
 
     """
-    return render_to_response('permission_error.html', {
-            'error_msg': msg or u'权限错误',
-            }, context_instance=RequestContext(request))
+    ctx = {}
+    ctx['error_msg'] = msg or u'权限错误'
+    ctx['base_template'] = 'myhome_base.html'
 
-def render_error(request, msg=None):
+    if extra_ctx:
+        for k in extra_ctx:
+            ctx[k] = extra_ctx[k]
+
+    return render_to_response('permission_error.html', ctx,
+                              context_instance=RequestContext(request))
+
+def render_error(request, msg=None, extra_ctx=None):
     """
     Return normal error page.
 
     """
-    return render_to_response('error.html', {
-            'error_msg': msg or u'内部错误',
-            }, context_instance=RequestContext(request))
+    ctx = {}
+    ctx['error_msg'] = msg or u'内部错误'
+    ctx['base_template'] = 'myhome_base.html'
+
+    if extra_ctx:
+        for k in extra_ctx:
+            ctx[k] = extra_ctx[k]
+
+    return render_to_response('error.html', ctx,
+                              context_instance=RequestContext(request))
 
 def list_to_string(l):
     """
@@ -232,7 +248,7 @@ def get_accessible_repos(request, repo):
     groups_repos = []
     groups = ccnet_threaded_rpc.get_groups(email)
     for group in groups:
-        group_repo_ids = get_group_repoids(group_id=group.id)
+        group_repo_ids = get_group_repoids(group.id)
         for repo_id in group_repo_ids:
             if not repo_id:
                 continue
@@ -318,13 +334,44 @@ def string2list(string):
         s.add(e)
     return [ x for x in s ]
         
-def get_cur_ctx(request):
-    ctx_dict = request.session.get('current_context', {
-            'base_template': 'myhome_base.html',
-            'org_dict': None})
-    return ctx_dict
+# def get_cur_ctx(request):
+#     ctx_dict = request.session.get('current_context', {
+#             'base_template': 'myhome_base.html',
+#             'org_dict': None})
+#     return ctx_dict
 
-def set_cur_ctx(request, ctx_dict):
-    request.session['current_context'] = ctx_dict
-    request.user.org = ctx_dict.get('org_dict', None)
+# def set_cur_ctx(request, ctx_dict):
+#     request.session['current_context'] = ctx_dict
+#     request.user.org = ctx_dict.get('org_dict', None)
 
+def check_and_get_org_by_repo(repo_id):
+    """
+    Check whether repo is org repo, get org info if it is, and set
+    base template.
+    """
+    org_id = get_org_id_by_repo_id(repo_id)
+    if org_id > 0:
+        # this repo is org repo, get org info
+        org = get_org_by_id(org_id)
+        base_template = 'org_base.html'
+    else:
+        org = None
+        base_template = 'myhome_base.html'
+    
+    return org, base_template
+
+def check_and_get_org_by_group(group_id):
+    """
+    Check whether repo is org repo, get org info if it is, and set
+    base template.
+    """
+    org_id = get_org_id_by_group(group_id)
+    if org_id > 0:
+        # this repo is org repo, get org info
+        org = get_org_by_id(org_id)
+        base_template = 'org_base.html'
+    else:
+        org = None
+        base_template = 'myhome_base.html'
+    
+    return org, base_template

@@ -331,8 +331,8 @@ def get_binding_peerids(email):
         peerid_list.append(peer_id)
     return peerid_list
 
-def get_group_repoids(group_id=None):
-    """Get repo ids of a given group id or username"""
+def get_group_repoids(group_id):
+    """Get repo ids of a given group id."""
     try:
         repo_ids = seafserv_threaded_rpc.get_group_repoids(group_id)
     except SearpcError:
@@ -347,6 +347,82 @@ def get_group_repoids(group_id=None):
             continue
         repoid_list.append(repo_id)
     return repoid_list
+
+def get_group_repos(group_id, user):
+    """Get repos of a given group id."""
+    try:
+        repo_ids = seafserv_threaded_rpc.get_group_repoids(group_id)
+    except SearpcError:
+        return []
+
+    if not repo_ids:
+        return []
+    
+    repoid_list = []
+    for repo_id in repo_ids.split("\n"):
+        if repo_id == '':
+            continue
+        repoid_list.append(repo_id)
+
+    repos = []
+    for repo_id in repoid_list:
+        if not repo_id:
+            continue
+        repo = get_repo(repo_id)
+        if not repo:
+            continue
+
+        repo.owner = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
+        repo.share_from_me = True if user == repo.owner else False
+
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+
+        repos.append(repo)
+    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    
+    return repos
+    
+def get_org_group_repos(org_id, group_id, user):
+    """Get org repos of a given group id."""
+    try:
+        repo_ids = seafserv_threaded_rpc.get_org_group_repoids(org_id, group_id)
+    except SearpcError:
+        return []
+
+    if not repo_ids:
+        return []
+    
+    repoid_list = []
+    for repo_id in repo_ids.split("\n"):
+        if repo_id == '':
+            continue
+        repoid_list.append(repo_id)
+
+    repos = []
+    for repo_id in repoid_list:
+        if not repo_id:
+            continue
+        repo = get_repo(repo_id)
+        if not repo:
+            continue
+
+        repo.owner = seafserv_threaded_rpc.get_org_group_repo_owner(org_id,
+                                                                    group_id,
+                                                                    repo_id)
+        repo.sharecd_from_me = True if user == repo.owner else False
+
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+
+        repos.append(repo)
+    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    
+    return repos
 
 def is_valid_filename(file_or_dir):
     """
@@ -381,3 +457,14 @@ def check_permission(repo_id, user):
     except SearpcError:
         ret = -1
     return True if ret == 0 else False
+
+def get_org_id_by_repo(repo_id):
+    """
+    Check whether repo is org repo.
+    """
+    try:
+        org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
+    except SearpcError:
+        org_id = -1
+    return org_id
+

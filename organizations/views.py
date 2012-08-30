@@ -28,7 +28,7 @@ from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
-    validate_group_name, string2list, set_cur_ctx, calculate_repo_last_modify,\
+    validate_group_name, string2list, calculate_repo_last_modify,\
     MAX_INT
 from seahub.views import myhome
 
@@ -68,9 +68,9 @@ def org_info(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    ctx_dict = {'base_template': 'org_base.html',
-                'org_dict': org._dict}
-    set_cur_ctx(request, ctx_dict)
+    # ctx_dict = {'base_template': 'org_base.html',
+    #             'org_dict': org._dict}
+    # set_cur_ctx(request, ctx_dict)
     
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
                                                         0, MAX_INT)
@@ -103,6 +103,7 @@ def org_personal(request, url_prefix):
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
             'url': reverse('org_repo_create', args=[url_prefix]),
+            'org': org,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -123,15 +124,17 @@ def org_inner_pub_repo_create(request, url_prefix):
         repo_desc = form.cleaned_data['repo_desc']
         passwd = form.cleaned_data['passwd']
         user = request.user.username
-        org_id = request.user.org['org_id']
+        org = get_user_current_org(request.user.username, url_prefix)
+        if not org:
+            return HttpResponse(json.dumps(u'创建目录失败：未加入该团体'),
+                                content_type=content_type)
         
         try:
             # create a org repo 
-            repo_id = seafserv_threaded_rpc.create_org_repo(repo_name,
-                                                            repo_desc,
-                                                            user, passwd,org_id)
+            repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
+                                      org.org_id)
             # set org inner pub
-            seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id)
+            seafserv_threaded_rpc.set_org_inner_pub_repo(org.org_id, repo_id)
         except:
             repo_id = None
         if not repo_id:
@@ -155,7 +158,11 @@ def org_groups(request, url_prefix):
     if request.method == 'POST':
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            return render_error(request, u'小组名称只能包含中英文字符，数字及下划线')
+            return render_error(request, u'小组名称只能包含中英文字符，数字及下划线',
+                                extra_ctx={
+                    'org': org,
+                    'base_template': 'org_base.html',
+                    })
         
         try:
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
@@ -163,7 +170,10 @@ def org_groups(request, url_prefix):
             ccnet_threaded_rpc.add_org_group(org.org_id, group_id)
         except SearpcError, e:
             error_msg = e.msg
-            return render_error(request, error_msg)
+            return render_error(request, error_msg, extra_ctx={
+                    'org': org,
+                    'base_template': 'org_base.html',
+                    })
         
     groups = get_org_groups(org.org_id, 0, MAX_INT)
     return render_to_response('organizations/org_groups.html', {
@@ -205,9 +215,9 @@ def org_useradmin(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    ctx_dict = {'base_template': 'org_admin_base.html',
-                'org_dict': request.user.org}
-    set_cur_ctx(request, ctx_dict)
+    # ctx_dict = {'base_template': 'org_admin_base.html',
+    #             'org_dict': request.user.org}
+    # set_cur_ctx(request, ctx_dict)
     
     if request.method == 'POST':
         emails = request.POST.get('added-member-name')
@@ -329,9 +339,13 @@ def org_repo_create(request, url_prefix):
         passwd_again = form.cleaned_data['passwd_again']
         
         user = request.user.username
-        org_id = request.user.org['org_id']
+        org = get_user_current_org(request.user.username, url_prefix)
+        if not org:
+            return HttpResponse(json.dumps(u'创建目录失败：未加入该团体'),
+                                content_type=content_type)
 
-        repo_id = create_org_repo(repo_name, repo_desc, user, passwd, org_id)
+        repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
+                                  org.org_id)
         if not repo_id:
             result['error'] = u"创建目录失败"
         else:

@@ -118,6 +118,9 @@ def translate_remain_time(value):
 
 @register.filter(name='email2nickname')
 def email2nickname(value):
+    if not value:
+        return ''
+    
     nickname = cache.get(NICKNAME_CACHE_PREFIX+value)
     if not nickname:
         profile = get_first_object_or_none(Profile.objects.filter(user=value))

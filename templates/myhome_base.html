@@ -10,11 +10,6 @@
         <a href="{% url public_home %}" {% block nav_publichome_class %}{% endblock %}>公共页面</a>
     </li>
     {% endif %}
-    {% if request.user.org %}
-    <li>
-        <a href="{{ SITE_ROOT }}org/" {% block nav_org_class %}{% endblock %}>企业</a>
-    </li>
-    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>小组</a>
     </li>
