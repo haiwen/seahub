@@ -100,10 +100,13 @@ def org_personal(request, url_prefix):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
+    groups = get_org_groups(org.org_id, 0, MAX_INT)
+    
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
             'url': reverse('org_repo_create', args=[url_prefix]),
             'org': org,
+            'groups': groups,
             }, context_instance=RequestContext(request))
 
 @login_required
