@@ -78,7 +78,7 @@ function addAutocomplete(ele_id, container_id, data) {
 /*
  * func: add autocomplete for `@` to some input ele
  * @param ele_id: autocomplete is added to this ele(ment), e.g-'#xxx'
- * @param ele_css: {'xx':'xxx'}, to be added to ele_cp(a cp of ele)
+ * @param ele_css: {'xx':'xxx'}, to be added to ele_cp(a copy of ele)
  * @param container_id: id of autocomplete's container, often container of element above
  */
 function addAtAutocomplete(ele_id, container_id, data, ele_css) {
@@ -154,6 +154,7 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
                 return false;
             }
         });
+     $(ele_id).autocomplete('widget').css({'max-width':$(ele_id).width()/2, 'max-height':$(document).height() - $(ele_id).offset().top - $(ele_id).height()});
 }
 
 function getCaretPos(inputor) {

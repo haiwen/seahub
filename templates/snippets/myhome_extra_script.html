@@ -13,6 +13,7 @@ $(function() {
         $("#repo_id").val($(this).attr("data"));
         $("#repo-share-form").modal({appendTo: "#main"});
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);
+        $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10});
     });
 
     //check before post

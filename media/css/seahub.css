@@ -442,6 +442,7 @@ ul.with-bg li {
 /*ui-autocomplete*/
 .ui-autocomplete {
     background:#fff;
+    overflow:auto;
 }
 .ui-menu-item {
     background-image:none;
@@ -1013,17 +1014,6 @@ ul.with-bg li {
     color:#fff;
     background:#646464;
     font-size:15px;
-}
-
-/* scroll result for autocomplete  */
-.ui-autocomplete {
-    max-height: 200px;
-    _height: 100px; /* for ie 6 */
-    overflow-y: auto;
-    /* prevent horizontal scrollbar */
-    overflow-x: hidden;
-    /* add padding to account for vertical scrollbar */
-    padding-right: 20px;
 }
 
 #shared-link {
