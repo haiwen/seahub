@@ -109,9 +109,15 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
                 }
                 ele_cp.html(str + '<span id="' + ele_id.substring(1) + '-at">@</span>');
                 at_pos = $(ele_id + '-at').position();
-                var x = at_pos.left,
-                    y = at_pos.top + parseInt(ele_cp.css('line-height')) - 2 - $(ele_id).scrollTop();
-                $(ele_id).autocomplete("option", "position", { my : "left top", at: "left top", offset: x + ' ' + y, collision: 'fit'});
+                x = at_pos.left;
+                y = at_pos.top + parseInt(ele_cp.css('line-height')) - 2 - $(ele_id).scrollTop();
+                $(this).autocomplete("option", "position", { my : "left top", at: "left top", offset: x + ' ' + y, collision: 'fit'});
+                $(this).bind('autocompleteopen', function(e, ui) {
+                    if ($(this).offset().top + y + $(this).autocomplete('widget').outerHeight() > $(window).height() + $(window).scrollTop()) {
+                        y = y - $(this).autocomplete('widget').outerHeight() - parseInt(ele_cp.css('line-height'));
+                        $(this).autocomplete('widget').offset({left: $(ele_id).offset().left + x, top:$(ele_id).offset().top + y});
+                    }
+                });
                 ele_scrollTop = $(ele_id).scrollTop();
             }
         })
