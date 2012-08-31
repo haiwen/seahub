@@ -16,7 +16,7 @@ from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     remove_org_user, get_org_groups, is_valid_filename, \
-    create_org_repo, get_org_id_by_group
+    create_org_repo, get_org_id_by_group, get_org_groups_by_user
 
 from decorators import org_staff_required
 from forms import OrgCreateForm
@@ -98,7 +98,7 @@ def org_personal(request, url_prefix):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    groups = get_org_groups(org.org_id, 0, MAX_INT)
+    groups = get_org_groups_by_user(org.org_id, user)
     
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,

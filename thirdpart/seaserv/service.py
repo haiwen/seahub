@@ -133,6 +133,22 @@ def get_org_groups(org_id, start, limit):
         groups = []
     return groups
 
+def get_org_groups_by_user(org_id, user):
+    """
+    Get user's groups created in org.
+    """
+    try:
+        groups_all = ccnet_threaded_rpc.get_groups(user)
+    except SearpcError:
+        return []
+
+    org_groups = []
+    for group in groups_all:
+        if org_id == ccnet_threaded_rpc.get_org_id_by_group(group.id):
+            org_groups.append(group)
+            
+    return org_groups
+    
 def get_personal_groups(email):
     try:
         groups_all = ccnet_threaded_rpc.get_groups(email)
