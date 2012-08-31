@@ -7,16 +7,19 @@ $('.reply, .replyclose').hover(
     }
 );
 $('.reply').click(function() {
-    var msg_id = $(this).attr('data'),
+    var myself = $(this),
+        msg_id = $(this).attr('data'),
         msg_bd = $(this).parent(),
         reply_cnt = msg_bd.find('.reply-cnt');
+    msg_bd.children('.reply-bd').html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="加载中..." />');
     $.ajax({
         url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
         dataType: 'json',
-        cache: false,
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             msg_bd.children('.reply-bd').html(data['html']).attr('class', 'reply-bd');
+            myself.addClass('hide');
+            myself.next().removeClass('hide'); // show 'replyclose'
             var reply_input = msg_bd.find('.reply-input'),
                 error = msg_bd.find('.error');
             function handleReplyInput() {
@@ -50,8 +53,6 @@ $('.reply').click(function() {
             });
         }
     });
-    $(this).addClass('hide');
-    $(this).next().removeClass('hide'); // show 'replyclose'
 });
 
 $('.replyclose').click(function() {
