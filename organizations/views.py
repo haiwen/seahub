@@ -214,14 +214,6 @@ def org_useradmin(request, url_prefix):
     """
     List and add org users.
     """
-    org = get_user_current_org(request.user.username, url_prefix)
-    if not org:
-        return HttpResponseRedirect(reverse(myhome))
-
-    # ctx_dict = {'base_template': 'org_admin_base.html',
-    #             'org_dict': request.user.org}
-    # set_cur_ctx(request, ctx_dict)
-    
     if request.method == 'POST':
         emails = request.POST.get('added-member-name')
 
@@ -264,7 +256,6 @@ def org_useradmin(request, url_prefix):
         current_page = 1
         per_page = 25
 
-    url_prefix = request.user.org['url_prefix']
     users_plus_one = ccnet_threaded_rpc.get_org_emailusers(\
         url_prefix, per_page * (current_page - 1), per_page + 1)
     if len(users_plus_one) == per_page + 1:

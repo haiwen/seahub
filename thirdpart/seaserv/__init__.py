@@ -14,7 +14,7 @@ from service import get_repos, get_repo, get_commits, get_branches, \
 from service import get_binding_peerids, is_valid_filename, check_permission
 from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
     get_user_current_org, add_org_user, remove_org_user, get_org_by_id, \
-    get_org_id_by_repo_id
+    get_org_id_by_repo_id, is_org_staff
 
 from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 

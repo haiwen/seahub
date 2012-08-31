@@ -10,12 +10,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
-from django.core.files.uploadhandler import FileUploadHandler, StopFutureHandlers, StopUpload
+from django.core.files.uploadhandler import FileUploadHandler, StopUpload, \
+    StopFutureHandlers
 from django.core.cache import cache
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
-    CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, \
+    CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group
 try:
     from settings import CROCODOC_API_TOKEN
@@ -344,7 +345,7 @@ def string2list(string):
 #     request.session['current_context'] = ctx_dict
 #     request.user.org = ctx_dict.get('org_dict', None)
 
-def check_and_get_org_by_repo(repo_id):
+def check_and_get_org_by_repo(repo_id, user):
     """
     Check whether repo is org repo, get org info if it is, and set
     base template.
@@ -353,6 +354,8 @@ def check_and_get_org_by_repo(repo_id):
     if org_id > 0:
         # this repo is org repo, get org info
         org = get_org_by_id(org_id)
+        org.is_staff = is_org_staff(org_id, user)
+        org.email = user
         base_template = 'org_base.html'
     else:
         org = None
@@ -360,7 +363,7 @@ def check_and_get_org_by_repo(repo_id):
     
     return org, base_template
 
-def check_and_get_org_by_group(group_id):
+def check_and_get_org_by_group(group_id, user):
     """
     Check whether repo is org repo, get org info if it is, and set
     base template.
@@ -369,6 +372,8 @@ def check_and_get_org_by_group(group_id):
     if org_id > 0:
         # this repo is org repo, get org info
         org = get_org_by_id(org_id)
+        org.is_staff = is_org_staff(org_id, user)
+        org.email = user
         base_template = 'org_base.html'
     else:
         org = None

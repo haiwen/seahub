@@ -36,7 +36,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
 from pysearpc import SearpcError
 
 from base.accounts import User
-from base.decorators import sys_staff_required
+from base.decorators import sys_staff_required, ctx_switch_required
 from seahub.base.models import UuidObjidMap, FileComment
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -122,7 +122,7 @@ def gen_path_link(path, repo_name):
     zipped = zip(paths, links)
     
     return zipped
-    
+
 def render_repo(request, repo_id, error=''):
     # Check whether user can view repo page
     can_access = access_to_repo(request, repo_id, '')
@@ -133,9 +133,6 @@ def render_repo(request, repo_id, error=''):
     if not repo:
         return render_error(request, u'该同步目录不存在')
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     # query whether set password if repo is encrypted
     password_set = False
     if repo.props.encrypted:
@@ -224,16 +221,12 @@ def render_repo(request, repo_id, error=''):
             "accessible_repos": accessible_repos,
             "applet_root": get_ccnetapplet_root(),
             "groups": groups,
-            "org": org,
-            "base_template": base_template,
             }, context_instance=RequestContext(request))
 
-@login_required    
+@login_required
+@ctx_switch_required
 def repo_upload_file(request, repo_id):
     repo = get_repo(repo_id)
-    
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
     
     if request.method == 'GET':
         parent_dir  = request.GET.get('p', '/')
@@ -263,17 +256,13 @@ def repo_upload_file(request, repo_id):
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             "no_quota": no_quota,
-            "base_template": base_template,
-            "org": org,
             }, context_instance=RequestContext(request))
 
 @login_required
+@ctx_switch_required
 def repo_update_file(request, repo_id):
     repo = get_repo(repo_id)
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     if request.method == 'GET':
         target_file  = request.GET.get('p')
         if not target_file:
@@ -304,8 +293,6 @@ def repo_update_file(request, repo_id):
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             "no_quota": no_quota,
-            "org": org,
-            "base_template": base_template,
             }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
@@ -324,10 +311,8 @@ def upload_error_msg (code):
         err_msg = u'文件传输出错'
     return err_msg
 
+@ctx_switch_required
 def upload_file_error(request, repo_id):
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     if request.method == 'GET':
         repo = get_repo(repo_id)
         parent_dir = request.GET.get('p')
@@ -346,14 +331,10 @@ def upload_file_error(request, repo_id):
                 'zipped': zipped,
                 'filename': filename,
                 'err_msg': err_msg,
-                'org': org,
-                'base_template': base_template,
                 }, context_instance=RequestContext(request))
 
+@ctx_switch_required    
 def update_file_error(request, repo_id):
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     if request.method == 'GET':
         repo = get_repo(repo_id)
         target_file = request.GET.get('p')
@@ -370,8 +351,6 @@ def update_file_error(request, repo_id):
                 'repo': repo,
                 'zipped': zipped,
                 'err_msg': err_msg,
-                'org': org,
-                'base_template': base_template,
                 }, context_instance=RequestContext(request))
     
 def get_subdir(request):
@@ -417,7 +396,8 @@ def get_subdir(request):
     content_type = 'application/json; charset=utf-8'
     return HttpResponse(json.dumps(subdirs),
                             content_type=content_type)
- 
+
+@ctx_switch_required
 def repo(request, repo_id):
     if request.method == 'GET':
         return render_repo(request, repo_id)
@@ -443,6 +423,7 @@ def repo(request, repo_id):
         return render_repo(request, repo_id)
 
 @login_required
+@ctx_switch_required
 def repo_history(request, repo_id):
     """
     View repo history.
@@ -452,9 +433,6 @@ def repo_history(request, repo_id):
 
     repo = get_repo(repo_id)
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     password_set = False
     if repo.props.encrypted:
         try:
@@ -497,8 +475,6 @@ def repo_history(request, repo_id):
             'per_page': per_page,
             'page_next': page_next,
             'is_owner': is_owner,
-            'org': org,
-            'base_template': base_template,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -617,9 +593,6 @@ def remove_repo(request, repo_id):
     # FIXME: no org in request.user, check whether repo is org repo, and then
     # check permission
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     if not validate_owner(request, repo_id) and not request.user.is_staff \
             and not request.user.org['is_staff']:
         err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
@@ -786,13 +759,11 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
     return HttpResponseRedirect(url)
 
+@ctx_switch_required
 def repo_view_file(request, repo_id):
     """
     Preview file on web, including files in current worktree and history.
     """
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     if request.method == 'POST':
         # handle post request to leave comment on file
         path = request.GET.get('p', '/')
@@ -951,8 +922,6 @@ def repo_view_file(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'org': org,
-            'base_template': base_template,
             }, context_instance=RequestContext(request))
     
 def repo_file_get(raw_path):
@@ -1064,12 +1033,10 @@ def update_file_after_edit(request, repo_id):
 
 
 @login_required
+@ctx_switch_required
 def repo_file_edit(request, repo_id):
     if request.method == 'POST':
         return update_file_after_edit(request, repo_id)
-
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
 
     path = request.GET.get('p', '/')
     if path[-1] == '/':
@@ -1115,8 +1082,6 @@ def repo_file_edit(request, repo_id):
         'file_content':file_content,
         'encoding': encoding,
         'newline_mode': newline_mode,
-        'org': org,
-        'base_template': base_template,
     }, context_instance=RequestContext(request))
 
 
@@ -1792,9 +1757,6 @@ def render_file_revisions (request, repo_id):
 
     zipped = gen_path_link(path, repo.name)
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_repo(repo_id)
-    
     return render_to_response('file_revisions.html', {
         'repo': repo,
         'path': path,
@@ -1802,8 +1764,6 @@ def render_file_revisions (request, repo_id):
         'zipped': zipped,
         'commits': commits,
         'is_owner': is_owner,
-        'org': org,
-        'base_template': base_template,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -1830,7 +1790,8 @@ def repo_revert_file (request, repo_id):
             messages.add_message(request, messages.INFO, msg)
         return HttpResponseRedirect(url)
 
-@login_required        
+@login_required
+@ctx_switch_required
 def file_revisions(request, repo_id):
     if request.method != 'GET':
         return render_error(request)

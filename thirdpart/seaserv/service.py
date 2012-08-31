@@ -223,6 +223,16 @@ def remove_org_user(org_id, email):
         ccnet_threaded_rpc.remove_org_user(org_id, email)
     except SearpcError:
         pass
+
+def is_org_staff(org_id, user):
+    """
+    Check whether user is staff of a org.
+    """
+    try:
+        ret = ccnet_threaded_rpc.is_org_staff(org_id, user)
+    except SearpcError:
+        ret = -1
+    return True if ret == 1 else False
     
 def send_command(command):
     client = pool.get_client()

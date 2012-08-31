@@ -19,6 +19,7 @@ from pysearpc import SearpcError
 from models import GroupMessage, MessageReply, MessageAttachment
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm
 from signals import grpmsg_added, grpmsg_reply_added
+from base.decorators import ctx_switch_required
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
@@ -139,9 +140,6 @@ def render_group_info(request, group_id, form):
     except ValueError:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_group(group_id_int)
-
     # Check whether user belong to the group or admin
     joined = False
     groups = ccnet_threaded_rpc.get_groups(request.user.username)
@@ -175,7 +173,8 @@ def render_group_info(request, group_id, form):
             managers.append(member)
         else:
             common_members.append(member)
-    
+
+    org = request.user.org
     if org:
         repos = get_org_group_repos(org.org_id, group_id_int,
                                     request.user.username)
@@ -252,8 +251,6 @@ def render_group_info(request, group_id, form):
             'per_page': per_page,
             'page_next': page_next,
             'url': reverse('create_group_repo', args=[group_id]),
-            'org': org,
-            'base_template': base_template,
             }, context_instance=RequestContext(request));
 
 @login_required
@@ -354,6 +351,7 @@ def msg_reply_new(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@ctx_switch_required
 def group_info(request, group_id):
     if request.method == 'POST':
         form = MessageForm(request.POST)
@@ -386,6 +384,7 @@ def group_info(request, group_id):
     return render_group_info(request, group_id, form)
 
 @login_required
+@ctx_switch_required
 def group_members(request, group_id):
     try:
         group_id_int = int(group_id)
@@ -443,15 +442,10 @@ def group_members(request, group_id):
     members = ccnet_threaded_rpc.get_group_members(group_id_int)
     contacts = Contact.objects.filter(user_email=request.user.username)
 
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_group(group_id_int)
-    
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members,
             'contacts': contacts,
-            'org': org,
-            'base_template': base_template,
             }, context_instance=RequestContext(request))
     
 @login_required
