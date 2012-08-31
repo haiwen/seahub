@@ -118,7 +118,7 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
                     end_str = $(this).val().substring(pos);
                     str = $(this).val().substring(0, pos);
                 }
-                ele_cp.html(str + '<span id="' + ele_id.substring(1) + '-at">@</span>');
+                ele_cp.html(str.replace(/</g, '&lt').replace(/>/g, '&gt').replace(/`/g, '&#96').replace(/"/g, '&quot').replace(/\r\n|\r|\n/g, "<br />") + '<span id="' + ele_id.substring(1) + '-at">@</span>');
                 var line_height = parseInt(ele_cp.css('line-height')),
                     at_pos = $(ele_id + '-at').position(),
                     x = at_pos.left,
