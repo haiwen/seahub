@@ -50,7 +50,9 @@ def create_org(request):
                 return HttpResponseRedirect(\
                     reverse(org_info, args=[url_prefix]))
             except SearpcError, e:
-                return render_error(request, e.msg)
+                return render_error(request, e.msg, extra_ctx={
+                        'base_template': 'myhome_base.html',
+                        })
             
     else:
         form = OrgCreateForm()
@@ -68,10 +70,6 @@ def org_info(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    # ctx_dict = {'base_template': 'org_base.html',
-    #             'org_dict': org._dict}
-    # set_cur_ctx(request, ctx_dict)
-    
     org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
                                                         0, MAX_INT)
     repos = list_org_inner_pub_repos(org.org_id)
@@ -429,13 +427,18 @@ def org_group_remove(request, url_prefix, group_id):
     # Check whether is the org group.
     org_id = get_org_id_by_group(group_id_int)
     if request.user.org['org_id'] != org_id:
-        return render_permission_error(request, '该小组不属于当前团体')
+        return render_permission_error(request, '该小组不属于当前团体',
+                                       extra_ctx={'org': request.user.org,
+                                                  'base_template': 'org_base.html'})
 
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
         ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
     except SearpcError, e:
-        return render_error(request, e.msg)
+        return render_error(request, e.msg, extra_ctx={
+                'org': request.user.org,
+                'base_template': 'org_base.html',
+                })
         
     return HttpResponseRedirect(next)

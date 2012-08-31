@@ -57,7 +57,6 @@ def render_permission_error(request, msg=None, extra_ctx=None):
     """
     ctx = {}
     ctx['error_msg'] = msg or u'权限错误'
-    ctx['base_template'] = 'myhome_base.html'
 
     if extra_ctx:
         for k in extra_ctx:
@@ -73,7 +72,6 @@ def render_error(request, msg=None, extra_ctx=None):
     """
     ctx = {}
     ctx['error_msg'] = msg or u'内部错误'
-    ctx['base_template'] = 'myhome_base.html'
 
     if extra_ctx:
         for k in extra_ctx:
