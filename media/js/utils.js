@@ -53,6 +53,9 @@ function addAutocomplete(ele_id, container_id, data) {
                 event.preventDefault();
             }
         })
+        .bind('autocompleteopen', function(e, ui) {
+            $(ele_id).autocomplete('widget').css({'max-width':$(ele_id).width(), 'max-height':$(window).height() + $(window).scrollTop() - $(ele_id).offset().top - $(ele_id).outerHeight()});
+        })
         .autocomplete({
             appendTo: container_id,
             autoFocus: true,
@@ -78,11 +81,19 @@ function addAutocomplete(ele_id, container_id, data) {
 /*
  * func: add autocomplete for `@` to some input ele
  * @param ele_id: autocomplete is added to this ele(ment), e.g-'#xxx'
- * @param ele_css: {'xx':'xxx'}, to be added to ele_cp(a copy of ele)
+ * @param ele_css: {'xx':'xxx'}, styles to be applied to ele_cp
  * @param container_id: id of autocomplete's container, often container of element above
  */
 function addAtAutocomplete(ele_id, container_id, data, ele_css) {
-    var pos = '';
+    var pos = ''; // cursor position
+    var cursor_at_end; // Boolean. if cursor at the end or in the middle.
+    var end_str = ''; // str after '@' when '@' is inserted into the middle of the ele's value
+    var ele_scrollTop = 0; // scrollTop of ele. defined to fix a bug for ff (after selecting a item, it turns into 0)
+
+    /*
+     * make a copy of ele, in order to get coordinates of '@'
+     * make sure ele_cp has the same 'width', 'font', 'line-height', 'border', 'padding', and etc, with ele
+     */
     var ele_cp = '<div id="' + ele_id.substring(1) + '-cp"></div>';
     $('#main').append(ele_cp);
     ele_cp = $(ele_id + '-cp');
@@ -98,7 +109,7 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
         .bind('keypress', function(e) {
             if (String.fromCharCode(e.keyCode || e.charCode) == '@') {
                 var str = '';
-                pos = getCaretPos($(ele_id)[0]); // get cursor position
+                pos = getCaretPos($(this)[0]);
                 if (pos == $(this).val().length) {
                     cursor_at_end = true;
                     str = $(this).val();
@@ -108,14 +119,17 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
                     str = $(this).val().substring(0, pos);
                 }
                 ele_cp.html(str + '<span id="' + ele_id.substring(1) + '-at">@</span>');
-                at_pos = $(ele_id + '-at').position();
-                x = at_pos.left;
-                y = at_pos.top + parseInt(ele_cp.css('line-height')) - 2 - $(ele_id).scrollTop();
+                var line_height = parseInt(ele_cp.css('line-height')),
+                    at_pos = $(ele_id + '-at').position(),
+                    x = at_pos.left,
+                    y = at_pos.top + line_height - 2 - $(ele_id).scrollTop();
                 $(this).autocomplete("option", "position", { my : "left top", at: "left top", offset: x + ' ' + y, collision: 'fit'});
                 $(this).bind('autocompleteopen', function(e, ui) {
-                    if ($(this).offset().top + y + $(this).autocomplete('widget').outerHeight() > $(window).height() + $(window).scrollTop()) {
-                        y = y - $(this).autocomplete('widget').outerHeight() - parseInt(ele_cp.css('line-height'));
-                        $(this).autocomplete('widget').offset({left: $(ele_id).offset().left + x, top:$(ele_id).offset().top + y});
+                    var menu = $(this).autocomplete('widget'),
+                        menu_height = menu.outerHeight();
+                    if ($(this).offset().top + y + menu_height > $(window).height() + $(window).scrollTop()) {
+                        y = y - menu_height - line_height;
+                        menu.offset({left: $(ele_id).offset().left + x, top:$(ele_id).offset().top + y});
                     }
                 });
                 ele_scrollTop = $(ele_id).scrollTop();
