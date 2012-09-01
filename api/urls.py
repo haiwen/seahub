@@ -16,5 +16,9 @@ urlpatterns = patterns('',
     url(r'^dir/(?P<repo_id>[^/]+)/(?P<dir_id>[^/]+)/$', csrf_exempt(RepoDirIdView.as_view()), name='repo-dir-id'),
     url(r'^file/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoFilePathView.as_view()), name='repo-file-path'),
     url(r'^file/(?P<repo_id>[^/]+)/(?P<file_id>[^/]+)/$', csrf_exempt(RepoFileIdView.as_view()), name='repo-file-id'),
+
+    url(r'^op/delete/(?P<repo_id>[^/]+)/$', csrf_exempt(OpDeleteView.as_view()), name='delete'),
+    url(r'^op/rename/(?P<repo_id>[^/]+)/$', csrf_exempt(OpRenameView.as_view()), name='rename'),
+    url(r'^op/move/$', csrf_exempt(OpMoveView.as_view()), name='move'),
 )
 
