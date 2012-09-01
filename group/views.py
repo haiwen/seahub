@@ -11,13 +11,15 @@ from django.template.loader import render_to_string
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_repo, get_group_repoids, check_group_staff, get_commits, \
-    get_personal_groups, get_group, get_group_members
+    get_repo, get_group_repos, check_group_staff, get_commits, \
+    get_personal_groups, get_group, get_group_members, create_org_repo, \
+    get_org_group_repos
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm
 from signals import grpmsg_added, grpmsg_reply_added
+from base.decorators import ctx_switch_required
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
@@ -25,7 +27,7 @@ from seahub.profile.models import Profile
 from seahub.settings import SITE_ROOT
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
-    validate_group_name, string2list
+    validate_group_name, string2list, check_and_get_org_by_group
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm
 
@@ -168,26 +170,13 @@ def render_group_info(request, group_id, form):
             managers.append(member)
         else:
             common_members.append(member)
-    
-    repos = []
-    repo_ids = get_group_repoids(group_id=group_id_int)
-    for repo_id in repo_ids:
-        if not repo_id:
-            continue
-        repo = get_repo(repo_id)
-        if not repo:
-            continue
-        
-        repo.share_from = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
-        repo.share_from_me = True if request.user.username == repo.share_from else False
 
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
-
-        repos.append(repo)
-    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    org = request.user.org
+    if org:
+        repos = get_org_group_repos(org.org_id, group_id_int,
+                                    request.user.username)
+    else:
+        repos = get_group_repos(group_id_int, request.user.username)
 
     # remove user notifications
     UserNotification.objects.filter(to_user=request.user.username,
@@ -359,6 +348,7 @@ def msg_reply_new(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@ctx_switch_required
 def group_info(request, group_id):
     if request.method == 'POST':
         form = MessageForm(request.POST)
@@ -391,6 +381,7 @@ def group_info(request, group_id):
     return render_group_info(request, group_id, form)
 
 @login_required
+@ctx_switch_required
 def group_members(request, group_id):
     try:
         group_id_int = int(group_id)
@@ -447,7 +438,7 @@ def group_members(request, group_id):
             
     members = ccnet_threaded_rpc.get_group_members(group_id_int)
     contacts = Contact.objects.filter(user_email=request.user.username)
-    
+
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members,
@@ -598,7 +589,7 @@ def group_recommend(request):
     else:
         # TODO: need more clear error message
         messages.add_message(request, messages.ERROR, '推荐失败')
-    return HttpResponseRedirect(next)                                     
+    return HttpResponseRedirect(next)
 
 @login_required
 def create_group_repo(request, group_id):
@@ -612,7 +603,7 @@ def create_group_repo(request, group_id):
                                       content_type=content_type)
     group_id = int(group_id)
     if not get_group(group_id):
-        return json_error(u'共享失败:小组不存在')
+        return json_error(u'创建失败:小组不存在')
 
     # Check whether user belong to the group
     groups = ccnet_threaded_rpc.get_groups(request.user.username)
@@ -620,7 +611,7 @@ def create_group_repo(request, group_id):
         if group.props.id == group_id:
             break
     else:
-        return json_error(u"共享失败:未加入该小组")
+        return json_error(u"创建失败:未加入该小组")
 
     form = RepoCreateForm(request.POST)
     if not form.is_valid():
@@ -631,25 +622,56 @@ def create_group_repo(request, group_id):
         encrypted = form.cleaned_data['encryption']
         passwd = form.cleaned_data['passwd']
         user = request.user.username
-        try:
-            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
-                                                        user, passwd)
-        except:
-            repo_id = None
-        if not repo_id:
-            return json_error(u"创建目录失败")
 
-        try:
-            status = seafserv_threaded_rpc.group_share_repo(repo_id, group_id, user, 'rw')
-        except SearpcError, e:
+        org, base_template = check_and_get_org_by_group(group_id)
+        if org:
+            # create group repo in org context
+            try:
+                repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
+                                          org.org_id)
+            except:
+                repo_id = None
+            if not repo_id:
+                return json_error(u"创建目录失败")
+
+            try:
+                status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
+                                                                  org.org_id,
+                                                                  group_id,
+                                                                  user, 'rw')
+            except SearpcError, e:
+                status = -1
+                
             # if share failed, remove the newly created repo
-            seafserv_threaded_rpc.remove_repo(repo_id)
-
-            return json_error(u'共享失败:内部错误')
-        else:
             if status != 0:
                 seafserv_threaded_rpc.remove_repo(repo_id)
-                return json_error(u'共享失败:内部错误')
+                return json_error(u'创建目录失败:内部错误')
+            else:
+                result = {'success': True}
+                return HttpResponse(json.dumps(result),
+                                    content_type=content_type)
+        else:
+            # create group repo in user context
+            try:
+                repo_id = seafserv_threaded_rpc.create_repo(repo_name,
+                                                            repo_desc,
+                                                            user, passwd)
+            except:
+                repo_id = None
+            if not repo_id:
+                return json_error(u"创建目录失败")
+
+            try:
+                status = seafserv_threaded_rpc.group_share_repo(repo_id,
+                                                                group_id,
+                                                                user, 'rw')
+            except SearpcError, e:
+                status = -1
+                
+            # if share failed, remove the newly created repo
+            if status != 0:
+                seafserv_threaded_rpc.remove_repo(repo_id)
+                return json_error(u'创建目录失败:内部错误')
             else:
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),

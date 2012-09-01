@@ -7,7 +7,7 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-from seahub.utils import get_cur_ctx
+# from seahub.utils import get_cur_ctx
     
 class OrganizationMiddleware(object):
     """
@@ -20,8 +20,8 @@ class OrganizationMiddleware(object):
             request.cloud_mode = True
             
             # Get current org context
-            ctx_dict = get_cur_ctx(request)
-            request.user.org = ctx_dict.get('org_dict', None)
+            # ctx_dict = get_cur_ctx(request)
+            # request.user.org = ctx_dict.get('org_dict', None)
 
             # Get all orgs user created.
             orgs = get_orgs_by_user(request.user.username)

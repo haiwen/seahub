@@ -1,5 +1,6 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags avatar_tags group_avatar_tags %}
+{% load url from future %}
 
 {% block nav_myhome_class %}class="cur"{% endblock %}
 {% block left_panel %}
@@ -21,7 +22,7 @@
 <li>
     小组
     {% for grp in grpmsg_list %}
-    <a href="{% url group_info grp.id %}" class="no-bold">{{ grp.group_name }}</a> 
+    <a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }}</a> 
     {% endfor %}
     有新留言
 </li>
@@ -30,7 +31,7 @@
 <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条留言有新回复</a></li>
 {% endif %}
 {% if orgmsg_list %}
-<li><a href="{% url org_msg %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
+<li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
 {% endif %}
 {% endif %}
 </ul>

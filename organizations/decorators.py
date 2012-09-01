@@ -13,6 +13,7 @@ def org_staff_required(func):
         url_prefix = kwargs.get('url_prefix', '')
         org = get_user_current_org(user, url_prefix)
         if org and org.is_staff:
+            request.user.org = org._dict
             return func(request, *args, **kwargs)
         return HttpResponseRedirect(reverse('myhome'))    
     return _decorated

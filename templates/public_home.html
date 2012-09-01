@@ -1,0 +1,61 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags %}
+{% load url from future %}
+
+{% block nav_publichome_class %}class="cur"{% endblock %}
+
+{% block main_panel %}
+<div class="side fright">
+<h3>成员</h3>
+{% if users %}
+<ul>
+    {% for member in users %}
+	<li class="org-member">{% avatar member.email 16 %}<span class="org-member-name"><a href="{% url 'user_profile' member.email %}">{{ member.email|email2nickname }}</a></span></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
+{% endif %}
+</div>
+
+<div class="main fleft">
+<h3>公开的同步目录</h3>
+<button id="repo-create">新建同步目录</button>
+<table>
+    <tr>
+        <th width="25%">名字</th>
+        <th width="43%">描述</th>
+        <th width="20%">更新时间</th>
+        <th width="12%">操作</th>
+    </tr>
+{% if public_repos %}
+    {% for repo in public_repos %}
+    <tr>
+        <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+        <td>
+            <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
+        </td>
+    </tr>
+    {% endfor %}
+{% endif %}
+</table>
+</div>
+
+{% include "snippets/repo_share_form.html" %}
+{% include "snippets/repo_create_form.html" %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include "snippets/myhome_extra_script.html" %}
+{% include "snippets/repo_create_js.html" %}
+</script>
+{% endblock %}

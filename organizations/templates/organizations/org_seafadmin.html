@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends "org_admin_base.html" %}
 {% block nav_seafadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
@@ -12,7 +12,7 @@
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" target="_blank">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn">删除</button></td>
     </tr>
