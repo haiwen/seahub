@@ -30,7 +30,7 @@ from pysearpc import SearpcError
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
-    check_group_staff
+    check_group_staff, check_permission
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
@@ -137,12 +137,9 @@ def calculate_repo_info(repo_list, username):
             repo.password_need = None
 
 def can_access_repo(request, repo_id):
-    repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
-    if not repo_ap:
-        repo_ap = 'own'
-
-    # check whether user can view repo
-    return access_to_repo(request, repo_id, repo_ap)
+    if check_permission(repo_id, request.user.username) < 0:
+        return False
+    return True
 
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)

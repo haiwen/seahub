@@ -1,4 +1,6 @@
 
+import os
+
 mime_str = """
 3gp video/3gpp
 aab application/x-authoware-bin
