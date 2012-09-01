@@ -30,7 +30,7 @@ from pysearpc import SearpcError
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
-    check_group_staff, check_permission
+    check_group_staff, check_permission, get_personal_groups, get_group_repos
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
@@ -277,7 +277,7 @@ class ReposView(ResponseMixin, View):
 
         for r in n_repos:
             repo = {
-                "type":"repo",
+                "type":"srepo",
                 "id":r.id,
                 "owner":r.shared_email,
                 "name":r.name,
@@ -288,6 +288,25 @@ class ReposView(ResponseMixin, View):
                 "password_need":r.password_need,
                 }
             repos_json.append(repo)
+
+        groups = get_personal_groups(email)
+        for group in groups:
+            g_repos = get_group_repos(group.id, email)
+            calculate_repo_info (g_repos, email)
+            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            for r in g_repos:
+                repo = {
+                    "type":"grepo",
+                    "id":r.id,
+                    "owner":group.group_name,
+                    "name":r.name,
+                    "desc":r.desc,
+                    "mtime":r.latest_modify,
+                    "root":r.root,
+                    "size":r.size,
+                    "password_need":r.password_need,
+                    }
+                repos_json.append(repo)
 
         response = Response(200, repos_json)
         return self.render(response)
