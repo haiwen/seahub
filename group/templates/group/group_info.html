@@ -200,11 +200,10 @@ addConfirmTo($('#quit-group'), '确定要退出？');
 addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
 
 $(function() {
-    var member_list = [];
+    var member_list = [], nickname, pinyin;
     {% for member in members %}
-    var nickname = "{{ member.user_name|email2nickname }}";
-    var pinyin = "{{ member.user_name|email2nickname|char2pinyin }}";
-    
+    nickname = '{{ member.user_name|email2nickname }}';
+    pinyin = '{{ member.user_name|email2nickname|char2pinyin }}';
     member_list.push({value:nickname + pinyin, label:nickname});
     {% endfor %}
     addAtAutocomplete('#message', '#group-message-form', member_list, {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
