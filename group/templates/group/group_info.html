@@ -207,7 +207,7 @@ $(function() {
     
     member_list.push({value:nickname + pinyin, label:nickname});
     {% endfor %}
-    addAtAutocomplete('#message', '#group-message-form', member_list);
+    addAtAutocomplete('#message', '#group-message-form', member_list, {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 });
 
 $("table tr:gt(0)").hover(
