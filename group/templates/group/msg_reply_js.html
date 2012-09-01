@@ -10,49 +10,59 @@ $('.reply').click(function() {
     var myself = $(this),
         msg_id = $(this).attr('data'),
         msg_bd = $(this).parent(),
-        reply_cnt = msg_bd.find('.reply-cnt');
-    msg_bd.children('.reply-bd').html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="加载中..." />');
-    $.ajax({
-        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        success: function(data) {
-            msg_bd.children('.reply-bd').html(data['html']).attr('class', 'reply-bd');
-            myself.addClass('hide');
-            myself.next().removeClass('hide'); // show 'replyclose'
-            var reply_input = msg_bd.find('.reply-input'),
-                error = msg_bd.find('.error');
-            function handleReplyInput() {
-                reply_input.val('@' + $(this).attr('data') + ' ');
-                var pos = reply_input.val().length;
-                setSelectionRange(reply_input[0], pos, pos);
-            }
-            msg_bd.find('.reply-at').click(handleReplyInput);
-            msg_bd.find('.submit').click(function() {
-                var reply = $.trim(reply_input.val());
-                if (reply && reply.length <= 150) {
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-                        dataType: 'json',
-                        cache: false,
-                        contentType: 'application/json; charset=utf-8',
-                        beforeSend: prepareCSRFToken,
-                        data: "message=" + reply,
-                        success: function(data) {
-                            msg_bd.find('.reply-list').append(data['html']);
-                            reply_input.val('');
-                            error.attr('class', 'error hide');
-                            reply_cnt.html((parseInt(reply_cnt.html()) + 1 || 1) + ' ');
-                            msg_bd.find('.reply-at').click(handleReplyInput);
-                        }
-                    });
-                } else {
-                    error.removeClass('hide');
-                }
-            });
+        reply_cnt = msg_bd.find('.reply-cnt'),
+        reply_bd = msg_bd.children('.reply-bd');
+
+    function afterBdShow() {
+        myself.addClass('hide');
+        myself.next().removeClass('hide'); // show 'replyclose'
+        var reply_input = msg_bd.find('.reply-input'),
+            error = msg_bd.find('.error');
+        function replyatHandler() {
+            reply_input.val('@' + $(this).attr('data') + ' ');
+            var pos = reply_input.val().length;
+            setSelectionRange(reply_input[0], pos, pos);
         }
-    });
+        msg_bd.find('.reply-at').click(replyatHandler);
+        msg_bd.find('.submit').click(function() {
+            var reply = $.trim(reply_input.val());
+            if (reply && reply.length <= 150) {
+                $.ajax({
+                    type: "POST",
+                    url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+                    dataType: 'json',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    beforeSend: prepareCSRFToken,
+                    data: "message=" + reply,
+                    success: function(data) {
+                        msg_bd.find('.reply-list').append(data['html']);
+                        reply_input.val('');
+                        error.attr('class', 'error hide');
+                        reply_cnt.html((parseInt(reply_cnt.html()) + 1 || 1) + ' ');
+                        msg_bd.find('.reply-at').click(replyatHandler);
+                    }
+                });
+            } else {
+                error.removeClass('hide');
+            }
+        });
+    }
+
+    if ($.trim(reply_cnt.html()) == '') {
+        reply_bd.html('<ul class="reply-list"></ul><textarea name="message" class="reply-input"></textarea> <button class="submit">回复</button><p class="error hide">输入不能为空且应少于150个字符。</p>').attr('class', 'reply-bd');
+        afterBdShow();
+    } else {
+        reply_bd.html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="加载中..." />');
+        $.ajax({
+            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+            dataType: 'json',
+            success: function(data) {
+                reply_bd.html(data['html']).attr('class', 'reply-bd');
+                afterBdShow();
+            }
+        });
+    }
 });
 
 $('.replyclose').click(function() {
