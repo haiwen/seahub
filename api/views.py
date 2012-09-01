@@ -6,10 +6,9 @@ import stat
 import simplejson as json
 import settings
 
-from django.http import HttpResponse, HttpResponseServerError
+from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 
 from djangorestframework.renderers import JSONRenderer
@@ -17,7 +16,13 @@ from djangorestframework.compat import View
 from djangorestframework.mixins import ResponseMixin
 from djangorestframework.response import Response
 
-from auth.decorators import api_login_required
+
+try:
+    from functools import update_wrapper, wraps
+except ImportError:
+    from django.utils.functional import update_wrapper, wraps  # Python 2.4 fallback.
+from django.utils.decorators import available_attrs
+
 from auth.forms import AuthenticationForm
 from auth import login as auth_login
 
@@ -34,18 +39,73 @@ from seahub.utils import list_to_string, \
 
 from seahub.views import access_to_repo, validate_owner
 from seahub.contacts.signals import mail_sended
-
 from share.models import FileShare
 
-from mime import MIME_MAP
+from mime import get_file_mime
 
 json_content_type = 'application/json; charset=utf-8'
 
-def get_file_mime(name):
-    sufix = os.path.splitext(name)[1][1:]
-    if sufix:
-        return MIME_MAP[sufix]
-    return None
+HTTP_ERRORS = {
+    '400':'Bad arguments',
+    '401':'Repo is not encrypted',
+    '402':'Incorrect password',
+    '403':'Can not access repo',
+    '404':'Repo not found',
+    '405':'Query password set error',
+    '406':'Password needed',
+    '407':'Method not supported',
+    '408':'Login failed',
+    '410':'Path does not exist',
+    '411':'Failed to get dirid by path',
+    '412':'Failed to get fileid by path',
+    '413':'Path needed',
+    '414':'Emails required',
+    '415':'Operation not supported',
+    '416':'Failed to list dir',
+    '417':'Set password error',
+
+    '499':'Unknow Error',
+
+    '500':'Internal server error',
+    '501':'Failed to get shared link',
+    '502':'Failed to send shared link',
+}
+
+def api_error(request, code='499', msg=None):
+    err_resp = { 'error_msg': msg if msg is not None else HTTP_ERRORS[code] }
+    return HttpResponse(json.dumps(err_resp), status=code,
+                        content_type=json_content_type)
+
+def api_user_passes_test(test_func):
+    """
+    Decorator for views that checks that the user passes the given test,
+    redirecting to the log-in page if necessary. The test should be a callable
+    that takes the user object and returns True if the user passes.
+    """
+    def decorator(view_func):
+        def _wrapped_view(obj, request, *args, **kwargs):
+            if test_func(request.user):
+                return view_func(obj, request, *args, **kwargs)
+            json_content_type = 'application/json; charset=utf-8'
+
+            return HttpResponse(json.dumps('login required'), status=401,
+                                content_type=json_content_type)
+        return wraps(view_func, assigned=available_attrs(view_func))(_wrapped_view)
+    return decorator
+
+
+def api_login_required(function=None):
+    """
+    Decorator for views that checks that the user is logged in, redirecting
+    to the log-in page if necessary.
+    """
+    actual_decorator = api_user_passes_test(
+        lambda u: u.is_authenticated()
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
 
 def calculate_repo_info(repo_list, username):
     """
@@ -76,11 +136,6 @@ def calculate_repo_info(repo_list, username):
             repo.size = -1
             repo.password_need = None
 
-def api_error(request, code='404', msg=None):
-    err_resp = {'error_msg':msg}
-    return HttpResponse(json.dumps(err_resp), status=code,
-                        content_type=json_content_type)
-
 def can_access_repo(request, repo_id):
     repo_ap = seafserv_threaded_rpc.repo_query_access_property(repo_id)
     if not repo_ap:
@@ -101,7 +156,8 @@ def get_dir_entrys_by_id(request, dir_id):
     try:
         dirs = seafserv_threaded_rpc.list_dir(dir_id)
     except SearpcError, e:
-        return api_error(request, "404", e.msg)
+        return api_error(request, "416")
+
     for dirent in dirs:
         dtype = "file"
         entry={}
@@ -127,28 +183,28 @@ def get_dir_entrys_by_id(request, dir_id):
 
 def set_repo_password(request, repo, password):
     if not password:
-        return api_error(request, '400', 'password should not be empty')
+        return api_error(request, '406')
 
     try:
         seafserv_threaded_rpc.set_passwd(repo.id, request.user.username, password)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
-            return api_error(request, '400', e.msg)
+            return api_error(request, '400')
         elif e.msg == 'Repo is not encrypted':
-            return api_error(request, '400', e.msg)
+            return api_error(request, '401')
         elif e.msg == 'Incorrect password':
-            return api_error(request, '400', 'Wrong password')
+            return api_error(request, '402')
         elif e.msg == 'Internal server error':
-            return api_error(request, '500', e.msg)
+            return api_error(request, '500')
         else:
-            return api_error(request, '400', e.msg)
+            return api_error(request, '417', e.msg)
 
 def check_repo_access_permission(request, repo):
     if not repo:
-        return api_error(request, '404', "repo not found")
+        return api_error(request, '404')
 
     if not can_access_repo(request, repo.id):
-        return api_error(request, '403', "can not access repo")
+        return api_error(request, '403')
 
     password_set = False
     if repo.encrypted:
@@ -157,30 +213,29 @@ def check_repo_access_permission(request, repo):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return api_error(request, '403', e.msg)
+            return api_error(request, '405', e.msg)
 
         if not password_set:
             password = request.REQUEST['password']
             if not password:
-                return api_error(request, '403', "password needed")
+                return api_error(request, '406')
 
             return set_repo_password(request, repo, password)
 
 
-@csrf_exempt
 def api_login(request):
     if request.method == "POST" :
         form = AuthenticationForm(data=request.POST)
     else:
-        return api_error(request, 400, "method not supported")
+        return api_error(request, '407')
 
     if form.is_valid():
         auth_login(request, form.get_user())
         return HttpResponse(json.dumps(request.session.session_key), status=200,
             content_type=json_content_type)
     else:
-        return HttpResponse(json.dumps("failed"), status=401,
-            content_type=json_content_type)
+        return api_error(request, '408')
+
 
 class Ping(ResponseMixin, View):
 
@@ -249,10 +304,10 @@ class RepoView(ResponseMixin, View):
         # check whether user can view repo
         repo = get_repo(repo_id)
         if not repo:
-            return api_error(request, '404', "repo not found")
+            return api_error(request, '404')
 
         if not can_access_repo(request, repo.id):
-            return api_error(request, '403', "can not access repo")
+            return api_error(request, '403')
 
         # check whether use is repo owner
         if validate_owner(request, repo_id):
@@ -316,7 +371,10 @@ class RepoDirPathView(ResponseMixin, View):
             dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error(request, "404", e.msg)
+            return api_error(request, "411", e.msg)
+
+        if not dir_id:
+            return api_error(request, '410')
 
         old_oid = request.GET.get('oid', None)
         if old_oid and old_oid == dir_id :
@@ -360,8 +418,7 @@ def get_shared_link(request, repo_id, path):
         try:
             fs.save()
         except IntegrityError, e:
-            err = '获取分享链接失败，请重新获取'
-            return api_err(request, '500', err)
+            return api_err(request, '501')
 
     domain = RequestSite(request).domain
     file_shared_link = 'http://%s%sf/%s/' % (domain,
@@ -402,8 +459,7 @@ def send_share_link(request, repo_id, path, emails):
         try:
             fs.save()
         except IntegrityError, e:
-            err = '获取分享链接失败，请重新获取'
-            return api_err(request, '500', err)
+            return api_err(request, '501')
 
     domain = RequestSite(request).domain
     file_shared_link = 'http://%s%sf/%s/' % (domain,
@@ -424,8 +480,7 @@ def send_share_link(request, repo_id, path, emails):
                       t.render(Context(c)), None, [to_email],
                       fail_silently=False)
         except:
-            err = 'Failed to send'
-            return api_error(request, '406', err)
+            return api_error(request, '502')
     return HttpResponse(json.dumps(file_shared_link), status=200, content_type=json_content_type)
 
 class RepoFileIdView(ResponseMixin, View):
@@ -453,17 +508,17 @@ class RepoFilePathView(ResponseMixin, View):
 
         path = request.GET.get('p', None)
         if not path:
-            return api_error(request, '404', "Path invalid")
+            return api_error(request, '413')
 
         file_id = None
         try:
             file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error(request, '404', e.msg)
+            return api_error(request, '412', e.msg)
 
         if not file_id:
-            return api_error(request, '400', "Path invalid")
+            return api_error(request, '410')
 
         file_name = request.GET.get('file_name', file_id)
         op = request.GET.get('op', 'download')
@@ -478,7 +533,7 @@ class RepoFilePathView(ResponseMixin, View):
 
         path = request.GET.get('p', None)
         if not path:
-            return api_error(request, '404', "Path invalid")
+            return api_error(request, '413')
 
         op = request.GET.get('op', 'delete')
         if op == 'delete':
@@ -486,8 +541,8 @@ class RepoFilePathView(ResponseMixin, View):
         if op == 'sendsharelink':
             emails = request.POST.get('email', None)
             if not emails:
-                return api_error(request, '400', 'emails required')
+                return api_error(request, '414')
             return send_share_link(request, path, emails)
 
-        return api_error(request, '404', 'operation not support')
+        return api_error(request, '415')
 

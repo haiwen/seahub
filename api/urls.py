@@ -1,13 +1,15 @@
 from django.conf.urls.defaults import *
 
+from django.views.decorators.csrf import csrf_exempt
+
 from views import *
 
 
 urlpatterns = patterns('',
     url(r'^ping/$', Ping.as_view()),
-    url(r'login/$', api_login),
-    url(r'^$', ReposView.as_view()),
-    url(r'^repo/list/$', ReposView.as_view(), name='repos'),
+    url(r'login/$', csrf_exempt(api_login)),
+    url(r'^$', csrf_exempt(ReposView.as_view())),
+    url(r'^repo/list/$', csrf_exempt(ReposView.as_view()), name='repos'),
     url(r'^repo/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoView.as_view()), name='repo'),
 
     url(r'^dir/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoDirPathView.as_view()), name='repo-dir-path'),

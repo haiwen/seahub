@@ -417,5 +417,13 @@ for line in mime_str.splitlines():
     if len(pair) == 2:
         MIME_MAP[pair[0]] = pair[1]
 
+
+def get_file_mime(name):
+    sufix = os.path.splitext(name)[1][1:]
+    if sufix:
+        return MIME_MAP[sufix]
+    return None
+
+
 if __name__ == "__main__":
     print MIME_MAP
