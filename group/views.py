@@ -623,7 +623,7 @@ def create_group_repo(request, group_id):
         passwd = form.cleaned_data['passwd']
         user = request.user.username
 
-        org, base_template = check_and_get_org_by_group(group_id)
+        org, base_template = check_and_get_org_by_group(group_id, user)
         if org:
             # create group repo in org context
             try:

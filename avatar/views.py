@@ -105,7 +105,8 @@ def group_add(request):
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
     # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_group(group_id_int)
+    org, base_template = check_and_get_org_by_group(group_id_int,
+                                                    request.user.username)
     
     form = GroupAvatarForm(request.POST or None, request.FILES or None)
 
