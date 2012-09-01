@@ -21,7 +21,8 @@ $('.reply').click(function() {
         function replyatHandler() {
             reply_input.val('@' + $(this).attr('data') + ' ');
             var pos = reply_input.val().length;
-            setSelectionRange(reply_input[0], pos, pos);
+            setCaretPos(reply_input[0], pos);
+            reply_input.focus();
         }
         msg_bd.find('.reply-at').click(replyatHandler);
         msg_bd.find('.submit').click(function() {
@@ -70,17 +71,3 @@ $('.replyclose').click(function() {
     $(this).addClass('hide');
     $(this).prev().removeClass('hide'); // show 'reply'
 });
-
-function setSelectionRange(input, selectionStart, selectionEnd) {
-  if (input.setSelectionRange) {
-    input.focus();
-    input.setSelectionRange(selectionStart, selectionEnd);
-  }
-  else if (input.createTextRange) {
-    var range = input.createTextRange();
-    range.collapse(true);
-    range.moveEnd('character', selectionEnd);
-    range.moveStart('character', selectionStart);
-    range.select();
-  }
-}

@@ -65,7 +65,8 @@ $('.reply-at').click(function() {
     var reply_input = $(this).parent().parent().parent().next();
     reply_input.val('@' + $(this).attr('data') + ' ');
     var pos = reply_input.val().length;
-    setSelectionRange(reply_input[0], pos, pos); 
+    setCaretPos(reply_input[0], pos); 
+    reply_input.focus();
 });
 $('.reply-bd .submit').click(function() {
     var msg_bd = $(this).parent().parent(),
@@ -91,7 +92,8 @@ $('.reply-bd .submit').click(function() {
                 msg_bd.find('.reply-at').click(function() {
                     reply_input.val('@' + $(this).attr('data') + ' ');
                     var pos = reply_input.val().length;
-                    setSelectionRange(reply_input[0], pos, pos); 
+                    setCaretPos(reply_input[0], pos); 
+                    reply_input.focus();
                 });
             }
         });
