@@ -21,13 +21,12 @@ def base(request):
     try:
         base_template = request.base_template
     except AttributeError:
-        base_template = None
+        base_template = 'myhome_base.html'
     return {
         'seafile_version': SEAFILE_VERSION,
         'seahub_title': SEAHUB_TITLE,
         'cloud_mode': request.cloud_mode,
         'org': org,
         'base_template': base_template,
-        # 'account_type': settings.ACCOUNT_TYPE,
         }
 

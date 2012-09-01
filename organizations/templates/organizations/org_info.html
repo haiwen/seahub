@@ -1,5 +1,6 @@
 {% extends "org_base.html" %}
 {% load seahub_tags avatar_tags %}
+{% load url from future %}
 
 {% block nav_org_class %}class="cur"{% endblock %}
 
@@ -67,6 +68,10 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
+
+{% url 'org_inner_pub_repo_create' org.url_prefix as repo_create_url %}
+{% with post_url=repo_create_url %}
 {% include "snippets/repo_create_js.html" %}
+{% endwith %}
 </script>
 {% endblock %}

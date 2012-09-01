@@ -128,7 +128,11 @@
 <p>暂无</p>
 {% endif %}
 
+{% url 'share_repo' as repo_share_url %}
+{% with post_url=repo_share_url %}
 {% include "snippets/repo_share_form.html" %}
+{% endwith %}
+
 {% include "snippets/repo_create_form.html" %}
 
 {% endblock %}
@@ -136,6 +140,11 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
+   
+{% url 'seahub.views.repo_create' as repo_create_url %}
+{% with post_url=repo_create_url %}
 {% include "snippets/repo_create_js.html" %}
+{% endwith %}
+   
 </script>
 {% endblock %}

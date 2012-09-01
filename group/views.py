@@ -32,6 +32,7 @@ from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm
 
 @login_required
+@ctx_switch_required
 def group_list(request):
     error_msg = None
     if request.method == 'POST':
@@ -173,7 +174,7 @@ def render_group_info(request, group_id, form):
 
     org = request.user.org
     if org:
-        repos = get_org_group_repos(org.org_id, group_id_int,
+        repos = get_org_group_repos(org['org_id'], group_id_int,
                                     request.user.username)
     else:
         repos = get_group_repos(group_id_int, request.user.username)
@@ -247,7 +248,6 @@ def render_group_info(request, group_id, form):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'url': reverse('create_group_repo', args=[group_id]),
             }, context_instance=RequestContext(request));
 
 @login_required
@@ -394,7 +394,7 @@ def group_members(request, group_id):
     group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
-    
+            
     if request.method == 'POST':
         """
         Add group members.

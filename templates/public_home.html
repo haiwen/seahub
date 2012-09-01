@@ -56,6 +56,10 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
+
+{% url 'seahub.views.public_repo_create' as repo_create_url %}
+{% with post_url=repo_create_url %}
 {% include "snippets/repo_create_js.html" %}
+{% endwith %}
 </script>
 {% endblock %}

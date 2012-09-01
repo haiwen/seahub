@@ -1,5 +1,6 @@
 {% extends "org_base.html" %}
 {% load seahub_tags group_avatar_tags %}
+{% load url from future %}
 
 {% block nav_org_personal_class %}class="cur"{% endblock %}
 {% block left_panel %}
@@ -22,6 +23,15 @@
 {% endblock %}
 
 {% block right_panel %}
+{% if messages %}
+{% autoescape off %}
+<ul class="messages hide">
+  {% for message in messages %}
+  <li class="info">{{ message }}</li>  
+  {% endfor %}
+</ul>
+{% endautoescape %}
+{% endif %}
 
 <h3>我拥有的同步目录</h3>
 <button id="repo-create">新建同步目录</button>
@@ -40,7 +50,7 @@
         {% if repo.latest_modify %}
         <td>{{ repo.latest_modify|translate_commit_time }}</td>
         {% else %}
-        <td>--</tdb>
+        <td>--</td>
         {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
@@ -52,7 +62,11 @@
 {% endif %}
 </table>
 
+{% url 'org_repo_share' org.url_prefix as repo_share_url %}
+{% with post_url=repo_share_url %}
 {% include "snippets/repo_share_form.html" %}
+{% endwith %}
+
 {% include "snippets/repo_create_form.html" %}
 
 {% endblock %}
@@ -60,6 +74,10 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
+   
+{% url 'org_repo_create' org.url_prefix as repo_create_url %}
+{% with post_url=repo_create_url %}
 {% include "snippets/repo_create_js.html" %}
+{% endwith %}
 </script>
 {% endblock %}

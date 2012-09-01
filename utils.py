@@ -352,8 +352,8 @@ def check_and_get_org_by_repo(repo_id, user):
     if org_id > 0:
         # this repo is org repo, get org info
         org = get_org_by_id(org_id)
-        org.is_staff = is_org_staff(org_id, user)
-        org.email = user
+        org._dict['is_staff'] = is_org_staff(org_id, user)
+        org._dict['email'] = user
         base_template = 'org_base.html'
     else:
         org = None
@@ -370,8 +370,8 @@ def check_and_get_org_by_group(group_id, user):
     if org_id > 0:
         # this repo is org repo, get org info
         org = get_org_by_id(org_id)
-        org.is_staff = is_org_staff(org_id, user)
-        org.email = user
+        org._dict['is_staff'] = is_org_staff(org_id, user)
+        org._dict['email'] = user
         base_template = 'org_base.html'
     else:
         org = None

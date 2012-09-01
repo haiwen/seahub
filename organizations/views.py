@@ -15,13 +15,16 @@ from pysearpc import SearpcError
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
-    remove_org_user, get_org_groups, is_valid_filename, \
-    create_org_repo, get_org_id_by_group, get_org_groups_by_user
+    remove_org_user, get_org_groups, is_valid_filename, org_user_exists, \
+    create_org_repo, get_org_id_by_group, get_org_groups_by_user, \
+    get_org_users_by_url_prefix
 
 from decorators import org_staff_required
 from forms import OrgCreateForm
 from signals import org_user_added
+from utils import validate_org_repo_owner
 from notifications.models import UserNotification
+from share.forms import RepoShareForm
 from registration.models import RegistrationProfile
 from seahub.base.accounts import User
 from seahub.contacts import Contact
@@ -69,15 +72,13 @@ def org_info(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    org_members = ccnet_threaded_rpc.get_org_emailusers(url_prefix,
-                                                        0, MAX_INT)
+    org_members = get_org_users_by_url_prefix(url_prefix, 0, MAX_INT)
     repos = list_org_inner_pub_repos(org.org_id)
 
     return render_to_response('organizations/org_info.html', {
             'org': org,
             'org_users': org_members,
             'repos': repos,
-            'url': reverse(org_inner_pub_repo_create, args=[url_prefix]),
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -97,13 +98,17 @@ def org_personal(request, url_prefix):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
+    # org groups user created
     groups = get_org_groups_by_user(org.org_id, user)
+
+    # org members used in auto complete
+    org_members = get_org_users_by_url_prefix(org.url_prefix, 0, MAX_INT)
     
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
-            'url': reverse('org_repo_create', args=[url_prefix]),
             'org': org,
             'groups': groups,
+            'org_members': org_members,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -253,7 +258,7 @@ def org_useradmin(request, url_prefix):
         current_page = 1
         per_page = 25
 
-    users_plus_one = ccnet_threaded_rpc.get_org_emailusers(\
+    users_plus_one = get_org_users_by_url_prefix(
         url_prefix, per_page * (current_page - 1), per_page + 1)
     if len(users_plus_one) == per_page + 1:
         page_next = True
@@ -441,3 +446,60 @@ def org_group_remove(request, url_prefix, group_id):
                 })
         
     return HttpResponseRedirect(next)
+
+@login_required
+def org_repo_share(request, url_prefix):
+    """
+    Share org repo to members in current org.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
+    
+    form = RepoShareForm(request.POST)
+    if not form.is_valid():
+        # TODO: may display error msg on form 
+        raise Http404
+    
+    email_or_group = form.cleaned_data['email_or_group']
+    repo_id = form.cleaned_data['repo_id']
+    from_email = request.user.username
+
+    # Test whether user is the repo owner
+    if not validate_org_repo_owner(org.org_id, repo_id, request.user.username):
+        return render_permission_error(request, u'只有目录拥有者有权共享目录',
+                                       extra_ctx={
+                'org': org,
+                'base_template': 'org_base.html',
+                })
+
+    to_email_list = string2list(email_or_group)
+    for to_email in to_email_list:
+        # if to_email is user name, the format is: 'example@mail.com';
+        # if to_email is group, the format is 'group_name <creator@mail.com>'
+        if (to_email.split(' ')[0].find('@') == -1):
+            pass
+        else:
+            ''' Share repo to user '''
+            # Test whether to_email is in this org
+            if not org_user_exists(org.org_id, to_email):
+                msg = u'共享给 %s 失败：团体中不存在该用户。' % to_email
+                messages.add_message(request, messages.ERROR, msg)
+                continue
+                
+            # Record share info to db.
+            try:
+                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
+                                                'rw')
+                msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                    (to_email, reverse('share_admin'))
+                messages.add_message(request, messages.INFO, msg)
+            except SearpcError, e:
+                msg = u'共享给 %s 失败。' % to_email
+                messages.add_message(request, messages.ERROR, msg)
+                continue
+        
+    return HttpResponseRedirect(reverse(org_personal, args=[org.url_prefix]))

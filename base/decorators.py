@@ -28,7 +28,9 @@ def ctx_switch_required(func):
         group_id = kwargs.get('group_id', '')
         if repo_id and group_id:
             return func(request, *args, **kwargs)
-        
+        if not repo_id and not group_id:
+            return func(request, *args, **kwargs)
+            
         user = request.user.username
         if repo_id:
             org, base_template = check_and_get_org_by_repo(repo_id, user)
@@ -36,7 +38,10 @@ def ctx_switch_required(func):
         if group_id:
             org, base_template = check_and_get_org_by_group(int(group_id), user)
 
-        request.user.org = org
+        if org:
+            request.user.org = org._dict
+        else:
+            request.user.org = None
         request.base_template = base_template
         return func(request, *args, **kwargs)
     return _decorated

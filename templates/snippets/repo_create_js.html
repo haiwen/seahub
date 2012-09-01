@@ -23,7 +23,7 @@ $('#repo-create-submit').click(function() {
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
 
     $.ajax({
-        url: '{{ url }}',
+        url: '{{ post_url }}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',

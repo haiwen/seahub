@@ -135,7 +135,7 @@ def get_org_groups(org_id, start, limit):
 
 def get_org_groups_by_user(org_id, user):
     """
-    Get user's groups created in org.
+    Get user's groups in org.
     """
     try:
         groups_all = ccnet_threaded_rpc.get_groups(user)
@@ -194,16 +194,9 @@ def get_org_id_by_group(group_id):
         org_id = -1
     return org_id
 
+# org
 def create_org(org_name, url_prefix, username):
     ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
-
-def get_orgs_by_user(user):
-    try:
-        orgs = ccnet_threaded_rpc.get_orgs_by_user(user)
-    except SearpcError:
-        orgs = []
-
-    return orgs
 
 def get_org_by_url_prefix(url_prefix):
     try:
@@ -221,13 +214,7 @@ def get_org_by_id(org_id):
 
     return org
 
-def get_user_current_org(user, url_prefix):
-    orgs = get_orgs_by_user(user)
-    for org in orgs:
-        if org.url_prefix == url_prefix:
-            return org
-    return None
-
+# org user
 def add_org_user(org_id, email, is_staff):
     try:
         ccnet_threaded_rpc.add_org_user(org_id, email, is_staff)
@@ -240,6 +227,31 @@ def remove_org_user(org_id, email):
     except SearpcError:
         pass
 
+def org_user_exists(org_id, user):
+    try:
+        ret = ccnet_threaded_rpc.org_user_exists(org_id, user)
+    except SearpcError:
+        ret = -1
+    return True if ret == 1 else False
+
+def get_org_users_by_url_prefix(url_prefix, start, limit):
+    """
+    List org users.
+    """
+    try:
+        users = ccnet_threaded_rpc.get_org_emailusers(url_prefix, start, limit)
+    except:
+        users = []
+    return users
+
+def get_orgs_by_user(user):
+    try:
+        orgs = ccnet_threaded_rpc.get_orgs_by_user(user)
+    except SearpcError:
+        orgs = []
+
+    return orgs
+
 def is_org_staff(org_id, user):
     """
     Check whether user is staff of a org.
@@ -249,7 +261,14 @@ def is_org_staff(org_id, user):
     except SearpcError:
         ret = -1
     return True if ret == 1 else False
-    
+
+def get_user_current_org(user, url_prefix):
+    orgs = get_orgs_by_user(user)
+    for org in orgs:
+        if org.url_prefix == url_prefix:
+            return org
+    return None
+
 def send_command(command):
     client = pool.get_client()
     client.send_cmd(command)
@@ -267,6 +286,7 @@ def get_repos():
     """
     return seafserv_threaded_rpc.get_repo_list("", 100)
 
+# org repo
 def create_org_repo(repo_name, repo_desc, user, passwd, org_id):
     """
     Create org repo, return valid repo id if success.
@@ -319,6 +339,14 @@ def get_org_id_by_repo_id(repo_id):
         org_id = ''
     return org_id
 
+def list_org_repos_by_owner(org_id, user):
+    try:
+        repos = seafserv_threaded_rpc.list_org_repos_by_owner(org_id, user)
+    except SearpcError:
+        repos = []
+    return repos
+
+# repo
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 

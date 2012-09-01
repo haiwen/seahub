@@ -12,9 +12,11 @@ urlpatterns = patterns('',
     url(r'^(?P<url_prefix>[^/]+)/innerpubrepo/create/$', org_inner_pub_repo_create, name='org_inner_pub_repo_create'),
     url(r'^(?P<url_prefix>[^/]+)/groups/$', org_groups, name='org_groups'),
     url(r'^([^/]+)/repo/create/$', org_repo_create, name='org_repo_create'),
-    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),                       
-    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
+    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),
+    url(r'^(?P<url_prefix>[^/]+)/repo/share/$', org_repo_share, name='org_repo_share'),
                        
+    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
+
     ### Org admin ###                       
     url(r'^(?P<url_prefix>[^/]+)/seafadmin/$', org_seafadmin, name='org_seafadmin'),
     url(r'^(?P<url_prefix>[^/]+)/useradmin/$', org_useradmin, name='org_useradmin'),

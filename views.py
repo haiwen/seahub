@@ -666,7 +666,6 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
-            "url": reverse(repo_create),
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -682,7 +681,6 @@ def public_home(request):
     return render_to_response('public_home.html', {
             'users': users,
             'public_repos': public_repos,
-            "url": reverse(public_repo_create),
             }, context_instance=RequestContext(request))
 
 @login_required    

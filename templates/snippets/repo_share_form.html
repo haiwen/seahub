@@ -1,4 +1,4 @@
-<form id="repo-share-form" action="{% url share.views.share_repo %}" method="post" name="repo-share-form" class="hide">
+<form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
     <label>邮箱或小组：</label><br />
     <textarea id="email_or_group" name="email_or_group"></textarea>
     <input id="repo_id" type="hidden" name="repo_id" value="" />
