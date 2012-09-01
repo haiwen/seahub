@@ -28,8 +28,7 @@ from seahub.contacts import Contact
 from seahub.forms import RepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
-    validate_group_name, string2list, calculate_repo_last_modify,\
-    MAX_INT
+    validate_group_name, string2list, calculate_repo_last_modify, MAX_INT
 from seahub.views import myhome
 
 @login_required

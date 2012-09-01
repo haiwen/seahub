@@ -67,9 +67,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',    
     'auth.middleware.AuthenticationMiddleware',
-    'seahub.base.middleware.InfobarMiddleware',
+    'base.middleware.BaseMiddleware',    
+    'base.middleware.InfobarMiddleware',
     'seahub.subdomain.middleware.SubdomainMiddleware',
-    'seahub.organizations.middleware.OrganizationMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'

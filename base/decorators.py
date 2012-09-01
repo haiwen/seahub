@@ -18,6 +18,12 @@ def ctx_switch_required(func):
     same template when both in org context and personal context.
     """
     def _decorated(request, *args, **kwargs):
+        if not request.cloud_mode:
+            # no need to switch context when `CLOUD_MODE` is false
+            request.user.org = None
+            request.base_template = 'myhome_base.html'
+            return func(request, *args, **kwargs)
+    
         repo_id = kwargs.get('repo_id', '')
         group_id = kwargs.get('group_id', '')
         if repo_id and group_id:

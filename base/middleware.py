@@ -1,27 +1,37 @@
 from django.core.cache import cache
 
-from seaserv import get_binding_peerids
+from seaserv import get_binding_peerids, get_orgs_by_user
 
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
-class UseridMiddleware(object):
-    """Store ccnet user ids in request.user.userid_list"""
-
+class BaseMiddleware(object):
+    """
+    Middleware that add organization info to request when user in organization
+    context.
+    """
+    
     def process_request(self, request):
-        if not request.user.is_authenticated():
-            return None
-
-        try:
-            request.user.userid_list = get_binding_peerids(request.user.username)
-        except:
-            request.user.userid_list = []
-
+        if CLOUD_MODE:
+            request.cloud_mode = True
+            
+            # Get all orgs user created.
+            orgs = get_orgs_by_user(request.user.username)
+            request.user.orgs = orgs
+        else:
+            request.cloud_mode = False
+            request.user.org = None
+            request.user.orgs = None
+            
         return None
 
     def process_response(self, request, response):
         return response
-
+    
 class InfobarMiddleware(object):
     """Query info bar close status, and store into reqeust."""
 
