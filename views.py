@@ -1637,6 +1637,12 @@ def repo_rename_file(request):
         error_msg = u"新文件名不能为空"
         return render_error(request, error_msg)
 
+    if newname == oldname:
+        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+        return HttpResponseRedirect(url)
+
+    newname = check_filename_with_rename(repo_id, parent_dir, newname)
+
     if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
         error_msg = u"新文件名太长"
         return render_error(request, error_msg)
