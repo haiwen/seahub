@@ -754,7 +754,7 @@ def repo_del_file(request, repo_id):
     except:
         messages.add_message(request, messages.ERROR, u'内部错误。%s 删除失败。' % file_name)
 
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
 
 @ctx_switch_required
@@ -1183,7 +1183,7 @@ def file_move(request):
 
     # do nothing when dst is the same as src
     if src_repo_id == dst_repo_id and src_path == dst_path:
-        url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % src_path)
+        url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
         return HttpResponseRedirect(url)
 
     # Error when moving/copying a dir to its subdir
@@ -1197,7 +1197,7 @@ def file_move(request):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + u'?p=' + dst_path
+        msg_url = reverse('repo', args=[dst_repo_id]) + u'?p=' + urllib2.quote(dst_path.encode('utf-8'))
         if op == 'cp':
             seafserv_threaded_rpc.copy_file (src_repo_id, src_path, obj_name,
                                              dst_repo_id, dst_path, new_obj_name,
@@ -1211,7 +1211,7 @@ def file_move(request):
     except Exception, e:
         return render_error(request, str(e))
 
-    url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % src_path)
+    url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
 
     return HttpResponseRedirect(url)
 
@@ -1600,7 +1600,7 @@ def repo_new_dir(request):
     except Exception, e:
         return render_error(request, str(e))
         
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
     
 @login_required        
@@ -1622,7 +1622,7 @@ def repo_new_file(request):
     except Exception, e:
         return render_error(request, str(e))
         
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
 
 @login_required    
@@ -1638,7 +1638,7 @@ def repo_rename_file(request):
         return render_error(request, error_msg)
 
     if newname == oldname:
-        url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+        url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
         return HttpResponseRedirect(url)
 
     newname = check_filename_with_rename(repo_id, parent_dir, newname)
@@ -1657,7 +1657,7 @@ def repo_rename_file(request):
     except Exception, e:
         return render_error(request, str(e))
 
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % parent_dir)
+    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
 
 @login_required    
@@ -1785,7 +1785,7 @@ def repo_revert_file (request, repo_id):
         return render_error(request, str(e))
     else:
         url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
-        file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + path
+        file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
         if ret == 1:
             msg = u'<a href="%s">%s</a> 已还原到根目录下' % (file_view_url, path.lstrip('/'))
             messages.add_message(request, messages.INFO, msg)
@@ -1829,7 +1829,7 @@ def file_revisions(request, repo_id):
                 return render_error(request)
 
             url = reverse('repo_access_file', args=[repo_id, dirent.obj_id])
-            url += '?file_name=%s&op=download' % file_name
+            url += '?file_name=%s&op=download' % urllib2.quote(file_name.encode('utf-8'))
             return HttpResponseRedirect(url)
 
         try:
