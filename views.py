@@ -34,7 +34,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     check_group_staff, get_personal_groups, is_repo_owner, del_org_group_repo,\
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, \
-    list_inner_pub_repos
+    list_inner_pub_repos, get_org_groups_by_repo
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -199,9 +199,13 @@ def render_repo(request, repo_id, error=''):
     # generate path and link
     zipped = gen_path_link(path, repo.name)
 
-    # get groups this repo is shared     
+    # get groups this repo is shared
     groups = []
-    repo_shared_groups = get_shared_groups_by_repo(repo_id)
+    if request.user.org:
+        org_id = request.user.org['org_id']
+        repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
+    else:
+        repo_shared_groups = get_shared_groups_by_repo(repo_id)
     for group in repo_shared_groups:
         # check whether user joined this group
         if is_group_user(group.id, request.user.username):

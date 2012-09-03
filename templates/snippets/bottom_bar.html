@@ -1,4 +1,5 @@
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> {% endif %}</div>';
+{% load url from future %}
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> <button id="click-into-group">点击进入小组</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');
@@ -17,6 +18,15 @@ $('#recommend').click(function() {
     addAutocomplete('#recommend-groups', '#recommend-form', group_list);
     $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
 });
+
+$('#click-into-group').click(function() {
+    {% for group in groups %}
+    {% if forloop.first %}
+    location.href= "{% url 'group_info' group.id %}";
+    {% endif %}
+    {% endfor %}
+});
+
 $('#recommend-submit').click(function() {
     if (!$.trim($('#recommend-groups').val())) {
         apply_form_error('recommend-form', '小组名称不能为空。');

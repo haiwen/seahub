@@ -364,9 +364,9 @@ def get_branches(repo_id):
 def get_shared_groups_by_repo(repo_id):
     try:
         group_ids = seafserv_threaded_rpc.get_shared_groups_by_repo(repo_id)
-        if not group_ids:
-            return []
     except SearpcError:
+        group_ids = ''
+    if not group_ids:
         return []
 
     groups = []
@@ -475,6 +475,24 @@ def get_org_group_repos(org_id, group_id, user):
     
     return repos
 
+def get_org_groups_by_repo(org_id, repo_id):
+    try:
+        group_ids = seafserv_threaded_rpc.get_org_groups_by_repo(org_id,
+                                                                 repo_id)
+    except SearpcError:
+        group_ids = ''
+    if not group_ids:
+        return []
+
+    groups = []
+    for group_id in group_ids.split('\n'):
+        if not group_id:
+            continue
+        group = get_group(group_id)
+        if group:
+            groups.append(group)
+    return groups
+    
 # inner pub repo
 def list_inner_pub_repos():
     """
