@@ -7,7 +7,8 @@ from service import get_emailusers
 from service import get_org_groups, get_personal_groups, get_group_repoids, \
     check_group_staff, remove_group_user, get_group, get_org_id_by_group, \
     get_group_members, get_shared_groups_by_repo, is_group_user, \
-    get_org_group_repos, get_group_repos, get_org_groups_by_user
+    get_org_group_repos, get_group_repos, get_org_groups_by_user, is_org_group,\
+    del_org_group_repo
 from service import get_repos, get_repo, get_commits, get_branches, \
     get_org_repos, is_repo_owner, create_org_repo, is_inner_pub_repo, \
     list_org_inner_pub_repos, get_org_id_by_repo_id, list_org_shared_repos, \

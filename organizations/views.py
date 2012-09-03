@@ -546,9 +546,6 @@ def org_repo_share(request, url_prefix):
         
     return HttpResponseRedirect(reverse(org_personal, args=[org.url_prefix]))
 
-@login_required
-def org_repo_unshare(request, url_prefix):
-    pass
 
 @login_required
 def org_shareadmin(request, url_prefix):
@@ -561,9 +558,28 @@ def org_shareadmin(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
     
-    # org repos that are shared to others
+    # Org repos that are shared to others.
     out_repos = list_org_shared_repos(username, 'from_email', -1, -1)
 
+    # Org repos that are shared to groups.
+    group_repos = seafserv_threaded_rpc.get_org_group_repos_by_owner(org.org_id,
+                                                                     username)
+    for group_repo in group_repos:
+        repo_id = group_repo.props.repo_id
+        if not repo_id:
+            continue
+        repo = get_repo(repo_id)
+        if not repo:
+            continue
+        group_id = group_repo.props.group_id
+        group = ccnet_threaded_rpc.get_group(int(group_id))
+        if not group:
+            continue
+        repo.props.shared_email = group.props.group_name
+        repo.gid = group_id
+        
+        out_repos.append(repo)
+    
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
     o_fileshares = []           # shared files in org repos

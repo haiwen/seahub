@@ -31,9 +31,9 @@ from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
-    check_group_staff, get_personal_groups, is_repo_owner, \
+    check_group_staff, get_personal_groups, is_repo_owner, del_org_group_repo,\
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
-    list_personal_shared_repos    
+    list_personal_shared_repos, is_org_group, get_org_id_by_group
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -1253,15 +1253,20 @@ def repo_remove_share(request):
 
         if not check_group_staff(group_id_int, request.user) \
                 and request.user.username != from_email: 
-            return render_permission_error(request, u'取消共享失败')        
-        from seahub.group.views import group_unshare_repo
-        group_unshare_repo(request, repo_id, group_id_int, from_email)
+            return render_permission_error(request, u'取消共享失败')
+
+        if is_org_group(group_id_int):
+            org_id = get_org_id_by_group(group_id_int)
+            del_org_group_repo(repo_id, org_id, group_id_int)
+        else:
+            from group.views import group_unshare_repo
+            group_unshare_repo(request, repo_id, group_id_int, from_email)
 
     messages.add_message(request, messages.INFO, '操作成功')
         
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = reverse(referer)
+        next = settings.SITE_ROOT
 
     return HttpResponseRedirect(next)
     

@@ -118,7 +118,7 @@ def share_admin(request):
     out_repos = list_personal_shared_repos(username, 'from_email', -1, -1)
 
     # repos that are share to groups
-    group_repos = seafserv_threaded_rpc.get_group_my_share_repos(request.user.username)
+    group_repos = seafserv_threaded_rpc.get_group_repos_by_owner(username)
     for group_repo in group_repos:
         repo_id = group_repo.props.repo_id
         if not repo_id:
@@ -143,7 +143,7 @@ def share_admin(request):
     #     link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
 
     # File shared links
-    fileshares = FileShare.objects.filter(username=request.user.username)
+    fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
     for fs in fileshares:
         if is_personal_repo(fs.repo_id):

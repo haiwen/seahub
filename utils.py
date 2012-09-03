@@ -254,7 +254,7 @@ def get_accessible_repos(request, repo):
             group_repo = get_repo(repo_id)
             if not group_repo:
                 continue
-            group_repo.share_from = seafserv_threaded_rpc.get_group_repo_share_from(repo_id)
+            group_repo.share_from = seafserv_threaded_rpc.get_group_repo_owner(repo_id)
             if email != group_repo.share_from:
                 groups_repos.append(group_repo)
 

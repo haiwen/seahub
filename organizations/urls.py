@@ -17,7 +17,6 @@ urlpatterns = patterns('',
     # repo share
     url(r'^(?P<url_prefix>[^/]+)/shareadmin/$', org_shareadmin, name='org_shareadmin'),
     url(r'^(?P<url_prefix>[^/]+)/repo/share/$', org_repo_share, name='org_repo_share'),
-   url(r'^(?P<url_prefix>[^/]+)/repo/unshare/$', org_repo_unshare, name='org_repo_unshare'),
                        
     url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
 
