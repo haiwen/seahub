@@ -44,6 +44,9 @@
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
+if ($.browser.msie) {
+    $('#file').before('<p class="error">下面的编辑器在 IE 下对中文输入的支持不是很好。如果您需要输入中文，请使用 chrome 或 firefox .</p>');
+}
 var editor = ace.edit("docu-view");
 editor.setShowPrintMargin(false); // rm the vertical line in the center
 editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
