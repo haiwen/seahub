@@ -44,6 +44,9 @@
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
+if ($.browser.msie) {
+    $('#file').before('<p class="error">下面的编辑器在 IE 下对中文输入的支持不是很好。如果您需要输入中文，请使用 chrome 或 firefox .</p>');
+}
 var editor = ace.edit("docu-view");
 editor.setShowPrintMargin(false); // rm the vertical line in the center
 editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
@@ -78,7 +81,7 @@ $('#file-edit-submit').click(function () {
     var content = editor.session.getValue();
     $.ajax({
         type: "POST",
-        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path}}',
+        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}',
         dataType: 'json',
         cache: false,
         contentType: 'application/json; charset=utf-8',
@@ -89,8 +92,7 @@ $('#file-edit-submit').click(function () {
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
-            $('#file-edit-submit').addClass('hide');
+            $('#op-after-edit').prepend('<p class="error">' + jsonVal['error'] + '</p>');
         }
     });
 });
@@ -100,7 +102,7 @@ $('#file-edit-cancel').click(function() {
 {% endifnotequal %}
 
 {% if err %}
-$('#file-view').html('<p class="error">{{ err }}</p>');
+$('#file').html('<p class="error">{{ err }}</p>');
 {% endif %}
 </script>
 {% endblock %}
