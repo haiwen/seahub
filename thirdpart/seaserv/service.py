@@ -336,7 +336,7 @@ def get_org_id_by_repo_id(repo_id):
     try:
         org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
     except SearpcError:
-        org_id = ''
+        org_id = -1
     return org_id
 
 def list_org_repos_by_owner(org_id, user):
@@ -522,3 +522,62 @@ def get_org_id_by_repo(repo_id):
         org_id = -1
     return org_id
 
+def is_personal_repo(repo_id):
+    """
+    Check whether repo is personal repo.
+    """
+    try:
+        owner = seafserv_threaded_rpc.get_repo_owner(repo_id)
+    except SearpcError:
+        owner = ''
+    return True if owner else False
+
+def list_personal_shared_repos(user, user_type, start, limit):
+    """
+    List personal repos that user share with others.
+    If `user_type` is 'from_email', list repos user shares to others;
+    If `user_type` is 'to_email', list repos others sahre to user.
+    """
+    try:
+        repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
+                                                       start, limit)
+    except SearpcError:
+        repos = []
+
+    p_repos = []
+    if repos:
+        for r in repos:
+            if is_personal_repo(r.id):
+                try:
+                    r.latest_modify = get_commits(r.id, 0, 1)[0].ctime
+                except:
+                    r.latest_modify = None
+                p_repos.append(r)
+
+    p_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    return p_repos
+
+def list_org_shared_repos(user, user_type, start, limit):
+    """
+    List org repos that user share with others.
+    If `user_type` is 'from_email', list repos user shares to others;
+    If `user_type` is 'to_email', list repos others sahre to user.
+    """
+    try:
+        repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
+                                                       start, limit)
+    except SearpcError:
+        repos = []
+
+    o_repos = []
+    if repos:
+        for r in repos:
+            if not is_personal_repo(r.id):
+                try:
+                    r.latest_modify = get_commits(r.id, 0, 1)[0].ctime
+                except:
+                    r.latest_modify = None
+                o_repos.append(r)
+
+    o_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    return o_repos

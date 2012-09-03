@@ -32,7 +32,6 @@ from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm
 
 @login_required
-@ctx_switch_required
 def group_list(request):
     error_msg = None
     if request.method == 'POST':
@@ -471,7 +470,8 @@ def group_remove_member(request, group_id, user_name):
         return render_error(request, e.msg)
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
-    
+
+@login_required
 def group_share_repo(request, repo_id, group_id, from_email):
     """
     Share a repo to a group.
@@ -494,15 +494,16 @@ def group_share_repo(request, repo_id, group_id, from_email):
     if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, 'rw') != 0:
         return render_error(request, u'共享失败:内部错误')
 
+@login_required
 def group_unshare_repo(request, repo_id, group_id, from_email):
     """
-    unshare a repo to a group
+    Unshare a repo in group.
     
     """
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, u'共享失败:小组不存在')
+        return render_error(request, u'取消共享失败:小组不存在')
     
     # Check whether user belong to the group
     joined = False
@@ -511,7 +512,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         if group.props.id == group_id:
             joined = True
     if not joined:
-        return render_error(request, u'共享失败:未加入该小组')
+        return render_error(request, u'取消共享失败:未加入该小组')
 
     # Check whether user is group staff or the one share the repo
     if not check_group_staff(group_id, from_email) and \
@@ -519,7 +520,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         return render_permission_error(request, u'取消共享失败:只有小组管理员或共享目录发布者有权取消共享')
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
-        return render_error(request, u'共享失败:内部错误')
+        return render_error(request, u'取消共享失败:内部错误')
 
 @login_required
 def group_recommend(request):

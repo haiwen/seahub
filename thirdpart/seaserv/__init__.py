@@ -10,7 +10,9 @@ from service import get_org_groups, get_personal_groups, get_group_repoids, \
     get_org_group_repos, get_group_repos, get_org_groups_by_user
 from service import get_repos, get_repo, get_commits, get_branches, \
     get_org_repos, is_repo_owner, create_org_repo, is_inner_pub_repo, \
-    list_org_inner_pub_repos, get_org_id_by_repo_id
+    list_org_inner_pub_repos, get_org_id_by_repo_id, list_org_shared_repos, \
+    list_personal_shared_repos, is_personal_repo
+
 from service import get_binding_peerids, is_valid_filename, check_permission
 from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
     get_user_current_org, add_org_user, remove_org_user, get_org_by_id, \

@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 import simplejson as json
 import sys
 from django.core.urlresolvers import reverse
@@ -12,18 +13,19 @@ from django.template import Context, loader, RequestContext
 
 from auth.decorators import login_required
 from pysearpc import SearpcError
-from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
+from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
     get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     remove_org_user, get_org_groups, is_valid_filename, org_user_exists, \
     create_org_repo, get_org_id_by_group, get_org_groups_by_user, \
-    get_org_users_by_url_prefix
+    get_org_users_by_url_prefix, list_org_shared_repos, is_personal_repo
 
 from decorators import org_staff_required
 from forms import OrgCreateForm
 from signals import org_user_added
 from utils import validate_org_repo_owner
 from notifications.models import UserNotification
+from share.models import FileShare
 from share.forms import RepoShareForm
 from registration.models import RegistrationProfile
 from seahub.base.accounts import User
@@ -98,17 +100,27 @@ def org_personal(request, url_prefix):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    # org groups user created
+    # Org repos others shared to me
+    in_repos = list_org_shared_repos(user,'to_email', -1, -1)
+    
+    # Org groups user created
     groups = get_org_groups_by_user(org.org_id, user)
 
-    # org members used in auto complete
+    # Org members used in auto complete
+    contacts = []
     org_members = get_org_users_by_url_prefix(org.url_prefix, 0, MAX_INT)
+    for m in org_members:
+        if m.email == user:     # shouldn' show my'email in auto complete
+            continue
+        m.contact_email = m.email
+        contacts.append(m)
     
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
+            "in_repos": in_repos,
             'org': org,
             'groups': groups,
-            'org_members': org_members,
+            'contacts': contacts,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -476,30 +488,97 @@ def org_repo_share(request, url_prefix):
                 'base_template': 'org_base.html',
                 })
 
-    to_email_list = string2list(email_or_group)
-    for to_email in to_email_list:
-        # if to_email is user name, the format is: 'example@mail.com';
-        # if to_email is group, the format is 'group_name <creator@mail.com>'
-        if (to_email.split(' ')[0].find('@') == -1):
-            pass
+    share_to_list = string2list(email_or_group)
+    for share_to in share_to_list:
+        # if share_to is user name, the format is: 'example@mail.com';
+        # if share_to is group, the format is 'group_name <creator@mail.com>'
+        if (share_to.split(' ')[0].find('@') == -1):
+            ''' Share repo to group '''
+            # TODO: if we know group id, then we can simplly call group_share_repo
+            if len(share_to.split(' ')) < 2:
+                msg = u'共享给 %s 失败。' % share_to                
+                messages.add_message(request, messages.ERROR, msg)
+                continue
+            
+            group_name = share_to.split(' ')[0]
+            group_creator = share_to.split(' ')[1]
+            # get org groups the user joined
+            groups = get_org_groups_by_user(org.org_id, from_email)
+            find = False
+            for group in groups:
+                # for every group that user joined, if group name and
+                # group creator matchs, then has finded the group
+                if group.props.group_name == group_name and \
+                        group_creator.find(group.props.creator_name) >= 0:
+                    seafserv_threaded_rpc.add_org_group_repo(repo_id,
+                                                             org.org_id,
+                                                             group.id,
+                                                             from_email,
+                                                             'rw')
+                    find = True
+                    msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                        (group_name, reverse('org_shareadmin', args=[org.url_prefix]))
+                    
+                    messages.add_message(request, messages.INFO, msg)
+                    break
+            if not find:
+                msg = u'共享到 %s 失败。' % group_name
+                messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''
-            # Test whether to_email is in this org
-            if not org_user_exists(org.org_id, to_email):
-                msg = u'共享给 %s 失败：团体中不存在该用户。' % to_email
+            # Test whether share_to is in this org
+            if not org_user_exists(org.org_id, share_to):
+                msg = u'共享给 %s 失败：团体中不存在该用户。' % share_to
                 messages.add_message(request, messages.ERROR, msg)
                 continue
                 
             # Record share info to db.
             try:
-                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
+                seafserv_threaded_rpc.add_share(repo_id, from_email, share_to,
                                                 'rw')
                 msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
-                    (to_email, reverse('share_admin'))
+                    (share_to, reverse('org_shareadmin', args=[org.url_prefix]))
                 messages.add_message(request, messages.INFO, msg)
             except SearpcError, e:
-                msg = u'共享给 %s 失败。' % to_email
+                msg = u'共享给 %s 失败。' % share_to
                 messages.add_message(request, messages.ERROR, msg)
                 continue
         
     return HttpResponseRedirect(reverse(org_personal, args=[org.url_prefix]))
+
+@login_required
+def org_repo_unshare(request, url_prefix):
+    pass
+
+@login_required
+def org_shareadmin(request, url_prefix):
+    """
+    List personal repos I share to others, include groups and users.
+    """
+    username = request.user.username
+
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
+    
+    # org repos that are shared to others
+    out_repos = list_org_shared_repos(username, 'from_email', -1, -1)
+
+    # File shared links
+    fileshares = FileShare.objects.filter(username=request.user.username)
+    o_fileshares = []           # shared files in org repos
+    for fs in fileshares:
+        if not is_personal_repo(fs.repo_id):
+            # only list files in org repos
+            fs.filename = os.path.basename(fs.path)
+            fs.repo = get_repo(fs.repo_id)
+            o_fileshares.append(fs)
+    
+    return render_to_response('organizations/share_admin.html', {
+            "org": org,
+            "out_repos": out_repos,
+            "fileshares": o_fileshares,
+            "protocol": request.is_secure() and 'https' or 'http',
+            "domain": RequestSite(request).domain,
+            }, context_instance=RequestContext(request))
+

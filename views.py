@@ -32,7 +32,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
     check_group_staff, get_personal_groups, is_repo_owner, \
-    get_group, get_shared_groups_by_repo, is_group_user, check_permission
+    get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
+    list_personal_shared_repos    
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -43,7 +44,6 @@ from seahub.contacts.signals import mail_sended
 from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
-from seahub.organizations.utils import access_org_repo
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
     RepoNewDirForm, RepoNewFileForm, FileCommentForm
 from utils import render_permission_error, render_error, list_to_string, \
@@ -610,17 +610,14 @@ def myhome(request):
     email = request.user.username
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
-    # Repos that I own
+    # Personal repos that I own
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
-    # Repos shared with me
-    in_repos = seafserv_threaded_rpc.list_share_repos(email,
-                                                      'to_email', -1, -1)
-    calculate_repo_last_modify(in_repos)
-    in_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
+    # Personal repos others shared to me
+    in_repos = list_personal_shared_repos(email,'to_email', -1, -1)
+    
     # my contacts
     contacts = Contact.objects.filter(user_email=email)
 
@@ -1260,17 +1257,14 @@ def repo_remove_share(request):
         from seahub.group.views import group_unshare_repo
         group_unshare_repo(request, repo_id, group_id_int, from_email)
 
-    referer = request.META.get('HTTP_REFERER', None)
-    if not referer:
-        referer = 'share_admin'
-        return HttpResponseRedirect(reverse(referer))
-    else:
-        return HttpResponseRedirect(referer)
-    
-# @login_required
-# def mypeers(request):
-#     cid = get_user_cid(request.user)
+    messages.add_message(request, messages.INFO, '操作成功')
+        
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse(referer)
 
+    return HttpResponseRedirect(next)
+    
 @login_required
 @sys_staff_required
 def sys_seafadmin(request):
@@ -1962,7 +1956,13 @@ def remove_shared_link(request):
     
     if not request.is_ajax():
         FileShare.objects.filter(token=token).delete()
-        return HttpResponseRedirect(reverse('share_admin'))
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = reverse('share_admin')
+
+        messages.add_message(request, messages.INFO, u'删除成功')
+        
+        return HttpResponseRedirect(next)
 
     content_type = 'application/json; charset=utf-8'
     

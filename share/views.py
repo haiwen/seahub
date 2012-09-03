@@ -11,7 +11,8 @@ from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
 from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
-    ccnet_threaded_rpc, get_personal_groups
+    ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
+    is_personal_repo
 
 from forms import RepoShareForm
 from models import AnonymousShare
@@ -109,14 +110,12 @@ def share_repo(request):
 @login_required
 def share_admin(request):
     """
-    List repos I share to others, include groups and users. And also list
-    file shared links I generated.
+    List personal repos I share to others, include groups and users.
     """
     username = request.user.username
 
-    # repos that are share to user
-    out_repos = seafserv_threaded_rpc.list_share_repos(username, 'from_email',
-                                                       -1, -1)
+    # personal repos that are share to user
+    out_repos = list_personal_shared_repos(username, 'from_email', -1, -1)
 
     # repos that are share to groups
     group_repos = seafserv_threaded_rpc.get_group_my_share_repos(request.user.username)
@@ -145,14 +144,18 @@ def share_admin(request):
 
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
+    p_fileshares = []           # personal file share
     for fs in fileshares:
-        fs.filename = os.path.basename(fs.path)
-        fs.repo = get_repo(fs.repo_id)
+        if is_personal_repo(fs.repo_id):
+            # only list files in personal repos
+            fs.filename = os.path.basename(fs.path)
+            fs.repo = get_repo(fs.repo_id)
+            p_fileshares.append(fs)
         
     return render_to_response('repo/share_admin.html', {
             "out_repos": out_repos,
             # "out_links": out_links,
-            "fileshares": fileshares,
+            "fileshares": p_fileshares,
             "protocol": request.is_secure() and 'https' or 'http',
             "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
@@ -221,7 +224,13 @@ def anonymous_share_confirm(request, token=None):
         return res
 
 def remove_anonymous_share(request, token):
-    AnonymousShare.objects.filter(token=token).delete()
+    AnonymousShare.objects.filter(token=token).delete() 
 
-    return HttpResponseRedirect(reverse('share_admin'))
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('share_admin')
+
+    messages.add_message(request, messages.INFO, u'删除成功')
+    
+    return HttpResponseRedirect(next)
 

@@ -13,5 +13,8 @@
     <li>
         <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>个人页面</a>
     </li>
+    <li>
+        <a href="{% url 'organizations.views.org_shareadmin' org.url_prefix %}" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
+    </li>
 </ul>
 {% endblock %}
