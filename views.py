@@ -33,7 +33,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
     check_group_staff, get_personal_groups, is_repo_owner, del_org_group_repo,\
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
-    list_personal_shared_repos, is_org_group, get_org_id_by_group
+    list_personal_shared_repos, is_org_group, get_org_id_by_group, \
+    list_inner_pub_repos
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -671,9 +672,7 @@ def public_home(request):
     Show public home page when CLOUD_MODE is False.
     """
     users = get_emailusers(-1, -1)
-    public_repos = seafserv_threaded_rpc.list_inner_pub_repos()
-    calculate_repo_last_modify(public_repos)
-    public_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    public_repos = list_inner_pub_repos()
     
     return render_to_response('public_home.html', {
             'users': users,

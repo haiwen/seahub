@@ -476,6 +476,22 @@ def get_org_group_repos(org_id, group_id, user):
     return repos
 
 # inner pub repo
+def list_inner_pub_repos():
+    """
+    List inner pub repos, which can be access by everyone.
+    """
+    inner_pub_repos = seafserv_threaded_rpc.list_inner_pub_repos()
+    for repo in inner_pub_repos:
+        repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.id)
+
+        try:
+            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        except:
+            repo.latest_modify = None
+
+    inner_pub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+    return inner_pub_repos
+
 def is_inner_pub_repo(repo_id):
     """
     Check whether a repo is public.
@@ -500,6 +516,7 @@ def list_org_inner_pub_repos(org_id, start=None, limit=None):
         
     # calculate repo's lastest modify time
     for repo in repos:
+        repo.owner = seafserv_threaded_rpc.get_org_repo_owner(repo.id)
         try:
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
         except:

@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.http import urlquote
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \

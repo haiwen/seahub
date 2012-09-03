@@ -35,7 +35,7 @@
                     <ul class="hide" id="account-context-selector">
                         <li><a href="{% url 'myhome' %}">个人帐号</a></li>
                         {% for org in request.user.orgs %}
-                        <li><a href="{% url 'org_info' org.url_prefix %}">{{ org.org_name }}</a></li>
+                        <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
                         {% endfor %}
                         <li><a href="{% url 'create_org' %}">新建团体</a></li>
                     </ul>

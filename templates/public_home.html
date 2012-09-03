@@ -23,10 +23,11 @@
 <button id="repo-create">新建同步目录</button>
 <table>
     <tr>
-        <th width="25%">名字</th>
-        <th width="43%">描述</th>
+        <th width="20%">名字</th>
+        <th width="28%">描述</th>
         <th width="20%">更新时间</th>
-        <th width="12%">操作</th>
+        <th width="22%">共享来源</th>
+        <th width="10%">操作</th>
     </tr>
 {% if public_repos %}
     {% for repo in public_repos %}
@@ -38,6 +39,7 @@
         {% else %}
         <td>--</td>
         {% endif %}
+        <td>{{ repo.owner|email2nickname }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
             <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
