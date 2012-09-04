@@ -1,15 +1,16 @@
+{% load seahub_tags avatar_tags %}
+{% load url from future %}
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>{{ seahub_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="文件 共享" />
+<meta name="keywords" content="文件 协作 团队 团体" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.jpg" />
 {% block extra_style %}{% endblock %}
-{% load seahub_tags avatar_tags %}
-{% load url from future %}
 </head>
 
 <body>
@@ -89,11 +90,6 @@
         <div id="main-panel" class="clear w100 ovhd">
             {% block main_panel %}{% endblock %}
         </div>
-        <div id="dialog-confirm" class="hide">
-            <p id="confirm-con">确定要删除？</p>
-            <button id="yes-btn">确定</button>
-            <button class="simplemodal-close">取消</button>
-        </div>
     </div>
 
     <div id="footer" class="ovhd">
@@ -124,6 +120,12 @@
             <p>© 2012 海文互知</p>
             <p><a href="http://seafile.com/contact/" target="_blank">联系我们</a>
         </div>
+    </div>
+
+    <div id="dialog-confirm" class="hide">
+      <p id="confirm-con">确定要删除？</p>
+      <button id="yes-btn">确定</button>
+      <button class="simplemodal-close">取消</button>
     </div>
 
 </div><!-- wrapper -->
