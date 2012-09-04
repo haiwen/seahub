@@ -1,5 +1,5 @@
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> <button id="click-into-group">点击进入小组</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> <button id="click-into-group">到所在小组</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');

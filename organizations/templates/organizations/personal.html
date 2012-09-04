@@ -3,8 +3,12 @@
 {% load url from future %}
 
 {% block nav_org_personal_class %}class="cur"{% endblock %}
-{% block left_panel %}
 
+{% block title_panel %}
+<h2>{{ org.org_name }}</h2>
+{% endblock %}
+
+{% block left_panel %}
 <h3>我的小组</h3>
 {% if groups %}
 <ul>
@@ -33,7 +37,6 @@
 {% endautoescape %}
 {% endif %}
 
-<h2>{{ org.org_name }}</h2>
 <h3>我拥有的同步目录</h3>
 <button id="repo-create">新建同步目录</button>
 <table>
