@@ -21,6 +21,7 @@
 <div class="main fleft">
 <h3>公开的同步目录</h3>
 <button id="repo-create">新建同步目录</button>
+{% if public_repos %}
 <table>
     <tr>
         <th width="20%">名字</th>
@@ -29,7 +30,6 @@
         <th width="22%">共享来源</th>
         <th width="10%">操作</th>
     </tr>
-{% if public_repos %}
     {% for repo in public_repos %}
     <tr>
         <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
@@ -46,8 +46,8 @@
         </td>
     </tr>
     {% endfor %}
-{% endif %}
 </table>
+{% endif %}
 </div>
 
 {% include "snippets/repo_share_form.html" %}

@@ -24,9 +24,9 @@
         {% endif %}
         <td>
           {% if note.primary != 1 %}
-          <button data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn">设为当前通知</button>
+          <a href="#" data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn op">设为当前通知</a>
           {% endif %}
-          <button data="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" class="note-delete-btn">删除</button>
+          <a href="#" data="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" class="note-delete-btn op">删除</a>
         </td>
     </tr>
     {% endfor %}

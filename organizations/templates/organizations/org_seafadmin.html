@@ -14,7 +14,7 @@
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" target="_blank">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td><button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn">删除</button></td>
+        <td><a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn op">删除</a></td>
     </tr>
     {% endfor %}
 </table>

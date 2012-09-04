@@ -32,12 +32,12 @@
         {% if user.props.is_active %}
         <td>已激活</td>
         {% else %}
-        <td><button data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate">激活</button></td>
+        <td><a href="#" data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">激活</a></td>
         {% endif %}
         <td>
           {% if not user.is_self %}
-          <button class="remove-user-btn" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</button>
-          <button class="reset-user-btn" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">密码重置</button>
+          <a href="#" class="remove-user-btn op" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</a>
+          <a href="#" class="reset-user-btn op" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">密码重置</a>
           {% endif %}
         </td>
     </tr>

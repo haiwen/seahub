@@ -589,8 +589,10 @@ def org_shareadmin(request, url_prefix):
             fs.filename = os.path.basename(fs.path)
             fs.repo = get_repo(fs.repo_id)
             o_fileshares.append(fs)
+
+    request.base_template = 'org_base.html'
     
-    return render_to_response('organizations/share_admin.html', {
+    return render_to_response('repo/share_admin.html', {
             "org": org,
             "out_repos": out_repos,
             "fileshares": o_fileshares,

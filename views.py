@@ -604,7 +604,10 @@ def remove_repo(request, repo_id):
         return render_permission_error(request, err_msg)
     
     seafserv_threaded_rpc.remove_repo(repo_id)
-    next = request.GET.get('next', '/')
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
     
 @login_required

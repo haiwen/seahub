@@ -9,8 +9,8 @@
 <table>
     <tr>
         <th width="20%">名字</th>
-        <th width="30%">域名前缀</th>
-        <th width="20%">创建者</th>
+        <th width="20%">域名前缀</th>
+        <th width="30%">创建者</th>
         <th width="23%">创建时间</th>
         <th width="7%">操作</th>
     </tr>
@@ -20,7 +20,7 @@
         <td>{{ org.url_prefix }}</td>
         <td>{{ org.creator }}</td>
         <td>{{ org.ctime|tsstr_sec }}</td>
-        <td><button data="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" class="org-remove-btn">删除</button></td>
+        <td><a href="#" data="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" class="org-remove-btn op">删除</a></td>
     </tr>
     {% endfor %}
 </table>

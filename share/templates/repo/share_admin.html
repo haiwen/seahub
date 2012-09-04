@@ -1,4 +1,4 @@
-{% extends "myhome_base.html" %}
+{% extends base_template %}
 {% load seahub_tags %}
 
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
@@ -30,9 +30,9 @@
         <td>{{ repo.props.desc }}</td>
         <td>
           {% if repo.gid %}
-          <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&gid={{ repo.gid }}" class="cancel-share vh" alt="取消共享" title="取消共享" />
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&gid={{ repo.gid }}" class="cancel-share op">删除</a>
           {% else %}
-          <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&to={{ repo.props.shared_email }}" class="cancel-share vh" alt="取消共享" title="取消共享" />
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&to={{ repo.props.shared_email }}" class="cancel-share op">删除</a>
           {% endif %}
         </td>
     </tr>

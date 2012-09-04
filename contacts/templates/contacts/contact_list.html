@@ -18,8 +18,8 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/edit-blue-20.png" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit vh" alt="编辑" title="编辑" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete vh" alt="删除" title="删除" />        
+            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">编辑</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">删除</a>
         </td>
     </tr>
 {% endfor %}
