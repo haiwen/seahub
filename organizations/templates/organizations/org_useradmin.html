@@ -33,7 +33,7 @@
 
     {% for user in users %}
     <tr>
-        <td><a href="{% url 'user_profile' user.email %}">{{ user.props.email }}</a></td>
+        <td><a href="{% url 'user_profile' user.email %}" target="_blank">{{ user.props.email }}</a></td>
         <td>
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">删除</a>

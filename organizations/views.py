@@ -377,7 +377,7 @@ def org_seafadmin(request, url_prefix):
     repos_all = get_org_repos(request.user.org['org_id'],
                               per_page * (current_page -1),
                               per_page + 1)
-        
+
     repos = repos_all[:per_page]
 
     if len(repos_all) == per_page + 1:

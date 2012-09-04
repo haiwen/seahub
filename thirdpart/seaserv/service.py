@@ -322,6 +322,10 @@ def create_org_repo(repo_name, repo_desc, user, passwd, org_id):
         
     return repo_id
 
+def is_org_repo(repo_id):
+    org_id = get_org_id_by_repo_id(repo_id)
+    return True if org_id > 0 else False
+
 def list_org_repos_by_owner(org_id, user):
     try:
         repos = seafserv_threaded_rpc.list_org_repos_by_owner(org_id, user)
@@ -338,6 +342,11 @@ def get_org_repos(org_id, start, limit):
     except SearpcError:
         repos = []
 
+    if repos:
+        for r in repos:
+            r.owner = get_org_repo_owner(org_id, r.id)
+            print org_id, type(org_id), r.id, r.owner
+            
     return repos
 
 def get_org_id_by_repo_id(repo_id):
@@ -349,6 +358,27 @@ def get_org_id_by_repo_id(repo_id):
     except SearpcError:
         org_id = -1
     return org_id
+
+def is_org_repo_owner(org_id, repo_id, user):
+    """
+    Check whether user is org repo owner.
+    NOTE:
+    	`org_id` may used in future.
+    """
+    owner = get_org_repo_owner(repo_id)
+    if not owner:
+        return False 
+    return True if owner == user else False
+
+def get_org_repo_owner(repo_id):
+    """
+    Get owner of repo repo.
+    """
+    try:
+        owner = seafserv_threaded_rpc.get_org_repo_owner(repo_id)
+    except SearpcError:
+        owner = None
+    return owner
 
 # commit
 def get_commits(repo_id, offset, limit):

@@ -33,8 +33,9 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
     check_group_staff, get_personal_groups, is_repo_owner, del_org_group_repo,\
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
-    list_personal_shared_repos, is_org_group, get_org_id_by_group, \
-    list_inner_pub_repos, get_org_groups_by_repo
+    list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
+    list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
+    get_org_repo_owner
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -595,15 +596,25 @@ def modify_token(request, repo_id):
 
 @login_required
 def remove_repo(request, repo_id):
-    # FIXME: no org in request.user, check whether repo is org repo, and then
-    # check permission
-
-    if not validate_owner(request, repo_id) and not request.user.is_staff \
-            and not request.user.org['is_staff']:
-        err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
-        return render_permission_error(request, err_msg)
-    
-    seafserv_threaded_rpc.remove_repo(repo_id)
+    user = request.user.username
+    org, base_template = check_and_get_org_by_repo(repo_id, user)
+    if org:
+        # Remove repo in org context, only repo owner or org staff can
+        # perform this operation.
+        if request.user.is_staff or org.is_staff or \
+                is_org_repo_owner(org.org_id, repo_id, user):
+            seafserv_threaded_rpc.remove_repo(repo_id)
+        else:
+            err_msg = u'删除同步目录失败, 只有团体管理员或目录创建者有权删除目录。'
+            return render_permission_error(request, err_msg)
+    else:
+        # Remove repo in personal context, only repo owner or site staff can
+        # perform this operation.
+        if validate_owner(request, repo_id) or request.user.is_staff:
+            seafserv_threaded_rpc.remove_repo(repo_id)
+        else:
+            err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
+            return render_permission_error(request, err_msg)
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -1299,10 +1310,13 @@ def sys_seafadmin(request):
         page_next = False
 
     for repo in repos:
-        try:
-            repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.props.id)
-        except:
-            repo.owner = None
+        if is_org_repo(repo.id):
+            repo.owner = get_org_repo_owner(repo.id)
+        else:
+            try:
+                repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.id)
+            except:
+                repo.owner = None
             
     return render_to_response(
         'sys_seafadmin.html', {
