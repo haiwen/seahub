@@ -5,12 +5,20 @@
 {% block nav_publichome_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
+{% if messages %}
+<ul class="messages hide">
+  {% for message in messages %}
+  <li class="info">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 <div class="side fright">
 <h3>成员</h3>
 {% if users %}
 <ul>
     {% for member in users %}
-	<li class="org-member">{% avatar member.email 16 %}<span class="org-member-name"><a href="{% url 'user_profile' member.email %}">{{ member.email|email2nickname }}</a></span></li>
+	<li class="member">{% avatar member.email 16 %}<a class="name" href="{% url 'user_profile' member.email %}">{{ member.email|email2nickname }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
@@ -52,16 +60,17 @@
 
 {% include "snippets/repo_share_form.html" %}
 {% include "snippets/repo_create_form.html" %}
+{% include "snippets/user_profile_html.html" %}
 
 {% endblock %}
 
 {% block extra_script %}
+{% include "snippets/user_profile_js.html" %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
-
 {% url 'seahub.views.public_repo_create' as repo_create_url %}
 {% with post_url=repo_create_url %}
-{% include "snippets/repo_create_js.html" %}
+    {% include "snippets/repo_create_js.html" %}
 {% endwith %}
 </script>
 {% endblock %}

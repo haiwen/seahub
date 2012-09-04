@@ -1,0 +1,50 @@
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-jtemplates.js"></script>
+<script type="text/javascript">
+//show profile when mouse over
+var Hide_profile = '';
+$('.member').hover(
+    function() {
+        var this_top = $(this).offset().top - $('#main').offset().top;
+        $(this).css('background', '#eee');
+        var avatar_url = $(this).children('.avatar').attr('src'),
+            avatar_url_array = avatar_url.split('/');
+        if (avatar_url_array[avatar_url_array.length-2] == 16) {//not default avatar
+            avatar_url_array[avatar_url_array.length-2] = 80;//choose avatar size 
+            avatar_url = avatar_url_array.join('/');
+        }
+        $.ajax({
+            url: $(this).children('.name').attr('href') + 'get/',
+            dataType: 'json',
+            success: function(data) {
+                $('#user-profile').setTemplateElement('jtemplate').processTemplate(data);
+                $('#user-profile .avatar').attr('src', avatar_url);
+                $('#user-profile').removeClass('hide');
+                $('#main').css('position', 'relative');
+                $('#add-as-contact').click(function() {
+                    //$('#add-as-contact-form').modal({appendTo: '#main'});
+                    $('#add-as-contact-form')[0].submit();
+                });
+                if (this_top + $('#user-profile').height() < $('#main').height()) {
+                    $('#user-profile').css('top', this_top - 10);
+                } else {
+                    $('#user-profile').css('top', $('#main').height() - $('#user-profile').height() - 5);
+                }
+            }
+        });
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).css('background', '#fff');
+        Hide_profile = setTimeout(function() { $('#user-profile').addClass('hide'); }, 1000);
+    }
+);
+
+$('#user-profile').hover(
+    function() {
+        clearTimeout(Hide_profile);
+    },
+    function() {
+        $(this).addClass('hide');
+    }
+);
+</script>
