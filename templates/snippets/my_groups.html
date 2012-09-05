@@ -1,0 +1,16 @@
+{% load group_avatar_tags %}
+<h3>我的小组</h3>
+{% if groups %}
+<ul>
+    {% for group in groups %}
+    <li class="mygroup">
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
+    </a><br />
+	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+	</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
+{% endif %}

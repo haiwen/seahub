@@ -1,0 +1,29 @@
+{% load seahub_tags %}
+<h3>我拥有的同步目录</h3>
+<button id="repo-create">新建同步目录</button>
+{% if owned_repos %}
+<table>
+    <tr>
+        <th width="25%">名字</th>
+        <th width="43%">描述</th>
+        <th width="20%">更新时间</th>
+        <th width="12%">操作</th>
+    </tr>
+    {% for repo in owned_repos %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+        <td>
+            <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
+            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
