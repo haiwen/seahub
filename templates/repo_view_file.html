@@ -81,7 +81,7 @@
 {% endif %}
 
     <div id="open-local-file-error-dlg" class="hide">
-        <p id="open-local-file-error" class="error"></p>
+        <p id="open-local-file-error" class=""></p>
     </div>
 
     <div id="redirect-download" class="hide">
@@ -258,7 +258,7 @@ $("#link-send-form").submit(function(event) {
 
 function send_open_local_file_request(path) {
     var callback = 'xx';
-    url = '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}';
+    url = '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}&commit_id={{current_commit.id}}';
     url += '&path=' + encodeURIComponent(path);
     url += '&callback=' + callback;
     $.ajax({
@@ -273,11 +273,29 @@ function send_open_local_file_request(path) {
                 
             } else if (data['no_assoc'] === true) {
                 // no application to open the file
+                $('#open-local-file-error').removeClass();
+                $('#open-local-file-error').addClass('notification');
                 $('#open-local-file-error').html('找不到打开该类型文件的程序。\nSeafile 将为你打开该文件所在目录');
+                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+
+            } else if (data['outdated'] === true) {
+                // local repo not in sync yet
+                $('#open-local-file-error').removeClass();
+                $('#open-local-file-error').addClass('notification');
+
+                if (data['auto-sync'] === false) {
+                    hint = '本地文件尚未与服务器同步。\n请打开本地目录的自动同步，或者手动进行同步';
+                } else {
+                    hint = '本地文件尚未与服务器同步，请稍后再试';
+                }
+
+                $('#open-local-file-error').html(hint);
                 $('#open-local-file-error-dlg').modal({appendTo:'#main'});
 
             } else if (data['error']) {
                 // other error
+                $('#open-local-file-error').removeClass();
+                $('#open-local-file-error').addClass('error');
                 $('#open-local-file-error').html('打开本地文件时出错');
                 $('#open-local-file-error-dlg').modal({appendTo:'#main'});
 
