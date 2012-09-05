@@ -148,7 +148,7 @@
               <td>
                 {% if not view_history and request.user.is_authenticated %}
                   <div>
-                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op hide" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                           <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
@@ -175,7 +175,7 @@
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
                   <div>
-                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op hide" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
                           {% if not view_history and request.user.is_authenticated %}
@@ -258,43 +258,32 @@
 <script type="text/javascript">
 $("table tr:gt(0)").hover(
     function() {
-        $(this).find('.more-op').removeClass('hide');
+        $(this).find('.more-op').removeClass('vh');
     },
     function() {
-        $(this).find('.more-op').addClass('hide');
+        $(this).find('.more-op').addClass('vh');
     }
 );
 
 $('#main-panel').removeClass('ovhd');
-var Hide = '';
-$('.more-op').hover(
-    function() {
-        $(this).parent().css('position','relative');
-        $('.op-list').attr('class', 'op-list hide');
-        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
-            $(this).next().css('top', 6);
-        } else {
-            $(this).next().css('bottom', 2);
-        }
-        $(this).next().removeClass('hide');
-        clearTimeout(Hide);
-        return false;
-    },
-    function() {
-        var op_list = $(this).next();
-        Hide = setTimeout(function() { op_list.addClass('hide'); }, 1000);
+var clicked_more_op;
+$('.more-op').click(function(e) {
+    clicked_more_op = $(this);
+    $(this).parent().css('position','relative');
+    $('.op-list').attr('class', 'op-list hide');
+    if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
+        $(this).next().css('top', 6);
+    } else {
+        $(this).next().css('bottom', 2);
     }
-);
-
-$('.op-list').hover(
-    function(){
-        clearTimeout(Hide);
-    },
-    function(){
-        $(this).addClass('hide');
+    $(this).next().removeClass('hide');
+});
+$(document).click(function(e) {
+    var target =  e.target || event.srcElement;
+    if (target != clicked_more_op[0]) {
+       clicked_more_op.next().addClass('hide');
     }
-);
-
+});
 $('.op-list li').hover(
     function() {
         $(this).css('background', '#eee');
