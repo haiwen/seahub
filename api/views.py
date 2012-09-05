@@ -61,8 +61,9 @@ HTTP_ERRORS = {
     '416':'Failed to list dir',
     '417':'Set password error',
     '418':'Failed to delete',
-    '420':'Failed to Rename',
     '419':'Failed to move',
+    '420':'Failed to rename',
+    '421':'Failed to mkdir',
 
     '499':'Unknow Error',
 
@@ -579,10 +580,39 @@ class OpDeleteView(ResponseMixin, View):
             ret = seafserv_threaded_rpc.del_file(repo_id, parent_dir,
                                                  file_name, request.user.username)
         except SearpcError,e:
-            return api_error(request, '418')
+            return api_error(request, '418', e.msg)
 
         if ret < 0:
             return api_error(request, '418')
+        return HttpResponse(json.dumps('success'), status='200',
+                            content_type=json_content_type)
+
+
+class OpMkdirView(ResponseMixin, View):
+
+    @api_login_required
+    def get(self, request, repo_id):
+        return api_error(request, '407')
+
+    @api_login_required
+    def post(self, request, repo_id):
+        path = request.GET.get('p')
+        if not path or path[0] != '/':
+            return api_error(request, '400')
+
+        parent_dir = os.path.dirname(path)
+        new_dir_name = os.path.basename(path)
+
+        new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
+
+        try:
+            ret = seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name,
+                                                 request.user.username)
+        except SearpcError, e:
+            return api_error(request, '421', e.msg)
+
+        if ret < 0:
+            return api_error(request, '421')
         return HttpResponse(json.dumps('success'), status='200',
                             content_type=json_content_type)
 
@@ -605,6 +635,11 @@ class OpRenameView(ResponseMixin, View):
 
         parent_dir = os.path.dirname(path)
         oldname = os.path.basename(path)
+
+        if oldname == newname:
+            return api_error(request, '420', 'The new name is the same to the old')
+
+        newname = check_filename_with_rename(repo_id, parent_dir, newname)
 
         try:
             ret = seafserv_threaded_rpc.rename_file (repo_id, parent_dir, oldname,

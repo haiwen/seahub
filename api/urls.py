@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     url(r'^op/delete/(?P<repo_id>[^/]+)/$', csrf_exempt(OpDeleteView.as_view()), name='delete'),
     url(r'^op/rename/(?P<repo_id>[^/]+)/$', csrf_exempt(OpRenameView.as_view()), name='rename'),
     url(r'^op/move/$', csrf_exempt(OpMoveView.as_view()), name='move'),
+    url(r'^op/mkdir/(?P<repo_id>[^/]+)/$', csrf_exempt(OpMkdirView.as_view()), name='mkdir'),
 )
 
