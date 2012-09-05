@@ -344,7 +344,7 @@ def get_org_repos(org_id, start, limit):
 
     if repos:
         for r in repos:
-            r.owner = get_org_repo_owner(org_id, r.id)
+            r.owner = get_org_repo_owner(r.id)
             print org_id, type(org_id), r.id, r.owner
             
     return repos
