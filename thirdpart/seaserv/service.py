@@ -153,7 +153,7 @@ def get_org_id_by_group(group_id):
 
 def get_org_groups(org_id, start, limit):
     try:
-        groups = ccnet_threaded_rpc.get_org_groups(org_id, 0, MAX_INT)
+        groups = ccnet_threaded_rpc.get_org_groups(org_id, start, limit)
     except SearpcError:
         groups = []
     return groups

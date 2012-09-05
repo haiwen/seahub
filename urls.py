@@ -7,7 +7,7 @@ from seahub.views import root, myhome, public_home,  \
     activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
     ownerhome, repo_history_revert, repo_file_edit, org_remove, user_reset, \
     user_info, repo_set_access_property, repo_access_file, \
-    repo_remove_share, repo_download, org_info, repo_view_file, pdf_full_view, \
+    repo_remove_share, repo_download, repo_view_file, pdf_full_view, \
     seafile_access_check, repo_history_changes, \
     repo_upload_file, file_upload_progress_page, \
     upload_file_error, update_file_error, \
@@ -83,7 +83,7 @@ urlpatterns = patterns('',
     (r'^file/move/$', file_move),
     (r'^seafile_access_check/$', seafile_access_check),                       
     url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
-    (r'^org/$', org_info),
+    # (r'^org/$', org_info),
 
     (r'^useradmin/add/$', user_add),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),

@@ -182,9 +182,11 @@ def org_groups(request, url_prefix):
                     })
         
         try:
-            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                   request.user.username)
-            ccnet_threaded_rpc.add_org_group(org.org_id, group_id)
+            e_grpname = group_name.encode('utf-8')
+            user = request.user.username
+            group_id = ccnet_threaded_rpc.create_org_group(org.org_id,
+                                                           e_grpname,
+                                                           user)
         except SearpcError, e:
             error_msg = e.msg
             return render_error(request, error_msg, extra_ctx={
@@ -192,7 +194,7 @@ def org_groups(request, url_prefix):
                     'base_template': 'org_base.html',
                     })
         
-    groups = get_org_groups(org.org_id, 0, MAX_INT)
+    groups = get_org_groups(org.org_id, -1, -1)
     return render_to_response('organizations/org_groups.html', {
             'org': org,
             'groups': groups,

@@ -1567,24 +1567,24 @@ def org_remove(request, org_id):
     
     return HttpResponseRedirect(reverse('sys_org_admin'))
 
-@login_required
-def org_info(request):
-    if not request.user.org:
-        raise Http404
+# @login_required
+# def org_info(request):
+#     if not request.user.org:
+#         raise Http404
 
-    org = request.user.org
+#     org = request.user.org
     
-    org_members = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, 0, MAX_INT)
-    for member in org_members:
-        member.short_username = member.email.split('@')[0]
+#     org_members = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, 0, MAX_INT)
+#     for member in org_members:
+#         member.short_username = member.email.split('@')[0]
 
-    groups = ccnet_threaded_rpc.get_org_groups(org.org_id, 0, MAX_INT)
+#     groups = get_org_groups(org.org_id, -1, -1)
     
-    return render_to_response('org_info.html', {
-            'org': org,
-            'org_users': org_members,
-            'groups': groups,
-            }, context_instance=RequestContext(request))
+#     return render_to_response('org_info.html', {
+#             'org': org,
+#             'org_users': org_members,
+#             'groups': groups,
+#             }, context_instance=RequestContext(request))
 
 @login_required
 def file_upload_progress_page(request):
