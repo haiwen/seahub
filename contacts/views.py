@@ -14,6 +14,7 @@ from models import Contact, ContactAddForm, ContactEditForm
 from utils import render_error
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
+from seahub.settings import SITE_ROOT
 
 @login_required
 def contact_list(request):
