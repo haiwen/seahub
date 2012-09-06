@@ -743,19 +743,16 @@ ul.with-bg li {
     width:5em;
     color:#666;
 }
-.group-member {
+.member {
     _height:21px;
 }
-.group-member .avatar,
-.org-member .avatar {
+.member .avatar {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	margin-right: 5px;
 }
-.group-member .avatar,
-.group-member-name,
-.org-member .avatar,
-.org-member-name {
+.member .avatar,
+.member .name {
 	vertical-align:middle;
 }
 #user-profile {

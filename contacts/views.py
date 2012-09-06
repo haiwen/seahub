@@ -63,12 +63,6 @@ def contact_add(request):
     if request.method != 'POST':
         raise Http404
     
-    group_id = request.GET.get('group_id', '0')
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return render_error('小组ID必须为整数')
-        
     form = ContactAddForm(request.POST)
     if form.is_valid():
         contact_email = form.cleaned_data['contact_email']
@@ -83,7 +77,11 @@ def contact_add(request):
         messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
     else:
         messages.error(request, '操作失败')
-    return HttpResponseRedirect(reverse("group_info", args=(group_id,)))
+    
+    referer = request.META.get('HTTP_REFERER', None)
+    if not referer:
+        referer = SITE_ROOT
+    return HttpResponseRedirect(referer)
 
 @login_required
 def contact_edit(request):

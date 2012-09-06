@@ -13,7 +13,7 @@
 {% endif %}
 {% endblock %}
 
-{% block right_panel %}
+{% block main_panel %}
 {% if messages %}
 {% autoescape off %}
 <ul class="messages hide">
@@ -23,9 +23,7 @@
 </ul>
 {% endautoescape %}
 {% endif %}
-{% endblock %}
 
-{% block main_panel %}
   {% if view_history %}
     <h2>{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
   {% else %}
