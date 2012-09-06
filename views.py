@@ -734,6 +734,14 @@ def public_repo_create(request):
                                       content_type=content_type)
 
 @login_required
+def unset_inner_pub_repo(request, repo_id):
+    try:
+        seafserv_threaded_rpc.unset_inner_pub_repo(repo_id)
+    except SearpcError:
+        pass
+    return HttpResponseRedirect(reverse('public_home'))
+
+@login_required
 def ownerhome(request, owner_name):
     owned_repos = []
     quota_usage = 0

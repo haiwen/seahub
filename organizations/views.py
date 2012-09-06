@@ -162,7 +162,20 @@ def org_inner_pub_repo_create(request, url_prefix):
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
+
+@login_required
+def unset_org_inner_pub_repo(request, url_prefix, repo_id):
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(org_info, args=[url_prefix]))
+       
+    try:
+        seafserv_threaded_rpc.unset_org_inner_pub_repo(org.org_id, repo_id)
+    except SearpcError:
+        pass
     
+    return HttpResponseRedirect(reverse(org_info, args=[url_prefix]))
+
 @login_required
 def org_groups(request, url_prefix):
     """

@@ -8,7 +8,7 @@ from seahub.views import root, myhome, public_home,  \
     ownerhome, repo_history_revert, repo_file_edit, org_remove, user_reset, \
     user_info, repo_set_access_property, repo_access_file, \
     repo_remove_share, repo_download, repo_view_file, pdf_full_view, \
-    seafile_access_check, repo_history_changes, \
+    seafile_access_check, repo_history_changes, unset_inner_pub_repo, \
     repo_upload_file, file_upload_progress_page, \
     upload_file_error, update_file_error, \
     get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, \
@@ -59,6 +59,7 @@ urlpatterns = patterns('',
     (r'^publicrepo/create/$', public_repo_create),
     (r'^repo/upload_check/$', validate_filename),
     (r'^repo/file_rename/$', repo_rename_file),
+    (r'^repo/unsetinnerpub/(?P<repo_id>[^/]+)/$', unset_inner_pub_repo),
     url(r'^repo/revert_file/(?P<repo_id>[^/]+)/$', repo_revert_file, name='repo_revert_file'),
     url(r'^repo/upload_file/(?P<repo_id>[^/]+)/$', repo_upload_file, name='repo_upload_file'),
     url(r'^repo/update_file/(?P<repo_id>[^/]+)/$', repo_update_file, name='repo_update_file'),
