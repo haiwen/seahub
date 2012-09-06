@@ -148,7 +148,7 @@
               <td>
                 {% if not view_history and request.user.is_authenticated %}
                   <div>
-                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" data="no-popup" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                           <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
@@ -175,7 +175,7 @@
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
                   <div>
-                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" />
+                      <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" data="no-popup" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
                           {% if not view_history and request.user.is_authenticated %}
@@ -269,19 +269,25 @@ $('#main-panel').removeClass('ovhd');
 var clicked_more_op;
 $('.more-op').click(function(e) {
     clicked_more_op = $(this);
-    $(this).parent().css('position','relative');
-    $('.op-list').attr('class', 'op-list hide');
-    if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
-        $(this).next().css('top', 6);
+    if ($(this).attr('data')) { // no popup
+        $(this).parent().css('position','relative');
+        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
+            $(this).next().css('top', 6);
+        } else {
+            $(this).next().css('bottom', 2);
+        }
+        $(this).next().removeClass('hide');
+        $(this).attr('data','');
     } else {
-        $(this).next().css('bottom', 2);
+        $(this).next().addClass('hide');
+        $(this).attr('data','no-popup');
     }
-    $(this).next().removeClass('hide');
 });
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
     if (target != clicked_more_op[0]) {
        clicked_more_op.next().addClass('hide');
+       clicked_more_op.attr('data','no-popup');
     }
 });
 $('.op-list li').hover(
