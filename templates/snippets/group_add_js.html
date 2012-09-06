@@ -1,0 +1,27 @@
+$('#group-add-submit').click(function() {
+    $.ajax({
+        url: '{{ post_url }}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'group_name': $('#group_name').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('group-add-form', data['error']);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('group-add-form', value[0]);
+            });
+        }
+    });
+
+    return false;
+});

@@ -186,13 +186,13 @@ def org_groups(request, url_prefix):
         return HttpResponseRedirect(reverse(myhome))
 
     if request.method == 'POST':
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            return render_error(request, u'小组名称只能包含中英文字符，数字及下划线',
-                                extra_ctx={
-                    'org': org,
-                    'base_template': 'org_base.html',
-                    })
+            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
+            return HttpResponse(json.dumps(result), content_type=content_type)
         
         try:
             e_grpname = group_name.encode('utf-8')
@@ -201,11 +201,10 @@ def org_groups(request, url_prefix):
                                                            e_grpname,
                                                            user)
         except SearpcError, e:
-            error_msg = e.msg
-            return render_error(request, error_msg, extra_ctx={
-                    'org': org,
-                    'base_template': 'org_base.html',
-                    })
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
         
     groups = get_org_groups(org.org_id, -1, -1)
     return render_to_response('organizations/org_groups.html', {

@@ -1,5 +1,6 @@
 {% extends "org_base.html" %}
 {% load seahub_tags group_avatar_tags %}
+{% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 {% block left_panel %}
@@ -33,11 +34,8 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="group-add-form" action="" method="post" name="group-add-form" class="hide">
-    <label>小组名称：</label><br />
-    <input id="group_name" name="group_name" value="" /><br />
-    <input type="submit" value="提交" />
-</form>
+<!-- 添加小组 -->
+{% include "snippets/group_add_form.html" %}
 
 {% endblock %}
 
@@ -47,6 +45,11 @@ $("#group-add").click(function() {
     $("#group-add-form").modal({appendTo: "#main"});
 	return false;
 });
+
+{% url 'org_groups' org.url_prefix as group_add_url %}
+{% with post_url=group_add_url %}
+{% include "snippets/group_add_js.html" %}
+{% endwith %}
 
 </script>
 {% endblock %}

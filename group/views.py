@@ -39,17 +39,23 @@ def group_list(request):
         """
         Add new group.
         """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            return render_error(request, u'小组名称只能包含中英文字符，数字及下划线')
+            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
+            return HttpResponse(json.dumps(result), content_type=content_type)
         
         try:
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
                                    request.user.username)
         except SearpcError, e:
-            error_msg = e.msg
-            return render_error(request, error_msg)
-    
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+
     groups = get_personal_groups(request.user.username);
     
     return render_to_response("group/groups.html", {
