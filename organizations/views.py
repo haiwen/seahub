@@ -330,12 +330,24 @@ def org_msg(request):
     orgmsg_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
-        if n.msg_type == 'org_msg':
-            orgmsg_list.append(n.detail)
+        if n.msg_type == 'org_join_msg':
+            try:
+                d = json.loads(n.detail)
+                from_email = d['from_email']
+                org_name = d['org_name']
+                org_prefix = d['org_prefix']
+                org_url = reverse('org_info', args=[org_prefix])
+                
+                msg = u'%s 将你加入到团体 <a href="%s">%s</a>' % (
+                    from_email, org_url, org_name)
+                orgmsg_list.append(msg)
+            except json.decoder.JSONDecodeError:
+                # This message is not json format, just list to user.
+                orgmsg_list.append(n.detail)
 
     # remove new org msg notification
     UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='org_msg').delete()
+                                    msg_type='org_join_msg').delete()
 
     return render_to_response('organizations/new_msg.html', {
             'orgmsg_list': orgmsg_list,

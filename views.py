@@ -653,7 +653,7 @@ def myhome(request):
             grpmsg_list.append(grp)
         elif n.msg_type == 'grpmsg_reply':
             grpmsg_reply_list.append(n.detail)
-        elif n.msg_type == 'org_msg':
+        elif n.msg_type == 'org_join_msg':
             orgmsg_list.append(n.detail)
 
     # my groups

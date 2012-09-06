@@ -2,23 +2,21 @@
 {% load seahub_tags avatar_tags %}
 
 {% block main_panel %}
-<div class="main fleft">
+<div class="text-panel">
 {% if orgmsg_list %}
-    <ul class="msg-list">
+{% autoescape off %}
+    <ul class="">
     {% for msg in orgmsg_list %}
         <li class="">
-        <div class="msg-bd">
             <p>{{ msg }}</p>
-        </div>
         </li>
     {% endfor %}
     </ul>
+{% endautoescape %}
 {% else %}
 <p>暂无</p>    
 {% endif %}
-
 </div>
-
 {% endblock %}
 
 {% block extra_script %}

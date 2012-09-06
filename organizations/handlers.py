@@ -1,4 +1,6 @@
 # encoding: utf-8
+import simplejson as json
+
 from signals import org_user_added
 from seahub.notifications.models import UserNotification
 
@@ -13,6 +15,11 @@ def org_user_added_cb(sender, **kwargs):
     if not org:
         return
     
-    msg = u'%s 将你加入到团体 %s' % (from_email, org.org_name)
-    n = UserNotification(to_user=to_email, msg_type='org_msg', detail=msg)
+    msg_dict = {'from_email': from_email,
+                'org_name': org.org_name,
+                'org_prefix': org.url_prefix,
+                'creator': org.creator}
+
+    n = UserNotification(to_user=to_email, msg_type='org_join_msg',
+                         detail=json.dumps(msg_dict))
     n.save()

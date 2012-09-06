@@ -147,6 +147,11 @@ def render_group_info(request, group_id, form):
     except ValueError:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
+    # remove user notifications
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='group_msg',
+                                    detail=str(group_id)).delete()
+    
     # Check whether user belong to the group or admin
     joined = False
     groups = ccnet_threaded_rpc.get_groups(request.user.username)
@@ -185,11 +190,6 @@ def render_group_info(request, group_id, form):
     else:
         repos = get_group_repos(group_id_int, request.user.username)
 
-    # remove user notifications
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='group_msg',
-                                    detail=str(group_id)).delete()
-    
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
