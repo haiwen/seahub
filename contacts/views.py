@@ -77,7 +77,11 @@ def contact_add(request):
         messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
     else:
         messages.error(request, '操作失败')
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    
+    referer = request.META.get('HTTP_REFERER', None)
+    if not referer:
+        referer = SITE_ROOT
+    return HttpResponseRedirect(referer)
 
 @login_required
 def contact_edit(request):
