@@ -405,6 +405,9 @@ def group_members(request, group_id):
         """
         Add group members.
         """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        
         member_name_str = request.POST.get('user_name', '')
 
         member_list = string2list(member_name_str)
@@ -417,14 +420,18 @@ def group_members(request, group_id):
                 if not ccnet_threaded_rpc.org_user_exists(request.user.org['org_id'],
                                                  member_name):
                     err_msg = u'无法添加成员，当前企业不存在 %s 用户' % member_name
-                    return render_error(request, err_msg)
+                    result['error'] = err_msg
+                    return HttpResponse(json.dumps(result),
+                                        content_type=content_type)
                 else:
                     try:
                         ccnet_threaded_rpc.group_add_member(group_id_int,
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
-                        return render_error(request, e.msg)
+                        result['error'] = e.msg
+                        return HttpResponse(json.dumps(result),
+                                            content_type=content_type)
         else:
             for member_name in member_list:
                 # Add email to contacts
@@ -433,15 +440,22 @@ def group_members(request, group_id):
                 
                 if not is_registered_user(member_name):
                     err_msg = u'无法添加成员，用户 %s 不存在' % member_name
-                    return render_error(request, err_msg)
+                    result['error'] = err_msg
+                    return HttpResponse(json.dumps(result),
+                                        content_type=content_type)
                 else:
                     try:
                         ccnet_threaded_rpc.group_add_member(group_id_int,
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
-                        return render_error(request, e.msg)
-            
+                        result['error'] = e.msg
+                        return HttpResponse(json.dumps(result),
+                                            content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+
+    ### GET ###
     members = ccnet_threaded_rpc.get_group_members(group_id_int)
     contacts = Contact.objects.filter(user_email=request.user.username)
 

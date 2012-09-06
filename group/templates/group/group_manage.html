@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags %}
+{% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
@@ -78,8 +79,32 @@ $('#member-add-submit').click(function() {
         $('#member-add-error').removeClass('hide');
         return false;
     }
-    return true;
+    $.ajax({
+        url: '{% url 'group_members' group.id %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_name': $('#added-member-name').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('member-add-form', data['error']);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('member-add-form', value[0]);
+            });
+        }
+    });
+
+    return false;
 });
-                
+
 </script>
 {% endblock %}
