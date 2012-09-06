@@ -16,17 +16,6 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-
-{% if is_join %}
-<h3>操作</h3>
-<ul class="with-bg">
-{% if is_staff %}
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">小组管理</a></li>
-{% else %}
-	<li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出小组</a></li>
-{% endif %}
-</ul>
-{% endif %}
 </div>
 
 <div class="main fleft">
@@ -36,9 +25,9 @@
 <table>
     <tr>
         <th width="20%">名字</th>
-        <th width="28%">描述</th>
-        <th width="20%">更新时间</th>
-        <th width="22%">共享来源</th>
+        <th width="40%">描述</th>
+        <th width="15%">更新时间</th>
+        <th width="15%">共享来源</th>
         <th width="10%">操作</th>
     </tr>
     {% for repo in repos %}
@@ -53,8 +42,7 @@
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
-            <!-- <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn vh" title="共享" alt="共享" /> -->
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="删除" alt="删除" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn vh" title="取消共享" alt="取消共享" />
         </td>
     </tr>
     {% endfor %}
