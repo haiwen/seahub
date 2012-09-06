@@ -50,7 +50,7 @@
     <label>邮箱:</label><br />
     <textarea id="added-member-name" name="user_name"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    <p class="error hide" id="member-add-error">输入不能为空。</p>
+    <p class="error hide" id="member-add-error"></p>
     <input type="submit" value="提交" id="member-add-submit" />
 </form>
 
@@ -76,7 +76,7 @@ $("#member-add").click(function() {
 
 $('#member-add-submit').click(function() {
     if (!$.trim($('#added-member-name').attr('value'))) {
-        $('#member-add-error').removeClass('hide');
+        apply_form_error('member-add-form', '输入不能为空。');
         return false;
     }
     $.ajax({
