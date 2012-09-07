@@ -37,7 +37,7 @@
 
     <div class="file-op fright">
         {% if not view_history %}
-        <p id="shared-link" class="hide">{{ file_shared_link }}</p>
+        <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
         <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
         <button id="send-shared-link" class="hide">发送</button>
         <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
@@ -157,6 +157,15 @@ function hideLink() {
     $('#shared-link, #send-shared-link, #rm-shared-link').addClass('hide');
     $('#get-shared-link').removeClass('hide');
 }
+function setLinkWidth() {
+    var link = $('#shared-link');
+    link.before('<p class="hide">' + link.val() + '</p>');
+    link.css('width', link.prev().width() + 2);
+    link.prev().remove();
+}
+if ($.trim($('#shared-link').val())) {
+    setLinkWidth();
+}
 
 {% if fileshare.token %}
 showLink();
@@ -175,7 +184,8 @@ $('#get-shared-link').click(function() {
             if (data.length > 0) {
                 var t = data[0]['token'],
                     shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
-                $('#shared-link').html(shared_link);
+                $('#shared-link').val(shared_link);
+                setLinkWidth();
                 $('#rm-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
                 $('input[name="file_shared_link"]').val(shared_link);
                 showLink();
@@ -197,7 +207,7 @@ $('#rm-shared-link').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             hideLink();
-            $('#shared-link').html('');
+            $('#shared-link').val('');
         }
     });
 });
@@ -251,6 +261,10 @@ $("#link-send-form").submit(function(event) {
        });
    } 
    return false;
+});
+
+$('#shared-link').click(function() {
+        $(this).select();
 });
 
 {% include "snippets/bottom_bar.html" %}
