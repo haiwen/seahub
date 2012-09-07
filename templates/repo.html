@@ -376,7 +376,12 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
 
 function renderDirTree(container, repo_data) {
     container
-        .bind('select_node.jstree', function(event,data) {
+        .delegate('.jstree-closed', 'dblclick', function(e) {
+            container.jstree('open_node', $(this));
+            $(this).find('a').removeClass('jstree-clicked');
+        })
+        .bind('select_node.jstree', function(e, data) {
+                //$('#mv-form .jstree-clicked').removeClass('jstree-clicked');
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
             $('input[name="dst_repo"]').attr('value', repo_id);
             var path = data.inst.get_path(data.rslt.obj);
