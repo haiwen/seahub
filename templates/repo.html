@@ -218,8 +218,13 @@
     </form>
 
     <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
-        <p id="mv-hd"></p>
-        <div id="dirs"></div>
+        <h3 id="mv-hd"></h3>
+        <div class="con">
+            <h4><span class="tri-bg tri-down-bg"></span>当前同步目录：</h4>
+            <div id="current-repo-dirs"></div>
+            <h4><span class="tri-bg tri-right-bg"></span>其他同步目录：</h4>
+            <div id="other-repos-dirs" class="hide"></div>
+        </div>
         <input type="hidden" name="operation" id="operation" value="" />
         <input type="hidden" name="src_repo" value="{{ repo.id }}" />
         <input type="hidden" name="src_path" value="{{ path }}" />
@@ -266,24 +271,26 @@ $("table tr:gt(0)").hover(
 $('#main-panel').removeClass('ovhd');
 var clicked_more_op;
 $('.more-op').click(function(e) {
-    clicked_more_op = $(this);
+    var its_op_list = $(this).next();
     if ($(this).attr('data')) { // no popup
+        clicked_more_op = $(this);
         $(this).parent().css('position','relative');
-        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
-            $(this).next().css('top', 6);
+        if ($(this).offset().top + its_op_list.height() <= $('#main').offset().top + $('#main').height()) {
+            its_op_list.css('top', 6);
         } else {
-            $(this).next().css('bottom', 2);
+            its_op_list.css('bottom', 2);
         }
-        $(this).next().removeClass('hide');
+        $('.op-list').addClass('hide');
+        its_op_list.removeClass('hide');
         $(this).attr('data','');
     } else {
-        $(this).next().addClass('hide');
+        its_op_list.addClass('hide');
         $(this).attr('data','no-popup');
     }
 });
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
-    if (target != clicked_more_op[0]) {
+    if (clicked_more_op && target != clicked_more_op[0]) {
        clicked_more_op.next().addClass('hide');
        clicked_more_op.attr('data','no-popup');
     }
@@ -308,19 +315,35 @@ $('.file-rename, .dir-rename').click(function () {
     return false;
 });
 
-var accessible_repos = [];
-{% for repo in accessible_repos %}
-    {% if repo.props.has_subdir %} 
-    accessible_repos.push({
-        'data': '{{ repo.props.name }}',
-        'attr': {'repo_id': '{{ repo.props.id }}'},
-        'state': 'closed'
-    });  
+var current_repo = [],
+    other_repos = [];
+{% for a_repo in accessible_repos %}
+    {% if a_repo.props.id == repo.props.id %}
+        {% if a_repo.props.has_subdir %} 
+            current_repo.push({
+                'data': '{{ a_repo.props.name }}',
+                'attr': {'repo_id': '{{ a_repo.props.id }}'},
+                'state': 'closed'
+            });  
+        {% else %}
+            current_repo.push({
+                'data': '{{ a_repo.props.name }}',
+                'attr': {'repo_id': '{{ a_repo.props.id }}'}
+            });
+        {% endif %}
     {% else %}
-    accessible_repos.push({
-        'data': '{{ repo.props.name }}',
-        'attr': {'repo_id': '{{ repo.props.id }}'}
-    });
+        {% if a_repo.props.has_subdir %} 
+            other_repos.push({
+                'data': '{{ a_repo.props.name }}',
+                'attr': {'repo_id': '{{ a_repo.props.id }}'},
+                'state': 'closed'
+            });  
+        {% else %}
+            other_repos.push({
+                'data': '{{ a_repo.props.name }}',
+                'attr': {'repo_id': '{{ a_repo.props.id }}'}
+            });
+        {% endif %}
     {% endif %}
 {% endfor %}
 
@@ -346,21 +369,23 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
 
     $('input[name="obj_name"]').val(obj_name);
     $('#mv-hd').html('将' + file_type + ' <span class="op-target">' + obj_name + '</span> ' + mv_type + '到：');
+    $('#mv-form').modal({appendTo:'#main', autoResize:true});
+    renderDirTree($('#current-repo-dirs'), current_repo);
+    return false;
+});
 
-    $('#dirs')
-        .bind('loaded.jstree', function(event,data) {
-            $('#mv-form').modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
+function renderDirTree(container, repo_data) {
+    container
+        .delegate('.jstree-closed', 'dblclick', function(e) {
+            container.jstree('open_node', $(this));
+            $(this).find('a').removeClass('jstree-clicked');
         })
-        .bind('after_open.jstree after_close.jstree set_focus.jstree', function(event, data) {
-             $('#mv-form').css({'max-height': window.innerHeight - parseInt($('#simplemodal-container').css('top')) - 57, 'max-width':window.innerWidth - $('#mv-form').offset().left - 40, 'overflow': 'auto'});
-             $('#simplemodal-container').css('height', $('#mv-form').height());
-        })
-        .bind('after_open.jstree set_focus.jstree', function(event,data) {
-            if ($('#mv-form').width() < $('#mv-form')[0].scrollWidth) {
-                $('#simplemodal-container').css('width', $('#mv-form')[0].scrollWidth + 15);
+        .bind('before.jstree', function(e, data) {
+            if (data.func === 'select_node') { // ensure only one selected dir display in the popup
+                $('#mv-form .jstree-clicked').removeClass('jstree-clicked');
             }
         })
-        .bind('select_node.jstree', function(event,data) {
+        .bind('select_node.jstree', function(e, data) {
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
             $('input[name="dst_repo"]').attr('value', repo_id);
             var path = data.inst.get_path(data.rslt.obj);
@@ -375,7 +400,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
         })
         .jstree({
             'json_data': {
-                'data': accessible_repos,
+                'data': repo_data,
                 'ajax': {
                     'url': function(data) {
                         var path = this.get_path(data);
@@ -395,7 +420,23 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
             },
             'plugins': ['themes', 'json_data', 'ui']
         });
-    return false;
+}
+
+$('#mv-form h4').click(function() {
+    var span = $(this).children('.tri-bg'),
+        next = $(this).next();
+    if (span.hasClass('tri-right-bg')) {
+        span.attr('class','tri-bg tri-down-bg');
+        if (next.attr('id') == 'current-repo-dirs') {
+            renderDirTree(next, current_repo);
+        } else {
+            renderDirTree(next, other_repos);
+        }
+        next.removeClass('hide');
+    } else {
+        span.attr('class','tri-bg tri-right-bg');
+        next.addClass('hide');
+    }
 });
 
 $('#rename-form .submit').click(function() {

@@ -1212,9 +1212,12 @@ def file_move(request):
     if obj_type == 'dir':
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
-            error_msg = u"不能把目录 %s %s到它的子目录 %s" \
+            error_msg = u"不能把目录 %s %s到它的子目录 %s中" \
                         % (src_dir, u"复制" if op == 'cp' else u"移动", dst_path)
-            return render_error(request, error_msg)
+            #return render_error(request, error_msg)
+            messages.add_message(request, messages.ERROR, error_msg)
+            url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
+            return HttpResponseRedirect(url)
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 

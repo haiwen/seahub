@@ -32,7 +32,7 @@
                     {% if cloud_mode %}
                     <a href="#" id="account-context" data="no-popup">
                     {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
-                    <span class="bg"></span></a>
+                    <span class="tri-bg tri-down-bg"></span></a>
                     <ul class="hide" id="account-context-selector">
                         <li><a href="{% url 'myhome' %}">个人帐号</a></li>
                         {% for org in request.user.orgs %}
