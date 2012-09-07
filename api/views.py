@@ -195,7 +195,7 @@ def set_repo_password(request, repo, password):
         elif e.msg == 'Internal server error':
             return api_error(request, '500')
         else:
-            return api_error(request, '417', "SearpcError:"+e.msg)
+            return api_error(request, '417', "SearpcError:" + e.msg)
 
 def check_repo_access_permission(request, repo):
     if not repo:
@@ -211,7 +211,7 @@ def check_repo_access_permission(request, repo):
             if ret == 1:
                 password_set = True
         except SearpcError, e:
-            return api_error(request, '405', "SearpcError:"+e.msg)
+            return api_error(request, '405', "SearpcError:" + e.msg)
 
         if not password_set:
             password = request.REQUEST['password']
@@ -388,7 +388,7 @@ class RepoDirPathView(ResponseMixin, View):
             dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error(request, "411", "SearpcError:"+e.msg)
+            return api_error(request, "411", "SearpcError:" + e.msg)
 
         if not dir_id:
             return api_error(request, '410')
@@ -532,7 +532,7 @@ class RepoFilePathView(ResponseMixin, View):
             file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error(request, '412', "SearpcError:"+e.msg)
+            return api_error(request, '412', "SearpcError:" + e.msg)
 
         if not file_id:
             return api_error(request, '410')
@@ -561,6 +561,29 @@ class RepoFilePathView(ResponseMixin, View):
 
         return api_error(request, '415')
 
+
+def reloaddir_if_neccessary (request, repo_id, path):
+    reloaddir = False
+    s = request.GET.get('reloaddir', None)
+    if s and s.lower() == 'true':
+        reloaddir = True
+
+    if not reloaddir:
+        return HttpResponse(json.dumps('success'), status='200',
+                            content_type=json_content_type)
+
+    current_commit = get_commits(repo_id, 0, 1)[0]
+    try:
+        dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                         parent_dir.encode('utf-8'))
+    except SearpcError, e:
+        return api_error(request, "411", "SearpcError:" + e.msg)
+
+    if not dir_id:
+        return api_error(request, '410')
+    return get_dir_entrys_by_id(request, dir_id)
+
+
 class OpDeleteView(ResponseMixin, View):
 
     @api_login_required
@@ -569,23 +592,25 @@ class OpDeleteView(ResponseMixin, View):
 
     @api_login_required
     def post(self, request, repo_id):
-        path = request.GET.get('p')
-        if not path or path[0] != '/':
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+
+        parent_dir = request.GET.get('p', '/')
+        file_names = request.POST.get("file_names")
+
+        if not parent_dir or not file_names:
             return api_error(request, '400')
 
-        parent_dir = os.path.dirname(path)
-        file_name = os.path.basename(path)
+        names =  file_names.split(':')
+        for file_name in names:
+            try:
+                seafserv_threaded_rpc.del_file(repo_id, parent_dir,
+                                               file_name, request.user.username)
+            except SearpcError,e:
+                return api_error(request, '418', 'SearpcError:' + e.msg)
 
-        try:
-            ret = seafserv_threaded_rpc.del_file(repo_id, parent_dir,
-                                                 file_name, request.user.username)
-        except SearpcError,e:
-            return api_error(request, '418', e.msg)
-
-        if ret < 0:
-            return api_error(request, '418')
-        return HttpResponse(json.dumps('success'), status='200',
-                            content_type=json_content_type)
+        return reloaddir_if_neccessary (request, repo_id, parent_dir)
 
 
 class OpMkdirView(ResponseMixin, View):
@@ -596,25 +621,25 @@ class OpMkdirView(ResponseMixin, View):
 
     @api_login_required
     def post(self, request, repo_id):
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+
         path = request.GET.get('p')
         if not path or path[0] != '/':
             return api_error(request, '400')
 
         parent_dir = os.path.dirname(path)
         new_dir_name = os.path.basename(path)
-
         new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
         try:
-            ret = seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name,
-                                                 request.user.username)
+            seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name,
+                                           request.user.username)
         except SearpcError, e:
             return api_error(request, '421', e.msg)
 
-        if ret < 0:
-            return api_error(request, '421')
-        return HttpResponse(json.dumps('success'), status='200',
-                            content_type=json_content_type)
+        return reloaddir_if_neccessary (request, repo_id, parent_dir)
 
 
 class OpRenameView(ResponseMixin, View):
@@ -625,6 +650,10 @@ class OpRenameView(ResponseMixin, View):
 
     @api_login_required
     def post(self, request, repo_id):
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+
         path = request.GET.get('p')
         newname = request.POST.get("newname")
         if not path or path[0] != '/' or not newname:
@@ -642,15 +671,13 @@ class OpRenameView(ResponseMixin, View):
         newname = check_filename_with_rename(repo_id, parent_dir, newname)
 
         try:
-            ret = seafserv_threaded_rpc.rename_file (repo_id, parent_dir, oldname,
-                                                     newname, request.user.username)
+            seafserv_threaded_rpc.rename_file (repo_id, parent_dir, oldname,
+                                               newname, request.user.username)
         except SearpcError,e:
-            return api_error(request, '420', "SearpcError:"+e.msg)
+            return api_error(request, '420', "SearpcError:" + e.msg)
 
-        if ret < 0:
-            return api_error(request, '420')
-        return HttpResponse(json.dumps('success'), status='200',
-                            content_type=json_content_type)
+        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+
 
 class OpMoveView(ResponseMixin, View):
 
@@ -661,44 +688,39 @@ class OpMoveView(ResponseMixin, View):
     @api_login_required
     def post(self, request):
         src_repo_id = request.POST.get('src_repo')
-        src_path    = request.POST.get('src_path')
+        src_dir     = request.POST.get('src_dir')
         dst_repo_id = request.POST.get('dst_repo')
         dst_dir     = request.POST.get('dst_dir')
-        obj_type    = request.POST.get('obj_type') # dir or file
         op          = request.POST.get('operation')
+        obj_names   = request.POST.get('obj_names')
 
-        if not (src_repo_id and src_path and src_path[0] == '/' and dst_repo_id \
-                and dst_dir and obj_type and op):
+        if not (src_repo_id and src_dir  and dst_repo_id \
+                and dst_dir and op and obj_names):
             return api_error(request, '400')
-
-        src_dir = os.path.dirname(src_path)
-        obj_name = os.path.basename(src_path)
 
         if src_repo_id == dst_repo_id and src_dir == dst_dir:
             return api_error(request, '419', 'The src_dir is same to dst_dir')
 
-        if obj_type == 'dir':
-            if dst_dir.startswith(src_path):
-                return api_error(request, '419', 'Can not move a dirctory to its subdir')
+        names = obj_names.split(':')
+        if dst_dir.startswith(src_dir):
+            for obj_name in names:
+                if dst_dir.startswith('/'.join([src_dir, obj_name])):
+                    return api_error(request, '419', 'Can not move a dirctory to its subdir')
 
-        new_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, obj_name)
+        for obj_name in names:
+            new_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, obj_name)
 
-        ret = 0
-        try:
-            if op == 'cp':
-                ret = seafserv_threaded_rpc.copy_file (src_repo_id, src_dir, obj_name,
-                                                       dst_repo_id, dst_dir, new_obj_name,
-                                                       request.user.username)
-            elif op == 'mv':
-                ret = seafserv_threaded_rpc.move_file (src_repo_id, src_dir, obj_name,
-                                                       dst_repo_id, dst_dir, new_obj_name,
-                                                       request.user.username)
-        except SearpcError, e:
-            return api_error(request, '419', "SearpcError:"+e.msg)
+            try:
+                if op == 'cp':
+                    seafserv_threaded_rpc.copy_file (src_repo_id, src_dir, obj_name,
+                                                     dst_repo_id, dst_dir, new_obj_name,
+                                                     request.user.username)
+                elif op == 'mv':
+                    seafserv_threaded_rpc.move_file (src_repo_id, src_dir, obj_name,
+                                                     dst_repo_id, dst_dir, new_obj_name,
+                                                     request.user.username)
+            except SearpcError, e:
+                return api_error(request, '419', "SearpcError:" + e.msg)
 
-        if ret < 0:
-            return api_error(request, '419')
-        return HttpResponse(json.dumps('success'), status='200',
-                            content_type=json_content_type)
-
+        return reloaddir_if_neccessary (request, dst_repo_id, dst_dir)
 
