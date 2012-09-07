@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-07 16:11+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: error_msg.py:7
+msgid "The group has already created"
+msgstr "该小组已经存在。"
+
+#: error_msg.py:8
+msgid "Failed to create group"
+msgstr "创建小组失败。"
+
+#: error_msg.py:11
+msgid "The group has already created in this org."
+msgstr "小组在该团体内已经存在。"
+
+#: error_msg.py:12
+msgid "Failed to create org group."
+msgstr "创建团体小组失败。"
+
+#: error_msg.py:15
+msgid "Permission error: only group staff can add member"
+msgstr "只有小组管理员可以添加成员。"
+
+#: error_msg.py:16
+msgid "Group not exists"
+msgstr "小组不存在。"
+
+#: error_msg.py:17
+msgid "Group is full"
+msgstr "小组已满，无法再添加成员。"
+
+#: error_msg.py:18
+msgid "Failed to add member to group"
+msgstr "添加成员失败。"

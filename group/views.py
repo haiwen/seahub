@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
+from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -51,7 +52,7 @@ def group_list(request):
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
                                    request.user.username)
         except SearpcError, e:
-            result['error'] = e.msg
+            result['error'] = _(e.msg)
             return HttpResponse(json.dumps(result), content_type=content_type)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
@@ -429,7 +430,7 @@ def group_members(request, group_id):
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
-                        result['error'] = e.msg
+                        result['error'] = _(e.msg)
                         return HttpResponse(json.dumps(result),
                                             content_type=content_type)
         else:
@@ -449,7 +450,7 @@ def group_members(request, group_id):
                                                    request.user.username,
                                                    member_name)
                     except SearpcError, e:
-                        result['error'] = e.msg
+                        result['error'] = _(e.msg)
                         return HttpResponse(json.dumps(result),
                                             content_type=content_type)
         return HttpResponse(json.dumps({'success': True}),

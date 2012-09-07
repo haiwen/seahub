@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
+from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from pysearpc import SearpcError
@@ -201,7 +202,7 @@ def org_groups(request, url_prefix):
                                                            e_grpname,
                                                            user)
         except SearpcError, e:
-            result['error'] = e.msg
+            result['error'] = _(e.msg)
             return HttpResponse(json.dumps(result), content_type=content_type)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
