@@ -386,7 +386,6 @@ function renderDirTree(container, repo_data) {
             }
         })
         .bind('select_node.jstree', function(e, data) {
-                //$('#mv-form .jstree-clicked').removeClass('jstree-clicked');
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
             $('input[name="dst_repo"]').attr('value', repo_id);
             var path = data.inst.get_path(data.rslt.obj);
@@ -421,8 +420,8 @@ function renderDirTree(container, repo_data) {
             },
             'plugins': ['themes', 'json_data', 'ui']
         });
-
 }
+
 $('#mv-form h4').click(function() {
     var span = $(this).children('.tri-bg'),
         next = $(this).next();
