@@ -1801,8 +1801,9 @@ def render_file_revisions (request, repo_id):
 def repo_revert_file (request, repo_id):
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
+    from_page = request.GET.get('from')
 
-    if not (commit_id and path):
+    if not (commit_id and path and from_page):
         return render_error(request, u"参数错误")
 
     try:
@@ -1811,8 +1812,13 @@ def repo_revert_file (request, repo_id):
     except Exception, e:
         return render_error(request, str(e))
     else:
-        parent_dir = os.path.dirname(path)
-        url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+        if from_page == 'repo_history':
+            # When revert file from repo history, we redirect to repo history
+            url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
+        else:
+            # When revert file from file history, we redirect to parent dir of this file
+            parent_dir = os.path.dirname(path)
+            url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
 
         file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
         if ret == 1:
