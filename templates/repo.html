@@ -197,22 +197,22 @@
     </div>
 
 {% if not view_history %}
-    <form id="add-new-dir-form" action="{{ SITE_ROOT}}repo/new_dir/" method="post" class="hide">{% csrf_token %}
+    <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
         <h4>新目录名称：</h4>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_dir_name" value="" /><br />
-        <p class="error hide">输入不能为空</p>
+        <p class="error hide"></p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
 
-    <form id="add-new-file-form" action="{{ SITE_ROOT}}repo/new_file/" method="post" class="hide">{% csrf_token %}
+    <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
         <h4>新文件名称：</h4>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_file_name" value="" /><br />
-        <p class="error hide">输入不能为空</p>
+        <p class="error hide"></p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
@@ -238,7 +238,7 @@
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="hidden" name="oldname" value="" />
         <input type="text" name="newname" value="" class="new-name" /><br />
-        <p class="error hide">输入不能为空。</p>
+        <p class="error hide"></p>
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
@@ -398,13 +398,94 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     return false;
 });
 
-$('#add-new-dir-form .submit, #add-new-file-form .submit, #rename-form .submit').click(function() {
-    if (!$.trim($(this).prev().prev().prev().val())) {//if the input is empty
-        $(this).prev().removeClass('hide');//show error msg
-        $('#simplemodal-container').css('height', $(this).parent().height());
-        return false;
-    }
+$('#rename-form .submit').click(function() {
+    $.ajax({
+        url: '{% url 'views.repo_rename_file' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': $('#rename-form input[name="repo_id"]').val(),
+            'parent_dir': $('#rename-form input[name="parent_dir"]').val(),
+            'oldname': $('#rename-form input[name="oldname"]').val(),
+            'newname': $('#rename-form input[name="newname"]').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('rename-form', data['error']);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('rename-form', value[0]);
+            });
+        }
+    });
+    return false;
 });
+
+$('#add-new-file-form .submit').click(function() {
+    $.ajax({
+        url: '{% url 'views.repo_new_file' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': $('#add-new-file-form input[name="repo_id"]').val(),
+            'parent_dir': $('#add-new-file-form input[name="parent_dir"]').val(),
+            'new_file_name': $('#add-new-file-form input[name="new_file_name"]').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('add-new-file-form', data['error']);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('add-new-file-form', value[0]);
+            });
+        }
+    });
+    return false;
+});
+
+$('#add-new-dir-form .submit').click(function() {
+    $.ajax({
+        url: '{% url 'views.repo_new_dir' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': $('#add-new-dir-form input[name="repo_id"]').val(),
+            'parent_dir': $('#add-new-dir-form input[name="parent_dir"]').val(),
+            'new_dir_name': $('#add-new-dir-form input[name="new_dir_name"]').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('add-new-dir-form', data['error']);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('add-new-dir-form', value[0]);
+            });
+        }
+    });
+    return false;
+});
+
 $('#mv-form .submit').click(function() {
     if (!$.trim($(this).prev().prev().val())) {//if the input is empty
         $(this).prev().removeClass('hide');//show error msg

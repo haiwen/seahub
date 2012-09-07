@@ -110,7 +110,7 @@ class RepoCreateForm(forms.Form):
 
 class RepoNewFileForm(forms.Form):
     """
-    Form for create a new empty file
+    Form for create a new empty file.
     """
     repo_id = forms.CharField(error_messages={'required': '参数错误'})
     parent_dir = forms.CharField(error_messages={'required': '参数错误'})
@@ -131,9 +131,33 @@ class RepoNewFileForm(forms.Form):
         except SearpcError, e:
             raise forms.ValidationError(str(e))
 
+class RepoRenameFileForm(forms.Form):
+    """
+    Form for rename a file.
+    """
+    repo_id = forms.CharField(error_messages={'required': '参数错误'})
+    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
+    oldname = forms.CharField(error_messages={'required': '参数错误'})
+    newname = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+                                error_messages={
+                                    'max_length': '新文件名太长',
+                                    'required': '新文件名不能为空',
+                                })
+
+    def clean_newname(self):
+        newname = self.cleaned_data['newname']
+        try:
+            if not is_valid_filename(newname):
+                error_msg = u"您输入的文件名 %s 包含非法字符" % newname
+                raise forms.ValidationError(error_msg)
+            else:
+                return newname
+        except SearpcError, e:
+            raise forms.ValidationError(str(e))
+
 class RepoNewDirForm(forms.Form):
     """
-    Form for create a new empty dir
+    Form for create a new empty dir.
     """
     repo_id = forms.CharField(error_messages={'required': '参数错误'})
     parent_dir = forms.CharField(error_messages={'required': '参数错误'})

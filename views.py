@@ -47,7 +47,7 @@ from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
-    RepoNewDirForm, RepoNewFileForm, FileCommentForm
+    RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -1610,7 +1610,9 @@ def file_upload_progress_page(request):
 
 @login_required        
 def repo_new_dir(request):        
-
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    
     form = RepoNewDirForm(request.POST)
     if form.is_valid():
         repo_id       = form.cleaned_data["repo_id"]
@@ -1618,20 +1620,26 @@ def repo_new_dir(request):
         new_dir_name = form.cleaned_data["new_dir_name"]
         user          = request.user.username
     else:
-        return render_error(request, form.errors.values()[0])
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
     try:
         seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name, user)
     except Exception, e:
-        return render_error(request, str(e))
+        result['error'] = str(e)
+        return HttpResponse(json.dumps(result), content_type=content_type)
         
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponseRedirect(url)
+    url = reverse('repo', args=[repo_id]) + \
+        ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
     
 @login_required        
 def repo_new_file(request):        
+    result = {}
+    content_type = 'application/json; charset=utf-8'
 
     form = RepoNewFileForm(request.POST)
     if form.is_valid():
@@ -1640,52 +1648,59 @@ def repo_new_file(request):
         new_file_name = form.cleaned_data["new_file_name"]
         user          = request.user.username
     else:
-        return render_error(request, form.errors.values()[0])
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), content_type=content_type)
         
-    new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+    new_file_name = check_filename_with_rename(repo_id, parent_dir,
+                                               new_file_name)
 
     try:
-        seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir, new_file_name, user)
+        seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir,
+                                              new_file_name, user)
     except Exception, e:
-        return render_error(request, str(e))
+        result['error'] = str(e)
+        return HttpResponse(json.dumps(result), content_type=content_type)
         
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponseRedirect(url)
+    url = reverse('repo', args=[repo_id]) + \
+        ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
 
 @login_required    
 def repo_rename_file(request):
-    repo_id         = request.POST.get("repo_id")
-    parent_dir      = request.POST.get("parent_dir")
-    oldname         = request.POST.get("oldname")
-    newname         = request.POST.get("newname")
-    user            = request.user.username
+    result = {}
+    content_type = 'application/json; charset=utf-8'
 
-    if not newname:
-        error_msg = u"新文件名不能为空"
-        return render_error(request, error_msg)
+    form = RepoRenameFileForm(request.POST)
+    if form.is_valid():
+        repo_id       = form.cleaned_data["repo_id"]
+        parent_dir    = form.cleaned_data["parent_dir"]
+        oldname       = form.cleaned_data["oldname"]
+        newname       = form.cleaned_data["newname"]
+        user          = request.user.username
+    else:
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
     if newname == oldname:
-        url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-        return HttpResponseRedirect(url)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
 
     newname = check_filename_with_rename(repo_id, parent_dir, newname)
-
-    if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-        error_msg = u"新文件名太长"
-        return render_error(request, error_msg)
-
-    if not (repo_id and parent_dir and oldname):
-        return render_error(request)
 
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
-        messages.add_message(request, messages.INFO, u'%s 已重命名为 %s。' % (oldname, newname))
+        messages.add_message(request, messages.INFO, u'%s 已重命名为 %s。' % \
+                                 (oldname, newname))
     except Exception, e:
-        return render_error(request, str(e))
+        result['error'] = str(e)
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponseRedirect(url)
+    url = reverse('repo', args=[repo_id]) + \
+        ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
 
 @login_required    
 def validate_filename(request):
