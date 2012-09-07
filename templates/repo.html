@@ -220,8 +220,8 @@
     <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
         <h3 id="mv-hd"></h3>
         <div class="con">
-            <h4><span class="tri-bg tri-right-bg"></span>当前同步目录：</h4>
-            <div id="current-repo-dirs" class="hide"></div>
+            <h4><span class="tri-bg tri-down-bg"></span>当前同步目录：</h4>
+            <div id="current-repo-dirs"></div>
             <h4><span class="tri-bg tri-right-bg"></span>其他同步目录：</h4>
             <div id="other-repos-dirs" class="hide"></div>
         </div>
@@ -370,6 +370,8 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     $('input[name="obj_name"]').val(obj_name);
     $('#mv-hd').html('将' + file_type + ' <span class="op-target">' + obj_name + '</span> ' + mv_type + '到：');
     $('#mv-form').modal({appendTo:'#main', autoResize:true});
+    $('#current-repo-dirs').prev().css('background', '#eee');
+    renderDirTree($('#current-repo-dirs'), current_repo);
     return false;
 });
 
@@ -415,6 +417,8 @@ function renderDirTree(container, repo_data) {
 $('#mv-form h4').click(function() {
     var span = $(this).children('.tri-bg'),
         next = $(this).next();
+    $('#mv-form h4').css('background', '#fff')
+    $(this).css('background', '#eee');
     if (span.hasClass('tri-right-bg')) {
         span.attr('class','tri-bg tri-down-bg');
         if (next.attr('id') == 'current-repo-dirs') {
