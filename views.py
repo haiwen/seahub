@@ -1811,7 +1811,9 @@ def repo_revert_file (request, repo_id):
     except Exception, e:
         return render_error(request, str(e))
     else:
-        url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
+        parent_dir = os.path.dirname(path)
+        url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+
         file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
         if ret == 1:
             msg = u'<a href="%s">%s</a> 已还原到根目录下' % (file_view_url, path.lstrip('/'))
