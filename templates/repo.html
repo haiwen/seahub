@@ -271,18 +271,20 @@ $("table tr:gt(0)").hover(
 $('#main-panel').removeClass('ovhd');
 var clicked_more_op;
 $('.more-op').click(function(e) {
-    clicked_more_op = $(this);
+    var its_op_list = $(this).next();
     if ($(this).attr('data')) { // no popup
+        clicked_more_op = $(this);
         $(this).parent().css('position','relative');
-        if ($(this).offset().top + $(this).next().height() <= $('#main').offset().top + $('#main').height()) {
-            $(this).next().css('top', 6);
+        if ($(this).offset().top + its_op_list.height() <= $('#main').offset().top + $('#main').height()) {
+            its_op_list.css('top', 6);
         } else {
-            $(this).next().css('bottom', 2);
+            its_op_list.css('bottom', 2);
         }
-        $(this).next().removeClass('hide');
+        $('.op-list').addClass('hide');
+        its_op_list.removeClass('hide');
         $(this).attr('data','');
     } else {
-        $(this).next().addClass('hide');
+        its_op_list.addClass('hide');
         $(this).attr('data','no-popup');
     }
 });

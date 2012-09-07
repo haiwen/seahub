@@ -441,6 +441,7 @@ ul.with-bg li {
     font-weight:normal;
 }
 #simplemodal-container h3 {
+    word-wrap:break-word;
     margin:0 0 4px;
 }
 .simplemodal-close {
