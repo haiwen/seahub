@@ -46,29 +46,27 @@
 {% if fileshares %}
 <table class="sharelink-list">
   <tr>
-    <th width="25%">文件名</th>
-    <th width="35%">所属目录</th>
-    <th width="20%">查看次数</th>
-    <th width="20%">操作</th>
+    <th width="45%">文件名</th>
+    <th width="30%">所属目录</th>
+    <th width="10%">查看次数</th>
+    <th width="15%">操作</th>
   </tr>
   {% for fs in fileshares %}
   <tr>
     <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/files/?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
     <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
     <td>{{ fs.view_cnt }}</td>
-    <td><a href="#" class="op view-file-link" data="{{ fs.token }}">查看链接</a>
-    <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">删除</a></td>
+    <td>
+        <a href="#" class="op view-link" data="{{ fs.token }}">查看链接</a>
+        <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">删除</a>
+    </td>
   </tr>
   {% endfor %}
-  
 </table>
 {% else %}
 <p>暂无</p>
 {% endif %}
-<div id="view-link" name="view-link" class="hide">
-  <span class="view-link-alert" style="float:left; "></span>
-</div>
-
+<p id="link" class="hide">该文件外链为：<input type="text" readonly="readonly" value="" id="shared-link" /></p>
 {% endblock %}
 
 {% block extra_script %}
@@ -77,23 +75,17 @@ $('.cancel-share').click(function() {
     location.href = $(this).attr('data');
 });
 
-$("table tr:gt(0)").hover(
-    function() {
-        $(this).find('img').css('cursor', 'pointer').removeClass('vh');
-    },
-    function() {
-        $(this).find('img').addClass('vh');
-    }
-);
-
-$(".view-file-link").click(function() {
-
-    var t = $(this).attr('data');
-    var l = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
-    $('.view-link-alert').html("该文件外链为：<p>" + l + "</p>");
-    $("#view-link").modal({appendTo: "#main", containerCss:{padding:18}});
+$(".view-link").click(function() {
+    var token = $(this).attr('data'),
+        link = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}f/' + token + '/';
+    $('#link').before('<p class="hide">' + link + '</p>');
+    $('#shared-link').val(link).css('width', $('#link').prev().width() + 2);
+    $("#link").modal({appendTo:'#main'});
+    $('#link').prev().remove();
     return false;
 });
-
+$('#shared-link').click(function() {
+    $(this).select();
+});
 </script>
 {% endblock %}
