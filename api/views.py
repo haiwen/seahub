@@ -6,6 +6,8 @@ import stat
 import simplejson as json
 import settings
 
+from urllib2 import unquote, quote
+
 from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.core.urlresolvers import reverse
@@ -562,7 +564,7 @@ class RepoFilePathView(ResponseMixin, View):
         return api_error(request, '415')
 
 
-def reloaddir_if_neccessary (request, repo_id, path):
+def reloaddir_if_neccessary (request, repo_id, parent_dir):
     reloaddir = False
     s = request.GET.get('reloaddir', None)
     if s and s.lower() == 'true':
@@ -603,6 +605,8 @@ class OpDeleteView(ResponseMixin, View):
             return api_error(request, '400')
 
         names =  file_names.split(':')
+        names = map(lambda x: unquote(x).decode('utf-8'), names)
+
         for file_name in names:
             try:
                 seafserv_threaded_rpc.del_file(repo_id, parent_dir,
@@ -659,6 +663,7 @@ class OpRenameView(ResponseMixin, View):
         if not path or path[0] != '/' or not newname:
             return api_error(request, '400')
 
+        newname = unquote(newname).decode('utf-8')
         if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
             return api_error(request, '420', 'New name too long')
 
@@ -688,9 +693,9 @@ class OpMoveView(ResponseMixin, View):
     @api_login_required
     def post(self, request):
         src_repo_id = request.POST.get('src_repo')
-        src_dir     = request.POST.get('src_dir')
+        src_dir     = unquote(request.POST.get('src_dir')).decode('utf-8')
         dst_repo_id = request.POST.get('dst_repo')
-        dst_dir     = request.POST.get('dst_dir')
+        dst_dir     = unquote(request.POST.get('dst_dir')).decode('utf-8')
         op          = request.POST.get('operation')
         obj_names   = request.POST.get('obj_names')
 
@@ -702,6 +707,8 @@ class OpMoveView(ResponseMixin, View):
             return api_error(request, '419', 'The src_dir is same to dst_dir')
 
         names = obj_names.split(':')
+        names = map(lambda x: unquote(x).decode('utf-8'), names)
+
         if dst_dir.startswith(src_dir):
             for obj_name in names:
                 if dst_dir.startswith('/'.join([src_dir, obj_name])):
