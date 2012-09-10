@@ -240,4 +240,4 @@ LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 USER_TOTAL_SPACE = 2 * pow(2,30)
 
-SEAFILE_VERSION = '0.9.5'
+SEAFILE_VERSION = '1.0.0'
