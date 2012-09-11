@@ -244,7 +244,6 @@ ul.with-bg li {
 /* top-bar */
 #top-bar {
     padding-bottom:21px;
-    background:transparent url('../img/dropshadow.png') repeat-x center bottom;
 }
 .top-bar-inner {
     background:#2d2d2d;
