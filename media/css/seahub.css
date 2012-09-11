@@ -243,7 +243,7 @@ ul.with-bg li {
 
 /* top-bar */
 #top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
-.top-bar-inner { height:21px; background:#606; }
+.top-bar-inner { height:24px; background:#2d2d2d; }
 .top-bar-con {
     color:#fff;
     font-weight:bold;
@@ -253,21 +253,22 @@ ul.with-bg li {
 .top-bar-con a {
     color:#ddd;
     font-weight:normal;
-    line-height:21px;
+    line-height:24px;
     padding:0 2px;
 }
 .top-bar-con a,
 .top-bar-con span {
     vertical-align:middle;
     display:inline-block;
-    height:21px;
+    line-height:24px;
 }
 .top-bar-con a.avatar-link {
-    height:16px;
+    line-height:24px;
 }
 .top-bar-con .avatar {
-	border-radius: 2px;
-	-moz-border-radius: 2px;
+    margin-top:4px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 .top-bar-con a.cur {
     background:#000;
