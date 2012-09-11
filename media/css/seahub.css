@@ -242,31 +242,36 @@ ul.with-bg li {
 }
 
 /* top-bar */
-#top-bar { height:21px; padding-bottom:21px;  background:#fff url('../img/dropshadow.png') repeat-x center bottom; }
-.top-bar-inner { height:24px; background:#2d2d2d; }
+#top-bar {
+    padding-bottom:21px;
+    background:transparent url('../img/dropshadow.png') repeat-x center bottom;
+}
+.top-bar-inner {
+    background:#2d2d2d;
+}
 .top-bar-con {
     color:#fff;
     font-weight:bold;
+    height:24px;
     width:950px;
     margin:0 auto;
 }
 .top-bar-con a {
     color:#ddd;
     font-weight:normal;
-    line-height:24px;
     padding:0 2px;
 }
 .top-bar-con a,
 .top-bar-con span {
-    vertical-align:middle;
     display:inline-block;
+    height:24px;
     line-height:24px;
+    vertical-align:middle;
 }
 .top-bar-con a.avatar-link {
-    line-height:24px;
+    height:16px;
 }
 .top-bar-con .avatar {
-    margin-top:4px;
     border-radius: 2px;
     -moz-border-radius: 2px;
 }
@@ -278,7 +283,7 @@ ul.with-bg li {
 }
 .top-bar-con a:hover {
     text-decoration:none;
-    background:#A0A;
+    background:#a0a;
 }
 .top-bar-con a.avatar-link:hover {
     background:none;
