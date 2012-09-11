@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_repo, get_group_repos, check_group_staff, get_commits, \
+    get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups, get_group, get_group_members, create_org_repo, \
     get_org_group_repos
 from pysearpc import SearpcError
@@ -153,12 +153,9 @@ def render_group_info(request, group_id, form):
                                     msg_type='group_msg',
                                     detail=str(group_id)).delete()
     
-    # Check whether user belong to the group or admin
-    joined = False
-    groups = ccnet_threaded_rpc.get_groups(request.user.username)
-    for group in groups:
-        if group.id == group_id_int:
-            joined = True
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    
     if not joined and not request.user.is_staff:
         return render_error(request, u'未加入该小组')
 
@@ -169,10 +166,7 @@ def render_group_info(request, group_id, form):
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    if check_group_staff(group.id, request.user):
-        is_staff = True
-    else:
-        is_staff = False
+    is_staff = True if check_group_staff(group.id, request.user) else False
         
     members = get_group_members(group_id_int)
     managers = []
@@ -212,10 +206,8 @@ def render_group_info(request, group_id, form):
     group_msgs = msgs_plus_one[:per_page]
     attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
 
-    reply_to_list = []
     msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
-    for r in msg_replies:
-        reply_to_list.append(r.reply_to_id)
+    reply_to_list = [ r.reply_to_id for r in msg_replies ]
     
     for msg in group_msgs:
         msg.reply_cnt = reply_to_list.count(msg.id)
@@ -307,11 +299,9 @@ def msg_reply(request, msg_id):
 
 @login_required
 def msg_reply_new(request):
-    grpmsg_reply_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
-    for n in notes:
-        if n.msg_type == 'grpmsg_reply':
-            grpmsg_reply_list.append(n.detail)
+    grpmsg_reply_list = [ n.detail for n in notes if \
+                              n.msg_type == 'grpmsg_reply']
 
     group_msgs = []
     for msg_id in grpmsg_reply_list:
@@ -503,12 +493,9 @@ def group_share_repo(request, repo_id, group_id, from_email):
     if not group:
         return render_error(request, u'共享失败:小组不存在')
     
-    # Check whether user belong to the group
-    joined = False
-    groups = ccnet_threaded_rpc.get_groups(request.user.username)
-    for group in groups:
-        if group.props.id == group_id:
-            joined = True
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+
     if not joined:
         return render_error(request, u'共享失败:未加入该小组')
     
@@ -525,12 +512,9 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     if not group:
         return render_error(request, u'取消共享失败:小组不存在')
     
-    # Check whether user belong to the group
-    joined = False
-    groups = ccnet_threaded_rpc.get_groups(from_email)
-    for group in groups:
-        if group.props.id == group_id:
-            joined = True
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+
     if not joined:
         return render_error(request, u'取消共享失败:未加入该小组')
 
@@ -626,12 +610,8 @@ def create_group_repo(request, group_id):
     if not get_group(group_id):
         return json_error(u'创建失败:小组不存在')
 
-    # Check whether user belong to the group
-    groups = ccnet_threaded_rpc.get_groups(request.user.username)
-    for group in groups:
-        if group.props.id == group_id:
-            break
-    else:
+    # Check whether user belongs to the group.
+    if not is_group_user(group_id, request.user.username):
         return json_error(u"创建失败:未加入该小组")
 
     form = RepoCreateForm(request.POST)
@@ -697,3 +677,4 @@ def create_group_repo(request, group_id):
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),
                                     content_type=content_type)
+

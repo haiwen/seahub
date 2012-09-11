@@ -201,16 +201,14 @@ def render_repo(request, repo_id, error=''):
     zipped = gen_path_link(path, repo.name)
 
     # get groups this repo is shared
-    groups = []
     if request.user.org:
         org_id = request.user.org['org_id']
         repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
     else:
         repo_shared_groups = get_shared_groups_by_repo(repo_id)
-    for group in repo_shared_groups:
-        # check whether user joined this group
-        if is_group_user(group.id, request.user.username):
-            groups.append(group)
+    # Filter out groups that user is joined.
+    groups = [ x for x in repo_shared_groups if \
+                   is_group_user(x.id, request.user.username)]
 
     return render_to_response('repo.html', {
             "repo": repo,
@@ -887,14 +885,11 @@ def repo_view_file(request, repo_id):
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
 
-    # get groups this repo is shared     
-    groups = []
+    # Get groups this repo is shared.
     repo_shared_groups = get_shared_groups_by_repo(repo_id)
-    for group in repo_shared_groups:
-        # check whether user joined this group
-        if is_group_user(group.id, request.user.username):
-            groups.append(group)
-
+    # Filter out groups that user in joined.
+    groups = [ x for x in repo_shared_groups if \
+                   is_group_user(x.id, request.user.username)]
     """file comments"""
     # Make sure page request is an int. If not, deliver first page.
     try:
