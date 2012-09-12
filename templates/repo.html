@@ -14,47 +14,7 @@
 {% endblock %}
 
 {% block main_panel %}
-{% if messages %}
-{% autoescape off %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endautoescape %}
-{% endif %}
-
-  {% if view_history %}
-    <h2>{{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
-  {% else %}
     <h2>{{repo.props.name}}</h2>
-  {% endif %}
-
-  {% if view_history %}
-    <div class="side fright">
-      {% if can_access %}
-      <div class="latest-commit">
-        <h3>修改信息</h3>
-        <p>{{ current_commit.props.desc|translate_commit_desc }}</p>
-        <p class="al-rt">
-          <span class="author">by
-          {% if current_commit.props.creator_name %}
-          {{ current_commit.props.creator_name|short_email }}
-          {% else %}
-          未知
-          {% endif %}
-          </span>
-          <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
-        </p>
-      </div>
-      {% endif %}
-
-      <h3>操作</h3>
-      <ul class="with-bg">
-        <li><a href="{{ SITE_ROOT }}repo/history/{{ repo.id }}/">返回历史列表</a></li>
-      </ul>
-    </div>
-  {% else %}
     <div class="side fright">
       <h3>基本信息</h3>
       <p>{{repo.props.desc}}</p>
@@ -83,7 +43,6 @@
           {% endif %}
       {% endif %}
     </div>
-  {% endif %}
   
     <div class="main fleft">
       {% if repo.props.encrypted and not password_set %}
@@ -105,17 +64,13 @@
               当前路径：
               {% for name, link in zipped %}
               {% if not forloop.last %}
-                {% if view_history %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
-                {% else %}
                 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /                
-                {% endif %}
               {% else %}
               {{ name }}
               {% endif %}
               {% endfor %}
               </p>
-              {% if not view_history and request.user.is_authenticated %}
+              {% if request.user.is_authenticated %}
               <div class="repo-op">
                   <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">上传</button>
                   <button id="add-new-dir" class="op-btn">新建目录</button>
@@ -134,17 +89,13 @@
             {% for dirent in dir_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
-              {% if view_history %}
-              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
-              {% else %}
               <td>
                   <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
               </td>
-              {% endif %}
 
               <td></td>
               <td>
-                {% if not view_history and request.user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                   <div>
                       <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" data="no-popup" />
                       <ul class="op-list hide">
@@ -162,13 +113,9 @@
             {% for dirent in file_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-              {% if view_history %}
-              <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
-              {% else %}
               <td>
                   <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
               </td>
-              {% endif %}
 
               <td>{{ dirent.file_size|filesizeformat }}</td>
               <td>
@@ -176,14 +123,12 @@
                       <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op vh" data="no-popup" />
                       <ul class="op-list hide">
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
-                          {% if not view_history and request.user.is_authenticated %}
+                          {% if request.user.is_authenticated %}
                           <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                           <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
                           <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                           <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                           <li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li>
-                          {% endif %}
-                          {% if view_history and request.user.is_authenticated %}
                           <li><a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ current_commit.id }}&p={{path|urlencode}}{{ dirent.obj_name|urlencode }}&from=repo_history" class="op file-revert">还原</a></li>
                           {% endif %}
                       </ul>
@@ -196,7 +141,6 @@
       {% endif %}
     </div>
 
-{% if not view_history %}
     <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
         <h4>新目录名称：</h4>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
@@ -250,14 +194,11 @@
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
-{% endif %}
 
 {% endblock %}
 
 {% block extra_script %}
-{% if not view_history %}
 <script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
-{% endif %}
 <script type="text/javascript">
 $("table tr:gt(0)").hover(
     function() {
@@ -304,7 +245,6 @@ $('.op-list li').hover(
     }
 );
 
-{% if not view_history %}
 $('.file-rename, .dir-rename').click(function () {
     var type = $(this).hasClass('file-rename') ? '文件 ' : '目录 ',
         name = $(this).attr('data');
@@ -557,6 +497,6 @@ $('#upload-file, #add-new-dir, #add-new-file').hover(
 );
 
 {% include "snippets/bottom_bar.html" %}
-{% endif %}
+
 </script>
 {% endblock %}

@@ -2,23 +2,10 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
-from seahub.views import root, myhome, public_home,  \
-    repo, repo_history, modify_token, remove_repo, sys_seafadmin, sys_useradmin, \
-    activate_user, user_add, user_remove, sys_group_admin, sys_org_admin, \
-    ownerhome, repo_history_revert, repo_file_edit, org_remove, user_reset, \
-    user_info, repo_set_access_property, repo_access_file, \
-    repo_remove_share, repo_download, repo_view_file, pdf_full_view, \
-    seafile_access_check, repo_history_changes, unset_inner_pub_repo, \
-    repo_upload_file, file_upload_progress_page, \
-    upload_file_error, update_file_error, \
-    get_subdir, file_move, repo_new_dir, repo_new_file, repo_rename_file, \
-    validate_filename, \
-    repo_create, repo_update_file, repo_revert_file, file_revisions, \
-    get_shared_link, view_shared_file, remove_shared_link, send_shared_link, \
-    crocodoc_upload, crocodoc_status, crocodoc_session, public_repo_create
-from seahub.notifications.views import notification_list
-from seahub.share.views import share_admin
-from seahub.group.views import group_list
+from seahub.views import *
+from notifications.views import notification_list
+from share.views import share_admin
+from group.views import group_list
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -69,6 +56,7 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
     (r'^repo/history/revert/(?P<repo_id>[^/]+)/$', repo_history_revert),
+    (r'^repo/history/view/(?P<repo_id>[^/]+)/$', repo_history_view),
 #    (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
     (r'^repo/history/changes/(?P<repo_id>[^/]+)/$', repo_history_changes),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),

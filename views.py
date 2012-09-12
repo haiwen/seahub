@@ -145,12 +145,8 @@ def render_repo(request, repo_id, error=''):
         except SearpcError, e:
             return render_error(request, e.msg)
 
-    # view newest worktree or history worktree
-    commit_id = request.GET.get('commit_id', '')
-    view_history = True if commit_id else False
-    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
-    if not current_commit:
-        current_commit = get_commits(repo_id, 0, 1)[0]
+    # Get newest commit.
+    current_commit = get_commits(repo_id, 0, 1)[0]
     
     # query repo infomation
     repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
@@ -188,7 +184,7 @@ def render_repo(request, repo_id, error=''):
             file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                              y.obj_name.lower()))
 
-    if request.user.is_authenticated() and not view_history:
+    if request.user.is_authenticated():
         try:
             accessible_repos = get_accessible_repos(request, repo)
         except SearpcError, e:
@@ -214,7 +210,6 @@ def render_repo(request, repo_id, error=''):
             "repo": repo,
             "can_access": can_access,
             "current_commit": current_commit,
-            "view_history": view_history,
             "password_set": password_set,
             "repo_size": repo_size,
             "dir_list": dir_list,
@@ -520,6 +515,89 @@ def repo_history_revert(request, repo_id):
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
+@login_required
+@ctx_switch_required
+def repo_history_view(request, repo_id):
+    """
+    View repo page in history.
+    """
+    # Check whether user can view repo page
+    can_access = access_to_repo(request, repo_id, '')
+    if not can_access:
+        return render_permission_error(request, '无法访问该同步目录')
+    
+    repo = get_repo(repo_id)
+    if not repo:
+        return render_error(request, u'该同步目录不存在')
+
+    # query whether set password if repo is encrypted
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return render_error(request, e.msg)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+    if not current_commit:
+        current_commit = get_commits(repo_id, 0, 1)[0]
+
+    # query repo infomation
+    repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
+
+    # get repo dirents
+    dirs = []
+    path = ''
+    zipped = []
+    dir_list = []
+    file_list = []
+    if not repo.props.encrypted or password_set:
+        path = request.GET.get('p', '/')
+        if path[-1] != '/':
+            path = path + '/'
+        
+        if current_commit.root_id == EMPTY_SHA1:
+            dirs = []
+        else:
+            try:
+                dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id,
+                                                     path.encode('utf-8'))
+            except SearpcError, e:
+                return render_error(request, e.msg)
+            for dirent in dirs:
+                if stat.S_ISDIR(dirent.props.mode):
+                    dir_list.append(dirent)
+                else:
+                    file_list.append(dirent)
+                    try:
+                        dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+                    except:
+                        dirent.file_size = 0
+            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                            y.obj_name.lower()))
+            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                             y.obj_name.lower()))
+
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
+
+    return render_to_response('repo_history_view.html', {
+            "repo": repo,
+            "can_access": can_access,
+            "current_commit": current_commit,
+            "password_set": password_set,
+            "repo_size": repo_size,
+            "dir_list": dir_list,
+            "file_list": file_list,
+            "path": path,
+            "zipped": zipped,
+            }, context_instance=RequestContext(request))
+    
 def get_diff(repo_id, arg1, arg2):
     lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : [], \
                  'newdir' : [], 'deldir' : []}
