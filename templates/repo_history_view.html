@@ -50,7 +50,7 @@
               当前路径：
               {% for name, link in zipped %}
               {% if not forloop.last %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
+                <a href="{% url 'seahub.views.repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
               {% else %}
               {{ name }}
               {% endif %}
@@ -67,7 +67,7 @@
             {% for dirent in dir_list %}
             <tr>
               <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
-              <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
+              <td><a href="{% url 'seahub.views.repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
               <td></td>
               <td></td>
             </tr>

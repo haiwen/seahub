@@ -26,7 +26,7 @@
          {% for name, link in zipped %}
             {% if not forloop.last %}
                 {% if view_history %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
+                <a href="{% url 'seahub.views.repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
                 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
                 {% endif %}
             {% else %}
