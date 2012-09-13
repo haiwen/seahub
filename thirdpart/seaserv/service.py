@@ -585,6 +585,13 @@ def check_permission(repo_id, user):
         ret = -1
     return True if ret == 0 else False
 
+def is_passwd_set(repo_id, user):
+    try:
+        ret = seafserv_rpc.is_passwd_set(repo_id, user)
+    except SearpcError, e:
+        ret = -1
+    return True if ret == 1 else False
+
 def is_personal_repo(repo_id):
     """
     Check whether repo is personal repo.
@@ -656,3 +663,9 @@ def is_valid_filename(file_or_dir):
 
     return ret
 
+def get_file_size(file_id):
+    try:
+        fs = seafserv_threaded_rpc.get_file_size(file_id)
+    except SearpcError, e:
+        fs = 0
+    return fs

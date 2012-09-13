@@ -13,9 +13,10 @@ from service import get_repos, get_repo, get_commits, get_branches, \
     get_org_repos, is_repo_owner, create_org_repo, is_inner_pub_repo, \
     list_org_inner_pub_repos, get_org_id_by_repo_id, list_org_shared_repos, \
     list_personal_shared_repos, is_personal_repo, list_inner_pub_repos, \
-    is_org_repo_owner, get_org_repo_owner, is_org_repo
+    is_org_repo_owner, get_org_repo_owner, is_org_repo, get_file_size
 
-from service import get_binding_peerids, is_valid_filename, check_permission
+from service import get_binding_peerids, is_valid_filename, check_permission,\
+    is_passwd_set
 from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
     get_user_current_org, add_org_user, remove_org_user, get_org_by_id, \
     get_org_id_by_repo_id, is_org_staff, get_org_users_by_url_prefix, \

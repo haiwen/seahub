@@ -37,7 +37,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner
+    get_org_repo_owner, is_passwd_set, get_file_size
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -143,12 +143,11 @@ class RepoMixin(object):
     
     def get_user(self):
         return self.request.user
-    
+
     def get_repo(self, repo_id):
         repo = get_repo(repo_id)
         if not repo:
             raise Http404
-            # return render_error(self.request, u'该同步目录不存在')
         return repo
 
     def get_repo_size(self):
@@ -156,51 +155,35 @@ class RepoMixin(object):
         return repo_size
 
     def is_password_set(self):
-        password_set = False
         if self.repo.encrypted:
-            try:
-                ret = seafserv_rpc.is_passwd_set(self.repo.id,
-                                                 self.user.username)
-                if ret == 1:
-                    password_set = True
-            except SearpcError, e:
-                return render_error(request, e.msg)
-        return password_set
+            return is_passwd_set(self.repo.id, self.user.username)
+        return False
 
     def get_repo_dirents(self):
-        dirs = []
-        path = ''
-        zipped = []
         dir_list = []
         file_list = []
-        if not self.repo.encrypted or self.password_set:
-            path = self.path
-            if path[-1] != '/':
-                path = path + '/'
+        if self.current_commit.root_id == EMPTY_SHA1:
+            return ([], [])
+        else:
+            try:
+                dirs = seafserv_threaded_rpc.list_dir_by_path(
+                    self.current_commit.id,
+                    self.path.encode('utf-8'))
+            except SearpcError, e:
+                raise Http404
+                # return render_error(self.request, e.msg)
+            for dirent in dirs:
+                if stat.S_ISDIR(dirent.props.mode):
+                    dir_list.append(dirent)
+                else:
+                    file_list.append(dirent)
+                    dirent.file_size = get_file_size(dirent.obj_id)
 
-            if self.current_commit.root_id == EMPTY_SHA1:
-                dirs = []
-            else:
-                try:
-                    dirs = seafserv_threaded_rpc.list_dir_by_path(self.current_commit.id,
-                                                         path.encode('utf-8'))
-                except SearpcError, e:
-                    raise Http404
-                    # return render_error(self.request, e.msg)
-                for dirent in dirs:
-                    if stat.S_ISDIR(dirent.props.mode):
-                        dir_list.append(dirent)
-                    else:
-                        file_list.append(dirent)
-                        try:
-                            dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
-                        except:
-                            dirent.file_size = 0
-                dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                                y.obj_name.lower()))
-                file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                                 y.obj_name.lower()))
-        return (file_list, dir_list)
+            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                            y.obj_name.lower()))
+            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                             y.obj_name.lower()))
+            return (file_list, dir_list)
 
     def get_nav_path(self):
         zipped = gen_path_link(self.path, self.repo.name)
@@ -215,33 +198,35 @@ class RepoMixin(object):
 
     def get_success_url(self):
         return reverse('repo', args=[self.repo_id])
-        
-    def get(self, request, *args, **kwargs):
+
+    def prepare_property(self):
+        # NOTE: order is important.
         self.repo_id = self.get_repo_id()
         self.user = self.get_user()
         self.path = self.get_path()
         self.repo = self.get_repo(self.repo_id)
+        self.repo_size = self.get_repo_size()        
         self.can_access = True
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
-        self.repo_size = self.get_repo_size()
-        self.file_list, self.dir_list = self.get_repo_dirents()
-        self.zipped = self.get_nav_path()
-        self.applet_root = self.get_applet_root()
+
+        if self.repo.encrypt and not self.password_set:
+            # Repo is encrypt and password is not set, then no need to
+            # query following informations.
+            self.file_list, self.dir_list = [], []
+            self.zipped = None
+            self.applet_root = None
+        else:
+            self.file_list, self.dir_list = self.get_repo_dirents()
+            self.zipped = self.get_nav_path()
+            self.applet_root = self.get_applet_root()
+        
+    def get(self, request, *args, **kwargs):
+        self.prepare_property()
         return super(RepoMixin, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.repo_id = self.get_repo_id()
-        self.user = self.get_user()
-        self.path = self.get_path()
-        self.repo = self.get_repo(self.repo_id)
-        self.can_access = True
-        self.current_commit = self.get_current_commit()
-        self.password_set = self.is_password_set()
-        self.repo_size = self.get_repo_size()
-        self.file_list, self.dir_list = self.get_repo_dirents()
-        self.zipped = self.get_nav_path()
-        self.applet_root = self.get_applet_root()
+        self.prepare_property()
         return super(RepoMixin, self).post(request, *args, **kwargs)
         
 class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
