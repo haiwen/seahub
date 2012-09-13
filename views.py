@@ -193,8 +193,9 @@ class RepoMixin(object):
         return get_ccnetapplet_root()
 
     def get_current_commit(self):
-        # Implemented in subclasses.
-        pass
+        # Get newest commit by default, subclasses can override this method.
+        current_commit = get_commits(self.repo.id, 0, 1)[0]
+        return current_commit
 
     def get_success_url(self):
         return reverse('repo', args=[self.repo_id])
@@ -231,6 +232,9 @@ class RepoMixin(object):
         
 class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
                BaseFormView):
+    """
+    View to show repo page and handle post request to decrypt repo.
+    """
     form_class = RepoPassowrdForm
     template_name = 'repo.html'
 
@@ -256,10 +260,6 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
                        is_group_user(x.id, self.user.username)]
         return groups
 
-    def get_current_commit(self):
-        current_commit = get_commits(self.repo.id, 0, 1)[0]
-        return current_commit
-    
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
         kwargs['can_access'] = self.can_access
@@ -276,6 +276,9 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         return kwargs
 
 class RepoHistoryView(CtxSwitchRequiredMixin, RepoMixin, TemplateView):
+    """
+    View to show repo page in history.
+    """
     template_name = 'repo_history_view.html'
 
     def get_current_commit(self):
