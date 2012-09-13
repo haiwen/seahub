@@ -6,7 +6,9 @@
         {% include 'snippets/editor_set_mode.html' %}
         theme: 'default',
         indentUnit: 4,
+        {% if fileext != 'txt' and fileext != 'text' %}
         lineNumbers: true,
+        {% endif %}
         readOnly: true
     });
     editor.setSize(null, (editor.lineCount() + 1) * parseFloat($('.CodeMirror').css('line-height')));
