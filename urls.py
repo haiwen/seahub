@@ -65,7 +65,6 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
     (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
     (r'^pdf_full_view/$', pdf_full_view),
-    (r'^document_full_view/$', document_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
     (r'^download/repo/$', repo_download),                       

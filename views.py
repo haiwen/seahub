@@ -1062,13 +1062,6 @@ def pdf_full_view(request):
             'file_src': file_src,
                 }, context_instance=RequestContext(request))
 
-def document_full_view(request):
-    file_id = request.GET.get('file_id')
-    file_src = DOCUMENT_CONVERTOR_ROOT + 'pdf/' + file_id
-    return render_to_response('pdf_full_view.html', {
-            'file_src': file_src,
-            }, context_instance=RequestContext(request))
-
 def update_file_after_edit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
     def error_json(error_msg=u"内部错误"):
