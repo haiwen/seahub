@@ -1159,6 +1159,7 @@ def repo_file_edit(request, repo_id):
         'u_filename':u_filename,
         'path':path,
         'zipped':zipped,
+        'filetype':filetype,
         'fileext':fileext,
         'err':err,
         'file_content':file_content,

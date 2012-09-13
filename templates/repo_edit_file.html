@@ -1,6 +1,16 @@
 {% extends base_template %}
 {% load seahub_tags %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+<style type="text/css">
+.CodeMirror-focused pre.CodeMirror-cursor {
+  visibility: visible;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
+{% endblock %}
+
 {% block main_panel %}
     <h2>编辑 {{ u_filename }}</h2>
     <p class="path">
@@ -14,18 +24,19 @@
          {% endfor %}
     </p>
     <div id="file">
-        <p id="file-fetching-tip">文件内容读取中...</p>
-        <div id="docu-view" class="hide"></div>
-        {% if fileext == 'markdown' or fileext == 'md' %}
+        {% ifnotequal file_content None %}
+        <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
+        {% endifnotequal %}
+        {% if filetype == 'Markdown' %}
         <div id="md-view" class="article hide"></div>
         {% endif %}
     </div>
     <div id="op-after-edit" class="w100 ovhd hide">
-        {% if fileext == 'markdown' or fileext == 'md' %}
+        {% if filetype == 'Markdown' %}
         <div class="fleft">
             <button id="file-edit-submit">提交</button>
-            <button id="source-code" class="hide">原文件</button>
-            <button id="preview">预览</button>
+            <button id="source-code-btn" class="hide">原文件</button>
+            <button id="preview-btn">预览</button>
         </div>
         {% else %}
         <button id="file-edit-submit" class="fleft">提交</button>
@@ -35,50 +46,43 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/ace.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}ace/theme-twilight.js"></script>
-{% include "snippets/file_view_js.html" %}
-{% if fileext == 'markdown' or fileext == 'md' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-markdown.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror.js"></script>
+{% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
-if ($.browser.msie) {
-    $('#file').before('<p class="error">下面的编辑器在 IE 下对中文输入的支持不是很好。如果您需要输入中文，请使用 chrome 或 firefox .</p>');
-}
-var editor = ace.edit("docu-view");
-editor.setShowPrintMargin(false); // rm the vertical line in the center
-editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
-editor.renderer.scrollBar.width = 0; // enlarge ace_content width
-editor.setTheme("ace/theme/twilight");
-{% include "snippets/editor_set_mode.html" %}
-editor.session.getDocument().setValue('{{ file_content|escapejs }}');
-editor.session.getDocument().setNewLineMode('{{ newline_mode }}'); 
-$('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height')), 'min-height': '400px'}); // '+ 1': offer space for bottom scrollbar
-editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
-editor.resize(); // fix some problem for showing some file in ie8
-$('#file-fetching-tip').addClass('hide');
-$('#docu-view, #op-after-edit').removeClass('hide');
-
-{% if fileext == 'markdown' or fileext == 'md' %}
-$('#file-edit-submit').css('margin-right', '8px');
-$('#source-code').click(function() {
-    $('#md-view, #source-code').addClass('hide');
-    $('#docu-view, #preview').removeClass('hide');
+var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
+    {% include "snippets/editor_set_mode.html" %}
+    {% if filetype == 'Markdown' %}
+    mode: 'markdown',
+    {% endif %}
+    theme: 'monokai',
+    indentUnit: 4,
+    lineNumbers: true,
+    autofocus: true
 });
-$('#preview').click(function() {
-    var content = editor.session.getValue();
+editor.setSize(null, (editor.lineCount() + 1) * parseFloat($('.CodeMirror').css('line-height')));
+$('#op-after-edit').removeClass('hide');
+
+{% if filetype == 'Markdown' %}
+$('#file-edit-submit').css('margin-right', '8px');
+$('#source-code-btn').click(function() {
+    $('#md-view, #source-code-btn').addClass('hide');
+    $('.CodeMirror, #preview-btn').removeClass('hide');
+    editor.focus();
+});
+$('#preview-btn').click(function() {
+    var content = editor.getValue();
     var converter = new Showdown.converter();
-    $('#docu-view, #preview').addClass('hide');
+    $('.CodeMirror, #preview-btn').addClass('hide');
     $('#md-view').html(converter.makeHtml(content)).removeClass('hide');
     $('#md-view').children(':first').css('margin-top', '0');
-    $('#source-code').removeClass('hide');
+    $('#source-code-btn').removeClass('hide');
 });
 {% endif %}
 
 $('#file-edit-submit').click(function () {
-    var content = editor.session.getValue();
     $.ajax({
         type: "POST",
         url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}',
@@ -86,7 +90,7 @@ $('#file-edit-submit').click(function () {
         cache: false,
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
-        data: {content: content, encoding: '{{ encoding }}'},
+        data: {content: editor.getValue(), encoding: '{{ encoding }}'},
         success: function(data) {
             location.href = $('#file-edit-cancel').attr('data');
         },

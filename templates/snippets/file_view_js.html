@@ -1,44 +1,5 @@
 {% if filetype == 'Text' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/ace.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}ace/theme-chrome.js"></script>
-{% if fileext == 'html' or fileext == 'xhtml' or fileext == 'htm' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-html.js"></script>
-{% endif %}
-{% if fileext == 'css' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-css.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}ace/worker-css.js"></script>
-{% endif %}
-{% if fileext == 'java' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-java.js"></script>
-{% endif %}
-{% if fileext == 'js' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-javascript.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}ace/worker-javascript.js"></script>
-{% endif %}
-{% if fileext == 'c' or fileext == 'cpp' or fileext == 'cc' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-c_cpp.js"></script>
-{% endif %}
-{% if fileext == 'tex' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-latex.js"></script>
-{% endif %}
-{% if fileext == 'pl' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-perl.js"></script>
-{% endif %}
-{% if fileext == 'php' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-php.js"></script>
-{% endif %}
-{% if fileext == 'py' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-python.js"></script>
-{% endif %}
-{% if fileext == 'rb' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-ruby.js"></script>
-{% endif %}
-{% if fileext == 'sh' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-sh.js"></script>
-{% endif %}
-{% if fileext == 'xml' %}
-<script type="text/javascript" src="{{MEDIA_URL}}ace/mode-xml.js"></script>
-{% endif %}
+<script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror.js"></script>
 {% endif %}
 {% if filetype == 'PDF' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>

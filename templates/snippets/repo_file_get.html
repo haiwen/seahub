@@ -1,21 +1,15 @@
 <!-- <script type="text/javascript"> -->
 {% if filetype == 'Text' %}
     {% ifnotequal file_content None %}
-    $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
-    var editor = ace.edit("docu-view");
-    $('#docu-view').removeClass('vh');
-    editor.setReadOnly(true);
-    editor.setHighlightActiveLine(false);
-    $('#docu-view .ace_cursor-layer').hide(); // rm cursor
-    editor.setShowPrintMargin(false); // rm the vertical line in the center
-    editor.renderer.scrollBar.element.style.display = "none"; // hide right scrollbar
-    editor.renderer.scrollBar.width = 0; // enlarge ace_content width
-    editor.setTheme("ace/theme/chrome");
-    {% include "snippets/editor_set_mode.html" %}
-    editor.session.getDocument().setValue('{{ file_content|escapejs }}');
-    $('#docu-view').css({'position': 'relative', 'height': (editor.session.getScreenLength() + 1) * parseInt($('#docu-view').css('line-height'))}); // '+ 1': offer space for bottom scrollbar
-    editor.session.setScrollLeft(0); // make bottom scrollbar start from the left-most
-    editor.resize(); // fix some problem for showing some file in ie8
+    $('#file-view').css('background', '#fff');
+    var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
+        {% include 'snippets/editor_set_mode.html' %}
+        theme: 'default',
+        indentUnit: 4,
+        lineNumbers: true,
+        readOnly: true
+    });
+    editor.setSize(null, (editor.lineCount() + 1) * parseFloat($('.CodeMirror').css('line-height')));
     {% endifnotequal %}
 
     {% if err %}
