@@ -19,9 +19,9 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group
 try:
-    from settings import CROCODOC_API_TOKEN
+    from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
-    CROCODOC_API_TOKEN = None
+    DOCUMENT_CONVERTOR_ROOT = None
     
 import settings
 
@@ -31,7 +31,7 @@ MAX_INT = 2147483647
 PREVIEW_FILEEXT = {
     'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
     'Image': ('gif', 'jpeg', 'jpg', 'png'),
-    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
+    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls'),
     'SVG': ('svg',),
     'PDF': ('pdf',),
     'Markdown': ('markdown', 'md'),
@@ -282,7 +282,7 @@ def valid_previewed_file(filename):
     if filetype:
         # Check whether this kind of file can be previewd.
         if filetype == 'Document':
-            return (filetype, fileExt) if CROCODOC_API_TOKEN \
+            return (filetype, fileExt) if DOCUMENT_CONVERTOR_ROOT \
                 else ('Unknown', fileExt)
         else:
             return (filetype, fileExt)

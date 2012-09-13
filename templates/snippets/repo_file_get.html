@@ -1,3 +1,4 @@
+<!-- <script type="text/javascript"> -->
 {% if filetype == 'Text' %}
     {% ifnotequal file_content None %}
     $('#file-view').html('<div id="docu-view" class="vh">' + '</div>');
@@ -37,75 +38,6 @@
     } else {
         $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
     }
-{% endif %}
-
-{% if filetype == 'Document' %}
-    var uuid = '',
-        obj_id = '';
-    function create_session() {
-        $.ajax({
-            url: '{{ SITE_ROOT }}crocodoc/session/?uuid=' + uuid,
-            cache: false,
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                if (data.length > 0) {
-                    $('#file-view').html('<div><iframe src="' + data[0]['doc_src'] + '" frameborder="0" id="doc-view"></iframe></div>').attr('class', '');
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
-            }
-        });            
-    }
-    function check_status () {
-        $.ajax({
-            url: '{{ SITE_ROOT }}crocodoc/status/?uuids='+ uuid + '&obj_id=' + obj_id,
-            cache: false,
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                if (data.length > 0) {
-                    var status = data[0]['status'];
-                    if (status == 'QUEUED') {
-                        $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
-                        setTimeout(check_status, 1000);
-                    } else if (status == 'PROCESSING') {
-                        $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
-                        setTimeout(check_status, 1000);
-                    } else {
-                        $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
-                        create_session();
-                    }
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
-            }
-        });
-    }
-
-if (!$.browser.mozilla && !$.browser.safari) {
-    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>').addClass('file-view-tip');
-} else {
-    $.ajax({
-        url: '{{ SITE_ROOT }}crocodoc/upload/?raw_path={{ raw_path|urlencode }}',
-        cache: false,
-        contentType: 'application/json; charset=utf-8',
-        success: function(data) {
-            if (data.length > 0) {
-                uuid = data[0]['uuid'];
-                obj_id = data[0]['obj_id'];
-                $('#file-view').html('<p class="msg">文档内容读取成功，开始转换...</p>').addClass('file-view-tip');
-                check_status();
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>').addClass('file-view-tip');
-        }
-    });
-}
 {% endif %}
 
 {% if filetype == 'PDF' %}
@@ -179,3 +111,79 @@ if (!$.browser.mozilla && !$.browser.safari) {
 {% if filetype == 'Unknown' %}
     $('#file-view').html('<p>该类型文件无法在线查看。</p>').addClass('file-view-tip');
 {% endif %}
+
+{% if filetype == 'Document' %}
+  {% if err %}
+  $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
+  {% else %}
+  function load_flexpaper() {
+      $('#file-view').html('<div><a id="viewerPlaceHolder" style="width:942px;height:480px;display:block"></a></div>');
+      var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
+      var fp = new FlexPaperViewer(
+          '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
+          'viewerPlaceHolder', { config : {
+              SwfFile : escape(swf_url),
+              Scale : 1.0, 
+              ZoomTransition : 'easeOut',
+              ZoomTime : 0.5,
+              ZoomInterval : 0.2,
+              FitPageOnLoad : true,
+              FitWidthOnLoad : false,
+              FullScreenAsMaxWindow : false,
+              ProgressiveLoading : false,
+              MinZoomSize : 0.2,
+              MaxZoomSize : 5,
+              SearchMatchAll : false,
+              InitViewMode : 'Portrait',
+              PrintPaperAsBitmap : false,
+              
+              ViewModeToolsVisible : true,
+              ZoomToolsVisible : true,
+              NavToolsVisible : true,
+              CursorToolsVisible : true,
+              SearchToolsVisible : true,
+              
+              localeChain: 'en_US'
+          }});
+  }
+  
+  {% if document_swf_exists %}
+  load_flexpaper();
+  {% else %}
+  function check_status () {
+      url = '{{ DOCUMENT_CONVERTOR_ROOT }}status';
+      url += '?file_id={{ obj_id }}';
+      
+      $.ajax({
+          url: url,
+          cache: false,
+          dataType: 'jsonp',
+          jsonpCallback: 'xx',
+          crossDomain: true,
+          success: function(data) {
+              if (data['error']) {
+                  $('#file-view').html('<p class="error">' + data['error'] + '</p>');
+              } else {
+                  var status = data['status'];
+                  if (status == 'QUEUED') {
+                      // $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                      setTimeout(check_status, 2000);
+                  } else if (status == 'PROCESSING') {
+                      // $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                      setTimeout(check_status, 2000);
+                  } else {
+                      // $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
+                      load_flexpaper();
+                  }
+              }
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+              var jsonVal = jQuery.parseJSON(xhr.responseText);
+              $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
+  {% endif %}
+  {% endif %}

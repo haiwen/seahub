@@ -61,9 +61,11 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_upload_url, check_and_get_org_by_repo
 from seahub.profile.models import Profile
 try:
-    from settings import CROCODOC_API_TOKEN
+    from settings import DOCUMENT_CONVERTOR_ROOT
+    if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
+        DOCUMENT_CONVERTOR_ROOT += '/'
 except ImportError:
-    CROCODOC_API_TOKEN = None
+    DOCUMENT_CONVERTOR_ROOT = None
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
 
 @login_required
@@ -925,8 +927,11 @@ def repo_view_file(request, repo_id):
     # get file content
     err = ''
     file_content = ''
+    document_swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+    elif filetype == 'Document':
+        err, document_swf_exists = document_prepare(raw_path, obj_id, fileext)
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -997,6 +1002,8 @@ def repo_view_file(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'document_swf_exists': document_swf_exists,
+            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
     
 def repo_file_get(raw_path):
@@ -1055,6 +1062,13 @@ def pdf_full_view(request):
             'file_src': file_src,
                 }, context_instance=RequestContext(request))
 
+def document_full_view(request):
+    file_id = request.GET.get('file_id')
+    file_src = DOCUMENT_CONVERTOR_ROOT + 'pdf/' + file_id
+    return render_to_response('pdf_full_view.html', {
+            'file_src': file_src,
+            }, context_instance=RequestContext(request))
+
 def update_file_after_edit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
     def error_json(error_msg=u"内部错误"):
@@ -1080,7 +1094,7 @@ def update_file_after_edit(request, repo_id):
     fd, tmpfile = tempfile.mkstemp()
     def remove_tmp_file():
         try:
-            os.remove(tmpfile_name)
+            os.remove(tmpfile)
         except:
             pass
 
@@ -1099,7 +1113,7 @@ def update_file_after_edit(request, repo_id):
     filename = os.path.basename(path).encode('utf-8')
     try:
         seafserv_threaded_rpc.put_file (repo_id, tmpfile, parent_dir,
-                                 filename, request.user.username);
+                                 filename, request.user.username)
         remove_tmp_file()
         return ok_json()
     except SearpcError, e:
@@ -1771,7 +1785,7 @@ def validate_filename(request):
     result = {'ret':'yes'}
 
     try:
-        ret = is_valid_filename(filename);
+        ret = is_valid_filename(filename)
     except SearpcError:
         result['ret'] = 'error'
     else:
@@ -2131,125 +2145,19 @@ def send_shared_link(request):
     data = json.dumps([{'msg': msg}])
     return HttpResponse(data, status=200, content_type=content_type)
 
-def crocodoc_upload(request):
-    """
-    Handle ajax request to upload document to crocodoc.com.
-    """
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-    raw_path = request.GET.get('raw_path', '')
-
-    # Fetch obj_id according token, if this obj_id already has uuid,
-    # send uuid; else, upload file.
-    obj_id = seafserv_rpc.web_query_access_token(raw_path.split('/files/')[1][:5]).obj_id
-    if not obj_id:
-        # Should nerver reach here.
-        data = json.dumps([{'error': '缺少obj_id'}])
-        return HttpResponse(data, status=500, content_type=content_type)
-    try:
-        uo = UuidObjidMap.objects.get(obj_id=obj_id)
-    except UuidObjidMap.DoesNotExist:
-        uo = None
-    if uo:
-        data = json.dumps([{'uuid': uo.uuid, 'obj_id': obj_id}])
-        return HttpResponse(data, status=200, content_type=content_type)
-        
-    curl = "https://crocodoc.com/api/v2/document/upload"
-    data = {'token': CROCODOC_API_TOKEN,
+def document_prepare(raw_path, obj_id, doctype):
+    curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
+    data = {'doctype': doctype,
+            'file_id': obj_id,
             'url': raw_path}
     try:
         f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
     except urllib2.URLError, e:
-        data = json.dumps([{'error': e.msg}])
-        return HttpResponse(data, status=500, content_type=content_type)
+        return u'内部错误', False
     else:
         ret = f.read()
         ret_dict = json.loads(ret)
         if ret_dict.has_key('error'):
-            data = json.dumps([{'error': ret_dict['error']}])
-            return HttpResponse(data, status=500, content_type=content_type)
+            return ret_dict['error'], False
         else:
-            data = json.dumps([{'uuid': ret_dict['uuid'], 'obj_id': obj_id}])
-            return HttpResponse(data, status=200, content_type=content_type)
-    
-def crocodoc_status(request):
-    """
-    Handle ajax request to get status of the document from crocodoc.com.
-    """
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-    uuids = request.GET.get('uuids', '')
-    obj_id = request.GET.get('obj_id', '')
-    
-    curl = 'https://crocodoc.com/api/v2/document/status?token=%s&uuids=%s' % (
-        CROCODOC_API_TOKEN, uuids
-        )
-    
-    f = urllib2.urlopen(url=curl)
-    ret = f.read()
-    ret_list = json.loads(ret)
-    ret_dict = ret_list[0]
-    if ret_dict.has_key('error'):
-        # Delete obj_id-uuid in db
-        UuidObjidMap.objects.filter(obj_id=obj_id).delete()
-        
-        data = json.dumps([{'error': '文档转换出错：' + ret_dict['error']}])
-        return HttpResponse(data, status=500, content_type=content_type)
-        
-    viewable = ret_dict['viewable'] # TODO: this may used in large file preview
-    status = ret_dict['status']
-    if status == 'QUEUED':
-        data = json.dumps([{'status': status}])
-        return HttpResponse(data, status=200, content_type=content_type)
-    elif status == 'PROCESSING':
-        data = json.dumps([{'status': status}])
-        return HttpResponse(data, status=200, content_type=content_type)
-    elif status == 'DONE':
-        # Cache obj_id and uuid in db
-        uo = UuidObjidMap(uuid=uuids, obj_id=obj_id)
-        try:
-            uo.save()
-        except IntegrityError, e:
-            pass
-        
-        data = json.dumps([{'status': status}])
-        return HttpResponse(data, status=200, content_type=content_type)
-    elif status == 'ERROR':
-        # Delete obj_id-uuid in db
-        UuidObjidMap.objects.filter(obj_id=obj_id).delete()
-
-        err_msg = '文档转换出错:' + ret_dict['error'] if ret_dict.has_key('error') \
-            else '文档转换出错'
-        data = json.dumps([{'error': err_msg}])
-        return HttpResponse(data, status=500, content_type=content_type)
-
-def crocodoc_session(request):
-    """
-    Handle ajax reqeust to create session.
-    Session expires 60 minutes after it's generated.
-    """
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-    uuid = request.GET.get('uuid', '')
-    
-    curl = 'https://crocodoc.com/api/v2/session/create'
-    data = {'token': CROCODOC_API_TOKEN,
-            'uuid': uuid,
-            'editable': 'true',
-            'user': '1337,备注',
-            'downloadable': 'true',
-            }
-    f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
-    ret = f.read()
-    ret_dict = json.loads(ret)
-    session = ret_dict['session']
-    doc_src = 'https://crocodoc.com/view/%s' % session
-
-    data = json.dumps([{'doc_src': doc_src}])
-    return HttpResponse(data, status=200, content_type=content_type)
+            return None, ret_dict['exists']

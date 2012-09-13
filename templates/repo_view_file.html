@@ -60,7 +60,7 @@
             {% endif %}
         </div>
         <div id="file-view">
-            <p>文件内容读取中...</p>
+            <span>文件内容读取中</span><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" />
         </div>
     </div>
 
@@ -344,6 +344,8 @@ $('#open-local').click(function () {
             local_applet_running = true;
             if (version < 1) {
                 update_url = '<a href="http://www.seafile.com/download/">升级</a>';
+                $('#open-local-file-error').removeClass();
+                $('#open-local-file-error').addClass('notification');
                 $('#open-local-file-error').html('您的 Seafile 客户端版本太低，请' + update_url + '到最新版本');
                 $('#open-local-file-error-dlg').modal({appendTo:'#main'});
             } else {
@@ -356,6 +358,8 @@ $('#open-local').click(function () {
     // is not running yet.
     setTimeout(function() {
         if (!local_applet_running) {
+            $('#open-local-file-error').removeClass();
+            $('#open-local-file-error').addClass('notification');
             $('#open-local-file-error').html('Seafile 客户端程序未启动或者版本过低');
             $('#open-local-file-error-dlg').modal({appendTo:'#main'});
         }

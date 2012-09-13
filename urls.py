@@ -65,6 +65,7 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
     (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
     (r'^pdf_full_view/$', pdf_full_view),
+    (r'^document_full_view/$', document_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
     (r'^download/repo/$', repo_download),                       
@@ -80,11 +81,6 @@ urlpatterns = patterns('',
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
     (r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset),
 
-    ### Document previewd ###
-    (r'^crocodoc/upload/$', crocodoc_upload),                       
-    (r'^crocodoc/status/$', crocodoc_status),                       
-    (r'^crocodoc/session/$', crocodoc_session),                       
-                       
     ### Apps ###                       
     (r'^avatar/', include('avatar.urls')),
     (r'^notification/', include('notifications.urls')),
