@@ -207,7 +207,7 @@ class RepoMixin(object):
         self.path = self.get_path()
         self.repo = self.get_repo(self.repo_id)
         self.repo_size = self.get_repo_size()        
-        self.can_access = True
+        self.can_access = access_to_repo(self.request, self.repo_id)
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
 
@@ -275,7 +275,8 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         kwargs['groups'] = self.get_repo_shared_groups()
         return kwargs
 
-class RepoHistoryView(CtxSwitchRequiredMixin, RepoMixin, TemplateView):
+class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
+                      TemplateView):
     """
     View to show repo page in history.
     """
