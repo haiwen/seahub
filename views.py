@@ -22,6 +22,8 @@ from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
+from django.views.generic.base import TemplateView, TemplateResponseMixin
+from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
@@ -40,6 +42,7 @@ from pysearpc import SearpcError
 
 from base.accounts import User
 from base.decorators import sys_staff_required, ctx_switch_required
+from base.mixins import LoginRequiredMixin, CtxSwitchRequiredMixin
 from seahub.base.models import UuidObjidMap, FileComment
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -47,7 +50,8 @@ from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
-    RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm
+    RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm, \
+    RepoPassowrdForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -125,102 +129,184 @@ def gen_path_link(path, repo_name):
     
     return zipped
 
-def render_repo(request, repo_id, error=''):
-    # Check whether user can view repo page
-    can_access = access_to_repo(request, repo_id, '')
-    if not can_access:
-        return render_permission_error(request, '无法访问该同步目录')
+class RepoMixin(object):
+    def get_repo_id(self):
+        return self.kwargs.get('repo_id', '')
+
+    def get_path(self):
+        return self.request.GET.get('p', '/')
     
-    repo = get_repo(repo_id)
-    if not repo:
-        return render_error(request, u'该同步目录不存在')
-
-    # query whether set password if repo is encrypted
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return render_error(request, e.msg)
-
-    # Get newest commit.
-    current_commit = get_commits(repo_id, 0, 1)[0]
+    def get_user(self):
+        return self.request.user
     
-    # query repo infomation
-    repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
+    def get_repo(self, repo_id):
+        repo = get_repo(repo_id)
+        if not repo:
+            raise Http404
+            # return render_error(self.request, u'该同步目录不存在')
+        return repo
 
-    # get repo dirents
-    dirs = []
-    path = ''
-    zipped = []
-    dir_list = []
-    file_list = []
-    if not repo.props.encrypted or password_set:
-        path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
-        
-        if current_commit.root_id == EMPTY_SHA1:
-            dirs = []
-        else:
+    def get_repo_size(self):
+        repo_size = seafserv_threaded_rpc.server_repo_size(self.repo.id)
+        return repo_size
+
+    def is_password_set(self):
+        password_set = False
+        if self.repo.encrypted:
             try:
-                dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id,
-                                                     path.encode('utf-8'))
+                ret = seafserv_rpc.is_passwd_set(self.repo.id,
+                                                 self.user.username)
+                if ret == 1:
+                    password_set = True
             except SearpcError, e:
                 return render_error(request, e.msg)
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    dir_list.append(dirent)
-                else:
-                    file_list.append(dirent)
-                    try:
-                        dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
-                    except:
-                        dirent.file_size = 0
-            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                            y.obj_name.lower()))
-            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                             y.obj_name.lower()))
+        return password_set
 
-    if request.user.is_authenticated():
-        try:
-            accessible_repos = get_accessible_repos(request, repo)
-        except SearpcError, e:
-            error_msg = e.msg
-            return render_error(request, error_msg)
-    else:
-         accessible_repos = []   
+    def get_repo_dirents(self):
+        dirs = []
+        path = ''
+        zipped = []
+        dir_list = []
+        file_list = []
+        if not self.repo.encrypted or self.password_set:
+            path = self.path
+            if path[-1] != '/':
+                path = path + '/'
 
-    # generate path and link
-    zipped = gen_path_link(path, repo.name)
+            if self.current_commit.root_id == EMPTY_SHA1:
+                dirs = []
+            else:
+                try:
+                    dirs = seafserv_threaded_rpc.list_dir_by_path(self.current_commit.id,
+                                                         path.encode('utf-8'))
+                except SearpcError, e:
+                    return render_error(request, e.msg)
+                for dirent in dirs:
+                    if stat.S_ISDIR(dirent.props.mode):
+                        dir_list.append(dirent)
+                    else:
+                        file_list.append(dirent)
+                        try:
+                            dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+                        except:
+                            dirent.file_size = 0
+                dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                                y.obj_name.lower()))
+                file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                                 y.obj_name.lower()))
+        return (file_list, dir_list)
 
-    # get groups this repo is shared
-    if request.user.org:
-        org_id = request.user.org['org_id']
-        repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
-    else:
-        repo_shared_groups = get_shared_groups_by_repo(repo_id)
-    # Filter out groups that user is joined.
-    groups = [ x for x in repo_shared_groups if \
-                   is_group_user(x.id, request.user.username)]
+    def get_nav_path(self):
+        zipped = gen_path_link(self.path, self.repo.name)
+        return zipped
 
-    return render_to_response('repo.html', {
-            "repo": repo,
-            "can_access": can_access,
-            "current_commit": current_commit,
-            "password_set": password_set,
-            "repo_size": repo_size,
-            "dir_list": dir_list,
-            "file_list": file_list,
-            "path": path,
-            "zipped": zipped,
-            "error": error,
-            "accessible_repos": accessible_repos,
-            "applet_root": get_ccnetapplet_root(),
-            "groups": groups,
-            }, context_instance=RequestContext(request))
+    def get_applet_root(self):
+        return get_ccnetapplet_root()
+
+    def get_current_commit(self):
+        # Implemented in subclasses.
+        pass
+
+    def get_success_url(self):
+        return reverse('repo', args=[self.repo_id])
+        
+    def get(self, request, *args, **kwargs):
+        self.repo_id = self.get_repo_id()
+        self.user = self.get_user()
+        self.path = self.get_path()
+        self.repo = self.get_repo(self.repo_id)
+        self.can_access = True
+        self.current_commit = self.get_current_commit()
+        self.password_set = self.is_password_set()
+        self.repo_size = self.get_repo_size()
+        self.file_list, self.dir_list = self.get_repo_dirents()
+        self.zipped = self.get_nav_path()
+        self.applet_root = self.get_applet_root()
+        return super(RepoMixin, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.repo_id = self.get_repo_id()
+        self.user = self.get_user()
+        self.path = self.get_path()
+        self.repo = self.get_repo(self.repo_id)
+        self.can_access = True
+        self.current_commit = self.get_current_commit()
+        self.password_set = self.is_password_set()
+        self.repo_size = self.get_repo_size()
+        self.file_list, self.dir_list = self.get_repo_dirents()
+        self.zipped = self.get_nav_path()
+        self.applet_root = self.get_applet_root()
+        return super(RepoMixin, self).post(request, *args, **kwargs)
+        
+class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
+               BaseFormView):
+    form_class = RepoPassowrdForm
+    template_name = 'repo.html'
+
+    def get_accessible_repos(self):
+        if self.user.is_authenticated():
+            try:
+                accessible_repos = get_accessible_repos(self.request, self.repo)
+            except SearpcError, e:
+                error_msg = e.msg
+                return render_error(self.request, error_msg)
+        else:
+             accessible_repos = []   
+        return accessible_repos
+    
+    def get_repo_shared_groups(self):
+        if self.user.org:
+            org_id = self.user.org['org_id']
+            repo_shared_groups = get_org_groups_by_repo(org_id, self.repo_id)
+        else:
+            repo_shared_groups = get_shared_groups_by_repo(self.repo_id)
+        # Filter out groups that user is joined.
+        groups = [ x for x in repo_shared_groups if \
+                       is_group_user(x.id, self.user.username)]
+        return groups
+
+    def get_current_commit(self):
+        current_commit = get_commits(self.repo.id, 0, 1)[0]
+        return current_commit
+    
+    def get_context_data(self, **kwargs):
+        kwargs['repo'] = self.repo
+        kwargs['can_access'] = self.can_access
+        kwargs['current_commit'] = self.get_current_commit()
+        kwargs['password_set'] = self.password_set
+        kwargs['repo_size'] = self.repo_size
+        kwargs['dir_list'] = self.dir_list
+        kwargs['file_list'] = self.file_list
+        kwargs['path'] = self.path
+        kwargs['zipped'] = self.zipped
+        kwargs['accessible_repos'] = self.get_accessible_repos()
+        kwargs['applet_root'] = self.applet_root
+        kwargs['groups'] = self.get_repo_shared_groups()
+        return kwargs
+
+class RepoHistoryView(CtxSwitchRequiredMixin, RepoMixin, TemplateView):
+    template_name = 'repo_history_view.html'
+
+    def get_current_commit(self):
+        commit_id = self.request.GET.get('commit_id', '')
+        if not commit_id:
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+        current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+        if not current_commit:
+            current_commit = get_commits(repo_id, 0, 1)[0]
+        return current_commit
+
+    def get_context_data(self, **kwargs):
+        kwargs['repo'] = self.repo
+        kwargs['can_access'] = self.can_access
+        kwargs['current_commit'] = self.get_current_commit()
+        kwargs['password_set'] = self.password_set
+        kwargs['repo_size'] = self.repo_size
+        kwargs['dir_list'] = self.dir_list
+        kwargs['file_list'] = self.file_list
+        kwargs['path'] = self.path
+        kwargs['zipped'] = self.zipped
+        return kwargs
 
 @login_required
 @ctx_switch_required
@@ -396,31 +482,6 @@ def get_subdir(request):
     return HttpResponse(json.dumps(subdirs),
                             content_type=content_type)
 
-@ctx_switch_required
-def repo(request, repo_id):
-    if request.method == 'GET':
-        return render_repo(request, repo_id)
-    elif request.method == 'POST':
-        password = request.POST.get('password', '')
-        if not password:
-            return render_repo(request, repo_id, u'密码不能为空')
-
-        try:
-            seafserv_threaded_rpc.set_passwd(repo_id, request.user.username, password)
-        except SearpcError, e:
-            if e.msg == 'Bad arguments':
-                return render_error(request, u'url 格式不正确')
-            elif e.msg == 'Repo is not encrypted':
-                return render_repo(request, repo_id)
-            elif e.msg == 'Incorrect password':
-                return render_repo(request, repo_id, u'密码不正确，请重新输入')
-            elif e.msg == 'Internal server error':
-                return render_error(request, u'服务器内部故障')
-            else:
-                return render_error(request, u'未知错误')
-
-        return render_repo(request, repo_id)
-
 @login_required
 @ctx_switch_required
 def repo_history(request, repo_id):
@@ -514,89 +575,6 @@ def repo_history_revert(request, repo_id):
             return render_error(request, u'未知错误')
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
-
-@login_required
-@ctx_switch_required
-def repo_history_view(request, repo_id):
-    """
-    View repo page in history.
-    """
-    # Check whether user can view repo page
-    can_access = access_to_repo(request, repo_id, '')
-    if not can_access:
-        return render_permission_error(request, '无法访问该同步目录')
-    
-    repo = get_repo(repo_id)
-    if not repo:
-        return render_error(request, u'该同步目录不存在')
-
-    # query whether set password if repo is encrypted
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return render_error(request, e.msg)
-
-    commit_id = request.GET.get('commit_id', '')
-    if not commit_id:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
-    if not current_commit:
-        current_commit = get_commits(repo_id, 0, 1)[0]
-
-    # query repo infomation
-    repo_size = seafserv_threaded_rpc.server_repo_size(repo_id)
-
-    # get repo dirents
-    dirs = []
-    path = ''
-    zipped = []
-    dir_list = []
-    file_list = []
-    if not repo.props.encrypted or password_set:
-        path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
-        
-        if current_commit.root_id == EMPTY_SHA1:
-            dirs = []
-        else:
-            try:
-                dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id,
-                                                     path.encode('utf-8'))
-            except SearpcError, e:
-                return render_error(request, e.msg)
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    dir_list.append(dirent)
-                else:
-                    file_list.append(dirent)
-                    try:
-                        dirent.file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
-                    except:
-                        dirent.file_size = 0
-            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                            y.obj_name.lower()))
-            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                             y.obj_name.lower()))
-
-    # generate path and link
-    zipped = gen_path_link(path, repo.name)
-
-    return render_to_response('repo_history_view.html', {
-            "repo": repo,
-            "can_access": can_access,
-            "current_commit": current_commit,
-            "password_set": password_set,
-            "repo_size": repo_size,
-            "dir_list": dir_list,
-            "file_list": file_list,
-            "path": path,
-            "zipped": zipped,
-            }, context_instance=RequestContext(request))
     
 def get_diff(repo_id, arg1, arg2):
     lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : [], \

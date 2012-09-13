@@ -2,7 +2,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, is_valid_filename
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
+    is_valid_filename
 
 from seahub.base.accounts import User
 from pysearpc import SearpcError
@@ -178,3 +179,31 @@ class RepoNewDirForm(forms.Form):
         except SearpcError, e:
             raise forms.ValidationError(str(e))
 
+class RepoPassowrdForm(forms.Form):
+    """
+    Form for user to decrypt a repo in repo page.
+    """
+    repo_id = forms.CharField(error_messages={'required': '参数错误'})
+    username = forms.CharField(error_messages={'required': '参数错误'})
+    password = forms.CharField(error_messages={'required': '密码不能为空'})
+
+    def clean(self):
+        if 'password' in self.cleaned_data:
+            repo_id = self.cleaned_data['repo_id']
+            username = self.cleaned_data['username']
+            password = self.cleaned_data['password']
+            try:
+                seafserv_threaded_rpc.set_passwd(repo_id, username, password)
+            except SearpcError, e:
+                if e.msg == 'Bad arguments':
+                    raise forms.ValidationError(u'url 格式不正确')
+                # elif e.msg == 'Repo is not encrypted':
+                #     return HttpResponseRedirect(reverse('repo',
+                #                                         args=[self.repo_id]))
+                elif e.msg == 'Incorrect password':
+                    raise forms.ValidationError(u'密码不正确，请重新输入')
+                elif e.msg == 'Internal server error':
+                    raise forms.ValidationError(u'服务器内部故障')
+                else:
+                    raise forms.ValidationError(u'未知错误')
+        

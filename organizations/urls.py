@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
 from views import *
-from seahub.views import repo, repo_history
+# from seahub.views import RepoView, RepoHistoryView
 
 urlpatterns = patterns('',
     url(r'^create/$', create_org, name='create_org'),
@@ -13,13 +13,14 @@ urlpatterns = patterns('',
     url(r'^(?P<url_prefix>[^/]+)/innerpubrepo/unset/(?P<repo_id>[^/]+)/$', unset_org_inner_pub_repo, name='unset_org_inner_pub_repo'),
     url(r'^(?P<url_prefix>[^/]+)/groups/$', org_groups, name='org_groups'),
     url(r'^([^/]+)/repo/create/$', org_repo_create, name='org_repo_create'),
-    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),
+#    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),
+
 
     # repo share
     url(r'^(?P<url_prefix>[^/]+)/shareadmin/$', org_shareadmin, name='org_shareadmin'),
     url(r'^(?P<url_prefix>[^/]+)/repo/share/$', org_repo_share, name='org_repo_share'),
                        
-    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', repo, name='repo'),
+#    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', RepoView.as_view(), name='repo'),
 
     ### Org admin ###                       
     url(r'^(?P<url_prefix>[^/]+)/seafadmin/$', org_seafadmin, name='org_seafadmin'),

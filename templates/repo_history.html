@@ -41,7 +41,7 @@
 
         {% if not forloop.last %}
         <td>
-            <a href="{% url 'seahub.views.repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">浏览</a>
+            <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">浏览</a>
             <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
 	    </td>
         {% else %}
