@@ -1,36 +1,42 @@
-{% if fileext = 'html' or fileext == 'xhtml' or fileext == 'htm' %}
-editor.session.setMode('ace/mode/html');
-{% endif %}
-{% if fileext = 'css' %}
-editor.session.setMode('ace/mode/css');
-{% endif %}
-{% if fileext = 'java' %}
-editor.session.setMode('ace/mode/java');
-{% endif %}
-{% if fileext = 'js' %}
-editor.session.setMode('ace/mode/javascript');
-{% endif %}
-{% if fileext = 'c' or fileext == 'cpp' or fileext == 'cc' %}
-editor.session.setMode('ace/mode/c_cpp');
-{% endif %}
-{% if fileext = 'tex' %}
-editor.session.setMode('ace/mode/latex');
-{% endif %}
-{% if fileext = 'pl' %}
-editor.session.setMode('ace/mode/perl');
-{% endif %}
-{% if fileext = 'php' %}
-editor.session.setMode('ace/mode/php');
-{% endif %}
-{% if fileext = 'py' %}
-editor.session.setMode('ace/mode/python');
-{% endif %}
-{% if fileext = 'rb' %}
-editor.session.setMode('ace/mode/ruby');
-{% endif %}
-{% if fileext = 'sh' %}
-editor.session.setMode('ace/mode/sh');
-{% endif %}
-{% if fileext = 'xml' %}
-editor.session.setMode('ace/mode/xml');
-{% endif %}
+        {% if fileext == 'c' %}
+        mode: 'text/x-csrc',
+        {% endif %}
+        {% if fileext == 'cpp' or fileext == 'cc' %}
+        mode: 'text/x-c++src',
+        {% endif %}
+        {% if fileext == 'cs' %}
+        mode: 'text/x-csharp',
+        {% endif %}
+        {% if fileext == 'java' %}
+        mode: 'text/x-java',
+        {% endif %}
+        {% if fileext == 'css' %}
+        mode: 'CSS',
+        {% endif %}
+        {% if fileext == 'html' or fileext == 'xhtml' or fileext == 'htm' %}
+        mode: 'htmlmixed',
+        {% endif %}
+        {% if fileext == 'js' %}
+        mode: 'javascript',
+        {% endif %}
+        {% if fileext == 'pl' %}
+        mode: 'perl',
+        {% endif %}
+        {% if fileext == 'php' %}
+        mode: 'php',
+        {% endif %}
+        {% if fileext == 'py' %}
+        mode: 'python',
+        {% endif %}
+        {% if fileext == 'rb' %}
+        mode: 'ruby',
+        {% endif %}
+        {% if fileext == 'sh' %}
+        mode: 'shell',
+        {% endif %}
+        {% if fileext == 'txt' or fileext == 'text' %}
+        mode: null,
+        {% endif %}
+        {% if fileext == 'xml' %}
+        mode: 'xml',
+        {% endif %}
