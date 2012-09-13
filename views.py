@@ -134,7 +134,10 @@ class RepoMixin(object):
         return self.kwargs.get('repo_id', '')
 
     def get_path(self):
-        return self.request.GET.get('p', '/')
+        path = self.request.GET.get('p', '/')
+        if path[-1] != '/':
+            path = path + '/'
+        return path
     
     def get_user(self):
         return self.request.user
@@ -180,7 +183,8 @@ class RepoMixin(object):
                     dirs = seafserv_threaded_rpc.list_dir_by_path(self.current_commit.id,
                                                          path.encode('utf-8'))
                 except SearpcError, e:
-                    return render_error(request, e.msg)
+                    raise Http404
+                    # return render_error(self.request, e.msg)
                 for dirent in dirs:
                     if stat.S_ISDIR(dirent.props.mode):
                         dir_list.append(dirent)
