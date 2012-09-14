@@ -8,7 +8,7 @@ $('.reply, .replyclose').hover(
 );
 $('.reply').click(function() {
     var myself = $(this),
-        msg_id = $(this).attr('data'),
+        msg_reply_url = $(this).attr('data'),
         msg_bd = $(this).parent(),
         reply_cnt = msg_bd.find('.reply-cnt'),
         reply_bd = msg_bd.children('.reply-bd');
@@ -30,7 +30,7 @@ $('.reply').click(function() {
             if (reply && reply.length <= 150) {
                 $.ajax({
                     type: "POST",
-                    url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+                    url: msg_reply_url,
                     dataType: 'json',
                     cache: false,
                     contentType: 'application/json; charset=utf-8',
@@ -56,7 +56,7 @@ $('.reply').click(function() {
     } else {
         reply_bd.html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="加载中..." />');
         $.ajax({
-            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
+            url: msg_reply_url,
             dataType: 'json',
             success: function(data) {
                 reply_bd.html(data['html']).attr('class', 'reply-bd');

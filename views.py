@@ -20,6 +20,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
+from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.base import TemplateView, TemplateResponseMixin
@@ -43,12 +44,14 @@ from pysearpc import SearpcError
 from base.accounts import User
 from base.decorators import sys_staff_required, ctx_switch_required
 from base.mixins import LoginRequiredMixin, CtxSwitchRequiredMixin
-from seahub.base.models import UuidObjidMap, FileComment
-from seahub.contacts.models import Contact
-from seahub.contacts.signals import mail_sended
+from base.models import UuidObjidMap, FileComment, InnerPubMsg, InnerPubMsgReply
+from contacts.models import Contact
+from contacts.signals import mail_sended
+from group.forms import MessageForm, MessageReplyForm
 from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
-from seahub.notifications.models import UserNotification
+from notifications.models import UserNotification
+from profile.models import Profile
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
     RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm, \
     RepoPassowrdForm
@@ -59,7 +62,6 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo
-from seahub.profile.models import Profile
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -695,6 +697,8 @@ def myhome(request):
     grpmsg_reply_list = []
     orgmsg_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
+    new_innerpub_msg = False
+    innerpubmsg_reply_list = []
     for n in notes:
         if n.msg_type == 'group_msg':
             grp = get_group(n.detail)
@@ -705,6 +709,10 @@ def myhome(request):
             grpmsg_reply_list.append(n.detail)
         elif n.msg_type == 'org_join_msg':
             orgmsg_list.append(n.detail)
+        elif n.msg_type == 'innerpub_msg':
+            new_innerpub_msg = True
+        elif n.msg_type == 'innerpubmsg_reply':
+            innerpubmsg_reply_list.append(n.detail)
 
     # my groups
     groups = get_personal_groups(email)
@@ -732,6 +740,8 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
+            "new_innerpub_msg": new_innerpub_msg,
+            "innerpubmsg_reply_list": innerpubmsg_reply_list,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -739,14 +749,127 @@ def public_home(request):
     """
     Show public home page when CLOUD_MODE is False.
     """
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            msg = InnerPubMsg()
+            msg.from_email = request.user.username
+            msg.message = form.cleaned_data['message']
+            msg.save()
+
+            return HttpResponseRedirect(reverse('public_home'))
+    else:
+        form = MessageForm()
+        
     users = get_emailusers(-1, -1)
     public_repos = list_inner_pub_repos()
-    
+
+    """inner pub messages"""
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '15'))
+    except ValueError:
+        current_page = 1
+        per_page = 15
+
+    msgs_plus_one = InnerPubMsg.objects.all()[per_page*(current_page-1) :
+                                                  per_page*current_page+1]
+    if len(msgs_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+    innerpub_msgs = msgs_plus_one[:per_page]
+
+    msg_replies = InnerPubMsgReply.objects.filter(reply_to__in=innerpub_msgs)
+    reply_to_list = [ r.reply_to_id for r in msg_replies ]
+    for msg in innerpub_msgs:
+        msg.reply_cnt = reply_to_list.count(msg.id)
+
+    # remove user notifications
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='innerpub_msg').delete()
+
     return render_to_response('public_home.html', {
             'users': users,
             'public_repos': public_repos,
+            'form': form,
+            'innerpub_msgs': innerpub_msgs,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
             }, context_instance=RequestContext(request))
 
+@login_required
+def innerpub_msg_reply(request, msg_id):
+    """Show inner pub message replies, and process message reply in ajax"""
+    
+    content_type = 'application/json; charset=utf-8'
+    if request.is_ajax():
+        ctx = {}
+        if request.method == 'POST':
+            form = MessageReplyForm(request.POST)
+
+            # TODO: invalid form
+            if form.is_valid():
+                msg = form.cleaned_data['message']
+                try:
+                    innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
+                except InnerPubMsg.DoesNotExist:
+                    return HttpResponseBadRequest(content_type=content_type)
+            
+                msg_reply = InnerPubMsgReply()
+                msg_reply.reply_to = innerpub_msg
+                msg_reply.from_email = request.user.username
+                msg_reply.message = msg
+                msg_reply.save()
+
+                ctx['reply'] = msg_reply
+                html = render_to_string("group/group_reply_new.html", ctx)
+
+        else:
+            try:
+                msg = InnerPubMsg.objects.get(id=msg_id)
+            except InnerPubMsg.DoesNotExist:
+                raise HttpResponse(status=400)
+
+            replies = InnerPubMsgReply.objects.filter(reply_to=msg)
+            ctx['replies'] = replies
+            html = render_to_string("group/group_reply_list.html", ctx)
+
+        serialized_data = json.dumps({"html": html})
+        return HttpResponse(serialized_data, content_type=content_type)
+    else:
+        return HttpResponseBadRequest(content_type=content_type)
+
+@login_required
+def innerpub_msg_reply_new(request):
+    notes = UserNotification.objects.filter(to_user=request.user.username)
+    innerpub_reply_list = [ n.detail for n in notes if \
+                              n.msg_type == 'innerpubmsg_reply']
+
+    innerpub_msgs = []
+    for msg_id in innerpub_reply_list:
+        try:
+            m = InnerPubMsg.objects.get(id=msg_id)
+        except InnerPubMsg.DoesNotExist:
+            continue
+        else:
+            m.reply_list = InnerPubMsgReply.objects.filter(reply_to=m)
+            m.reply_cnt = m.reply_list.count()
+            innerpub_msgs.append(m)
+
+    # remove new innerpub msg reply notification
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='innerpubmsg_reply').delete()
+            
+    return render_to_response("new_innerpubmsg_reply.html", {
+            'innerpub_msgs': innerpub_msgs,
+            }, context_instance=RequestContext(request))
+    
 @login_required    
 def public_repo_create(request):
     '''

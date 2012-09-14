@@ -2,7 +2,7 @@ from seaserv import ccnet_threaded_rpc
 
 from signals import grpmsg_added
 from models import GroupMessage
-from seahub.notifications.models import UserNotification
+from notifications.models import UserNotification
 
 def grpmsg_added_cb(sender, **kwargs):
     group_id = kwargs['group_id']

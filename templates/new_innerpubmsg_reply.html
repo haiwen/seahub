@@ -1,0 +1,95 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags avatar_tags %}
+{% load url from future %}
+
+{% block right_panel %}
+{% if innerpub_msgs %}
+    <ul class="msg-list">
+    {% for msg in innerpub_msgs %}
+        <li class="msg w100 ovhd">
+        <div class="pic fleft">
+            <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="msg-hd">
+                <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
+                <a href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
+                <span class="group">留言所属：<a href="{% url 'public_home' %}">公共页面</a></span>
+            </div>
+            <div class="msg-bd">
+                <p>
+                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
+                </p>
+                <button class="reply op hide" data="{% url 'innerpub_msg_reply' msg.id %}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
+                <button class="replyclose op">收起回复</button>
+                <div class="reply-bd">
+                    <ul class="reply-list">
+                        {% for reply in msg.reply_list %}
+                        <li class="w100 ovhd">
+                        <a href="{% url 'user_profile' reply.from_email %}" class="pic fleft">{% avatar reply.from_email 28 %}</a>
+                        <div class="txt fright">
+                            <a href="{% url 'user_profile' reply.from_email %}">{{ reply.from_email|email2nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --
+                            <button class="reply-at op" data="{{ reply.from_email|email2nickname }}">回复</button>
+                        </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <textarea name="message" class="reply-input"></textarea>
+                    <button class="submit">回复</button>
+                    <p class="error hide">输入不能为空且应少于150个字符。</p>
+                </div>
+            </div>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+<p>暂无</p>    
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include 'group/msg_reply_js.html' %}
+$('.reply-at').click(function() {
+    var reply_input = $(this).parent().parent().parent().next();
+    reply_input.val('@' + $(this).attr('data') + ' ');
+    var pos = reply_input.val().length;
+    setCaretPos(reply_input[0], pos); 
+    reply_input.focus();
+});
+$('.reply-bd .submit').click(function() {
+    var msg_bd = $(this).parent().parent(),
+        msg_reply_url = msg_bd.find('.reply').attr('data'),
+        reply_cnt = msg_bd.find('.reply-cnt'),
+        reply_input = $(this).prev(),
+        reply = $.trim(reply_input.val()),
+        error = $(this).next();
+    if (reply && reply.length <= 150) {
+        $.ajax({
+            type: "POST",
+            url: msg_reply_url,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: prepareCSRFToken,
+            data: "message=" + reply,
+            success: function(data) {
+                msg_bd.find('.reply-list').append(data['html']);
+                reply_input.val('');
+                error.attr('class', 'error hide');
+                reply_cnt.html(parseInt(reply_cnt.html()) + 1 + ' ');
+                msg_bd.find('.reply-at').click(function() {
+                    reply_input.val('@' + $(this).attr('data') + ' ');
+                    var pos = reply_input.val().length;
+                    setCaretPos(reply_input[0], pos); 
+                    reply_input.focus();
+                });
+            }
+        });
+    } else {
+        error.removeClass('hide');
+    }
+});
+</script>
+{% endblock %}
