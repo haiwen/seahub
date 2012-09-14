@@ -74,20 +74,20 @@
         <p id="sending" class="hide">发送中...</p>
         <p id="success" class="hide"></p> 
     </form>
+
+    <div id="open-local-feedback" class="hide">
+        <p id="open-local-handling-tip">处理中，请稍侯...</p>
+        <p id="open-local-error" class="error"></p>
+        <div id="redirect-download" class="hide">
+            <p class="error">您还没有将同步目录 {{repo.name}} 同步到本地</p>
+            <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">点此同步</button>
+        </div>
+    </div>
     
     {% with attach_type='file' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
 {% endif %}
-
-    <div id="open-local-file-error-dlg" class="hide">
-        <p id="open-local-file-error" class=""></p>
-    </div>
-
-    <div id="redirect-download" class="hide">
-        <p class="error">您还没有将同步目录 {{repo.name}} 同步到本地</p>
-        <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">点此同步</button>
-    </div>
 
 {% if request.user.is_authenticated %}
 <div id="file-comment">
@@ -127,6 +127,7 @@
   {% endfor %}
 </ul>
 {% endif %}
+
 <div id="paginator">
   {% if current_page != 1 %}
   <a href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
@@ -264,7 +265,7 @@ $("#link-send-form").submit(function(event) {
 });
 
 $('#shared-link').click(function() {
-        $(this).select();
+    $(this).select();
 });
 
 {% include "snippets/bottom_bar.html" %}
@@ -272,49 +273,38 @@ $('#shared-link').click(function() {
 
 function send_open_local_file_request(path) {
     var callback = 'xx';
-    url = '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}&commit_id={{current_commit.id}}';
-    url += '&path=' + encodeURIComponent(path);
-    url += '&callback=' + callback;
     $.ajax({
-        url: url,
+        url: '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}&commit_id={{current_commit.id}}&path=' + e(path) + '&callback=' + callback,
         dataType: 'jsonp',
         jsonpCallback: callback,
         crossDomain: true,
         success: function(data) {
+            $('#open-local-handling-tip').addClass('hide');
             if (data['exists'] === false) {
                 // repo doesn't exist on local machine
-                $('#redirect-download').modal({appendTo:'#main'});
+                $('#open-local-error').addClass('hide');
+                $('#redirect-download').removeClass('hide');
                 
             } else if (data['no_assoc'] === true) {
                 // no application to open the file
-                $('#open-local-file-error').removeClass();
-                $('#open-local-file-error').addClass('notification');
-                $('#open-local-file-error').html('找不到打开该类型文件的程序。\nSeafile 将为你打开该文件所在目录');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+                $('#open-local-error').html('找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录');
 
             } else if (data['outdated'] === true) {
                 // local repo not in sync yet
-                $('#open-local-file-error').removeClass();
-                $('#open-local-file-error').addClass('notification');
-
                 if (data['auto-sync'] === false) {
-                    hint = '本地文件尚未与服务器同步。\n请打开本地目录的自动同步，或者手动进行同步';
+                    $('#open-local-error').html('本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步');
                 } else {
-                    hint = '本地文件尚未与服务器同步，请稍后再试';
+                    $('#open-local-error').html('本地文件尚未与服务器同步，请稍后再试');
                 }
-
-                $('#open-local-file-error').html(hint);
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
 
             } else if (data['error']) {
                 // other error
-                $('#open-local-file-error').removeClass();
-                $('#open-local-file-error').addClass('error');
-                $('#open-local-file-error').html('打开本地文件时出错');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+                $('#open-local-error').html('打开本地文件时出错');
 
             } else {
-                // open file successfully, nothing to do
+                // open file successfully
+                $('#open-local-handling-tip').removeClass('hide');
+                setTimeout(openLocalPopupClose, 1500);
             }
         }
     });
@@ -330,10 +320,17 @@ $('#download-repo').click(function() {
 //   - if exists, send an open local file requst
 //   - if not exits, redirect to repo download page
 
-
 $('#open-local').click(function () {
     var path = $(this).attr('data');
     var local_applet_running = false;
+    {% if filetype == 'Document' %}
+    $('#file-view').addClass('vh');
+    {% endif %}
+    $('#open-local-feedback').modal({
+        appendTo: '#main',
+        containerCss: { width: 300, height: 60},
+        onClose: openLocalPopupClose
+    });
 
     $.ajax({
         url: '{{ applet_root }}/seafile_rpc_version/',
@@ -343,27 +340,27 @@ $('#open-local').click(function () {
         success: function(version) {
             local_applet_running = true;
             if (version < 1) {
-                update_url = '<a href="http://www.seafile.com/download/">升级</a>';
-                $('#open-local-file-error').removeClass();
-                $('#open-local-file-error').addClass('notification');
-                $('#open-local-file-error').html('您的 Seafile 客户端版本太低，请' + update_url + '到最新版本');
-                $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+                $('#open-local-handling-tip').addClass('hide');
+                $('#open-local-error').html('您的 Seafile 客户端版本太低，请<a href="http://www.seafile.com/download/">升级</a>到最新版本');
             } else {
                 send_open_local_file_request(path);
             }
         }
     });
 
-    // if jsonp response doesn't arrive in 2 seconds, we can say local client
-    // is not running yet.
+    // if jsonp response doesn't arrive in 2 seconds, we can say local client is not running yet.
     setTimeout(function() {
         if (!local_applet_running) {
-            $('#open-local-file-error').removeClass();
-            $('#open-local-file-error').addClass('notification');
-            $('#open-local-file-error').html('Seafile 客户端程序未启动或者版本过低');
-            $('#open-local-file-error-dlg').modal({appendTo:'#main'});
+            $('#open-local-handling-tip').addClass('hide');
+            $('#open-local-error').html('Seafile 客户端程序未启动或者版本过低');
         }
     }, 2000);
 });
+function openLocalPopupClose() {
+    $.modal.close();
+    {% if filetype == 'Document' %}
+    $('#file-view').removeClass('vh');
+    {% endif %}
+}
 </script>
 {% endblock %}
