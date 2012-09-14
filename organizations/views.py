@@ -489,7 +489,7 @@ def org_group_remove(request, url_prefix, group_id):
 @login_required
 def org_repo_share(request, url_prefix):
     """
-    Share org repo to members in current org.
+    Share org repo to members or groups in current org.
     """
     if request.method != 'POST':
         raise Http404

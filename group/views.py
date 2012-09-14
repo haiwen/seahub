@@ -15,7 +15,7 @@ from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups, get_group, get_group_members, create_org_repo, \
-    get_org_group_repos
+    get_org_group_repos, get_org_groups_by_user
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment
@@ -29,7 +29,8 @@ from seahub.profile.models import Profile
 from seahub.settings import SITE_ROOT
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
-    validate_group_name, string2list, check_and_get_org_by_group
+    validate_group_name, string2list, check_and_get_org_by_group, \
+    check_and_get_org_by_repo
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm
 
@@ -545,7 +546,8 @@ def group_recommend(request):
         attach_type = form.cleaned_data['attach_type']
         path = form.cleaned_data['path']
         message = form.cleaned_data['message']
-
+        username = request.user.username
+        
         group_list = string2list(groups)
         for e in group_list:
             group_name = e.split(' ')[0]
@@ -556,9 +558,16 @@ def group_recommend(request):
                                      u'推荐到 %s 失败，请检查小组名称。' % \
                                          group_name)
                 continue
+
+            # Check whether this repo is org repo.
+            org, base_template = check_and_get_org_by_repo(repo_id, username)
+            if org:
+                org_id = org.org_id
+                groups = get_org_groups_by_user(org_id, username)
+
+            else:
+                groups = get_personal_groups(request.user.username)
             
-            # get all the groups the user joined
-            groups = get_personal_groups(request.user.username)
             find = False
             for group in groups:
                 # for every group that user joined, if group name and

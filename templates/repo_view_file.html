@@ -7,16 +7,6 @@
 {% endblock %}
 
 {% block main_panel %}
-{% if messages %}
-{% autoescape off %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endautoescape %}
-{% endif %}
-
     <h2>
         {% if not view_history %}
         {{ u_filename }}

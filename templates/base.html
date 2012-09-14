@@ -50,7 +50,7 @@
                 
                 {% if org.is_staff %}
                 <a href="{% url 'org_useradmin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>管理员工作台</a>
-                <a href="{% url 'organizations.views.org_info' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>个人工作台</a>
+                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>个人工作台</a>
                 {% endif %}
                 </div>
 

@@ -255,6 +255,7 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
             repo_shared_groups = get_org_groups_by_repo(org_id, self.repo_id)
         else:
             repo_shared_groups = get_shared_groups_by_repo(self.repo_id)
+
         # Filter out groups that user is joined.
         groups = [ x for x in repo_shared_groups if \
                        is_group_user(x.id, self.user.username)]
@@ -939,11 +940,18 @@ def repo_view_file(request, repo_id):
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
 
-    # Get groups this repo is shared.
-    repo_shared_groups = get_shared_groups_by_repo(repo_id)
+        
+    # Get groups this repo is shared.    
+    if request.user.org:
+        org_id = request.user.org['org_id']
+        repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
+    else:
+        repo_shared_groups = get_shared_groups_by_repo(repo_id)
+
     # Filter out groups that user in joined.
     groups = [ x for x in repo_shared_groups if \
                    is_group_user(x.id, request.user.username)]
+
     """file comments"""
     # Make sure page request is an int. If not, deliver first page.
     try:
