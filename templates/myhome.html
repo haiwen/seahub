@@ -28,13 +28,13 @@
 </li>
 {% endif %}
 {% if grpmsg_reply_list %}
-<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条留言有新回复</a></li>
+<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条小组留言有新回复</a></li>
 {% endif %}
 {% if new_innerpub_msg %}
 <li><a href="{% url 'public_home' %}" class="no-bold">公共页面有新留言</a></li>
 {% endif %}
 {% if innerpubmsg_reply_list %}
-<li><a href="{% url 'innerpub_msg_reply_new' %}" class="no-bold">{{ innerpubmsg_reply_list|length }}条留言有新回复</a></li>
+<li><a href="{% url 'innerpub_msg_reply_new' %}" class="no-bold">{{ innerpubmsg_reply_list|length }}条公共留言有新回复</a></li>
 {% endif %}
 {% if orgmsg_list %}
 <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>

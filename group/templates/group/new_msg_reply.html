@@ -30,7 +30,7 @@
                 {% endif %}
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
-                <button class="reply op hide" data="{{ msg.id }}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
+                <button class="reply op hide" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
                 <button class="replyclose op">收起回复</button>
                 <div class="reply-bd">
                     <ul class="reply-list">
@@ -61,45 +61,6 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include 'group/msg_reply_js.html' %}
-$('.reply-at').click(function() {
-    var reply_input = $(this).parent().parent().parent().next();
-    reply_input.val('@' + $(this).attr('data') + ' ');
-    var pos = reply_input.val().length;
-    setCaretPos(reply_input[0], pos); 
-    reply_input.focus();
-});
-$('.reply-bd .submit').click(function() {
-    var msg_bd = $(this).parent().parent(),
-        msg_id = msg_bd.find('.reply').attr('data'),
-        reply_cnt = msg_bd.find('.reply-cnt'),
-        reply_input = $(this).prev(),
-        reply = $.trim(reply_input.val()),
-        error = $(this).next();
-    if (reply && reply.length <= 150) {
-        $.ajax({
-            type: "POST",
-            url: '{{ SITE_ROOT }}group/reply/' + msg_id + '/',
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/json; charset=utf-8',
-            beforeSend: prepareCSRFToken,
-            data: "message=" + reply,
-            success: function(data) {
-                msg_bd.find('.reply-list').append(data['html']);
-                reply_input.val('');
-                error.attr('class', 'error hide');
-                reply_cnt.html(parseInt(reply_cnt.html()) + 1 + ' ');
-                msg_bd.find('.reply-at').click(function() {
-                    reply_input.val('@' + $(this).attr('data') + ' ');
-                    var pos = reply_input.val().length;
-                    setCaretPos(reply_input[0], pos); 
-                    reply_input.focus();
-                });
-            }
-        });
-    } else {
-        error.removeClass('hide');
-    }
-});
+{% include 'group/new_msg_reply_js.html' %}
 </script>
 {% endblock %}
