@@ -1,12 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
-    <title>Page not found</title>
-</head>
-<body>
-    <h1>Page not found</h1>
+{% extends "myhome_base.html" %}
 
-    <p>Sorry, but the requested page could not be found.</p>
-</body>
-</html>
+{% block main_panel %}
+<div class="text-panel">
+  <p>Sorry, but the requested page could not be found.</p>
+</div>
+{% endblock %}
+
