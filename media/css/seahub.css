@@ -175,7 +175,7 @@ ul.with-bg li {
     line-height:20px;
     background: #fff url('../img/li.gif') no-repeat scroll left 6px;
 }
-#paginator { margin-top:10px; }
+#paginator { margin:10px; }
 .tri-bg { /*triangle bg, <span>*/
     display:inline-block;
     font-size:0;
@@ -634,15 +634,35 @@ ul.with-bg li {
 }
 
 /*repo page*/
+#repo-basic-info {
+    color:#333;
+    background:#fafafa;
+    border:1px solid #ddd;
+    border-radius:3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    margin: 10px 0;
+}
+#repo-basic-info .desc,
+#repo-basic-info .size {
+    padding:5px 10px;
+    margin:0;
+}
+#repo-basic-info .desc {
+    border-bottom:1px solid #ddd;
+}
 .path, .access-notice { margin: 0.8em 0 0.4em; }
-.repo-op button {
+.repo-op {
+    text-align:right;
+}
+.repo-op button,
+#repo-download-btn {
     height:25px;
     background:#f5f5f5 scroll no-repeat 3px 48%;
 }
 #upload-file {
     padding-left:19px;
     background-image:url('../img/upload.png');
-    margin-right:5px;
 }
 #add-new-dir {
     padding-left:23px;
@@ -652,20 +672,51 @@ ul.with-bg li {
     padding-left:23px;
     background-image:url('../img/new-file-icon.png');
 }
-.more-op {
+.repo-file-list-outer-container,
+.commit-list-outer-container {
+    padding:3px;
+    background:#eee;
+    border-radius:3px;
+    margin:20px 0 25px;
+}
+.repo-file-list-inner-container,
+.commit-list-inner-container {
+    min-height:250px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
+.repo-file-list-not-show {
+    padding-left:10px;
+}
+.repo-file-list-topbar {
+    padding:8px 10px;
+    border-bottom:1px solid #ddd;
+}
+.repo-file-list-topbar .path {
+    line-height:25px;
+    margin:0;
+}
+.repo-file-list {
+    margin:15px 0 0;
+}
+.displayed-op {
+    display:inline;
+    margin-right:8px;
+}
+.repo-file-list .more-op-icon {
     cursor:pointer;
 }
-.op-list {
+.repo-file-list .hidden-op {
     position:absolute;
     left:18px;
     background:#fff;
     padding:6px 1px;
     border:1px solid #eee;
     border-radius:5px;
-    -moz-border-radius:5px;
     z-index:10;
 }
-.op-list li a {
+.hidden-op li a {
     display:block;
     padding:0 12px;
 }
@@ -694,33 +745,51 @@ ul.with-bg li {
     border-top-color:#333;
 }
 #rename-form .new-name {
-    margin-top:8px;
-}
-.latest-commit .more:hover {
-    text-decoration:none;
+    min-width:180px;
+    margin-top:6px;
 }
 .icon-container {
     text-align:center;
 }
-.latest-commit-time-author {
-    color:#333;
-    font-size:13px;
-    font-weight:normal;
+#repo-download-btn {
+    font-size:14px;
+    height:26px;
+    padding:0 5px 0 27px;
+    background-image: url('../img/sync-20.png');
 }
 .latest-commit {
     word-wrap:break-word;
+    border: 1px solid #C5D5DD;
+    border-radius: 4px;
+    margin-top:10px;
 }
-.latest-commit .author {
-    font-style:italic;
+.latest-commit .commit-msg,
+.latest-commit .meta-info {
+    padding:4px 10px;
+    margin:0;
+}
+.latest-commit .commit-msg {
+    width:928px;
+    padding:8px 10px;
+    background: #E6F1F6;
+    border-bottom: 1px solid #D8E6EC;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+.latest-commit .commit-msg .more {
+    margin-left:10px;
+}
+.latest-commit .author .avatar {
+    border-radius:3px;
+}
+.latest-commit .author .avatar,
+.latest-commit .author .name,
+.latest-commit .time {
+    vertical-align:middle;
 }
 .latest-commit .time {
     color:#666;
-    margin-left:2px;
-}
-.repo-history {
-    font-weight:normal;
-    font-size:16px;
-    margin: 4px 0 12px 0;
+    margin-left:5px;
 }
 .lsch {
     font-size:12px;
@@ -735,11 +804,29 @@ ul.with-bg li {
     max-height:550px;
     overflow:auto;
 }
+#ls-ch .latest-commit-time-author {
+    color:#333;
+    font-size:13px;
+    font-weight:normal;
+}
 #ls-ch ul {
     padding:0 0 6px 0;
 }
 #dirs { /* file mv */
     margin-top:8px;
+}
+/* repo-history */
+#history-back-to-repo {
+    margin-top:5px;
+}
+.commit-list {
+    margin:0 0 20px;
+}
+.commit-list .time {
+    padding-left:10px;
+}
+.commit-list .avatar {
+    border-radius:2px;
 }
 /*repo-share-form*/
 #email,
