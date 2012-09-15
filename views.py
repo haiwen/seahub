@@ -313,12 +313,11 @@ def repo_upload_file(request, repo_id):
         parent_dir  = request.GET.get('p', '/')
         zipped = gen_path_link (parent_dir, repo.name)
 
-        token = ''        
         if access_to_repo(request, repo_id, ''):
-            token = gen_token()
-            seafserv_rpc.web_save_access_token(token, repo_id,
-                                               'dummy', 'upload',
-                                               request.user.username)
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'upload',
+                                                      request.user.username)
         else:
             return render_permission_error(request, u'无法访问该目录')
 
@@ -350,12 +349,11 @@ def repo_update_file(request, repo_id):
             return render_error(request, u'非法链接')
         zipped = gen_path_link (target_file, repo.name)
 
-        token = ''        
         if access_to_repo(request, repo_id, ''):
-            token = gen_token()
-            seafserv_rpc.web_save_access_token(token, repo_id,
-                                               'dummy', 'update',
-                                               request.user.username)
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'update',
+                                                      request.user.username)
         else:
             return render_permission_error(request, u'无法访问该目录')
 
@@ -896,12 +894,12 @@ def repo_view_file(request, repo_id):
     if not repo:
         raise Http404
 
-    token = ''        
     if access_to_repo(request, repo_id, ''):
         # Get a token to visit file
-        token = gen_token()
-        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
-                                           'view', request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  obj_id,
+                                                  'view',
+                                                  request.user.username)
     else:
         render_permission_error(request, '无法查看该文件')
 
@@ -1051,9 +1049,8 @@ def pdf_full_view(request):
     obj_id = request.GET.get('obj_id', '')
     file_name = request.GET.get('file_name', '')
 
-    token = gen_token()
-    seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
-                                           'view', request.user.username)
+    token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                              'view', request.user.username)
     file_src = gen_file_get_url(token, file_name)
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,
@@ -1134,11 +1131,9 @@ def repo_file_edit(request, repo_id):
     if not obj_id:
         return render_error(request, '文件不存在')
 
-    token = ''        
     if access_to_repo(request, repo_id, ''):
-        token = gen_token()
-        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
-                                           'view', request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                  'view', request.user.username)
     else:
         render_permission_error(request, '无法查看该文件')
 
@@ -1197,12 +1192,10 @@ def repo_access_file(request, repo_id, obj_id):
     else:
         from_shared_link = False
 
-    token = ''        
     if access_to_repo(request, repo_id, '') or from_shared_link:
         # Get a token to access file
-        token = gen_token()
-        seafserv_rpc.web_save_access_token(token, repo_id, obj_id,
-                                           op, request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                  op, request.user.username)
     else:
         render_permission_error(request, '无法访问文件')
 
@@ -2031,9 +2024,8 @@ def view_shared_file(request, token):
     if not repo:
         raise Http404
 
-    access_token = gen_token()
-    seafserv_rpc.web_save_access_token(access_token, repo.id, obj_id,
-                                       'view', '')
+    access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
+                                                     'view', '')
     
     filetype, fileext = valid_previewed_file(filename)
     
