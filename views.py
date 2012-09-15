@@ -58,7 +58,8 @@ from utils import render_permission_error, render_error, list_to_string, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, \
-    gen_file_upload_url, check_and_get_org_by_repo
+    gen_file_upload_url, check_and_get_org_by_repo, \
+    get_file_contributors
 from seahub.profile.models import Profile
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
@@ -968,6 +969,8 @@ def repo_view_file(request, repo_id):
     else:
         page_next = False
     comments = comments_plus_one[:per_page]
+
+    contributors = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
@@ -999,6 +1002,7 @@ def repo_view_file(request, repo_id):
             'page_next': page_next,
             'document_swf_exists': document_swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+            'contributors': contributors,
             }, context_instance=RequestContext(request))
     
 def repo_file_get(raw_path):
@@ -1828,7 +1832,7 @@ def render_file_revisions (request, repo_id):
         return render_error(request, error_msg)
 
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path, 0)
     except SearpcError, e:
         return render_error(request, e.msg)
 

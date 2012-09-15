@@ -41,6 +41,14 @@
     
     <div id="file">
         <div id="file-op">
+            <div id="file-contributors" style="float:left">
+            <span>{{ contributors|length }} 个贡献者</span>
+            {% for user in contributors %}
+            <span class="file-contributor" data="{{user}}">
+                {{ user|email2nickname}}<a href="{% url 'user_profile' user %}">{% avatar user 24 %}</a>
+            </span>
+            {% endfor %}
+            </div>
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>

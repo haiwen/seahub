@@ -495,7 +495,7 @@ def group_share_repo(request, repo_id, group_id, from_email):
         return render_error(request, u'共享失败:小组不存在')
     
     # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
+    joined = is_group_user(int(group.id), request.user.username)
 
     if not joined:
         return render_error(request, u'共享失败:未加入该小组')

@@ -2,7 +2,6 @@
 # encoding: utf-8
 import os
 import re
-import time
 import random
 import stat
 
@@ -10,9 +9,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
-from django.core.files.uploadhandler import FileUploadHandler, StopUpload, \
-    StopFutureHandlers
-from django.core.cache import cache
+from base.models import FileContributors
+
+from pysearpc import SearpcError
 
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
@@ -140,50 +139,6 @@ def calculate_repo_last_modify(repo_list):
             repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
         except:
             repo.latest_modify = None
-
-class UploadProgressCachedHandler(FileUploadHandler):
-    """Tracks progress for file uploads. The http post request must contain a
-    header or query parameter, 'X-Progress-ID', which should contain a unique
-    string to identify the upload to be tracked.
-
-    """
-
-    def __init__(self, request=None):
-        super(UploadProgressCachedHandler, self).__init__(request)
-        self.progress_id = None
-        self.cache_key = None
-
-    def handle_raw_input(self, input_data, META, content_length, boundary, encoding=None):
-        self.content_length = content_length
-        if 'X-Progress-ID' in self.request.GET :
-            self.progress_id = self.request.GET['X-Progress-ID']
-        elif 'X-Progress-ID' in self.request.META:
-            self.progress_id = self.request.META['X-Progress-ID']
-        # print "handle_raw_input: ", self.progress_id
-        if self.progress_id:
-            self.cache_key = "%s_%s" % (self.request.user.username, self.progress_id )
-            # make cache expiring in 30 seconds
-            cache.set(self.cache_key, {
-                'length': self.content_length,
-                'uploaded' : 0
-            }, 30)            
-
-    def new_file(self, field_name, file_name, content_type, content_length, charset=None):
-        pass
-
-    def receive_data_chunk(self, raw_data, start):
-        if self.cache_key:
-            data = cache.get(self.cache_key)
-            data['uploaded'] += self.chunk_size
-            cache.set(self.cache_key, data, 30)
-        return raw_data
-    
-    def file_complete(self, file_size):
-        pass
-
-    def upload_complete(self):
-        if self.cache_key:
-            cache.delete(self.cache_key)
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
     latest_commit = get_commits(repo_id, 0, 1)[0]
@@ -378,3 +333,70 @@ def check_and_get_org_by_group(group_id, user):
         base_template = 'myhome_base.html'
     
     return org, base_template
+
+def get_file_contributors_from_revisions(repo_id, file_path):
+    """Inspect the file history and get a list of users who have modified the
+    it.
+
+    """
+    commits = []
+    try:
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, 100)
+    except SearpcError:
+        return []
+
+    # Commits are already sorted by date, so the user list is also sorted.
+    users = [ commit.creator_name for commit in commits ]
+
+    # Remove duplicate elements in a list
+    ret = []
+    for user in users:
+        if user not in ret:
+            ret.append(user)
+
+    return ret
+
+def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
+    """Get file contributors list from database cache. If not found in cache,
+    try to get it from seaf-server.
+
+    """
+    contributors = []
+    try:
+        fc = FileContributors.objects.get(repo_id=repo_id,
+                                          file_path_hash=file_path_hash)
+    except FileContributors.DoesNotExist:
+        # has no cache yet
+        contributors = get_file_contributors_from_revisions (repo_id, file_path)
+        if not contributors:
+            return []
+        emails = ','.join(contributors)
+        file_contributors = FileContributors(repo_id=repo_id,
+                                             file_id=file_id,
+                                             file_path=file_path,
+                                             file_path_hash=file_path_hash,
+                                             emails=emails)
+        file_contributors.save()
+    else:
+        # cache found
+        if fc.file_id != file_id:
+            # but cache is outdated
+            fc.delete()
+            contributors = get_file_contributors_from_revisions (repo_id, file_path)
+            if not contributors:
+                return []
+            emails = ','.join(contributors)
+            file_contributors = FileContributors(repo_id=repo_id,
+                                                 file_id=file_id,
+                                                 file_path=file_path,
+                                                 file_path_hash=file_path_hash,
+                                                 emails=emails)
+            file_contributors.save()
+        else:
+            # cache is valid
+            if fc.emails:
+                contributors = fc.emails.split(',')
+            else:
+                contributors = []
+
+    return contributors

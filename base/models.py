@@ -24,3 +24,15 @@ class FileComment(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+
+class FileContributors(models.Model):        
+    """(repo_id, file path, file_id, contributors)"""
+
+    repo_id = models.CharField(max_length=36, db_index=True)
+    file_id = models.CharField(max_length=40)
+    
+    file_path = models.TextField()
+    file_path_hash = models.CharField(max_length=12)
+
+    # email addresses seperated by comma
+    emails = models.TextField()
