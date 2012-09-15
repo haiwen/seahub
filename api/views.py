@@ -49,11 +49,12 @@ json_content_type = 'application/json; charset=utf-8'
 
 HTTP_ERRORS = {
     '400':'Bad arguments',
-    '401':'Repo is not encrypted',
+    '401':'Login required',
     '402':'Incorrect password',
     '403':'Can not access repo',
     '404':'Repo not found',
     '405':'Query password set error',
+    '406':'Repo is not encrypted',
     '407':'Method not supported',
     '408':'Login failed',
     '410':'Path does not exist',
@@ -76,6 +77,7 @@ HTTP_ERRORS = {
 
 def api_error(request, code='499', msg=None):
     err_resp = { 'error_msg': msg if msg is not None else HTTP_ERRORS[code] }
+    print "===============,", code, err_resp
     return HttpResponse(json.dumps(err_resp), status=code,
                         content_type=json_content_type)
 
@@ -89,10 +91,7 @@ def api_user_passes_test(test_func):
         def _wrapped_view(obj, request, *args, **kwargs):
             if test_func(request.user):
                 return view_func(obj, request, *args, **kwargs)
-            json_content_type = 'application/json; charset=utf-8'
-
-            return HttpResponse(json.dumps('login required'), status=401,
-                                content_type=json_content_type)
+            return api_error (request, '401')
         return wraps(view_func, assigned=available_attrs(view_func))(_wrapped_view)
     return decorator
 
@@ -191,7 +190,7 @@ def set_repo_password(request, repo, password):
         if e.msg == 'Bad arguments':
             return api_error(request, '400')
         elif e.msg == 'Repo is not encrypted':
-            return api_error(request, '401')
+            return api_error(request, '406')
         elif e.msg == 'Incorrect password':
             return api_error(request, '402')
         elif e.msg == 'Internal server error':
