@@ -45,8 +45,11 @@ class FileLinkShareForm(forms.Form):
     Form for sharing file shared link to emails.
     """
 
-    email = forms.CharField(max_length=512)
-    file_shared_link = forms.CharField(max_length=40)
+    email = forms.CharField(max_length=512, error_messages={
+            'required': '输入不能为空',
+            'max_length': '邮箱太长，不超过512个字符'
+            })
+    file_shared_link = forms.CharField()
 
 class FileCommentForm(forms.Form):
     """

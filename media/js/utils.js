@@ -267,7 +267,7 @@ function apply_form_error(formid, error_msg) {
     var form_err = $("#" + formid + " .error"),
         container = $("#simplemodal-container");
 
-    form_err.html(error_msg).attr('class', 'error');
+    form_err.html(error_msg).attr('class', 'error').removeClass('hide');
     container.css('height', $('#'+formid).height());
 }
 

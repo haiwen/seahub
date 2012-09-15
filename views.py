@@ -2213,47 +2213,46 @@ def remove_shared_link(request):
 @login_required
 def send_shared_link(request):
     """
-    Handle ajax post request to share file shared link.
+    Handle ajax post request to send file shared link.
     """
     if not request.is_ajax() and not request.method == 'POST':
         raise Http404
 
+    result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     form = FileLinkShareForm(request.POST)
-    if not form.is_valid():
-        err = '发送失败'
-        data = json.dumps([{'error':err}])
-        return HttpResponse(data, status=400, content_type=content_type)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        file_shared_link = form.cleaned_data['file_shared_link']
 
-    email = form.cleaned_data['email']
-    file_shared_link = form.cleaned_data['file_shared_link']
+        t = loader.get_template('shared_link_email.html')
+        to_email_list = string2list(email)
+        for to_email in to_email_list:
+            # Add email to contacts.
+            mail_sended.send(sender=None, user=request.user.username,
+                             email=to_email)
 
-    t = loader.get_template('shared_link_email.html')
-    to_email_list = string2list(email)
-    for to_email in to_email_list:
-        # Add email to contacts
-        mail_sended.send(sender=None, user=request.user.username,
-                         email=to_email)
+            c = {
+                'email': request.user.username,
+                'to_email': to_email,
+                'file_shared_link': file_shared_link,
+                }
 
-        c = {
-            'email': request.user.username,
-            'to_email': to_email,
-            'file_shared_link': file_shared_link,
-            }
-        
-        try:
-            send_mail('您的好友通过SeaCloud分享了一个文件给您',
-                      t.render(Context(c)), None, [to_email],
-                      fail_silently=False)
-        except:
-            err = '发送失败'
-            data = json.dumps([{'error':err}])
-            return HttpResponse(data, status=500, content_type=content_type)
-            
-    msg = '发送成功。'
-    data = json.dumps([{'msg': msg}])
-    return HttpResponse(data, status=200, content_type=content_type)
+            try:
+                send_mail('您的好友通过SeaCloud分享了一个文件给您',
+                          t.render(Context(c)), None, [to_email],
+                          fail_silently=False)
+            except:
+                data = json.dumps({'error':u'发送失败'})
+                return HttpResponse(data, status=500, content_type=content_type)
+
+        data = json.dumps("success")
+        messages.add_message(request, messages.INFO, u'发送成功')
+        return HttpResponse(data, status=200, content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
 
 def document_prepare(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'

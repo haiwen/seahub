@@ -77,10 +77,9 @@
         <label>邮箱(多个邮箱以,分隔)：</label><br />
         <textarea id="email" name="email"></textarea><br />
         <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
-        <p id="error" class="hide">输入不能为空。</p>
         <input type="submit" value="提交" class="submit" />
-        <p id="sending" class="hide">发送中...</p>
-        <p id="success" class="hide"></p> 
+        <p class="error hide"></p>
+        <p id="sending" class="hide">发送中...</p>        
     </form>
 
     <div id="open-local-feedback" class="hide">
@@ -233,42 +232,36 @@ $('#send-shared-link').click(function() {
 });
 
 $("#link-send-form").submit(function(event) {
-    $('#error, #sending, #success').attr('class', 'hide');
+    $('#link-send-form .error').addClass('hide');
+    $('#sending').removeClass('hide');
+    
     var form = $(this), 
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
         email = $.trim(form.children('textarea[name="email"]').val());
 
-    if (!email) {
-        $('#error').attr('class', 'error');
-        $('#simplemodal-container').css('height', $('#link-send-form').height());
-        return false;
-    }
-   
-   $('#sending').removeClass('hide');
-   $('#simplemodal-container').css('height', $('#link-send-form').height());
-
-   if (email.length <= 512) {
        $.ajax({
            type: "POST",
-           url: "{{ SITE_ROOT }}sharedlink/send/",
+           url: "{% url 'seahub.views.send_shared_link' %}",
            dataType: 'json',
            cache: false,
            contentType: 'application/json; charset=utf-8',
            beforeSend: prepareCSRFToken,
            data: {file_shared_link: file_shared_link, email: email},
            success: function(data) {
-               $('#sending').attr('class', 'hide');
-               $('#success').html(data[0]['msg']).removeClass('hide');
-               $('#simplemodal-container').css('height', $('#link-send-form').height());
+                location.reload(true);
            },
-           error: function(xhr, ajaxOptions, thrownError) {
-               var jsonVal = jQuery.parseJSON(xhr.responseText);
-               $('#sending').attr('class', 'hide');
-               $('#error').html(jsonVal[0]['error']).attr('class','error');
-               $('#simplemodal-container').css('height', $('#link-send-form').height());
+           error: function(data, textStatus, jqXHR) {
+               $('#sending').addClass('hide');
+               var errors = $.parseJSON(data.responseText);
+               $.each(errors, function(index, value) {
+                   if (index == 'error') {
+                       apply_form_error('link-send-form', value);
+                   } else {
+                       apply_form_error('link-send-form', value[0]);
+                   }
+               });
            }
        });
-   } 
    return false;
 });
 
