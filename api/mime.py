@@ -317,7 +317,7 @@ MIME_MAP = {
  'sv4cpio': 'application/x-sv4cpio',
  'sv4crc': 'application/x-sv4crc',
  'svf': 'image/vnd',
- 'svg': 'image/svg-xml',
+ 'svg': 'image/svg+xml',
  'svh': 'image/svh',
  'svr': 'x-world/x-svr',
  'swf': 'application/x-shockwave-flash',
