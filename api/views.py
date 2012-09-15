@@ -445,9 +445,8 @@ def get_shared_link(request, repo_id, path):
 
 def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'download':
-        token = gen_token()
-        seafserv_rpc.web_save_access_token(token, repo_id, file_id,
-                                           op, request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id, file_id,
+                                                  op, request.user.username)
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
                                 content_type=json_content_type)
