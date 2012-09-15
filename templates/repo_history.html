@@ -2,137 +2,87 @@
 {% load seahub_tags avatar_tags %}
 {% load url from future %}
 
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">返回同步目录</a></li>
-</ul>
-{% endblock %}
-
-{% block right_panel %}
-<h2 class="repo-history">{{repo.props.name}} 修改历史</h2>
-<table>
-    <tr>
-        <th width="12%">修改时间</th>
-        <th width="13%">修改者</th>
-        <th width="62%">描述</th>
-        <th width="13%">操作</th>
-    </tr>
-
-    {% for commit in commits %}
-    <tr>
-        <td>{{ commit.ctime|translate_commit_time }}</td>
-
-        {% if commit.creator_name %}
-        <td>
-            <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{% avatar commit.creator_name 16 %}</a>
-            <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
-        </td>
-        {% else %}
-        <td>未知</td>
-        {% endif %}
-
-        <td>
-	    {{ commit.props.desc|translate_commit_desc }}
-	    {% if not forloop.last %}
-	    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
-	    {% endif %}
-	    </td>
-
-        {% if not forloop.last %}
-        <td>
-            <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">浏览</a>
-            <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
-	    </td>
-        {% else %}
-        <td></td>
-        {% endif %}
-    </tr>
-    {% endfor %}
-</table>
-<div id="paginator">
-    {% if current_page != 1 %}
-    <a href="?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
-    {% endif %}
-    {% if page_next %}
-    <a href="?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
-    {% endif %}
-    <span>每页：</span>
-    {% if per_page == 25 %}
-    <span> 25 </span>
-    {% else %}
-    <a href="?per_page=25" class="per-page">25</a>
-    {% endif %}
-    {% if per_page == 50 %}
-    <span> 50 </span>
-    {% else %}
-    <a href="?per_page=50" class="per-page">50</a>
-    {% endif %}
-    {% if per_page == 100 %}
-    <span> 100 </span> 
-    {% else %}
-    <a href="?per_page=100" class="per-page">100</a>
-    {% endif %}
+{% block main_panel %}
+<div class="w100 ovhd">
+    <h2 class="fleft">{{repo.props.name}} 修改历史</h2>
+    <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="history-back-to-repo">返回同步目录</button>
 </div>
+<div class="commit-list-outer-container">
+    <div class="commit-list-inner-container">
+        <table class="commit-list">
+            <tr>
+                <th width="13%" class="time">修改时间</th>
+                <th width="15%">修改者</th>
+                <th width="57%">描述</th>
+                <th width="15%">操作</th>
+            </tr>
 
-<div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
+            {% for commit in commits %}
+            <tr>
+                <td class="time">{{ commit.ctime|translate_commit_time }}</td>
+
+                {% if commit.creator_name %}
+                <td>
+                    <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{% avatar commit.creator_name 16 %}</a>
+                    <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
+                </td>
+                {% else %}
+                <td>未知</td>
+                {% endif %}
+
+                <td>
+                    {{ commit.props.desc|translate_commit_desc }}
+                    {% if not forloop.last %}
+                    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                    {% endif %}
+                </td>
+
+                {% if not forloop.last %}
+                <td>
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">浏览</a>
+                    <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
+                </td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        <div id="paginator">
+            {% if current_page != 1 %}
+            <a href="?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+            {% endif %}
+            {% if page_next %}
+            <a href="?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+            {% endif %}
+            <span>每页：</span>
+            {% if per_page == 25 %}
+            <span> 25 </span>
+            {% else %}
+            <a href="?per_page=25" class="per-page">25</a>
+            {% endif %}
+            {% if per_page == 50 %}
+            <span> 50 </span>
+            {% else %}
+            <a href="?per_page=50" class="per-page">50</a>
+            {% endif %}
+            {% if per_page == 100 %}
+            <span> 100 </span> 
+            {% else %}
+            <a href="?per_page=100" class="per-page">100</a>
+            {% endif %}
+        </div>
+        <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-    //list modification made by a commit
-    $('.lsch').each(function() {
-        $(this).click(function() {
-            var time = '<span class="latest-commit-time-author">(' + $(this).attr('data') + ')</span>';
-            $.ajax({
-                url: $(this).attr('href'),
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    var title = '<h3>修改详情' + time + '</h3>',
-                        con = ''; 
-                    var show = function(data_) {
-                            con += '<ul>';
-                            for (var i = 0, len = data_.length; i < len; i++) {
-                                con += '<li>' + data_[i] + '</li>';
-                            }   
-                            con += '</ul>';
-                    };  
-                    if (data['new'].length > 0) {
-                        con += '<h4 id="ls-ch-new">新文件</h4>';
-                        show(data['new']);
-                    }   
-                    if (data['removed'].length > 0) {
-                        con += '<h4 id="ls-ch-rm">删除的文件</h4>';
-                        show(data['removed']);
-                    }   
-                    if (data['renamed'].length > 0) {
-                        con += '<h4 id="ls-ch-rn">重命名或移动的文件</h4>';
-                        show(data['renamed']);
-                    }   
-                    if (data['modified'].length > 0) {
-                        con += '<h4 id="ls-ch-modi">修改的文件</h4>';
-                        show(data['modified']);
-                    }
-                    if (data['newdir'].length > 0) {
-                        con += '<h4 id="ls-ch-newdir">新目录</h4>';
-                        show(data['newdir']);
-                    }
-                    if (data['deldir'].length > 0) {
-                        con += '<h4 id="ls-ch-deldir">删除的目录</h4>';
-                        show(data['deldir']);
-                    }
-                    if (!con) {
-                        con = '<p>没有文件被改动</p>';
-                    }
-                    $('#ls-ch').html(title + con).modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
-                }
-            });
-            return false;
-        });
+    {% include 'snippets/list_commit_detail.html' %}
+    $('#history-back-to-repo').click(function() {
+        location.href = $(this).attr('data');
     });
-
     addConfirmTo($(".repo-revert"), '确定要还原该目录？');
 </script>
 {% endblock %}
