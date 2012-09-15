@@ -3,9 +3,9 @@
 {% load url from future %}
 
 {% block right_panel %}
-{% if group_msgs %}
+{% if innerpub_msgs %}
     <ul class="msg-list">
-    {% for msg in group_msgs %}
+    {% for msg in innerpub_msgs %}
         <li class="msg w100 ovhd">
         <div class="pic fleft">
             <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
@@ -14,23 +14,13 @@
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
-                <span class="group">所在小组：<a href="{% url 'group_info' msg.group_id %}">{{ msg.group_name }}</a></span>
+                <span class="group">留言所属：<a href="{% url 'public_home' %}">公共页面</a></span>
             </div>
             <div class="msg-bd">
                 <p>
-                {% if msg.attachment %}
-                <span class="recommend">推荐
-                  {% if msg.attachment.attach_type == 'file' %}
-                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
-                  {% else %}
-                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
-                  {% endif %}
-                  {{ msg.attachment.name }}</a> :
-                </span>
-                {% endif %}
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
-                <button class="reply op hide" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
+                <button class="reply op hide" data="{% url 'innerpub_msg_reply' msg.id %}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>回复</a>
                 <button class="replyclose op">收起回复</button>
                 <div class="reply-bd">
                     <ul class="reply-list">

@@ -6,14 +6,6 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
-{% if messages %}
-<ul class="messages hide">
-    {% for message in messages %}
-    <li class="info">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 <h2>{{ group.group_name }}</h2>
 
 <div class="side fright">
@@ -125,7 +117,7 @@
                 
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
-                <button class="reply op" data="{{ msg.id }}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
+                <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
                 <button class="replyclose op hide">收起回复</button>
                 <div class="reply-bd"></div>
             </div>
