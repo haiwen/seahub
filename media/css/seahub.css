@@ -1016,9 +1016,6 @@ ul.with-bg li {
 .reply-input {
     width:82%;
     padding:0 1px;
-    height:20px;
-    line-height:20px;
-    vertical-align:bottom;
 }
 .reply-at {
     font-size:12px;
