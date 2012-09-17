@@ -1,5 +1,5 @@
     $('.lsch').click(function() {
-            var time = '<span class="latest-commit-time-author">(' + $(this).attr('data') + ')</span>';
+            var time = '<span class="commit-time">(' + $(this).attr('data') + ')</span>';
             $.ajax({
                 url: $(this).attr('href'),
                 dataType: 'json',

@@ -821,7 +821,8 @@ ul.with-bg li {
     max-height:550px;
     overflow:auto;
 }
-#ls-ch .latest-commit-time-author {
+#ls-ch .commit-time,
+.commit-time {
     color:#333;
     font-size:13px;
     font-weight:normal;
