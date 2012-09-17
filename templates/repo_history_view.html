@@ -9,7 +9,6 @@
         <button data="{{ SITE_ROOT }}repo/history/{{ repo.id }}/" class="fright" id="back-to-history-list">返回历史列表</button>
     </div>
 
-    {% if can_access %}
     <div id="repo-latest-commit">
         <p class="commit-msg">{{ current_commit.props.desc|translate_commit_desc }}</p>
         <p class="meta-info">
@@ -24,25 +23,10 @@
         <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
         </p>
     </div>
-    {% endif %}
 
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
-            {% if repo.props.encrypted and not password_set %}
-            <div class="repo-file-list-not-show">
-                <p class="access-notice">该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
-                <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
-                    <label>密码：</label>
-                    <input id="id_password" type="password" name="password" maxlength="64" /><br />
-                    {% if error %}
-                    <p class="error">{{ error }}</p>
-                    {% endif %}
-                    <input type="submit" value="提交" />
-                </form>
-            </div>
-
-            {% else %}
-            {% if not can_access %}
+            {% if not user_perm %}
             <div class="repo-file-list-not-show">
                 <p class="access-notice">无法在线查看该同步目录。</p>
             </div>
@@ -59,6 +43,7 @@
                 {% endfor %}
                 </p>
             </div>
+            <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
@@ -93,7 +78,7 @@
                 </tr>
                 {% endfor %}
             </table>
-            {% endif %}
+            <!-- /.repo-file-list -->
             {% endif %}
         </div>
     </div>

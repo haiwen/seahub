@@ -109,7 +109,15 @@ def access_to_repo(request, repo_id, repo_ap=None):
         return True if token else False
     else:
         return check_permission(repo_id, request.user.username)
-    
+
+def get_user_permission(request, repo_id):
+    if request.user.is_authenticated():
+        return 'rw' if check_permission(repo_id, request.user.username) else \
+            ''
+    else:
+        token = request.COOKIES.get('anontoken', None)
+        return 'r' if token else ''
+        
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
@@ -210,7 +218,8 @@ class RepoMixin(object):
         self.path = self.get_path()
         self.repo = self.get_repo(self.repo_id)
         self.repo_size = self.get_repo_size()        
-        self.can_access = access_to_repo(self.request, self.repo_id)
+        # self.can_access = access_to_repo(self.request, self.repo_id)
+        self.user_perm = get_user_permission(self.request, self.repo_id)
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
 
@@ -239,7 +248,13 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
     View to show repo page and handle post request to decrypt repo.
     """
     form_class = RepoPassowrdForm
-    template_name = 'repo.html'
+
+    def get_template_names(self):
+        if self.repo.encrypted and not self.password_set:
+            template_name = 'decrypt_repo_form.html'
+        else:
+            template_name = 'repo.html'
+        return template_name
 
     def get_accessible_repos(self):
         if self.user.is_authenticated():
@@ -266,7 +281,8 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
 
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
-        kwargs['can_access'] = self.can_access
+        # kwargs['can_access'] = self.can_access
+        kwargs['user_perm'] = self.user_perm
         kwargs['current_commit'] = self.get_current_commit()
         kwargs['password_set'] = self.password_set
         kwargs['repo_size'] = self.repo_size
@@ -284,8 +300,13 @@ class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
     """
     View to show repo page in history.
     """
-    template_name = 'repo_history_view.html'
-
+    def get_template_names(self):
+        if self.repo.encrypted and not self.password_set:
+            template_name = 'decrypt_repo_form.html'
+        else:
+            template_name = 'repo_history_view.html'            
+        return template_name
+    
     def get_current_commit(self):
         commit_id = self.request.GET.get('commit_id', '')
         if not commit_id:
@@ -297,7 +318,8 @@ class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
 
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
-        kwargs['can_access'] = self.can_access
+        # kwargs['can_access'] = self.can_access
+        kwargs['user_perm'] = self.user_perm
         kwargs['current_commit'] = self.get_current_commit()
         kwargs['password_set'] = self.password_set
         kwargs['repo_size'] = self.repo_size

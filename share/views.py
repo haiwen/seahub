@@ -40,7 +40,13 @@ def share_repo(request):
     repo_id = form.cleaned_data['repo_id']
     from_email = request.user.username
 
-    # Test whether user is the repo owner
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    is_encrypted = True if repo.encrypted else False
+        
+    # Test whether user is the repo owner.
     if not validate_owner(request, repo_id):
         return render_permission_error(request, u'只有目录拥有者有权共享目录')
     
@@ -97,7 +103,8 @@ def share_repo(request):
                 # Generate shared link and send mail if user has not registered.
                 kwargs = {'repo_id': repo_id,
                           'repo_owner': from_email,
-                          'anon_email': to_email
+                          'anon_email': to_email,
+                          'is_encrypted': is_encrypted,
                           }
                 anonymous_share(request, **kwargs)
             else:
@@ -169,6 +176,14 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
     repo_id = kwargs['repo_id']
     repo_owner = kwargs['repo_owner']
     anon_email = kwargs['anon_email']
+    is_encrypted = kwargs['is_encrypted']
+
+    # Encrypt repo can not be shared to unregistered user.
+    if is_encrypted:
+        msg = u'共享给 %s 失败，加密目录无法共享给站外邮箱。' % anon_email
+        messages.error(request, msg)
+        return
+    
     token = anon_share_token_generator.make_token()
 
     anon_share = AnonymousShare()

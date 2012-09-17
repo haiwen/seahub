@@ -16,10 +16,8 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}}</h2>
-        {% if not repo.props.encrypted or password_set %}
-        {% if can_access %}
+        {% if user_perm == 'rw' %}
         <button id="repo-download-btn" class="fright">同步到本地</button>
-        {% endif %}
         {% endif %}
     </div>
     <div id="repo-basic-info">
@@ -27,15 +25,13 @@
       <p class="size">大小：{{ repo_size|filesizeformat }}</p>
     </div>
       
-    {% if not repo.props.encrypted or password_set %}
-    {% if can_access %}
     <div id="repo-latest-commit">
         <p class="commit-msg ovhd">
         <span class="fleft">
             {{ current_commit.props.desc|translate_commit_desc }}
             <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ current_commit.id }}" data="{{ current_commit.props.ctime|tsstr_sec }}">详情</a>
         </span>
-        {% if request.user.is_authenticated %}
+        {% if user_perm == 'rw' %}
         <a href="{% url 'seahub.views.repo_history' repo.id %}" class="more fright">更多历史</a>
         {% endif %}
         </p>
@@ -52,28 +48,10 @@
         </p>
         <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
     </div>
-    {% endif %}
-    {% endif %}
 
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
-            {% if repo.props.encrypted and not password_set %}
-            <div class="repo-file-list-not-show">
-                <p class="access-notice">该目录已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
-                <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/" method="post">
-                    <label>密码：</label>
-                    <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-                    <input type="hidden" name="username" value="{{ request.user.username }}" />
-                    <input id="id_password" type="password" name="password" maxlength="64" />
-                    {% for error in form.errors.values %}
-                    <p class="error">{{ error|escape }}</p>
-                    {% endfor %}
-                    <input type="submit" value="提交" />
-                </form>
-            </div>
-
-            {% else %}
-            {% if not can_access %}
+            {% if not user_perm %}
             <div class="repo-file-list-not-show">
                 <p class="access-notice">无法在线查看该同步目录。</p>
             </div>
@@ -89,7 +67,7 @@
                 {% endif %}
                 {% endfor %}
                 </p>
-                {% if request.user.is_authenticated %}
+                {% if user_perm == 'rw' %}
                 <div class="repo-op fright">
                     <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">上传</button>
                     <button id="add-new-dir" class="op-btn">新建目录</button>
@@ -97,6 +75,7 @@
                 </div>
                 {% endif %}
             </div>
+            <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
@@ -114,7 +93,7 @@
 
                     <td></td>
                     <td>
-                        {% if request.user.is_authenticated %}
+                      {% if user_perm == 'rw' %}
                         <div class="repo-file-op vh">
                             <div class="displayed-op"> 
                                 <a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a>
@@ -127,7 +106,7 @@
                                 <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                             </ul>
                         </div>
-                        {% endif %}
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -141,6 +120,7 @@
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
+                      {% if user_perm == 'rw' %}
                         <div class="repo-file-op vh">
                             <div class="displayed-op">
                                 <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
@@ -150,21 +130,20 @@
                             <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
                                 <!--li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li-->
-                                {% if request.user.is_authenticated %}
                                 <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                                 <!--li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li-->
                                 <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                                 <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                                 <!--li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li-->
                                 <li><a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ current_commit.id }}&p={{path|urlencode}}{{ dirent.obj_name|urlencode }}&from=repo_history" class="op file-revert">还原</a></li>
-                                {% endif %}
                             </ul>
                         </div>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </table>
-            {% endif %}
+            <!-- /.repo-file-list -->
             {% endif %}
         </div>
     </div>
