@@ -518,11 +518,6 @@ def repo_history(request, repo_id):
     else:
         page_next = False
 
-    is_owner = False
-    if request.user.is_authenticated():
-        if validate_owner(request, repo_id):
-            is_owner = True
-
     return render_to_response('repo_history.html', {
             "repo": repo,
             "commits": commits,
@@ -531,7 +526,6 @@ def repo_history(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'is_owner': is_owner,
             }, context_instance=RequestContext(request))
 
 @login_required

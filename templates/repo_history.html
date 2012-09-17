@@ -7,6 +7,8 @@
     <h2 class="fleft">{{repo.props.name}} 修改历史</h2>
     <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="history-back-to-repo">返回同步目录</button>
 </div>
+
+<p class="tip">Tip：在每次修改后会生成一个镜像，记录修改后的目录状态。</p>
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
         <table class="commit-list">
@@ -32,18 +34,18 @@
 
                 <td>
                     {{ commit.props.desc|translate_commit_desc }}
-                    {% if not forloop.last %}
+                    {% if page_next or not forloop.last %}
                     <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
                     {% endif %}
                 </td>
 
-                {% if not forloop.last %}
+
+		{% if forloop.first and current_page == 1 %}
+                <td>这是当前版本</td>
+		{% else %}
                 <td>
-                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">浏览</a>
-                    <a href="#" data="{{ SITE_ROOT }}repo/history/revert/{{ repo.id }}/?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">查看镜像</a>
                 </td>
-                {% else %}
-                <td></td>
                 {% endif %}
             </tr>
             {% endfor %}
