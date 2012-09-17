@@ -29,7 +29,7 @@
       
     {% if not repo.props.encrypted or password_set %}
     {% if can_access %}
-    <div class="latest-commit">
+    <div id="repo-latest-commit">
         <p class="commit-msg ovhd">
         <span class="fleft">
             {{ current_commit.props.desc|translate_commit_desc }}

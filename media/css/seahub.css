@@ -757,18 +757,25 @@ ul.with-bg li {
     padding:0 5px 0 27px;
     background-image: url('../img/sync-20.png');
 }
-.latest-commit {
+#repo-latest-commit,
+#file-commit-info {
     word-wrap:break-word;
     border: 1px solid #C5D5DD;
     border-radius: 4px;
     margin-top:10px;
 }
-.latest-commit .commit-msg,
-.latest-commit .meta-info {
+#file-commit-info {
+    margin-top:16px;
+}
+#repo-latest-commit .commit-msg,
+#repo-latest-commit .meta-info,
+#file-commit-info .latest-commit,
+#file-commit-info .contributors {
     padding:4px 10px;
     margin:0;
 }
-.latest-commit .commit-msg {
+#repo-latest-commit .commit-msg,
+#file-commit-info .latest-commit {
     width:928px;
     padding:8px 10px;
     background: #E6F1F6;
@@ -776,18 +783,28 @@ ul.with-bg li {
     border-top-left-radius:3px;
     border-top-right-radius:3px;
 }
-.latest-commit .commit-msg .more {
+#repo-latest-commit .commit-msg .more {
     margin-left:10px;
 }
-.latest-commit .author .avatar {
+#file-commit-info .contributors {
+    color:#666;
+}
+#file-commit-info .contributors .avatar {
+    margin-right:5px;
+}
+#repo-latest-commit .author .avatar,
+#file-commit-info .avatar {
     border-radius:3px;
 }
-.latest-commit .author .avatar,
-.latest-commit .author .name,
-.latest-commit .time {
+#repo-latest-commit .author .avatar,
+#repo-latest-commit .author .name,
+#repo-latest-commit .time,
+#file-commit-info .name,
+#file-commit-info .avatar,
+#file-commit-info span {
     vertical-align:middle;
 }
-.latest-commit .time {
+#repo-latest-commit .time {
     color:#666;
     margin-left:5px;
 }
@@ -1055,7 +1072,7 @@ ul.with-bg li {
     background:#dedede;
     border-radius:3px;
     -moz-border-radius:3px;
-    margin-top:23px;
+    margin-top:12px;
 }
 #file-op {
     padding:8px 10px;

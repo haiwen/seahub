@@ -1094,6 +1094,7 @@ def repo_view_file(request, repo_id):
     comments = comments_plus_one[:per_page]
 
     contributors = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+    latest_contributor = contributors[0]
     
     return render_to_response('repo_view_file.html', {
             'repo': repo,
@@ -1126,6 +1127,7 @@ def repo_view_file(request, repo_id):
             'document_swf_exists': document_swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
+            'latest_contributor': latest_contributor,
             }, context_instance=RequestContext(request))
     
 def repo_file_get(raw_path):
