@@ -15,40 +15,42 @@
         {% endif %}
     </h2>
     <div class="w100 ovhd">
-    <p class="path fleft">
-         当前路径：
-         {% for name, link in zipped %}
-            {% if not forloop.last %}
-                {% if view_history %}
-                <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
-                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
-                {% endif %}
-            {% else %}
-                {{ name }}
-            {% endif %}
-         {% endfor %}
-    </p>
-
-    <div class="file-op fright">
-        {% if not view_history %}
-        <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
-        <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
-        <button id="send-shared-link" class="hide">发送</button>
-        <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
+        <p class="path fleft">
+        当前路径：
+        {% for name, link in zipped %}
+        {% if not forloop.last %}
+        {% if view_history %}
+        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
         {% endif %}
+        {% else %}
+        {{ name }}
+        {% endif %}
+        {% endfor %}
+        </p>
+
+        <div class="file-op fright">
+            {% if not view_history %}
+            <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
+            <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
+            <button id="send-shared-link" class="hide">发送</button>
+            <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
+            {% endif %}
+        </div>
     </div>
+
+    <div id="file-commit-info">
+        <p class="latest-commit">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> 做了最新修改</p>
+        <p class="contributors">
+        <span>{{ contributors|length }} 个贡献者</span>
+        {% for user in contributors %}
+            <a href="{% url 'user_profile' user %}" class="name" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
+        {% endfor %}
+        </p>
     </div>
-    
+   
     <div id="file">
         <div id="file-op">
-            <div id="file-contributors" style="float:left">
-            <span>{{ contributors|length }} 个贡献者</span>
-            {% for user in contributors %}
-            <span class="file-contributor" data="{{user}}">
-                {{ user|email2nickname}}<a href="{% url 'user_profile' user %}">{% avatar user 24 %}</a>
-            </span>
-            {% endfor %}
-            </div>
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
