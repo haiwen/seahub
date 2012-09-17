@@ -115,11 +115,11 @@
                     <td></td>
                     <td>
                         {% if request.user.is_authenticated %}
-                        <div>
-                            <div class="displayed-op vh"> 
+                        <div class="repo-file-op vh">
+                            <div class="displayed-op"> 
                                 <a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a>
                             </div>
-                            <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon vh" data="no-popup" />
+                            <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
                                 <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
                                 <!--li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li-->
@@ -141,13 +141,13 @@
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
-                        <div>
-                            <div class="displayed-op vh">
+                        <div class="repo-file-op vh">
+                            <div class="displayed-op">
                                 <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
                                 <a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a>
                                 <a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a>
                             </div>
-                            <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon vh" data="no-popup" />
+                            <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
                                 <!--li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li-->
                                 {% if request.user.is_authenticated %}
@@ -230,10 +230,12 @@
 <script type="text/javascript">
 $("table tr:gt(0)").hover(
     function() {
-        $(this).find('.displayed-op, .more-op-icon').removeClass('vh');
+        $(this).find('.repo-file-op').removeClass('vh');
     },
     function() {
-        $(this).find('.displayed-op, .more-op-icon').addClass('vh');
+        $(this).find('.repo-file-op').addClass('vh');
+        $(this).find('.more-op-icon').attr('data','no-popup');
+        $(this).find('.hidden-op').addClass('hide');
     }
 );
 
@@ -250,7 +252,6 @@ $('.more-op-icon').click(function(e) {
         } else {
             its_op_list.css('bottom', 2);
         }
-        $('.hidden-op').addClass('hide');
         its_op_list.removeClass('hide');
         $(this).attr('data','');
     } else {
