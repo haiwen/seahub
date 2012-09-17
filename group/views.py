@@ -18,7 +18,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_org_group_repos, get_org_groups_by_user
 from pysearpc import SearpcError
 
-from models import GroupMessage, MessageReply, MessageAttachment
+from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm
 from signals import grpmsg_added, grpmsg_reply_added
 from base.decorators import ctx_switch_required
@@ -36,7 +36,6 @@ from seahub.forms import RepoCreateForm
 
 @login_required
 def group_list(request):
-    error_msg = None
     if request.method == 'POST':
         """
         Add new group.
@@ -61,6 +60,90 @@ def group_list(request):
     groups = get_personal_groups(request.user.username);
     
     return render_to_response("group/groups.html", {
+            "groups": groups,
+            }, context_instance=RequestContext(request))
+
+def is_dept_group(group_id):
+    try:
+        BusinessGroup.objects.get(group_id=group_id, group_type='dept')
+        ret = True
+    except BusinessGroup.DoesNotExist:
+        ret = False
+    return ret
+
+def is_proj_group(group_id):
+    try:
+        BusinessGroup.objects.get(group_id=group_id, group_type='proj')
+        ret = True
+    except BusinessGroup.DoesNotExist:
+        ret = False
+    return ret
+
+@login_required
+def dept_group_list(request):
+    if request.method == 'POST':
+        """
+        Add new department group.
+        """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        group_name = request.POST.get('group_name')
+        if not validate_group_name(group_name):
+            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                   request.user.username)
+            bg = BusinessGroup()
+            bg.group_id = group_id
+            bg.group_type = 'dept'
+            bg.save()
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    
+    groups = [ g for g in get_personal_groups(request.user.username) \
+                   if is_dept_group(g.id)]
+
+    return render_to_response("group/dept_groups.html", {
+            "groups": groups,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def proj_group_list(request):
+    if request.method == 'POST':
+        """
+        Add new department group.
+        """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        group_name = request.POST.get('group_name')
+        if not validate_group_name(group_name):
+            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                   request.user.username)
+            bg = BusinessGroup()
+            bg.group_id = group_id
+            bg.group_type = 'proj'
+            bg.save()
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    
+    groups = [ g for g in get_personal_groups(request.user.username) \
+                   if is_proj_group(g.id)]
+
+    return render_to_response("group/proj_groups.html", {
             "groups": groups,
             }, context_instance=RequestContext(request))
 

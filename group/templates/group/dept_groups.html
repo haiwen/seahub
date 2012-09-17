@@ -1,7 +1,7 @@
 {% extends "myhome_base.html" %}
 {% load url from future %}
 
-{% block nav_group_class %}class="cur"{% endblock %}
+{% block nav_deptgroup_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <!-- 操作 -->
 {% include "group/groups_left_panel.html" %}
@@ -19,7 +19,7 @@ $("#group-add").click(function() {
 	return false;
 });
 
-{% url 'group_list' as group_add_url %}
+{% url 'dept_group_list' as group_add_url %}
 {% with post_url=group_add_url %}
 {% include "snippets/group_add_js.html" %}
 {% endwith %}

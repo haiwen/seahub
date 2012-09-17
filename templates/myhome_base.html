@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load url from future %}
 {% block top_bar_myaccount_class %} class="cur"{% endblock %}
 {% block nav %}
 <ul class="nav">
@@ -7,12 +8,21 @@
     </li>
     {% if not request.cloud_mode %}
     <li>
-        <a href="{% url public_home %}" {% block nav_publichome_class %}{% endblock %}>公共页面</a>
+        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>公共页面</a>
     </li>
     {% endif %}
+    {% if business_mode %}
+    <li>
+        <a href="{% url 'dept_group_list' %}" {% block nav_deptgroup_class %}{% endblock %}>部门组</a>      
+    </li>
+    <li>
+        <a href="{% url 'proj_group_list' %}" {% block nav_projgroup_class %}{% endblock %}>项目组</a>
+    </li>
+    {% else %}
     <li>
         <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>小组</a>
     </li>
+    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}shareadmin/" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
     </li>
