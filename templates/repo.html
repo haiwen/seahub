@@ -135,7 +135,6 @@
                                 <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                                 <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                                 <!--li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li-->
-                                <li><a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ current_commit.id }}&p={{path|urlencode}}{{ dirent.obj_name|urlencode }}&from=repo_history" class="op file-revert">还原</a></li>
                             </ul>
                         </div>
                       {% endif %}
