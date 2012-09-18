@@ -11,7 +11,7 @@
         {% if not view_history %}
         {{ u_filename }}
         {% else %}
-        {{repo.props.name}} 历史浏览<span class="latest-commit-time-author">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        {{repo.props.name}} 历史浏览<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
         {% endif %}
     </h2>
     <div class="w100 ovhd">
