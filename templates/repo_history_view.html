@@ -5,7 +5,7 @@
 
 {% block main_panel %}
     <div class="w100 ovhd">
-        <h2 class="fleft">{{repo.props.name}} 历史浏览<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
+        <h2 class="fleft">{{repo.props.name}} 历史镜像<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
         <button data="{{ SITE_ROOT }}repo/history/{{ repo.id }}/" class="fright" id="back-to-history-list">返回历史列表</button>
     </div>
 
@@ -48,15 +48,13 @@
                 <tr>
                     <th width="5%"></th>
                     <th width="65%">名字</th>
-                    <th width="13%">大小</th>
-                    <th width="17%">操作</th>
+                    <th width="30%">大小</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
                     <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
-                    <td></td>
                     <td></td>
                 </tr>
                 {% endfor %}
@@ -67,13 +65,6 @@
                     <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
-                        <div class="repo-file-op vh">
-                            <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" alt="更多操作" class="more-op-icon" data="no-popup" />
-                            <ul class="hidden-op hide">
-                                <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li>
-                                <li><a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ current_commit.id }}&p={{path|urlencode}}{{ dirent.obj_name|urlencode }}&from=repo_history" class="op file-revert">还原</a></li>
-                            </ul>
-                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -86,53 +77,5 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("table tr:gt(0)").hover(
-    function() {
-        $(this).find('.repo-file-op').removeClass('vh');
-    },
-    function() {
-        $(this).find('.repo-file-op').addClass('vh');
-        $(this).find('.more-op-icon').attr('data','no-popup');
-        $(this).find('.hidden-op').addClass('hide');
-    }
-);
-
-$('#main-panel').removeClass('ovhd');
-var clicked_more_op;
-$('.more-op-icon').click(function(e) {
-    var its_op_list = $(this).next();
-    if ($(this).attr('data')) { // no popup
-        clicked_more_op = $(this);
-        $(this).parent().css('position','relative');
-        if ($(this).offset().top + its_op_list.height() <= $('#main').offset().top + $('#main').height()) {
-            its_op_list.css('top', 6);
-        } else {
-            its_op_list.css('bottom', 2);
-        }
-        its_op_list.removeClass('hide');
-        $(this).attr('data','');
-    } else {
-        its_op_list.addClass('hide');
-        $(this).attr('data','no-popup');
-    }
-});
-$(document).click(function(e) {
-    var target =  e.target || event.srcElement;
-    if (clicked_more_op && target != clicked_more_op[0]) {
-       clicked_more_op.next().addClass('hide');
-       clicked_more_op.attr('data','no-popup');
-    }
-});
-$('.hidden-op li').hover(
-    function() {
-        $(this).css('background', '#eee');
-    },
-    function() {
-        $(this).css('background', '#fff');
-    }
-);
-$('#back-to-history-list').click(function() {
-    location.href = $(this).attr('data');
-});
 </script>
 {% endblock %}
