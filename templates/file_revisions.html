@@ -3,6 +3,8 @@
 
 {% block main_panel %}
 <h2>{{ u_filename }} 版本历史</h2>
+<p class="tip">Tip: 文件在每次修改后会生成一个新的版本，可以把当前文件内容“还原”到特定的版本。</p>
+
 <p class="path">
 当前路径：
 {% for name, link in zipped %}

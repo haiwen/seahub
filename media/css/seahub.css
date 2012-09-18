@@ -651,7 +651,8 @@ ul.with-bg li {
 #repo-basic-info .desc {
     border-bottom:1px solid #ddd;
 }
-.path, .access-notice { margin: 0.8em 0 0.4em; }
+.path { margin: 1.4em 0 0; }
+.access-notice { margin: 0.8em 0 0.4em; }
 .repo-op {
     text-align:right;
 }
@@ -677,7 +678,7 @@ ul.with-bg li {
     padding:3px;
     background:#eee;
     border-radius:3px;
-    margin:20px 0 25px;
+    margin:10px 0 25px;
 }
 .repo-file-list-inner-container,
 .commit-list-inner-container {
