@@ -51,17 +51,17 @@
    
     <div id="file">
         <div id="file-op">
+            {% if not view_history and request.user.is_authenticated %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
+              {% if filetype == 'Text' or filetype == 'Markdown' %}
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
+              {% endif %}
+	    {% endif %}
+            <button data="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" id="history">历史</button>
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
             {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">下载</button>
-            {% if not view_history and request.user.is_authenticated %}
-            <button data="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" id="history">历史</button>
-            {% if filetype == 'Text' or filetype == 'Markdown' %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
-            {% endif %}
-            {% endif %}
         </div>
         <div id="file-view">
             {% if filetype == 'Text' %}
@@ -155,8 +155,11 @@
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
+$('#history').click(function() {
+    location.href = $(this).attr('data');
+});
 {% if not view_history %}
-$('#edit, #history').click(function() {
+$('#edit').click(function() {
     location.href = $(this).attr('data');
 });
 function showLink() {
