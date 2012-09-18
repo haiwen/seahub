@@ -40,7 +40,7 @@
     </div>
 
     <div id="file-commit-info">
-        <p class="latest-commit">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> 做了最新修改</p>
+        <p class="latest-commit">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span>做了最新修改</span></p>
         <p class="contributors">
         <span>{{ contributors|length }} 个贡献者</span>
         {% for user in contributors %}
