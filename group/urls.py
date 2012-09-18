@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from views import group_list, group_info, group_member_operations, \
+from views import group_info, group_member_operations, \
     group_members, msg_reply, msg_reply_new, group_recommend, \
     create_group_repo
 

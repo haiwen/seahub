@@ -202,8 +202,6 @@ SEAHUB_TITLE = 'SeaHub'
 
 USE_SUBDOMAIN = False
 
-BUSINESS_MODE = True
-
 try:
     import local_settings
 except ImportError:

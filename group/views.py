@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -19,9 +21,11 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
-from forms import MessageForm, MessageReplyForm, GroupRecommendForm
+from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
+    GroupAddForm
 from signals import grpmsg_added, grpmsg_reply_added
 from base.decorators import ctx_switch_required
+from base.mixins import LoginRequiredMixin
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
@@ -34,118 +38,126 @@ from seahub.utils import render_error, render_permission_error, \
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm
 
-@login_required
-def group_list(request):
-    if request.method == 'POST':
-        """
-        Add new group.
-        """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
+class GroupMixin(object):
+    def get_username(self):
+        return self.request.user.username
 
-        group_name = request.POST.get('group_name')
-        if not validate_group_name(group_name):
-            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
-            return HttpResponse(json.dumps(result), content_type=content_type)
-        
-        try:
-            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                   request.user.username)
-        except SearpcError, e:
-            result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result), content_type=content_type)
+    def ajax_form_valid(self):
         return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
+                            content_type='application/json; charset=utf-8')
 
-    groups = get_personal_groups(request.user.username);
-    
-    return render_to_response("group/groups.html", {
-            "groups": groups,
-            }, context_instance=RequestContext(request))
+    def ajax_form_invalid(self, form):
+        return HttpResponseBadRequest(
+            json.dumps(form.errors),
+            content_type='application/json; charset=utf-8')
 
-def is_dept_group(group_id):
-    try:
-        BusinessGroup.objects.get(group_id=group_id, group_type='dept')
-        ret = True
-    except BusinessGroup.DoesNotExist:
-        ret = False
-    return ret
-
-def is_proj_group(group_id):
-    try:
-        BusinessGroup.objects.get(group_id=group_id, group_type='proj')
-        ret = True
-    except BusinessGroup.DoesNotExist:
-        ret = False
-    return ret
-
-@login_required
-def dept_group_list(request):
-    if request.method == 'POST':
-        """
-        Add new department group.
-        """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        group_name = request.POST.get('group_name')
-        if not validate_group_name(group_name):
-            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
-            return HttpResponse(json.dumps(result), content_type=content_type)
-        
+    def is_dept_group(self, group_id):
         try:
-            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                   request.user.username)
+            BusinessGroup.objects.get(group_id=group_id, group_type='dept')
+            ret = True
+        except BusinessGroup.DoesNotExist:
+            ret = False
+        return ret
+
+    def is_proj_group(self, group_id):
+        try:
+            BusinessGroup.objects.get(group_id=group_id, group_type='proj')
+            ret = True
+        except BusinessGroup.DoesNotExist:
+            ret = False
+        return ret
+    
+class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
+                    BaseFormView):
+    template_name = 'group/groups.html'
+    form_class = GroupAddForm
+
+    def form_valid(self, form):
+        group_name = form.cleaned_data['group_name']
+        username = self.get_username()
+        try:
+            group_id = ccnet_threaded_rpc.create_group(
+                group_name.encode('utf-8'), username)
+        except SearpcError, e:
+            result = {}
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result),
+                                content_type='application/json; charset=utf-8')
+        
+        if self.request.is_ajax():
+            return self.ajax_form_valid()
+        else:
+            return FormMixin.form_valid(self, form)
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return self.ajax_form_invalid(form)
+        else:
+            return FormMixin.form_invalid(self, form)
+
+    def get_context_data(self, **kwargs):
+        kwargs['groups'] = get_personal_groups(self.get_username())
+        return kwargs
+
+class DeptGroupListView(GroupListView):
+    template_name = 'group/dept_groups.html'
+
+    def form_valid(self, form):
+        group_name = form.cleaned_data['group_name']
+        username = self.get_username()
+        try:
+            group_id = ccnet_threaded_rpc.create_group(
+                group_name.encode('utf-8'), username)
             bg = BusinessGroup()
             bg.group_id = group_id
             bg.group_type = 'dept'
             bg.save()
         except SearpcError, e:
+            result = {}
             result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result), content_type=content_type)
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-    
-    groups = [ g for g in get_personal_groups(request.user.username) \
-                   if is_dept_group(g.id)]
-
-    return render_to_response("group/dept_groups.html", {
-            "groups": groups,
-            }, context_instance=RequestContext(request))
-
-@login_required
-def proj_group_list(request):
-    if request.method == 'POST':
-        """
-        Add new department group.
-        """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        group_name = request.POST.get('group_name')
-        if not validate_group_name(group_name):
-            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
-            return HttpResponse(json.dumps(result), content_type=content_type)
+            return HttpResponse(json.dumps(result),
+                                content_type='application/json; charset=utf-8')
         
+        if self.request.is_ajax():
+            return self.ajax_form_valid()
+        else:
+            return FormMixin.form_valid(self, form)
+
+    def get_context_data(self, **kwargs):
+        groups = [ g for g in get_personal_groups(self.get_username()) \
+                       if self.is_dept_group(g.id)]
+        kwargs['groups'] = groups
+        return kwargs
+
+class ProjGroupListView(GroupListView):
+    template_name = 'group/proj_groups.html'
+
+    def form_valid(self, form):
+        group_name = form.cleaned_data['group_name']
+        username = self.get_username()
         try:
-            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                   request.user.username)
+            group_id = ccnet_threaded_rpc.create_group(
+                group_name.encode('utf-8'), username)
             bg = BusinessGroup()
             bg.group_id = group_id
             bg.group_type = 'proj'
             bg.save()
         except SearpcError, e:
+            result = {}
             result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result), content_type=content_type)
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-    
-    groups = [ g for g in get_personal_groups(request.user.username) \
-                   if is_proj_group(g.id)]
+            return HttpResponse(json.dumps(result),
+                                content_type='application/json; charset=utf-8')
+        
+        if self.request.is_ajax():
+            return self.ajax_form_valid()
+        else:
+            return FormMixin.form_valid(self, form)
 
-    return render_to_response("group/proj_groups.html", {
-            "groups": groups,
-            }, context_instance=RequestContext(request))
+    def get_context_data(self, **kwargs):
+        groups = [ g for g in get_personal_groups(self.get_username()) \
+                       if self.is_proj_group(g.id)]
+        kwargs['groups'] = groups
+        return kwargs
 
 @login_required
 def group_remove(request, group_id):

@@ -6,7 +6,11 @@ and returns a dictionary to add to the context.
 These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
-from settings import SEAFILE_VERSION, SEAHUB_TITLE, BUSINESS_MODE
+from settings import SEAFILE_VERSION, SEAHUB_TITLE
+try:
+    from settings import BUSINESS_MODE
+except ImportError:
+    BUSINESS_MODE = False
 
 def base(request):
     """

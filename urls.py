@@ -5,7 +5,7 @@ from django.views.generic.simple import direct_to_template
 from seahub.views import *
 from notifications.views import notification_list
 from share.views import share_admin
-from group.views import group_list, dept_group_list, proj_group_list
+from group.views import GroupListView, DeptGroupListView, ProjGroupListView
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -88,9 +88,9 @@ urlpatterns = patterns('',
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groups/', group_list, name='group_list'),
-    url(r'^deptgroups/', dept_group_list, name='dept_group_list'),
-    url(r'^projgroups/', proj_group_list, name='proj_group_list'),
+    url(r'^groups/', GroupListView.as_view(), name='group_list'),
+    url(r'^deptgroups/', DeptGroupListView.as_view(), name='dept_group_list'),
+    url(r'^projgroups/', ProjGroupListView.as_view(), name='proj_group_list'),
     (r'^organizations/', include('seahub.organizations.urls')),
     (r'^profile/', include('seahub.profile.urls')),
 
