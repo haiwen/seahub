@@ -2,7 +2,7 @@
 {% load seahub_tags avatar_tags %}
 
 {% block main_panel %}
-<h2>{{ u_filename }} 修改历史</h2>
+<h2>{{ u_filename }} 版本历史</h2>
 <p class="path">
 当前路径：
 {% for name, link in zipped %}
@@ -17,8 +17,8 @@
     <div class="commit-list-inner-container">
         <table class="commit-list">
             <tr>
-                <th width="30%" class="time">修改时间</th>
-                <th width="20%">修改者</th>
+                <th width="30%" class="time">版本生成时间</th>
+                <th width="20%">最后修改者</th>
                 <th width="20%">大小</th>
                 <th width="30%">操作</th>
             </tr>
