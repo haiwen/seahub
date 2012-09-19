@@ -1180,6 +1180,7 @@ ul.with-bg li {
 }
 #comment-input {
     width:315px;
+    max-width:315px;/*limit width when drag*/
     padding-left:1px;
     height:30px;
     margin:0;
