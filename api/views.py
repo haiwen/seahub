@@ -57,6 +57,7 @@ HTTP_ERRORS = {
     '406':'Repo is not encrypted',
     '407':'Method not supported',
     '408':'Login failed',
+    '409':'Repo password required',
     '410':'Path does not exist',
     '411':'Failed to get dirid by path',
     '412':'Failed to get fileid by path',
@@ -181,8 +182,7 @@ def get_dir_entrys_by_id(request, dir_id):
     return response
 
 def set_repo_password(request, repo, password):
-    if not password:
-        return api_error(request, '400', 'Password needed')
+    assert password, 'password must not be none'
 
     try:
         seafserv_threaded_rpc.set_passwd(repo.id, request.user.username, password)
@@ -217,7 +217,7 @@ def check_repo_access_permission(request, repo):
         if not password_set:
             password = request.REQUEST['password']
             if not password:
-                return api_error(request, '400', 'Repo password needed')
+                return api_error(request, '409')
 
             return set_repo_password(request, repo, password)
 
