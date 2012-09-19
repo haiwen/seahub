@@ -972,42 +972,6 @@ def repo_view_file(request, repo_id):
     """
     Preview file on web, including files in current worktree and history.
     """
-    if request.method == 'POST':
-        # handle post request to leave comment on file
-        path = request.GET.get('p', '/')
-        next = reverse('repo_view_file', args=[repo_id]) + '?p=' + \
-            urllib2.quote(path.encode('utf-8'))
-        
-        f = FileCommentForm(request.POST)
-        if f.is_valid():
-            repo_id = f.cleaned_data['repo_id']
-            file_path = f.cleaned_data['file_path']
-            file_path_hash = md5_constructor(file_path).hexdigest()[:12]
-            message = f.cleaned_data['message']
-            fc = FileComment(repo_id=repo_id, file_path=file_path,
-                             file_path_hash=file_path_hash,
-                             from_email=request.user.username, message=message)
-            fc.save()
-            # send a group message if the repo shared to any groups
-            repo_shared_groups = get_shared_groups_by_repo(repo_id)
-
-            for group in repo_shared_groups:
-                # save group message, and length should be less than 500
-                gm = GroupMessage(group_id=group.id,
-                                  from_email=request.user.username,
-                                  message=message[:500])
-                gm.save()
-                # send signal
-                grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                                  from_email=request.user.username)
-
-                # save attachment
-                ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                       attach_type='file', path=path,
-                                       src='filecomment')
-                ma.save()
-        return HttpResponseRedirect(next)
-    
     http_server_root = get_httpserver_root()
     path = request.GET.get('p', '/')
     u_filename = os.path.basename(path)
@@ -1092,22 +1056,9 @@ def repo_view_file(request, repo_id):
 
     """file comments"""
     # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '15'))
-    except ValueError:
-        current_page = 1
-        per_page = 15
             
     file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-    comments_plus_one = FileComment.objects.filter(
-        file_path_hash=file_path_hash,
-        repo_id=repo_id)[per_page*(current_page-1) : per_page*current_page+1]
-    if comments_plus_one.count() == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-    comments = comments_plus_one[:per_page]
+    comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
     contributors = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     latest_contributor = contributors[0]
@@ -1135,17 +1086,52 @@ def repo_view_file(request, repo_id):
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
             'comments': comments,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
             'document_swf_exists': document_swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
             }, context_instance=RequestContext(request))
+
+def file_comment(request):
+    if request.method == 'POST':
+        # handle post request to leave comment on a file
+        content_type = 'application/json; charset=utf-8'
+        path = request.GET.get('p', '');
+        
+        f = FileCommentForm(request.POST)
+        if f.is_valid():
+            repo_id = f.cleaned_data['repo_id']
+            file_path = f.cleaned_data['file_path']
+            file_path_hash = md5_constructor(file_path).hexdigest()[:12]
+            message = f.cleaned_data['message']
+            fc = FileComment(repo_id=repo_id, file_path=file_path,
+                             file_path_hash=file_path_hash,
+                             from_email=request.user.username, message=message)
+            fc.save()
+            # send a group message if the repo shared to any groups
+            repo_shared_groups = get_shared_groups_by_repo(repo_id)
+
+            for group in repo_shared_groups:
+                # save group message, and length should be less than 500
+                gm = GroupMessage(group_id=group.id,
+                                  from_email=request.user.username,
+                                  message=message[:500])
+                gm.save()
+                # send signal
+                grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                                  from_email=request.user.username)
+
+                # save attachment
+                ma = MessageAttachment(group_message=gm, repo_id=repo_id,
+                                       attach_type='file', path=path,
+                                       src='filecomment')
+                ma.save()
+
+            comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
+            html = render_to_string("file_comments.html", {'comments':comments})
+            return HttpResponse(json.dumps({'html': html}), content_type=content_type)
     
+   
 def repo_file_get(raw_path):
     err = ''
     file_content = ''

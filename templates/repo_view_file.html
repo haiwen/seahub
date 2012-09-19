@@ -29,16 +29,17 @@
         {% endfor %}
         </p>
 
+        {% if not view_history %}
         <div class="file-op fright">
-            {% if not view_history %}
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
             <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
             <button id="send-shared-link" class="hide">发送</button>
             <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 
+    {% if not view_history %}
     <div id="file-commit-info">
         <p class="latest-commit">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span>做了最新修改</span></p>
         <p class="contributors">
@@ -48,16 +49,19 @@
         {% endfor %}
         </p>
     </div>
-   
+    {% endif %}
+
     <div id="file">
         <div id="file-op">
             {% if not view_history and request.user.is_authenticated %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
-              {% if filetype == 'Text' or filetype == 'Markdown' %}
+            {% if filetype == 'Text' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
-              {% endif %}
-	    {% endif %}
+            {% endif %}
+            {% endif %}
+            {% if not view_history %}
             <button data="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" id="history">历史</button>
+            {% endif %}
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
             {% endif %}
@@ -74,7 +78,7 @@
         </div>
     </div>
 
-{% if not view_history %}
+    {% if not view_history %}
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
         <label>邮箱(多个邮箱以,分隔)：</label><br />
         <textarea id="email" name="email"></textarea><br />
@@ -96,56 +100,43 @@
     {% with attach_type='file' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
-{% endif %}
 
-{% if request.user.is_authenticated %}
-<div id="file-comment">
-    <h3>评论</h3>
-    <form id="file-comment-form" action="" method="post">
-        <input name="repo_id" type="hidden" value="{{ repo.id }}"/>
-        <input name="file_path" type="hidden" value="{{ path|urlencode }}" />
-        <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
-        {% for error in form.message.errors %}
-        <p class="error">{{ error|escape }}</p>
-        {% endfor %}
-        <input type="submit" value="提交" class="submit" />
-    </form>
-</div>
-{% endif %}
-
-{% if comments %}
-<!-- file comments list -->
-<ul class="msg-list">
-  {% for comment in comments %}
-  <li class="msg w100 ovhd">
-    <div class="pic fleft">
-      <a href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
+    {% if request.user.is_authenticated %}
+    <div id="file-comment" class="hide">
+        <form id="file-comment-form" action="" method="post">
+            <div class="ovhd">
+                <a class="pic fleft" href="{% url 'user_profile' request.user.username %}">{% avatar request.user.username 48 %}</a>
+                <div class="txt fright">
+                    <textarea name="message" id="comment-input">评论一下~</textarea><br />
+                    <p class="error"></p>
+                    <input type="submit" value="提交" class="submit hide" />
+                </div>
+            </div>
+        </form>
+        {% if comments %}
+        <ul id="comment-list">
+            {% for comment in comments %}
+            <li class="comment ovhd">
+            <a class="pic fleft" href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
+            <div class="txt fright">
+                <div class="comment-hd w100 ovhd">
+                    <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}" class="fleft">{{ comment.from_email|email2nickname }}</a>
+                    <span class="time fright">{{ comment.timestamp|translate_commit_time }}</span>
+                </div>
+                <p class="comment-bd">{{ comment.message|seahub_urlize|find_at|linebreaksbr }}</p>
+            </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
-    <div id="filecomment-{{comment.id}}" class="txt fright">
-      <div class="msg-hd">
-        <span class="time">{{ comment.timestamp|translate_commit_time }}</span>
-        <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}">{{ comment.from_email|email2nickname }}</a>
-      </div>
-      <div class="msg-bd">
-        <p>
-          {{ comment.message|seahub_urlize|find_at|linebreaksbr }}
-        </p>
-      </div>
+    <div id="comment-caret" class="hide">
+        <div id="comment-outer-caret">
+            <div id="comment-inner-caret"></div>
+        </div>
     </div>
-  </li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-<div id="paginator">
-  {% if current_page != 1 %}
-  <a href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
-  {% endif %}
-  {% if page_next %}
-  <a href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}&page={{ next_page }}&per_page={{ per_page }}">下一页</a>
-  {% endif %}
-</div>
-
+    {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -275,6 +266,54 @@ $('#shared-link').click(function() {
 });
 
 {% include "snippets/bottom_bar.html" %}
+{% if request.user.is_authenticated %}
+$('#bottom-bar').append(' <button id="comment">评论</button>');
+$('#file-comment').css('max-height', $(window).height() - parseInt($('#file-comment').css('bottom')));
+$('#comment').click(function() {
+    if ($('#file-comment').hasClass('hide')) {
+        $('#file-comment, #comment-caret').removeClass('hide');
+    } else {
+        $('#file-comment, #comment-caret').addClass('hide');
+    }
+});
+
+var comment_input_pre_text = $('#comment-input').val();
+$('#comment-input').css('color', '#999').click(function() {
+    $(this).val('').css('color', '#000');
+    $('#file-comment-form .submit').removeClass('hide');
+});
+$('#file-comment-form .submit').click(function() {
+    if (!$.trim($('#comment-input').val())) {
+        $('#file-comment-form .error').html('请先输入您的评论').removeClass('hide');
+        return false;
+    }
+    $.ajax({
+        url: '{% url 'views.file_comment' %}' + '?p={{path}}',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': '{{ repo.id }}',
+            'file_path': '{{ path|urlencode }}',
+            'message': $('#comment-input').val()
+        },
+        success: function(data) {
+            $('#comment-input').val(comment_input_pre_text).css('color', '#999');
+            $('#file-comment-form .submit, #file-comment-form .error').addClass('hide');
+            $('#comment-list').html(data.html);
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                $('#file-comment-form .error').html(value[0]).removeClass('hide');
+            }); 
+        }   
+    });
+    return false;
+});
+{% endif %}
+
 {% endif %}
 
 function send_open_local_file_request(path) {
