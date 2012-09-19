@@ -104,17 +104,17 @@
     {% if request.user.is_authenticated %}
     <div id="file-comment" class="hide">
         <form id="file-comment-form" action="" method="post">
-            <div class="ovhd">
+            <div class="w100 ovhd">
                 <a class="pic fleft" href="{% url 'user_profile' request.user.username %}">{% avatar request.user.username 48 %}</a>
                 <div class="txt fright">
                     <textarea name="message" id="comment-input">评论一下~</textarea><br />
-                    <p class="error"></p>
+                    <p class="error hide"></p>
                     <input type="submit" value="提交" class="submit hide" />
                 </div>
             </div>
         </form>
-        {% if comments %}
         <ul id="comment-list">
+        {% if comments %}
             {% for comment in comments %}
             <li class="comment ovhd">
             <a class="pic fleft" href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
@@ -127,8 +127,8 @@
             </div>
             </li>
             {% endfor %}
-        </ul>
         {% endif %}
+        </ul>
     </div>
     <div id="comment-caret" class="hide">
         <div id="comment-outer-caret">
