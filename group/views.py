@@ -1,12 +1,14 @@
 # encoding: utf-8
 import os
 import simplejson as json
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.sites.models import RequestSite
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
+from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
@@ -501,14 +503,16 @@ def group_members(request, group_id):
 
         if request.user.org:
             for member_name in member_list:
-                # Add email to contacts
+                # Add user to contacts.
                 mail_sended.send(sender=None, user=request.user.username,
                                   email=member_name)
+
+                # Can not add unregistered user to group in org context.
                 if not ccnet_threaded_rpc.org_user_exists(request.user.org['org_id'],
                                                  member_name):
                     err_msg = u'无法添加成员，当前企业不存在 %s 用户' % member_name
                     result['error'] = err_msg
-                    return HttpResponse(json.dumps(result),
+                    return HttpResponse(json.dumps(result), status=400,
                                         content_type=content_type)
                 else:
                     try:
@@ -517,29 +521,47 @@ def group_members(request, group_id):
                                                    member_name)
                     except SearpcError, e:
                         result['error'] = _(e.msg)
-                        return HttpResponse(json.dumps(result),
+                        return HttpResponse(json.dumps(result), status=500,
                                             content_type=content_type)
         else:
             for member_name in member_list:
-                # Add email to contacts
+                # Add user to contacts.
                 mail_sended.send(sender=None, user=request.user.username,
                                   email=member_name)
-                
+
+                # Send email to unregistered user.
                 if not is_registered_user(member_name):
-                    err_msg = u'无法添加成员，用户 %s 不存在' % member_name
-                    result['error'] = err_msg
-                    return HttpResponse(json.dumps(result),
-                                        content_type=content_type)
-                else:
+                    use_https = request.is_secure()
+                    domain = RequestSite(request).domain
+
+                    t = loader.get_template('group/add_member_email.html')
+                    c = {
+                        'email': request.user.username,
+                        'to_email': member_name,
+                        'group': group,
+                        'domain': domain,
+                        'protocol': use_https and 'https' or 'http',
+                        }
+                    
                     try:
-                        ccnet_threaded_rpc.group_add_member(group_id_int,
-                                                   request.user.username,
-                                                   member_name)
-                    except SearpcError, e:
-                        result['error'] = _(e.msg)
-                        return HttpResponse(json.dumps(result),
+                        send_mail('您的好友在SeaCloud上将你加入到小组',
+                                  t.render(Context(c)), None, [member_name],
+                                  fail_silently=False)
+                    except:
+                        data = json.dumps({'error': u'发送失败'})
+                        return HttpResponse(data, status=500,
                                             content_type=content_type)
-        return HttpResponse(json.dumps({'success': True}),
+                # Add user to group.
+                try:
+                    ccnet_threaded_rpc.group_add_member(group_id_int,
+                                               request.user.username,
+                                               member_name)
+                except SearpcError, e:
+                    result['error'] = _(e.msg)
+                    return HttpResponse(json.dumps(result), status=500,
+                                        content_type=content_type)
+        messages.success(request, u'操作成功')
+        return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
 
     ### GET ###

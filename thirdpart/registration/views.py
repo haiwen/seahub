@@ -199,6 +199,10 @@ def register(request, backend, success_url=None, form_class=None,
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
 
+    src = request.GET.get('src', '')
+    if src:
+        form = form_class(initial={'email': src})
+
     return render_to_response(template_name,
                               { 'form': form },
                               context_instance=context)
