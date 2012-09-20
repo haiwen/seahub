@@ -1,0 +1,16 @@
+{% load seahub_tags avatar_tags%}
+{% load url from future %}
+
+        {% for comment in comments %}
+        <li class="comment ovhd">
+        <a class="pic fleft" href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
+        <div class="txt fright">
+            <div class="comment-hd w100 ovhd">
+                <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}" class="fleft">{{ comment.from_email|email2nickname }}</a>
+                <span class="time fright">{{ comment.timestamp|translate_commit_time }}</span>
+            </div>
+            <p class="comment-bd">{{ comment.message|seahub_urlize|find_at|linebreaksbr }}</p>
+        </div>
+        </li>
+        {% endfor %}
+

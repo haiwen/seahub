@@ -112,7 +112,7 @@
 
                 {% if msg.attachment.src == 'filecomment' %}
                 <!-- file comment -->
-                <span class="recommend">文件 <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank"> {{ msg.attachment.name }}</a> 有新的评注：</span>
+                <span class="recommend">文件 <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> 有新的评注：</span>
                 {% endif %}
                 
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}

@@ -956,7 +956,8 @@ ul.with-bg li {
     font-size:12px;
     color:#333;
 }
-#message {
+#message,
+#comment-input {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
     word-wrap: break-word;
     width: 600px;
@@ -985,7 +986,8 @@ ul.with-bg li {
     margin-bottom:2px;
 }
 .msg-hd .time,
-.msg-hd .group {
+.msg-hd .group,
+.comment-hd .time {
     color: #808080;
 }
 .msg-hd .group {
@@ -1164,5 +1166,58 @@ ul.with-bg li {
 }
 /* File comment */
 #file-comment {
-    margin-top: 60px;
+    width:400px;
+    position:fixed;
+    right:10px;
+    bottom:40px;
+    border:1px solid #cbcbcb;
+    padding:0 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    background:#fff;
+    overflow:auto;
+}
+#comment-input {
+    width:315px;
+    max-width:315px;/*limit width when drag*/
+    padding-left:1px;
+    height:30px;
+    margin:0;
+}
+.comment {
+    width:380px;
+    padding:15px 0;
+    border-top:1px solid #e8e8e8;
+}
+.comment .txt {
+    width:318px;
+}
+#file-comment-form {
+    width:380px;
+    margin:15px 0;
+}
+.comment-bd {
+    word-wrap:break-word;
+}
+#comment-caret {
+    position:fixed;
+    right:27px;
+    bottom:26px;
+}
+#comment-outer-caret,
+#comment-inner-caret {
+    height:0;
+    width:1px;
+    border:14px solid;
+    border-color:#CBCBCB transparent;
+    border-bottom-width:0;
+    z-index:100;
+    margin:0 auto;
+}
+#comment-inner-caret {
+    border-top-color:#fff;
+    position:relative;
+    top:-15px;
+    left:-14px;
 }
