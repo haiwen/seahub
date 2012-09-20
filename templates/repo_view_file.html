@@ -269,6 +269,9 @@ $('#shared-link').click(function() {
 {% if request.user.is_authenticated %}
 $('#bottom-bar').append(' <button id="comment">评论</button>');
 $('#file-comment').css('max-height', $(window).height() - parseInt($('#file-comment').css('bottom')));
+{% if comment_open %}
+$('#file-comment, #comment-caret').removeClass('hide');
+{% endif %}
 $('#comment').click(function() {
     if ($('#file-comment').hasClass('hide')) {
         $('#file-comment, #comment-caret').removeClass('hide');

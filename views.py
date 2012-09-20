@@ -976,6 +976,7 @@ def repo_view_file(request, repo_id):
     path = request.GET.get('p', '/')
     u_filename = os.path.basename(path)
     filename = urllib2.quote(u_filename.encode('utf-8'))
+    comment_open = request.GET.get('comment_open', '')
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -1086,6 +1087,7 @@ def repo_view_file(request, repo_id):
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
             'comments': comments,
+            'comment_open':comment_open,
             'document_swf_exists': document_swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
