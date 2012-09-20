@@ -358,7 +358,7 @@ function send_open_local_file_request(path) {
             } else {
                 // open file successfully
                 $('#open-local-handling-tip').removeClass('hide');
-                setTimeout(openLocalPopupClose, 1500);
+                setTimeout(function() { $.modal.close(); }, 1500);
             }
         }
     });
@@ -377,13 +377,9 @@ $('#download-repo').click(function() {
 $('#open-local').click(function () {
     var path = $(this).attr('data');
     var local_applet_running = false;
-    {% if filetype == 'Document' %}
-    $('#file-view').addClass('vh');
-    {% endif %}
     $('#open-local-feedback').modal({
         appendTo: '#main',
-        containerCss: { width: 300, height: 60},
-        onClose: openLocalPopupClose
+        containerCss: { width: 300, height: 60}
     });
 
     $.ajax({
@@ -410,11 +406,5 @@ $('#open-local').click(function () {
         }
     }, 2000);
 });
-function openLocalPopupClose() {
-    $.modal.close();
-    {% if filetype == 'Document' %}
-    $('#file-view').removeClass('vh');
-    {% endif %}
-}
 </script>
 {% endblock %}
