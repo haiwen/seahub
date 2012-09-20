@@ -95,13 +95,10 @@
                     <td>
                       {% if user_perm == 'rw' %}
                         <div class="repo-file-op vh">
-                            <div class="displayed-op"> 
-                                <a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a>
-                            </div>
                             <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
                                 <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
-                                <!--li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li-->
+                                <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
                                 <li><a class="op dir-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                                 <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                             </ul>
@@ -124,14 +121,13 @@
                         <div class="repo-file-op vh">
                             <div class="displayed-op">
                                 <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a>
-                                <a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a>
                                 <a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a>
                             </div>
                             <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="更多操作" alt="更多操作" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
                                 <!--li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">下载</a></li-->
                                 <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">删除</a></li>
-                                <!--li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li-->
+                                <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">重命名</a></li>
                                 <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">移动</a></li>
                                 <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">复制</a></li>
                                 <!--li><a class="op file-update" href="{{ SITE_ROOT }}repo/update_file/{{repo.id}}/?p={{ path|urlencode }}{{dirent.obj_name|urlencode}}">更新</a></li-->
