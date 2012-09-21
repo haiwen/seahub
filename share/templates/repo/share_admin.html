@@ -20,13 +20,15 @@
     <tr>
         <th width="20%">名字</th>
         <th width="25%">共享给</th>
-        <th width="47%">描述</th>
+	<th width="10%">权限</th>
+        <th width="37%">描述</th>
         <th width="8%">操作</th>
     </tr>
     {% for repo in out_repos %}
     <tr>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.shared_email }}</td>
+	<td>{{ repo.share_permission }}</td>
         <td>{{ repo.props.desc }}</td>
         <td>
           {% if repo.gid %}

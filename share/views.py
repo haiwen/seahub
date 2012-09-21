@@ -38,6 +38,7 @@ def share_repo(request):
     
     email_or_group = form.cleaned_data['email_or_group']
     repo_id = form.cleaned_data['repo_id']
+    permission = form.cleaned_data['permission']
     from_email = request.user.username
 
     repo = get_repo(repo_id)
@@ -74,7 +75,7 @@ def share_repo(request):
                         group_creator.find(group.props.creator_name) >= 0:
                     from seahub.group.views import group_share_repo
                     group_share_repo(request, repo_id, int(group.props.id),
-                                     from_email)
+                                     from_email, permission)
                     find = True
                     msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
                         (group_name, reverse('share_admin'))
@@ -93,7 +94,7 @@ def share_repo(request):
             # Record share info to db.
             try:
                 seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
-                                                'rw')
+                                                permission)
             except SearpcError, e:
                 msg = u'共享给 %s 失败。' % to_email
                 messages.add_message(request, messages.ERROR, msg)
@@ -138,9 +139,18 @@ def share_admin(request):
         if not group:
             continue
         repo.props.shared_email = group.props.group_name
+        repo.props.share_permission = group_repo.props.permission
         repo.gid = group_id
         
         out_repos.append(repo)
+
+    for repo in out_repos:
+        if repo.props.share_permission == 'rw':
+            repo.share_permission = '可读写'
+        elif repo.props.share_permission == 'r':
+            repo.share_permission = '只可浏览'
+        else:
+            repo.share_permission = ''
 
     # Repo anonymous share links
     # out_links = AnonymousShare.objects.filter(repo_owner=request.user.username)

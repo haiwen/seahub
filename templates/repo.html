@@ -20,6 +20,9 @@
         <button id="repo-download-btn" class="fright">同步到本地</button>
         {% endif %}
     </div>
+    {% if user_perm != 'rw' %}
+    <p>这个同步目录设置了只读共享，您只能在线浏览文件</p>
+    {% endif %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
       <p class="size">大小：{{ repo_size|filesizeformat }}</p>

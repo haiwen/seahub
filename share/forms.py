@@ -7,3 +7,4 @@ class RepoShareForm(forms.Form):
 
     email_or_group = forms.CharField(max_length=512)
     repo_id = forms.CharField(max_length=36)
+    permission = forms.ChoiceField(choices=(('rw', 'read-write'), ('r', 'read-only')))

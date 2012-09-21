@@ -855,6 +855,9 @@ ul.with-bg li {
     width:260px;
     height:80px;
 }
+#share-permission {
+    width:260px;
+}
 #recommend-msg,
 #recommend-groups {
     width:450px;

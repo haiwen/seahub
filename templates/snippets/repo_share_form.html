@@ -1,6 +1,12 @@
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
     <label>邮箱或小组：</label><br />
     <textarea id="email_or_group" name="email_or_group"></textarea>
+    <div>
+      <select id="share-permission" name="permission">
+	<option value="rw" selected="selected">可读写</option>
+	<option value="r">只可浏览</option>
+      </select>
+    </div>
     <input id="repo_id" type="hidden" name="repo_id" value="" />
     <p class="tip">{{ tips }}</p>
     <p class="error hide"></p>

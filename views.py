@@ -108,12 +108,11 @@ def access_to_repo(request, repo_id, repo_ap=None):
         token = request.COOKIES.get('anontoken', None)
         return True if token else False
     else:
-        return check_permission(repo_id, request.user.username)
+        return True if check_permission(repo_id, request.user.username) else False
 
 def get_user_permission(request, repo_id):
     if request.user.is_authenticated():
-        return 'rw' if check_permission(repo_id, request.user.username) else \
-            ''
+        return check_permission(repo_id, request.user.username)
     else:
         token = request.COOKIES.get('anontoken', None)
         return 'r' if token else ''
@@ -338,7 +337,7 @@ def repo_upload_file(request, repo_id):
         parent_dir  = request.GET.get('p', '/')
         zipped = gen_path_link (parent_dir, repo.name)
 
-        if access_to_repo(request, repo_id, ''):
+        if get_user_permission(request, repo_id) == 'rw':
             token = seafserv_rpc.web_get_access_token(repo_id,
                                                       'dummy',
                                                       'upload',
@@ -374,7 +373,7 @@ def repo_update_file(request, repo_id):
             return render_error(request, u'非法链接')
         zipped = gen_path_link (target_file, repo.name)
 
-        if access_to_repo(request, repo_id, ''):
+        if get_user_permission(request, repo_id) == 'rw':
             token = seafserv_rpc.web_get_access_token(repo_id,
                                                       'dummy',
                                                       'update',
@@ -955,6 +954,9 @@ def repo_set_access_property(request, repo_id):
 
 @login_required    
 def repo_del_file(request, repo_id):
+    if get_user_permission(request, repo_id) != 'rw':
+        return render_permission_error(request, '无法删除该文件')
+
     parent_dir = request.GET.get("p", "/")
     file_name = request.GET.get("file_name")
     user = request.user.username
@@ -999,14 +1001,17 @@ def repo_view_file(request, repo_id):
     if not repo:
         raise Http404
 
-    if access_to_repo(request, repo_id, ''):
+    permission = get_user_permission(request, repo_id)
+    if permission:
         # Get a token to visit file
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   obj_id,
                                                   'view',
                                                   request.user.username)
     else:
-        render_permission_error(request, '无法查看该文件')
+        return render_permission_error(request, '无法查看该文件')
+
+    read_only = True if permission == 'r' else False
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -1092,6 +1097,7 @@ def repo_view_file(request, repo_id):
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
+            'read_only': read_only,
             }, context_instance=RequestContext(request))
 
 def file_comment(request):
@@ -1198,6 +1204,9 @@ def update_file_after_edit(request, repo_id):
     def ok_json():
         return HttpResponse(json.dumps({'status': 'ok'}),
                             content_type=content_type)
+
+    if get_user_permission(request, repo_id) != 'rw':
+        return error_json('Permission denied')
         
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
@@ -1247,6 +1256,9 @@ def repo_file_edit(request, repo_id):
     if request.method == 'POST':
         return update_file_after_edit(request, repo_id)
 
+    if get_user_permission(request, repo_id) != 'rw':
+        return render_permission_error(request, '无法编辑该文件')
+
     path = request.GET.get('p', '/')
     if path[-1] == '/':
         path = path[:-1]
@@ -1268,7 +1280,7 @@ def repo_file_edit(request, repo_id):
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                   'view', request.user.username)
     else:
-        render_permission_error(request, '无法查看该文件')
+        return render_permission_error(request, '无法查看该文件')
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -1330,7 +1342,7 @@ def repo_access_file(request, repo_id, obj_id):
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                   op, request.user.username)
     else:
-        render_permission_error(request, '无法访问文件')
+        return render_permission_error(request, '无法访问文件')
 
     redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
@@ -1812,6 +1824,10 @@ def repo_new_dir(request):
         result['error'] = str(form.errors.values()[0])
         return HttpResponse(json.dumps(result), content_type=content_type)
 
+    if get_user_permission(request, repo_id) != 'rw':
+        result['error'] = 'Permission denied'
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
     try:
@@ -1838,6 +1854,10 @@ def repo_new_file(request):
         user          = request.user.username
     else:
         result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    if get_user_permission(request, repo_id) != 'rw':
+        result['error'] = 'Permission denied'
         return HttpResponse(json.dumps(result), content_type=content_type)
         
     new_file_name = check_filename_with_rename(repo_id, parent_dir,
@@ -1869,6 +1889,10 @@ def repo_rename_file(request):
         user          = request.user.username
     else:
         result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    if get_user_permission(request, repo_id) != 'rw':
+        result['error'] = 'Permission denied'
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     if newname == oldname:
