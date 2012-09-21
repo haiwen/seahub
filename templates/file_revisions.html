@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags avatar_tags %}
+{% load url from future %}
 
 {% block main_panel %}
 <h2>{{ u_filename }} 版本历史</h2>
@@ -46,10 +47,10 @@
 
                 <td>
                     {% if not commit.is_current_version %}
-                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="file-revert op">还原</a>
+                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op">还原</a>
                     {% endif %}
-                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="file-download op">下载</a>
-                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=view" class="file-download op">查看</a>
+                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">下载</a>
+                    <a href="{% url 'repo_view_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}&from=file_history" class="op">查看</a>
                 </td>
             </tr>
             {% endfor %}

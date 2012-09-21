@@ -552,11 +552,8 @@ def repo_history(request, repo_id):
 @login_required
 @ctx_switch_required
 def repo_view_snapshot(request, repo_id):
-    """
-    View repo history.
-    """
     if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, u'无法浏览该同步目录修改历史')
+        return render_permission_error(request, u'无法查看该同步目录镜像')
 
     repo = get_repo(repo_id)
 
@@ -579,8 +576,9 @@ def repo_view_snapshot(request, repo_id):
         current_page = 1
         per_page = 25
 
-    commits_all = get_commits(repo_id, per_page * (current_page -1),
-                              per_page + 1)
+    # don't show the current commit
+    commits_all = get_commits(repo_id, per_page * (current_page -1) + 1,
+                              per_page + 2)
     commits = commits_all[:per_page]
 
     if len(commits_all) == per_page + 1:
@@ -1028,6 +1026,7 @@ def repo_view_file(request, repo_id):
     u_filename = os.path.basename(path)
     filename = urllib2.quote(u_filename.encode('utf-8'))
     comment_open = request.GET.get('comment_open', '')
+    page_from = request.GET.get('from', '')
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -1147,6 +1146,7 @@ def repo_view_file(request, repo_id):
             'contributors': contributors,
             'latest_contributor': latest_contributor,
             'read_only': read_only,
+            'page_from': page_from,
             }, context_instance=RequestContext(request))
 
 def file_comment(request):
@@ -2056,6 +2056,7 @@ def render_file_revisions (request, repo_id):
                 # do not use no file_size, since it's ok to have file_size = 0
                 return render_error(request)
             commit.revision_file_size = file_size
+            commit.file_id = file_id
             if file_id == current_file_id:
                 commit.is_current_version = True
             else:
@@ -2115,11 +2116,11 @@ def file_revisions(request, repo_id):
     op = request.GET.get('op')
     if not op:
         return render_file_revisions(request, repo_id)
-    elif op != 'download' and op != 'view':
+    elif op != 'download':
         return render_error(request)
 
-    commit_id   = request.GET.get('commit')
-    path        = request.GET.get('p')
+    commit_id  = request.GET.get('commit')
+    path = request.GET.get('p')
 
     if not (commit_id and path):
         return render_error(request)
@@ -2148,14 +2149,6 @@ def file_revisions(request, repo_id):
             return handle_download()
         except Exception, e:
             return render_error(request, str(e))
-    elif op == 'view':
-        seafile_id = get_file_revision_id_size (commit_id, path)[0]
-        if not seafile_id:
-            return render_error(request)
-        file_name = os.path.basename(path)
-        url = reverse(repo_view_file, args=[repo_id])
-        url += '?obj_id=%s&commit_id=%s&p=%s' % (seafile_id, commit_id, path)
-        return HttpResponseRedirect(url)
 
 @login_required
 def get_shared_link(request):

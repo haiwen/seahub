@@ -11,21 +11,33 @@
         {% if not view_history %}
         {{ u_filename }}
         {% else %}
-        {{repo.props.name}} 历史浏览<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        {{repo.props.name}}
+        {% if page_from == 'snapshot' %}镜像浏览{% endif %}
+        {% if page_from == 'file_history' %}历史浏览{% endif %}
+        <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
         {% endif %}
     </h2>
     <div class="w100 ovhd">
         <p class="path fleft">
         当前路径：
         {% for name, link in zipped %}
-        {% if not forloop.last %}
-        {% if view_history %}
-        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
-        {% endif %}
-        {% else %}
-        {{ name }}
-        {% endif %}
+            {% if not forloop.last %}
+                {% if view_history %}
+                    {% if page_from == 'snapshot' %}
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    {% else %}
+                    {{ name }} /
+                    {% endif %}
+                {% else %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+                {% endif %}
+            {% else %}
+                {% if view_history and page_from == 'file_history' %}
+                <a href="{% url 'file_revisions' repo.id %}?p={{ link|urlencode }}" title="返回文件历史列表">{{ name }}</a>
+                {% else %}
+                {{ name }}
+                {% endif %}
+            {% endif %}
         {% endfor %}
         </p>
 
