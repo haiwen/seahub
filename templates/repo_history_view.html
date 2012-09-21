@@ -6,7 +6,7 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}} 历史镜像<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
-        <button data="{{ SITE_ROOT }}repo/history/{{ repo.id }}/" class="fright" id="back-to-history-list">返回历史列表</button>
+        <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">返回镜像列表</button>
     </div>
 
     <div id="repo-latest-commit">
@@ -77,5 +77,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('#back').click(function() {
+    location.href = $(this).attr('data');
+});
 </script>
 {% endblock %}

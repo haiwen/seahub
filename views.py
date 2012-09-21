@@ -550,6 +550,55 @@ def repo_history(request, repo_id):
             }, context_instance=RequestContext(request))
 
 @login_required
+@ctx_switch_required
+def repo_view_snapshot(request, repo_id):
+    """
+    View repo history.
+    """
+    if not access_to_repo(request, repo_id, ''):
+        return render_permission_error(request, u'无法浏览该同步目录修改历史')
+
+    repo = get_repo(repo_id)
+
+    password_set = False
+    if repo.props.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return render_error(request, e.msg)
+
+    if repo.props.encrypted and not password_set:
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    commits_all = get_commits(repo_id, per_page * (current_page -1),
+                              per_page + 1)
+    commits = commits_all[:per_page]
+
+    if len(commits_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response('repo_view_snapshot.html', {
+            "repo": repo,
+            "commits": commits,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            }, context_instance=RequestContext(request))
+
+@login_required
 def repo_history_revert(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:

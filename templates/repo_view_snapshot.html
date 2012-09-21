@@ -4,18 +4,18 @@
 
 {% block main_panel %}
 <div class="w100 ovhd">
-    <h2 class="fleft">{{repo.props.name}} 修改历史</h2>
-    <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="back">返回同步目录</button>
+    <h2 class="fleft">{{repo.props.name}} 镜像查看</h2>
+    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="history-back-to-repo">返回修改历史</button>
 </div>
 
-<p class="tip">Tip：在每次修改后会生成一个镜像，记录修改后的目录状态。<a href="{% url 'repo_view_snapshot' repo.props.id %}">查看镜像</a></p>
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
         <table class="commit-list">
             <tr>
-                <th width="20%" class="time">修改时间</th>
-                <th width="20%">修改者</th>
-                <th width="60%">描述</th>
+                <th width="15%" class="time">生成时间</th>
+                <th width="15%">修改者</th>
+                <th width="55%">描述</th>
+                <th width="15%">操作</th>
             </tr>
 
             {% for commit in commits %}
@@ -33,6 +33,14 @@
                     {{ commit.props.desc|translate_commit_desc }}
                     {% if page_next or not forloop.last %}
                     <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                    {% endif %}
+                </td>
+                <td>
+		            {% if forloop.first and current_page == 1 %}
+                    这是当前版本
+                    {% else %}
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">查看</a>
+                    <a href="#" data="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
                     {% endif %}
                 </td>
             </tr>
@@ -70,8 +78,9 @@
 {% block extra_script %}
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
-    $('#back').click(function() {
+    $('#history-back-to-repo').click(function() {
         location.href = $(this).attr('data');
     });
+    addConfirmTo($(".repo-revert"), '确定要还原该目录？');
 </script>
 {% endblock %}
