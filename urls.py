@@ -27,7 +27,6 @@ urlpatterns = patterns('',
     (r'^$', root),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
-    url(r'^home/public/$', public_home, name='public_home'),
     url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
     url(r'^home/public/reply/new/$', innerpub_msg_reply_new, name='innerpub_msg_reply_new'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
@@ -92,7 +91,6 @@ urlpatterns = patterns('',
     url(r'^groups/', GroupListView.as_view(), name='group_list'),
     url(r'^deptgroups/', DeptGroupListView.as_view(), name='dept_group_list'),
     url(r'^projgroups/', ProjGroupListView.as_view(), name='proj_group_list'),
-    (r'^organizations/', include('seahub.organizations.urls')),
     (r'^profile/', include('seahub.profile.urls')),
 
     ### SeaHub admin ###                       
@@ -107,5 +105,18 @@ if settings.DEBUG:
     media_url = settings.MEDIA_URL.strip('/')
     urlpatterns += patterns('',
         (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
+
+try:
+    from settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
+if CLOUD_MODE:
+    urlpatterns += patterns('',
+        (r'^organizations/', include('seahub.organizations.urls')),
+    )
+else:
+    urlpatterns += patterns('',
+        url(r'^home/public/$', public_home, name='public_home'),
     )
 

@@ -8,7 +8,7 @@
     </li>
     {% if not request.cloud_mode %}
     <li>
-        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>公共页面</a>
+        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>公共资料</a>
     </li>
     {% endif %}
     {% if business_mode %}
@@ -20,7 +20,7 @@
     </li>
     {% else %}
     <li>
-        <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>小组</a>
+        <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>协作小组</a>
     </li>
     {% endif %}
     <li>
