@@ -5,7 +5,7 @@
 {% block main_panel %}
 <div class="w100 ovhd">
     <h2 class="fleft">{{repo.props.name}} 镜像查看</h2>
-    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="history-back-to-repo">返回修改历史</button>
+    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="back">返回修改历史</button>
 </div>
 
 <div class="commit-list-outer-container">
@@ -78,7 +78,7 @@
 {% block extra_script %}
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
-    $('#history-back-to-repo').click(function() {
+    $('#back').click(function() {
         location.href = $(this).attr('data');
     });
     addConfirmTo($(".repo-revert"), '确定要还原该目录？');

@@ -835,8 +835,8 @@ ul.with-bg li {
     margin-top:8px;
 }
 /* repo-history */
-#history-back-to-repo {
-    margin-top:5px;
+#back {
+    margin-top:3px;
 }
 .commit-list {
     margin:0 0 20px;
