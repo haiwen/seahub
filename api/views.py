@@ -78,7 +78,6 @@ HTTP_ERRORS = {
 
 def api_error(request, code='499', msg=None):
     err_resp = { 'error_msg': msg if msg is not None else HTTP_ERRORS[code] }
-    print "===============,", code, err_resp
     return HttpResponse(json.dumps(err_resp), status=code,
                         content_type=json_content_type)
 
