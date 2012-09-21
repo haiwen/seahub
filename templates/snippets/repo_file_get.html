@@ -36,10 +36,8 @@
     }
 {% endif %}
 
-{% if filetype == 'PDF' %}
-if (!$.browser.mozilla && !$.browser.safari) {
-    $('#file-view').html('<p>在线查看：请使用firefox 或 chrome。</p>').addClass('file-view-tip');
-} else {
+{% if filetype == 'PDF' and not pdf_use_flash %}
+    // Use pdf.js to view pdf in firefox/chrome
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
     $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
     $('#pdf-op-bar').append($('#file-op').html());
@@ -89,7 +87,6 @@ if (!$.browser.mozilla && !$.browser.safari) {
             window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
         });
     });
-}
 {% endif %}
 
 {% if filetype == 'Markdown' %}
@@ -108,7 +105,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
     $('#file-view').html('<p>该类型文件无法在线查看。</p>').addClass('file-view-tip');
 {% endif %}
 
-{% if filetype == 'Document' %}
+{% if filetype == 'Document' or filetype == 'PDF' and pdf_use_flash %}
   {% if err %}
   $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
   {% else %}
@@ -144,7 +141,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
           $('#file-view').children('object').prepend('<param name="wmode" value="opaque">'); //allow popup to show on top of the flash
   }
   
-  {% if document_swf_exists %}
+  {% if swf_exists %}
   load_flexpaper();
   {% else %}
   function check_status () {
@@ -176,7 +173,7 @@ if (!$.browser.mozilla && !$.browser.safari) {
           },
           error: function(xhr, ajaxOptions, thrownError) {
               var jsonVal = jQuery.parseJSON(xhr.responseText);
-              $('#file-view').html('<p class="error">' + jsonVal[0]['error'] + '</p>');
+              $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
           }
       });
   }

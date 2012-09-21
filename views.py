@@ -1025,11 +1025,16 @@ def repo_view_file(request, repo_id):
     # get file content
     err = ''
     file_content = ''
-    document_swf_exists = False
+    swf_exists = False
+    pdf_use_flash = False
     if filetype == 'Text' or filetype == 'Markdown':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
     elif filetype == 'Document':
-        err, document_swf_exists = document_prepare(raw_path, obj_id, fileext)
+        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+    elif filetype == 'PDF':
+        pdf_use_flash = use_flash_for_pdf(request)
+        if pdf_use_flash:
+            err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -1093,7 +1098,8 @@ def repo_view_file(request, repo_id):
             'groups': groups,
             'comments': comments,
             'comment_open':comment_open,
-            'document_swf_exists': document_swf_exists,
+            'swf_exists': swf_exists,
+            'pdf_use_flash': pdf_use_flash,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
@@ -2192,8 +2198,16 @@ def view_shared_file(request, token):
     # get file content
     err = ''
     file_content = ''
+    swf_exists = False
+    pdf_use_flash = False
     if filetype == 'Text' or filetype == 'Markdown':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+    elif filetype == 'Document':
+        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+    elif filetype == 'PDF':
+        pdf_use_flash = use_flash_for_pdf(request)
+        if pdf_use_flash:
+            err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -2213,6 +2227,9 @@ def view_shared_file(request, token):
             'username': username,
             'err': err,
             'file_content': file_content,
+            'swf_exists': swf_exists,
+            'pdf_use_flash': pdf_use_flash,
+            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -2284,7 +2301,7 @@ def send_shared_link(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
-def document_prepare(raw_path, obj_id, doctype):
+def flash_prepare(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
     data = {'doctype': doctype,
             'file_id': obj_id,
@@ -2300,3 +2317,16 @@ def document_prepare(raw_path, obj_id, doctype):
             return ret_dict['error'], False
         else:
             return None, ret_dict['exists']
+
+def use_flash_for_pdf(request):
+    """Decide whether to use flash to view pdf file, according to the current
+    browser type and version.
+
+    """
+    ua = request.META.get('HTTP_USER_AGENT', '')
+    if 'MSIE' in ua:
+        return True
+    else:
+        return False
+    
+
