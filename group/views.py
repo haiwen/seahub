@@ -601,7 +601,7 @@ def group_remove_member(request, group_id, user_name):
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
 
-def group_share_repo(request, repo_id, group_id, from_email):
+def group_share_repo(request, repo_id, group_id, from_email, permission):
     """
     Share a repo to a group.
     
@@ -617,7 +617,7 @@ def group_share_repo(request, repo_id, group_id, from_email):
     if not joined:
         return render_error(request, u'共享失败:未加入该小组')
     
-    if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, 'rw') != 0:
+    if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, permission) != 0:
         return render_error(request, u'共享失败:内部错误')
 
 def group_unshare_repo(request, repo_id, group_id, from_email):

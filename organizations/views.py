@@ -603,10 +603,19 @@ def org_shareadmin(request, url_prefix):
         if not group:
             continue
         repo.props.shared_email = group.props.group_name
+        repo.props.share_permission = group_repo.props.permission
         repo.gid = group_id
         
         out_repos.append(repo)
-    
+
+    for repo in out_repos:
+        if repo.props.share_permission == 'rw':
+            repo.share_permission = '可读写'
+        elif repo.props.share_permission == 'r':
+            repo.share_permission = '只可浏览'
+        else:
+            repo.share_permission = ''
+
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
     o_fileshares = []           # shared files in org repos

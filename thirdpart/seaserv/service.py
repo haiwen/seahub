@@ -582,8 +582,8 @@ def check_permission(repo_id, user):
     try:
         ret = seafserv_threaded_rpc.check_permission(repo_id, user)
     except SearpcError:
-        ret = -1
-    return True if ret == 0 else False
+        ret = ""
+    return ret
 
 def is_passwd_set(repo_id, user):
     try:

@@ -140,7 +140,7 @@ def calculate_repo_info(repo_list, username):
             repo.password_need = None
 
 def can_access_repo(request, repo_id):
-    if check_permission(repo_id, request.user.username) < 0:
+    if not check_permission(repo_id, request.user.username):
         return False
     return True
 
