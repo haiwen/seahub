@@ -756,8 +756,8 @@ ul.with-bg li {
 #repo-download-btn {
     font-size:14px;
     height:26px;
-    padding:0 5px 0 27px;
-    background-image: url('../img/download-20.png');
+    padding:0 5px 0 20px;
+    background-image: url('../img/download-16.png');
 }
 #repo-latest-commit,
 #file-commit-info {
