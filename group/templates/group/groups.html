@@ -2,14 +2,10 @@
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<!-- 操作 -->
-{% include "group/groups_left_panel.html" %}
-{% endblock %}
 
 {% block right_panel %}
-<!-- 我的小组 -->
-<h3>我的小组</h3>
+<!-- 协作小组 -->
+<h3>协作小组</h3>
 {% include "group/groups_right_panel.html" %}
 {% endblock %}
 

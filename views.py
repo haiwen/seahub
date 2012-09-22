@@ -773,6 +773,9 @@ def myhome(request):
     # Get all personal groups used in autocomplete.
     groups = get_personal_groups(-1, -1)
 
+    # Get all personal groups I joined.
+    joined_groups = get_personal_groups_by_user(request.user.username)
+
     # get nickname
     if not Profile.objects.filter(user=request.user.username):
         nickname = ''
@@ -788,6 +791,7 @@ def myhome(request):
             "in_repos": in_repos,
             "contacts": contacts,
             "groups": groups,
+            "joined_groups": joined_groups,
             "notes": notes,
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,

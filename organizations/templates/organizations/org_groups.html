@@ -3,15 +3,8 @@
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a id="group-add" href="#">添加小组</a></li>
-</ul>
-{% endblock %}
 
 {% block right_panel %}
-
 <h3>{{ org.org_name }} 的小组</h3>
 {% include "group/groups_right_panel.html" %}
 {% endblock %}

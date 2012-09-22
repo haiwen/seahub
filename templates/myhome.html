@@ -40,7 +40,9 @@
 <p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
 
 <!-- 我的小组 -->
+{% with groups=joined_groups %}
 {% include "snippets/my_groups.html" %}
+{% endwith %}
 {% endblock %}
 
 {% block right_panel %}
