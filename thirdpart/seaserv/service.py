@@ -119,12 +119,7 @@ def get_personal_groups_by_user(email):
     except SearpcError:
         return []
 
-    personal_groups = []
-    for group in groups_all:
-        if not is_org_group(group.id):
-            personal_groups.append(group)
-            
-            return personal_groups
+    return [ x for x in groups_all if not is_org_group(x.id) ]
     
 # group user
 def is_group_user(group_id, user):
@@ -187,12 +182,7 @@ def get_org_groups_by_user(org_id, user):
     except SearpcError:
         return []
 
-    org_groups = []
-    for group in groups_all:
-        if org_id == ccnet_threaded_rpc.get_org_id_by_group(group.id):
-            org_groups.append(group)
-            
-    return org_groups
+    return [ x for x in groups_all if org_id == get_org_id_by_group(x.id) ]
     
 # org
 def create_org(org_name, url_prefix, username):
