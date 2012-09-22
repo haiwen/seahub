@@ -18,8 +18,9 @@ from django.views.generic.edit import BaseFormView, FormMixin
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
-    get_personal_groups, get_group, get_group_members, create_org_repo, \
-    get_org_group_repos, get_org_groups_by_user
+    get_personal_groups_by_user, get_group, get_group_members, \
+    get_personal_groups, create_org_repo, get_org_group_repos, \
+    get_org_groups_by_user
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
@@ -98,68 +99,68 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
             return FormMixin.form_invalid(self, form)
 
     def get_context_data(self, **kwargs):
-        kwargs['groups'] = get_personal_groups(self.get_username())
+        kwargs['groups'] = get_personal_groups(-1, -1)
         return kwargs
 
-class DeptGroupListView(GroupListView):
-    template_name = 'group/dept_groups.html'
+# class DeptGroupListView(GroupListView):
+#     template_name = 'group/dept_groups.html'
 
-    def form_valid(self, form):
-        group_name = form.cleaned_data['group_name']
-        username = self.get_username()
-        try:
-            group_id = ccnet_threaded_rpc.create_group(
-                group_name.encode('utf-8'), username)
-            bg = BusinessGroup()
-            bg.group_id = group_id
-            bg.group_type = 'dept'
-            bg.save()
-        except SearpcError, e:
-            result = {}
-            result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result),
-                                content_type='application/json; charset=utf-8')
+#     def form_valid(self, form):
+#         group_name = form.cleaned_data['group_name']
+#         username = self.get_username()
+#         try:
+#             group_id = ccnet_threaded_rpc.create_group(
+#                 group_name.encode('utf-8'), username)
+#             bg = BusinessGroup()
+#             bg.group_id = group_id
+#             bg.group_type = 'dept'
+#             bg.save()
+#         except SearpcError, e:
+#             result = {}
+#             result['error'] = _(e.msg)
+#             return HttpResponse(json.dumps(result),
+#                                 content_type='application/json; charset=utf-8')
         
-        if self.request.is_ajax():
-            return self.ajax_form_valid()
-        else:
-            return FormMixin.form_valid(self, form)
+#         if self.request.is_ajax():
+#             return self.ajax_form_valid()
+#         else:
+#             return FormMixin.form_valid(self, form)
 
-    def get_context_data(self, **kwargs):
-        groups = [ g for g in get_personal_groups(self.get_username()) \
-                       if self.is_dept_group(g.id)]
-        kwargs['groups'] = groups
-        return kwargs
+#     def get_context_data(self, **kwargs):
+#         groups = [ g for g in get_personal_groups_by_user(self.get_username()) \
+#                        if self.is_dept_group(g.id)]
+#         kwargs['groups'] = groups
+#         return kwargs
 
-class ProjGroupListView(GroupListView):
-    template_name = 'group/proj_groups.html'
+# class ProjGroupListView(GroupListView):
+#     template_name = 'group/proj_groups.html'
 
-    def form_valid(self, form):
-        group_name = form.cleaned_data['group_name']
-        username = self.get_username()
-        try:
-            group_id = ccnet_threaded_rpc.create_group(
-                group_name.encode('utf-8'), username)
-            bg = BusinessGroup()
-            bg.group_id = group_id
-            bg.group_type = 'proj'
-            bg.save()
-        except SearpcError, e:
-            result = {}
-            result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result),
-                                content_type='application/json; charset=utf-8')
+#     def form_valid(self, form):
+#         group_name = form.cleaned_data['group_name']
+#         username = self.get_username()
+#         try:
+#             group_id = ccnet_threaded_rpc.create_group(
+#                 group_name.encode('utf-8'), username)
+#             bg = BusinessGroup()
+#             bg.group_id = group_id
+#             bg.group_type = 'proj'
+#             bg.save()
+#         except SearpcError, e:
+#             result = {}
+#             result['error'] = _(e.msg)
+#             return HttpResponse(json.dumps(result),
+#                                 content_type='application/json; charset=utf-8')
         
-        if self.request.is_ajax():
-            return self.ajax_form_valid()
-        else:
-            return FormMixin.form_valid(self, form)
+#         if self.request.is_ajax():
+#             return self.ajax_form_valid()
+#         else:
+#             return FormMixin.form_valid(self, form)
 
-    def get_context_data(self, **kwargs):
-        groups = [ g for g in get_personal_groups(self.get_username()) \
-                       if self.is_proj_group(g.id)]
-        kwargs['groups'] = groups
-        return kwargs
+#     def get_context_data(self, **kwargs):
+#         groups = [ g for g in get_personal_groups_by_user(self.get_username()) \
+#                        if self.is_proj_group(g.id)]
+#         kwargs['groups'] = groups
+#         return kwargs
 
 @login_required
 def group_remove(request, group_id):
@@ -611,12 +612,6 @@ def group_share_repo(request, repo_id, group_id, from_email, permission):
     if not group:
         return render_error(request, u'共享失败:小组不存在')
     
-    # Check whether user belongs to the group.
-    joined = is_group_user(int(group.id), request.user.username)
-
-    if not joined:
-        return render_error(request, u'共享失败:未加入该小组')
-    
     if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, permission) != 0:
         return render_error(request, u'共享失败:内部错误')
 
@@ -629,12 +624,6 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     group = get_group(group_id)
     if not group:
         return render_error(request, u'取消共享失败:小组不存在')
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id, request.user.username)
-
-    if not joined:
-        return render_error(request, u'取消共享失败:未加入该小组')
 
     # Check whether user is group staff or the one share the repo
     if not check_group_staff(group_id, from_email) and \
@@ -683,7 +672,7 @@ def group_recommend(request):
                 groups = get_org_groups_by_user(org_id, username)
 
             else:
-                groups = get_personal_groups(request.user.username)
+                groups = get_personal_groups_by_user(request.user.username)
             
             find = False
             for group in groups:

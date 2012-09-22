@@ -6,7 +6,7 @@ $(function() {
     {% endfor %}
 
     {% for group in groups %}
-    share_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
+    share_list.push('{{ group.props.group_name }}');
     {% endfor %}
 
     $(".repo-share-btn").click(function() {

@@ -32,7 +32,7 @@ from pysearpc import SearpcError
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
     get_repo, get_commits, get_branches, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, \
-    check_group_staff, check_permission, get_personal_groups, get_group_repos
+    check_group_staff, check_permission, get_personal_groups_by_user, get_group_repos
 
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
@@ -290,7 +290,7 @@ class ReposView(ResponseMixin, View):
                 }
             repos_json.append(repo)
 
-        groups = get_personal_groups(email)
+        groups = get_personal_groups_by_user(email)
         for group in groups:
             g_repos = get_group_repos(group.id, email)
             calculate_repo_info (g_repos, email)

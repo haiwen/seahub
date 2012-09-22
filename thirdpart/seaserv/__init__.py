@@ -4,7 +4,8 @@ from service import ccnet_rpc, monitor_rpc, seafserv_rpc, \
     seafserv_threaded_rpc, ccnet_threaded_rpc
 from service import send_command
 from service import get_emailusers
-from service import get_org_groups, get_personal_groups, get_group_repoids, \
+from service import get_org_groups, get_personal_groups_by_user, \
+    get_group_repoids, get_personal_groups, \
     check_group_staff, remove_group_user, get_group, get_org_id_by_group, \
     get_group_members, get_shared_groups_by_repo, is_group_user, \
     get_org_group_repos, get_group_repos, get_org_groups_by_user, is_org_group,\

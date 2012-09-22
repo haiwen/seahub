@@ -33,8 +33,9 @@ from auth.tokens import default_token_generator
 from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_inner_pub_repo, \
-    check_group_staff, get_personal_groups, is_repo_owner, del_org_group_repo,\
+    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
+    check_group_staff, get_personal_groups_by_user, is_inner_pub_repo, \
+    del_org_group_repo, get_personal_groups, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
@@ -758,8 +759,6 @@ def myhome(request):
     grpmsg_reply_list = []
     orgmsg_list = []
     notes = UserNotification.objects.filter(to_user=request.user.username)
-    new_innerpub_msg = False
-    innerpubmsg_reply_list = []
     for n in notes:
         if n.msg_type == 'group_msg':
             grp = get_group(n.detail)
@@ -770,13 +769,9 @@ def myhome(request):
             grpmsg_reply_list.append(n.detail)
         elif n.msg_type == 'org_join_msg':
             orgmsg_list.append(n.detail)
-        elif n.msg_type == 'innerpub_msg':
-            new_innerpub_msg = True
-        elif n.msg_type == 'innerpubmsg_reply':
-            innerpubmsg_reply_list.append(n.detail)
 
-    # my groups
-    groups = get_personal_groups(email)
+    # Get all personal groups used in autocomplete.
+    groups = get_personal_groups(-1, -1)
 
     # get nickname
     if not Profile.objects.filter(user=request.user.username):
@@ -784,10 +779,6 @@ def myhome(request):
     else:
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
-
-    # ctx_dict = {'base_template': 'myhome_base.html',
-    #             'org_dict': None}
-    # set_cur_ctx(request, ctx_dict)
 
     return render_to_response('myhome.html', {
             "myname": email,
@@ -801,8 +792,6 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
-            "new_innerpub_msg": new_innerpub_msg,
-            "innerpubmsg_reply_list": innerpubmsg_reply_list,
             }, context_instance=RequestContext(request))
 
 @login_required

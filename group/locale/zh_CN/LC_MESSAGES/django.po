@@ -20,11 +20,11 @@ msgstr ""
 
 #: error_msg.py:7
 msgid "The group has already created"
-msgstr "该小组已经存在。"
+msgstr "名称重复，请重新输入。"
 
 #: error_msg.py:8
 msgid "Failed to create group"
-msgstr "创建小组失败。"
+msgstr "创建失败。"
 
 #: error_msg.py:11
 msgid "The group has already created in this org."
