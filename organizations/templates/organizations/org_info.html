@@ -49,7 +49,7 @@
         {% endif %}
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/sync-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="同步到本地" alt="同步" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn vh" title="下载到本地" alt="下载" />
             <img src="{{ MEDIA_URL }}img/delete-20.png" data="{% url 'unset_org_inner_pub_repo' org.url_prefix repo.id %}" class="unshare-btn vh" title="取消共享" alt="取消共享" />
         </td>
     </tr>
