@@ -6,7 +6,7 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}} 历史镜像<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
-        <button data="{{ SITE_ROOT }}repo/history/{{ repo.id }}/" class="fright" id="back-to-history-list">返回历史列表</button>
+        <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">返回镜像列表</button>
     </div>
 
     <div id="repo-latest-commit">
@@ -62,7 +62,7 @@
                 {% for dirent in file_list %}
                 <tr>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
-                    <td><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
+                    <td><a class="op" href="{% url 'repo_view_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=snapshot">{{ dirent.props.obj_name }}</a></td>              
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
                     </td>
@@ -77,5 +77,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('#back').click(function() {
+    location.href = $(this).attr('data');
+});
 </script>
 {% endblock %}

@@ -7,25 +7,42 @@
 {% endblock %}
 
 {% block main_panel %}
-    <h2>
-        {% if not view_history %}
-        {{ u_filename }}
-        {% else %}
-        {{repo.props.name}} 历史浏览<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+    {% if not view_history %}
+    <h2>{{ u_filename }}</h2>
+    {% else %}
+        {% if page_from == 'snapshot' %}
+        <h2>
+            {{repo.props.name}} 镜像浏览
+            <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        </h2>
         {% endif %}
-    </h2>
+        {% if page_from == 'file_history' %}
+        <div class="w100 ovhd">
+            <h2 class="fleft">
+                {{repo.props.name}} 历史浏览
+                <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+            </h2>
+            <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">返回文件版本列表</button>
+        </div>
+        {% endif %}
+    {% endif %}
     <div class="w100 ovhd">
         <p class="path fleft">
         当前路径：
         {% for name, link in zipped %}
-        {% if not forloop.last %}
-        {% if view_history %}
-        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                     {% else %}
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
-        {% endif %}
-        {% else %}
-        {{ name }}
-        {% endif %}
+            {% if not forloop.last %}
+                {% if view_history %}
+                    {% if page_from == 'snapshot' %}
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    {% else %}
+                    {{ name }} /
+                    {% endif %}
+                {% else %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+                {% endif %}
+            {% else %}
+                {{ name }}
+            {% endif %}
         {% endfor %}
         </p>
 
@@ -148,11 +165,8 @@
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
-$('#history').click(function() {
-    location.href = $(this).attr('data');
-});
 {% if not view_history %}
-$('#edit').click(function() {
+$('#edit, #history').click(function() {
     location.href = $(this).attr('data');
 });
 function showLink() {
@@ -325,8 +339,6 @@ $('#file-comment-form .submit').click(function() {
 });
 {% endif %}
 
-{% endif %}
-
 function send_open_local_file_request(path) {
     var callback = 'xx';
     $.ajax({
@@ -369,13 +381,6 @@ $('#download-repo').click(function() {
     location.href = $(this).attr('data');
 });
 
-// When user clicks 'open local file':
-//
-// - First, check client version to determine is this operation supported by client
-// - second check whether repo exists on local machine, then:
-//   - if exists, send an open local file requst
-//   - if not exits, redirect to repo download page
-
 $('#open-local').click(function () {
     var path = $(this).attr('data');
     var local_applet_running = false;
@@ -408,5 +413,13 @@ $('#open-local').click(function () {
         }
     }, 2000);
 });
+//'not view_history' ends here
+{% endif %}
+
+{% if view_history and page_from == 'file_history' %}
+$('#back').click(function() {
+    location.href = $(this).attr('data');
+});
+{% endif %}
 </script>
 {% endblock %}
