@@ -69,7 +69,11 @@
     {% endif %}
 
     <div id="file">
+        {% if filetype == 'PDF' %}
+        <div id="file-op" class="hide">
+        {% else %}
         <div id="file-op">
+        {% endif %}
             {% if not view_history and request.user.is_authenticated %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
               {% if filetype == 'Text' or filetype == 'Markdown' %}

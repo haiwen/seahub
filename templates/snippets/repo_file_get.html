@@ -39,8 +39,12 @@
 {% if filetype == 'PDF' and not pdf_use_flash %}
     // Use pdf.js to view pdf in firefox/chrome
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-    $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin-top:20px;" /><div id="pdf-op-bar" class="vh"><button id="prev">上一页</button><button id="next">下一页</button><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><button id="full-screen">全屏</button></div><canvas data="{{ raw_path }}" id="pdf-view" class="vh"></canvas></div>').css({'text-align':'center'});
-    $('#pdf-op-bar').append($('#file-op').html());
+    $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">上一页</button></span><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><span id="pdf-page-right"><button id="next" style="margin-right:15px;">下一页</button><button id="full-screen">全屏</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
+    $('#pdf-page-right').append($('#file-op').html());
+    $('#file-op').html('');
+    $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
+    $('#pdf-page-left').css({'text-align':'right', 'width': $('#pdf-page-right').width()});
+    $('#pdf-op-bar').removeClass('vh');
     var seahub_getPage = function (pdf, page_number) {
         pdf.getPage(page_number).then(function(page) {
             var scale = 1.5;
@@ -60,8 +64,8 @@
         $('#page-nums').html(pdf.numPages);
         $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
         seahub_getPage(pdf, 1);
-        $('#file-op, #pdf-loading').addClass('hide');
-        $('#pdf-op-bar, #pdf-view').removeClass('vh');
+        $('#pdf-loading').addClass('hide');
+        $('#pdf-view').removeClass('hide');
 
         $('#page-number').change(function() {
             seahub_getPage(pdf, $(this).val());

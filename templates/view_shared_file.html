@@ -5,8 +5,14 @@
     <h2>{{ file_name }}</h2>
     <p class="file-share-from">共享者：{{ username }}</p>
     <div id="file">
+        {% if filetype == 'PDF' %}
+        <div id="file-op" class="hide">
+        {% else %}
         <div id="file-op">
+        {% endif %}
+            {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">原始文件</button>
+            {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">下载</button>
         </div>
         <div id="file-view">
