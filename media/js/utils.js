@@ -58,7 +58,10 @@ function addAutocomplete(ele_id, container_id, data) {
             delay: 100,
             minLength: 0,
             source: function(request, response) {
-                response($.ui.autocomplete.filter(data, extractLast(request.term)));
+                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(extractLast(request.term)), "i");
+                    response($.grep(data, function(value) {
+                                return matcher.test(value.value);
+                            }));
             },
             focus: function() {
                 return false;
@@ -66,7 +69,7 @@ function addAutocomplete(ele_id, container_id, data) {
             select: function(event, ui) {
                 var terms = split(this.value);
                 terms.pop();
-                terms.push(ui.item.value);
+                terms.push(ui.item.label);
                 terms.push("");
                 this.value = terms.join(", ");
                 return false;

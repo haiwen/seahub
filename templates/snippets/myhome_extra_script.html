@@ -1,12 +1,15 @@
+{% load seahub_tags avatar_tags %}
 $(function() {
     //repo-share-form share-list autocomplete
-    var share_list = [];
+    var share_list = [], group_name, group_name_py;
     {% for contact in contacts %}
     share_list.push('{{ contact.contact_email }}');
     {% endfor %}
 
     {% for group in groups %}
-    share_list.push('{{ group.props.group_name }}');
+    group_name = '{{ group.group_name }}';
+    group_name_py = '{{ group.group_name|char2pinyin }}'
+    share_list.push({value:group_name + group_name_py, label:group_name});
     {% endfor %}
 
     $(".repo-share-btn").click(function() {
