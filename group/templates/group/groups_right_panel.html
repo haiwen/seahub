@@ -1,7 +1,28 @@
 {% load seahub_tags group_avatar_tags %}
 {% load url from future %}
 
+<h3>我的群组</h3>
 <button id="group-add">添加群组</button>
+{% if joined_groups %}
+<ul class="group-list w100 ovhd">
+    {% for group in joined_groups %}
+    <li class="group fleft">
+    <div class="pic fleft">
+        <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
+            <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
+        </a>
+    </div>
+    <div class="txt fright">
+        <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
+        <p><span class="item-name">创建者：</span>{{ group.props.creator_name }}</p>
+        <p><span class="item-name">创建时间：</span>{{ group.props.timestamp|tsstr_sec }}</p>
+    </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h3>所有群组</h3>
 {% if groups %}
 <ul class="group-list w100 ovhd">
     {% for group in groups %}

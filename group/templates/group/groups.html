@@ -3,9 +3,14 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
+{% block left_panel %}
+<h3>小提示</h3>
+<div>
+  <p>群组创建后，就可以往里面共享资料，邀请他人一起来协同维护这些资料。</p>
+</div>
+{% endblock %}
+
 {% block right_panel %}
-<!-- 群组 -->
-<h3>群组</h3>
 {% include "group/groups_right_panel.html" %}
 {% endblock %}
 

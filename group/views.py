@@ -99,6 +99,9 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
             return FormMixin.form_invalid(self, form)
 
     def get_context_data(self, **kwargs):
+        # Get all personal groups I joined.
+        kwargs['joined_groups'] = get_personal_groups_by_user(self.get_username())
+        # Get all groups including others'.
         kwargs['groups'] = get_personal_groups(-1, -1)
         return kwargs
 
