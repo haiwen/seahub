@@ -29,5 +29,10 @@
     <li>
         <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>通讯录</a>
     </li>
+    {% if show_events %}
+    <li>
+        <a href="{{ SITE_ROOT }}events/">事件流</a>
+    </li>
+    {% endif %}
 </ul>
 {% endblock %}

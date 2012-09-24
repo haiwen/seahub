@@ -12,6 +12,12 @@ try:
 except ImportError:
     BUSINESS_MODE = False
 
+try:
+    from settings import EVENTS_CONFIG_FILE
+    SHOW_EVENTS = True
+except ImportError:
+    SHOW_EVENTS = False
+
 def base(request):
     """
     Add seahub base configure to the context.
@@ -32,5 +38,6 @@ def base(request):
         'cloud_mode': request.cloud_mode,
         'org': org,
         'base_template': base_template,
+        'show_events': SHOW_EVENTS,
         }
 

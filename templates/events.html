@@ -1,0 +1,64 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags%}
+{% load url from future %}
+
+{% block extra_style %}
+<style type="text/css">
+
+.event-item {
+    padding-top: 5px;
+    margin-top: 10px;
+    border-top: 1px dashed gray;
+}
+
+#events {
+    width: 600px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block main_panel %}
+<h2>最近事件</h2>
+<ul id="events">
+{% for ev in events %}
+    <li class="event-item">
+    {% if ev.etype == 'repo-update' %}
+        {% with author=ev.commit.creator_name commit=ev.commit repo=ev.repo %}
+        {% avatar author 24 %}<a href="{% url 'user_profile' author %}" class="name" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+        在 {{ commit.ctime|translate_commit_time }} 更新了目录
+        <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a>
+        <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+        {% endwith %}
+    {% endif %}
+        
+    {% if ev.etype == 'repo-create' %}
+        {% with author=ev.creator repo_id=ev.repo_id repo_name=ev.repo_name %}
+        {% avatar author 24 %}<a href="{% url 'user_profile' author %}" class="name" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+        在 {{ ev.timestamp|translate_commit_time }} 创建了目录
+        <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a>
+        {% endwith %}
+    {% endif %}
+
+    {% if ev.etype == 'repo-delete' %}
+        {% with author=ev.repo_owner repo_name=ev.repo_name %}
+        {% avatar author 24 %}<a href="{% url 'user_profile' author %}" class="name" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+        在 {{ ev.timestamp|translate_commit_time }} 删除了目录
+        <span>{{ repo_name }}</span>
+        {% endwith %}
+    {% endif %}
+    </li>
+{% endfor %}
+</ul>
+<div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    {% include 'snippets/list_commit_detail.html' %}
+    $('#back').click(function() {
+        location.href = $(this).attr('data');
+    });
+</script>
+{% endblock %}
