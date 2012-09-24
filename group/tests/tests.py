@@ -119,7 +119,7 @@ class GroupRecommendTest(GroupTestCase):
 
         self.assertEquals(len(response.context['messages']), 1)
         for message in response.context['messages']:
-            self.assert_('请检查小组名称' in str(message))
+            self.assert_('请检查群组名称' in str(message))
             
         
     def test_recommend_file_to_unparticipated_group(self):
@@ -133,4 +133,4 @@ class GroupRecommendTest(GroupTestCase):
 
         self.assertEquals(len(response.context['messages']), 1)
         for message in response.context['messages']:
-            self.assert_('请检查是否参加了该小组' in str(message))
+            self.assert_('请检查是否参加了该群组' in str(message))

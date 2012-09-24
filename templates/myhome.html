@@ -20,7 +20,7 @@
 <ul>
 {% if grpmsg_list %}
 <li>
-    小组
+    群组
     {% for grp in grpmsg_list %}
     <a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }}</a> 
     {% endfor %}
@@ -28,7 +28,7 @@
 </li>
 {% endif %}
 {% if grpmsg_reply_list %}
-<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条小组留言有新回复</a></li>
+<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条群组留言有新回复</a></li>
 {% endif %}
 {% if orgmsg_list %}
 <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
@@ -39,7 +39,7 @@
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
 
-<!-- 我的小组 -->
+<!-- 我的群组 -->
 {% with groups=joined_groups %}
 {% include "snippets/my_groups.html" %}
 {% endwith %}

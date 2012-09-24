@@ -1,5 +1,5 @@
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到小组</button> <button id="click-into-group">到所在小组</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到群组</button> <button id="click-into-group">到所在群组</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');
@@ -29,7 +29,7 @@ $('#click-into-group').click(function() {
 
 $('#recommend-submit').click(function() {
     if (!$.trim($('#recommend-groups').val())) {
-        apply_form_error('recommend-form', '小组名称不能为空。');
+        apply_form_error('recommend-form', '群组名称不能为空。');
         return false;    
     }
     if (!$.trim($('#recommend-msg').val())) {

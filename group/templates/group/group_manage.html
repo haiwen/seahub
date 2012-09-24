@@ -6,20 +6,20 @@
 
 {% block main_panel %}
 
-<h2>{{ group.group_name }} 小组管理</h2>
+<h2>{{ group.group_name }} 群组管理</h2>
 
 <div class="side fright">
 <h3>操作</h3>
 <ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置小组图标</a></li>
-    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散小组</a></li>
-    <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回小组</a></li>
+    <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置群组图标</a></li>
+    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散群组</a></li>
+    <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回群组</a></li>
 </ul>
 </div>
 
 <div class="main fleft">
     <div class="w100 ovhd">
-        <h3 class="fleft">小组成员列表</h3>
+        <h3 class="fleft">群组成员列表</h3>
         <a id="member-add" href="#" class="fright">添加成员</a>
     </div>
 {% if members %}
@@ -60,7 +60,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($("#group-remove"), '确定要解散该小组吗？');
+addConfirmTo($("#group-remove"), '确定要解散该群组吗？');
 
 addConfirmTo($(".member-remove-btn"), '确定要删除该成员？');
 

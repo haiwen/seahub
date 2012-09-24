@@ -8,7 +8,7 @@
         <a href="{% url 'organizations.views.org_info' org.url_prefix %}" {% block nav_org_class %}{% endblock %}>公共页面</a>
     </li>
     <li>
-        <a href="{% url 'organizations.views.org_groups' org.url_prefix %}" {% block nav_group_class %}{% endblock %}>小组</a>
+        <a href="{% url 'organizations.views.org_groups' org.url_prefix %}" {% block nav_group_class %}{% endblock %}>群组</a>
     </li>
     <li>
         <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>个人页面</a>

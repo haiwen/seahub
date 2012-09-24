@@ -31,9 +31,9 @@
 <h3>操作</h3>
 <ul class="with-bg">
 {% if is_staff %}
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">小组管理</a></li>
+    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">群组管理</a></li>
 {% else %}
-	<li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出小组</a></li>
+	<li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出群组</a></li>
 {% endif %}
 </ul>
 {% endif %}
@@ -41,7 +41,7 @@
 </div>
 
 <div class="main fleft">
-<h3>小组里共享的同步目录</h3>
+<h3>群组里共享的同步目录</h3>
 <button id="repo-create">新建同步目录</button>
 {% if repos %}
 <table>

@@ -98,7 +98,7 @@ def group_add(request):
         return render_error(request, u'group id 不是有效参数')        
 
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有小组管理员有权设置小组图标')
+        return render_permission_error(request, u'只有群组管理员有权设置群组图标')
 
     group = ccnet_threaded_rpc.get_group(group_id_int)
     if not group:

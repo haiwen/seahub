@@ -25,13 +25,13 @@ class GroupAddForm(forms.Form):
     A form used to add a new group.
     """
     group_name = forms.CharField(max_length=255, error_messages={
-            'required': u'小组名称不能为空',
-            'max_length': u'小组名称太长，不超过255个字符',
+            'required': u'群组名称不能为空',
+            'max_length': u'群组名称太长，不超过255个字符',
             })
     def clean_group_name(self):
         group_name = self.cleaned_data['group_name']
         if not validate_group_name(group_name):
-            error_msg = u'小组名称只能包含中英文字符，数字及下划线。'
+            error_msg = u'群组名称只能包含中英文字符，数字及下划线。'
             raise forms.ValidationError(error_msg)
         else:
             return group_name

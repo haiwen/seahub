@@ -170,7 +170,7 @@ def group_remove(request, group_id):
     """
     # Check whether user is system admin.
     if not request.user.is_staff:
-        return render_permission_error(request, u'只有管理员有权删除小组')
+        return render_permission_error(request, u'只有管理员有权删除群组')
         
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next = request.META.get('HTTP_REFERER', None)
@@ -207,7 +207,7 @@ def group_dismiss(request, group_id):
     # Check whether user is group staff
     user = request.user.username
     if not ccnet_threaded_rpc.check_group_staff(group_id_int, user):
-        return render_permission_error(request, u'只有小组管理员有权解散小组')
+        return render_permission_error(request, u'只有群组管理员有权解散群组')
 
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, user)
@@ -256,10 +256,10 @@ def render_group_info(request, group_id, form):
     joined = is_group_user(group_id_int, request.user.username)
     
     if not joined and not request.user.is_staff:
-        return render_error(request, u'未加入该小组')
+        return render_error(request, u'未加入该群组')
 
     # if request.user.org and not request.user.org.is_staff:
-    #     return render_error(request, u'未加入该小组')
+    #     return render_error(request, u'未加入该群组')
 
     group = get_group(group_id)
     if not group:
@@ -485,7 +485,7 @@ def group_members(request, group_id):
         return render_error(request, u'group id 不是有效参数')        
 
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有小组管理员有权管理小组')
+        return render_permission_error(request, u'只有群组管理员有权管理群组')
 
     group = get_group(group_id)
     if not group:
@@ -545,7 +545,7 @@ def group_members(request, group_id):
                         }
                     
                     try:
-                        send_mail('您的好友在SeaCloud上将你加入到小组',
+                        send_mail('您的好友在SeaCloud上将你加入到群组',
                                   t.render(Context(c)), None, [member_name],
                                   fail_silently=False)
                     except:
@@ -590,7 +590,7 @@ def group_remove_member(request, group_id, user_name):
         return render_error(request, u'group id 不是有效参数')        
     
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有小组管理员有权删除成员')
+        return render_permission_error(request, u'只有群组管理员有权删除成员')
     
     try:
         ccnet_threaded_rpc.group_remove_member(group_id_int,
@@ -610,7 +610,7 @@ def group_share_repo(request, repo_id, group_id, from_email, permission):
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, u'共享失败:小组不存在')
+        return render_error(request, u'共享失败:群组不存在')
     
     if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, permission) != 0:
         return render_error(request, u'共享失败:内部错误')
@@ -623,12 +623,12 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, u'取消共享失败:小组不存在')
+        return render_error(request, u'取消共享失败:群组不存在')
 
     # Check whether user is group staff or the one share the repo
     if not check_group_staff(group_id, from_email) and \
             seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
-        return render_permission_error(request, u'取消共享失败:只有小组管理员或共享目录发布者有权取消共享')
+        return render_permission_error(request, u'取消共享失败:只有群组管理员或共享目录发布者有权取消共享')
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
         return render_error(request, u'取消共享失败:内部错误')
@@ -661,7 +661,7 @@ def group_recommend(request):
                 group_creator = e.split(' ')[1]
             except IndexError:
                 messages.add_message(request, messages.ERROR,
-                                     u'推荐到 %s 失败，请检查小组名称。' % \
+                                     u'推荐到 %s 失败，请检查群组名称。' % \
                                          group_name)
                 continue
 
@@ -704,7 +704,7 @@ def group_recommend(request):
                     break
             if not find:
                 messages.add_message(request, messages.ERROR,
-                                     u'推荐到 %s 失败，请检查是否参加了该小组。' % \
+                                     u'推荐到 %s 失败，请检查是否参加了该群组。' % \
                                          group_name)
     else:
         # TODO: need more clear error message
@@ -723,11 +723,11 @@ def create_group_repo(request, group_id):
                                       content_type=content_type)
     group_id = int(group_id)
     if not get_group(group_id):
-        return json_error(u'创建失败:小组不存在')
+        return json_error(u'创建失败:群组不存在')
 
     # Check whether user belongs to the group.
     if not is_group_user(group_id, request.user.username):
-        return json_error(u"创建失败:未加入该小组")
+        return json_error(u"创建失败:未加入该群组")
 
     form = RepoCreateForm(request.POST)
     if not form.is_valid():

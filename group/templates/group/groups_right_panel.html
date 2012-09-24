@@ -1,7 +1,7 @@
 {% load seahub_tags group_avatar_tags %}
 {% load url from future %}
 
-<button id="group-add">添加小组</button>
+<button id="group-add">添加群组</button>
 {% if groups %}
 <ul class="group-list w100 ovhd">
     {% for group in groups %}
@@ -21,7 +21,7 @@
 </ul>
 {% endif %}
 <form id="group-add-form" action="" method="post" name="group-add-form" class="hide">
-    <label>小组名称：</label><br />
+    <label>群组名称：</label><br />
     <input id="group_name" name="group_name" value="" /><br />
     <p class="error hide"></p>
     <input id="group-add-submit" type="submit" value="提交" />

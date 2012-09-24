@@ -75,7 +75,7 @@ def share_repo(request):
                     messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
-                msg = u'共享到 %s 失败，小组不存在。' % group_name
+                msg = u'共享到 %s 失败，群组不存在。' % group_name
                 messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''

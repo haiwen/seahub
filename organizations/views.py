@@ -192,7 +192,7 @@ def org_groups(request, url_prefix):
         
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            result['error'] = u'小组名称只能包含中英文字符，数字及下划线。'
+            result['error'] = u'群组名称只能包含中英文字符，数字及下划线。'
             return HttpResponse(json.dumps(result), content_type=content_type)
         
         try:
@@ -470,7 +470,7 @@ def org_group_remove(request, url_prefix, group_id):
     # Check whether is the org group.
     org_id = get_org_id_by_group(group_id_int)
     if request.user.org['org_id'] != org_id:
-        return render_permission_error(request, '该小组不属于当前团体',
+        return render_permission_error(request, '该群组不属于当前团体',
                                        extra_ctx={'org': request.user.org,
                                                   'base_template': 'org_base.html'})
 

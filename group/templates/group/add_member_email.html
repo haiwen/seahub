@@ -1,7 +1,7 @@
 {% load url from future %}
 亲爱的 {{ to_email }}：
 
-{{ email }} 邀请你加入小组 {{ group.group_name }}, 点击以下链接加入：
+{{ email }} 邀请你加入群组 {{ group.group_name }}, 点击以下链接加入：
 {{ protocol }}://{{ domain }}{% url 'registration_register' %}?src={{ to_email }}
 
 邮箱请填写当前邮箱，感谢使用我们的网站！
