@@ -11,19 +11,6 @@
 
 
 {% block right_panel %}
-{% if messages %}
-<ul class="messages hide">
-  {% for message in messages %}
-  {% if message.tags == 'info' %}
-  <li class="info">邮件发送成功。</li>  
-  {% endif %}
-  {% if message.tags == 'error' %}
-  <li class="info">邮件发送失败。</li>  
-  {% endif %}
-  {% endfor %}
-</ul>
-{% endif %}
-
 <h3>所有用户</h3>
 <table>
     <tr>

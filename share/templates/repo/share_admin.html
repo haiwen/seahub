@@ -4,16 +4,6 @@
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-{% if messages %}
-{% autoescape off %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>  
-  {% endfor %}
-</ul>
-{% endautoescape %}
-{% endif %}
-
 <h3>我共享的同步目录</h3>
 {% if out_repos %}
 <table class="repo-list">

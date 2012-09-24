@@ -92,7 +92,7 @@
             {% autoescape off %}
             <ul class="messages hide">
               {% for message in messages %}
-              <li class="info">{{ message }}</li>
+              <li class="{{ message.tags }}">{{ message }}</li>
               {% endfor %}
             </ul>
             {% endautoescape %}

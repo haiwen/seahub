@@ -377,10 +377,17 @@ ul.with-bg li {
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.messages .info {
+.messages .info,
+.messages .success{
+    padding:5px;
+    background:#C4ECA9;
+    margin:0;
+}
+.messages .error{
     padding:5px;
     background:#FDF;
     margin:0;
+    color:#000;
 }
 /* narrow-panel: for pages like 'login' */
 .narrow-panel {

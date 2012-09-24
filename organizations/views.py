@@ -233,9 +233,9 @@ def send_org_user_add_mail(request, email, password, org_name):
     try:
         send_mail(u'SeaCloud注册信息', t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, email)
+        messages.add_message(request, messages.INFO, u'邮件发送成功。')
     except:
-        messages.add_message(request, messages.ERROR, email)
+        messages.add_message(request, messages.ERROR, u'邮件发送失败。')
     
 @login_required
 @org_staff_required

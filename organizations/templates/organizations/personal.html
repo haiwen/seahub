@@ -14,16 +14,6 @@
 {% endblock %}
 
 {% block right_panel %}
-{% if messages %}
-{% autoescape off %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>  
-  {% endfor %}
-</ul>
-{% endautoescape %}
-{% endif %}
-
 <!-- 我拥有的同步目录 -->
 {% include "snippets/my_owned_repos.html" %}
 

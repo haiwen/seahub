@@ -1,18 +1,6 @@
 {% extends "myhome_base.html" %}
 {% load i18n avatar_tags %}
 
-{% block right_panel %}
-{% if messages %}
-{% autoescape off %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>  
-  {% endfor %}
-</ul>
-{% endautoescape %}
-{% endif %}
-{% endblock %}
-
 {% block main_panel %}
 <div class="narrow-panel avatar-op">
     <h2>上传头像</h2>

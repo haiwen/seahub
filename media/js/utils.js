@@ -275,5 +275,5 @@ function apply_form_error(formid, error_msg) {
 if ($('.messages')) {
     $('#main').append($('.messages')).css('position','relative');
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, 3000);
+    setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }

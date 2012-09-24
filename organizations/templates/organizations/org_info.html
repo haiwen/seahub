@@ -5,14 +5,6 @@
 {% block nav_org_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
-{% if messages %}
-<ul class="messages hide">
-  {% for message in messages %}
-  <li class="info">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
-
 <div class="side fright">
 <h3>团体成员</h3>
 {% if org_users %}
