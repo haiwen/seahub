@@ -206,15 +206,24 @@ ul.with-bg li {
     overflow:hidden;
     padding-bottom:8px;
     border-bottom:1px solid #ddd;
-    margin-bottom:15px;
+    margin-bottom:20px;
 }
 #main {
     min-height: 400px;
     _height: 400px;
     padding-top: 10px;
 }
-#left-panel { float:right; width:220px; border-left:1px solid #E8E8E8; padding-left: 15px;}
+#left-panel {
+    float:right;
+    width:220px;
+    border-left:1px solid #E8E8E8;
+    padding-left: 15px;
+}
 #right-panel { float:left; width:680px; }
+#right-panel h3:first-child,
+#left-panel h3:first-child {
+    margin-top: 0px;
+}
 #main-panel .side { /*side panel in main-panel*/
     color:#333;
     width:220px;
