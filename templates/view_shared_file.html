@@ -5,7 +5,7 @@
     <h2>{{ file_name }}</h2>
     <p class="file-share-from">共享者：{{ username }}</p>
     <div id="file">
-        {% if filetype == 'PDF' %}
+        {% if filetype == 'PDF' and not pdf_use_flas %}
         <div id="file-op" class="hide">
         {% else %}
         <div id="file-op">

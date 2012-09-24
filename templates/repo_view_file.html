@@ -69,7 +69,7 @@
     {% endif %}
 
     <div id="file">
-        {% if filetype == 'PDF' %}
+        {% if filetype == 'PDF' and not pdf_use_flash %}
         <div id="file-op" class="hide">
         {% else %}
         <div id="file-op">
