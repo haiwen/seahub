@@ -11,14 +11,15 @@ form,input,textarea,button,img {
 }
 body {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
+    color: #333;
 }
 h1 {
     font-size:1.9em;
     margin:1.1em 0 0.5em;
 }
-h2 { font-size:1.5em; color:#808;}
-h3 { font-size:1.2em; color:#808; font-weight:normal; margin:0.95em 0 0.4em; }
-h4 { font-size:1.1em; color:#000; font-weight:normal; margin:0.5em 0 0.2em; }
+h2 { font-size:1.5em; color:#222;}
+h3 { font-size:1.2em; color:#222; font-weight:normal; margin:0.95em 0 0.4em; }
+h4 { font-size:1.1em; color:#222; font-weight:normal; margin:0.5em 0 0.2em; }
 h5, h6 {
     font-size:1em;
     margin:0.4em 0 0.15em;
