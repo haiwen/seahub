@@ -308,8 +308,10 @@ $(document).click(function(e) {
 
 var comment_input_pre_text = $('#comment-input').val();
 $('#comment-input').css('color', '#999').click(function() {
-    $(this).val('').css('color', '#000');
-    $('#file-comment-form .submit').removeClass('hide');
+    if ($(this).val() == comment_input_pre_text) {
+        $(this).val('').css('color', '#000');
+        $('#file-comment-form .submit').removeClass('hide');
+    }
 });
 $('#file-comment-form .submit').click(function() {
     if (!$.trim($('#comment-input').val())) {
