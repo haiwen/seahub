@@ -4,8 +4,7 @@
 
 {% block nav_org_class %}class="cur"{% endblock %}
 
-{% block main_panel %}
-<div class="side fright">
+{% block left_panel %}
 <h3>团体成员</h3>
 {% if org_users %}
 <ul>
@@ -16,9 +15,9 @@
 {% else %}
 <p>暂无</p>
 {% endif %}
-</div>
+{% endblock %}
 
-<div class="main fleft">
+{% block right_panel %}
 <h3>{{ org.org_name }} 公开的同步目录</h3>
 <button id="repo-create">新建同步目录</button>
 {% if repos %}
@@ -48,7 +47,6 @@
     {% endfor %}
 </table>
 {% endif %}
-</div>
 
 {% include "snippets/repo_share_form.html" %}
 {% include "snippets/repo_create_form.html" %}

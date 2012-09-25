@@ -2,20 +2,14 @@
 {% load url from future %}
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="" class="user-add">添加用户</a></li>
-</ul>
-{% endblock %}
-
 
 {% block right_panel %}
 <h3>所有用户</h3>
+<button id="org-user-add">添加用户</button>
 <table>
     <tr>
-        <th width="90%">邮箱</th>
-        <th width="10%">操作</th>
+        <th width="80%">邮箱</th>
+        <th width="20%">操作</th>
     </tr>
 
     {% for user in users %}
@@ -23,7 +17,7 @@
         <td><a href="{% url 'user_profile' user.email %}" target="_blank">{{ user.props.email }}</a></td>
         <td>
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">删除</a>
+          <button class="remove-user-btn" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">删除</button>
           {% endif %}
         </td>
     </tr>
@@ -67,24 +61,23 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.activate').each(function(){
-    $(this).click(function(){
-        location.href = $(this).attr('data');
-    });
-});
-
-$('.user-add').click(function() {
+$('#org-user-add').click(function() {
     $("#user-add-form").modal({appendTo: "#main"});
-    
     var contacts_list = [];
     {% for contact in contacts %}
     contacts_list.push('{{ contact.contact_email }}');
     {% endfor %}
     addAutocomplete('#added-member-name', '#user-add-form', contacts_list);
-    return false;
-});
+})
+.hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
 
-//delete confirm
 addConfirmTo($('.remove-user-btn'));
 </script>
 {% endblock %}

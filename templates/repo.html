@@ -497,16 +497,15 @@ $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main'});
 });
 
-$('#upload-file, #add-new-dir, #add-new-file, #repo-download-btn').hover(
+$('#repo-download-btn').hover(
     function() {
         $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
     },
     function() {
         $(this).css('background-color', '#f5f5f5');
     }
-);
-
-$('#repo-download-btn').click(function() {
+)
+.click(function() {
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}'); 
 });
 {% include "snippets/list_commit_detail.html" %}

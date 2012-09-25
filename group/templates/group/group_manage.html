@@ -4,24 +4,22 @@
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
-{% block main_panel %}
-
+{% block title_panel %}
 <h2>{{ group.group_name }} 群组管理</h2>
+{% endblock %}
 
-<div class="side fright">
+{% block left_panel %}
 <h3>操作</h3>
 <ul class="with-bg">
     <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置群组图标</a></li>
     <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散群组</a></li>
     <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回群组</a></li>
 </ul>
-</div>
+{% endblock %}
 
-<div class="main fleft">
-    <div class="w100 ovhd">
-        <h3 class="fleft">群组成员列表</h3>
-        <a id="member-add" href="#" class="fright">添加成员</a>
-    </div>
+{% block right_panel %}
+<h3>群组成员列表</h3>
+<button id="group-member-add">添加成员</button>
 {% if members %}
 <table class="member-list">
     <tr>
@@ -32,13 +30,11 @@
     {% for member in members %}
     <tr>
         <td>{{ member.user_name }}</td>
-        {% if not member.is_staff %}
         <td>
-            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</button>
-        </td>
-        {% else %}
-        <td></td>
+        {% if not member.is_staff %}
+            <button data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn">删除</button>
         {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>
@@ -54,8 +50,6 @@
     <p class="error hide" id="member-add-error"></p>
     <input type="submit" value="提交" id="member-add-submit" />
 </form>
-
-</div>
 {% endblock %}
 
 {% block extra_script %}
@@ -69,11 +63,19 @@ var contact_list = [];
 contact_list.push('{{ contact.contact_email }}');
 {% endfor %}
 
-$("#member-add").click(function() {
+$("#group-member-add").click(function() {
     $("#member-add-form").modal({appendTo: "#main"});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;
-});
+})
+.hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
 
 $('#member-add-submit').click(function() {
     if (!$.trim($('#added-member-name').attr('value'))) {
