@@ -81,7 +81,7 @@ def translate_commit_desc(value):
 def translate_commit_time(value):
     """Translate commit time to human frindly format instead of timestamp"""
     
-    if type(value) == type(1):	# check whether value is int
+    if isinstance(value, int) or isinstance(value, long): # check whether value is int
         val = datetime.fromtimestamp(value)
     elif isinstance(value, datetime):
         val = datetime.fromtimestamp(int(value.strftime("%s")))
