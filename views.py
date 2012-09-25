@@ -1112,7 +1112,7 @@ def repo_view_file(request, repo_id):
     file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
     comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
-    contributors = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+    contributors, last_modified = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     latest_contributor = contributors[0]
     
     return render_to_response('repo_view_file.html', {
@@ -1144,6 +1144,7 @@ def repo_view_file(request, repo_id):
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
+            'last_modified': last_modified,
             'read_only': read_only,
             'page_from': page_from,
             }, context_instance=RequestContext(request))

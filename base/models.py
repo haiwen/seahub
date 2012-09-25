@@ -42,6 +42,8 @@ class FileContributors(models.Model):
     file_path = models.TextField()
     file_path_hash = models.CharField(max_length=12)
 
+    last_modified = models.IntegerField()
+
     # email addresses seperated by comma
     emails = models.TextField()
 

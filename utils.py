@@ -354,27 +354,29 @@ def get_file_contributors_from_revisions(repo_id, file_path):
         if user not in ret:
             ret.append(user)
 
-    return ret
+    return ret, commits[0].ctime
 
 def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
-    """Get file contributors list from database cache. If not found in cache,
-    try to get it from seaf-server.
+    """Get file contributors list and last modfied time from database cache.
+    If not found in cache, try to get it from seaf-server.
 
     """
     contributors = []
+    last_modified = 0
     try:
         fc = FileContributors.objects.get(repo_id=repo_id,
                                           file_path_hash=file_path_hash)
     except FileContributors.DoesNotExist:
         # has no cache yet
-        contributors = get_file_contributors_from_revisions (repo_id, file_path)
+        contributors, last_modified = get_file_contributors_from_revisions (repo_id, file_path)
         if not contributors:
-            return []
+            return [], 0
         emails = ','.join(contributors)
         file_contributors = FileContributors(repo_id=repo_id,
                                              file_id=file_id,
                                              file_path=file_path,
                                              file_path_hash=file_path_hash,
+                                             last_modified=last_modified,
                                              emails=emails)
         file_contributors.save()
     else:
@@ -382,14 +384,15 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
         if fc.file_id != file_id:
             # but cache is outdated
             fc.delete()
-            contributors = get_file_contributors_from_revisions (repo_id, file_path)
+            contributors, last_modified = get_file_contributors_from_revisions (repo_id, file_path)
             if not contributors:
-                return []
+                return [], 0
             emails = ','.join(contributors)
             file_contributors = FileContributors(repo_id=repo_id,
                                                  file_id=file_id,
                                                  file_path=file_path,
                                                  file_path_hash=file_path_hash,
+                                                 last_modified=last_modified,
                                                  emails=emails)
             file_contributors.save()
         else:
@@ -398,5 +401,6 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
                 contributors = fc.emails.split(',')
             else:
                 contributors = []
+            last_modified = fc.last_modified
 
-    return contributors
+    return contributors, last_modified 
