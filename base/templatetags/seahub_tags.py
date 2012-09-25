@@ -51,7 +51,7 @@ def translate_commit_desc(value):
         return u'合并了其他人的修改'
     else:
         operations = '|'.join(TRANSLATION_MAP.keys())
-        patt = r'(%s) "(.*)"\s?(and ([0-9]+) more files)?' % operations
+        patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         ret_list = []
         for e in value.split('\n'):
@@ -66,13 +66,18 @@ def translate_commit_desc(value):
             op = m.group(1)
             op_trans = TRANSLATION_MAP.get(op)
             file_name = m.group(2)
-            more_files = m.group(3)
+            more = m.group(3)
             n_files = m.group(4)
+            more_type = m.group(5)
     
-            if not more_files:
+            if not more:
                 ret = op_trans + u' "' + file_name + u'".'
             else:
-                ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个文件.'
+                if more_type == 'files':
+                    typ = u'文件'
+                else:
+                    typ = u'目录'
+                ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
             ret_list.append(ret)
 
         return '\n'.join(ret_list)

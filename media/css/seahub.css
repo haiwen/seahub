@@ -1242,3 +1242,7 @@ ul.with-bg li {
     top:-15px;
     left:-14px;
 }
+
+#ls-ch a {
+    color: green;
+}

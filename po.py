@@ -4,6 +4,7 @@
 TRANSLATION_MAP = {
     'Added' : u'添加了',
     'Deleted' : u'删除了',
+    'Removed' : u'删除了',
     'Modified' : u'修改了',
     'Renamed' : u'重命名或移动了',
     'Moved' : u'移动了',

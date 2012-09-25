@@ -635,7 +635,14 @@ def repo_history_revert(request, repo_id):
             return render_error(request, u'未知错误')
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
-    
+
+def fpath_to_link(repo_id, path):
+    """Translate file path of a repo to its view link"""
+    fpath = 'repo/%s/files/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
+    href = os.path.join(settings.SITE_ROOT, fpath)
+
+    return '<a href="%s">%s</a>' % (href, path)
+
 def get_diff(repo_id, arg1, arg2):
     lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : [], \
                  'newdir' : [], 'deldir' : []}
@@ -646,15 +653,15 @@ def get_diff(repo_id, arg1, arg2):
 
     for d in diff_result:
         if d.status == "add":
-            lists['new'].append(d.name)
+            lists['new'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "del":
             lists['removed'].append(d.name)
         elif d.status == "mov":
-            lists['renamed'].append(d.name + " ==> " + d.new_name)
+            lists['renamed'].append(d.name + " ==> " + fpath_to_link(repo_id, d.new_name))
         elif d.status == "mod":
-            lists['modified'].append(d.name)
+            lists['modified'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "newdir":
-            lists['newdir'].append(d.name)
+            lists['newdir'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "deldir":
             lists['deldir'].append(d.name)
 
