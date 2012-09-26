@@ -35,3 +35,13 @@ class GroupAddForm(forms.Form):
             raise forms.ValidationError(error_msg)
         else:
             return group_name
+
+class GroupJoinMsgForm(forms.Form):
+    """
+    A form used to send group join request message.
+    """
+    group_join_msg = forms.CharField(max_length=255, error_messages={
+            'required': u'验证信息不能为空',
+            'max_length': u'验证信息太长，不超过255个字符',
+            })
+

@@ -885,6 +885,12 @@ ul.with-bg li {
     width:262px;
     margin:5px 0;
 }
+/* group-join-form */
+#id_group_join_msg {
+    width:260px;
+    height:80px;
+}
+
 #recommend-msg,
 #recommend-groups {
     width:450px;

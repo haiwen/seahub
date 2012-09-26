@@ -1,0 +1,64 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags group_avatar_tags %}
+{% load url from future %}
+
+{% block main_panel %}
+<div class="user-profile narrow-panel ovhd">
+  <div class="pic fleft">
+    <img src="{% grp_avatar_url group.id 48 %}" alt="{{ group.group_name }}的图标" title="{{ group.group_name }}" class="avatar" />
+    <button id="add">申请加入</button>
+  </div>
+
+  <div class="txt fright">
+    <p>名称：{{ group.group_name }}</p>
+    <p>管理员：{{ group.creator_name }}</p>
+    <p>创建于：{{ group.timestamp|tsstr_sec }}</p>
+    <p>人数：{{ members|length }}</p>
+  </div>
+</div>
+
+<form id="group-join-form" class="hide" action="" method="post">
+  <label>验证信息：</label><br />
+  <textarea id="id_group_join_msg" name="group_join_msg"></textarea><br />
+  <p class="error hide"></p>
+  <input type="submit" value="提交" id="group-join-submit" />
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#add').click(function() {
+    $('#group-join-form').modal({appendTo: '#main'});
+});
+
+$('#group-join-submit').click(function() {
+    $.ajax({
+        url: '{% url 'group_joinrequest' group.id %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'group_join_msg': $('#id_group_join_msg').val(),
+        },
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                if (index == 'error') {
+                    apply_form_error('group-join-form', value);
+                } else {
+                    apply_form_error('group-join-form', value[0]);
+                }
+            });
+        }
+    });
+
+    return false;
+});
+
+
+</script>
+{% endblock %}

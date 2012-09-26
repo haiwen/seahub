@@ -25,7 +25,7 @@ from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm
+    GroupAddForm, GroupJoinMsgForm
 from signals import grpmsg_added, grpmsg_reply_added
 from base.decorators import ctx_switch_required
 from base.mixins import LoginRequiredMixin
@@ -255,26 +255,27 @@ def render_group_info(request, group_id, form):
                                     msg_type='group_msg',
                                     detail=str(group_id)).delete()
     
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    
-    if not joined and not request.user.is_staff:
-        return render_error(request, u'未加入该群组')
-
-    # if request.user.org and not request.user.org.is_staff:
-    #     return render_error(request, u'未加入该群组')
-
     group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
+    # Get all group members.
+    members = get_group_members(group_id_int)
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
     is_staff = True if check_group_staff(group.id, request.user) else False
         
-    members = get_group_members(group_id_int)
     managers = []
     common_members = []
     for member in members:
-#        member.short_username = member.user_name.split('@')[0]
         if member.is_staff == 1:
             managers.append(member)
         else:
@@ -803,3 +804,55 @@ def create_group_repo(request, group_id):
                 return HttpResponse(json.dumps(result),
                                     content_type=content_type)
 
+@login_required
+def group_joinrequest(request, group_id):
+    """
+    Handle post request to join a group.
+    """
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(group_id)
+    group =get_group(group_id) 
+    if not group:
+        raise Http404
+
+    user = request.user.username
+    # TODO: Group creator is group staff now, but may changed in future.
+    staff = group.creator_name
+    if is_group_user(group_id, user):
+        # Already in the group. Normally, this case should not happen.
+        err = u'你已经在该群组。'
+        return HttpResponseBadRequest(json.dumps({'error': err}),
+                                      content_type=content_type)
+    else:
+        form = GroupJoinMsgForm(request.POST)
+        if form.is_valid():
+            group_join_msg = form.cleaned_data['group_join_msg']
+            # Send the message to group staff.
+            use_https = request.is_secure()
+            domain = RequestSite(request).domain
+            t = loader.get_template('group/group_join_email.html')
+            c = {
+                'staff': staff,
+                'user': user,
+                'group': group,
+                'group_join_msg': group_join_msg,
+                }
+            try:
+                send_mail(u'加入群组申请', t.render(Context(c)), None, [staff],
+                          fail_silently=False)
+                messages.success(request, u'发送成功，等候群组管理员处理。')
+                return HttpResponse(json.dumps('success'),
+                                    content_type=content_type)
+            except:
+                err = u'发送失败，请稍后再试。'
+                return HttpResponse(json.dumps({'error': err}), status=500,
+                                    content_type=content_type)
+        else:
+            return HttpResponseBadRequest(json.dumps(form.errors),
+                                          content_type=content_type)
+        
