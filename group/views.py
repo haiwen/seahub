@@ -538,28 +538,32 @@ def group_members(request, group_id):
                 mail_sended.send(sender=None, user=request.user.username,
                                   email=member_name)
 
-                # Send email to unregistered user.
                 if not is_registered_user(member_name):
-                    use_https = request.is_secure()
-                    domain = RequestSite(request).domain
-
-                    t = loader.get_template('group/add_member_email.html')
-                    c = {
-                        'email': request.user.username,
-                        'to_email': member_name,
-                        'group': group,
-                        'domain': domain,
-                        'protocol': use_https and 'https' or 'http',
-                        }
+                    err_msg = u'无法添加成员，%s 未注册' % member_name
+                    result['error'] = err_msg
+                    return HttpResponse(json.dumps(result), status=400,
+                                        content_type=content_type)
                     
-                    try:
-                        send_mail('您的好友在SeaCloud上将你加入到群组',
-                                  t.render(Context(c)), None, [member_name],
-                                  fail_silently=False)
-                    except:
-                        data = json.dumps({'error': u'发送失败'})
-                        return HttpResponse(data, status=500,
-                                            content_type=content_type)
+                    # use_https = request.is_secure()
+                    # domain = RequestSite(request).domain
+
+                    # t = loader.get_template('group/add_member_email.html')
+                    # c = {
+                    #     'email': request.user.username,
+                    #     'to_email': member_name,
+                    #     'group': group,
+                    #     'domain': domain,
+                    #     'protocol': use_https and 'https' or 'http',
+                    #     }
+                    
+                    # try:
+                    #     send_mail('您的好友在SeaCloud上将你加入到群组',
+                    #               t.render(Context(c)), None, [member_name],
+                    #               fail_silently=False)
+                    # except:
+                    #     data = json.dumps({'error': u'发送失败'})
+                    #     return HttpResponse(data, status=500,
+                    #                         content_type=content_type)
                 # Add user to group.
                 try:
                     ccnet_threaded_rpc.group_add_member(group_id_int,
