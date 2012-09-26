@@ -209,6 +209,9 @@ class RepoMixin(object):
         return current_commit
 
     def get_success_url(self):
+        next = self.request.GET.get('next', '')
+        if next:
+            return next
         return reverse('repo', args=[self.repo_id])
 
     def prepare_property(self):
@@ -1065,6 +1068,12 @@ def repo_view_file(request, repo_id):
     if not repo:
         raise Http404
 
+    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+        # Redirect uesr to decrypt repo page.
+        return render_to_response('decrypt_repo_form.html', {
+                'repo': repo,
+                'next': request.get_full_path(),
+                }, context_instance=RequestContext(request))
     permission = get_user_permission(request, repo_id)
     if permission:
         # Get a token to visit file
