@@ -847,6 +847,10 @@ ul.with-bg li {
 #ls-ch ul {
     padding:0 0 6px 0;
 }
+#ls-ch a {
+    color:#e83;
+    font-weight:normal;
+}
 #dirs { /* file mv */
     margin-top:8px;
 }
