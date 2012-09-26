@@ -25,12 +25,13 @@ from decorators import org_staff_required
 from forms import OrgCreateForm
 from signals import org_user_added
 from utils import validate_org_repo_owner
+from group.views import GroupListView
 from notifications.models import UserNotification
 from share.models import FileShare
 from share.forms import RepoShareForm
 from registration.models import RegistrationProfile
-from seahub.base.accounts import User
-from seahub.contacts import Contact
+from base.accounts import User
+from contacts import Contact
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
@@ -212,11 +213,13 @@ def org_groups(request, url_prefix):
             return HttpResponse(json.dumps(result), content_type=content_type)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
-        
+
+    joined_groups = get_org_groups_by_user(org.org_id, request.user.username)
     groups = get_org_groups(org.org_id, -1, -1)
     return render_to_response('organizations/org_groups.html', {
             'org': org,
             'groups': groups,
+            'joined_groups': joined_groups,
             }, context_instance=RequestContext(request))
 
 def send_org_user_add_mail(request, email, password, org_name):
@@ -524,8 +527,6 @@ def org_repo_share(request, url_prefix):
 
     share_to_list = string2list(email_or_group)
     for share_to in share_to_list:
-        # if share_to is user name, the format is: 'example@mail.com';
-        # if share_to is group, the format is 'group_name <creator@mail.com>'
         if share_to == 'all':
             ''' Share to public '''
 
@@ -540,24 +541,18 @@ def org_repo_share(request, url_prefix):
             msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
                 (reverse('org_shareadmin', args=[org.url_prefix]))
             messages.add_message(request, messages.INFO, msg)
-        elif (share_to.split(' ')[0].find('@') == -1):
+        elif (share_to.find('@') == -1):
             ''' Share repo to group '''
             # TODO: if we know group id, then we can simplly call group_share_repo
-            if len(share_to.split(' ')) < 2:
-                msg = u'共享给 %s 失败。' % share_to                
-                messages.add_message(request, messages.ERROR, msg)
-                continue
-            
-            group_name = share_to.split(' ')[0]
-            group_creator = share_to.split(' ')[1]
+            group_name = share_to
+
             # get org groups the user joined
             groups = get_org_groups_by_user(org.org_id, from_email)
             find = False
             for group in groups:
                 # for every group that user joined, if group name and
                 # group creator matchs, then has finded the group
-                if group.props.group_name == group_name and \
-                        group_creator.find(group.props.creator_name) >= 0:
+                if group.props.group_name == group_name:
                     seafserv_threaded_rpc.add_org_group_repo(repo_id,
                                                              org.org_id,
                                                              group.id,
