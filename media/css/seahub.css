@@ -220,11 +220,11 @@ ul.with-bg li {
     float:right;
     width:220px;
     border-left:1px solid #E8E8E8;
-    padding-left:25px;
+    padding-left:20px;
 }
 #right-panel {
     float:left;
-    width:665px;
+    width:670px;
 }
 #right-panel h3:first-child,
 #left-panel h3:first-child {
