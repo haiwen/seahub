@@ -23,6 +23,11 @@ from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list
 
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
+
 @login_required
 def share_repo(request):
     """
@@ -53,7 +58,23 @@ def share_repo(request):
     
     to_email_list = string2list(email_or_group)
     for to_email in to_email_list:
-        if to_email.find('@') == -1:
+        if to_email == 'all':
+            ''' Share to public '''
+
+            # ignore 'all' if we're running in cloud mode
+            if not CLOUD_MODE:
+                try:
+                    seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+                except:
+                    msg = u'共享到公共资料失败'
+                    message.add_message(request, message.ERROR, msg)
+                    continue
+
+                msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
+                    (reverse('share_admin'))
+                messages.add_message(request, messages.INFO, msg)
+                
+        elif to_email.find('@') == -1:
             ''' Share repo to group '''
             # TODO: if we know group id, then we can simplly call group_share_repo
             group_name = to_email
@@ -114,35 +135,38 @@ def share_admin(request):
     """
     username = request.user.username
 
-    # personal repos that are share to user
-    out_repos = list_personal_shared_repos(username, 'from_email', -1, -1)
+    shared_repos = []
 
-    # repos that are share to groups
+    # personal repos shared by this user
+    shared_repos += seafserv_threaded_rpc.list_share_repos(username, 'from_email',
+                                                           -1, -1)
+
+    # repos shared to groups
     group_repos = seafserv_threaded_rpc.get_group_repos_by_owner(username)
-    for group_repo in group_repos:
-        repo_id = group_repo.props.repo_id
-        if not repo_id:
-            continue
-        repo = get_repo(repo_id)
-        if not repo:
-            continue
-        group_id = group_repo.props.group_id
-        group = ccnet_threaded_rpc.get_group(int(group_id))
+    for repo in group_repos:
+        group = ccnet_threaded_rpc.get_group(int(repo.group_id))
         if not group:
+            repo.props.user = ''
             continue
-        repo.props.shared_email = group.props.group_name
-        repo.props.share_permission = group_repo.props.permission
-        repo.gid = group_id
-        
-        out_repos.append(repo)
+        repo.props.user = group.props.group_name
+    shared_repos += group_repos
 
-    for repo in out_repos:
-        if repo.props.share_permission == 'rw':
+    if not CLOUD_MODE:
+        # public repos shared by this user
+        pub_repos = seafserv_threaded_rpc.list_inner_pub_repos_by_owner(username)
+        for repo in pub_repos:
+            repo.props.user = '所有人'
+        shared_repos += pub_repos
+
+    for repo in shared_repos:
+        if repo.props.permission == 'rw':
             repo.share_permission = '可读写'
-        elif repo.props.share_permission == 'r':
+        elif repo.props.permission == 'r':
             repo.share_permission = '只可浏览'
         else:
             repo.share_permission = ''
+
+    shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
 
     # Repo anonymous share links
     # out_links = AnonymousShare.objects.filter(repo_owner=request.user.username)
@@ -162,7 +186,8 @@ def share_admin(request):
             p_fileshares.append(fs)
         
     return render_to_response('repo/share_admin.html', {
-            "out_repos": out_repos,
+            "org": None,
+            "shared_repos": shared_repos,
             # "out_links": out_links,
             "fileshares": p_fileshares,
             "protocol": request.is_secure() and 'https' or 'http',

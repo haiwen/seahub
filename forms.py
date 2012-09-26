@@ -111,6 +111,11 @@ class RepoCreateForm(forms.Form):
                     raise forms.ValidationError("两次输入的密码不一致")
         return self.cleaned_data
 
+class SharedRepoCreateForm(RepoCreateForm):
+    """
+    Used for creating group repo and public repo
+    """
+    permission = forms.ChoiceField(choices=(('rw', 'read-write'), ('r', 'read-only')))
 
 class RepoNewFileForm(forms.Form):
     """

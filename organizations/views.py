@@ -31,7 +31,7 @@ from share.forms import RepoShareForm
 from registration.models import RegistrationProfile
 from seahub.base.accounts import User
 from seahub.contacts import Contact
-from seahub.forms import RepoCreateForm
+from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
     validate_group_name, string2list, calculate_repo_last_modify, MAX_INT
@@ -76,12 +76,13 @@ def org_info(request, url_prefix):
         return HttpResponseRedirect(reverse(myhome))
 
     org_members = get_org_users_by_url_prefix(url_prefix, 0, MAX_INT)
-    repos = list_org_inner_pub_repos(org.org_id)
+    repos = list_org_inner_pub_repos(org.org_id, request.user.username)
 
     return render_to_response('organizations/org_info.html', {
             'org': org,
             'org_users': org_members,
             'repos': repos,
+            'create_shared_repo': True,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -102,7 +103,7 @@ def org_personal(request, url_prefix):
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # Org repos others shared to me
-    in_repos = list_org_shared_repos(user,'to_email', -1, -1)
+    in_repos = list_org_shared_repos(org.org_id, user,'to_email', -1, -1)
     
     # Org groups user created
     groups = get_org_groups_by_user(org.org_id, user)
@@ -122,6 +123,8 @@ def org_personal(request, url_prefix):
             'org': org,
             'groups': groups,
             'contacts': contacts,
+            'create_shared_repo': False,
+            'allow_public_share': True,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -136,10 +139,11 @@ def org_inner_pub_repo_create(request, url_prefix):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
-    form = RepoCreateForm(request.POST)
+    form = SharedRepoCreateForm(request.POST)
     if form.is_valid():
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
+        permission = form.cleaned_data['permission']
         passwd = form.cleaned_data['passwd']
         user = request.user.username
         org = get_user_current_org(request.user.username, url_prefix)
@@ -152,7 +156,7 @@ def org_inner_pub_repo_create(request, url_prefix):
             repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
                                       org.org_id)
             # set org inner pub
-            seafserv_threaded_rpc.set_org_inner_pub_repo(org.org_id, repo_id)
+            seafserv_threaded_rpc.set_org_inner_pub_repo(org.org_id, repo_id, permission)
         except:
             repo_id = None
         if not repo_id:
@@ -174,8 +178,10 @@ def unset_org_inner_pub_repo(request, url_prefix, repo_id):
         seafserv_threaded_rpc.unset_org_inner_pub_repo(org.org_id, repo_id)
     except SearpcError:
         pass
+
+    messages.add_message(request, messages.INFO, '操作成功')
     
-    return HttpResponseRedirect(reverse(org_info, args=[url_prefix]))
+    return HttpResponseRedirect(reverse(org_shareadmin, args=[url_prefix]))
 
 @login_required
 def org_groups(request, url_prefix):
@@ -505,6 +511,7 @@ def org_repo_share(request, url_prefix):
     
     email_or_group = form.cleaned_data['email_or_group']
     repo_id = form.cleaned_data['repo_id']
+    permission = form.cleaned_data['permission']
     from_email = request.user.username
 
     # Test whether user is the repo owner
@@ -519,7 +526,21 @@ def org_repo_share(request, url_prefix):
     for share_to in share_to_list:
         # if share_to is user name, the format is: 'example@mail.com';
         # if share_to is group, the format is 'group_name <creator@mail.com>'
-        if (share_to.split(' ')[0].find('@') == -1):
+        if share_to == 'all':
+            ''' Share to public '''
+
+            try:
+                seafserv_threaded_rpc.set_org_inner_pub_repo(org.org_id,
+                                                             repo_id, permission)
+            except:
+                msg = u'共享到公共资料失败'
+                message.add_message(request, message.ERROR, msg)
+                continue
+
+            msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
+                (reverse('org_shareadmin', args=[org.url_prefix]))
+            messages.add_message(request, messages.INFO, msg)
+        elif (share_to.split(' ')[0].find('@') == -1):
             ''' Share repo to group '''
             # TODO: if we know group id, then we can simplly call group_share_repo
             if len(share_to.split(' ')) < 2:
@@ -541,7 +562,7 @@ def org_repo_share(request, url_prefix):
                                                              org.org_id,
                                                              group.id,
                                                              from_email,
-                                                             'rw')
+                                                             permission)
                     find = True
                     msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
                         (group_name, reverse('org_shareadmin', args=[org.url_prefix]))
@@ -562,7 +583,7 @@ def org_repo_share(request, url_prefix):
             # Record share info to db.
             try:
                 seafserv_threaded_rpc.add_share(repo_id, from_email, share_to,
-                                                'rw')
+                                                permission)
                 msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
                     (share_to, reverse('org_shareadmin', args=[org.url_prefix]))
                 messages.add_message(request, messages.INFO, msg)
@@ -585,36 +606,41 @@ def org_shareadmin(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
     
-    # Org repos that are shared to others.
-    out_repos = list_org_shared_repos(username, 'from_email', -1, -1)
+    shared_repos = []
 
-    # Org repos that are shared to groups.
+    # personal repos shared by this user
+    shared_repos += seafserv_threaded_rpc.list_org_share_repos(org.org_id,
+                                                               username,
+                                                               'from_email',
+                                                               -1, -1)
+
+    # repos shared to groups
     group_repos = seafserv_threaded_rpc.get_org_group_repos_by_owner(org.org_id,
-                                                                     username)
-    for group_repo in group_repos:
-        repo_id = group_repo.props.repo_id
-        if not repo_id:
-            continue
-        repo = get_repo(repo_id)
-        if not repo:
-            continue
-        group_id = group_repo.props.group_id
-        group = ccnet_threaded_rpc.get_group(int(group_id))
+                                                                      username)
+    for repo in group_repos:
+        group = ccnet_threaded_rpc.get_group(int(repo.group_id))
         if not group:
+            repo.props.user = ''
             continue
-        repo.props.shared_email = group.props.group_name
-        repo.props.share_permission = group_repo.props.permission
-        repo.gid = group_id
-        
-        out_repos.append(repo)
+        repo.props.user = group.props.group_name
+    shared_repos += group_repos
 
-    for repo in out_repos:
-        if repo.props.share_permission == 'rw':
+    # public repos shared by this user
+    pub_repos = seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(org.org_id,
+                                                                        username)
+    for repo in pub_repos:
+        repo.props.user = '所有团体成员'
+    shared_repos += pub_repos
+
+    for repo in shared_repos:
+        if repo.props.permission == 'rw':
             repo.share_permission = '可读写'
-        elif repo.props.share_permission == 'r':
+        elif repo.props.permission == 'r':
             repo.share_permission = '只可浏览'
         else:
             repo.share_permission = ''
+
+    shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
 
     # File shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
@@ -630,7 +656,7 @@ def org_shareadmin(request, url_prefix):
     
     return render_to_response('repo/share_admin.html', {
             "org": org,
-            "out_repos": out_repos,
+            "shared_repos": shared_repos,
             "fileshares": o_fileshares,
             "protocol": request.is_secure() and 'https' or 'http',
             "domain": RequestSite(request).domain,

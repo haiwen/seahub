@@ -521,21 +521,22 @@ def get_org_groups_by_repo(org_id, repo_id):
     return groups
     
 # inner pub repo
-def list_inner_pub_repos():
+def list_inner_pub_repos(username):
     """
     List inner pub repos, which can be access by everyone.
     """
-    inner_pub_repos = seafserv_threaded_rpc.list_inner_pub_repos()
-    for repo in inner_pub_repos:
-        repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.id)
+    try:
+        shared_repos = seafserv_threaded_rpc.list_inner_pub_repos()
+    except:
+        shared_repos = []
 
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
+    for repo in shared_repos:
+        perm = seafserv_threaded_rpc.check_permission(repo.props.repo_id,
+                                                      username)
+        repo.user_perm = perm
 
-    inner_pub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-    return inner_pub_repos
+    shared_repos.sort(lambda x, y: cmp(y.props.last_modified, x.props.last_modified))
+    return shared_repos
 
 def is_inner_pub_repo(repo_id):
     """
@@ -550,25 +551,23 @@ def is_inner_pub_repo(repo_id):
     return ret
 
 # org inner pub repo
-def list_org_inner_pub_repos(org_id, start=None, limit=None):
+def list_org_inner_pub_repos(org_id, username, start=None, limit=None):
     """
     List org inner pub repos, which can be access by all org members.
     """
     try:
-        repos = seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
+        shared_repos = seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
     except SearpcError:
-        repos = []
-        
-    # calculate repo's lastest modify time
-    for repo in repos:
-        repo.owner = seafserv_threaded_rpc.get_org_repo_owner(repo.id)
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
-    # sort repos by latest modify time
-    repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-    return repos
+        shared_repos = []
+
+    for repo in shared_repos:
+        perm = seafserv_threaded_rpc.check_permission(repo.props.repo_id,
+                                                      username)
+        repo.user_perm = perm
+
+    # sort repos by last modify time
+    shared_repos.sort(lambda x, y: cmp(y.props.last_modified, x.props.last_modified))
+    return shared_repos
 
 # repo permissoin
 def check_permission(repo_id, user):
@@ -606,48 +605,35 @@ def list_personal_shared_repos(user, user_type, start, limit):
     If `user_type` is 'to_email', list repos others sahre to user.
     """
     try:
-        repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
-                                                       start, limit)
+        share_repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
+                                                             start, limit)
     except SearpcError:
-        repos = []
+        share_repos = []
 
-    p_repos = []
-    if repos:
-        for r in repos:
-            if is_personal_repo(r.id):
-                try:
-                    r.latest_modify = get_commits(r.id, 0, 1)[0].ctime
-                except:
-                    r.latest_modify = None
-                p_repos.append(r)
+    for repo in share_repos:
+        repo.user_perm = check_permission(repo.props.repo_id, user)
 
-    p_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-    return p_repos
+    share_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+    return share_repos
 
-def list_org_shared_repos(user, user_type, start, limit):
+def list_org_shared_repos(org_id, user, user_type, start, limit):
     """
     List org repos that user share with others.
     If `user_type` is 'from_email', list repos user shares to others;
     If `user_type` is 'to_email', list repos others sahre to user.
     """
     try:
-        repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
-                                                       start, limit)
+        share_repos = seafserv_threaded_rpc.list_org_share_repos(org_id,
+                                                                 user, user_type,
+                                                                 start, limit)
     except SearpcError:
-        repos = []
+        share_repos = []
 
-    o_repos = []
-    if repos:
-        for r in repos:
-            if not is_personal_repo(r.id):
-                try:
-                    r.latest_modify = get_commits(r.id, 0, 1)[0].ctime
-                except:
-                    r.latest_modify = None
-                o_repos.append(r)
+    for repo in share_repos:
+        repo.user_perm = check_permission(repo.props.repo_id, user)
 
-    o_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-    return o_repos
+    share_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+    return share_repos
 
 def is_valid_filename(file_or_dir):
     """

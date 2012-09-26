@@ -5,28 +5,36 @@
 
 {% block right_panel %}
 <h3>我共享的同步目录</h3>
-{% if out_repos %}
+{% if shared_repos %}
 <table class="repo-list">
     <tr>
         <th width="5%"><!--icon--></th>
         <th width="20%">名字</th>
         <th width="25%">共享给</th>
         <th width="10%">权限</th>
-        <th width="37%">描述</th>
-        <th width="8%">操作</th>
+        <th width="35%">描述</th>
+        <th width="10%">操作</th>
     </tr>
-    {% for repo in out_repos %}
+    {% for repo in shared_repos %}
     <tr>
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.shared_email }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
+        <td>{{ repo.props.user }}</td>
 	<td>{{ repo.share_permission }}</td>
-        <td>{{ repo.props.desc }}</td>
+        <td>{{ repo.props.repo_desc }}</td>
         <td>
-          {% if repo.gid %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&gid={{ repo.gid }}" class="cancel-share op">删除</a>
-          {% else %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ request.user }}&to={{ repo.props.shared_email }}" class="cancel-share op">删除</a>
+          {% if repo.props.share_type == 'group' %}
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">取消共享</a>
+	  {% endif %}
+          {% if repo.props.share_type == 'personal' %}
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">取消共享</a>
+	  {% endif %}
+	  {% if repo.props.share_type == 'public' %}
+	      {% if not org %}
+	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">取消共享</a>
+	      {% else %}
+	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">取消共享</a>
+	      {% endif %}
           {% endif %}
         </td>
     </tr>

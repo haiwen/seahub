@@ -605,6 +605,11 @@ ul.with-bg li {
 #repo-desc {
     height:70px;
 }
+#repo-create-form select[name="permission"] {
+    display:block;
+    width:262px;
+    margin-bottom:10px;
+}
 /* avatar */
 .avatar-op .avatar,
 .home-profile .avatar,
@@ -875,8 +880,10 @@ ul.with-bg li {
     width:260px;
     height:80px;
 }
-#share-permission {
-    width:260px;
+#repo-share-form select[name="permission"] {
+    display:block;
+    width:262px;
+    margin:5px 0;
 }
 #recommend-msg,
 #recommend-groups {

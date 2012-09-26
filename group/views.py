@@ -20,7 +20,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user
+    get_org_groups_by_user, check_permission
 from pysearpc import SearpcError
 
 from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
@@ -39,7 +39,7 @@ from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
     check_and_get_org_by_repo
 from seahub.views import is_registered_user
-from seahub.forms import RepoCreateForm
+from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
 class GroupMixin(object):
     def get_username(self):
@@ -287,6 +287,9 @@ def render_group_info(request, group_id, form):
     else:
         repos = get_group_repos(group_id_int, request.user.username)
 
+    for repo in repos:
+        repo.user_perm = check_permission(repo.props.id, request.user.username)
+
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -349,6 +352,7 @@ def render_group_info(request, group_id, form):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'create_shared_repo': True,
             }, context_instance=RequestContext(request));
 
 @login_required
@@ -732,12 +736,13 @@ def create_group_repo(request, group_id):
     if not is_group_user(group_id, request.user.username):
         return json_error(u"创建失败:未加入该群组")
 
-    form = RepoCreateForm(request.POST)
+    form = SharedRepoCreateForm(request.POST)
     if not form.is_valid():
         return json_error(form.errors)
     else:
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
+        permission = form.cleaned_data['permission']
         encrypted = form.cleaned_data['encryption']
         passwd = form.cleaned_data['passwd']
         user = request.user.username
@@ -757,7 +762,8 @@ def create_group_repo(request, group_id):
                 status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
                                                                   org.org_id,
                                                                   group_id,
-                                                                  user, 'rw')
+                                                                  user,
+                                                                  permission)
             except SearpcError, e:
                 status = -1
                 
@@ -783,7 +789,8 @@ def create_group_repo(request, group_id):
             try:
                 status = seafserv_threaded_rpc.group_share_repo(repo_id,
                                                                 group_id,
-                                                                user, 'rw')
+                                                                user,
+                                                                permission)
             except SearpcError, e:
                 status = -1
                 

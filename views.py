@@ -55,7 +55,7 @@ from notifications.models import UserNotification
 from profile.models import Profile
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
     RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm, \
-    RepoPassowrdForm
+    RepoPassowrdForm, SharedRepoCreateForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -790,6 +790,13 @@ def myhome(request):
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
 
+    try:
+        from settings import CLOUD_MODE
+    except:
+        CLOUD_MODE = False
+
+    allow_public_share = True if not CLOUD_MODE else False
+
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -803,6 +810,8 @@ def myhome(request):
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
             "orgmsg_list": orgmsg_list,
+            "create_shared_repo": False,
+            "allow_public_share": allow_public_share,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -824,7 +833,7 @@ def public_home(request):
     #     form = MessageForm()
         
     users = get_emailusers(-1, -1)
-    public_repos = list_inner_pub_repos()
+    public_repos = list_inner_pub_repos(request.user.username)
 
     # """inner pub messages"""
     # # Make sure page request is an int. If not, deliver first page.
@@ -855,6 +864,7 @@ def public_home(request):
     return render_to_response('public_home.html', {
             'users': users,
             'public_repos': public_repos,
+            'create_shared_repo': True,
             # 'form': form,
             # 'innerpub_msgs': innerpub_msgs,
             # 'current_page': current_page,
@@ -943,19 +953,22 @@ def public_repo_create(request):
     result = {}
     content_type = 'application/json; charset=utf-8'
     
-    form = RepoCreateForm(request.POST)
+    form = SharedRepoCreateForm(request.POST)
     if form.is_valid():
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
+        permission = form.cleaned_data['permission']
         passwd = form.cleaned_data['passwd']
         user = request.user.username
+
+        print permission
 
         try:
             # create a repo 
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
                                                         user, passwd)
             # set this repo as inner pub
-            seafserv_threaded_rpc.set_inner_pub_repo(repo_id)
+            seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
         except:
             repo_id = None
         if not repo_id:
@@ -973,7 +986,10 @@ def unset_inner_pub_repo(request, repo_id):
         seafserv_threaded_rpc.unset_inner_pub_repo(repo_id)
     except SearpcError:
         pass
-    return HttpResponseRedirect(reverse('public_home'))
+
+    messages.add_message(request, messages.INFO, '操作成功')
+
+    return HttpResponseRedirect(reverse('share_admin'))
 
 @login_required
 def ownerhome(request, owner_name):

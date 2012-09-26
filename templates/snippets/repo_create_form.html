@@ -4,6 +4,13 @@
     <input id="repo-name" type="text" name="repo_name" value="" /><br />
     <label>描述：</label><br/>
     <textarea id="repo-desc" name="repo_desc"></textarea>
+    {% if create_shared_repo %}
+    <label style="display:block">共享权限：</label>
+    <select name="permission">
+      <option value="rw" selected="selected">可读写</option>
+      <option value="r">只可浏览</option>
+    </select>
+    {% endif %}
     <div class="repo-create-encryption">
         <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
         <label>密码：</label><span class="tip">(3到15个字符)</span><br />

@@ -33,17 +33,18 @@
     {% for repo in repos %}
     <tr>
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.desc }}</td>
-        {% if repo.latest_modify %}
-        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}/">{{ repo.props.repo_name }}</a></td>
+        <td>{{ repo.props.repo_desc }}</td>
+        {% if repo.last_modified %}
+        <td>{{ repo.last_modified|translate_commit_time }}</td>
         {% else %}
         <td>--</td>
         {% endif %}
-        <td>{{ repo.owner|email2nickname }}</td>
+        <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{% url 'unset_org_inner_pub_repo' org.url_prefix repo.id %}" class="unshare-btn op-icon vh" title="取消共享" alt="取消共享" />
+	    {% if repo.user_perm == 'rw' %}
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
+	    {% endif %}
         </td>
     </tr>
     {% endfor %}

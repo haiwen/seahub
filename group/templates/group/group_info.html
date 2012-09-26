@@ -68,7 +68,9 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
+	{% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载到本地" />
+	{% endif %}
         {% if is_staff or repo.share_from_me  %}
             <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
         {% endif %}

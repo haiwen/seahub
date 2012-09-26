@@ -170,3 +170,12 @@ cc.spliter = ''
 def char2pinyin(value):
     """Convert Chinese character to pinyin."""
     return cc.convert(value)
+
+@register.filter(name='translate_permission')
+def translate_permission(value):
+    if value == 'rw':
+        return u'可读写'
+    elif value == 'r':
+        return u'只可浏览'
+    else:
+        return ''

@@ -31,6 +31,9 @@ $('#repo-create-submit').click(function() {
         data: {
             'repo_name': $('#repo-name').val(),
             'repo_desc': $('#repo-desc').val(),
+            {% if create_shared_repo %}
+            'permission': $('#repo-create-form select[name="permission"]').val(),
+            {% endif %}
             'encryption': $('#encrypt-switch').attr('checked') ? 1 : 0,
             'passwd': passwd.val(),
             'passwd_again': passwd_again.val()
