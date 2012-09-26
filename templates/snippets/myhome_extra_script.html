@@ -1,9 +1,10 @@
 {% load seahub_tags avatar_tags %}
 $(function() {
     //repo-share-form share-list autocomplete
-    var share_list = [], group_name, group_name_py;
+    var share_list = [], contact_email, group_name, group_name_py;
     {% for contact in contacts %}
-    share_list.push('{{ contact.contact_email }}');
+    contact_email = '{{ contact.contact_email }}';
+    share_list.push({value:contact_email, label:contact_email});
     {% endfor %}
 
     {% for group in groups %}
