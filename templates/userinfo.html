@@ -17,13 +17,15 @@
 {% if owned_repos %}
 <table>
     <tr>
+        <th width="5%"><!--icon--></th>
         <th width="30%">名字</th>
-        <th width="50%">描述</th>
+        <th width="45%">描述</th>
         <th width="20%">操作</th>
     </tr>
 
     {% for repo in owned_repos %}
     <tr>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
@@ -40,18 +42,18 @@
 {% if in_repos %}
 <table class="repo-list">
     <tr>
+        <th width="5%"><!--icon--></th>
         <th width="30%">名字</th>
-        <th width="30%">共享来源</th>
+        <th width="25%">共享来源</th>
         <th width="40%">描述</th>
     </tr>
 
     {% for repo in in_repos %}
     <tr>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.shared_email }}</td>
         <td>{{ repo.props.desc }}</td>
-        <td>
-        </td>
     </tr>
     {% endfor %}
 </table>

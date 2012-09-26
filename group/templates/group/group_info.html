@@ -46,27 +46,31 @@
 {% if repos %}
 <table>
     <tr>
+        <th width="5%"><!--icon--></th>
         <th width="20%">名字</th>
-        <th width="40%">描述</th>
-        <th width="15%">更新时间</th>
-        <th width="15%">共享来源</th>
+        <th width="35%">描述</th>
+        <th width="14%">更新时间</th>
+        <th width="16%">共享来源</th>
         <th width="10%">操作</th>
     </tr>
 
     {% for repo in repos %}
     <tr>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
+        <td>
         {% if repo.latest_modify %}
-        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        {{ repo.latest_modify|translate_commit_time }}
         {% else %}
-        <td>—— ——</td>
+        —— ——
         {% endif %}
+        </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" class="download vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载到本地" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载到本地" />
         {% if is_staff or repo.share_from_me  %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
         {% endif %}
         </td>
     </tr>
@@ -160,10 +164,10 @@ $(function() {
 
 $("table tr:gt(0)").hover(
     function() {
-        $(this).find('img').css('cursor', 'pointer').removeClass('vh');
+        $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
     },
     function() {
-        $(this).find('img').addClass('vh');
+        $(this).find('.op-icon').addClass('vh');
     }
 );
 

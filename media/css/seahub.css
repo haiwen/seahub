@@ -214,7 +214,7 @@ ul.with-bg li {
     _height: 400px;
 }
 #title-panel h2 {
-    margin-bottom:0.8em;
+    margin-bottom:0.45em;
 }
 #left-panel {
     float:right;
@@ -672,9 +672,22 @@ ul.with-bg li {
 .repo-op {
     text-align:right;
 }
+.repo-op button,
 #repo-download-btn {
     height:25px;
     background:#f5f5f5 scroll no-repeat 3px 48%;
+}
+#upload-file {
+    padding-left:19px;
+    background-image:url('../img/upload.png');
+}
+#add-new-dir {
+    padding-left:23px;
+    background-image:url('../img/folder-add.png');
+}
+#add-new-file {
+    padding-left:23px;
+    background-image:url('../img/new-file-icon.png');
 }
 .repo-file-list-outer-container,
 .commit-list-outer-container {
