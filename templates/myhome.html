@@ -15,7 +15,7 @@
 {% endif %}
 </div>
 
-{% if notes %}
+{% if grpmsg_list or grpmsg_reply_list or orgmsg_list %}
 <h3>提醒...</h3>
 <ul>
 {% if grpmsg_list %}
@@ -33,8 +33,8 @@
 {% if orgmsg_list %}
 <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
 {% endif %}
-{% endif %}
 </ul>
+{% endif %}
 
 <h3>已用空间</h3>
 <p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>

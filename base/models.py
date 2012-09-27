@@ -66,7 +66,7 @@ class InnerPubMsgReply(models.Model):
 
 at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
     
-@receiver(post_save, sender=InnerPubMsgReply)
+# @receiver(post_save, sender=InnerPubMsgReply)
 def msgreply_save_handler(sender, instance, **kwargs):
     """
     Handle sending notification to '@<user>' when reply messages.
@@ -107,7 +107,7 @@ def msgreply_save_handler(sender, instance, **kwargs):
                                      detail=innerpub_msg.id)
                 n.save()
     
-@receiver(post_save, sender=InnerPubMsg)
+# @receiver(post_save, sender=InnerPubMsg)
 def innerpub_msg_added_cb(sender, instance, **kwargs):
     from_email = instance.from_email
 
@@ -123,7 +123,7 @@ def innerpub_msg_added_cb(sender, instance, **kwargs):
                                  detail='')
             n.save()
 
-@receiver(post_save, sender=InnerPubMsgReply)
+# @receiver(post_save, sender=InnerPubMsgReply)
 def innerpubmsg_reply_added_cb(sender, instance, **kwargs):
     innerpub_msg = instance.reply_to
     from_email = instance.from_email
