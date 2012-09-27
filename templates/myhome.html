@@ -53,7 +53,7 @@
 {% include "snippets/shared_in_repos.html" %}
 
 {% url 'share_repo' as repo_share_url %}
-{% with post_url=repo_share_url tips='可以是非网站注册用户，我们会以邮件通知对方。' %}
+{% with post_url=repo_share_url tips='' %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 

@@ -115,12 +115,15 @@ def share_repo(request):
             
             if not is_registered_user(to_email):
                 # Generate shared link and send mail if user has not registered.
-                kwargs = {'repo_id': repo_id,
-                          'repo_owner': from_email,
-                          'anon_email': to_email,
-                          'is_encrypted': is_encrypted,
-                          }
-                anonymous_share(request, **kwargs)
+                # kwargs = {'repo_id': repo_id,
+                #           'repo_owner': from_email,
+                #           'anon_email': to_email,
+                #           'is_encrypted': is_encrypted,
+                #           }
+                # anonymous_share(request, **kwargs)
+                msg = u'共享给 %s 失败，用户未注册。' % to_email
+                messages.add_message(request, messages.ERROR, msg)
+                continue
             else:
                 msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
                     (to_email, reverse('share_admin'))
