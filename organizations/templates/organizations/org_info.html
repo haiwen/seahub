@@ -23,16 +23,22 @@
 {% if repos %}
 <table>
     <tr>
-        <th width="5%"><!--icon--></th>
+        <th width="4%"><!--icon--></th>
         <th width="20%">名字</th>
-        <th width="35%">描述</th>
+        <th width="36%">描述</th>
         <th width="15%">更新时间</th>
         <th width="15%">共享来源</th>
         <th width="10%">操作</th>
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
+        <td>
+            {% if repo.user_perm == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="目录icon" />
+            {% endif %}
+        </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}/">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.repo_desc }}</td>
         {% if repo.last_modified %}
