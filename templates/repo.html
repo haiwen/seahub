@@ -243,11 +243,14 @@ $('.more-op-icon').click(function(e) {
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
     if (clicked_more_op_icon && target != clicked_more_op_icon[0]) {
-       clicked_more_op_icon.next().addClass('hide');
-       clicked_more_op_icon.attr('data','no-popup');
-       clicked_more_op_icon.parent().addClass('vh');
-       clicked_more_op_icon.parent().parent().parent().removeClass('hl');
-       no_file_op_popup = true;
+        clicked_more_op_icon.next().addClass('hide'); // hide the popup
+        clicked_more_op_icon.attr('data','no-popup');
+        var its_tr = clicked_more_op_icon.parent().parent().parent();
+        if (!(its_tr.find('*').is(target))) {
+            clicked_more_op_icon.parent().addClass('vh');
+            its_tr.removeClass('hl');
+        }
+        no_file_op_popup = true;
     }
 });
 $('.hidden-op li').hover(
