@@ -14,7 +14,7 @@
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>

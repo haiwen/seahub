@@ -34,9 +34,9 @@
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="只读" alt="目录icon" />
             {% endif %}
         </td>
         <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
