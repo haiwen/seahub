@@ -761,8 +761,9 @@ def myhome(request):
     # Personal repos others shared to me
     in_repos = list_personal_shared_repos(email,'to_email', -1, -1)
     
-    # my contacts
-    contacts = Contact.objects.filter(user_email=email)
+    # Get registered contacts used in autocomplete.
+    contacts = [ c for c in Contact.objects.filter(user_email=email) \
+                     if is_registered_user(c.contact_email) ]
 
     # user notifications
     grpmsg_list = []
@@ -780,10 +781,7 @@ def myhome(request):
         elif n.msg_type == 'org_join_msg':
             orgmsg_list.append(n.detail)
 
-    # Get all personal groups used in autocomplete.
-    groups = get_personal_groups(-1, -1)
-
-    # Get all personal groups I joined.
+    # Get all personal groups I joined used in autocomplete.
     joined_groups = get_personal_groups_by_user(request.user.username)
 
     # get nickname
@@ -807,7 +805,7 @@ def myhome(request):
             "quota_usage": quota_usage,
             "in_repos": in_repos,
             "contacts": contacts,
-            "groups": groups,
+            "groups": joined_groups,
             "joined_groups": joined_groups,
             "notes": notes,
             "grpmsg_list": grpmsg_list,

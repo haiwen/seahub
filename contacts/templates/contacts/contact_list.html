@@ -1,4 +1,5 @@
 {% extends "myhome_base.html" %}
+{% load avatar_tags %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
@@ -9,17 +10,19 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>联系人列表</h3>
+<h3>站内联系人列表</h3>
 <button id="contact-add">添加联系人</button>
 <table>
     <tr>
+        <th width="4%"></th>
         <th width="38%">邮箱</th>
         <th width="20%">名字</th>
-        <th width="32%">备注</th>
+        <th width="28%">备注</th>
         <th width="10%">操作</th>
     </tr>
-    {% for contact in contacts %}
+    {% for contact in registered_contacts %}
     <tr>
+        <td>{% avatar contact.contact_email 20 %}</td>
         <td>{{ contact.contact_email }}</td>
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
@@ -30,6 +33,30 @@
     </tr>
 {% endfor %}
 </table>
+
+<h3>站外联系人列表</h3>
+<table>
+    <tr>
+        <th width="4%"></th>
+        <th width="38%">邮箱</th>
+        <th width="20%">名字</th>
+        <th width="32%">备注</th>
+        <th width="10%">操作</th>
+    </tr>
+    {% for contact in unregistered_contacts %}
+    <tr>
+        <td>{% avatar contact.contact_email 20 %}</td>
+        <td>{{ contact.contact_email }}</td>
+        <td>{{ contact.contact_name }}</td>
+        <td>{{ contact.note }}</td>
+        <td>
+            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">编辑</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">删除</a>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
 <form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
     <h3>添加联系人</h3>
     {{ form.user_email.as_hidden }}
@@ -98,15 +125,6 @@ $('#contact-edit-form').submit(function() {
 });
 
 addConfirmTo($('.contact-delete'));
-
-$("table tr:gt(0)").hover(
-    function() {
-        $(this).find('img').css('cursor', 'pointer').removeClass('vh');
-    },
-    function() {
-        $(this).find('img').addClass('vh');
-    }
-);
 
 $('#contact-add')
 .click(function() {

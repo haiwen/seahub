@@ -14,20 +14,31 @@ from models import Contact, ContactAddForm, ContactEditForm
 from utils import render_error
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
+from seahub.views import is_registered_user
 from seahub.settings import SITE_ROOT
 
 @login_required
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
+    registered_contacts = []
+    unregistered_contacts = []
+    for c in contacts:
+        if is_registered_user(c.contact_email):
+            registered_contacts.append(c)
+        else:
+            unregistered_contacts.append(c)
+
     form = ContactAddForm({'user_email':request.user.username})
     edit_init_data = {'user_email':request.user.username,
-                 'contact_email':'',
-                 'contact_name':'',
-                 'note':''}
+                      'contact_email':'',
+                      'contact_name':'',
+                      'note':''}
     edit_form = ContactEditForm(edit_init_data)
 
     return render_to_response('contacts/contact_list.html', {
         'contacts': contacts,
+        'registered_contacts': registered_contacts,
+        'unregistered_contacts': unregistered_contacts,
         'form': form,
         'edit_form': edit_form,
         }, context_instance=RequestContext(request))
@@ -43,14 +54,17 @@ def contact_add_post(request):
 
     form = ContactAddForm(request.POST)
     if form.is_valid():
+        contact_email = form.cleaned_data['contact_email']
+        
         contact = Contact()
         contact.user_email = form.cleaned_data['user_email']
-        contact.contact_email = form.cleaned_data['contact_email']
+        contact.contact_email = contact_email
         contact.contact_name = form.cleaned_data['contact_name']
         contact.note = form.cleaned_data['note']
         contact.save()
 
         result['success'] = True
+        messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -102,6 +116,7 @@ def contact_edit(request):
         contact.note = note
         contact.save()
         result['success'] = True
+        messages.success(request, u'操作成功')
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -114,5 +129,6 @@ def contact_delete(request):
     contact_email = request.GET.get('email')
 
     Contact.objects.filter(user_email=user_email, contact_email=contact_email).delete()
+    messages.success(request, u'删除成功')
     
     return HttpResponseRedirect(reverse("contact_list"))

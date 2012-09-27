@@ -109,6 +109,9 @@ def org_personal(request, url_prefix):
     # Org groups user created
     groups = get_org_groups_by_user(org.org_id, user)
 
+    # All org groups used in auto complete.
+    org_groups = get_org_groups(org.org_id, -1, -1)
+    
     # Org members used in auto complete
     contacts = []
     org_members = get_org_users_by_url_prefix(org.url_prefix, 0, MAX_INT)
@@ -123,6 +126,7 @@ def org_personal(request, url_prefix):
             "in_repos": in_repos,
             'org': org,
             'groups': groups,
+            'org_groups': org_groups,
             'contacts': contacts,
             'create_shared_repo': False,
             'allow_public_share': True,
@@ -546,8 +550,8 @@ def org_repo_share(request, url_prefix):
             # TODO: if we know group id, then we can simplly call group_share_repo
             group_name = share_to
 
-            # get org groups the user joined
-            groups = get_org_groups_by_user(org.org_id, from_email)
+            # Get all org groups.
+            groups = get_org_groups(org.org_id, -1, -1)
             find = False
             for group in groups:
                 # for every group that user joined, if group name and

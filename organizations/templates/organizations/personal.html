@@ -31,7 +31,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+{% with groups=org_groups %}
 {% include "snippets/myhome_extra_script.html" %}
+{% endwith %}
    
 {% url 'org_repo_create' org.url_prefix as repo_create_url %}
 {% with post_url=repo_create_url %}

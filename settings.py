@@ -165,7 +165,7 @@ GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 24 * 60 * 60
 AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
-AUTO_GENERATE_AVATAR_SIZES = (16, 28, 48, 60, 80)
+AUTO_GENERATE_AVATAR_SIZES = (16, 20, 28, 48, 60, 80)
 
 CACHES = {
     'default': {
