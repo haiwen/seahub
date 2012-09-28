@@ -32,7 +32,7 @@
         <td>{{ member.user_name }}</td>
         <td>
         {% if not member.is_staff %}
-            <button data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn">删除</button>
+            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
         {% endif %}
         </td>
     </tr>

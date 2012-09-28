@@ -493,7 +493,7 @@ def group_members(request, group_id):
         return render_error(request, u'group id 不是有效参数')        
 
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有群组管理员有权管理群组')
+        raise Http404
 
     group = get_group(group_id)
     if not group:
@@ -602,15 +602,16 @@ def group_remove_member(request, group_id, user_name):
         return render_error(request, u'group id 不是有效参数')        
     
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有群组管理员有权删除成员')
-    
+        raise Http404
+
     try:
         ccnet_threaded_rpc.group_remove_member(group_id_int,
                                                request.user.username,
                                                user_name)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
+        messages.success(request, u'操作成功')
     except SearpcError, e:
-        return render_error(request, e.msg)
+        messages.error(request, u'操作失败：%s' % e.msg)
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
 
