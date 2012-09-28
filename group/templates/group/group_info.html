@@ -46,9 +46,9 @@
 {% if repos %}
 <table>
     <tr>
-        <th width="5%"><!--icon--></th>
+        <th width="4%"><!--icon--></th>
         <th width="20%">名字</th>
-        <th width="35%">描述</th>
+        <th width="36%">描述</th>
         <th width="14%">更新时间</th>
         <th width="16%">共享来源</th>
         <th width="10%">操作</th>
@@ -56,7 +56,13 @@
 
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
+        <td>
+            {% if repo.user_perm == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="目录icon" />
+            {% endif %}
+        </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
@@ -68,9 +74,9 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
-	{% if repo.user_perm == 'rw' %}
+	    {% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载到本地" />
-	{% endif %}
+	    {% endif %}
         {% if is_staff or repo.share_from_me  %}
             <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
         {% endif %}

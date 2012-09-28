@@ -21,7 +21,7 @@
         {% endif %}
     </div>
     {% if user_perm != 'rw' %}
-    <p>这个同步目录设置了只读共享，您只能在线浏览文件</p>
+    <p>这个同步目录设置了只读共享，您只能在线浏览文件。</p>
     {% endif %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
@@ -189,7 +189,7 @@
     </form>
 
     <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="hide">
-        <p>将 <span id="rename-target" class="op-target"></span> 重命名为：</p>
+        <h3 id="rename-hd"></h3>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="hidden" name="oldname" value="" />
@@ -207,23 +207,25 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 <script type="text/javascript">
-$("table tr:gt(0)").hover(
+var clicked_more_op_icon, no_file_op_popup = true;
+$("table tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
     function() {
-        $(this).find('.repo-file-op').removeClass('vh');
+        if (no_file_op_popup) {
+            $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+        }
     },
     function() {
-        $(this).find('.repo-file-op').addClass('vh');
-        $(this).find('.more-op-icon').attr('data','no-popup');
-        $(this).find('.hidden-op').addClass('hide');
+        if (no_file_op_popup) {
+            $(this).removeClass('hl').find('.repo-file-op').addClass('vh');
+        }
     }
 );
 
 $('#main-panel').removeClass('ovhd');
-var clicked_more_op;
 $('.more-op-icon').click(function(e) {
     var its_op_list = $(this).next();
     if ($(this).attr('data')) { // no popup
-        clicked_more_op = $(this);
+        clicked_more_op_icon = $(this);
         $(this).parent().css('position','relative');
         its_op_list.css('left', $(this).position().left + $(this).width() + 5);
         if ($(this).offset().top + its_op_list.height() <= $('#main').offset().top + $('#main').height()) {
@@ -233,16 +235,28 @@ $('.more-op-icon').click(function(e) {
         }
         its_op_list.removeClass('hide');
         $(this).attr('data','');
+        no_file_op_popup = false;
     } else {
         its_op_list.addClass('hide');
         $(this).attr('data','no-popup');
+        no_file_op_popup = true;
     }
 });
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
-    if (clicked_more_op && target != clicked_more_op[0]) {
-       clicked_more_op.next().addClass('hide');
-       clicked_more_op.attr('data','no-popup');
+    if (clicked_more_op_icon && target != clicked_more_op_icon[0]) {
+        clicked_more_op_icon.next().addClass('hide'); // hide the popup
+        clicked_more_op_icon.attr('data','no-popup');
+        var its_tr = clicked_more_op_icon.parent().parent().parent();
+        if (!(its_tr.find('*').is(target))) {
+            clicked_more_op_icon.parent().addClass('vh');
+            its_tr.removeClass('hl');
+            if ($('table tr:gt(0)').find('*').is(target)) {
+                target.parentNode.className += 'hl';
+                target.parentNode.getElementsByTagName('div')[0].className = 'repo-file-op';
+            }
+        }
+        no_file_op_popup = true;
     }
 });
 $('.hidden-op li').hover(
@@ -258,7 +272,7 @@ $('.file-rename, .dir-rename').click(function () {
     var type = $(this).hasClass('file-rename') ? '文件 ' : '目录 ',
         name = $(this).attr('data');
         newname = $('#rename-form input[name="newname"]');
-    $('#rename-target').html(type + name);
+        $('#rename-hd').html( '将' + type + ' <span class="op-target">' + name + '</span> 重命名为：');
     $('#rename-form input[name="oldname"]').val(name);
     $('#rename-form').modal({appendTo:'#main'});
     newname.before('<p class="hide">' + name + '</p>');

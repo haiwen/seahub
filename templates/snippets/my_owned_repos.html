@@ -4,15 +4,15 @@
 {% if owned_repos %}
 <table>
     <tr>
-        <th width="5%"><!--icon--></th>
-        <th width="23%">名字</th>
+        <th width="4%"><!--icon--></th>
+        <th width="24%">名字</th>
         <th width="40%">描述</th>
         <th width="20%">更新时间</th>
         <th width="12%">操作</th>
     </tr>
     {% for repo in owned_repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
