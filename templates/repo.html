@@ -249,6 +249,10 @@ $(document).click(function(e) {
         if (!(its_tr.find('*').is(target))) {
             clicked_more_op_icon.parent().addClass('vh');
             its_tr.removeClass('hl');
+            if ($('table tr:gt(0)').find('*').is(target)) {
+                target.parentNode.className += 'hl';
+                target.parentNode.getElementsByTagName('div')[0].className = 'repo-file-op';
+            }
         }
         no_file_op_popup = true;
     }
