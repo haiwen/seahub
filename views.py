@@ -819,6 +819,19 @@ def myhome(request):
 
     allow_public_share = True if not CLOUD_MODE else False
 
+    # events
+    if EVENTS_CONFIG_FILE:
+        ev_session = get_seafevents_session()
+        events = seafevents.get_user_events(ev_session, request.user.username, 0, 10)
+        ev_session.close()
+        for ev in events:
+            if ev.etype == 'repo-update':
+                ev.repo = get_repo(ev.repo_id)
+                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+    else:
+        events = None
+
+
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -834,6 +847,7 @@ def myhome(request):
             "orgmsg_list": orgmsg_list,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
+            "events": events,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -2424,7 +2438,7 @@ def use_flash_for_pdf(request):
         return True
     else:
         return False
-    
+'''    
 @login_required            
 def show_events(request):
     ev_session = get_seafevents_session()
@@ -2438,3 +2452,4 @@ def show_events(request):
     return render_to_response ('events.html', {
         'events': events,
         }, context_instance=RequestContext(request))
+'''

@@ -99,8 +99,6 @@ urlpatterns = patterns('',
     url(r'^sys/useradmin/$', sys_useradmin, name='sys_useradmin'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
-
-    url(r'^events/$', show_events, name='show_events'),
 )
 
 if settings.DEBUG:

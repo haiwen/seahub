@@ -610,6 +610,19 @@ ul.with-bg li {
     width:262px;
     margin-bottom:10px;
 }
+.event-item {
+    padding:2px 0 10px;
+    border-bottom:1px solid #eee;
+    margin-bottom:10px;
+}
+.event-item .time {
+    color:#888;
+}
+.event-item .avatar {
+    border-radius:2px;
+    margin-right:5px;
+    vertical-align:middle;
+}
 /* avatar */
 .avatar-op .avatar,
 .home-profile .avatar,
