@@ -861,3 +861,37 @@ def group_joinrequest(request, group_id):
             return HttpResponseBadRequest(json.dumps(form.errors),
                                           content_type=content_type)
         
+def attention(request):
+    """
+    Handle ajax request to query group members used in autocomplete.
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    try:
+        gid = int(request.GET.get('gid', ''))
+    except ValueError:
+        raise Http404
+
+    name_str =  request.GET.get('name_startsWith')
+    user = request.user.username
+
+    if not is_group_user(gid, user):
+        raise Http404
+
+    result = []
+    # Get all group users
+    members = get_group_members(gid)
+    for m in members:
+        if m.user_name == user:
+            continue
+        from base.templatetags.seahub_tags import email2nickname, char2pinyin
+        nickname = email2nickname(m.user_name)
+        pinyin = char2pinyin(nickname)
+        if nickname.startswith(name_str) or pinyin.startswith(name_str):
+            result.append({'contact_name': nickname})
+
+    content_type = 'application/json; charset=utf-8'
+    
+    return HttpResponse(json.dumps(result), content_type=content_type)
+    

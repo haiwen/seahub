@@ -1,13 +1,11 @@
-/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-
 //add op confirm dialog
 var Op_url = '';
 function addConfirmTo(ele, confirm_con) {
     ele.each(function() {
         $(this).click(function() {
-			if (confirm_con) {
-				$('#confirm-con').html(confirm_con);
-			}
+	    if (confirm_con) {
+		$('#confirm-con').html(confirm_con);
+	    }
             $('#dialog-confirm').modal({appendTo:'#main'});
             Op_url = $(this).attr('data');
             return false;//in case ele is '<a>'
@@ -58,10 +56,10 @@ function addAutocomplete(ele_id, container_id, data) {
             delay: 100,
             minLength: 0,
             source: function(request, response) {
-                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(extractLast(request.term)), "i");
-                    response($.grep(data, function(value) {
-                                return matcher.test(value.value);
-                            }));
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(extractLast(request.term)), "i");
+                response($.grep(data, function(value) {
+                    return matcher.test(value.value);
+                }));
             },
             focus: function() {
                 return false;
@@ -83,7 +81,7 @@ function addAutocomplete(ele_id, container_id, data) {
  * @param ele_css: {'xx':'xxx'}, styles to be applied to ele_cp
  * @param container_id: id of autocomplete's container, often container of element above
  */
-function addAtAutocomplete(ele_id, container_id, data, ele_css) {
+function addAtAutocomplete(ele_id, container_id, gid, aj_url, ele_css) {
     var pos = ''; // cursor position
     var cursor_at_end; // Boolean. if cursor at the end or in the middle.
     var end_str = ''; // str after '@' when '@' is inserted into the middle of the ele's value
@@ -150,10 +148,22 @@ function addAtAutocomplete(ele_id, container_id, data, ele_css) {
                     } else {
                         request_term = request.term.slice(pos + 1, - end_str.length);
                     }
-                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request_term), "i");
-                    response($.grep(data, function(value) {
-                        return matcher.test(value.value);
-                    }));
+                    $.ajax({
+                        url: aj_url,
+                        dataType: "json",
+                        data: {
+                            gid: gid,
+                            name_startsWith: request_term
+                        },
+                        success: function(data) {
+                            response($.map(data, function(value) {
+                                return {
+                                    label: value.contact_name,
+                                    value: value.contact_name
+                                }
+                            }));
+                        }
+                    });
                 } else {
                     response(null); // when cursor is at the left of current @ or @ is deleted
                 }
