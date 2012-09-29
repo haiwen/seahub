@@ -18,8 +18,8 @@ import seafevents
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
-    get_org_id_by_group, list_personal_shared_repos, \
-    get_personal_groups_by_user, list_personal_repos_by_owner, \
+    get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
+    get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
     list_org_repos_by_owner, get_org_groups_by_user
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
@@ -208,14 +208,14 @@ def get_accessible_repos(request, repo):
         shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
         groups_repos = []
         for group in get_org_groups_by_user(org_id, email):
-            groups_repos.append(get_org_group_repos(org_id, group.id, email))
+            groups_repos += get_org_group_repos(org_id, group.id, email)
     else:
         # personal context
         owned_repos = list_personal_repos_by_owner(email)
         shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
         groups_repos = []
         for group in get_personal_groups_by_user(email):
-            groups_repos.append(get_group_repos(group.id, email))
+            groups_repos += get_group_repos(group.id, email)
 
     def has_repo(repos, repo):
         for r in repos:
@@ -224,10 +224,10 @@ def get_accessible_repos(request, repo):
         return False
 
     accessible_repos = set()
-    for repo in owned_repos + shared_repos + groups_repos:
-        if not repo.props.encrypted:
-            repo.has_subdir = check_has_subdir(repo)
-            accessible_repos.add(repo)
+    for r in owned_repos + shared_repos + groups_repos:
+        if not r.encrypted:
+            r.has_subdir = check_has_subdir(r)
+            accessible_repos.add(r)
 
     return accessible_repos
 
