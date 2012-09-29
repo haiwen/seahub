@@ -39,8 +39,10 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner, is_passwd_set, get_file_size
+    get_org_repo_owner, is_passwd_set, get_file_size, get_related_users_by_repo
 from pysearpc import SearpcError
+
+from signals import repo_created, repo_deleted
 
 from base.accounts import User
 from base.decorators import sys_staff_required, ctx_switch_required
@@ -71,6 +73,14 @@ try:
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
+
+try:
+    from settings import EVENTS_CONFIG_FILE
+    import seafevents
+except ImportError:
+    EVENTS_CONFIG_FILE = None
+else:
+    from utils import get_seafevents_session
 
 @login_required
 def root(request):
@@ -716,6 +726,10 @@ def modify_token(request, repo_id):
 
 @login_required
 def remove_repo(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        return render_error(request, u"该同步目录不存在")
+        
     user = request.user.username
     org, base_template = check_and_get_org_by_repo(repo_id, user)
     if org:
@@ -731,7 +745,14 @@ def remove_repo(request, repo_id):
         # Remove repo in personal context, only repo owner or site staff can
         # perform this operation.
         if validate_owner(request, repo_id) or request.user.is_staff:
+            usernames = get_related_users_by_repo(repo_id)
             seafserv_threaded_rpc.remove_repo(repo_id)
+            repo_deleted.send(sender=None,
+                              usernames=usernames,
+                              repo_owner=user,
+                              repo_id=repo_id,
+                              repo_name=repo.name,
+                          )
         else:
             err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
             return render_permission_error(request, err_msg)
@@ -794,6 +815,19 @@ def myhome(request):
 
     allow_public_share = True if not CLOUD_MODE else False
 
+    # events
+    if EVENTS_CONFIG_FILE:
+        ev_session = get_seafevents_session()
+        events = seafevents.get_user_events(ev_session, request.user.username, 0, 10)
+        ev_session.close()
+        for ev in events:
+            if ev.etype == 'repo-update':
+                ev.repo = get_repo(ev.repo_id)
+                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+    else:
+        events = None
+
+
     return render_to_response('myhome.html', {
             "myname": email,
             "nickname": nickname,
@@ -809,6 +843,7 @@ def myhome(request):
             "orgmsg_list": orgmsg_list,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
+            "events": events,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -972,6 +1007,11 @@ def public_repo_create(request):
             result['error'] = u"创建目录失败"
         else:
             result['success'] = True
+            repo_created.send(sender=None,
+                              creator=user,
+                              repo_id=repo_id,
+                              repo_name=repo_name)
+
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -2038,6 +2078,10 @@ def repo_create(request):
             result['error'] = u"创建目录失败"
         else:
             result['success'] = True
+            repo_created.send(sender=None,
+                              creator=user,
+                              repo_id=repo_id,
+                              repo_name=repo_name)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -2390,5 +2434,18 @@ def use_flash_for_pdf(request):
         return True
     else:
         return False
-    
+'''    
+@login_required            
+def show_events(request):
+    ev_session = get_seafevents_session()
+    events = seafevents.get_user_events(ev_session, request.user.username, 0, 10)
+    ev_session.close()
+    for ev in events:
+        if ev.etype == 'repo-update':
+            ev.repo = get_repo(ev.repo_id)
+            ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
 
+    return render_to_response ('events.html', {
+        'events': events,
+        }, context_instance=RequestContext(request))
+'''
