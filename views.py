@@ -261,11 +261,7 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
 
     def get_accessible_repos(self):
         if self.user.is_authenticated():
-            try:
-                accessible_repos = get_accessible_repos(self.request, self.repo)
-            except SearpcError, e:
-                error_msg = e.msg
-                return render_error(self.request, error_msg)
+            accessible_repos = get_accessible_repos(self.request, self.repo)
         else:
              accessible_repos = []   
         return accessible_repos

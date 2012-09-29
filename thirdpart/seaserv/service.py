@@ -296,6 +296,16 @@ def get_repos():
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 
+def list_personal_repos_by_owner(owner):
+    """
+    List users owned repos in personal context.
+    """
+    try:
+        repos = seafserv_threaded_rpc.list_owned_repos(owner)
+    except SearpcError:
+        repos = []
+    return repos
+    
 def is_repo_owner(user, repo_id):
     """
     Check whether user is repo owner.
