@@ -54,30 +54,51 @@
 
 {% if events %}
 <h3>最近事件</h3>
-<ul id="events">
+<ul id="events" class="hide">
 {% for ev in events %}
-    <li class="event-item">
+    <li class="event-item w100 ovhd">
     {% if ev.etype == 'repo-update' %}
         {% with author=ev.commit.creator_name commit=ev.commit repo=ev.repo %}
-        <p class="time">{{ commit.ctime|translate_commit_time }}</p>
-        <p>{% avatar author 24 %}<a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
-        更新了目录
-        <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a>
-        <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a></P>
+        <div class="pic fleft" data="{{ author }}">
+            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="event-hd">
+                <span class="time">{{ commit.ctime|translate_commit_time }}</span>
+                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+            </div>
+            <p>更新了目录 <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a> <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a></P>
+        </div>
         {% endwith %}
     {% endif %}
      
     {% if ev.etype == 'repo-create' %}
         {% with author=ev.creator repo_id=ev.repo_id repo_name=ev.repo_name %}
-        <p class="time">{{ ev.timestamp|translate_commit_time }}</p>
-        <p>{% avatar author 24 %}<a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a> 创建了目录 <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
+        <div class="pic fleft" data="{{ author }}">
+            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="event-hd">
+                <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
+                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+            </div>
+            <p>创建了目录 <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
+        </div>
         {% endwith %}
     {% endif %}
 
     {% if ev.etype == 'repo-delete' %}
         {% with author=ev.repo_owner repo_name=ev.repo_name %}
-        <p class="time">{{ ev.timestamp|translate_commit_time }}</p>
-        <p>{% avatar author 24 %}<a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a> 删除了目录 {{ repo_name }}</p>
+        <div class="pic fleft" data="{{ author }}">
+            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="event-hd">
+                <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
+                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
+            </div>
+            <p>删除了目录 {{ repo_name }}</p>
+        </div>
         {% endwith %}
     {% endif %}
     </li>
@@ -105,6 +126,12 @@
 
 {% if events %}
 {% include 'snippets/list_commit_detail.html' %}
+$('.event-item').each(function(index) {
+    if (index > 0 && $(this).children('.pic').attr('data') == $(this).prev().children('.pic').attr('data')) {
+        $(this).children('.pic').addClass('hide');
+    }
+});
+$('#events').removeClass('hide');
 {% endif %}
 </script>
 {% endblock %}

@@ -611,17 +611,18 @@ ul.with-bg li {
     margin-bottom:10px;
 }
 .event-item {
-    padding:2px 0 10px;
-    border-bottom:1px solid #eee;
-    margin-bottom:10px;
+    margin:10px 0 15px;
 }
-.event-item .time {
+.event-item .txt {
+    width:610px;
+    padding-bottom:8px;
+    border-bottom:1px solid #eee;
+}
+.event-hd .time {
     color:#888;
 }
 .event-item .avatar {
-    border-radius:2px;
-    margin-right:5px;
-    vertical-align:middle;
+    border-radius:3px;
 }
 /* avatar */
 .avatar-op .avatar,
