@@ -1,0 +1,78 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags %}
+{% load url from future %}
+
+{% block main_panel %}
+    <div class="w100 ovhd">
+        <h2 class="fleft">{{repo.props.name}} 的文件回收站</h2>
+        <button data="{% url 'repo' repo.id %}" class="fright" id="back">返回同步目录</button>
+    </div>
+
+    <div class="repo-file-list-outer-container">
+        <div class="repo-file-list-inner-container">
+            <div class="repo-file-list-topbar">
+                <p class="path">
+                当前路径：
+		<a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} 的文件回收站</a>
+		{% if not show_recycle_root %}
+                    {% for name, link in zipped %}
+                        {% if not forloop.last %}
+                        / <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a>
+                        {% else %}
+                        / {{ name }}
+                        {% endif %}
+                    {% endfor %}
+		{% endif %}
+                </p>
+            </div>
+            <!-- /.repo-file-list-topbar -->
+            <table class="repo-file-list">
+                <tr>
+                    <th width="5%"></th>
+                    <th width="60%">名字</th>
+		    <th width="20%">删除时间</th>
+                    <th width="15%">大小</th>
+                </tr>
+
+                {% for dirent in dir_list %}
+                <tr>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
+		    {% if show_recycle_root %}
+		    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+                    <td>{{ dirent.delete_time|translate_commit_time }}</td>
+		    {% else %}
+                    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+		    <td></td>
+		    {% endif %}
+		    <td></td>
+                </tr>
+                {% endfor %}
+
+                {% for dirent in file_list %}
+                <tr>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
+		    {% if show_recycle_root %}
+                    <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.obj_name }}</a></td>
+                    <td>{{ dirent.delete_time|translate_commit_time }}</td>
+		    {% else %}
+                    <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.props.obj_name }}</a></td>
+		    <td></td>
+		    {% endif %}
+                    <td>{{ dirent.file_size|filesizeformat }}</td>
+                    <td>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#back').click(function() {
+    location.href = $(this).attr('data');
+});
+</script>
+{% endblock %}

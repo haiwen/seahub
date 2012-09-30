@@ -144,12 +144,37 @@ def gen_path_link(path, repo_name):
             link = '/' + '/'.join(paths[:i])
             i = i + 1
             links.append(link)
-    paths.insert(0, repo_name)
-    links.insert(0, '/')
+    if repo_name:
+        paths.insert(0, repo_name)
+        links.insert(0, '/')
         
     zipped = zip(paths, links)
     
     return zipped
+
+def get_repo_dirents(commit, path):
+    dir_list = []
+    file_list = []
+    if commit.root_id == EMPTY_SHA1:
+        return ([], [])
+    else:
+        try:
+            dirs = seafserv_threaded_rpc.list_dir_by_path(commit.id, path.encode('utf-8'))
+        except SearpcError, e:
+            raise Http404
+            # return render_error(self.request, e.msg)
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.props.mode):
+                dir_list.append(dirent)
+            else:
+                file_list.append(dirent)
+                dirent.file_size = get_file_size(dirent.obj_id)
+
+        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                        y.obj_name.lower()))
+        file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                         y.obj_name.lower()))
+        return (file_list, dir_list)
 
 class RepoMixin(object):
     def get_repo_id(self):
@@ -178,32 +203,6 @@ class RepoMixin(object):
         if self.repo.encrypted:
             return is_passwd_set(self.repo.id, self.user.username)
         return False
-
-    def get_repo_dirents(self):
-        dir_list = []
-        file_list = []
-        if self.current_commit.root_id == EMPTY_SHA1:
-            return ([], [])
-        else:
-            try:
-                dirs = seafserv_threaded_rpc.list_dir_by_path(
-                    self.current_commit.id,
-                    self.path.encode('utf-8'))
-            except SearpcError, e:
-                raise Http404
-                # return render_error(self.request, e.msg)
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    dir_list.append(dirent)
-                else:
-                    file_list.append(dirent)
-                    dirent.file_size = get_file_size(dirent.obj_id)
-
-            dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                            y.obj_name.lower()))
-            file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                             y.obj_name.lower()))
-            return (file_list, dir_list)
 
     def get_nav_path(self):
         zipped = gen_path_link(self.path, self.repo.name)
@@ -242,7 +241,7 @@ class RepoMixin(object):
             self.zipped = None
             self.applet_root = None
         else:
-            self.file_list, self.dir_list = self.get_repo_dirents()
+            self.file_list, self.dir_list = get_repo_dirents(self.current_commit, self.path)
             self.zipped = self.get_nav_path()
             self.applet_root = self.get_applet_root()
         
@@ -336,6 +335,81 @@ class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         kwargs['path'] = self.path
         kwargs['zipped'] = self.zipped
         return kwargs
+
+def render_recycle_root(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    try:
+        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id)
+    except:
+        deleted_entries = []
+
+    dir_list = []
+    file_list = []
+    for dirent in deleted_entries:
+        if stat.S_ISDIR(dirent.mode):
+            dir_list.append(dirent)
+        else:
+            file_list.append(dirent)
+
+    dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                    y.obj_name.lower()))
+    file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
+                                     y.obj_name.lower()))
+
+    return render_to_response('repo_recycle_view.html', {
+            'show_recycle_root': True,
+            'repo': repo,
+            'dir_list': dir_list,
+            'file_list': file_list,
+            }, context_instance=RequestContext(request))
+
+def render_recycle_dir(request, repo_id, commit_id):
+    basedir = request.GET.get('base', '')
+    path = request.GET.get('p', '')
+    if not basedir or not path:
+        return render_recycle_root(request, repo_id)
+
+    if basedir[0] != '/':
+        basedir = '/' + basedir
+    if path[-1] != '/':
+        path += '/'
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    commit = seafserv_threaded_rpc.get_commit(commit_id)
+    if not commit:
+        raise Http404
+
+    zipped = gen_path_link(path, '')
+    file_list, dir_list = get_repo_dirents(commit, basedir + path)
+
+    return render_to_response('repo_recycle_view.html', {
+            'show_recycle_root': False,
+            'repo': repo,
+            'zipped': zipped,
+            'dir_list': dir_list,
+            'file_list': file_list,
+            'commit_id': commit_id,
+            'basedir': basedir,
+            'path': path,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@ctx_switch_required
+def repo_recycle_view(request, repo_id):
+    if get_user_permission(request, repo_id) != 'rw':
+        return render_permission_error(request, '无法查看文件回收站')
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return render_recycle_root(request, repo_id)
+    else:
+        return render_recycle_dir(request, repo_id, commit_id)
 
 @login_required
 @ctx_switch_required
@@ -1086,6 +1160,12 @@ def repo_view_file(request, repo_id):
     if not current_commit:
         current_commit = get_commits(repo_id, 0, 1)[0]
 
+    basedir = ''
+    if page_from == 'recycle':
+        basedir = request.GET.get('base', '')
+        if not basedir:
+            raise Http404
+
     if view_history:
         obj_id = request.GET.get('obj_id', '')
     else:
@@ -1120,7 +1200,10 @@ def repo_view_file(request, repo_id):
     read_only = True if permission == 'r' else False
 
     # generate path and link
-    zipped = gen_path_link(path, repo.name)
+    if page_from == 'recycle':
+        zipped = gen_path_link(path, '')
+    else:
+        zipped = gen_path_link(path, repo.name)
 
     # determin whether file can preview on web
     filetype, fileext = valid_previewed_file(filename)
@@ -1141,6 +1224,29 @@ def repo_view_file(request, repo_id):
         pdf_use_flash = use_flash_for_pdf(request)
         if pdf_use_flash:
             err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
+
+    if view_history:
+        return render_to_response('repo_view_file.html', {
+                'repo': repo,
+                'obj_id': obj_id,
+                'u_filename': u_filename,
+                'file_name': filename,
+                'path': path,
+                'zipped': zipped,
+                'view_history': view_history,
+                'current_commit': current_commit,
+                'token': token,
+                'filetype': filetype,
+                'fileext': fileext,
+                'raw_path': raw_path,
+                'err': err,
+                'file_content': file_content,
+                'swf_exists': swf_exists,
+                'pdf_use_flash': pdf_use_flash,
+                'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+                'page_from': page_from,
+                'basedir': basedir,
+                }, context_instance=RequestContext(request))
     
     # file share link
     l = FileShare.objects.filter(repo_id=repo_id).filter(\

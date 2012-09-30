@@ -25,10 +25,31 @@
             <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">返回文件版本列表</button>
         </div>
         {% endif %}
+	{% if page_from == 'recycle' %}
+        <div class="w100 ovhd">
+            <h2 class="fleft">
+                {{repo.props.name}} 的文件回收站
+            </h2>
+            <button class="fright" data="{% url 'repo' repo.id %}" id="back">返回同步目录</button>
+        </div>
+	{% endif %}
     {% endif %}
     <div class="w100 ovhd">
         <p class="path fleft">
         当前路径：
+	{% if page_from == 'recycle' %}
+
+	<a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} 的文件回收站</a>
+        {% for name, link in zipped %}
+            {% if not forloop.last %}
+            / <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a>
+            {% else %}
+            / {{ name }}
+            {% endif %}
+        {% endfor %}
+
+	{% else %}
+
         {% for name, link in zipped %}
             {% if not forloop.last %}
                 {% if view_history %}
@@ -44,6 +65,8 @@
                 {{ name }}
             {% endif %}
         {% endfor %}
+
+	{% endif %} <!-- if page_from == 'recycle' -->
         </p>
 
         {% if not view_history %}
@@ -422,10 +445,12 @@ $('#open-local').click(function () {
 //'not view_history' ends here
 {% endif %}
 
-{% if view_history and page_from == 'file_history' %}
+{% if view_history %}
+    {% if page_from == 'file_history' or page_from == 'recycle' %}
 $('#back').click(function() {
     location.href = $(this).attr('data');
 });
+    {% endif %}
 {% endif %}
 </script>
 {% endblock %}
