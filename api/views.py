@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.core.urlresolvers import reverse
 from django.template import loader
+from django.core.mail import send_mail
 
 from djangorestframework.renderers import JSONRenderer
 from djangorestframework.compat import View
@@ -244,6 +245,21 @@ class Ping(ResponseMixin, View):
         else:
             response["logined"] = False
         return response
+
+class Account(ResponseMixin, View):
+    renderers = (JSONRenderer,)
+
+    @api_login_required
+    def get(self, request):
+        info = {}
+        email = request.user.username
+        info['email'] = email
+        info['usage'] = seafserv_threaded_rpc.get_user_quota_usage(email)
+        info['total'] = 2 * 1024 * 1024 * 1024
+        info['feedback'] = settings.DEFAULT_FROM_EMAIL
+        response = Response(200, [info])
+        return self.render(response)
+
 
 class ReposView(ResponseMixin, View):
     renderers = (JSONRenderer,)
