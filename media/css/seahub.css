@@ -632,6 +632,8 @@ ul.with-bg li {
     font-size:1em;
     padding:0;
     border:0;
+    min-height:150px;
+    margin-bottom:75px;
 }
 #repos-tabs .ui-tabs-nav {
     padding:0;
