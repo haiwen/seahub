@@ -18,6 +18,7 @@
         <h2 class="fleft">{{repo.props.name}}</h2>
         {% if user_perm == 'rw' %}
         <button id="repo-download-btn" class="fright">下载到本地</button>
+	<button id="recycle-btn" class="fright" data="{% url 'repo_recycle_view' repo.id %}">文件回收站</button>
         {% endif %}
     </div>
     {% if user_perm != 'rw' %}
@@ -513,7 +514,7 @@ $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main'});
 });
 
-$('#upload-file, #add-new-dir, #add-new-file,#repo-download-btn').hover(
+$('#upload-file, #add-new-dir, #add-new-file, #repo-download-btn, #recycle-btn').hover(
     function() {
         $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
     },
@@ -525,6 +526,11 @@ $('#upload-file, #add-new-dir, #add-new-file,#repo-download-btn').hover(
 $('#repo-download-btn').click(function() {
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}'); 
 });
+
+$('#recycle-btn').click(function() {
+    location.href = $(this).attr('data');
+});
+
 {% include "snippets/list_commit_detail.html" %}
 {% include "snippets/bottom_bar.html" %}
 
