@@ -13,8 +13,6 @@ from base.models import FileContributors
 
 from pysearpc import SearpcError
 
-import seafevents
-
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
@@ -410,11 +408,11 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
     return contributors, last_modified 
 
-seafevents_session = None
-def get_seafevents_session():
-    if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
-        return None
-    else:
+
+if hasattr(settings, 'EVENTS_CONFIG_FILE'):
+    import seafevents
+    seafevents_session = None
+    def get_seafevents_session():
         global seafevents_session
 
         if not seafevents_session:

@@ -76,11 +76,10 @@ from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
 
 try:
     from settings import EVENTS_CONFIG_FILE
+    from utils import get_seafevents_session
     import seafevents
 except ImportError:
     EVENTS_CONFIG_FILE = None
-else:
-    from utils import get_seafevents_session
 
 @login_required
 def root(request):
