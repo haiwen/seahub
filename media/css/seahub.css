@@ -197,6 +197,25 @@ ul.with-bg li {
     border-style: dashed dashed dashed solid;
     border-left-color: #bbb;
 }
+.info-item {
+    border: 1px solid #C5D5DD;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.info-item h3,
+.info-item p {
+    margin:0;
+}
+.info-item-top {
+    padding: 4px 10px;
+    background: #E6F1F6;
+    border-bottom: 1px solid #D8E6EC;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.info-item-bottom {
+    padding: 8px 10px;
+}
 
 /* container */
 #header, #main, #footer { width:950px; }
@@ -567,20 +586,21 @@ ul.with-bg li {
 /*myhome*/
 .home-profile .avatar {
     float:left;
-    margin:0 15px 0 11px;
+    margin:0 15px 0 9px;
 }
 .mygroup {
-    display:inline-block;
-    width:70px;
+    float:left;
+    width:66px;
     text-align:center;
     word-wrap:break-word;
     vertical-align:top;
     margin:0 0px 5px 0;
 }
-.mygroup .tip {
-    font-size: 0.9em;
-    color: #333;
+.mygroup a {
+    display:inline-block;
+    width:100%;
 }
+
 #repo-create,
 #contact-add,
 #group-add,

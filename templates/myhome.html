@@ -5,8 +5,9 @@
 {% block nav_myhome_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-<h3>我的基本信息</h3>
-<div class="home-profile w100 ovhd">
+<div class="info-item">
+<h3 class="info-item-top">我的基本信息</h3>
+<div class="info-item-bottom home-profile ovhd">
     <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar myname 48 %}</a>
 {% if nickname %}
 <p class="fleft">{{ nickname }}</p>
@@ -14,10 +15,12 @@
 <p class="fleft">暂无昵称 <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="编辑" title="编辑" /></a></p>
 {% endif %}
 </div>
+</div>
 
 {% if grpmsg_list or grpmsg_reply_list or orgmsg_list %}
-<h3>提醒...</h3>
-<ul>
+<div class="info-item">
+<h3 class="info-item-top">提醒...</h3>
+<ul class="info-item-bottom">
 {% if grpmsg_list %}
 <li>
     群组
@@ -34,10 +37,13 @@
 <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
 {% endif %}
 </ul>
+</div>
 {% endif %}
 
-<h3>已用空间</h3>
-<p>{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
+<div class="info-item">
+<h3 class="info-item-top">已用空间</h3>
+<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
+</div>
 
 <!-- 我的群组 -->
 {% with groups=joined_groups %}
