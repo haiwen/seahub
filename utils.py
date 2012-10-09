@@ -181,7 +181,7 @@ def get_accessible_repos(request, repo):
 
     """
     def check_has_subdir(repo):
-        latest_commit = get_commits(repo.props.id, 0, 1)[0]
+        latest_commit = get_commits(repo.id, 0, 1)[0]
         if latest_commit.root_id == EMPTY_SHA1:
             return False
 
@@ -222,12 +222,21 @@ def get_accessible_repos(request, repo):
         return False
 
     accessible_repos = []
-    for r in owned_repos + shared_repos + groups_repos:
-        if not has_repo(accessible_repos, r):
-            if not r.encrypted:
-                r.has_subdir = check_has_subdir(r)
-                accessible_repos.append(r)
+    for r in owned_repos:
+        if not has_repo(accessible_repos, r) and not r.encrypted:
+            r.has_subdir = check_has_subdir(r)
+            accessible_repos.append(r)
 
+    for r in shared_repos + groups_repos:
+        if not has_repo(accessible_repos, r) and not r.encrypted:
+            # For compatibility with diffrent fields names in Repo and
+            # SharedRepo objects.
+            r.id = r.repo_id
+            r.name = r.repo_name
+            r.desc = r.repo_desc
+            r.has_subdir = check_has_subdir(r)
+            accessible_repos.append(r)
+        
     return accessible_repos
 
 def valid_previewed_file(filename):
