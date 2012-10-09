@@ -5,16 +5,10 @@
 {% block nav_publichome_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-<h3>成员</h3>
-{% if users %}
-<ul>
-    {% for member in users %}
-	<li class="member">{% avatar member.email 16 %}<a class="name" href="{% url 'user_profile' member.email %}">{{ member.email|email2nickname }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>暂无</p>
-{% endif %}
+<h3>小提示</h3>
+<div>
+  <p>标记为只读的资料库只能查看，无法下载。</p>
+</div>
 {% endblock %}
 
 {% block right_panel %}
@@ -55,6 +49,8 @@
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<p class="empty-repo-tips">您可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。</p>
 {% endif %}
 <!-- /.main -->
 {% include "snippets/repo_share_form.html" %}

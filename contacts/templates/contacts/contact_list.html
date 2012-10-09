@@ -35,9 +35,8 @@
 {% endfor %}
 </table>
 {% else %}
-<p>暂无</p>
+<p class="empty-repo-tips">添加联系人时，如果该用户已注册，则显示为您的站内联系人。</p>
 {% endif %}
-
 
 <h3>站外联系人列表</h3>
 {% if unregistered_contacts %}
@@ -63,7 +62,7 @@
 {% endfor %}
 </table>
 {% else %}
-<p>暂无</p>
+<p class="empty-repo-tips">添加联系人时，如果该用户未注册，则显示为您的站外联系人。</p>
 {% endif %}
 
 <form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">

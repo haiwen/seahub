@@ -352,7 +352,7 @@ def repo_upload_file(request, repo_id):
                                                       'upload',
                                                       request.user.username)
         else:
-            return render_permission_error(request, u'无法访问该目录')
+            return render_permission_error(request, u'无法访问该资料库')
 
         no_quota = False
         if seafserv_threaded_rpc.check_quota(repo_id) < 0:
@@ -388,7 +388,7 @@ def repo_update_file(request, repo_id):
                                                       'update',
                                                       request.user.username)
         else:
-            return render_permission_error(request, u'无法访问该目录')
+            return render_permission_error(request, u'无法访问该资料库')
 
         no_quota = False
         if seafserv_threaded_rpc.check_quota(repo_id) < 0:
@@ -738,7 +738,7 @@ def remove_repo(request, repo_id):
                 is_org_repo_owner(org.org_id, repo_id, user):
             seafserv_threaded_rpc.remove_repo(repo_id)
         else:
-            err_msg = u'删除资料库失败, 只有团体管理员或目录创建者有权删除目录。'
+            err_msg = u'删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。'
             return render_permission_error(request, err_msg)
     else:
         # Remove repo in personal context, only repo owner or site staff can
@@ -753,7 +753,7 @@ def remove_repo(request, repo_id):
                               repo_name=repo.name,
                           )
         else:
-            err_msg = u'删除资料库失败, 只有管理员或目录创建者有权删除目录。'
+            err_msg = u'删除资料库失败, 只有管理员或资料库创建者有权删除资料库。'
             return render_permission_error(request, err_msg)
 
     next = request.META.get('HTTP_REFERER', None)
@@ -1003,7 +1003,7 @@ def public_repo_create(request):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = u"创建目录失败"
+            result['error'] = u"创建失败"
         else:
             result['success'] = True
             repo_created.send(sender=None,

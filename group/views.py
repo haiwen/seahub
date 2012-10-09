@@ -641,7 +641,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     # Check whether user is group staff or the one share the repo
     if not check_group_staff(group_id, from_email) and \
             seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
-        return render_permission_error(request, u'取消共享失败:只有群组管理员或共享目录发布者有权取消共享')
+        return render_permission_error(request, u'取消共享失败:只有群组管理员或共享资料库发布者有权取消共享')
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
         return render_error(request, u'取消共享失败:内部错误')

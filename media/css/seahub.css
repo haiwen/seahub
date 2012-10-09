@@ -593,6 +593,10 @@ ul.with-bg li {
 #repo-create-form {
     padding:0 20px;
 }
+.empty-repo-tips {
+    width: 60%;
+    margin: 25px auto;
+}
 #repo-name,
 #repo-desc,
 .repo-create-encryption .passwd,

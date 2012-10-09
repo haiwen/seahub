@@ -41,7 +41,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p>暂无</p>
+<p class="empty-repo-tips">这里将显示您共享给您朋友的资料库。您可以点击“我的页面”任意资料库旁的“共享”图标将您的资料库共享给您的朋友。</p>
 {% endif %}
 
 <h3>我管理的文件外链</h3>
@@ -66,7 +66,7 @@
   {% endfor %}
 </table>
 {% else %}
-<p>暂无</p>
+<p class="empty-repo-tips">这里将显示您分享的文件外链。您可以在文件浏览页面点击“获取分享地址”按钮生成文件外链。</p>
 {% endif %}
 <p id="link" class="hide">该文件外链为：<input type="text" readonly="readonly" value="" id="shared-link" /></p>
 {% endblock %}

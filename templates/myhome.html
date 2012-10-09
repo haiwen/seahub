@@ -67,7 +67,7 @@
                 <span class="time">{{ commit.ctime|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>更新了目录 <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a> <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a></P>
+            <p>更新了资料库 <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a> <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a></P>
         </div>
         {% endwith %}
     {% endif %}
@@ -82,7 +82,7 @@
                 <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>创建了目录 <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
+            <p>创建了资料库 <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
         </div>
         {% endwith %}
     {% endif %}
@@ -97,7 +97,7 @@
                 <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>删除了目录 {{ repo_name }}</p>
+            <p>删除了资料库 {{ repo_name }}</p>
         </div>
         {% endwith %}
     {% endif %}
