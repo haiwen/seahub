@@ -41,8 +41,8 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>群组里共享的同步目录</h3>
-<button id="repo-create">新建同步目录</button>
+<h3>群组里共享的资料库</h3>
+<button id="repo-create">新建资料库</button>
 {% if repos %}
 <table>
     <tr>
@@ -158,7 +158,7 @@
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
 addConfirmTo($('#quit-group'), '确定要退出？');
-addConfirmTo($('.cancel-share'), '确定要取消共享该目录？');
+addConfirmTo($('.cancel-share'), '确定要取消共享该资料库？');
 
 $(function() {
     addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em

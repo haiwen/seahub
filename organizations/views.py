@@ -153,7 +153,7 @@ def org_inner_pub_repo_create(request, url_prefix):
         user = request.user.username
         org = get_user_current_org(request.user.username, url_prefix)
         if not org:
-            return HttpResponse(json.dumps(u'创建目录失败：未加入该团体'),
+            return HttpResponse(json.dumps(u'创建失败：未加入该团体'),
                                 content_type=content_type)
         
         try:
@@ -165,7 +165,7 @@ def org_inner_pub_repo_create(request, url_prefix):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = u"创建目录失败"
+            result['error'] = u"创建失败"
         else:
             result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -389,13 +389,13 @@ def org_repo_create(request, url_prefix):
         user = request.user.username
         org = get_user_current_org(request.user.username, url_prefix)
         if not org:
-            return HttpResponse(json.dumps(u'创建目录失败：未加入该团体'),
+            return HttpResponse(json.dumps(u'创建失败：未加入该团体'),
                                 content_type=content_type)
 
         repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
                                   org.org_id)
         if not repo_id:
-            result['error'] = u"创建目录失败"
+            result['error'] = u"创建失败"
         else:
             result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -523,7 +523,7 @@ def org_repo_share(request, url_prefix):
 
     # Test whether user is the repo owner
     if not validate_org_repo_owner(org.org_id, repo_id, request.user.username):
-        return render_permission_error(request, u'只有目录拥有者有权共享目录',
+        return render_permission_error(request, u'只有资料库拥有者有权共享该资料库',
                                        extra_ctx={
                 'org': org,
                 'base_template': 'org_base.html',

@@ -64,8 +64,8 @@ class RepoCreateForm(forms.Form):
     Form for creating repo and org repo.
     """
     repo_name = forms.CharField(max_length=50, error_messages={
-            'required': '目录名不能为空',
-            'max_length': '目录名太长，不超过50个字符'
+            'required': '名称不能为空',
+            'max_length': '名称太长，不超过50个字符'
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
             'required': '描述不能为空',
@@ -86,7 +86,7 @@ class RepoCreateForm(forms.Form):
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_filename(repo_name):
-            error_msg = u"您输入的目录名 %s 包含非法字符" % repo_name
+            error_msg = u"您输入的名称 %s 包含非法字符" % repo_name
             raise forms.ValidationError(error_msg)
         else:
             return repo_name

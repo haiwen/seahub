@@ -762,7 +762,7 @@ def create_group_repo(request, group_id):
             except:
                 repo_id = None
             if not repo_id:
-                return json_error(u"创建目录失败")
+                return json_error(u"创建失败")
 
             try:
                 status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
@@ -776,7 +776,7 @@ def create_group_repo(request, group_id):
             # if share failed, remove the newly created repo
             if status != 0:
                 seafserv_threaded_rpc.remove_repo(repo_id)
-                return json_error(u'创建目录失败:内部错误')
+                return json_error(u'创建失败:内部错误')
             else:
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),
@@ -790,7 +790,7 @@ def create_group_repo(request, group_id):
             except:
                 repo_id = None
             if not repo_id:
-                return json_error(u"创建目录失败")
+                return json_error(u"创建失败")
 
             try:
                 status = seafserv_threaded_rpc.group_share_repo(repo_id,
@@ -803,7 +803,7 @@ def create_group_repo(request, group_id):
             # if share failed, remove the newly created repo
             if status != 0:
                 seafserv_threaded_rpc.remove_repo(repo_id)
-                return json_error(u'创建目录失败:内部错误')
+                return json_error(u'创建失败:内部错误')
             else:
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),

@@ -4,7 +4,7 @@
 <ul class="nav">
     {% if request.user.is_staff %}
     <li>
-        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>目录管理</a>
+        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>资料库管理</a>
     </li>
     <li>
         <a href="{{ SITE_ROOT }}sys/useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>

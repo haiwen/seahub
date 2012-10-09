@@ -42,7 +42,7 @@ def file_icon_filter(value):
 def translate_commit_desc(value):
     """Translate commit description."""
     if value.startswith('Reverted repo'):
-        return value.replace('Reverted repo to status at', u'同步目录内容还原到')
+        return value.replace('Reverted repo to status at', u'资料库内容还原到')
     elif value.startswith('Reverted file'):
         value = value.replace('Reverted file', u'还原文件')
         value = value.replace('to status at', u'内容到')

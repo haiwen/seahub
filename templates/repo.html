@@ -21,7 +21,7 @@
         {% endif %}
     </div>
     {% if user_perm != 'rw' %}
-    <p>这个同步目录设置了只读共享，您只能在线浏览文件。</p>
+    <p>这个资料库设置了只读共享，您只能在线浏览文件。</p>
     {% endif %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
@@ -56,7 +56,7 @@
         <div class="repo-file-list-inner-container">
             {% if not user_perm %}
             <div class="repo-file-list-not-show">
-                <p class="access-notice">无法在线查看该同步目录。</p>
+                <p class="access-notice">无法在线查看该资料库。</p>
             </div>
             {% else %}
             <div class="repo-file-list-topbar ovhd">
@@ -171,9 +171,9 @@
     <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
         <h3 id="mv-hd"></h3>
         <div class="con">
-            <h4><span class="tri-bg tri-down-bg"></span>当前同步目录：</h4>
+            <h4><span class="tri-bg tri-down-bg"></span>当前资料库：</h4>
             <div id="current-repo-dirs"></div>
-            <h4><span class="tri-bg tri-right-bg"></span>其他同步目录：</h4>
+            <h4><span class="tri-bg tri-right-bg"></span>其他资料库：</h4>
             <div id="other-repos-dirs" class="hide"></div>
         </div>
         <input type="hidden" name="operation" id="operation" value="" />

@@ -54,7 +54,7 @@ def share_repo(request):
         
     # Test whether user is the repo owner.
     if not validate_owner(request, repo_id):
-        return render_permission_error(request, u'只有目录拥有者有权共享目录')
+        return render_permission_error(request, u'只有资料库拥有者有权共享该资料库')
     
     to_email_list = string2list(email_or_group)
     for to_email in to_email_list:
@@ -210,7 +210,7 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
 
     # Encrypt repo can not be shared to unregistered user.
     if is_encrypted:
-        msg = u'共享给 %s 失败，加密目录无法共享给站外邮箱。' % anon_email
+        msg = u'共享给 %s 失败，加密资料库无法共享给站外邮箱。' % anon_email
         messages.error(request, msg)
         return
     
@@ -243,7 +243,7 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
             }
 
         try:
-            send_mail(u'您在SeaCloud上收到一个同步目录', t.render(Context(c)), None,
+            send_mail(u'您在SeaCloud上收到一个资料库', t.render(Context(c)), None,
                       [anon_email], fail_silently=False)
         except:
             AnonymousShare.objects.filter(token=token).delete()

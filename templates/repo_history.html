@@ -5,7 +5,7 @@
 {% block main_panel %}
 <div class="w100 ovhd">
     <h2 class="fleft">{{repo.props.name}} 修改历史</h2>
-    <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="back">返回同步目录</button>
+    <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="back">返回资料库</button>
 </div>
 
 <p class="tip">Tip：在每次修改后会生成一个镜像，记录修改之前的目录状态。<a href="{% url 'repo_view_snapshot' repo.props.id %}">查看镜像</a></p>

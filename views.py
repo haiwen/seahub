@@ -418,7 +418,7 @@ def upload_error_msg (code):
     elif (code == 3):
         err_msg = u'文件大小超过限制'
     elif (code == 4):
-        err_msg = u'该同步目录所有者的空间已用完，无法上传'
+        err_msg = u'该资料库所有者的空间已用完，无法上传'
     elif (code == 5):
         err_msg = u'文件传输出错'
     return err_msg
@@ -516,7 +516,7 @@ def repo_history(request, repo_id):
     View repo history.
     """
     if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, u'无法浏览该同步目录修改历史')
+        return render_permission_error(request, u'无法浏览该资料库修改历史')
 
     repo = get_repo(repo_id)
 
@@ -562,7 +562,7 @@ def repo_history(request, repo_id):
 @ctx_switch_required
 def repo_view_snapshot(request, repo_id):
     if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, u'无法查看该同步目录镜像')
+        return render_permission_error(request, u'无法查看该资料库镜像')
 
     repo = get_repo(repo_id)
 
@@ -636,7 +636,7 @@ def repo_history_revert(request, repo_id):
         if e.msg == 'Bad arguments':
             return render_error(request, u'非法参数')
         elif e.msg == 'No such repo':
-            return render_error(request, u'同步目录不存在')
+            return render_error(request, u'资料库不存在')
         elif e.msg == "Commit doesn't exist":
             return render_error(request, u'指定的历史记录不存在')
         else:
@@ -727,7 +727,7 @@ def modify_token(request, repo_id):
 def remove_repo(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, u"该同步目录不存在")
+        return render_error(request, u"该资料库不存在")
         
     user = request.user.username
     org, base_template = check_and_get_org_by_repo(repo_id, user)
@@ -738,7 +738,7 @@ def remove_repo(request, repo_id):
                 is_org_repo_owner(org.org_id, repo_id, user):
             seafserv_threaded_rpc.remove_repo(repo_id)
         else:
-            err_msg = u'删除同步目录失败, 只有团体管理员或目录创建者有权删除目录。'
+            err_msg = u'删除资料库失败, 只有团体管理员或目录创建者有权删除目录。'
             return render_permission_error(request, err_msg)
     else:
         # Remove repo in personal context, only repo owner or site staff can
@@ -753,7 +753,7 @@ def remove_repo(request, repo_id):
                               repo_name=repo.name,
                           )
         else:
-            err_msg = u'删除同步目录失败, 只有管理员或目录创建者有权删除目录。'
+            err_msg = u'删除资料库失败, 只有管理员或目录创建者有权删除目录。'
             return render_permission_error(request, err_msg)
 
     next = request.META.get('HTTP_REFERER', None)
@@ -2099,7 +2099,7 @@ def render_file_revisions (request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = u"同步目录不存在"
+        error_msg = u"资料库不存在"
         return render_error(request, error_msg)
 
     try:
