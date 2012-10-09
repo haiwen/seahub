@@ -208,6 +208,7 @@ ul.with-bg li {
 }
 .info-item-top {
     padding: 4px 10px;
+    background: #f8f8f8;
     border-bottom: 1px solid #eee;
     border-top-left-radius: 1px;
     border-top-right-radius: 1px;
