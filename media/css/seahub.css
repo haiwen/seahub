@@ -630,12 +630,12 @@ ul.with-bg li {
     margin-bottom:10px;
 }
 #repos-tabs {
+    font-size:1em;
     padding:0;
     border:0;
 }
 #repos-tabs .ui-tabs-nav {
     padding:0;
-    margin-bottom:6px;
 }
 #repos-tabs .ui-tabs-nav li {
     border:0;
@@ -643,6 +643,7 @@ ul.with-bg li {
 }
 #repos-tabs .ui-tabs-nav li a {
     color:#8A948F;
+    font-weight:normal;
     padding:.3em 0;
     margin-right:0.6em;
 }
