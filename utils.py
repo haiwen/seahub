@@ -222,12 +222,12 @@ def get_accessible_repos(request, repo):
         return False
 
     accessible_repos = []
-    for r in owned_repos:
+    for r in owned_repos + groups_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
             r.has_subdir = check_has_subdir(r)
             accessible_repos.append(r)
 
-    for r in shared_repos + groups_repos:
+    for r in shared_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
             # For compatibility with diffrent fields names in Repo and
             # SharedRepo objects.
