@@ -52,11 +52,8 @@
 {% endblock %}
 
 {% block right_panel %}
-<!-- 我拥有的资料库 -->
+<!-- 我拥有的资料库 --><!-- 共享给我的资料库 -->
 {% include "snippets/my_owned_repos.html" %}
-
-<!-- 共享给我的资料库 -->
-{% include "snippets/shared_in_repos.html" %}
 
 {% if events %}
 <h3>最近事件</h3>
