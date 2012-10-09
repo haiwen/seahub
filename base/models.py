@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from seaserv import get_emailusers
 
 from shortcuts import get_first_object_or_none
+from base.templatetags.seahub_tags import at_pattern
 from notifications.models import UserNotification
 from profile.models import Profile
 
@@ -64,8 +65,6 @@ class InnerPubMsgReply(models.Model):
     message = models.CharField(max_length=150)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
-    
 # @receiver(post_save, sender=InnerPubMsgReply)
 def msgreply_save_handler(sender, instance, **kwargs):
     """
@@ -75,7 +74,8 @@ def msgreply_save_handler(sender, instance, **kwargs):
     reply_msg = instance.message
     innerpub_msg = instance.reply_to
     to_user = ''
-    
+
+
     m = re.match(at_pattern, reply_msg)
     if m:
         nickname_or_emailprefix = m.group()[1:]

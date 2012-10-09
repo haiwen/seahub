@@ -63,7 +63,7 @@ class RepoCreateForm(forms.Form):
     """
     Form for creating repo and org repo.
     """
-    repo_name = forms.CharField(max_length=15, error_messages={
+    repo_name = forms.CharField(max_length=50, error_messages={
             'required': '目录名不能为空',
             'max_length': '目录名太长，不超过50个字符'
             })

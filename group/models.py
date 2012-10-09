@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from seaserv import get_group_members
 
 from shortcuts import get_first_object_or_none
+from base.templatetags.seahub_tags import at_pattern
 from notifications.models import UserNotification
 from profile.models import Profile
 
@@ -44,8 +45,6 @@ class BusinessGroup(models.Model):
     class Meta:
         unique_together = ("group_id", "group_type")
     
-at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
-
 @receiver(post_save, sender=MessageReply)
 def msgreply_save_handler(sender, instance, **kwargs):
     """

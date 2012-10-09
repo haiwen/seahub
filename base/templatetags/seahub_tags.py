@@ -138,11 +138,11 @@ def url_target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')
 url_target_blank.is_safe=True
 
-at_pattern = re.compile(r'(\s|^)(@\w+)', flags=re.U)
+at_pattern = re.compile(r'(@\w+)', flags=re.U)
 
 @register.filter(name='find_at')
 def find_at(text):
-    return at_pattern.sub(r'\1<span class="at">\2</span>', text)
+    return at_pattern.sub(r'<span class="at">\1</span>', text)
 find_at.is_safe=True
 
 @register.filter(name='short_email')
