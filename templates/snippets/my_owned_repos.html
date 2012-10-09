@@ -1,6 +1,14 @@
 {% load seahub_tags %}
-<h3>我拥有的资料库</h3>
-<button id="repo-create">新建资料库</button>
+<h3>资料库</h3>
+<div id="repos-tabs">
+<div class="ovhd">
+    <ul class="fleft">
+        <li><a href="#my-own-repos" onfocus="this.blur()">我拥有的</a></li>
+        <li><a href="#repos-shared-to-me" onfocus="this.blur()">共享给我的</a></li>
+    </ul>
+    <button id="repo-create" class="fright">新建资料库</button>
+</div>
+<div id="my-own-repos">
 {% if owned_repos %}
 <table>
     <tr>
@@ -31,3 +39,47 @@
 {% else %}
 <p class="empty-repo-tips">您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资料库可以单独地同步和共享。</p>
 {% endif %}
+</div>
+<div id="repos-shared-to-me">
+{% if in_repos %}
+<table>
+    <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="20%">名字</th>
+        <th width="36%">描述</th>
+        <th width="15%">更新时间</th>
+        <th width="15%">共享来源</th>
+        <th width="10%">操作</th>
+    </tr>
+
+    {% for repo in in_repos %}
+    <tr>
+        <td>
+            {% if repo.user_perm == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="只读" alt="目录icon" />
+            {% endif %}
+        </td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
+        <td>{{ repo.props.repo_desc }}</td>
+        {% if repo.props.last_modified %}
+        <td>{{ repo.props.last_modified|translate_commit_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+        <td>{{ repo.props.user|email2nickname }}</td>
+        <td>
+        {% if repo.user_perm == 'rw' %}
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
+        {% endif %}
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" class="unshare-btn op-icon vh" title="取消共享" alt="取消共享" />
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p class="empty-repo-tips">您的朋友可以将他的资料库共享给您，这些资料库会显示在这里。</p>
+{% endif %}
+</div>
+</div>
