@@ -2268,6 +2268,9 @@ def repo_revert_file (request, repo_id):
         if from_page == 'repo_history':
             # When revert file from repo history, we redirect to repo history
             url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
+        elif from_page == 'recycle':
+            # When revert from recycle page, redirect to recycle page.
+            url = reverse('repo_recycle_view', args=[repo_id])
         else:
             # When revert file from file history, we redirect to parent dir of this file
             parent_dir = os.path.dirname(path)

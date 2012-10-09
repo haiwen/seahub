@@ -6,7 +6,7 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}} 的文件回收站</h2>
-        <button data="{% url 'repo' repo.id %}" class="fright" id="back">返回同步目录</button>
+        <button data="{% url 'repo' repo.id %}" class="fright" id="back">返回资料库</button>
     </div>
 
     <div class="repo-file-list-outer-container">
@@ -31,8 +31,9 @@
                 <tr>
                     <th width="5%"></th>
                     <th width="60%">名字</th>
-		    <th width="20%">删除时间</th>
-                    <th width="15%">大小</th>
+		    <th width="15%">删除时间</th>
+                    <th width="10%">大小</th>
+		    <th width="10%">操作</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -46,6 +47,7 @@
 		    <td></td>
 		    {% endif %}
 		    <td></td>
+		    <td></td>
                 </tr>
                 {% endfor %}
 
@@ -55,13 +57,14 @@
 		    {% if show_recycle_root %}
                     <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_commit_time }}</td>
+                    <td>{{ dirent.file_size|filesizeformat }}</td>
+                    <td><a class="op" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">还原</a></td>
 		    {% else %}
                     <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.props.obj_name }}</a></td>
 		    <td></td>
-		    {% endif %}
                     <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td>
-                    </td>
+		    <td></td>
+		    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
