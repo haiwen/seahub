@@ -256,7 +256,7 @@ ul.with-bg li {
 #sharelink-infobar {
     color: #fff;
     padding:1px 25px 1px 10px;
-    background: gray;
+    background: #080;
 }
 #info-bar {
     position:relative;
