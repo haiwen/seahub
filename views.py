@@ -2577,7 +2577,7 @@ def demo(request):
     Login as demo account.
     """
 
-    redirect_to = '/'
+    redirect_to = settings.SITE_ROOT
 
     auth_login(request, authenticate(username='demo@seafile.com',
                                      password='demo'))
