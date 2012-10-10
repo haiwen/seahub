@@ -1058,6 +1058,7 @@ ul.with-bg li {
 
 /* group message and replies */
 #group-reply {
+    width:602px;
     margin-top:50px;
 }
 .msg-num {
@@ -1072,11 +1073,14 @@ ul.with-bg li {
     height: 80px;
     margin-top: 4px;
 }
+#message {
+    width:538px;
+    margin-top:0;
+}
 #group-reply .submit {
     margin-top:3px;
 }
 .msg-list {
-    width:602px;
     margin-top: 10px;
 }
 .msg {

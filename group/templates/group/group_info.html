@@ -96,13 +96,16 @@
 
 <div id="group-reply">
     <h3>信息栏</h3>
-    <form id="group-message-form" action="" method="post">
-        <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
-        {% for error in form.message.errors %}
-        <p class="error">{{ error|escape }}</p>
-        {% endfor %}
-        <input type="submit" value="提交" class="submit" />
-    </form>
+    <div class="w100 ovhd">
+        <img src="{{MEDIA_URL}}avatars/default.jpg" alt="" class="fleft" width="48" height="48" />
+        <form id="group-message-form" action="" method="post" class="fright">
+            <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
+            {% for error in form.message.errors %}
+            <p class="error">{{ error|escape }}</p>
+            {% endfor %}
+            <input type="submit" value="提交" class="submit" />
+        </form>
+    </div>
 
 {% if group_msgs %}
     <ul class="msg-list">
