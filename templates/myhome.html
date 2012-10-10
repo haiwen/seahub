@@ -120,7 +120,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+{% with groups=autocomp_groups %}
 {% include "snippets/myhome_extra_script.html" %}
+{% endwith %}
    
 {% url 'seahub.views.repo_create' as repo_create_url %}
 {% with post_url=repo_create_url %}
