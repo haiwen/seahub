@@ -57,9 +57,10 @@ addConfirmTo($("#group-remove"), '确定要解散该群组吗？');
 
 addConfirmTo($(".member-remove-btn"), '确定要删除该成员？');
 
-var contact_list = [];
+var contact_list = [], contact_email;
 {% for contact in contacts %}
-contact_list.push('{{ contact.contact_email }}');
+contact_email = '{{ contact.contact_email }}';
+contact_list.push({value:contact_email, label:contact_email});
 {% endfor %}
 
 $("#group-member-add").click(function() {

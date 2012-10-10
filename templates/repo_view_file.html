@@ -263,9 +263,10 @@ $('#send-shared-link').click(function() {
     $("#link-send-form").modal({appendTo: "#main"});
     
     // link-send-form email autocomplete
-    var share_list = [];    
+    var share_list = [], contact_email;    
     {% for contact in contacts %}
-    share_list.push('{{ contact.contact_email }}');
+    contact_email = '{{ contact.contact_email }}';
+    share_list.push({value:contact_email, label:contact_email});
     {% endfor %}
     addAutocomplete('#email', '#link-send-form', share_list);
 });

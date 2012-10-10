@@ -63,9 +63,10 @@
 <script type="text/javascript">
 $('#org-user-add').click(function() {
     $("#user-add-form").modal({appendTo: "#main"});
-    var contacts_list = [];
+    var contacts_list = [], contact_email;
     {% for contact in contacts %}
-    contacts_list.push('{{ contact.contact_email }}');
+    contact_email = '{{ contact.contact_email }}';
+    contacts_list.push({value:contact_email, label:contact_email});
     {% endfor %}
     addAutocomplete('#added-member-name', '#user-add-form', contacts_list);
 })
