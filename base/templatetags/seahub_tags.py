@@ -25,6 +25,14 @@ def tsstr_sec(value):
     except:
         return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d %H:%M:%S")
 
+@register.filter(name='tsstr_day')
+def tsstr_day(value):
+    """Turn a timestamp to string"""
+    try:
+        return datetime.fromtimestamp(value).strftime("%Y-%m-%d")
+    except:
+        return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d")
+
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value):
     """Get file icon according to the file postfix"""

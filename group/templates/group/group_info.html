@@ -14,7 +14,7 @@
     <h3 class="info-item-top">基本信息</h3>
     <div class="info-item-bottom group-basic-info ovhd">
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar fleft" />
-        <p class="txt fright">{{ group.creator_name }} 创建于<br />{{ group.timestamp|tsstr_sec }}</p>
+        <p class="txt fright">{{ group.creator_name|email2nickname }} 创建于<br />{{ group.timestamp|tsstr_day }}</p>
     </div>
 </div>
 <div class="info-item">
@@ -104,7 +104,7 @@
 <div id="group-reply">
     <h3>信息栏</h3>
     <div class="w100 ovhd">
-        <img src="{{MEDIA_URL}}avatars/default.jpg" alt="默认头像" class="avatar fleft" width="48" height="48" />
+        <div class="pic fleft">{% avatar request.user.username 48 %}</div>
         <form id="group-message-form" action="" method="post" class="fright">
             <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
             {% for error in form.message.errors %}
