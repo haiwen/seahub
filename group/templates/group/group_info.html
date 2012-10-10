@@ -1,6 +1,6 @@
 {% extends base_template %}
 
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
@@ -10,6 +10,13 @@
 {% endblock %}
 
 {% block left_panel %}
+<div class="info-item">
+    <h3 class="info-item-top">基本信息</h3>
+    <div class="info-item-bottom group-basic-info ovhd">
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar fleft" />
+        <p class="txt fright">{{ group.creator_name }} 创建于<br />{{ group.timestamp|tsstr_sec }}</p>
+    </div>
+</div>
 <div class="info-item">
     <h3 class="info-item-top">管理员</h3>
     <ul class="info-item-bottom">
@@ -97,7 +104,7 @@
 <div id="group-reply">
     <h3>信息栏</h3>
     <div class="w100 ovhd">
-        <img src="{{MEDIA_URL}}avatars/default.jpg" alt="" class="fleft" width="48" height="48" />
+        <img src="{{MEDIA_URL}}avatars/default.jpg" alt="默认头像" class="avatar fleft" width="48" height="48" />
         <form id="group-message-form" action="" method="post" class="fright">
             <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
             {% for error in form.message.errors %}
