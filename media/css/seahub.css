@@ -216,6 +216,9 @@ ul.with-bg li {
 .info-item-bottom {
     padding: 8px 10px;
 }
+.info-item p.not-last {
+    margin-bottom:0.4em;
+}
 
 /* container */
 #header, #main, #footer { width:950px; }
