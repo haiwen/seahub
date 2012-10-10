@@ -27,6 +27,8 @@ from django.views.generic.base import TemplateView, TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
+from auth import login as auth_login
+from auth import authenticate
 from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
     PasswordChangeForm
 from auth.tokens import default_token_generator
@@ -2569,3 +2571,16 @@ def show_events(request):
         'events': events,
         }, context_instance=RequestContext(request))
 '''
+
+def demo(request):
+    """
+    Login as demo account.
+    """
+
+    redirect_to = '/'
+
+    auth_login(request, authenticate(username='demo@seafile.com',
+                                     password='demo'))
+
+    return HttpResponseRedirect(redirect_to)
+

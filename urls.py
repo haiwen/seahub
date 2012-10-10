@@ -115,6 +115,7 @@ except ImportError:
 if CLOUD_MODE:
     urlpatterns += patterns('',
         (r'^organizations/', include('seahub.organizations.urls')),
+        (r'^demo/', demo),
     )
 else:
     urlpatterns += patterns('',
