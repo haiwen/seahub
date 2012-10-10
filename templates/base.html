@@ -18,7 +18,7 @@
   {% block info_bar_message %}
     {% if request.user.is_authenticated and request.cur_note %}
     <div id="info-bar">
-      <p>{{ request.cur_note.message|urlize|url_target_blank }}</p>
+      <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
       <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
     </div>
     {% endif %}

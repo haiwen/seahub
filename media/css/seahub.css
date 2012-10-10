@@ -255,8 +255,8 @@ ul.with-bg li {
 #info-bar,
 #sharelink-infobar {
     color: #fff;
-    padding:1px 25px 2px 10px;
-    background: #000;
+    padding:1px 25px 1px 10px;
+    background: gray;
 }
 #info-bar {
     position:relative;
@@ -266,6 +266,9 @@ ul.with-bg li {
     position:absolute;
     right:5px;
     top:5px;
+}
+#info-bar-info {
+    margin:0.3em 0;
 }
 
 /* top-bar */
