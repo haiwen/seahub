@@ -10,33 +10,41 @@
 {% endblock %}
 
 {% block left_panel %}
-<h3>管理员</h3>
-<ul>
-{% for member in managers %}
-    <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
-{% endfor %}
-</ul>
+<div class="info-item">
+    <h3 class="info-item-top">管理员</h3>
+    <ul class="info-item-bottom">
+        {% for member in managers %}
+        <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
 
-<h3>成员</h3>
-{% if common_members %}
-<ul>
-    {% for member in common_members %}
-    <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>暂无</p>
-{% endif %}
+<div class="info-item">
+    <h3 class="info-item-top">成员</h3>
+    <div class="info-item-bottom">
+        {% if common_members %}
+        <ul>
+            {% for member in common_members %}
+            <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>暂无</p>
+        {% endif %}
+    </div>
+</div>
 
 {% if is_join %}
-<h3>操作</h3>
-<ul class="with-bg">
-{% if is_staff %}
-    <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">群组管理</a></li>
-{% else %}
-	<li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出群组</a></li>
-{% endif %}
-</ul>
+<div class="info-item">
+    <h3 class="info-item-top">操作</h3>
+    <ul class="with-bg info-item-bottom">
+        {% if is_staff %}
+        <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">群组管理</a></li>
+        {% else %}
+        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出群组</a></li>
+        {% endif %}
+    </ul>
+</div>
 {% endif %}
 {% endblock %}
 
