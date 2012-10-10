@@ -1329,3 +1329,9 @@ ul.with-bg li {
     top:-15px;
     left:-14px;
 }
+.bulb-tips {
+    background-image: url('../img/bulb_yellow.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 25px;
+}
