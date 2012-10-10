@@ -13,15 +13,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("#group-add").click(function() {
-    $("#group-add-form").modal({appendTo: "#main"});
-	return false;
-});
-
 {% url 'group_list' as group_add_url %}
 {% with post_url=group_add_url %}
 {% include "snippets/group_add_js.html" %}
 {% endwith %}
-
 </script>
 {% endblock %}

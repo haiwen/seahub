@@ -197,6 +197,9 @@ ul.with-bg li {
     border-style: dashed dashed dashed solid;
     border-left-color: #bbb;
 }
+.avatar {
+    border-radius:3px;
+}
 .info-item {
     border: 1px solid #eee;
     border-radius: 2px;
@@ -205,6 +208,9 @@ ul.with-bg li {
 .info-item h3,
 .info-item p {
     margin:0;
+}
+.info-item h3 {
+    font-size:1.15em;
 }
 .info-item-top {
     padding: 4px 10px;
@@ -1032,6 +1038,10 @@ ul.with-bg li {
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+.group-basic-info .txt {
+    width:145px;
+    word-wrap:break-word;
+}
 
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
@@ -1061,6 +1071,7 @@ ul.with-bg li {
 
 /* group message and replies */
 #group-reply {
+    width:602px;
     margin-top:50px;
 }
 .msg-num {
@@ -1075,11 +1086,14 @@ ul.with-bg li {
     height: 80px;
     margin-top: 4px;
 }
+#message {
+    width:538px;
+    margin-top:0;
+}
 #group-reply .submit {
     margin-top:3px;
 }
 .msg-list {
-    width:602px;
     margin-top: 10px;
 }
 .msg {

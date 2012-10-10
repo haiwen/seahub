@@ -1,3 +1,7 @@
+$("#group-add").click(function() {
+    $("#group-add-form").modal({appendTo: "#main"});
+});
+
 $('#group-add-submit').click(function() {
     $.ajax({
         url: '{{ post_url }}',
