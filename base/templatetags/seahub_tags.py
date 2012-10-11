@@ -55,6 +55,8 @@ def translate_commit_desc(value):
         value = value.replace('Reverted file', u'还原文件')
         value = value.replace('to status at', u'内容到')
         return value
+    elif value.startswith('Recovered deleted directory'):
+        return value.replace('Recovered deleted directory', u'还原已删除的目录')
     elif value.startswith('Merged'):
         return u'合并了其他人的修改'
     else:
