@@ -76,12 +76,10 @@ def org_info(request, url_prefix):
     if not org:
         return HttpResponseRedirect(reverse(myhome))
 
-    org_members = get_org_users_by_url_prefix(url_prefix, 0, MAX_INT)
     repos = list_org_inner_pub_repos(org.org_id, request.user.username)
 
     return render_to_response('organizations/org_info.html', {
             'org': org,
-            'org_users': org_members,
             'repos': repos,
             'create_shared_repo': True,
             }, context_instance=RequestContext(request))
@@ -220,10 +218,13 @@ def org_groups(request, url_prefix):
 
     joined_groups = get_org_groups_by_user(org.org_id, request.user.username)
     groups = get_org_groups(org.org_id, -1, -1)
+    org_members = get_org_users_by_url_prefix(url_prefix, 0, MAX_INT)
+    
     return render_to_response('organizations/org_groups.html', {
             'org': org,
             'groups': groups,
             'joined_groups': joined_groups,
+            'org_members': org_members, 
             }, context_instance=RequestContext(request))
 
 def send_org_user_add_mail(request, email, password, org_name):

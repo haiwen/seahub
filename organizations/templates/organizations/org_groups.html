@@ -1,18 +1,36 @@
 {% extends "org_base.html" %}
-{% load seahub_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-{% include "group/groups_left_panel.html" %}
+<div class="info-item">
+    <h3 class="info-item-top">小提示</h3>
+    <div class="info-item-bottom">
+        <p class="not-last">群组创建后，就可以往里面共享资料，邀请他人一起来协同维护这些资料。</p>
+        <p>您也可以共享资料到您没有参加的群组，相当于邮件的抄送功能。</p>
+    </div>
+</div>
+<h3>团体成员</h3>
+{% if org_members %}
+<ul>
+    {% for member in org_members %}
+	<li class="member">{% avatar member.email 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>暂无</p>
+{% endif %}
 {% endblock %}
 
 {% block right_panel %}
 {% include "group/groups_right_panel.html" %}
+{% include "snippets/user_profile_html.html" %}
 {% endblock %}
 
 {% block extra_script %}
+{% include "snippets/user_profile_js.html" %}
 <script type="text/javascript">
 {% url 'org_groups' org.url_prefix as group_add_url %}
 {% with post_url=group_add_url %}

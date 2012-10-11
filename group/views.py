@@ -34,6 +34,10 @@ from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 from seahub.settings import SITE_ROOT
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
@@ -99,10 +103,12 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
             return FormMixin.form_invalid(self, form)
 
     def get_context_data(self, **kwargs):
-        # Get all personal groups I joined.
+        # In cloud mode, only get joined groups; otherwise, get joined groups
+        # and all other groups
         kwargs['joined_groups'] = get_personal_groups_by_user(self.get_username())
-        # Get all groups including others'.
-        kwargs['groups'] = get_personal_groups(-1, -1)
+        if not CLOUD_MODE:
+            kwargs['groups'] = get_personal_groups(-1, -1)            
+
         return kwargs
 
 # class DeptGroupListView(GroupListView):

@@ -5,7 +5,7 @@
 {% block nav %}
 <ul class="nav">
     <li>
-        <a href="{% url 'organizations.views.org_info' org.url_prefix %}" {% block nav_org_class %}{% endblock %}>公共页面</a>
+        <a href="{% url 'organizations.views.org_info' org.url_prefix %}" {% block nav_org_class %}{% endblock %}>公共资料</a>
     </li>
     <li>
         <a href="{% url 'organizations.views.org_groups' org.url_prefix %}" {% block nav_group_class %}{% endblock %}>群组</a>
