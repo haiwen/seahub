@@ -6,28 +6,24 @@
     <li>
         <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>我的页面</a>
     </li>
-    {% if not request.cloud_mode %}
+    {% if not cloud_mode %}
     <li>
         <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>公共资料</a>
     </li>
     {% endif %}
-    {% if business_mode %}
-    <li>
-        <a href="{% url 'dept_group_list' %}" {% block nav_deptgroup_class %}{% endblock %}>部门</a>
-    </li>
-    <li>
-        <a href="{% url 'proj_group_list' %}" {% block nav_projgroup_class %}{% endblock %}>项目组</a>
-    </li>
-    {% else %}
     <li>
         <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>群组</a>
     </li>
-    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}shareadmin/" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
     </li>
     <li>
         <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>通讯录</a>
     </li>
+    {% if not cloud_mode %}
+    <li>
+        <a href="{% url 'seahub.views.pubinfo' %}" {% block nav_pubinfo_class %}{% endblock %}>公共信息</a>
+    </li>
+    {% endif %}
 </ul>
 {% endblock %}

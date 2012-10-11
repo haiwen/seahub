@@ -5,16 +5,19 @@
 {% block nav %}
 <ul class="nav">
     <li>
+        <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>个人页面</a>
+    </li>
+    <li>
         <a href="{% url 'organizations.views.org_info' org.url_prefix %}" {% block nav_org_class %}{% endblock %}>公共资料</a>
     </li>
     <li>
         <a href="{% url 'organizations.views.org_groups' org.url_prefix %}" {% block nav_group_class %}{% endblock %}>群组</a>
     </li>
     <li>
-        <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>个人页面</a>
+        <a href="{% url 'organizations.views.org_shareadmin' org.url_prefix %}" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
     </li>
     <li>
-        <a href="{% url 'organizations.views.org_shareadmin' org.url_prefix %}" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
+        <a href="{% url 'organizations.views.org_pubinfo' org.url_prefix %}" {% block nav_pubinfo_class %}{% endblock %}>公共信息</a>
     </li>
 </ul>
 {% endblock %}

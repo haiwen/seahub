@@ -879,18 +879,15 @@ def myhome(request):
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
 
-    try:
-        from settings import CLOUD_MODE
-    except:
-        CLOUD_MODE = False
-
-    if CLOUD_MODE:
+    if request.cloud_mode:
+        allow_public_share = False
         # In cloud mode, list joined groups and registered contacts for
         # autocompletion.
         autocomp_groups = joined_groups
         contacts = [ c for c in Contact.objects.filter(user_email=email) \
                          if is_registered_user(c.contact_email) ]
     else:
+        allow_public_share = True
         # List all personal groups and all registered users for autocompletion.
         autocomp_groups = get_personal_groups(-1, -1)
         contacts = []
@@ -899,8 +896,6 @@ def myhome(request):
                 continue
             u.contact_email = u.email
             contacts.append(u)
-
-    allow_public_share = True if not CLOUD_MODE else False
 
     # events
     if EVENTS_CONFIG_FILE:
@@ -951,7 +946,6 @@ def public_home(request):
     # else:
     #     form = MessageForm()
         
-    users = get_emailusers(-1, -1)
     public_repos = list_inner_pub_repos(request.user.username)
 
     # """inner pub messages"""
@@ -981,7 +975,6 @@ def public_home(request):
     #                                 msg_type='innerpub_msg').delete()
 
     return render_to_response('public_home.html', {
-            'users': users,
             'public_repos': public_repos,
             'create_shared_repo': True,
             # 'form': form,
@@ -2584,3 +2577,19 @@ def demo(request):
 
     return HttpResponseRedirect(redirect_to)
 
+@login_required
+def pubinfo(request):
+    """
+    Show public information.
+    """
+    if request.cloud_mode:
+        # Users are not allowed to see public information when in cloud mode.
+        raise Http404
+    else:
+        groups = get_personal_groups(-1, -1)
+        users = get_emailusers(-1, -1)
+        return render_to_response('pubinfo.html', {
+                'groups': groups,
+                'users': users,
+                }, context_instance=RequestContext(request))
+    

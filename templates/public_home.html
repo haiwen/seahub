@@ -53,14 +53,11 @@
 <p class="empty-repo-tips">您可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。</p>
 {% endif %}
 <!-- /.main -->
-{% include "snippets/repo_share_form.html" %}
 {% include "snippets/repo_create_form.html" %}
-{% include "snippets/user_profile_html.html" %}
 
 {% endblock %}
 
 {% block extra_script %}
-{% include "snippets/user_profile_js.html" %}
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" %}
 {% url 'seahub.views.public_repo_create' as repo_create_url %}

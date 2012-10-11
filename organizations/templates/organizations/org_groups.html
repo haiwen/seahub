@@ -12,25 +12,13 @@
         <p>您也可以共享资料到您没有参加的群组，相当于邮件的抄送功能。</p>
     </div>
 </div>
-<h3>团体成员</h3>
-{% if org_members %}
-<ul>
-    {% for member in org_members %}
-	<li class="member">{% avatar member.email 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>暂无</p>
-{% endif %}
 {% endblock %}
 
 {% block right_panel %}
 {% include "group/groups_right_panel.html" %}
-{% include "snippets/user_profile_html.html" %}
 {% endblock %}
 
 {% block extra_script %}
-{% include "snippets/user_profile_js.html" %}
 <script type="text/javascript">
 {% url 'org_groups' org.url_prefix as group_add_url %}
 {% with post_url=group_add_url %}

@@ -662,3 +662,20 @@ def org_shareadmin(request, url_prefix):
             "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
 
+@login_required
+def org_pubinfo(request, url_prefix):
+    """
+    Show org public information.
+    """
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
+    
+    groups = get_org_groups(org.org_id, -1, -1)
+    org_members = get_org_users_by_url_prefix(url_prefix, 0, MAX_INT)
+
+    return render_to_response('organizations/org_pubinfo.html', {
+            'org': org,
+            'groups': groups,
+            'org_members': org_members,
+            }, context_instance=RequestContext(request))

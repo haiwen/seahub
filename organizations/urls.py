@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^(?P<url_prefix>[^/]+)/groups/$', org_groups, name='org_groups'),
     url(r'^([^/]+)/repo/create/$', org_repo_create, name='org_repo_create'),
 #    url(r'^([^/]+)/repo/history/(?P<repo_id>[^/]+)/$', repo_history, name='org_repo_history'),
+    url(r'^(?P<url_prefix>[^/]+)/pubinfo/$', org_pubinfo, name='org_pubinfo'),
 
 
     # repo share

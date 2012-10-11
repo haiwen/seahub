@@ -71,6 +71,7 @@ urlpatterns = patterns('',
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
+    (r'^pubinfo/$', pubinfo),                       
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
     (r'^file/move/$', file_move),
