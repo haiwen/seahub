@@ -21,14 +21,18 @@
 	<button id="recycle-btn" class="fright" data="{% url 'repo_recycle_view' repo.id %}">文件回收站</button>
         {% endif %}
     </div>
-    {% if user_perm != 'rw' %}
+    {% if user_perm == 'r' %}
     <p>这个资料库设置了只读共享，您只能在线浏览文件。</p>
     {% endif %}
+
+    {% if user_perm %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
       <p class="size">大小：{{ repo_size|filesizeformat }}</p>
     </div>
-      
+    {% endif %}
+
+    {% if user_perm %}
     <div id="repo-latest-commit">
         <p class="commit-msg ovhd">
         <span class="fleft">
@@ -52,6 +56,7 @@
         </p>
         <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
     </div>
+    {% endif %}
 
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
