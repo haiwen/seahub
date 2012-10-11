@@ -51,9 +51,9 @@
     {% for repo in in_repos %}
     <tr>
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.shared_email }}</td>
-        <td>{{ repo.props.desc }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.repo_name }}</a></td>
+        <td>{{ repo.props.user }}</td>
+        <td>{{ repo.props.repo_desc }}</td>
     </tr>
     {% endfor %}
 </table>
