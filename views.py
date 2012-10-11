@@ -2283,12 +2283,39 @@ def repo_revert_file (request, repo_id):
             parent_dir = os.path.dirname(path)
             url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
 
-        file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
         if ret == 1:
-            msg = u'<a href="%s">%s</a> 已还原到根目录下' % (file_view_url, path.lstrip('/'))
+            root_url = reverse('repo', args=[repo_id]) + u'?p=/'
+            msg = u'%s 已还原到<a href="%s">根目录</a>下' % (path.lstrip('/'), root_url)
             messages.add_message(request, messages.INFO, msg)
         else:
+            file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
             msg = u'<a href="%s">%s</a> 已经还原' % (file_view_url, path.lstrip('/'))
+            messages.add_message(request, messages.INFO, msg)
+        return HttpResponseRedirect(url)
+
+@login_required
+def repo_revert_dir (request, repo_id):
+    commit_id = request.GET.get('commit')
+    path      = request.GET.get('p')
+
+    if not (commit_id and path):
+        return render_error(request, u"参数错误")
+
+    try:
+        ret = seafserv_threaded_rpc.revert_dir (repo_id, commit_id,
+                            path.encode('utf-8'), request.user.username)
+    except Exception, e:
+        return render_error(request, str(e))
+    else:
+        url = reverse('repo_recycle_view', args=[repo_id])
+
+        if ret == 1:
+            root_url = reverse('repo', args=[repo_id]) + u'?p=/'
+            msg = u'%s 已还原到<a href="%s">根目录</a>下' % (path.lstrip('/'), root_url)
+            messages.add_message(request, messages.INFO, msg)
+        else:
+            dir_view_url = reverse('repo', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
+            msg = u'<a href="%s">%s</a> 已经还原' % (dir_view_url, path.lstrip('/'))
             messages.add_message(request, messages.INFO, msg)
         return HttpResponseRedirect(url)
 

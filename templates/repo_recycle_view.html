@@ -42,12 +42,14 @@
 		    {% if show_recycle_root %}
 		    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_commit_time }}</td>
+		    <td></td>
+		    <td><a class="op" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">还原</a></td>
 		    {% else %}
                     <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
 		    <td></td>
+		    <td></td>
+		    <td></td>
 		    {% endif %}
-		    <td></td>
-		    <td></td>
                 </tr>
                 {% endfor %}
 
