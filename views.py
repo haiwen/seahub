@@ -1343,8 +1343,15 @@ def file_comment(request):
                              file_path_hash=file_path_hash,
                              from_email=request.user.username, message=message)
             fc.save()
-            # send a group message if the repo shared to any groups
-            repo_shared_groups = get_shared_groups_by_repo(repo_id)
+
+            # Get repo groups
+            org, base_template = check_and_get_org_by_repo(repo_id,
+                                                           request.user.username)
+            if org:
+                repo_shared_groups = get_org_groups_by_repo(org.org_id,
+                                                            repo_id)
+            else:
+                repo_shared_groups = get_shared_groups_by_repo(repo_id)
 
             for group in repo_shared_groups:
                 # save group message, and length should be less than 500
@@ -1362,9 +1369,12 @@ def file_comment(request):
                                        src='filecomment')
                 ma.save()
 
-            comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
-            html = render_to_string("file_comments.html", {'comments':comments})
-            return HttpResponse(json.dumps({'html': html}), content_type=content_type)
+            comments = FileComment.objects.filter(file_path_hash=file_path_hash,
+                                                  repo_id=repo_id)
+            html = render_to_string("file_comments.html", {
+                    'comments':comments})
+            return HttpResponse(json.dumps({'html': html}),
+                                content_type=content_type)
     
    
 def repo_file_get(raw_path):
