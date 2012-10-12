@@ -5,7 +5,11 @@
 <div class="narrow-panel">
     <h3>更新文件
             {% for name, link in zipped %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+                {% if not forloop.last %}
+                <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
+		{% else %}
+		<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a>
+	        {% endif %}
             {% endfor %}
         失败：
     </h3>

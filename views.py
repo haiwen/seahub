@@ -535,7 +535,7 @@ def update_file_error(request, repo_id):
         code = int(err)
         err_msg = upload_error_msg(code)
 
-        return render_to_response('upload_file_error.html', {
+        return render_to_response('update_file_error.html', {
                 'repo': repo,
                 'zipped': zipped,
                 'err_msg': err_msg,
