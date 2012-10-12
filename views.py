@@ -723,10 +723,11 @@ def repo_history_revert(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        fpath = 'repo/%s/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
+        url = reverse("repo", args=[repo_id])
     else:
-        fpath = 'repo/%s/files/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
-    href = os.path.join(settings.SITE_ROOT, fpath)
+        url = reverse("repo_view_file", args=[repo_id])
+
+    href = url + '?p=/%s' % urllib2.quote(path.encode('utf-8'))
 
     return '<a href="%s">%s</a>' % (href, path)
 
