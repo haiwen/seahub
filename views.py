@@ -720,9 +720,12 @@ def repo_history_revert(request, repo_id):
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
-def fpath_to_link(repo_id, path):
+def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
-    fpath = 'repo/%s/files/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
+    if is_dir:
+        fpath = 'repo/%s/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
+    else:
+        fpath = 'repo/%s/files/?p=/%s' % (repo_id, urllib2.quote(path.encode('utf-8')))
     href = os.path.join(settings.SITE_ROOT, fpath)
 
     return '<a href="%s">%s</a>' % (href, path)
@@ -745,7 +748,7 @@ def get_diff(repo_id, arg1, arg2):
         elif d.status == "mod":
             lists['modified'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "newdir":
-            lists['newdir'].append(fpath_to_link(repo_id, d.name))
+            lists['newdir'].append(fpath_to_link(repo_id, d.name, is_dir=True))
         elif d.status == "deldir":
             lists['deldir'].append(d.name)
 
