@@ -4,6 +4,10 @@
 
 {% block nav_org_class %}class="cur"{% endblock %}
 
+{% block title_panel %}
+<h2>{{ org.org_name }}</h2>
+{% endblock %}
+
 {% block left_panel %}
 <div class="info-item">
 <h3 class="info-item-top">小提示</h3>
@@ -12,7 +16,7 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>{{ org.org_name }} 公开的资料库</h3>
+<h3>公开的资料库</h3>
 <button id="repo-create">新建资料库</button>
 {% if repos %}
 <table>
