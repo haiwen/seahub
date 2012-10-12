@@ -412,6 +412,9 @@ $('#mv-form h4').click(function() {
 });
 
 $('#rename-form .submit').click(function() {
+    var self = $(this);
+    self.attr('disabled', 'disabled');
+    
     $.ajax({
         url: '{% url 'views.repo_rename_file' %}',
         type: 'POST',
@@ -429,6 +432,7 @@ $('#rename-form .submit').click(function() {
                 location.reload(true);
             } else {
                 apply_form_error('rename-form', data['error']);
+                self.removeAttr('disabled');                
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -436,12 +440,15 @@ $('#rename-form .submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('rename-form', value[0]);
             });
+            self.removeAttr('disabled');            
         }
     });
     return false;
 });
 
 $('#add-new-file-form .submit').click(function() {
+    var self = $(this);
+    self.attr('disabled', 'disabled');
     $.ajax({
         url: '{% url 'views.repo_new_file' %}',
         type: 'POST',
@@ -458,6 +465,7 @@ $('#add-new-file-form .submit').click(function() {
                 location.reload(true);
             } else {
                 apply_form_error('add-new-file-form', data['error']);
+                self.removeAttr('disabled');
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -465,12 +473,16 @@ $('#add-new-file-form .submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('add-new-file-form', value[0]);
             });
+            self.removeAttr('disabled');
         }
     });
     return false;
 });
 
 $('#add-new-dir-form .submit').click(function() {
+    var self = $(this);
+    self.attr('disabled', 'disabled');
+    
     $.ajax({
         url: '{% url 'views.repo_new_dir' %}',
         type: 'POST',
@@ -487,6 +499,7 @@ $('#add-new-dir-form .submit').click(function() {
                 location.reload(true);
             } else {
                 apply_form_error('add-new-dir-form', data['error']);
+                self.removeAttr('disabled');
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -494,6 +507,7 @@ $('#add-new-dir-form .submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('add-new-dir-form', value[0]);
             });
+            self.removeAttr('disabled');
         }
     });
     return false;

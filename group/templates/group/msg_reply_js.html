@@ -26,6 +26,8 @@ $('.reply').click(function() {
         }
         msg_bd.find('.reply-at').click(replyatHandler);
         msg_bd.find('.submit').click(function() {
+            var self = $(this);
+            self.attr('disabled', 'disabled');
             var reply = $.trim(reply_input.val());
             if (reply && reply.length <= 150) {
                 $.ajax({
@@ -42,10 +44,12 @@ $('.reply').click(function() {
                         error.attr('class', 'error hide');
                         reply_cnt.html((parseInt(reply_cnt.html()) + 1 || 1) + ' ');
                         msg_bd.find('.reply-at').click(replyatHandler);
+                        self.removeAttr('disabled');
                     }
                 });
             } else {
                 error.removeClass('hide');
+                self.removeAttr('disabled');
             }
         });
     }

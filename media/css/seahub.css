@@ -79,6 +79,9 @@ button:hover {
     cursor:pointer;
     background: #FFF;
 }
+input[type=submit][disabled=disabled]{
+    background: #ebebe4;
+}
 input[type="file"] {
     border:none;
     height:24px;

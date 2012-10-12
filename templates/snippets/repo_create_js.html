@@ -21,6 +21,8 @@ $('#encrypt-switch').click(function () {
 $('#repo-create-submit').click(function() {
     var passwd = $('#repo-create-form input[name="passwd"]'),
         passwd_again = $('#repo-create-form input[name="passwd_again"]');
+    var self = $(this);
+    self.attr('disabled', 'disabled');
 
     $.ajax({
         url: '{{ post_url }}',
@@ -43,6 +45,7 @@ $('#repo-create-submit').click(function() {
                 location.reload(true);
             } else {
                 apply_form_error('repo-create-form', data['error']);
+                self.removeAttr('disabled');
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -50,6 +53,7 @@ $('#repo-create-submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('repo-create-form', value[0]);
             });
+            self.removeAttr('disabled');
         }
     });
 
