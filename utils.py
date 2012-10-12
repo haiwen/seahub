@@ -228,15 +228,16 @@ def get_accessible_repos(request, repo):
             accessible_repos.append(r)
 
     for r in shared_repos:
+        # For compatibility with diffrent fields names in Repo and
+        # SharedRepo objects.
+        r.id = r.repo_id
+        r.name = r.repo_name
+        r.desc = r.repo_desc
+
         if not has_repo(accessible_repos, r) and not r.encrypted:
-            # For compatibility with diffrent fields names in Repo and
-            # SharedRepo objects.
-            r.id = r.repo_id
-            r.name = r.repo_name
-            r.desc = r.repo_desc
             r.has_subdir = check_has_subdir(r)
             accessible_repos.append(r)
-        
+
     return accessible_repos
 
 def valid_previewed_file(filename):
