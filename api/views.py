@@ -38,7 +38,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    gen_file_get_url, string2list
+    gen_file_get_url, string2list, gen_file_upload_url
 
 from seahub.views import access_to_repo, validate_owner
 from seahub.contacts.signals import mail_sended
@@ -62,6 +62,7 @@ HTTP_ERRORS = {
     '410':'Path does not exist',
     '411':'Failed to get dirid by path',
     '412':'Failed to get fileid by path',
+    '413':'Above quota',
     '415':'Operation not supported',
     '416':'Failed to list dir',
     '417':'Set password error',
@@ -744,3 +745,28 @@ class OpMoveView(ResponseMixin, View):
 
         return reloaddir_if_neccessary (request, dst_repo_id, dst_dir)
 
+
+class OpUploadView(ResponseMixin, View):
+
+    @api_login_required
+    def post(self, request):
+        return api_error(request, '407')
+
+    @api_login_required
+    def get(self, request, repo_id):
+
+        repo = get_repo(repo_id)
+        if check_permission(repo_id, request.user.username) == 'rw':
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'upload',
+                                                      request.user.username)
+        else:
+            return api_error(request, '403')
+
+        if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
+            return api_error(request, '413')
+
+        upload_url = gen_file_upload_url(token, 'upload')
+        return HttpResponse(json.dumps(upload_url), status=200,
+                            content_type=json_content_type)
