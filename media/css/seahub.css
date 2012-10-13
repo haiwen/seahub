@@ -604,15 +604,16 @@ ul.with-bg li {
 }
 .mygroup {
     float:left;
-    width:69px;
+    display:inline;
+    width:67px;
     text-align:center;
-    word-wrap:break-word;
-    vertical-align:top;
-    margin:0 0px 5px 0;
+    margin:0 1px 5px 1px;
 }
 .mygroup a {
     display:inline-block;
     width:100%;
+    white-space:nowrap;
+    overflow:hidden;
 }
 
 #repo-create,
