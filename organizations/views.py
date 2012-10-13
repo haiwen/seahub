@@ -55,7 +55,7 @@ def create_org(request):
                 # create_org(org_name, url_prefix, username)
                 ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
                 return HttpResponseRedirect(\
-                    reverse(org_public, args=[url_prefix]))
+                    reverse(org_personal, args=[url_prefix]))
             except SearpcError, e:
                 return render_error(request, e.msg, extra_ctx={
                         'base_template': 'myhome_base.html',
