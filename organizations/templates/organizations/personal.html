@@ -1,5 +1,5 @@
 {% extends "org_base.html" %}
-{% load seahub_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags %}
 {% load url from future %}
 
 {% block nav_org_personal_class %}class="cur"{% endblock %}
@@ -9,6 +9,18 @@
 {% endblock %}
 
 {% block left_panel %}
+<!-- 我的基本信息 -->
+<div class="info-item">
+<h3 class="info-item-top">我的基本信息</h3>
+<div class="info-item-bottom home-profile ovhd">
+    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
+{% if nickname %}
+<p class="fleft">{{ nickname }}</p>
+{% else %}
+<p class="fleft">暂无昵称 <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="编辑" title="编辑" /></a></p>
+{% endif %}
+</div>
+</div>
 <!-- 我的群组 -->
 {% include "snippets/my_groups.html" %}
 {% endblock %}

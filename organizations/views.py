@@ -27,6 +27,7 @@ from signals import org_user_added
 from utils import validate_org_repo_owner
 from group.views import GroupListView
 from notifications.models import UserNotification
+from profile.models import Profile
 from share.models import FileShare
 from share.forms import RepoShareForm
 from registration.models import RegistrationProfile
@@ -54,7 +55,7 @@ def create_org(request):
                 # create_org(org_name, url_prefix, username)
                 ccnet_threaded_rpc.create_org(org_name, url_prefix, username)
                 return HttpResponseRedirect(\
-                    reverse(org_info, args=[url_prefix]))
+                    reverse(org_public, args=[url_prefix]))
             except SearpcError, e:
                 return render_error(request, e.msg, extra_ctx={
                         'base_template': 'myhome_base.html',
@@ -68,7 +69,11 @@ def create_org(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def org_info(request, url_prefix):
+def org_root(request, url_prefix):
+    return HttpResponseRedirect(reverse(org_personal, args=[url_prefix]))
+    
+@login_required
+def org_public(request, url_prefix):
     """
     Show org info page, list org inner pub repos.
     """
@@ -78,7 +83,7 @@ def org_info(request, url_prefix):
 
     repos = list_org_inner_pub_repos(org.org_id, request.user.username)
 
-    return render_to_response('organizations/org_info.html', {
+    return render_to_response('organizations/org_public.html', {
             'org': org,
             'repos': repos,
             'create_shared_repo': True,
@@ -118,7 +123,14 @@ def org_personal(request, url_prefix):
             continue
         m.contact_email = m.email
         contacts.append(m)
-    
+
+    # Get nickname
+    if not Profile.objects.filter(user=request.user.username):
+        nickname = ''
+    else:
+        profile = Profile.objects.filter(user=request.user.username)[0]
+        nickname = profile.nickname
+        
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
             "in_repos": in_repos,
@@ -128,6 +140,7 @@ def org_personal(request, url_prefix):
             'contacts': contacts,
             'create_shared_repo': False,
             'allow_public_share': True,
+            'nickname': nickname,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -175,7 +188,7 @@ def org_inner_pub_repo_create(request, url_prefix):
 def unset_org_inner_pub_repo(request, url_prefix, repo_id):
     org = get_user_current_org(request.user.username, url_prefix)
     if not org:
-        return HttpResponseRedirect(reverse(org_info, args=[url_prefix]))
+        return HttpResponseRedirect(reverse(org_public, args=[url_prefix]))
        
     try:
         seafserv_threaded_rpc.unset_org_inner_pub_repo(org.org_id, repo_id)
@@ -351,7 +364,7 @@ def org_msg(request):
                 from_email = d['from_email']
                 org_name = d['org_name']
                 org_prefix = d['org_prefix']
-                org_url = reverse('org_info', args=[org_prefix])
+                org_url = reverse('org_public', args=[org_prefix])
                 
                 msg = u'%s 将你加入到团体 <a href="%s">%s</a>' % (
                     from_email, org_url, org_name)

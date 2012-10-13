@@ -8,7 +8,7 @@
 <div class="info-item">
 <h3 class="info-item-top">我的基本信息</h3>
 <div class="info-item-bottom home-profile ovhd">
-    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar myname 48 %}</a>
+    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
 {% if nickname %}
 <p class="fleft">{{ nickname }}</p>
 {% else %}
