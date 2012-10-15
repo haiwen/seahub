@@ -354,12 +354,12 @@ def get_file_contributors_from_revisions(repo_id, file_path):
     """
     commits = []
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, 100)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1)
     except SearpcError:
         return []
 
     # Commits are already sorted by date, so the user list is also sorted.
-    users = [ commit.creator_name for commit in commits ]
+    users = [ commit.creator_name for commit in commits if commit.creator_name ]
 
     # Remove duplicate elements in a list
     ret = []
