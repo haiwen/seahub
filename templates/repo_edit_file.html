@@ -7,6 +7,9 @@
 .CodeMirror-focused pre.CodeMirror-cursor {
   visibility: visible;
 }
+.CodeMirror-scroll {
+    height:auto;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
 {% endblock %}
@@ -62,7 +65,6 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     lineNumbers: true,
     autofocus: true
 });
-editor.setSize(null, (editor.lineCount() + 1) * parseFloat($('.CodeMirror').css('line-height')));
 $('#op-after-edit').removeClass('hide');
 
 {% if filetype == 'Markdown' %}
