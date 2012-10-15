@@ -24,7 +24,7 @@ from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
     get_org_id_by_repo_id, is_org_staff, get_org_users_by_url_prefix, \
     org_user_exists, list_org_repos_by_owner
 
-from service import get_related_users_by_repo
+from service import get_related_users_by_repo, get_related_users_by_org_repo
 
 from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 

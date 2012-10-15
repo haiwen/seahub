@@ -669,19 +669,55 @@ def get_related_users_by_repo(repo_id):
     - users to which the repo is shared
     """
     owner = seafserv_threaded_rpc.get_repo_owner(repo_id)
+    if not owner:
+        # Can't happen
+        return []
+
     users = [owner]
 
     groups = get_shared_groups_by_repo(repo_id)
+
     for group in groups:
         members = get_group_members(group.id)
         for member in members:
             if member.user_name not in users:
                 users.append(member.user_name)
 
-    share_repos = seafserv_threaded_rpc.list_share_repos(owner, 'from_email', -1, -1)
+    share_repos = seafserv_threaded_rpc.list_share_repos(owner, \
+                                        'from_email', -1, -1)
+
     for repo in share_repos:
-        if repo.id == repo_id:
-            if repo.shared_email not in users:
-                users.append(repo.shared_email)
+        if repo.repo_id == repo_id:
+            if repo.user not in users:
+                users.append(repo.user)
+
+    return users
+
+def get_related_users_by_org_repo(org_id, repo_id):
+    """Org version of get_related_users_by_repo
+    """
+    owner = get_org_repo_owner(repo_id)
+
+    if not owner:
+        # Can't happen
+        return []
+
+    users = [owner]
+
+    groups = get_org_groups_by_repo(org_id, repo_id)
+
+    for group in groups:
+        members = get_group_members(group.id)
+        for member in members:
+            if member.user_name not in users:
+                users.append(member.user_name)
+
+    share_repos = seafserv_threaded_rpc.list_org_share_repos(org_id, \
+                                        owner, 'from_email', -1, -1)
+
+    for repo in share_repos:
+        if repo.repo_id == repo_id:
+            if repo.user not in users:
+                users.append(repo.user)
 
     return users

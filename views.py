@@ -41,7 +41,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner, is_passwd_set, get_file_size, get_related_users_by_repo
+    get_org_repo_owner, is_passwd_set, get_file_size, \
+    get_related_users_by_repo, get_related_users_by_org_repo
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -67,7 +68,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo, \
-    get_file_contributors
+    get_file_contributors, EVENTS_ENABLED, get_user_events
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -76,12 +77,6 @@ except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
 
-try:
-    from settings import EVENTS_CONFIG_FILE
-    from utils import get_seafevents_session
-    import seafevents
-except ImportError:
-    EVENTS_CONFIG_FILE = None
 
 @login_required
 def root(request):
@@ -816,7 +811,16 @@ def remove_repo(request, repo_id):
         # perform this operation.
         if request.user.is_staff or org.is_staff or \
                 is_org_repo_owner(org.org_id, repo_id, user):
+            # Must get related useres before remove the repo
+            usernames = get_related_users_by_org_repo(org.org_id, repo_id)
             seafserv_threaded_rpc.remove_repo(repo_id)
+            repo_deleted.send(sender=None,
+                              org_id=org.org_id,
+                              usernames=usernames,
+                              repo_owner=user,
+                              repo_id=repo_id,
+                              repo_name=repo.name,
+                          )
         else:
             err_msg = u'删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。'
             return render_permission_error(request, err_msg)
@@ -827,6 +831,7 @@ def remove_repo(request, repo_id):
             usernames = get_related_users_by_repo(repo_id)
             seafserv_threaded_rpc.remove_repo(repo_id)
             repo_deleted.send(sender=None,
+                              org_id=-1,
                               usernames=usernames,
                               repo_owner=user,
                               repo_id=repo_id,
@@ -902,17 +907,10 @@ def myhome(request):
             contacts.append(u)
 
     # events
-    if EVENTS_CONFIG_FILE:
-        ev_session = get_seafevents_session()
-        events = seafevents.get_user_events(ev_session, request.user.username, 0, 10)
-        ev_session.close()
-        for ev in events:
-            if ev.etype == 'repo-update':
-                ev.repo = get_repo(ev.repo_id)
-                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+    if EVENTS_ENABLED:
+        events = get_user_events(request.user.username)
     else:
         events = None
-
 
     return render_to_response('myhome.html', {
             "nickname": nickname,
@@ -1076,8 +1074,6 @@ def public_repo_create(request):
         passwd = form.cleaned_data['passwd']
         user = request.user.username
 
-        print permission
-
         try:
             # create a repo 
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
@@ -1091,6 +1087,7 @@ def public_repo_create(request):
         else:
             result['success'] = True
             repo_created.send(sender=None,
+                              org_id=-1,
                               creator=user,
                               repo_id=repo_id,
                               repo_name=repo_name)
@@ -2185,6 +2182,7 @@ def repo_create(request):
         else:
             result['success'] = True
             repo_created.send(sender=None,
+                              org_id=-1,
                               creator=user,
                               repo_id=repo_id,
                               repo_name=repo_name)
@@ -2570,21 +2568,6 @@ def use_flash_for_pdf(request):
         return True
     else:
         return False
-'''    
-@login_required            
-def show_events(request):
-    ev_session = get_seafevents_session()
-    events = seafevents.get_user_events(ev_session, request.user.username, 0, 10)
-    ev_session.close()
-    for ev in events:
-        if ev.etype == 'repo-update':
-            ev.repo = get_repo(ev.repo_id)
-            ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
-
-    return render_to_response ('events.html', {
-        'events': events,
-        }, context_instance=RequestContext(request))
-'''
 
 def demo(request):
     """
@@ -2614,3 +2597,16 @@ def pubinfo(request):
                 'users': users,
                 }, context_instance=RequestContext(request))
     
+def repo_set_password(request):
+    ret = {}
+    content_type = 'application/json; charset=utf-8'
+
+    form = RepoPassowrdForm(request.POST)
+    if form.is_valid():
+        ret['success'] = True
+    else:
+        ret['success'] = False
+        ret['error'] = str(form.errors.values()[0])
+
+    return HttpResponse(json.dumps(ret),
+                        content_type=content_type)

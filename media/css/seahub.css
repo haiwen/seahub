@@ -922,7 +922,7 @@ ul.with-bg li {
     color:#666;
     margin-left:5px;
 }
-.lsch {
+.lsch, .lsch-encrypted {
     font-size:12px;
     font-weight:normal;
     color:#666;
