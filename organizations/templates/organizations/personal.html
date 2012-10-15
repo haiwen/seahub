@@ -29,6 +29,10 @@
 <!-- 我拥有的资料库 --><!-- 共享给我的资料库 -->
 {% include "snippets/my_owned_repos.html" %}
 
+{% if events %}
+{% include "snippets/events.html" %}
+{% endif %}
+
 {% url 'org_repo_share' org.url_prefix as repo_share_url %}
 {% with post_url=repo_share_url tips='必须是团体内部成员或群组。' %}
 {% include "snippets/repo_share_form.html" %}
@@ -48,5 +52,10 @@
 {% with post_url=repo_create_url %}
 {% include "snippets/repo_create_js.html" %}
 {% endwith %}
+
+  
+{% if events %}
+{% include "snippets/events_js.html" %}
+{% endif %}
 </script>
 {% endblock %}

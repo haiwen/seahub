@@ -421,11 +421,46 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
 if hasattr(settings, 'EVENTS_CONFIG_FILE'):
     import seafevents
-    seafevents_session = None
-    def get_seafevents_session():
-        global seafevents_session
 
-        if not seafevents_session:
-            seafevents_session = seafevents.init_db_session(settings.EVENTS_CONFIG_FILE)
+    EVENTS_ENABLED = True
+    SeafEventsSession = seafevents.init_db_session_class(settings.EVENTS_CONFIG_FILE)
 
-        return seafevents_session()
+    def get_user_events(username):
+        ev_session = SeafEventsSession()
+        events = seafevents.get_user_events(ev_session, username, 0, 10)
+        ev_session.close()
+        for ev in events:
+            if ev.etype == 'repo-update':
+                repo = get_repo(ev.repo_id)
+                if not repo:
+                    ev.etype = 'dummy'
+                    continue
+                if repo.encrypted:
+                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                ev.repo = repo
+                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+
+        return events
+
+    def get_org_user_events(org_id, username):
+        ev_session = SeafEventsSession()
+        events = seafevents.get_org_user_events(ev_session, \
+                            org_id, username, 0, 10)
+        ev_session.close()
+        for ev in events:
+            if ev.etype == 'repo-update':
+                repo = get_repo(ev.repo_id)
+                if not repo:
+                    ev.etype = 'dummy'
+                    continue
+                if repo.encrypted:
+                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                ev.repo = repo
+                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+        return events
+else:
+    EVENTS_ENABLED = False
+    def get_user_events():
+        pass
+    def get_org_user_events():
+        pass

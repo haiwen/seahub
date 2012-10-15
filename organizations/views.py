@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from pysearpc import SearpcError
-from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_repo, \
+from seaserv import ccnet_threaded_rpc, seafserv_rpc, seafserv_threaded_rpc, get_repo, \
     get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     remove_org_user, get_org_groups, is_valid_filename, org_user_exists, \
@@ -36,8 +36,11 @@ from contacts import Contact
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
-    validate_group_name, string2list, calculate_repo_last_modify, MAX_INT
+    validate_group_name, string2list, calculate_repo_last_modify, MAX_INT, \
+    EVENTS_ENABLED, get_org_user_events
 from seahub.views import myhome
+from seahub.signals import repo_created
+
 
 @login_required
 def create_org(request):
@@ -131,6 +134,12 @@ def org_personal(request, url_prefix):
         profile = Profile.objects.filter(user=request.user.username)[0]
         nickname = profile.nickname
         
+    # events
+    if EVENTS_ENABLED:
+        events = get_org_user_events(org.org_id, user)
+    else:
+        events = None
+    
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
             "in_repos": in_repos,
@@ -141,6 +150,7 @@ def org_personal(request, url_prefix):
             'create_shared_repo': False,
             'allow_public_share': True,
             'nickname': nickname,
+            'events': events,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -179,6 +189,11 @@ def org_inner_pub_repo_create(request, url_prefix):
             result['error'] = u"创建失败"
         else:
             result['success'] = True
+            repo_created.send(sender=None,
+                              org_id=org.org_id,
+                              creator=user,
+                              repo_id=repo_id,
+                              repo_name=repo_name)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -412,6 +427,11 @@ def org_repo_create(request, url_prefix):
             result['error'] = u"创建失败"
         else:
             result['success'] = True
+            repo_created.send(sender=None,
+                              org_id=org.org_id,
+                              creator=user,
+                              repo_id=repo_id,
+                              repo_name=repo_name)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),

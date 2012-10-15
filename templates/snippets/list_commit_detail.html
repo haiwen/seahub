@@ -1,49 +1,66 @@
-    $('.lsch').click(function() {
-            var time = '<span class="commit-time">(' + $(this).attr('data') + ')</span>';
-            $.ajax({
-                url: $(this).attr('href'),
-                dataType: 'json',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    var title = '<h3>修改详情' + time + '</h3>',
-                        con = ''; 
-                    var show = function(data_) {
-                            con += '<ul>';
-                            for (var i = 0, len = data_.length; i < len; i++) {
-                                con += '<li>' + data_[i] + '</li>';
-                            }   
-                            con += '</ul>';
-                    };  
-                    if (data['new'].length > 0) {
-                        con += '<h4 id="ls-ch-new">新文件</h4>';
-                        show(data['new']);
-                    }   
-                    if (data['removed'].length > 0) {
-                        con += '<h4 id="ls-ch-rm">删除的文件</h4>';
-                        show(data['removed']);
-                    }   
-                    if (data['renamed'].length > 0) {
-                        con += '<h4 id="ls-ch-rn">重命名或移动的文件</h4>';
-                        show(data['renamed']);
-                    }   
-                    if (data['modified'].length > 0) {
-                        con += '<h4 id="ls-ch-modi">修改的文件</h4>';
-                        show(data['modified']);
-                    }
-                    if (data['newdir'].length > 0) {
-                        con += '<h4 id="ls-ch-newdir">新目录</h4>';
-                        show(data['newdir']);
-                    }
-                    if (data['deldir'].length > 0) {
-                        con += '<h4 id="ls-ch-deldir">删除的目录</h4>';
-                        show(data['deldir']);
-                    }
-                    if (!con) {
-                        con = '<p>没有文件被改动</p>';
-                    }
-                    $('#ls-ch').html(title + con).modal({appendTo:'#main', maxHeight: window.innerHeight - 57, autoResize:true});
+<!-- <script type="text/javascript"> -->
+
+function get_commit_diff(url, callback) {
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            var con = '';
+            var show = function(data_) {
+                con += '<ul>';
+                for (var i = 0, len = data_.length; i < len; i++) {
+                    con += '<li>' + data_[i] + '</li>';
                 }
-            });
-            return false;
+                con += '</ul>';
+            };
+            if (data['new'].length > 0) {
+                con += '<h4 id="ls-ch-new">新文件</h4>';
+                show(data['new']);
+            }
+            if (data['removed'].length > 0) {
+                con += '<h4 id="ls-ch-rm">删除的文件</h4>';
+                show(data['removed']);
+            }
+            if (data['renamed'].length > 0) {
+                con += '<h4 id="ls-ch-rn">重命名或移动的文件</h4>';
+                show(data['renamed']);
+            }
+            if (data['modified'].length > 0) {
+                con += '<h4 id="ls-ch-modi">修改的文件</h4>';
+                show(data['modified']);
+            }
+            if (data['newdir'].length > 0) {
+                con += '<h4 id="ls-ch-newdir">新目录</h4>';
+                show(data['newdir']);
+            }
+            if (data['deldir'].length > 0) {
+                con += '<h4 id="ls-ch-deldir">删除的目录</h4>';
+                show(data['deldir']);
+            }
+            if (!con) {
+                con = '<p>没有文件被改动</p>';
+            }
+            callback(con);
+        }
+    });
+}
+
+function list_commit_change(obj) {
+    var url = obj.attr('href');
+    get_commit_diff(url, function(content) {
+        var time = '<span class="commit-time">(' + obj.attr('data') + ')</span>';
+        var title = '<h3>修改详情' + time + '</h3>';
+        $('#ls-ch').html(title + content).modal({
+            appendTo:'#main',
+            maxHeight: window.innerHeight - 57,
+            autoResize:true,
         });
+    });
+}
+
+$('.lsch').click(function() {
+    list_commit_change($(this));
+    return false;
+});
