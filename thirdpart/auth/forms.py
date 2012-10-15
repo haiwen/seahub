@@ -14,7 +14,7 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    username = forms.CharField(label=_("Username"), max_length=30)
+    username = forms.CharField(label=_("Username"), max_length=255)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
@@ -55,7 +55,7 @@ class AuthenticationForm(forms.Form):
         return self.user_cache
 
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label=_("E-mail"), max_length=75)
+    email = forms.EmailField(label=_("E-mail"), max_length=255)
 
     def clean_email(self):
         """
@@ -96,6 +96,7 @@ class PasswordResetForm(forms.Form):
             'token': token_generator.make_token(user),
             'protocol': use_https and 'https' or 'http',
         }
+
         send_mail(_("Password reset on %s") % site_name,
                   t.render(Context(c)), None, [user.username])
 
