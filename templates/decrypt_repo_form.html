@@ -12,10 +12,10 @@
                     <input type="hidden" name="repo_id" value="{{ repo.id }}" />
                     <input type="hidden" name="username" value="{{ request.user.username }}" />
                     <input id="id_password" type="password" name="password" maxlength="64" />
+                    <input type="submit" value="提交" />
                     {% for error in form.errors.values %}
                     <p class="error">{{ error|escape }}</p>
                     {% endfor %}
-                    <input type="submit" value="提交" />
                 </form>
             </div>
         </div>
