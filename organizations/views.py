@@ -349,6 +349,8 @@ def org_user_remove(request, url_prefix, user):
     url_prefix = request.user.org['url_prefix']
     remove_org_user(org_id, user)
 
+    messages.success(request, u"删除成功")
+    
     return HttpResponseRedirect(reverse('org_useradmin', args=[url_prefix]))
 
 def org_msg(request):
