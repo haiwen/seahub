@@ -45,6 +45,9 @@ button {
     font-family:Arial, Helvetica, sans-serif;/*for ff*/
     display:inline-block;/*for ie*/
 }
+button {
+    overflow:visible;/*for ie 7*/
+}
 input[type=checkbox] {
     height:auto;
 }
