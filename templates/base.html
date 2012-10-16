@@ -154,19 +154,19 @@ $('#info-bar .close').click(function() {
     if (navigator.cookieEnabled) {
         var date = new Date(),
             cookies = document.cookie.split('; '),
-            note_id_exist = false,
-            new_note_id = $(this).attr('data') + ',';
+            info_id_exist = false,
+            new_info_id = $(this).attr('data') + '_';
         date.setTime(date.getTime() + 14*24*60*60*1000);
-        new_note_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}'; 
+        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}'; 
         for (var i = 0, len = cookies.length; i < len; i++) {
-            if (cookies[i].split('=')[0] == 'note_id') {
-                note_id_exist = true;
-                document.cookie = 'note_id=' + cookies[i].split('=')[1] + new_note_id; 
+            if (cookies[i].split('=')[0] == 'info_id') {
+                info_id_exist = true;
+                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id; 
                 break;
             }
         }
-        if (!note_id_exist) {
-            document.cookie = 'note_id=' + new_note_id; 
+        if (!info_id_exist) {
+            document.cookie = 'info_id=' + new_info_id; 
         }
     }
 });
