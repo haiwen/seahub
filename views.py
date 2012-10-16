@@ -42,7 +42,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, \
-    get_related_users_by_repo, get_related_users_by_org_repo
+    get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -76,7 +76,6 @@ try:
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
-
 
 @login_required
 def root(request):
@@ -786,7 +785,7 @@ def repo_history_changes(request, repo_id):
 
     return HttpResponse(json.dumps(changes),
                         content_type=content_type)
-    
+
 @login_required
 def modify_token(request, repo_id):
     if not validate_owner(request, repo_id):
@@ -1290,7 +1289,7 @@ def repo_view_file(request, repo_id):
     file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
     comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
-    contributors, last_modified = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+    contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     latest_contributor = contributors[0]
     
     return render_to_response('repo_view_file.html', {
@@ -1323,6 +1322,7 @@ def repo_view_file(request, repo_id):
             'contributors': contributors,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,
+            'last_commit_id': last_commit_id,
             'read_only': read_only,
             'page_from': page_from,
             }, context_instance=RequestContext(request))
@@ -2610,3 +2610,86 @@ def repo_set_password(request):
 
     return HttpResponse(json.dumps(ret),
                         content_type=content_type)
+
+def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
+    try:
+        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                                        commit_id, path)
+    except:
+        return None, 'bad path'
+
+    if not obj_id or obj_id == EMPTY_SHA1:
+        return '', None
+    else:
+        permission = get_user_permission(request, repo_id)
+        if permission:
+            # Get a token to visit file
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      obj_id,
+                                                      'view',
+                                                      request.user.username)
+        else:
+            return None, 'permission denied'
+
+        filename = os.path.basename(path)
+        raw_path = gen_file_get_url(token, urllib2.quote(filename))
+
+        try:
+            err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+        except Exception, e:
+            return None, 'error when read file from httpserver: %s' % e
+        return file_content, err
+
+@login_required    
+def text_diff(request, repo_id):
+    commit_id = request.GET.get('commit', '')
+    path = request.GET.get('p', '')
+
+    if not (commit_id and path):
+        return render_error(request, 'bad params')
+        
+    repo = get_repo(repo_id)
+    if not repo:
+        return render_error(request, 'bad repo')
+
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+    if not current_commit:
+        return render_error(request, 'bad commit id')
+
+    prev_commit = seafserv_threaded_rpc.get_commit(current_commit.parent_id)
+    if not prev_commit:
+        return render_error('bad commit id')
+
+    path = path.encode('utf-8')
+
+    current_content, err = get_file_content_by_commit_and_path(request, \
+                                    repo_id, current_commit.id, path)
+    if err:
+        return render_error(request, err)
+        
+    prev_content, err = get_file_content_by_commit_and_path(request, \
+                                    repo_id, prev_commit.id, path)
+    if err:
+        return render_error(request, err)
+
+    is_new_file = False
+    diff_result_table = ''
+    if prev_content == '' and current_content == '':
+        is_new_file = True
+    else:
+        diff = HtmlDiff()
+        diff_result_table = diff.make_table(prev_content.splitlines(),
+                                        current_content.splitlines())
+
+    zipped = gen_path_link(path, repo.name)
+
+    return render_to_response('text_diff.html', {
+        'repo': repo,
+        'path': path,
+        'zipped': zipped,
+        'current_commit': current_commit,
+        'prev_commit': prev_commit,
+        'diff_result_table': diff_result_table,
+        'is_new_file': is_new_file,
+    }, context_instance=RequestContext(request))
+

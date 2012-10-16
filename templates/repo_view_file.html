@@ -82,7 +82,13 @@
     {% if not view_history %}
     <div id="file-commit-info">
         <div class="latest-commit ovhd">
-            <p class="latest-commit-info fleft">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> 做了最新修改</span></p>
+            <p class="latest-commit-info fleft">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> 做了最新修改</span>
+                {% if filetype == 'Text' or filetype == 'Markdown' %}
+                {% if last_commit_id %}
+                <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">详情</a></span>
+                {% endif %}
+                {% endif %}
+            </p>
             <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" class="more fright">更多历史</a>
         </div> 
         <p class="contributors">

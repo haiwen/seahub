@@ -367,7 +367,7 @@ def get_file_contributors_from_revisions(repo_id, file_path):
         if user not in ret:
             ret.append(user)
 
-    return ret, commits[0].ctime
+    return ret, commits[0].ctime, commits[0].id
 
 def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
     """Get file contributors list and last modfied time from database cache.
@@ -376,12 +376,13 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
     """
     contributors = []
     last_modified = 0
+    last_commit_id = ''
     try:
         fc = FileContributors.objects.get(repo_id=repo_id,
                                           file_path_hash=file_path_hash)
     except FileContributors.DoesNotExist:
         # has no cache yet
-        contributors, last_modified = get_file_contributors_from_revisions (repo_id, file_path)
+        contributors, last_modified, last_commit_id = get_file_contributors_from_revisions (repo_id, file_path)
         if not contributors:
             return [], 0
         emails = ','.join(contributors)
@@ -390,22 +391,24 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
                                              file_path=file_path,
                                              file_path_hash=file_path_hash,
                                              last_modified=last_modified,
+                                             last_commit_id=last_commit_id,
                                              emails=emails)
         file_contributors.save()
     else:
         # cache found
-        if fc.file_id != file_id:
+        if fc.file_id != file_id or not fc.last_commit_id:
             # but cache is outdated
             fc.delete()
-            contributors, last_modified = get_file_contributors_from_revisions (repo_id, file_path)
+            contributors, last_modified, last_commit_id = get_file_contributors_from_revisions (repo_id, file_path)
             if not contributors:
-                return [], 0
+                return [], 0, ''
             emails = ','.join(contributors)
             file_contributors = FileContributors(repo_id=repo_id,
                                                  file_id=file_id,
                                                  file_path=file_path,
                                                  file_path_hash=file_path_hash,
                                                  last_modified=last_modified,
+                                                 last_commit_id=last_commit_id,
                                                  emails=emails)
             file_contributors.save()
         else:
@@ -415,8 +418,9 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
             else:
                 contributors = []
             last_modified = fc.last_modified
+            last_commit_id = fc.last_commit_id
 
-    return contributors, last_modified 
+    return contributors, last_modified, last_commit_id 
 
 
 if hasattr(settings, 'EVENTS_CONFIG_FILE'):

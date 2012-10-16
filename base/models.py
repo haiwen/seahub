@@ -44,6 +44,7 @@ class FileContributors(models.Model):
     file_path_hash = models.CharField(max_length=12)
 
     last_modified = models.BigIntegerField()
+    last_commit_id = models.CharField(max_length=40)
 
     # email addresses seperated by comma
     emails = models.TextField()

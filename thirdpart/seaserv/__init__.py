@@ -28,3 +28,5 @@ from service import get_related_users_by_repo, get_related_users_by_org_repo
 
 from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
 
+from htmldiff import HtmlDiff
+

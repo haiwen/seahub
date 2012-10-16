@@ -1,0 +1,39 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags%}
+{% load url from future %}
+
+{% block main_panel %}
+<h2>文件修改详情</h2>
+<div class="diff-desc">
+    <p class="path">
+        文件路径：
+        {% for name, link in zipped %}
+        {% if not forloop.last %}
+        <a href="{% url 'repo' repo.id %}?p={{ link|urlencode }}">{{ name }}</a> /                
+        {% else %}
+        <a href="{% url 'repo_view_file' repo.id %}?p={{ link|urlencode }}">{{ name }}</a>
+        {% endif %}
+        {% endfor %}
+    </p>
+    <p class="">{% avatar current_commit.creator_name 20 %} {{ current_commit.creator_name|email2nickname }} 修改于 {{ current_commit.ctime|translate_commit_time }}</p>
+</div>
+{% if is_new_file %}
+<div class="text-panel">
+    <p>文件 {{repo.name}} {{ path }} 是一个新建的空白文件</p>
+</div>
+{% else %}
+<div id="text-diff-output">
+<table rules="group">
+    <thead>
+        <th width="3%"></th>
+        <th width="47%"> 修改前 </th>
+        <th width="3%"></th>
+        <th width="47%"> 修改后 </th>
+    </thead>
+    <tbody>
+        {{ diff_result_table|safe }}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}
