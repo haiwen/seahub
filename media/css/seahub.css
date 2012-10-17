@@ -903,6 +903,9 @@ ul.with-bg li {
 #repo-latest-commit .commit-msg .more {
     margin-left:10px;
 }
+#file-commit-info .latest-commit-info {
+    margin:0;
+}
 #file-commit-info .contributors {
     color:#666;
 }

@@ -81,7 +81,10 @@
 
     {% if not view_history %}
     <div id="file-commit-info">
-        <p class="latest-commit">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> 做了最新修改</span></p>
+        <div class="latest-commit ovhd">
+            <p class="latest-commit-info fleft">{% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> 做了最新修改</span></p>
+            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" class="more fright">更多历史</a>
+        </div> 
         <p class="contributors">
         <span>{{ contributors|length }} 个贡献者</span>
         {% for user in contributors %}
@@ -99,14 +102,12 @@
         {% endif %}
             {% if not view_history and request.user.is_authenticated %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
-              {% if filetype == 'Text' or filetype == 'Markdown' %}
-	        {% if not read_only %}
+            {% if not read_only %}
+            {% if filetype == 'Text' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
-	        {% endif %}
-              {% endif %}
-	    {% endif %}
-            {% if not view_history %}
-            <button data="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" id="history">历史</button>
+            {% endif %}
+            <button data="{{ SITE_ROOT }}repo/update_file/{{ repo.id }}/?p={{ path }}" id="update">更新</button>
+            {% endif %}
             {% endif %}
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
@@ -193,7 +194,7 @@ $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
 {% if not view_history %}
-$('#edit, #history').click(function() {
+$('#edit, #update').click(function() {
     location.href = $(this).attr('data');
 });
 function showLink() {
