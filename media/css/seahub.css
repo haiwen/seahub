@@ -770,7 +770,7 @@ ul.with-bg li {
 }
 #upload-file {
     padding-left:19px;
-    background-image:url('../img/upload.png');
+    background-image:url('../img/upload.png?v=1');
 }
 #add-new-dir {
     padding-left:23px;
@@ -934,12 +934,20 @@ ul.with-bg li {
     max-width:850px;
     max-height:550px;
     overflow:auto;
+    line-height:1.6;
+}
+#ls-ch h2,
+#ls-ch h3 {
+    margin: 0 0 0.2em;
+    color:#333;
+    font-weight:bold;
 }
 #ls-ch .commit-time,
 .commit-time {
     color:#333;
     font-size:13px;
     font-weight:normal;
+    margin-top: 0em;
 }
 #ls-ch ul {
     padding:0 0 6px 0;
