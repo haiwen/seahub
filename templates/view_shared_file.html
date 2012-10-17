@@ -1,6 +1,10 @@
 {% extends "myhome_base.html" %}
 {% load seahub_tags %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+{% endblock %}
+
 {% block main_panel %}
     <h2>{{ file_name }}</h2>
     <p class="file-share-from">共享者：{{ username }}</p>
