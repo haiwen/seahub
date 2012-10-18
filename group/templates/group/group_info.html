@@ -149,7 +149,9 @@
                 </p>
                 <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
                 <button class="replyclose op hide">收起回复</button>
+                {% if is_staff or msg.from_email == request.user.username %}
                 <button class="msg-delete op" href="#" data="{% url 'group_message_remove' group.id msg.id %}">删除</button>
+                {% endif %}
                 <div class="reply-bd"></div>
             </div>
         </div>
@@ -203,6 +205,14 @@ $('.download').click(function() {
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
 
+$('.msg-delete').hover(
+    function() {
+        $(this).css('color', '#f93');
+    },
+    function() {
+        $(this).css('color', '#080');
+    }
+);
 addConfirmTo($('.msg-delete'));
 
 </script>

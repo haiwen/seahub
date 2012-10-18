@@ -374,10 +374,16 @@ def group_message_remove(request, group_id, msg_id):
     try:
         gm = GroupMessage.objects.get(id=msg_id)
     except GroupMessage.DoesNotExist:
-        messages.success(request, u'删除失败')
+        messages.error(request, u'删除失败')
     else:
-        gm.delete()
-        messages.success(request, u'删除成功')
+        # Test whether user is group admin or message owner.
+        if check_group_staff(group_id, request.user) or \
+                gm.from_email == request.user.username:
+            gm.delete()
+            messages.success(request, u'删除成功')
+        else:
+            messages.error(request, u'删除失败：权限不足')
+            
     return HttpResponseRedirect(reverse('group_info', args=[group_id]))
 
 @login_required
