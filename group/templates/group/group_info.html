@@ -125,7 +125,6 @@
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/" title="{{ msg.from_email }}">{{ msg.from_email|email2nickname }}</a>
-                <a class="msg-delete" href="#" data="{% url 'group_message_remove' group.id msg.id %}">删除</a>
             </div>
             <div class="msg-bd">
                 <p>
@@ -150,6 +149,7 @@
                 </p>
                 <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
                 <button class="replyclose op hide">收起回复</button>
+                <button class="msg-delete op" href="#" data="{% url 'group_message_remove' group.id msg.id %}">删除</button>
                 <div class="reply-bd"></div>
             </div>
         </div>
