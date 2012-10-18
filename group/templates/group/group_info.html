@@ -18,7 +18,12 @@
     </div>
 </div>
 <div class="info-item">
-    <h3 class="info-item-top">管理员</h3>
+    <div class="info-item-top">
+        <h3 class="inbl">管理员</h3>
+        {% if is_staff %}
+        <a href="javascript:void(0);" class="grp-admin-add op">添加</a>
+        {% endif %}
+    </div>
     <ul class="info-item-bottom">
         {% for member in managers %}
         <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
@@ -27,7 +32,12 @@
 </div>
 
 <div class="info-item">
-    <h3 class="info-item-top">成员</h3>
+    <div class="info-item-top">
+        <h3 class="inbl">成员</h3>
+        {% if is_staff %}
+        <a href="javascript:void(0);" class="grp-member-add op">添加</a>
+        {% endif %}
+    </div>
     <div class="info-item-bottom">
         {% if common_members %}
         <ul>
@@ -172,6 +182,7 @@
 
 {% include "snippets/user_profile_html.html" %}
 {% include "snippets/repo_create_form.html" %}
+{% include 'group/grpmember_add_form.html' %}
 
 {% endblock %}
 
@@ -200,6 +211,12 @@ $('.download').click(function() {
 
 {% include 'group/msg_reply_js.html' %}
 
+var contact_list = [], contact_email;
+{% for contact in contacts %}
+contact_email = '{{ contact.contact_email }}';
+contact_list.push({value:contact_email, label:contact_email});
+{% endfor %}
+
 {% url 'create_group_repo' group.id as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
@@ -214,6 +231,26 @@ $('.msg-delete').hover(
     }
 );
 addConfirmTo($('.msg-delete'));
+
+$('.grp-admin-add').click(function() {
+    $("#admin-add-form").modal({appendTo: "#main"});
+    addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
+});
+
+$('.grp-member-add').click(function() {
+    $("#member-add-form").modal({appendTo: "#main"});
+    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
+});
+
+{% url 'group_add_admin' group.id as admin_add_url %}
+{% with post_url=admin_add_url %}
+{% include 'group/grpadmin_add_js.html' %}
+{% endwith %}
+
+{% url 'group_members' group.id as member_add_url %}
+{% with post_url=member_add_url %}
+{% include 'group/grpmember_add_js.html' %}
+{% endwith %}
 
 </script>
 {% endblock %}

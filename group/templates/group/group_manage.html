@@ -20,6 +20,7 @@
 {% block right_panel %}
 <h3>群组成员列表</h3>
 <button id="group-member-add">添加成员</button>
+<button id="group-admin-add">添加管理员</button>
 {% if members %}
 <table class="member-list">
     <tr>
@@ -31,9 +32,7 @@
     <tr>
         <td>{{ member.user_name }}</td>
         <td>
-        {% if not member.is_staff %}
             <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
-        {% endif %}
         </td>
     </tr>
     {% endfor %}
@@ -42,13 +41,8 @@
 <p>暂无</p>
 {% endif %}
 
-<form id="member-add-form" action="{{ SITE_ROOT }}group/{{ group.id }}/members/" method="post" name="member-add-form" class="hide">
-    <label>邮箱:</label><br />
-    <textarea id="added-member-name" name="user_name"></textarea><br />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    <p class="error hide" id="member-add-error"></p>
-    <input type="submit" value="提交" id="member-add-submit" />
-</form>
+{% include 'group/grpmember_add_form.html' %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -63,47 +57,15 @@ contact_email = '{{ contact.contact_email }}';
 contact_list.push({value:contact_email, label:contact_email});
 {% endfor %}
 
-$("#group-member-add").click(function() {
-    $("#member-add-form").modal({appendTo: "#main"});
-    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
-    return false;
-})
-.hover(
-    function() {
-        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
-    },
-    function() {
-        $(this).css('background-color', '#f5f5f5');
-    }
-);
+{% url 'group_members' group.id as member_add_url %}
+{% with post_url=member_add_url %}
+{% include 'group/grpmember_add_js.html' %}
+{% endwith %}
 
-$('#member-add-submit').click(function() {
-    if (!$.trim($('#added-member-name').attr('value'))) {
-        apply_form_error('member-add-form', '输入不能为空。');
-        return false;
-    }
-    $.ajax({
-        url: '{% url 'group_members' group.id %}',
-        type: 'POST',
-        dataType: 'json',
-        cache: 'false',
-        beforeSend: prepareCSRFToken,
-        data: {
-            'user_name': $('#added-member-name').val()
-        },
-        success: function(data) {
-            location.reload(true);
-        },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('member-add-form', value);
-            });
-        }
-    });
-
-    return false;
-});
+{% url 'group_add_admin' group.id as admin_add_url %}
+{% with post_url=admin_add_url %}
+{% include 'group/grpadmin_add_js.html' %}
+{% endwith %}
 
 </script>
 {% endblock %}

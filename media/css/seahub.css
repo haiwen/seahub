@@ -138,6 +138,7 @@ p {
 .error { color:red; }
 .errorlist { color: red; }
 .ovhd { overflow:hidden; }
+.inbl { display: inline-block; }
 .bold { font-weight:bold; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .w100 {
@@ -224,6 +225,10 @@ ul.with-bg li {
     border-bottom: 1px solid #eee;
     border-top-left-radius: 1px;
     border-top-right-radius: 1px;
+}
+.info-item-top a {
+    font-size: 0.9em;
+    float: right;
 }
 .info-item-bottom {
     padding: 8px 10px;
@@ -623,7 +628,8 @@ ul.with-bg li {
 #contact-add,
 #group-add,
 #org-user-add,
-#group-member-add {
+#group-member-add,
+#group-admin-add {
     padding-left:21px;
     height:27px;
     background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
@@ -984,7 +990,8 @@ ul.with-bg li {
 #email,
 #email_or_group,
 #share-link,
-#added-member-name {
+#added-member-name,
+#added-admin-name {
     width:260px;
     height:80px;
 }

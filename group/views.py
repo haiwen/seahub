@@ -338,7 +338,9 @@ def render_group_info(request, group_id, form):
                         path = path[:-1]
                     att.name = os.path.basename(path)
                 msg.attachment = att
-                
+
+    contacts = Contact.objects.filter(user_email=request.user.username)
+
     return render_to_response("group/group_info.html", {
             "managers": managers,
             "common_members": common_members,
@@ -356,6 +358,7 @@ def render_group_info(request, group_id, form):
             'per_page': per_page,
             'page_next': page_next,
             'create_shared_repo': True,
+            'contacts': contacts,
             }, context_instance=RequestContext(request));
 
 @login_required
@@ -616,6 +619,52 @@ def group_members(request, group_id):
             'members': members,
             'contacts': contacts,
             }, context_instance=RequestContext(request))
+
+@login_required
+def group_add_admin(request, group_id):
+    """
+    Add group admin.
+    """
+    # TODO: group admin required
+
+    group_id = int(group_id)    # Checked by URL Conf
+    
+    if request.method != 'POST' or not request.is_ajax():
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    member_name_str = request.POST.get('user_name', '')
+    member_list = string2list(member_name_str)
+
+    for member_name in member_list:
+        # Add user to contacts.
+        mail_sended.send(sender=None, user=request.user.username,
+                         email=member_name)
+
+        if not is_registered_user(member_name):
+            err_msg = u'无法添加管理员，%s 未注册' % member_name
+            result['error'] = err_msg
+            return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+        
+        # Check whether user is in the group
+        if is_group_user(group_id, member_name):
+            pass
+        else:
+            try:
+                ccnet_threaded_rpc.group_add_member(group_id,
+                                                    request.user.username,
+                                                    member_name)
+                ccnet_threaded_rpc.group_set_admin(group_id, member_name)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+        messages.success(request, u'操作成功')
+        return HttpResponse(json.dumps('success'), status=200,
+                            content_type=content_type)
     
 @login_required
 def group_member_operations(request, group_id, user_name):

@@ -1,0 +1,42 @@
+$("#group-member-add").click(function() {
+    $("#member-add-form").modal({appendTo: "#main"});
+    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
+    return false;
+})
+.hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
+
+$('#member-add-submit').click(function() {
+    if (!$.trim($('#added-member-name').attr('value'))) {
+        apply_form_error('member-add-form', '输入不能为空。');
+        return false;
+    }
+    $.ajax({
+        url: '{{ post_url }}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_name': $('#added-member-name').val()
+        },
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('member-add-form', value);
+            });
+        }
+    });
+
+    return false;
+});
+

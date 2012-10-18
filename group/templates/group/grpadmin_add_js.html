@@ -1,0 +1,41 @@
+$("#group-admin-add").click(function() {
+    $("#admin-add-form").modal({appendTo: "#main"});
+    addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
+    return false;
+})
+.hover(
+    function() {
+        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
+    },
+    function() {
+        $(this).css('background-color', '#f5f5f5');
+    }
+);
+
+$('#admin-add-submit').click(function() {
+    if (!$.trim($('#added-admin-name').attr('value'))) {
+        apply_form_error('admin-add-form', '输入不能为空。');
+        return false;
+    }
+    $.ajax({
+        url: '{{ post_url }}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_name': $('#added-admin-name').val()
+        },
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('admin-add-form', value);
+            });
+        }
+    });
+
+    return false;
+});
