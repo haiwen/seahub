@@ -359,6 +359,28 @@ def render_group_info(request, group_id, form):
             }, context_instance=RequestContext(request));
 
 @login_required
+def group_message_remove(request, group_id, msg_id):
+    """
+    Remove group message and all message replies and attachments.
+    """
+    # Checked by URL Conf
+    group_id = int(group_id)
+    msg_id = int(msg_id)
+    
+    # Test whether user is in the group
+    if not is_group_user(group_id, request.user.username):
+        raise Http404
+
+    try:
+        gm = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        messages.success(request, u'删除失败')
+    else:
+        gm.delete()
+        messages.success(request, u'删除成功')
+    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+
+@login_required
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
     

@@ -125,6 +125,7 @@
             <div class="msg-hd">
                 <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
                 <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/" title="{{ msg.from_email }}">{{ msg.from_email|email2nickname }}</a>
+                <a class="msg-delete" href="#" data="{% url 'group_message_remove' group.id msg.id %}">删除</a>
             </div>
             <div class="msg-bd">
                 <p>
@@ -201,5 +202,8 @@ $('.download').click(function() {
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
+
+addConfirmTo($('.msg-delete'));
+
 </script>
 {% endblock %}
