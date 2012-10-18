@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags %}
+{% load url from future %}
 
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
 
@@ -12,21 +13,30 @@
 {% block right_panel %}
 <h3>我共享的资料库</h3>
 {% if shared_repos %}
-<table class="repo-list">
+<table>
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="20%">名字</th>
-        <th width="25%">共享给</th>
-        <th width="10%">权限</th>
+        <th width="22%">共享给</th>
+        <th width="13%">权限</th>
         <th width="30%">描述</th>
         <th width="11%">操作</th>
     </tr>
     {% for repo in shared_repos %}
-    <tr>
+    <tr data="{{repo.props.share_type}}">
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
-        <td>{{ repo.props.user }}</td>
-	<td>{{ repo.share_permission }}</td>
+        <td data="{{ repo.props.repo_id }}"><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
+        <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
+        <td>
+            <select name="permission" class="share-permission">
+                <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
+                {% if repo.props.permission == 'rw' %}
+                <option value="r">只可浏览</option>
+                {% else %}
+                <option value="rw">可读写</option>
+                {% endif %} 
+            </select>
+        </td>
         <td>{{ repo.props.repo_desc }}</td>
         <td>
           {% if repo.props.share_type == 'group' %}
@@ -79,6 +89,49 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('.share-permission').change(function() {
+    var select = $(this),
+        select_cont = $(this).parent(),
+        user = select_cont.prev(),
+        share_type = select_cont.parent().attr('data');
+        {% if org %}
+        var url = '{% url 'org_share_permission_admin' org.url_prefix %}?org_id={{ org.org_id }}&share_type=' + share_type;
+        {% else %}
+        var url = '{% url 'share_permission_admin' %}?share_type=' + share_type;
+        {% endif %}
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            repo_id: user.prev().attr('data'),
+            email_or_group: user.attr('data'),
+            permission: select.val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                feedback('权限设置成功', 'success');
+            } else {
+                feedback('权限设置失败', 'error');
+                location.reload();
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            feedback(textStatus + '，权限设置失败', 'error');
+            location.reload();
+        }   
+    });
+});
+function feedback(con, type) {
+    var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+    $('#main').append(html).css('position','relative');
+    $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
+    setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
+}
+
 $('.cancel-share').click(function() {
     location.href = $(this).attr('data');
 });

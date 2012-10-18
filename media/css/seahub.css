@@ -1301,6 +1301,11 @@ ul.with-bg li {
 .view-link-alert p {
     display: inline-block;
 }
+.share-permission {
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:2px;
+}
 /*bottom bar*/
 #bottom-bar button {
     color:#fff;
