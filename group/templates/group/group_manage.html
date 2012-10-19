@@ -18,9 +18,8 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>群组成员列表</h3>
+<h3>成员列表</h3>
 <button id="group-member-add">添加成员</button>
-<button id="group-admin-add">添加管理员</button>
 {% if members %}
 <table class="member-list">
     <tr>
@@ -41,6 +40,30 @@
 <p>暂无</p>
 {% endif %}
 
+<h3>管理员列表</h3>
+<button id="group-admin-add">添加管理员</button>
+{% if admins %}
+<table class="member-list">
+    <tr>
+        <th width="75%">邮箱</th>
+        <th width="25%">操作</th>
+    </tr>
+
+    {% for member in admins %}
+    <tr>
+        <td>{{ member.user_name }}</td>
+        <td>
+            {% if member.user_name != request.user.username %}
+            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>暂无</p>
+{% endif %}
+
 {% include 'group/grpmember_add_form.html' %}
 
 {% endblock %}
@@ -49,7 +72,7 @@
 <script type="text/javascript">
 addConfirmTo($("#group-remove"), '确定要解散该群组吗？');
 
-addConfirmTo($(".member-remove-btn"), '确定要删除该成员？');
+addConfirmTo($(".member-remove-btn"));
 
 var contact_list = [], contact_email;
 {% for contact in contacts %}

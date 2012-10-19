@@ -611,12 +611,19 @@ def group_members(request, group_id):
                             content_type=content_type)
 
     ### GET ###
-    members = ccnet_threaded_rpc.get_group_members(group_id_int)
+    members_all = ccnet_threaded_rpc.get_group_members(group_id_int)
+    members, admins = [], []
+    for m in members_all:
+        if m.is_staff:
+            admins.append(m)
+        else:
+            members.append(m)
     contacts = Contact.objects.filter(user_email=request.user.username)
 
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members,
+            'admins': admins,
             'contacts': contacts,
             }, context_instance=RequestContext(request))
 
@@ -690,7 +697,7 @@ def group_remove_member(request, group_id, user_name):
         seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
         messages.success(request, u'操作成功')
     except SearpcError, e:
-        messages.error(request, u'操作失败：%s' % e.msg)
+        messages.error(request, u'操作失败：%s' % _(e.msg))
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
 

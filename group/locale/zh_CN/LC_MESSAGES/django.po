@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-20 14:58+0800\n"
+"POT-Creation-Date: 2012-10-20 16:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "创建团体群组失败。"
 msgid "Permission error: only group staff can add member"
 msgstr "只有群组管理员可以添加成员。"
 
-#: error_msg.py:16
+#: error_msg.py:16 error_msg.py:22
 msgid "Group not exists"
 msgstr "群组不存在。"
 
@@ -50,21 +50,29 @@ msgstr "群组已满，无法再添加成员。"
 msgid "Failed to add member to group"
 msgstr "添加成员失败。"
 
-#: views.py:705
+#: error_msg.py:21
+msgid "Only group staff can remove member"
+msgstr "只有群组管理员可以删除成员。"
+
+#: error_msg.py:23
+msgid "Can not remove myself"
+msgstr "无法删除自己"
+
+#: views.py:761
 msgid "Recommend error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
-#: views.py:713
+#: views.py:769
 #, python-format
 msgid "Recommend to %s error: you are not in that group"
 msgstr "推荐到 %s 失败：未参加该群组"
 
-#: views.py:733
+#: views.py:789
 #, python-format
 msgid ""
 "Recommend to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a> success。"
 msgstr "推荐到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
 
-#: views.py:738
+#: views.py:794
 msgid "Recommend failed"
 msgstr "推荐失败"
