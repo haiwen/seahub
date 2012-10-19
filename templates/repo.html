@@ -208,6 +208,8 @@
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
 
+    <div id="ls-ch" class="hide"></div><!--let user choose which group if there are more than one groups-->
+    
 {% endblock %}
 
 {% block extra_script %}
@@ -551,7 +553,10 @@ $('#recycle-btn').click(function() {
 });
 
 {% include "snippets/list_commit_detail.html" %}
+
+{% if groups %}
 {% include "snippets/bottom_bar.html" %}
+{% endif %}
 
 </script>
 {% endblock %}

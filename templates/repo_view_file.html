@@ -317,7 +317,10 @@ $('#shared-link').click(function() {
     $(this).select();
 });
 
+{% if groups %}
 {% include "snippets/bottom_bar.html" %}
+{% endif %}
+
 {% if request.user.is_authenticated %}
 $('#bottom-bar').append(' <button id="comment">评论</button>');
 $('#file-comment').css('max-height', $(window).height() - parseInt($('#file-comment').css('bottom')));

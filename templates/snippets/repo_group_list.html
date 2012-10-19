@@ -1,0 +1,11 @@
+{% load url from future %}
+{% autoescape off %}
+<h2>这个资料库被共享到多个群组</h2>
+<h3>请选择群组</h3>
+<ul>
+  {% for group in groups %}
+  <li><a href="{% url 'group_info' group.id %}">{{ group.group_name }}</a></li>
+  {% endfor %}
+</ul>
+{% endautoescape %}
+

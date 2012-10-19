@@ -296,6 +296,13 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         kwargs['accessible_repos'] = self.get_accessible_repos()
         kwargs['applet_root'] = self.applet_root
         kwargs['groups'] = self.get_repo_shared_groups()
+        if len(kwargs['groups']) > 1:
+            ctx = {}
+            ctx['groups'] = kwargs['groups']
+            repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
+            kwargs['repo_group_str'] = repogrp_str
+        else:
+            kwargs['repo_group_str'] = ''
         return kwargs
 
 class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
