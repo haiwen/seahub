@@ -1013,7 +1013,9 @@ ul.with-bg li {
 }
 .group {
     width:315px;
-    margin:0 17px 15px 0;
+    margin:0 17px 30px 0;
+    border-bottom:1px dashed #ddd;
+    padding-bottom:10px;
 }
 .group .txt {
     color:#333;
@@ -1032,15 +1034,17 @@ ul.with-bg li {
 }
 .member {
     _height:21px;
+    padding-bottom:4px;
+    border-bottom:1px dashed #eee;
 }
 .member .avatar {
-	border-radius: 2px;
-	-moz-border-radius: 2px;
-	margin-right: 5px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    margin-right: 5px;
 }
 .member .avatar,
 .member .name {
-	vertical-align:middle;
+    vertical-align:middle;
 }
 #user-profile {
     width:318px;
