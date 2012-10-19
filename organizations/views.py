@@ -575,7 +575,7 @@ def org_repo_share(request, url_prefix):
                                                              repo_id, permission)
             except:
                 msg = u'共享到公共资料失败'
-                message.add_message(request, message.ERROR, msg)
+                messages.add_message(request, messages.ERROR, msg)
                 continue
 
             msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
@@ -658,6 +658,7 @@ def org_shareadmin(request, url_prefix):
             repo.props.user = ''
             continue
         repo.props.user = group.props.group_name
+        repo.props.user_info = repo.group_id
     shared_repos += group_repos
 
     # public repos shared by this user
@@ -665,6 +666,7 @@ def org_shareadmin(request, url_prefix):
                                                                         username)
     for repo in pub_repos:
         repo.props.user = '所有团体成员'
+        repo.props.user_info = 'all'
     shared_repos += pub_repos
 
     for repo in shared_repos:
@@ -674,6 +676,9 @@ def org_shareadmin(request, url_prefix):
             repo.share_permission = '只可浏览'
         else:
             repo.share_permission = ''
+
+        if repo.props.share_type == 'personal':
+            repo.props.user_info = repo.props.user
 
     shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
 
@@ -696,6 +701,42 @@ def org_shareadmin(request, url_prefix):
             "protocol": request.is_secure() and 'https' or 'http',
             "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
+
+@login_required
+def org_share_permission_admin(request, url_prefix):
+    org_id = int(request.GET.get('org_id', ''))
+    share_type = request.GET.get('share_type', '') 
+    content_type = 'application/json; charset=utf-8'
+        
+    form = RepoShareForm(request.POST)
+    form.is_valid()
+            
+    email_or_group = form.cleaned_data['email_or_group']
+    repo_id = form.cleaned_data['repo_id']
+    permission = form.cleaned_data['permission']
+    from_email = request.user.username
+
+    if share_type == 'personal':
+        try:
+            seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+    if share_type == 'group':
+        group_id = int(email_or_group)
+        try:
+            seafserv_threaded_rpc.set_org_group_repo_permission(org_id, group_id, repo_id, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+    if share_type == 'public':
+        try:
+            seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
 def org_pubinfo(request, url_prefix):

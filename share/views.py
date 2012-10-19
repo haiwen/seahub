@@ -1,5 +1,6 @@
 # encoding: utf-8
 import os
+import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -152,6 +153,7 @@ def share_admin(request):
             repo.props.user = ''
             continue
         repo.props.user = group.props.group_name
+        repo.props.user_info = repo.group_id
     shared_repos += group_repos
 
     if not CLOUD_MODE:
@@ -159,6 +161,7 @@ def share_admin(request):
         pub_repos = seafserv_threaded_rpc.list_inner_pub_repos_by_owner(username)
         for repo in pub_repos:
             repo.props.user = '所有人'
+            repo.props.user_info = 'all'
         shared_repos += pub_repos
 
     for repo in shared_repos:
@@ -168,6 +171,9 @@ def share_admin(request):
             repo.share_permission = '只可浏览'
         else:
             repo.share_permission = ''
+
+        if repo.props.share_type == 'personal':
+            repo.props.user_info = repo.props.user
 
     shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
 
@@ -197,6 +203,40 @@ def share_admin(request):
             "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
     
+@login_required
+def share_permission_admin(request):
+    share_type = request.GET.get('share_type', '')
+    content_type = 'application/json; charset=utf-8'
+    
+    form = RepoShareForm(request.POST)
+    form.is_valid()
+    
+    email_or_group = form.cleaned_data['email_or_group']
+    repo_id = form.cleaned_data['repo_id']
+    permission = form.cleaned_data['permission']
+    from_email = request.user.username
+
+    if share_type == 'personal':
+        try:
+            seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+    if share_type == 'group':
+        try:
+            seafserv_threaded_rpc.set_group_repo_permission(int(email_or_group), repo_id, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+    if share_type == 'public':
+        try:
+            seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+        except:
+            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
 # 2 views for anonymous share:
 # - anonymous_share records share infomation to db and sends the mail
 # - anonymous_share_confirm checks the link use clicked and

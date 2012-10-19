@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     # repo share
     url(r'^(?P<url_prefix>[^/]+)/shareadmin/$', org_shareadmin, name='org_shareadmin'),
     url(r'^(?P<url_prefix>[^/]+)/repo/share/$', org_repo_share, name='org_repo_share'),
+    url(r'^(?P<url_prefix>[^/]+)/share/permission_admin/$', org_share_permission_admin, name='org_share_permission_admin'),
                        
 #    url(r'^([^/]+)/repo/(?P<repo_id>[^/]+)/$', RepoView.as_view(), name='repo'),
 
