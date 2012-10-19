@@ -1301,9 +1301,12 @@ ul.with-bg li {
 .view-link-alert p {
     display: inline-block;
 }
-.share-permission {
+.share-permission-edit-icon {
+    cursor:pointer;
+}
+.share-permission-select {
     background:#fff;
-    border:1px solid #eee;
+    border:1px solid #ddd;
     border-radius:2px;
 }
 /*bottom bar*/

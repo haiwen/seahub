@@ -28,7 +28,11 @@
         <td data="{{ repo.props.repo_id }}"><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
         <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
         <td>
-            <select name="permission" class="share-permission">
+            <div class="share-permission">
+                <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="编辑 icon" title="编辑" class="share-permission-edit-icon vh" />
+            </div>
+            <select name="permission" class="share-permission-select hide">
                 <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
                 {% if repo.props.permission == 'rw' %}
                 <option value="r">只可浏览</option>
@@ -89,7 +93,19 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.share-permission').change(function() {
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.share-permission-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.share-permission-edit-icon').addClass('vh');
+    }
+);
+$('.share-permission-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'share-permission-select'
+});
+$('.share-permission-select').change(function() {
     var select = $(this),
         select_cont = $(this).parent(),
         user = select_cont.prev(),
@@ -114,22 +130,34 @@ $('.share-permission').change(function() {
         success: function(data) {
             if (data['success']) {
                 feedback('权限设置成功', 'success');
+                select.prev().children('.share-permission-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
             } else {
                 feedback('权限设置失败', 'error');
-                location.reload();
             }
+            select.addClass('hide');
+            select.prev().removeClass('hide');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             feedback(textStatus + '，权限设置失败', 'error');
-            location.reload();
+            select.addClass('hide');
+            select.prev().removeClass('hide');
         }   
     });
+});
+// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.share-permission-edit-icon, .share-permission-select').is(target)) {
+        $('.share-permission').removeClass('hide');
+        $('.share-permission-select').addClass('hide');
+    }
 });
 function feedback(con, type) {
     var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
     $('#main').append(html).css('position','relative');
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
+    setTimeout(function() { $('.messages').addClass('hide'); }, 2000);
 }
 
 $('.cancel-share').click(function() {
