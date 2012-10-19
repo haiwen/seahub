@@ -71,7 +71,7 @@ $('.reply').click(function() {
 });
 
 $('.replyclose').click(function() {
-    $(this).next().next().addClass('hide'); // hide 'reply-bd'
+    $('.reply-bd').addClass('hide'); // hide 'reply-bd'
     $(this).addClass('hide');
     $(this).prev().removeClass('hide'); // show 'reply'
 });
