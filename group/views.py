@@ -658,7 +658,12 @@ def group_add_admin(request, group_id):
         
         # Check whether user is in the group
         if is_group_user(group_id, member_name):
-            pass
+            try:
+                ccnet_threaded_rpc.group_set_admin(group_id, member_name)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
         else:
             try:
                 ccnet_threaded_rpc.group_add_member(group_id,
