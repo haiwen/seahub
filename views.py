@@ -1298,7 +1298,14 @@ def repo_view_file(request, repo_id):
 
     contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     latest_contributor = contributors[0]
-    
+
+    if len(groups) > 1:
+        ctx = {}
+        ctx['groups'] = groups
+        repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
+    else:
+        repogrp_str = '' 
+
     return render_to_response('repo_view_file.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -1332,6 +1339,7 @@ def repo_view_file(request, repo_id):
             'last_commit_id': last_commit_id,
             'read_only': read_only,
             'page_from': page_from,
+            'repo_group_str': repogrp_str,
             }, context_instance=RequestContext(request))
 
 def file_comment(request):

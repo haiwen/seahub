@@ -19,6 +19,8 @@ $('#recommend').click(function() {
     $('.ui-autocomplete').css({'max-height': window.innerHeight - $('.ui-autocomplete-input').offset().top - $('.ui-autocomplete-input').height() - 10, 'overflow': 'auto'});
 });
 
+$('#main').append('<div id="to-group" class="hide">{{ repo_group_str|escapejs }}</div><div id="to-group-caret" class="hide"><div id="comment-outer-caret"><div id="comment-inner-caret"></div></div></div>');
+$('#to-group-caret').css('left', $('#click-into-group').offset().left);
 $('#click-into-group').click(function() {
     {% if groups|length == 1 %}
     // only one group, just turn to group page
@@ -28,16 +30,19 @@ $('#click-into-group').click(function() {
     
     {% else %}
     // more than one group, then let user choose
-    var content = '{{ repo_group_str|escapejs }}';
-    $('#ls-ch').html(content).modal({
-        appendTo:'#main',
-        maxHeight: window.innerHeight - 57,
-        autoResize:true
-    });
-
+    if ($('#to-group').hasClass('hide')) {
+        $('#to-group, #to-group-caret').removeClass('hide');
+    } else {
+        $('#to-group, #to-group-caret').addClass('hide');
+    }
     {% endif %}
 });
-
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    if (!$('#click-into-group, #to-group, #to-group-caret').is(target) && !($('#to-group, #to-group-caret').find('*').is(target))) {
+        $('#to-group, #to-group-caret').addClass('hide');
+    }   
+});
 $('#recommend-submit').click(function() {
     if (!$.trim($('#recommend-msg').val())) {
         apply_form_error('recommend-form', '推荐语不能为空。');

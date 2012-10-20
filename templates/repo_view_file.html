@@ -191,7 +191,6 @@
     </div>
     {% endif %}
     {% endif %}
-    <div id="ls-ch" class="hide"></div><!--let user choose which group if there are more than one groups-->
 {% endblock %}
 
 {% block extra_script %}
@@ -344,7 +343,7 @@ $('#comment').click(function() {
 });
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
-    if (target != $('#comment')[0] && target != $('#file-comment')[0] && target != $('#comment-caret')[0] && !($('#file-comment, #comment-caret').find('*').is(target))) {
+    if (!$('#comment, #file-comment, #comment-caret').is(target) && !($('#file-comment, #comment-caret').find('*').is(target))) {
         $('#file-comment, #comment-caret').addClass('hide');
     }
 });

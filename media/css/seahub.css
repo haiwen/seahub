@@ -1332,7 +1332,8 @@ ul.with-bg li {
     font-size:15px;
 }
 /* File comment */
-#file-comment {
+#file-comment,
+#to-group {
     width:400px;
     position:fixed;
     right:10px;
@@ -1367,7 +1368,9 @@ ul.with-bg li {
 .comment-bd {
     word-wrap:break-word;
 }
-#comment-caret {
+#comment-caret,
+#to-group-caret {
+    width:28px;
     position:fixed;
     right:27px;
     bottom:26px;
@@ -1389,6 +1392,10 @@ ul.with-bg li {
     left:-14px;
 }
 .placeholder { color: #aaa; }
+/*to-group*/
+#to-group {
+    padding:15px;
+}
 
 /* text file diff */
 div.diff-desc { margin: 10px 0; }
