@@ -50,7 +50,6 @@ button {
 }
 input[type=checkbox] {
     height:auto;
-    margin-right: 5px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {/*for input type="number" in chrome: to hide up/download arrow*/
