@@ -160,7 +160,7 @@
         <form id="file-comment-form" action="" method="post">
             <div class="w100 ovhd">
                 <a class="pic fleft" href="{% url 'user_profile' request.user.username %}">{% avatar request.user.username 48 %}</a>
-                <div class="txt fright">
+                <div id="comment-container" class="txt fright">
                     <textarea name="message" id="comment-input">评论一下~</textarea><br />
                     <p class="error hide"></p>
                     <input type="submit" value="提交" class="submit hide" />
@@ -201,6 +201,15 @@ $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
 {% if not view_history %}
+
+$(function() {
+    var gids = '';
+    {% for g in groups %}
+    gids = gids + '{{ g.id }}' + ',';
+    {% endfor %}
+    addAtAutocomplete('#comment-input', '#comment-container', gids, "{% url 'group_attention' %}", {'width':'315px','max-width':'315px','padding-left':'1px','height':'36px','margin':'0','line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
+});
+
 $('#edit, #update').click(function() {
     location.href = $(this).attr('data');
 });

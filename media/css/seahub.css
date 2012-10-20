@@ -1160,7 +1160,8 @@ ul.with-bg li {
     border:none;
 }
 .msg-bd .recommend,
-.msg-bd .at {
+.msg-bd .at,
+.comment-bd .at {
     color:#808;
 }
 .reply-list {

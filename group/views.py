@@ -943,23 +943,35 @@ def attention(request):
     if not request.is_ajax():
         raise Http404
 
-    try:
-        gid = int(request.GET.get('gid', ''))
-    except ValueError:
-        raise Http404
-
-    name_str =  request.GET.get('name_startsWith')
     user = request.user.username
-
-    if not is_group_user(gid, user):
-        raise Http404
-
+    name_str =  request.GET.get('name_startsWith')
+    gids = request.GET.get('gids', '')
     result = []
-    # Get all group users
-    members = get_group_members(gid)
+
+    members = []
+    for gid in gids.split(','):
+        try:
+            gid = int(gid)
+        except ValueError:
+            continue
+
+        if not is_group_user(gid, user):
+            continue
+
+        # Get all group users
+        members += get_group_members(gid)
+
+    member_names = []
     for m in members:
         if m.user_name == user:
             continue
+
+        if m.user_name in member_names:
+            # Remove duplicated member names
+            continue
+        else:
+            member_names.append(m.user_name)
+
         from base.templatetags.seahub_tags import email2nickname, char2pinyin
         nickname = email2nickname(m.user_name)
         pinyin = char2pinyin(nickname)

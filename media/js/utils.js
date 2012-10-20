@@ -81,7 +81,7 @@ function addAutocomplete(ele_id, container_id, data) {
  * @param ele_css: {'xx':'xxx'}, styles to be applied to ele_cp
  * @param container_id: id of autocomplete's container, often container of element above
  */
-function addAtAutocomplete(ele_id, container_id, gid, aj_url, ele_css) {
+function addAtAutocomplete(ele_id, container_id, gids, aj_url, ele_css) {
     var pos = ''; // cursor position
     var cursor_at_end; // Boolean. if cursor at the end or in the middle.
     var end_str = ''; // str after '@' when '@' is inserted into the middle of the ele's value
@@ -152,7 +152,7 @@ function addAtAutocomplete(ele_id, container_id, gid, aj_url, ele_css) {
                         url: aj_url,
                         dataType: "json",
                         data: {
-                            gid: gid,
+                            gids: gids,
                             name_startsWith: request_term
                         },
                         success: function(data) {
