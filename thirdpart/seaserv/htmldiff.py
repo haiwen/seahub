@@ -1875,17 +1875,21 @@ class HtmlDiff(object):
 
         cls = ''
         if '\0+' in text:
-            cls = 'diff_add'
+            cls = 'diff-add'
         elif '\0-' in text:
-            cls = 'diff_sub'
+            cls = 'diff-sub'
         elif '\0^' in text:
-            cls = 'diff_chg'
+            cls = 'diff-chg'
+
+        text = text.replace('\0+', '').replace('\0-', ''). \
+               replace('\0^', '').replace('\1', ''). \
+               replace('\t','&nbsp;')
 
         if cls:
-            return '<td class="diff_header">%s</td><td class=%s>%s</td>' \
+            return '<td class="diff-header">%s</td><td class=%s>%s</td>' \
                % (linenum,cls,text)
         else:
-            return '<td class="diff_header">%s</td><td>%s</td>' \
+            return '<td class="diff-header">%s</td><td>%s</td>' \
                % (linenum,text)
 
     def _make_prefix(self):
@@ -2004,11 +2008,13 @@ class HtmlDiff(object):
 
         data_rows = ''.join(s)
 
-        return data_rows.replace('\0+',''). \
-                     replace('\0-',''). \
-                     replace('\0^',''). \
-                     replace('\1',''). \
-                     replace('\t','&nbsp;')
+        return data_rows
+
+        # return data_rows.replace('\0+',''). \
+        #              replace('\0-',''). \
+        #              replace('\0^',''). \
+        #              replace('\1',''). \
+        #              replace('\t','&nbsp;')
 
 del re
 

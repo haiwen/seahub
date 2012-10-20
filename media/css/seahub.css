@@ -928,7 +928,9 @@ ul.with-bg li {
     color:#666;
     margin-left:5px;
 }
-.lsch, .lsch-encrypted, .file-diff {
+.lsch,
+.lsch-encrypted,
+.file-diff {
     font-size:12px;
     font-weight:normal;
     color:#666;
@@ -1383,13 +1385,27 @@ ul.with-bg li {
 /* text file diff */
 div.diff-desc { margin: 10px 0; }
 div.diff-desc p { margin: 10px 0; }
-#text-diff-output table { margin-top: 20px; border: 1px solid gray; }
-#text-diff-output thead { border: 1px solid gray; }
-#text-diff-output th { background-color: #EED; text-align: center; }
-#text-diff-output th, #text-diff-output td { border-bottom: none; }
-#text-diff-output tr.hl { background-color: #afcde8; }/*highlight*/
 
-.diff_header { background-color: #EED; text-align: center; }
-.diff_add { background-color: #DFD; }
-.diff_sub { background-color: #FDD; }
-.diff_chg { background-color: #FD8; }
+#text-diff-output table {
+    margin-top: 20px;
+    border: 1px solid gray;
+}
+
+#text-diff-output tr th {
+    background-color: #EED;
+    text-align: center;
+}
+#text-diff-output th,
+#text-diff-output td {
+    border-bottom: none;
+}
+#text-diff-output tr.hl {
+    background-color: #afcde8;  /*highlight*/
+}
+.diff-header {
+    background-color: #EED;
+    text-align: center;
+}
+.diff-add { background-color: #DFD; }
+.diff-sub { background-color: #FDD; }
+.diff-chg { background-color: #FD8; }

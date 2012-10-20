@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% block main_panel %}
-<h2>文件修改详情</h2>
+<h3>文件修改详情</h3>
 <div class="diff-desc">
     <p class="path">
         文件路径：
@@ -23,16 +23,14 @@
 </div>
 {% else %}
 <div id="text-diff-output">
-<table rules="group">
-    <thead>
+<table>
+    <tr>
         <th width="3%"></th>
         <th width="47%"> 修改前 </th>
         <th width="3%"></th>
         <th width="47%"> 修改后 </th>
-    </thead>
-    <tbody>
-        {{ diff_result_table|safe }}
-    </tbody>
+    </tr>
+    {{ diff_result_table|safe }}
 </table>
 </div>
 {% endif %}
