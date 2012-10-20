@@ -7,7 +7,7 @@
 {% block left_panel %}
 <h3>成员列表</h3>
 {% if users %}
-<ul>
+<ul class="pubinfo-members">
     {% for member in users %}
 	<li class="member">{% avatar member.email 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a></li>
     {% endfor %}

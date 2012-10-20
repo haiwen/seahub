@@ -1035,7 +1035,6 @@ ul.with-bg li {
 .member {
     _height:21px;
     padding-bottom:4px;
-    border-bottom:1px dashed #eee;
 }
 .member .avatar {
     border-radius: 2px;
