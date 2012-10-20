@@ -1,10 +1,11 @@
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar"><button id="recommend">推荐到群组</button> <button id="click-into-group">到所在群组</button></div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到群组</button> <button id="click-into-group">到所在群组</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');
 $('#footer').addClass('hide');
 
+{% if groups %}
 var group_list = []
 {% for group in groups %}
 group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
@@ -43,4 +44,4 @@ $('#recommend-submit').click(function() {
         return false;   
     }
 });
-
+{% endif %}

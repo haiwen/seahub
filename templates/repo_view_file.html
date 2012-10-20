@@ -191,6 +191,7 @@
     </div>
     {% endif %}
     {% endif %}
+    <div id="ls-ch" class="hide"></div><!--let user choose which group if there are more than one groups-->
 {% endblock %}
 
 {% block extra_script %}
@@ -326,9 +327,7 @@ $('#shared-link').click(function() {
     $(this).select();
 });
 
-{% if groups %}
 {% include "snippets/bottom_bar.html" %}
-{% endif %}
 
 {% if request.user.is_authenticated %}
 $('#bottom-bar').append(' <button id="comment">评论</button>');
