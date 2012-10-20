@@ -1117,6 +1117,9 @@ ul.with-bg li {
 .msg-list {
     margin-top: 10px;
 }
+.msg-list button.op {
+    color: #2a2;
+}
 .msg {
     word-wrap: break-word;
     padding: 10px 0 5px;
