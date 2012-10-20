@@ -690,68 +690,52 @@ def group_recommend(request):
     
     form = GroupRecommendForm(request.POST)
     if form.is_valid():
-        groups = form.cleaned_data['groups']
         repo_id = form.cleaned_data['repo_id']
         attach_type = form.cleaned_data['attach_type']
         path = form.cleaned_data['path']
         message = form.cleaned_data['message']
+        groups = request.POST.getlist('groups') # groups is a group_id list, e.g. [u'1', u'7']
         username = request.user.username
-        
-        group_list = string2list(groups)
-        for e in group_list:
-            group_name = e.split(' ')[0]
+
+        # Check group id format
+        for group_id in groups:
             try:
-                group_creator = e.split(' ')[1]
-            except IndexError:
-                messages.add_message(request, messages.ERROR,
-                                     u'推荐到 %s 失败，请检查群组名称。' % \
-                                         group_name)
+                group_id = int(group_id)
+            except ValueError:
+                messages.error(request, _(u'Recommend error: wrong group id'))
+                return HttpResponseRedirect(next)
+
+            # Get that group
+            group = get_group(group_id)
+
+            # TODO: Check whether repo is in the group and Im in the group
+            if not is_group_user(group_id, username):
+                err_msg = _(u'Recommend to %s error: you are not in that group')
+                messages.error(request, err_msg %  group.group_name)
                 continue
 
-            # Check whether this repo is org repo.
-            org, base_template = check_and_get_org_by_repo(repo_id, username)
-            if org:
-                org_id = org.org_id
-                groups = get_org_groups_by_user(org_id, username)
+            # save message to group
+            gm = GroupMessage(group_id=group_id, from_email=username,
+                              message=message)
+            gm.save()
 
-            else:
-                groups = get_personal_groups_by_user(request.user.username)
-            
-            find = False
-            for group in groups:
-                # for every group that user joined, if group name and
-                # group creator matchs, then has find the group
-                if group.group_name == group_name and \
-                        group_creator.find(group.creator_name) >= 0:
-                    find = True
-                    # save message to group
-                    gm = GroupMessage(group_id=int(group.id),
-                                      from_email=request.user.username,
-                                      message=message)
-                    gm.save()
-
-                    # send signal
-                    grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                                      from_email=request.user.username)
+            # send signal
+            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+                              from_email=request.user.username)
                     
-                    # save attachment
-                    ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                           attach_type=attach_type, path=path,
-                                           src='recommend')
-                    ma.save()
+            # save attachment
+            ma = MessageAttachment(group_message=gm, repo_id=repo_id,
+                                   attach_type=attach_type, path=path,
+                                   src='recommend')
+            ma.save()
 
-                    group_url = reverse('group_info', args=[group.id])
-                    msg = u'推荐到 <a href="%s" target="_blank">%s</a> 成功。' %\
-                        (group_url, group_name)                    
-                    messages.add_message(request, messages.INFO, msg)
-                    break
-            if not find:
-                messages.add_message(request, messages.ERROR,
-                                     u'推荐到 %s 失败，请检查是否参加了该群组。' % \
-                                         group_name)
+            group_url = reverse('group_info', args=[group_id])
+            msg = _(u'Recommend to <a href="%(url)s" target="_blank">%(name)s</a> success。') %\
+                {'url':group_url, 'name':group.group_name}
+            messages.add_message(request, messages.INFO, msg)
+
     else:
-        # TODO: need more clear error message
-        messages.add_message(request, messages.ERROR, '推荐失败')
+        messages.add_message(request, messages.ERROR, _(u'Recommend failed'))
     return HttpResponseRedirect(next)
 
 @login_required

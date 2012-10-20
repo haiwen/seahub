@@ -28,10 +28,6 @@ $('#click-into-group').click(function() {
 });
 
 $('#recommend-submit').click(function() {
-    if (!$.trim($('#recommend-groups').val())) {
-        apply_form_error('recommend-form', '群组名称不能为空。');
-        return false;    
-    }
     if (!$.trim($('#recommend-msg').val())) {
         apply_form_error('recommend-form', '推荐语不能为空。');
         return false;   

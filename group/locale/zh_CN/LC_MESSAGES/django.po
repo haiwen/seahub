@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-07 16:11+0800\n"
+"POT-Creation-Date: 2012-10-20 14:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,3 +49,22 @@ msgstr "群组已满，无法再添加成员。"
 #: error_msg.py:18
 msgid "Failed to add member to group"
 msgstr "添加成员失败。"
+
+#: views.py:705
+msgid "Recommend error: wrong group id"
+msgstr "推荐失败：群组id不正确"
+
+#: views.py:713
+#, python-format
+msgid "Recommend to %s error: you are not in that group"
+msgstr "推荐到 %s 失败：未参加该群组"
+
+#: views.py:733
+#, python-format
+msgid ""
+"Recommend to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a> success。"
+msgstr "推荐到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
+
+#: views.py:738
+msgid "Recommend failed"
+msgstr "推荐失败"

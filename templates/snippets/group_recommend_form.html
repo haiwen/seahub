@@ -6,12 +6,16 @@
                 {{ name }}
             {% endif %}
         {% endfor %}
-        到群组
+        到群组：
         </h3>
-        <label>群组名称：</label><br />
-        <input type="input" name="groups" id="recommend-groups" value="" /><br />
+        <div>
+        {% for group in groups %}
+        <input type="checkbox" name="groups" value="{{ group.id }}" {% if forloop.first and forloop.last %} checked {% endif %}>{{ group.group_name }}<br>
+        {% endfor %}
+        </div>
+
         <label>推荐语：</label><br />
-        <textarea name="message" id="recommend-msg"></textarea><br />
+        <textarea name="message" id="recommend-msg">看一看～</textarea><br />
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="path" value="{{ path }}" />
         <input type="hidden" name="attach_type" value="{{ attach_type }}" />
