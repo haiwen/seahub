@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Ignore all apps
+django-admin.py makemessages -l zh_CN -e py,html -i "thirdpart*" -i "api*" -i "avatar*" -i "base*" -i "contacts*" -i "group*" -i "notifications*" -i "organizations*" -i "profile*" -i "share*"
+
+django-admin.py compilemessages

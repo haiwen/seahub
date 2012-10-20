@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load i18n %}
 {% block top_bar_myaccount_class %} class="cur"{% endblock %}
 {% block nav %}
 <ul class="nav">
     <li>
-        <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>我的页面</a>
+        <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>{% trans "My Home" %}</a>
     </li>
     {% if not cloud_mode %}
     <li>
