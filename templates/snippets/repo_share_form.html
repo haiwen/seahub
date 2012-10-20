@@ -1,10 +1,9 @@
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
-    {% if allow_public_share %}
-    <label>邮箱或群组，输入 all 共享到公共资料：</label><br />
-    {% else %}
-    <label>邮箱或群组：</label><br />
-    {% endif %}
+    <label>共享给：</label><br />
     <textarea id="email_or_group" name="email_or_group" placeholder="输入邮箱或群组"></textarea>
+    {% if allow_public_share %}    
+    <p class="tip">Tip：输入 all 共享到公共资料</p>
+    {% endif %}
     <select name="permission">
       <option value="rw" selected="selected">可读写</option>
       <option value="r">只可浏览</option>
