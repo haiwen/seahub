@@ -216,7 +216,7 @@ def check_repo_access_permission(request, repo):
             return api_error(request, '405', "SearpcError:" + e.msg)
 
         if not password_set:
-            password = request.REQUEST['password']
+            password = request.REQUEST.get('password', default=None)
             if not password:
                 return api_error(request, '409')
 
