@@ -92,7 +92,7 @@ input[type="file"] {
 }
 label {
     display: inline-block;
-    margin:2px 0px;
+    margin:4px 0px;
 }
 iframe {
     display:block;

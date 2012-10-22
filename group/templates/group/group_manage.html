@@ -58,7 +58,7 @@
         <td>{{ member.user_name }}</td>
         <td>
             {% if member.user_name != request.user.username %}
-            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
+            <a href="#" data="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" class="member-remove-btn op">删除</a>
             {% endif %}
         </td>
     </tr>

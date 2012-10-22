@@ -618,28 +618,22 @@ def group_members(request, group_id):
 
     ### GET ###
     members_all = ccnet_threaded_rpc.get_group_members(group_id)
-    members, admins = [], []
-    for m in members_all:
-        if m.is_staff:
-            admins.append(m)
-        else:
-            members.append(m)
+    admins = [ m for m in members_all if m.is_staff ]
     contacts = Contact.objects.filter(user_email=user)
 
     return render_to_response('group/group_manage.html', {
             'group' : group,
-            'members': members,
+            'members': members_all,
             'admins': admins,
             'contacts': contacts,
             }, context_instance=RequestContext(request))
 
 @login_required
+@group_staff_required
 def group_add_admin(request, group_id):
     """
     Add group admin.
     """
-    # TODO: group admin required
-
     group_id = int(group_id)    # Checked by URL Conf
     
     if request.method != 'POST' or not request.is_ajax():
@@ -683,6 +677,20 @@ def group_add_admin(request, group_id):
         messages.success(request, u'操作成功')
         return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
+
+@login_required
+@group_staff_required
+def group_remove_admin(request, group_id):
+    """
+    Remove group admin, and becomes normal group member.
+    """
+    user = request.GET.get('u', '')
+    try:
+        ccnet_threaded_rpc.group_unset_admin(int(group_id), user)
+        messages.success(request, u'操作成功')
+    except SearpcError, e:
+        messages.error(request, e.msg)
+    return HttpResponseRedirect(reverse('group_members', args=[group_id]))
     
 @login_required
 def group_member_operations(request, group_id, user_name):
