@@ -54,6 +54,7 @@
         </span>
         <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
         </p>
+        <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
     </div>
     {% endif %}
 
@@ -203,12 +204,10 @@
         <input type="submit" value="提交" class="submit" />
         <button class="simplemodal-close">取消</button>
     </form>
+
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
-
-    <div id="ls-ch" class="hide"></div><!--let user choose which group if there are more than one groups-->
-    
 {% endblock %}
 
 {% block extra_script %}

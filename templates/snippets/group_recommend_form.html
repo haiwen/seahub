@@ -1,25 +1,28 @@
 {% load url from future %}
-    <form action="{% url 'group_recommend' %}" method="post" id="recommend-form" class="hide">{% csrf_token %}
+    <form action="{% url 'group_recommend' %}" method="post" id="recommend-to-group-form" class="hide">{% csrf_token %}
         <h3>推荐
         {% for name, link in zipped %}
             {% if forloop.last %}
-                {{ name }}
+            <span class="op-target">{{ name }}</span>
             {% endif %}
         {% endfor %}
         到群组：
         </h3>
-        <div>
-        {% for group in groups %}
-        <input type="checkbox" name="groups" value="{{ group.id }}" {% if forloop.first and forloop.last %} checked {% endif %}>{{ group.group_name }}<br>
-        {% endfor %}
+        <div class="groups">
+            {% for group in groups %}
+            <input type="checkbox" name="groups" value="{{ group.id }}" id="{{ group.id }}" {% if forloop.first and forloop.last %}checked="checked"{% endif %} class="group-checkbox"><label for="{{ group.id }}" class="group-name">{{ group.group_name }}</label>
+            {% endfor %}
         </div>
-
-        <label>推荐语：</label><br />
-        <textarea name="message" id="recommend-msg"></textarea><br />
+        <label>推荐语：</label>
+        <textarea name="message"></textarea>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="path" value="{{ path }}" />
         <input type="hidden" name="attach_type" value="{{ attach_type }}" />
         <p class="error hide"></p>
         <input type="submit" id="recommend-submit" class="submit" value="提交" />
-        <button class="simplemodal-close">取消</button>
     </form>
+    <div id="recommend-to-group-caret" class="hide">
+        <div class="outer-caret">
+            <div class="inner-caret"></div>
+        </div>
+    </div>
