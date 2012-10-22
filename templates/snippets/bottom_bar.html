@@ -20,6 +20,7 @@ $('#recommend').click(function() {
 });
 
 $('#main').append('<div id="to-group" class="hide">{{ repo_group_str|escapejs }}</div><div id="to-group-caret" class="hide"><div id="comment-outer-caret"><div id="comment-inner-caret"></div></div></div>');
+$('#to-group').css({'width':$('#to-group').width(), 'left':$('#click-into-group').offset().left - $('#to-group').width()/3});
 $('#to-group-caret').css('left', $('#click-into-group').offset().left);
 $('#click-into-group').click(function() {
     {% if groups|length == 1 %}

@@ -350,12 +350,14 @@ ul.with-bg li {
     -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
 }
-#account-context-selector a {
+#account-context-selector a,
+#to-group a {
     color:#000;
     display:block;
     padding:0 5px;
 }
-#account-context-selector a:hover {
+#account-context-selector a:hover,
+#to-group a:hover {
     background:#eee;
 }
 
@@ -1394,7 +1396,16 @@ ul.with-bg li {
 .placeholder { color: #aaa; }
 /*to-group*/
 #to-group {
-    padding:15px;
+    min-width:100px;
+    width:auto;
+    padding:6px 0;
+}
+#to-group a {
+    font-weight:normal;
+    padding:1px 5px;
+}
+#to-group a:hover {
+    text-decoration:none;
 }
 
 /* text file diff */
