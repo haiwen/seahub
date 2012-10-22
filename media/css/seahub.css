@@ -666,6 +666,9 @@ ul.with-bg li {
     width: 60%;
     margin: 25px auto;
 }
+.empty-repo-tips h3 {
+    text-align:center;
+}
 #repo-name,
 #repo-desc,
 .repo-create-encryption .passwd,

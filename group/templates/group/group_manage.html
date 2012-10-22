@@ -37,7 +37,11 @@
     {% endfor %}
 </table>
 {% else %}
-<p>暂无</p>
+{% if cloud_mode and not org %}
+<div class="empty-repo-tips"><h3>当前群组还没有成员</h3>可以点击上方的“添加成员”按钮来加入成员，如果对方未注册，系统会向他发送邀请邮件。</div>
+{% else %}
+<div class="empty-repo-tips"><h3>当前群组还没有成员</h3>可以点击上方的“添加成员”按钮来加入成员，对方必须在当前团体内。</div>
+{% endif %}
 {% endif %}
 
 <h3>管理员列表</h3>

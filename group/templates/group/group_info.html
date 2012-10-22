@@ -32,7 +32,7 @@
     <div class="info-item-top">
         <h3 class="inbl">成员</h3>
         {% if is_staff %}
-        <a href="javascript:void(0);" class="grp-member-add op">添加</a>
+        <a href="#" class="grp-member-add op">添加</a>
         {% endif %}
     </div>
     <div class="info-item-bottom">
@@ -43,7 +43,11 @@
             {% endfor %}
         </ul>
         {% else %}
-        <p>暂无</p>
+        {% if cloud_mode and not org %}
+        <p>可以点击上方的“添加”来加入成员，如果对方未注册，系统会向他发送邀请邮件。</p>
+        {% else %}
+        <p>可以点击上方的“添加”来加入成员。</p>
+        {% endif %}
         {% endif %}
     </div>
 </div>
@@ -179,6 +183,7 @@
 
 {% include "snippets/user_profile_html.html" %}
 {% include "snippets/repo_create_form.html" %}
+
 {% include 'group/grpmember_add_form.html' %}
 
 {% endblock %}
@@ -237,6 +242,7 @@ $('.grp-admin-add').click(function() {
 $('.grp-member-add').click(function() {
     $("#member-add-form").modal({appendTo: "#main"});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
+    return false;
 });
 
 {% url 'group_add_admin' group.id as admin_add_url %}

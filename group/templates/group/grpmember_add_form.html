@@ -2,6 +2,11 @@
     <label>添加成员到 {{ group.group_name }}:</label><br />
     <textarea id="added-member-name" name="user_name" placeholder="输入邮箱"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
+    {% if cloud_mode and not org %}
+    <p class="tip">Tip：可以是未注册邮箱，系统会向他发送邀请邮件。</p>
+    {% else %}
+    <p class="tip">Tip：必须是已注册的邮箱。</p>
+    {% endif %}
     <p class="error hide" id="member-add-error"></p>
     <input type="submit" value="提交" id="member-add-submit" />
 </form>
