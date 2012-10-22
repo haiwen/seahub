@@ -76,7 +76,7 @@ def user_profile(request, user):
             user_intro = profile.intro
     else:
         nickname = user
-        intro = ''
+        user_intro = '他还未接受邀请。'
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
