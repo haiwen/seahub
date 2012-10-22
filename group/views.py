@@ -23,6 +23,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_org_groups_by_user, check_permission
 from pysearpc import SearpcError
 
+from decorators import group_staff_required
 from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm
@@ -519,106 +520,111 @@ def group_info(request, group_id):
 
 @login_required
 @ctx_switch_required
+@group_staff_required
 def group_members(request, group_id):
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return render_error(request, u'group id 不是有效参数')        
-
-    if not check_group_staff(group_id_int, request.user):
-        raise Http404
+    group_id = int(group_id)    # Checked by URL Conf
 
     group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
-            
+
+    user = request.user.username
+    
     if request.method == 'POST':
         """
         Add group members.
         """
         result = {}
         content_type = 'application/json; charset=utf-8'
-        
-        member_name_str = request.POST.get('user_name', '')
 
+        member_name_str = request.POST.get('user_name', '')
         member_list = string2list(member_name_str)
 
-        if request.user.org:
-            for member_name in member_list:
-                # Add user to contacts.
-                mail_sended.send(sender=None, user=request.user.username,
-                                  email=member_name)
+        # Add users to contacts.        
+        for email in member_list:
+            mail_sended.send(sender=None, user=user, email=email)
+            
+        if request.cloud_mode:
+            if request.user.org:
+                # Can only invite org users to group.
+                org_id = request.user.org['org_id']
+                for email in member_list:
+                    if not ccnet_threaded_rpc.org_user_exists(org_id, email):
+                        err_msg = _(u'Failed to add group member, %s is not in current organization.') % email
+                        result['error'] = err_msg
+                        return HttpResponse(json.dumps(result), status=400,
+                                            content_type=content_type)
+                    else:
+                        try:
+                            ccnet_threaded_rpc.group_add_member(group_id,
+                                                                user, email)
+                        except SearpcError, e:
+                            result['error'] = _(e.msg)
+                            return HttpResponse(json.dumps(result), status=500,
+                                                content_type=content_type)
+            else:
+                # Can invite unregistered user to group.
+                for email in member_list:
+                    if not is_registered_user(email):
+                        use_https = request.is_secure()
+                        domain = RequestSite(request).domain
 
-                # Can not add unregistered user to group in org context.
-                if not ccnet_threaded_rpc.org_user_exists(request.user.org['org_id'],
-                                                 member_name):
-                    err_msg = u'无法添加成员，当前企业不存在 %s 用户' % member_name
-                    result['error'] = err_msg
-                    return HttpResponse(json.dumps(result), status=400,
-                                        content_type=content_type)
-                else:
+                        t = loader.get_template('group/add_member_email.html')
+                        c = {
+                            'email': user,
+                            'to_email': email,
+                            'group': group,
+                            'domain': domain,
+                            'protocol': use_https and 'https' or 'http',
+                            }
+                    
+                        try:
+                            send_mail('您的好友在SeaCloud上将你加入到群组',
+                                      t.render(Context(c)), None, [email],
+                                      fail_silently=False)
+                        except:
+                            data = json.dumps({'error': _(u'Failed to send mail.')})
+                            return HttpResponse(data, status=500,
+                                                content_type=content_type)
+
+                    # Add user to group, unregistered user will see the group
+                    # when he logs in.
                     try:
-                        ccnet_threaded_rpc.group_add_member(group_id_int,
-                                                   request.user.username,
-                                                   member_name)
+                        ccnet_threaded_rpc.group_add_member(group_id,
+                                                            user, email)
                     except SearpcError, e:
                         result['error'] = _(e.msg)
                         return HttpResponse(json.dumps(result), status=500,
                                             content_type=content_type)
         else:
-            for member_name in member_list:
-                # Add user to contacts.
-                mail_sended.send(sender=None, user=request.user.username,
-                                  email=member_name)
-
-                if not is_registered_user(member_name):
-                    err_msg = u'无法添加成员，%s 未注册' % member_name
-                    result['error'] = err_msg
+            # Can only invite registered user to group if not in cloud mode.
+            for email in member_list:
+                if not is_registered_user(email):
+                    err_msg = _(u'Failed to add group member, %s is not registerd.')
+                    result['error'] = err_msg % email
                     return HttpResponse(json.dumps(result), status=400,
                                         content_type=content_type)
-                    
-                    # use_https = request.is_secure()
-                    # domain = RequestSite(request).domain
-
-                    # t = loader.get_template('group/add_member_email.html')
-                    # c = {
-                    #     'email': request.user.username,
-                    #     'to_email': member_name,
-                    #     'group': group,
-                    #     'domain': domain,
-                    #     'protocol': use_https and 'https' or 'http',
-                    #     }
-                    
-                    # try:
-                    #     send_mail('您的好友在SeaCloud上将你加入到群组',
-                    #               t.render(Context(c)), None, [member_name],
-                    #               fail_silently=False)
-                    # except:
-                    #     data = json.dumps({'error': u'发送失败'})
-                    #     return HttpResponse(data, status=500,
-                    #                         content_type=content_type)
                 # Add user to group.
                 try:
-                    ccnet_threaded_rpc.group_add_member(group_id_int,
-                                               request.user.username,
-                                               member_name)
+                    ccnet_threaded_rpc.group_add_member(group_id,
+                                               user, email)
                 except SearpcError, e:
                     result['error'] = _(e.msg)
                     return HttpResponse(json.dumps(result), status=500,
                                         content_type=content_type)
-        messages.success(request, u'操作成功')
+        messages.success(request, _(u'Successfully added group member(s).'))
         return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
 
     ### GET ###
-    members_all = ccnet_threaded_rpc.get_group_members(group_id_int)
+    members_all = ccnet_threaded_rpc.get_group_members(group_id)
     members, admins = [], []
     for m in members_all:
         if m.is_staff:
             admins.append(m)
         else:
             members.append(m)
-    contacts = Contact.objects.filter(user_email=request.user.username)
+    contacts = Contact.objects.filter(user_email=user)
 
     return render_to_response('group/group_manage.html', {
             'group' : group,
