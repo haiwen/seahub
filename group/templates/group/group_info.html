@@ -57,7 +57,7 @@
     <h3 class="info-item-top">操作</h3>
     <ul class="with-bg info-item-bottom">
         {% if is_staff %}
-        <li><a id="group-mgr" href="{{ SITE_ROOT }}group/{{ group.id }}/members/">群组管理</a></li>
+        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">群组管理</a></li>
         {% else %}
         <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出群组</a></li>
         {% endif %}

@@ -6,10 +6,12 @@ from django.utils.hashcompat import md5_constructor
 from django.core.urlresolvers import reverse
 
 from seahub.base.accounts import User
+from seahub.views import is_registered_user
 
 from avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFAULT,
                              AVATAR_DEFAULT_SIZE)
-from avatar.util import get_primary_avatar, get_default_avatar_url, cache_result
+from avatar.util import get_primary_avatar, get_default_avatar_url, \
+    cache_result, get_default_avatar_non_registered_url
 
 register = template.Library()
 
@@ -40,7 +42,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
             alt = unicode(user)
             url = avatar_url(user, size)
         except User.DoesNotExist:
-            url = get_default_avatar_url()
+            url = get_default_avatar_non_registered_url()
             alt = _("Default Avatar")
     else:
         alt = unicode(user)

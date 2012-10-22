@@ -521,7 +521,7 @@ def group_info(request, group_id):
 @login_required
 @ctx_switch_required
 @group_staff_required
-def group_members(request, group_id):
+def group_manage(request, group_id):
     group_id = int(group_id)    # Checked by URL Conf
 
     group = get_group(group_id)
@@ -543,7 +543,8 @@ def group_members(request, group_id):
         # Add users to contacts.        
         for email in member_list:
             mail_sended.send(sender=None, user=user, email=email)
-            
+
+        mail_sended_list = []
         if request.cloud_mode:
             if request.user.org:
                 # Can only invite org users to group.
@@ -582,6 +583,7 @@ def group_members(request, group_id):
                             send_mail('您的好友在SeaCloud上将你加入到群组',
                                       t.render(Context(c)), None, [email],
                                       fail_silently=False)
+                            mail_sended_list.append(email)
                         except:
                             data = json.dumps({'error': _(u'Failed to send mail.')})
                             return HttpResponse(data, status=500,
@@ -612,13 +614,17 @@ def group_members(request, group_id):
                     result['error'] = _(e.msg)
                     return HttpResponse(json.dumps(result), status=500,
                                         content_type=content_type)
-        messages.success(request, _(u'Successfully added group member(s).'))
+        if mail_sended_list:
+            messages.success(request, _(u'Successfully added group member(s). An email has been sent to user(s).'))
+        else:
+            messages.success(request, _(u'Successfully added group member(s).'))
         return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
 
     ### GET ###
     members_all = ccnet_threaded_rpc.get_group_members(group_id)
-    admins = [ m for m in members_all if m.is_staff ]
+    admins = [ m for m in members_all if m.is_staff ]    
+
     contacts = Contact.objects.filter(user_email=user)
 
     return render_to_response('group/group_manage.html', {

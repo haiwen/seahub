@@ -62,7 +62,6 @@ def edit_profile(request):
 def user_profile(request, user):
     user_nickname = ''
     user_intro = ''
-    err_msg = ''
 
     try:
         user_check = User.objects.get(email=user)
@@ -76,7 +75,8 @@ def user_profile(request, user):
             user_nickname = profile.nickname
             user_intro = profile.intro
     else:
-        err_msg = '该用户不存在'
+        nickname = user
+        intro = ''
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
@@ -84,16 +84,15 @@ def user_profile(request, user):
         new_user = False
     else:
         new_user = True
-        
+    print new_user
     return render_to_response('profile/user_profile.html', {
-                                'email': user,
-                                'nickname': user_nickname,
-                                'intro': user_intro,
-                                'new_user': new_user,
-                                'err_msg': err_msg,
-                                  },
-                              context_instance=RequestContext(request))
+            'email': user,
+            'nickname': user_nickname,
+            'intro': user_intro,
+            'new_user': new_user,
+            }, context_instance=RequestContext(request))
 
+@login_required
 def get_user_profile(request, user):
     data = {
             'email': user,
@@ -116,7 +115,7 @@ def get_user_profile(request, user):
             data['user_nickname'] = profile.nickname
             data['user_intro'] = profile.intro
     else:
-        data['err_msg'] = '该用户不存在'
+        data['user_intro'] = '他还未接受邀请。'
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,

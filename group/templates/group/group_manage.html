@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags avatar_tags %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
@@ -9,12 +9,16 @@
 {% endblock %}
 
 {% block left_panel %}
-<h3>操作</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置群组图标</a></li>
-    <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散群组</a></li>
-    <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回群组</a></li>
-</ul>
+<div class="info-item">
+  <div class="info-item-top"><h3>操作</h3> </div>
+  <div class="info-item-bottom">
+    <ul class="with-bg">
+      <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置群组图标</a></li>
+      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散群组</a></li>
+      <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回群组</a></li>
+    </ul>
+  </div>
+</div>
 {% endblock %}
 
 {% block right_panel %}
@@ -23,12 +27,14 @@
 {% if members %}
 <table class="member-list">
     <tr>
-        <th width="75%">邮箱</th>
+        <th width="4%"></th>
+        <th width="71%">邮箱</th>
         <th width="25%">操作</th>
     </tr>
 
     {% for member in members %}
     <tr>
+        <td>{% avatar member.user_name 20 %}</td>
         <td>{{ member.user_name }}</td>
         <td>
             <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
@@ -49,12 +55,14 @@
 {% if admins %}
 <table class="member-list">
     <tr>
-        <th width="75%">邮箱</th>
+        <th width="4%"></th>
+        <th width="71%">邮箱</th>
         <th width="25%">操作</th>
     </tr>
 
     {% for member in admins %}
     <tr>
+        <td>{% avatar member.user_name 20 %}</td>
         <td>{{ member.user_name }}</td>
         <td>
             {% if member.user_name != request.user.username %}

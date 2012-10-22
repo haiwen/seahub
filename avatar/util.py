@@ -4,7 +4,8 @@ from django.core.cache import cache
 from seahub.base.accounts import User
 
 from avatar.settings import (AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,
-                             AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE)
+                             AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE,
+                             AVATAR_DEFAULT_NON_REGISTERED_URL)
 
 cached_funcs = set()
 
@@ -59,6 +60,23 @@ def get_default_avatar_url():
         return '%s/%s' % (base_url, AVATAR_DEFAULT_URL)
     return '%s%s' % (base_url, AVATAR_DEFAULT_URL)
 
+def get_default_avatar_non_registered_url():
+    base_url = getattr(settings, 'STATIC_URL', None)
+    if not base_url:
+        base_url = getattr(settings, 'MEDIA_URL', '')
+    # Don't use base_url if the default avatar url starts with http:// of https://
+    if AVATAR_DEFAULT_NON_REGISTERED_URL.startswith('http://') or AVATAR_DEFAULT_NON_REGISTERED_URL.startswith('https://'):
+        return AVATAR_DEFAULT_NON_REGISTERED_URL
+    # We'll be nice and make sure there are no duplicated forward slashes
+    ends = base_url.endswith('/')
+    begins = AVATAR_DEFAULT_NON_REGISTERED_URL.startswith('/')
+    if ends and begins:
+        base_url = base_url[:-1]
+    elif not ends and not begins:
+        return '%s/%s' % (base_url, AVATAR_DEFAULT_NON_REGISTERED_URL)
+    return '%s%s' % (base_url, AVATAR_DEFAULT_NON_REGISTERED_URL)
+    
+    
 def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:
