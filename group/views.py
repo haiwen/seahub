@@ -70,7 +70,7 @@ class GroupMixin(object):
         except BusinessGroup.DoesNotExist:
             ret = False
         return ret
-    
+
 class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
                     BaseFormView):
     template_name = 'group/groups.html'
@@ -79,13 +79,27 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
     def form_valid(self, form):
         group_name = form.cleaned_data['group_name']
         username = self.get_username()
+        result = {}
+        
+        if self.request.cloud_mode:
+            # Check whether group name is duplicated in groups he joined and
+            # created.
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            # Check whether group name is duplicated in all groups.
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = _(u'The group name has been occupied.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type='application/json; charset=utf-8')
+
         try:
             group_id = ccnet_threaded_rpc.create_group(
                 group_name.encode('utf-8'), username)
         except SearpcError, e:
-            result = {}
             result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result),
+            return HttpResponse(json.dumps(result), status=500,
                                 content_type='application/json; charset=utf-8')
         
         if self.request.is_ajax():
@@ -100,12 +114,7 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
             return FormMixin.form_invalid(self, form)
 
     def get_context_data(self, **kwargs):
-        # In cloud mode, only get joined groups; otherwise, get joined groups
-        # and all other groups
         kwargs['joined_groups'] = get_personal_groups_by_user(self.get_username())
-        if not self.request.cloud_mode:
-            kwargs['groups'] = get_personal_groups(-1, -1)            
-
         return kwargs
 
 # class DeptGroupListView(GroupListView):
