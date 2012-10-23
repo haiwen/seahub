@@ -978,7 +978,7 @@ def attention(request):
     result = []
 
     members = []
-    for gid in gids.split(','):
+    for gid in gids.split('_'):
         try:
             gid = int(gid)
         except ValueError:
