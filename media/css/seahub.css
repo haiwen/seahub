@@ -152,6 +152,7 @@ p {
 .tip {
     color:#808080;
     font-size:12px;
+    width: 260px;
 }
 .vh {
     visibility:hidden;
@@ -226,7 +227,13 @@ ul.with-bg li {
 }
 .placeholder {
     color: #aaa;
+    padding: 2px;           /* for ie */
 }
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+    padding: 2px;           /* for FF */
+}
+::-webkit-input-placeholder { padding: 2px; } /* for chrome, safari */
 .avatar {
     border-radius:3px;
 }
@@ -1019,6 +1026,7 @@ ul.with-bg li {
 #added-admin-name {
     width:260px;
     height:80px;
+    padding: 2px;
 }
 #repo-share-form select[name="permission"] {
     display:block;

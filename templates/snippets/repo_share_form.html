@@ -1,7 +1,11 @@
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
     <label>共享给：</label><br />
     <textarea id="email_or_group" name="email_or_group" placeholder="输入邮箱或群组"></textarea>
-    {% if allow_public_share %}    
+    {% if cloud_mode %}
+      {% if org %}
+      <p class="tip">Tip：必须是团体内成员或群组，输入 all 共享到公共资料。</p>
+      {% endif %}
+    {% else %}
     <p class="tip">Tip：输入 all 共享到公共资料</p>
     {% endif %}
     <select name="permission">
@@ -9,7 +13,6 @@
       <option value="r">只可浏览</option>
     </select>
     <input id="repo_id" type="hidden" name="repo_id" value="" />
-    <p class="tip">{{ tips }}</p>
     <p class="error hide"></p>
     <input type="submit" value="提交" id="share-submit-btn" />
 </form>

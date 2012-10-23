@@ -60,7 +60,7 @@
 {% endif %}
 
 {% url 'share_repo' as repo_share_url %}
-{% with post_url=repo_share_url tips='' %}
+{% with post_url=repo_share_url %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 

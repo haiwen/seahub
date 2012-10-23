@@ -34,7 +34,7 @@
 {% endif %}
 
 {% url 'org_repo_share' org.url_prefix as repo_share_url %}
-{% with post_url=repo_share_url tips='必须是团体内部成员或群组。' %}
+{% with post_url=repo_share_url %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 
