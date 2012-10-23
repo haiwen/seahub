@@ -1034,7 +1034,7 @@ ul.with-bg li {
 .group-list {
     margin-top:20px;
 }
-.group {
+.group-list .group {
     width:315px;
     margin:0 17px 30px 0;
     border-bottom:1px dashed #ddd;
@@ -1114,9 +1114,13 @@ ul.with-bg li {
 }
 
 /* group message and replies */
-#group-reply {
+#group-reply,
+.new-reply-msg-list {
     width:602px;
     margin-top:50px;
+}
+.new-reply-msg-list {
+    margin-top:0;
 }
 .msg-num {
     font-size:12px;

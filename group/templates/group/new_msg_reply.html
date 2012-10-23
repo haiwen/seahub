@@ -4,7 +4,7 @@
 
 {% block right_panel %}
 {% if group_msgs %}
-    <ul class="msg-list">
+    <ul class="msg-list new-reply-msg-list">
     {% for msg in group_msgs %}
         <li class="msg w100 ovhd">
         <div class="pic fleft">
@@ -44,7 +44,7 @@
                         </li>
                         {% endfor %}
                     </ul>
-                    <textarea name="message" class="reply-input"></textarea>
+                    <input type="text" name="message" class="reply-input" />
                     <button class="submit">回复</button>
                     <p class="error hide">输入不能为空且应少于150个字符。</p>
                 </div>
