@@ -135,7 +135,7 @@ function addAtAutocomplete(ele_id, container_id, gids, aj_url, ele_css) {
         .autocomplete({
             appendTo: container_id,
             autoFocus: true,
-            delay: 100,
+            delay: 0,
             minLength: 0,
             source: function(request, response) {
                 if (pos === '') {
