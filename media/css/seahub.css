@@ -9,7 +9,8 @@ form,input,textarea,button,img {
     padding:0;
     margin:0;
 }
-body {
+body,
+input, button, select {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
     color: #333;
 }
@@ -41,8 +42,6 @@ input {
 }
 input,
 button {
-    font-size:13px;/*for ff*/
-    font-family:Arial, Helvetica, sans-serif;/*for ff*/
     display:inline-block;/*for ie*/
 }
 button {
@@ -64,7 +63,6 @@ button::-moz-focus-inner {/*Remove button padding in FF*/
 input[type=submit],
 input.submit,
 button { 
-    color: #333;
     height:23px;
     line-height:21px;
     padding:0 3px;
@@ -152,7 +150,6 @@ p {
 .tip {
     color:#808080;
     font-size:12px;
-    width: 260px;
 }
 .vh {
     visibility:hidden;
@@ -1028,10 +1025,11 @@ textarea:-moz-placeholder {
     height:80px;
     padding: 2px;
 }
-#repo-share-form select[name="permission"] {
-    display:block;
-    width:262px;
-    margin:5px 0;
+#repo-share-form {
+    width:266px;
+}
+#repo-share-form .share-permission-select {
+    width:100%;
 }
 /* group-join-form */
 #id_group_join_msg {
