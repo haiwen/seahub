@@ -90,7 +90,7 @@
                 {% endif %}
                 {% endif %}
             </p>
-            <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?p={{ path }}" class="more fright">更多历史</a>
+            <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">更多历史</a>
         </div> 
         <p class="contributors">
         <span>{{ contributors|length }} 个贡献者</span>
@@ -113,7 +113,6 @@
             {% if filetype == 'Text' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
             {% endif %}
-            <button data="{{ SITE_ROOT }}repo/update_file/{{ repo.id }}/?p={{ path }}" id="update">更新</button>
             {% endif %}
             {% endif %}
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
