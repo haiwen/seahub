@@ -40,7 +40,7 @@ function get_commit_diff(url, callback) {
                 show(data['deldir']);
             }
             if (!con) {
-                con = '<p>没有文件被改动</p>';
+                con = '<p>合并没有产生冲突文件</p>';
             }
             callback(con);
         }

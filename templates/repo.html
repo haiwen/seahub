@@ -48,8 +48,12 @@
         <p class="meta-info">
         <span class="author">
             {% if current_commit.props.creator_name %}
-            {% avatar current_commit.props.creator_name 20 %}
-            <a class="name" href="{% url 'profile.views.user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|short_email }}</a>
+	        {% if not current_commit.second_parent_id %}
+                    {% avatar current_commit.props.creator_name 20 %}
+                    <a class="name" href="{% url 'profile.views.user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|short_email }}</a>
+		{% else %}
+		    <span class="name">系统自动生成</span>
+		{% endif %}
             {% else %}
             未知
             {% endif %}

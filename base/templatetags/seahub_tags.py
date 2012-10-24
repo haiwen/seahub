@@ -57,8 +57,8 @@ def translate_commit_desc(value):
         return value
     elif value.startswith('Recovered deleted directory'):
         return value.replace('Recovered deleted directory', u'还原已删除的目录')
-    elif value.startswith('Merged'):
-        return u'合并了其他人的修改'
+    elif value.startswith('Merged') or value.startswith('Auto merge'):
+        return u'系统自动合并修改'
     else:
         operations = '|'.join(TRANSLATION_MAP.keys())
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
