@@ -3,10 +3,9 @@
 {% load url from future %}
 
 {% block main_panel %}
-<h3>文件修改详情</h3>
-<div class="diff-desc">
+<h2 class="file-modification-hd"><span class="op-target">{{ u_filename }}</span> 修改详情 <a href="{% url 'user_profile' current_commit.creator_name %}">{% avatar current_commit.creator_name 16 %}</a><span class="modifier">{{ current_commit.creator_name|email2nickname }}</span><span class="time">{{ current_commit.ctime|translate_commit_time }}</span></h2>
     <p class="path">
-        文件路径：
+        当前路径：
         {% for name, link in zipped %}
         {% if not forloop.last %}
         <a href="{% url 'repo' repo.id %}?p={{ link|urlencode }}">{{ name }}</a> /                
@@ -15,20 +14,18 @@
         {% endif %}
         {% endfor %}
     </p>
-    <p class="">{% avatar current_commit.creator_name 20 %} {{ current_commit.creator_name|email2nickname }} 修改于 {{ current_commit.ctime|translate_commit_time }}</p>
-</div>
 {% if is_new_file %}
-<div class="text-panel">
-    <p>文件 {{repo.name}} {{ path }} 是一个新建的空白文件</p>
+<div id="text-diff-output">
+<p class="blank-file">该文件为新建空白文件。</p>
 </div>
 {% else %}
 <div id="text-diff-output">
-<table>
+<table class="diff-con">
     <tr>
         <th width="3%"></th>
-        <th width="47%"> 修改前 </th>
+        <th width="47%">修改前</th>
         <th width="3%"></th>
-        <th width="47%"> 修改后 </th>
+        <th width="47%">修改后</th>
     </tr>
     {{ diff_result_table|safe }}
 </table>

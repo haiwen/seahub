@@ -2659,6 +2659,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
 def text_diff(request, repo_id):
     commit_id = request.GET.get('commit', '')
     path = request.GET.get('p', '')
+    u_filename = os.path.basename(path)
 
     if not (commit_id and path):
         return render_error(request, 'bad params')
@@ -2699,6 +2700,7 @@ def text_diff(request, repo_id):
     zipped = gen_path_link(path, repo.name)
 
     return render_to_response('text_diff.html', {
+        'u_filename':u_filename,
         'repo': repo,
         'path': path,
         'zipped': zipped,

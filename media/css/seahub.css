@@ -1253,7 +1253,8 @@ textarea:-moz-placeholder {
     color:#444;
     margin-top:3px;
 }
-#file {
+#file,
+#text-diff-output {
     padding:3px;
     background:#dedede;
     border-radius:3px;
@@ -1434,29 +1435,56 @@ textarea:-moz-placeholder {
     height:5em;
 }
 /* text file diff */
-div.diff-desc { margin: 10px 0; }
-div.diff-desc p { margin: 10px 0; }
-
-#text-diff-output table {
-    margin-top: 20px;
-    border: 1px solid gray;
+.file-modification-hd .modifier,
+.file-modification-hd .time {
+    font-weight:normal;
+    font-size:13px;
+    color:#666;
 }
-
-#text-diff-output tr th {
-    background-color: #EED;
+.file-modification-hd a {
+    margin:0 3px 0 5px;
+}
+.file-modification-hd .avatar,
+.file-modification-meta-info .span {
+    vertical-align:middle;
+}
+.file-modification-hd .time {
+    margin-left:5px;
+}
+#text-diff-output {
+    font-size:14px;
+    font-family:monospace;
+}
+#text-diff-output .blank-file,
+#text-diff-output .diff-con {
+    background:#fff;
+    border:1px solid #ccc;
+    margin:0;
+}
+#text-diff-output .blank-file {
+    padding:2em 1em;
+}
+#text-diff-output th {
     text-align: center;
 }
-#text-diff-output th,
 #text-diff-output td {
-    border-bottom: none;
+    font-size:12px;
+    word-wrap:break-word;
+    padding:2px 3px;
+    border-bottom:none;
 }
-#text-diff-output tr.hl {
-    background-color: #afcde8;  /*highlight*/
+#text-diff-output .diff-header {
+    text-align:right;
+    vertical-align:top; /* make the line number stay there even its right td gets multi lines of content */
+    background-color:#ebebeb;
+    border-right:1px solid #eee;
 }
-.diff-header {
-    background-color: #EED;
-    text-align: center;
+.diff-add {
+    color: #080;
 }
-.diff-add { background-color: #DFD; }
-.diff-sub { background-color: #FDD; }
-.diff-chg { background-color: #FD8; }
+.diff-sub {
+    color: #c00;
+}
+.diff-chg {
+    color: #c3f;
+}
