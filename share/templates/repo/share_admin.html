@@ -153,13 +153,6 @@ $(document).click(function(e) {
         $('.share-permission-select').addClass('hide');
     }
 });
-function feedback(con, type) {
-    var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
-    $('#main').append(html).css('position','relative');
-    $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, 2000);
-}
-
 $('.cancel-share').click(function() {
     location.href = $(this).attr('data');
 });

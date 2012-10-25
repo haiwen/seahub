@@ -161,7 +161,7 @@
                 <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
                 <button class="replyclose op hide">收起回复</button>
                 {% if is_staff or msg.from_email == request.user.username %}
-                <button class="msg-delete op" href="#" data="{% url 'group_message_remove' group.id msg.id %}">删除</button>
+                <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">删除</button>
                 {% endif %}
                 <div class="reply-bd"></div>
             </div>
@@ -194,9 +194,7 @@
 addConfirmTo($('#quit-group'), '确定要退出？');
 addConfirmTo($('.cancel-share'), '确定要取消共享该资料库？');
 
-$(function() {
-    addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
-});
+addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
 $("table tr:gt(0)").hover(
     function() {
@@ -232,7 +230,36 @@ $('.msg-delete').hover(
         $(this).css('color', '#4b4');
     }
 );
-addConfirmTo($('.msg-delete'));
+//addConfirmTo($('.msg-delete'));
+$('.msg-delete').click(function() {
+    var url = $(this).attr('data');
+    var msg = $(this).parents('.msg');
+    var del_confirm = '<div class="msg-del-confirm hide"><p>确认要删除该留言吗？</p><button class="msg-del-yes">确认</button><button class="msg-del-no">取消</button></div>';
+    $(this).parent().append(del_confirm).css('position', 'relative');
+    del_confirm = $(this).parent().find('.msg-del-confirm');
+    del_confirm.css({'left':$(this).position().left - 15, 'top':$(this).position().top - del_confirm.outerHeight()}).removeClass('hide');
+    del_confirm.children('.msg-del-yes').click(function() {
+        del_confirm.remove();
+        $.ajax({
+            url: url,
+            dataType:'json',
+            success: function(data) {
+                if (data['success']) {
+                    msg.remove();
+                    feedback('删除成功', 'success');
+                } else {
+                    feedback('删除失败：' + data['err_msg'], 'error');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                feedback(textStatus + '，删除失败', 'error');
+            }
+        });
+    });
+    del_confirm.children('.msg-del-no').click(function() {
+        del_confirm.remove();
+    });
+});
 
 $('.grp-admin-add').click(function() {
     $("#admin-add-form").modal({appendTo: "#main"});

@@ -284,9 +284,17 @@ function apply_form_error(formid, error_msg) {
     container.css('height', $('#'+formid).height());
 }
 
-//handle messages
+// handle messages
 if ($('.messages')) {
     $('#main').append($('.messages')).css('position','relative');
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
+}
+
+// show 'messages' for ajax request
+function feedback(con, type) {
+    var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+    $('#main').append(html).css('position','relative');
+    $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
+    setTimeout(function() { $('.messages').addClass('hide'); }, 2000);
 }
