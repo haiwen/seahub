@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 18:02+0800\n"
+"POT-Creation-Date: 2012-10-26 19:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,7 +129,7 @@ msgid "My Home"
 msgstr "我的页面"
 
 #: templates/myhome_base.html:12
-msgid "Public Repo"
+msgid "Public Library"
 msgstr "公共资料"
 
 #: templates/myhome_base.html:16
@@ -218,7 +218,7 @@ msgid "Empty"
 msgstr "暂无"
 
 #: templates/snippets/my_owned_repos.html:2
-msgid "Repos"
+msgid "Libraries"
 msgstr "资料库"
 
 #: templates/snippets/my_owned_repos.html:6
@@ -230,7 +230,7 @@ msgid "Share to me"
 msgstr "共享给我的"
 
 #: templates/snippets/my_owned_repos.html:9
-msgid "New Repo"
+msgid "New Library"
 msgstr "新建资料库"
 
 #: templates/snippets/my_owned_repos.html:16
@@ -282,6 +282,15 @@ msgstr "只读"
 #: templates/snippets/my_owned_repos.html:76
 msgid "Remove Share"
 msgstr "取消共享"
+
+#~ msgid "Public Repo"
+#~ msgstr "公共资料"
+
+#~ msgid "Repos"
+#~ msgstr "资料库"
+
+#~ msgid "New Repo"
+#~ msgstr "新建资料库"
 
 #~ msgid "Sign out"
 #~ msgstr "退出"

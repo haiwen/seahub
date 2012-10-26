@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 17:21+0800\n"
+"POT-Creation-Date: 2012-10-26 19:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: po.js:3
-msgid "hello"
-msgstr "你好"
+#: po.js:4 po.js.c:10
+msgid "Email can't be blank"
+msgstr "邮箱不能为空"
+
+#: po.js:5 po.js.c:11
+msgid "Password can't be blank"
+msgstr "密码不能为空"
+
+#: po.js:6
+msgid "Confirm password can't be blank"
+msgstr "确认密码不能为空"
+
+#: po.js:7
+msgid "The two password fields did't match"
+msgstr "两次密码不相同"
+
+#: po.js:12
+msgid "Incorrect email or password"
+msgstr "您输入的邮箱或密码不正确"
