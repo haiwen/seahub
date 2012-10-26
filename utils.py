@@ -4,12 +4,14 @@ import os
 import re
 import random
 import stat
+import urllib2
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
-from base.models import FileContributors
+from base.models import FileContributors, UserStarredFiles
+from django.utils.hashcompat import md5_constructor
 
 from pysearpc import SearpcError
 
@@ -468,3 +470,126 @@ else:
         pass
     def get_org_user_events():
         pass
+
+class StarredFile(object):
+    def format_path(self):
+        if self.path == "/":
+            return self.path
+
+        # strip leading slash
+        path = self.path[1:]
+        if path[-1:] == '/':
+            path = path[:-1]
+        return path.replace('/', ' / ')
+            
+    def __init__(self, org_id, repo, path, is_dir, last_modified):
+        # always 0 for non-org repo
+        self.org_id = org_id
+        self.repo = repo
+        self.path = path
+        self.formatted_path = self.format_path()
+        self.is_dir = is_dir
+        # always 0 for dir
+        self.last_modified = last_modified
+
+# org_id > 0: get starred files in org repos
+# org_id < 0: get starred files in personal repos
+def get_starred_files(email, org_id=-1):
+    """Return a list of starred files for some user, sorted descending by the
+    last modified time.
+
+    """
+    starred_files = UserStarredFiles.objects.filter(email=email, org_id=org_id)
+
+    ret = []
+    for sfile in starred_files:
+        # repo still exists?
+        try:
+            repo = get_repo(sfile.repo_id)
+        except SearpcError:
+            continue
+
+        if not repo:
+            sfile.delete()
+            continue
+
+        # file still exists?
+        file_id = ''
+        if sfile.path != "/":
+            try:
+                file_id = seafserv_threaded_rpc.get_file_by_path(sfile.repo_id, sfile.path)
+            except SearpcError:
+                continue
+
+            if not file_id:
+                sfile.delete()
+                continue
+
+        last_modified = 0
+        if not sfile.is_dir:
+            # last modified
+            path_hash = md5_constructor(urllib2.quote(sfile.path.encode('utf-8'))).hexdigest()[:12]
+            last_modified = get_file_contributors(sfile.repo_id, sfile.path, path_hash, file_id)[1]
+
+        f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified)
+
+        ret.append(f)
+        
+    # First sort by repo
+    # Within the same repo:
+    # dir > file
+    # dirs are sorted by name ascending
+    # files are sorted by last_modified descending
+    def sort_func(fa, fb):
+        # Different repo?
+        if fa.repo.id != fb.repo.id:
+            ret = cmp(fa.repo.name, fb.repo.name)
+            if ret != 0:
+                return ret
+            else:
+                # two different repo has the same name, compare the id
+                return cmp(fa.repo.id, fb.repo.id)
+
+        # OK, same repo
+        if fa.is_dir and fb.is_dir:
+            return cmp(fa.path, fb.path)
+        elif fa.is_dir and not fb.is_dir:
+            return -1
+        elif fb.is_dir and not fa.is_dir:
+            return 1
+        else:
+            return cmp(fb.last_modified, fa.last_modified)
+        
+    ret.sort(sort_func)
+    return ret
+
+def star_file(email, repo_id, path, is_dir, org_id=-1):
+    if is_file_starred(email, repo_id, path, org_id):
+        return
+
+    f = UserStarredFiles(email=email,
+                         org_id=org_id,
+                         repo_id=repo_id,
+                         path=path,
+                         is_dir=is_dir)
+    f.save()
+
+def unstar_file(email, repo_id, path):
+    try:
+        f = UserStarredFiles.objects.get(email=email,
+                                         repo_id=repo_id,
+                                         path=path)
+    except UserStarredFiles.DoesNotExist:
+        pass
+    else:
+        f.delete()
+            
+def is_file_starred(email, repo_id, path, org_id=-1):
+    try:
+        f = UserStarredFiles.objects.get(email=email,
+                                         repo_id=repo_id,
+                                         path=path,
+                                         org_id=org_id)
+        return True
+    except UserStarredFiles.DoesNotExist:
+        return False

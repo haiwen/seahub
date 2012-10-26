@@ -68,7 +68,8 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo, \
-    get_file_contributors, EVENTS_ENABLED, get_user_events
+    get_file_contributors, EVENTS_ENABLED, get_user_events, \
+    get_starred_files, star_file, unstar_file, is_file_starred
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -282,6 +283,14 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
                        is_group_user(x.id, self.user.username)]
         return groups
 
+    def is_starred_dir(self):
+        org_id = -1
+        if self.request.user.org:
+            org_id = self.request.user.org['org_id']
+        args = (self.request.user.username, self.repo.id, self.path.encode('utf-8'), org_id)
+        print args
+        return is_file_starred(*args)
+
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
         # kwargs['can_access'] = self.can_access
@@ -296,6 +305,7 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         kwargs['accessible_repos'] = self.get_accessible_repos()
         kwargs['applet_root'] = self.applet_root
         kwargs['groups'] = self.get_repo_shared_groups()
+        kwargs['is_starred'] = self.is_starred_dir()
         if len(kwargs['groups']) > 1:
             ctx = {}
             ctx['groups'] = kwargs['groups']
@@ -919,6 +929,8 @@ def myhome(request):
     else:
         events = None
 
+    starred_files = get_starred_files(request.user.username)
+
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -935,6 +947,7 @@ def myhome(request):
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "events": events,
+            "starred_files": starred_files,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1308,6 +1321,13 @@ def repo_view_file(request, repo_id):
     else:
         repogrp_str = '' 
 
+    is_starred = False
+    if page_from != 'recycle':
+        org_id = -1
+        if request.user.org:
+            org_id = request.user.org['org_id']
+        is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
+
     return render_to_response('repo_view_file.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -1342,6 +1362,7 @@ def repo_view_file(request, repo_id):
             'read_only': read_only,
             'page_from': page_from,
             'repo_group_str': repogrp_str,
+            'is_starred': is_starred,
             }, context_instance=RequestContext(request))
 
 def file_comment(request):
@@ -2752,3 +2773,22 @@ def i18n(request):
 
     return res
 
+@login_required    
+def repo_star_file(request, repo_id):
+    path = request.POST.get('path')
+    state = request.POST.get('state');
+
+    content_type = 'application/json; charset=utf-8'
+
+    if not (path and state):
+        return HttpResponse(json.dumps({'success':False, 'err_msg':u'参数错误'}),
+                            content_type=content_type)
+
+    org_id = int(request.POST.get('org_id'))
+    path = urllib2.unquote(path.encode('utf-8'))
+    is_dir = False
+    if state == 'unstarred':
+        star_file(request.user.username, repo_id, path, is_dir, org_id=org_id)
+    else:
+        unstar_file(request.user.username, repo_id, path)
+    return HttpResponse(json.dumps({'success':True}), content_type=content_type)

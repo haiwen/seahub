@@ -149,3 +149,15 @@ def innerpubmsg_reply_added_cb(sender, instance, **kwargs):
                              detail=msg_id)
         n.save()
             
+class UserStarredFiles(models.Model):
+    """Starred files are marked by users to get quick access to it on user
+    home page.
+
+    """
+
+    email = models.EmailField()
+    org_id = models.IntegerField()
+    repo_id = models.CharField(max_length=36)
+    
+    path = models.TextField()
+    is_dir = models.BooleanField()

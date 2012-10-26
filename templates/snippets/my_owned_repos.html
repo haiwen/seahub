@@ -1,10 +1,12 @@
 {% load seahub_tags i18n %}
+{% load url from future %}
 <h3>{% trans "Libraries" %}</h3>
 <div id="repos-tabs">
 <div class="ovhd">
     <ul class="fleft">
         <li><a href="#my-own-repos" onfocus="this.blur()">{% trans "I owned" %}</a></li>
-        <li><a href="#repos-shared-to-me" onfocus="this.blur()">{% trans "Share to me" %}</a></li>
+        <li><a href="#repos-shared-to-me" onfocus="this.blur()">{% trans "Shared to me" %}</a></li>
+        <li><a href="#starred-files" onfocus="this.blur()">{% trans "starred" %}</a></li>
     </ul>
     <button id="repo-create" class="fright">{% trans "New Library" %}</button>
 </div>
@@ -80,6 +82,30 @@
 </table>
 {% else %}
 <p class="empty-repo-tips">您的朋友可以将他的资料库共享给您，这些资料库会显示在这里。</p>
+{% endif %}
+</div>
+<div id="starred-files">
+{% if starred_files %}
+<table>
+    <tr>
+        <th width="5%"></th>
+        <th width="45%">文件名</th>
+        <th width="30%">所属资料库</th>
+        <th width="20%">更新时间</th>
+    </tr>
+    {% for sfile in starred_files %}
+    <tr>
+        <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="文件" /></td>
+        <td>
+            <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.formatted_path }}</a>
+        </td>
+        <td>{{ sfile.repo.name }}</td>
+        <td>{{ sfile.last_modified|translate_commit_time }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p class="no-starred-file-tips">您可以把重要的文件加上星标，这样它们就能显示在这里</p>
 {% endif %}
 </div>
 </div>

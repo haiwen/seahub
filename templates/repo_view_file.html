@@ -25,14 +25,12 @@
             <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">返回文件版本列表</button>
         </div>
         {% endif %}
-	{% if page_from == 'recycle' %}
-        <div class="w100 ovhd">
-            <h2 class="fleft">
-                {{repo.props.name}} 的文件回收站
-            </h2>
-            <button class="fright" data="{% url 'repo' repo.id %}" id="back">返回同步目录</button>
-        </div>
-	{% endif %}
+        {% if page_from == 'recycle' %}
+            <div class="w100 ovhd">
+                <h2 class="fleft">{{repo.props.name}} 的文件回收站</h2>
+                <button class="fright" data="{% url 'repo' repo.id %}" id="back">返回同步目录</button>
+            </div>
+        {% endif %}
     {% endif %}
     <div class="w100 ovhd">
         <p class="path fleft">
@@ -65,7 +63,6 @@
                 {{ name }}
             {% endif %}
         {% endfor %}
-
 	{% endif %} <!-- if page_from == 'recycle' -->
         </p>
 
@@ -75,6 +72,11 @@
             <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
             <button id="send-shared-link" class="hide">发送</button>
             <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
+            {% if is_starred %}
+            <button id="star" data="starred">取消星标</button>
+            {% else %}
+            <button id="star" data="unstarred">添加星标</button>
+            {% endif %}
         </div>
         {% endif %}
     </div>
@@ -465,6 +467,48 @@ $('#open-local').click(function () {
         }
     }, 2000);
 });
+//star
+$('#star').click(function() {
+    var star_btn = $(this);
+    var state = star_btn.attr('data');
+    $.ajax({
+        url: '{{ SITE_ROOT }}repo/star_file/{{ repo.id }}/',
+        type: 'POST',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        dataType: 'json',
+        data: {
+            path: '{{ path }}',
+            state: state,
+            org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
+        },
+        success:function(data) {
+            if (data['success']) {
+                if (state == 'starred') {
+                    feedback('星标取消成功', 'success');
+                    star_btn.attr('data', 'unstarred').text('添加星标');
+                } else {
+                    feedback('星标添加成功', 'success');
+                    star_btn.attr('data', 'starred').text('取消星标');
+                }
+            } else {
+                feedback('操作失败：' + data['err_msg'], 'error');
+            }
+        },
+        error:function(jqXHR, textStatus, errorThrown) {
+            feedback(textStatus + '，操作失败', 'error');
+        }
+   });
+})
+.hover(
+    function() {
+        $(this).css('background-color', '#fff');
+    },
+    function() {
+        $(this).css('background-color', '#efefef');
+    }
+);
 //'not view_history' ends here
 {% endif %}
 
