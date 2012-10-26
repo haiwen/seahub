@@ -289,6 +289,7 @@ class ReposView(ResponseMixin, View):
                 "mtime":r.latest_modify,
                 "root":r.root,
                 "size":r.size,
+                "encrypted":r.encrypted,
                 "password_need":r.password_need,
                 }
             repos_json.append(repo)
@@ -303,6 +304,7 @@ class ReposView(ResponseMixin, View):
                 "mtime":r.latest_modify,
                 "root":r.root,
                 "size":r.size,
+                "encrypted":r.encrypted,
                 "password_need":r.password_need,
                 }
             repos_json.append(repo)
@@ -322,6 +324,7 @@ class ReposView(ResponseMixin, View):
                     "mtime":r.latest_modify,
                     "root":r.root,
                     "size":r.size,
+                    "encrypted":r.encrypted,
                     "password_need":r.password_need,
                     }
                 repos_json.append(repo)
@@ -364,9 +367,10 @@ class RepoView(ResponseMixin, View):
             "name":repo.name,
             "desc":repo.desc,
             "mtime":repo.lastest_modify,
-            "password_need":repo.password_need,
             "size":repo.size,
+            "encrypted":r.encrypted,
             "root":current_commit.root_id,
+            "password_need":repo.password_need,
             }
 
         response = Response(200, repo_json)
@@ -384,6 +388,7 @@ class RepoView(ResponseMixin, View):
 
         return HttpResponse(json.dumps("unsupported operation"), status=200,
                             content_type=json_content_type)
+
 
 class RepoDirPathView(ResponseMixin, View):
     renderers = (JSONRenderer,)
