@@ -1,26 +1,26 @@
-{% load seahub_tags %}
-<h3>资料库</h3>
+{% load seahub_tags i18n %}
+<h3>{% trans "Repos" %}</h3>
 <div id="repos-tabs">
 <div class="ovhd">
     <ul class="fleft">
-        <li><a href="#my-own-repos" onfocus="this.blur()">我拥有的</a></li>
-        <li><a href="#repos-shared-to-me" onfocus="this.blur()">共享给我的</a></li>
+        <li><a href="#my-own-repos" onfocus="this.blur()">{% trans "I owned" %}</a></li>
+        <li><a href="#repos-shared-to-me" onfocus="this.blur()">{% trans "Share to me" %}</a></li>
     </ul>
-    <button id="repo-create" class="fright">新建资料库</button>
+    <button id="repo-create" class="fright">{% trans "New Repo" %}</button>
 </div>
 <div id="my-own-repos">
 {% if owned_repos %}
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="24%">名字</th>
-        <th width="43%">描述</th>
-        <th width="15%">更新时间</th>
-        <th width="14%">操作</th>
+        <th width="24%">{% trans "Name" %}</th>
+        <th width="43%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Update Time" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in owned_repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
@@ -29,9 +29,9 @@
         <td>--</td>
         {% endif %}
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
-            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn op-icon vh" title="共享" alt="共享" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op-icon vh" title="删除" alt="删除" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
+            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" alt="{% trans "Share" %}" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" alt="{% trans "Delete" %}" />
         </td>
     </tr>
     {% endfor %}
@@ -45,20 +45,20 @@
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">名字</th>
-        <th width="36%">描述</th>
-        <th width="15%">更新时间</th>
-        <th width="15%">共享来源</th>
-        <th width="10%">操作</th>
+        <th width="20%">{% trans "Name" %}</th>
+        <th width="36%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Update Time" %}</th>
+        <th width="15%">{% trans "Share From" %}</th>
+        <th width="10%">{% trans "Operations" %}</th>
     </tr>
 
     {% for repo in in_repos %}
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="只读" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="目录icon" />
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
@@ -71,9 +71,9 @@
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
         {% if repo.user_perm == 'rw' %}
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
         {% endif %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" class="unshare-btn op-icon vh" title="取消共享" alt="取消共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" class="unshare-btn op-icon vh" title="{% trans "Remove Share" %}" alt="{% trans "Remove Share" %}" />
         </td>
     </tr>
     {% endfor %}

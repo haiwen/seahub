@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-20 16:19+0800\n"
+"POT-Creation-Date: 2012-10-26 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,9 +26,154 @@ msgstr ""
 msgid "The two password fields didn't match."
 msgstr ""
 
+#: settings.py:93
+msgid "English"
+msgstr ""
+
+#: settings.py:94
+msgid "Simplified Chinese"
+msgstr ""
+
+#: templates/base.html:59
+msgid "Welcome,"
+msgstr "欢迎，"
+
+#: templates/base.html:60
+msgid "Profile"
+msgstr "设置"
+
+#: templates/base.html:61 templates/registration/logout.html:4
+msgid "Log Out"
+msgstr "退出"
+
+#: templates/base.html:63 templates/registration/login.html:3
+#: templates/registration/login.html:6
+msgid "Log In"
+msgstr "登录"
+
+#: templates/base.html:64 templates/registration/registration_form.html:3
+#: templates/registration/registration_form.html:9
+msgid "Register"
+msgstr "注册"
+
+#: templates/base.html:106
+msgid "Introduction"
+msgstr "介绍"
+
+#: templates/base.html:108
+msgid "Forum"
+msgstr "论坛"
+
+#: templates/base.html:112
+msgid "Client"
+msgstr "客户端"
+
+#: templates/base.html:118
+msgid "Documents"
+msgstr "文档"
+
+#: templates/base.html:120
+msgid "Help"
+msgstr "使用帮助"
+
+#: templates/base.html:126
+msgid "Server Version: "
+msgstr "服务器版本："
+
+#: templates/base.html:127
+msgid "Seafile"
+msgstr "海文互知"
+
+#: templates/base.html:128
+msgid "Contact Us"
+msgstr "联系我们"
+
+#: templates/myhome.html:9
+msgid "My Basic Infos"
+msgstr "我的基本信息"
+
+#: templates/myhome.html:15
+msgid "Nickname is empty"
+msgstr "暂无昵称"
+
+#: templates/myhome.html:15
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/myhome.html:22
+msgid "Reminders..."
+msgstr "提醒..."
+
+#: templates/myhome.html:26
+msgid "Group"
+msgstr "群组"
+
+#: templates/myhome.html:30
+msgid "have new message"
+msgstr "有新留言"
+
+#: templates/myhome.html:34
+msgid "group message has new reply"
+msgstr "条群组留言有新回复"
+
+#: templates/myhome.html:37
+msgid "org messages"
+msgstr "团体消息"
+
+#: templates/myhome.html:44
+msgid "Storage Used"
+msgstr "已用空间"
+
 #: templates/myhome_base.html:8
 msgid "My Home"
 msgstr "我的页面"
+
+#: templates/myhome_base.html:12
+msgid "Public Repo"
+msgstr "公共资料"
+
+#: templates/myhome_base.html:16
+msgid "Groups"
+msgstr "群组"
+
+#: templates/myhome_base.html:19
+msgid "Share Admin"
+msgstr "共享管理"
+
+#: templates/myhome_base.html:22
+msgid "Contacts"
+msgstr "通讯录"
+
+#: templates/myhome_base.html:26
+msgid "Public Info"
+msgstr "公共信息"
+
+#: templates/registration/login.html:8
+#: templates/registration/registration_form.html:11
+msgid "Email"
+msgstr "邮箱"
+
+#: templates/registration/login.html:10
+#: templates/registration/registration_form.html:13
+msgid "Password"
+msgstr "密码"
+
+#: templates/registration/login.html:13
+#: templates/registration/registration_form.html:18
+msgid "Submit"
+msgstr "提交"
+
+#: templates/registration/login.html:14
+msgid "Forgot password?"
+msgstr "忘记密码"
+
+#: templates/registration/logout.html:8
+msgid "Thanks for your participation! "
+msgstr "感谢参与！"
+
+#: templates/registration/logout.html:8
+msgid "Log in again"
+msgstr "重新登录"
 
 #: templates/registration/password_reset_email.html:2
 msgid "You're receiving this e-mail because you requested a password reset"
@@ -55,3 +200,91 @@ msgstr ""
 #, python-format
 msgid "The %(site_name)s team"
 msgstr ""
+
+#: templates/registration/registration_form.html:7
+msgid "Welcome back, you are already signed in."
+msgstr "欢迎回来，您已登录。"
+
+#: templates/registration/registration_form.html:15
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: templates/snippets/my_groups.html:3
+msgid "My Groups"
+msgstr "我的群组"
+
+#: templates/snippets/my_groups.html:16
+msgid "Empty"
+msgstr "暂无"
+
+#: templates/snippets/my_owned_repos.html:2
+msgid "Repos"
+msgstr "资料库"
+
+#: templates/snippets/my_owned_repos.html:6
+msgid "I owned"
+msgstr "我拥有的"
+
+#: templates/snippets/my_owned_repos.html:7
+msgid "Share to me"
+msgstr "共享给我的"
+
+#: templates/snippets/my_owned_repos.html:9
+msgid "New Repo"
+msgstr "新建资料库"
+
+#: templates/snippets/my_owned_repos.html:16
+#: templates/snippets/my_owned_repos.html:48
+msgid "Name"
+msgstr "名字"
+
+#: templates/snippets/my_owned_repos.html:17
+#: templates/snippets/my_owned_repos.html:49
+msgid "Description"
+msgstr "描述"
+
+#: templates/snippets/my_owned_repos.html:18
+#: templates/snippets/my_owned_repos.html:50
+msgid "Update Time"
+msgstr "更新时间"
+
+#: templates/snippets/my_owned_repos.html:19
+#: templates/snippets/my_owned_repos.html:52
+msgid "Operations"
+msgstr "操作"
+
+#: templates/snippets/my_owned_repos.html:23
+#: templates/snippets/my_owned_repos.html:59
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templates/snippets/my_owned_repos.html:32
+#: templates/snippets/my_owned_repos.html:74
+msgid "Download"
+msgstr "下载"
+
+#: templates/snippets/my_owned_repos.html:33
+msgid "Share"
+msgstr "共享"
+
+#: templates/snippets/my_owned_repos.html:34
+msgid "Delete"
+msgstr "删除"
+
+#: templates/snippets/my_owned_repos.html:51
+msgid "Share From"
+msgstr "共享来源"
+
+#: templates/snippets/my_owned_repos.html:61
+msgid "Read-Only"
+msgstr "只读"
+
+#: templates/snippets/my_owned_repos.html:76
+msgid "Remove Share"
+msgstr "取消共享"
+
+#~ msgid "Sign out"
+#~ msgstr "退出"
+
+#~ msgid "Sign in"
+#~ msgstr "登录"

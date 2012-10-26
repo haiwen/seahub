@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 <!DOCTYPE html>
@@ -56,16 +56,12 @@
 
                 <div class="account fright">
                 {% if request.user.is_authenticated %}
-                <span>欢迎,</span> <a href="{% url 'avatar_add' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
-                <a href="{{ SITE_ROOT }}profile/">设置</a>
-                <a href="{{ SITE_ROOT }}accounts/logout/">退出</a>
+                <span>{% trans "Welcome," %}</span> <a href="{% url 'avatar_add' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
+                <a href="{{ SITE_ROOT }}profile/">{% trans "Profile" %}</a>
+                <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log Out" %}</a>
                 {% else %}
-                <a href="{{ SITE_ROOT }}accounts/login/">登录</a>
-                {% if account_type == 'business' %}
-                <a href="{{ SITE_ROOT }}accounts/business/register/">注册</a>
-                {% else %}
-                <a href="{{ SITE_ROOT }}accounts/register/">注册</a>
-                {% endif %}
+                <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
+                <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Register" %}</a>
                 {% endif %}
                 </div>
             </div>
@@ -107,28 +103,39 @@
             <div class="item">
                 <h4>SeaCloud</h4>
                 <ul>
-                    <li><a href="http://seafile.com/" target="_blank">介绍</a></li>
+                    <li><a href="http://seafile.com/" target="_blank">{% trans "Introduction" %}</a></li>
                     <li><a href="http://wiki.seafile.com.cn/" target="_blank">Wiki</a></li>
-                    <li><a href="http://gonggeng.org/vanilla/" target="_blank">论坛</a></li>
+                    <li><a href="http://gonggeng.org/vanilla/" target="_blank">{% trans "Forum" %}</a></li>
                 </ul>
             </div>
             <div class="item">
-                <h4>客户端</h4>
+                <h4>{% trans "Client" %}</h4>
                 <ul>
                     <li><a href="http://www.seafile.com/download/">Seafile for Windows</a></li>
                 </ul>
             </div>
             <div class="item">
-                <h4>文档</h4>
+                <h4>{% trans "Documents" %}</h4>
                 <ul>
-                    <li><a href="http://www.seafile.com/help/" target="_blank">使用帮助</a></li>
+                    <li><a href="http://www.seafile.com/help/" target="_blank">{% trans "Help" %}</a></li>
                 </ul>
             </div>
         </div>
         <div class="other-info fright">
-            <p>服务器版本：{{ seafile_version }}</p>
-            <p>© 2012 海文互知</p>
-            <p><a href="http://seafile.com/contact/" target="_blank">联系我们</a>
+          <div class="fleft">
+            <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
+            <p>© 2012 {% trans "Seafile" %}</p>
+            <p><a href="http://seafile.com/contact/" target="_blank">{% trans "Contact Us" %}</a></p>
+          </div>
+        <div class="fright">
+          <a href="#" id="lang-context" data="no-popup">{{ LANGUAGE_CODE|language_name_local }}<span class="tri-bg tri-down-bg"></span></a>
+          <ul class="hide" id="lang-context-selector">
+            {% for LANG in LANGUAGES %}
+            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{% trans LANG.1 %}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+            
         </div>
     </div>
 
@@ -145,12 +152,34 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js?t=4884491531236"></script>
+<script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 <script type="text/javascript">
 $(function() {
  $('input, textarea').placeholder();
 });
 
     $('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
+
+$('#lang-context').click(function() {
+        if ($(this).attr('data') == 'no-popup') {
+            $(this).parent().css('position', 'relative');
+            $('#lang-context-selector').removeClass('hide');
+            $(this).attr('data', 'has-popup');
+        } else {
+            $('#lang-context-selector').addClass('hide');
+            $(this).attr('data', 'no-popup');
+        }
+        return false;
+    }).focus(function() { $(this).blur(); });
+
+$(document).click(function(e) {
+    var element = e.target || e.srcElement;
+    if (element.id != 'lang-context-selector' && element.attrid != 'lang-context') {
+        $('#lang-context-selector').addClass('hide');
+        $('#lang-context').attr('data', 'no-popup');
+    }
+});
+
 {% if request.user.is_authenticated %}
 
 {% if request.cur_note %}
@@ -198,6 +227,7 @@ $(document).click(function(e) {
     }
 });
 {% endif %}
+
 
 {% endif %}
 </script>

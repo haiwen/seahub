@@ -1,6 +1,6 @@
-{% load group_avatar_tags %}
+{% load group_avatar_tags i18n %}
 <div class="info-item">
-<h3 class="info-item-top">我的群组</h3>
+<h3 class="info-item-top">{% trans "My Groups" %}</h3>
 {% if groups %}
 <ul class="info-item-bottom ovhd">
     {% for group in groups %}
@@ -13,6 +13,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p class="info-item-bottom">暂无</p>
+<p class="info-item-bottom">{% trans "Empty" %}</p>
 {% endif %}
 </div>

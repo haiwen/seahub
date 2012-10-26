@@ -1,9 +1,10 @@
 {% extends "myhome_base.html" %}
+{% load i18n %}
 
-{% block title %}退出{% endblock %}
+{% block title %}{% trans "Log Out" %}{% endblock %}
 
 {% block main_panel %}
 <div class="text-panel">
-	<p>感谢参与。<a href="{{ SITE_ROOT }}accounts/login/">重新登录</a></p>
+	<p>{% trans "Thanks for your participation! " %}<a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log in again" %}</a></p>
 </div>
 {% endblock %}

@@ -329,7 +329,7 @@ class RegistrationForm(forms.Form):
         if not emailuser:
             return self.cleaned_data['email']
         else:
-            raise forms.ValidationError("该邮箱已被注册")
+            raise forms.ValidationError(_("A user with this email already"))
 
     def clean_userid(self):
         if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:
@@ -346,6 +346,6 @@ class RegistrationForm(forms.Form):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError("两次输入的密码不一致")
+                raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 

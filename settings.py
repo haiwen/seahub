@@ -26,7 +26,7 @@ TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'zh_CN'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -65,6 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',    
     'auth.middleware.AuthenticationMiddleware',
     'base.middleware.BaseMiddleware',    
@@ -83,6 +84,17 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(os.path.dirname(__file__), "templates"),
     os.path.join(os.path.dirname(__file__),'thirdpart/djangorestframework/templates'),
+)
+
+# This is defined here as a do-nothing function because we can't import
+# django.utils.translation -- that module depends on the settings.
+gettext_noop = lambda s: s
+LANGUAGES = (
+    ('en', gettext_noop('English')),
+    ('zh-cn', gettext_noop('Simplified Chinese')),
+)
+LOCALE_PATHS = (
+    os.path.join(os.path.dirname(__file__), 'locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

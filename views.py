@@ -2710,3 +2710,20 @@ def text_diff(request, repo_id):
         'is_new_file': is_new_file,
     }, context_instance=RequestContext(request))
 
+def i18n(request):
+    """
+    Set client language preference, lasts for one month
+
+    """
+    from django.conf import settings
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    
+    lang = request.GET.get('lang', 'en')
+
+    res = HttpResponseRedirect(next)
+    res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
+
+    return res
+

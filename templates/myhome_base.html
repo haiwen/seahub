@@ -9,21 +9,21 @@
     </li>
     {% if not cloud_mode %}
     <li>
-        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>公共资料</a>
+        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>{% trans "Public Repo" %}</a>
     </li>
     {% endif %}
     <li>
-        <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>群组</a>
+        <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>{% trans "Groups" %}</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}shareadmin/" {% block nav_shareadmin_class %}{% endblock %}>共享管理</a>
+        <a href="{{ SITE_ROOT }}shareadmin/" {% block nav_shareadmin_class %}{% endblock %}>{% trans "Share Admin" %}</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>通讯录</a>
+        <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>{% trans "Contacts" %}</a>
     </li>
     {% if not cloud_mode %}
     <li>
-        <a href="{% url 'seahub.views.pubinfo' %}" {% block nav_pubinfo_class %}{% endblock %}>公共信息</a>
+        <a href="{% url 'seahub.views.pubinfo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Public Info" %}</a>
     </li>
     {% endif %}
 </ul>

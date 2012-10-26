@@ -74,7 +74,8 @@ urlpatterns = patterns('',
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
-    (r'^pubinfo/$', pubinfo),                       
+    (r'^pubinfo/$', pubinfo),
+    url(r'^i18n/$', i18n, name='i18n'),
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
     (r'^file/move/$', file_move),
@@ -125,3 +126,13 @@ else:
         url(r'^home/public/$', public_home, name='public_home'),
     )
 
+# i18n in javascript
+js_info_dict = {
+    'domain': 'djangojs',
+    'packages': (
+        'seahub.group',
+        ),
+}    
+urlpatterns += patterns('',
+    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+)

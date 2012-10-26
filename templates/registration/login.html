@@ -1,16 +1,17 @@
 {% extends "myhome_base.html" %}
-{% block title %}登录{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Log In" %}{% endblock %}
 {% block main_panel %}
 <div class="narrow-panel">
-<h2>登录</h2>
+<h2>{% trans "Log In" %}</h2>
 <form action="" method="post" class="login-form">
-    <label for="username">邮箱：</label>
+    <label for="username">{% trans "Email" %}</label>
 	<input type="text" id="id_email" name="username" value="" />
-	<label for="password">密码：</label>
+	<label for="password">{% trans "Password" %}</label>
 	<input type="password" id="id_password" name="password" value="" />
 	<p class="error hide"></p>
-	<input type="submit" value="提交" class="submit" />
-	<a href="{{ SITE_ROOT }}accounts/password/reset/">忘记密码？</a>
+	<input type="submit" value="{% trans "Submit" %}" class="submit" />
+	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "Forgot password?" %}</a>
 {% if next %}
     <input type="hidden" name="next" value="{{ next|escape }}" />
 {% else %}
