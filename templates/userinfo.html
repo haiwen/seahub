@@ -1,5 +1,7 @@
 {% extends "admin_base.html" %}
 
+{% load url from future %}
+
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <!--
@@ -7,8 +9,13 @@
     <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
 </ul>
 -->
-<h3>已用空间</h3>
-<p>{{ quota_usage|filesizeformat }} / 2 GB</p>
+<div class="info-item">
+<div class="info-item-top">
+    <h3 class="inbl">已用空间</h3>
+    <a href="#" class="set-quota op">设置容量</a>
+</div>
+<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %} / {{ quota|filesizeformat }} {% endif %}</p>
+</div>
 
 {% endblock %}
 
@@ -29,7 +36,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <button data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn">删除</button>
+        <a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="remove-user-repo op">删除</a>
         </td>
     </tr>
     {% endfor %}
@@ -61,33 +68,59 @@
 <p>暂无</p>
 {% endif %}
 
-<!--
-<h3>{{ email }} 的计算机</h3>
-<table class="user-list">
-    <tr>
-        <th width="60%">计算机名</th>
-        <th width="20%">角色</th>
-        <th width="20%">状态</th>
-    </tr>
+<form id="set-quota-form" method="post" class="hide">{% csrf_token %}
+    <label>设置该用户的存储容量上限</label><br />
+    <input type="hidden" name="email" value="{{ email }}" />
+    <input type="text" name="quota" /> MB <br />
+    <p class="tip">Tip: 设置为0表示重置为默认上限</p>
+    <p class="error hide"></p>
+    <input type="submit" value="提交" class="submit" />
+</form>
 
-    {% for username, roles in user_dict.items %}
-    <tr>
-      {% if username %}
-      <td>{{ username }}</td>
-      {% else %}
-      <td>未知</td>
-      {% endif %}
-      
-      {% if roles %}
-      <td>{{ roles }}</td>
-      <td>已验证</td>
-      {% else %}
-      <td>无</td>
-      <td>未验证</td>
-      {% endif %}
-      
-    </tr>
-    {% endfor %}
-</table>
--->
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+
+$('.set-quota').click(function() {
+    $("#set-quota-form").modal({appendTo: "#main"});
+    return false;
+});
+
+$('#set-quota-form .submit').click(function() {
+    var self = $(this);
+    self.attr('disabled', 'disabled');
+    $.ajax({
+        url: '{% url 'views.user_info' email %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'email': $('#set-quota-form input[name="email"]').val(),
+            'quota': $('#set-quota-form input[name="quota"]').val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('set-quota-form', data['error']);
+                self.removeAttr('disabled');
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('set-quota-form', value[0]);
+            });
+            self.removeAttr('disabled');
+        }
+    });
+    return false;
+});
+
+addConfirmTo($('.remove-user-repo'), '确定要删除该资料库？');
+
+</script>
 {% endblock %}

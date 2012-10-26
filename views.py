@@ -60,7 +60,7 @@ from notifications.models import UserNotification
 from profile.models import Profile
 from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
     RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm, \
-    RepoPassowrdForm, SharedRepoCreateForm
+    RepoPassowrdForm, SharedRepoCreateForm, SetUserQuotaForm
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_token, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -858,6 +858,7 @@ def myhome(request):
     quota_usage = 0
 
     email = request.user.username
+    quota = seafserv_threaded_rpc.get_user_quota(email)
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
     # Personal repos that I own
@@ -921,6 +922,7 @@ def myhome(request):
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
+            "quota": quota,
             "quota_usage": quota_usage,
             "in_repos": in_repos,
             "contacts": contacts,
@@ -1825,10 +1827,32 @@ def sys_useradmin(request):
 @login_required
 @sys_staff_required
 def user_info(request, email):
+    if request.method == 'POST':
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        f = SetUserQuotaForm(request.POST)
+        if f.is_valid():
+            email = f.cleaned_data['email']
+            quota_mb = f.cleaned_data['quota']
+            quota = quota_mb * (1 << 20)
+
+            try:
+                seafserv_threaded_rpc.set_user_quota(email, quota)
+            except:
+                result['error'] = u'内部错误，设置失败'
+                return HttpResponse(json.dumps(result), content_type=content_type)
+
+            result['success'] = True
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
+            result['error'] = str(f.errors.values()[0])
+            return HttpResponse(json.dumps(result), content_type=content_type)
+
     owned_repos = []
-    quota_usage = 0
 
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+    quota = seafserv_threaded_rpc.get_user_quota(email)
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
     # Repos that are share to user
@@ -1838,6 +1862,7 @@ def user_info(request, email):
     return render_to_response(
         'userinfo.html', {
             'owned_repos': owned_repos,
+            'quota': quota,
             'quota_usage': quota_usage,
             "in_repos": in_repos,
             'email': email
