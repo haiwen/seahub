@@ -666,7 +666,8 @@ textarea:-moz-placeholder {
 #repo-create-form {
     padding:0 20px;
 }
-.empty-repo-tips {
+.empty-repo-tips,
+.no-starred-file-tips {
     width: 60%;
     margin: 25px auto;
 }
@@ -1348,6 +1349,10 @@ textarea:-moz-placeholder {
 }
 #file-edit-cancel {
     color:#900;
+}
+#star {
+    padding-left:18px;
+    background:#efefef url('../img/star.png') no-repeat scroll 3px 48%;
 }
 /* shareadmin */
 .view-link-alert p {

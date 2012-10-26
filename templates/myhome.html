@@ -19,30 +19,30 @@
 
 {% if grpmsg_list or grpmsg_reply_list or orgmsg_list %}
 <div class="info-item">
-<h3 class="info-item-top">提醒...</h3>
-<ul class="info-item-bottom">
-{% if grpmsg_list %}
-<li>
-    群组
-    {% for grp in grpmsg_list %}
-    <a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }}</a>
-    {% endfor %}
-    有新留言
-</li>
-{% endif %}
-{% if grpmsg_reply_list %}
-<li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条群组留言有新回复</a></li>
-{% endif %}
-{% if orgmsg_list %}
-<li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
-{% endif %}
-</ul>
+    <h3 class="info-item-top">提醒...</h3>
+    <ul class="info-item-bottom">
+        {% if grpmsg_list %}
+        <li>
+        群组
+        {% for grp in grpmsg_list %}
+        <a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }}</a>
+        {% endfor %}
+        有新留言
+        </li>
+        {% endif %}
+        {% if grpmsg_reply_list %}
+        <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}条群组留言有新回复</a></li>
+        {% endif %}
+        {% if orgmsg_list %}
+        <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}条团体消息</a></li>
+        {% endif %}
+    </ul>
 </div>
 {% endif %}
 
 <div class="info-item">
-<h3 class="info-item-top">已用空间</h3>
-<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
+    <h3 class="info-item-top">已用空间</h3>
+    <p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
 </div>
 
 <!-- 我的群组 -->
@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block right_panel %}
-<!-- 我拥有的资料库 --><!-- 共享给我的资料库 -->
+<!-- 我拥有的资料库 共享给我的资料库 星标文件 -->
 {% include "snippets/my_owned_repos.html" %}
 
 {% if events %}
@@ -81,6 +81,5 @@
 {% if events %}
 {% include "snippets/events_js.html" %}
 {% endif %}
-
 </script>
 {% endblock %}

@@ -37,7 +37,7 @@ from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
     validate_group_name, string2list, calculate_repo_last_modify, MAX_INT, \
-    EVENTS_ENABLED, get_org_user_events
+    EVENTS_ENABLED, get_org_user_events, get_starred_files
 from seahub.views import myhome
 from seahub.signals import repo_created
 
@@ -139,6 +139,8 @@ def org_personal(request, url_prefix):
         events = get_org_user_events(org.org_id, user)
     else:
         events = None
+
+    starred_files = get_starred_files(user, org_id=org.org_id)
     
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
@@ -151,6 +153,7 @@ def org_personal(request, url_prefix):
             'allow_public_share': True,
             'nickname': nickname,
             'events': events,
+            'starred_files': starred_files,
             }, context_instance=RequestContext(request))
 
 @login_required
