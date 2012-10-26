@@ -3,18 +3,33 @@
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 
+{% block left_panel %}
+
+<div class="info-item">
+    <h3 class="info-item-top">团体已用总空间</h3>
+    <p class="info-item-bottom">{{ org_quota_usage|filesizeformat }} {% if org_quota > 0 %} / {{ org_quota|filesizeformat }} {% endif %}</p>
+</div>
+
+{% endblock %}
+
 {% block right_panel %}
-<h3>所有用户</h3>
-<button id="org-user-add">添加用户</button>
+<h3>所有成员</h3>
+<button id="org-user-add">添加成员</button>
 <table>
     <tr>
-        <th width="80%">邮箱</th>
+        <th width="60%">邮箱</th>
+	<th width="20%">已用空间</th>
         <th width="20%">操作</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td><a href="{% url 'user_profile' user.email %}" target="_blank">{{ user.props.email }}</a></td>
+	<td>
+	    {% if user.quota_usage >= 0 %}
+	    {{ user.quota_usage|filesizeformat }}
+	    {% endif %}
+	</td>
         <td>
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">删除</a>

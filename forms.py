@@ -215,3 +215,11 @@ class RepoPassowrdForm(forms.Form):
                 else:
                     raise forms.ValidationError(u'未知错误')
         
+class SetUserQuotaForm(forms.Form):
+    """
+    Form for setting user quota.
+    """
+    email = forms.CharField(error_messages={'required': '参数错误'})
+    quota = forms.IntegerField(min_value=0,
+                               error_messages={'required': '容量不能为空',
+                                               'min_value': '容量不能小于0'})

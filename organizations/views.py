@@ -139,6 +139,8 @@ def org_personal(request, url_prefix):
         events = get_org_user_events(org.org_id, user)
     else:
         events = None
+
+    quota_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org.org_id, user)
     
     return render_to_response('organizations/personal.html', {
             'owned_repos': owned_repos,
@@ -151,6 +153,7 @@ def org_personal(request, url_prefix):
             'allow_public_share': True,
             'nickname': nickname,
             'events': events,
+            'quota_usage': quota_usage,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -281,7 +284,7 @@ def send_org_user_add_mail(request, email, password, org_name):
     
 @login_required
 @org_staff_required
-def org_useradmin(request, url_prefix):
+def org_admin(request, url_prefix):
     """
     List and add org users.
     """
@@ -333,17 +336,28 @@ def org_useradmin(request, url_prefix):
         page_next = True
     else:
         page_next = False
+
+    org = get_user_current_org(request.user.username, url_prefix)
+    if not org:
+        return HttpResponseRedirect(reverse(myhome))
         
     users = users_plus_one[:per_page]
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
+        try:
+            user.quota_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org.org_id, user.email)
+        except:
+            user.quota_usage = -1
 
     # My contacts
     contacts = Contact.objects.filter(user_email=request.user.username)
+
+    org_quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
+    org_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
             
     return render_to_response(
-        'organizations/org_useradmin.html', {
+        'organizations/org_admin.html', {
             'users': users,
             'contacts': contacts,
             'current_page': current_page,
@@ -351,6 +365,8 @@ def org_useradmin(request, url_prefix):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'org_quota_usage': org_quota_usage,
+            'org_quota': org_quota,
         },
         context_instance=RequestContext(request))
 

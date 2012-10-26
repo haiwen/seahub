@@ -42,7 +42,7 @@
 
 <div class="info-item">
 <h3 class="info-item-top">{% trans "Storage Used" %}</h3>
-<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if cloud_mode %}/ 2 GB {% endif %}</p>
+<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
 </div>
 
 <!-- 我的群组 -->

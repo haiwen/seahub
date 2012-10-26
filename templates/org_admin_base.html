@@ -4,7 +4,7 @@
 <ul class="nav">
     {% if request.user.org.is_staff %}
     <li>
-        <a href="{% url org_useradmin request.user.org.url_prefix %}" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+        <a href="{% url org_admin request.user.org.url_prefix %}" {% block nav_useradmin_class %}{% endblock %}>团体概况</a>
     </li>
     <li>
         <a href="{% url org_seafadmin request.user.org.url_prefix %}" {% block nav_seafadmin_class %}{% endblock %}>资料库管理</a>
