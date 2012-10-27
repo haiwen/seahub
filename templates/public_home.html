@@ -1,36 +1,36 @@
 {% extends "myhome_base.html" %}
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_publichome_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
 <div class="info-item">
-<h3 class="info-item-top">小提示</h3>
-<p class="info-item-bottom">标记为只读的资料库只能查看，无法整个下载。</p>
+<h3 class="info-item-top">{% trans "Tips"%}</h3>
+<p class="info-item-bottom">{% trans "Libraries mark as read-only can only be viewing, can not be downloaded."%}</p>
 </div>
 {% endblock %}
 
 {% block right_panel %}
-<h3>公开的资料库</h3>
-<button id="repo-create">新建资料库</button>
+<h3>{% trans "Public Libraries"%}</h3>
+<button id="repo-create">{% trans "New Library"%}</button>
 {% if public_repos %}
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">名字</th>
-        <th width="36%">描述</th>
-        <th width="15%">更新时间</th>
-        <th width="15%">共享来源</th>
-        <th width="10%">操作</th>
+        <th width="20%">{% trans "Name"%}</th>
+        <th width="36%">{% trans "Description"%}</th>
+        <th width="15%">{% trans "Last Update"%}</th>
+        <th width="15%">{% trans "Share From"%}</th>
+        <th width="10%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in public_repos %}
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="目录icon" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="只读" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="目录icon" />
             {% endif %}
         </td>
         <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
@@ -43,14 +43,14 @@
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
 	    {% if repo.user_perm == 'rw' %}
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="下载到本地" alt="下载" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
 	    {% endif %}
         </td>
     </tr>
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">您可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。</p>
+<p class="empty-repo-tips">{% trans "You can create a public library, others can view and download this library."%}</p>
 {% endif %}
 <!-- /.main -->
 {% include "snippets/repo_create_form.html" %}

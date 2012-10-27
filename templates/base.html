@@ -131,7 +131,7 @@
           <a href="#" id="lang-context" data="no-popup">{{ LANGUAGE_CODE|language_name_local }}<span class="tri-bg tri-down-bg"></span></a>
           <ul class="hide" id="lang-context-selector">
             {% for LANG in LANGUAGES %}
-            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{% trans LANG.1 %}</a></li>
+            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
             {% endfor %}
           </ul>
         </div>

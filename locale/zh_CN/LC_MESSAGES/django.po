@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 20:22+0800\n"
+"POT-Creation-Date: 2012-10-27 21:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,12 +55,12 @@ msgstr "密码太长"
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
-#: settings.py:93
+#: settings.py:94
 msgid "English"
 msgstr ""
 
-#: settings.py:94
-msgid "Simplified Chinese"
+#: settings.py:95
+msgid "简体中文"
 msgstr ""
 
 #: templates/base.html:59
@@ -173,7 +173,7 @@ msgstr "我的页面"
 msgid "Public Library"
 msgstr "公共资料"
 
-#: templates/myhome_base.html:16
+#: templates/myhome_base.html:16 templates/pubinfo.html:22
 msgid "Groups"
 msgstr "群组"
 
@@ -189,6 +189,102 @@ msgstr "通讯录"
 msgid "Public Info"
 msgstr "公共信息"
 
+#: templates/pubinfo.html:8
+msgid "Users"
+msgstr "成员列表"
+
+#: templates/pubinfo.html:16 templates/snippets/my_groups.html:16
+msgid "Empty"
+msgstr "暂无"
+
+#: templates/pubinfo.html:33
+msgid "Creator: "
+msgstr "创建者："
+
+#: templates/pubinfo.html:34
+msgid "Create Time: "
+msgstr "创建时间："
+
+#: templates/pubinfo.html:40
+msgid ""
+"No one has created any groups, you can click \"Add Group\" button under "
+"\"Group\" label to create a group. "
+msgstr "现在还没有人创建群组，您可以通过“群组”标签下的“添加群组”按钮创建。"
+
+#: templates/public_home.html:9
+msgid "Tips"
+msgstr "小提示"
+
+#: templates/public_home.html:10
+msgid "Libraries mark as read-only can only be viewing, can not be downloaded."
+msgstr "标记为只读的资料库只能查看，无法整个下载。"
+
+#: templates/public_home.html:15
+msgid "Public Libraries"
+msgstr "公开的资料库"
+
+#: templates/public_home.html:16 templates/snippets/my_owned_repos.html:11
+#: templates/snippets/repo_create_form.html:3
+msgid "New Library"
+msgstr "新建资料库"
+
+#: templates/public_home.html:21 templates/repo.html:97
+#: templates/repo_history_view.html:50
+#: templates/snippets/my_owned_repos.html:18
+#: templates/snippets/my_owned_repos.html:50
+#: templates/snippets/repo_create_form.html:4
+msgid "Name"
+msgstr "名称"
+
+#: templates/public_home.html:22 templates/repo_history.html:18
+#: templates/snippets/my_owned_repos.html:19
+#: templates/snippets/my_owned_repos.html:51
+#: templates/snippets/repo_create_form.html:6
+msgid "Description"
+msgstr "描述"
+
+#: templates/public_home.html:23 templates/repo_history.html:16
+#: templates/snippets/my_owned_repos.html:20
+#: templates/snippets/my_owned_repos.html:52
+msgid "Last Update"
+msgstr "更新时间"
+
+#: templates/public_home.html:24 templates/snippets/my_owned_repos.html:53
+msgid "Share From"
+msgstr "共享来源"
+
+#: templates/public_home.html:25 templates/repo.html:99
+#: templates/repo_view_snapshot.html:18
+#: templates/snippets/my_owned_repos.html:21
+#: templates/snippets/my_owned_repos.html:54
+msgid "Operations"
+msgstr "操作"
+
+#: templates/public_home.html:31 templates/snippets/my_owned_repos.html:25
+#: templates/snippets/my_owned_repos.html:61
+#: templates/snippets/repo_create_form.html:11
+#: templates/snippets/repo_share_form.html:13
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templates/public_home.html:33 templates/snippets/my_owned_repos.html:63
+#: templates/snippets/repo_create_form.html:12
+#: templates/snippets/repo_share_form.html:14
+msgid "Read-Only"
+msgstr "只读"
+
+#: templates/public_home.html:46 templates/repo.html:21
+#: templates/repo.html.py:137 templates/repo_view_file.html:123
+#: templates/snippets/my_owned_repos.html:34
+#: templates/snippets/my_owned_repos.html:76
+msgid "Download"
+msgstr "下载"
+
+#: templates/public_home.html:53
+msgid ""
+"You can create a public library, others can view and download this library."
+msgstr "您可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。"
+
 #: templates/repo.html:11
 msgid ""
 "Current page will be gone shortly, welcome joining <a href=\"http://seafile."
@@ -197,12 +293,6 @@ msgstr ""
 "当前链接会在短期内失效，欢迎您 <a href=\"http://seafile.com/\" target="
 "\"_blank\">加入Seafile </a>体验更多功能。"
 
-#: templates/repo.html:21 templates/repo.html.py:137
-#: templates/repo_view_file.html:123 templates/snippets/my_owned_repos.html:34
-#: templates/snippets/my_owned_repos.html:76
-msgid "Download"
-msgstr "下载"
-
 #: templates/repo.html:22
 msgid "Trash"
 msgstr "文件回收站"
@@ -210,6 +300,11 @@ msgstr "文件回收站"
 #: templates/repo.html:27
 msgid "This library is read only, you can only view files."
 msgstr "这个资料库设置了只读共享，您只能在线浏览文件。"
+
+#: templates/repo.html:42 templates/repo_history.html:39
+#: templates/repo_view_file.html:91 templates/repo_view_snapshot.html:39
+msgid "More"
+msgstr "详情"
 
 #: templates/repo.html:45
 msgid "Histories"
@@ -244,22 +339,9 @@ msgstr "新建目录"
 msgid "New File"
 msgstr "新建文件"
 
-#: templates/repo.html:97 templates/repo_history_view.html:50
-#: templates/snippets/my_owned_repos.html:18
-#: templates/snippets/my_owned_repos.html:50
-#: templates/snippets/repo_create_form.html:4
-msgid "Name"
-msgstr "名称"
-
 #: templates/repo.html:98 templates/repo_history_view.html:51
 msgid "Size"
 msgstr "大小"
-
-#: templates/repo.html:99 templates/repo_view_snapshot.html:18
-#: templates/snippets/my_owned_repos.html:21
-#: templates/snippets/my_owned_repos.html:54
-msgid "Operations"
-msgstr "操作"
 
 #: templates/repo.html:104
 msgid "Folder"
@@ -350,20 +432,9 @@ msgstr "Tip：在每次修改后会生成一个镜像，记录修改之前的目
 msgid "View Snapshot"
 msgstr "查看镜像"
 
-#: templates/repo_history.html:16 templates/snippets/my_owned_repos.html:20
-#: templates/snippets/my_owned_repos.html:52
-msgid "Last Update"
-msgstr "更新时间"
-
 #: templates/repo_history.html:17
 msgid "Modifier"
 msgstr "修改者"
-
-#: templates/repo_history.html:18 templates/snippets/my_owned_repos.html:19
-#: templates/snippets/my_owned_repos.html:51
-#: templates/snippets/repo_create_form.html:6
-msgid "Description"
-msgstr "描述"
 
 #: templates/repo_history.html:30 templates/repo_view_snapshot.html:30
 msgid "None"
@@ -428,10 +499,6 @@ msgstr "添加星标"
 #: templates/repo_view_file.html:88
 msgid "update this library"
 msgstr "做了最新修改"
-
-#: templates/repo_view_file.html:91 templates/repo_view_snapshot.html:39
-msgid "More"
-msgstr "详情"
 
 #: templates/repo_view_file.html:95
 msgid "More Histories"
@@ -580,10 +647,6 @@ msgstr "推荐语"
 msgid "My Groups"
 msgstr "我的群组"
 
-#: templates/snippets/my_groups.html:16
-msgid "Empty"
-msgstr "暂无"
-
 #: templates/snippets/my_owned_repos.html:3
 msgid "Libraries"
 msgstr "资料库"
@@ -600,18 +663,6 @@ msgstr "共享给我的"
 msgid "Starred"
 msgstr "星标文件"
 
-#: templates/snippets/my_owned_repos.html:11
-#: templates/snippets/repo_create_form.html:3
-msgid "New Library"
-msgstr "新建资料库"
-
-#: templates/snippets/my_owned_repos.html:25
-#: templates/snippets/my_owned_repos.html:61
-#: templates/snippets/repo_create_form.html:11
-#: templates/snippets/repo_share_form.html:13
-msgid "Read-Write"
-msgstr "可读写"
-
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:61
 #: templates/snippets/my_owned_repos.html:63
@@ -626,16 +677,6 @@ msgid ""
 msgstr ""
 "您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资"
 "料库可以单独地同步和共享。"
-
-#: templates/snippets/my_owned_repos.html:53
-msgid "Share From"
-msgstr "共享来源"
-
-#: templates/snippets/my_owned_repos.html:63
-#: templates/snippets/repo_create_form.html:12
-#: templates/snippets/repo_share_form.html:14
-msgid "Read-Only"
-msgstr "只读"
 
 #: templates/snippets/my_owned_repos.html:78
 msgid "Remove Share"

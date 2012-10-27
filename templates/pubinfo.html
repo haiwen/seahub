@@ -1,11 +1,11 @@
 {% extends "myhome_base.html" %}
-{% load seahub_tags avatar_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_pubinfo_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-<h3>成员列表</h3>
+<h3>{% trans "Users" %}</h3>
 {% if users %}
 <ul class="pubinfo-members">
     {% for member in users %}
@@ -13,13 +13,13 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>暂无</p>
+<p>{% trans "Empty"%}</p>
 {% endif %}
 {% endblock %}
 
 {% block right_panel %}
 {% if groups %}
-<h3>所有群组</h3>
+<h3>{% trans "Groups"%}</h3>
 <ul class="group-list w100 ovhd">
     {% for group in groups %}
     <li class="group fleft">
@@ -30,14 +30,14 @@
     </div>
     <div class="txt fright">
         <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
-        <p><span class="item-name">创建者：</span>{{ group.props.creator_name }}</p>
-        <p><span class="item-name">创建时间：</span>{{ group.props.timestamp|tsstr_sec }}</p>
+        <p><span class="item-name">{% trans "Creator: "%}</span>{{ group.props.creator_name }}</p>
+        <p><span class="item-name">{% trans "Create Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
     </div>
     </li>
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty-repo-tips">现在还没有人创建群组，您可以通过“群组”标签下的“添加群组”按钮创建。</p>
+<p class="empty-repo-tips">{% blocktrans %}No one has created any groups, you can click "Add Group" button under "Group" label to create a group. {% endblocktrans %}</p>
 {% endif %}
 <!-- user profile -->
 {% include "snippets/user_profile_html.html" %}

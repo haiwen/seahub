@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Django settings for seahub project.
 import os
 
@@ -91,7 +92,7 @@ TEMPLATE_DIRS = (
 gettext_noop = lambda s: s
 LANGUAGES = (
     ('en', gettext_noop('English')),
-    ('zh-cn', gettext_noop('Simplified Chinese')),
+    ('zh-cn', gettext_noop(u'简体中文')),
 )
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
