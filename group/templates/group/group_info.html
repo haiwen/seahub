@@ -234,7 +234,7 @@ $('.msg-delete').hover(
 $('.msg-delete').click(function() {
     var url = $(this).attr('data');
     var msg = $(this).parents('.msg');
-    var del_confirm = gettext('<div class="msg-del-confirm hide"><p>Confirm to delete this message?</p><button class="msg-del-yes">Yes</button><button class="msg-del-no">No</button></div>');
+    var del_confirm = gettext('<div class="msg-del-confirm hide"><p>Really delete this message?</p><button class="msg-del-yes">Yes</button><button class="msg-del-no">No</button></div>');
     $(this).parent().append(del_confirm).css('position', 'relative');
     del_confirm = $(this).parent().find('.msg-del-confirm');
     del_confirm.css({'left':$(this).position().left - 15, 'top':$(this).position().top - del_confirm.outerHeight()}).removeClass('hide');

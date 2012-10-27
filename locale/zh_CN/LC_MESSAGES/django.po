@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 21:01+0800\n"
+"POT-Creation-Date: 2012-10-27 21:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,9 +80,8 @@ msgstr "退出"
 msgid "Log In"
 msgstr "登录"
 
-#: templates/base.html:64 templates/registration/registration_form.html:3
-#: templates/registration/registration_form.html:9
-msgid "Register"
+#: templates/base.html:64 templates/registration/registration_form.html:9
+msgid "Signup"
 msgstr "注册"
 
 #: templates/base.html:106
@@ -622,6 +621,10 @@ msgstr ""
 msgid "The %(site_name)s team"
 msgstr ""
 
+#: templates/registration/registration_form.html:3
+msgid "Register"
+msgstr "注册"
+
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
 msgstr "欢迎回来，您已登录。"
@@ -749,9 +752,6 @@ msgstr "Tip：输入 all 共享到公共资料"
 
 #~ msgid "New Repo"
 #~ msgstr "新建资料库"
-
-#~ msgid "Sign out"
-#~ msgstr "退出"
 
 #~ msgid "Sign in"
 #~ msgstr "登录"

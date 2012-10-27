@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 13:34+0800\n"
+"POT-Creation-Date: 2012-10-27 21:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,8 +268,8 @@ msgstr "小提示"
 
 #: templates/group/groups_left_panel.html:5
 msgid ""
-"After creating groups, you can share into your libraries, and inviting "
-"others to maintain these libraries."
+"After creating a group, you can add other members and share libraries into "
+"the group."
 msgstr "群组创建后，就可以往里面共享资料，邀请他人一起来协同维护这些资料。"
 
 #: templates/group/groups_left_panel.html:7
