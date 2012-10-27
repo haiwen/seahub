@@ -1,21 +1,21 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
 <div class="w100 ovhd">
-    <h2 class="fleft">{{repo.props.name}} 镜像查看</h2>
-    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="back">返回修改历史</button>
+    <h2 class="fleft">{{repo.props.name}} {% trans "snapshot viewing"%}</h2>
+    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="back">{% trans "Back to modification history"%}</button>
 </div>
 
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
         <table class="commit-list">
             <tr>
-                <th width="15%" class="time">生成时间</th>
-                <th width="15%">最后修改者</th>
-                <th width="55%">修改内容</th>
-                <th width="15%">操作</th>
+                <th width="15%" class="time">{% trans "Create Time"%}</th>
+                <th width="15%">{% trans "Last Modifier"%}</th>
+                <th width="55%">{% trans "Detail"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
             </tr>
 
             {% for commit in commits %}
@@ -27,33 +27,33 @@
                         <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{% avatar commit.creator_name 16 %}</a>
                         <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
 		    {% else %}
-			无
+			{% trans "None"%}
 		    {% endif %}
                 {% else %}
-                未知
+                {% trans "Unknown"%}
                 {% endif %}
                 </td>
                 <td>
                     {{ commit.props.desc|translate_commit_desc }}
                     {% if page_next or not forloop.last %}
-                    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans "More"%}</a>
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">查看</a>
-                    <a href="#" data="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">还原</a>
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">{% trans "View"%}</a>
+                    <a href="#" data="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">{% trans "Restore"%}</a>
                 </td>
             </tr>
             {% endfor %}
         </table>
         <div id="paginator">
             {% if current_page != 1 %}
-            <a href="?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+            <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a> |
             {% endif %}
             {% if page_next %}
-            <a href="?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+            <a href="?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a> |
             {% endif %}
-            <span>每页：</span>
+            <span>{% trans "Per page: "%}</span>
             {% if per_page == 25 %}
             <span> 25 </span>
             {% else %}
@@ -81,6 +81,6 @@
     $('#back').click(function() {
         location.href = $(this).attr('data');
     });
-    addConfirmTo($(".repo-revert"), '确定要还原该资料库？');
+    addConfirmTo($(".repo-revert"), gettext('Confirm to restore this library?'));
 </script>
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 18:02+0800\n"
+"POT-Creation-Date: 2012-10-27 20:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,15 +219,16 @@ msgstr "更多历史"
 msgid "System automatically generate"
 msgstr "系统自动生成"
 
-#: templates/repo.html:58
+#: templates/repo.html:58 templates/repo_history.html:33
+#: templates/repo_history_view.html:20 templates/repo_view_snapshot.html:33
 msgid "Unknown"
 msgstr "未知"
 
-#: templates/repo.html:71
+#: templates/repo.html:71 templates/repo_history_view.html:31
 msgid "Can't view this library"
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo.html:76
+#: templates/repo.html:76 templates/repo_history_view.html:36
 msgid "Current path: "
 msgstr "当前路径："
 
@@ -243,17 +244,19 @@ msgstr "新建目录"
 msgid "New File"
 msgstr "新建文件"
 
-#: templates/repo.html:97 templates/snippets/my_owned_repos.html:18
+#: templates/repo.html:97 templates/repo_history_view.html:50
+#: templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:50
 #: templates/snippets/repo_create_form.html:4
 msgid "Name"
 msgstr "名称"
 
-#: templates/repo.html:98
+#: templates/repo.html:98 templates/repo_history_view.html:51
 msgid "Size"
 msgstr "大小"
 
-#: templates/repo.html:99 templates/snippets/my_owned_repos.html:21
+#: templates/repo.html:99 templates/repo_view_snapshot.html:18
+#: templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:54
 msgid "Operations"
 msgstr "操作"
@@ -279,7 +282,7 @@ msgstr "移动"
 msgid "Copy"
 msgstr "复制"
 
-#: templates/repo.html:128
+#: templates/repo.html:128 templates/repo_history_view.html:64
 msgid "File"
 msgstr "文件"
 
@@ -329,7 +332,68 @@ msgstr "其他资料库"
 msgid "Please choose derection folder"
 msgstr "请点击选择目标目录。"
 
-#: templates/repo_view_file.html:15
+#: templates/repo_history.html:7
+msgid "modification history"
+msgstr "修改历史"
+
+#: templates/repo_history.html:8 templates/repo_view_file.html:31
+msgid "Back to Library"
+msgstr "返回资料库"
+
+#: templates/repo_history.html:11
+msgid ""
+"Tip: A snapshot will be generated after modification, which records the "
+"state of previous directory."
+msgstr "Tip：在每次修改后会生成一个镜像，记录修改之前的目录状态。"
+
+#: templates/repo_history.html:11
+msgid "View Snapshot"
+msgstr "查看镜像"
+
+#: templates/repo_history.html:16 templates/snippets/my_owned_repos.html:20
+#: templates/snippets/my_owned_repos.html:52
+msgid "Last Update"
+msgstr "更新时间"
+
+#: templates/repo_history.html:17
+msgid "Modifier"
+msgstr "修改者"
+
+#: templates/repo_history.html:18 templates/snippets/my_owned_repos.html:19
+#: templates/snippets/my_owned_repos.html:51
+#: templates/snippets/repo_create_form.html:6
+msgid "Description"
+msgstr "描述"
+
+#: templates/repo_history.html:30 templates/repo_view_snapshot.html:30
+msgid "None"
+msgstr "无"
+
+#: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
+msgid "Previous"
+msgstr "前一页"
+
+#: templates/repo_history.html:50 templates/repo_view_snapshot.html:54
+msgid "Next"
+msgstr "下一页"
+
+#: templates/repo_history.html:52 templates/repo_view_snapshot.html:56
+msgid "Per page: "
+msgstr "每页："
+
+#: templates/repo_history_view.html:8
+msgid "snapshot"
+msgstr "镜像"
+
+#: templates/repo_history_view.html:9
+msgid "Back to snapshots"
+msgstr "返回镜像列表"
+
+#: templates/repo_history_view.html:56
+msgid "Directory"
+msgstr "目录"
+
+#: templates/repo_view_file.html:15 templates/repo_view_snapshot.html:7
 msgid "snapshot viewing"
 msgstr "镜像浏览"
 
@@ -340,10 +404,6 @@ msgstr "历史浏览"
 #: templates/repo_view_file.html:25
 msgid "Back to file versions"
 msgstr "返回文件版本列表"
-
-#: templates/repo_view_file.html:31
-msgid "Back to Library"
-msgstr "返回资料库"
 
 #: templates/repo_view_file.html:37
 msgid "Current Path: "
@@ -369,7 +429,7 @@ msgstr "添加星标"
 msgid "update this library"
 msgstr "做了最新修改"
 
-#: templates/repo_view_file.html:91
+#: templates/repo_view_file.html:91 templates/repo_view_snapshot.html:39
 msgid "More"
 msgstr "详情"
 
@@ -398,9 +458,8 @@ msgid "Emails(seperated with ,)"
 msgstr "邮箱(多个邮箱以,分隔)"
 
 #: templates/repo_view_file.html:143
-#, fuzzy
 msgid "Sending..."
-msgstr "提醒..."
+msgstr "发送中..."
 
 #: templates/repo_view_file.html:147
 msgid "Under processing, please wait..."
@@ -418,6 +477,30 @@ msgstr "点此下载"
 #: templates/repo_view_file.html:165
 msgid "Leave a message~"
 msgstr "评论一下~"
+
+#: templates/repo_view_snapshot.html:8
+msgid "Back to modification history"
+msgstr "回到修改历史"
+
+#: templates/repo_view_snapshot.html:15
+msgid "Create Time"
+msgstr "生成时间"
+
+#: templates/repo_view_snapshot.html:16
+msgid "Last Modifier"
+msgstr "最后修改者"
+
+#: templates/repo_view_snapshot.html:17
+msgid "Detail"
+msgstr "修改内容"
+
+#: templates/repo_view_snapshot.html:43
+msgid "View"
+msgstr "查看"
+
+#: templates/repo_view_snapshot.html:44
+msgid "Restore"
+msgstr "还原"
 
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
@@ -522,17 +605,6 @@ msgstr "星标文件"
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/snippets/my_owned_repos.html:19
-#: templates/snippets/my_owned_repos.html:51
-#: templates/snippets/repo_create_form.html:6
-msgid "Description"
-msgstr "描述"
-
-#: templates/snippets/my_owned_repos.html:20
-#: templates/snippets/my_owned_repos.html:52
-msgid "Last Update"
-msgstr "更新时间"
-
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:61
 #: templates/snippets/repo_create_form.html:11
@@ -618,9 +690,6 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 #: templates/snippets/repo_share_form.html:10
 msgid "Tip: type all to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
-
-#~ msgid "Update Time"
-#~ msgstr "更新时间"
 
 #~ msgid "My Basic Infos"
 #~ msgstr "我的基本信息"

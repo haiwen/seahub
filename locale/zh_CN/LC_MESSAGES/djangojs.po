@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 18:02+0800\n"
+"POT-Creation-Date: 2012-10-27 20:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,64 +18,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: templates/po.js:3 templates/po.js.py:8
+#: templates/po.js:4 templates/po.js.c:10
 msgid "Email can't be blank"
 msgstr "邮箱不能为空"
 
-#: templates/po.js:4 templates/po.js.py:9
+#: templates/po.js:5 templates/po.js.c:11
 msgid "Password can't be blank"
 msgstr "密码不能为空"
 
-#: templates/po.js:5
+#: templates/po.js:6
 msgid "Confirm password can't be blank"
 msgstr "确认密码不能为空"
 
-#: templates/po.js:6
+#: templates/po.js:7
 msgid "The two password fields did't match"
 msgstr "两次密码不相同"
 
-#: templates/po.js:10
+#: templates/po.js:12
 msgid "Incorrect email or password"
 msgstr "您输入的邮箱或密码不正确"
 
-#: templates/po.js:12
+#: templates/po.js:15
 msgid "Input can't be empty"
 msgstr "输入不能为空"
 
-#: templates/po.js:13
+#: templates/po.js:16
 msgid "Confirm to remove shared library?"
 msgstr "确定要取消共享？"
 
-#: templates/po.js:15
+#: templates/po.js:19
 msgid " <button id=\"comment\">Comment</button>"
 msgstr " <button id=\"comment\">评论</button>"
 
-#: templates/po.js:16
+#: templates/po.js:20
 msgid "Please type a message"
 msgstr "请先输入您的评论"
 
-#: templates/po.js:17
+#: templates/po.js:21
 msgid "Can't find a application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/po.js:18
+#: templates/po.js:22
 msgid "File is not Synchronized with server, please synchronize manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/po.js:19
+#: templates/po.js:23
 msgid "File is not Synchronized with server, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/po.js:20
+#: templates/po.js:24
 msgid "An error occur during opening local file."
 msgstr "打开本地文件时出错"
 
-#: templates/po.js:21
+#: templates/po.js:25
 msgid "Seafile client is not start or out of date"
 msgstr "Seafile 客户端程序未启动或者版本过低"
 
-#: templates/po.js:22
+#: templates/po.js:26
 msgid ""
 "Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
 "download/\">upgrade</a> to latest."
-msgstr "您的 Seafile 客户端版本太低，请<a href=\"http://www.seafile.com/download/\">升级</a>到最新版本"
+msgstr ""
+"您的 Seafile 客户端版本太低，请<a href=\"http://www.seafile.com/download/\">"
+"升级</a>到最新版本"
+
+#: templates/po.js:29
+msgid "Confirm to restore this library?"
+msgstr "确定要还原该资料库？"

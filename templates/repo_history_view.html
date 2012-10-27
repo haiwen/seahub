@@ -1,12 +1,12 @@
 {% extends base_template %}
 
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
     <div class="w100 ovhd">
-        <h2 class="fleft">{{repo.props.name}} 历史镜像<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
-        <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">返回镜像列表</button>
+        <h2 class="fleft">{{repo.props.name}} {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
+        <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">{% trans "Back to snapshots"%}</button>
     </div>
 
     <div id="repo-latest-commit">
@@ -17,7 +17,7 @@
             {% avatar current_commit.props.creator_name 20 %}
             <a class="name" href="{% url 'profile.views.user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|short_email }}</a>
             {% else %}
-            未知
+            {% trans "Unknown"%}
             {% endif %}
         </span>
         <span class="time">{{ current_commit.props.ctime|translate_commit_time }}</span>
@@ -28,12 +28,12 @@
         <div class="repo-file-list-inner-container">
             {% if not user_perm %}
             <div class="repo-file-list-not-show">
-                <p class="access-notice">无法在线查看该资料库。</p>
+                <p class="access-notice">{% trans "Can't view this library"%}</p>
             </div>
             {% else %}
             <div class="repo-file-list-topbar">
                 <p class="path">
-                当前路径：
+                {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
                 <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
@@ -47,13 +47,13 @@
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
-                    <th width="65%">名字</th>
-                    <th width="30%">大小</th>
+                    <th width="65%">{% trans "Name"%}</th>
+                    <th width="30%">{% trans "Size"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory"%}" /></td>
                     <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
                     <td></td>
                 </tr>
@@ -61,7 +61,7 @@
 
                 {% for dirent in file_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td><a class="op" href="{% url 'repo_view_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=snapshot">{{ dirent.props.obj_name }}</a></td>              
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
