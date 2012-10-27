@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 14:01+0800\n"
+"POT-Creation-Date: 2012-10-27 17:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,7 @@ msgid "Password should be less than 15 characters"
 msgstr "密码太长"
 
 #: forms.py:89
+#, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
@@ -188,6 +189,145 @@ msgstr "通讯录"
 msgid "Public Info"
 msgstr "公共信息"
 
+#: templates/repo.html:11
+msgid ""
+"Current page will be gone shortly, welcome joining <a href=\"http://seafile."
+"com/\" target=\"_blank\">Seafile</a> to experience more features."
+msgstr ""
+"当前链接会在短期内失效，欢迎您 <a href=\"http://seafile.com/\" target="
+"\"_blank\">加入Seafile </a>体验更多功能。"
+
+#: templates/repo.html:21 templates/repo.html.py:137
+#: templates/snippets/my_owned_repos.html:34
+#: templates/snippets/my_owned_repos.html:76
+msgid "Download"
+msgstr "下载"
+
+#: templates/repo.html:22
+msgid "Trash"
+msgstr "文件回收站"
+
+#: templates/repo.html:27
+msgid "This library is read only, you can only view files."
+msgstr "这个资料库设置了只读共享，您只能在线浏览文件。"
+
+#: templates/repo.html:45
+msgid "Histories"
+msgstr "更多历史"
+
+#: templates/repo.html:55
+msgid "System automatically generate"
+msgstr "系统自动生成"
+
+#: templates/repo.html:58
+msgid "Unknown"
+msgstr "未知"
+
+#: templates/repo.html:71
+msgid "Can't view this library"
+msgstr "无法在线查看该资料库。"
+
+#: templates/repo.html:76
+msgid "Current path: "
+msgstr "当前路径："
+
+#: templates/repo.html:87
+msgid "Upload"
+msgstr "上传"
+
+#: templates/repo.html:88
+msgid "New Folder"
+msgstr "新建目录"
+
+#: templates/repo.html:89
+msgid "New File"
+msgstr "新建文件"
+
+#: templates/repo.html:97 templates/snippets/my_owned_repos.html:18
+#: templates/snippets/my_owned_repos.html:50
+#: templates/snippets/repo_create_form.html:4
+msgid "Name"
+msgstr "名称"
+
+#: templates/repo.html:98
+msgid "Size"
+msgstr "大小"
+
+#: templates/repo.html:99 templates/snippets/my_owned_repos.html:21
+#: templates/snippets/my_owned_repos.html:54
+msgid "Operations"
+msgstr "操作"
+
+#: templates/repo.html:104
+msgid "Folder"
+msgstr "目录"
+
+#: templates/repo.html:115 templates/repo.html.py:145
+#: templates/snippets/my_owned_repos.html:36
+msgid "Delete"
+msgstr "删除"
+
+#: templates/repo.html:116 templates/repo.html.py:146
+msgid "Rename"
+msgstr "重命名"
+
+#: templates/repo.html:117 templates/repo.html.py:147
+msgid "Move"
+msgstr "移动"
+
+#: templates/repo.html:118 templates/repo.html.py:148
+msgid "Copy"
+msgstr "复制"
+
+#: templates/repo.html:128
+msgid "File"
+msgstr "文件"
+
+#: templates/repo.html:139
+msgid "Update"
+msgstr "更新"
+
+#: templates/repo.html:143
+msgid "More Operations"
+msgstr "更多操作"
+
+#: templates/repo.html:149
+msgid "History"
+msgstr "历史"
+
+#: templates/repo.html:163
+msgid "Folder Name"
+msgstr "目录名称"
+
+#: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
+#: templates/repo.html.py:209 templates/registration/login.html:13
+#: templates/registration/registration_form.html:18
+#: templates/snippets/group_recommend_form.html:23
+#: templates/snippets/repo_share_form.html:18
+msgid "Submit"
+msgstr "提交"
+
+#: templates/repo.html:169 templates/repo.html.py:179 templates/repo.html:199
+#: templates/repo.html.py:210
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/repo.html:173 templates/snippets/my_owned_repos.html:92
+msgid "File Name"
+msgstr "文件名称"
+
+#: templates/repo.html:185
+msgid "Current Library"
+msgstr "当前资料库"
+
+#: templates/repo.html:187
+msgid "Other Libraries"
+msgstr "其他资料库"
+
+#: templates/repo.html:197
+msgid "Please choose derection folder"
+msgstr "请点击选择目标目录。"
+
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
 msgid "Email"
@@ -198,12 +338,6 @@ msgstr "邮箱"
 #: templates/snippets/repo_create_form.html:17
 msgid "Password"
 msgstr "密码"
-
-#: templates/registration/login.html:13
-#: templates/registration/registration_form.html:18
-#: templates/snippets/repo_share_form.html:18
-msgid "Submit"
-msgstr "提交"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
@@ -256,6 +390,18 @@ msgstr "欢迎回来，您已登录。"
 msgid "Confirm Password"
 msgstr "确认密码"
 
+#: templates/snippets/group_recommend_form.html:4
+msgid "Recommend"
+msgstr "推荐"
+
+#: templates/snippets/group_recommend_form.html:10
+msgid "to group:"
+msgstr "到群组："
+
+#: templates/snippets/group_recommend_form.html:17
+msgid "Recommend Message"
+msgstr "推荐语"
+
 #: templates/snippets/my_groups.html:3
 msgid "My Groups"
 msgstr "我的群组"
@@ -285,12 +431,6 @@ msgstr "星标文件"
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/snippets/my_owned_repos.html:18
-#: templates/snippets/my_owned_repos.html:50
-#: templates/snippets/repo_create_form.html:4
-msgid "Name"
-msgstr "名字"
-
 #: templates/snippets/my_owned_repos.html:19
 #: templates/snippets/my_owned_repos.html:51
 #: templates/snippets/repo_create_form.html:6
@@ -301,11 +441,6 @@ msgstr "描述"
 #: templates/snippets/my_owned_repos.html:52
 msgid "Last Update"
 msgstr "更新时间"
-
-#: templates/snippets/my_owned_repos.html:21
-#: templates/snippets/my_owned_repos.html:54
-msgid "Operations"
-msgstr "操作"
 
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:61
@@ -319,15 +454,6 @@ msgstr "可读写"
 #: templates/snippets/my_owned_repos.html:63
 msgid "directory icon"
 msgstr "目录图标"
-
-#: templates/snippets/my_owned_repos.html:34
-#: templates/snippets/my_owned_repos.html:76
-msgid "Download"
-msgstr "下载"
-
-#: templates/snippets/my_owned_repos.html:36
-msgid "Delete"
-msgstr "删除"
 
 #: templates/snippets/my_owned_repos.html:42
 msgid ""
@@ -356,10 +482,6 @@ msgstr "取消共享"
 msgid ""
 "Libraries shared to you (for example, by your friends) will be shown here."
 msgstr "您的朋友可以将他的资料库共享给您，这些资料库会显示在这里。"
-
-#: templates/snippets/my_owned_repos.html:92
-msgid "File"
-msgstr "文件名"
 
 #: templates/snippets/my_owned_repos.html:93
 msgid "Library"
