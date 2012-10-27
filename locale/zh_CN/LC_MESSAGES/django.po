@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 17:21+0800\n"
+"POT-Creation-Date: 2012-10-27 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr "我的基本信息"
 msgid "Nickname is empty"
 msgstr "暂无昵称"
 
-#: templates/myhome.html:15
+#: templates/myhome.html:15 templates/repo_view_file.html:116
 msgid "Edit"
 msgstr "编辑"
 
@@ -198,7 +198,7 @@ msgstr ""
 "\"_blank\">加入Seafile </a>体验更多功能。"
 
 #: templates/repo.html:21 templates/repo.html.py:137
-#: templates/snippets/my_owned_repos.html:34
+#: templates/repo_view_file.html:123 templates/snippets/my_owned_repos.html:34
 #: templates/snippets/my_owned_repos.html:76
 msgid "Download"
 msgstr "下载"
@@ -263,7 +263,7 @@ msgid "Folder"
 msgstr "目录"
 
 #: templates/repo.html:115 templates/repo.html.py:145
-#: templates/snippets/my_owned_repos.html:36
+#: templates/repo_view_file.html:74 templates/snippets/my_owned_repos.html:36
 msgid "Delete"
 msgstr "删除"
 
@@ -300,7 +300,8 @@ msgid "Folder Name"
 msgstr "目录名称"
 
 #: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
-#: templates/repo.html.py:209 templates/registration/login.html:13
+#: templates/repo.html.py:209 templates/repo_view_file.html:141
+#: templates/repo_view_file.html.py:167 templates/registration/login.html:13
 #: templates/registration/registration_form.html:18
 #: templates/snippets/group_recommend_form.html:23
 #: templates/snippets/repo_share_form.html:18
@@ -327,6 +328,96 @@ msgstr "其他资料库"
 #: templates/repo.html:197
 msgid "Please choose derection folder"
 msgstr "请点击选择目标目录。"
+
+#: templates/repo_view_file.html:15
+msgid "snapshot viewing"
+msgstr "镜像浏览"
+
+#: templates/repo_view_file.html:22
+msgid "history viewing"
+msgstr "历史浏览"
+
+#: templates/repo_view_file.html:25
+msgid "Back to file versions"
+msgstr "返回文件版本列表"
+
+#: templates/repo_view_file.html:31
+msgid "Back to Library"
+msgstr "返回资料库"
+
+#: templates/repo_view_file.html:37
+msgid "Current Path: "
+msgstr "当前路径："
+
+#: templates/repo_view_file.html:72
+msgid "Get sharing link"
+msgstr "获取分享地址"
+
+#: templates/repo_view_file.html:73
+msgid "Send"
+msgstr "发送"
+
+#: templates/repo_view_file.html:76
+msgid "Unstar"
+msgstr "取消新标"
+
+#: templates/repo_view_file.html:78
+msgid "Star"
+msgstr "添加星标"
+
+#: templates/repo_view_file.html:88
+msgid "update this library"
+msgstr "做了最新修改"
+
+#: templates/repo_view_file.html:91
+msgid "More"
+msgstr "详情"
+
+#: templates/repo_view_file.html:95
+msgid "More Histories"
+msgstr "更多历史"
+
+#: templates/repo_view_file.html:98
+msgid "contributors"
+msgstr "个贡献者"
+
+#: templates/repo_view_file.html:113
+msgid "Open local file"
+msgstr "打开本地文件"
+
+#: templates/repo_view_file.html:121
+msgid "Raw"
+msgstr "原始文件"
+
+#: templates/repo_view_file.html:131
+msgid "File is loading..."
+msgstr "文件内容读取中..."
+
+#: templates/repo_view_file.html:138
+msgid "Emails(seperated with ,)"
+msgstr "邮箱(多个邮箱以,分隔)"
+
+#: templates/repo_view_file.html:143
+#, fuzzy
+msgid "Sending..."
+msgstr "提醒..."
+
+#: templates/repo_view_file.html:147
+msgid "Under processing, please wait..."
+msgstr "处理中，请稍侯..."
+
+#: templates/repo_view_file.html:150
+#, python-format
+msgid "You have not downloaded %(repo.name)s"
+msgstr "您还没有将资料库 %(repo.name)s 下载到本地"
+
+#: templates/repo_view_file.html:151
+msgid "Click to download"
+msgstr "点此下载"
+
+#: templates/repo_view_file.html:165
+msgid "Leave a message~"
+msgstr "评论一下~"
 
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11

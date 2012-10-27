@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags%}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block extra_style %}
@@ -12,29 +12,29 @@
     {% else %}
         {% if page_from == 'snapshot' %}
         <h2>
-            {{repo.props.name}} 镜像浏览
+            {{repo.props.name}} {% trans "snapshot viewing" %}
             <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
         </h2>
         {% endif %}
         {% if page_from == 'file_history' %}
         <div class="w100 ovhd">
             <h2 class="fleft">
-                {{repo.props.name}} 历史浏览
+                {{repo.props.name}} {% trans "history viewing"%}
                 <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
             </h2>
-            <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">返回文件版本列表</button>
+            <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
         </div>
         {% endif %}
         {% if page_from == 'recycle' %}
             <div class="w100 ovhd">
                 <h2 class="fleft">{{repo.props.name}} 的文件回收站</h2>
-                <button class="fright" data="{% url 'repo' repo.id %}" id="back">返回同步目录</button>
+                <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
             </div>
         {% endif %}
     {% endif %}
     <div class="w100 ovhd">
         <p class="path fleft">
-        当前路径：
+        {% trans "Current Path: "%}
 	{% if page_from == 'recycle' %}
 
 	<a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} 的文件回收站</a>
@@ -69,13 +69,13 @@
         {% if not view_history %}
         <div class="file-op fright">
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
-            <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">获取分享地址</button>
-            <button id="send-shared-link" class="hide">发送</button>
-            <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">删除</button>
+            <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">{% trans "Get sharing link"%}</button>
+            <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
+            <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% if is_starred %}
-            <button id="star" data="starred">取消星标</button>
+            <button id="star" data="starred">{% trans "Unstar"%}</button>
             {% else %}
-            <button id="star" data="unstarred">添加星标</button>
+            <button id="star" data="unstarred">{% trans "Star"%}</button>
             {% endif %}
         </div>
         {% endif %}
@@ -85,17 +85,17 @@
     <div id="file-commit-info">
         <div class="latest-commit ovhd">
             <p class="latest-commit-info fleft">
-                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> 做了最新修改</span>
+                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a> <span class="time">{{ last_modified|translate_commit_time}}</span><span> {% trans "update this library"%}</span>
                 {% if filetype == 'Text' or filetype == 'Markdown' %}
                 {% if last_commit_id %}
-                <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">详情</a></span>
+                <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "More"%}</a></span>
                 {% endif %}
                 {% endif %}
             </p>
-            <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">更多历史</a>
+            <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">{% trans "More Histories"%}</a>
         </div> 
         <p class="contributors">
-        <span>{{ contributors|length }} 个贡献者</span>
+        <span>{{ contributors|length }} {% trans "contributors"%}</span>
         {% for user in contributors %}
             <a href="{% url 'user_profile' user %}" class="name" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
         {% endfor %}
@@ -110,17 +110,17 @@
         <div id="file-op">
         {% endif %}
             {% if not view_history and request.user.is_authenticated %}
-            <button id="open-local" data="{{path}}{{dirent.obj_name}}">打开本地文件</button>
+            <button id="open-local" data="{{path}}{{dirent.obj_name}}">{% trans "Open local file"%}</button>
             {% if not read_only %}
             {% if filetype == 'Text' or filetype == 'Markdown' %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">编辑</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">{% trans "Edit"%}</button>
             {% endif %}
             {% endif %}
             {% endif %}
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">原始文件</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">{% trans "Raw"%}</button>
             {% endif %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">下载</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
         <div id="file-view">
             {% if filetype == 'Text' %}
@@ -128,27 +128,27 @@
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
                 {% endifnotequal %}
             {% else %}
-            <p>文件内容读取中...</p>
+            <p>{% trans "File is loading..."%}</p>
             {% endif %}
         </div>
     </div>
 
     {% if not view_history %}
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
-        <label>邮箱(多个邮箱以,分隔)：</label><br />
+        <label>{% trans "Emails(seperated with ,)"%}</label><br />
         <textarea id="email" name="email"></textarea><br />
         <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
-        <input type="submit" value="提交" class="submit" />
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <p class="error hide"></p>
-        <p id="sending" class="hide">发送中...</p>        
+        <p id="sending" class="hide">{% trans "Sending..."%}</p>        
     </form>
 
     <div id="open-local-feedback" class="hide">
-        <p id="open-local-handling-tip">处理中，请稍侯...</p>
+        <p id="open-local-handling-tip">{% trans "Under processing, please wait..."%}</p>
         <p id="open-local-error" class="error"></p>
         <div id="redirect-download" class="hide">
-            <p class="error">您还没有将资料库 {{repo.name}} 下载到本地</p>
-            <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">点此下载</button>
+            <p class="error">{% blocktrans %}You have not downloaded {{repo.name}}{% endblocktrans %}</p>
+            <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">{% trans "Click to download"%}</button>
         </div>
     </div>
     
@@ -162,9 +162,9 @@
             <div class="w100 ovhd">
                 <a class="pic fleft" href="{% url 'user_profile' request.user.username %}">{% avatar request.user.username 48 %}</a>
                 <div id="comment-container" class="txt fright">
-                    <textarea name="message" id="comment-input">评论一下~</textarea><br />
+                    <textarea name="message" id="comment-input">{% trans "Leave a message~"%}</textarea><br />
                     <p class="error hide"></p>
-                    <input type="submit" value="提交" class="submit hide" />
+                    <input type="submit" value="{% trans "Submit"%}" class="submit hide" />
                 </div>
             </div>
         </form>
@@ -320,7 +320,7 @@ $('#shared-link').click(function() {
 
 {% include "snippets/bottom_bar.html" %}
 {% if request.user.is_authenticated %}
-$('#bottom-bar').append(' <button id="comment">评论</button>');
+$('#bottom-bar').append(gettext(' <button id="comment">Comment</button>'));
 $('#file-comment').css({'max-height':$(window).height() - parseInt($('#file-comment').css('bottom'))});
 var gids = '';
 {% for g in groups %}
@@ -363,7 +363,7 @@ $('#comment-input').css('color', '#999').click(function() {
 });
 $('#file-comment-form .submit').click(function() {
     if (!$.trim($('#comment-input').val())) {
-        $('#file-comment-form .error').html('请先输入您的评论').removeClass('hide');
+        $('#file-comment-form .error').html(gettext('Please type a message')).removeClass('hide');
         return false;
     }
     $.ajax({
@@ -409,19 +409,19 @@ function send_open_local_file_request(path) {
                 
             } else if (data['no_assoc'] === true) {
                 // no application to open the file
-                $('#open-local-error').html('找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录');
+                $('#open-local-error').html(gettext('Can\'t find a application to open file. Seafile will open the folder.'));
 
             } else if (data['outdated'] === true) {
                 // local repo not in sync yet
                 if (data['auto-sync'] === false) {
-                    $('#open-local-error').html('本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步');
+                    $('#open-local-error').html(gettext('File is not Synchronized with server, please synchronize manually.'));
                 } else {
-                    $('#open-local-error').html('本地文件尚未与服务器同步，请稍后再试');
+                    $('#open-local-error').html(gettext('File is not Synchronized with server, please retry later.'));
                 }
 
             } else if (data['error']) {
                 // other error
-                $('#open-local-error').html('打开本地文件时出错');
+                $('#open-local-error').html(gettext('An error occur during opening local file.'));
 
             } else {
                 // open file successfully
@@ -452,7 +452,7 @@ $('#open-local').click(function () {
             local_applet_running = true;
             if (version < 1) {
                 $('#open-local-handling-tip').addClass('hide');
-                $('#open-local-error').html('您的 Seafile 客户端版本太低，请<a href="http://www.seafile.com/download/">升级</a>到最新版本');
+                $('#open-local-error').html(gettext('Your Seafile client is out of date, please <a href="http://www.seafile.com/download/">upgrade</a> to latest.'));
             } else {
                 send_open_local_file_request(path);
             }
@@ -463,7 +463,7 @@ $('#open-local').click(function () {
     setTimeout(function() {
         if (!local_applet_running) {
             $('#open-local-handling-tip').addClass('hide');
-            $('#open-local-error').html('Seafile 客户端程序未启动或者版本过低');
+            $('#open-local-error').html(gettext('Seafile client is not start or out of date'));
         }
     }, 2000);
 });
