@@ -6,6 +6,8 @@ from datetime import datetime
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
 from profile.models import Profile
 from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
@@ -48,7 +50,11 @@ def file_icon_filter(value):
 
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
-    """Translate commit description."""
+    """Translate commit description to Chinese."""
+    # Do nothing if current language is English
+    if translation.get_language() == 'en':
+        return value
+    
     if value.startswith('Reverted repo'):
         return value.replace('Reverted repo to status at', u'资料库内容还原到')
     elif value.startswith('Reverted file'):
@@ -112,13 +118,13 @@ def translate_commit_time(value):
     if days * 24 * 60 * 60 + seconds > limit:
         return val.strftime("%Y-%m-%d")
     elif days > 0:
-        return u'%d 天前' % (days)
+        return _(u'%d days ago') % (days)
     elif seconds > 60 * 60:
-        return u'%d 小时前' % (seconds/3600)
+        return _(u'%d hours ago') % (seconds/3600)
     elif seconds > 60:
-        return u'%d 分钟前' % (seconds/60)
+        return _(u'%d minutes ago') % (seconds/60)
     else:
-        return u'%d 秒前' % (seconds)
+        return _(u'%d seconds ago') % (seconds)
 
 @register.filter(name='translate_remain_time')
 def translate_remain_time(value):
