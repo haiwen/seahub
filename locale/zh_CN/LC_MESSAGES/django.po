@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 11:11+0800\n"
+"POT-Creation-Date: 2012-10-27 11:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,8 +42,8 @@ msgstr "欢迎，"
 msgid "Profile"
 msgstr "设置"
 
-#: templates/base.html:61 templates/registration/logout.html:4
-msgid "Log Out"
+#: templates/base.html:61
+msgid "Log out"
 msgstr "退出"
 
 #: templates/base.html:63 templates/registration/login.html:3
@@ -89,8 +89,8 @@ msgid "Contact Us"
 msgstr "联系我们"
 
 #: templates/myhome.html:9
-msgid "My Basic Infos"
-msgstr "我的基本信息"
+msgid "Account"
+msgstr ""
 
 #: templates/myhome.html:15
 msgid "Nickname is empty"
@@ -121,8 +121,8 @@ msgid "org messages"
 msgstr "团体消息"
 
 #: templates/myhome.html:44
-msgid "Storage Used"
-msgstr "已用空间"
+msgid "Space used"
+msgstr ""
 
 #: templates/myhome_base.html:8
 msgid "My Home"
@@ -136,9 +136,9 @@ msgstr "公共资料"
 msgid "Groups"
 msgstr "群组"
 
-#: templates/myhome_base.html:19
-msgid "Share Admin"
-msgstr "共享管理"
+#: templates/myhome_base.html:19 templates/snippets/my_owned_repos.html:35
+msgid "Share"
+msgstr "共享"
 
 #: templates/myhome_base.html:22
 msgid "Contacts"
@@ -166,6 +166,10 @@ msgstr "提交"
 #: templates/registration/login.html:14
 msgid "Forgot password?"
 msgstr "忘记密码"
+
+#: templates/registration/logout.html:4
+msgid "Log Out"
+msgstr "退出"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
@@ -222,11 +226,11 @@ msgid "Libraries"
 msgstr "资料库"
 
 #: templates/snippets/my_owned_repos.html:7
-msgid "I owned"
+msgid "Mine"
 msgstr "我拥有的"
 
 #: templates/snippets/my_owned_repos.html:8
-msgid "Shared to me"
+msgid "Shared"
 msgstr "共享给我的"
 
 #: templates/snippets/my_owned_repos.html:9
@@ -272,10 +276,6 @@ msgstr "目录图标"
 #: templates/snippets/my_owned_repos.html:76
 msgid "Download"
 msgstr "下载"
-
-#: templates/snippets/my_owned_repos.html:35
-msgid "Share"
-msgstr "共享"
 
 #: templates/snippets/my_owned_repos.html:36
 msgid "Delete"
@@ -326,6 +326,21 @@ msgstr "图标"
 #: templates/snippets/my_owned_repos.html:108
 msgid "You can star the important files, and they will be shown here."
 msgstr "您可以给那些重要的文件加上星标，然后它们将在这里显示。"
+
+#~ msgid "My Basic Infos"
+#~ msgstr "我的基本信息"
+
+#~ msgid "Storage Used"
+#~ msgstr "已用空间"
+
+#~ msgid "Share Admin"
+#~ msgstr "共享管理"
+
+#~ msgid "I owned"
+#~ msgstr "我拥有的"
+
+#~ msgid "Shared to me"
+#~ msgstr "共享给我的"
 
 #~ msgid "Public Repo"
 #~ msgstr "公共资料"

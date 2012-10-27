@@ -6,7 +6,7 @@
 
 {% block left_panel %}
 <div class="info-item">
-<h3 class="info-item-top">{% trans "My Basic Infos" %}</h3>
+<h3 class="info-item-top">{% trans "Account" %}</h3>
 <div class="info-item-bottom home-profile ovhd">
     <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
 {% if nickname %}
@@ -41,7 +41,7 @@
 {% endif %}
 
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Storage Used" %}</h3>
+    <h3 class="info-item-top">{% trans "Space used" %}</h3>
     <p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
 </div>
 

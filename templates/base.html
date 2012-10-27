@@ -58,7 +58,7 @@
                 {% if request.user.is_authenticated %}
                 <span>{% trans "Welcome," %}</span> <a href="{% url 'avatar_add' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
                 <a href="{{ SITE_ROOT }}profile/">{% trans "Profile" %}</a>
-                <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log Out" %}</a>
+                <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
                 {% else %}
                 <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
                 <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Register" %}</a>
