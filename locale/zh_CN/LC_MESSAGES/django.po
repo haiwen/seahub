@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 19:51+0800\n"
+"POT-Creation-Date: 2012-10-27 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgid "Edit"
 msgstr "编辑"
 
 #: templates/myhome.html:22
-msgid "Reminders..."
+msgid "Reminding..."
 msgstr "提醒..."
 
 #: templates/myhome.html:26
@@ -217,71 +217,115 @@ msgstr "我的群组"
 msgid "Empty"
 msgstr "暂无"
 
-#: templates/snippets/my_owned_repos.html:2
+#: templates/snippets/my_owned_repos.html:3
 msgid "Libraries"
 msgstr "资料库"
 
-#: templates/snippets/my_owned_repos.html:6
+#: templates/snippets/my_owned_repos.html:7
 msgid "I owned"
 msgstr "我拥有的"
 
-#: templates/snippets/my_owned_repos.html:7
-msgid "Share to me"
+#: templates/snippets/my_owned_repos.html:8
+msgid "Shared to me"
 msgstr "共享给我的"
 
 #: templates/snippets/my_owned_repos.html:9
+msgid "Starred Files"
+msgstr "星标文件"
+
+#: templates/snippets/my_owned_repos.html:11
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/snippets/my_owned_repos.html:16
-#: templates/snippets/my_owned_repos.html:48
+#: templates/snippets/my_owned_repos.html:18
+#: templates/snippets/my_owned_repos.html:50
 msgid "Name"
 msgstr "名字"
 
-#: templates/snippets/my_owned_repos.html:17
-#: templates/snippets/my_owned_repos.html:49
+#: templates/snippets/my_owned_repos.html:19
+#: templates/snippets/my_owned_repos.html:51
 msgid "Description"
 msgstr "描述"
 
-#: templates/snippets/my_owned_repos.html:18
-#: templates/snippets/my_owned_repos.html:50
+#: templates/snippets/my_owned_repos.html:20
+#: templates/snippets/my_owned_repos.html:52
 msgid "Update Time"
 msgstr "更新时间"
 
-#: templates/snippets/my_owned_repos.html:19
-#: templates/snippets/my_owned_repos.html:52
+#: templates/snippets/my_owned_repos.html:21
+#: templates/snippets/my_owned_repos.html:54
 msgid "Operations"
 msgstr "操作"
 
-#: templates/snippets/my_owned_repos.html:23
-#: templates/snippets/my_owned_repos.html:59
+#: templates/snippets/my_owned_repos.html:25
+#: templates/snippets/my_owned_repos.html:61
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templates/snippets/my_owned_repos.html:32
-#: templates/snippets/my_owned_repos.html:74
+#: templates/snippets/my_owned_repos.html:25
+#: templates/snippets/my_owned_repos.html:61
+#: templates/snippets/my_owned_repos.html:63
+msgid "directory icon"
+msgstr "目录图标"
+
+#: templates/snippets/my_owned_repos.html:34
+#: templates/snippets/my_owned_repos.html:76
 msgid "Download"
 msgstr "下载"
 
-#: templates/snippets/my_owned_repos.html:33
+#: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
 
-#: templates/snippets/my_owned_repos.html:34
+#: templates/snippets/my_owned_repos.html:36
 msgid "Delete"
 msgstr "删除"
 
-#: templates/snippets/my_owned_repos.html:51
+#: templates/snippets/my_owned_repos.html:42
+msgid ""
+"You can create a library to organize your files. For example, you can create "
+"one for each of your projects. Every library can be synchronized and shared "
+"respectively."
+msgstr ""
+"您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资"
+"料库可以单独地同步和共享。"
+
+#: templates/snippets/my_owned_repos.html:53
 msgid "Share From"
 msgstr "共享来源"
 
-#: templates/snippets/my_owned_repos.html:61
+#: templates/snippets/my_owned_repos.html:63
 msgid "Read-Only"
 msgstr "只读"
 
-#: templates/snippets/my_owned_repos.html:76
+#: templates/snippets/my_owned_repos.html:78
 msgid "Remove Share"
 msgstr "取消共享"
+
+#: templates/snippets/my_owned_repos.html:84
+msgid ""
+"Libraries shared to you (for example, by your friends) will be shown here."
+msgstr "您的朋友可以将他的资料库共享给您，这些资料库会显示在这里。"
+
+#: templates/snippets/my_owned_repos.html:92
+msgid "File"
+msgstr "文件名"
+
+#: templates/snippets/my_owned_repos.html:93
+msgid "Library"
+msgstr "所属资料库"
+
+#: templates/snippets/my_owned_repos.html:94
+msgid "UpdateTime"
+msgstr "更新时间"
+
+#: templates/snippets/my_owned_repos.html:98
+msgid "icon"
+msgstr "图标"
+
+#: templates/snippets/my_owned_repos.html:108
+msgid "You can star the important files, and they will be shown here."
+msgstr "您可以给那些重要的文件加上星标，然后它们将在这里显示。"
 
 #~ msgid "Public Repo"
 #~ msgstr "公共资料"

@@ -6,7 +6,7 @@
     <ul class="fleft">
         <li><a href="#my-own-repos" onfocus="this.blur()">{% trans "I owned" %}</a></li>
         <li><a href="#repos-shared-to-me" onfocus="this.blur()">{% trans "Shared to me" %}</a></li>
-        <li><a href="#starred-files" onfocus="this.blur()">{% trans "starred" %}</a></li>
+        <li><a href="#starred-files" onfocus="this.blur()">{% trans "Starred Files" %}</a></li>
     </ul>
     <button id="repo-create" class="fright">{% trans "New Library" %}</button>
 </div>
@@ -22,7 +22,7 @@
     </tr>
     {% for repo in owned_repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
@@ -39,7 +39,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资料库可以单独地同步和共享。</p>
+<p class="empty-repo-tips">{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Every library can be synchronized and shared respectively." %}</p>
 {% endif %}
 </div>
 <div id="repos-shared-to-me">
@@ -58,9 +58,9 @@
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
@@ -81,7 +81,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">您的朋友可以将他的资料库共享给您，这些资料库会显示在这里。</p>
+<p class="empty-repo-tips">{% trans "Libraries shared to you (for example, by your friends) will be shown here." %}</p>
 {% endif %}
 </div>
 <div id="starred-files">
@@ -89,13 +89,13 @@
 <table>
     <tr>
         <th width="5%"></th>
-        <th width="45%">文件名</th>
-        <th width="30%">所属资料库</th>
-        <th width="20%">更新时间</th>
+        <th width="45%">{% trans "File" %}</th>
+        <th width="30%">{% trans "Library" %}</th>
+        <th width="20%">{% trans "UpdateTime" %}</th>
     </tr>
     {% for sfile in starred_files %}
     <tr>
-        <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="文件" /></td>
+        <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
         <td>
             <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.formatted_path }}</a>
         </td>
@@ -105,7 +105,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="no-starred-file-tips">您可以把重要的文件加上星标，这样它们就能显示在这里</p>
+<p class="no-starred-file-tips">{% trans "You can star the important files, and they will be shown here." %}</p>
 {% endif %}
 </div>
 </div>
