@@ -231,8 +231,14 @@ def api_login(request):
 
     if form.is_valid():
         auth_login(request, form.get_user())
-        return HttpResponse(json.dumps(request.session.session_key), status=200,
-            content_type=json_content_type)
+        info = {}
+        email = request.user.username
+        info['email'] = email
+        info['feedback'] = settings.DEFAULT_FROM_EMAIL
+        info['sessionid'] = request.session.session_key
+        info['usage'] = seafserv_threaded_rpc.get_user_quota_usage(email)
+        info['total'] = seafserv_threaded_rpc.get_user_quota(email)
+        return HttpResponse(json.dumps([info]), status=200, content_type=json_content_type)
     else:
         return api_error(request, '408')
 
