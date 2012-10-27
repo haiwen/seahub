@@ -1042,7 +1042,6 @@ textarea:-moz-placeholder {
 .group-list .group {
     width:315px;
     margin:0 17px 30px 0;
-    border-bottom:1px dashed #ddd;
     padding-bottom:10px;
 }
 .group .txt {
