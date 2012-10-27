@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 16:01+0800\n"
+"POT-Creation-Date: 2012-10-27 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,43 +62,205 @@ msgstr "无法删除自己"
 msgid "The group name has been occupied."
 msgstr "名称重复，请重新输入。"
 
-#: views.py:564
+#: views.py:561
 #, python-format
 msgid "Failed to add group member, %s is not in current organization."
 msgstr "添加成员失败，%s 未在当前团体中。"
 
-#: views.py:598
+#: views.py:595
 msgid "Failed to send mail."
 msgstr "邮件发送失败。"
 
-#: views.py:615
+#: views.py:612
 #, python-format
 msgid "Failed to add group member, %s is not registerd."
 msgstr "添加成员失败，%s 未注册。"
 
-#: views.py:628
+#: views.py:625
 msgid "Successfully added group member(s). An email has been sent to user(s)."
 msgstr "添加群组成员成功，邀请邮件已发送。"
 
-#: views.py:630
+#: views.py:627
 msgid "Successfully added group member(s)."
 msgstr "添加群组成员成功。"
 
-#: views.py:796
+#: views.py:793
 msgid "Recommend error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
-#: views.py:804
+#: views.py:801
 #, python-format
 msgid "Recommend to %s error: you are not in that group"
 msgstr "推荐到 %s 失败：未参加该群组"
 
-#: views.py:824
+#: views.py:821
 #, python-format
 msgid ""
 "Recommend to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a> success。"
 msgstr "推荐到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
 
-#: views.py:829
+#: views.py:826
 msgid "Recommend failed"
 msgstr "推荐失败"
+
+#: templates/group/group_info.html:14
+msgid "Basic Infos"
+msgstr "基本信息"
+
+#: templates/group/group_info.html:17
+msgid "created in "
+msgstr "创建于"
+
+#: templates/group/group_info.html:22
+msgid "Staffs"
+msgstr "管理员"
+
+#: templates/group/group_info.html:33
+msgid "Members"
+msgstr "成员"
+
+#: templates/group/group_info.html:35
+msgid "Add"
+msgstr "添加"
+
+#: templates/group/group_info.html:47
+msgid ""
+"You can click \"Add\" button to add members, if he is not registered, system "
+"will send him a invitation email."
+msgstr ""
+"可以点击上方的“添加”来加入成员，如果对方未注册，系统会向他发送邀请邮件。"
+
+#: templates/group/group_info.html:49
+msgid "You can click \"Add\" button to add members."
+msgstr "可以点击上方的“添加”来加入成员。"
+
+#: templates/group/group_info.html:57 templates/group/group_info.html.py:80
+msgid "Operations"
+msgstr "操作"
+
+#: templates/group/group_info.html:60
+msgid "Group Management"
+msgstr "群组管理"
+
+#: templates/group/group_info.html:62
+msgid "Quit Group"
+msgstr "退出群组"
+
+#: templates/group/group_info.html:70
+msgid "Libraries in Group"
+msgstr "群组里共享的资料库"
+
+#: templates/group/group_info.html:71
+msgid "New Library"
+msgstr "新建资料库"
+
+#: templates/group/group_info.html:76
+msgid "Name"
+msgstr "名字"
+
+#: templates/group/group_info.html:77
+msgid "Description"
+msgstr "描述"
+
+#: templates/group/group_info.html:78
+msgid "Update Time"
+msgstr "更新时间"
+
+#: templates/group/group_info.html:79
+msgid "Share From"
+msgstr "共享来源"
+
+#: templates/group/group_info.html:87
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templates/group/group_info.html:104
+msgid "Download"
+msgstr "下载"
+
+#: templates/group/group_info.html:107
+msgid "Cancle Share"
+msgstr "取消共享"
+
+#: templates/group/group_info.html:116
+msgid "Discussions"
+msgstr "信息栏"
+
+#: templates/group/group_info.html:124
+#: templates/group/groups_right_panel.html:30
+msgid "Submit"
+msgstr "提交"
+
+#: templates/group/group_info.html:144
+msgid "Recommend"
+msgstr "推荐"
+
+#: templates/group/group_info.html:156
+msgid "File "
+msgstr "文件 "
+
+#: templates/group/group_info.html:156
+msgid "has new comment:"
+msgstr "有新的评注："
+
+#: templates/group/group_info.html:161
+msgid "Reply"
+msgstr "回复"
+
+#: templates/group/group_info.html:162
+msgid "Hide Reply"
+msgstr "收起回复"
+
+#: templates/group/group_info.html:164
+msgid "Delete"
+msgstr "删除"
+
+#: templates/group/group_info.html:176
+msgid "Previous"
+msgstr "前一页"
+
+#: templates/group/group_info.html:179
+msgid "Next"
+msgstr "下一页"
+
+#: templates/group/groups_left_panel.html:3
+msgid "Tips"
+msgstr "小提示"
+
+#: templates/group/groups_left_panel.html:5
+msgid ""
+"After creating groups, you can share into your libraries, and inviting "
+"others to maintain these libraries."
+msgstr "群组创建后，就可以往里面共享资料，邀请他人一起来协同维护这些资料。"
+
+#: templates/group/groups_left_panel.html:7
+msgid ""
+"You can also share libraries to groups that you're not participated, kind "
+"like carbon copy in email sending."
+msgstr "您也可以共享资料到您没有参加的群组，相当于邮件的抄送功能。"
+
+#: templates/group/groups_right_panel.html:4
+msgid "My Groups"
+msgstr "我的群组"
+
+#: templates/group/groups_right_panel.html:5
+msgid "Add Group"
+msgstr "添加群组"
+
+#: templates/group/groups_right_panel.html:17
+msgid "Creator: "
+msgstr "创建者："
+
+#: templates/group/groups_right_panel.html:18
+msgid "Create Time: "
+msgstr "创建时间："
+
+#: templates/group/groups_right_panel.html:24
+msgid ""
+"Your are not in any groups, you can click \"Add Group\" button to add some "
+"groups."
+msgstr "您还没有参加任何群组，可以点击“添加群组”按钮创建群组。"
+
+#: templates/group/groups_right_panel.html:27
+msgid "Group Name"
+msgstr "群组名称"

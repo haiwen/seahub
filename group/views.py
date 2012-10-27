@@ -257,17 +257,14 @@ def group_quit(request, group_id):
     return HttpResponseRedirect(reverse('group_list', args=[]))
 
 def render_group_info(request, group_id, form):
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
+    group_id_int = int(group_id) # Checkeb by URL Conf
 
     # remove user notifications
     UserNotification.objects.filter(to_user=request.user.username,
                                     msg_type='group_msg',
                                     detail=str(group_id)).delete()
     
-    group = get_group(group_id)
+    group = get_group(group_id_int)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 

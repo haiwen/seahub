@@ -1,6 +1,6 @@
 {% extends base_template %}
 
-{% load seahub_tags avatar_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
@@ -11,15 +11,15 @@
 
 {% block left_panel %}
 <div class="info-item">
-    <h3 class="info-item-top">基本信息</h3>
+    <h3 class="info-item-top">{% trans "Basic Infos" %}</h3>
     <div class="info-item-bottom group-basic-info ovhd">
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar fleft" />
-        <p class="txt fright">{{ group.creator_name|email2nickname }} 创建于<br />{{ group.timestamp|tsstr_day }}</p>
+        <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created in " %}<br />{{ group.timestamp|tsstr_day }}</p>
     </div>
 </div>
 <div class="info-item">
     <div class="info-item-top">
-        <h3 class="inbl">管理员</h3>
+        <h3 class="inbl">{% trans "Staffs" %}</h3>
     </div>
     <ul class="info-item-bottom">
         {% for member in managers %}
@@ -30,9 +30,9 @@
 
 <div class="info-item">
     <div class="info-item-top">
-        <h3 class="inbl">成员</h3>
+        <h3 class="inbl">{% trans "Members" %}</h3>
         {% if is_staff %}
-        <a href="#" class="grp-member-add op">添加</a>
+        <a href="#" class="grp-member-add op">{% trans "Add" %}</a>
         {% endif %}
     </div>
     <div class="info-item-bottom">
@@ -44,9 +44,9 @@
         </ul>
         {% else %}
         {% if cloud_mode and not org %}
-        <p>可以点击上方的“添加”来加入成员，如果对方未注册，系统会向他发送邀请邮件。</p>
+        <p>{% blocktrans %}You can click "Add" button to add members, if he is not registered, system will send him a invitation email.{% endblocktrans %}</p>
         {% else %}
-        <p>可以点击上方的“添加”来加入成员。</p>
+        <p>{% blocktrans %}You can click "Add" button to add members.{% endblocktrans %}</p>
         {% endif %}
         {% endif %}
     </div>
@@ -54,12 +54,12 @@
 
 {% if is_join %}
 <div class="info-item">
-    <h3 class="info-item-top">操作</h3>
+    <h3 class="info-item-top">{% trans "Operations" %}</h3>
     <ul class="with-bg info-item-bottom">
         {% if is_staff %}
-        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">群组管理</a></li>
+        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Group Management" %}</a></li>
         {% else %}
-        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">退出群组</a></li>
+        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit Group" %}</a></li>
         {% endif %}
     </ul>
 </div>
@@ -67,24 +67,24 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>群组里共享的资料库</h3>
-<button id="repo-create">新建资料库</button>
+<h3>{% trans "Libraries in Group" %}</h3>
+<button id="repo-create">{% trans "New Library" %}</button>
 {% if repos %}
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">名字</th>
-        <th width="36%">描述</th>
-        <th width="14%">更新时间</th>
-        <th width="16%">共享来源</th>
-        <th width="10%">操作</th>
+        <th width="20%">{% trans "Name" %}</th>
+        <th width="36%">{% trans "Description" %}</th>
+        <th width="14%">{% trans "Update Time" %}</th>
+        <th width="16%">{% trans "Share From" %}</th>
+        <th width="10%">{% trans "Operations" %}</th>
     </tr>
 
     {% for repo in repos %}
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" />
             {% else %}
             <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="目录icon" />
             {% endif %}
@@ -101,10 +101,10 @@
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
 	    {% if repo.user_perm == 'rw' %}
-            <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="下载" title="下载到本地" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="{% trans "Download" %}" title="{% trans "Download" %}" />
 	    {% endif %}
         {% if is_staff or repo.share_from_me  %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="取消共享" alt="取消共享" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="{% trans "Cancle Share" %}" alt="{% trans "Cancle Share" %}" />
         {% endif %}
         </td>
     </tr>
@@ -113,7 +113,7 @@
 {% endif %}
 
 <div id="group-reply">
-    <h3>信息栏</h3>
+    <h3>{% trans "Discussions" %}</h3>
     <div class="w100 ovhd">
         <div class="pic fleft">{% avatar request.user.username 48 %}</div>
         <form id="group-message-form" action="" method="post" class="fright">
@@ -121,7 +121,7 @@
             {% for error in form.message.errors %}
             <p class="error">{{ error|escape }}</p>
             {% endfor %}
-            <input type="submit" value="提交" class="submit" />
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
     </div>
 
@@ -141,7 +141,7 @@
                 <p>
                 {% if msg.attachment.src == 'recommend' %}
                 <!-- recommend -->
-                <span class="recommend">推荐
+                <span class="recommend">{% trans "Recommend" %}
                   {% if msg.attachment.attach_type == 'file' %}
                   <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
                   {% else %}
@@ -153,15 +153,15 @@
 
                 {% if msg.attachment.src == 'filecomment' %}
                 <!-- file comment -->
-                <span class="recommend">文件 <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> 有新的评注：</span>
+                <span class="recommend">{% trans "File " %}<a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> {% trans "has new comment:"%}</span>
                 {% endif %}
                 
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
-                <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>回复</button>
-                <button class="replyclose op hide">收起回复</button>
+                <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>{% trans "Reply" %}</button>
+                <button class="replyclose op hide">{% trans "Hide Reply" %}</button>
                 {% if is_staff or msg.from_email == request.user.username %}
-                <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">删除</button>
+                <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</button>
                 {% endif %}
                 <div class="reply-bd"></div>
             </div>
@@ -173,10 +173,10 @@
 
     <div id="paginator">
         {% if current_page != 1 %}
-        <a href="{{ SITE_ROOT }}group/{{ group.id}}/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+        <a href="{{ SITE_ROOT }}group/{{ group.id}}/?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
         {% endif %}
         {% if page_next %}
-        <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+        <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
         {% endif %}
     </div>
 </div>

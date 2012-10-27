@@ -1,8 +1,8 @@
-{% load seahub_tags group_avatar_tags %}
+{% load seahub_tags group_avatar_tags i18n %}
 {% load url from future %}
 
-<h3>我的群组</h3>
-<button id="group-add">添加群组</button>
+<h3>{% trans "My Groups" %}</h3>
+<button id="group-add">{% trans "Add Group" %}</button>
 {% if joined_groups %}
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}
@@ -14,18 +14,18 @@
     </div>
     <div class="txt fright">
         <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
-        <p><span class="item-name">创建者：</span>{{ group.props.creator_name }}</p>
-        <p><span class="item-name">创建时间：</span>{{ group.props.timestamp|tsstr_sec }}</p>
+        <p><span class="item-name">{% trans "Creator: " %}</span>{{ group.props.creator_name }}</p>
+        <p><span class="item-name">{% trans "Create Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
     </div>
     </li>
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty-repo-tips">您还没有参加任何群组，可以点击“添加群组”按钮创建群组。</p>
+<p class="empty-repo-tips">{% blocktrans %}Your are not in any groups, you can click "Add Group" button to add some groups.{% endblocktrans %}</p>
 {% endif %}
 <form id="group-add-form" action="" method="post" name="group-add-form" class="hide">
-    <label>群组名称：</label><br />
+    <label>{% trans "Group Name" %}</label><br />
     <input id="group_name" name="group_name" value="" /><br />
     <p class="error hide"></p>
-    <input id="group-add-submit" type="submit" value="提交" />
+    <input id="group-add-submit" type="submit" value="{% trans "Submit" %}" />
 </form>
