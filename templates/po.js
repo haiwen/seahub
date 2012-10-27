@@ -11,6 +11,6 @@ msg = gettext('Email can\'t be blank');
 msg = gettext('Password can\'t be blank');
 msg = gettext('Incorrect email or password');
 
-
-
-
+// myhome_extra_script.html
+msg = gettext('Input can\'t be empty');
+msg = gettext('Confirm to remove shared library?');

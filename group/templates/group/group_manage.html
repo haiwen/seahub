@@ -1,35 +1,35 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<h2>{{ group.group_name }} 群组管理</h2>
+<h2>{{ group.group_name }} {% trans "group management"%}</h2>
 {% endblock %}
 
 {% block left_panel %}
 <div class="info-item">
-  <div class="info-item-top"><h3>操作</h3> </div>
+  <div class="info-item-top"><h3>{% trans "Operations"%}</h3> </div>
   <div class="info-item-bottom">
     <ul class="with-bg">
-      <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">设置群组图标</a></li>
-      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">解散群组</a></li>
-      <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">返回群组</a></li>
+      <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">{% trans "Set Group Avatar"%}</a></li>
+      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss Group"%}</a></li>
+      <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back to Group"%}</a></li>
     </ul>
   </div>
 </div>
 {% endblock %}
 
 {% block right_panel %}
-<h3>成员列表</h3>
-<button id="group-member-add">添加成员</button>
+<h3>{% trans "Group Members"%}</h3>
+<button id="group-member-add">{% trans "Add Members"%}</button>
 {% if members %}
 <table class="member-list">
     <tr>
         <th width="4%"></th>
-        <th width="71%">邮箱</th>
-        <th width="25%">操作</th>
+        <th width="71%">{% trans "Email"%}</th>
+        <th width="25%">{% trans "Operations"%}</th>
     </tr>
 
     {% for member in members %}
@@ -37,27 +37,21 @@
         <td>{% avatar member.user_name 20 %}</td>
         <td>{{ member.user_name }}</td>
         <td>
-            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">删除</a>
+            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">{% trans "Delete"%}</a>
         </td>
     </tr>
     {% endfor %}
 </table>
-{% else %}
-{% if cloud_mode and not org %}
-<div class="empty-repo-tips"><h3>当前群组还没有成员</h3>可以点击上方的“添加成员”按钮来加入成员，如果对方未注册，系统会向他发送邀请邮件。</div>
-{% else %}
-<div class="empty-repo-tips"><h3>当前群组还没有成员</h3>可以点击上方的“添加成员”按钮来加入成员，对方必须在当前团体内。</div>
-{% endif %}
 {% endif %}
 
-<h3>管理员列表</h3>
-<button id="group-admin-add">添加管理员</button>
+<h3>{% trans "Group Staffs"%}</h3>
+<button id="group-admin-add">{% trans "Add Staffs"%}</button>
 {% if admins %}
 <table class="member-list">
     <tr>
         <th width="4%"></th>
-        <th width="71%">邮箱</th>
-        <th width="25%">操作</th>
+        <th width="71%">{% trans "Email"%}</th>
+        <th width="25%">{% trans "Operations"%}</th>
     </tr>
 
     {% for member in admins %}
@@ -66,14 +60,12 @@
         <td>{{ member.user_name }}</td>
         <td>
             {% if member.user_name != request.user.username %}
-            <a href="#" data="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" class="member-remove-btn op">删除</a>
+            <a href="#" data="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
             {% endif %}
         </td>
     </tr>
     {% endfor %}
 </table>
-{% else %}
-<p>暂无</p>
 {% endif %}
 
 {% include 'group/grpmember_add_form.html' %}

@@ -1,18 +1,19 @@
+{% load i18n %}
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
-    <p>共享给：</p>
-    <textarea id="email_or_group" name="email_or_group" placeholder="输入邮箱或群组"></textarea>
+    <p>{% trans "Share to"%}</p>
+    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups"%}"></textarea>
     {% if cloud_mode %}
       {% if org %}
-      <p class="tip">Tip：必须是团体内成员或群组，输入 all 共享到公共资料。</p>
+      <p class="tip">{% trans "Tip: must be org members or org groups, type all to share to public library."%}</p>
       {% endif %}
     {% else %}
-    <p class="tip">Tip：输入 all 共享到公共资料</p>
+    <p class="tip">{% trans "Tip: type all to share to public library."%}</p>
     {% endif %}
     <select name="permission" class="share-permission-select">
-      <option value="rw" selected="selected">可读写</option>
-      <option value="r">只可浏览</option>
+      <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+      <option value="r">{% trans "Read-Only"%}</option>
     </select>
     <input id="repo_id" type="hidden" name="repo_id" value="" />
     <p class="error hide"></p>
-    <input type="submit" value="提交" id="share-submit-btn" />
+    <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />
 </form>

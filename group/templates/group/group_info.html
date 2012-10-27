@@ -75,7 +75,7 @@
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
         <th width="36%">{% trans "Description" %}</th>
-        <th width="14%">{% trans "Update Time" %}</th>
+        <th width="14%">{% trans "Last Update" %}</th>
         <th width="16%">{% trans "Share From" %}</th>
         <th width="10%">{% trans "Operations" %}</th>
     </tr>
@@ -192,7 +192,7 @@
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
 addConfirmTo($('#quit-group'), gettext('Confirm to quit group?'));
-addConfirmTo($('.cancel-share'), gettext('Confirm to unshare this repo?'));
+addConfirmTo($('.cancel-share'), gettext('Confirm to unshare this library?'));
 
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
@@ -234,7 +234,7 @@ $('.msg-delete').hover(
 $('.msg-delete').click(function() {
     var url = $(this).attr('data');
     var msg = $(this).parents('.msg');
-    var del_confirm = '<div class="msg-del-confirm hide"><p>确认要删除该留言吗？</p><button class="msg-del-yes">确认</button><button class="msg-del-no">取消</button></div>';
+    var del_confirm = gettext('<div class="msg-del-confirm hide"><p>Confirm to delete this message?</p><button class="msg-del-yes">Yes</button><button class="msg-del-no">No</button></div>');
     $(this).parent().append(del_confirm).css('position', 'relative');
     del_confirm = $(this).parent().find('.msg-del-confirm');
     del_confirm.css({'left':$(this).position().left - 15, 'top':$(this).position().top - del_confirm.outerHeight()}).removeClass('hide');
@@ -246,7 +246,7 @@ $('.msg-delete').click(function() {
             success: function(data) {
                 if (data['success']) {
                     msg.remove();
-                    feedback('删除成功', 'success');
+                    feedback(gettext('Successfully deleted.'), 'success');
                 } else {
                     feedback('删除失败：' + data['err_msg'], 'error');
                 }

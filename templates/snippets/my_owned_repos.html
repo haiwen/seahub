@@ -6,7 +6,7 @@
     <ul class="fleft">
         <li><a href="#my-own-repos" onfocus="this.blur()">{% trans "Mine" %}</a></li>
         <li><a href="#repos-shared-to-me" onfocus="this.blur()">{% trans "Shared" %}</a></li>
-        <li><a href="#starred-files" onfocus="this.blur()">{% trans "Starred Files" %}</a></li>
+        <li><a href="#starred-files" onfocus="this.blur()">{% trans "Starred" %}</a></li>
     </ul>
     <button id="repo-create" class="fright">{% trans "New Library" %}</button>
 </div>
@@ -17,7 +17,7 @@
         <th width="4%"><!--icon--></th>
         <th width="24%">{% trans "Name" %}</th>
         <th width="43%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Update Time" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in owned_repos %}
@@ -49,7 +49,7 @@
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
         <th width="36%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Update Time" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
         <th width="15%">{% trans "Share From" %}</th>
         <th width="10%">{% trans "Operations" %}</th>
     </tr>

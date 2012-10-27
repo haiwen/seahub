@@ -1,21 +1,22 @@
+{% load i18n %}
 <form id="repo-create-form" action="" method="post" class="hide">
-    <h3>新建资料库</h3>
-    <label>名称：</label><br/>
+    <h3>{% trans "New Library"%}</h3>
+    <label>{% trans "Name"%}</label><br/>
     <input id="repo-name" type="text" name="repo_name" value="" /><br />
-    <label>描述：</label><br/>
+    <label>{% trans "Description"%}</label><br/>
     <textarea id="repo-desc" name="repo_desc"></textarea>
     {% if create_shared_repo %}
-    <label style="display:block">共享权限：</label>
+    <label style="display:block">{% trans "Share Permission"%}</label>
     <select name="permission">
-      <option value="rw" selected="selected">可读写</option>
-      <option value="r">只可浏览</option>
+      <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+      <option value="r">{% trans "Read-Only"%}</option>
     </select>
     {% endif %}
     <div class="repo-create-encryption">
-        <input type="checkbox" name="encryption" id="encrypt-switch" /><label>加密</label><br />
-        <label>密码：</label><span class="tip">(3到15个字符)</span><br />
+        <input type="checkbox" name="encryption" id="encrypt-switch" /><label>{% trans "Encrypt"%}</label><br />
+        <label>{% trans "Password"%}</label><span class="tip">{% trans "(3-15 characters)"%}</span><br />
         <input type="password" name="passwd" disabled="disabled" class="passwd input-disabled" /><br />
-        <label>密码确认：</label><br />
+        <label>{% trans "Confirm Password"%}</label><br />
         <input type="password" name="passwd_again" disabled="disabled" class="passwd input-disabled" />
     </div>
     <p class="error hide"></p>

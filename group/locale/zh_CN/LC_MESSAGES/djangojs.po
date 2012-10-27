@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-26 17:04+0800\n"
+"POT-Creation-Date: 2012-10-27 13:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: templates/group/po.js:4
+#: templates/group/po.js:3
 msgid "Confirm to quit group?"
 msgstr "确定要退出？"
 
-#: templates/group/po.js:5
-msgid "Confirm to unshare this repo?"
+#: templates/group/po.js:4
+#, fuzzy
+msgid "Confirm to unshare this library?"
 msgstr "确定要取消共享？"
+
+#: templates/group/po.js:5
+msgid ""
+"<div class=\"msg-del-confirm hide\"><p>Confirm to delete this message?</"
+"p><button class=\"msg-del-yes\">Yes</button><button class=\"msg-del-no\">No</"
+"button></div>"
+msgstr ""
+"<div class=\"msg-del-confirm hide\"><p>确认要删除该留言吗？</p><button class="
+"\"msg-del-yes\">确认</button><button class=\"msg-del-no\">取消</button></div>"
+
+#: templates/group/po.js:6
+msgid "Successfully deleted."
+msgstr "删除成功"

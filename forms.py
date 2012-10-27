@@ -64,29 +64,29 @@ class RepoCreateForm(forms.Form):
     Form for creating repo and org repo.
     """
     repo_name = forms.CharField(max_length=50, error_messages={
-            'required': '名称不能为空',
-            'max_length': '名称太长，不超过50个字符'
+            'required': _(u'Name can\'t be empty'),
+            'max_length': _(u'Name should be less than 50 characters')
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
-            'required': '描述不能为空',
-            'max_length': '描述太长，不超过100个字符'
+            'required': _(u'Description can\'t be empty'),
+            'max_length': _(u'Description should be less than 100 characters')
             })
     encryption = forms.CharField(max_length=1)
     passwd = forms.CharField(min_length=3, max_length=15, required=False,
                              error_messages={
-            'min_length': '密码太短',
-            'max_length': '密码太长',
+            'min_length': _(u'Password should be at least 3 characters'),
+            'max_length': _(u'Password should be less than 15 characters'),
             })
     passwd_again = forms.CharField(min_length=3, max_length=15, required=False,
                                    error_messages={
-            'min_length': '密码太短',
-            'max_length': '密码太长',
+            'min_length': _(u'Password should be at least 3 characters'),
+            'max_length': _(u'Password should be less than 15 characters'),
             })
 
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_filename(repo_name):
-            error_msg = u"您输入的名称 %s 包含非法字符" % repo_name
+            error_msg = _(u"Name %s is not valid") % repo_name
             raise forms.ValidationError(error_msg)
         else:
             return repo_name
@@ -108,7 +108,7 @@ class RepoCreateForm(forms.Form):
                 passwd = self.cleaned_data['passwd']
                 passwd_again = self.cleaned_data['passwd_again']
                 if passwd != passwd_again:
-                    raise forms.ValidationError("两次输入的密码不一致")
+                    raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 
 class SharedRepoCreateForm(RepoCreateForm):

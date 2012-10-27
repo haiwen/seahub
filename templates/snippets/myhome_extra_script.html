@@ -23,14 +23,14 @@ $(function() {
     //check before post
     $('#share-submit-btn').click(function() {
         if (!$.trim($('#email_or_group').attr('value'))) {
-            apply_form_error('repo-share-form', '输入不能为空。');
+            apply_form_error('repo-share-form', gettext('Input can\'t be empty'));
             return false;
         }
     });
 
     addConfirmTo($('.repo-delete-btn'));
     
-    addConfirmTo($('.unshare-btn'), '确定要取消共享？');
+    addConfirmTo($('.unshare-btn'), gettext('Confirm to remove shared library?'));
 
     $(".download-btn").click(function() {
             window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
