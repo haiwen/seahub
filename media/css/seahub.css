@@ -271,7 +271,6 @@ textarea:-moz-placeholder {
     font-size: 14px;
     font-weight: bold;
     overflow:hidden;
-    padding-bottom:8px;
     border-bottom:1px solid #ddd;
     margin-bottom:25px;
 }
@@ -394,7 +393,7 @@ textarea:-moz-placeholder {
 }
 #header .nav {
     float:left;
-    padding-top:16px;
+    padding-top:17px;
 }
 #header .nav li {
     float: left;

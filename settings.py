@@ -211,7 +211,7 @@ CCNET_APPLET_ROOT = "http://localhost:13420"
 # Account initial password, for password resetting.
 INIT_PASSWD = '123456'
 
-SEAHUB_TITLE = 'Private SeaCloud'
+SEAHUB_TITLE = 'Private Seafile'
 
 USE_SUBDOMAIN = False
 
