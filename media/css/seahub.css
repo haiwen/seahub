@@ -617,7 +617,7 @@ textarea:-moz-placeholder {
     color: #777;
     padding: 0 15px; 
     border-left: 4px solid #DDD; 
-    margin: 10px 0;
+    margin: 1.2em 0;
 }
 .article table {
     margin:0.8em 0;
