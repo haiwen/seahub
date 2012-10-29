@@ -1,5 +1,5 @@
 {% extends "org_base.html" %}
-{% load seahub_tags avatar_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_org_personal_class %}class="cur"{% endblock %}
@@ -11,19 +11,19 @@
 {% block left_panel %}
 <!-- 我的基本信息 -->
 <div class="info-item">
-<h3 class="info-item-top">我的基本信息</h3>
+<h3 class="info-item-top">{% trans "Account" %}</h3>
 <div class="info-item-bottom home-profile ovhd">
     <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
 {% if nickname %}
 <p class="fleft">{{ nickname }}</p>
 {% else %}
-<p class="fleft">暂无昵称 <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="编辑" title="编辑" /></a></p>
+<p class="fleft">{% trans "Nickname is empty" %} <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit" %}" title="{% trans "Edit" %}" /></a></p>
 {% endif %}
 </div>
 </div>
 
 <div class="info-item">
-<h3 class="info-item-top">我已用的团体空间</h3>
+<h3 class="info-item-top">{% trans "Org Space Used" %}</h3>
 <p class="info-item-bottom">{{ quota_usage|filesizeformat }}</p>
 </div>
 

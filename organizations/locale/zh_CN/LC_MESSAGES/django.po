@@ -1,0 +1,212 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-29 17:43+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: templates/organizations/org_admin.html:10
+msgid "Total Org Space Used"
+msgstr "团体已用总空间"
+
+#: templates/organizations/org_admin.html:17
+msgid "All Members"
+msgstr "所有成员"
+
+#: templates/organizations/org_admin.html:18
+msgid "Add Members"
+msgstr "添加成员"
+
+#: templates/organizations/org_admin.html:21
+msgid "Email"
+msgstr "邮箱"
+
+#: templates/organizations/org_admin.html:22
+msgid "Space Used"
+msgstr "已用空间"
+
+#: templates/organizations/org_admin.html:23
+#: templates/organizations/org_group_admin.html:14
+#: templates/organizations/org_public.html:29
+#: templates/organizations/org_seafadmin.html:15
+msgid "Operations"
+msgstr "操作"
+
+#: templates/organizations/org_admin.html:36
+#: templates/organizations/org_group_admin.html:21
+#: templates/organizations/org_seafadmin.html:23
+msgid "Delete"
+msgstr "删除"
+
+#: templates/organizations/org_admin.html:45
+#: templates/organizations/org_group_admin.html:28
+#: templates/organizations/org_seafadmin.html:30
+msgid "Previous"
+msgstr "上一页"
+
+#: templates/organizations/org_admin.html:48
+#: templates/organizations/org_group_admin.html:31
+#: templates/organizations/org_seafadmin.html:33
+msgid "Next"
+msgstr "下一页"
+
+#: templates/organizations/org_admin.html:53
+#: templates/organizations/org_group_admin.html:36
+#: templates/organizations/org_seafadmin.html:38
+msgid "Per page: "
+msgstr "每页："
+
+#: templates/organizations/org_admin.html:72
+msgid "Email: "
+msgstr "邮箱："
+
+#: templates/organizations/org_admin.html:74
+msgid "System will send notification email if email is not registered."
+msgstr "可以是非网站注册用户，我们会以邮件通知对方。"
+
+#: templates/organizations/org_admin.html:75
+msgid "Please type an email"
+msgstr "输入不能为空。"
+
+#: templates/organizations/org_admin.html:76
+msgid "Submit"
+msgstr "提交"
+
+#: templates/organizations/org_group_admin.html:7
+#: templates/organizations/org_pubinfo.html:26
+msgid "Groups"
+msgstr "群组"
+
+#: templates/organizations/org_group_admin.html:11
+#: templates/organizations/org_public.html:25
+#: templates/organizations/org_seafadmin.html:12
+msgid "Name"
+msgstr "名称"
+
+#: templates/organizations/org_group_admin.html:12
+msgid "Creator"
+msgstr "创建者"
+
+#: templates/organizations/org_group_admin.html:13
+msgid "Create Time"
+msgstr "创建时间"
+
+#: templates/organizations/org_group_admin.html:54
+#: templates/organizations/org_pubinfo.html:20
+#: templates/organizations/org_seafadmin.html:56
+msgid "Empty"
+msgstr "暂无"
+
+#: templates/organizations/org_group_admin.html:60
+msgid "Really delete this group?"
+msgstr "确定要删除这个群组？"
+
+#: templates/organizations/org_groups.html:13
+#: templates/organizations/org_public.html:13
+msgid "Tips"
+msgstr "小提示"
+
+#: templates/organizations/org_groups.html:15
+msgid ""
+"After creating a group, you can add other members and share libraries into "
+"the group."
+msgstr "群组创建后，就可以往里面共享资料，邀请他人一起来协同维护这些资料。"
+
+#: templates/organizations/org_groups.html:16
+msgid ""
+"You can also share libraries to groups that you're not participated, kind "
+"like carbon copy in email sending."
+msgstr "您也可以共享资料到您没有参加的群组，相当于邮件的抄送功能。"
+
+#: templates/organizations/org_pubinfo.html:12
+msgid "Users"
+msgstr "成员列表"
+
+#: templates/organizations/org_pubinfo.html:37
+msgid "Creator: "
+msgstr "创建者："
+
+#: templates/organizations/org_pubinfo.html:38
+msgid "Create Time: "
+msgstr "创建时间："
+
+#: templates/organizations/org_pubinfo.html:44
+msgid ""
+"No one has created any groups, you can click \"Add Group\" button under "
+"\"Group\" label to create a group. "
+msgstr "现在还没有人创建群组，您可以通过“群组”标签下的“添加群组”按钮创建。"
+
+#: templates/organizations/org_public.html:14
+msgid "Libraries mark as read-only can only be viewing, can not be downloaded."
+msgstr "标记为只读的资料库只能查看，无法整个下载。"
+
+#: templates/organizations/org_public.html:19
+msgid "Public Libraries"
+msgstr "公开的资料库"
+
+#: templates/organizations/org_public.html:20
+msgid "New Library"
+msgstr "新建资料库"
+
+#: templates/organizations/org_public.html:26
+#: templates/organizations/org_seafadmin.html:14
+msgid "Description"
+msgstr "描述"
+
+#: templates/organizations/org_public.html:27
+msgid "Last Update"
+msgstr "更新时间"
+
+#: templates/organizations/org_public.html:28
+msgid "Share From"
+msgstr "共享来源"
+
+#: templates/organizations/org_public.html:35
+#: templates/organizations/org_seafadmin.html:19
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templates/organizations/org_public.html:37
+msgid "Read-Only"
+msgstr "只读"
+
+#: templates/organizations/org_public.html:50
+msgid "Download"
+msgstr "下载"
+
+#: templates/organizations/org_seafadmin.html:7
+msgid "All Libraries"
+msgstr "所有资料库"
+
+#: templates/organizations/org_seafadmin.html:13
+msgid "Owner"
+msgstr "拥有者"
+
+#: templates/organizations/personal.html:14
+msgid "Account"
+msgstr "我的基本信息"
+
+#: templates/organizations/personal.html:20
+msgid "Nickname is empty"
+msgstr "暂无昵称"
+
+#: templates/organizations/personal.html:20
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/organizations/personal.html:26
+msgid "Org Space Used"
+msgstr "我已用的团体空间"

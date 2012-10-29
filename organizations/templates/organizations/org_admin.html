@@ -1,25 +1,26 @@
 {% extends "org_admin_base.html" %}
 {% load url from future %}
+{% load i18n %}
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
 
 <div class="info-item">
-    <h3 class="info-item-top">团体已用总空间</h3>
+    <h3 class="info-item-top">{% trans "Total Org Space Used" %}</h3>
     <p class="info-item-bottom">{{ org_quota_usage|filesizeformat }} {% if org_quota > 0 %} / {{ org_quota|filesizeformat }} {% endif %}</p>
 </div>
 
 {% endblock %}
 
 {% block right_panel %}
-<h3>所有成员</h3>
-<button id="org-user-add">添加成员</button>
+<h3>{% trans "All Members" %}</h3>
+<button id="org-user-add">{% trans "Add Members" %}</button>
 <table>
     <tr>
-        <th width="60%">邮箱</th>
-	<th width="20%">已用空间</th>
-        <th width="20%">操作</th>
+        <th width="60%">{% trans "Email" %}</th>
+	<th width="20%">{% trans "Space Used" %}</th>
+        <th width="20%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -32,7 +33,7 @@
 	</td>
         <td>
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">删除</a>
+          <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">{% trans "Delete" %}</a>
           {% endif %}
         </td>
     </tr>
@@ -41,12 +42,15 @@
 
 <div id="paginator">
     {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
     {% endif %}
     {% if page_next %}
-    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+    <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/useradmin/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next" %}</a>
     {% endif %}
-    <span>每页：</span> 
+    {% if current_page != 1 or page_next %}
+    |
+    {% endif %}
+    <span>{% trans "Per page: "%}</span>
     {% if per_page == 25 %}
     <span> 25 </span> 
     {% else %}
@@ -65,11 +69,11 @@
 </div>
 
 <form id="user-add-form" action="" method="post" name="user-add-form" class="hide">
-    <label>邮箱：</label><br />
+    <label>{% trans "Email: " %}</label><br />
     <textarea id="added-member-name" name="added-member-name"></textarea>
-    <p class="tip">可以是非网站注册用户，我们会以邮件通知对方。</p>
-    <p class="error hide">输入不能为空。</p>
-    <input type="submit" value="提交" />
+    <p class="tip">{% trans "System will send notification email if email is not registered." %}</p>
+    <p class="error hide">{% trans "Please type an email" %}</p>
+    <input type="submit" value="{% trans "Submit" %}" />
 </form>
 
 {% endblock %}
