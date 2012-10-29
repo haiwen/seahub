@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags i18n %}
 {% load url from future %}
 
 {% block nav_shareadmin_class %}class="cur"{% endblock %}
@@ -11,49 +11,49 @@
 {% endif %}
 
 {% block right_panel %}
-<h3>我共享的资料库</h3>
+<h3>{% trans "Shared Libraries"%}</h3>
 {% if shared_repos %}
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">名字</th>
-        <th width="22%">共享给</th>
-        <th width="13%">权限</th>
-        <th width="30%">描述</th>
-        <th width="11%">操作</th>
+        <th width="20%">{% trans "Name"%}</th>
+        <th width="22%">{% trans "Share To"%}</th>
+        <th width="13%">{% trans "Permission"%}</th>
+        <th width="30%">{% trans "Description"%}</th>
+        <th width="11%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in shared_repos %}
     <tr data="{{repo.props.share_type}}">
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="目录icon" /></td>
         <td data="{{ repo.props.repo_id }}"><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
         <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
         <td>
             <div class="share-permission">
                 <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="编辑 icon" title="编辑" class="share-permission-edit-icon vh" />
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%} icon" title="{% trans "Edit"%}" class="share-permission-edit-icon vh" />
             </div>
             <select name="permission" class="share-permission-select hide">
                 <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
                 {% if repo.props.permission == 'rw' %}
-                <option value="r">只可浏览</option>
+                <option value="r">{% trans "Read-Only"%}</option>
                 {% else %}
-                <option value="rw">可读写</option>
+                <option value="rw">{% trans "Read-Write"%}</option>
                 {% endif %} 
             </select>
         </td>
         <td>{{ repo.props.repo_desc }}</td>
         <td>
           {% if repo.props.share_type == 'group' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">取消共享</a>
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Remove Share"%}</a>
 	  {% endif %}
           {% if repo.props.share_type == 'personal' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">取消共享</a>
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">{% trans "Remove Share"%}</a>
 	  {% endif %}
 	  {% if repo.props.share_type == 'public' %}
 	      {% if not org %}
-	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">取消共享</a>
+	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Remove Share"%}</a>
 	      {% else %}
-	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">取消共享</a>
+	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Remove Share"%}</a>
 	      {% endif %}
           {% endif %}
         </td>
@@ -61,17 +61,17 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">这里将显示您共享给您朋友的资料库。您可以点击“我的页面”任意资料库旁的“共享”图标将您的资料库共享给您的朋友。</p>
+<p class="empty-repo-tips">{% blocktrans %}Here will show libraries you share to your friends. You can click "Share" icon in "My Home" to share library to your friends.{% endblocktrans %}</p>
 {% endif %}
 
-<h3>我管理的文件外链</h3>
+<h3>{% trans "File Links"%}</h3>
 {% if fileshares %}
 <table class="sharelink-list">
   <tr>
-    <th width="45%">文件名</th>
-    <th width="30%">所属资料库</th>
-    <th width="10%">查看次数</th>
-    <th width="15%">操作</th>
+    <th width="45%">{% trans "File"%}</th>
+    <th width="30%">{% trans "Library"%}</th>
+    <th width="10%">{% trans "View Count"%}</th>
+    <th width="15%">{% trans "Operations"%}</th>
   </tr>
   {% for fs in fileshares %}
   <tr>
@@ -79,16 +79,16 @@
     <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
     <td>{{ fs.view_cnt }}</td>
     <td>
-        <a href="#" class="op view-link" data="{{ fs.token }}">查看链接</a>
-        <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">删除</a>
+        <a href="#" class="op view-link" data="{{ fs.token }}">{% trans "View Link"%}</a>
+        <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">{% trans "Remove"%}</a>
     </td>
   </tr>
   {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">这里将显示您分享的文件外链。您可以在文件浏览页面点击“获取分享地址”按钮生成文件外链。</p>
+<p class="empty-repo-tips">{% blocktrans %}Here will show your file links. You can click "Get sharing link" in file viewing page to generate file link. {% endblocktrans %}</p>
 {% endif %}
-<p id="link" class="hide">该文件外链为：<input type="text" readonly="readonly" value="" id="shared-link" /></p>
+<p id="link" class="hide">{% trans "File Link: "%}<input type="text" readonly="readonly" value="" id="shared-link" /></p>
 {% endblock %}
 
 {% block extra_script %}

@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-29 11:17+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: templates/repo/share_admin.html:14
+msgid "Shared Libraries"
+msgstr "我共享的资料库"
+
+#: templates/repo/share_admin.html:19
+msgid "Name"
+msgstr "名字"
+
+#: templates/repo/share_admin.html:20
+msgid "Share To"
+msgstr "共享到"
+
+#: templates/repo/share_admin.html:21
+msgid "Permission"
+msgstr "权限"
+
+#: templates/repo/share_admin.html:22
+msgid "Description"
+msgstr "描述"
+
+#: templates/repo/share_admin.html:23 templates/repo/share_admin.html.py:74
+msgid "Operations"
+msgstr "操作"
+
+#: templates/repo/share_admin.html:27 templates/repo/share_admin.html.py:40
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templates/repo/share_admin.html:33
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/repo/share_admin.html:38
+msgid "Read-Only"
+msgstr "只读"
+
+#: templates/repo/share_admin.html:47 templates/repo/share_admin.html.py:50
+#: templates/repo/share_admin.html:54 templates/repo/share_admin.html.py:56
+msgid "Remove Share"
+msgstr "取消共享"
+
+#: templates/repo/share_admin.html:64
+msgid ""
+"Here will show libraries you share to your friends. You can click \"Share\" "
+"icon in \"My Home\" to share library to your friends."
+msgstr ""
+"这里将显示您共享给您朋友的资料库。您可以点击“我的页面”任意资料库旁的“共享”图"
+"标将您的资料库共享给您的朋友。"
+
+#: templates/repo/share_admin.html:67
+msgid "File Links"
+msgstr "文件外链"
+
+#: templates/repo/share_admin.html:71
+msgid "File"
+msgstr "文件"
+
+#: templates/repo/share_admin.html:72
+msgid "Library"
+msgstr "资料库"
+
+#: templates/repo/share_admin.html:73
+msgid "View Count"
+msgstr "查看次数"
+
+#: templates/repo/share_admin.html:82
+msgid "View Link"
+msgstr "查看链接"
+
+#: templates/repo/share_admin.html:83
+msgid "Remove"
+msgstr "删除"
+
+#: templates/repo/share_admin.html:89
+msgid ""
+"Here will show your file links. You can click \"Get sharing link\" in file "
+"viewing page to generate file link. "
+msgstr ""
+"这里将显示您分享的文件外链。您可以在文件浏览页面点击“获取分享地址”按钮生成文"
+"件外链。"
+
+#: templates/repo/share_admin.html:91
+msgid "File Link: "
+msgstr "文件外链："

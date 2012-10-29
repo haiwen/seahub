@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 21:11+0800\n"
+"POT-Creation-Date: 2012-10-29 10:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,6 +190,8 @@ msgstr "信息栏"
 
 #: templates/group/group_info.html:124
 #: templates/group/groups_right_panel.html:30
+#: templates/group/grpmember_add_form.html:12
+#: templates/group/grpmember_add_form.html:19
 msgid "Submit"
 msgstr "提交"
 
@@ -303,6 +305,27 @@ msgstr "您还没有参加任何群组，可以点击“添加群组”按钮创
 #: templates/group/groups_right_panel.html:27
 msgid "Group Name"
 msgstr "群组名称"
+
+#: templates/group/grpmember_add_form.html:3
+msgid "Add members to "
+msgstr "添加成员到 "
+
+#: templates/group/grpmember_add_form.html:4
+#: templates/group/grpmember_add_form.html:16
+msgid "Type Emails"
+msgstr "输入邮箱"
+
+#: templates/group/grpmember_add_form.html:7
+msgid "Tip: System will send an email to him if the email is not registered."
+msgstr "Tip：可以是未注册邮箱，系统会向他发送邀请邮件。"
+
+#: templates/group/grpmember_add_form.html:9
+msgid "Tip: The email should be already registered."
+msgstr "Tip：必须是已注册的邮箱。"
+
+#: templates/group/grpmember_add_form.html:15
+msgid "Add staffs to "
+msgstr "添加管理员到 "
 
 #~ msgid "Update Time"
 #~ msgstr "更新时间"
