@@ -19,7 +19,7 @@
 </div>
 <div class="info-item">
     <div class="info-item-top">
-        <h3 class="inbl">{% trans "Staffs" %}</h3>
+        <h3>{% trans "Staffs" %}</h3>
     </div>
     <ul class="info-item-bottom">
         {% for member in managers %}
@@ -29,10 +29,10 @@
 </div>
 
 <div class="info-item">
-    <div class="info-item-top">
-        <h3 class="inbl">{% trans "Members" %}</h3>
+    <div class="info-item-top ovhd">
+        <h3 class="fleft">{% trans "Members" %}</h3>
         {% if is_staff %}
-        <a href="#" class="grp-member-add op">{% trans "Add" %}</a>
+        <a href="#" id="grp-member-add" class="op fright">{% trans "Add" %}</a>
         {% endif %}
     </div>
     <div class="info-item-bottom">
@@ -74,10 +74,10 @@
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
-        <th width="36%">{% trans "Description" %}</th>
-        <th width="14%">{% trans "Last Update" %}</th>
-        <th width="16%">{% trans "Share From" %}</th>
-        <th width="10%">{% trans "Operations" %}</th>
+        <th width="34%">{% trans "Description" %}</th>
+        <th width="16%">{% trans "Last Update" %}</th>
+        <th width="14%">{% trans "Share From" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
 
     {% for repo in repos %}
@@ -266,7 +266,7 @@ $('.grp-admin-add').click(function() {
     addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
 });
 
-$('.grp-member-add').click(function() {
+$('#grp-member-add').click(function() {
     $("#member-add-form").modal({appendTo: "#main"});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;

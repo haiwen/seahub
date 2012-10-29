@@ -1,5 +1,6 @@
+{% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">推荐到群组</button> <button id="click-into-group">到所在群组</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">{% trans "Recommend" %}</button> <button id="click-into-group">{% trans "Back to group" %}</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
 $('#main-panel').css('margin-bottom', '28px');
@@ -27,7 +28,7 @@ $(document).click(function(e) {
 
 $('#recommend-submit').click(function() {
     if (!$.trim($('#recommend-to-group-form [name="message"]').val())) {
-        apply_form_error('recommend-form', '推荐语不能为空。');
+    apply_form_error('recommend-form', '{% trans "Please input recommend message." %}');
         return false;   
     }
 });

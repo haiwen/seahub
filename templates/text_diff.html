@@ -1,11 +1,11 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags%}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
-<h2 class="file-modification-hd"><span class="op-target">{{ u_filename }}</span> 修改详情 <a href="{% url 'user_profile' current_commit.creator_name %}">{% avatar current_commit.creator_name 16 %}</a><span class="modifier">{{ current_commit.creator_name|email2nickname }}</span><span class="time">{{ current_commit.ctime|translate_commit_time }}</span></h2>
+<h2 class="file-modification-hd"><span class="op-target">{{ u_filename }}</span> {% trans "modification details" %} <a href="{% url 'user_profile' current_commit.creator_name %}">{% avatar current_commit.creator_name 16 %}</a><span class="modifier">{{ current_commit.creator_name|email2nickname }}</span><span class="time">{{ current_commit.ctime|translate_commit_time }}</span></h2>
     <p class="path">
-        当前路径：
+        {% trans "Current Path:" %}
         {% for name, link in zipped %}
         {% if not forloop.last %}
         <a href="{% url 'repo' repo.id %}?p={{ link|urlencode }}">{{ name }}</a> /                
@@ -16,16 +16,16 @@
     </p>
 {% if is_new_file %}
 <div id="text-diff-output">
-<p class="blank-file">该文件为新建空白文件。</p>
+    <p class="blank-file">{% trans "It's a newly-created blank file." %}</p>
 </div>
 {% else %}
 <div id="text-diff-output">
 <table class="diff-con">
     <tr>
         <th width="3%"></th>
-        <th width="47%">修改前</th>
+        <th width="47%">{% trans "before modification" %}</th>
         <th width="3%"></th>
-        <th width="47%">修改后</th>
+        <th width="47%">{% trans "after modification" %}</th>
     </tr>
     {{ diff_result_table|safe }}
 </table>

@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url from future %}
     <form action="{% url 'group_recommend' %}" method="post" id="recommend-to-group-form" class="hide">{% csrf_token %}
-        <h3>{% trans "Recommend"%}
+        <h3>{% trans "Recommend" %}
         {% for name, link in zipped %}
             {% if forloop.last %}
             <span class="op-target">{{ name }}</span>

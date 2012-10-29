@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if not cloud_mode or not no_quota %}
 <script type="text/javascript">
 function gen_uuid() {
@@ -47,7 +48,7 @@ function submit_and_real_time_show () {
 
 $('#upload-submit').click(function () {
     if (!$.trim($('#file').val())) {
-        $('#error-msg').html('请先选择一个文件');
+    $('#error-msg').html('{% trans "Please choose a file at first." %}');
         return false;
     }
     $('#error-msg').addClass('hide');

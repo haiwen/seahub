@@ -17,7 +17,7 @@
         <th width="4%"><!--icon--></th>
         <th width="24%">{% trans "Name" %}</th>
         <th width="43%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="15%">{% trans "UpdateTime" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in owned_repos %}
@@ -39,7 +39,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Every library can be synchronized and shared respectively." %}</p>
+<p class="empty-repo-tips">{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Every library can be synchronized and shared separately." %}</p>
 {% endif %}
 </div>
 <div id="repos-shared-to-me">
@@ -49,8 +49,8 @@
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
         <th width="36%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Last Update" %}</th>
-        <th width="15%">{% trans "Share From" %}</th>
+        <th width="15%">{% trans "UpdateTime" %}</th>
+        <th width="15%">{% trans "Shared By" %}</th>
         <th width="10%">{% trans "Operations" %}</th>
     </tr>
 
@@ -81,7 +81,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "Libraries shared to you (for example, by your friends) will be shown here." %}</p>
+<p class="empty-repo-tips">{% trans "Libraries shared to you will be shown here." %}</p>
 {% endif %}
 </div>
 <div id="starred-files">
@@ -105,7 +105,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="no-starred-file-tips">{% trans "You can star the important files, and they will be shown here." %}</p>
+<p class="no-starred-file-tips">{% trans "You can star important files, and they will be shown here." %}</p>
 {% endif %}
 </div>
 </div>

@@ -6,7 +6,7 @@
 <head>
 <title>{% if org %}{{ org.org_name }} - {% endif %}{{ seahub_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="文件 协作 团队 团体" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=4884491531237" />
 <link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.jpg" />
@@ -31,26 +31,26 @@
                 {% if request.user.is_authenticated %}
                     {% if cloud_mode %}
                     <a href="#" id="account-context" data="no-popup">
-                    {% if org %} {{ org.org_name }} {% else %} 个人帐号 {% endif %}
+                        {% if org %} {{ org.org_name }} {% else %} {% trans "Personal Account" %} {% endif %}
                     <span class="tri-bg tri-down-bg"></span></a>
                     <ul class="hide" id="account-context-selector">
-                        <li><a href="{% url 'myhome' %}">个人帐号</a></li>
+                        <li><a href="{% url 'myhome' %}">{% trans "Personal Account" %}</a></li>
                         {% for org in request.user.orgs %}
                         <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
                         {% endfor %}
-                        <li><a href="{% url 'create_org' %}">新建团体</a></li>
+                        <li><a href="{% url 'create_org' %}">{% trans "New Organization" %}</a></li>
                     </ul>
                     {% endif %}
                 {% endif %}
 
                 {% if request.user.is_staff %}
-                <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>系统管理</a>
-                <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>个人工作台</a>
+                <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
+                <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "My Workspace" %}</a>
                 {% endif %}
                 
                 {% if org.is_staff %}
-                <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>管理员工作台</a>
-                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>个人工作台</a>
+                <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>{% trans "Admin" %}</a>
+                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "My Workspace" %}</a>
                 {% endif %}
                 </div>
 
@@ -140,7 +140,7 @@
     </div>
 
     <div id="dialog-confirm" class="hide">
-      <p id="confirm-con">{% trans "Confirm to delete?"%}</p>
+      <p id="confirm-con">{% trans "Really want to delete?" %}</p>
       <button id="yes-btn">{% trans "Yes"%}</button>
       <button class="simplemodal-close">{% trans "No"%}</button>
     </div>
@@ -154,12 +154,8 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js?t=4884491531236"></script>
 <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 <script type="text/javascript">
-$(function() {
  $('input, textarea').placeholder();
-});
-
-    $('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
-
+ $('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
 $('#lang-context').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -227,7 +223,6 @@ $(document).click(function(e) {
     }
 });
 {% endif %}
-
 
 {% endif %}
 </script>

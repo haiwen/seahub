@@ -1,6 +1,6 @@
-{% load seahub_tags avatar_tags group_avatar_tags %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
-<h3>最近事件</h3>
+<h3>{% trans 'Latest Events' %}</h3>
 <ul id="events" class="hide">
 {% for ev in events %}
     <li class="event-item w100 ovhd">
@@ -14,16 +14,16 @@
                 <span class="time">{{ commit.ctime|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>更新了资料库 <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a></p>
+            <p>{% trans 'Updated library' %} <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a></p>
             <p class="commit-msg ovhd">{{ commit.desc|translate_commit_desc }}
             {% if repo.encrypted %}
                 {% if repo.password_set %}
-                <a class="lsch-encrypted" password_set="true" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                <a class="lsch-encrypted" password_set="true" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
                 {% else %}
-                <a class="lsch-encrypted" password_set="false" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                <a class="lsch-encrypted" password_set="false" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
                 {% endif %}
             {% else %}
-                <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">详情</a>
+                <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
                 {% endif %}
             </p>
         </div>
@@ -40,7 +40,7 @@
                 <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>创建了资料库 <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
+            <p>{% trans 'Created library' %} <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
         </div>
         {% endwith %}
     {% endif %}
@@ -55,7 +55,7 @@
                 <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
-            <p>删除了资料库 {{ repo_name }}</p>
+            <p>{% trans 'Deleted library' %} {{ repo_name }}</p>
         </div>
         {% endwith %}
     {% endif %}
@@ -63,13 +63,13 @@
 {% endfor %}
 </ul>
 <form id="repo-set-password-form" class="hide">
-    <h3>资料库 <span class="repo-name"></span> 已加密</h3>
+    <h3>{% trans 'Library' %} <span class="repo-name"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />
-    <label>密码：</label>
+    <label>{% trans 'Password：' %}</label>
     <input type="password" name="password" maxlength="64" />
-    <p class="tip">密码只会在服务器上暂存1小时</p>
+    <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
     <p class="error"></p>
-    <input type="submit" class="submit" value="提交" />
-    <button class="simplemodal-close">取消</button>
+    <input type="submit" class="submit" value="{% trans 'Submit' %}" />
+    <button class="simplemodal-close">{% trans 'Cancel' %}</button>
 </form>
 <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->

@@ -1,5 +1,5 @@
 <!-- <script type="text/javascript"> -->
-
+{% load i18n %}
 function get_commit_diff(url, callback) {
     $.ajax({
         url: url,
@@ -16,31 +16,31 @@ function get_commit_diff(url, callback) {
                 con += '</ul>';
             };
             if (data['new'].length > 0) {
-                con += '<h3 id="ls-ch-new">新文件</h3>';
+            con += '<h3 id="ls-ch-new">{% trans "New files" %}</h3>';
                 show(data['new']);
             }
             if (data['removed'].length > 0) {
-                con += '<h3 id="ls-ch-rm">删除的文件</h3>';
+                con += '<h3 id="ls-ch-rm">{% trans "Deleted files" %}</h3>';
                 show(data['removed']);
             }
             if (data['renamed'].length > 0) {
-                con += '<h3 id="ls-ch-rn">重命名或移动的文件</h3>';
+            con += '<h3 id="ls-ch-rn">{% trans "Renamed or Moved files" %}</h3>';
                 show(data['renamed']);
             }
             if (data['modified'].length > 0) {
-                con += '<h3 id="ls-ch-modi">修改的文件</h3>';
+            con += '<h3 id="ls-ch-modi">{% trans "Modified files" %}</h3>';
                 show(data['modified']);
             }
             if (data['newdir'].length > 0) {
-                con += '<h3 id="ls-ch-newdir">新目录</h3>';
+            con += '<h3 id="ls-ch-newdir">{% trans "New directories" %}</h3>';
                 show(data['newdir']);
             }
             if (data['deldir'].length > 0) {
-                con += '<h3 id="ls-ch-deldir">删除的目录</h3>';
+            con += '<h3 id="ls-ch-deldir">{% trans "Deleted directories" %}</h3>';
                 show(data['deldir']);
             }
             if (!con) {
-                con = '<p>合并没有产生冲突文件</p>';
+            con = '<p>{% trans "No conflict in the merge." %}</p>';
             }
             callback(con);
         }
@@ -51,7 +51,7 @@ function list_commit_change(obj) {
     var url = obj.attr('href');
     get_commit_diff(url, function(content) {
         var time = '<p><span class="commit-time">' + obj.attr('data') + '</span></p>';
-        var title = '<h2>修改详情</h2>' + time;
+        var title = '<h2>{% trans "Modification Details" %}</h2>' + time;
         $('#ls-ch').html(title + content).modal({
             appendTo:'#main',
             maxHeight: window.innerHeight - 57,
