@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 20:24+0800\n"
+"POT-Creation-Date: 2012-10-29 23:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,7 @@ msgid "Password should be less than 15 characters"
 msgstr "密码太长"
 
 #: forms.py:89
+#, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
@@ -186,15 +187,17 @@ msgstr "已用空间"
 msgid "My Home"
 msgstr "我的页面"
 
-#: templates/myhome_base.html:12
+#: templates/myhome_base.html:12 templates/org_base.html:12
 msgid "Public Library"
 msgstr "公共资料"
 
-#: templates/myhome_base.html:16 templates/pubinfo.html:22
+#: templates/myhome_base.html:16 templates/org_base.html:15
+#: templates/pubinfo.html:22
 msgid "Groups"
 msgstr "群组"
 
-#: templates/myhome_base.html:19 templates/snippets/my_owned_repos.html:35
+#: templates/myhome_base.html:19 templates/org_base.html:18
+#: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
 
@@ -202,9 +205,25 @@ msgstr "共享"
 msgid "Contacts"
 msgstr "通讯录"
 
-#: templates/myhome_base.html:26
+#: templates/myhome_base.html:26 templates/org_base.html:21
 msgid "Public Info"
 msgstr "公共信息"
+
+#: templates/org_admin_base.html:7
+msgid "Org Info"
+msgstr "团体概况"
+
+#: templates/org_admin_base.html:10
+msgid "Library Management"
+msgstr "资料库管理"
+
+#: templates/org_admin_base.html:13
+msgid "Group Management"
+msgstr "群组管理"
+
+#: templates/org_base.html:9
+msgid "Personal"
+msgstr "个人页面"
 
 #: templates/pubinfo.html:8
 msgid "Users"
@@ -499,7 +518,7 @@ msgstr "前一页"
 msgid "Next"
 msgstr "下一页"
 
-#: templates/repo_history.html:52 templates/repo_view_snapshot.html:56
+#: templates/repo_history.html:55 templates/repo_view_snapshot.html:56
 msgid "Per page: "
 msgstr "每页："
 
@@ -624,6 +643,7 @@ msgid "Processing..."
 msgstr "处理中..."
 
 #: templates/repo_view_file.html:150
+#, python-format
 msgid "You have not downloaded %(repo.name)s"
 msgstr "您还没有将资料库 %(repo.name)s 下载到本地"
 
@@ -731,6 +751,7 @@ msgid "You're receiving this e-mail because you requested a password reset"
 msgstr "您收到这封邮件是因为您请求了密码重置。"
 
 #: templates/registration/password_reset_email.html:3
+#, python-format
 msgid "for your user account at %(site_name)s"
 msgstr ""
 
