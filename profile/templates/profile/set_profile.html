@@ -1,27 +1,27 @@
 {% extends "profile/profile_base.html" %}
-{% load avatar_tags %}
+{% load avatar_tags i18n %}
 
 {% block left_panel %}
 {% endblock %}
 
 {% block right_panel %}
 <div id="user-basic-info">
-<h2>个人基本信息修改</h2>
+<h2>{% trans "Modify Personal Infos" %}</h2>
 <form action="" method="post">
-    <label>头像:</label>{% avatar request.user.username 60 %}
-    <a href="{{ SITE_ROOT }}avatar/add/">更改</a><br />
-    <label>密码:</label><a href="{{ SITE_ROOT }}accounts/password/change/">更改</a><br/>
-    <label>昵称:</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
+    <label>{% trans "Avatar: " %}</label>{% avatar request.user.username 60 %}
+    <a href="{{ SITE_ROOT }}avatar/add/">{% trans "Change" %}</a><br />
+    <label>{% trans "Password: " %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Change" %}</a><br/>
+    <label>{% trans "Nickname: " %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
     {% for error in form.nickname.errors %}
     <span class="error">{{ error|escape }}</span>
     {% endfor %}
     <br/>
-    <label>一句话介绍:</label><textarea name="intro">{{ form.data.intro }}</textarea>
+    <label>{% trans "Introduction: " %}</label><textarea name="intro">{{ form.data.intro }}</textarea>
     {% for error in form.intro.errors %}
     <span class="error">{{ error|escape }}</span>
     {% endfor %}
     <br/>
-    <input type="submit" value="提交" class="submit" />
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 </div>
 {% endblock %}

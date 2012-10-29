@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-29 14:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: views.py:41
+msgid "Successfully editting profile."
+msgstr "修改成功"
+
+#: views.py:47
+msgid "Failed to edit profile"
+msgstr "修改失败"
+
+#: views.py:80 views.py:119
+msgid "Has not accepted invitation yet"
+msgstr "他还未接受邀请。"
+
+#: templates/profile/set_profile.html:9
+msgid "Modify Personal Infos"
+msgstr "个人基本信息修改"
+
+#: templates/profile/set_profile.html:11
+msgid "Avatar: "
+msgstr "头像: "
+
+#: templates/profile/set_profile.html:12 templates/profile/set_profile.html:13
+msgid "Change"
+msgstr "更改"
+
+#: templates/profile/set_profile.html:13
+msgid "Password: "
+msgstr "密码:"
+
+#: templates/profile/set_profile.html:14
+msgid "Nickname: "
+msgstr "昵称: "
+
+#: templates/profile/set_profile.html:19
+msgid "Introduction: "
+msgstr "一句话介绍: "
+
+#: templates/profile/set_profile.html:24
+#: templates/profile/user_profile.html:36
+msgid "Submit"
+msgstr "提交"
+
+#: templates/profile/user_profile.html:10
+msgid "Add to contacts"
+msgstr "加为联系人"
+
+#: templates/profile/user_profile.html:30
+msgid "Email: "
+msgstr "邮箱："
+
+#: templates/profile/user_profile.html:32
+msgid "Name(optional): "
+msgstr "名字(可选)："
+
+#: templates/profile/user_profile.html:34
+msgid "Note(optional): "
+msgstr "备注(可选)："

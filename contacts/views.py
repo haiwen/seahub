@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory
 from django.contrib import messages
+from django.utils.translation import ugettext as _
 
 from models import Contact, ContactAddForm, ContactEditForm
 from utils import render_error
@@ -64,7 +65,7 @@ def contact_add_post(request):
         contact.save()
 
         result['success'] = True
-        messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
+        messages.success(request, _(u"Successfully adding %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -89,9 +90,9 @@ def contact_add(request):
         contact.note = form.cleaned_data['note']
         contact.save()
             
-        messages.success(request, u"您已成功添加 %s 为联系人" % contact_email)
+        messages.success(request, _(u"Successfully adding %s to contacts.") % contact_email)
     else:
-        messages.error(request, '操作失败')
+        messages.error(request, _('Failed to add an contact.'))
     
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:
@@ -116,7 +117,7 @@ def contact_edit(request):
         contact.note = note
         contact.save()
         result['success'] = True
-        messages.success(request, u'操作成功')
+        messages.success(request, _(u'Editting Successfully'))
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -129,6 +130,6 @@ def contact_delete(request):
     contact_email = request.GET.get('email')
 
     Contact.objects.filter(user_email=user_email, contact_email=contact_email).delete()
-    messages.success(request, u'删除成功')
+    messages.success(request, _(u'Deleting Successfully'))
     
     return HttpResponseRedirect(reverse("contact_list"))

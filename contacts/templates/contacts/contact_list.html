@@ -1,27 +1,27 @@
 {% extends "myhome_base.html" %}
-{% load avatar_tags %}
+{% load avatar_tags i18n %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
 <div class="info-item">
-<h3 class="info-item-top">小提示</h3>
-<p class="info-item-bottom">在共享和发送外链的时候，系统会自动记录下您用过的通讯地址，以方便下次使用。</p>
+<h3 class="info-item-top">{% trans "Tip"%}</h3>
+<p class="info-item-bottom">{% trans "System will record emails used in sharing and file link sending automatically."%}</p>
 </div>
 
 {% endblock %}
 
 {% block right_panel %}
-<h3>站内联系人列表</h3>
-<button id="contact-add">添加联系人</button>
+<h3>{% trans "Registered Contacts"%}</h3>
+<button id="contact-add">{% trans "Add Contacts"%}</button>
 {% if registered_contacts %}
 <table>
     <tr>
         <th width="4%"></th>
-        <th width="38%">邮箱</th>
-        <th width="20%">名字</th>
-        <th width="26%">备注</th>
-        <th width="12%">操作</th>
+        <th width="38%">{% trans "Email "%}</th>
+        <th width="20%">{% trans "Name"%}</th>
+        <th width="26%">{% trans "Note"%}</th>
+        <th width="12%">{% trans "Operations"%}</th>
     </tr>
     {% for contact in registered_contacts %}
     <tr>
@@ -30,25 +30,25 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td>
-            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">编辑</a>
-            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">删除</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">添加联系人时，如果该用户已注册，则显示为您的站内联系人。</p>
+<p class="empty-repo-tips">{% trans "Here will show all registered users when adding contacts."%}</p>
 {% endif %}
 
-<h3>站外联系人列表</h3>
+<h3>{% trans "Unregistered Contacts"%}</h3>
 {% if unregistered_contacts %}
 <table>
     <tr>
         <th width="4%"></th>
-        <th width="38%">邮箱</th>
-        <th width="20%">名字</th>
-        <th width="26%">备注</th>
-        <th width="12%">操作</th>
+        <th width="38%">{% trans "Email "%}</th>
+        <th width="20%">{% trans "Name"%}</th>
+        <th width="26%">{% trans "Note"%}</th>
+        <th width="12%">{% trans "Operations"%}</th>
     </tr>
     {% for contact in unregistered_contacts %}
     <tr>
@@ -57,35 +57,35 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td>
-            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">编辑</a>
-            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">删除</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">添加联系人时，如果该用户未注册，则显示为您的站外联系人。</p>
+<p class="empty-repo-tips">{% trans "Here will show all unregistered users when adding contacts."%}</p>
 {% endif %}
 
 <form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
-    <h3>添加联系人</h3>
+    <h3>{% trans "Add Contacts"%}</h3>
     {{ form.user_email.as_hidden }}
-    <label>邮箱：</label><br />
+    <label>{% trans "Email"%}</label><br />
     {{ form.contact_email }}<br />
-    <label>名字(可选)：</label><br />{{ form.contact_name }}<br />
-    <label>备注(可选)：</label><br />{{ form.note }}<br />
-    <p class="error hide" id="contact-add-error">请输入邮箱地址。</p>
-    <input type="submit" value="提交"  class="submit" />
+    <label>{% trans "Name(optional)"%}</label><br />{{ form.contact_name }}<br />
+    <label>{% trans "Note(optional)"%}</label><br />{{ form.note }}<br />
+    <p class="error hide" id="contact-add-error">{% trans "Please input email address"%}</p>
+    <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
 <form action="{% url contact_edit %}" method="post" id="contact-edit-form" class="hide">
-    <h3>编辑联系人</h3>
+    <h3>{% trans "Edit Contact"%}</h3>
     {{ edit_form.user_email.as_hidden }}
-    <label>邮箱：</label><br />
+    <label>{% trans "Email"%}</label><br />
     {{ edit_form.contact_email }}<br />
-    <label>名字(可选)：</label><br />{{ edit_form.contact_name }}<br />
-    <label>备注(可选)：</label><br />{{ edit_form.note }}<br />
+    <label>{% trans "Name(optional)"%}</label><br />{{ edit_form.contact_name }}<br />
+    <label>{% trans "Note(optional)"%}</label><br />{{ edit_form.note }}<br />
     <p class="error hide" id="contact-edit-error"></p>
-    <input type="submit" value="提交"  class="submit" />
+    <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
 
 {% endblock %}
@@ -101,6 +101,7 @@ $('.contact-edit').click(function() {
     $('#contact-edit-form [name="contact_name"]').val(contact_name);
     $('#contact-edit-form [name="note"]').val(contact_note);
     $('#contact-edit-form').modal({appendTo: '#main'});
+    return false;
 });
 $('#contact-edit-form').submit(function() {
     $.ajax({

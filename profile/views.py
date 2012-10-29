@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids
 from pysearpc import SearpcError
@@ -37,13 +38,13 @@ def edit_profile(request):
             profile.nickname = nickname
             profile.intro = intro
             profile.save()
-            messages.add_message(request, messages.INFO, u'修改成功')
+            messages.success(request, _(u'Successfully editting profile.'))
             # refresh nickname cache
             refresh_cache(request.user.username)
             
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
-            messages.add_message(request, messages.ERROR, u'修改失败')
+            messages.error(request, _(u'Failed to edit profile'))
     else:
         try:
             profile = Profile.objects.get(user=request.user.username)
@@ -76,7 +77,7 @@ def user_profile(request, user):
             user_intro = profile.intro
     else:
         nickname = user
-        user_intro = '他还未接受邀请。'
+        user_intro = _(u'Has not accepted invitation yet')
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
@@ -115,7 +116,7 @@ def get_user_profile(request, user):
             data['user_nickname'] = profile.nickname
             data['user_intro'] = profile.intro
     else:
-        data['user_intro'] = '他还未接受邀请。'
+        data['user_intro'] = _(u'Has not accepted invitation yet')
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,

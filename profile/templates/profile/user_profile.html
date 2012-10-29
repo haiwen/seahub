@@ -1,5 +1,5 @@
 {% extends "profile/profile_base.html" %}
-{% load avatar_tags %}
+{% load avatar_tags i18n %}
 
 {% block main_panel %}
 {% if not err_msg %}
@@ -7,7 +7,7 @@
     <div class="pic fleft">
         {% avatar email 80 %}
         {% if new_user %}
-        <button id="add">加为联系人</button>
+        <button id="add">{% trans "Add to contacts" %}</button>
         {% endif %}
     </div>
 
@@ -27,13 +27,13 @@
 {% if new_user %}
 <form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
     <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
-    <label>邮箱：</label><br />
+    <label>{% trans "Email: " %}</label><br />
     <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{{ email }}" /><br />
-    <label>名字(可选)：</label><br />
+    <label>{% trans "Name(optional): " %}</label><br />
     <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
-    <label>备注(可选)：</label><br />
+    <label>{% trans "Note(optional): " %}</label><br />
     <input id="id_note" type="text" name="note" maxlength="255" /><br />
-    <input type="submit" value="提交"  class="submit" />
+    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
 </form>
 {% endif %}
 
