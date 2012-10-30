@@ -283,7 +283,7 @@ $('.file-rename, .dir-rename').click(function () {
         var type = $(this).hasClass('file-rename') ? '{% trans "file" %} ' : '{% trans "directory" %} ',
         name = $(this).attr('data');
         newname = $('#rename-form input[name="newname"]');
-        $('#rename-hd').html( '{% trans "Rename" %}' + type + ' <span class="op-target">' + name + '</span> {% trans "to:" %}');
+        $('#rename-hd').html( '{% trans "Rename " %}' + type + ' <span class="op-target">' + name + '</span> {% trans "to:" %}');
     $('#rename-form input[name="oldname"]').val(name);
     $('#rename-form').modal({appendTo:'#main'});
     newname.before('<p class="hide">' + name + '</p>');

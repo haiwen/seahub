@@ -1,13 +1,13 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
-<h2>{{ u_filename }} 版本历史</h2>
-<p class="tip">Tip: 文件在每次修改后会生成一个新的版本，可以把当前文件内容“还原”到特定的版本。</p>
+<h2>{{ u_filename }}{% trans "'s Version History" %}</h2>
+<p class="tip">{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
 
 <p class="path">
-当前路径：
+{% trans 'Current Path:' %}
 {% for name, link in zipped %}
 {% if not forloop.last %}
 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /    
@@ -20,17 +20,17 @@
     <div class="commit-list-inner-container">
         <table class="commit-list">
             <tr>
-                <th width="30%" class="time">版本生成时间</th>
-                <th width="20%">最后修改者</th>
-                <th width="20%">大小</th>
-                <th width="30%">操作</th>
+                <th width="30%" class="time">{% trans 'Time' %}</th>
+                <th width="20%">{% trans 'Last Modifier' %}</th>
+                <th width="20%">{% trans 'Size' %}</th>
+                <th width="30%">{% trans 'Operations' %}</th>
             </tr>
             {% for commit in commits %}
             <tr>
                 <td class="time">
                     {{ commit.props.ctime|translate_commit_time }}
                     {% if commit.is_current_version %}
-                    (当前版本)
+                    {% trans '(current version)' %}
                     {% endif %}
                 </td>
 
@@ -40,17 +40,17 @@
                     <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
                 </td>
                 {% else %}
-                <td>未知</td>
+                <td>{% trans 'Unknown' %}</td>
                 {% endif %}
 
                 <td>{{ commit.revision_file_size|filesizeformat }} </td>
 
                 <td>
                     {% if not commit.is_current_version %}
-                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op">还原</a>
+                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op">{% trans 'Restore' %}</a>
                     {% endif %}
-                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">下载</a>
-                    <a href="{% url 'repo_view_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}&from=file_history" class="op">查看</a>
+                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">{% trans 'Download' %}</a>
+                    <a href="{% url 'repo_view_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}&from=file_history" class="op">{% trans 'View' %}</a>
                 </td>
             </tr>
             {% endfor %}
