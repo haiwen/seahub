@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 17:43+0800\n"
+"POT-Creation-Date: 2012-10-30 17:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+
+#: views.py:218
+msgid "Operation Successful"
+msgstr "操作成功"
+
+#: views.py:237
+msgid "Group name can only contain letters, numbers and underscore"
+msgstr "群组名称只能包含中英文字符，数字及下划线。"
+
+#: views.py:282
+msgid "Seafile Login Information"
+msgstr "Seafile 登陆信息"
+
+#: views.py:284
+msgid "Sending mail Successfully"
+msgstr "邮件发送成功"
+
+#: views.py:286
+msgid "Failed to send email"
+msgstr "邮件发送失败"
+
+#: views.py:386
+msgid "Successfully deleted member"
+msgstr "删除成员成功"
+
+#: views.py:405
+#, fuzzy, python-format
+msgid ""
+"%(from_email)s added you to organization <a href=\"%(org_url)s\">"
+"%(org_name)s</a>"
+msgstr "%(from_email)s 将你加入到团体 <a href=\"%(org_url)s\">%(org_name)s</a>"
+
+#: templates/organizations/create_org.html:5
+msgid "Create Orgnization"
+msgstr "创建团体"
+
+#: templates/organizations/create_org.html:7
+msgid "Organization Name"
+msgstr "团体名称"
+
+#: templates/organizations/create_org.html:9
+msgid "Url Prefix"
+msgstr "个性域名"
+
+#: templates/organizations/create_org.html:11
+msgid "Url prefix can only contains letters or numbers"
+msgstr "个性域名只能包含字母或数字"
+
+#: templates/organizations/create_org.html:14
+#: templates/organizations/org_admin.html:76
+msgid "Submit"
+msgstr "提交"
 
 #: templates/organizations/org_admin.html:10
 msgid "Total Org Space Used"
@@ -80,10 +132,6 @@ msgstr "可以是非网站注册用户，我们会以邮件通知对方。"
 #: templates/organizations/org_admin.html:75
 msgid "Please type an email"
 msgstr "输入不能为空。"
-
-#: templates/organizations/org_admin.html:76
-msgid "Submit"
-msgstr "提交"
 
 #: templates/organizations/org_group_admin.html:7
 #: templates/organizations/org_pubinfo.html:26
@@ -194,6 +242,43 @@ msgstr "所有资料库"
 #: templates/organizations/org_seafadmin.html:13
 msgid "Owner"
 msgstr "拥有者"
+
+#: templates/organizations/org_user_add_email.html:2
+#, python-format
+msgid "%(user)s added you to %(org_name)s organization on Seafile. "
+msgstr "%(user)s 在 Seafile 云存储上将你加入到 %(org_name)s 团体。"
+
+#: templates/organizations/org_user_add_email.html:3
+#, python-format
+msgid ""
+"\n"
+"Here is your login information:\n"
+"email: %(email)s\n"
+"password: %(password)s\n"
+"\n"
+"Please click follow link to log in:\n"
+msgstr ""
+"\n"
+"以下是您的登录信息：\n"
+"邮箱：%(email)s\n"
+"密码：%(password)s\n"
+"\n"
+"请点击以下链接登录：\n"
+
+#: templates/organizations/org_user_add_email.html:11
+#, python-format
+msgid ""
+"\n"
+"Please change your password after login.\n"
+"Thank you for using our site!\n"
+"\n"
+"The %(site_name)s team\n"
+msgstr ""
+"\n"
+"登录后请立即更改密码。\n"
+"感谢使用我们的网站！\n"
+"\n"
+"%(site_name)s 团队\n"
 
 #: templates/organizations/personal.html:14
 msgid "Account"

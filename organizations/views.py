@@ -215,7 +215,7 @@ def unset_org_inner_pub_repo(request, url_prefix, repo_id):
     except SearpcError:
         pass
 
-    messages.add_message(request, messages.INFO, '操作成功')
+    messages.add_message(request, messages.INFO, _('Operation Successful'))
     
     return HttpResponseRedirect(reverse(org_shareadmin, args=[url_prefix]))
 
@@ -234,7 +234,7 @@ def org_groups(request, url_prefix):
         
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            result['error'] = u'群组名称只能包含中英文字符，数字及下划线。'
+            result['error'] = _(u'Group name can only contain letters, numbers and underscore')
             return HttpResponse(json.dumps(result), content_type=content_type)
         
         try:
@@ -275,14 +275,15 @@ def send_org_user_add_mail(request, email, password, org_name):
         'password': password,
         'domain': domain,
         'protocol': use_https and 'https' or 'http',
+        'site_name': seahub_settings.SITE_NAME,
         }
-    
+
     try:
-        send_mail(u'SeaCloud注册信息', t.render(Context(c)),
+        send_mail(_(u'Seafile Login Information'), t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, u'邮件发送成功。')
+        messages.add_message(request, messages.INFO, _(u'Sending mail Successfully'))
     except:
-        messages.add_message(request, messages.ERROR, u'邮件发送失败。')
+        messages.add_message(request, messages.ERROR, _(u'Failed to send email'))
     
 @login_required
 @org_staff_required
@@ -382,9 +383,9 @@ def org_user_remove(request, url_prefix, user):
     url_prefix = request.user.org['url_prefix']
     remove_org_user(org_id, user)
 
-    messages.success(request, u"删除成功")
+    messages.success(request, _(u"Successfully deleted member"))
     
-    return HttpResponseRedirect(reverse('org_useradmin', args=[url_prefix]))
+    return HttpResponseRedirect(reverse('org_admin', args=[url_prefix]))
 
 def org_msg(request):
     """
@@ -401,8 +402,10 @@ def org_msg(request):
                 org_prefix = d['org_prefix']
                 org_url = reverse('org_public', args=[org_prefix])
                 
-                msg = u'%s 将你加入到团体 <a href="%s">%s</a>' % (
-                    from_email, org_url, org_name)
+                msg = _(u'%(from_email)s added you to organization <a href="%(org_url)s">%(org_name)s</a>') % \
+                {'from_email':from_email,
+                 'org_url': org_url,
+                 'org_name': org_name}
                 orgmsg_list.append(msg)
             except json.decoder.JSONDecodeError:
                 # This message is not json format, just list to user.

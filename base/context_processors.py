@@ -6,7 +6,7 @@ and returns a dictionary to add to the context.
 These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
-from settings import SEAFILE_VERSION, SEAHUB_TITLE
+from settings import SEAFILE_VERSION, SEAHUB_TITLE, SITE_NAME, SITE_BASE
 try:
     from settings import BUSINESS_MODE
 except ImportError:
@@ -33,5 +33,6 @@ def base(request):
         'cloud_mode': request.cloud_mode,
         'org': org,
         'base_template': base_template,
+        'site_name': SITE_NAME,
         }
 

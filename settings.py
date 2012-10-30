@@ -193,8 +193,8 @@ MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
 MAX_UPLOAD_FILE_NAME_LEN    = 256
 
 # Base url and name used in email sending
-SITE_BASE = 'http://gonggeng.org/'
-SITE_NAME = 'gonggeng'
+SITE_BASE = 'http://seafile.com'
+SITE_NAME = 'Seafile'
 
 # Set to True when user will be activaed after registration,
 # and no email sending
