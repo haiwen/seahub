@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-18 10:55+0800\n"
+"POT-Creation-Date: 2012-10-30 13:31+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,23 +44,31 @@ msgstr ""
 msgid "Avatar for %s"
 msgstr ""
 
-#: views.py:76
+#: views.py:77
 msgid "Successfully uploaded a new avatar."
 msgstr "上传成功。"
 
-#: views.py:143
+#: views.py:150
 msgid "Successfully updated your avatar."
 msgstr "更新成功。"
 
-#: views.py:185
+#: views.py:192
 msgid "Successfully deleted the requested avatars."
 msgstr "删除成功。"
 
-#: templates/avatar/add.html:19 templates/avatar/change.html:8
+#: templates/avatar/add.html:6
+msgid "Upload Avatar"
+msgstr "上传头像"
+
+#: templates/avatar/add.html:7 templates/avatar/change.html:8
 msgid "Your current avatar: "
 msgstr "当前头像："
 
-#: templates/avatar/add.html:25 templates/avatar/change.html:30
+#: templates/avatar/add.html:9
+msgid "Upload New Avatar: "
+msgstr "上传新头像："
+
+#: templates/avatar/add.html:13 templates/avatar/change.html:30
 msgid "Upload New Image"
 msgstr "提交"
 
@@ -92,7 +100,7 @@ msgstr ""
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
 
-#: templatetags/avatar_tags.py:44
+#: templatetags/avatar_tags.py:46
 msgid "Default Avatar"
 msgstr ""
 
