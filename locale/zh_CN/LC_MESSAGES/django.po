@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 23:01+0800\n"
+"POT-Creation-Date: 2012-10-30 11:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,34 +25,112 @@ msgstr "该邮箱已被注册"
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
+#: forms.py:49 forms.py:222
+msgid "Email is required"
+msgstr ""
+
+#: forms.py:50
+msgid "Email is not longer than 512 characters"
+msgstr "邮箱太长，不超过512个字符"
+
 #: forms.py:67
 msgid "Name can't be empty"
 msgstr "名称不能为空"
 
 #: forms.py:68
-msgid "Name should be less than 50 characters"
-msgstr "名称太长，不超过50个字符"
+msgid "Name is too long (maximum is 50 characters)"
+msgstr "名称太长（不超过50个字符）"
 
 #: forms.py:71
 msgid "Description can't be empty"
 msgstr "描述不能为空"
 
 #: forms.py:72
-msgid "Description should be less than 100 characters"
-msgstr "描述太长，不超过100个字符"
+msgid "Description is too long (maximum is 100 characters)"
+msgstr "描述太长（不超过100个字符）"
 
 #: forms.py:77 forms.py:82
-msgid "Password should be at least 3 characters"
-msgstr "密码太短"
+msgid "Password is too short (minimum is 3 characters)"
+msgstr "密码太短（不少于3个字符）"
 
 #: forms.py:78 forms.py:83
-msgid "Password should be less than 15 characters"
-msgstr "密码太长"
+msgid "Password is too long (maximum is 15 characters)"
+msgstr "密码太长（不超过15个字符）"
 
 #: forms.py:89
 #, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
+
+#: forms.py:124 forms.py:147 forms.py:171 forms.py:194
+msgid "Repo id is required"
+msgstr "需要 repo id"
+
+#: forms.py:125 forms.py:148 forms.py:172
+msgid "Parent dir is required"
+msgstr "需要 parent dir"
+
+#: forms.py:128 forms.py:152
+msgid "File name is too long"
+msgstr "文件名过长"
+
+#: forms.py:129 forms.py:153
+msgid "File name can't be empty"
+msgstr "文件名不能为空"
+
+#: forms.py:136 forms.py:160
+#, python-format
+msgid "File name \"%s\" is not valid"
+msgstr "文件名 %s 含有无效字符"
+
+#: forms.py:149
+msgid "Oldname is required"
+msgstr "需要 oldname"
+
+#: forms.py:175
+msgid "Directory name is too long"
+msgstr "目录名过长"
+
+#: forms.py:176
+msgid "Directory name can't be empty"
+msgstr "描述不能为空"
+
+#: forms.py:183
+#, python-format
+msgid "Directory name \"%s\" is not valid"
+msgstr "目录名 %s 含有无效字符"
+
+#: forms.py:195
+msgid "Username is required"
+msgstr "需要 username"
+
+#: forms.py:196
+msgid "Password can't be empty"
+msgstr "密码不能为空"
+
+#: forms.py:207
+msgid "Bad url format"
+msgstr "错误的 url 格式"
+
+#: forms.py:212
+msgid "Wrong password"
+msgstr "密码错误"
+
+#: forms.py:214
+msgid "Inernal server error"
+msgstr "服务器内部错误"
+
+#: forms.py:216
+msgid "Decrypt library error"
+msgstr "解密资料库出错"
+
+#: forms.py:224
+msgid "Quota can't be empty"
+msgstr "容量不能为空"
+
+#: forms.py:225
+msgid "Quota is too low (minimum value is 0)"
+msgstr "容量太小（最小为0）"
 
 #: settings.py:94
 msgid "English"
@@ -151,6 +229,29 @@ msgstr "确定"
 msgid "No"
 msgstr "取消"
 
+#: templates/decrypt_repo_form.html:9
+msgid ""
+"This library is encrypt, please input password. The password will live on "
+"server for 1 hour."
+msgstr "该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。"
+
+#: templates/decrypt_repo_form.html:11
+msgid "Password: "
+msgstr "密码："
+
+#: templates/decrypt_repo_form.html:15 templates/repo.html:168
+#: templates/repo.html.py:178 templates/repo.html:198
+#: templates/repo.html.py:209 templates/repo_update_file.html:21
+#: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
+#: templates/repo_view_file.html.py:167 templates/registration/login.html:13
+#: templates/registration/registration_form.html:18
+#: templates/snippets/events.html:72
+#: templates/snippets/group_recommend_form.html:23
+#: templates/snippets/repo_create_form.html:23
+#: templates/snippets/repo_share_form.html:18
+msgid "Submit"
+msgstr "提交"
+
 #: templates/myhome.html:15
 msgid "No Nickname"
 msgstr "暂无昵称"
@@ -209,15 +310,15 @@ msgstr "通讯录"
 msgid "Public Info"
 msgstr "公共信息"
 
-#: templates/org_admin_base.html:7
+#: templates/org_admin_base.html:8
 msgid "Org Info"
 msgstr "团体概况"
 
-#: templates/org_admin_base.html:10
+#: templates/org_admin_base.html:11
 msgid "Library Management"
 msgstr "资料库管理"
 
-#: templates/org_admin_base.html:13
+#: templates/org_admin_base.html:14
 msgid "Group Management"
 msgstr "群组管理"
 
@@ -421,18 +522,6 @@ msgstr "更多操作"
 #: templates/repo.html:163
 msgid "Directory Name"
 msgstr "目录名"
-
-#: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
-#: templates/repo.html.py:209 templates/repo_update_file.html:21
-#: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
-#: templates/repo_view_file.html.py:167 templates/registration/login.html:13
-#: templates/registration/registration_form.html:18
-#: templates/snippets/events.html:72
-#: templates/snippets/group_recommend_form.html:23
-#: templates/snippets/repo_create_form.html:23
-#: templates/snippets/repo_share_form.html:18
-msgid "Submit"
-msgstr "提交"
 
 #: templates/repo.html:169 templates/repo.html.py:179 templates/repo.html:199
 #: templates/repo.html.py:210 templates/repo_update_file.html:27
@@ -980,9 +1069,6 @@ msgstr "Tip：输入 all 共享到公共资料"
 
 #~ msgid "Get sharing link"
 #~ msgstr "获取分享地址"
-
-#~ msgid "File is loading..."
-#~ msgstr "文件内容读取中..."
 
 #~ msgid "Under processing, please wait..."
 #~ msgstr "处理中，请稍侯..."

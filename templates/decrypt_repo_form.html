@@ -1,18 +1,18 @@
 {% extends base_template %}
-
+{% load i18n %}
 {% load url from future %}
 
 {% block main_panel %}
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
             <div class="repo-file-list-not-show">
-                <p class="access-notice">该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。</p>
+                <p class="access-notice">{% trans "This library is encrypt, please input password. The password will live on server for 1 hour." %}</p>
                 <form action="{{ SITE_ROOT }}repo/{{ repo.id }}/?next={{ next }}" method="post">
-                    <label>密码：</label>
+                    <label>{% trans "Password: " %}</label>
                     <input type="hidden" name="repo_id" value="{{ repo.id }}" />
                     <input type="hidden" name="username" value="{{ request.user.username }}" />
                     <input id="id_password" type="password" name="password" maxlength="64" />
-                    <input type="submit" value="提交" />
+                    <input type="submit" value="{% trans "Submit" %}" />
                     {% for error in form.errors.values %}
                     <p class="error">{{ error|escape }}</p>
                     {% endfor %}

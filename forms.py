@@ -46,8 +46,8 @@ class FileLinkShareForm(forms.Form):
     """
 
     email = forms.CharField(max_length=512, error_messages={
-            'required': '输入不能为空',
-            'max_length': '邮箱太长，不超过512个字符'
+            'required': _("Email is required"),
+            'max_length': _("Email is not longer than 512 characters"),
             })
     file_shared_link = forms.CharField()
 
@@ -65,22 +65,22 @@ class RepoCreateForm(forms.Form):
     """
     repo_name = forms.CharField(max_length=50, error_messages={
             'required': _(u'Name can\'t be empty'),
-            'max_length': _(u'Name should be less than 50 characters')
+            'max_length': _(u'Name is too long (maximum is 50 characters)')
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
             'required': _(u'Description can\'t be empty'),
-            'max_length': _(u'Description should be less than 100 characters')
+            'max_length': _(u'Description is too long (maximum is 100 characters)')
             })
     encryption = forms.CharField(max_length=1)
     passwd = forms.CharField(min_length=3, max_length=15, required=False,
                              error_messages={
-            'min_length': _(u'Password should be at least 3 characters'),
-            'max_length': _(u'Password should be less than 15 characters'),
+            'min_length': _(u'Password is too short (minimum is 3 characters)'),
+            'max_length': _(u'Password is too long (maximum is 15 characters)'),
             })
     passwd_again = forms.CharField(min_length=3, max_length=15, required=False,
                                    error_messages={
-            'min_length': _(u'Password should be at least 3 characters'),
-            'max_length': _(u'Password should be less than 15 characters'),
+            'min_length': _(u'Password is too short (minimum is 3 characters)'),
+            'max_length': _(u'Password is too long (maximum is 15 characters)'),
             })
 
     def clean_repo_name(self):
@@ -121,19 +121,19 @@ class RepoNewFileForm(forms.Form):
     """
     Form for create a new empty file.
     """
-    repo_id = forms.CharField(error_messages={'required': '参数错误'})
-    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
+    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
+    parent_dir = forms.CharField(error_messages={'required': _('Parent dir is required')})
     new_file_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
                                 error_messages={
-                                    'max_length': '新文件名太长',
-                                    'required': '新文件名不能为空',
+                                    'max_length': _('File name is too long'),
+                                    'required': _('File name can\'t be empty'),
                                 })
 
     def clean_new_file_name(self):
         new_file_name = self.cleaned_data['new_file_name']
         try:
             if not is_valid_filename(new_file_name):
-                error_msg = u"您输入的文件名 %s 包含非法字符" % new_file_name
+                error_msg = _(u'File name "%s" is not valid') % new_file_name
                 raise forms.ValidationError(error_msg)
             else:
                 return new_file_name
@@ -144,20 +144,20 @@ class RepoRenameFileForm(forms.Form):
     """
     Form for rename a file.
     """
-    repo_id = forms.CharField(error_messages={'required': '参数错误'})
-    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
-    oldname = forms.CharField(error_messages={'required': '参数错误'})
+    repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
+    parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
+    oldname = forms.CharField(error_messages={'required': _("Oldname is required")})
     newname = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
                                 error_messages={
-                                    'max_length': '新文件名太长',
-                                    'required': '新文件名不能为空',
+                                    'max_length': _('File name is too long'),
+                                    'required': _('File name can\'t be empty'),
                                 })
 
     def clean_newname(self):
         newname = self.cleaned_data['newname']
         try:
             if not is_valid_filename(newname):
-                error_msg = u"您输入的文件名 %s 包含非法字符" % newname
+                error_msg = _(u'File name "%s" is not valid') % newname
                 raise forms.ValidationError(error_msg)
             else:
                 return newname
@@ -168,19 +168,19 @@ class RepoNewDirForm(forms.Form):
     """
     Form for create a new empty dir.
     """
-    repo_id = forms.CharField(error_messages={'required': '参数错误'})
-    parent_dir = forms.CharField(error_messages={'required': '参数错误'})
+    repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
+    parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
     new_dir_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
                                 error_messages={
-                                    'max_length': '新目录名太长',
-                                    'required': '新目录名不能为空',
+                                    'max_length': _('Directory name is too long'),
+                                    'required': _('Directory name can\'t be empty'),
                             })
 
     def clean_new_dir_name(self):
         new_dir_name = self.cleaned_data['new_dir_name']
         try:
             if not is_valid_filename(new_dir_name):
-                error_msg = u"您输入的目录名 %s 包含非法字符" % new_dir_name
+                error_msg = _(u'Directory name "%s" is not valid') % new_dir_name
                 raise forms.ValidationError(error_msg)
             else:
                 return new_dir_name
@@ -191,9 +191,9 @@ class RepoPassowrdForm(forms.Form):
     """
     Form for user to decrypt a repo in repo page.
     """
-    repo_id = forms.CharField(error_messages={'required': '参数错误'})
-    username = forms.CharField(error_messages={'required': '参数错误'})
-    password = forms.CharField(error_messages={'required': '密码不能为空'})
+    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
+    username = forms.CharField(error_messages={'required': _('Username is required')})
+    password = forms.CharField(error_messages={'required': _('Password can\'t be empty')})
 
     def clean(self):
         if 'password' in self.cleaned_data:
@@ -204,22 +204,22 @@ class RepoPassowrdForm(forms.Form):
                 seafserv_threaded_rpc.set_passwd(repo_id, username, password)
             except SearpcError, e:
                 if e.msg == 'Bad arguments':
-                    raise forms.ValidationError(u'url 格式不正确')
+                    raise forms.ValidationError(_(u'Bad url format'))
                 # elif e.msg == 'Repo is not encrypted':
                 #     return HttpResponseRedirect(reverse('repo',
                 #                                         args=[self.repo_id]))
                 elif e.msg == 'Incorrect password':
-                    raise forms.ValidationError(u'密码不正确，请重新输入')
+                    raise forms.ValidationError(_(u'Wrong password'))
                 elif e.msg == 'Internal server error':
-                    raise forms.ValidationError(u'服务器内部故障')
+                    raise forms.ValidationError(_(u'Inernal server error'))
                 else:
-                    raise forms.ValidationError(u'未知错误')
+                    raise forms.ValidationError(_(u'Decrypt library error'))
         
 class SetUserQuotaForm(forms.Form):
     """
     Form for setting user quota.
     """
-    email = forms.CharField(error_messages={'required': '参数错误'})
+    email = forms.CharField(error_messages={'required': _('Email is required')})
     quota = forms.IntegerField(min_value=0,
-                               error_messages={'required': '容量不能为空',
-                                               'min_value': '容量不能小于0'})
+                               error_messages={'required': _('Quota can\'t be empty'),
+                                               'min_value': _('Quota is too low (minimum value is 0)')})
