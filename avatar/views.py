@@ -1,5 +1,5 @@
 # encoding: utf-8
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -90,15 +90,11 @@ def add(request, extra_context=None, next_override=None,
         )
 
 @login_required
-def group_add(request):
-    group_id = request.GET.get('gid', '')
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return render_error(request, u'group id 不是有效参数')        
+def group_add(request, gid):
+    group_id_int = int(gid)     # Checked by URL Conf
 
     if not check_group_staff(group_id_int, request.user):
-        return render_permission_error(request, u'只有群组管理员有权设置群组图标')
+        raise Http404
 
     group = ccnet_threaded_rpc.get_group(group_id_int)
     if not group:

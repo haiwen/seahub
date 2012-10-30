@@ -11,7 +11,7 @@
 
 {% block left_panel %}
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Basic Infos" %}</h3>
+    <h3 class="info-item-top">{% trans "Group Info" %}</h3>
     <div class="info-item-bottom group-basic-info ovhd">
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar fleft" />
         <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created in " %}<br />{{ group.timestamp|tsstr_day }}</p>
@@ -76,7 +76,7 @@
         <th width="20%">{% trans "Name" %}</th>
         <th width="34%">{% trans "Description" %}</th>
         <th width="16%">{% trans "Last Update" %}</th>
-        <th width="14%">{% trans "Share From" %}</th>
+        <th width="14%">{% trans "Shared by" %}</th>
         <th width="12%">{% trans "Operations" %}</th>
     </tr>
 
@@ -159,7 +159,7 @@
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
                 <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>{% trans "Reply" %}</button>
-                <button class="replyclose op hide">{% trans "Hide Reply" %}</button>
+                <button class="replyclose op hide">{% trans "Hide" %}</button>
                 {% if is_staff or msg.from_email == request.user.username %}
                 <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</button>
                 {% endif %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 13:31+0800\n"
+"POT-Creation-Date: 2012-10-30 21:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,7 +64,7 @@ msgstr "上传头像"
 msgid "Your current avatar: "
 msgstr "当前头像："
 
-#: templates/avatar/add.html:9
+#: templates/avatar/add.html:9 templates/avatar/set_avatar.html:12
 msgid "Upload New Avatar: "
 msgstr "上传新头像："
 
@@ -87,6 +87,22 @@ msgstr ""
 #: templates/avatar/confirm_delete.html:18
 msgid "Delete These"
 msgstr "删除"
+
+#: templates/avatar/set_avatar.html:8
+msgid "Avatar Change"
+msgstr "头像修改"
+
+#: templates/avatar/set_avatar.html:9
+msgid "Current avatar: "
+msgstr "当前头像："
+
+#: templates/avatar/set_avatar.html:10
+msgid "Current Avatar"
+msgstr "当前头像"
+
+#: templates/avatar/set_avatar.html:16
+msgid "Submit"
+msgstr "提交"
 
 #: templates/notification/avatar_friend_updated/notice.html:2
 #, python-format

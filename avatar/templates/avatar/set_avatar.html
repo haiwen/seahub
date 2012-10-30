@@ -1,19 +1,19 @@
 {% extends base_template %}
-{% load group_avatar_tags %}
+{% load group_avatar_tags i18n %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
 <div class="narrow-panel avatar-op">
-    <h2>修改群组 <a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a> 的图标</h2>
-    <h3>当前图标：</h3>
-    <img src="{% grp_avatar_url group.id %}" alt="当前图标" class="avatar" />
+    <h2><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a> {% trans "Avatar Change" %}</h2>
+    <h3>{% trans "Current avatar: " %}</h3>
+    <img src="{% grp_avatar_url group.id %}" alt="{% trans "Current Avatar" %}" class="avatar" />
 
-    <h3 class="upload-new-avatar-hd">上传新图标：</h3>
+    <h3 class="upload-new-avatar-hd">{% trans "Upload New Avatar: " %}</h3>
     <form enctype="multipart/form-data" method="post" action="">
         {{ form.avatar }}<br />
         {{ form.avatar.errors }}
-        <input type="submit" value="提交" class="submit" />
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
 {% endblock %}

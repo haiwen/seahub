@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 10:41+0800\n"
+"POT-Creation-Date: 2012-10-30 21:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,7 +104,7 @@ msgid "Recommend failed"
 msgstr "推荐失败"
 
 #: templates/group/group_info.html:14
-msgid "Basic Infos"
+msgid "Group Info"
 msgstr "基本信息"
 
 #: templates/group/group_info.html:17
@@ -169,7 +169,7 @@ msgid "Last Update"
 msgstr "更新时间"
 
 #: templates/group/group_info.html:79
-msgid "Share From"
+msgid "Shared by"
 msgstr "共享来源"
 
 #: templates/group/group_info.html:87
@@ -208,12 +208,14 @@ msgid "has new comment:"
 msgstr "有新的评注："
 
 #: templates/group/group_info.html:161
+#: templates/group/group_reply_list.html:10
+#: templates/group/group_reply_list.html:16
 msgid "Reply"
 msgstr "回复"
 
 #: templates/group/group_info.html:162
-msgid "Hide Reply"
-msgstr "收起回复"
+msgid "Hide"
+msgstr "隐藏"
 
 #: templates/group/group_info.html:164 templates/group/group_manage.html:40
 #: templates/group/group_manage.html:63
@@ -264,6 +266,10 @@ msgstr "管理员列表"
 msgid "Add Staffs"
 msgstr "添加管理员"
 
+#: templates/group/group_reply_list.html:17
+msgid "Reply can not be empty and maximum length is 150 characters"
+msgstr "输入不能为空且应少于150个字符。"
+
 #: templates/group/groups_left_panel.html:3
 msgid "Tips"
 msgstr "小提示"
@@ -312,11 +318,11 @@ msgstr "添加成员到 "
 
 #: templates/group/grpmember_add_form.html:4
 #: templates/group/grpmember_add_form.html:16
-msgid "Type Emails"
-msgstr "输入邮箱"
+msgid "Type Emails, Seperate by ','"
+msgstr "输入邮箱，以','分隔"
 
 #: templates/group/grpmember_add_form.html:7
-msgid "Tip: System will send an email to him if the email is not registered."
+msgid "Tip: An invitation will be sent if the email is not registered."
 msgstr "Tip：可以是未注册邮箱，系统会向他发送邀请邮件。"
 
 #: templates/group/grpmember_add_form.html:9
@@ -326,6 +332,15 @@ msgstr "Tip：必须是已注册的邮箱。"
 #: templates/group/grpmember_add_form.html:15
 msgid "Add staffs to "
 msgstr "添加管理员到 "
+
+#~ msgid "Type Emails"
+#~ msgstr "输入邮箱"
+
+#~ msgid "Basic Infos"
+#~ msgstr "基本信息"
+
+#~ msgid "Hide Reply"
+#~ msgstr "收起回复"
 
 #~ msgid "Update Time"
 #~ msgstr "更新时间"
