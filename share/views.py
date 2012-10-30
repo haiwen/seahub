@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
+from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from django.contrib import messages
@@ -55,7 +56,7 @@ def share_repo(request):
         
     # Test whether user is the repo owner.
     if not validate_owner(request, repo_id):
-        return render_permission_error(request, u'只有资料库拥有者有权共享该资料库')
+        return render_permission_error(request, _(u'Only the owner of the library has permission to share it.'))
     
     to_email_list = string2list(email_or_group)
     for to_email in to_email_list:
@@ -67,11 +68,11 @@ def share_repo(request):
                 try:
                     seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
                 except:
-                    msg = u'共享到公共资料失败'
+                    msg = _(u'Failed to share to all')
                     message.add_message(request, message.ERROR, msg)
                     continue
 
-                msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
+                msg = _(u'Shared to all successfully, go check it at <a href="%s">Share</a>.') % \
                     (reverse('share_admin'))
                 messages.add_message(request, messages.INFO, msg)
                 
@@ -91,13 +92,13 @@ def share_repo(request):
                     group_share_repo(request, repo_id, int(group.props.id),
                                      from_email, permission)
                     find = True
-                    msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
-                        (group_name, reverse('share_admin'))
+                    msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
+                            {'group':group_name, 'share':reverse('share_admin')}
                     
                     messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
-                msg = u'共享到 %s 失败，群组不存在。' % group_name
+                msg = _(u'Failed to share to %s，as it does not exists.') % group_name
                 messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''
@@ -110,7 +111,7 @@ def share_repo(request):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
                                                 permission)
             except SearpcError, e:
-                msg = u'共享给 %s 失败。' % to_email
+                msg = _(u'Failed to share to %s .') % to_email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
             
@@ -122,12 +123,12 @@ def share_repo(request):
                 #           'is_encrypted': is_encrypted,
                 #           }
                 # anonymous_share(request, **kwargs)
-                msg = u'共享给 %s 失败，用户未注册。' % to_email
+                msg = _(u'Failed to share to %s, as he/she has not registered.') % to_email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
             else:
-                msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
-                    (to_email, reverse('share_admin'))
+                msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
+                        {'email':to_email, 'share':reverse('share_admin')}
                 messages.add_message(request, messages.INFO, msg)
                
     return HttpResponseRedirect(reverse('myhome'))
@@ -166,9 +167,9 @@ def share_admin(request):
 
     for repo in shared_repos:
         if repo.props.permission == 'rw':
-            repo.share_permission = '可读写'
+            repo.share_permission = _(u'Read-Write')
         elif repo.props.permission == 'r':
-            repo.share_permission = '只可浏览'
+            repo.share_permission = _(u'Read-Only')
         else:
             repo.share_permission = ''
 
@@ -250,7 +251,7 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
 
     # Encrypt repo can not be shared to unregistered user.
     if is_encrypted:
-        msg = u'共享给 %s 失败，加密资料库无法共享给站外邮箱。' % anon_email
+        msg = _(u'Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site.') % anon_email
         messages.error(request, msg)
         return
     
@@ -265,7 +266,7 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
     try:
         anon_share.save()
     except:
-        msg = u'共享给 %s 失败。' % anon_email
+        msg = _(u'Failed to share to %s.') % anon_email
         messages.add_message(request, messages.ERROR, msg)
     else:
         # send mail
@@ -283,15 +284,15 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
             }
 
         try:
-            send_mail(u'您在SeaCloud上收到一个资料库', t.render(Context(c)), None,
+            send_mail(_(u'You are shared with a library in SeaCloud'), t.render(Context(c)), None,
                       [anon_email], fail_silently=False)
         except:
             AnonymousShare.objects.filter(token=token).delete()
-            msg = u'共享给 %s 失败。' % anon_email
+            msg = _(u'Failed to share to %s.') % anon_email
             messages.add_message(request, messages.ERROR, msg)
         else:
-            msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
-                (anon_email, reverse('share_admin'))
+            msg = _(u'Shared to %(email)s successfully, go check it at <a href="%(share)s">Share</a>.') % \
+                    {'email':anon_email, 'share':reverse('share_admin')}
             messages.add_message(request, messages.INFO, msg)
 
 def anonymous_share_confirm(request, token=None):
@@ -315,7 +316,7 @@ def remove_anonymous_share(request, token):
     if not next:
         next = reverse('share_admin')
 
-    messages.add_message(request, messages.INFO, u'删除成功')
+    messages.add_message(request, messages.INFO, _(u'Deleted successfully.'))
     
     return HttpResponseRedirect(next)
 
