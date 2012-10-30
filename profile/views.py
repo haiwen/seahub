@@ -38,7 +38,7 @@ def edit_profile(request):
             profile.nickname = nickname
             profile.intro = intro
             profile.save()
-            messages.success(request, _(u'Successfully editting profile.'))
+            messages.success(request, _(u'Successfully edited profile.'))
             # refresh nickname cache
             refresh_cache(request.user.username)
             
