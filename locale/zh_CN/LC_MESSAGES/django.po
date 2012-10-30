@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 11:46+0800\n"
+"POT-Creation-Date: 2012-10-30 14:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -233,7 +233,9 @@ msgstr "取消"
 msgid ""
 "This library is encrypt, please input password. The password will live on "
 "server for 1 hour."
-msgstr "该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。"
+msgstr ""
+"该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂"
+"存1小时。"
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -244,6 +246,9 @@ msgstr "密码："
 #: templates/repo.html.py:209 templates/repo_update_file.html:21
 #: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
 #: templates/repo_view_file.html.py:167 templates/registration/login.html:13
+#: templates/registration/password_change_form.html:18
+#: templates/registration/password_reset_confirm.html:19
+#: templates/registration/password_reset_form.html:13
 #: templates/registration/registration_form.html:18
 #: templates/snippets/events.html:72
 #: templates/snippets/group_recommend_form.html:23
@@ -584,7 +589,7 @@ msgstr "返回资料库"
 #: templates/repo_history.html:11
 msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
-"state of previous directory."
+"library state before this modification."
 msgstr "Tip：在每次修改后会生成一个镜像，记录修改之前的目录状态。"
 
 #: templates/repo_history.html:11
@@ -835,31 +840,86 @@ msgstr "感谢参与！"
 msgid "Log in again"
 msgstr "重新登录"
 
+#: templates/registration/password_change_done.html:4
+msgid "Password Change Successfully"
+msgstr "密码修改成功"
+
+#: templates/registration/password_change_done.html:9
+msgid "Your password has been changed successfully."
+msgstr "密码修改成功"
+
+#: templates/registration/password_change_form.html:3
+#: templates/registration/password_change_form.html:7
+msgid "Password Modification"
+msgstr "密码修改"
+
+#: templates/registration/password_change_form.html:9
+msgid "Current Password: "
+msgstr "当前密码："
+
+#: templates/registration/password_change_form.html:11
+#: templates/registration/password_reset_confirm.html:13
+msgid "New Password: "
+msgstr "新密码："
+
+#: templates/registration/password_change_form.html:13
+#: templates/registration/password_reset_confirm.html:16
+msgid "Confirm Password: "
+msgstr "确认密码"
+
+#: templates/registration/password_reset_confirm.html:4
+#: templates/registration/password_reset_form.html:4
+#: templates/registration/password_reset_form.html:7
+msgid "Password Reset"
+msgstr "密码重置"
+
+#: templates/registration/password_reset_confirm.html:11
+msgid "Input new password"
+msgstr "输入新密码"
+
+#: templates/registration/password_reset_confirm.html:26
+msgid "Failed to reset password: this link is no longer available."
+msgstr "密码重置失败：重置链接失效。请重新重置。"
+
+#: templates/registration/password_reset_done.html:4
+msgid "Password Reset Successfully"
+msgstr "密码重置成功"
+
+#: templates/registration/password_reset_done.html:8
+msgid "We've send a password reset email to your email."
+msgstr "我们已经把密码重置说明发往您提交的邮箱里，请查收。"
+
 #: templates/registration/password_reset_email.html:2
-msgid "You're receiving this e-mail because you requested a password reset"
-msgstr "您收到这封邮件是因为您请求了密码重置。"
-
-#: templates/registration/password_reset_email.html:3
 #, python-format
-msgid "for your user account at %(site_name)s"
-msgstr ""
+msgid ""
+"You're receiving this e-mail because you requested a password reset for your "
+"user account at %(site_name)s. "
+msgstr "您收到这封邮件是因为您请求给您在 %(site_name)s 的账号重置密码。"
 
-#: templates/registration/password_reset_email.html:5
+#: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "请点击以下链接更新密码："
 
-#: templates/registration/password_reset_email.html:9
+#: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
 msgstr "您的用户名:"
 
-#: templates/registration/password_reset_email.html:11
+#: templates/registration/password_reset_email.html:10
 msgid "Thanks for using our site!"
 msgstr "感谢使用！"
 
-#: templates/registration/password_reset_email.html:13
+#: templates/registration/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "%(site_name)s 团队"
+
+#: templates/registration/password_reset_form.html:9
+msgid "Your email used in login: "
+msgstr "您注册的邮箱账号："
+
+#: templates/registration/password_reset_form.html:12
+msgid "We will send you an email to set new password"
+msgstr "我们会把新密码设置说明通过邮件发送给您"
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
@@ -1002,7 +1062,7 @@ msgstr "目录图标"
 #: templates/snippets/my_owned_repos.html:42
 msgid ""
 "You can create a library to organize your files. For example, you can create "
-"one for each of your projects. Every library can be synchronized and shared "
+"one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr ""
 "您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资"

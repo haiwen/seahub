@@ -96,6 +96,7 @@ LANGUAGES = (
 )
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
+    os.path.join(os.path.dirname(__file__), 'thirdpart/auth/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
