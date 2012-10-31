@@ -27,7 +27,7 @@
         {% blocktrans count counter=grpmsg_list|length %}
         has new message
         {% plural %}
-        have new message
+        have new messages
         {% endblocktrans %}
         </li>
         {% endif %}
@@ -36,7 +36,7 @@
         <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{% blocktrans count counter=grpmsg_reply_list|length %}
         one group message has new reply
         {% plural %}
-        {{ counter }} group messages have new reply
+        {{ counter }} group messages have new replies
         {% endblocktrans %}</a></li>
         {% endif %}
 
