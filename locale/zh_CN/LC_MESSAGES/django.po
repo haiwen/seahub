@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 16:13+0800\n"
+"POT-Creation-Date: 2012-10-31 17:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,6 +254,7 @@ msgstr "密码："
 #: templates/snippets/group_recommend_form.html:23
 #: templates/snippets/repo_create_form.html:23
 #: templates/snippets/repo_share_form.html:18
+#: templates/snippets/user_profile_html.html:33
 msgid "Submit"
 msgstr "提交"
 
@@ -906,6 +907,7 @@ msgstr "修改历史"
 
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
+#: templates/snippets/user_profile_html.html:27
 msgid "Email"
 msgstr "邮箱"
 
@@ -920,8 +922,8 @@ msgid "Forgot password?"
 msgstr "忘记密码"
 
 #: templates/registration/login.html:28
-#: templates/registration/registration_form.html:28
-msgid "Email cannot be blank"
+#, fuzzy
+msgid "Email cant be blank"
 msgstr "邮箱不能为空"
 
 #: templates/registration/login.html:32
@@ -1037,6 +1039,10 @@ msgstr "欢迎回来，您已登录。"
 #: templates/registration/registration_form.html:15
 msgid "Confirm Password"
 msgstr "确认密码"
+
+#: templates/registration/registration_form.html:28
+msgid "Email cannot be blank"
+msgstr "邮箱不能为空"
 
 #: templates/registration/registration_form.html:36
 msgid "Confirm password cannot be blank"
@@ -1242,68 +1248,15 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 msgid "Tip: type all to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
 
-#~ msgid "The two password fields did\\'t match"
-#~ msgstr "两次输入的密码不一致"
+#: templates/snippets/user_profile_html.html:8
+msgid "Add as contact"
+msgstr "加为联系人"
 
-#~ msgid "Confirm to remove shared library?"
-#~ msgstr "确定要取消共享？"
+#: templates/snippets/user_profile_html.html:29
+msgid "Name(optional)"
+msgstr "名字(可选)"
 
-#~ msgid "Group"
-#~ msgstr "群组"
+#: templates/snippets/user_profile_html.html:31
+msgid "Note(optional)"
+msgstr "备注(可选)"
 
-#~ msgid "have new message"
-#~ msgstr "有新留言"
-
-#~ msgid "org messages"
-#~ msgstr "团体消息"
-
-#~ msgid "snapshot viewing"
-#~ msgstr "镜像浏览"
-
-#~ msgid "Folder"
-#~ msgstr "目录"
-
-#~ msgid "history viewing"
-#~ msgstr "历史浏览"
-
-#~ msgid "Get sharing link"
-#~ msgstr "获取分享地址"
-
-#~ msgid "Under processing, please wait..."
-#~ msgstr "处理中，请稍侯..."
-
-#~ msgid "Nickname is empty"
-#~ msgstr "暂无昵称"
-
-#~ msgid "Histories"
-#~ msgstr "更多历史"
-
-#~ msgid "System automatically generate"
-#~ msgstr "系统自动生成"
-
-#~ msgid "New Folder"
-#~ msgstr "新建目录"
-
-#~ msgid "Folder Name"
-#~ msgstr "目录名称"
-
-#~ msgid "My Basic Infos"
-#~ msgstr "我的基本信息"
-
-#~ msgid "Storage Used"
-#~ msgstr "已用空间"
-
-#~ msgid "I owned"
-#~ msgstr "我拥有的"
-
-#~ msgid "Public Repo"
-#~ msgstr "公共资料"
-
-#~ msgid "Repos"
-#~ msgstr "资料库"
-
-#~ msgid "New Repo"
-#~ msgstr "新建资料库"
-
-#~ msgid "Sign in"
-#~ msgstr "登录"

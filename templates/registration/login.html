@@ -25,7 +25,7 @@
 <script type="text/javascript">
 $('input[type="submit"]').click(function(){
         if (!$.trim($('input[name="username"]').attr('value'))) {
-            $('.error').removeClass('hide').html('{% trans "Email cannot be blank" %}');
+            $('.error').removeClass('hide').html('{% trans "Email cant be blank" %}');
             return false;
         }
         if (!$.trim($('input[name="password"]').attr('value'))) {
