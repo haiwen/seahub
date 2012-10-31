@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 17:00+0800\n"
+"POT-Creation-Date: 2012-10-31 19:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -517,15 +517,16 @@ msgid "This library is read-only, and you can only view the files."
 msgstr "这个资料库设置了只读共享，您只能在线浏览文件。"
 
 #: templates/repo.html:33
-msgid "Size:"
+msgid "Size: "
 msgstr "大小："
 
-#: templates/repo.html:42 templates/repo_history.html:39
-#: templates/repo_view_file.html:91 templates/repo_view_snapshot.html:39
-msgid "More"
-msgstr "详情"
+#: templates/repo.html:42 templates/repo_view_file.html:91
+#: templates/repo_view_snapshot.html:17
+msgid "Detail"
+msgstr "修改内容"
 
 #: templates/repo.html:45 templates/repo.html.py:149
+#: templates/repo_view_file.html:95
 msgid "History"
 msgstr "历史"
 
@@ -674,6 +675,10 @@ msgstr "修改者"
 msgid "None"
 msgstr "无"
 
+#: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
+msgid "More"
+msgstr "详情"
+
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
 msgid "Previous"
 msgstr "前一页"
@@ -773,10 +778,6 @@ msgstr "添加星标"
 #: templates/repo_view_file.html:88
 msgid "updated this library"
 msgstr "更新了该资料库"
-
-#: templates/repo_view_file.html:95
-msgid "more history"
-msgstr "更多历史"
 
 #: templates/repo_view_file.html:98
 #, python-format
@@ -881,10 +882,6 @@ msgstr "返回修改历史"
 msgid "Create Time"
 msgstr "生成时间"
 
-#: templates/repo_view_snapshot.html:17
-msgid "Detail"
-msgstr "修改内容"
-
 #: templates/repo_view_snapshot.html:84
 msgid "Really want to restore this library?"
 msgstr "确定要还原这个资料库？"
@@ -922,7 +919,6 @@ msgid "Forgot password?"
 msgstr "忘记密码"
 
 #: templates/registration/login.html:28
-#, fuzzy
 msgid "Email cant be blank"
 msgstr "邮箱不能为空"
 
@@ -1236,8 +1232,8 @@ msgid "Share to"
 msgstr "共享给"
 
 #: templates/snippets/repo_share_form.html:4
-msgid "Emails or Groups"
-msgstr "输入邮箱或群组"
+msgid "Emails or Groups, Seperate by ','"
+msgstr "输入邮箱或群组，多个以,分隔"
 
 #: templates/snippets/repo_share_form.html:7
 msgid ""
@@ -1260,3 +1256,5 @@ msgstr "名字(可选)"
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
+#~ msgid "more history"
+#~ msgstr "更多历史"

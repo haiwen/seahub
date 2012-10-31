@@ -30,7 +30,7 @@
     {% if user_perm %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
-      <p class="size">{% trans 'Size:' %}{{ repo_size|filesizeformat }}</p>
+      <p class="size">{% trans 'Size: ' %}{{ repo_size|filesizeformat }}</p>
     </div>
     {% endif %}
 
@@ -39,7 +39,7 @@
         <p class="commit-msg ovhd">
         <span class="fleft">
             {{ current_commit.props.desc|translate_commit_desc }}
-            <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ current_commit.id }}" data="{{ current_commit.props.ctime|tsstr_sec }}">{% trans "More"%}</a>
+            <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ current_commit.id }}" data="{{ current_commit.props.ctime|tsstr_sec }}">{% trans "Detail"%}</a>
         </span>
         {% if user_perm == 'rw' %}
         <a href="{% url 'seahub.views.repo_history' repo.id %}" class="more fright">{% trans "History"%}</a>

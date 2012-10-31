@@ -88,11 +88,11 @@
                 {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_commit_time}}</span><span>{% trans "updated this library"%}</span>
                 {% if filetype == 'Text' or filetype == 'Markdown' %}
                 {% if last_commit_id %}
-                <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "More"%}</a></span>
+                <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "Detail"%}</a></span>
                 {% endif %}
                 {% endif %}
             </p>
-            <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">{% trans "more history"%}</a>
+            <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">{% trans "History"%}</a>
         </div> 
         <p class="contributors">
         <span>{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>

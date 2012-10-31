@@ -1,7 +1,7 @@
 {% load i18n %}
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
     <p>{% trans "Share to"%}</p>
-    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups"%}"></textarea>
+    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups, Seperate by ','"%}"></textarea>
     {% if cloud_mode %}
       {% if org %}
       <p class="tip">{% trans "Tip: must be org members or org groups, type all to share to public library."%}</p>
