@@ -23,18 +23,30 @@
     <ul class="info-item-bottom">
         {% if grpmsg_list %}
         <li>
-        {% trans "Group" %}
-        {% for grp in grpmsg_list %}
-        <a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }}</a>
-        {% endfor %}
-        {% trans "have new message" %}
+        {% for grp in grpmsg_list %}<a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }} </a>{% endfor %}
+        {% blocktrans count counter=grpmsg_list|length %}
+        has new message
+        {% plural %}
+        have new message
+        {% endblocktrans %}
         </li>
         {% endif %}
+
         {% if grpmsg_reply_list %}
-        <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{{ grpmsg_reply_list|length }}{% trans "group message has new reply" %}</a></li>
+        <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{% blocktrans count counter=grpmsg_reply_list|length %}
+        one group message has new reply
+        {% plural %}
+        {{ counter }} group messages have new reply
+        {% endblocktrans %}</a></li>
         {% endif %}
+
         {% if orgmsg_list %}
-        <li><a href="{% url 'org_msg' %}" class="no-bold">{{ orgmsg_list|length }}{% trans "org messages" %}</a></li>
+        <li><a href="{% url 'org_msg' %}" class="no-bold">
+          {% blocktrans count counter=orgmsg_list|length %}
+          one org message
+          {% plural %}
+          {{ counter }} org messages
+          {% endblocktrans %}</a></li>
         {% endif %}
     </ul>
 </div>

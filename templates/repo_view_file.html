@@ -95,7 +95,7 @@
             <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">{% trans "more history"%}</a>
         </div> 
         <p class="contributors">
-        <span>{{ contributors|length }} {% trans "contributors"%}</span>
+        <span>{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
         {% for user in contributors %}
             <a href="{% url 'user_profile' user %}" class="name" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
         {% endfor %}

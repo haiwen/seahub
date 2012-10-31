@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 20:27+0800\n"
+"POT-Creation-Date: 2012-10-31 00:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,7 +265,8 @@ msgstr " 版本历史"
 msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
-msgstr "Tip：每次修改后都会生成一个新的版本, 您可以将当前文件恢复到之前的某个版本。"
+msgstr ""
+"Tip：每次修改后都会生成一个新的版本, 您可以将当前文件恢复到之前的某个版本。"
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
 msgid "Current Path:"
@@ -328,23 +329,49 @@ msgstr "编辑"
 msgid "Reminding..."
 msgstr "提醒..."
 
-#: templates/myhome.html:26
-msgid "Group"
-msgstr "群组"
+#: templates/myhome.html:27
+msgid ""
+"\n"
+"        has new message\n"
+"        "
+msgid_plural ""
+"\n"
+"        have new message\n"
+"        "
+msgstr[0] ""
 
-#: templates/myhome.html:30
-msgid "have new message"
-msgstr "有新留言"
+#: templates/myhome.html:36
+#, fuzzy, python-format
+msgid ""
+"\n"
+"        one group message has new reply\n"
+"        "
+msgid_plural ""
+"\n"
+"        %(counter)s group messages have new reply\n"
+"        "
+msgstr[0] "条群组留言有新回复"
 
-#: templates/myhome.html:34
-msgid "group message has new reply"
-msgstr "条群组留言有新回复"
+#: templates/myhome.html:45
+#, python-format
+msgid ""
+"\n"
+"          one org message\n"
+"          "
+msgid_plural ""
+"\n"
+"          %(counter)s org messages\n"
+"          "
+msgstr[0] ""
+"\n"
+"          一条团体消息\n"
+"          "
+msgstr[1] ""
+"\n"
+"          %(counter)s 条团体消息\n"
+"          "
 
-#: templates/myhome.html:37
-msgid "org messages"
-msgstr "团体消息"
-
-#: templates/myhome.html:44
+#: templates/myhome.html:56
 msgid "Space used"
 msgstr "已用空间"
 
@@ -749,8 +776,11 @@ msgid "more history"
 msgstr "更多历史"
 
 #: templates/repo_view_file.html:98
-msgid "contributors"
-msgstr "个贡献者"
+#, python-format
+msgid "one contributor"
+msgid_plural " %(counter)s contributors "
+msgstr[0] "一个贡献者"
+msgstr[1] " %(counter)s 个贡献者 "
 
 #: templates/repo_view_file.html:113
 msgid "Open local file"
@@ -910,6 +940,7 @@ msgid "We've send a password reset email to your email."
 msgstr "我们已经把密码重置说明发往您提交的邮箱里，请查收。"
 
 #: templates/registration/password_reset_email.html:2
+#, python-format
 msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
@@ -928,6 +959,7 @@ msgid "Thanks for using our site!"
 msgstr "感谢使用！"
 
 #: templates/registration/password_reset_email.html:12
+#, python-format
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s 团队"
 
@@ -1138,6 +1170,15 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 #: templates/snippets/repo_share_form.html:10
 msgid "Tip: type all to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
+
+#~ msgid "Group"
+#~ msgstr "群组"
+
+#~ msgid "have new message"
+#~ msgstr "有新留言"
+
+#~ msgid "org messages"
+#~ msgstr "团体消息"
 
 #~ msgid "snapshot viewing"
 #~ msgstr "镜像浏览"

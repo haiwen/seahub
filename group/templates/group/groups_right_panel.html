@@ -15,7 +15,7 @@
     <div class="txt fright">
         <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
         <p><span class="item-name">{% trans "Creator: " %}</span>{{ group.props.creator_name }}</p>
-        <p><span class="item-name">{% trans "Create Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
+        <p><span class="item-name">{% trans "Create At: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
     </div>
     </li>
     {% endfor %}
