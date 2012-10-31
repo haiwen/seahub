@@ -25,16 +25,16 @@
 <script type="text/javascript">
 $('input[type="submit"]').click(function(){
         if (!$.trim($('input[name="username"]').attr('value'))) {
-            $('.error').removeClass('hide').html(gettext('Email can\'t be blank'));
+            $('.error').removeClass('hide').html('{% trans "Email cannot be blank" %}');
             return false;
         }
         if (!$.trim($('input[name="password"]').attr('value'))) {
-            $('.error').removeClass('hide').html(gettext('Password can\'t be blank'));
+            $('.error').removeClass('hide').html('{% trans "Password cannot be blank" %}');
             return false;
         }
    });
     {% if form.errors %}
-    $('.error').removeClass('hide').html(gettext('Incorrect email or password'));
+    $('.error').removeClass('hide').html('{% trans "Incorrect email or password" %}');
     {% endif %}
 </script>
 {% endblock %}

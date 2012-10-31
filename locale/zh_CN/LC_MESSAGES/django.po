@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 11:28+0800\n"
+"POT-Creation-Date: 2012-10-31 16:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -820,6 +820,42 @@ msgstr "点此下载"
 msgid "Leave a message~"
 msgstr "评论一下~"
 
+#: templates/repo_view_file.html:323
+msgid "Comment"
+msgstr "评论"
+
+#: templates/repo_view_file.html:366
+msgid "Please type a message"
+msgstr "请先输入您的评论"
+
+#: templates/repo_view_file.html:412
+msgid "Cannot find a application to open file. Seafile will open the folder."
+msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
+
+#: templates/repo_view_file.html:417
+msgid "File is not Synchronized with server, please synchronize manually."
+msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
+
+#: templates/repo_view_file.html:419
+msgid "File is not Synchronized with server, please retry later."
+msgstr "本地文件尚未与服务器同步，请稍后再试"
+
+#: templates/repo_view_file.html:424
+msgid "An error occur during opening local file."
+msgstr "打开本地文件时出错"
+
+#: templates/repo_view_file.html:455
+msgid ""
+"Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
+"download/\">upgrade</a> to latest."
+msgstr ""
+"Seafile 客户端程序未启动或者版本过低，请<a href=\"http://www.seafile.com/"
+"download/\">下载</a>最新版客户端"
+
+#: templates/repo_view_file.html:466
+msgid "Seafile client is not start or out of date"
+msgstr "Seafile 客户端程序未启动或者版本过低"
+
 #: templates/repo_view_file.html:489
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
@@ -847,6 +883,10 @@ msgstr "生成时间"
 #: templates/repo_view_snapshot.html:17
 msgid "Detail"
 msgstr "修改内容"
+
+#: templates/repo_view_snapshot.html:84
+msgid "Really want to restore this library?"
+msgstr "确定要还原这个资料库？"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -878,6 +918,20 @@ msgstr "密码"
 #: templates/registration/login.html:14
 msgid "Forgot password?"
 msgstr "忘记密码"
+
+#: templates/registration/login.html:28
+#: templates/registration/registration_form.html:28
+msgid "Email cannot be blank"
+msgstr "邮箱不能为空"
+
+#: templates/registration/login.html:32
+#: templates/registration/registration_form.html:32
+msgid "Password cannot be blank"
+msgstr "密码不能为空"
+
+#: templates/registration/login.html:37
+msgid "Incorrect email or password"
+msgstr "您输入的邮箱或密码不正确"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -983,6 +1037,14 @@ msgstr "欢迎回来，您已登录。"
 #: templates/registration/registration_form.html:15
 msgid "Confirm Password"
 msgstr "确认密码"
+
+#: templates/registration/registration_form.html:36
+msgid "Confirm password cannot be blank"
+msgstr "确认密码不能为空"
+
+#: templates/registration/registration_form.html:40
+msgid "The two password fields not match"
+msgstr "两次输入的密码不一致"
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
@@ -1139,6 +1201,14 @@ msgstr "图标"
 msgid "You can star important files, and they will be shown here."
 msgstr "您可以给那些重要的文件加上星标，然后它们将在这里显示。"
 
+#: templates/snippets/myhome_extra_script.html:26
+msgid "Input cannot be empty"
+msgstr "输入不能为空"
+
+#: templates/snippets/myhome_extra_script.html:33
+msgid "Really remove this shared library?"
+msgstr "确定要还原这个资料库？"
+
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
 msgstr "共享权限"
@@ -1171,6 +1241,12 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 #: templates/snippets/repo_share_form.html:10
 msgid "Tip: type all to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
+
+#~ msgid "The two password fields did\\'t match"
+#~ msgstr "两次输入的密码不一致"
+
+#~ msgid "Confirm to remove shared library?"
+#~ msgstr "确定要取消共享？"
 
 #~ msgid "Group"
 #~ msgstr "群组"

@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 $('#repos-tabs').tabs({cookie:{expires:1}});
 $(function() {
     //repo-share-form share-list autocomplete
@@ -23,14 +23,14 @@ $(function() {
     //check before post
     $('#share-submit-btn').click(function() {
         if (!$.trim($('#email_or_group').attr('value'))) {
-            apply_form_error('repo-share-form', gettext('Input can\'t be empty'));
+            apply_form_error('repo-share-form', '{% trans "Input cannot be empty" %}');
             return false;
         }
     });
 
     addConfirmTo($('.repo-delete-btn'));
     
-    addConfirmTo($('.unshare-btn'), gettext('Confirm to remove shared library?'));
+    addConfirmTo($('.unshare-btn'), '{% trans "Really remove this shared library?" %}');
 
     $(".download-btn").click(function() {
             window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));

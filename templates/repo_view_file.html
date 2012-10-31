@@ -320,7 +320,7 @@ $('#shared-link').click(function() {
 
 {% include "snippets/bottom_bar.html" %}
 {% if request.user.is_authenticated %}
-$('#bottom-bar').append(gettext(' <button id="comment">Comment</button>'));
+$('#bottom-bar').append(' <button id="comment">{% trans "Comment" %}</button>');
 $('#file-comment').css({'max-height':$(window).height() - parseInt($('#file-comment').css('bottom'))});
 var gids = '';
 {% for g in groups %}
@@ -363,7 +363,7 @@ $('#comment-input').css('color', '#999').click(function() {
 });
 $('#file-comment-form .submit').click(function() {
     if (!$.trim($('#comment-input').val())) {
-        $('#file-comment-form .error').html(gettext('Please type a message')).removeClass('hide');
+        $('#file-comment-form .error').html('{% trans "Please type a message" %}').removeClass('hide');
         return false;
     }
     $.ajax({
@@ -409,19 +409,19 @@ function send_open_local_file_request(path) {
                 
             } else if (data['no_assoc'] === true) {
                 // no application to open the file
-                $('#open-local-error').html(gettext('Can\'t find a application to open file. Seafile will open the folder.'));
+                $('#open-local-error').html('{% trans "Cannot find a application to open file. Seafile will open the folder." %}');
 
             } else if (data['outdated'] === true) {
                 // local repo not in sync yet
                 if (data['auto-sync'] === false) {
-                    $('#open-local-error').html(gettext('File is not Synchronized with server, please synchronize manually.'));
+                    $('#open-local-error').html('{% trans "File is not Synchronized with server, please synchronize manually." %}');
                 } else {
-                    $('#open-local-error').html(gettext('File is not Synchronized with server, please retry later.'));
+                    $('#open-local-error').html('{% trans "File is not Synchronized with server, please retry later." %}');
                 }
 
             } else if (data['error']) {
                 // other error
-                $('#open-local-error').html(gettext('An error occur during opening local file.'));
+                $('#open-local-error').html('{% trans "An error occur during opening local file." %}');
 
             } else {
                 // open file successfully
@@ -452,7 +452,7 @@ $('#open-local').click(function () {
             local_applet_running = true;
             if (version < 1) {
                 $('#open-local-handling-tip').addClass('hide');
-                $('#open-local-error').html(gettext('Your Seafile client is out of date, please <a href="http://www.seafile.com/download/">upgrade</a> to latest.'));
+                $('#open-local-error').html('{% trans 'Your Seafile client is out of date, please <a href="http://www.seafile.com/download/">upgrade</a> to latest.' %}');
             } else {
                 send_open_local_file_request(path);
             }
@@ -463,7 +463,7 @@ $('#open-local').click(function () {
     setTimeout(function() {
         if (!local_applet_running) {
             $('#open-local-handling-tip').addClass('hide');
-            $('#open-local-error').html(gettext('Seafile client is not start or out of date'));
+            $('#open-local-error').html('{% trans "Seafile client is not start or out of date" %}');
         }
     }, 2000);
 });

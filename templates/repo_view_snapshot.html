@@ -81,6 +81,6 @@
     $('#back').click(function() {
         location.href = $(this).attr('data');
     });
-    addConfirmTo($(".repo-revert"), gettext('Really want to restore this library?'));
+    addConfirmTo($(".repo-revert"), '{% trans "Really want to restore this library?" %}');
 </script>
 {% endblock %}
