@@ -3,7 +3,7 @@
 
 {% block main_panel %}
 <div class="narrow-panel">
-    <h3>上传文件 {{ filename }} 到
+    <h3>上传文件{% if filename %} {{ filename }} {% endif %}到
             {% for name, link in zipped %}
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
             {% endfor %}

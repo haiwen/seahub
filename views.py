@@ -515,9 +515,9 @@ def upload_file_error(request, repo_id):
     if request.method == 'GET':
         repo = get_repo(repo_id)
         parent_dir = request.GET.get('p')
-        filename = request.GET.get('fn')
+        filename = request.GET.get('fn', '')
         err = request.GET.get('err')
-        if not parent_dir or not filename or not err:
+        if not parent_dir or not err:
             return render_error(request, u'非法链接')
 
         zipped = gen_path_link (parent_dir, repo.name)
