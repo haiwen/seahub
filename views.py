@@ -2255,19 +2255,13 @@ def render_file_revisions (request, repo_id):
         is_owner = False
 
     try:
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        current_file_id = get_file_revision_id_size (current_commit.id, path)[0]
         for commit in commits:
             file_id, file_size = get_file_revision_id_size (commit.id, path)
             if not file_id or file_size is None:
-                # do not use no file_size, since it's ok to have file_size = 0
+                # do not use 'not file_size', since it's ok to have file_size = 0
                 return render_error(request)
             commit.revision_file_size = file_size
             commit.file_id = file_id
-            if file_id == current_file_id:
-                commit.is_current_version = True
-            else:
-                commit.is_current_version = False
     except Exception, e:
         return render_error(request, str(e))
 

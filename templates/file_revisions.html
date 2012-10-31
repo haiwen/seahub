@@ -46,7 +46,7 @@
                 <td>{{ commit.revision_file_size|filesizeformat }} </td>
 
                 <td>
-                    {% if not commit.is_current_version %}
+                    {% if commit.id != repo.head_cmmt_id %}
                     <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op">{% trans 'Restore' %}</a>
                     {% endif %}
                     <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">{% trans 'Download' %}</a>
