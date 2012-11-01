@@ -40,11 +40,9 @@ urlpatterns = patterns('',
     (r'^sharedlink/send/$', send_shared_link),
     url(r'^f/(?P<token>[^/]+)/$', view_shared_file, name='view_shared_file'),
                        
-    (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^repo/new_dir/$', repo_new_dir),
     (r'^repo/new_file/$', repo_new_file),
     (r'^repo/create/$', repo_create),
-    (r'^publicrepo/create/$', public_repo_create),
     (r'^repo/upload_check/$', validate_filename),
     (r'^repo/file_rename/$', repo_rename_file),
     (r'^repo/unsetinnerpub/(?P<repo_id>[^/]+)/$', unset_inner_pub_repo),
@@ -58,23 +56,22 @@ urlpatterns = patterns('',
     (r'^repo/update_error/(?P<repo_id>[^/]+)/$', update_file_error),
     url(r'^repo/file_revisions/(?P<repo_id>[^/]+)/$', file_revisions, name='file_revisions'),
     url(r'^repo/text_diff/(?P<repo_id>[^/]+)/$', text_diff, name='text_diff'),
-    url(r'^repo/(?P<repo_id>[^/]{36,36})/$', RepoView.as_view(), name='repo'),
+    url(r'^repo/(?P<repo_id>[^/]{36})/$', RepoView.as_view(), name='repo'),
     (r'^repo/history/(?P<repo_id>[^/]+)/$', repo_history),
     (r'^repo/history/revert/(?P<repo_id>[^/]+)/$', repo_history_revert),
     url(r'^repo/history/view/(?P<repo_id>[^/]+)/$', RepoHistoryView.as_view(), name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[^/]+)/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^repo/snapshot/view/(?P<repo_id>[^/]+)/$', repo_view_snapshot, name='repo_view_snapshot'),
-#    (r'^repo/token/modify/(?P<repo_id>[^/]+)/$', modify_token),
     (r'^repo/history/changes/(?P<repo_id>[^/]+)/$', repo_history_changes),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', remove_repo),
-#    (r'^repo/removefetched/(?P<user_id>[^/]+)/(?P<repo_id>[^/]+)/$', remove_fetched_repo),
-#    (r'^repo/setap/(?P<repo_id>[^/]+)/$', repo_set_access_property),
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
     (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
-    (r'^file_comment/$', file_comment),
-    (r'^pdf_full_view/$', pdf_full_view),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
+    (r'^file_upload_progress_page/$', file_upload_progress_page),
+    (r'^publicrepo/create/$', public_repo_create),
+    (r'^file_comment/$', file_comment),
+    (r'^pdf_full_view/$', pdf_full_view),
     (r'^pubinfo/$', pubinfo),
     url(r'^i18n/$', i18n, name='i18n'),
     (r'^download/repo/$', repo_download),                       
@@ -128,12 +125,12 @@ else:
     )
 
 # i18n in javascript
-js_info_dict = {
-    'domain': 'djangojs',
-    'packages': (
-        'seahub.group',
-        ),
-}    
-urlpatterns += patterns('',
-    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
-)
+# js_info_dict = {
+#     'domain': 'djangojs',
+#     'packages': (
+#         'seahub.group',
+#         ),
+# }    
+# urlpatterns += patterns('',
+#     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+# )

@@ -230,7 +230,6 @@ class RepoMixin(object):
         self.user_perm = get_user_permission(self.request, self.repo_id)
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
-
         if self.repo.encrypt and not self.password_set:
             # Repo is encrypt and password is not set, then no need to
             # query following informations.
@@ -288,7 +287,6 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         if self.request.user.org:
             org_id = self.request.user.org['org_id']
         args = (self.request.user.username, self.repo.id, self.path.encode('utf-8'), org_id)
-        print args
         return is_file_starred(*args)
 
     def get_context_data(self, **kwargs):
@@ -306,6 +304,7 @@ class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
         kwargs['applet_root'] = self.applet_root
         kwargs['groups'] = self.get_repo_shared_groups()
         kwargs['is_starred'] = self.is_starred_dir()
+        kwargs['next'] = self.get_success_url()
         if len(kwargs['groups']) > 1:
             ctx = {}
             ctx['groups'] = kwargs['groups']
