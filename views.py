@@ -249,8 +249,8 @@ class RepoMixin(object):
         self.prepare_property()
         return super(RepoMixin, self).post(request, *args, **kwargs)
         
-class RepoView(CtxSwitchRequiredMixin, RepoMixin, TemplateResponseMixin,
-               BaseFormView):
+class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
+               TemplateResponseMixin, BaseFormView):
     """
     View to show repo page and handle post request to decrypt repo.
     """
