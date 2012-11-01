@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 15:29+0800\n"
+"POT-Creation-Date: 2012-11-01 17:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,7 @@ msgid "You don't have the permission."
 msgstr "您的权限不够。"
 
 #: views.py:562
+#, python-format
 msgid "Failed to add, %s is not in current organization."
 msgstr "添加失败，%s 不在当前团体中。"
 
@@ -94,10 +95,12 @@ msgid "Failed to send mail."
 msgstr "邮件发送失败。"
 
 #: views.py:613
+#, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "添加失败，%s 未注册。"
 
 #: views.py:627
+#, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "添加群组成员成功，%(count)s 封邀请邮件已发送。"
@@ -107,6 +110,7 @@ msgid "Successfully added."
 msgstr "添加成功。"
 
 #: views.py:675
+#, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "添加失败，%s 还没注册。"
 
@@ -119,6 +123,7 @@ msgid "group id is not valid"
 msgstr "群组 id 无效"
 
 #: views.py:740
+#, python-format
 msgid "Failed：%s"
 msgstr "删除失败：%s"
 
@@ -149,10 +154,12 @@ msgid "Error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
 #: views.py:809
+#, python-format
 msgid "Error: you are not in group %s."
 msgstr "推荐到 %s 失败：您不在该群组中。"
 
 #: views.py:829
+#, python-format
 msgid ""
 "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
@@ -261,7 +268,7 @@ msgid "Description"
 msgstr "描述"
 
 #: templates/group/group_info.html:78
-msgid "UpdateTime"
+msgid "Last Update"
 msgstr "更新时间"
 
 #: templates/group/group_info.html:79
@@ -281,8 +288,8 @@ msgid "Download"
 msgstr "下载"
 
 #: templates/group/group_info.html:107
-msgid "Revoke"
-msgstr "取消共享"
+msgid "Unshare"
+msgstr ""
 
 #: templates/group/group_info.html:116
 msgid "Messages"
@@ -502,56 +509,3 @@ msgstr "输入不能为空且应应少于 150 个字符。"
 msgid "None"
 msgstr "暂无"
 
-#~ msgid "The group name has been occupied."
-#~ msgstr "名称重复，请重新输入。"
-
-#~ msgid "Recommend failed"
-#~ msgstr "推荐失败"
-
-#~ msgid "Group Management"
-#~ msgstr "群组管理"
-
-#~ msgid "Quit Group"
-#~ msgstr "退出群组"
-
-#~ msgid "Last Update"
-#~ msgstr "更新时间"
-
-#~ msgid "Cancle Share"
-#~ msgstr "取消共享"
-
-#~ msgid "Discussions"
-#~ msgstr "信息栏"
-
-#~ msgid "Hide Reply"
-#~ msgstr "收起回复"
-
-#~ msgid "group management"
-#~ msgstr "群组管理"
-
-#~ msgid "Set Group Avatar"
-#~ msgstr "设置群组图标"
-
-#~ msgid "Back to Group"
-#~ msgstr "返回群组"
-
-#~ msgid "Group Members"
-#~ msgstr "成员列表"
-
-#~ msgid "Group Staffs"
-#~ msgstr "管理员列表"
-
-#~ msgid "Add Staffs"
-#~ msgstr "添加管理员"
-
-#~ msgid "Add members to "
-#~ msgstr "添加成员到 "
-
-#~ msgid "Type Emails"
-#~ msgstr "输入邮箱"
-
-#~ msgid "Staffs"
-#~ msgstr "管理员"
-
-#~ msgid "Add Group"
-#~ msgstr "添加群组"
