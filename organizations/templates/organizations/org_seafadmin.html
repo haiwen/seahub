@@ -10,13 +10,13 @@
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="25%">{% trans "Name" %}</th>
-        <th width="28%">{% trans "Owner" %}</th>
-        <th width="36%">{% trans "Description" %}</th>
-        <th width="7%">{% trans "Operations" %}</th>
+        <th width="25%">{% trans "Owner" %}</th>
+        <th width="34%">{% trans "Description" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" target="_blank">{{ repo.props.name }}</a></td>
         <td><a href="{% url 'user_profile' repo.owner %}" target="_blank">{{ repo.owner }}</a></td>
         <td>{{ repo.props.desc }}</td>
@@ -53,7 +53,7 @@
     {% endif %}
 </div>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "None" %}</p>
 {% endif %}
 {% endblock %}
 

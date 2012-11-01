@@ -5,7 +5,7 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<h2>{{ group.group_name }} {% trans "group management"%}</h2>
+<h2>{{ group.group_name }} {% trans "administration"%}</h2>
 {% endblock %}
 
 {% block left_panel %}
@@ -13,16 +13,16 @@
   <div class="info-item-top"><h3>{% trans "Operations"%}</h3> </div>
   <div class="info-item-bottom">
     <ul class="with-bg">
-      <li><a href="{% url 'avatar_group_add' group.id %}">{% trans "Set Group Avatar"%}</a></li>
-      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss Group"%}</a></li>
-      <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back to Group"%}</a></li>
+      <li><a href="{{ SITE_ROOT }}avatar/group/add/?gid={{ group.id }}">{% trans "Avatar"%}</a></li>
+      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
+      <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back"%}</a></li>
     </ul>
   </div>
 </div>
 {% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Group Members"%}</h3>
+<h3>{% trans "Members"%}</h3>
 <button id="group-member-add">{% trans "Add Members"%}</button>
 {% if members %}
 <table class="member-list">
@@ -44,8 +44,8 @@
 </table>
 {% endif %}
 
-<h3>{% trans "Group Staffs"%}</h3>
-<button id="group-admin-add">{% trans "Add Staffs"%}</button>
+<h3>{% trans "Administrators"%}</h3>
+<button id="group-admin-add">{% trans "Add Administrators"%}</button>
 {% if admins %}
 <table class="member-list">
     <tr>
@@ -69,15 +69,12 @@
 {% endif %}
 
 {% include 'group/grpmember_add_form.html' %}
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($("#group-remove"), '确定要解散该群组吗？');
-
+addConfirmTo($("#group-remove"), '{% trans "Really want to dismiss this group?" %}');
 addConfirmTo($(".member-remove-btn"));
-
 var contact_list = [], contact_email;
 {% for contact in contacts %}
 contact_email = '{{ contact.contact_email }}';
@@ -93,6 +90,5 @@ contact_list.push({value:contact_email, label:contact_email});
 {% with post_url=admin_add_url %}
 {% include 'group/grpadmin_add_js.html' %}
 {% endwith %}
-
 </script>
 {% endblock %}

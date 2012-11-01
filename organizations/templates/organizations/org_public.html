@@ -10,8 +10,8 @@
 
 {% block left_panel %}
 <div class="info-item">
-<h3 class="info-item-top">{% trans "Tips" %}</h3>
-<p class="info-item-bottom">{% trans "Libraries mark as read-only can only be viewing, can not be downloaded." %}</p>
+    <h3 class="info-item-top">{% trans "Tips" %}</h3>
+    <p class="info-item-bottom">{% trans "Libraries marked as read-only can only be browsed online." %}</p>
 </div>
 {% endblock %}
 
@@ -23,18 +23,18 @@
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name"%}</th>
-        <th width="36%">{% trans "Description"%}</th>
-        <th width="15%">{% trans "Last Update"%}</th>
-        <th width="15%">{% trans "Share From"%}</th>
-        <th width="10%">{% trans "Operations"%}</th>
+        <th width="33%">{% trans "Description"%}</th>
+        <th width="16%">{% trans "UpdateTime"%}</th>
+        <th width="15%">{% trans "Shared By"%}</th>
+        <th width="12%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in repos %}
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}/">{{ repo.props.repo_name }}</a></td>
@@ -58,7 +58,6 @@
 {% include "snippets/repo_share_form.html" %}
 {% include "snippets/repo_create_form.html" %}
 {% include "snippets/user_profile_html.html" %}
-
 {% endblock %}
 
 {% block extra_script %}

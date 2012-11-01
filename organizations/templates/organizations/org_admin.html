@@ -5,12 +5,10 @@
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Total Org Space Used" %}</h3>
+    <h3 class="info-item-top">{% trans "Space Used" %}</h3>
     <p class="info-item-bottom">{{ org_quota_usage|filesizeformat }} {% if org_quota > 0 %} / {{ org_quota|filesizeformat }} {% endif %}</p>
 </div>
-
 {% endblock %}
 
 {% block right_panel %}
@@ -19,22 +17,22 @@
 <table>
     <tr>
         <th width="60%">{% trans "Email" %}</th>
-	<th width="20%">{% trans "Space Used" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
         <th width="20%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td><a href="{% url 'user_profile' user.email %}" target="_blank">{{ user.props.email }}</a></td>
-	<td>
-	    {% if user.quota_usage >= 0 %}
-	    {{ user.quota_usage|filesizeformat }}
-	    {% endif %}
-	</td>
         <td>
-          {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">{% trans "Delete" %}</a>
-          {% endif %}
+            {% if user.quota_usage >= 0 %}
+            {{ user.quota_usage|filesizeformat }}
+            {% endif %}
+        </td>
+        <td>
+            {% if not user.is_self %}
+            <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">{% trans "Delete" %}</a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
@@ -69,10 +67,10 @@
 </div>
 
 <form id="user-add-form" action="" method="post" name="user-add-form" class="hide">
-    <label>{% trans "Email: " %}</label><br />
+    <label>{% trans "Emails: " %}</label><br />
     <textarea id="added-member-name" name="added-member-name"></textarea>
-    <p class="tip">{% trans "System will send notification email if email is not registered." %}</p>
-    <p class="error hide">{% trans "Please type an email" %}</p>
+    <p class="tip">{% trans "An invitation will be sent if the email is not registered." %}</p>
+    <p class="error hide">{% trans "Emails is required." %}</p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
 

@@ -179,7 +179,7 @@ def org_inner_pub_repo_create(request, url_prefix):
         user = request.user.username
         org = get_user_current_org(request.user.username, url_prefix)
         if not org:
-            return HttpResponse(json.dumps(u'创建失败：未加入该团体'),
+            return HttpResponse(json.dumps(_(u'Failed to create the library: you has not joined this organizatioin.')),
                                 content_type=content_type)
         
         try:
@@ -191,7 +191,7 @@ def org_inner_pub_repo_create(request, url_prefix):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = u"创建失败"
+            result['error'] = _(u"Failed to create.")
         else:
             result['success'] = True
             repo_created.send(sender=None,
@@ -215,7 +215,7 @@ def unset_org_inner_pub_repo(request, url_prefix, repo_id):
     except SearpcError:
         pass
 
-    messages.add_message(request, messages.INFO, _('Operation Successful'))
+    messages.add_message(request, messages.INFO, _('Operation Succeeded.'))
     
     return HttpResponseRedirect(reverse(org_shareadmin, args=[url_prefix]))
 
@@ -234,7 +234,7 @@ def org_groups(request, url_prefix):
         
         group_name = request.POST.get('group_name')
         if not validate_group_name(group_name):
-            result['error'] = _(u'Group name can only contain letters, numbers and underscore')
+            result['error'] = _(u'Group name can only contain letters, digits and underscore')
             return HttpResponse(json.dumps(result), content_type=content_type)
         
         try:
@@ -281,9 +281,9 @@ def send_org_user_add_mail(request, email, password, org_name):
     try:
         send_mail(_(u'Seafile Login Information'), t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, _(u'Sending mail Successfully'))
+        messages.add_message(request, messages.INFO, _(u'Mail sent successfully'))
     except:
-        messages.add_message(request, messages.ERROR, _(u'Failed to send email'))
+        messages.add_message(request, messages.ERROR, _(u'Failed to send the email'))
     
 @login_required
 @org_staff_required
@@ -383,7 +383,7 @@ def org_user_remove(request, url_prefix, user):
     url_prefix = request.user.org['url_prefix']
     remove_org_user(org_id, user)
 
-    messages.success(request, _(u"Successfully deleted member"))
+    messages.success(request, _(u"Successfully deleted."))
     
     return HttpResponseRedirect(reverse('org_admin', args=[url_prefix]))
 
@@ -402,7 +402,7 @@ def org_msg(request):
                 org_prefix = d['org_prefix']
                 org_url = reverse('org_public', args=[org_prefix])
                 
-                msg = _(u'%(from_email)s added you to organization <a href="%(org_url)s">%(org_name)s</a>') % \
+                msg = _(u'%(from_email)s added you to Organization <a href="%(org_url)s">%(org_name)s</a>') % \
                 {'from_email':from_email,
                  'org_url': org_url,
                  'org_name': org_name}
@@ -441,13 +441,13 @@ def org_repo_create(request, url_prefix):
         user = request.user.username
         org = get_user_current_org(request.user.username, url_prefix)
         if not org:
-            return HttpResponse(json.dumps(u'创建失败：未加入该团体'),
+            return HttpResponse(json.dumps(_(u'Failed to create: you has not joined this organization')),
                                 content_type=content_type)
 
         repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
                                   org.org_id)
         if not repo_id:
-            result['error'] = u"创建失败"
+            result['error'] = _(u'Failed to create')
         else:
             result['success'] = True
             repo_created.send(sender=None,
@@ -540,7 +540,7 @@ def org_group_remove(request, url_prefix, group_id):
     # Check whether is the org group.
     org_id = get_org_id_by_group(group_id_int)
     if request.user.org['org_id'] != org_id:
-        return render_permission_error(request, '该群组不属于当前团体',
+        return render_permission_error(request, _(u"This group doesn't belong to current organazation"),
                                        extra_ctx={'org': request.user.org,
                                                   'base_template': 'org_base.html'})
 
@@ -580,7 +580,7 @@ def org_repo_share(request, url_prefix):
 
     # Test whether user is the repo owner
     if not validate_org_repo_owner(org.org_id, repo_id, request.user.username):
-        return render_permission_error(request, u'只有资料库拥有者有权共享该资料库',
+        return render_permission_error(request, _(u'Only the owner of this library has permission to share it.'),
                                        extra_ctx={
                 'org': org,
                 'base_template': 'org_base.html',
@@ -595,11 +595,11 @@ def org_repo_share(request, url_prefix):
                 seafserv_threaded_rpc.set_org_inner_pub_repo(org.org_id,
                                                              repo_id, permission)
             except:
-                msg = u'共享到公共资料失败'
+                msg = _(u'Failed to share to all members')
                 messages.add_message(request, messages.ERROR, msg)
                 continue
 
-            msg = u'共享公共资料成功，请前往<a href="%s">共享管理</a>查看。' % \
+            msg = _(u'Shared to all members successfully, you can go check it at <a href="%s">Share</a>.') % \
                 (reverse('org_shareadmin', args=[org.url_prefix]))
             messages.add_message(request, messages.INFO, msg)
         elif (share_to.find('@') == -1):
@@ -620,19 +620,19 @@ def org_repo_share(request, url_prefix):
                                                              from_email,
                                                              permission)
                     find = True
-                    msg = u'共享到 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
-                        (group_name, reverse('org_shareadmin', args=[org.url_prefix]))
+                    msg = _(u'Shared to %(group)s successfully，you can go check it at <a href="%(share)s">Share</a>.') % \
+                            {'group':group_name, 'share':reverse('org_shareadmin', args=[org.url_prefix])}
                     
                     messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
-                msg = u'共享到 %s 失败。' % group_name
+                msg = _(u'Failed to share to %s.') % group_name
                 messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''
             # Test whether share_to is in this org
             if not org_user_exists(org.org_id, share_to):
-                msg = u'共享给 %s 失败：团体中不存在该用户。' % share_to
+                msg = _(u'Failed to share to %s: this user does not exist in the organization.') % share_to
                 messages.add_message(request, messages.ERROR, msg)
                 continue
                 
@@ -640,11 +640,11 @@ def org_repo_share(request, url_prefix):
             try:
                 seafserv_threaded_rpc.add_share(repo_id, from_email, share_to,
                                                 permission)
-                msg = u'共享给 %s 成功，请前往<a href="%s">共享管理</a>查看。' % \
+                msg = _(u'Shared to %(share_to)s successfully，you can go check it at <a href="%(share)s">Share</a>.') % \
                     (share_to, reverse('org_shareadmin', args=[org.url_prefix]))
                 messages.add_message(request, messages.INFO, msg)
             except SearpcError, e:
-                msg = u'共享给 %s 失败。' % share_to
+                msg = _(u'Failed to share to %s.') % share_to
                 messages.add_message(request, messages.ERROR, msg)
                 continue
         
@@ -686,15 +686,15 @@ def org_shareadmin(request, url_prefix):
     pub_repos = seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(org.org_id,
                                                                         username)
     for repo in pub_repos:
-        repo.props.user = '所有团体成员'
+        repo.props.user = _(u'all members')
         repo.props.user_info = 'all'
     shared_repos += pub_repos
 
     for repo in shared_repos:
         if repo.props.permission == 'rw':
-            repo.share_permission = '可读写'
+            repo.share_permission = _(u'Read-Write')
         elif repo.props.permission == 'r':
-            repo.share_permission = '只可浏览'
+            repo.share_permission = _(u'Read-Only')
         else:
             repo.share_permission = ''
 

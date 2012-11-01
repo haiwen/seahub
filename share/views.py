@@ -68,11 +68,11 @@ def share_repo(request):
                 try:
                     seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
                 except:
-                    msg = _(u'Failed to share to all')
+                    msg = _(u'Failed to share to all members')
                     message.add_message(request, message.ERROR, msg)
                     continue
 
-                msg = _(u'Shared to all successfully, go check it at <a href="%s">Share</a>.') % \
+                msg = _(u'Shared to all members successfully, go check it at <a href="%s">Share</a>.') % \
                     (reverse('share_admin'))
                 messages.add_message(request, messages.INFO, msg)
                 
@@ -123,7 +123,7 @@ def share_repo(request):
                 #           'is_encrypted': is_encrypted,
                 #           }
                 # anonymous_share(request, **kwargs)
-                msg = _(u'Failed to share to %s, as he/she has not registered.') % to_email
+                msg = _(u'Failed to share to %s, as the email is not registered.') % to_email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
             else:
@@ -161,7 +161,7 @@ def share_admin(request):
         # public repos shared by this user
         pub_repos = seafserv_threaded_rpc.list_inner_pub_repos_by_owner(username)
         for repo in pub_repos:
-            repo.props.user = '所有人'
+            repo.props.user = _(u'all members')
             repo.props.user_info = 'all'
         shared_repos += pub_repos
 

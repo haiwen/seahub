@@ -12,6 +12,7 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
@@ -90,7 +91,7 @@ class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
             checked_groups = get_personal_groups(-1, -1)
         for g in checked_groups:
             if g.group_name == group_name:
-                result['error'] = _(u'The group name has been occupied.')
+                result['error'] = _(u'There is already a group with that name.')
                 return HttpResponse(json.dumps(result), status=400,
                                     content_type='application/json; charset=utf-8')
 
@@ -185,7 +186,7 @@ def group_remove(request, group_id):
     """
     # Check whether user is system admin.
     if not request.user.is_staff:
-        return render_permission_error(request, u'只有管理员有权删除群组')
+        return render_permission_error(request, _(u'Only administrators can delete the group.'))
         
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next = request.META.get('HTTP_REFERER', None)
@@ -222,7 +223,7 @@ def group_dismiss(request, group_id):
     # Check whether user is group staff
     user = request.user.username
     if not ccnet_threaded_rpc.check_group_staff(group_id_int, user):
-        return render_permission_error(request, u'只有群组管理员有权解散群组')
+        return render_permission_error(request, _(u'Only administrators can dismiss the group'))
 
     try:
         ccnet_threaded_rpc.remove_group(group_id_int, user)
@@ -245,7 +246,7 @@ def group_quit(request, group_id):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return render_error(request, u'group id 不是有效参数')
+        return render_error(request, _(u'group id  is not a valid argument.'))
     
     try:
         ccnet_threaded_rpc.quit_group(group_id_int, request.user.username)
@@ -384,7 +385,7 @@ def group_message_remove(request, group_id, msg_id):
     try:
         gm = GroupMessage.objects.get(id=msg_id)
     except GroupMessage.DoesNotExist:
-        return HttpResponse(json.dumps({'success': False, 'err_msg':u'该留言不存在'}),
+        return HttpResponse(json.dumps({'success': False, 'err_msg':_(u"The message doesn't exist")}),
                                    content_type='application/json; charset=utf-8')
     else:
         # Test whether user is group admin or message owner.
@@ -394,7 +395,7 @@ def group_message_remove(request, group_id, msg_id):
             return HttpResponse(json.dumps({'success': True}),
                                         content_type='application/json; charset=utf-8')
         else:
-            return HttpResponse(json.dumps({'success': False, 'err_msg':u'您的权限不够'}),
+            return HttpResponse(json.dumps({'success': False, 'err_msg': _(u"You don't have the permission.")}),
                                         content_type='application/json; charset=utf-8')
 
 @login_required
@@ -558,7 +559,7 @@ def group_manage(request, group_id):
                 org_id = request.user.org['org_id']
                 for email in member_list:
                     if not ccnet_threaded_rpc.org_user_exists(org_id, email):
-                        err_msg = _(u'Failed to add group member, %s is not in current organization.') % email
+                        err_msg = _(u'Failed to add, %s is not in current organization.') % email
                         result['error'] = err_msg
                         return HttpResponse(json.dumps(result), status=400,
                                             content_type=content_type)
@@ -587,7 +588,7 @@ def group_manage(request, group_id):
                             }
                     
                         try:
-                            send_mail('您的好友在SeaCloud上将你加入到群组',
+                            send_mail(_(u'Your friend added you to a group in SeaCloud.'),
                                       t.render(Context(c)), None, [email],
                                       fail_silently=False)
                             mail_sended_list.append(email)
@@ -609,7 +610,7 @@ def group_manage(request, group_id):
             # Can only invite registered user to group if not in cloud mode.
             for email in member_list:
                 if not is_registered_user(email):
-                    err_msg = _(u'Failed to add group member, %s is not registerd.')
+                    err_msg = _(u'Failed to add, %s is not registerd.')
                     result['error'] = err_msg % email
                     return HttpResponse(json.dumps(result), status=400,
                                         content_type=content_type)
@@ -622,9 +623,16 @@ def group_manage(request, group_id):
                     return HttpResponse(json.dumps(result), status=500,
                                         content_type=content_type)
         if mail_sended_list:
-            messages.success(request, _(u'Successfully added group member(s). An email has been sent to user(s).'))
+            msg = ungettext(
+                'Successfully added. An email has been sent.',
+                'Successfully added. %(count)s emails have been sent.',
+            count) % {
+                'count': len(mail_sended_list),
+            }
+            messages.success(request, msg)
+
         else:
-            messages.success(request, _(u'Successfully added group member(s).'))
+            messages.success(request, _(u'Successfully added.'))
         return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
 
@@ -664,7 +672,7 @@ def group_add_admin(request, group_id):
                          email=member_name)
 
         if not is_registered_user(member_name):
-            err_msg = u'无法添加管理员，%s 未注册' % member_name
+            err_msg = _(u'Failed to add, %s is not registrated.') % member_name
             result['error'] = err_msg
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
@@ -687,7 +695,7 @@ def group_add_admin(request, group_id):
                 result['error'] = _(e.msg)
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
-        messages.success(request, u'操作成功')
+        messages.success(request, _(u'Operation succeeded.'))
         return HttpResponse(json.dumps('success'), status=200,
                             content_type=content_type)
 
@@ -700,7 +708,7 @@ def group_remove_admin(request, group_id):
     user = request.GET.get('u', '')
     try:
         ccnet_threaded_rpc.group_unset_admin(int(group_id), user)
-        messages.success(request, u'操作成功')
+        messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
         messages.error(request, e.msg)
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
@@ -717,7 +725,7 @@ def group_remove_member(request, group_id, user_name):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return render_error(request, u'group id 不是有效参数')        
+        return render_error(request, _(u'group id is not valid'))        
     
     if not check_group_staff(group_id_int, request.user):
         raise Http404
@@ -727,9 +735,9 @@ def group_remove_member(request, group_id, user_name):
                                                request.user.username,
                                                user_name)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
-        messages.success(request, u'操作成功')
+        messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
-        messages.error(request, u'操作失败：%s' % _(e.msg))
+        messages.error(request, _(u'Failed：%s') % e.msg)
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
 
@@ -741,10 +749,10 @@ def group_share_repo(request, repo_id, group_id, from_email, permission):
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, u'共享失败:群组不存在')
+        return render_error(request, _(u"Failed to share: the group doesn't exist."))
     
     if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, permission) != 0:
-        return render_error(request, u'共享失败:内部错误')
+        return render_error(request, _(u"Failed to share: internal error."))
 
 def group_unshare_repo(request, repo_id, group_id, from_email):
     """
@@ -754,15 +762,15 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, u'取消共享失败:群组不存在')
+        return render_error(request, _(u"Failed to unshare: the group doesn't exist."))
 
     # Check whether user is group staff or the one share the repo
     if not check_group_staff(group_id, from_email) and \
             seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
-        return render_permission_error(request, u'取消共享失败:只有群组管理员或共享资料库发布者有权取消共享')
+        return render_permission_error(request, _(u"Operation failed: only administrators and the owner of the library can unshare it."))
         
     if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
-        return render_error(request, u'取消共享失败:内部错误')
+        return render_error(request, _(u"Failed to unshare: internal error."))
 
 @login_required
 def group_recommend(request):
@@ -790,7 +798,7 @@ def group_recommend(request):
             try:
                 group_id = int(group_id)
             except ValueError:
-                messages.error(request, _(u'Recommend error: wrong group id'))
+                messages.error(request, _(u'Error: wrong group id'))
                 return HttpResponseRedirect(next)
 
             # Get that group
@@ -798,7 +806,7 @@ def group_recommend(request):
 
             # TODO: Check whether repo is in the group and Im in the group
             if not is_group_user(group_id, username):
-                err_msg = _(u'Recommend to %s error: you are not in that group')
+                err_msg = _(u'Error: you are not in group %s.')
                 messages.error(request, err_msg %  group.group_name)
                 continue
 
@@ -818,12 +826,12 @@ def group_recommend(request):
             ma.save()
 
             group_url = reverse('group_info', args=[group_id])
-            msg = _(u'Recommend to <a href="%(url)s" target="_blank">%(name)s</a> success。') %\
+            msg = _(u'Successfully recommended to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
                 {'url':group_url, 'name':group.group_name}
             messages.add_message(request, messages.INFO, msg)
 
     else:
-        messages.add_message(request, messages.ERROR, _(u'Recommend failed'))
+        messages.add_message(request, messages.ERROR, _(u'Failed to recommend.'))
     return HttpResponseRedirect(next)
 
 @login_required
@@ -838,11 +846,11 @@ def create_group_repo(request, group_id):
                                       content_type=content_type)
     group_id = int(group_id)
     if not get_group(group_id):
-        return json_error(u'创建失败:群组不存在')
+        return json_error(_(u'Failed to create: the group does not exist.'))
 
     # Check whether user belongs to the group.
     if not is_group_user(group_id, request.user.username):
-        return json_error(u"创建失败:未加入该群组")
+        return json_error(_(u'Failed to create: you are not in the group.'))
 
     form = SharedRepoCreateForm(request.POST)
     if not form.is_valid():
@@ -864,7 +872,7 @@ def create_group_repo(request, group_id):
             except:
                 repo_id = None
             if not repo_id:
-                return json_error(u"创建失败")
+                return json_error(_(u'Failed to create'))
 
             try:
                 status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
@@ -878,7 +886,7 @@ def create_group_repo(request, group_id):
             # if share failed, remove the newly created repo
             if status != 0:
                 seafserv_threaded_rpc.remove_repo(repo_id)
-                return json_error(u'创建失败:内部错误')
+                return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),
@@ -892,7 +900,7 @@ def create_group_repo(request, group_id):
             except:
                 repo_id = None
             if not repo_id:
-                return json_error(u"创建失败")
+                return json_error(_(u'Failed to create'))
 
             try:
                 status = seafserv_threaded_rpc.group_share_repo(repo_id,
@@ -905,7 +913,7 @@ def create_group_repo(request, group_id):
             # if share failed, remove the newly created repo
             if status != 0:
                 seafserv_threaded_rpc.remove_repo(repo_id)
-                return json_error(u'创建失败:内部错误')
+                return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
                 return HttpResponse(json.dumps(result),
@@ -932,7 +940,7 @@ def group_joinrequest(request, group_id):
     staff = group.creator_name
     if is_group_user(group_id, user):
         # Already in the group. Normally, this case should not happen.
-        err = u'你已经在该群组。'
+        err = _(u'You are already in the group.')
         return HttpResponseBadRequest(json.dumps({'error': err}),
                                       content_type=content_type)
     else:
@@ -950,13 +958,13 @@ def group_joinrequest(request, group_id):
                 'group_join_msg': group_join_msg,
                 }
             try:
-                send_mail(u'加入群组申请', t.render(Context(c)), None, [staff],
+                send_mail(_(u'apply to join the group'), t.render(Context(c)), None, [staff],
                           fail_silently=False)
-                messages.success(request, u'发送成功，等候群组管理员处理。')
+                messages.success(request, _(u'Sent successfully, the group admin will handle it.'))
                 return HttpResponse(json.dumps('success'),
                                     content_type=content_type)
             except:
-                err = u'发送失败，请稍后再试。'
+                err = _(u'Failed to send. You can try it again later.')
                 return HttpResponse(json.dumps({'error': err}), status=500,
                                     content_type=content_type)
         else:

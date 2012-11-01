@@ -9,9 +9,9 @@
 <table>
     <tr>
         <th width="30%">{% trans "Name" %}</th>
-        <th width="40%">{% trans "Creator" %}</th>
-        <th width="23%">{% trans "Create Time" %}</th>
-        <th width="7%">{% trans "Operations" %}</th>
+        <th width="35%">{% trans "Creator" %}</th>
+        <th width="23%">{% trans "Created At" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
     {% for group in groups %}
     <tr>
@@ -51,13 +51,13 @@
     {% endif %}
 </div>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "None" %}</p>
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.group-remove-btn'), '{% trans "Really delete this group?" %}');
+addConfirmTo($('.group-remove-btn'), '{% trans "Really want to delete this group?" %}');
 </script>
 {% endblock %}
  

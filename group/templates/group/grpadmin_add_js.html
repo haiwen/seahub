@@ -1,3 +1,4 @@
+{% load i18n %}
 $("#group-admin-add").click(function() {
     $("#admin-add-form").modal({appendTo: "#main"});
     addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
@@ -14,7 +15,7 @@ $("#group-admin-add").click(function() {
 
 $('#admin-add-submit').click(function() {
     if (!$.trim($('#added-admin-name').attr('value'))) {
-        apply_form_error('admin-add-form', '输入不能为空。');
+        apply_form_error('admin-add-form', '{% trans 'It can not be blank.' %}');
         return false;
     }
     $.ajax({

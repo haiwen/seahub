@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 15:59+0800\n"
+"POT-Creation-Date: 2012-10-31 16:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,18 +22,20 @@ msgid "Only the owner of the library has permission to share it."
 msgstr "只有资料库拥有者才有共享权限。"
 
 #: views.py:71
-msgid "Failed to share to all"
+msgid "Failed to share to all members"
 msgstr "共享到公共资料失败"
 
 #: views.py:75
-msgid "Shared to all successfully, go check it at <a href=\"%s\">Share</a>."
+msgid ""
+"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享管理</a> 查看。"
 
 #: views.py:95
 msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr "共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
+msgstr ""
+"共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
 
 #: views.py:101
 msgid "Failed to share to %s，as it does not exists."
@@ -44,14 +46,19 @@ msgid "Failed to share to %s ."
 msgstr "共享给 %s 失败。"
 
 #: views.py:126
-msgid "Failed to share to %s, as he/she has not registered."
+msgid "Failed to share to %s, as the email is not registered."
 msgstr "共享给 %s 失败，该邮件尚未注册。"
 
 #: views.py:130
 msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
+msgstr ""
+"共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
+
+#: views.py:164
+msgid "all members"
+msgstr "所有成员"
 
 #: views.py:170 templates/repo/share_admin.html:27
 #: templates/repo/share_admin.html.py:40
@@ -80,7 +87,8 @@ msgstr "有人通过SeaCloud共享了一个资料库给您"
 msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
+msgstr ""
+"共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
 
 #: views.py:319
 msgid "Deleted successfully."

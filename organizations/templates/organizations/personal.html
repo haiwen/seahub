@@ -11,20 +11,20 @@
 {% block left_panel %}
 <!-- 我的基本信息 -->
 <div class="info-item">
-<h3 class="info-item-top">{% trans "Account" %}</h3>
-<div class="info-item-bottom home-profile ovhd">
-    <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
-{% if nickname %}
-<p class="fleft">{{ nickname }}</p>
-{% else %}
-<p class="fleft">{% trans "Nickname is empty" %} <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit" %}" title="{% trans "Edit" %}" /></a></p>
-{% endif %}
-</div>
+    <h3 class="info-item-top">{% trans "Profile" %}</h3>
+    <div class="info-item-bottom home-profile ovhd">
+        <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
+        {% if nickname %}
+        <p class="fleft">{{ nickname }}</p>
+        {% else %}
+        <p class="fleft">{% trans "No Nickname" %} <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit" %}" title="{% trans "Edit" %}" /></a></p>
+        {% endif %}
+    </div>
 </div>
 
 <div class="info-item">
-<h3 class="info-item-top">{% trans "Org Space Used" %}</h3>
-<p class="info-item-bottom">{{ quota_usage|filesizeformat }}</p>
+    <h3 class="info-item-top">{% trans "Space Used" %}</h3>
+    <p class="info-item-bottom">{{ quota_usage|filesizeformat }}</p>
 </div>
 
 <!-- 我的群组 -->
@@ -45,7 +45,6 @@
 {% endwith %}
 
 {% include "snippets/repo_create_form.html" %}
-
 {% endblock %}
 
 {% block extra_script %}
@@ -59,7 +58,6 @@
 {% include "snippets/repo_create_js.html" %}
 {% endwith %}
 
-  
 {% if events %}
 {% include "snippets/events_js.html" %}
 {% endif %}

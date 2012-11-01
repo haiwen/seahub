@@ -11,15 +11,15 @@
 
 {% block left_panel %}
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Group Info" %}</h3>
+    <h3 class="info-item-top">{% trans "Basic Info" %}</h3>
     <div class="info-item-bottom group-basic-info ovhd">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar fleft" />
-        <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created in " %}<br />{{ group.timestamp|tsstr_day }}</p>
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar fleft" />
+        <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
     </div>
 </div>
 <div class="info-item">
     <div class="info-item-top">
-        <h3>{% trans "Staffs" %}</h3>
+        <h3>{% trans "Admin" %}</h3>
     </div>
     <ul class="info-item-bottom">
         {% for member in managers %}
@@ -44,7 +44,7 @@
         </ul>
         {% else %}
         {% if cloud_mode and not org %}
-        <p>{% blocktrans %}You can click "Add" button to add members, if he is not registered, system will send him a invitation email.{% endblocktrans %}</p>
+        <p>{% blocktrans %}You can click "Add" button to add some, and if the email is not registered, an invitation will be sent to it.{% endblocktrans %}</p>
         {% else %}
         <p>{% blocktrans %}You can click "Add" button to add members.{% endblocktrans %}</p>
         {% endif %}
@@ -57,9 +57,9 @@
     <h3 class="info-item-top">{% trans "Operations" %}</h3>
     <ul class="with-bg info-item-bottom">
         {% if is_staff %}
-        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Group Management" %}</a></li>
+        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
         {% else %}
-        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit Group" %}</a></li>
+        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
         {% endif %}
     </ul>
 </div>
@@ -67,7 +67,7 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Libraries in Group" %}</h3>
+<h3>{% trans "Libraries" %}</h3>
 <button id="repo-create">{% trans "New Library" %}</button>
 {% if repos %}
 <table>
@@ -75,8 +75,8 @@
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
         <th width="34%">{% trans "Description" %}</th>
-        <th width="16%">{% trans "Last Update" %}</th>
-        <th width="14%">{% trans "Shared by" %}</th>
+        <th width="16%">{% trans "UpdateTime" %}</th>
+        <th width="14%">{% trans "Shared By" %}</th>
         <th width="12%">{% trans "Operations" %}</th>
     </tr>
 
@@ -84,9 +84,9 @@
     <tr>
         <td>
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="目录icon" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
@@ -104,7 +104,7 @@
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="{% trans "Download" %}" title="{% trans "Download" %}" />
 	    {% endif %}
         {% if is_staff or repo.share_from_me  %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="{% trans "Cancle Share" %}" alt="{% trans "Cancle Share" %}" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="{% trans "Unshare" %}" alt="{% trans "Unshare" %}" />
         {% endif %}
         </td>
     </tr>
@@ -113,7 +113,7 @@
 {% endif %}
 
 <div id="group-reply">
-    <h3>{% trans "Discussions" %}</h3>
+    <h3>{% trans "Messages" %}</h3>
     <div class="w100 ovhd">
         <div class="pic fleft">{% avatar request.user.username 48 %}</div>
         <form id="group-message-form" action="" method="post" class="fright">
@@ -141,7 +141,7 @@
                 <p>
                 {% if msg.attachment.src == 'recommend' %}
                 <!-- recommend -->
-                <span class="recommend">{% trans "Recommend" %}
+                <span class="recommend">{% trans "Recommended" %}
                   {% if msg.attachment.attach_type == 'file' %}
                   <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
                   {% else %}
@@ -153,12 +153,22 @@
 
                 {% if msg.attachment.src == 'filecomment' %}
                 <!-- file comment -->
-                <span class="recommend">{% trans "File " %}<a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> {% trans "has new comment:"%}</span>
+                <span class="recommend">{% trans "File " %}<a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> {% trans "has a new comment:"%}</span>
                 {% endif %}
                 
                 {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
                 </p>
-                <button class="reply op" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{% if msg.reply_cnt != 0 %}{{ msg.reply_cnt }} {% endif %}</span>{% trans "Reply" %}</button>
+                <button class="reply op" data="{% url 'msg_reply' msg.id %}">
+                    {% if msg.reply_cnt == 0 %}
+                    <span class="reply-cnt"></span>{% trans 'Reply' %}
+                    {% else %}
+                    {% blocktrans count counter=msg.reply_cnt %}
+                    <span class="reply-cnt">{{ counter }}</span> Reply
+                    {% plural %}
+                    <span class="reply-cnt">{{ counter }}</span> Replies
+                    {% endblocktrans %}
+                    {% endif %}
+                </button>
                 <button class="replyclose op hide">{% trans "Hide" %}</button>
                 {% if is_staff or msg.from_email == request.user.username %}
                 <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</button>
@@ -183,16 +193,14 @@
 
 {% include "snippets/user_profile_html.html" %}
 {% include "snippets/repo_create_form.html" %}
-
 {% include 'group/grpmember_add_form.html' %}
-
 {% endblock %}
 
 {% block extra_script %}
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
-addConfirmTo($('#quit-group'), gettext('Confirm to quit group?'));
-addConfirmTo($('.cancel-share'), gettext('Confirm to unshare this library?'));
+addConfirmTo($('#quit-group'), '{% trans "Really want to quit this group?" %}');
+addConfirmTo($('.cancel-share'), '{% trans "Really want to unshare this library?" %}');
 
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
@@ -230,11 +238,10 @@ $('.msg-delete').hover(
         $(this).css('color', '#4b4');
     }
 );
-//addConfirmTo($('.msg-delete'));
 $('.msg-delete').click(function() {
     var url = $(this).attr('data');
     var msg = $(this).parents('.msg');
-    var del_confirm = gettext('<div class="msg-del-confirm hide"><p>Really delete this message?</p><button class="msg-del-yes">Yes</button><button class="msg-del-no">No</button></div>');
+    var del_confirm = '<div class="msg-del-confirm hide"><p>{% trans "Really want to delete this message?" %}</p><button class="msg-del-yes">{% trans "Yes" %}</button><button class="msg-del-no">{% trans "No" %}</button></div>';
     $(this).parent().append(del_confirm).css('position', 'relative');
     del_confirm = $(this).parent().find('.msg-del-confirm');
     del_confirm.css({'left':$(this).position().left - 15, 'top':$(this).position().top - del_confirm.outerHeight()}).removeClass('hide');
@@ -246,13 +253,13 @@ $('.msg-delete').click(function() {
             success: function(data) {
                 if (data['success']) {
                     msg.remove();
-                    feedback(gettext('Successfully deleted.'), 'success');
+                    feedback('{% trans "Successfully deleted" %}', 'success');
                 } else {
-                    feedback('删除失败：' + data['err_msg'], 'error');
+                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                feedback(textStatus + '，删除失败', 'error');
+                feedback(textStatus + '{% trans ", failed to delete." %}', 'error');
             }
         });
     });
@@ -281,6 +288,5 @@ $('#grp-member-add').click(function() {
 {% with post_url=member_add_url %}
 {% include 'group/grpmember_add_js.html' %}
 {% endwith %}
-
 </script>
 {% endblock %}

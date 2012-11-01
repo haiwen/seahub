@@ -1,3 +1,4 @@
+{% load i18n %}
 $("#group-member-add").click(function() {
     $("#member-add-form").modal({appendTo: "#main"});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
@@ -14,7 +15,7 @@ $("#group-member-add").click(function() {
 
 $('#member-add-submit').click(function() {
     if (!$.trim($('#added-member-name').attr('value'))) {
-        apply_form_error('member-add-form', '输入不能为空。');
+        apply_form_error('member-add-form', '{% trans 'It can not be blank.' %}');
         return false;
     }
     $.ajax({

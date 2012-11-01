@@ -1,3 +1,4 @@
+{% load i18n %}
 $('.reply, .replyclose').hover(
     function() {
         $(this).css('color', '#f93');
@@ -55,10 +56,10 @@ $('.reply').click(function() {
     }
 
     if ($.trim(reply_cnt.html()) == '') {
-        reply_bd.html('<ul class="reply-list"></ul><input type="text" name="message" class="reply-input" /> <button class="submit">回复</button><p class="error hide">输入不能为空且应少于150个字符。</p>').attr('class', 'reply-bd');
+        reply_bd.html('<ul class="reply-list"></ul><input type="text" name="message" class="reply-input" /> <button class="submit">{% trans "Reply" %}</button><p class="error hide">{% trans "It cannot be blank and should be no more than 150 characters." %}</p>').attr('class', 'reply-bd');
         afterBdShow();
     } else {
-        reply_bd.html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="加载中..." />');
+        reply_bd.html('<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "loading ..." %}" />');
         $.ajax({
             url: msg_reply_url,
             dataType: 'json',

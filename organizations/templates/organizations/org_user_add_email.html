@@ -1,16 +1,16 @@
 {% load i18n %}{% autoescape off %}
-{% blocktrans %}{{ user }} added you to {{ org_name }} organization on Seafile. {% endblocktrans %}
+{% blocktrans %}{{ user }} added you to Organization {{ org_name }} on Seafile. {% endblocktrans %}
 {% blocktrans %}
 Here is your login information:
 email: {{ email }}
 password: {{ password }}
 
-Please click follow link to log in:
+Please click the link to log in:
 {% endblocktrans %}
 {{ protocol }}://{{ domain }}{% url auth_login %}
 {% blocktrans %}
-Please change your password after login.
-Thank you for using our site!
+and reset your password later.
+Thank you!
 
 The {{ site_name }} team
 {% endblocktrans%}
