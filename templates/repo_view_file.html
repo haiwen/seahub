@@ -410,7 +410,7 @@ function send_open_local_file_request(path) {
                 
             } else if (data['no_assoc'] === true) {
                 // no application to open the file
-                $('#open-local-error').html('{% trans "Cannot find a application to open file. Seafile will open the folder." %}');
+                $('#open-local-error').html('{% trans "Cannot find an application to open file. Seafile will open the folder." %}');
 
             } else if (data['outdated'] === true) {
                 // local repo not in sync yet

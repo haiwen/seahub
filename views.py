@@ -1879,13 +1879,21 @@ def user_info(request, email):
     in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email',
                                                       -1, -1)
 
+    # get nickname
+    if not Profile.objects.filter(user=email):
+        nickname = ''
+    else:
+        profile = Profile.objects.filter(user=email)[0]
+        nickname = profile.nickname
+    
     return render_to_response(
         'userinfo.html', {
             'owned_repos': owned_repos,
             'quota': quota,
             'quota_usage': quota_usage,
             "in_repos": in_repos,
-            'email': email
+            'email': email,
+            'nickname': nickname,
             }, context_instance=RequestContext(request))
 
 @login_required

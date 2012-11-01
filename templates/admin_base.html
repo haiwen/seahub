@@ -1,24 +1,25 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block top_bar_sys_manager_class %} class="cur"{% endblock %}
 {% block nav %}
 <ul class="nav">
     {% if request.user.is_staff %}
     <li>
-        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>资料库管理</a>
+        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>{% trans "Library Management" %}</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}sys/useradmin/" {% block nav_useradmin_class %}{% endblock %}>用户管理</a>
+        <a href="{{ SITE_ROOT }}sys/useradmin/" {% block nav_useradmin_class %}{% endblock %}>{% trans "User Management" %}</a>
     </li>
     <li>
-        <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>群组管理</a>
+        <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>{% trans "Group Management" %}</a>
     </li>
     {% if request.cloud_mode %}
     <li>
-        <a href="{{ SITE_ROOT }}sys/orgadmin/" {% block nav_orgadmin_class %}{% endblock %}>团体管理</a>
+        <a href="{{ SITE_ROOT }}sys/orgadmin/" {% block nav_orgadmin_class %}{% endblock %}>{% trans "Org Management" %}</a>
     </li>
     {% endif %}
     <li>
-        <a href="{{ SITE_ROOT }}sys/notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>通知管理</a>
+        <a href="{{ SITE_ROOT }}sys/notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>{% trans "Notification Management" %}</a>
     </li>
     {% endif %}
 </ul>

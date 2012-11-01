@@ -1,34 +1,34 @@
 {% extends "admin_base.html" %}
-
+{% load i18n %}
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<h3>操作</h3>
+<h3>{% trans "Operations" %}</h3>
 <ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
+    <li><a href="{{ SITE_ROOT }}useradmin/add/">{% trans "Add new user" %}</a></li>
 </ul>
 {% endblock %}
 
 {% block right_panel %}
-<h3>所有用户</h3>
+<h3>{% trans "All Members" %}</h3>
 <table>
     <tr>
-        <th width="62%">邮箱</th>
-        <th width="20%">是否激活</th>
-        <th width="18%">操作</th>
+        <th width="55%">{% trans "Email" %}</th>
+        <th width="20%">{% trans "Status" %}</th>
+        <th width="25%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
         {% if user.props.is_active %}
-        <td>已激活</td>
+        <td>{% trans "Activated" %}</td>
         {% else %}
-        <td><a href="#" data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">激活</a></td>
+        <td><a href="#" data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
         {% endif %}
         <td>
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">删除</a>
-          <a href="#" class="reset-user-btn op" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">密码重置</a>
+          <a href="#" class="remove-user-btn op" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">{% trans "Password Reset" %}</a>
           {% endif %}
         </td>
     </tr>
@@ -37,12 +37,15 @@
 
 <div id="paginator">
     {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
     {% endif %}
     {% if page_next %}
-    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+    <a href="{{ SITE_ROOT }}sys/useradmin/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next" %}</a>
     {% endif %}
-    <span>每页：</span> 
+    {% if current_page != 1 or page_next %}
+    |
+    {% endif %}
+    <span>{% trans "Per page: " %}</span> 
     {% if per_page == 25 %}
     <span> 25 </span> 
     {% else %}
@@ -71,6 +74,6 @@ $('.activate').each(function(){
 });
 
 addConfirmTo($('.remove-user-btn'));
-addConfirmTo($('.reset-user-btn'), '确定要重置？');
+addConfirmTo($('.reset-user-btn'), '{% trans "Really reset?" %}');
 </script>
 {% endblock %}

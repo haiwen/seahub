@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 13:57+0800\n"
+"POT-Creation-Date: 2012-11-01 15:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,86 @@ msgstr ""
 msgid "简体中文"
 msgstr ""
 
+#: templates/add_user_form.html:3 templates/add_user_form.html.py:7
+msgid "Add User"
+msgstr "添加新用户"
+
+#: templates/add_user_form.html:9 templates/sys_useradmin.html:15
+#: templates/registration/login.html:8
+#: templates/registration/registration_form.html:11
+#: templates/snippets/user_profile_html.html:27
+msgid "Email"
+msgstr "邮箱"
+
+#: templates/add_user_form.html:11 templates/registration/login.html:10
+#: templates/registration/registration_form.html:13
+#: templates/snippets/repo_create_form.html:17
+msgid "Password"
+msgstr "密码"
+
+#: templates/add_user_form.html:13
+#: templates/registration/registration_form.html:15
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
+#: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
+#: templates/repo.html.py:209 templates/repo_update_file.html:21
+#: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
+#: templates/repo_view_file.html.py:167 templates/userinfo.html:87
+#: templates/registration/login.html:13
+#: templates/registration/password_change_form.html:18
+#: templates/registration/password_reset_confirm.html:19
+#: templates/registration/password_reset_form.html:13
+#: templates/registration/registration_form.html:18
+#: templates/snippets/events.html:72
+#: templates/snippets/group_recommend_form.html:23
+#: templates/snippets/repo_create_form.html:23
+#: templates/snippets/repo_share_form.html:18
+#: templates/snippets/user_profile_html.html:33
+msgid "Submit"
+msgstr "提交"
+
+#: templates/add_user_form.html:26 templates/registration/login.html:28
+#: templates/registration/registration_form.html:28
+msgid "Email cannot be blank"
+msgstr "邮箱不能为空"
+
+#: templates/add_user_form.html:30 templates/registration/login.html:32
+#: templates/registration/registration_form.html:32
+msgid "Password cannot be blank"
+msgstr "密码不能为空"
+
+#: templates/add_user_form.html:34
+#: templates/registration/registration_form.html:36
+msgid "Confirm password cannot be blank"
+msgstr "确认密码不能为空"
+
+#: templates/add_user_form.html:38
+#: templates/registration/registration_form.html:40
+msgid "The two password fields not match"
+msgstr "两次输入的密码不一致"
+
+#: templates/admin_base.html:8 templates/org_admin_base.html:11
+msgid "Library Management"
+msgstr "资料库管理"
+
+#: templates/admin_base.html:11
+msgid "User Management"
+msgstr "用户管理"
+
+#: templates/admin_base.html:14 templates/org_admin_base.html:14
+msgid "Group Management"
+msgstr "群组管理"
+
+#: templates/admin_base.html:18
+msgid "Org Management"
+msgstr "团体管理"
+
+#: templates/admin_base.html:22
+msgid "Notification Management"
+msgstr "通知管理"
+
 #: templates/base.html:9
 msgid "File Collaboration Team Organization"
 msgstr "文件 合作 团队 团体"
@@ -168,7 +248,7 @@ msgstr "管理员工作台"
 msgid "Welcome,"
 msgstr "欢迎，"
 
-#: templates/base.html:60 templates/myhome.html:9
+#: templates/base.html:60 templates/myhome.html:9 templates/userinfo.html:13
 msgid "Profile"
 msgstr "设置"
 
@@ -241,23 +321,6 @@ msgstr ""
 msgid "Password: "
 msgstr "密码："
 
-#: templates/decrypt_repo_form.html:15 templates/repo.html:168
-#: templates/repo.html.py:178 templates/repo.html:198
-#: templates/repo.html.py:209 templates/repo_update_file.html:21
-#: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
-#: templates/repo_view_file.html.py:167 templates/registration/login.html:13
-#: templates/registration/password_change_form.html:18
-#: templates/registration/password_reset_confirm.html:19
-#: templates/registration/password_reset_form.html:13
-#: templates/registration/registration_form.html:18
-#: templates/snippets/events.html:72
-#: templates/snippets/group_recommend_form.html:23
-#: templates/snippets/repo_create_form.html:23
-#: templates/snippets/repo_share_form.html:18
-#: templates/snippets/user_profile_html.html:33
-msgid "Submit"
-msgstr "提交"
-
 #: templates/file_revisions.html:6
 msgid "'s Version History"
 msgstr " 版本历史"
@@ -288,6 +351,9 @@ msgstr "大小"
 
 #: templates/file_revisions.html:26 templates/public_home.html:25
 #: templates/repo.html:99 templates/repo_view_snapshot.html:18
+#: templates/sys_group_admin.html:14 templates/sys_org_admin.html:15
+#: templates/sys_seafadmin.html:14 templates/sys_useradmin.html:5
+#: templates/sys_useradmin.html.py:17 templates/userinfo.html:40
 #: templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:54
 msgid "Operations"
@@ -408,14 +474,6 @@ msgstr "公共信息"
 msgid "Org Info"
 msgstr "团体概况"
 
-#: templates/org_admin_base.html:11
-msgid "Library Management"
-msgstr "资料库管理"
-
-#: templates/org_admin_base.html:14
-msgid "Group Management"
-msgstr "群组管理"
-
 #: templates/org_base.html:9
 msgid "Personal"
 msgstr "个人页面"
@@ -424,7 +482,10 @@ msgstr "个人页面"
 msgid "Users"
 msgstr "成员列表"
 
-#: templates/pubinfo.html:16 templates/snippets/my_groups.html:16
+#: templates/pubinfo.html:16 templates/sys_group_admin.html:54
+#: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
+#: templates/userinfo.html:55 templates/userinfo.html.py:78
+#: templates/snippets/my_groups.html:16
 msgid "Empty"
 msgstr "暂无"
 
@@ -460,7 +521,9 @@ msgid "New Library"
 msgstr "新建资料库"
 
 #: templates/public_home.html:21 templates/repo.html:97
-#: templates/repo_history_view.html:50
+#: templates/repo_history_view.html:50 templates/sys_group_admin.html:11
+#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
+#: templates/userinfo.html:38 templates/userinfo.html.py:63
 #: templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:50
 #: templates/snippets/repo_create_form.html:4
@@ -468,21 +531,27 @@ msgid "Name"
 msgstr "名称"
 
 #: templates/public_home.html:22 templates/repo_history.html:18
-#: templates/snippets/my_owned_repos.html:19
+#: templates/sys_seafadmin.html:13 templates/userinfo.html:39
+#: templates/userinfo.html.py:65 templates/snippets/my_owned_repos.html:19
 #: templates/snippets/my_owned_repos.html:51
 #: templates/snippets/repo_create_form.html:6
 msgid "Description"
 msgstr "描述"
 
 #: templates/public_home.html:23 templates/repo_history.html:16
+#: templates/snippets/my_owned_repos.html:20
+#: templates/snippets/my_owned_repos.html:52
+#: templates/snippets/my_owned_repos.html:94
 msgid "Last Update"
 msgstr "更新时间"
 
-#: templates/public_home.html:24
+#: templates/public_home.html:24 templates/userinfo.html:64
 msgid "Share From"
 msgstr "共享来源"
 
-#: templates/public_home.html:31 templates/snippets/my_owned_repos.html:25
+#: templates/public_home.html:31 templates/sys_seafadmin.html:18
+#: templates/userinfo.html:45 templates/userinfo.html.py:70
+#: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:61
 #: templates/snippets/repo_create_form.html:11
 #: templates/snippets/repo_share_form.html:13
@@ -563,7 +632,10 @@ msgid "More operations"
 msgstr "更多操作"
 
 #: templates/repo.html:115 templates/repo.html.py:145
-#: templates/repo_view_file.html:74 templates/snippets/my_owned_repos.html:36
+#: templates/repo_view_file.html:74 templates/sys_group_admin.html:21
+#: templates/sys_org_admin.html:23 templates/sys_seafadmin.html:22
+#: templates/sys_useradmin.html:30 templates/userinfo.html:49
+#: templates/snippets/my_owned_repos.html:36
 msgid "Delete"
 msgstr "删除"
 
@@ -680,14 +752,20 @@ msgid "More"
 msgstr "详情"
 
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
+#: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
+#: templates/sys_useradmin.html:40
 msgid "Previous"
 msgstr "前一页"
 
 #: templates/repo_history.html:50 templates/repo_view_snapshot.html:54
+#: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
+#: templates/sys_useradmin.html:43
 msgid "Next"
 msgstr "下一页"
 
 #: templates/repo_history.html:55 templates/repo_view_snapshot.html:56
+#: templates/sys_group_admin.html:36 templates/sys_seafadmin.html:37
+#: templates/sys_useradmin.html:48
 msgid "Per page: "
 msgstr "每页："
 
@@ -835,7 +913,7 @@ msgid "Please type a message"
 msgstr "请先输入您的评论"
 
 #: templates/repo_view_file.html:413
-msgid "Cannot find a application to open file. Seafile will open the folder."
+msgid "Cannot find an application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
 #: templates/repo_view_file.html:418
@@ -890,6 +968,73 @@ msgstr "生成时间"
 msgid "Really want to restore this library?"
 msgstr "确定要还原这个资料库？"
 
+#: templates/sys_group_admin.html:7
+msgid "All Groups"
+msgstr "所有群组"
+
+#: templates/sys_group_admin.html:12 templates/sys_org_admin.html:13
+msgid "Creator"
+msgstr "创建者"
+
+#: templates/sys_group_admin.html:13 templates/sys_org_admin.html:14
+msgid "Create At"
+msgstr "创建时间"
+
+#: templates/sys_group_admin.html:60
+msgid "Really delete this group?"
+msgstr "确定要删除这个群组？"
+
+#: templates/sys_org_admin.html:7
+msgid "All Organizations"
+msgstr "所有团体"
+
+#: templates/sys_org_admin.html:12
+msgid "Url Prefix"
+msgstr "个性域名"
+
+#: templates/sys_org_admin.html:61
+msgid "Really delete this organization?"
+msgstr "确定要删除这个团体？"
+
+#: templates/sys_seafadmin.html:6
+msgid "All Libraries"
+msgstr "所有资料库"
+
+#: templates/sys_seafadmin.html:12
+msgid "Owner"
+msgstr "拥有者"
+
+#: templates/sys_useradmin.html:7
+msgid "Add new user"
+msgstr "添加新用户"
+
+#: templates/sys_useradmin.html:12
+msgid "All Members"
+msgstr "所有用户"
+
+#: templates/sys_useradmin.html:16
+msgid "Status"
+msgstr "状态"
+
+#: templates/sys_useradmin.html:24
+msgid "Activated"
+msgstr "已激活"
+
+#: templates/sys_useradmin.html:26
+msgid "Active"
+msgstr "激活"
+
+#: templates/sys_useradmin.html:31
+#: templates/registration/password_reset_confirm.html:4
+#: templates/registration/password_reset_form.html:4
+#: templates/registration/password_reset_form.html:7
+msgid "Password Reset"
+msgstr "密码重置"
+
+#: templates/sys_useradmin.html:77
+msgid "Really reset?"
+msgstr "确定要重置？"
+
 #: templates/text_diff.html:6
 msgid "modification details"
 msgstr "修改详情"
@@ -906,30 +1051,37 @@ msgstr "修改前"
 msgid "after modification"
 msgstr "修改历史"
 
-#: templates/registration/login.html:8
-#: templates/registration/registration_form.html:11
-#: templates/snippets/user_profile_html.html:27
-msgid "Email"
-msgstr "邮箱"
+#: templates/userinfo.html:24
+msgid "Space Used"
+msgstr "已用空间"
 
-#: templates/registration/login.html:10
-#: templates/registration/registration_form.html:13
-#: templates/snippets/repo_create_form.html:17
-msgid "Password"
-msgstr "密码"
+#: templates/userinfo.html:25
+msgid "Set Quota"
+msgstr "设置容量"
+
+#: templates/userinfo.html:33
+msgid "Owned"
+msgstr "我拥有的"
+
+#: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
+msgid "Shared"
+msgstr "共享给我的"
+
+#: templates/userinfo.html:82
+msgid "Set user storage limit"
+msgstr "设置该用户的存储容量上限"
+
+#: templates/userinfo.html:85
+msgid "Tip: 0 means default limit"
+msgstr "Tip: 设置为0表示重置为默认上限"
+
+#: templates/userinfo.html:133
+msgid "Really delete this library?"
+msgstr "确定要删除这个资料库？"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
 msgstr "忘记密码"
-
-#: templates/registration/login.html:28
-msgid "Email cant be blank"
-msgstr "邮箱不能为空"
-
-#: templates/registration/login.html:32
-#: templates/registration/registration_form.html:32
-msgid "Password cannot be blank"
-msgstr "密码不能为空"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
@@ -973,12 +1125,6 @@ msgstr "新密码："
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
 msgstr "确认密码"
-
-#: templates/registration/password_reset_confirm.html:4
-#: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:7
-msgid "Password Reset"
-msgstr "密码重置"
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
@@ -1035,22 +1181,6 @@ msgstr "注册"
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
 msgstr "欢迎回来，您已登录。"
-
-#: templates/registration/registration_form.html:15
-msgid "Confirm Password"
-msgstr "确认密码"
-
-#: templates/registration/registration_form.html:28
-msgid "Email cannot be blank"
-msgstr "邮箱不能为空"
-
-#: templates/registration/registration_form.html:36
-msgid "Confirm password cannot be blank"
-msgstr "确认密码不能为空"
-
-#: templates/registration/registration_form.html:40
-msgid "The two password fields not match"
-msgstr "两次输入的密码不一致"
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
@@ -1158,19 +1288,9 @@ msgstr "资料库"
 msgid "Mine"
 msgstr "我拥有的"
 
-#: templates/snippets/my_owned_repos.html:8
-msgid "Shared"
-msgstr "共享给我的"
-
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
 msgstr "星标文件"
-
-#: templates/snippets/my_owned_repos.html:20
-#: templates/snippets/my_owned_repos.html:52
-#: templates/snippets/my_owned_repos.html:94
-msgid "UpdateTime"
-msgstr "更新时间"
 
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:61
@@ -1259,6 +1379,12 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:31
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "UpdateTime"
+#~ msgstr "更新时间"
+
+#~ msgid "Email cant be blank"
+#~ msgstr "邮箱不能为空"
 
 #~ msgid "more history"
 #~ msgstr "更多历史"

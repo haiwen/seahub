@@ -1,36 +1,40 @@
 {% extends "admin_base.html" %}
+{% load i18n %}
 {% block nav_seafadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-<h3>所有资料库</h3>
+<h3>{% trans "All Libraries" %}</h3>
 {% if repos %}
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="25%">名字</th>
-        <th width="28%">拥有者</th>
-        <th width="36%">描述</th>
-        <th width="7%">操作</th>
+        <th width="25%">{% trans "Name" %}</th>
+        <th width="28%">{% trans "Owner" %}</th>
+        <th width="31%">{% trans "Description" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="可读写" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op">删除</a></td>
+        <td><a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
 
 <div id="paginator">
     {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}sys/seafadmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
+    <a href="{{ SITE_ROOT }}sys/seafadmin/?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
     {% endif %}
     {% if page_next %}
-    <a href="{{ SITE_ROOT }}sys/seafadmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
+    <a href="{{ SITE_ROOT }}sys/seafadmin/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next" %}</a>
     {% endif %}
-    <span>每页：</span> 
+    {% if current_page != 1 or page_next %}
+    |
+    {% endif %}
+    <span>{% trans "Per page: " %}</span> 
     {% if per_page == 25 %}
     <span> 25 </span> 
     {% else %}
@@ -48,7 +52,7 @@
     {% endif %}
 </div>
 {% else %}
-<p>暂无</p>
+<p>{% trans "Empty" %}</p>
 {% endif %}
 {% endblock %}
 

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+django-admin.py makemessages -l zh_CN -e py,html
+
+django-admin.py makemessages -d djangojs -l zh_CN
+
+django-admin.py compilemessages

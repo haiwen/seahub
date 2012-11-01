@@ -1,18 +1,18 @@
 {% extends "admin_base.html" %}
-{% load seahub_tags %}
+{% load seahub_tags i18n %}
 
 {% block nav_orgadmin_class %}class="cur"{% endblock %}
 
 {% block right_panel %}
-<h3>所有团体</h3>
+<h3>{% trans "All Organizations" %}</h3>
 {% if orgs %}
 <table>
     <tr>
-        <th width="20%">名字</th>
-        <th width="20%">域名前缀</th>
-        <th width="30%">创建者</th>
-        <th width="23%">创建时间</th>
-        <th width="7%">操作</th>
+        <th width="20%">{% trans "Name" %}</th>
+        <th width="18%">{% trans "Url Prefix" %}</th>
+        <th width="27%">{% trans "Creator" %}</th>
+        <th width="23%">{% trans "Create At" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
     {% for org in orgs %}
     <tr>
@@ -20,7 +20,7 @@
         <td>{{ org.url_prefix }}</td>
         <td>{{ org.creator }}</td>
         <td>{{ org.ctime|tsstr_sec }}</td>
-        <td><a href="#" data="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" class="org-remove-btn op">删除</a></td>
+        <td><a href="#" data="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" class="org-remove-btn op">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -52,13 +52,13 @@
 </div>
 -->
 {% else %}
-<p>暂无</p>
+<p>{% trans "Empty" %}</p>
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.org-remove-btn'), '确定要删除该团体？');
+addConfirmTo($('.org-remove-btn'), '{% trans "Really delete this organization?" %}');
 </script>
 {% endblock %}
  
