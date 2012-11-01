@@ -289,7 +289,7 @@ msgstr "下载"
 
 #: templates/group/group_info.html:107
 msgid "Unshare"
-msgstr ""
+msgstr "取消共享"
 
 #: templates/group/group_info.html:116
 msgid "Messages"
