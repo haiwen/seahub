@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 15:08+0800\n"
+"POT-Creation-Date: 2012-11-01 17:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,7 @@ msgstr "确认密码不能为空"
 msgid "The two password fields not match"
 msgstr "两次输入的密码不一致"
 
-#: templates/admin_base.html:8 templates/org_admin_base.html:11
+#: templates/admin_base.html:8
 msgid "Library Management"
 msgstr "资料库管理"
 
@@ -208,7 +208,7 @@ msgstr "资料库管理"
 msgid "User Management"
 msgstr "用户管理"
 
-#: templates/admin_base.html:14 templates/org_admin_base.html:14
+#: templates/admin_base.html:14
 msgid "Group Management"
 msgstr "群组管理"
 
@@ -452,8 +452,8 @@ msgstr "我的页面"
 msgid "Public Library"
 msgstr "公共资料"
 
-#: templates/myhome_base.html:16 templates/org_base.html:15
-#: templates/pubinfo.html:22
+#: templates/myhome_base.html:16 templates/org_admin_base.html:14
+#: templates/org_base.html:15 templates/pubinfo.html:22
 msgid "Groups"
 msgstr "群组"
 
@@ -471,8 +471,12 @@ msgid "Public Info"
 msgstr "公共信息"
 
 #: templates/org_admin_base.html:8
-msgid "Org Info"
-msgstr "团体概况"
+msgid "Basic Info"
+msgstr "基本信息"
+
+#: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
+msgid "Libraries"
+msgstr "资料库"
 
 #: templates/org_base.html:9
 msgid "Personal"
@@ -1196,7 +1200,7 @@ msgid "Please input recommend message."
 msgstr "请输入推荐语。"
 
 #: templates/snippets/events.html:3
-msgid "Latest Events"
+msgid "Recent Events"
 msgstr "最近事件"
 
 #: templates/snippets/events.html:17
@@ -1279,10 +1283,6 @@ msgstr "修改详情"
 #: templates/snippets/my_groups.html:3
 msgid "My Groups"
 msgstr "我的群组"
-
-#: templates/snippets/my_owned_repos.html:3
-msgid "Libraries"
-msgstr "资料库"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
@@ -1379,6 +1379,9 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:31
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Org Info"
+#~ msgstr "团体概况"
 
 #~ msgid "UpdateTime"
 #~ msgstr "更新时间"
