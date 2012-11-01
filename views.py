@@ -2595,7 +2595,6 @@ def send_shared_link(request):
                 return HttpResponse(data, status=500, content_type=content_type)
 
         data = json.dumps("success")
-        messages.add_message(request, messages.INFO, u'发送成功')
         return HttpResponse(data, status=200, content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),

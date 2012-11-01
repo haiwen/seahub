@@ -297,7 +297,8 @@ $("#link-send-form").submit(function(event) {
            beforeSend: prepareCSRFToken,
            data: {file_shared_link: file_shared_link, email: email},
            success: function(data) {
-                location.reload(true);
+               $.modal.close();
+               feedback('{% trans "Sending successfully" %}', "success");
            },
            error: function(data, textStatus, jqXHR) {
                $('#sending').addClass('hide');

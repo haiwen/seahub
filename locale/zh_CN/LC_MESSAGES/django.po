@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 19:32+0800\n"
+"POT-Creation-Date: 2012-11-01 13:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -771,7 +771,7 @@ msgstr "发送"
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:490
+#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:491
 msgid "Star"
 msgstr "添加星标"
 
@@ -822,31 +822,35 @@ msgstr "点此下载"
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/repo_view_file.html:323
+#: templates/repo_view_file.html:301
+msgid "Sending successfully"
+msgstr "发送成功"
+
+#: templates/repo_view_file.html:324
 msgid "Comment"
 msgstr "评论"
 
-#: templates/repo_view_file.html:366
+#: templates/repo_view_file.html:367
 msgid "Please type a message"
 msgstr "请先输入您的评论"
 
-#: templates/repo_view_file.html:412
+#: templates/repo_view_file.html:413
 msgid "Cannot find a application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/repo_view_file.html:417
+#: templates/repo_view_file.html:418
 msgid "File is not Synchronized with server, please synchronize manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/repo_view_file.html:419
+#: templates/repo_view_file.html:420
 msgid "File is not Synchronized with server, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/repo_view_file.html:424
+#: templates/repo_view_file.html:425
 msgid "An error occur during opening local file."
 msgstr "打开本地文件时出错"
 
-#: templates/repo_view_file.html:455
+#: templates/repo_view_file.html:456
 msgid ""
 "Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
 "download/\">upgrade</a> to latest."
@@ -854,23 +858,23 @@ msgstr ""
 "Seafile 客户端程序未启动或者版本过低，请<a href=\"http://www.seafile.com/"
 "download/\">下载</a>最新版客户端"
 
-#: templates/repo_view_file.html:466
+#: templates/repo_view_file.html:467
 msgid "Seafile client is not start or out of date"
 msgstr "Seafile 客户端程序未启动或者版本过低"
 
-#: templates/repo_view_file.html:489
+#: templates/repo_view_file.html:490
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/repo_view_file.html:492
+#: templates/repo_view_file.html:493
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/repo_view_file.html:496
+#: templates/repo_view_file.html:497
 msgid "Failed:"
 msgstr "操作失败："
 
-#: templates/repo_view_file.html:500
+#: templates/repo_view_file.html:501
 msgid ", failed"
 msgstr "，操作失败"
 
