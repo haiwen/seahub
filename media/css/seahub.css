@@ -345,6 +345,10 @@ textarea:-moz-placeholder {
 }
 .top-bar-con a.cur {
     background:#000;
+    border-top:2px solid #B00;
+    height:20px;
+    line-height:20px;
+    padding-bottom:2px;
 }
 .top-bar-con span {
     margin-right:3px;
