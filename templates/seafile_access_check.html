@@ -1,9 +1,10 @@
 {% extends "myhome_base.html" %}
+{% load i18n %}
 
 {% block main_panel %}
 <div class="text-panel">
-    <p id="msg-client"  class="error hide">请确认本地Seafile程序已启动。</p>
-    <p id="msg-version" class="error hide">你的 Seafile 客户端版本太旧，请升级到最新版本。<a href="http://www.seafile.com/download">点击下载</a></p>
+    <p id="msg-client"  class="error hide">{% trans "Make sure Seafile client is running." %}</p>
+    <p id="msg-version" class="error hide">{% trans "Your Seafile client is out of date, please upgrade to latest version." %}<a href="http://www.seafile.com/download">{% trans "Click to download." %}</a></p>
 </div>
 {% endblock %}
 

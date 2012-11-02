@@ -43,11 +43,7 @@
             {% endfor %}
         </ul>
         {% else %}
-        {% if cloud_mode and not org %}
-        <p>{% blocktrans %}You can click "Add" button to add some, and if the email is not registered, an invitation will be sent to it.{% endblocktrans %}</p>
-        {% else %}
-        <p>{% blocktrans %}You can click "Add" button to add members.{% endblocktrans %}</p>
-        {% endif %}
+        <p>{% blocktrans %}You can click "Add" above to add members.{% endblocktrans %}</p>
         {% endif %}
     </div>
 </div>

@@ -5,16 +5,16 @@
 
 {% block left_panel %}
 <div class="info-item">
-<h3 class="info-item-top">{% trans "Tip"%}</h3>
-<p class="info-item-bottom">{% trans "System will record emails used in sharing and file link sending automatically."%}</p>
+<h3 class="info-item-top">{% trans "Tips"%}</h3>
+<p class="info-item-bottom">{% trans "When you share libraries or file links to a friend, his/her email will be added to contacts."%}</p>
 </div>
 
 {% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Registered Contacts"%}</h3>
+<h3>{% trans "Contacts"%}</h3>
 <button id="contact-add">{% trans "Add Contacts"%}</button>
-{% if registered_contacts %}
+{% if contacts %}
 <table>
     <tr>
         <th width="4%"></th>
@@ -23,7 +23,7 @@
         <th width="26%">{% trans "Note"%}</th>
         <th width="12%">{% trans "Operations"%}</th>
     </tr>
-    {% for contact in registered_contacts %}
+    {% for contact in contacts %}
     <tr>
         <td>{% avatar contact.contact_email 20 %}</td>
         <td>{{ contact.contact_email }}</td>
@@ -37,34 +37,10 @@
 {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "Here will show all registered users when adding contacts."%}</p>
-{% endif %}
-
-<h3>{% trans "Unregistered Contacts"%}</h3>
-{% if unregistered_contacts %}
-<table>
-    <tr>
-        <th width="4%"></th>
-        <th width="38%">{% trans "Email "%}</th>
-        <th width="20%">{% trans "Name"%}</th>
-        <th width="26%">{% trans "Note"%}</th>
-        <th width="12%">{% trans "Operations"%}</th>
-    </tr>
-    {% for contact in unregistered_contacts %}
-    <tr>
-        <td>{% avatar contact.contact_email 20 %}</td>
-        <td>{{ contact.contact_email }}</td>
-        <td>{{ contact.contact_name }}</td>
-        <td>{{ contact.note }}</td>
-        <td>
-            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
-            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
-        </td>
-    </tr>
-{% endfor %}
-</table>
-{% else %}
-<p class="empty-repo-tips">{% trans "Here will show all unregistered users when adding contacts."%}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any contacts" %}</h2>
+  <p>{% trans "Add your contacts so you can quickly share libraries and send file shared link." %}</p>
+</div>
 {% endif %}
 
 <form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">

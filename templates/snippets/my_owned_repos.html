@@ -39,7 +39,13 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You have not created any libraries" %}</h2>
+  <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
+  <h3>{% trans "Synchronize libraries with PC client" %}</h3>
+  <p>{% trans "1. Download the library (make sure PC client is running)." %}</p>
+  <p>{% trans "2. Add files to the folder and they will be uploaded automatically." %}</p>
+</div>
 {% endif %}
 </div>
 <div id="repos-shared-to-me">
@@ -81,7 +87,10 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "Libraries shared to you will be shown here." %}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "No library is shared to you" %}</h2>
+  <p>{% trans "Libraries shared to you will be listed here. You can download this library. Files you add into the downloaded library will be synchronized automatically." %}</p>
+</div>
 {% endif %}
 </div>
 <div id="starred-files">
@@ -105,7 +114,10 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="no-starred-file-tips">{% trans "You can star important files, and they will be shown here." %}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any starred files yet" %}</h2>
+  <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+</div>
 {% endif %}
 </div>
 </div>

@@ -259,6 +259,9 @@ textarea:-moz-placeholder {
 .info-item p.not-last {
     margin-bottom:0.4em;
 }
+.center-contents {
+    text-align: center;
+}
 
 /* container */
 #header, #main, #footer { width:950px; }
@@ -674,13 +677,10 @@ textarea:-moz-placeholder {
 #repo-create-form {
     padding:0 20px;
 }
-.empty-repo-tips,
-.no-starred-file-tips {
+.empty-tips {
     width: 60%;
-    margin: 25px auto;
-}
-.empty-repo-tips h3 {
-    text-align:center;
+    margin: 40px auto;
+    padding-top: 20px;
 }
 #repo-name,
 #repo-desc,

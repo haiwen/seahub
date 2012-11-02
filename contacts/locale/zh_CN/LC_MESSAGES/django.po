@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-29 11:47+0800\n"
+"POT-Creation-Date: 2012-11-02 18:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,91 +36,103 @@ msgid "Deleting Successfully"
 msgstr "删除成功"
 
 #: templates/contacts/contact_list.html:8
-msgid "Tip"
+msgid "Tips"
 msgstr "小提示"
 
 #: templates/contacts/contact_list.html:9
 msgid ""
-"System will record emails used in sharing and file link sending "
-"automatically."
-msgstr ""
-"在共享和发送外链的时候，系统会自动记录下您用过的通讯地址，以方便下次使用。"
+"When you share libraries or file links to a friend, his/her email will be "
+"added to contacts."
+msgstr "在共享和发送外链的时候，系统会自动记录下您用过的通讯地址，以方便下次使用。"
 
 #: templates/contacts/contact_list.html:15
-msgid "Registered Contacts"
-msgstr "站内联系人"
+msgid "Contacts"
+msgstr "联系人列表"
 
 #: templates/contacts/contact_list.html:16
-#: templates/contacts/contact_list.html:71
+#: templates/contacts/contact_list.html:47
 msgid "Add Contacts"
 msgstr "添加联系人"
 
 #: templates/contacts/contact_list.html:21
-#: templates/contacts/contact_list.html:48
 msgid "Email "
 msgstr "邮箱"
 
 #: templates/contacts/contact_list.html:22
-#: templates/contacts/contact_list.html:49
 msgid "Name"
 msgstr "名字"
 
 #: templates/contacts/contact_list.html:23
-#: templates/contacts/contact_list.html:50
 msgid "Note"
 msgstr "备注"
 
 #: templates/contacts/contact_list.html:24
-#: templates/contacts/contact_list.html:51
 msgid "Operations"
 msgstr "备注"
 
 #: templates/contacts/contact_list.html:33
-#: templates/contacts/contact_list.html:60
 msgid "Edit"
 msgstr "编辑"
 
 #: templates/contacts/contact_list.html:34
-#: templates/contacts/contact_list.html:61
 msgid "Delete"
 msgstr "删除"
 
-#: templates/contacts/contact_list.html:40
-msgid "Here will show all registered users when adding contacts."
-msgstr "添加联系人时，如果该用户已注册，则显示为您的站内联系人。"
+#: templates/contacts/contact_list.html:41
+msgid "You don't have any contacts"
+msgstr "你还没有联系人"
 
-#: templates/contacts/contact_list.html:43
-msgid "Unregistered Contacts"
-msgstr "站外联系人"
+#: templates/contacts/contact_list.html:42
+msgid ""
+"Add your contacts so you can quickly share libraries and send file shared "
+"link."
+msgstr "联系人用来在共享资料库和发送文件外链时的快速补全。"
 
-#: templates/contacts/contact_list.html:67
-msgid "Here will show all unregistered users when adding contacts."
-msgstr "添加联系人时，如果该用户未注册，则显示为您的站外联系人。"
-
-#: templates/contacts/contact_list.html:73
-#: templates/contacts/contact_list.html:83
+#: templates/contacts/contact_list.html:49
+#: templates/contacts/contact_list.html:59
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/contacts/contact_list.html:75
-#: templates/contacts/contact_list.html:85
+#: templates/contacts/contact_list.html:51
+#: templates/contacts/contact_list.html:61
 msgid "Name(optional)"
 msgstr "名字(可选)"
 
-#: templates/contacts/contact_list.html:76
-#: templates/contacts/contact_list.html:86
+#: templates/contacts/contact_list.html:52
+#: templates/contacts/contact_list.html:62
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
-#: templates/contacts/contact_list.html:77
+#: templates/contacts/contact_list.html:53
 msgid "Please input email address"
 msgstr "请输入邮箱地址。"
 
-#: templates/contacts/contact_list.html:78
-#: templates/contacts/contact_list.html:88
+#: templates/contacts/contact_list.html:54
+#: templates/contacts/contact_list.html:64
 msgid "Submit"
 msgstr "提交"
 
-#: templates/contacts/contact_list.html:81
+#: templates/contacts/contact_list.html:57
 msgid "Edit Contact"
 msgstr "编辑联系人"
+
+#~ msgid "Tip"
+#~ msgstr "小提示"
+
+#~ msgid ""
+#~ "System will record emails used in sharing and file link sending "
+#~ "automatically."
+#~ msgstr ""
+#~ "在共享和发送外链的时候，系统会自动记录下您用过的通讯地址，以方便下次使用。"
+
+#~ msgid "Registered Contacts"
+#~ msgstr "站内联系人"
+
+#~ msgid "Here will show all registered users when adding contacts."
+#~ msgstr "添加联系人时，如果该用户已注册，则显示为您的站内联系人。"
+
+#~ msgid "Unregistered Contacts"
+#~ msgstr "站外联系人"
+
+#~ msgid "Here will show all unregistered users when adding contacts."
+#~ msgstr "添加联系人时，如果该用户未注册，则显示为您的站外联系人。"

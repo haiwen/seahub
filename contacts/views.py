@@ -21,13 +21,13 @@ from seahub.settings import SITE_ROOT
 @login_required
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
-    registered_contacts = []
-    unregistered_contacts = []
-    for c in contacts:
-        if is_registered_user(c.contact_email):
-            registered_contacts.append(c)
-        else:
-            unregistered_contacts.append(c)
+    # registered_contacts = []
+    # unregistered_contacts = []
+    # for c in contacts:
+    #     if is_registered_user(c.contact_email):
+    #         registered_contacts.append(c)
+    #     else:
+    #         unregistered_contacts.append(c)
 
     form = ContactAddForm({'user_email':request.user.username})
     edit_init_data = {'user_email':request.user.username,
@@ -38,8 +38,8 @@ def contact_list(request):
 
     return render_to_response('contacts/contact_list.html', {
         'contacts': contacts,
-        'registered_contacts': registered_contacts,
-        'unregistered_contacts': unregistered_contacts,
+        # 'registered_contacts': registered_contacts,
+        # 'unregistered_contacts': unregistered_contacts,
         'form': form,
         'edit_form': edit_form,
         }, context_instance=RequestContext(request))

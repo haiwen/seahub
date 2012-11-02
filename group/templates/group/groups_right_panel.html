@@ -21,7 +21,10 @@
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty-repo-tips">{% blocktrans %}Your are not in any group, you can create some.{% endblocktrans %}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You are not in any groups" %}</h2>
+  <p>{% blocktrans %}You can create a group by clicking "New Group" button. Group is a place for you and your friends leaving messages and collaborating on libraries.{% endblocktrans %}</p>
+</div>
 {% endif %}
 <form id="group-add-form" action="" method="post" name="group-add-form" class="hide">
     <label>{% trans "Group Name" %}</label><br />
