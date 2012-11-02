@@ -32,7 +32,8 @@
                     {% if cloud_mode %}
                     <a href="#" id="account-context" data="no-popup">
                         {% if org %} {{ org.org_name }} {% else %} {% trans "Personal Account" %} {% endif %}
-                    <span class="tri-bg tri-down-bg"></span></a>
+                        <span class="tri-bg tri-down-bg"></span>
+                    </a>
                     <ul class="hide" id="account-context-selector">
                         <li><a href="{% url 'myhome' %}">{% trans "Personal Account" %}</a></li>
                         {% for org in request.user.orgs %}
@@ -63,7 +64,16 @@
                 <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
                 <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
                 {% endif %}
-                </div>
+                <a href="#" id="lang-context" data="no-popup">
+                    {{ LANGUAGE_CODE|language_name_local }}
+                    <span class="tri-bg tri-down-bg"></span>
+                </a>
+                <ul class="hide" id="lang-context-selector">
+                    {% for LANG in LANGUAGES %}
+                    <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
             </div>
         </div>
     </div>
@@ -122,20 +132,9 @@
             </div>
         </div>
         <div class="other-info fright">
-          <div class="fleft">
             <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
             <p>© 2012 {% trans "Seafile" %}</p>
             <p><a href="http://seafile.com/contact/" target="_blank">{% trans "Contact Us" %}</a></p>
-          </div>
-        <div class="fright">
-          <a href="#" id="lang-context" data="no-popup">{{ LANGUAGE_CODE|language_name_local }}<span class="tri-bg tri-down-bg"></span></a>
-          <ul class="hide" id="lang-context-selector">
-            {% for LANG in LANGUAGES %}
-            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-            
         </div>
     </div>
 
@@ -153,8 +152,8 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js?t=4884491531236"></script>
 <script type="text/javascript">
- $('input, textarea').placeholder();
- $('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
+$('input, textarea').placeholder();
+$('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
 $('#lang-context').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -169,7 +168,7 @@ $('#lang-context').click(function() {
 
 $(document).click(function(e) {
     var element = e.target || e.srcElement;
-    if (element.id != 'lang-context-selector' && element.attrid != 'lang-context') {
+    if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
         $('#lang-context-selector').addClass('hide');
         $('#lang-context').attr('data', 'no-popup');
     }
@@ -216,7 +215,7 @@ $('#info-bar .close').click(function() {
 
 $(document).click(function(e) {
     var element = e.target || e.srcElement;
-    if (element.id != 'account-context-selector' && element.attrid != 'account-context') {
+    if (element.id != 'account-context-selector' && element.id != 'account-context') {
         $('#account-context-selector').addClass('hide');
         $('#account-context').attr('data', 'no-popup');
     }
