@@ -267,7 +267,7 @@ textarea:-moz-placeholder {
 #main, #footer { width:950px; }
 #main { margin:0 auto; }
 #header {
-    padding-top:4px;
+    padding-top:12px;
     background:#f4f4f4;
     width:100%;
     font-size: 14px;
@@ -411,7 +411,7 @@ textarea:-moz-placeholder {
 }
 #header .nav {
     float:left;
-    padding-top:17px;
+    padding-top:9px;
 }
 #header .nav li {
     float: left;
