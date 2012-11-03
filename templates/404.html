@@ -1,8 +1,9 @@
 {% extends "myhome_base.html" %}
+{% load i18n %}
 
 {% block main_panel %}
 <div class="text-panel">
-  <p>Sorry, but the requested page could not be found.</p>
+  <p>{% trans "Sorry, but the requested page could not be found." %}</p>
 </div>
 {% endblock %}
 

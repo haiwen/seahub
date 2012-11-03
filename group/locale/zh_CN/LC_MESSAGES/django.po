@@ -79,7 +79,7 @@ msgstr "该留言不存在"
 
 #: views.py:398
 msgid "You don't have the permission."
-msgstr "您的权限不够。"
+msgstr "你的权限不够。"
 
 #: views.py:562
 #, python-format
@@ -88,7 +88,7 @@ msgstr "添加失败，%s 不在当前团体中。"
 
 #: views.py:591
 msgid "Your friend added you to a group in SeaCloud."
-msgstr "您的朋友在 SeaCloud 上把您加入到了一个群组中。"
+msgstr "你的朋友在 SeaCloud 上把你加入到了一个群组中。"
 
 #: views.py:596
 msgid "Failed to send mail."
@@ -156,7 +156,7 @@ msgstr "推荐失败：群组id不正确"
 #: views.py:809
 #, python-format
 msgid "Error: you are not in group %s."
-msgstr "推荐到 %s 失败：您不在该群组中。"
+msgstr "推荐到 %s 失败：你不在该群组中。"
 
 #: views.py:829
 #, python-format
@@ -175,7 +175,7 @@ msgstr "创建失败：该群组不存在。"
 
 #: views.py:853
 msgid "Failed to create: you are not in the group."
-msgstr "创建失败：您不在该群组中。"
+msgstr "创建失败：你不在该群组中。"
 
 #: views.py:875 views.py:903
 msgid "Failed to create"
@@ -187,7 +187,7 @@ msgstr "创建团体群组失败。"
 
 #: views.py:943
 msgid "You are already in the group."
-msgstr "您已在该群组中。"
+msgstr "你已在该群组中。"
 
 #: views.py:961
 msgid "apply to join the group"
@@ -228,7 +228,7 @@ msgstr "添加"
 
 #: templates/group/group_info.html:46
 msgid "You can click \"Add\" above to add members."
-msgstr "您可以点击上方的“添加”来加入成员。"
+msgstr "你可以点击上方的“添加”来加入成员。"
 
 #: templates/group/group_info.html:53 templates/group/group_info.html.py:76
 #: templates/group/group_manage.html:13 templates/group/group_manage.html:32
@@ -431,7 +431,7 @@ msgstr "群组创建后，就可以添加成员，共享资料。"
 
 #: templates/group/groups_left_panel.html:7
 msgid "You can also share libraries into groups that you're not in."
-msgstr "您也可以将资料库共享到您没有参加的群组。"
+msgstr "你也可以将资料库共享到你没有参加的群组。"
 
 #: templates/group/groups_right_panel.html:4
 msgid "My Groups"
@@ -518,10 +518,10 @@ msgstr "暂无"
 #~ "You can click \"Add\" button to add some, and if the email is not "
 #~ "registered, an invitation will be sent to it."
 #~ msgstr ""
-#~ "您可以点击上方的“添加”来加入成员，如果该邮件还没注册，我们会给它发送邀请。"
+#~ "你可以点击上方的“添加”来加入成员，如果该邮件还没注册，我们会给它发送邀请。"
 
 #~ msgid "Your are not in any group, you can create some."
-#~ msgstr "您还没有参加任何群组，您可以自己创建一些。"
+#~ msgstr "你还没有参加任何群组，你可以自己创建一些。"
 
 #~ msgid "Emails here, and separate them by ',', please"
 #~ msgstr "请输入邮箱并用','分隔"

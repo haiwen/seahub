@@ -19,7 +19,7 @@ msgstr ""
 
 #: views.py:182
 msgid "Failed to create the library: you has not joined this organizatioin."
-msgstr "资料库创建失败：您还没有加入这个团体。"
+msgstr "资料库创建失败：你还没有加入这个团体。"
 
 #: views.py:194
 msgid "Failed to create."
@@ -54,11 +54,11 @@ msgstr "删除成功"
 msgid ""
 "%(from_email)s added you to Organization <a href=\"%(org_url)s\">"
 "%(org_name)s</a>"
-msgstr "%(from_email)s 将您加入到团体 <a href=\"%(org_url)s\">%(org_name)s</a>"
+msgstr "%(from_email)s 将你加入到团体 <a href=\"%(org_url)s\">%(org_name)s</a>"
 
 #: views.py:444
 msgid "Failed to create: you has not joined this organization"
-msgstr "创建失败：您还没有加入这个团体。"
+msgstr "创建失败：你还没有加入这个团体。"
 
 #: views.py:450
 msgid "Failed to create"
@@ -243,7 +243,7 @@ msgstr "群组创建后，可以给其添加成员，共享资料库。"
 
 #: templates/organizations/org_groups.html:16
 msgid "You can also share to groups that you're not in."
-msgstr "也可将资料库共享到您没有参加的群组。"
+msgstr "也可将资料库共享到你没有参加的群组。"
 
 #: templates/organizations/org_pubinfo.html:12
 msgid "Members"
@@ -263,7 +263,7 @@ msgstr "创建时间："
 
 #: templates/organizations/org_pubinfo.html:44
 msgid "You can go to \"Groups\" and create a group. "
-msgstr "您可以到“群组”页面创建一个群组。"
+msgstr "你可以到“群组”页面创建一个群组。"
 
 #: templates/organizations/org_public.html:14
 msgid "Libraries marked as read-only can only be browsed online."
@@ -311,7 +311,7 @@ msgstr "拥有者"
 #: templates/organizations/org_user_add_email.html:2
 #, python-format
 msgid "%(user)s added you to Organization %(org_name)s on Seafile. "
-msgstr "%(user)s 已将您加入到 Seafile 上的 %(org_name)s 团体。"
+msgstr "%(user)s 已将你加入到 Seafile 上的 %(org_name)s 团体。"
 
 #: templates/organizations/org_user_add_email.html:3
 #, python-format
@@ -324,7 +324,7 @@ msgid ""
 "Please click the link to log in:\n"
 msgstr ""
 "\n"
-"以下是您的登录信息：\n"
+"以下是你的登录信息：\n"
 "邮箱：%(email)s\n"
 "密码：%(password)s\n"
 "\n"
@@ -340,7 +340,7 @@ msgid ""
 "The %(site_name)s team\n"
 msgstr ""
 "\n"
-"随后请重置您的密码。\n"
+"随后请重置你的密码。\n"
 "谢谢！\n"
 "\n"
 "%(site_name)s 团队\n"

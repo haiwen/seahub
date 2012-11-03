@@ -30,7 +30,7 @@ msgstr "%(ext)s 不是有效文件后缀。有效的文件后缀为：%(valid_ex
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
-msgstr "您的文件过大（%(size)s），允许最大文件为 %(max_valid_size)s"
+msgstr "你的文件过大（%(size)s），允许最大文件为 %(max_valid_size)s"
 
 #: forms.py:44
 #, python-format
@@ -82,7 +82,7 @@ msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
 "\">upload one</a> now."
 msgstr ""
-"您还没有上传自己的头像。现在 <a href=\"%(avatar_change_url)s\">上传一个</a>。"
+"你还没有上传自己的头像。现在 <a href=\"%(avatar_change_url)s\">上传一个</a>。"
 
 #: templates/avatar/confirm_delete.html:18
 msgid "Delete These"
@@ -127,7 +127,7 @@ msgstr ""
 #~ msgstr "从已有头像中选择"
 
 #~ msgid "You haven't uploaded an avatar yet. Please upload one now."
-#~ msgstr "您还没有上传自己的头像。请上传。"
+#~ msgstr "你还没有上传自己的头像。请上传。"
 
 #~ msgid "Choose new Default"
 #~ msgstr "确定"

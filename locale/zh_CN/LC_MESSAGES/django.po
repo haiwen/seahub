@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 17:44+0800\n"
+"POT-Creation-Date: 2012-11-03 11:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,6 +139,10 @@ msgstr ""
 #: settings.py:95
 msgid "简体中文"
 msgstr ""
+
+#: templates/404.html:6
+msgid "Sorry, but the requested page could not be found."
+msgstr "对不起，你访问的页面不存在。"
 
 #: templates/add_user_form.html:3 templates/add_user_form.html.py:7
 msgid "Add User"
@@ -330,7 +334,7 @@ msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr ""
-"Tip：每次修改后都会生成一个新的版本, 您可以将当前文件恢复到之前的某个版本。"
+"Tip：每次修改后都会生成一个新的版本, 你可以将当前文件恢复到之前的某个版本。"
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
 msgid "Current Path:"
@@ -508,7 +512,7 @@ msgstr "创建时间："
 msgid ""
 "No one has created any groups, you can click \"Add Group\" button under "
 "\"Group\" label to create a group. "
-msgstr "现在还没有人创建群组，您可以通过“群组”标签下的“添加群组”按钮创建。"
+msgstr "现在还没有人创建群组，你可以通过“群组”标签下的“添加群组”按钮创建。"
 
 #: templates/public_home.html:9
 msgid "Tips"
@@ -574,14 +578,14 @@ msgstr "只读"
 #: templates/public_home.html:53
 msgid ""
 "You can create a public library, others can view and download this library."
-msgstr "您可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。"
+msgstr "你可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。"
 
 #: templates/repo.html:11
 msgid ""
 "This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
-"当前链接会在短期内失效，欢迎您 <a href=\"http://seafile.com/\" target="
+"当前链接会在短期内失效，欢迎你 <a href=\"http://seafile.com/\" target="
 "\"_blank\">加入Seafile </a>体验更多功能。"
 
 #: templates/repo.html:22
@@ -590,7 +594,7 @@ msgstr "文件回收站"
 
 #: templates/repo.html:27
 msgid "This library is read-only, and you can only view the files."
-msgstr "这个资料库设置了只读共享，您只能在线浏览文件。"
+msgstr "这个资料库设置了只读共享，你只能在线浏览文件。"
 
 #: templates/repo.html:33
 msgid "Size: "
@@ -897,7 +901,7 @@ msgstr "处理中..."
 #: templates/repo_view_file.html:150
 #, python-format
 msgid "You have not downloaded %(repo.name)s"
-msgstr "您还没有将资料库 %(repo.name)s 下载到本地"
+msgstr "你还没有将资料库 %(repo.name)s 下载到本地"
 
 #: templates/repo_view_file.html:151
 msgid "Click to download"
@@ -917,7 +921,7 @@ msgstr "评论"
 
 #: templates/repo_view_file.html:367
 msgid "Please type a message"
-msgstr "请先输入您的评论"
+msgstr "请先输入你的评论"
 
 #: templates/repo_view_file.html:413
 msgid "Cannot find an application to open file. Seafile will open the folder."
@@ -1104,7 +1108,7 @@ msgstr "忘记密码"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
-msgstr "您输入的邮箱或密码不正确"
+msgstr "你输入的邮箱或密码不正确"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -1159,14 +1163,14 @@ msgstr "密码重置成功"
 
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
-msgstr "我们已经把密码重置说明发往您提交的邮箱里，请查收。"
+msgstr "我们已经把密码重置说明发往你提交的邮箱里，请查收。"
 
 #: templates/registration/password_reset_email.html:2
 #, python-format
 msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
-msgstr "您收到这封邮件是因为您请求给您在 %(site_name)s 的账号重置密码。"
+msgstr "你收到这封邮件是因为你请求给你在 %(site_name)s 的账号重置密码。"
 
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
@@ -1174,7 +1178,7 @@ msgstr "请点击以下链接更新密码："
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
-msgstr "您的用户名:"
+msgstr "你的用户名:"
 
 #: templates/registration/password_reset_email.html:10
 msgid "Thanks for using our site!"
@@ -1187,11 +1191,11 @@ msgstr "%(site_name)s 团队"
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr "您注册的邮箱账号："
+msgstr "你注册的邮箱账号："
 
 #: templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
-msgstr "我们会把新密码设置说明通过邮件发送给您"
+msgstr "我们会把新密码设置说明通过邮件发送给你"
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
@@ -1199,7 +1203,7 @@ msgstr "注册"
 
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
-msgstr "欢迎回来，您已登录。"
+msgstr "欢迎回来，你已登录。"
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
@@ -1324,7 +1328,7 @@ msgid ""
 "one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr ""
-"您可以新建一个资料库来组织您的文件资料，比如为每个项目创建一个资料库，每个资"
+"你可以新建一个资料库来组织你的文件资料，比如为每个项目创建一个资料库，每个资"
 "料库可以单独地同步和共享。"
 
 #: templates/snippets/my_owned_repos.html:45
@@ -1372,7 +1376,8 @@ msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing "
 "page, and they will be listed here."
 msgstr ""
-"你可以在文件浏览页面点击“添加星标”按钮给重要的文件加上星标，这些文件会显示在这里。"
+"你可以在文件浏览页面点击“添加星标”按钮给重要的文件加上星标，这些文件会显示在"
+"这里。"
 
 #: templates/snippets/myhome_extra_script.html:26
 msgid "Input cannot be empty"

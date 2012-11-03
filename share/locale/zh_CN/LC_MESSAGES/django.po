@@ -89,7 +89,7 @@ msgstr "共享给 %s 失败。"
 
 #: views.py:287
 msgid "You are shared with a library in SeaCloud"
-msgstr "有人通过SeaCloud共享了一个资料库给您"
+msgstr "有人通过SeaCloud共享了一个资料库给你"
 
 #: views.py:294
 #, python-format
@@ -159,7 +159,7 @@ msgid ""
 "Share library to your friends and colleagues by clicking the \"Share\" icon "
 "near the library."
 msgstr ""
-"点击资料库旁的“共享”图标将您的资料库共享给您的朋友和同事。"
+"点击资料库旁的“共享”图标将你的资料库共享给你的朋友和同事。"
 
 #: templates/repo/share_admin.html:79
 msgid "Links"
