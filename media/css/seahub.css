@@ -264,14 +264,21 @@ textarea:-moz-placeholder {
 }
 
 /* container */
-#header, #main, #footer { width:950px; }
-#header, #main { margin:0 auto; }
+#main, #footer { width:950px; }
+#main { margin:0 auto; }
 #header {
+    padding-top:4px;
+    background:#f4f4f4;
+    width:100%;
     font-size: 14px;
     font-weight: bold;
     overflow:hidden;
     border-bottom:1px solid #ddd;
     margin-bottom:25px;
+}
+#header-inner {
+    width:950px;
+    margin:0 auto;
 }
 #main {
     min-height: 400px;
@@ -315,7 +322,6 @@ textarea:-moz-placeholder {
 
 /* top-bar */
 #top-bar {
-    padding-bottom:21px;
 }
 .top-bar-inner {
     background:#2d2d2d;

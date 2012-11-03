@@ -79,8 +79,10 @@
     </div>
 
     <div id="header">
-        <img src="{{ MEDIA_URL }}img/logo.jpg?t=1" title="SeaCloud" alt="SeaCloud logo" id="logo" class="fleft" />
+      <div id="header-inner">
+        <img src="{{ MEDIA_URL }}img/logo.png?t=1" title="SeaCloud" alt="SeaCloud logo" id="logo" class="fleft" />
         {% block nav %}{% endblock %}
+      </div>
     </div>
 
     <div id="main">
