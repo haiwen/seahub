@@ -31,11 +31,11 @@
                 {% if request.user.is_authenticated %}
                     {% if cloud_mode %}
                     <a href="#" id="account-context" data="no-popup">
-                        {% if org %} {{ org.org_name }} {% else %} {% trans "Personal Account" %} {% endif %}
+                        {% if org %} {{ org.org_name }} {% else %} {% trans "Personal" %} {% endif %}
                         <span class="tri-bg tri-down-bg"></span>
                     </a>
                     <ul class="hide" id="account-context-selector">
-                        <li><a href="{% url 'myhome' %}">{% trans "Personal Account" %}</a></li>
+                        <li><a href="{% url 'myhome' %}">{% trans "Personal" %}</a></li>
                         {% for org in request.user.orgs %}
                         <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
                         {% endfor %}
@@ -46,19 +46,18 @@
 
                 {% if request.user.is_staff %}
                 <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
-                <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "My Workspace" %}</a>
+                <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
                 {% endif %}
                 
                 {% if org.is_staff %}
                 <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>{% trans "Admin" %}</a>
-                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "My Workspace" %}</a>
+                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
                 {% endif %}
                 </div>
 
                 <div class="account fright">
                 {% if request.user.is_authenticated %}
-                <span>{% trans "Welcome," %}</span> <a href="{% url 'avatar_add' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
-                <a href="{{ SITE_ROOT }}profile/">{% trans "Profile" %}</a>
+                <a href="{% url 'edit_profile' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
                 <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
                 {% else %}
                 <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
