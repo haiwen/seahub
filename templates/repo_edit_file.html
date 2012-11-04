@@ -87,7 +87,7 @@ $('#preview-btn').click(function() {
 $('#file-edit-submit').click(function () {
     $.ajax({
         type: "POST",
-        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}',
+        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}',
         dataType: 'json',
         cache: false,
         contentType: 'application/json; charset=utf-8',

@@ -13,7 +13,7 @@
               {% endif %}
             {% endfor %}
     </h3>
-    <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}">
+    <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}?head={{ head_id }}">
         <input type="hidden" name="target_file" value="{{ target_file }}" />
         <input type="file" name="file" id="file" />
         <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>
