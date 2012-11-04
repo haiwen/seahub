@@ -492,6 +492,18 @@ class StarredFile(object):
         # always 0 for dir
         self.last_modified = last_modified
 
+    def __init__(self, org_id, repo, path, is_dir, last_modified, size):
+        # always 0 for non-org repo
+        self.org_id = org_id
+        self.repo = repo
+        self.path = path
+        self.formatted_path = self.format_path()
+        self.is_dir = is_dir
+        # always 0 for dir
+        self.last_modified = last_modified
+        self.size = size;
+
+
 # org_id > 0: get starred files in org repos
 # org_id < 0: get starred files in personal repos
 def get_starred_files(email, org_id=-1):
@@ -515,9 +527,11 @@ def get_starred_files(email, org_id=-1):
 
         # file still exists?
         file_id = ''
+        size = -1;
         if sfile.path != "/":
             try:
                 file_id = seafserv_threaded_rpc.get_file_by_path(sfile.repo_id, sfile.path)
+                size = seafserv_threaded_rpc.get_file_size(file_id)
             except SearpcError:
                 continue
 
@@ -531,7 +545,7 @@ def get_starred_files(email, org_id=-1):
             path_hash = md5_constructor(urllib2.quote(sfile.path.encode('utf-8'))).hexdigest()[:12]
             last_modified = get_file_contributors(sfile.repo_id, sfile.path, path_hash, file_id)[1]
 
-        f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified)
+        f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified, size)
 
         ret.append(f)
         

@@ -263,7 +263,7 @@ class Account(ResponseMixin, View):
         email = request.user.username
         info['email'] = email
         info['usage'] = seafserv_threaded_rpc.get_user_quota_usage(email)
-        info['total'] = 2 * 1024 * 1024 * 1024
+        info['total'] = seafserv_threaded_rpc.get_user_quota(email)
         info['feedback'] = settings.DEFAULT_FROM_EMAIL
         response = Response(200, [info])
         return self.render(response)
@@ -801,6 +801,7 @@ def append_starred_files(array, files):
                  'path' : f.path,
                  'mtime' : f.last_modified,
                  'dir' : f.is_dir,
+                 'size' : f.size
                  }
         array.append(sfile)
 
