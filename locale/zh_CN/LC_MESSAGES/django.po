@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-03 11:55+0800\n"
+"POT-Creation-Date: 2012-11-04 12:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,9 +228,9 @@ msgstr "通知管理"
 msgid "File Collaboration Team Organization"
 msgstr "文件 合作 团队 团体"
 
-#: templates/base.html:34 templates/base.html.py:38
-msgid "Personal Account"
-msgstr "个人帐号"
+#: templates/base.html:34 templates/base.html.py:38 templates/org_base.html:9
+msgid "Personal"
+msgstr "个人页面"
 
 #: templates/base.html:42
 msgid "New Organization"
@@ -241,75 +241,67 @@ msgid "System Admin"
 msgstr "系统管理"
 
 #: templates/base.html:49 templates/base.html.py:54
-msgid "My Workspace"
+msgid "Workspace"
 msgstr "个人工作台"
 
 #: templates/base.html:53
 msgid "Admin"
 msgstr "管理员工作台"
 
-#: templates/base.html:60
-msgid "Welcome,"
-msgstr "欢迎，"
-
-#: templates/base.html:61 templates/userinfo.html:13
-msgid "Profile"
-msgstr "设置"
-
-#: templates/base.html:62
+#: templates/base.html:61
 msgid "Log out"
 msgstr "退出"
 
-#: templates/base.html:64 templates/registration/login.html:3
+#: templates/base.html:63 templates/registration/login.html:3
 #: templates/registration/login.html:6
 msgid "Log In"
 msgstr "登录"
 
-#: templates/base.html:65 templates/registration/registration_form.html:9
+#: templates/base.html:64 templates/registration/registration_form.html:9
 msgid "Signup"
 msgstr "注册"
 
-#: templates/base.html:116
+#: templates/base.html:117
 msgid "Introduction"
 msgstr "介绍"
 
-#: templates/base.html:118
+#: templates/base.html:119
 msgid "Forum"
 msgstr "论坛"
 
-#: templates/base.html:122
+#: templates/base.html:123
 msgid "Client"
 msgstr "客户端"
 
-#: templates/base.html:128
+#: templates/base.html:129
 msgid "Documents"
 msgstr "文档"
 
-#: templates/base.html:130
+#: templates/base.html:131
 msgid "Help"
 msgstr "使用帮助"
 
-#: templates/base.html:135
+#: templates/base.html:136
 msgid "Server Version: "
 msgstr "服务器版本："
 
-#: templates/base.html:136
+#: templates/base.html:137
 msgid "Seafile"
 msgstr "海文互知"
 
-#: templates/base.html:137
+#: templates/base.html:138
 msgid "Contact Us"
 msgstr "联系我们"
 
-#: templates/base.html:142
+#: templates/base.html:143
 msgid "Really want to delete?"
 msgstr "确定要删除？"
 
-#: templates/base.html:143
+#: templates/base.html:144
 msgid "Yes"
 msgstr "确定"
 
-#: templates/base.html:144
+#: templates/base.html:145
 msgid "No"
 msgstr "取消"
 
@@ -485,10 +477,6 @@ msgstr "基本信息"
 #: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
 msgid "Libraries"
 msgstr "资料库"
-
-#: templates/org_base.html:9
-msgid "Personal"
-msgstr "个人页面"
 
 #: templates/pubinfo.html:8
 msgid "Users"
@@ -865,8 +853,8 @@ msgid "Star"
 msgstr "添加星标"
 
 #: templates/repo_view_file.html:88
-msgid "updated this library"
-msgstr "更新了该资料库"
+msgid "updated this file"
+msgstr "更新了该文件"
 
 #: templates/repo_view_file.html:98
 #, python-format
@@ -1072,7 +1060,11 @@ msgstr "修改前"
 
 #: templates/text_diff.html:28
 msgid "after modification"
-msgstr "修改历史"
+msgstr "修改后"
+
+#: templates/userinfo.html:13
+msgid "Profile"
+msgstr "设置"
 
 #: templates/userinfo.html:24
 msgid "Space Used"
@@ -1431,6 +1423,12 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:31
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Personal Account"
+#~ msgstr "个人帐号"
+
+#~ msgid "Welcome,"
+#~ msgstr "欢迎，"
 
 #~ msgid "Org Info"
 #~ msgstr "团体概况"
