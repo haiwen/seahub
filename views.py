@@ -491,6 +491,7 @@ def repo_update_file(request, repo_id):
             "zipped": zipped,
             "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
             "no_quota": no_quota,
+            "head_id": repo.head_cmmt_id,
             }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
@@ -1487,6 +1488,7 @@ def update_file_after_edit(request, repo_id):
     path = request.GET.get('p')
     if content is None or not path:
         return error_json(u"参数错误")
+    head_id = request.GET.get('head', None)
 
     if encoding not in ["gbk", "utf-8"]:
         return error_json(u"参数错误")
@@ -1516,7 +1518,7 @@ def update_file_after_edit(request, repo_id):
     filename = os.path.basename(path).encode('utf-8')
     try:
         seafserv_threaded_rpc.put_file (repo_id, tmpfile, parent_dir,
-                                 filename, request.user.username)
+                                 filename, request.user.username, head_id)
         remove_tmp_file()
         return ok_json()
     except SearpcError, e:
@@ -1542,6 +1544,8 @@ def repo_file_edit(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    head_id = repo.head_cmmt_id
 
     try:
         obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
@@ -1576,6 +1580,7 @@ def repo_file_edit(request, repo_id):
         'file_content':file_content,
         'encoding': encoding,
         'newline_mode': newline_mode,
+        'head_id': head_id,
     }, context_instance=RequestContext(request))
 
 
