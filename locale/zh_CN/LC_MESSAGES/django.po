@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-04 12:57+0800\n"
+"POT-Creation-Date: 2012-11-04 13:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,20 @@ msgstr ""
 msgid "简体中文"
 msgstr ""
 
+#: views.py:1158
+msgid "Failed to delete file."
+msgstr "删除文件出错。"
+
+#: views.py:1165
+#, python-format
+msgid "%s successfully deleted."
+msgstr "%s 删除成功。"
+
+#: views.py:1167
+#, python-format
+msgid "Internal error. Failed to delete %s."
+msgstr "内部错误。删除 %s 失败。"
+
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "对不起，你访问的页面不存在。"
@@ -168,7 +182,8 @@ msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
 #: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
-#: templates/repo.html.py:209 templates/repo_update_file.html:21
+#: templates/repo.html.py:209 templates/repo_edit_file.html:40
+#: templates/repo_edit_file.html.py:45 templates/repo_update_file.html:21
 #: templates/repo_upload_file.html:17 templates/repo_view_file.html:141
 #: templates/repo_view_file.html.py:167 templates/userinfo.html:87
 #: templates/registration/login.html:13
@@ -341,16 +356,16 @@ msgid "Last Modifier"
 msgstr "最后修改者"
 
 #: templates/file_revisions.html:25 templates/repo.html:98
-#: templates/repo_history_view.html:51
+#: templates/repo_history_view.html:51 templates/repo_recycle_view.html:35
 msgid "Size"
 msgstr "大小"
 
 #: templates/file_revisions.html:26 templates/public_home.html:25
-#: templates/repo.html:99 templates/repo_view_snapshot.html:18
-#: templates/sys_group_admin.html:14 templates/sys_org_admin.html:15
-#: templates/sys_seafadmin.html:14 templates/sys_useradmin.html:5
-#: templates/sys_useradmin.html.py:17 templates/userinfo.html:40
-#: templates/snippets/my_owned_repos.html:21
+#: templates/repo.html:99 templates/repo_recycle_view.html:36
+#: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:14
+#: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
+#: templates/sys_useradmin.html:5 templates/sys_useradmin.html.py:17
+#: templates/userinfo.html:40 templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:60
 msgid "Operations"
 msgstr "操作"
@@ -365,7 +380,8 @@ msgstr "(当前版本)"
 msgid "Unknown"
 msgstr "未知"
 
-#: templates/file_revisions.html:50 templates/repo_view_snapshot.html:44
+#: templates/file_revisions.html:50 templates/repo_recycle_view.html:46
+#: templates/repo_recycle_view.html:63 templates/repo_view_snapshot.html:44
 msgid "Restore"
 msgstr "还原"
 
@@ -388,7 +404,8 @@ msgstr "个人基本信息"
 msgid "No Nickname"
 msgstr "暂无昵称"
 
-#: templates/myhome.html:15 templates/repo_view_file.html:116
+#: templates/myhome.html:15 templates/repo_edit_file.html:18
+#: templates/repo_view_file.html:116
 msgid "Edit"
 msgstr "编辑"
 
@@ -520,10 +537,10 @@ msgid "New Library"
 msgstr "新建资料库"
 
 #: templates/public_home.html:21 templates/repo.html:97
-#: templates/repo_history_view.html:50 templates/sys_group_admin.html:11
-#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
-#: templates/userinfo.html:38 templates/userinfo.html.py:63
-#: templates/snippets/my_owned_repos.html:18
+#: templates/repo_history_view.html:50 templates/repo_recycle_view.html:33
+#: templates/sys_group_admin.html:11 templates/sys_org_admin.html:11
+#: templates/sys_seafadmin.html:11 templates/userinfo.html:38
+#: templates/userinfo.html.py:63 templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:56
 #: templates/snippets/repo_create_form.html:4
 msgid "Name"
@@ -606,7 +623,8 @@ msgstr "系统自动生成"
 msgid "You can't access this library."
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo.html:76 templates/repo_history_view.html:36
+#: templates/repo.html:76 templates/repo_edit_file.html:20
+#: templates/repo_history_view.html:36 templates/repo_recycle_view.html:16
 msgid "Current path: "
 msgstr "当前路径："
 
@@ -651,6 +669,7 @@ msgid "Copy"
 msgstr "复制"
 
 #: templates/repo.html:128 templates/repo_history_view.html:64
+#: templates/repo_recycle_view.html:58
 msgid "File"
 msgstr "文件"
 
@@ -667,8 +686,9 @@ msgid "Directory Name"
 msgstr "目录名"
 
 #: templates/repo.html:169 templates/repo.html.py:179 templates/repo.html:199
-#: templates/repo.html.py:210 templates/repo_update_file.html:27
-#: templates/repo_upload_file.html:23 templates/snippets/events.html:73
+#: templates/repo.html.py:210 templates/repo_edit_file.html:47
+#: templates/repo_update_file.html:27 templates/repo_upload_file.html:23
+#: templates/snippets/events.html:73
 msgid "Cancel"
 msgstr "取消"
 
@@ -720,11 +740,20 @@ msgstr "文件"
 msgid "directory "
 msgstr "目录"
 
+#: templates/repo_edit_file.html:41
+msgid "Continue editing"
+msgstr "继续修改"
+
+#: templates/repo_edit_file.html:42
+msgid "Preview"
+msgstr "预览"
+
 #: templates/repo_history.html:7
 msgid "modification history"
 msgstr "修改历史"
 
-#: templates/repo_history.html:8 templates/repo_view_file.html:31
+#: templates/repo_history.html:8 templates/repo_recycle_view.html:9
+#: templates/repo_view_file.html:31
 msgid "Back to Library"
 msgstr "返回资料库"
 
@@ -780,9 +809,18 @@ msgstr "返回镜像列表"
 msgid "Can't view this library"
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo_history_view.html:56
+#: templates/repo_history_view.html:56 templates/repo_recycle_view.html:41
 msgid "Directory"
 msgstr "目录"
+
+#: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
+#: templates/repo_view_file.html:30 templates/repo_view_file.html.py:40
+msgid "'s trash"
+msgstr "文件回收站"
+
+#: templates/repo_recycle_view.html:34
+msgid "Delete Time"
+msgstr "删除时间"
 
 #: templates/repo_update_file.html:7
 msgid "Update file"
@@ -827,10 +865,6 @@ msgstr "历史"
 #: templates/repo_view_file.html:25
 msgid "Back to file versions"
 msgstr "返回文件版本列表"
-
-#: templates/repo_view_file.html:30 templates/repo_view_file.html.py:40
-msgid "'s trash"
-msgstr "文件回收站"
 
 #: templates/repo_view_file.html:37
 msgid "Current Path: "
@@ -1296,6 +1330,10 @@ msgstr "修改详情"
 msgid "My Groups"
 msgstr "我的群组"
 
+#: templates/snippets/my_groups.html:18
+msgid "Create a group now"
+msgstr "现在创建群组"
+
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
 msgstr "我拥有的"
@@ -1349,8 +1387,8 @@ msgstr "还没有资料库共享给你"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
-"Libraries shared to you will be listed here. You can download this library. "
-"Files you add into the downloaded library will be synchronized automatically."
+"Libraries shared to you will be listed here. Libraries shared as writable "
+"can be downloaded and synced. Read only libraries can only be viewed online."
 msgstr ""
 "这里会显示共享给你的资料库。你可以下载这个资料库。你可以添加文件到这个下载下"
 "来的资料库，这些文件会自动同步到服务器。"

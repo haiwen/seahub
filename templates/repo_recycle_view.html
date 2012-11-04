@@ -1,20 +1,20 @@
 {% extends base_template %}
 
-{% load seahub_tags avatar_tags %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
     <div class="w100 ovhd">
-        <h2 class="fleft">{{repo.props.name}} 的文件回收站</h2>
-        <button data="{% url 'repo' repo.id %}" class="fright" id="back">返回资料库</button>
+        <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
+        <button data="{% url 'repo' repo.id %}" class="fright" id="back">{% trans "Back to Library" %}</button>
     </div>
 
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar">
                 <p class="path">
-                当前路径：
-		<a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} 的文件回收站</a>
+                {% trans "Current path: " %}
+		<a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a>
 		{% if not show_recycle_root %}
                     {% for name, link in zipped %}
                         {% if not forloop.last %}
@@ -30,20 +30,20 @@
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
-                    <th width="60%">名字</th>
-		    <th width="15%">删除时间</th>
-                    <th width="10%">大小</th>
-		    <th width="10%">操作</th>
+                    <th width="60%">{% trans "Name" %}</th>
+		    <th width="15%">{% trans "Delete Time" %}</th>
+                    <th width="10%">{% trans "Size" %}</th>
+		    <th width="10%">{% trans "Operations" %}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="目录" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
 		    {% if show_recycle_root %}
 		    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_commit_time }}</td>
 		    <td></td>
-		    <td><a class="op" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">还原</a></td>
+		    <td><a class="op" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">{% trans "Restore" %}</a></td>
 		    {% else %}
                     <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
 		    <td></td>
@@ -55,12 +55,12 @@
 
                 {% for dirent in file_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="文件" /></td>
+                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
 		    {% if show_recycle_root %}
                     <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_commit_time }}</td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td><a class="op" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">还原</a></td>
+                    <td><a class="op" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
 		    {% else %}
                     <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.props.obj_name }}</a></td>
 		    <td></td>

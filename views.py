@@ -1155,16 +1155,16 @@ def repo_set_access_property(request, repo_id):
 @login_required    
 def repo_del_file(request, repo_id):
     if get_user_permission(request, repo_id) != 'rw':
-        return render_permission_error(request, '无法删除该文件')
+        return render_permission_error(request, _('Failed to delete file.'))
 
     parent_dir = request.GET.get("p", "/")
     file_name = request.GET.get("file_name")
     user = request.user.username
     try:
         seafserv_threaded_rpc.del_file(repo_id, parent_dir,file_name, user)
-        messages.add_message(request, messages.INFO, u'%s 删除成功。' % file_name)
+        messages.success(request, _(u'%s successfully deleted.') % file_name)
     except:
-        messages.add_message(request, messages.ERROR, u'内部错误。%s 删除失败。' % file_name)
+        messages.error(request, _(u'Internal error. Failed to delete %s.') % file_name)
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)

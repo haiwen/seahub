@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags i18n %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
@@ -15,9 +15,9 @@
 {% endblock %}
 
 {% block main_panel %}
-    <h2>编辑 {{ u_filename }}</h2>
+    <h2>{% trans "Edit" %} {{ u_filename }}</h2>
     <p class="path">
-         当前路径：
+         {% trans "Current path: " %}
          {% for name, link in zipped %}
             {% if not forloop.last %}
                 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
@@ -37,14 +37,14 @@
     <div id="op-after-edit" class="w100 ovhd hide">
         {% if filetype == 'Markdown' %}
         <div class="fleft">
-            <button id="file-edit-submit">提交</button>
-            <button id="source-code-btn" class="hide">继续编辑</button>
-            <button id="preview-btn">预览</button>
+            <button id="file-edit-submit">{% trans "Submit" %}</button>
+            <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
+            <button id="preview-btn">{% trans "Preview" %}</button>
         </div>
         {% else %}
-        <button id="file-edit-submit" class="fleft">提交</button>
+        <button id="file-edit-submit" class="fleft">{% trans "Submit" %}</button>
         {% endif %}
-        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel" class="fright">取消修改</button>
+        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel" class="fright">{% trans "Cancel" %}</button>
     </div>
 {% endblock %}
 
