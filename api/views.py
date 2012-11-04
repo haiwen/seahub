@@ -38,7 +38,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, \
 from seahub.utils import list_to_string, \
     get_httpserver_root, gen_token, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
-    gen_file_get_url, string2list, gen_file_upload_url
+    gen_file_get_url, string2list, gen_file_upload_url, \
+    get_starred_files, star_file, unstar_file
 
 from seahub.views import access_to_repo, validate_owner
 from seahub.contacts.signals import mail_sended
@@ -51,7 +52,7 @@ json_content_type = 'application/json; charset=utf-8'
 HTTP_ERRORS = {
     '400':'Bad arguments',
     '401':'Login required',
-    '402':'Incorrect password',
+    '402':'Incorrect repo password',
     '403':'Can not access repo',
     '404':'Repo not found',
     '405':'Query password set error',
@@ -541,6 +542,7 @@ class RepoFileIdView(ResponseMixin, View):
         return get_repo_file (request, repo_id, file_id, file_name, 'download')
 
 
+
 class RepoFilePathView(ResponseMixin, View):
 
     @api_login_required
@@ -585,7 +587,15 @@ class RepoFilePathView(ResponseMixin, View):
             if not emails:
                 return api_error(request, '400', "Email required")
             return send_share_link(request, path, emails)
-
+        elif op == 'star':
+            org_id = int(request.GET.get('org', '-1'))
+            star_file(request.user.username, repo_id, path, False, org_id=org_id)
+            return HttpResponse(json.dumps('success'), status=200,
+                                content_type=json_content_type)
+        elif op == 'unstar':
+            unstar_file(request.user.username, repo_id, path)
+            return HttpResponse(json.dumps('success'), status=200,
+                                content_type=json_content_type)
         return api_error(request, '415')
 
 
@@ -781,3 +791,31 @@ class OpUploadView(ResponseMixin, View):
         upload_url = gen_file_upload_url(token, 'upload')
         return HttpResponse(json.dumps(upload_url), status=200,
                             content_type=json_content_type)
+
+
+
+def append_starred_files(array, files):
+    for f in files:
+        sfile = {'org' : f.org_id,
+                 'repo' : f.repo.id,
+                 'path' : f.path,
+                 'mtime' : f.last_modified,
+                 'dir' : f.is_dir,
+                 }
+        array.append(sfile)
+
+
+
+def api_starred_files(request):
+    starred_files = []
+    personal_files = get_starred_files(request.user.username, -1)
+    append_starred_files (starred_files, personal_files)
+    return HttpResponse(json.dumps(starred_files), status=200,
+                        content_type=json_content_type)
+
+
+class StarredFileView(ResponseMixin, View):
+
+    @api_login_required
+    def get(self, request):
+        return api_starred_files(request)

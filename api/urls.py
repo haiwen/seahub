@@ -23,5 +23,6 @@ urlpatterns = patterns('',
     url(r'^op/move/$', csrf_exempt(OpMoveView.as_view()), name='move'),
     url(r'^op/mkdir/(?P<repo_id>[^/]+)/$', csrf_exempt(OpMkdirView.as_view()), name='mkdir'),
     url(r'^op/upload/(?P<repo_id>[^/]+)/$', csrf_exempt(OpUploadView.as_view()), name='upload'),
+    url(r'^starredfiles/', csrf_exempt(StarredFileView.as_view()), name='starredfiles'),
 )
 
