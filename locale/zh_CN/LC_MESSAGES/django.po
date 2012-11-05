@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 14:20+0800\n"
+"POT-Creation-Date: 2012-11-05 16:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,8 +212,7 @@ msgstr "未知错误"
 #: views.py:842 views.py:858
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
-msgstr ""
-"删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
+msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
 #: views.py:1108
 msgid "Failed to create repo"
@@ -671,25 +670,25 @@ msgstr "已用空间"
 msgid "My Home"
 msgstr "我的页面"
 
-#: templates/myhome_base.html:12 templates/org_base.html:12
-msgid "Public Library"
-msgstr "公共资料"
-
-#: templates/myhome_base.html:16 templates/org_admin_base.html:14
+#: templates/myhome_base.html:11 templates/org_admin_base.html:14
 #: templates/org_base.html:15 templates/pubinfo.html:22
 msgid "Groups"
 msgstr "群组"
 
-#: templates/myhome_base.html:19 templates/org_base.html:18
+#: templates/myhome_base.html:14 templates/org_base.html:18
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
 
-#: templates/myhome_base.html:22
+#: templates/myhome_base.html:17
 msgid "Contacts"
 msgstr "通讯录"
 
-#: templates/myhome_base.html:26 templates/org_base.html:21
+#: templates/myhome_base.html:21 templates/org_base.html:12
+msgid "Public Library"
+msgstr "公共资料"
+
+#: templates/myhome_base.html:24 templates/org_base.html:21
 msgid "Public Info"
 msgstr "公共信息"
 
@@ -731,7 +730,8 @@ msgstr "小提示"
 
 #: templates/public_home.html:10
 msgid ""
-"Libraries marked as read-only can only be viewing, can not be downloaded."
+"Libraries marked as read-only can only be viewed online, can not be "
+"downloaded."
 msgstr "标记为只读的资料库只能查看，无法整个下载。"
 
 #: templates/public_home.html:15
@@ -1302,6 +1302,22 @@ msgstr "修改前"
 #: templates/text_diff.html:28
 msgid "after modification"
 msgstr "修改后"
+
+#: templates/update_file_error.html:6
+msgid "Update file "
+msgstr "更新文件 "
+
+#: templates/update_file_error.html:14 templates/upload_file_error.html:10
+msgid "error: "
+msgstr "失败："
+
+#: templates/upload_file_error.html:6
+msgid "Upload file"
+msgstr "上传文件"
+
+#: templates/upload_file_error.html:6
+msgid "to"
+msgstr "到"
 
 #: templates/userinfo.html:13
 msgid "Profile"

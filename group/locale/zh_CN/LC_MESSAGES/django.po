@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-03 11:50+0800\n"
+"POT-Creation-Date: 2012-11-05 16:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,26 @@ msgstr "只有群组管理员可以删除成员。"
 #: error_msg.py:23
 msgid "Can not remove myself"
 msgstr "无法删除自己"
+
+#: forms.py:28
+msgid "Group name can't be empty"
+msgstr "群组名称不能为空"
+
+#: forms.py:29
+msgid "Group name is too long (maximum is 255 characters)"
+msgstr "群组名称太长，不超过255个字符"
+
+#: forms.py:34
+msgid "Group name can only contain letters, numbers or underline"
+msgstr "群组名称只能包含中英文字符，数字及下划线。"
+
+#: forms.py:44
+msgid "Verification message can't be empty"
+msgstr "验证信息不能为空"
+
+#: forms.py:45
+msgid "Verification message is too long (maximun is 255 characters)"
+msgstr "验证信息太长，不超过255个字符"
 
 #: views.py:94
 msgid "There is already a group with that name."
@@ -288,7 +308,7 @@ msgstr "取消共享"
 msgid "Messages"
 msgstr "信息栏"
 
-#: templates/group/group_info.html:120
+#: templates/group/group_info.html:120 templates/group/group_pubinfo.html:24
 #: templates/group/groups_right_panel.html:33
 #: templates/group/grpmember_add_form.html:12
 #: templates/group/grpmember_add_form.html:19
@@ -416,6 +436,31 @@ msgstr "添加管理员"
 msgid "Really want to dismiss this group?"
 msgstr "确定要解散该群组？"
 
+#: templates/group/group_pubinfo.html:9
+msgid "Join Group"
+msgstr "申请加入"
+
+#: templates/group/group_pubinfo.html:13
+msgid "Name: "
+msgstr "名字："
+
+#: templates/group/group_pubinfo.html:14
+#: templates/group/groups_right_panel.html:17
+msgid "Creator: "
+msgstr "创建者："
+
+#: templates/group/group_pubinfo.html:15
+msgid "Create at: "
+msgstr "创建于："
+
+#: templates/group/group_pubinfo.html:16
+msgid "Members: "
+msgstr "成员数："
+
+#: templates/group/group_pubinfo.html:21
+msgid "Verification Message"
+msgstr "验证消息"
+
 #: templates/group/group_reply_list.html:17
 msgid "It can not be blank and should be no more than 150 characters."
 msgstr "输入不能为空且应少于150个字符。"
@@ -440,10 +485,6 @@ msgstr "我的群组"
 #: templates/group/groups_right_panel.html:5
 msgid "New Group"
 msgstr "新建群组"
-
-#: templates/group/groups_right_panel.html:17
-msgid "Creator: "
-msgstr "创建者："
 
 #: templates/group/groups_right_panel.html:18
 msgid "Time: "

@@ -1,13 +1,13 @@
 {% extends base_template %}
-{% load seahub_tags %}
+{% load seahub_tags i18n %}
 
 {% block main_panel %}
 <div class="narrow-panel">
-    <h3>上传文件{% if filename %} {{ filename }} {% endif %}到
+    <h3>{% trans "Upload file" %} {% if filename %} {{ filename }} {% endif %} {% trans "to" %}
             {% for name, link in zipped %}
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> / 
             {% endfor %}
-        失败：
+        {% trans "error: " %}
     </h3>
     <p>{{ err_msg }}</p>
 </div>

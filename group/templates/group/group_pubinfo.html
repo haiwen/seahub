@@ -1,27 +1,27 @@
 {% extends "myhome_base.html" %}
-{% load seahub_tags group_avatar_tags %}
+{% load seahub_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
 <div class="user-profile narrow-panel ovhd">
   <div class="pic fleft">
     <img src="{% grp_avatar_url group.id 48 %}" alt="{{ group.group_name }}的图标" title="{{ group.group_name }}" class="avatar" />
-    <button id="add">申请加入</button>
+    <button id="add">{% trans "Join Group" %}</button>
   </div>
 
   <div class="txt fright">
-    <p>名称：{{ group.group_name }}</p>
-    <p>管理员：{{ group.creator_name }}</p>
-    <p>创建于：{{ group.timestamp|tsstr_sec }}</p>
-    <p>人数：{{ members|length }}</p>
+    <p>{% trans "Name: " %}{{ group.group_name }}</p>
+    <p>{% trans "Creator: " %}{{ group.creator_name }}</p>
+    <p>{% trans "Create at: " %}{{ group.timestamp|tsstr_sec }}</p>
+    <p>{% trans "Members: " %}{{ members|length }}</p>
   </div>
 </div>
 
 <form id="group-join-form" class="hide" action="" method="post">
-  <label>验证信息：</label><br />
+  <label>{% trans "Verification Message" %}</label><br />
   <textarea id="id_group_join_msg" name="group_join_msg"></textarea><br />
   <p class="error hide"></p>
-  <input type="submit" value="提交" id="group-join-submit" />
+  <input type="submit" value="{% trans "Submit" %}" id="group-join-submit" />
 </form>
 {% endblock %}
 
@@ -32,6 +32,9 @@ $('#add').click(function() {
 });
 
 $('#group-join-submit').click(function() {
+    var self = $(this);
+    self.attr('disabled', 'disabled');
+    
     $.ajax({
         url: '{% url 'group_joinrequest' group.id %}',
         type: 'POST',
@@ -42,6 +45,7 @@ $('#group-join-submit').click(function() {
             'group_join_msg': $('#id_group_join_msg').val(),
         },
         success: function(data) {
+            self.removeAttr('disabled');
             location.reload(true);
         },
         error: function(data, textStatus, jqXHR) {
@@ -53,6 +57,7 @@ $('#group-join-submit').click(function() {
                     apply_form_error('group-join-form', value[0]);
                 }
             });
+            self.removeAttr('disabled');
         }
     });
 
