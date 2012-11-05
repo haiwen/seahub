@@ -239,7 +239,7 @@ else:
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-USER_TOTAL_SPACE = 2 * pow(2,30)
+USER_TOTAL_SPACE = 5 * pow(2,30)
 
-SEAFILE_VERSION = '1.1.0'
+SEAFILE_VERSION = '1.2.0'
 

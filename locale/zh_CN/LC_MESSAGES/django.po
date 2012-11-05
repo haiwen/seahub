@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 16:52+0800\n"
+"POT-Creation-Date: 2012-11-05 17:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -424,25 +424,28 @@ msgstr "确认密码不能为空"
 msgid "The two password fields not match"
 msgstr "两次输入的密码不一致"
 
-#: templates/admin_base.html:8
-msgid "Library Management"
-msgstr "资料库管理"
+#: templates/admin_base.html:8 templates/org_admin_base.html:11
+#: templates/snippets/my_owned_repos.html:3
+msgid "Libraries"
+msgstr "资料库"
 
-#: templates/admin_base.html:11
-msgid "User Management"
-msgstr "用户管理"
+#: templates/admin_base.html:11 templates/pubinfo.html:8
+msgid "Users"
+msgstr "成员"
 
-#: templates/admin_base.html:14
-msgid "Group Management"
-msgstr "群组管理"
+#: templates/admin_base.html:14 templates/myhome_base.html:11
+#: templates/org_admin_base.html:14 templates/org_base.html:15
+#: templates/pubinfo.html:22
+msgid "Groups"
+msgstr "群组"
 
 #: templates/admin_base.html:18
-msgid "Org Management"
-msgstr "团体管理"
+msgid "Organizations"
+msgstr "团体"
 
 #: templates/admin_base.html:22
-msgid "Notification Management"
-msgstr "通知管理"
+msgid "Notifications"
+msgstr "通知"
 
 #: templates/base.html:9
 msgid "File Collaboration Team Organization"
@@ -670,11 +673,6 @@ msgstr "已用空间"
 msgid "My Home"
 msgstr "我的页面"
 
-#: templates/myhome_base.html:11 templates/org_admin_base.html:14
-#: templates/org_base.html:15 templates/pubinfo.html:22
-msgid "Groups"
-msgstr "群组"
-
 #: templates/myhome_base.html:14 templates/org_base.html:18
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
@@ -695,14 +693,6 @@ msgstr "公共信息"
 #: templates/org_admin_base.html:8
 msgid "Basic Info"
 msgstr "基本信息"
-
-#: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
-msgid "Libraries"
-msgstr "资料库"
-
-#: templates/pubinfo.html:8
-msgid "Users"
-msgstr "成员列表"
 
 #: templates/pubinfo.html:16 templates/sys_group_admin.html:54
 #: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
@@ -1684,6 +1674,18 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Library Management"
+#~ msgstr "资料库管理"
+
+#~ msgid "User Management"
+#~ msgstr "用户管理"
+
+#~ msgid "Group Management"
+#~ msgstr "群组管理"
+
+#~ msgid "Org Management"
+#~ msgstr "团体管理"
 
 #~ msgid "Create Time: "
 #~ msgstr "创建时间："
