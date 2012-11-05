@@ -11,7 +11,7 @@
         </div>
         <div class="txt fright">
             <div class="event-hd">
-                <span class="time">{{ commit.ctime|translate_commit_time }}</span>
+                <span class="time">{{ commit.ctime|translate_seahub_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
             <p>{% trans 'Updated library' %} <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a></p>
@@ -37,7 +37,7 @@
         </div>
         <div class="txt fright">
             <div class="event-hd">
-                <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
+                <span class="time">{{ ev.timestamp|translate_seahub_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
             <p>{% trans 'Created library' %} <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
@@ -52,7 +52,7 @@
         </div>
         <div class="txt fright">
             <div class="event-hd">
-                <span class="time">{{ ev.timestamp|translate_commit_time }}</span>
+                <span class="time">{{ ev.timestamp|translate_seahub_time }}</span>
                 <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
             </div>
             <p>{% trans 'Deleted library' %} {{ repo_name }}</p>

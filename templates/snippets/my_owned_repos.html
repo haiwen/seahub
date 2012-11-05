@@ -26,7 +26,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
-        <td>{{ repo.latest_modify|translate_commit_time }}</td>
+        <td>{{ repo.latest_modify|translate_seahub_time }}</td>
         {% else %}
         <td>--</td>
         {% endif %}
@@ -72,7 +72,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.repo_desc }}</td>
         {% if repo.props.last_modified %}
-        <td>{{ repo.props.last_modified|translate_commit_time }}</td>
+        <td>{{ repo.props.last_modified|translate_seahub_time }}</td>
         {% else %}
         <td>--</td>
         {% endif %}
@@ -109,7 +109,7 @@
             <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.formatted_path }}</a>
         </td>
         <td>{{ sfile.repo.name }}</td>
-        <td>{{ sfile.last_modified|translate_commit_time }}</td>
+        <td>{{ sfile.last_modified|translate_seahub_time }}</td>
     </tr>
     {% endfor %}
 </table>

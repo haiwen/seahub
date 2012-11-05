@@ -28,7 +28,7 @@
             {% for commit in commits %}
             <tr>
                 <td class="time">
-                    {{ commit.props.ctime|translate_commit_time }}
+                    {{ commit.props.ctime|translate_seahub_time }}
                     {% if commit.is_current_version %}
                     {% trans '(current version)' %}
                     {% endif %}

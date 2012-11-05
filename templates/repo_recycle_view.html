@@ -41,7 +41,7 @@
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
 		    {% if show_recycle_root %}
 		    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
-                    <td>{{ dirent.delete_time|translate_commit_time }}</td>
+                    <td>{{ dirent.delete_time|translate_seahub_time }}</td>
 		    <td></td>
 		    <td><a class="op" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">{% trans "Restore" %}</a></td>
 		    {% else %}
@@ -58,7 +58,7 @@
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
 		    {% if show_recycle_root %}
                     <td><a class="op" href="{% url 'repo_view_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&from=recycle">{{ dirent.obj_name }}</a></td>
-                    <td>{{ dirent.delete_time|translate_commit_time }}</td>
+                    <td>{{ dirent.delete_time|translate_seahub_time }}</td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td><a class="op" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
 		    {% else %}

@@ -20,7 +20,7 @@
 
             {% for commit in commits %}
             <tr>
-                <td class="time">{{ commit.ctime|translate_commit_time }}</td>
+                <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
                 <td>
                 {% if commit.creator_name %}
 		    {% if not commit.second_parent_id %}

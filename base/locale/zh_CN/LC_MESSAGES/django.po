@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 14:27+0800\n"
+"POT-Creation-Date: 2012-11-05 17:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,19 +50,38 @@ msgstr ""
 msgid "The two password fields didn't match."
 msgstr ""
 
-#: templatetags/seahub_tags.py:116
+#: templatetags/seahub_tags.py:123
 #, python-format
-msgid "%d days ago"
-msgstr "%d 天前"
+msgid "%(days)d day ago"
+msgid_plural "%(days)d days ago"
+msgstr[0] "%(days)d 天前"
 
-#: templatetags/seahub_tags.py:118
-msgid "%d hours ago"
-msgstr "%d 小时前"
+#: templatetags/seahub_tags.py:130
+#, python-format
+msgid "%(hours)d hour ago"
+msgid_plural "%(hours)d hours ago"
+msgstr[0] "%(hours)d 小时前"
 
-#: templatetags/seahub_tags.py:120
-msgid "%d minutes ago"
-msgstr "%d 分钟前"
+#: templatetags/seahub_tags.py:137
+#, python-format
+msgid "%(minutes)d minute ago"
+msgid_plural "%(minutes)d minutes ago"
+msgstr[0] "%(minutes)d 分钟前"
 
-#: templatetags/seahub_tags.py:122
-msgid "%d seconds ago"
-msgstr "%d 秒前"
+#: templatetags/seahub_tags.py:143
+#, python-format
+msgid "%(seconds)d second ago"
+msgid_plural "%(seconds)d seconds ago"
+msgstr[0] "%(seconds)d 秒前"
+
+#: templatetags/seahub_tags.py:148
+msgid "0 second ago"
+msgstr "0 秒前"
+
+#: templatetags/seahub_tags.py:214
+msgid "Read-Write"
+msgstr "可读写"
+
+#: templatetags/seahub_tags.py:216
+msgid "Read-Only"
+msgstr "只读"

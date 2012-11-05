@@ -85,7 +85,7 @@
     <div id="file-commit-info">
         <div class="latest-commit ovhd">
             <p class="latest-commit-info fleft">
-                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_commit_time}}</span><span>{% trans "updated this file"%}</span>
+                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span><span>{% trans "updated this file"%}</span>
                 {% if filetype == 'Text' or filetype == 'Markdown' %}
                 {% if last_commit_id %}
                 <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "Detail"%}</a></span>
@@ -176,7 +176,7 @@
             <div class="txt fright">
                 <div class="comment-hd w100 ovhd">
                     <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}" class="fleft">{{ comment.from_email|email2nickname }}</a>
-                    <span class="time fright">{{ comment.timestamp|translate_commit_time }}</span>
+                    <span class="time fright">{{ comment.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="comment-bd">{{ comment.message|seahub_urlize|find_at|linebreaksbr }}</p>
             </div>

@@ -12,7 +12,7 @@
         </div>
         <div class="txt fright">
             <div class="msg-hd">
-                <span class="time">{{ msg.timestamp|translate_commit_time }}</span>
+                <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 <a href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
                 <span class="group">留言所属：<a href="{% url 'public_home' %}">公共页面</a></span>
             </div>

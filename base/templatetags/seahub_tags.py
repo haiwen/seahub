@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django.utils import translation
 from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
 
 from profile.models import Profile
 from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
@@ -98,9 +99,9 @@ def translate_commit_desc(value):
 
         return '\n'.join(ret_list)
     
-@register.filter(name='translate_commit_time')
-def translate_commit_time(value):
-    """Translate commit time to human frindly format instead of timestamp"""
+@register.filter(name='translate_seahub_time')
+def translate_seahub_time(value):
+    """Translate seahub time to human friendly format instead of timestamp"""
     
     if isinstance(value, int) or isinstance(value, long): # check whether value is int
         val = datetime.fromtimestamp(value)
@@ -118,24 +119,44 @@ def translate_commit_time(value):
     if days * 24 * 60 * 60 + seconds > limit:
         return val.strftime("%Y-%m-%d")
     elif days > 0:
-        return _(u'%d days ago') % (days)
+        ret = ungettext(
+            '%(days)d day ago',
+            '%(days)d days ago',
+            days ) % { 'days': days }
+        return ret
     elif seconds > 60 * 60:
-        return _(u'%d hours ago') % (seconds/3600)
+        hours = seconds / 3600
+        ret = ungettext(
+            '%(hours)d hour ago',
+            '%(hours)d hours ago',
+            hours ) % { 'hours': hours }
+        return ret
     elif seconds > 60:
-        return _(u'%d minutes ago') % (seconds/60)
+        minutes = seconds/60
+        ret = ungettext(
+            '%(minutes)d minute ago',
+            '%(minutes)d minutes ago',
+            minutes ) % { 'minutes': minutes }
+        return ret
+    elif seconds > 0:
+        ret = ungettext(
+            '%(seconds)d second ago',
+            '%(seconds)d seconds ago',
+            seconds ) % { 'seconds': seconds }
+        return ret
     else:
-        return _(u'%d seconds ago') % (seconds)
-
-@register.filter(name='translate_remain_time')
-def translate_remain_time(value):
-    if value > 24 * 60 * 60:
-        return u'%d 天' % (value/24/3600)
-    elif value > 60 * 60:
-        return u'%d 小时' % (value/3600)
-    elif value > 60:
-        return u'%d 分钟' % (value/60)
-    else:
-        return u'%d 秒' % (value)
+        return _(u'0 second ago')
+    
+# @register.filter(name='translate_remain_time')
+# def translate_remain_time(value):
+#     if value > 24 * 60 * 60:
+#         return u'%d 天' % (value/24/3600)
+#     elif value > 60 * 60:
+#         return u'%d 小时' % (value/3600)
+#     elif value > 60:
+#         return u'%d 分钟' % (value/60)
+#     else:
+#         return u'%d 秒' % (value)
 
 @register.filter(name='email2nickname')
 def email2nickname(value):
@@ -190,8 +211,8 @@ def char2pinyin(value):
 @register.filter(name='translate_permission')
 def translate_permission(value):
     if value == 'rw':
-        return u'可读写'
+        return _(u'Read-Write')
     elif value == 'r':
-        return u'只可浏览'
+        return _(u'Read-Only')
     else:
         return ''
