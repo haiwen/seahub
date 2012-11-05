@@ -439,7 +439,7 @@ def repo_upload_file(request, repo_id):
                                                       'upload',
                                                       request.user.username)
         else:
-            return render_permission_error(request, u'无法访问该资料库')
+            return render_permission_error(request, _(u'Can not access library'))
 
         no_quota = False
         if seafserv_threaded_rpc.check_quota(repo_id) < 0:
@@ -466,7 +466,7 @@ def repo_update_file(request, repo_id):
     if request.method == 'GET':
         target_file  = request.GET.get('p')
         if not target_file:
-            return render_error(request, u'非法链接')
+            return render_error(request, _(u'Invalid url'))
         zipped = gen_path_link (target_file, repo.name)
 
         if get_user_permission(request, repo_id) == 'rw':
@@ -475,7 +475,7 @@ def repo_update_file(request, repo_id):
                                                       'update',
                                                       request.user.username)
         else:
-            return render_permission_error(request, u'无法访问该资料库')
+            return render_permission_error(request, _(u'Can not access library'))
 
         no_quota = False
         if seafserv_threaded_rpc.check_quota(repo_id) < 0:
@@ -496,19 +496,19 @@ def repo_update_file(request, repo_id):
             }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
-    err_msg = u'服务器内部错误'
+    err_msg = _(u'Internal Server Error')
     if (code == 0):
-        err_msg = u'上传的文件名包含非法字符'
+        err_msg = _(u'Filename contains invalid character')
     elif (code == 1):
-        err_msg = u'已存在同名的文件'
+        err_msg = _(u'Duplicated filename')
     elif (code == 2):
-        err_msg = u'文件不存在'
+        err_msg = _(u'File not exists')
     elif (code == 3):
-        err_msg = u'文件大小超过限制'
+        err_msg = _(u'File size surpasses the limit')
     elif (code == 4):
-        err_msg = u'该资料库所有者的空间已用完，无法上传'
+        err_msg = _(u'The space of owner is used up, upload failed')
     elif (code == 5):
-        err_msg = u'文件传输出错'
+        err_msg = _(u'An error occurs during file transfer')
     return err_msg
 
 @ctx_switch_required
@@ -519,7 +519,7 @@ def upload_file_error(request, repo_id):
         filename = request.GET.get('fn', '')
         err = request.GET.get('err')
         if not parent_dir or not err:
-            return render_error(request, u'非法链接')
+            return render_error(request, _(u'Invalid url'))
 
         zipped = gen_path_link (parent_dir, repo.name)
 
@@ -540,7 +540,7 @@ def update_file_error(request, repo_id):
         target_file = request.GET.get('p')
         err = request.GET.get('err')
         if not target_file or not err:
-            return render_error(request, u'非法链接')
+            return render_error(request, _(u'Invalid url'))
 
         zipped = gen_path_link (target_file, repo.name)
 
@@ -604,7 +604,7 @@ def repo_history(request, repo_id):
     View repo history.
     """
     if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, u'无法浏览该资料库修改历史')
+        return render_permission_error(request, _(u'Unable to view library modification'))
 
     repo = get_repo(repo_id)
 
@@ -650,7 +650,7 @@ def repo_history(request, repo_id):
 @ctx_switch_required
 def repo_view_snapshot(request, repo_id):
     if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, u'无法查看该资料库镜像')
+        return render_permission_error(request, _(u'Unable to view library snapshots'))
 
     repo = get_repo(repo_id)
 
@@ -700,7 +700,7 @@ def repo_history_revert(request, repo_id):
         raise Http404
 
     if not access_to_repo(request, repo_id):
-        return render_permission_error(request, u'您没有权限进行还原操作')
+        return render_permission_error(request, _(u'You have no permission to restore library'))
 
     password_set = False
     if repo.props.encrypted:
@@ -716,19 +716,19 @@ def repo_history_revert(request, repo_id):
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return render_error(request, u'请指定历史记录 ID')
+        return render_error(request, _(u'Please specify history ID'))
 
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
-            return render_error(request, u'非法参数')
+            return render_error(request, _(u'Invalid arguments'))
         elif e.msg == 'No such repo':
-            return render_error(request, u'资料库不存在')
+            return render_error(request, _(u'Library not exists'))
         elif e.msg == "Commit doesn't exist":
-            return render_error(request, u'指定的历史记录不存在')
+            return render_error(request, _(u'History you specified is not exists'))
         else:
-            return render_error(request, u'未知错误')
+            return render_error(request, _(u'Unknown error'))
 
     return HttpResponseRedirect(reverse(repo_history, args=[repo_id]))
 
@@ -819,7 +819,7 @@ def modify_token(request, repo_id):
 def remove_repo(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, u"该资料库不存在")
+        return render_error(request, _(u'Library not exists'))
         
     user = request.user.username
     org, base_template = check_and_get_org_by_repo(repo_id, user)
@@ -839,7 +839,7 @@ def remove_repo(request, repo_id):
                               repo_name=repo.name,
                           )
         else:
-            err_msg = u'删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。'
+            err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
             return render_permission_error(request, err_msg)
     else:
         # Remove repo in personal context, only repo owner or site staff can
@@ -855,7 +855,7 @@ def remove_repo(request, repo_id):
                               repo_name=repo.name,
                           )
         else:
-            err_msg = u'删除资料库失败, 只有管理员或资料库创建者有权删除资料库。'
+            err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
             return render_permission_error(request, err_msg)
 
     next = request.META.get('HTTP_REFERER', None)
@@ -1105,7 +1105,7 @@ def public_repo_create(request):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = u"创建失败"
+            result['error'] = _(u'Failed to create repo')
         else:
             result['success'] = True
             repo_created.send(sender=None,
@@ -1443,7 +1443,7 @@ def repo_file_get(raw_path):
                 u_content = content.decode('gbk')
                 encoding = 'gbk'
             except UnicodeDecodeError:
-                err = u'文件编码无法识别'
+                err = _(u'Unknown file encoding')
                 return err, '', '', ''
 
         file_content = u_content
@@ -1472,7 +1472,7 @@ def pdf_full_view(request):
 
 def update_file_after_edit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
-    def error_json(error_msg=u"内部错误"):
+    def error_json(error_msg=_(u'Internal Error')):
         return HttpResponse(json.dumps({'error': error_msg}),
                             status=400,
                             content_type=content_type)
@@ -1487,11 +1487,11 @@ def update_file_after_edit(request, repo_id):
     encoding = request.POST.get('encoding')
     path = request.GET.get('p')
     if content is None or not path:
-        return error_json(u"参数错误")
+        return error_json(_(u'Invalid arguments'))
     head_id = request.GET.get('head', None)
 
     if encoding not in ["gbk", "utf-8"]:
-        return error_json(u"参数错误")
+        return error_json(_(u'Invalid arguments'))
 
     content = content.encode(encoding)
 
@@ -1641,7 +1641,7 @@ def repo_download(request):
     relay_id = ccnet_rpc.get_session_info().id
     if not relay_id:
         return render_to_response('error.html', {
-                "error_msg": u"下载失败：无法取得中继"
+                "error_msg": _(u"Failed to download library, unable to find servre")
                 }, context_instance=RequestContext(request))
 
     try:
@@ -1653,7 +1653,7 @@ def repo_download(request):
     addr, port = get_ccnet_server_addr_port ()
 
     if not (addr and port):
-        return render_error(request, u"服务器设置错误")
+        return render_error(request, _(u"Invalid server setting"))
 
     ccnet_applet_root = get_ccnetapplet_root()
     email = urllib2.quote(request.user.username)
@@ -1689,8 +1689,10 @@ def file_move(request):
     if obj_type == 'dir':
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
-            error_msg = u"不能把目录 %s %s到它的子目录 %s中" \
-                        % (src_dir, u"复制" if op == 'cp' else u"移动", dst_path)
+            error_msg = _(u'Can not %(op)s directory %(src)s to its subdirectory %(des)s') \
+                        % {'op': _(u"copy") if op == 'cp' else _(u"move"),
+                           'src': src_dir,
+                           'des': dst_path}
             #return render_error(request, error_msg)
             messages.add_message(request, messages.ERROR, error_msg)
             url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
@@ -1704,12 +1706,14 @@ def file_move(request):
             seafserv_threaded_rpc.copy_file (src_repo_id, src_path, obj_name,
                                              dst_repo_id, dst_path, new_obj_name,
                                              request.user.username)
-            messages.add_message(request, messages.INFO, u'%s 复制成功：<a href="%s">查看</a>' % (obj_name, msg_url))
+            messages.success(request, _(u'Successfully copying %(name)s：<a href="%(url)s">view</a>') % \
+                                 {"name":obj_name, "url":msg_url})
         elif op == 'mv':
             seafserv_threaded_rpc.move_file (src_repo_id, src_path, obj_name,
                                              dst_repo_id, dst_path, new_obj_name,
                                              request.user.username)
-            messages.add_message(request, messages.INFO, u'%s 移动成功：<a href="%s">查看</a>' % (obj_name, msg_url))
+            messages.success(request, _(u'Successfully moving %(name)s <a href="%(url)s">view</a>') % \
+                                 {"name":obj_name, "url":msg_url})
     except Exception, e:
         return render_error(request, str(e))
 
@@ -1865,7 +1869,7 @@ def user_info(request, email):
             try:
                 seafserv_threaded_rpc.set_user_quota(email, quota)
             except:
-                result['error'] = u'内部错误，设置失败'
+                result['error'] = _(u'Failed to set quota: internal error')
                 return HttpResponse(json.dumps(result), content_type=content_type)
 
             result['success'] = True
@@ -1938,11 +1942,11 @@ def send_user_reset_email(request, email, password):
         'password': password,
         }
     try:
-        send_mail(u'密码重置', t.render(Context(c)),
+        send_mail(_(u'Password Reset'), t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, '通知邮件已成功。')
+        messages.success(request, _(u'Successfully sending mail'))
     except:
-        messages.add_message(request, messages.ERROR, '邮件发送失败。')
+        messages.error(request, _(u'Failed to send mail'))
 
 @login_required
 @sys_staff_required
@@ -1953,13 +1957,13 @@ def user_reset(request, user_id):
         user.set_password(INIT_PASSWD)
         user.save()
 
-        messages.add_message(request, messages.INFO, u'密码重置成功。')
+        messages.success(request, _(u'Successfully resetting password'))
 
         if hasattr(settings, 'EMAIL_HOST'):
             send_user_reset_email(request, user.email, INIT_PASSWD)
     except User.DoesNotExist:
-        msg  =u'密码重置失败，用户不存在。'
-        messages.add_message(request, messages.ERROR, msg)
+        msg = _(u'Failed to reset password: user does not exist')
+        messages.error(request, msg)
 
     return HttpResponseRedirect(reverse('sys_useradmin'))
     
@@ -1979,11 +1983,11 @@ def send_user_add_mail(request, email, password):
         'protocol': use_https and 'https' or 'http',
         }
     try:
-        send_mail(u'SeaCloud注册信息', t.render(Context(c)),
+        send_mail(_(u'Seafile Registration Information'), t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.add_message(request, messages.INFO, '邮件发送成功。')
+        messages.success(request, _(u'Successfully sending mail'))
     except:
-        messages.add_message(request, messages.ERROR, '邮件发送失败。')
+        messages.error(request, _(u'Failed to send mail'))
 
 @login_required
 def user_add(request):
@@ -2195,8 +2199,8 @@ def repo_rename_file(request):
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
-        messages.add_message(request, messages.INFO, u'%s 已重命名为 %s。' % \
-                                 (oldname, newname))
+        messages.success(request, _(u'Successfully rename %(old)s to %(new)s。') % \
+                             {"old":oldname, "new":newname})
     except Exception, e:
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -2251,7 +2255,7 @@ def repo_create(request):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = u"创建目录失败"
+            result['error'] = _(u"Failed to create library")
         else:
             result['success'] = True
             repo_created.send(sender=None,
@@ -2277,7 +2281,7 @@ def render_file_revisions (request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = u"资料库不存在"
+        error_msg = _(u"Library not exists")
         return render_error(request, error_msg)
 
     try:
@@ -2329,7 +2333,7 @@ def repo_revert_file (request, repo_id):
     from_page = request.GET.get('from')
 
     if not (commit_id and path and from_page):
-        return render_error(request, u"参数错误")
+        return render_error(request, _(u"Invalid arguments"))
 
     try:
         ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
@@ -2350,11 +2354,11 @@ def repo_revert_file (request, repo_id):
 
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
-            msg = u'%s 已还原到<a href="%s">根目录</a>下' % (path.lstrip('/'), root_url)
+            msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path":path.lstrip('/'), "root":root_url}
             messages.add_message(request, messages.INFO, msg)
         else:
             file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
-            msg = u'<a href="%s">%s</a> 已经还原' % (file_view_url, path.lstrip('/'))
+            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":file_view_url, "path":path.lstrip('/')}
             messages.add_message(request, messages.INFO, msg)
         return HttpResponseRedirect(url)
 
@@ -2364,7 +2368,7 @@ def repo_revert_dir (request, repo_id):
     path      = request.GET.get('p')
 
     if not (commit_id and path):
-        return render_error(request, u"参数错误")
+        return render_error(request, _(u"Invalid arguments"))
 
     try:
         ret = seafserv_threaded_rpc.revert_dir (repo_id, commit_id,
@@ -2376,11 +2380,11 @@ def repo_revert_dir (request, repo_id):
 
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
-            msg = u'%s 已还原到<a href="%s">根目录</a>下' % (path.lstrip('/'), root_url)
+            msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path":path.lstrip('/'), "url":root_url}
             messages.add_message(request, messages.INFO, msg)
         else:
             dir_view_url = reverse('repo', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
-            msg = u'<a href="%s">%s</a> 已经还原' % (dir_view_url, path.lstrip('/'))
+            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":dir_view_url, "path":path.lstrip('/')}
             messages.add_message(request, messages.INFO, msg)
         return HttpResponseRedirect(url)
 
@@ -2600,11 +2604,11 @@ def send_shared_link(request):
                 }
 
             try:
-                send_mail('您的好友通过SeaCloud分享了一个文件给您',
+                send_mail(_(u'Your friend sharing a file to you on Seafile'),
                           t.render(Context(c)), None, [to_email],
                           fail_silently=False)
             except:
-                data = json.dumps({'error':u'发送失败'})
+                data = json.dumps({'error':_(u'Failed to send mail')})
                 return HttpResponse(data, status=500, content_type=content_type)
 
         data = json.dumps("success")
@@ -2621,7 +2625,7 @@ def flash_prepare(raw_path, obj_id, doctype):
     try:
         f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
     except urllib2.URLError, e:
-        return u'内部错误', False
+        return _(u'Internal error'), False
     else:
         ret = f.read()
         ret_dict = json.loads(ret)
@@ -2792,7 +2796,7 @@ def repo_star_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not (path and state):
-        return HttpResponse(json.dumps({'success':False, 'err_msg':u'参数错误'}),
+        return HttpResponse(json.dumps({'success':False, 'err_msg':_(u'Invalid arguments')}),
                             content_type=content_type)
 
     org_id = int(request.POST.get('org_id'))

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 11:53+0800\n"
+"POT-Creation-Date: 2012-11-05 14:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,85 @@ msgstr ""
 msgid "简体中文"
 msgstr ""
 
+#: views.py:442 views.py:478
+msgid "Can not access library"
+msgstr "无法访问该资料库"
+
+#: views.py:469 views.py:522 views.py:543
+msgid "Invalid url"
+msgstr "非法链接"
+
+#: views.py:499
+msgid "Internal Server Error"
+msgstr "服务器内部错误"
+
+#: views.py:501
+msgid "Filename contains invalid character"
+msgstr "上传的文件名包含非法字符"
+
+#: views.py:503
+msgid "Duplicated filename"
+msgstr "已存在同名的文件"
+
+#: views.py:505
+msgid "File not exists"
+msgstr "文件不存在"
+
+#: views.py:507
+msgid "File size surpasses the limit"
+msgstr "文件大小超过限制"
+
+#: views.py:509
+msgid "The space of owner is used up, upload failed"
+msgstr "该资料库所有者的空间已用完，无法上传"
+
+#: views.py:511
+msgid "An error occurs during file transfer"
+msgstr "文件传输出错"
+
+#: views.py:607
+msgid "Unable to view library modification"
+msgstr "无法浏览该资料库修改历史"
+
+#: views.py:653
+msgid "Unable to view library snapshots"
+msgstr "无法查看该资料库镜像"
+
+#: views.py:703
+msgid "You have no permission to restore library"
+msgstr "你没有权限进行还原操作"
+
+#: views.py:719
+msgid "Please specify history ID"
+msgstr "请指定历史记录ID"
+
+#: views.py:725 views.py:1490 views.py:1494 views.py:2336 views.py:2371
+#: views.py:2799
+msgid "Invalid arguments"
+msgstr "非法参数"
+
+#: views.py:727 views.py:822 views.py:2284
+msgid "Library not exists"
+msgstr "资料库不存在"
+
+#: views.py:729
+msgid "History you specified is not exists"
+msgstr "指定的历史记录不存在"
+
+#: views.py:731
+msgid "Unknown error"
+msgstr "未知错误"
+
+#: views.py:842 views.py:858
+msgid ""
+"Failed to remove library. Only staff or owner can perform this operation."
+msgstr ""
+"删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
+
+#: views.py:1108
+msgid "Failed to create repo"
+msgstr "创建失败"
+
 #: views.py:1126
 msgid "Operation successful"
 msgstr "操作成功"
@@ -162,21 +241,124 @@ msgstr "%s 删除成功。"
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1751 views.py:1761
+#: views.py:1446
+msgid "Unknown file encoding"
+msgstr "文件编码无法识别"
+
+#: views.py:1475
+msgid "Internal Error"
+msgstr "内部错误"
+
+#: views.py:1644
+msgid "Failed to download library, unable to find servre"
+msgstr "下载失败：找不到服务器"
+
+#: views.py:1656
+msgid "Invalid server setting"
+msgstr "服务器设置错误"
+
+#: views.py:1692
+#, python-format
+msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
+msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
+
+#: views.py:1693
+msgid "copy"
+msgstr "复制"
+
+#: views.py:1693
+msgid "move"
+msgstr "移动"
+
+#: views.py:1709
+#, python-format
+msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
+msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
+
+#: views.py:1715
+#, python-format
+msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
+msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
+
+#: views.py:1755 views.py:1765
 msgid "Remove share failed"
 msgstr "取消共享失败"
 
-#: views.py:1757
+#: views.py:1761
 msgid "group id is not valid"
 msgstr "group id 无效"
 
-#: views.py:1770
+#: views.py:1774
 msgid "Remove share successful"
 msgstr "取消共享成功"
 
-#: views.py:2561 views.py:2569
+#: views.py:1872
+msgid "Failed to set quota: internal error"
+msgstr "内部错误，设置失败"
+
+#: views.py:1945 templates/sys_useradmin.html:31
+#: templates/registration/password_reset_confirm.html:4
+#: templates/registration/password_reset_form.html:4
+#: templates/registration/password_reset_form.html:7
+msgid "Password Reset"
+msgstr "密码重置"
+
+#: views.py:1947 views.py:1988
+msgid "Successfully sending mail"
+msgstr "邮件发送成功"
+
+#: views.py:1949 views.py:1990 views.py:2611
+msgid "Failed to send mail"
+msgstr "邮件发送失败"
+
+#: views.py:1960
+msgid "Successfully resetting password"
+msgstr "密码重置成功"
+
+#: views.py:1965
+msgid "Failed to reset password: user does not exist"
+msgstr "密码重置失败：用户不存在"
+
+#: views.py:1986
+msgid "Seafile Registration Information"
+msgstr "Seafile注册信息"
+
+#: views.py:2202
+#, python-format
+msgid "Successfully rename %(old)s to %(new)s。"
+msgstr "%(old)s 已重命名为 %(new)s"
+
+#: views.py:2258
+msgid "Failed to create library"
+msgstr "创建资料库失败"
+
+#: views.py:2357
+#, python-format
+msgid ""
+"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
+msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
+
+#: views.py:2361 views.py:2387
+#, python-format
+msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
+msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
+
+#: views.py:2383
+#, python-format
+msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
+msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
+
+#: views.py:2565 views.py:2573
 msgid "Remove successful"
 msgstr "删除成功"
+
+#: views.py:2607
+msgid "Your friend sharing a file to you on Seafile"
+msgstr "您的好友通过Seafile分享了一个文件给您"
+
+#: views.py:2628
+msgid "Internal error"
+msgstr "内部错误"
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -1100,13 +1282,6 @@ msgstr "已激活"
 #: templates/sys_useradmin.html:26
 msgid "Active"
 msgstr "激活"
-
-#: templates/sys_useradmin.html:31
-#: templates/registration/password_reset_confirm.html:4
-#: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:7
-msgid "Password Reset"
-msgstr "密码重置"
 
 #: templates/sys_useradmin.html:77
 msgid "Really reset?"
