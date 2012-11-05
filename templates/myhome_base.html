@@ -7,11 +7,6 @@
     <li>
         <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>{% trans "My Home" %}</a>
     </li>
-    {% if not cloud_mode %}
-    <li>
-        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>{% trans "Public Library" %}</a>
-    </li>
-    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>{% trans "Groups" %}</a>
     </li>
@@ -22,6 +17,9 @@
         <a href="{{ SITE_ROOT }}contacts/" {% block nav_contacts_class %}{% endblock %}>{% trans "Contacts" %}</a>
     </li>
     {% if not cloud_mode %}
+    <li>
+        <a href="{% url 'public_home' %}" {% block nav_publichome_class %}{% endblock %}>{% trans "Public Library" %}</a>
+    </li>
     <li>
         <a href="{% url 'seahub.views.pubinfo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Public Info" %}</a>
     </li>
