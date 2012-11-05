@@ -22,6 +22,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.base import TemplateView, TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
@@ -1122,10 +1123,9 @@ def public_repo_create(request):
 def unset_inner_pub_repo(request, repo_id):
     try:
         seafserv_threaded_rpc.unset_inner_pub_repo(repo_id)
+        messages.success(request, _('Operation successful'))
     except SearpcError:
-        pass
-
-    messages.add_message(request, messages.INFO, '操作成功')
+        messages.error(request, _('Operation failed'))
 
     return HttpResponseRedirect(reverse('share_admin'))
 
@@ -1748,17 +1748,17 @@ def repo_remove_share(request):
         to_email = request.GET.get('to', '')
         if request.user.username != from_email and \
                 request.user.username != to_email:
-            return render_permission_error(request, u'取消共享失败')
+            return render_permission_error(request, _(u'Remove share failed'))
         seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
     else:
         try:
             group_id_int = int(group_id)
         except:
-            return render_error(request, u'group id 不是有效参数')
+            return render_error(request, _(u'group id is not valid'))
 
         if not check_group_staff(group_id_int, request.user) \
                 and request.user.username != from_email: 
-            return render_permission_error(request, u'取消共享失败')
+            return render_permission_error(request, _(u'Remove share failed'))
 
         if is_org_group(group_id_int):
             org_id = get_org_id_by_group(group_id_int)
@@ -1767,7 +1767,7 @@ def repo_remove_share(request):
             from group.views import group_unshare_repo
             group_unshare_repo(request, repo_id, group_id_int, from_email)
 
-    messages.add_message(request, messages.INFO, '操作成功')
+    messages.success(request, _('Remove share successful'))
         
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -2558,7 +2558,7 @@ def remove_shared_link(request):
         if not next:
             next = reverse('share_admin')
 
-        messages.add_message(request, messages.INFO, u'删除成功')
+        messages.success(request, _(u'Remove successful'))
         
         return HttpResponseRedirect(next)
 
@@ -2566,7 +2566,7 @@ def remove_shared_link(request):
     
     FileShare.objects.filter(token=token).delete()
 
-    msg = '删除成功'
+    msg = _('Remove successful')
     data = json.dumps([{'msg': msg}])
     return HttpResponse(data, status=200, content_type=content_type)
     

@@ -53,16 +53,16 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
           {% if repo.props.share_type == 'group' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Revoke"%}</a>
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
           {% if repo.props.share_type == 'personal' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">{% trans "Revoke"%}</a>
+          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
 	  {% if repo.props.share_type == 'public' %}
 	      {% if not org %}
-	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Revoke"%}</a>
+	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	      {% else %}
-	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Revoke"%}</a>
+	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	      {% endif %}
           {% endif %}
         </td>

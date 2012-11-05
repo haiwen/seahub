@@ -4,9 +4,6 @@
 {#if !$T.err_msg}
 <div class="pic fleft">
     <img class="avatar" width="80" height="80" alt="{$T.email}" />
-    {#if $T.new_user}
-    <button id="add-as-contact">{% trans "Add as contact" %}</button>
-    {#/if}
 </div>
 
 <div class="txt fright">
@@ -18,6 +15,10 @@
 
     {#if $T.user_intro}
     <p class="intro">{$T.user_intro}</p>
+    {#/if}
+
+    {#if $T.new_user}
+    <button id="add-as-contact">{% trans "Add to contacts" %}</button>
     {#/if}
 </div>
 

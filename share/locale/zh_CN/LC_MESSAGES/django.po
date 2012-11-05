@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 17:37+0800\n"
+"POT-Creation-Date: 2012-11-05 11:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,7 +147,7 @@ msgstr "编辑"
 
 #: templates/repo/share_admin.html:56 templates/repo/share_admin.html.py:59
 #: templates/repo/share_admin.html:63 templates/repo/share_admin.html.py:65
-msgid "Revoke"
+msgid "Unshare"
 msgstr "取消共享"
 
 #: templates/repo/share_admin.html:74
@@ -158,8 +158,7 @@ msgstr "你还没有共享任何资料库"
 msgid ""
 "Share library to your friends and colleagues by clicking the \"Share\" icon "
 "near the library."
-msgstr ""
-"点击资料库旁的“共享”图标将你的资料库共享给你的朋友和同事。"
+msgstr "点击资料库旁的“共享”图标将你的资料库共享给你的朋友和同事。"
 
 #: templates/repo/share_admin.html:79
 msgid "Links"
@@ -207,3 +206,5 @@ msgstr "权限修改失败"
 msgid "edit failed"
 msgstr "权限修改失败"
 
+#~ msgid "Revoke"
+#~ msgstr "取消共享"

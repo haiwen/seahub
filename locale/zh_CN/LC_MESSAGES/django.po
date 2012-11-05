@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-04 13:28+0800\n"
+"POT-Creation-Date: 2012-11-05 11:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,19 +140,43 @@ msgstr ""
 msgid "简体中文"
 msgstr ""
 
-#: views.py:1158
+#: views.py:1126
+msgid "Operation successful"
+msgstr "操作成功"
+
+#: views.py:1128
+msgid "Operation failed"
+msgstr "操作失败"
+
+#: views.py:1159
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1165
+#: views.py:1166
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1167
+#: views.py:1168
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
+
+#: views.py:1751 views.py:1761
+msgid "Remove share failed"
+msgstr "取消共享失败"
+
+#: views.py:1757
+msgid "group id is not valid"
+msgstr "group id 无效"
+
+#: views.py:1770
+msgid "Remove share successful"
+msgstr "取消共享成功"
+
+#: views.py:2561 views.py:2569
+msgid "Remove successful"
+msgstr "删除成功"
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -165,7 +189,7 @@ msgstr "添加新用户"
 #: templates/add_user_form.html:9 templates/sys_useradmin.html:15
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
-#: templates/snippets/user_profile_html.html:27
+#: templates/snippets/user_profile_html.html:28
 msgid "Email"
 msgstr "邮箱"
 
@@ -195,7 +219,7 @@ msgstr "确认密码"
 #: templates/snippets/group_recommend_form.html:23
 #: templates/snippets/repo_create_form.html:23
 #: templates/snippets/repo_share_form.html:18
-#: templates/snippets/user_profile_html.html:33
+#: templates/snippets/user_profile_html.html:34
 msgid "Submit"
 msgstr "提交"
 
@@ -308,7 +332,7 @@ msgstr "海文互知"
 msgid "Contact Us"
 msgstr "联系我们"
 
-#: templates/base.html:143
+#: templates/base.html:143 templates/snippets/myhome_extra_script.html:31
 msgid "Really want to delete?"
 msgstr "确定要删除？"
 
@@ -510,8 +534,8 @@ msgid "Creator: "
 msgstr "创建者："
 
 #: templates/pubinfo.html:34
-msgid "Create Time: "
-msgstr "创建时间："
+msgid "Time: "
+msgstr "时间："
 
 #: templates/pubinfo.html:40
 msgid ""
@@ -524,7 +548,8 @@ msgid "Tips"
 msgstr "小提示"
 
 #: templates/public_home.html:10
-msgid "Libraries mark as read-only can only be viewing, can not be downloaded."
+msgid ""
+"Libraries marked as read-only can only be viewing, can not be downloaded."
 msgstr "标记为只读的资料库只能查看，无法整个下载。"
 
 #: templates/public_home.html:15
@@ -580,10 +605,17 @@ msgstr "可读写"
 msgid "Read-Only"
 msgstr "只读"
 
-#: templates/public_home.html:53
+#: templates/public_home.html:54
+msgid "No public library"
+msgstr "当前没有公共资料"
+
+#: templates/public_home.html:55
 msgid ""
-"You can create a public library, others can view and download this library."
-msgstr "你可以新建一个公开的资料库，网站内的其他人都可以查看下载这个资料库。"
+"You can create a public library by clicking \"New Library\" button, others "
+"can view and download this library."
+msgstr ""
+"你可以点击“新建资料库”按钮创建一个公开的资料库，网站内的其他人都可以查看下载"
+"这个资料库。"
 
 #: templates/repo.html:11
 msgid ""
@@ -1378,8 +1410,8 @@ msgid "Shared By"
 msgstr "共享来源"
 
 #: templates/snippets/my_owned_repos.html:84
-msgid "Remove Share"
-msgstr "取消共享"
+msgid "Leave Share"
+msgstr "退出共享"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
@@ -1414,8 +1446,8 @@ msgid "Input cannot be empty"
 msgstr "输入不能为空"
 
 #: templates/snippets/myhome_extra_script.html:33
-msgid "Really remove this shared library?"
-msgstr "确定要还原这个资料库？"
+msgid "Really want to leave share?"
+msgstr "确定要退出共享？"
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -1450,17 +1482,23 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 msgid "Tip: type all to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
 
-#: templates/snippets/user_profile_html.html:8
-msgid "Add as contact"
+#: templates/snippets/user_profile_html.html:21
+msgid "Add to contacts"
 msgstr "加为联系人"
 
-#: templates/snippets/user_profile_html.html:29
+#: templates/snippets/user_profile_html.html:30
 msgid "Name(optional)"
 msgstr "名字(可选)"
 
-#: templates/snippets/user_profile_html.html:31
+#: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Create Time: "
+#~ msgstr "创建时间："
+
+#~ msgid "Really remove this shared library?"
+#~ msgstr "确定要取消共享这个资料库？"
 
 #~ msgid "Personal Account"
 #~ msgstr "个人帐号"

@@ -7,7 +7,7 @@
 {% block left_panel %}
 <div class="info-item">
 <h3 class="info-item-top">{% trans "Tips"%}</h3>
-<p class="info-item-bottom">{% trans "Libraries mark as read-only can only be viewing, can not be downloaded."%}</p>
+<p class="info-item-bottom">{% trans "Libraries marked as read-only can only be viewing, can not be downloaded."%}</p>
 </div>
 {% endblock %}
 
@@ -19,10 +19,10 @@
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name"%}</th>
-        <th width="36%">{% trans "Description"%}</th>
+        <th width="33%">{% trans "Description"%}</th>
         <th width="15%">{% trans "Last Update"%}</th>
         <th width="15%">{% trans "Share From"%}</th>
-        <th width="10%">{% trans "Operations"%}</th>
+        <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in public_repos %}
     <tr>
@@ -50,7 +50,10 @@
     {% endfor %}
 </table>
 {% else %}
-<p class="empty-repo-tips">{% trans "You can create a public library, others can view and download this library."%}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "No public library" %}</h2>
+  <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
+</div>
 {% endif %}
 <!-- /.main -->
 {% include "snippets/repo_create_form.html" %}

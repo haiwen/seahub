@@ -28,9 +28,9 @@ $(function() {
         }
     });
 
-    addConfirmTo($('.repo-delete-btn'));
+    addConfirmTo($('.repo-delete-btn'), '{% trans "Really want to delete?" %}');
     
-    addConfirmTo($('.unshare-btn'), '{% trans "Really remove this shared library?" %}');
+    addConfirmTo($('.unshare-btn'), '{% trans "Really want to leave share?" %}');
 
     $(".download-btn").click(function() {
             window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
