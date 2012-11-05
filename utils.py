@@ -380,8 +380,17 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
     last_modified = 0
     last_commit_id = ''
     try:
-        fc = FileContributors.objects.get(repo_id=repo_id,
-                                          file_path_hash=file_path_hash)
+        # HACK: Fixed the unique key bug in 1.1
+        # Should be removed in future
+        fc = FileContributors.objects.filter(repo_id=repo_id,
+                                file_path_hash=file_path_hash)
+        if not fc:
+            raise FileContributors.DoesNotExist
+        else:
+            if len(fc) > 1:
+                for e in fc[1:]:
+                    e.delete()
+            fc = fc[0]
     except FileContributors.DoesNotExist:
         # has no cache yet
         contributors, last_modified, last_commit_id = get_file_contributors_from_revisions (repo_id, file_path)
