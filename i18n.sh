@@ -12,8 +12,12 @@ function usage () {
     echo
 }
 
-apps="avatar base contacts group notifications organizations profile share"
+apps="avatar base contacts group notifications organizations profile share thirdpart/auth"
 function is_valid_app() {
+    if [[ $1 == "seahub" ]]; then
+        return 0;
+    fi
+
     for app in ${apps}; do
         if [[ $1 == $app ]]; then
             return 0;
