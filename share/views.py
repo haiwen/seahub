@@ -14,16 +14,18 @@ from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
 from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
     ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
-    is_personal_repo
+    is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
+    del_org_group_repo
 
-from forms import RepoShareForm
+from forms import RepoShareForm, FileLinkShareForm
 from models import AnonymousShare
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
-from seahub.utils import render_permission_error, string2list
+from seahub.utils import render_permission_error, string2list, render_error, \
+    gen_token
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -132,6 +134,51 @@ def share_repo(request):
                 messages.add_message(request, messages.INFO, msg)
                
     return HttpResponseRedirect(reverse('myhome'))
+
+@login_required
+def repo_remove_share(request):
+    """
+    If repo is shared from one person to another person, only these two peson
+    can remove share.
+    If repo is shared from one person to a group, then only the one share the
+    repo and group staff can remove share.
+    """
+    repo_id = request.GET.get('repo_id', '')
+    group_id = request.GET.get('gid', '')
+    from_email = request.GET.get('from', '')
+    
+    # if request params don't have 'gid', then remove repos that share to
+    # to other person; else, remove repos that share to groups
+    if not group_id:
+        to_email = request.GET.get('to', '')
+        if request.user.username != from_email and \
+                request.user.username != to_email:
+            return render_permission_error(request, _(u'Failed to remove share'))
+        seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
+    else:
+        try:
+            group_id_int = int(group_id)
+        except:
+            return render_error(request, _(u'group id is not valid'))
+
+        if not check_group_staff(group_id_int, request.user) \
+                and request.user.username != from_email: 
+            return render_permission_error(request, _(u'Failed to remove share'))
+
+        if is_org_group(group_id_int):
+            org_id = get_org_id_by_group(group_id_int)
+            del_org_group_repo(repo_id, org_id, group_id_int)
+        else:
+            from group.views import group_unshare_repo
+            group_unshare_repo(request, repo_id, group_id_int, from_email)
+
+    messages.success(request, _('Successfully removed share'))
+        
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+
+    return HttpResponseRedirect(next)
 
 @login_required
 def share_admin(request):
@@ -319,4 +366,112 @@ def remove_anonymous_share(request, token):
     messages.add_message(request, messages.INFO, _(u'Deleted successfully.'))
     
     return HttpResponseRedirect(next)
+
+@login_required
+def get_shared_link(request):
+    """
+    Handle ajax request to generate file shared link.
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    
+    repo_id = request.GET.get('repo_id')
+    obj_id = request.GET.get('obj_id')
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+
+    l = FileShare.objects.filter(repo_id=repo_id).filter(
+        username=request.user.username).filter(path=path)
+    if len(l) > 0:
+        fileshare = l[0]
+        token = fileshare.token
+    else:
+        token = gen_token(max_length=10)
+        
+        fs = FileShare()
+        fs.username = request.user.username
+        fs.repo_id = repo_id
+        fs.path = path
+        fs.token = token
+
+        try:
+            fs.save()
+        except IntegrityError, e:
+            err = _('Failed to get shared link, please retry.')
+            data = json.dumps([{'error': err}])
+            return HttpResponse(data, status=500, content_type=content_type)
+    
+    data = json.dumps([{'token': token}])
+    return HttpResponse(data, status=200, content_type=content_type)
+
+@login_required
+def remove_shared_link(request):
+    """
+    Handle request to remove file shared link.
+    """
+    token = request.GET.get('t', '')
+    
+    if not request.is_ajax():
+        FileShare.objects.filter(token=token).delete()
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = reverse('share_admin')
+
+        messages.success(request, _(u'Removed successfully'))
+        
+        return HttpResponseRedirect(next)
+
+    content_type = 'application/json; charset=utf-8'
+    
+    FileShare.objects.filter(token=token).delete()
+
+    msg = _('Removed successfully')
+    data = json.dumps([{'msg': msg}])
+    return HttpResponse(data, status=200, content_type=content_type)
+    
+@login_required
+def send_shared_link(request):
+    """
+    Handle ajax post request to send file shared link.
+    """
+    if not request.is_ajax() and not request.method == 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    form = FileLinkShareForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        file_shared_link = form.cleaned_data['file_shared_link']
+
+        t = loader.get_template('shared_link_email.html')
+        to_email_list = string2list(email)
+        for to_email in to_email_list:
+            # Add email to contacts.
+            mail_sended.send(sender=None, user=request.user.username,
+                             email=to_email)
+
+            c = {
+                'email': request.user.username,
+                'to_email': to_email,
+                'file_shared_link': file_shared_link,
+                }
+
+            try:
+                send_mail(_(u'Your friend sharing a file to you on Seafile'),
+                          t.render(Context(c)), None, [to_email],
+                          fail_silently=False)
+            except:
+                data = json.dumps({'error':_(u'Failed to send mail')})
+                return HttpResponse(data, status=500, content_type=content_type)
+
+        data = json.dumps("success")
+        return HttpResponse(data, status=200, content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
 

@@ -69,9 +69,9 @@
         {% if not view_history %}
         <div class="file-op fright">
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
-            <button data="{{ SITE_ROOT }}sharedlink/get/?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">{% trans "Share link"%}</button>
+            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">{% trans "Share link"%}</button>
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
-            <button data="{{ SITE_ROOT }}sharedlink/remove/?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+            <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% if is_starred %}
             <button id="star" data="starred">{% trans "Unstar"%}</button>
             {% else %}
@@ -135,8 +135,8 @@
 
     {% if not view_history %}
     <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
-        <label>{% trans "Emails(seperated with ,)"%}</label><br />
-        <textarea id="email" name="email"></textarea><br />
+        <label>{% trans "Emails"%}</label><br />
+        <textarea id="email" name="email" placeholder="{% trans "Emails, Seperate by ','"%}"></textarea><br />
         <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <p class="error hide"></p>
@@ -242,7 +242,8 @@ $('#get-shared-link').click(function() {
                     shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
                 $('#shared-link').val(shared_link);
                 setLinkWidth();
-                $('#rm-shared-link').attr('data', '{{ SITE_ROOT }}sharedlink/remove/?t='+t);
+                var remove_link = '{% url 'remove_shared_link' %}';
+                $('#rm-shared-link').attr('data', remove_link + '?t=' + t);
                 $('input[name="file_shared_link"]').val(shared_link);
                 showLink();
             }
@@ -290,7 +291,7 @@ $("#link-send-form").submit(function(event) {
 
        $.ajax({
            type: "POST",
-           url: "{% url 'seahub.views.send_shared_link' %}",
+           url: "{% url 'send_shared_link' %}",
            dataType: 'json',
            cache: false,
            contentType: 'application/json; charset=utf-8',

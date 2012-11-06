@@ -40,17 +40,6 @@ class AddUserForm(forms.Form):
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 
-class FileLinkShareForm(forms.Form):
-    """
-    Form for sharing file shared link to emails.
-    """
-
-    email = forms.CharField(max_length=512, error_messages={
-            'required': _("Email is required"),
-            'max_length': _("Email is not longer than 512 characters"),
-            })
-    file_shared_link = forms.CharField()
-
 class FileCommentForm(forms.Form):
     """
     Form for leave comments on file.

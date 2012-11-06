@@ -59,11 +59,11 @@ from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
 from notifications.models import UserNotification
 from profile.models import Profile
-from forms import AddUserForm, FileLinkShareForm, RepoCreateForm, \
-    RepoNewDirForm, RepoNewFileForm, FileCommentForm, RepoRenameFileForm, \
-    RepoPassowrdForm, SharedRepoCreateForm, SetUserQuotaForm
+from forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
+    FileCommentForm, RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
+    SetUserQuotaForm
 from utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, gen_token, \
+    get_httpserver_root, get_ccnetapplet_root, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
@@ -1423,15 +1423,15 @@ def repo_file_get(raw_path):
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            err = '文件超过10M，无法在线查看。'
+            err = _(u'File size surpasses 10M, can not be previewed online.')
             return err, '', '', ''
         else:
             content = file_response.read()
     except urllib2.HTTPError, e:
-        err = 'HTTPError: 无法在线打开该文件'
+        err = _(u'HTTPError: failed to open file online')
         return err, '', '', ''
     except urllib2.URLError as e:
-        err = 'URLError: 无法在线打开该文件'
+        err = _(u'URLError: failed to open file online')
         return err, '', '', ''
     else:
         try:
@@ -1734,50 +1734,6 @@ def seafile_access_check(request):
         },
         context_instance=RequestContext(request))
 
-@login_required
-def repo_remove_share(request):
-    """
-    If repo is shared from one person to another person, only these two peson
-    can remove share.
-    If repo is shared from one person to a group, then only the one share the
-    repo and group staff can remove share.
-    """
-    repo_id = request.GET.get('repo_id', '')
-    group_id = request.GET.get('gid')
-    from_email = request.GET.get('from', '')
-    
-    # if request params don't have 'gid', then remove repos that share to
-    # to other person; else, remove repos that share to groups
-    if not group_id:
-        to_email = request.GET.get('to', '')
-        if request.user.username != from_email and \
-                request.user.username != to_email:
-            return render_permission_error(request, _(u'Remove share failed'))
-        seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
-    else:
-        try:
-            group_id_int = int(group_id)
-        except:
-            return render_error(request, _(u'group id is not valid'))
-
-        if not check_group_staff(group_id_int, request.user) \
-                and request.user.username != from_email: 
-            return render_permission_error(request, _(u'Remove share failed'))
-
-        if is_org_group(group_id_int):
-            org_id = get_org_id_by_group(group_id_int)
-            del_org_group_repo(repo_id, org_id, group_id_int)
-        else:
-            from group.views import group_unshare_repo
-            group_unshare_repo(request, repo_id, group_id_int, from_email)
-
-    messages.success(request, _('Remove share successful'))
-        
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-
-    return HttpResponseRedirect(next)
     
 @login_required
 @sys_staff_required
@@ -2431,46 +2387,6 @@ def file_revisions(request, repo_id):
         except Exception, e:
             return render_error(request, str(e))
 
-@login_required
-def get_shared_link(request):
-    """
-    Handle ajax request to generate file shared link.
-    """
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-    
-    repo_id = request.GET.get('repo_id')
-    obj_id = request.GET.get('obj_id')
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
-
-    l = FileShare.objects.filter(repo_id=repo_id).filter(\
-        username=request.user.username).filter(path=path)
-    if len(l) > 0:
-        fileshare = l[0]
-        token = fileshare.token
-    else:
-        token = gen_token(max_length=10)
-        
-        fs = FileShare()
-        fs.username = request.user.username
-        fs.repo_id = repo_id
-        fs.path = path
-        fs.token = token
-
-        try:
-            fs.save()
-        except IntegrityError, e:
-            err = '获取分享链接失败，请重新获取'
-            data = json.dumps([{'error': err}])
-            return HttpResponse(data, status=500, content_type=content_type)
-    
-    data = json.dumps([{'token': token}])
-    return HttpResponse(data, status=200, content_type=content_type)
-
 def view_shared_file(request, token):
     """
     Preview file via shared link.
@@ -2498,7 +2414,7 @@ def view_shared_file(request, token):
         obj_id = None
 
     if not obj_id:
-        return render_error(request, '文件不存在')
+        return render_error(request, _(u'File not exists'))
     
     repo = get_repo(repo_id)
     if not repo:
@@ -2549,73 +2465,6 @@ def view_shared_file(request, token):
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
 
-@login_required
-def remove_shared_link(request):
-    """
-    Handle request to remove file shared link.
-    """
-    token = request.GET.get('t', '')
-    
-    if not request.is_ajax():
-        FileShare.objects.filter(token=token).delete()
-        next = request.META.get('HTTP_REFERER', None)
-        if not next:
-            next = reverse('share_admin')
-
-        messages.success(request, _(u'Remove successful'))
-        
-        return HttpResponseRedirect(next)
-
-    content_type = 'application/json; charset=utf-8'
-    
-    FileShare.objects.filter(token=token).delete()
-
-    msg = _('Remove successful')
-    data = json.dumps([{'msg': msg}])
-    return HttpResponse(data, status=200, content_type=content_type)
-    
-@login_required
-def send_shared_link(request):
-    """
-    Handle ajax post request to send file shared link.
-    """
-    if not request.is_ajax() and not request.method == 'POST':
-        raise Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    form = FileLinkShareForm(request.POST)
-    if form.is_valid():
-        email = form.cleaned_data['email']
-        file_shared_link = form.cleaned_data['file_shared_link']
-
-        t = loader.get_template('shared_link_email.html')
-        to_email_list = string2list(email)
-        for to_email in to_email_list:
-            # Add email to contacts.
-            mail_sended.send(sender=None, user=request.user.username,
-                             email=to_email)
-
-            c = {
-                'email': request.user.username,
-                'to_email': to_email,
-                'file_shared_link': file_shared_link,
-                }
-
-            try:
-                send_mail(_(u'Your friend sharing a file to you on Seafile'),
-                          t.render(Context(c)), None, [to_email],
-                          fail_silently=False)
-            except:
-                data = json.dumps({'error':_(u'Failed to send mail')})
-                return HttpResponse(data, status=500, content_type=content_type)
-
-        data = json.dumps("success")
-        return HttpResponse(data, status=200, content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
-                                      content_type=content_type)
 
 def flash_prepare(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'

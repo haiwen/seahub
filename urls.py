@@ -4,7 +4,6 @@ from django.views.generic.simple import direct_to_template
 
 from seahub.views import *
 from notifications.views import notification_list
-from share.views import share_admin
 from group.views import GroupListView
 
 # Uncomment the next two lines to enable the admin:
@@ -31,15 +30,6 @@ urlpatterns = patterns('',
     url(r'^home/public/reply/new/$', innerpub_msg_reply_new, name='innerpub_msg_reply_new'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
-    (r'^share/', include('share.urls')),
-    (r'^api/', include('api.urls')),
-    url(r'^shareadmin/$', share_admin, name='share_admin'),
-    (r'^shareadmin/removeshare/$', repo_remove_share),
-    (r'^sharedlink/get/$', get_shared_link),
-    (r'^sharedlink/remove/$', remove_shared_link),
-    (r'^sharedlink/send/$', send_shared_link),
-    url(r'^f/(?P<token>[^/]+)/$', view_shared_file, name='view_shared_file'),
-                       
     (r'^repo/new_dir/$', repo_new_dir),
     (r'^repo/new_file/$', repo_new_file),
     (r'^repo/create/$', repo_create),
@@ -68,6 +58,7 @@ urlpatterns = patterns('',
     (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
+    url(r'^f/(?P<token>[^/]+)/$', view_shared_file, name='view_shared_file'),
     (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^publicrepo/create/$', public_repo_create),
     (r'^file_comment/$', file_comment),
@@ -86,18 +77,18 @@ urlpatterns = patterns('',
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
     (r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset),
 
-    ### Apps ###                       
+    ### Apps ###
+    (r'^api/', include('api.urls')),
     (r'^avatar/', include('avatar.urls')),
     (r'^notification/', include('notifications.urls')),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
     url(r'^groups/', GroupListView.as_view(), name='group_list'),
-    # url(r'^deptgroups/', DeptGroupListView.as_view(), name='dept_group_list'),
-    # url(r'^projgroups/', ProjGroupListView.as_view(), name='proj_group_list'),
     (r'^profile/', include('seahub.profile.urls')),
+    (r'^share/', include('share.urls')),
 
-    ### SeaHub admin ###                       
+    ### system admin ###                       
     (r'^sys/seafadmin/$', sys_seafadmin),
     url(r'^sys/useradmin/$', sys_useradmin, name='sys_useradmin'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),

@@ -2,7 +2,7 @@
 {% load seahub_tags i18n %}
 {% load url from future %}
 
-{% block nav_shareadmin_class %}class="cur"{% endblock %}
+{% block nav_share_class %}class="cur"{% endblock %}
 
 {% if org %}
 {% block title_panel %}
@@ -53,10 +53,10 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
           {% if repo.props.share_type == 'group' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
           {% if repo.props.share_type == 'personal' %}
-          <a href="#" data="{{ SITE_ROOT }}shareadmin/removeshare/?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">{% trans "Unshare"%}</a>
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user }}&to={{ repo.props.user }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
 	  {% if repo.props.share_type == 'public' %}
 	      {% if not org %}
@@ -92,7 +92,7 @@
     <td>{{ fs.view_cnt }}</td>
     <td>
         <a href="#" class="op view-link" data="{{ fs.token }}">{% trans "View" %}</a>
-        <a class="op" href="{{ SITE_ROOT }}sharedlink/remove/?t={{ fs.token }}">{% trans "Remove"%}</a>
+        <a class="op" href="{% url 'remove_shared_link' %}?t={{ fs.token }}">{% trans "Remove"%}</a>
     </td>
   </tr>
   {% endfor %}
