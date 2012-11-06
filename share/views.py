@@ -331,7 +331,7 @@ def anonymous_share(request, email_template_name='repo/anonymous_share_email.htm
             }
 
         try:
-            send_mail(_(u'You are shared with a library in SeaCloud'), t.render(Context(c)), None,
+            send_mail(_(u'You are shared with a library in Seafile'), t.render(Context(c)), None,
                       [anon_email], fail_silently=False)
         except:
             AnonymousShare.objects.filter(token=token).delete()

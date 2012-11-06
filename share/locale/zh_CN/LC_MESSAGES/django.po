@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 11:43+0800\n"
+"POT-Creation-Date: 2012-11-06 13:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: views.py:59
+#: forms.py:19
+msgid "Email is required"
+msgstr "请输入邮箱"
+
+#: forms.py:20
+msgid "Email is not longer than 512 characters"
+msgstr "邮箱不能超过512个字符"
+
+#: views.py:61
 msgid "Only the owner of the library has permission to share it."
 msgstr "只有资料库拥有者才有共享权限。"
 
-#: views.py:71
+#: views.py:73
 msgid "Failed to share to all members"
 msgstr "共享到公共资料失败"
 
-#: views.py:75
+#: views.py:77
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享管理</a> 查看。"
 
-#: views.py:95
+#: views.py:97
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
@@ -39,22 +47,22 @@ msgid ""
 msgstr ""
 "共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
 
-#: views.py:101
+#: views.py:103
 #, python-format
 msgid "Failed to share to %s，as it does not exists."
 msgstr "共享到 %s 失败，该小组不存在。"
 
-#: views.py:114
+#: views.py:116
 #, python-format
 msgid "Failed to share to %s ."
 msgstr "共享给 %s 失败。"
 
-#: views.py:126
+#: views.py:128
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "共享给 %s 失败，该邮件尚未注册。"
+msgstr "共享给 %s 失败，该用户尚未注册。"
 
-#: views.py:130
+#: views.py:132
 #, python-format
 msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
@@ -62,36 +70,48 @@ msgid ""
 msgstr ""
 "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
 
-#: views.py:164
+#: views.py:156 views.py:166
+msgid "Failed to remove share"
+msgstr "取消共享失败"
+
+#: views.py:162
+msgid "group id is not valid"
+msgstr "无效的group id"
+
+#: views.py:175
+msgid "Successfully removed share"
+msgstr "取消共享成功"
+
+#: views.py:211
 msgid "all members"
 msgstr "所有成员"
 
-#: views.py:170 templates/repo/share_admin.html:36
+#: views.py:217 templates/repo/share_admin.html:36
 #: templates/repo/share_admin.html.py:49
 msgid "Read-Write"
 msgstr "可读写"
 
-#: views.py:172 templates/repo/share_admin.html:47
+#: views.py:219 templates/repo/share_admin.html:47
 msgid "Read-Only"
 msgstr "只可浏览"
 
-#: views.py:254
+#: views.py:301
 #, python-format
 msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr "共享给 %s 失败， 加密的资料库不能共享给站外邮箱。"
 
-#: views.py:269 views.py:291
+#: views.py:316 views.py:338
 #, python-format
 msgid "Failed to share to %s."
 msgstr "共享给 %s 失败。"
 
-#: views.py:287
-msgid "You are shared with a library in SeaCloud"
-msgstr "有人通过SeaCloud共享了一个资料库给你"
+#: views.py:334
+msgid "You are shared with a library in Seafile"
+msgstr "有人在Seafile上共享了一个资料库给你"
 
-#: views.py:294
+#: views.py:341
 #, python-format
 msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
@@ -99,9 +119,25 @@ msgid ""
 msgstr ""
 "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享管理</a> 查看。"
 
-#: views.py:319
+#: views.py:366
 msgid "Deleted successfully."
 msgstr "删除成功"
+
+#: views.py:403
+msgid "Failed to get shared link, please retry."
+msgstr "获取分享链接失败，请重新获取"
+
+#: views.py:423 views.py:431
+msgid "Removed successfully"
+msgstr "删除成功"
+
+#: views.py:465
+msgid "Your friend sharing a file to you on Seafile"
+msgstr "你的朋友在Seafile上共享了一个文件给你"
+
+#: views.py:469
+msgid "Failed to send mail"
+msgstr "邮件发送失败"
 
 #: templates/repo/share_admin.html:15
 msgid "Tips"
@@ -206,5 +242,3 @@ msgstr "权限修改失败"
 msgid "edit failed"
 msgstr "权限修改失败"
 
-#~ msgid "Revoke"
-#~ msgstr "取消共享"
