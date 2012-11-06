@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 17:47+0800\n"
+"POT-Creation-Date: 2012-11-06 10:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1206,14 +1206,18 @@ msgid "Really want to restore this library?"
 msgstr "确定要还原这个资料库？"
 
 #: templates/seafile_access_check.html:6
+msgid "Preparing, please wait..."
+msgstr "处理中，请稍候..."
+
+#: templates/seafile_access_check.html:7
 msgid "Make sure Seafile client is running."
 msgstr "请确认本地Seafile程序已启动。"
 
-#: templates/seafile_access_check.html:7
+#: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
 msgstr "你的 Seafile 客户端版本太旧，请升级到最新版本。"
 
-#: templates/seafile_access_check.html:7
+#: templates/seafile_access_check.html:8
 msgid "Click to download."
 msgstr "点此下载"
 

@@ -3,6 +3,7 @@
 
 {% block main_panel %}
 <div class="text-panel">
+    <p id="msg-wait">{% trans 'Preparing, please wait...' %}</p>
     <p id="msg-client"  class="error hide">{% trans "Make sure Seafile client is running." %}</p>
     <p id="msg-version" class="error hide">{% trans "Your Seafile client is out of date, please upgrade to latest version." %}<a href="http://www.seafile.com/download">{% trans "Click to download." %}</a></p>
 </div>
@@ -29,6 +30,7 @@ $(function() {
     });
 
     setTimeout(function() {
+        $('#msg-wait').addClass('hide');
         if (version_mismatch) {
             $('#msg-version').removeClass('hide');
         } else if (!req_success) {

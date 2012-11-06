@@ -16,3 +16,4 @@ secret_key.py
 run-seahub.sh
 setenv.sh
 .DS_Store
+*.mo
