@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 10:43+0800\n"
+"POT-Creation-Date: 2012-11-06 13:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,114 +21,110 @@ msgstr ""
 msgid "A user with this email already"
 msgstr "该邮箱已被注册"
 
-#: forms.py:40 forms.py:111
+#: forms.py:40 forms.py:100
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
-#: forms.py:49 forms.py:222
-msgid "Email is required"
-msgstr "请输入邮箱"
-
-#: forms.py:50
-msgid "Email is not longer than 512 characters"
-msgstr "邮箱不能超过512个字符"
-
-#: forms.py:67
+#: forms.py:56
 msgid "Name can't be empty"
 msgstr "名称不能为空"
 
-#: forms.py:68
+#: forms.py:57
 msgid "Name is too long (maximum is 50 characters)"
 msgstr "名称太长（不超过50个字符）"
 
-#: forms.py:71
+#: forms.py:60
 msgid "Description can't be empty"
 msgstr "描述不能为空"
 
-#: forms.py:72
+#: forms.py:61
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "描述太长（不超过100个字符）"
 
-#: forms.py:77 forms.py:82
+#: forms.py:66 forms.py:71
 msgid "Password is too short (minimum is 3 characters)"
 msgstr "密码太短（不少于3个字符）"
 
-#: forms.py:78 forms.py:83
+#: forms.py:67 forms.py:72
 msgid "Password is too long (maximum is 15 characters)"
 msgstr "密码太长（不超过15个字符）"
 
-#: forms.py:89
+#: forms.py:78
 #, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
-#: forms.py:124 forms.py:147 forms.py:171 forms.py:194
+#: forms.py:113 forms.py:136 forms.py:160 forms.py:183
 msgid "Repo id is required"
 msgstr "repo id 为必填项"
 
-#: forms.py:125 forms.py:148 forms.py:172
+#: forms.py:114 forms.py:137 forms.py:161
 msgid "Parent dir is required"
 msgstr "parent dir 为必填项"
 
-#: forms.py:128 forms.py:152
+#: forms.py:117 forms.py:141
 msgid "File name is too long"
 msgstr "文件名过长"
 
-#: forms.py:129 forms.py:153
+#: forms.py:118 forms.py:142
 msgid "File name can't be empty"
 msgstr "文件名不能为空"
 
-#: forms.py:136 forms.py:160
+#: forms.py:125 forms.py:149
 #, python-format
 msgid "File name \"%s\" is not valid"
 msgstr "文件名 %s 含有无效字符"
 
-#: forms.py:149
+#: forms.py:138
 msgid "Oldname is required"
 msgstr "需要 oldname"
 
-#: forms.py:175
+#: forms.py:164
 msgid "Directory name is too long"
 msgstr "目录名过长"
 
-#: forms.py:176
+#: forms.py:165
 msgid "Directory name can't be empty"
 msgstr "描述不能为空"
 
-#: forms.py:183
+#: forms.py:172
 #, python-format
 msgid "Directory name \"%s\" is not valid"
 msgstr "目录名 %s 含有无效字符"
 
-#: forms.py:195
+#: forms.py:184
 msgid "Username is required"
 msgstr "用户名为必填项"
 
-#: forms.py:196
+#: forms.py:185
 msgid "Password can't be empty"
 msgstr "密码不能为空"
 
-#: forms.py:207
+#: forms.py:196
 msgid "Bad url format"
 msgstr "错误的 url 格式"
 
-#: forms.py:212
+#: forms.py:201
 msgid "Wrong password"
 msgstr "密码错误"
 
-#: forms.py:214
+#: forms.py:203
 msgid "Inernal server error"
 msgstr "服务器内部错误"
 
-#: forms.py:216
+#: forms.py:205
 msgid "Decrypt library error"
 msgstr "解密资料库出错"
 
-#: forms.py:224
+#: forms.py:211
+msgid "Email is required"
+msgstr "请输入邮箱"
+
+#: forms.py:213
 msgid "Quota can't be empty"
 msgstr "容量不能为空"
 
-#: forms.py:225
+#: forms.py:214
 msgid "Quota is too low (minimum value is 0)"
 msgstr "容量太小（最小为0）"
 
@@ -160,7 +156,7 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:505
+#: views.py:505 views.py:2417
 msgid "File not exists"
 msgstr "文件不存在"
 
@@ -192,12 +188,12 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:725 views.py:1490 views.py:1494 views.py:2336 views.py:2371
-#: views.py:2799
+#: views.py:725 views.py:1490 views.py:1494 views.py:2292 views.py:2327
+#: views.py:2648
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:727 views.py:822 views.py:2284
+#: views.py:727 views.py:822 views.py:2240
 msgid "Library not exists"
 msgstr "资料库不存在"
 
@@ -240,6 +236,18 @@ msgstr "%s 删除成功。"
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
+#: views.py:1426
+msgid "File size surpasses 10M, can not be previewed online."
+msgstr "文件超过10M，无法在线查看。"
+
+#: views.py:1431
+msgid "HTTPError: failed to open file online"
+msgstr "HTTPError: 无法在线打开该文件"
+
+#: views.py:1434
+msgid "URLError: failed to open file online"
+msgstr "URLError: 无法在线打开该文件"
+
 #: views.py:1446
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
@@ -279,83 +287,63 @@ msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1755 views.py:1765
-msgid "Remove share failed"
-msgstr "取消共享失败"
-
-#: views.py:1761
-msgid "group id is not valid"
-msgstr "group id 无效"
-
-#: views.py:1774
-msgid "Remove share successful"
-msgstr "取消共享成功"
-
-#: views.py:1872
+#: views.py:1828
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:1945 templates/sys_useradmin.html:31
+#: views.py:1901 templates/sys_useradmin.html:31
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:1947 views.py:1988
+#: views.py:1903 views.py:1944
 msgid "Successfully sending mail"
 msgstr "邮件发送成功"
 
-#: views.py:1949 views.py:1990 views.py:2611
+#: views.py:1905 views.py:1946
 msgid "Failed to send mail"
 msgstr "邮件发送失败"
 
-#: views.py:1960
+#: views.py:1916
 msgid "Successfully resetting password"
 msgstr "密码重置成功"
 
-#: views.py:1965
+#: views.py:1921
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:1986
+#: views.py:1942
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2202
+#: views.py:2158
 #, python-format
 msgid "Successfully rename %(old)s to %(new)s。"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2258
+#: views.py:2214
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2357
+#: views.py:2313
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2361 views.py:2387
+#: views.py:2317 views.py:2343
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2383
+#: views.py:2339
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2565 views.py:2573
-msgid "Remove successful"
-msgstr "删除成功"
-
-#: views.py:2607
-msgid "Your friend sharing a file to you on Seafile"
-msgstr "您的好友通过Seafile分享了一个文件给您"
-
-#: views.py:2628
+#: views.py:2477
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -838,7 +826,7 @@ msgstr "上传"
 
 #: templates/repo.html:88
 msgid "New Directory"
-msgstr "目录"
+msgstr "新建目录"
 
 #: templates/repo.html:89
 msgid "New File"
@@ -1086,7 +1074,7 @@ msgstr "发送"
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:491
+#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:492
 msgid "Star"
 msgstr "添加星标"
 
@@ -1113,8 +1101,12 @@ msgid "Loading..."
 msgstr "加载中..."
 
 #: templates/repo_view_file.html:138
-msgid "Emails(seperated with ,)"
-msgstr "邮箱(多个邮箱以,分隔)"
+msgid "Emails"
+msgstr "邮箱"
+
+#: templates/repo_view_file.html:139
+msgid "Emails, Seperate by ','"
+msgstr "输入邮箱，多个以,分隔"
 
 #: templates/repo_view_file.html:143
 msgid "Sending..."
@@ -1137,35 +1129,35 @@ msgstr "点此下载"
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/repo_view_file.html:301
+#: templates/repo_view_file.html:302
 msgid "Sending successfully"
 msgstr "发送成功"
 
-#: templates/repo_view_file.html:324
+#: templates/repo_view_file.html:325
 msgid "Comment"
 msgstr "评论"
 
-#: templates/repo_view_file.html:367
+#: templates/repo_view_file.html:368
 msgid "Please type a message"
 msgstr "请先输入你的评论"
 
-#: templates/repo_view_file.html:413
+#: templates/repo_view_file.html:414
 msgid "Cannot find an application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/repo_view_file.html:418
+#: templates/repo_view_file.html:419
 msgid "File is not Synchronized with server, please synchronize manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/repo_view_file.html:420
+#: templates/repo_view_file.html:421
 msgid "File is not Synchronized with server, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/repo_view_file.html:425
+#: templates/repo_view_file.html:426
 msgid "An error occur during opening local file."
 msgstr "打开本地文件时出错"
 
-#: templates/repo_view_file.html:456
+#: templates/repo_view_file.html:457
 msgid ""
 "Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
 "download/\">upgrade</a> to latest."
@@ -1173,23 +1165,23 @@ msgstr ""
 "Seafile 客户端程序未启动或者版本过低，请<a href=\"http://www.seafile.com/"
 "download/\">下载</a>最新版客户端"
 
-#: templates/repo_view_file.html:467
+#: templates/repo_view_file.html:468
 msgid "Seafile client is not started or out of date"
 msgstr "Seafile 客户端程序未启动或者版本过低"
 
-#: templates/repo_view_file.html:490
+#: templates/repo_view_file.html:491
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/repo_view_file.html:493
+#: templates/repo_view_file.html:494
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/repo_view_file.html:497
+#: templates/repo_view_file.html:498
 msgid "Failed:"
 msgstr "操作失败："
 
-#: templates/repo_view_file.html:501
+#: templates/repo_view_file.html:502
 msgid ", failed"
 msgstr "，操作失败"
 
@@ -1678,6 +1670,27 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Email is not longer than 512 characters"
+#~ msgstr "邮箱不能超过512个字符"
+
+#~ msgid "Remove share failed"
+#~ msgstr "取消共享失败"
+
+#~ msgid "group id is not valid"
+#~ msgstr "group id 无效"
+
+#~ msgid "Remove share successful"
+#~ msgstr "取消共享成功"
+
+#~ msgid "Remove successful"
+#~ msgstr "删除成功"
+
+#~ msgid "Your friend sharing a file to you on Seafile"
+#~ msgstr "您的好友通过Seafile分享了一个文件给您"
+
+#~ msgid "Emails(seperated with ,)"
+#~ msgstr "邮箱(多个邮箱以,分隔)"
 
 #~ msgid "Library Management"
 #~ msgstr "资料库管理"
