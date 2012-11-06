@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^account/info/$', Account.as_view()),
     url(r'^$', csrf_exempt(ReposView.as_view())),
     url(r'^repo/list/$', csrf_exempt(ReposView.as_view()), name='repos'),
-    url(r'^repo/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoView.as_view()), name='repo'),
+    (r'^repo/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoView.as_view())),
 
     url(r'^dir/(?P<repo_id>[^/]+)/$', csrf_exempt(RepoDirPathView.as_view()), name='repo-dir-path'),
     url(r'^dir/(?P<repo_id>[^/]+)/(?P<dir_id>[^/]+)/$', csrf_exempt(RepoDirIdView.as_view()), name='repo-dir-id'),
