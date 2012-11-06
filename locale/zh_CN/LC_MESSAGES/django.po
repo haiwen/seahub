@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 17:07+0800\n"
+"POT-Creation-Date: 2012-11-06 17:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,7 +160,7 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:505 views.py:1211 views.py:1560 views.py:2423
+#: views.py:505 views.py:1211 views.py:1560 views.py:2418
 msgid "File not exists"
 msgstr "文件不存在"
 
@@ -192,12 +192,12 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:725 views.py:1495 views.py:1499 views.py:2298 views.py:2333
-#: views.py:2654
+#: views.py:725 views.py:1495 views.py:1499 views.py:2293 views.py:2328
+#: views.py:2649
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:727 views.py:822 views.py:2246
+#: views.py:727 views.py:822 views.py:2247
 msgid "Library not exists"
 msgstr "资料库不存在"
 
@@ -314,11 +314,11 @@ msgstr "内部错误，设置失败"
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:1909 views.py:1950
+#: views.py:1909 views.py:1951
 msgid "Successfully sending mail"
 msgstr "邮件发送成功"
 
-#: views.py:1911 views.py:1952
+#: views.py:1911 views.py:1953
 msgid "Failed to send mail"
 msgstr "邮件发送失败"
 
@@ -330,36 +330,36 @@ msgstr "密码重置成功"
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:1948
+#: views.py:1949
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2164
+#: views.py:2165
 #, python-format
 msgid "Successfully rename %(old)s to %(new)s。"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2220
+#: views.py:2221
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2319
+#: views.py:2314
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2323 views.py:2349
+#: views.py:2318 views.py:2344
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2345
+#: views.py:2340
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2483
+#: views.py:2478
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -481,6 +481,7 @@ msgstr "退出"
 
 #: templates/base.html:63 templates/registration/login.html:3
 #: templates/registration/login.html:6
+#: templates/registration/password_reset_complete.html:8
 msgid "Log In"
 msgstr "登录"
 
@@ -1350,7 +1351,9 @@ msgstr "到"
 msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
-msgstr "你收到这封邮件是因为 %(user)s 在 %(site_name)s 上将你加入到“%(org.org_name)s”团体。"
+msgstr ""
+"你收到这封邮件是因为 %(user)s 在 %(site_name)s 上将你加入"
+"到“%(org.org_name)s”团体。"
 
 #: templates/user_add_email.html:5
 #, python-format
@@ -1468,6 +1471,14 @@ msgstr "新密码："
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
 msgstr "确认密码"
+
+#: templates/registration/password_reset_complete.html:4
+msgid "Successfully reset password"
+msgstr "密码重置成功"
+
+#: templates/registration/password_reset_complete.html:8
+msgid "Successfully reset password."
+msgstr "密码重置成功。"
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"

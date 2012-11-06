@@ -1,9 +1,9 @@
-{% load url from future %}
-亲爱的 {{ to_email }}：
-
-{{ email }} 邀请你加入群组 {{ group.group_name }}, 点击以下链接加入：
+{% load url from future %}{% load i18n %}{% autoescape off %}
+{% blocktrans %}{{ email }} invite you to join group {{ group.group_name }}. Please go to the following page and sign up:{% endblocktrans %}
 {{ protocol }}://{{ domain }}{% url 'registration_register' %}?src={{ to_email }}
 
-邮箱请填写当前邮箱，感谢使用我们的网站！
+{% trans "Thanks for using our site!" %}
 
-Seafile团队
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

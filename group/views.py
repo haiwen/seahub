@@ -35,7 +35,7 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
@@ -585,6 +585,7 @@ def group_manage(request, group_id):
                             'group': group,
                             'domain': domain,
                             'protocol': use_https and 'https' or 'http',
+                            'site_name': SITE_NAME,
                             }
                     
                         try:
@@ -954,8 +955,9 @@ def group_joinrequest(request, group_id):
             c = {
                 'staff': staff,
                 'user': user,
-                'group': group,
+                'group_name': group.group_name,
                 'group_join_msg': group_join_msg,
+                'site_name': SITE_NAME,
                 }
             try:
                 send_mail(_(u'apply to join the group'), t.render(Context(c)), None, [staff],

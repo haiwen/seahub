@@ -1,10 +1,10 @@
-{% autoescape off %}
-亲爱的 {{ staff }}：
-{{ user }} 申请加入群组 {{ group.group_name }}，验证信息：
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}{{ user }} want to join to Group "{{ group_name }}", here is the verification message: {% endblocktrans %}
+
 {{ group_join_msg }}
 
-感谢使用我们的网站！
+{% trans "Thanks for using our site!" %}
 
-Seafile团队
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
 
 {% endautoescape %}

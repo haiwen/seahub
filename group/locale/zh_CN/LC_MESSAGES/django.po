@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 16:43+0800\n"
+"POT-Creation-Date: 2012-11-06 19:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,120 +106,138 @@ msgstr "你的权限不够。"
 msgid "Failed to add, %s is not in current organization."
 msgstr "添加失败，%s 不在当前团体中。"
 
-#: views.py:591
+#: views.py:592
 msgid "Your friend added you to a group in SeaCloud."
 msgstr "你的朋友在 SeaCloud 上把你加入到了一个群组中。"
 
-#: views.py:596
+#: views.py:597
 msgid "Failed to send mail."
 msgstr "邮件发送失败。"
 
-#: views.py:613
+#: views.py:614
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "添加失败，%s 未注册。"
 
-#: views.py:627
+#: views.py:628
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "添加群组成员成功，%(count)s 封邀请邮件已发送。"
 
-#: views.py:635
+#: views.py:636
 msgid "Successfully added."
 msgstr "添加成功。"
 
-#: views.py:675
+#: views.py:676
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "添加失败，%s 还没注册。"
 
-#: views.py:698 views.py:711 views.py:738
+#: views.py:699 views.py:712 views.py:739
 msgid "Operation succeeded."
 msgstr "操作成功"
 
-#: views.py:728
+#: views.py:729
 msgid "group id is not valid"
 msgstr "群组 id 无效"
 
-#: views.py:740
+#: views.py:741
 #, python-format
 msgid "Failed：%s"
 msgstr "删除失败：%s"
 
-#: views.py:752
+#: views.py:753
 msgid "Failed to share: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:755
+#: views.py:756
 msgid "Failed to share: internal error."
 msgstr "共享失败： 内部错误。"
 
-#: views.py:765
+#: views.py:766
 msgid "Failed to unshare: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:770
+#: views.py:771
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr "操作失败：只有管理员和资料库拥有者才能取消共享。"
 
-#: views.py:773
+#: views.py:774
 msgid "Failed to unshare: internal error."
 msgstr "取消共享失败：内部错误。"
 
-#: views.py:801
+#: views.py:802
 msgid "Error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
-#: views.py:809
+#: views.py:810
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "推荐到 %s 失败：你不在该群组中。"
 
-#: views.py:829
+#: views.py:830
 #, python-format
 msgid ""
 "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
 msgstr "推荐到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
 
-#: views.py:834
+#: views.py:835
 msgid "Failed to recommend."
 msgstr "推荐失败。"
 
-#: views.py:849
+#: views.py:850
 msgid "Failed to create: the group does not exist."
 msgstr "创建失败：该群组不存在。"
 
-#: views.py:853
+#: views.py:854
 msgid "Failed to create: you are not in the group."
 msgstr "创建失败：你不在该群组中。"
 
-#: views.py:875 views.py:903
+#: views.py:876 views.py:904
 msgid "Failed to create"
 msgstr "创建失败。"
 
-#: views.py:889 views.py:916
+#: views.py:890 views.py:917
 msgid "Failed to create: internal error."
 msgstr "创建团体群组失败。"
 
-#: views.py:943
+#: views.py:944
 msgid "You are already in the group."
 msgstr "你已在该群组中。"
 
-#: views.py:961
+#: views.py:963
 msgid "apply to join the group"
 msgstr "申请加入群组"
 
-#: views.py:963
+#: views.py:965
 msgid "Sent successfully, the group admin will handle it."
 msgstr "发送成功，请等候管理员处理。"
 
-#: views.py:967
+#: views.py:969
 msgid "Failed to send. You can try it again later."
 msgstr "发送失败, 请稍侯再试。"
+
+#: templates/group/add_member_email.html:2
+#, python-format
+msgid ""
+"%(email)s invite you to join group %(group.group_name)s. Please go to the "
+"following page and sign up:"
+msgstr "%(email)s 邀请你加入到群组 %(group.group_name)s。请点击以下链接注册："
+
+#: templates/group/add_member_email.html:5
+#: templates/group/group_join_email.html:6
+msgid "Thanks for using our site!"
+msgstr "感谢使用！"
+
+#: templates/group/add_member_email.html:7
+#: templates/group/group_join_email.html:8
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "%(site_name)s 团队"
 
 #: templates/group/group_info.html:14
 msgid "Basic Info"
@@ -399,6 +417,13 @@ msgstr "删除失败："
 #: templates/group/group_info.html:258
 msgid ", failed to delete."
 msgstr "，删除失败。"
+
+#: templates/group/group_join_email.html:2
+#, python-format
+msgid ""
+"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
+"message: "
+msgstr "%(user)s 申请加入到群组 “%(group_name)s”, 验证信息如下："
 
 #: templates/group/group_manage.html:8
 msgid "administration"
