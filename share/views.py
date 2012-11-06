@@ -443,6 +443,8 @@ def send_shared_link(request):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
+    from seahub.settings import SITE_NAME
+
     form = FileLinkShareForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
@@ -459,6 +461,7 @@ def send_shared_link(request):
                 'email': request.user.username,
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
+                'site_name': SITE_NAME,
                 }
 
             try:

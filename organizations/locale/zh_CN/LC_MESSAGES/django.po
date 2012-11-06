@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 16:17+0800\n"
+"POT-Creation-Date: 2012-11-06 17:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,19 +335,19 @@ msgstr ""
 msgid ""
 "\n"
 "and reset your password later.\n"
-"Thank you!\n"
+"Thanks for using our site!\n"
 "\n"
 "The %(site_name)s team\n"
 msgstr ""
 "\n"
 "随后请重置你的密码。\n"
-"谢谢！\n"
+"感谢使用！\n"
 "\n"
 "%(site_name)s 团队\n"
 
 #: templates/organizations/personal.html:14
-msgid "Profile"
-msgstr "个人基本信息"
+msgid "Account"
+msgstr "我的基本信息"
 
 #: templates/organizations/personal.html:20
 msgid "No Nickname"
@@ -356,6 +356,9 @@ msgstr "暂无昵称"
 #: templates/organizations/personal.html:20
 msgid "Edit"
 msgstr "编辑"
+
+#~ msgid "Profile"
+#~ msgstr "个人基本信息"
 
 #~ msgid "Total Org Space Used"
 #~ msgstr "团体已用总空间"
@@ -371,9 +374,6 @@ msgstr "编辑"
 
 #~ msgid "Last Update"
 #~ msgstr "更新时间"
-
-#~ msgid "Account"
-#~ msgstr "我的基本信息"
 
 #~ msgid "Nickname is empty"
 #~ msgstr "暂无昵称"

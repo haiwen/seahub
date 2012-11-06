@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 13:38+0800\n"
+"POT-Creation-Date: 2012-11-06 17:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,6 +136,10 @@ msgstr ""
 msgid "简体中文"
 msgstr ""
 
+#: views.py:419
+msgid "Unable to view recycle page"
+msgstr "无法查看文件回收站"
+
 #: views.py:442 views.py:478
 msgid "Can not access library"
 msgstr "无法访问该资料库"
@@ -156,7 +160,7 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:505 views.py:2417
+#: views.py:505 views.py:1211 views.py:1560 views.py:2423
 msgid "File not exists"
 msgstr "文件不存在"
 
@@ -188,12 +192,12 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:725 views.py:1490 views.py:1494 views.py:2292 views.py:2327
-#: views.py:2648
+#: views.py:725 views.py:1495 views.py:1499 views.py:2298 views.py:2333
+#: views.py:2654
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:727 views.py:822 views.py:2240
+#: views.py:727 views.py:822 views.py:2246
 msgid "Library not exists"
 msgstr "资料库不存在"
 
@@ -210,140 +214,152 @@ msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1108
+#: views.py:1113
 msgid "Failed to create repo"
 msgstr "创建失败"
 
-#: views.py:1126
+#: views.py:1131
 msgid "Operation successful"
 msgstr "操作成功"
 
-#: views.py:1128
+#: views.py:1133
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: views.py:1159
+#: views.py:1164
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1166
+#: views.py:1171
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1168
+#: views.py:1173
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1426
+#: views.py:1231 views.py:1566
+msgid "Unable to view file"
+msgstr "无法查看该文件"
+
+#: views.py:1431
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1431
+#: views.py:1436
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1434
+#: views.py:1439
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1446
+#: views.py:1451
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1475
+#: views.py:1480
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1644
+#: views.py:1541
+msgid "Unable to edit file"
+msgstr "无法编辑该文件"
+
+#: views.py:1629
+msgid "Unable to access file"
+msgstr "无法访问文件"
+
+#: views.py:1649
 msgid "Failed to download library, unable to find servre"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1656
+#: views.py:1661
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1692
+#: views.py:1697
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1693
+#: views.py:1698
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1693
+#: views.py:1698
 msgid "move"
 msgstr "移动"
 
-#: views.py:1709
+#: views.py:1714
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1715
+#: views.py:1720
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1828
+#: views.py:1833
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:1901 templates/sys_useradmin.html:31
+#: views.py:1907 templates/sys_useradmin.html:31
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:1903 views.py:1944
+#: views.py:1909 views.py:1950
 msgid "Successfully sending mail"
 msgstr "邮件发送成功"
 
-#: views.py:1905 views.py:1946
+#: views.py:1911 views.py:1952
 msgid "Failed to send mail"
 msgstr "邮件发送失败"
 
-#: views.py:1916
+#: views.py:1922
 msgid "Successfully resetting password"
 msgstr "密码重置成功"
 
-#: views.py:1921
+#: views.py:1927
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:1942
+#: views.py:1948
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2158
+#: views.py:2164
 #, python-format
 msgid "Successfully rename %(old)s to %(new)s。"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2214
+#: views.py:2220
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2313
+#: views.py:2319
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2317 views.py:2343
+#: views.py:2323 views.py:2349
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2339
+#: views.py:2345
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2477
+#: views.py:2483
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -1213,6 +1229,30 @@ msgstr "你的 Seafile 客户端版本太旧，请升级到最新版本。"
 msgid "Click to download."
 msgstr "点此下载"
 
+#: templates/shared_link_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(email)s is sharing a file to you on "
+"%(site_name)s."
+msgstr "你收到这封邮件是因为 %(email)s 在 %(site_name)s 上共享了一个文件给你。"
+
+#: templates/shared_link_email.html:4
+msgid "Please go to the following page and view the file:"
+msgstr "请点击以下链接查看："
+
+#: templates/shared_link_email.html:7 templates/user_add_email.html:14
+#: templates/user_reset_email.html:6
+#: templates/registration/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "感谢使用！"
+
+#: templates/shared_link_email.html:9 templates/user_add_email.html:16
+#: templates/user_reset_email.html:8
+#: templates/registration/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "%(site_name)s 团队"
+
 #: templates/sys_group_admin.html:7
 msgid "All Groups"
 msgstr "所有群组"
@@ -1304,6 +1344,51 @@ msgstr "上传文件"
 #: templates/upload_file_error.html:6
 msgid "to"
 msgstr "到"
+
+#: templates/user_add_email.html:3
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to organization "
+"\"%(org.org_name)s\" on %(site_name)s."
+msgstr "你收到这封邮件是因为 %(user)s 在 %(site_name)s 上将你加入到“%(org.org_name)s”团体。"
+
+#: templates/user_add_email.html:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to %(site_name)s."
+msgstr "你收到这封邮件是因为 %(user)s 将你加入到 %(site_name)s。"
+
+#: templates/user_add_email.html:7
+msgid "Following is your account information:"
+msgstr "以下是您的登录信息："
+
+#: templates/user_add_email.html:8
+#, python-format
+msgid "Email: %(email)s"
+msgstr "邮箱：%(email)s"
+
+#: templates/user_add_email.html:9
+#, python-format
+msgid "Password:  %(password)s"
+msgstr "密码：%(password)s"
+
+#: templates/user_add_email.html:11
+msgid "Please go to the following page and log in:"
+msgstr "请点击以下链接登录："
+
+#: templates/user_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because staff has reset your password at "
+"%(site_name)s. "
+msgstr "你收到这封邮件是因为你在 %(site_name)s 的账号密码已经被管理员重置。"
+
+#: templates/user_reset_email.html:4
+#, python-format
+msgid ""
+"Your new password is %(password)s, please modify your password as soon as "
+"possible."
+msgstr "你的新密码是 %(password)s, 请尽快修改。"
 
 #: templates/userinfo.html:13
 msgid "Profile"
@@ -1414,15 +1499,6 @@ msgstr "请点击以下链接更新密码："
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
 msgstr "你的用户名:"
-
-#: templates/registration/password_reset_email.html:10
-msgid "Thanks for using our site!"
-msgstr "感谢使用！"
-
-#: templates/registration/password_reset_email.html:12
-#, python-format
-msgid "The %(site_name)s team"
-msgstr "%(site_name)s 团队"
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "

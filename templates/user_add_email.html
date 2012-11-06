@@ -1,19 +1,18 @@
-{% autoescape off %}
-亲爱的 {{ email }}：
+{% load i18n %}{% autoescape off %}
 {% if org %}
-{{ user }} 在 SeaCloud 云存储上将您加入到企业 {{ org.org_name }}！
+{% blocktrans %}You're receiving this e-mail because {{ user }} added you to organization "{{ org.org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
-{{ user }} 将您加入 SeaCloud 云存储！
+{% blocktrans %}You're receiving this e-mail because {{ user }} added you to {{ site_name }}.{% endblocktrans%}
 {% endif %}
-以下是您的登录信息：
-用户名： {{ email }}
-密码： {{ password }}
+{% trans "Following is your account information:" %}
+{% blocktrans %}Email: {{ email }}{% endblocktrans %}
+{% blocktrans %}Password:  {{ password }}{% endblocktrans %}
 
-请点击以下链接登录：
+{% trans "Please go to the following page and log in:" %}
 {{ protocol }}://{{ domain }}{% url auth_login %}
 
-感谢使用我们的网站！
+{% trans "Thanks for using our site!" %}
 
-Seafile团队
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
 
 {% endautoescape %}

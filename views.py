@@ -416,7 +416,7 @@ def render_recycle_dir(request, repo_id, commit_id):
 @ctx_switch_required
 def repo_recycle_view(request, repo_id):
     if get_user_permission(request, repo_id) != 'rw':
-        return render_permission_error(request, '无法查看文件回收站')
+        return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -915,6 +915,11 @@ def myhome(request):
                          if is_registered_user(c.contact_email) ]
     else:
         allow_public_share = True
+
+        # Clear org messages just in case. Should never happen in production
+        # environment.
+        orgmsg_list = []        
+        
         # List all personal groups and all registered users for autocompletion.
         autocomp_groups = get_personal_groups(-1, -1)
         contacts = []
@@ -1203,7 +1208,7 @@ def repo_view_file(request, repo_id):
             obj_id = None
 
     if not obj_id:
-        return render_error(request, '文件不存在')
+        return render_error(request, _(u'File not exists'))
     
     repo = get_repo(repo_id)
     if not repo:
@@ -1223,7 +1228,7 @@ def repo_view_file(request, repo_id):
                                                   'view',
                                                   request.user.username)
     else:
-        return render_permission_error(request, '无法查看该文件')
+        return render_permission_error(request, _(u'Unable to view file'))
 
     read_only = True if permission == 'r' else False
 
@@ -1533,7 +1538,7 @@ def repo_file_edit(request, repo_id):
         return update_file_after_edit(request, repo_id)
 
     if get_user_permission(request, repo_id) != 'rw':
-        return render_permission_error(request, '无法编辑该文件')
+        return render_permission_error(request, _(u'Unable to edit file'))
 
     path = request.GET.get('p', '/')
     if path[-1] == '/':
@@ -1552,13 +1557,13 @@ def repo_file_edit(request, repo_id):
     except:
         obj_id = None
     if not obj_id:
-        return render_error(request, '文件不存在')
+        return render_error(request, _(u'File not exists'))
 
     if access_to_repo(request, repo_id, ''):
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                   'view', request.user.username)
     else:
-        return render_permission_error(request, '无法查看该文件')
+        return render_permission_error(request, _(u'Unable to view file'))
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -1621,7 +1626,7 @@ def repo_access_file(request, repo_id, obj_id):
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                   op, request.user.username)
     else:
-        return render_permission_error(request, '无法访问文件')
+        return render_permission_error(request, _(u'Unable to access file'))
 
     redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
@@ -1896,6 +1901,7 @@ def send_user_reset_email(request, email, password):
     c = {
         'email': email,
         'password': password,
+        'site_name': settings.SITE_NAME,
         }
     try:
         send_mail(_(u'Password Reset'), t.render(Context(c)),
@@ -1937,6 +1943,7 @@ def send_user_add_mail(request, email, password):
         'password': password,
         'domain': domain,
         'protocol': use_https and 'https' or 'http',
+        'site_name': settings.SITE_NAME,
         }
     try:
         send_mail(_(u'Seafile Registration Information'), t.render(Context(c)),

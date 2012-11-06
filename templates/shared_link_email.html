@@ -1,12 +1,11 @@
-{% autoescape off %}
-亲爱的 {{ to_email }}：
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}You're receiving this e-mail because {{ email }} is sharing a file to you on {{ site_name }}.{% endblocktrans%}
 
-{{ email }} 在SeaCloud上共享了一个文件给你，请点击以下链接查看：
-
+{% trans "Please go to the following page and view the file:" %}
 {{ file_shared_link }}
 
-感谢使用我们的网站！
+{% trans "Thanks for using our site!" %}
 
-Seafile团队
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
 
 {% endautoescape %}
