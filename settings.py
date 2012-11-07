@@ -192,10 +192,6 @@ CACHES = {
 MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
 MAX_UPLOAD_FILE_NAME_LEN    = 256
 
-# Base url and name used in email sending
-SITE_BASE = 'http://seafile.com'
-SITE_NAME = 'Seafile'
-
 # Set to True when user will be activaed after registration,
 # and no email sending
 ACTIVATE_AFTER_REGISTRATION = True
@@ -213,9 +209,12 @@ CCNET_APPLET_ROOT = "http://localhost:13420"
 # Account initial password, for password resetting.
 INIT_PASSWD = '123456'
 
-SEAHUB_TITLE = 'Private Seafile'
+# browser tab title
+SITE_TITLE = 'Private Seafile'
 
-USE_SUBDOMAIN = False
+# Base url and name used in email sending
+SITE_BASE = 'http://seafile.com'
+SITE_NAME = 'Seafile'
 
 try:
     import local_settings
@@ -239,7 +238,7 @@ else:
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-USER_TOTAL_SPACE = 5 * pow(2,30)
-
 SEAFILE_VERSION = '1.2.0'
+
+USE_SUBDOMAIN = False
 
