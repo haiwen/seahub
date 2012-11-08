@@ -1,6 +1,6 @@
 {% load i18n %}
 $("#group-member-add").click(function() {
-    $("#member-add-form").modal({appendTo: "#main"});
+    $("#member-add-form").modal({appendTo: "#main", focus:false});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;
 })

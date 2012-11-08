@@ -1,6 +1,6 @@
 {% load i18n %}
 $("#group-admin-add").click(function() {
-    $("#admin-add-form").modal({appendTo: "#main"});
+    $("#admin-add-form").modal({appendTo: "#main", focus: false});
     addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
     return false;
 })

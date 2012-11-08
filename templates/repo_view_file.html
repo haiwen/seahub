@@ -270,7 +270,7 @@ $('#rm-shared-link').click(function() {
 });
 
 $('#send-shared-link').click(function() {
-    $("#link-send-form").modal({appendTo: "#main"});
+    $("#link-send-form").modal({appendTo: "#main", focus: false});
     
     // link-send-form email autocomplete
     var share_list = [], contact_email;    
