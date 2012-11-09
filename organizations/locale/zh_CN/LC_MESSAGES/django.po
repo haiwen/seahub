@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 17:20+0800\n"
+"POT-Creation-Date: 2012-11-09 10:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -261,9 +261,14 @@ msgstr "创建者："
 msgid "Time: "
 msgstr "创建时间："
 
-#: templates/organizations/org_pubinfo.html:44
-msgid "You can go to \"Groups\" and create a group. "
-msgstr "你可以到“群组”页面创建一个群组。"
+#: templates/organizations/org_pubinfo.html:45
+msgid "No one has created any groups yet"
+msgstr "还没有群组被创建"
+
+#: templates/organizations/org_pubinfo.html:46
+msgid ""
+"You can click \"Add Group\" button under \"Group\" label to create a group. "
+msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
 #: templates/organizations/org_public.html:14
 msgid "Libraries marked as read-only can only be browsed online."
@@ -299,6 +304,18 @@ msgstr "目录图标"
 #: templates/organizations/org_public.html:50
 msgid "Download"
 msgstr "下载"
+
+#: templates/organizations/org_public.html:58
+msgid "No public library"
+msgstr "当前没有公共资料"
+
+#: templates/organizations/org_public.html:59
+msgid ""
+"You can create a public library by clicking \"New Library\" button, others "
+"can view and download this library."
+msgstr ""
+"你可以点击“新建资料库”按钮创建一个公开的资料库，网站内的其他人都可以查看下载"
+"这个资料库。"
 
 #: templates/organizations/org_seafadmin.html:7
 msgid "All Libraries"

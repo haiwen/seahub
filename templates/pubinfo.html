@@ -37,7 +37,10 @@
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty-repo-tips">{% blocktrans %}No one has created any groups, you can click "Add Group" button under "Group" label to create a group. {% endblocktrans %}</p>
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "No one has created any groups yet" %}</h2>
+  <p> {% blocktrans %}You can click "Add Group" button under "Group" label to create a group. {% endblocktrans %}</p>
+</div>
 {% endif %}
 <!-- user profile -->
 {% include "snippets/user_profile_html.html" %}

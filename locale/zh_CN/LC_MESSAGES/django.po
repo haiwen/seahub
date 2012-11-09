@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 17:59+0800\n"
+"POT-Creation-Date: 2012-11-09 10:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -438,7 +438,7 @@ msgid "Users"
 msgstr "成员"
 
 #: templates/admin_base.html:14 templates/myhome_base.html:11
-#: templates/org_admin_base.html:14 templates/org_base.html:15
+#: templates/org_admin_base.html:14 templates/org_base.html:12
 #: templates/pubinfo.html:22
 msgid "Groups"
 msgstr "群组"
@@ -489,47 +489,47 @@ msgstr "登录"
 msgid "Signup"
 msgstr "注册"
 
-#: templates/base.html:117
+#: templates/base.html:119
 msgid "Introduction"
 msgstr "介绍"
 
-#: templates/base.html:119
+#: templates/base.html:121
 msgid "Forum"
 msgstr "论坛"
 
-#: templates/base.html:123
+#: templates/base.html:125
 msgid "Client"
 msgstr "客户端"
 
-#: templates/base.html:129
+#: templates/base.html:131
 msgid "Documents"
 msgstr "文档"
 
-#: templates/base.html:131
+#: templates/base.html:133
 msgid "Help"
 msgstr "使用帮助"
 
-#: templates/base.html:136
+#: templates/base.html:138
 msgid "Server Version: "
 msgstr "服务器版本："
 
-#: templates/base.html:137
+#: templates/base.html:139
 msgid "Seafile"
 msgstr "海文互知"
 
-#: templates/base.html:138
+#: templates/base.html:140
 msgid "Contact Us"
 msgstr "联系我们"
 
-#: templates/base.html:143 templates/snippets/myhome_extra_script.html:31
+#: templates/base.html:145 templates/snippets/myhome_extra_script.html:32
 msgid "Really want to delete?"
 msgstr "确定要删除？"
 
-#: templates/base.html:144
+#: templates/base.html:146
 msgid "Yes"
 msgstr "确定"
 
-#: templates/base.html:145
+#: templates/base.html:147
 msgid "No"
 msgstr "取消"
 
@@ -678,7 +678,7 @@ msgstr "已用空间"
 msgid "My Home"
 msgstr "我的页面"
 
-#: templates/myhome_base.html:14 templates/org_base.html:18
+#: templates/myhome_base.html:14 templates/org_base.html:15
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
@@ -687,7 +687,7 @@ msgstr "共享"
 msgid "Contacts"
 msgstr "通讯录"
 
-#: templates/myhome_base.html:21 templates/org_base.html:12
+#: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
 msgstr "公共资料"
 
@@ -713,11 +713,14 @@ msgstr "创建者："
 msgid "Time: "
 msgstr "时间："
 
-#: templates/pubinfo.html:40
+#: templates/pubinfo.html:41
+msgid "No one has created any groups yet"
+msgstr "还没有群组被创建"
+
+#: templates/pubinfo.html:42
 msgid ""
-"No one has created any groups, you can click \"Add Group\" button under "
-"\"Group\" label to create a group. "
-msgstr "现在还没有人创建群组，你可以通过“群组”标签下的“添加群组”按钮创建。"
+"You can click \"Add Group\" button under \"Group\" label to create a group. "
+msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
 #: templates/public_home.html:9
 msgid "Tips"
@@ -1091,7 +1094,7 @@ msgstr "发送"
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:492
+#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:493
 msgid "Star"
 msgstr "添加星标"
 
@@ -1146,35 +1149,35 @@ msgstr "点此下载"
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/repo_view_file.html:302
+#: templates/repo_view_file.html:303
 msgid "Sending successfully"
 msgstr "发送成功"
 
-#: templates/repo_view_file.html:325
+#: templates/repo_view_file.html:326
 msgid "Comment"
 msgstr "评论"
 
-#: templates/repo_view_file.html:368
+#: templates/repo_view_file.html:369
 msgid "Please type a message"
 msgstr "请先输入你的评论"
 
-#: templates/repo_view_file.html:414
+#: templates/repo_view_file.html:415
 msgid "Cannot find an application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/repo_view_file.html:419
+#: templates/repo_view_file.html:420
 msgid "File is not Synchronized with server, please synchronize manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/repo_view_file.html:421
+#: templates/repo_view_file.html:422
 msgid "File is not Synchronized with server, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/repo_view_file.html:426
+#: templates/repo_view_file.html:427
 msgid "An error occur during opening local file."
 msgstr "打开本地文件时出错"
 
-#: templates/repo_view_file.html:457
+#: templates/repo_view_file.html:458
 msgid ""
 "Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
 "download/\">upgrade</a> to latest."
@@ -1182,23 +1185,23 @@ msgstr ""
 "Seafile 客户端程序未启动或者版本过低，请<a href=\"http://www.seafile.com/"
 "download/\">下载</a>最新版客户端"
 
-#: templates/repo_view_file.html:468
+#: templates/repo_view_file.html:469
 msgid "Seafile client is not started or out of date"
 msgstr "Seafile 客户端程序未启动或者版本过低"
 
-#: templates/repo_view_file.html:491
+#: templates/repo_view_file.html:492
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/repo_view_file.html:494
+#: templates/repo_view_file.html:495
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/repo_view_file.html:498
+#: templates/repo_view_file.html:499
 msgid "Failed:"
 msgstr "操作失败："
 
-#: templates/repo_view_file.html:502
+#: templates/repo_view_file.html:503
 msgid ", failed"
 msgstr "，操作失败"
 
@@ -1705,11 +1708,11 @@ msgstr ""
 "你可以在文件浏览页面点击“添加星标”按钮给重要的文件加上星标，这些文件会显示在"
 "这里。"
 
-#: templates/snippets/myhome_extra_script.html:26
+#: templates/snippets/myhome_extra_script.html:27
 msgid "Input cannot be empty"
 msgstr "输入不能为空"
 
-#: templates/snippets/myhome_extra_script.html:33
+#: templates/snippets/myhome_extra_script.html:34
 msgid "Really want to leave share?"
 msgstr "确定要退出共享？"
 

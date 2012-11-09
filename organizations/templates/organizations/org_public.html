@@ -53,6 +53,11 @@
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "No public library" %}</h2>
+  <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
+</div>
 {% endif %}
 
 {% include "snippets/repo_share_form.html" %}
