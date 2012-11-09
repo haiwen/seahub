@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 18:02+0800\n"
+"POT-Creation-Date: 2012-11-09 19:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,8 +271,8 @@ msgid ""
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
 #: templates/organizations/org_public.html:15
-msgid "Libraries marked as read-only can only be browsed online. "
-msgstr "标记为只读的资料库只能在线浏览。"
+msgid "A library marked as read-only can be downloaded."
+msgstr "标记为只读的资料库可以被下载。"
 
 #: templates/organizations/org_public.html:16
 msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 18:02+0800\n"
+"POT-Creation-Date: 2012-11-09 19:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -727,8 +727,8 @@ msgid "Tips"
 msgstr "小提示"
 
 #: templates/public_home.html:11
-msgid "Libraries marked as read-only can only be browsed online. "
-msgstr "标记为只读的资料库只能在线浏览。"
+msgid "A library marked as read-only can be downloaded."
+msgstr "标记为只读的资料库可以被下载。"
 
 #: templates/public_home.html:12
 msgid ""
@@ -1717,10 +1717,6 @@ msgstr ""
 msgid "Input cannot be empty"
 msgstr "输入不能为空"
 
-#: templates/snippets/myhome_extra_script.html:34
-msgid "Really want to leave share?"
-msgstr "确定要退出共享？"
-
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
 msgstr "共享权限"
@@ -1765,6 +1761,9 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Really want to leave share?"
+#~ msgstr "确定要退出共享？"
 
 #~ msgid "Email is not longer than 512 characters"
 #~ msgstr "邮箱不能超过512个字符"
