@@ -17,6 +17,7 @@ $(function() {
     $(".repo-share-btn").click(function() {
         $("#repo_id").val($(this).attr("data"));
         $("#repo-share-form").modal({appendTo: "#main", focus:false});
+        $('#simplemodal-container').css('height', 'auto');
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);
     });
 

@@ -1042,6 +1042,7 @@ textarea:-moz-placeholder {
     width:260px;
     height:80px;
     padding: 2px;
+    resize: vertical;
 }
 #repo-share-form {
     width:266px;
