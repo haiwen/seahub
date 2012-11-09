@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 10:47+0800\n"
+"POT-Creation-Date: 2012-11-09 17:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,12 +112,12 @@ msgstr ""
 msgid "all members"
 msgstr "所有成员"
 
-#: views.py:695 templates/organizations/org_public.html:35
+#: views.py:695 templates/organizations/org_public.html:38
 #: templates/organizations/org_seafadmin.html:19
 msgid "Read-Write"
 msgstr "可读写"
 
-#: views.py:697 templates/organizations/org_public.html:37
+#: views.py:697 templates/organizations/org_public.html:40
 msgid "Read-Only"
 msgstr "只读"
 
@@ -162,7 +162,7 @@ msgstr "邮箱"
 
 #: templates/organizations/org_admin.html:21
 #: templates/organizations/org_group_admin.html:14
-#: templates/organizations/org_public.html:29
+#: templates/organizations/org_public.html:32
 #: templates/organizations/org_seafadmin.html:15
 msgid "Operations"
 msgstr "操作"
@@ -209,7 +209,7 @@ msgid "Groups"
 msgstr "群组"
 
 #: templates/organizations/org_group_admin.html:11
-#: templates/organizations/org_public.html:25
+#: templates/organizations/org_public.html:28
 #: templates/organizations/org_seafadmin.html:12
 msgid "Name"
 msgstr "名称"
@@ -270,46 +270,54 @@ msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
-#: templates/organizations/org_public.html:14
-msgid "Libraries marked as read-only can only be browsed online."
+#: templates/organizations/org_public.html:15
+msgid "Libraries marked as read-only can only be browsed online. "
 msgstr "标记为只读的资料库只能在线浏览。"
 
-#: templates/organizations/org_public.html:19
+#: templates/organizations/org_public.html:16
+msgid ""
+"Afterward, updating on server will be downloaded automatically, but updating "
+"on local files will not be uploaded."
+msgstr ""
+"之后，服务器上的修改会自动同步到本地，而本地"
+"文件的修改无法上传到服务器。"
+
+#: templates/organizations/org_public.html:22
 msgid "Public Libraries"
 msgstr "公共资料库"
 
-#: templates/organizations/org_public.html:20
+#: templates/organizations/org_public.html:23
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/organizations/org_public.html:26
+#: templates/organizations/org_public.html:29
 #: templates/organizations/org_seafadmin.html:14
 msgid "Description"
 msgstr "描述"
 
-#: templates/organizations/org_public.html:27
+#: templates/organizations/org_public.html:30
 msgid "UpdateTime"
 msgstr "更新时间"
 
-#: templates/organizations/org_public.html:28
+#: templates/organizations/org_public.html:31
 msgid "Shared By"
 msgstr "共享来源"
 
-#: templates/organizations/org_public.html:35
-#: templates/organizations/org_public.html:37
+#: templates/organizations/org_public.html:38
+#: templates/organizations/org_public.html:40
 #: templates/organizations/org_seafadmin.html:19
 msgid "directory icon"
 msgstr "目录图标"
 
-#: templates/organizations/org_public.html:50
+#: templates/organizations/org_public.html:52
 msgid "Download"
 msgstr "下载"
 
-#: templates/organizations/org_public.html:58
+#: templates/organizations/org_public.html:59
 msgid "No public library"
 msgstr "当前没有公共资料"
 
-#: templates/organizations/org_public.html:59
+#: templates/organizations/org_public.html:60
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
