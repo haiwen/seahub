@@ -31,7 +31,7 @@
         </td>
         <td>
             {% if not user.is_self %}
-            <a href="#" class="remove-user-btn op" data="{% url 'org_user_remove' request.user.org.url_prefix user.email %}">{% trans "Delete" %}</a>
+            <a href="#" class="remove-user-btn op" data-url="{% url 'org_user_remove' request.user.org.url_prefix user.email %}" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
             {% endif %}
         </td>
     </tr>
@@ -96,6 +96,6 @@ $('#org-user-add').click(function() {
     }
 );
 
-addConfirmTo($('.remove-user-btn'));
+addConfirmTo($('.remove-user-btn'), '{% trans "Delete Member" %}', '{% trans "Are you sure you want to delete" %}');
 </script>
 {% endblock %}

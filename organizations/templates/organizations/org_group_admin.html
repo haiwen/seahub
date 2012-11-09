@@ -18,7 +18,7 @@
         <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" target="_blank">{{ group.props.group_name }}</a></td>
         <td>{{ group.props.creator_name }}</td>
         <td>{{ group.props.timestamp|tsstr_sec }}</td>
-        <td><a href="#" data="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/group/remove/{{ group.id }}/" class="group-remove-btn op">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{{ SITE_ROOT}}organizations/{{ org.url_prefix }}/group/remove/{{ group.id }}/" data-target="{{ group.props.group_name }}" class="group-remove-btn op">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -57,7 +57,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.group-remove-btn'), '{% trans "Really want to delete this group?" %}');
+addConfirmTo($('.group-remove-btn'), '{% trans "Delete Group" %}', '{% trans "Are you sure you want to delete" %}');
 </script>
 {% endblock %}
  

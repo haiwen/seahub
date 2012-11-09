@@ -27,8 +27,8 @@
         {% endif %}
         <td>
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/">{% trans "Delete" %}</a>
-          <a href="#" class="reset-user-btn op" data="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/">{% trans "Password Reset" %}</a>
+          <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op" data-url="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Password Reset" %}</a>
           {% endif %}
         </td>
     </tr>
@@ -73,7 +73,7 @@ $('.activate').each(function(){
     });
 });
 
-addConfirmTo($('.remove-user-btn'));
-addConfirmTo($('.reset-user-btn'), '{% trans "Really reset?" %}');
+addConfirmTo($('.remove-user-btn'), '{% trans "Delete User" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.reset-user-btn'), '{% trans "Password Reset" %}', '{% trans "Are you sure you want to reset password of" %}');
 </script>
 {% endblock %}

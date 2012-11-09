@@ -3,10 +3,12 @@
 {% block nav_notificationadmin_class %}class="cur"{% endblock %}
 
 {% block left_panel %}
-<h3>{% trans "Operations" %}</h3>
-<ul class="with-bg">
-    <li><a href="{{ SITE_ROOT }}notification/add/">{% trans "Add new notification" %}</a></li>
-</ul>
+<div class="info-item">
+    <h3 class="info-item-top">{% trans "Operations" %}</h3>
+    <ul class="info-item-bottom with-bg">
+        <li><a href="{{ SITE_ROOT }}notification/add/">{% trans "Add new notification" %}</a></li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block right_panel %}
@@ -27,7 +29,7 @@
           {% if note.primary != 1 %}
           <a href="#" data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn op">{% trans "Set to current" %}</a>
           {% endif %}
-          <a href="#" data="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" class="note-delete-btn op">{% trans "Delete" %}</a>
+          <a href="#" data-url="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" data-target="{{ note.message }}" class="note-delete-btn op">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -65,10 +67,10 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.note-delete-btn'));
+addConfirmTo($('.note-delete-btn'), '{% trans "Delete Notification" %}', '{% trans "Are you sure you want to delete" %}');
 
 $('.note-change-btn').click(function() {
-window.location = $(this).attr('data');
+    window.location = $(this).attr('data');
 })
 </script>
 {% endblock %}

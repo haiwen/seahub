@@ -167,7 +167,7 @@ p {
     font-size:13px;
 }
 .op-target {
-    color:#633;
+    color:#803;
     word-wrap:break-word;
 }
 .no-deco,
@@ -556,11 +556,11 @@ textarea:-moz-placeholder {/* for FF */
 .simplemodal-close {
     margin-left:5px;
 }
-#dialog-delete-confirm {
-    text-align:center;
+#confirm-popup {
+    min-width:255px;
 }
-#confirm-con {
-    margin-bottom:6px;
+#confirm-popup button {
+    margin-top:.8em;
 }
 
 /*ui-autocomplete*/

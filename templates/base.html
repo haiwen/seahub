@@ -109,6 +109,11 @@
           
             {% block main_panel %} {% endblock %}
         </div>
+        <div id="confirm-popup" class="hide">
+            <div id="confirm-con"></div>
+            <button id="confirm-yes">{% trans "Yes"%}</button>
+            <button class="simplemodal-close">{% trans "No"%}</button>
+        </div>
     </div>
 
     <div id="footer" class="ovhd">
@@ -141,11 +146,6 @@
         </div>
     </div>
 
-    <div id="dialog-confirm" class="hide">
-      <p id="confirm-con">{% trans "Really want to delete?" %}</p>
-      <button id="yes-btn">{% trans "Yes"%}</button>
-      <button class="simplemodal-close">{% trans "No"%}</button>
-    </div>
 
 </div><!-- wrapper -->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>

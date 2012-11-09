@@ -33,7 +33,7 @@
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
             <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" alt="{% trans "Share" %}" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" alt="{% trans "Delete" %}" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" alt="{% trans "Delete" %}" />
         </td>
     </tr>
     {% endfor %}
@@ -79,7 +79,7 @@
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" data-target="{{repo.props.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
         </td>
     </tr>
     {% endfor %}

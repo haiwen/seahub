@@ -1,20 +1,20 @@
-//add op confirm dialog
-var Op_url = '';
-function addConfirmTo(ele, confirm_con) {
-    ele.each(function() {
-        $(this).click(function() {
-	    if (confirm_con) {
-		$('#confirm-con').html(confirm_con);
-	    }
-            $('#dialog-confirm').modal({appendTo:'#main'});
-            Op_url = $(this).attr('data');
-            return false;//in case ele is '<a>'
-        });
+//add op confirm popup
+function addConfirmTo(ele, confirm_hd, confirm_con) {
+    ele.click(function() {
+        var con = '<h3>' + confirm_hd + '</h3>',
+            target = '';
+        if ($(this).attr('data-target')) {
+            target = ' <span class="op-target">' + $(this).attr('data-target') + '</span>';
+        }
+        con += '<p>' + confirm_con + target + ' ?</p>';
+        $('#confirm-con').html(con);
+        $('#confirm-popup').modal({appendTo:'#main'});
+        $('#confirm-yes')
+        .attr('data', $(this).attr('data-url'))
+        .click(function() { location.href = $(this).attr('data'); });
+        return false;//in case ele is '<a>'
     });
 }
-$('#yes-btn').click(function() {
-    location.href = Op_url;
-});
 
 //highlight the tr when mouse hover on it
 $("table tr:gt(0)").hover(

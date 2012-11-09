@@ -20,7 +20,7 @@
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" target="_blank">{{ repo.props.name }}</a></td>
         <td><a href="{% url 'user_profile' repo.owner %}" target="_blank">{{ repo.owner }}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/" data-target="{{repo.props.name}}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -59,6 +59,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.repo-delete-btn'));
+    addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 </script>
 {% endblock %}

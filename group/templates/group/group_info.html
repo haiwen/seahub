@@ -55,7 +55,7 @@
         {% if is_staff %}
         <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
         {% else %}
-        <li><a id="quit-group" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
+        <li><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
         {% endif %}
     </ul>
 </div>
@@ -98,7 +98,7 @@
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="{% trans "Download" %}" title="{% trans "Download" %}" />
         {% if is_staff or repo.share_from_me  %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="{% trans "Unshare" %}" alt="{% trans "Unshare" %}" />
+        <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}" alt="{% trans "Unshare" %}" />
         {% endif %}
         </td>
     </tr>
@@ -193,8 +193,8 @@
 {% block extra_script %}
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
-addConfirmTo($('#quit-group'), '{% trans "Really want to quit this group?" %}');
-addConfirmTo($('.cancel-share'), '{% trans "Really want to unshare this library?" %}');
+addConfirmTo($('#quit-group'), '{% trans "Quit Group" %}', '{% trans "Are you sure you want to quit this group" %}');
+addConfirmTo($('.cancel-share'), '{% trans "Unshare Library" %}', '{% trans "Are you sure you want to unshare" %}');
 
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 

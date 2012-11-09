@@ -31,7 +31,7 @@
         <td>{{ contact.note }}</td>
         <td>
             <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
-            <a href="#" data="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}
@@ -111,7 +111,7 @@ $('#contact-edit-form').submit(function() {
     return false;
 });
 
-addConfirmTo($('.contact-delete'));
+addConfirmTo($('.contact-delete'), '{% trans "Delete Contact" %}', '{% trans "Are you sure you want to delete" %}');
 
 $('#contact-add')
 .click(function() {

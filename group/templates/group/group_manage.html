@@ -14,7 +14,7 @@
   <div class="info-item-bottom">
     <ul class="with-bg">
       <li><a href="{% url 'avatar_group_add' group.id %}">{% trans "Avatar"%}</a></li>      
-      <li><a id="group-remove" href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
+      <li><a id="group-dismiss" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
       <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back"%}</a></li>
     </ul>
   </div>
@@ -37,7 +37,7 @@
         <td>{% avatar member.user_name 20 %}</td>
         <td>{{ member.user_name }}</td>
         <td>
-            <a href="#" data="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" class="member-remove-btn op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
         </td>
     </tr>
     {% endfor %}
@@ -60,7 +60,7 @@
         <td>{{ member.user_name }}</td>
         <td>
             {% if member.user_name != request.user.username %}
-            <a href="#" data="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
             {% endif %}
         </td>
     </tr>
@@ -73,8 +73,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($("#group-remove"), '{% trans "Really want to dismiss this group?" %}');
-addConfirmTo($(".member-remove-btn"));
+addConfirmTo($("#group-dismiss"), '{% trans "Dismiss Group" %}', '{% trans "Really want to dismiss this group" %}');
+addConfirmTo($(".member-remove-btn"), '{% trans "Delete Member" %}', '{% trans "Really want to delete Member" %}');
 var contact_list = [], contact_email;
 {% for contact in contacts %}
 contact_email = '{{ contact.contact_email }}';

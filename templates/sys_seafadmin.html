@@ -15,11 +15,11 @@
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -58,7 +58,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.repo-delete-btn'));
+    addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 </script>
 {% endblock %}
  

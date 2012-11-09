@@ -41,7 +41,7 @@
                 </td>
                 <td>
                     <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">{% trans "View"%}</a>
-                    <a href="#" data="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">{% trans "Restore"%}</a>
+                    <a href="#" data-url="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">{% trans "Restore"%}</a>
                 </td>
             </tr>
             {% endfor %}
@@ -81,6 +81,6 @@
     $('#back').click(function() {
         location.href = $(this).attr('data');
     });
-    addConfirmTo($(".repo-revert"), '{% trans "Really want to restore this library?" %}');
+    addConfirmTo($('.repo-revert'), '{% trans "Restore Library" %}', '{% trans "Are you sure you want to restore this library" %}');
 </script>
 {% endblock %}

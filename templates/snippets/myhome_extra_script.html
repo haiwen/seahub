@@ -29,11 +29,10 @@ $(function() {
         }
     });
 
-    addConfirmTo($('.repo-delete-btn'), '{% trans "Really want to delete?" %}');
-
     $('.unshare-btn').click(function() {
         location.href = $(this).attr('data');
     });
+    addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 
     $(".download-btn").click(function() {
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));

@@ -42,11 +42,11 @@
 
     {% for repo in owned_repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
-        <a href="#" data="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" class="remove-user-repo op">{% trans "Delete" %}</a>
+        <a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="remove-user-repo op">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -130,7 +130,6 @@ $('#set-quota-form .submit').click(function() {
     return false;
 });
 
-addConfirmTo($('.remove-user-repo'), '{% trans "Really delete this library?" %}');
-
+addConfirmTo($('.remove-user-repo'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 </script>
 {% endblock %}
