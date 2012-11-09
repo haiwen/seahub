@@ -92,7 +92,9 @@
                 {% endif %}
                 {% endif %}
             </p>
+            {% if user_perm == 'rw' %}
             <a href="{% url 'file_revisions' repo.id %}?p={{ path }}" class="more fright">{% trans "History"%}</a>
+            {% endif %}
         </div> 
         <p class="contributors">
         <span>{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>

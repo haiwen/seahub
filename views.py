@@ -1333,6 +1333,8 @@ def repo_view_file(request, repo_id):
             org_id = request.user.org['org_id']
         is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
 
+    user_perm = get_user_permission(request, repo_id)
+        
     return render_to_response('repo_view_file.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -1368,6 +1370,7 @@ def repo_view_file(request, repo_id):
             'page_from': page_from,
             'repo_group_str': repogrp_str,
             'is_starred': is_starred,
+            'user_perm': user_perm,
             }, context_instance=RequestContext(request))
 
 def file_comment(request):
