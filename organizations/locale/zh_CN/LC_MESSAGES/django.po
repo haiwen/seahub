@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 19:57+0800\n"
+"POT-Creation-Date: 2012-11-09 21:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -203,6 +203,16 @@ msgstr "如果该邮箱还未注册，我们将给其发送邀请。"
 msgid "Emails is required."
 msgstr "邮箱为必填项。"
 
+#: templates/organizations/org_admin.html:99
+msgid "Delete Member"
+msgstr "删除成员"
+
+#: templates/organizations/org_admin.html:99
+#: templates/organizations/org_group_admin.html:60
+#: templates/organizations/org_seafadmin.html:62
+msgid "Are you sure you want to delete"
+msgstr "确定要删除"
+
 #: templates/organizations/org_group_admin.html:7
 #: templates/organizations/org_pubinfo.html:26
 msgid "Groups"
@@ -229,8 +239,8 @@ msgid "None"
 msgstr "暂无"
 
 #: templates/organizations/org_group_admin.html:60
-msgid "Really want to delete this group?"
-msgstr "确定要删除这个群组？"
+msgid "Delete Group"
+msgstr "删除群组"
 
 #: templates/organizations/org_groups.html:13
 #: templates/organizations/org_public.html:13
@@ -332,6 +342,10 @@ msgstr "所有资料库"
 msgid "Owner"
 msgstr "拥有者"
 
+#: templates/organizations/org_seafadmin.html:62
+msgid "Delete Library"
+msgstr "删除资料库"
+
 #: templates/organizations/org_user_add_email.html:2
 #, python-format
 msgid "%(user)s added you to Organization %(org_name)s on Seafile. "
@@ -380,6 +394,9 @@ msgstr "暂无昵称"
 #: templates/organizations/personal.html:20
 msgid "Edit"
 msgstr "编辑"
+
+#~ msgid "Really want to delete this group?"
+#~ msgstr "确定要删除这个群组？"
 
 #~ msgid "Profile"
 #~ msgstr "个人基本信息"

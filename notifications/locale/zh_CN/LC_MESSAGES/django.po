@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 15:05+0800\n"
+"POT-Creation-Date: 2012-11-09 21:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +19,7 @@ msgstr ""
 
 #: templates/notifications/add_notification_form.html:3
 #: templates/notifications/add_notification_form.html:7
-#: templates/notifications/notification_list.html:8
+#: templates/notifications/notification_list.html:9
 msgid "Add new notification"
 msgstr "添加新通知"
 
@@ -32,34 +31,42 @@ msgstr "通知"
 msgid "Submit"
 msgstr "提交"
 
-#: templates/notifications/notification_list.html:6
-#: templates/notifications/notification_list.html:18
+#: templates/notifications/notification_list.html:7
+#: templates/notifications/notification_list.html:20
 msgid "Operations"
 msgstr "操作"
 
-#: templates/notifications/notification_list.html:13
+#: templates/notifications/notification_list.html:15
 msgid "All Notifications"
 msgstr "所有通知"
 
-#: templates/notifications/notification_list.html:17
+#: templates/notifications/notification_list.html:19
 msgid "Notification Detail"
 msgstr "通知内容"
 
-#: templates/notifications/notification_list.html:24
+#: templates/notifications/notification_list.html:26
 msgid "(current notification)"
 msgstr "（当前通知）"
 
-#: templates/notifications/notification_list.html:28
+#: templates/notifications/notification_list.html:30
 msgid "Set to current"
 msgstr "设为当前通知"
 
-#: templates/notifications/notification_list.html:30
+#: templates/notifications/notification_list.html:32
 msgid "Delete"
 msgstr "删除"
 
-#: templates/notifications/notification_list.html:62
+#: templates/notifications/notification_list.html:64
 msgid "Empty"
 msgstr "空"
+
+#: templates/notifications/notification_list.html:70
+msgid "Delete Notification"
+msgstr "删除通知"
+
+#: templates/notifications/notification_list.html:70
+msgid "Are you sure you want to delete"
+msgstr "确定要删除"
 
 #~ msgid "Detail"
 #~ msgstr "内容"

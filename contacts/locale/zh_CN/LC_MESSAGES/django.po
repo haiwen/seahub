@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 18:00+0800\n"
+"POT-Creation-Date: 2012-11-09 21:31+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +42,8 @@ msgstr "小提示"
 msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
-msgstr "在共享和发送外链的时候，系统会自动记录下你用过的通讯地址，以方便下次使用。"
+msgstr ""
+"在共享和发送外链的时候，系统会自动记录下你用过的通讯地址，以方便下次使用。"
 
 #: templates/contacts/contact_list.html:15
 msgid "Contacts"
@@ -115,6 +115,14 @@ msgstr "提交"
 #: templates/contacts/contact_list.html:57
 msgid "Edit Contact"
 msgstr "编辑联系人"
+
+#: templates/contacts/contact_list.html:114
+msgid "Delete Contact"
+msgstr "删除联系人"
+
+#: templates/contacts/contact_list.html:114
+msgid "Are you sure you want to delete"
+msgstr "确定要删除"
 
 #~ msgid "Tip"
 #~ msgstr "小提示"

@@ -308,6 +308,7 @@ msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
 #: views.py:1910 templates/sys_useradmin.html:31
+#: templates/sys_useradmin.html.py:77
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
@@ -489,49 +490,45 @@ msgstr "登录"
 msgid "Signup"
 msgstr "注册"
 
-#: templates/base.html:119
-msgid "Introduction"
-msgstr "介绍"
-
-#: templates/base.html:121
-msgid "Forum"
-msgstr "论坛"
-
-#: templates/base.html:125
-msgid "Client"
-msgstr "客户端"
-
-#: templates/base.html:131
-msgid "Documents"
-msgstr "文档"
-
-#: templates/base.html:133
-msgid "Help"
-msgstr "使用帮助"
-
-#: templates/base.html:138
-msgid "Server Version: "
-msgstr "服务器版本："
-
-#: templates/base.html:139
-msgid "Seafile"
-msgstr "海文互知"
-
-#: templates/base.html:140
-msgid "Contact Us"
-msgstr "联系我们"
-
-#: templates/base.html:145 templates/snippets/myhome_extra_script.html:32
-msgid "Really want to delete?"
-msgstr "确定要删除？"
-
-#: templates/base.html:146
+#: templates/base.html:114
 msgid "Yes"
 msgstr "确定"
 
-#: templates/base.html:147
+#: templates/base.html:115
 msgid "No"
 msgstr "取消"
+
+#: templates/base.html:124
+msgid "Introduction"
+msgstr "介绍"
+
+#: templates/base.html:126
+msgid "Forum"
+msgstr "论坛"
+
+#: templates/base.html:130
+msgid "Client"
+msgstr "客户端"
+
+#: templates/base.html:136
+msgid "Documents"
+msgstr "文档"
+
+#: templates/base.html:138
+msgid "Help"
+msgstr "使用帮助"
+
+#: templates/base.html:143
+msgid "Server Version: "
+msgstr "服务器版本："
+
+#: templates/base.html:144
+msgid "Seafile"
+msgstr "海文互知"
+
+#: templates/base.html:145
+msgid "Contact Us"
+msgstr "联系我们"
 
 #: templates/decrypt_repo_form.html:9
 msgid ""
@@ -1219,7 +1216,11 @@ msgid "Create Time"
 msgstr "生成时间"
 
 #: templates/repo_view_snapshot.html:84
-msgid "Really want to restore this library?"
+msgid "Restore Library"
+msgstr "还原资料库"
+
+#: templates/repo_view_snapshot.html:84
+msgid "Are you sure you want to restore this library"
 msgstr "确定要还原这个资料库？"
 
 #: templates/seafile_access_check.html:6
@@ -1275,8 +1276,14 @@ msgid "Create At"
 msgstr "创建时间"
 
 #: templates/sys_group_admin.html:60
-msgid "Really delete this group?"
-msgstr "确定要删除这个群组？"
+msgid "Delete Group"
+msgstr "删除群组"
+
+#: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
+#: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:76
+#: templates/userinfo.html:133 templates/snippets/myhome_extra_script.html:32
+msgid "Are you sure you want to delete"
+msgstr "确定要删除"
 
 #: templates/sys_org_admin.html:7
 msgid "All Organizations"
@@ -1287,8 +1294,8 @@ msgid "Url Prefix"
 msgstr "个性域名"
 
 #: templates/sys_org_admin.html:61
-msgid "Really delete this organization?"
-msgstr "确定要删除这个团体？"
+msgid "Delete Organization"
+msgstr "删除团体"
 
 #: templates/sys_seafadmin.html:6
 msgid "All Libraries"
@@ -1297,6 +1304,18 @@ msgstr "所有资料库"
 #: templates/sys_seafadmin.html:12
 msgid "Owner"
 msgstr "拥有者"
+
+#: templates/sys_seafadmin.html:18 templates/userinfo.html:45
+#: templates/snippets/my_owned_repos.html:25
+#: templates/snippets/my_owned_repos.html:67
+#: templates/snippets/my_owned_repos.html:69
+msgid "directory icon"
+msgstr "目录图标"
+
+#: templates/sys_seafadmin.html:61 templates/userinfo.html:133
+#: templates/snippets/myhome_extra_script.html:32
+msgid "Delete Library"
+msgstr "删除资料库"
 
 #: templates/sys_useradmin.html:7
 msgid "Add new user"
@@ -1318,9 +1337,13 @@ msgstr "已激活"
 msgid "Active"
 msgstr "激活"
 
+#: templates/sys_useradmin.html:76
+msgid "Delete User"
+msgstr "删除用户"
+
 #: templates/sys_useradmin.html:77
-msgid "Really reset?"
-msgstr "确定要重置？"
+msgid "Are you sure you want to reset password of"
+msgstr "确定要重置该用户的密码："
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -1428,10 +1451,6 @@ msgstr "设置该用户的存储容量上限"
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
-
-#: templates/userinfo.html:133
-msgid "Really delete this library?"
-msgstr "确定要删除这个资料库？"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
@@ -1646,12 +1665,6 @@ msgstr "我拥有的"
 msgid "Starred"
 msgstr "星标文件"
 
-#: templates/snippets/my_owned_repos.html:25
-#: templates/snippets/my_owned_repos.html:67
-#: templates/snippets/my_owned_repos.html:69
-msgid "directory icon"
-msgstr "目录图标"
-
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
 msgstr "你还未创建资料库"
@@ -1762,9 +1775,6 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
-
-#~ msgid "Really want to leave share?"
-#~ msgstr "确定要退出共享？"
 
 #~ msgid "Email is not longer than 512 characters"
 #~ msgstr "邮箱不能超过512个字符"
