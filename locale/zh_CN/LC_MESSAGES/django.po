@@ -1430,7 +1430,7 @@ msgstr "确定要删除这个资料库？"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
-msgstr "忘记密码"
+msgstr "忘记密码？"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
