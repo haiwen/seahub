@@ -16,12 +16,12 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}}</h2>
-        {% if user_perm == 'rw' %}
         <div class="fright">
             <button id="repo-download-btn">{% trans "Download"%}</button>
+            {% if user_perm == 'rw' %}
             <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
     {% if user_perm == 'r' %}
     <p>{% trans "This library is read-only, and you can only view the files."%}</p>

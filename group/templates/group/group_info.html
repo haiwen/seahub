@@ -96,9 +96,7 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
-	    {% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="{% trans "Download" %}" title="{% trans "Download" %}" />
-	    {% endif %}
         {% if is_staff or repo.share_from_me  %}
             <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" title="{% trans "Unshare" %}" alt="{% trans "Unshare" %}" />
         {% endif %}

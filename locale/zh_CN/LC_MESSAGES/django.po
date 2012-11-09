@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 10:52+0800\n"
+"POT-Creation-Date: 2012-11-09 14:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -598,10 +598,10 @@ msgstr "未知"
 msgid "Restore"
 msgstr "还原"
 
-#: templates/file_revisions.html:52 templates/public_home.html:46
-#: templates/repo.html:21 templates/repo.html.py:137
+#: templates/file_revisions.html:52 templates/public_home.html:45
+#: templates/repo.html:20 templates/repo.html.py:137
 #: templates/repo_view_file.html:123 templates/snippets/my_owned_repos.html:34
-#: templates/snippets/my_owned_repos.html:82
+#: templates/snippets/my_owned_repos.html:81
 msgid "Download"
 msgstr "下载"
 
@@ -727,10 +727,8 @@ msgid "Tips"
 msgstr "小提示"
 
 #: templates/public_home.html:10
-msgid ""
-"Libraries marked as read-only can only be viewed online, can not be "
-"downloaded."
-msgstr "标记为只读的资料库只能查看，无法整个下载。"
+msgid "Libraries marked as read-only can only be browsed online."
+msgstr "标记为只读的资料库只能在线浏览。"
 
 #: templates/public_home.html:15
 msgid "Public Libraries"
@@ -762,7 +760,7 @@ msgstr "描述"
 #: templates/public_home.html:23 templates/repo_history.html:16
 #: templates/snippets/my_owned_repos.html:20
 #: templates/snippets/my_owned_repos.html:58
-#: templates/snippets/my_owned_repos.html:103
+#: templates/snippets/my_owned_repos.html:101
 msgid "Last Update"
 msgstr "更新时间"
 
@@ -785,11 +783,11 @@ msgstr "可读写"
 msgid "Read-Only"
 msgstr "只读"
 
-#: templates/public_home.html:54
+#: templates/public_home.html:52
 msgid "No public library"
 msgstr "当前没有公共资料"
 
-#: templates/public_home.html:55
+#: templates/public_home.html:53
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
@@ -904,7 +902,7 @@ msgstr "目录名"
 msgid "Cancel"
 msgstr "取消"
 
-#: templates/repo.html:173 templates/snippets/my_owned_repos.html:101
+#: templates/repo.html:173 templates/snippets/my_owned_repos.html:99
 msgid "File Name"
 msgstr "文件名称"
 
@@ -1565,7 +1563,7 @@ msgid "Deleted library"
 msgstr "删除了资料库"
 
 #: templates/snippets/events.html:66
-#: templates/snippets/my_owned_repos.html:102
+#: templates/snippets/my_owned_repos.html:100
 msgid "Library"
 msgstr "资料库"
 
@@ -1676,15 +1674,15 @@ msgstr "2. 把文件拷贝到下载下来的目录中，它们会自动同步到
 msgid "Shared By"
 msgstr "共享来源"
 
-#: templates/snippets/my_owned_repos.html:84
+#: templates/snippets/my_owned_repos.html:82
 msgid "Leave Share"
 msgstr "退出共享"
 
-#: templates/snippets/my_owned_repos.html:91
+#: templates/snippets/my_owned_repos.html:89
 msgid "No library is shared to you"
 msgstr "还没有资料库共享给你"
 
-#: templates/snippets/my_owned_repos.html:92
+#: templates/snippets/my_owned_repos.html:90
 msgid ""
 "Libraries shared to you will be listed here. Libraries shared as writable "
 "can be downloaded and synced. Read only libraries can only be viewed online."
@@ -1692,15 +1690,15 @@ msgstr ""
 "这里会显示共享给你的资料库。你可以下载这个资料库。你可以添加文件到这个下载下"
 "来的资料库，这些文件会自动同步到服务器。"
 
-#: templates/snippets/my_owned_repos.html:107
+#: templates/snippets/my_owned_repos.html:105
 msgid "icon"
 msgstr "图标"
 
-#: templates/snippets/my_owned_repos.html:118
+#: templates/snippets/my_owned_repos.html:116
 msgid "You don't have any starred files yet"
 msgstr "你还没有星标文件"
 
-#: templates/snippets/my_owned_repos.html:119
+#: templates/snippets/my_owned_repos.html:117
 msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing "
 "page, and they will be listed here."

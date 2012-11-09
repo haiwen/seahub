@@ -7,7 +7,7 @@
 {% block left_panel %}
 <div class="info-item">
 <h3 class="info-item-top">{% trans "Tips"%}</h3>
-<p class="info-item-bottom">{% trans "Libraries marked as read-only can only be viewed online, can not be downloaded."%}</p>
+<p class="info-item-bottom">{% trans "Libraries marked as read-only can only be browsed online."%}</p>
 </div>
 {% endblock %}
 
@@ -42,9 +42,7 @@
         {% endif %}
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-	    {% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
-	    {% endif %}
         </td>
     </tr>
     {% endfor %}

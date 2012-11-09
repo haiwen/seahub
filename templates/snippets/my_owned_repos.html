@@ -78,9 +78,7 @@
         {% endif %}
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-        {% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
-        {% endif %}
             <img src="{{ MEDIA_URL }}img/delete-20.png" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
         </td>
     </tr>

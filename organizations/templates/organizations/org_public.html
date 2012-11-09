@@ -46,9 +46,7 @@
         {% endif %}
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-	    {% if repo.user_perm == 'rw' %}
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
-	    {% endif %}
         </td>
     </tr>
     {% endfor %}
