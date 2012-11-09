@@ -10,7 +10,7 @@ form,input,textarea,button,img {
     margin:0;
 }
 body,
-input, button, select {
+input, textarea, button, select {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
     color: #333;
 }
@@ -222,15 +222,18 @@ ul.with-bg li {
     top:-15px;
     left:-14px;
 }
-.placeholder {
+.placeholder { /*for ie */
     color: #aaa;
-    padding: 2px;           /* for ie */
+    line-height:1.5;
 }
 input:-moz-placeholder,
-textarea:-moz-placeholder {
-    padding: 2px;           /* for FF */
+textarea:-moz-placeholder {/* for FF */
+    color: #aaa;
+    line-height:1.5;
 }
-::-webkit-input-placeholder { padding: 2px; } /* for chrome, safari */
+::-webkit-input-placeholder {/*for chrome, safari */
+    line-height:1.5;
+}
 .avatar {
     border-radius:3px;
 }
