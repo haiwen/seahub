@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 17:49+0800\n"
+"POT-Creation-Date: 2012-11-09 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,11 +276,10 @@ msgstr "标记为只读的资料库只能在线浏览。"
 
 #: templates/organizations/org_public.html:16
 msgid ""
-"Afterward, updating on server will be downloaded automatically, but updating "
+"Afterwards, updates on server will be downloaded automatically, but updates "
 "on local files will not be uploaded."
 msgstr ""
-"之后，服务器上的修改会自动同步到本地，而本地"
-"文件的修改无法上传到服务器。"
+"之后，服务器上的修改会自动同步到本地，而本地文件的修改无法上传到服务器。"
 
 #: templates/organizations/org_public.html:22
 msgid "Public Libraries"
