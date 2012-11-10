@@ -641,7 +641,8 @@ def org_repo_share(request, url_prefix):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, share_to,
                                                 permission)
                 msg = _(u'Shared to %(share_to)s successfully，you can go check it at <a href="%(share)s">Share</a>.') % \
-                    (share_to, reverse('org_shareadmin', args=[org.url_prefix]))
+                    {"share_to":share_to,
+                     "share": reverse('org_shareadmin', args=[org.url_prefix])}
                 messages.add_message(request, messages.INFO, msg)
             except SearpcError, e:
                 msg = _(u'Failed to share to %s.') % share_to
