@@ -1221,7 +1221,7 @@ msgstr "还原资料库"
 
 #: templates/repo_view_snapshot.html:84
 msgid "Are you sure you want to restore this library"
-msgstr "确定要还原这个资料库？"
+msgstr "确定要还原这个资料库"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."

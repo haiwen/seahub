@@ -30,7 +30,7 @@ $(function() {
     });
 
     $('.unshare-btn').click(function() {
-        location.href = $(this).attr('data');
+        location.href = $(this).attr('data-url');
     });
     addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 
