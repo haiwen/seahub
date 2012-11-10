@@ -159,21 +159,23 @@
         </div>
     </div>
 
-    <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
-        <h4>{% trans "Directory Name"%}</h4>
+    <form id="add-new-dir-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+        <h3>{% trans "New Directory" %}</h3>
+        <label>{% trans "Directory Name" %}</label>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
-        <input type="text" name="new_dir_name" value="" /><br />
+        <input type="text" name="new_dir_name" value="" class="long-input" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
 
-    <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
-        <h4>{% trans "File Name"%}</h4>
+    <form id="add-new-file-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+        <h3>{% trans "New File" %}</h3>
+        <label>{% trans "File Name" %}</label>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
-        <input type="text" name="new_file_name" value="" /><br />
+        <input type="text" name="new_file_name" value="" class="long-input" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>

@@ -556,11 +556,18 @@ textarea:-moz-placeholder {/* for FF */
 .simplemodal-close {
     margin-left:5px;
 }
-#confirm-popup {
+#confirm-popup,
+#rename-form {
     min-width:255px;
 }
 #confirm-popup button {
     margin-top:.8em;
+}
+.simple-input-popup {
+    width:255px;
+}
+.simple-input-popup .long-input {
+    width:99%;
 }
 
 /*ui-autocomplete*/
