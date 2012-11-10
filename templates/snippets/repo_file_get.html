@@ -142,7 +142,6 @@ $('#file-view').html('<p>{% trans "This type of file cannot be viewed online." %
               
               localeChain: 'en_US'
           }});
-          $('#file-view').children('object').prepend('<param name="wmode" value="opaque">'); //allow popup to show on top of the flash
   }
   
   {% if swf_exists %}

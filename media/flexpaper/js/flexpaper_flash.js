@@ -150,29 +150,30 @@ function onDocumentPrinted(){
  */
 
 (function() {
-		
-	var IE = document.all,
-		 URL = 'http://www.adobe.com/go/getflashplayer',
-		 JQUERY = typeof jQuery == 'function', 
-		 RE = /(\d+)[^\d]+(\d+)[^\d]*(\d*)/,
-		 GLOBAL_OPTS = { 
-			// very common opts
-			width: '100%',
-			height: '100%',		
-			id: "_" + ("" + Math.random()).slice(9),
-			
-			// flashembed defaults
-			allowfullscreen: true,
-			allowscriptaccess: 'always',
-			quality: 'high',	
-			
-			// flashembed specific options
-			version: [3, 0],
-			onFail: null,
-			expressInstall: null, 
-			w3c: false,
-			cachebusting: false  		 		 
-	};
+
+    var IE = document.all,
+        URL = 'http://www.adobe.com/go/getflashplayer',
+        JQUERY = typeof jQuery == 'function', 
+        RE = /(\d+)[^\d]+(\d+)[^\d]*(\d*)/,
+        GLOBAL_OPTS = { 
+            // very common opts
+            width: '100%',
+            height: '100%',		
+            id: "_" + ("" + Math.random()).slice(9),
+
+            // flashembed defaults
+            allowfullscreen: true,
+            allowscriptaccess: 'always',
+            quality: 'high',	
+            wmode: 'opaque', // by lj, 2012-11-10
+
+            // flashembed specific options
+            version: [3, 0],
+            onFail: null,
+            expressInstall: null, 
+            w3c: false,
+            cachebusting: false  		 		 
+        };
 	
 	if(IE){GLOBAL_OPTS.cachebusting=true;}
 	

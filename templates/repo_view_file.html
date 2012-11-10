@@ -204,7 +204,7 @@ $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
 {% if not view_history %}
-$('#edit, #update').click(function() {
+$('#edit').click(function() {
     location.href = $(this).attr('data');
 });
 function showLink() {
