@@ -37,7 +37,7 @@ msgstr "共享到公共资料失败"
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
-msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享管理</a> 查看。"
+msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享</a> 查看。"
 
 #: views.py:97
 #, python-format

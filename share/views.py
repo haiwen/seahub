@@ -176,7 +176,8 @@ def repo_remove_share(request):
         
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = settings.SITE_ROOT
+        from seahub.settings import SITE_ROOT
+        next = SITE_ROOT
 
     return HttpResponseRedirect(next)
 

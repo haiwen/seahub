@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 09:50+0800\n"
+"POT-Creation-Date: 2012-11-10 12:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -391,8 +391,8 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
-#: templates/repo.html:168 templates/repo.html.py:178 templates/repo.html:198
-#: templates/repo.html.py:209 templates/repo_edit_file.html:40
+#: templates/repo.html:169 templates/repo.html.py:180 templates/repo.html:200
+#: templates/repo.html.py:211 templates/repo_edit_file.html:40
 #: templates/repo_edit_file.html.py:45 templates/repo_update_file.html:21
 #: templates/repo_upload_file.html:17 templates/repo_view_file.html:143
 #: templates/repo_view_file.html.py:169 templates/userinfo.html:87
@@ -597,7 +597,8 @@ msgstr "还原"
 
 #: templates/file_revisions.html:52 templates/public_home.html:48
 #: templates/repo.html:20 templates/repo.html.py:137
-#: templates/repo_view_file.html:125 templates/snippets/my_owned_repos.html:34
+#: templates/repo_view_file.html:125 templates/view_shared_file.html:20
+#: templates/snippets/my_owned_repos.html:34
 #: templates/snippets/my_owned_repos.html:81
 msgid "Download"
 msgstr "下载"
@@ -846,11 +847,11 @@ msgstr "当前路径："
 msgid "Upload"
 msgstr "上传"
 
-#: templates/repo.html:88
+#: templates/repo.html:88 templates/repo.html.py:163
 msgid "New Directory"
 msgstr "新建目录"
 
-#: templates/repo.html:89
+#: templates/repo.html:89 templates/repo.html.py:174
 msgid "New File"
 msgstr "新建文件"
 
@@ -895,62 +896,62 @@ msgstr "更新"
 msgid "More Operations"
 msgstr "更多操作"
 
-#: templates/repo.html:163
+#: templates/repo.html:164
 msgid "Directory Name"
 msgstr "目录名"
 
-#: templates/repo.html:169 templates/repo.html.py:179 templates/repo.html:199
-#: templates/repo.html.py:210 templates/repo_edit_file.html:47
+#: templates/repo.html:170 templates/repo.html.py:181 templates/repo.html:201
+#: templates/repo.html.py:212 templates/repo_edit_file.html:47
 #: templates/repo_update_file.html:27 templates/repo_upload_file.html:23
 #: templates/snippets/events.html:73
 msgid "Cancel"
 msgstr "取消"
 
-#: templates/repo.html:173 templates/snippets/my_owned_repos.html:99
+#: templates/repo.html:175 templates/snippets/my_owned_repos.html:99
 msgid "File Name"
 msgstr "文件名称"
 
-#: templates/repo.html:185
+#: templates/repo.html:187
 msgid "Current Library"
 msgstr "当前资料库"
 
-#: templates/repo.html:187
+#: templates/repo.html:189
 msgid "Other Libraries"
 msgstr "其他资料库"
 
-#: templates/repo.html:197
+#: templates/repo.html:199
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: templates/repo.html:283
+#: templates/repo.html:285
 msgid "file"
 msgstr "文件"
 
-#: templates/repo.html:283
+#: templates/repo.html:285
 msgid "directory"
 msgstr "目录"
 
-#: templates/repo.html:286
+#: templates/repo.html:288
 msgid "Rename "
 msgstr "重命名"
 
-#: templates/repo.html:286 templates/repo.html.py:348
+#: templates/repo.html:288 templates/repo.html.py:350
 msgid "to:"
 msgstr "到："
 
-#: templates/repo.html:333
+#: templates/repo.html:335
 msgid "Copy "
 msgstr "复制"
 
-#: templates/repo.html:336
+#: templates/repo.html:338
 msgid "Move "
 msgstr "移动"
 
-#: templates/repo.html:340
+#: templates/repo.html:342
 msgid "file "
 msgstr "文件"
 
-#: templates/repo.html:343
+#: templates/repo.html:345
 msgid "directory "
 msgstr "目录"
 
@@ -1114,7 +1115,7 @@ msgstr[0] " %(counter)s 个贡献者 "
 msgid "Open local file"
 msgstr "打开本地文件"
 
-#: templates/repo_view_file.html:123
+#: templates/repo_view_file.html:123 templates/view_shared_file.html:18
 msgid "Raw"
 msgstr "原始文件"
 
@@ -1281,7 +1282,7 @@ msgstr "删除群组"
 
 #: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
 #: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:76
-#: templates/userinfo.html:133 templates/snippets/myhome_extra_script.html:32
+#: templates/userinfo.html:133 templates/snippets/myhome_extra_script.html:35
 msgid "Are you sure you want to delete"
 msgstr "确定要删除"
 
@@ -1313,7 +1314,7 @@ msgid "directory icon"
 msgstr "目录图标"
 
 #: templates/sys_seafadmin.html:61 templates/userinfo.html:133
-#: templates/snippets/myhome_extra_script.html:32
+#: templates/snippets/myhome_extra_script.html:35
 msgid "Delete Library"
 msgstr "删除资料库"
 
@@ -1451,6 +1452,14 @@ msgstr "设置该用户的存储容量上限"
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
+
+#: templates/view_shared_file.html:10
+msgid "Share From: "
+msgstr "共享来源："
+
+#: templates/view_shared_file.html:28
+msgid "File is loading..."
+msgstr "文件内容读取中..."
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
@@ -1708,8 +1717,9 @@ msgid ""
 "can be downloaded and synced. Read only libraries can only be downloaded, "
 "updates on local files will not be uploaded."
 msgstr ""
-"这里会显示共享给你的资料库。你可以下载和同步以可读写方式共享给你的资料库。而对于以只读方式共享"
-"给你的资料库，你只能下载，对本地文件所做的修改将不会被上传。"
+"这里会显示共享给你的资料库。你可以下载和同步以可读写方式共享给你的资料库。而"
+"对于以只读方式共享给你的资料库，你只能下载，对本地文件所做的修改将不会被上"
+"传。"
 
 #: templates/snippets/my_owned_repos.html:105
 msgid "icon"

@@ -1,5 +1,5 @@
 {% extends "myhome_base.html" %}
-{% load seahub_tags %}
+{% load seahub_tags i18n %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
@@ -7,7 +7,7 @@
 
 {% block main_panel %}
     <h2>{{ file_name }}</h2>
-    <p class="file-share-from">共享者：{{ username }}</p>
+    <p class="file-share-from">{% trans "Share From: " %}{{ username }}</p>
     <div id="file">
         {% if filetype == 'PDF' and not pdf_use_flas %}
         <div id="file-op" class="hide">
@@ -15,9 +15,9 @@
         <div id="file-op">
         {% endif %}
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">原始文件</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">{% trans "Raw" %}</button>
             {% endif %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">下载</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">{% trans "Download" %}</button>
         </div>
         <div id="file-view">
             {% if filetype == 'Text' %}
@@ -25,7 +25,7 @@
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
                 {% endifnotequal %}
             {% else %}
-            <p>文件内容读取中...</p>
+            <p>{% trans "File is loading..." %}</p>
             {% endif %}
         </div>
     </div>
