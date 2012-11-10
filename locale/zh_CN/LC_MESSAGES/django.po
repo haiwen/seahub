@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 13:45+0800\n"
+"POT-Creation-Date: 2012-11-10 14:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -996,13 +996,13 @@ msgstr "详情"
 
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
 #: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
-#: templates/sys_useradmin.html:40
+#: templates/sys_useradmin.html:40 templates/snippets/repo_file_get.html:42
 msgid "Previous"
 msgstr "前一页"
 
 #: templates/repo_history.html:50 templates/repo_view_snapshot.html:54
 #: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
-#: templates/sys_useradmin.html:43
+#: templates/sys_useradmin.html:43 templates/snippets/repo_file_get.html:42
 msgid "Next"
 msgstr "下一页"
 
@@ -1093,7 +1093,7 @@ msgstr "获取共享链接"
 msgid "Send"
 msgstr "发送"
 
-#: templates/repo_view_file.html:76
+#: templates/repo_view_file.html:76 templates/repo_view_file.html.py:498
 msgid "Unstar"
 msgstr "取消星标"
 
@@ -1752,6 +1752,32 @@ msgstr "(3到15个字符)"
 #: templates/snippets/repo_create_form.html:19
 msgid "Password again"
 msgstr "请再次输入密码"
+
+#: templates/snippets/repo_file_get.html:33
+msgid "To view it online, you can use firefox, chrome or IE 9."
+msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
+
+#: templates/snippets/repo_file_get.html:42
+msgid ""
+"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span></span>"
+msgstr ""
+"<span id=\"pdf-page\"><label for=\"page-number\">第</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span> 页</span>"
+
+#: templates/snippets/repo_file_get.html:42
+msgid "Full Screen"
+msgstr "全屏"
+
+#: templates/snippets/repo_file_get.html:42
+msgid "loading..."
+msgstr "加载中..."
+
+#: templates/snippets/repo_file_get.html:109
+msgid "This type of file cannot be viewed online."
+msgstr "该类型文件无法在线查看。"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share to"

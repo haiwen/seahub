@@ -1,4 +1,5 @@
 <!-- <script type="text/javascript"> -->
+{% load i18n %}
 {% if filetype == 'Text' %}
     {% ifnotequal file_content None %}
     $('#file-view').css('background', '#fff');
@@ -29,7 +30,7 @@
 
 {% if filetype == 'SVG' %}
     if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-        $('#file-view').html('<p>在线查看：请使用firefox, chrome 或 IE 9。</p>').addClass('file-view-tip');
+    $('#file-view').html('<p>{% trans "To view it online, you can use firefox, chrome or IE 9." %}</p>').addClass('file-view-tip');
     } else {
         $('#file-view').html('<div><iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe></div>');
     }
@@ -38,7 +39,7 @@
 {% if filetype == 'PDF' and not pdf_use_flash %}
     // Use pdf.js to view pdf in firefox/chrome
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
-    $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">上一页</button></span><span id="pdf-page"><label for="page-number">第</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span> 页</span><span id="pdf-page-right"><button id="next" style="margin-right:15px;">下一页</button><button id="full-screen">全屏</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="加载中..." id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
+    $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">{% trans "Previous" %}</button></span>{% blocktrans %}<span id="pdf-page"><label for="page-number">Page</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span></span>{% endblocktrans %}<span id="pdf-page-right"><button id="next" style="margin-right:15px;">{% trans "Next" %}</button><button id="full-screen">{% trans "Full Screen" %}</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="{% trans "loading..." %}" id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
     $('#pdf-page-right').append($('#file-op').html());
     $('#file-op').html('');
     $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
@@ -105,7 +106,7 @@
 {% endif %}
 
 {% if filetype == 'Unknown' %}
-    $('#file-view').html('<p>该类型文件无法在线查看。</p>').addClass('file-view-tip');
+$('#file-view').html('<p>{% trans "This type of file cannot be viewed online." %}</p>').addClass('file-view-tip');
 {% endif %}
 
 {% if filetype == 'Document' or filetype == 'PDF' and pdf_use_flash %}
@@ -163,7 +164,7 @@
               } else {
                   var status = data['status'];
                   if (status == 'QUEUED') {
-                      // $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
+                  // $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
                       setTimeout(check_status, 2000);
                   } else if (status == 'PROCESSING') {
                       // $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');

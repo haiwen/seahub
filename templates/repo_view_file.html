@@ -495,7 +495,7 @@ $('#star').click(function() {
                     star_btn.attr('data', 'unstarred').text('{% trans "Star" %}');
                 } else {
                 feedback('{% trans "Starred successfully" %}', 'success');
-                    star_btn.attr('data', 'starred').text('Unstar');
+                    star_btn.attr('data', 'starred').text('{% trans "Unstar" %}');
                 }
             } else {
                 feedback('{% trans "Failed:" %}' + data['err_msg'], 'error');
