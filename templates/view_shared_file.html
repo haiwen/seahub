@@ -7,7 +7,7 @@
 
 {% block main_panel %}
     <h2>{{ file_name }}</h2>
-    <p class="file-share-from">{% trans "Share From: " %}{{ username }}</p>
+    <p class="file-share-from">{% trans "Shared by: " %}{{ username }}</p>
     <div id="file">
         {% if filetype == 'PDF' and not pdf_use_flas %}
         <div id="file-op" class="hide">
@@ -25,7 +25,7 @@
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
                 {% endifnotequal %}
             {% else %}
-            <p>{% trans "File is loading..." %}</p>
+            <p>{% trans "Loading..." %}</p>
             {% endif %}
         </div>
     </div>

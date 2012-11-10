@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 12:01+0800\n"
+"POT-Creation-Date: 2012-11-10 13:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1119,7 +1119,7 @@ msgstr "打开本地文件"
 msgid "Raw"
 msgstr "原始文件"
 
-#: templates/repo_view_file.html:133
+#: templates/repo_view_file.html:133 templates/view_shared_file.html:28
 msgid "Loading..."
 msgstr "加载中..."
 
@@ -1454,12 +1454,8 @@ msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
 
 #: templates/view_shared_file.html:10
-msgid "Share From: "
+msgid "Shared by: "
 msgstr "共享来源："
-
-#: templates/view_shared_file.html:28
-msgid "File is loading..."
-msgstr "文件内容读取中..."
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
@@ -1785,6 +1781,12 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Share From: "
+#~ msgstr "共享来源："
+
+#~ msgid "File is loading..."
+#~ msgstr "文件内容读取中..."
 
 #~ msgid "Email is not longer than 512 characters"
 #~ msgstr "邮箱不能超过512个字符"
