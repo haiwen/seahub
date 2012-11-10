@@ -81,14 +81,14 @@ msgstr "共享到公共资料失败"
 msgid ""
 "Shared to all members successfully, you can go check it at <a href=\"%s"
 "\">Share</a>."
-msgstr "共享到公共资料成功，请前往<a href=\"%s\">共享管理</a>查看。"
+msgstr "共享到公共资料成功，请前往<a href=\"%s\">共享</a>查看。"
 
 #: views.py:623
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr "共享到 %(group)s 成功，请前往<a href=\"%(share)s\">共享管理</a>查看。"
+msgstr "共享到 %(group)s 成功，请前往<a href=\"%(share)s\">共享</a>查看。"
 
 #: views.py:629 views.py:647
 #, python-format
@@ -106,7 +106,7 @@ msgid ""
 "Shared to %(share_to)s successfully，you can go check it at <a href="
 "\"%(share)s\">Share</a>."
 msgstr ""
-"共享给 %(share_to)s 成功，请前往<a href=\"%(share)s\">共享管理</a>查看。"
+"共享给 %(share_to)s 成功，请前往<a href=\"%(share)s\">共享</a>查看。"
 
 #: views.py:689
 msgid "all members"
