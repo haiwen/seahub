@@ -354,6 +354,7 @@ textarea:-moz-placeholder {/* for FF */
     height:16px;
     vertical-align:middle;
     margin-bottom:3px;
+    *margin-bottom:0;/*for ie 7*/
 }
 .top-bar-con .avatar {
     border-radius: 2px;
@@ -379,6 +380,7 @@ textarea:-moz-placeholder {/* for FF */
 #account-context .tri-bg,
 #lang-context .tri-bg {
     height:0;
+    *margin-bottom:5px;/* for ie 7*/
 }
 #account-context-selector,
 #lang-context-selector {
@@ -830,6 +832,12 @@ textarea:-moz-placeholder {/* for FF */
 .access-notice { margin: 0.8em 0 0.4em; }
 .repo-op {
     text-align:right;
+}
+#recycle-btn,
+.file-op button,
+#file-op button,
+.repo-op .op-btn {
+    *margin-left:5px;/* for ie 7*/
 }
 #upload-file {
     padding-left:19px;

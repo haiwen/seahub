@@ -225,6 +225,12 @@ $(document).click(function(e) {
 });
 {% endif %}
 
+// for ie 7
+$('#title-panel, #left-panel, #right-panel').each(function() {
+    if($(this).children().length == 0) {
+        $(this).addClass('hide');
+    }
+});
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
