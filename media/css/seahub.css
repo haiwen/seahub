@@ -35,8 +35,8 @@ textarea {
     overflow: auto; /* rm default vertical scrollbar in ie */
 }
 input { 
-    height:20px;
-    line-height:20px;
+    height:22px;
+    line-height:22px;
     border: 1px solid #ddd;
     margin:3px 0;
 }
@@ -44,7 +44,18 @@ input,
 button {
     display:inline-block;/*for ie*/
 }
-button {
+input[type=submit],
+input.submit { 
+    height:auto;
+    line-height:1.5;
+}
+button,
+input[type=submit],
+input.submit { 
+    padding:3px;
+    background: #efefef;
+    border: 1px solid #ddd;
+    border-radius: 3px;
     overflow:visible;/*for ie 7*/
 }
 input[type=checkbox] {
@@ -59,17 +70,6 @@ input::-moz-focus-inner,
 button::-moz-focus-inner {/*Remove button padding in FF*/
     border: 0;
     padding: 0;
-}
-input[type=submit],
-input.submit,
-button { 
-    height:23px;
-    line-height:21px;
-    padding:0 3px;
-    background: #efefef;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    -moz-border-radius:3px;
 }
 input[type=submit],
 input.submit {
@@ -680,15 +680,16 @@ textarea:-moz-placeholder {/* for FF */
     white-space:nowrap;
     overflow:hidden;
 }
-
 #repo-create,
 #contact-add,
 #group-add,
 #org-user-add,
 #group-member-add,
-#group-admin-add {
+#group-admin-add,
+#repo-download-btn,
+#recycle-btn,
+.repo-op .op-btn {
     padding-left:21px;
-    height:27px;
     background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
 }
 #repo-create-form {
@@ -827,14 +828,6 @@ textarea:-moz-placeholder {/* for FF */
 .repo-op {
     text-align:right;
 }
-.repo-op button,
-#repo-download-btn {
-    height:25px;
-    background:#f5f5f5 scroll no-repeat 3px 48%;
-}
-#recycle-btn {
-    background:#f5f5f5 scroll no-repeat 3px 40%;
-}
 #upload-file {
     padding-left:19px;
     background-image:url('../img/upload.png?v=1');
@@ -925,8 +918,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #repo-download-btn, #recycle-btn {
     font-size:14px;
-    height:26px;
-    padding:0 5px 0 20px;
 }
 #repo-download-btn {
     background-image: url('../img/download-16.png');
@@ -1292,7 +1283,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .file-op button {
     color:#444;
-    margin-top:3px;
 }
 #file,
 #text-diff-output {
@@ -1309,7 +1299,7 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #ccc;
 }
 #file-op button {
-    padding:0 8px;
+    padding:2px 8px;
 }
 #file-view {
     border: 1px solid #ccc;
@@ -1410,7 +1400,7 @@ textarea:-moz-placeholder {/* for FF */
     width:400px;
     position:fixed;
     right:10px;
-    bottom:40px;
+    bottom:44px;
     border:1px solid #cbcbcb;
     padding:0 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
@@ -1446,7 +1436,7 @@ textarea:-moz-placeholder {/* for FF */
     width:28px;
     position:fixed;
     right:27px;
-    bottom:26px;
+    bottom:31px;
 }
 /*to-group*/
 #to-group {
