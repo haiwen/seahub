@@ -46,7 +46,7 @@ button {
 }
 input[type=submit],
 input.submit { 
-    height:auto;
+    height:27px;/*for ff*/
     line-height:1.5;
 }
 button,
@@ -56,7 +56,10 @@ input.submit {
     background: #efefef;
     border: 1px solid #ddd;
     border-radius: 3px;
+}
+button {
     overflow:visible;/*for ie 7*/
+    padding-bottom:0 \9;/*for ie; to make height right*/
 }
 input[type=checkbox] {
     height:auto;
