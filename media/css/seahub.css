@@ -346,10 +346,11 @@ textarea:-moz-placeholder {/* for FF */
     display:inline-block;
     height:24px;
     line-height:24px;
-    vertical-align:middle;
 }
-.top-bar-con a.avatar-link {
+.top-bar-con .avatar-link {
     height:16px;
+    vertical-align:middle;
+    margin-bottom:3px;
 }
 .top-bar-con .avatar {
     border-radius: 2px;
