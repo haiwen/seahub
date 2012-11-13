@@ -1,9 +1,8 @@
 {% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">{% trans "Recommend" %}</button> <button id="click-into-group">{% trans "Back to group" %}</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">{% trans "Recommend" %}</button><button id="click-into-group">{% trans "Back to group" %}</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
-$('#bottom-bar').css({'position':'fixed', 'bottom':0, 'right':'10px'});
-$('#main-panel').css('margin-bottom', '28px');
+$('#main-panel').css('margin-bottom', $('#bottom-bar button').outerHeight() + 2);
 $('#footer').addClass('hide');
 
 {% if groups %}
@@ -11,10 +10,10 @@ var group_list = []
 {% for group in groups %}
 group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
 {% endfor %}
-$('#recommend-to-group-caret').css('left', $('#recommend').offset().left);
 $('#recommend').click(function() {
     if ($('#recommend-to-group-form').hasClass('hide')) {
         $('#recommend-to-group-form, #recommend-to-group-caret').removeClass('hide');
+        $('#recommend-to-group-caret').css('left', $('#recommend').offset().left);
     } else {
         $('#recommend-to-group-form, #recommend-to-group-caret').addClass('hide');
     }
@@ -34,19 +33,21 @@ $('#recommend-submit').click(function() {
 });
 
 $('#main').append('<div id="to-group" class="hide">{{ repo_group_str|escapejs }}</div><div id="to-group-caret" class="hide"><div class="outer-caret"><div class="inner-caret"></div></div></div>');
-$('#to-group').css({'width':$('#to-group').width(), 'left':$('#click-into-group').offset().left - $('#to-group').width()/3});
-$('#to-group-caret').css('left', $('#click-into-group').offset().left);
 $('#click-into-group').click(function() {
     {% if groups|length == 1 %}
     // only one group, just turn to group page
     {% for group in groups %}
     location.href= "{% url 'group_info' group.id %}";
     {% endfor %}
-    
+
     {% else %}
     // more than one group, then let user choose
     if ($('#to-group').hasClass('hide')) {
         $('#to-group, #to-group-caret').removeClass('hide');
+        $('#to-group-caret').css('left', $('#click-into-group').offset().left + $('#click-into-group').width()/3);
+        if ($('#to-group').offset().left > $('#click-into-group').offset().left) {
+            $('#to-group').css('left', $('#click-into-group').offset().left);
+        }
     } else {
         $('#to-group, #to-group-caret').addClass('hide');
     }
@@ -57,5 +58,11 @@ $(document).click(function(e) {
     if (!$('#click-into-group, #to-group, #to-group-caret').is(target) && !($('#to-group, #to-group-caret').find('*').is(target))) {
         $('#to-group, #to-group-caret').addClass('hide');
     }   
+});
+
+$(function() {
+    var btn_height = $('#bottom-bar button').outerHeight();
+    $('#recommend-to-group-caret, #to-group-caret, #comment-caret').css({'bottom': btn_height + 1});
+    $('#file-comment, #to-group, #recommend-to-group-form').css({'bottom': btn_height + 1 + $('.outer-caret').outerHeight()});
 });
 {% endif %}

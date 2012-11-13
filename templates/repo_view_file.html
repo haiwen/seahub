@@ -325,7 +325,7 @@ $('#shared-link').click(function() {
 
 {% include "snippets/bottom_bar.html" %}
 {% if request.user.is_authenticated %}
-$('#bottom-bar').append(' <button id="comment">{% trans "Comment" %}</button>');
+$('#bottom-bar').append('<button id="comment">{% trans "Comment" %}</button>');
 $('#file-comment').css({'max-height':$(window).height() - parseInt($('#file-comment').css('bottom'))});
 var gids = '';
 {% for g in groups %}
@@ -342,10 +342,12 @@ $('#comment-input').bind('autocompleteopen', function(e, ui) {
 });
 {% if comment_open %}
 $('#file-comment, #comment-caret').removeClass('hide');
+$(function() { $('#comment-caret').css({'left': $('#comment').offset().left}); });
 {% endif %}
 $('#comment').click(function() {
     if ($('#file-comment').hasClass('hide')) {
         $('#file-comment, #comment-caret').removeClass('hide');
+        $('#comment-caret').css({'left':$('#comment').offset().left});
         $('#comment-list').css({'max-height':parseInt($('#file-comment').css('max-height')) - $('#file-comment-form').outerHeight(true), 'overflow':'auto'});
     } else {
         $('#file-comment, #comment-caret').addClass('hide');

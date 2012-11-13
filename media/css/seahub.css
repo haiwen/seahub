@@ -511,7 +511,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .narrow-panel input {
     width:318px;
-    height:1.8em;
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
@@ -1399,25 +1398,30 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
 }
 /*bottom bar*/
+#bottom-bar {
+    position:fixed;
+    bottom:0;
+    right:10px;
+}
 #bottom-bar button {
     color:#fff;
-    background:#646464;
     font-size:15px;
+    background:#646464;
+    margin-left:5px;
 }
 /* File comment */
 #file-comment,
 #to-group,
 #recommend-to-group-form {
     width:400px;
+    padding:0 15px;
     position:fixed;
     right:10px;
-    bottom:44px;
+    background:#fff;
     border:1px solid #cbcbcb;
-    padding:0 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
     -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
-    background:#fff;
 }
 #comment-input {
     width:315px;
@@ -1446,8 +1450,6 @@ textarea:-moz-placeholder {/* for FF */
 #recommend-to-group-caret {
     width:28px;
     position:fixed;
-    right:27px;
-    bottom:31px;
 }
 /*to-group*/
 #to-group {
