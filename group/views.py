@@ -627,7 +627,7 @@ def group_manage(request, group_id):
             msg = ungettext(
                 'Successfully added. An email has been sent.',
                 'Successfully added. %(count)s emails have been sent.',
-            count) % {
+            len(mail_sended_list)) % {
                 'count': len(mail_sended_list),
             }
             messages.success(request, msg)
