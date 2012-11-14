@@ -1,10 +1,16 @@
+{% load i18n %}
 $("#group-add").click(function() {
     $("#group-add-form").modal({appendTo: "#main"});
 });
 
 $('#group-add-form').submit(function() {
+    if (!$.trim($('#group_name').val())) {
+        apply_form_error('group-add-form', "{% trans "Group name can't be empty" %}");
+        return false;
+    }
+
     var submit_btn = $(this).children('input[type="submit"]');  
-        submit_btn.attr('disabled', 'disabled');
+    submit_btn.attr('disabled', 'disabled').addClass('btn-disabled');
     $.ajax({
         url: '{{ post_url }}',
         type: 'POST',
@@ -19,7 +25,7 @@ $('#group-add-form').submit(function() {
                 location.reload(true);
             } else {
                 apply_form_error('group-add-form', data['error']);
-                submit_btn.removeAttr('disabled');
+                submit_btn.removeAttr('disabled').removeClass('btn-disabled');
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -31,7 +37,7 @@ $('#group-add-form').submit(function() {
                     apply_form_error('group-add-form', value[0]);
                 }
             });
-            submit_btn.removeAttr('disabled');
+            submit_btn.removeAttr('disabled').removeClass('btn-disabled');
         }
     });
 
