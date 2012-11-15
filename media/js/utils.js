@@ -298,3 +298,10 @@ function feedback(con, type) {
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
     setTimeout(function() { $('.messages').addClass('hide'); }, 2000);
 }
+
+function disable(btn) {
+    btn.attr('disabled', 'disabled').addClass('btn-disabled');
+}
+function enable(btn) {
+    btn.removeAttr('disabled').removeClass('btn-disabled');
+}

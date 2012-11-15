@@ -174,11 +174,15 @@ p {
 .no-deco:hover {
     text-decoration:none;
 }
-.input-disabled {
+.input-disabled {/* for type="password"/"text" etc*/
     background:#ebebe4;
 }
-.btn-disabled {
+input.btn-disabled { /*for <input type="submit" disabled="disabled" />*/
     color:#999;
+}
+input.btn-disabled:hover {
+    cursor:default;
+    background: #efefef;
 }
 .no-bold {
     font-weight:normal;
