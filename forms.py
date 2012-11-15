@@ -97,7 +97,7 @@ class RepoCreateForm(forms.Form):
                 passwd = self.cleaned_data['passwd']
                 passwd_again = self.cleaned_data['passwd_again']
                 if passwd != passwd_again:
-                    raise forms.ValidationError(_("The two password fields didn't match."))
+                    raise forms.ValidationError(_("Passwords don't match"))
         return self.cleaned_data
 
 class SharedRepoCreateForm(RepoCreateForm):
