@@ -454,6 +454,12 @@ $('#rename-form .submit').click(function() {
 });
 
 $('#add-new-file-form').submit(function() {
+    var new_file = $(this).find('input[name="new_file_name"]').val();
+    if (!$.trim(new_file)) {
+        apply_form_error('add-new-file-form', "{% trans "File name can't be empty" %}");
+        return false;
+    }
+
     var submit_btn = $(this).children('input[type="submit"]');  
     disable(submit_btn);
     $.ajax({
@@ -464,7 +470,7 @@ $('#add-new-file-form').submit(function() {
         data: {
             'repo_id': $('#add-new-file-form input[name="repo_id"]').val(),
             'parent_dir': $('#add-new-file-form input[name="parent_dir"]').val(),
-            'new_file_name': $('#add-new-file-form input[name="new_file_name"]').val()
+            'new_file_name': new_file
         },
         success: function(data) {
             if (data['success']) {
@@ -486,6 +492,12 @@ $('#add-new-file-form').submit(function() {
 });
 
 $('#add-new-dir-form').submit(function() {
+    var new_dir = $(this).find('input[name="new_dir_name"]').val();
+    if (!$.trim(new_dir)) {
+        apply_form_error('add-new-dir-form', "{% trans "Directory name can't be empty" %}");
+        return false;
+    }
+
     var submit_btn = $(this).children('input[type="submit"]');  
     disable(submit_btn);
     $.ajax({
@@ -496,7 +508,7 @@ $('#add-new-dir-form').submit(function() {
         data: {
             'repo_id': $('#add-new-dir-form input[name="repo_id"]').val(),
             'parent_dir': $('#add-new-dir-form input[name="parent_dir"]').val(),
-            'new_dir_name': $('#add-new-dir-form input[name="new_dir_name"]').val()
+            'new_dir_name': new_dir 
         },
         success: function(data) {
             if (data['success']) {

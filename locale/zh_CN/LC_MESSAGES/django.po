@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 14:21+0800\n"
+"POT-Creation-Date: 2012-11-15 16:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "A user with this email already"
 msgstr "该邮箱已被注册"
 
-#: forms.py:40 forms.py:100
+#: forms.py:40
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
-#: forms.py:56
+#: forms.py:56 templates/snippets/repo_create_js.html:28
 msgid "Name can't be empty"
 msgstr "名称不能为空"
 
@@ -33,7 +33,7 @@ msgstr "名称不能为空"
 msgid "Name is too long (maximum is 50 characters)"
 msgstr "名称太长（不超过50个字符）"
 
-#: forms.py:60
+#: forms.py:60 templates/snippets/repo_create_js.html:32
 msgid "Description can't be empty"
 msgstr "描述不能为空"
 
@@ -41,11 +41,11 @@ msgstr "描述不能为空"
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "描述太长（不超过100个字符）"
 
-#: forms.py:66 forms.py:71
+#: forms.py:66 forms.py:71 templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
 msgstr "密码太短（不少于3个字符）"
 
-#: forms.py:67 forms.py:72
+#: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:45
 msgid "Password is too long (maximum is 15 characters)"
 msgstr "密码太长（不超过15个字符）"
 
@@ -53,6 +53,10 @@ msgstr "密码太长（不超过15个字符）"
 #, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
+
+#: forms.py:100 templates/snippets/repo_create_js.html:53
+msgid "Passwords don't match"
+msgstr "两次输入的密码不一致"
 
 #: forms.py:113 forms.py:136 forms.py:160 forms.py:183
 msgid "Repo id is required"
@@ -66,7 +70,7 @@ msgstr "parent dir 为必填项"
 msgid "File name is too long"
 msgstr "文件名过长"
 
-#: forms.py:118 forms.py:142
+#: forms.py:118 forms.py:142 templates/repo.html:459
 msgid "File name can't be empty"
 msgstr "文件名不能为空"
 
@@ -83,7 +87,7 @@ msgstr "需要 oldname"
 msgid "Directory name is too long"
 msgstr "目录名过长"
 
-#: forms.py:165
+#: forms.py:165 templates/repo.html:497
 msgid "Directory name can't be empty"
 msgstr "描述不能为空"
 
@@ -1093,11 +1097,11 @@ msgstr "获取共享链接"
 msgid "Send"
 msgstr "发送"
 
-#: templates/repo_view_file.html:76 templates/repo_view_file.html.py:498
+#: templates/repo_view_file.html:76 templates/repo_view_file.html.py:500
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:495
+#: templates/repo_view_file.html:78 templates/repo_view_file.html.py:497
 msgid "Star"
 msgstr "添加星标"
 
@@ -1160,27 +1164,27 @@ msgstr "发送成功"
 msgid "Comment"
 msgstr "评论"
 
-#: templates/repo_view_file.html:371
+#: templates/repo_view_file.html:373
 msgid "Please type a message"
 msgstr "请先输入你的评论"
 
-#: templates/repo_view_file.html:417
+#: templates/repo_view_file.html:419
 msgid "Cannot find an application to open file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/repo_view_file.html:422
+#: templates/repo_view_file.html:424
 msgid "File is not Synchronized with server, please synchronize manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/repo_view_file.html:424
+#: templates/repo_view_file.html:426
 msgid "File is not Synchronized with server, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/repo_view_file.html:429
+#: templates/repo_view_file.html:431
 msgid "An error occur during opening local file."
 msgstr "打开本地文件时出错"
 
-#: templates/repo_view_file.html:460
+#: templates/repo_view_file.html:462
 msgid ""
 "Your Seafile client is out of date, please <a href=\"http://www.seafile.com/"
 "download/\">upgrade</a> to latest."
@@ -1188,23 +1192,23 @@ msgstr ""
 "Seafile 客户端程序未启动或者版本过低，请<a href=\"http://www.seafile.com/"
 "download/\">下载</a>最新版客户端"
 
-#: templates/repo_view_file.html:471
+#: templates/repo_view_file.html:473
 msgid "Seafile client is not started or out of date"
 msgstr "Seafile 客户端程序未启动或者版本过低"
 
-#: templates/repo_view_file.html:494
+#: templates/repo_view_file.html:496
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/repo_view_file.html:497
+#: templates/repo_view_file.html:499
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/repo_view_file.html:501
+#: templates/repo_view_file.html:503
 msgid "Failed:"
 msgstr "操作失败："
 
-#: templates/repo_view_file.html:505
+#: templates/repo_view_file.html:507
 msgid ", failed"
 msgstr "，操作失败"
 
@@ -1568,7 +1572,7 @@ msgstr "推荐"
 msgid "Back to group"
 msgstr "到所在群组"
 
-#: templates/snippets/bottom_bar.html:31
+#: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
 msgstr "请输入推荐语。"
 
@@ -1613,6 +1617,10 @@ msgstr "密码将在服务器上保存一小时。"
 #: templates/snippets/file_upload_progress_js.html:51
 msgid "Please choose a file at first."
 msgstr "请先选择一个文件。"
+
+#: templates/snippets/group_add_js.html:8
+msgid "Group name can't be empty"
+msgstr "群组名称不能为空"
 
 #: templates/snippets/group_recommend_form.html:10
 msgid "to group:"
@@ -1751,6 +1759,14 @@ msgstr "(3到15个字符)"
 
 #: templates/snippets/repo_create_form.html:19
 msgid "Password again"
+msgstr "请再次输入密码"
+
+#: templates/snippets/repo_create_js.html:37
+msgid "Please enter password"
+msgstr "请输入密码"
+
+#: templates/snippets/repo_create_js.html:49
+msgid "Please enter the password again"
 msgstr "请再次输入密码"
 
 #: templates/snippets/repo_file_get.html:33
