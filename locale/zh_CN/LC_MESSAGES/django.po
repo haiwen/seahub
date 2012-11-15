@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-15 16:46+0800\n"
+"POT-Creation-Date: 2012-11-15 17:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,7 +89,7 @@ msgstr "目录名过长"
 
 #: forms.py:165 templates/repo.html:497
 msgid "Directory name can't be empty"
-msgstr "描述不能为空"
+msgstr "目录名不能为空"
 
 #: forms.py:172
 #, python-format
