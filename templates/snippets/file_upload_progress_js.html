@@ -9,15 +9,15 @@ function gen_uuid() {
     return uuid;
 }
 
-function submit_and_real_time_show () {
-    var form = $('#upload-file-form')[0],
+function submit_and_real_time_show (dialog_id) {
+    var form = $(dialog_id + ' form')[0],
         uuid = gen_uuid(); // id for this upload so we can fetch progress info.
-    $('#upload-progress').removeClass('hide');
+    $(dialog_id + ' #upload-progress').removeClass('hide');
 
     // Append X-Progress-ID uuid form action
     form.action += (form.action.indexOf('?') == -1 ? '?' : '&') + 'X-Progress-ID=' + uuid;
     form.submit();
-    $('#upload-submit').addClass('hide');
+    $(dialog_id + ' form .submit').addClass('hide');
 
     // Update progress bar: not work in chrome.
     function update_progress_info() {
@@ -27,8 +27,8 @@ function submit_and_real_time_show () {
             cache: false,
             success: function(data) {
                 if (data) {
-                    $('#upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
-                    $('#task-progress-bar').removeClass('hide').progressbar({
+                    $(dialog_id + ' #upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $(dialog_id + ' #task-progress-bar').removeClass('hide').progressbar({
                             value: data.uploaded / data.length * 100
                     });
                 }
@@ -46,18 +46,39 @@ function submit_and_real_time_show () {
     return false;
 };
 
-$('#upload-submit').click(function () {
-    if (!$.trim($('#file').val())) {
-    $('#error-msg').html('{% trans "Please choose a file at first." %}');
+$('#upload-file-form .submit').click(function () {
+    if (!$.trim($('#upload-file-form input[type=file]').val())) {
+        $('#upload-file-form .error').html('{% trans "Please choose a file at first." %}').removeClass('hide');
         return false;
     }
-    $('#error-msg').addClass('hide');
-    submit_and_real_time_show();
+
+    $('#upload-file-form .error').addClass('hide');
+    
+    $.fn.MultiFile.disableEmpty(); // disable dummy element before submiting the form
+    submit_and_real_time_show('#upload-file-dialog');
     return false;
 });
 
-$('#upload-cancel').click(function() {
+$('#upload-file-dialog #upload-cancel').click(function() {
     location.reload(true);
 });
+
+$('#update-file-form .submit').click(function () {
+    if (!$.trim($('#update-file-form input[type=file]').val())) {
+        $('#update-file-form .error').html('{% trans "Please choose a file at first." %}').removeClass('hide');
+        return false;
+    }
+
+    $('#update-file-form .error').addClass('hide');
+    
+    $.fn.MultiFile.disableEmpty(); // disable dummy element before submiting the form
+    submit_and_real_time_show('#update-file-dialog');
+    return false;
+});
+
+$('#update-file-dialog #upload-cancel').click(function() {
+    location.reload(true);
+});
+
 </script>
 {% endif %}

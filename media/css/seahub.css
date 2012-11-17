@@ -1540,3 +1540,32 @@ textarea:-moz-placeholder {/* for FF */
 .diff-chg {
     color: #c3f;
 }
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    margin-right: 200px;
+    padding-top: 10px;
+    vertical-align: middle;
+    display:inline-block;/*for ie*/
+    /* background: #efefef; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 3px; */
+    cursor: pointer;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  font-size: 23px;
+  direction: ltr;
+  cursor: pointer;
+}
+.icon-plus {
+    padding-left:21px;
+    background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
+}

@@ -38,11 +38,11 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
     check_group_staff, get_personal_groups_by_user, is_inner_pub_repo, \
-    del_org_group_repo, get_personal_groups, \
+    del_org_group_repo, get_personal_groups, web_get_access_token, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner, is_passwd_set, get_file_size, \
+    get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff
 from pysearpc import SearpcError
 
@@ -183,6 +183,9 @@ class RepoMixin(object):
         if path[-1] != '/':
             path = path + '/'
         return path
+
+    def get_parent_dir(self):
+        return self.request.GET.get('p', '/')
     
     def get_user(self):
         return self.request.user
@@ -225,6 +228,7 @@ class RepoMixin(object):
         self.repo_id = self.get_repo_id()
         self.user = self.get_user()
         self.path = self.get_path()
+        self.parent_dir = self.get_parent_dir()
         self.repo = self.get_repo(self.repo_id)
         self.repo_size = self.get_repo_size()        
         # self.can_access = access_to_repo(self.request, self.repo_id)
@@ -290,6 +294,35 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         args = (self.request.user.username, self.repo.id, self.path.encode('utf-8'), org_id)
         return is_file_starred(*args)
 
+    def is_no_quota(self):
+        return True if check_quota(self.repo_id) < 0 else False
+
+    def get_max_upload_file_size(self):
+        return settings.MAX_UPLOAD_FILE_SIZE
+
+    def get_upload_url(self):
+        if get_user_permission(self.request, self.repo_id) == 'rw':
+            token = web_get_access_token(self.repo_id,
+                                         'dummy', 'upload',
+                                         self.request.user.username)
+            return gen_file_upload_url(token, 'upload')
+        else:
+            # TODO: handle permission error
+            raise Http404
+
+    def get_httpserver_root(self):
+        return get_httpserver_root()
+
+    def get_update_url(self):
+        if get_user_permission(self.request, self.repo_id) == 'rw':
+            token = web_get_access_token(self.repo_id,
+                                         'dummy', 'update',
+                                         self.request.user.username)
+            return gen_file_upload_url(token, 'update')
+        else:
+            # TODO: handle permission error
+            raise Http404
+        
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
         # kwargs['can_access'] = self.can_access
@@ -300,6 +333,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         kwargs['dir_list'] = self.dir_list
         kwargs['file_list'] = self.file_list
         kwargs['path'] = self.path
+        kwargs['parent_dir'] = self.parent_dir
         kwargs['zipped'] = self.zipped
         kwargs['accessible_repos'] = self.get_accessible_repos()
         kwargs['applet_root'] = self.applet_root
@@ -313,6 +347,13 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
             kwargs['repo_group_str'] = repogrp_str
         else:
             kwargs['repo_group_str'] = ''
+        kwargs['no_quota'] = self.is_no_quota()
+        kwargs['max_upload_file_size'] = self.get_max_upload_file_size()
+        kwargs['upload_url'] = self.get_upload_url()
+        kwargs['update_url'] = self.get_update_url()
+        kwargs['httpserver_root'] = self.get_httpserver_root()
+        kwargs['head_id'] = self.repo.head_cmmt_id
+
         return kwargs
 
 class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
@@ -423,77 +464,6 @@ def repo_recycle_view(request, repo_id):
         return render_recycle_root(request, repo_id)
     else:
         return render_recycle_dir(request, repo_id, commit_id)
-
-@login_required
-@ctx_switch_required
-def repo_upload_file(request, repo_id):
-    repo = get_repo(repo_id)
-    
-    if request.method == 'GET':
-        parent_dir  = request.GET.get('p', '/')
-        zipped = gen_path_link (parent_dir, repo.name)
-
-        if get_user_permission(request, repo_id) == 'rw':
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'upload',
-                                                      request.user.username)
-        else:
-            return render_permission_error(request, _(u'Can not access library'))
-
-        no_quota = False
-        if seafserv_threaded_rpc.check_quota(repo_id) < 0:
-            no_quota = True
-
-        upload_url = gen_file_upload_url(token, 'upload')
-        httpserver_root = get_httpserver_root()
-
-        return render_to_response ('repo_upload_file.html', {
-            "repo": repo,
-            "upload_url": upload_url,
-            "httpserver_root": httpserver_root,
-            "parent_dir": parent_dir,
-            "zipped": zipped,
-            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
-            "no_quota": no_quota,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@ctx_switch_required
-def repo_update_file(request, repo_id):
-    repo = get_repo(repo_id)
-
-    if request.method == 'GET':
-        target_file  = request.GET.get('p')
-        if not target_file:
-            return render_error(request, _(u'Invalid url'))
-        zipped = gen_path_link (target_file, repo.name)
-
-        if get_user_permission(request, repo_id) == 'rw':
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'update',
-                                                      request.user.username)
-        else:
-            return render_permission_error(request, _(u'Can not access library'))
-
-        no_quota = False
-        if seafserv_threaded_rpc.check_quota(repo_id) < 0:
-            no_quota = True
-
-        update_url = gen_file_upload_url(token, 'update')
-        httpserver_root = get_httpserver_root()
-
-        return render_to_response ('repo_update_file.html', {
-            "repo": repo,
-            "update_url": update_url,
-            "httpserver_root": httpserver_root,
-            "target_file": target_file,
-            "zipped": zipped,
-            "max_upload_file_size": settings.MAX_UPLOAD_FILE_SIZE,
-            "no_quota": no_quota,
-            "head_id": repo.head_cmmt_id,
-            }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')

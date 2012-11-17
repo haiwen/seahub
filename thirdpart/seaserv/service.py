@@ -721,3 +721,20 @@ def get_related_users_by_org_repo(org_id, repo_id):
                 users.append(repo.user)
 
     return users
+
+# quota
+def check_quota(repo_id):
+    try:
+        ret = seafserv_threaded_rpc.check_quota(repo_id)
+    except SearpcError, e:
+        ret = -1
+    return ret
+    
+# access token
+def web_get_access_token(repo_id, obj_id, op, username):
+    try:
+        ret = seafserv_rpc.web_get_access_token(repo_id, obj_id, op, username)
+    except SearpcError, e:
+        ret = ''
+    return ret
+    
