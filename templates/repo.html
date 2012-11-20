@@ -226,8 +226,8 @@
         <h3>{% trans "New File" %}</h3>
         <div id="featured-filetype">
             <label>{% trans "Featured File Type" %}</label><br />
-            <button data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "can be edited with semantic Rich Text editor online." %}</span> <a href="http://http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/featured_filetype#seaf">{% trans 'more' %}</a><br />
-            <button data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "a simple markup format." %}</span> <a href="http://http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/featured_filetype#markdown">{% trans 'more' %}</a>
+            <button data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format." %}</span> <a href="http://http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/featured_filetype#seaf">{% trans 'more' %}</a><br />
+            <button data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span> <a href="http://http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/featured_filetype#markdown">{% trans 'more' %}</a>
         </div>
         <label>{% trans "File Name" %}</label>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
