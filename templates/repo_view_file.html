@@ -3,7 +3,9 @@
 {% load url from future %}
 
 {% block extra_style %}
+{% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+{% endif %}
 {% endblock %}
 
 {% block main_panel %}
@@ -112,9 +114,11 @@
         <div id="file-op">
         {% endif %}
             {% if not view_history and request.user.is_authenticated %}
+            {% if filetype != 'Sf' %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">{% trans "Open local file"%}</button>
+            {% endif %}
             {% if not read_only %}
-            {% if filetype == 'Text' or filetype == 'Markdown' %}
+            {% if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">{% trans "Edit"%}</button>
             {% endif %}
             {% endif %}
@@ -125,9 +129,13 @@
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
         <div id="file-view">
-            {% if filetype == 'Text' %}
+            {% if filetype == 'Text' or filetype == 'Sf' %}
                 {% ifnotequal file_content None %}
+                {% if filetype == 'Text' %}
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
+                {% else %}
+                <div id="sf-view" class="article">{{ file_content|safe }}</div>
+                {% endif %}
                 {% endifnotequal %}
             {% else %}
             <p>{% trans "Loading..."%}</p>

@@ -2,6 +2,9 @@
 {% load seahub_tags i18n %}
 
 {% block extra_style %}
+{% if filetype == 'Sf' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}aloha-0.22.3/css/aloha.css" />
+{% else %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
 .CodeMirror-focused pre.CodeMirror-cursor {
@@ -12,11 +15,17 @@
 }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
+{% endif %}
 {% endblock %}
 
 {% block main_panel %}
-    <h2>{% trans "Edit" %} {{ u_filename }}</h2>
+    <h2>{% trans "Edit" %} <span class="op-target">{{ u_filename }}</span></h2>
+    {% if filetype == 'Sf' %}
+    <div id="sf-path-op" class="ovhd">
+        <p class="path fleft">
+    {% else %}
     <p class="path">
+    {% endif %}
          {% trans "Current path: " %}
          {% for name, link in zipped %}
             {% if not forloop.last %}
@@ -26,9 +35,20 @@
             {% endif %}
          {% endfor %}
     </p>
+    {% if filetype == 'Sf' %}
+    <div id="op-after-edit" class="fright">
+        <button id="file-edit-submit">{% trans "Submit" %}</button>
+        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</button>
+    </div>
+    </div>
+    {% endif %}
     <div id="file">
         {% ifnotequal file_content None %}
+        {% ifnotequal filetype 'Sf' %}
         <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
+        {% else %}
+        <div id="sf" class="article">{{ file_content|safe }}</div>
+        {% endifnotequal %}
         {% endifnotequal %}
         {% if filetype == 'Markdown' %}
         <div id="md-view" class="article hide"></div>
@@ -49,12 +69,32 @@
 {% endblock %}
 
 {% block extra_script %}
+{% if filetype == 'Sf' %}
+<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/require.js"></script>
+<script type="text/javascript">
+//settings must be before aloha.js
+Aloha = window.Aloha || {}; 
+Aloha.settings = Aloha.settings || {}; 
+if ($('#lang-context').attr('data-lang') == 'zh-cn') {
+    Aloha.settings.locale = "zh-hans";
+}
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/aloha.js" data-aloha-plugins="common/format, common/abbr, common/align, common/characterpicker, common/highlighteditables, common/image, common/link, common/list, common/table, common/undo, common/ui"></script>
+{% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror.js"></script>
+{% endif %}
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
+{% if filetype == 'Sf' %}
+$('#main').css('width','100%');
+$('h2, #sf-path-op').css({'width':950, 'margin':'0 auto'});
+$('#file').css({'background':'#f4f4f4', 'border-top':'1px solid #ededed'});
+$('#sf').css({'width':690, 'margin':'35px auto'});
+Aloha.ready(function() { $('#sf').aloha().focus(); });
+{% else %}
 var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     {% include "snippets/editor_set_mode.html" %}
     {% if filetype == 'Markdown' %}
@@ -66,6 +106,7 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     autofocus: true
 });
 $('#op-after-edit').removeClass('hide');
+{% endif %}
 
 {% if filetype == 'Markdown' %}
 $('#file-edit-submit').css('margin-right', '8px');
@@ -85,6 +126,12 @@ $('#preview-btn').click(function() {
 {% endif %}
 
 $('#file-edit-submit').click(function () {
+    {% if filetype == 'Sf' %}
+    var content = $('#sf').html();
+    {% else %}
+    var content = editor.getValue();
+    {% endif %}
+
     $.ajax({
         type: "POST",
         url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}',
@@ -92,7 +139,7 @@ $('#file-edit-submit').click(function () {
         cache: false,
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
-        data: {content: editor.getValue(), encoding: '{{ encoding }}'},
+        data: {content: content, encoding: '{{ encoding }}'},
         success: function(data) {
             location.href = $('#file-edit-cancel').attr('data');
         },

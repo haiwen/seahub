@@ -61,7 +61,8 @@ button {
     overflow:visible;/*for ie 7*/
     padding-bottom:0 \9;/*for ie; to make height right*/
 }
-input[type=checkbox] {
+input[type=checkbox],
+input[type=radio] {
     height:auto;
 }
 input::-webkit-outer-spin-button,
@@ -548,15 +549,10 @@ textarea:-moz-placeholder {/* for FF */
     -moz-border-radius:4px;
 }
 #simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
-#simplemodal-container a {color:#ddd;}
+#simplemodal-container a {font-weight:normal;}
 #simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
-#simplemodal-container .ui-menu-item a {/*for tip item of autocomplete*/
-    color:#e83;
-    font-weight:normal;
-}
 #simplemodal-container .jstree a {
     color:#000;
-    font-weight:normal;
 }
 #simplemodal-container h3 {
     word-wrap:break-word;
@@ -566,14 +562,12 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:5px;
 }
 #confirm-popup,
-#rename-form {
+#rename-form,
+.simple-input-popup {
     min-width:255px;
 }
 #confirm-popup button {
     margin-top:.8em;
-}
-.simple-input-popup {
-    width:255px;
 }
 .simple-input-popup .long-input {
     width:99%;
@@ -853,6 +847,15 @@ textarea:-moz-placeholder {/* for FF */
 #add-new-file {
     padding-left:23px;
     background-image:url('../img/new-file-icon.png');
+}
+#featured-filetype {
+    margin:5px 0;
+}
+#featured-filetype button {
+    padding: 2px;
+    line-height: 1.2;
+    border: 1px solid #BBB;
+    margin: 2px 0 5px;
 }
 .repo-file-list-outer-container,
 .commit-list-outer-container {
@@ -1388,6 +1391,15 @@ textarea:-moz-placeholder {/* for FF */
 #star {
     padding-left:18px;
     background:#efefef url('../img/star.png') no-repeat scroll 3px 48%;
+}
+#sf, /* sf editor*/
+#sf-view {
+    min-height:380px;
+    background:#fff;
+    border:1px solid #ccc;
+}
+#sf-view {
+    border:none;
 }
 /* shareadmin */
 .view-link-alert p {

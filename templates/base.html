@@ -63,7 +63,7 @@
                 <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
                 <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
                 {% endif %}
-                <a href="#" id="lang-context" data="no-popup">
+                <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}">
                     {{ LANGUAGE_CODE|language_name_local }}
                     <span class="tri-bg tri-down-bg"></span>
                 </a>

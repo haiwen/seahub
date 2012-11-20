@@ -1219,7 +1219,7 @@ def repo_view_file(request, repo_id):
     file_content = ''
     swf_exists = False
     pdf_use_flash = False
-    if filetype == 'Text' or filetype == 'Markdown':
+    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
     elif filetype == 'Document':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
@@ -2407,7 +2407,7 @@ def view_shared_file(request, token):
     file_content = ''
     swf_exists = False
     pdf_use_flash = False
-    if filetype == 'Text' or filetype == 'Markdown':
+    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
     elif filetype == 'Document':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)

@@ -38,6 +38,7 @@ PREVIEW_FILEEXT = {
     'SVG': ('svg',),
     'PDF': ('pdf',),
     'Markdown': ('markdown', 'md'),
+    'Sf': ('seaf',),
 }
 
 def gen_fileext_type_map():

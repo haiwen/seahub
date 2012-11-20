@@ -20,9 +20,13 @@
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">{% trans "Download" %}</button>
         </div>
         <div id="file-view">
-            {% if filetype == 'Text' %}
+            {% if filetype == 'Text' or filetype == 'Sf' %}
                 {% ifnotequal file_content None %}
+                {% if filetype == 'Text' %}
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
+                {% else %}
+                <div id="sf-view" class="article">{{ file_content|safe }}</div>
+                {% endif %}
                 {% endifnotequal %}
             {% else %}
             <p>{% trans "Loading..." %}</p>
