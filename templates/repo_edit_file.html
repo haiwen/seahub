@@ -20,12 +20,8 @@
 
 {% block main_panel %}
     <h2>{% trans "Edit" %} <span class="op-target">{{ u_filename }}</span></h2>
-    {% if filetype == 'Sf' %}
-    <div id="sf-path-op" class="ovhd">
+    <div id="path-op" class="ovhd">
         <p class="path fleft">
-    {% else %}
-    <p class="path">
-    {% endif %}
          {% trans "Current path: " %}
          {% for name, link in zipped %}
             {% if not forloop.last %}
@@ -35,14 +31,16 @@
             {% endif %}
          {% endfor %}
     </p>
-    {% if filetype == 'Sf' %}
-    <div id="op-after-edit" class="fright">
+    <div id="op-after-edit" class="fright hide">
         <button id="file-edit-submit">{% trans "Submit" %}</button>
+        {% if filetype == 'Markdown' %}
+            <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
+            <button id="preview-btn">{% trans "Preview" %}</button>
+        {% endif %}
         <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</button>
     </div>
     </div>
-    {% endif %}
-    <div id="file">
+    <div id="file-edit">
         {% ifnotequal file_content None %}
         {% ifnotequal filetype 'Sf' %}
         <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
@@ -53,18 +51,6 @@
         {% if filetype == 'Markdown' %}
         <div id="md-view" class="article hide"></div>
         {% endif %}
-    </div>
-    <div id="op-after-edit" class="w100 ovhd hide">
-        {% if filetype == 'Markdown' %}
-        <div class="fleft">
-            <button id="file-edit-submit">{% trans "Submit" %}</button>
-            <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
-            <button id="preview-btn">{% trans "Preview" %}</button>
-        </div>
-        {% else %}
-        <button id="file-edit-submit" class="fleft">{% trans "Submit" %}</button>
-        {% endif %}
-        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel" class="fright">{% trans "Cancel" %}</button>
     </div>
 {% endblock %}
 
@@ -88,11 +74,12 @@ if ($('#lang-context').attr('data-lang') == 'zh-cn') {
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
-{% if filetype == 'Sf' %}
 $('#main').css('width','100%');
-$('h2, #sf-path-op').css({'width':950, 'margin':'0 auto'});
-$('#file').css({'background':'#f4f4f4', 'border-top':'1px solid #ededed'});
-$('#sf').css({'width':690, 'margin':'35px auto'});
+$('h2, #path-op').css({'width':950, 'margin':'0 auto'});
+$('#file-edit').css({'background':'#f4f4f4', 'border-top':'1px solid #ededed'});
+$('#sf, #md-view').css({'width':690, 'margin':'35px auto', 'border':'1px solid #ccc', 'box-shadow':'0 0 6px #ccc', 'min-height':400});
+$('#footer').addClass('hide');
+{% if filetype == 'Sf' %}
 Aloha.ready(function() { $('#sf').aloha().focus(); });
 {% else %}
 var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
@@ -105,11 +92,12 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     lineNumbers: true,
     autofocus: true
 });
-$('#op-after-edit').removeClass('hide');
+$('.CodeMirror').css({'width':950, 'margin':'35px auto', 'box-shadow':'0 0 6px #272822'});
+$('.CodeMirror-scroll').css({'min-height':480});
 {% endif %}
+$('#op-after-edit').removeClass('hide');
 
 {% if filetype == 'Markdown' %}
-$('#file-edit-submit').css('margin-right', '8px');
 $('#source-code-btn').click(function() {
     $('#md-view, #source-code-btn').addClass('hide');
     $('.CodeMirror, #preview-btn').removeClass('hide');
@@ -155,7 +143,7 @@ $('#file-edit-cancel').click(function() {
 {% endifnotequal %}
 
 {% if err %}
-$('#file').html('<p class="error">{{ err }}</p>');
+$('#file-edit').html('<p class="error">{{ err }}</p>');
 {% endif %}
 </script>
 {% endblock %}

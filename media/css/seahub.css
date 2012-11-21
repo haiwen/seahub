@@ -1384,12 +1384,12 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     -moz-border-radius:3px;
 }
-#op-after-edit {
-    margin-top:18px;
+#file-edit {
+    border:1px solid #ccc;
+    margin-top:12px;
 }
-#op-after-edit button {
-    padding:3px 10px;
-    height:auto;
+#op-after-edit {
+    margin-top:1em;
 }
 #file-edit-cancel {
     color:#900;
@@ -1402,13 +1402,9 @@ textarea:-moz-placeholder {/* for FF */
 #sf-view {
     min-height:380px;
     background:#fff;
-    border:1px solid #ccc;
-}
-#sf-view {
-    border:none;
 }
 /*overwrite aloha.css*/
-#file .aloha-editable-active, .aloha-editable-active[contenteditable="true"]:focus {
+#file-edit .aloha-editable-active, .aloha-editable-active[contenteditable="true"]:focus {
     outline: none!important;
 }
 #aloha-attribute-field-imageSource, /* img src input*/
