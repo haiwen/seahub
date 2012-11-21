@@ -870,11 +870,8 @@ def myhome(request):
     joined_groups = get_personal_groups_by_user(request.user.username)
 
     # get nickname
-    if not Profile.objects.filter(user=request.user.username):
-        nickname = ''
-    else:
-        profile = Profile.objects.filter(user=request.user.username)[0]
-        nickname = profile.nickname
+    profiles = Profile.objects.filter(user=request.user.username)
+    nickname = profiles[0].nickname if profiles else ''
 
     if request.cloud_mode:
         allow_public_share = False
