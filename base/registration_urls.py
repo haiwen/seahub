@@ -27,18 +27,27 @@ urlpatterns = patterns('',
                            activate,
                            { 'backend': 'seahub.base.accounts.RegistrationBackend', },
                            name='registration_activate'),
-                       url(r'^register/$',
-                           register,
-                           reg_dict,
-                           name='registration_register'),
-                       url(r'^register/complete/$',
-                           direct_to_template,
-                           { 'template': 'registration/registration_complete.html',
-                             'extra_context': { 'send_mail': settings.REGISTRATION_SEND_MAIL } },
-                           name='registration_complete'),
-                       url(r'^register/closed/$',
-                           direct_to_template,
-                           { 'template': 'registration/registration_closed.html' },
-                           name='registration_disallowed'),
                        (r'', include('registration.auth_urls')),
                        )
+
+try:
+    from settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
+if CLOUD_MODE:
+    urlpatterns += patterns('',
+        url(r'^register/$',
+            register,
+            reg_dict,
+            name='registration_register'),
+        url(r'^register/complete/$',
+            direct_to_template,
+            { 'template': 'registration/registration_complete.html',
+              'extra_context': { 'send_mail': settings.REGISTRATION_SEND_MAIL } },
+            name='registration_complete'),
+        url(r'^register/closed/$',
+            direct_to_template,
+            { 'template': 'registration/registration_closed.html' },
+            name='registration_disallowed'),
+)
+
