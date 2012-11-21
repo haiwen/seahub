@@ -1,4 +1,5 @@
 # encoding: utf-8
+from django.core.cache import cache
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -12,7 +13,7 @@ from avatar.models import Avatar, GroupAvatar
 from avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_SIZE
 from avatar.signals import avatar_updated
 from avatar.util import get_primary_avatar, get_default_avatar_url, \
-    invalidate_cache
+    invalidate_cache, invalidate_group_cache
 from seahub.utils import render_error, render_permission_error, \
     check_and_get_org_by_group
 
@@ -110,10 +111,12 @@ def group_add(request, gid):
         if form.is_valid():
             image_file = request.FILES['avatar']
             avatar = GroupAvatar()
-            avatar.group_id = group_id
+            avatar.group_id = gid
             avatar.avatar.save(image_file.name, image_file)
             avatar.save()
- 
+            # invalidate group avatar cache
+            invalidate_group_cache(gid)
+
     return render_to_response('avatar/set_avatar.html', {
             'group' : group,
             'form' : form,

@@ -11,14 +11,15 @@ AVATAR_DEFAULT_SIZE = getattr(settings, 'AVATAR_DEFAULT_SIZE', 80)
 AVATAR_STORAGE_DIR = getattr(settings, 'AVATAR_STORAGE_DIR', 'avatars')
 AVATAR_DEFAULT_URL = getattr(settings, 'AVATAR_DEFAULT_URL', 'avatar/img/default.jpg')
 AVATAR_DEFAULT_NON_REGISTERED_URL = getattr(settings, 'AVATAR_DEFAULT_NON_REGISTERED_URL', '/avatars/default-non-register.jpg')
+AUTO_GENERATE_AVATAR_SIZES = getattr(settings, 'AUTO_GENERATE_AVATAR_SIZES', (AVATAR_DEFAULT_SIZE,))
     
 ### Group avatars ###
 GROUP_AVATAR_DEFAULT_SIZE = getattr(settings, 'GROUP_AVATAR_DEFAULT_SIZE', 48)
 GROUP_AVATAR_STORAGE_DIR = getattr(settings, 'GROUP_AVATAR_STORAGE_DIR', 'avatars/groups')
 GROUP_AVATAR_DEFAULT_URL = getattr(settings, 'GROUP_AVATAR_DEFAULT_URL', 'avatars/groups/default.png')
+AUTO_GENERATE_GROUP_AVATAR_SIZES = getattr(settings, 'AUTO_GENERATE_GROUP_AVATAR_SIZES', (GROUP_AVATAR_DEFAULT_SIZE,))
 
 ### Common settings ###
-AUTO_GENERATE_AVATAR_SIZES = getattr(settings, 'AUTO_GENERATE_AVATAR_SIZES', (AVATAR_DEFAULT_SIZE,))
 AVATAR_RESIZE_METHOD = getattr(settings, 'AVATAR_RESIZE_METHOD', Image.ANTIALIAS)
 AVATAR_GRAVATAR_BACKUP = getattr(settings, 'AVATAR_GRAVATAR_BACKUP', True)
 AVATAR_GRAVATAR_DEFAULT = getattr(settings, 'AVATAR_GRAVATAR_DEFAULT', None)

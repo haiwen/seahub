@@ -1,13 +1,11 @@
-# import urllib
-
 from django.conf import settings
-
+from django.core.cache import cache
 from django import template
-# from django.utils.hashcompat import md5_constructor
-# from django.core.urlresolvers import reverse
 
-from avatar.settings import (GROUP_AVATAR_DEFAULT_SIZE, GROUP_AVATAR_DEFAULT_URL)
+from avatar.settings import (GROUP_AVATAR_DEFAULT_SIZE, AVATAR_CACHE_TIMEOUT,
+                             GROUP_AVATAR_DEFAULT_URL)
 from avatar.models import GroupAvatar
+from avatar.util import get_grp_cache_key
 
 register = template.Library()
 
@@ -29,6 +27,13 @@ def get_default_group_avatar_url():
 
 @register.simple_tag
 def grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
+    # Get from cache
+    key = get_grp_cache_key(group_id, size)
+    val = cache.get(key)
+    if val:
+        return val
+
+    # Get from DB, and refresh cache
     grp_avatars = GroupAvatar.objects.filter(group_id=group_id)
     if grp_avatars:
         avatar = grp_avatars.order_by('-date_uploaded')[0]
@@ -42,4 +47,5 @@ def grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
     else:
         avatar_src = get_default_group_avatar_url()
 
+    cache.set(key, avatar_src, AVATAR_CACHE_TIMEOUT)
     return avatar_src
