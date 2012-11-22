@@ -175,7 +175,32 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
             else:
                 i += 1
 
+def get_user_repos(user):
+    """
+    Get all repos that user can access, including owns, shared, and repo in
+    groups.
+    NOTE: collumn names in shared_repo struct are not same as owned or group
+    repos.
+    """
+    email = user.username
+    if user.org:
+        # org context
+        org_id = user.org['org_id']
+        owned_repos = list_org_repos_by_owner(org_id, email)
+        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
+        groups_repos = []
+        for group in get_org_groups_by_user(org_id, email):
+            groups_repos += get_org_group_repos(org_id, group.id, email)
+    else:
+        # personal context
+        owned_repos = list_personal_repos_by_owner(email)
+        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
+        groups_repos = []
+        for group in get_personal_groups_by_user(email):
+            groups_repos += get_group_repos(group.id, email)
 
+    return (owned_repos, shared_repos, groups_repos)
+                
 def get_accessible_repos(request, repo):
     """Get all repos the current user can access when coping/moving files
     online. If the repo is encrypted, then files can only be copied/moved
@@ -200,23 +225,7 @@ def get_accessible_repos(request, repo):
         accessible_repos = [repo]
         return accessible_repos
 
-    email = request.user.username
-
-    if request.user.org:
-        # org context
-        org_id = request.user.org['org_id']
-        owned_repos = list_org_repos_by_owner(org_id, email)
-        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
-        groups_repos = []
-        for group in get_org_groups_by_user(org_id, email):
-            groups_repos += get_org_group_repos(org_id, group.id, email)
-    else:
-        # personal context
-        owned_repos = list_personal_repos_by_owner(email)
-        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
-        groups_repos = []
-        for group in get_personal_groups_by_user(email):
-            groups_repos += get_group_repos(group.id, email)
+    owned_repos, shared_repos, groups_repos = get_user_repos(request.user)
 
     def has_repo(repos, repo):
         for r in repos:
