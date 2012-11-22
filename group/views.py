@@ -43,141 +43,53 @@ from seahub.utils import render_error, render_permission_error, \
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
-class GroupMixin(object):
-    def get_username(self):
-        return self.request.user.username
+@login_required
+def group_list(request):
+    username = request.user.username
 
-    def ajax_form_valid(self):
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type='application/json; charset=utf-8')
-
-    def ajax_form_invalid(self, form):
-        return HttpResponseBadRequest(
-            json.dumps(form.errors),
-            content_type='application/json; charset=utf-8')
-
-    def is_dept_group(self, group_id):
-        try:
-            BusinessGroup.objects.get(group_id=group_id, group_type='dept')
-            ret = True
-        except BusinessGroup.DoesNotExist:
-            ret = False
-        return ret
-
-    def is_proj_group(self, group_id):
-        try:
-            BusinessGroup.objects.get(group_id=group_id, group_type='proj')
-            ret = True
-        except BusinessGroup.DoesNotExist:
-            ret = False
-        return ret
-
-class GroupListView(LoginRequiredMixin, GroupMixin, TemplateResponseMixin,
-                    BaseFormView):
-    template_name = 'group/groups.html'
-    form_class = GroupAddForm
-
-    def form_valid(self, form):
-        group_name = form.cleaned_data['group_name']
-        username = self.get_username()
+    if request.method == 'POST':
+        """
+        Add a new group.
+        """
         result = {}
-        
-        if self.request.cloud_mode:
-            # Check whether group name is duplicated in groups he joined and
-            # created.
-            checked_groups = get_personal_groups_by_user(username)
+        content_type = 'application/json; charset=utf-8'
+
+        form = GroupAddForm(request.POST)
+        if form.is_valid():
+            group_name = form.cleaned_data['group_name']
+
+            # Check whether group name is duplicated.
+            if request.cloud_mode:
+                checked_groups = get_personal_groups_by_user(username)
+            else:
+                checked_groups = get_personal_groups(-1, -1)
+            for g in checked_groups:
+                if g.group_name == group_name:
+                    result['error'] = _(u'There is already a group with that name.')
+                    return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+            # Group name is valid, create that group.
+            try:
+                ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                                username)
+                return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
         else:
-            # Check whether group name is duplicated in all groups.
-            checked_groups = get_personal_groups(-1, -1)
-        for g in checked_groups:
-            if g.group_name == group_name:
-                result['error'] = _(u'There is already a group with that name.')
-                return HttpResponse(json.dumps(result), status=400,
-                                    content_type='application/json; charset=utf-8')
+            return HttpResponseBadRequest(json.dumps(form.errors),
+                                          content_type=content_type)
 
-        try:
-            group_id = ccnet_threaded_rpc.create_group(
-                group_name.encode('utf-8'), username)
-        except SearpcError, e:
-            result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result), status=500,
-                                content_type='application/json; charset=utf-8')
-        
-        if self.request.is_ajax():
-            return self.ajax_form_valid()
-        else:
-            return FormMixin.form_valid(self, form)
+    ### GET ###
+    joined_groups = get_personal_groups_by_user(username)
 
-    def form_invalid(self, form):
-        if self.request.is_ajax():
-            return self.ajax_form_invalid(form)
-        else:
-            return FormMixin.form_invalid(self, form)
-
-    def get_context_data(self, **kwargs):
-        kwargs['joined_groups'] = get_personal_groups_by_user(self.get_username())
-        return kwargs
-
-# class DeptGroupListView(GroupListView):
-#     template_name = 'group/dept_groups.html'
-
-#     def form_valid(self, form):
-#         group_name = form.cleaned_data['group_name']
-#         username = self.get_username()
-#         try:
-#             group_id = ccnet_threaded_rpc.create_group(
-#                 group_name.encode('utf-8'), username)
-#             bg = BusinessGroup()
-#             bg.group_id = group_id
-#             bg.group_type = 'dept'
-#             bg.save()
-#         except SearpcError, e:
-#             result = {}
-#             result['error'] = _(e.msg)
-#             return HttpResponse(json.dumps(result),
-#                                 content_type='application/json; charset=utf-8')
-        
-#         if self.request.is_ajax():
-#             return self.ajax_form_valid()
-#         else:
-#             return FormMixin.form_valid(self, form)
-
-#     def get_context_data(self, **kwargs):
-#         groups = [ g for g in get_personal_groups_by_user(self.get_username()) \
-#                        if self.is_dept_group(g.id)]
-#         kwargs['groups'] = groups
-#         return kwargs
-
-# class ProjGroupListView(GroupListView):
-#     template_name = 'group/proj_groups.html'
-
-#     def form_valid(self, form):
-#         group_name = form.cleaned_data['group_name']
-#         username = self.get_username()
-#         try:
-#             group_id = ccnet_threaded_rpc.create_group(
-#                 group_name.encode('utf-8'), username)
-#             bg = BusinessGroup()
-#             bg.group_id = group_id
-#             bg.group_type = 'proj'
-#             bg.save()
-#         except SearpcError, e:
-#             result = {}
-#             result['error'] = _(e.msg)
-#             return HttpResponse(json.dumps(result),
-#                                 content_type='application/json; charset=utf-8')
-        
-#         if self.request.is_ajax():
-#             return self.ajax_form_valid()
-#         else:
-#             return FormMixin.form_valid(self, form)
-
-#     def get_context_data(self, **kwargs):
-#         groups = [ g for g in get_personal_groups_by_user(self.get_username()) \
-#                        if self.is_proj_group(g.id)]
-#         kwargs['groups'] = groups
-#         return kwargs
-
+    return render_to_response('group/groups.html', {
+            'joined_groups': joined_groups,
+            }, context_instance=RequestContext(request))
+    
 @login_required
 def group_remove(request, group_id):
     """

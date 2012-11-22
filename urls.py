@@ -4,7 +4,7 @@ from django.views.generic.simple import direct_to_template
 
 from seahub.views import *
 from notifications.views import notification_list
-from group.views import GroupListView
+from group.views import group_list
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -82,7 +82,7 @@ urlpatterns = patterns('',
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     (r'^contacts/', include('contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groups/', GroupListView.as_view(), name='group_list'),
+    url(r'^groups/', group_list, name='group_list'),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('share.urls')),
 

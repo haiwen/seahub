@@ -25,7 +25,6 @@ from decorators import org_staff_required
 from forms import OrgCreateForm
 from signals import org_user_added
 from utils import validate_org_repo_owner
-from group.views import GroupListView
 from notifications.models import UserNotification
 from profile.models import Profile
 from share.models import FileShare
