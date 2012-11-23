@@ -11,7 +11,9 @@ from auth.models import get_hexdigest, check_password
 from auth import authenticate, login
 from registration import signals
 #from registration.forms import RegistrationForm
-from seaserv import ccnet_threaded_rpc
+from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
+
+from seahub.utils import get_user_repos
 
 class UserManager(object):
     def create_user(self, email, password=None, is_staff=False, is_active=False):
@@ -141,7 +143,38 @@ class User(object):
         "Sends an e-mail to this User."
         from django.core.mail import send_mail
         send_mail(subject, message, from_email, [self.email])
-    
+
+    def remove_repo_passwds(self):
+        """
+        Remove all repo decryption passwords stored on server.
+        """
+        owned_repos, shared_repos, groups_repos = get_user_repos(self)
+
+        def has_repo(repos, repo):
+            for r in repos:
+                if repo.id == r.id:
+                    return True
+            return False
+
+        passwd_setted_repos = []
+        for r in owned_repos + groups_repos:
+            if not has_repo(passwd_setted_repos, r) and r.encrypted and \
+                    is_passwd_set(r.id, self.email):
+                passwd_setted_repos.append(r)
+        for r in shared_repos:
+            # For compatibility with diffrent fields names in Repo and
+            # SharedRepo objects.
+            r.id = r.repo_id
+            r.name = r.repo_name
+            r.desc = r.repo_desc
+
+            if not has_repo(passwd_setted_repos, r) and r.encrypted and \
+                    is_passwd_set(r.id, self.email):
+                passwd_setted_repos.append(r)
+
+        for r in passwd_setted_repos:
+            unset_repo_passwd(r.id, self.email)
+
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:

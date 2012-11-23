@@ -590,13 +590,6 @@ def check_permission(repo_id, user):
         ret = ""
     return ret
 
-def is_passwd_set(repo_id, user):
-    try:
-        ret = seafserv_rpc.is_passwd_set(repo_id, user)
-    except SearpcError, e:
-        ret = -1
-    return True if ret == 1 else False
-
 def is_personal_repo(repo_id):
     """
     Check whether repo is personal repo.
@@ -738,3 +731,24 @@ def web_get_access_token(repo_id, obj_id, op, username):
         ret = ''
     return ret
     
+# password management
+def unset_repo_passwd(repo_id, user):
+    """
+    Remove user password of a encrypt repo.
+    Arguments:
+    - `repo_id`: encrypt repo id
+    - `user`: username
+    """
+    try:
+        ret = seafserv_threaded_rpc.unset_passwd(repo_id, user)
+    except SearpcError, e:
+        ret = -1
+    return ret
+
+def is_passwd_set(repo_id, user):
+    try:
+        ret = seafserv_rpc.is_passwd_set(repo_id, user)
+    except SearpcError, e:
+        ret = -1
+    return True if ret == 1 else False
+

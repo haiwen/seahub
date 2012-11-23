@@ -85,9 +85,14 @@ def logout(request):
     """
     Removes the authenticated user's ID from the request and flushes their
     session data.
+    Also remove all passwords used to decrypt repos.
     """
     request.session.flush()
     if hasattr(request, 'user'):
+        # NOTE: must include `seahub` before `base`        
+        from seahub.base.accounts import User 
+        if isinstance(request.user, User):
+            request.user.remove_repo_passwds()
         from auth.models import AnonymousUser
         request.user = AnonymousUser()
 
