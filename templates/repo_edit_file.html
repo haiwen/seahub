@@ -32,12 +32,12 @@
          {% endfor %}
     </p>
     <div id="op-after-edit" class="fright hide">
-        <button id="file-edit-submit">{% trans "Submit" %}</button>
+        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</button>
         {% if filetype == 'Markdown' %}
             <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
             <button id="preview-btn">{% trans "Preview" %}</button>
         {% endif %}
-        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</button>
+        <button id="file-edit-submit">{% trans "Submit" %}</button>
     </div>
     </div>
     <div id="file-edit">
@@ -114,6 +114,8 @@ $('#preview-btn').click(function() {
 {% endif %}
 
 $('#file-edit-submit').click(function () {
+    var submit_btn = $(this);
+    disable(submit_btn);
     {% if filetype == 'Sf' %}
     var content = $('#sf').html();
     {% else %}
@@ -134,6 +136,7 @@ $('#file-edit-submit').click(function () {
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
             $('#op-after-edit').prepend('<p class="error">' + jsonVal['error'] + '</p>');
+            enable(submit_btn);
         }
     });
 });
@@ -143,7 +146,7 @@ $('#file-edit-cancel').click(function() {
 {% endifnotequal %}
 
 {% if err %}
-$('#file-edit').html('<p class="error">{{ err }}</p>');
+$('#file-edit').html('<div id="sf" class="article"><p class="error">{{ err }}</p></div>');
 {% endif %}
 </script>
 {% endblock %}

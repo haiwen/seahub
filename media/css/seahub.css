@@ -175,13 +175,14 @@ p {
 .no-deco:hover {
     text-decoration:none;
 }
-.input-disabled {/* for type="password"/"text" etc*/
+.input-disabled {/* for type="password/text" etc*/
     background:#ebebe4;
 }
-input.btn-disabled { /*for <input type="submit" disabled="disabled" />*/
+.btn-disabled { /*for <input type="submit" />, <button>*/
     color:#999;
 }
-input.btn-disabled:hover {
+.btn-disabled:hover,
+input.btn-disabled:hover {/*for input*/
     cursor:default;
     background: #efefef;
 }
@@ -589,7 +590,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* for article */
 .article {
-    padding:40px 200px 40px 60px;
+    padding:40px 130px;
     font-size:14px;
     line-height:1.6;
     color:#333;
@@ -1354,7 +1355,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
 }
 #md-view {
-    min-height:120px;
+    min-height:200px;
 }
 #svg-view {
     min-height:500px;/*for ff*/
@@ -1390,6 +1391,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 #op-after-edit {
     margin-top:1em;
+}
+#op-after-edit button {
+    margin-left:5px;
 }
 #file-edit-cancel {
     color:#900;
