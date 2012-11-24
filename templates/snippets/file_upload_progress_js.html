@@ -40,7 +40,7 @@ function submit_and_real_time_show (dialog_id) {
 
     // Update progress bar: for chrome 
     if ($.browser.safari) {
-        $('#request-progress').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid);
+        $(dialog_id + ' iframe').attr('src', '{{ SITE_ROOT }}file_upload_progress_page/?uuid=' + uuid + '&dlg_id=' + dialog_id.substr(1));
     }
 
     return false;

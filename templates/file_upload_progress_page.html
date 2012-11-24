@@ -4,14 +4,15 @@
 <script type="text/javascript">
     // Update progress bar
     function update_progress_info() {
+        var dialog_id = '{{ dialog_id }}';
         $.ajax({
             url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + '{{ uuid }}' + '&callback=?', 
             dataType: 'jsonp',
             cache: false,
             success: function(data) {
                 if (data) {
-                    $('#upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
-                    $('#task-progress-bar', window.parent.document).removeClass('hide').progressbar({
+                    $(dialog_id + ' #upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $(dialog_id + ' #task-progress-bar', window.parent.document).removeClass('hide').progressbar({
                             value: data.uploaded / data.length * 100
                     });
                 }
