@@ -2628,3 +2628,36 @@ def repo_star_file(request, repo_id):
     else:
         unstar_file(request.user.username, repo_id, path)
     return HttpResponse(json.dumps({'success':True}), content_type=content_type)
+
+@login_required
+def repo_download_dir(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(u'Library not exists'))
+
+    try:
+        parent_dir = request.GET['parent']
+        dirname = request.GET['dirname']
+    except KeyError:
+        return render_error(request, _(u'Invalid arguments'))
+
+    path = os.path.join(parent_dir, dirname.rstrip('/'))
+
+    permission = get_user_permission(request, repo_id)
+    if permission:
+        dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
+                                                          path.encode('utf-8'))
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
+    else:
+        return render_permission_error(request, _(u'Unable to access file'))
+
+    if len(path) > 1:
+        filename = os.path.basename(path)
+    else:
+        filename = repo.name
+    url = gen_file_get_url(token, filename)
+
+    return redirect(url)
