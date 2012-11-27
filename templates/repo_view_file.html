@@ -6,56 +6,104 @@
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 {% endif %}
+{% if filetype == 'Sf' %}
+<style type="text/css">
+#main {
+    width:100%;
+}
+#view-hd,
+#view-path-op,
+#file-op,
+#sf-commit-op {
+    width:950px;
+    margin:0 auto;
+}
+#file-op {
+    padding:0;
+    border:0;
+}
+#file-op .avatar,
+#file-op .name,
+#file-op .time,
+#file-op span {
+    vertical-align:middle;
+}
+#file-op .time {
+    color:#666;
+    margin:0 4px 0 8px;
+}
+#file-op .contributors {
+    margin-left:8px;
+}
+#file {
+    padding:0;
+    background:#fff;
+}
+#file-view {
+    background:#f4f4f4;
+    border-top:1px solid #ededed;
+    margin-top:12px;
+}
+#sf {
+    width:624px;
+    padding:40px 96px;
+    border:1px solid #ccc;
+    margin:30px auto 10px;
+    box-shadow:0 0 6px #ccc;
+    min-height:400px;
+}
+</style>
+{% endif %}
 {% endblock %}
 
 {% block main_panel %}
+    <div id="view-hd" class="w100 ovhd">
     {% if not view_history %}
-    <h2>{{ u_filename }}</h2>
+        <h2>{{ u_filename }}</h2>
     {% else %}
+
         {% if page_from == 'snapshot' %}
         <h2>
             {{repo.props.name}} {% trans "snapshots" %}
             <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
         </h2>
         {% endif %}
+
         {% if page_from == 'file_history' %}
-        <div class="w100 ovhd">
             <h2 class="fleft">
                 {{repo.props.name}} {% trans "history"%}
                 <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
             </h2>
             <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
-        </div>
         {% endif %}
+        
         {% if page_from == 'recycle' %}
-            <div class="w100 ovhd">
-                <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
-                <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
-            </div>
+            <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
+            <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
         {% endif %}
     {% endif %}
-    <div class="w100 ovhd">
+    </div>
+
+    <div id="view-path-op" class="w100 ovhd">
         <p class="path fleft">
         {% trans "Current Path: "%}
-	{% if page_from == 'recycle' %}
 
-    <a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a>
-        {% for name, link in zipped %}
-            {% if not forloop.last %}
-            / <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a>
-            {% else %}
-            / {{ name }}
-            {% endif %}
-        {% endfor %}
-
-	{% else %}
+	    {% if page_from == 'recycle' %}
+        <a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a> /
+	    {% endif %}
 
         {% for name, link in zipped %}
             {% if not forloop.last %}
                 {% if view_history %}
                     {% if page_from == 'snapshot' %}
                     <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
-                    {% else %}
+                    {% endif %}
+
+	                {% if page_from == 'recycle' %}
+                    <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    {% endif %}
+
+	                {% if page_from == 'file_history' %}
                     {{ name }} /
                     {% endif %}
                 {% else %}
@@ -65,7 +113,6 @@
                 {{ name }}
             {% endif %}
         {% endfor %}
-	{% endif %} <!-- if page_from == 'recycle' -->
         </p>
 
         {% if not view_history %}
@@ -83,7 +130,7 @@
         {% endif %}
     </div>
 
-    {% if not view_history %}
+    {% if not view_history and filetype != 'Sf' %}
     <div id="file-commit-info">
         <div class="latest-commit ovhd">
             <p class="latest-commit-info fleft">
@@ -99,10 +146,10 @@
             {% endif %}
         </div> 
         <p class="contributors">
-        <span>{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
-        {% for user in contributors %}
-            <a href="{% url 'user_profile' user %}" class="name" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
-        {% endfor %}
+            <span>{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
+            {% for user in contributors %}
+                <a href="{% url 'user_profile' user %}" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
+            {% endfor %}
         </p>
     </div>
     {% endif %}
@@ -113,6 +160,20 @@
         {% else %}
         <div id="file-op">
         {% endif %}
+
+        {% if not view_history and filetype == 'Sf' %}
+            <div class="commit fleft">
+                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span><span>{% trans "updated this file"%}.</span>
+                <span class="contributors">{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
+                {% for user in contributors %}
+                <a href="{% url 'user_profile' user %}" title="{{ user|email2nickname}}">{% avatar user 16 %}</a>
+                {% endfor %}
+            </div>
+            {% if user_perm == 'rw' %}
+            <button data-url="{% url 'file_revisions' repo.id %}?p={{ path }}" class="history">{% trans "History"%}</button>
+            {% endif %}
+        {% endif %}
+
             {% if not view_history and request.user.is_authenticated %}
             {% if filetype != 'Sf' %}
             <button id="open-local" data="{{path}}{{dirent.obj_name}}">{% trans "Open local file"%}</button>
@@ -134,7 +195,7 @@
                 {% if filetype == 'Text' %}
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
                 {% else %}
-                <div id="sf-view" class="article">{{ file_content|safe }}</div>
+                <div id="sf" class="article">{{ file_content|safe }}</div>
                 {% endif %}
                 {% endifnotequal %}
             {% else %}
@@ -208,6 +269,7 @@
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
 {% include "snippets/repo_file_get.html" %}
+
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
@@ -485,6 +547,7 @@ $('#open-local').click(function () {
 //star
 $('#star').click(function() {
     var star_btn = $(this);
+    disable(star_btn);
     var state = star_btn.attr('data');
     $.ajax({
         url: '{{ SITE_ROOT }}repo/star_file/{{ repo.id }}/',
@@ -504,15 +567,17 @@ $('#star').click(function() {
                     feedback('{% trans "Unstarred successfully" %}', 'success');
                     star_btn.attr('data', 'unstarred').text('{% trans "Star" %}');
                 } else {
-                feedback('{% trans "Starred successfully" %}', 'success');
+                    feedback('{% trans "Starred successfully" %}', 'success');
                     star_btn.attr('data', 'starred').text('{% trans "Unstar" %}');
                 }
             } else {
                 feedback('{% trans "Failed:" %}' + data['err_msg'], 'error');
             }
+            enable(star_btn);
         },
         error:function(jqXHR, textStatus, errorThrown) {
-                  feedback(textStatus + '{% trans ", failed" %}', 'error');
+            feedback(textStatus + '{% trans ", failed" %}', 'error');
+            enable(star_btn);
         }
    });
 })
@@ -533,6 +598,15 @@ $('#back').click(function() {
         location.href = $(this).attr('data');
 });
 {% endif %}
+{% endif %}
+
+{% if filetype == 'Sf' %}
+{% if not view_history %}
+$('#file-op .history').click(function () {
+    location.href = $(this).data('url');
+});
+{% endif %}
+$('#main-panel').css({'margin-bottom':0});
 {% endif %}
 </script>
 {% endblock %}

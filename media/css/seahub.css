@@ -422,6 +422,8 @@ textarea:-moz-placeholder {/* for FF */
 
 /* header */
 #logo {
+    width:95px;
+    height:40px;
     margin-right:30px;
 }
 #header .nav {
@@ -556,6 +558,7 @@ textarea:-moz-placeholder {/* for FF */
     color:#000;
 }
 #simplemodal-container h3 {
+    font-size:1.5em;
     word-wrap:break-word;
     margin:0 0 4px;
 }
@@ -590,7 +593,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* for article */
 .article {
-    padding:40px 130px;
+    padding:40px 200px 40px 60px;
     font-size:14px;
     line-height:1.6;
     color:#333;
@@ -1385,25 +1388,23 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     -moz-border-radius:3px;
 }
-#file-edit {
-    border:1px solid #ccc;
-    margin-top:12px;
-}
 #op-after-edit {
-    margin-top:1em;
+    margin-top:.9em;
 }
 #op-after-edit button {
     margin-left:5px;
 }
 #file-edit-cancel {
     color:#900;
+    font-weight: normal;
+    margin-left: 3px;
 }
 #star {
     padding-left:18px;
     background:#efefef url('../img/star.png') no-repeat scroll 3px 48%;
 }
-#sf, /* sf editor*/
-#sf-view {
+#sf {
+    font-size:15px;
     min-height:380px;
     background:#fff;
 }

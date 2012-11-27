@@ -12,14 +12,64 @@
 }
 .CodeMirror-scroll {
     height:auto;
+    min-height:480px;
 }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
 {% endif %}
+<style type="text/css">
+#main {
+    width:100%; 
+}
+#footer {
+    display:none;
+}
+#edit-hd, #path-op {
+    width:950px;
+    margin:0 auto;
+}
+#path-op {
+    padding-bottom:6px;
+}
+#path-op .path {
+    margin-top:1.2em
+}
+#file-edit {
+    min-height:480px;
+    padding:30px 0 10px;
+    background:#f4f4f4;
+    border-top:1px solid #ededed;
+}
+#md-view {
+    width:690px;
+}
+#sf {
+    width:624px;
+    padding:40px 96px;
+}
+#sf, #md-view {
+    box-shadow:0 0 6px #ccc;
+    min-height:400px;
+    border:1px solid #ccc;
+    margin:0 auto;
+}
+.fixed-path-op {
+    position:fixed;
+    background:#fff;
+    border-bottom:1px solid #ededed;/*for ie*/
+    box-shadow:0 1px 3px #777;
+    z-index:1010;/*make seaf image show below path-op*/
+}
+.CodeMirror {
+    width:950px;
+    margin:0 auto;
+    box-shadow:0 0 6px #272822;
+}
+</style>
 {% endblock %}
 
 {% block main_panel %}
-    <h2>{% trans "Edit" %} <span class="op-target">{{ u_filename }}</span></h2>
+    <h2 id="edit-hd">{% trans "Edit" %} <span class="op-target">{{ u_filename }}</span></h2>
     <div id="path-op" class="ovhd">
         <p class="path fleft">
          {% trans "Current path: " %}
@@ -32,12 +82,12 @@
          {% endfor %}
     </p>
     <div id="op-after-edit" class="fright hide">
-        <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</button>
         {% if filetype == 'Markdown' %}
             <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
             <button id="preview-btn">{% trans "Preview" %}</button>
         {% endif %}
         <button id="file-edit-submit">{% trans "Submit" %}</button>
+        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
     </div>
     </div>
     <div id="file-edit">
@@ -74,13 +124,22 @@ if ($('#lang-context').attr('data-lang') == 'zh-cn') {
 {% endif %}
 <script type="text/javascript">
 {% ifnotequal file_content None %}
-$('#main').css('width','100%');
-$('h2, #path-op').css({'width':950, 'margin':'0 auto'});
-$('#file-edit').css({'background':'#f4f4f4', 'border-top':'1px solid #ededed'});
-$('#sf, #md-view').css({'width':690, 'margin':'35px auto', 'border':'1px solid #ccc', 'box-shadow':'0 0 6px #ccc', 'min-height':400});
-$('#footer').addClass('hide');
+$(window).scroll(function() {
+    var offset = $('#edit-hd').offset();
+    if ($(window).scrollTop() > offset.top + $('#edit-hd').height()) {
+        $('#path-op').addClass('fixed-path-op').css({'left':0, 'top':0, 'padding-left':offset.left, 'padding-right':offset.left});
+    } else {
+        $('#path-op').removeClass('fixed-path-op');
+    }
+});
 {% if filetype == 'Sf' %}
-Aloha.ready(function() { $('#sf').aloha().focus(); });
+Aloha.ready(function() {
+    if ($.browser.msie) {
+        $('#sf').aloha();
+    } else {
+        $('#sf').aloha().focus();
+    }
+});
 {% else %}
 var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     {% include "snippets/editor_set_mode.html" %}
@@ -92,8 +151,6 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     lineNumbers: true,
     autofocus: true
 });
-$('.CodeMirror').css({'width':950, 'margin':'35px auto', 'box-shadow':'0 0 6px #272822'});
-$('.CodeMirror-scroll').css({'min-height':480});
 {% endif %}
 $('#op-after-edit').removeClass('hide');
 
@@ -131,7 +188,7 @@ $('#file-edit-submit').click(function () {
         beforeSend: prepareCSRFToken,
         data: {content: content, encoding: '{{ encoding }}'},
         success: function(data) {
-            location.href = $('#file-edit-cancel').attr('data');
+            location.href = $('#file-edit-cancel').attr('href');
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
@@ -139,9 +196,6 @@ $('#file-edit-submit').click(function () {
             enable(submit_btn);
         }
     });
-});
-$('#file-edit-cancel').click(function() {
-    location.href = $(this).attr('data');
 });
 {% endifnotequal %}
 
