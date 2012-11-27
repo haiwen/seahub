@@ -9,6 +9,7 @@
         <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">{% trans "Back to snapshots"%}</button>
     </div>
 
+    {% if path == '/' %}
     <div id="repo-latest-commit">
         <p class="commit-msg">{{ current_commit.props.desc|translate_commit_desc }}</p>
         <p class="meta-info">
@@ -23,6 +24,7 @@
         <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
         </p>
     </div>
+    {% endif %}
 
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">

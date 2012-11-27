@@ -27,14 +27,12 @@
     <p>{% trans "This library is read-only, and you can only view the files."%}</p>
     {% endif %}
 
-    {% if user_perm %}
+    {% if user_perm and path == '/' %}
     <div id="repo-basic-info">
       <p class="desc">{{repo.props.desc}}</p>
       <p class="size">{% trans 'Size: ' %}{{ repo_size|filesizeformat }}</p>
     </div>
-    {% endif %}
 
-    {% if user_perm %}
     <div id="repo-latest-commit">
         <p class="commit-msg ovhd">
         <span class="fleft">
