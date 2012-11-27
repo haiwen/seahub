@@ -206,7 +206,13 @@ cc.spliter = ''
 @register.filter(name='char2pinyin')
 def char2pinyin(value):
     """Convert Chinese character to pinyin."""
-    return cc.convert(value)
+
+    py = cache.get('CHAR2PINYIN_'+value)
+    if not py:
+        py = cc.convert(value)
+        cache.set('CHAR2PINYIN_'+value, py, 365 * 24 * 60 * 60)
+
+    return py
 
 @register.filter(name='translate_permission')
 def translate_permission(value):
