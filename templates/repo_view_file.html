@@ -218,7 +218,7 @@
         <p id="open-local-handling-tip">{% trans "Processing..."%}</p>
         <p id="open-local-error" class="error"></p>
         <div id="redirect-download" class="hide">
-            <p class="error">{% trans "You have not downloaded " %}"{{ repo.props.name }}." </p>
+            <p class="error">{% trans "You have not downloaded " %}"{{ repo.props.name }}"{% trans "." %} </p>
             <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">{% trans "Click to download"%}</button>
         </div>
     </div>

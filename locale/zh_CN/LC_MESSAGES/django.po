@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-27 17:11+0800\n"
+"POT-Creation-Date: 2012-11-27 17:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1177,6 +1177,10 @@ msgstr "处理中..."
 #: templates/repo_view_file.html:221
 msgid "You have not downloaded "
 msgstr "你还未下载"
+
+#: templates/repo_view_file.html:221
+msgid "."
+msgstr "。"
 
 #: templates/repo_view_file.html:222
 msgid "Click to download"
