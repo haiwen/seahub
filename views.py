@@ -2456,15 +2456,15 @@ def flash_prepare(raw_path, obj_id, doctype):
             return None, ret_dict['exists']
 
 def use_flash_for_pdf(request):
-    """Decide whether to use flash to view pdf file, according to the current
-    browser type and version.
+    """Only use pdfjs to display PDF in Firefox. For IE/Chrome/Others, use flash.
 
     """
     ua = request.META.get('HTTP_USER_AGENT', '')
-    if 'MSIE' in ua:
-        return True
-    else:
+    if 'firefox' in ua.lower():
+        # Browser is firefox
         return False
+    else:
+        return True
 
 def demo(request):
     """
