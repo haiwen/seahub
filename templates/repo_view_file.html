@@ -218,7 +218,7 @@
         <p id="open-local-handling-tip">{% trans "Processing..."%}</p>
         <p id="open-local-error" class="error"></p>
         <div id="redirect-download" class="hide">
-            <p class="error">{% blocktrans %}You have not downloaded {{repo.name}}{% endblocktrans %}</p>
+            <p class="error">{% trans "You have not downloaded " %}"{{ repo.props.name }}." </p>
             <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">{% trans "Click to download"%}</button>
         </div>
     </div>
@@ -517,8 +517,9 @@ $('#open-local').click(function () {
     var local_applet_running = false;
     $('#open-local-feedback').modal({
         appendTo: '#main',
-        containerCss: { width: 300, height: 60}
+        containerCss: { width: 300}
     });
+    $('#simplemodal-container').css('height', 'auto');
 
     $.ajax({
         url: '{{ applet_root }}/seafile_rpc_version/',
