@@ -78,17 +78,25 @@ def add(request, extra_context=None, next_override=None,
             messages.success(request, _("Successfully uploaded a new avatar."))
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
             return HttpResponseRedirect(next_override or _get_next(request))
-    return render_to_response(
-            'avatar/add.html',
-            extra_context,
-            context_instance = RequestContext(
-                request,
-                { 'avatar': avatar, 
-                  'avatars': avatars, 
-                  'upload_avatar_form': upload_avatar_form,
-                  'next': next_override or _get_next(request), }
-            )
-        )
+        else:
+            messages.error(request, upload_avatar_form.errors['avatar'])
+
+        return HttpResponseRedirect(_get_next(request))
+    else:
+        # Only allow post request to change avatar.
+        raise Http404
+
+    # return render_to_response(
+    #         'avatar/add.html',
+    #         extra_context,
+    #         context_instance = RequestContext(
+    #             request,
+    #             { 'avatar': avatar, 
+    #               'avatars': avatars, 
+    #               'upload_avatar_form': upload_avatar_form,
+    #               'next': next_override or _get_next(request), }
+    #         )
+    #     )
 
 @login_required
 def group_add(request, gid):

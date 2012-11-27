@@ -4,9 +4,16 @@
 {% block right_panel %}
 <div id="user-basic-info">
     <h2>{% trans "Profile Setting" %}</h2>
+
+    <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
+    <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url avatar_add %}" style="display:inline-block;">
+      <span class="fileinput-button">
+        <a href="#">{% trans "Change picture" %}</a>
+        <input type="file" name="avatar" id="id_avatar" />
+      </span>
+    </form>
+
     <form action="" method="post">
-        <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
-        <a href="{{ SITE_ROOT }}avatar/add/">{% trans "Update" %}</a><br />
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
         <label>{% trans "Nickname:" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
         {% for error in form.nickname.errors %}
@@ -21,4 +28,36 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#id_avatar').change(function() {
+    // check file extension
+    var file = $(this).val();
+    var extension = file.substr((file.lastIndexOf('.') +1));
+    var allowed_ext = ['jpg', 'png', 'jpeg', 'gif'];
+    var allow = false;
+    for (e in allowed_ext) {
+        if (extension == allowed_ext[e]) {
+            allow = true;
+            break;
+        }
+    }
+    if (!allow) {
+        var err_msg = extension + ' is an invalid file extension. Authorized extensions are : ' + allowed_ext;
+        feedback(err_msg, 'error');
+        return false;        
+    }
+
+    // check file size is less than 1MB
+    if (this.files && this.files[0].size > 1024*1024) {
+        feedback('Your file is too big, the maximum allowed size is 1MB', 'error');
+        return false;        
+    }
+    
+    $('#id_avatar_form').submit();
+    return false;
+})
+</script>
 {% endblock %}
