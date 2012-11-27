@@ -52,6 +52,18 @@ $('#upload-file-form .submit').click(function () {
         return false;
     }
 
+    var total = 0;
+    $.each($('#upload-file-form input[type=file]'), function() {
+        if($(this).val()) {
+            total += this.files[0].size;
+        }
+    });
+
+    if (total > {{ max_upload_file_size }}) {
+        $('#upload-file-form .error').html('{% trans "File size surpasses the limit." %}').removeClass('hide');
+        return false;
+    }
+
     $('#upload-file-form .error').addClass('hide');
     
     $.fn.MultiFile.disableEmpty(); // disable dummy element before submiting the form

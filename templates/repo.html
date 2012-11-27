@@ -164,7 +164,7 @@
 
     <!-- popup dialog for file upload -->
     <div id="upload-file-dialog" class="hide">
-        <h3>Upload Files</h3>
+        <h3>{% trans "Upload Files" %}</h3>
       {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space. Upload failed." %}</p>
       {% else %}
@@ -172,11 +172,11 @@
           <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
           <span class="fileinput-button">
               <i class="icon-plus"></i>
-              <span class="op">Add files...</span>
+              <span class="op">{% trans "Add files..." %}</span>
               <input type="file" name="file" id="file" />
           </span>
           <div id="upload-file-list" style="border:#999 solid 3px; padding:10px;">
-            <p>Selected files will be populated here...</p>
+            <p>{% trans "Selected files will be populated here..." %}</p>
             <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
           </div>
           <p class="error">{{ error_msg }}</p>
@@ -603,7 +603,8 @@ $('#upload-file').click(function () {
     $('#file').MultiFile({
         list: '#upload-file-list',
         STRING: {
-            file: '<em title="Click to remove" onclick="$(this).parent().prev().click()">$file</em>'
+            file: '<em title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</em>',
+            duplicate: '{% trans "This file has already been selected:\n$file!" %}'
         }});     // init MultiFile 
     $('#simplemodal-container').css('height', 'auto');
     return false;
