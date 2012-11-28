@@ -377,11 +377,13 @@ $('#shared-link').click(function() {
 {% if request.user.is_authenticated %}
 $('#bottom-bar').append('<button id="comment">{% trans "Comment" %}</button>');
 $('#file-comment').css({'max-height':$(window).height() - parseInt($('#file-comment').css('bottom'))});
+{% if groups %}
 var gids = '';
 {% for g in groups %}
 gids += '{{ g.id }}_';
 {% endfor %}
 addAtAutocomplete('#comment-input', '#comment-container', gids, "{% url 'group_attention' %}", {'width':'315px','padding-left':'1px','height':'36px','margin':'0','font-size':'13px', 'font-family':'Arial, Helvetica, sans-serif', 'line-height': '1.5em', 'border':'1px solid #ddd'});
+{% endif %}
 $('#comment-input').bind('autocompleteopen', function(e, ui) {
     var menu = $(this).autocomplete('widget');
     if (parseInt(menu.css('top')) > 0) {

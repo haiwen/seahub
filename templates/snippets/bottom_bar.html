@@ -59,10 +59,10 @@ $(document).click(function(e) {
         $('#to-group, #to-group-caret').addClass('hide');
     }   
 });
+{% endif %}
 
 $(function() {
     var btn_height = $('#bottom-bar button').outerHeight();
     $('#recommend-to-group-caret, #to-group-caret, #comment-caret').css({'bottom': btn_height + 1});
     $('#file-comment, #to-group, #recommend-to-group-form').css({'bottom': btn_height + 1 + $('.outer-caret').outerHeight()});
 });
-{% endif %}
