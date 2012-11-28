@@ -101,7 +101,7 @@
     {% endifnotequal %}
 
     {% if err %}
-    $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
+    $('#file-view').html('<div id="md-view" class="article"><p class="error">{{ err }}</p></div>');
     {% endif %}
 {% endif %}
 
