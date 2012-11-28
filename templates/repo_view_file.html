@@ -6,53 +6,8 @@
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 {% endif %}
-{% if filetype == 'Sf' %}
-<style type="text/css">
-#main {
-    width:100%;
-}
-#view-hd,
-#view-path-op,
-#file-op,
-#sf-commit-op {
-    width:950px;
-    margin:0 auto;
-}
-#file-op {
-    padding:0;
-    border:0;
-}
-#file-op .avatar,
-#file-op .name,
-#file-op .time,
-#file-op span {
-    vertical-align:middle;
-}
-#file-op .time {
-    color:#666;
-    margin:0 4px 0 8px;
-}
-#file-op .contributors {
-    margin-left:8px;
-}
-#file {
-    padding:0;
-    background:#fff;
-}
-#file-view {
-    background:#f4f4f4;
-    border-top:1px solid #ededed;
-    margin-top:12px;
-}
-#sf {
-    width:624px;
-    padding:40px 96px;
-    border:1px solid #ccc;
-    margin:30px auto 10px;
-    box-shadow:0 0 6px #ccc;
-    min-height:400px;
-}
-</style>
+{% if filetype == 'Sf' or filetype == 'Markdown' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% endif %}
 {% endblock %}
 
@@ -84,7 +39,15 @@
     {% endif %}
     </div>
 
+    {% if filetype == 'Sf' or filetype == 'Markdown'%}
+        {% if view_history %}
+        <div id="view-path-op" class="hide">
+        {% else %}
+        <div id="view-path-op" class="w100 ovhd">
+        {% endif %}
+    {% else %}
     <div id="view-path-op" class="w100 ovhd">
+    {% endif %}
         <p class="path fleft">
         {% trans "Current Path: "%}
 
@@ -130,12 +93,12 @@
         {% endif %}
     </div>
 
-    {% if not view_history and filetype != 'Sf' %}
+    {% if not view_history and filetype != 'Sf' and filetype != 'Markdown' %}
     <div id="file-commit-info">
         <div class="latest-commit ovhd">
             <p class="latest-commit-info fleft">
                 {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span><span>{% trans "updated this file"%}</span>
-                {% if filetype == 'Text' or filetype == 'Markdown' %}
+                {% if filetype == 'Text' %}
                 {% if last_commit_id %}
                 <span><a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "Detail"%}</a></span>
                 {% endif %}
@@ -161,9 +124,19 @@
         <div id="file-op">
         {% endif %}
 
-        {% if not view_history and filetype == 'Sf' %}
+        {% if not view_history %}
+            {% if filetype == 'Sf' or filetype == 'Markdown' %}
             <div class="commit fleft">
-                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span><span>{% trans "updated this file"%}.</span>
+                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span>
+                {% if filetype == 'Markdown' %}
+                {% if last_commit_id %}
+                <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "Detail"%}</a>.</span>
+                {% endif %}
+                {% endif %}
+
+                {% if filetype == 'Sf' %}
+                <span>{% trans "updated this file"%}.</span>
+                {% endif %}
                 <span class="contributors">{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
                 {% for user in contributors %}
                 <a href="{% url 'user_profile' user %}" title="{{ user|email2nickname}}">{% avatar user 16 %}</a>
@@ -171,6 +144,7 @@
             </div>
             {% if user_perm == 'rw' %}
             <button data-url="{% url 'file_revisions' repo.id %}?p={{ path }}" class="history">{% trans "History"%}</button>
+            {% endif %}
             {% endif %}
         {% endif %}
 
@@ -199,7 +173,13 @@
                 {% endif %}
                 {% endifnotequal %}
             {% else %}
-            <p>{% trans "Loading..."%}</p>
+                {% if filetype == 'Markdown' %}
+                <div id="md-view" class="article">
+                    <p>{% trans "Loading..."%}</p>
+                </div>
+                {% else %}
+                <p>{% trans "Loading..."%}</p>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -601,13 +581,16 @@ $('#back').click(function() {
 {% endif %}
 {% endif %}
 
-{% if filetype == 'Sf' %}
+{% if filetype == 'Sf' or filetype == 'Markdown' %}
 {% if not view_history %}
 $('#file-op .history').click(function () {
     location.href = $(this).data('url');
 });
-{% endif %}
 $('#main-panel').css({'margin-bottom':0});
+{% else %}
+$('.path').css('margin-top', '.5em');
+$('#file-op').prepend($('.path'));
+{% endif %}
 {% endif %}
 </script>
 {% endblock %}

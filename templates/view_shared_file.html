@@ -2,21 +2,33 @@
 {% load seahub_tags i18n %}
 
 {% block extra_style %}
+{% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+{% endif %}
+{% if filetype == 'Sf' or filetype == 'Markdown' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
+{% endif %}
 {% endblock %}
 
 {% block main_panel %}
-    <h2>{{ file_name }}</h2>
+    <h2 id="view-hd">{{ file_name }}</h2>
+    {% if filetype != 'Markdown' and filetype != 'Sf' %}
     <p class="file-share-from">{% trans "Shared by: " %}{{ username }}</p>
+    {% endif %}
     <div id="file">
         {% if filetype == 'PDF' and not pdf_use_flas %}
         <div id="file-op" class="hide">
         {% else %}
         <div id="file-op">
         {% endif %}
+            {% if filetype == 'Markdown' or filetype == 'Sf' %}
+            <p class="fleft">{% trans "Shared by: " %}{{ username }}</p>
+            {% endif %}
+
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">{% trans "Raw" %}</button>
             {% endif %}
+
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">{% trans "Download" %}</button>
         </div>
         <div id="file-view">
@@ -25,11 +37,17 @@
                 {% if filetype == 'Text' %}
                 <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
                 {% else %}
-                <div id="sf-view" class="article">{{ file_content|safe }}</div>
+                <div id="sf" class="article">{{ file_content|safe }}</div>
                 {% endif %}
                 {% endifnotequal %}
             {% else %}
-            <p>{% trans "Loading..." %}</p>
+                {% if filetype == 'Markdown' %}
+                <div id="md-view" class="article">
+                    <p>{% trans "Loading..."%}</p>
+                </div>
+                {% else %}
+                <p>{% trans "Loading..." %}</p>
+                {% endif %}
             {% endif %}
         </div>
     </div>

@@ -40,14 +40,9 @@
     background:#f4f4f4;
     border-top:1px solid #ededed;
 }
-#md-view {
-    width:690px;
-}
-#sf {
+#sf, #md-view {
     width:624px;
     padding:40px 96px;
-}
-#sf, #md-view {
     box-shadow:0 0 6px #ccc;
     min-height:400px;
     border:1px solid #ccc;
@@ -61,7 +56,11 @@
     z-index:1010;/*make seaf image show below path-op*/
 }
 .CodeMirror {
+    {% if filetype == 'Markdown' %}
+    width:818px;
+    {% else %}
     width:950px;
+    {% endif %}
     margin:0 auto;
     box-shadow:0 0 6px #272822;
 }

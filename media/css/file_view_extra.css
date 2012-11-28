@@ -1,0 +1,50 @@
+#main {
+    width:100%;
+}
+#view-hd,
+#view-path-op,
+#file-op,
+#sf-commit-op {
+    width:950px;
+    margin:0 auto;
+}
+#file-op {
+    padding:0;
+    border:0;
+}
+#file-op .avatar,
+#file-op .name,
+#file-op .time,
+#file-op span {
+    vertical-align:middle;
+}
+#file-op .time {
+    color:#666;
+    margin:0 2px 0 8px;
+}
+#file-op .file-diff {
+    font-size:100%;
+}
+#file-op .contributors {
+    margin-left:8px;
+}
+#file {
+    padding:0;
+    background:#fff;
+}
+#file-view {
+    padding:30px 0 10px;
+    min-height:400px;
+    background:#f4f4f4;
+    border:1px solid #ededed;
+    margin-top:12px;
+}
+#sf,
+#md-view {
+    width:624px;
+    padding:40px 96px;
+    border:1px solid #ccc;
+    margin:0 auto;
+    box-shadow:0 0 6px #ccc;
+    min-height:400px;
+}
