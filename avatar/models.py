@@ -168,4 +168,5 @@ def create_default_thumbnails(instance=None, created=False, **kwargs):
         for size in AUTO_GENERATE_AVATAR_SIZES:
             instance.create_thumbnail(size)
 
-#signals.post_save.connect(create_default_thumbnails, sender=Avatar)
+signals.post_save.connect(create_default_thumbnails, sender=Avatar, dispatch_uid="create_default_thumbnails")
+

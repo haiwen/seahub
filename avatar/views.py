@@ -125,12 +125,21 @@ def group_add(request, gid):
             # invalidate group avatar cache
             invalidate_group_cache(gid)
 
-    return render_to_response('avatar/set_avatar.html', {
-            'group' : group,
-            'form' : form,
-            'org': org,
-            'base_template': base_template,
-            }, context_instance=RequestContext(request))
+            messages.success(request, _("Successfully uploaded a new group avatar."))
+        else:
+            messages.error(request, form.errors['avatar'])
+
+        return HttpResponseRedirect(_get_next(request))
+    else:
+        # Only allow post request to change group avatar.
+         raise Http404   
+
+    # return render_to_response('avatar/set_avatar.html', {
+    #         'group' : group,
+    #         'form' : form,
+    #         'org': org,
+    #         'base_template': base_template,
+    #         }, context_instance=RequestContext(request))
 
 @login_required
 def change(request, extra_context=None, next_override=None,

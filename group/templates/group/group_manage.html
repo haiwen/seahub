@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load seahub_tags avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 {% block nav_group_class %}class="cur"{% endblock %}
@@ -10,10 +10,22 @@
 
 {% block left_panel %}
 <div class="info-item">
+  <div class="info-item-top"><h3>Group Avatar</h3></div>
+  <div class="info-item-bottom ovhd">
+    <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar fleft" />
+      <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url 'avatar_group_add' group.id %}" style="padding-left: 5px; display:inline-block;">
+        <span class="fileinput-button" style="margin-right: 0px; padding-top: 0px; ">
+          <a href="#">{% trans "Change picture" %}</a>
+          <input type="file" name="avatar" id="id_avatar" />
+        </span>
+      </form>
+  </div>
+</div>
+
+<div class="info-item">
   <div class="info-item-top"><h3>{% trans "Operations"%}</h3> </div>
   <div class="info-item-bottom">
     <ul class="with-bg">
-      <li><a href="{% url 'avatar_group_add' group.id %}">{% trans "Avatar"%}</a></li>      
       <li><a id="group-dismiss" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
       <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back"%}</a></li>
     </ul>
@@ -91,4 +103,5 @@ contact_list.push({value:contact_email, label:contact_email});
 {% include 'group/grpadmin_add_js.html' %}
 {% endwith %}
 </script>
+{% include "snippets/avatar_upload_js.html" %}
 {% endblock %}

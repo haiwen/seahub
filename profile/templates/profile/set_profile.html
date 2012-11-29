@@ -1,12 +1,13 @@
 {% extends "profile/profile_base.html" %}
 {% load avatar_tags i18n %}
+{% load url from future %}
 
 {% block right_panel %}
 <div id="user-basic-info">
     <h2>{% trans "Profile Setting" %}</h2>
 
     <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
-    <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url avatar_add %}" style="display:inline-block;">
+    <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}" style="display:inline-block;">
       <span class="fileinput-button">
         <a href="#">{% trans "Change picture" %}</a>
         <input type="file" name="avatar" id="id_avatar" />
@@ -31,33 +32,5 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript">
-$('#id_avatar').change(function() {
-    // check file extension
-    var file = $(this).val();
-    var extension = file.substr((file.lastIndexOf('.') +1));
-    var allowed_ext = ['jpg', 'png', 'jpeg', 'gif'];
-    var allow = false;
-    for (e in allowed_ext) {
-        if (extension == allowed_ext[e]) {
-            allow = true;
-            break;
-        }
-    }
-    if (!allow) {
-        var err_msg = extension + ' is an invalid file extension. Authorized extensions are : ' + allowed_ext;
-        feedback(err_msg, 'error');
-        return false;        
-    }
-
-    // check file size is less than 1MB
-    if (this.files && this.files[0].size > 1024*1024) {
-        feedback('Your file is too big, the maximum allowed size is 1MB', 'error');
-        return false;        
-    }
-    
-    $('#id_avatar_form').submit();
-    return false;
-})
-</script>
+{% include "snippets/avatar_upload_js.html" %}
 {% endblock %}
