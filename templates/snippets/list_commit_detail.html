@@ -16,27 +16,27 @@ function get_commit_diff(url, callback) {
                 con += '</ul>';
             };
             if (data['new'].length > 0) {
-            con += '<h3 id="ls-ch-new">{% trans "New files" %}</h3>';
+            con += '<h4 id="ls-ch-new">{% trans "New files" %}</h4>';
                 show(data['new']);
             }
             if (data['removed'].length > 0) {
-                con += '<h3 id="ls-ch-rm">{% trans "Deleted files" %}</h3>';
+                con += '<h4 id="ls-ch-rm">{% trans "Deleted files" %}</h4>';
                 show(data['removed']);
             }
             if (data['renamed'].length > 0) {
-            con += '<h3 id="ls-ch-rn">{% trans "Renamed or Moved files" %}</h3>';
+            con += '<h4 id="ls-ch-rn">{% trans "Renamed or Moved files" %}</h4>';
                 show(data['renamed']);
             }
             if (data['modified'].length > 0) {
-            con += '<h3 id="ls-ch-modi">{% trans "Modified files" %}</h3>';
+            con += '<h4 id="ls-ch-modi">{% trans "Modified files" %}</h4>';
                 show(data['modified']);
             }
             if (data['newdir'].length > 0) {
-            con += '<h3 id="ls-ch-newdir">{% trans "New directories" %}</h3>';
+            con += '<h4 id="ls-ch-newdir">{% trans "New directories" %}</h4>';
                 show(data['newdir']);
             }
             if (data['deldir'].length > 0) {
-            con += '<h3 id="ls-ch-deldir">{% trans "Deleted directories" %}</h3>';
+            con += '<h4 id="ls-ch-deldir">{% trans "Deleted directories" %}</h4>';
                 show(data['deldir']);
             }
             if (!con) {
@@ -51,7 +51,7 @@ function list_commit_change(obj) {
     var url = obj.attr('href');
     get_commit_diff(url, function(content) {
         var time = '<p><span class="commit-time">' + obj.attr('data') + '</span></p>';
-        var title = '<h2>{% trans "Modification Details" %}</h2>' + time;
+        var title = '<h3>{% trans "Modification Details" %}</h3>' + time;
         $('#ls-ch').html(title + content).modal({
             appendTo:'#main',
             maxHeight: window.innerHeight - 57,
