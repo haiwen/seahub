@@ -572,7 +572,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:5px;
 }
 #confirm-popup,
-#rename-form,
 .simple-input-popup {
     min-width:255px;
 }

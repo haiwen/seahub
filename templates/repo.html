@@ -259,12 +259,12 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="hide">
+    <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="simple-input-popup hide">
         <h3 id="rename-hd"></h3>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="hidden" name="oldname" value="" />
-        <input type="text" name="newname" value="" class="new-name" /><br />
+        <input type="text" name="newname" value="" class="long-input" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
@@ -341,15 +341,15 @@ $('.hidden-op li').hover(
 );
 
 $('.file-rename, .dir-rename').click(function () {
-        var type = $(this).hasClass('file-rename') ? '{% trans "file" %} ' : '{% trans "directory" %} ',
+    var type = $(this).hasClass('file-rename') ? '{% trans "file" %} ' : '{% trans "directory" %} ',
         name = $(this).attr('data');
         newname = $('#rename-form input[name="newname"]');
-        $('#rename-hd').html( '{% trans "Rename " %}' + type + ' <span class="op-target">' + name + '</span> {% trans "to:" %}');
+    $('#rename-hd').html( '{% trans "Rename " %}' + type + ' <span class="op-target">' + name + '</span> {% trans "to:" %}');
     $('#rename-form input[name="oldname"]').val(name);
-    $('#rename-form').modal({appendTo:'#main'});
-    newname.before('<p class="hide">' + name + '</p>');
-    newname.val(name).css('width', newname.prev().width() + 3);
-    newname.prev().remove();
+    $('#rename-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    $(window).resize();// make the popup in the center of the window
+    newname.val(name);
     return false;
 });
 
@@ -477,9 +477,15 @@ $('#mv-form h4').click(function() {
     }
 });
 
-$('#rename-form .submit').click(function() {
-    var self = $(this);
-    self.attr('disabled', 'disabled');
+$('#rename-form').submit(function() {
+    var new_name = $(this).find('input[name="newname"]').val();
+    if (!$.trim(new_name)) {
+        apply_form_error('rename-form', "{% trans "File name can't be empty" %}");
+        return false;
+    }
+
+    var submit_btn = $(this).children('input[type="submit"]');  
+    disable(submit_btn);
     
     $.ajax({
         url: '{% url 'views.repo_rename_file' %}',
@@ -491,14 +497,14 @@ $('#rename-form .submit').click(function() {
             'repo_id': $('#rename-form input[name="repo_id"]').val(),
             'parent_dir': $('#rename-form input[name="parent_dir"]').val(),
             'oldname': $('#rename-form input[name="oldname"]').val(),
-            'newname': $('#rename-form input[name="newname"]').val()
+            'newname': new_name
         },
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
             } else {
                 apply_form_error('rename-form', data['error']);
-                self.removeAttr('disabled');                
+                enable(submit_btn);
             }
         },
         error: function(data, textStatus, jqXHR) {
@@ -506,7 +512,7 @@ $('#rename-form .submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('rename-form', value[0]);
             });
-            self.removeAttr('disabled');            
+            enable(submit_btn);
         }
     });
     return false;
