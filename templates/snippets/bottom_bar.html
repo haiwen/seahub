@@ -27,7 +27,7 @@ $(document).click(function(e) {
 
 $('#recommend-submit').click(function() {
     if (!$.trim($('#recommend-to-group-form [name="message"]').val())) {
-    apply_form_error('recommend-form', '{% trans "Please input recommend message." %}');
+        apply_form_error('recommend-to-group-form', '{% trans "Please input recommend message." %}');
         return false;   
     }
 });
