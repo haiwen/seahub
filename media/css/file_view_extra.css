@@ -43,8 +43,21 @@
 #md-view {
     width:624px;
     padding:40px 96px;
+}
+.CodeMirror {
+    color:#000;
+    width:950px;
+    background:#fff;
+}
+#sf,
+#md-view,
+.CodeMirror {
     border:1px solid #ccc;
     margin:0 auto;
     box-shadow:0 0 6px #ccc;
+}
+#sf,
+#md-view,
+.CodeMirror-scroll {
     min-height:400px;
 }

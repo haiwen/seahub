@@ -12,7 +12,7 @@
 }
 .CodeMirror-scroll {
     height:auto;
-    min-height:480px;
+    min-height:700px;
 }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
@@ -35,8 +35,8 @@
     margin-top:1.2em
 }
 #file-edit {
-    min-height:480px;
-    padding:30px 0 10px;
+    min-height:700px;
+    padding:30px 0 60px;
     background:#f4f4f4;
     border-top:1px solid #ededed;
 }
@@ -44,7 +44,7 @@
     width:624px;
     padding:40px 96px;
     box-shadow:0 0 6px #ccc;
-    min-height:400px;
+    min-height:620px;
     border:1px solid #ccc;
     margin:0 auto;
 }
@@ -56,7 +56,7 @@
     z-index:1010;/*make seaf image show below path-op*/
 }
 .CodeMirror {
-    {% if filetype == 'Markdown' %}
+    {% if filetype == 'Markdown' or fileext == 'txt' or fileext == 'text' %}
     width:818px;
     {% else %}
     width:950px;
@@ -79,15 +79,15 @@
                 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}">{{ name }}</a>
             {% endif %}
          {% endfor %}
-    </p>
-    <div id="op-after-edit" class="fright hide">
-        {% if filetype == 'Markdown' %}
-            <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
-            <button id="preview-btn">{% trans "Preview" %}</button>
-        {% endif %}
-        <button id="file-edit-submit">{% trans "Submit" %}</button>
-        <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
-    </div>
+         </p>
+         <div id="op-after-edit" class="fright hide">
+             {% if filetype == 'Markdown' %}
+             <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
+             <button id="preview-btn">{% trans "Preview" %}</button>
+             {% endif %}
+             <button id="file-edit-submit">{% trans "Submit" %}</button>
+             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
+         </div>
     </div>
     <div id="file-edit">
         {% ifnotequal file_content None %}
@@ -127,8 +127,10 @@ $(window).scroll(function() {
     var offset = $('#edit-hd').offset();
     if ($(window).scrollTop() > offset.top + $('#edit-hd').height()) {
         $('#path-op').addClass('fixed-path-op').css({'left':0, 'top':0, 'padding-left':offset.left, 'padding-right':offset.left});
+        $('#edit-hd').css('margin-bottom', $('#path-op').outerHeight());
     } else {
-        $('#path-op').removeClass('fixed-path-op');
+        $('#path-op').removeClass('fixed-path-op').removeAttr('style');
+        $('#edit-hd').css('margin-bottom', 0);
     }
 });
 {% if filetype == 'Sf' %}
@@ -148,6 +150,13 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     theme: 'monokai',
     indentUnit: 4,
     lineNumbers: true,
+    lineWrapping: true,
+    onCursorActivity: function() {
+        var cursor = editor.cursorCoords(true, 'page');
+        if (cursor.yBot >= $(window).height() + $(window).scrollTop() - 60) {
+           $(window).scrollTop($(window).scrollTop() + parseInt($('#file-edit').css('padding-bottom')));
+        }
+    },
     autofocus: true
 });
 {% endif %}

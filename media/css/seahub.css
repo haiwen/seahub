@@ -13,6 +13,7 @@ body,
 input, textarea, button, select {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
     color: #333;
+    word-wrap:break-word; /* for en */
 }
 h1 {
     font-size:1.9em;
@@ -1397,6 +1398,10 @@ textarea:-moz-placeholder {/* for FF */
     color:#900;
     font-weight: normal;
     margin-left: 3px;
+}
+#op-after-edit button,
+#file-edit-cancel {
+    vertical-align:middle; /* for ie 7 */
 }
 #star {
     padding-left:18px;

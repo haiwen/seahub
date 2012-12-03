@@ -5,14 +5,14 @@
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 {% endif %}
-{% if filetype == 'Sf' or filetype == 'Markdown' %}
+{% if filetype == 'Sf' or filetype == 'Markdown' or filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% endif %}
 {% endblock %}
 
 {% block main_panel %}
     <h2 id="view-hd">{{ file_name }}</h2>
-    {% if filetype != 'Markdown' and filetype != 'Sf' %}
+    {% if filetype != 'Markdown' and filetype != 'Sf' and filetype != 'Text' %}
     <p class="file-share-from">{% trans "Shared by: " %}{{ username }}</p>
     {% endif %}
     <div id="file">
@@ -21,7 +21,7 @@
         {% else %}
         <div id="file-op">
         {% endif %}
-            {% if filetype == 'Markdown' or filetype == 'Sf' %}
+            {% if filetype == 'Markdown' or filetype == 'Sf' or filetype == 'Text' %}
             <p class="fleft">{% trans "Shared by: " %}{{ username }}</p>
             {% endif %}
 

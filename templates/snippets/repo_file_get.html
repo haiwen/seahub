@@ -2,7 +2,6 @@
 {% load i18n %}
 {% if filetype == 'Text' %}
     {% ifnotequal file_content None %}
-    $('#file-view').css('background', '#fff');
     var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
         {% include 'snippets/editor_set_mode.html' %}
         theme: 'default',
@@ -10,12 +9,13 @@
         {% if fileext != 'txt' and fileext != 'text' %}
         lineNumbers: true,
         {% endif %}
+        lineWrapping: true,
         readOnly: true
     });
     {% endifnotequal %}
 
     {% if err %}
-    $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
+    $('#file-view').html('<div class="CodeMirror"><p class="error file-view-tip">{{ err }}</p></div>');
     {% endif %}
 {% endif %}
 
