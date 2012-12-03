@@ -94,7 +94,7 @@ urlpatterns = patterns('',
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
 )
 
-if settings.DEBUG:
+if settings.SERVE_STATIC:
     media_url = settings.MEDIA_URL.strip('/')
     urlpatterns += patterns('',
         (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),

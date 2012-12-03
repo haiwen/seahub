@@ -2,7 +2,7 @@
 # Django settings for seahub project.
 import os
 
-DEBUG = True 
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -216,6 +216,10 @@ SITE_TITLE = 'Private Seafile'
 SITE_BASE = 'http://seafile.com'
 SITE_NAME = 'Seafile'
 
+# Using Django to server static file. Set to `False` if deployed behide a web
+# server.
+SERVE_STATIC = True
+
 try:
     import local_settings
 except ImportError:
@@ -238,7 +242,7 @@ else:
 
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-SEAFILE_VERSION = '1.2.0'
+SEAFILE_VERSION = '1.3.0'
 
 USE_SUBDOMAIN = False
 
