@@ -686,10 +686,10 @@ textarea:-moz-placeholder {/* for FF */
     text-align:center;
     margin:0 1px 5px 1px;
 }
-.mygroup a {
+.mygroup .name {
     display:inline-block;
     width:100%;
-    white-space:nowrap;
+    height:1.5em;
     overflow:hidden;
 }
 #repo-create,

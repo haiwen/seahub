@@ -9,7 +9,7 @@
     <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
         <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
     </a>
-	<a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" title="{{ group.props.group_name }}">{{ group.props.group_name }}</a>
+	<a class="name" href="{{ SITE_ROOT }}group/{{ group.props.id }}/" title="{{ group.props.group_name }}">{{ group.props.group_name }}</a>
 	</li>
     {% endfor %}
 </ul>
