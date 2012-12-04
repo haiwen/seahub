@@ -231,7 +231,6 @@ class RepoMixin(object):
         self.parent_dir = self.get_parent_dir()
         self.repo = self.get_repo(self.repo_id)
         self.repo_size = self.get_repo_size()        
-        # self.can_access = access_to_repo(self.request, self.repo_id)
         self.user_perm = get_user_permission(self.request, self.repo_id)
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
@@ -307,8 +306,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
                                          self.request.user.username)
             return gen_file_upload_url(token, 'upload')
         else:
-            # TODO: handle permission error
-            raise Http404
+            return ''
 
     def get_httpserver_root(self):
         return get_httpserver_root()
@@ -320,12 +318,10 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
                                          self.request.user.username)
             return gen_file_upload_url(token, 'update')
         else:
-            # TODO: handle permission error
-            raise Http404
+            return ''
         
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
-        # kwargs['can_access'] = self.can_access
         kwargs['user_perm'] = self.user_perm
         kwargs['current_commit'] = self.get_current_commit()
         kwargs['password_set'] = self.password_set
@@ -379,7 +375,6 @@ class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
 
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
-        # kwargs['can_access'] = self.can_access
         kwargs['user_perm'] = self.user_perm
         kwargs['current_commit'] = self.get_current_commit()
         kwargs['password_set'] = self.password_set
