@@ -1,5 +1,6 @@
 {% extends "admin_base.html" %}
 {% load i18n %}
+{% load url from future %}
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <h3>{% trans "Operations" %}</h3>
@@ -28,7 +29,7 @@
         <td>
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
-          <a href="#" class="reset-user-btn op" data-url="{{ SITE_ROOT }}useradmin/password/reset/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Password Reset" %}</a>
+          <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
           {% endif %}
         </td>
     </tr>

@@ -74,7 +74,7 @@ urlpatterns = patterns('',
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
-    (r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset),
+    url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     ### Apps ###
     (r'^api/', include('api.urls')),

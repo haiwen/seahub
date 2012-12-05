@@ -1871,9 +1871,13 @@ def send_user_reset_email(request, email, password):
     try:
         send_mail(_(u'Password Reset'), t.render(Context(c)),
                   None, [email], fail_silently=False)
-        messages.success(request, _(u'Successfully sending mail'))
+        msg = _('Successfully resetting password to %(passwd)s, an email has been sent to %(user)s.') % \
+            {'passwd': password, 'user': email}
+        messages.success(request, msg)
     except:
-        messages.error(request, _(u'Failed to send mail'))
+        msg = _('Successfully resetting password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
+            {'passwd':password, 'user': email}
+        messages.error(request, msg)
 
 @login_required
 @sys_staff_required
@@ -1884,10 +1888,10 @@ def user_reset(request, user_id):
         user.set_password(INIT_PASSWD)
         user.save()
 
-        messages.success(request, _(u'Successfully resetting password'))
-
         if hasattr(settings, 'EMAIL_HOST'):
             send_user_reset_email(request, user.email, INIT_PASSWD)
+        else:
+            messages.success(request, _(u'Successfully resetting password to %s') % INIT_PASSWD)
     except User.DoesNotExist:
         msg = _(u'Failed to reset password: user does not exist')
         messages.error(request, msg)
