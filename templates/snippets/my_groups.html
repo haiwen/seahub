@@ -15,7 +15,13 @@
 </ul>
 {% else %}
 <div class="info-item-bottom">
-  <p><a href="{% url 'group_list' %}">{% trans "Create a group now" %}</a></p>
+  <p>
+    {% if cloud_mode %}
+    <a href="{% url 'org_groups' org.url_prefix %}">
+    {% else %}
+    <a href="{% url 'group_list' %}">    
+    {% endif %}
+    {% trans "Create a group now" %}</a></p>
 </div>
 {% endif %}
 </div>
