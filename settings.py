@@ -140,33 +140,6 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# Add supported file extensions and file icon name.
-# Icons will show in repo page.
-FILEEXT_ICON_MAP = {
-    # pdf file
-    'pdf' : 'pdf.png',
-    # document file
-    'doc' : 'ms-word.png',
-    'docx' : 'ms-word.png',
-    'ppt' : 'ms-ppt.png',
-    'pptx' : 'ms-ppt.png',
-    'xls' : 'ms-excel.png',
-    'xlsx' : 'ms-excel.png',
-    'txt' : 'txt.png',
-    'odf' : 'odf.png',
-    # music file
-    'mp3' : 'music-icon-24.png',
-    # picture file
-    'jpg' : 'pic-icon-24.png',
-    'jpeg' : 'pic-icon-24.png',
-    'png' : 'pic-icon-24.png',
-    'svg' : 'pic-icon-24.png',
-    'gif' : 'pic-icon-24.png',
-    'bmp' : 'pic-icon-24.png',
-    # normal file and unkown file
-    'default' : 'file-icon-24.png',
-}
-
 # File preview
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
 

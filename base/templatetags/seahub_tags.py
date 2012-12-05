@@ -14,7 +14,6 @@ from django.utils.translation import ungettext
 from profile.models import Profile
 from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
 from seahub.cconvert import CConvert
-from seahub.settings import FILEEXT_ICON_MAP
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
 
@@ -37,6 +36,31 @@ def tsstr_day(value):
     except:
         return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d")
 
+# Supported file extensions and file icon name. 
+FILEEXT_ICON_MAP = {
+    # pdf file
+    'pdf' : 'pdf.png',
+    # document file
+    'doc' : 'ms-word.png',
+    'docx' : 'ms-word.png',
+    'ppt' : 'ms-ppt.png',
+    'pptx' : 'ms-ppt.png',
+    'xls' : 'ms-excel.png',
+    'xlsx' : 'ms-excel.png',
+    'txt' : 'txt.png',
+    'odf' : 'odf.png',
+    # music file
+    'mp3' : 'music-icon-24.png',
+    # picture file
+    'jpg' : 'pic-icon-24.png',
+    'jpeg' : 'pic-icon-24.png',
+    'png' : 'pic-icon-24.png',
+    'svg' : 'pic-icon-24.png',
+    'gif' : 'pic-icon-24.png',
+    'bmp' : 'pic-icon-24.png',
+    # normal file and unkown file
+    'default' : 'file-icon-24.png',
+}
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value):
     """Get file icon according to the file postfix"""
