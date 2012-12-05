@@ -296,6 +296,9 @@ def get_repos():
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 
+def remove_repo(repo_id):
+    seafserv_threaded_rpc.remove_repo(repo_id)
+
 def list_personal_repos_by_owner(owner):
     """
     List users owned repos in personal context.

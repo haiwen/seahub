@@ -10,7 +10,7 @@ from service import get_org_groups, get_personal_groups_by_user, \
     get_group_members, get_shared_groups_by_repo, is_group_user, \
     get_org_group_repos, get_group_repos, get_org_groups_by_user, is_org_group,\
     del_org_group_repo, get_org_groups_by_repo
-from service import get_repos, get_repo, get_commits, get_branches, \
+from service import get_repos, get_repo, get_commits, get_branches, remove_repo, \
     get_org_repos, is_repo_owner, create_org_repo, is_inner_pub_repo, \
     list_org_inner_pub_repos, get_org_id_by_repo_id, list_org_shared_repos, \
     list_personal_shared_repos, is_personal_repo, list_inner_pub_repos, \

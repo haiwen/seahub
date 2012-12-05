@@ -38,7 +38,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
     check_group_staff, get_personal_groups_by_user, is_inner_pub_repo, \
-    del_org_group_repo, get_personal_groups, web_get_access_token, \
+    del_org_group_repo, get_personal_groups, web_get_access_token, remove_repo, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
@@ -795,7 +795,7 @@ def remove_repo(request, repo_id):
                 is_org_repo_owner(org.org_id, repo_id, user):
             # Must get related useres before remove the repo
             usernames = get_related_users_by_org_repo(org.org_id, repo_id)
-            seafserv_threaded_rpc.remove_repo(repo_id)
+            remove_repo(repo_id)
             repo_deleted.send(sender=None,
                               org_id=org.org_id,
                               usernames=usernames,
@@ -811,7 +811,7 @@ def remove_repo(request, repo_id):
         # perform this operation.
         if validate_owner(request, repo_id) or request.user.is_staff:
             usernames = get_related_users_by_repo(repo_id)
-            seafserv_threaded_rpc.remove_repo(repo_id)
+            remove_repo(repo_id)
             repo_deleted.send(sender=None,
                               org_id=-1,
                               usernames=usernames,

@@ -13,6 +13,7 @@ from registration import signals
 #from registration.forms import RegistrationForm
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
+from profile.models import Profile
 from seahub.utils import get_user_repos
 
 class UserManager(object):
@@ -110,8 +111,8 @@ class User(object):
         """
         # TODO: what about repo and org?
         ccnet_threaded_rpc.remove_emailuser(self.username)
-        ccnet_threaded_rpc.remove_binding(self.username)
         ccnet_threaded_rpc.remove_group_user(self.username)
+        Profile.objects.filter(user=self.username).delete()
 
     def get_and_delete_messages(self):
         messages = []
