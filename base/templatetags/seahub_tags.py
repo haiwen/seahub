@@ -1,7 +1,8 @@
 # encoding: utf-8
 import datetime as dt
-import re
 from datetime import datetime
+import re
+import time
 
 from django import template
 from django.core.cache import cache
@@ -104,16 +105,22 @@ def translate_seahub_time(value):
     """Translate seahub time to human friendly format instead of timestamp"""
     
     if isinstance(value, int) or isinstance(value, long): # check whether value is int
-        val = datetime.fromtimestamp(value)
+        val_ts = value
+        val = datetime.fromtimestamp(val_ts) # convert timestamp to datetime
     elif isinstance(value, datetime):
-        val = datetime.fromtimestamp(int(value.strftime("%s")))
+        val_ts = int(value.strftime("%s"))
+        val = value
     else:
         return value
 
     limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
     now = datetime.now()
-    delta = now - (val - dt.timedelta(0, 0, val.microsecond))
+    # If current time is less than value, that means clock at user machine is
+    # faster than server, in this case, we just set time description to `just now`
+    if time.mktime(now.timetuple()) < val_ts:
+        return 'Just now'
 
+    delta = now - (val - dt.timedelta(0, 0, val.microsecond))
     seconds = delta.seconds
     days = delta.days
     if days * 24 * 60 * 60 + seconds > limit:
