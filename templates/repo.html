@@ -111,15 +111,15 @@
                             <div class="displayed-op">
                                 <a class="op" href="{{ SITE_ROOT }}repo/download_dir/{{ repo.id }}/?parent={{ path|urlencode }}&dirname={{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
                             </div>
+                            {% if user_perm == 'rw' %}
                             <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon" data="no-popup" />
                             <ul class="hidden-op hide">
-                            {% if user_perm == 'rw' %}
                                 <li><a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?p={{ path|urlencode }}&file_name={{ dirent.props.obj_name|urlencode }}&op=del">{% trans "Delete"%}</a></li>
                                 <li><a class="op dir-rename" href="#" data="{{ dirent.obj_name }}">{% trans "Rename"%}</a></li>
                                 <li><a class="op dir-mv" href="#" data="{{ dirent.obj_name }}">{% trans "Move"%}</a></li>
                                 <li><a class="op dir-cp" href="#" data="{{ dirent.obj_name }}">{% trans "Copy"%}</a></li>
-                            {% endif %}
                             </ul>
+                            {% endif %} 
                         </div>
                         {% endif %}
                     </td>
