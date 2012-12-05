@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-05 17:20+0800\n"
+"POT-Creation-Date: 2012-12-05 15:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,70 +18,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: accounts.py:313
+#: accounts.py:347
 msgid "Email address"
 msgstr ""
 
-#: accounts.py:318
+#: accounts.py:352
 msgid "Username"
 msgstr ""
 
-#: accounts.py:319
+#: accounts.py:353
 msgid "This value must be of length 40"
 msgstr ""
 
-#: accounts.py:322
+#: accounts.py:356
 msgid "Password"
 msgstr ""
 
-#: accounts.py:324
+#: accounts.py:358
 msgid "Password (again)"
 msgstr ""
 
-#: accounts.py:332
+#: accounts.py:366
 msgid "A user with this email already"
 msgstr ""
 
-#: accounts.py:336
+#: accounts.py:370
 msgid "Invalid user id."
 msgstr ""
 
-#: accounts.py:349
+#: accounts.py:383
 msgid "The two password fields didn't match."
 msgstr ""
 
-#: templatetags/seahub_tags.py:123
+#: templatetags/seahub_tags.py:121
+msgid "Just now"
+msgstr "刚才"
+
+#: templatetags/seahub_tags.py:130
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d 天前"
 
-#: templatetags/seahub_tags.py:130
+#: templatetags/seahub_tags.py:137
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d 小时前"
 
-#: templatetags/seahub_tags.py:137
+#: templatetags/seahub_tags.py:144
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "%(minutes)d 分钟前"
 
-#: templatetags/seahub_tags.py:143
+#: templatetags/seahub_tags.py:150
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d 秒前"
 
-#: templatetags/seahub_tags.py:148
+#: templatetags/seahub_tags.py:155
 msgid "0 second ago"
 msgstr "0 秒前"
 
-#: templatetags/seahub_tags.py:214
+#: templatetags/seahub_tags.py:227
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templatetags/seahub_tags.py:216
+#: templatetags/seahub_tags.py:229
 msgid "Read-Only"
 msgstr "只读"

@@ -118,7 +118,7 @@ def translate_seahub_time(value):
     # If current time is less than value, that means clock at user machine is
     # faster than server, in this case, we just set time description to `just now`
     if time.mktime(now.timetuple()) < val_ts:
-        return 'Just now'
+        return _('Just now')
 
     delta = now - (val - dt.timedelta(0, 0, val.microsecond))
     seconds = delta.seconds
