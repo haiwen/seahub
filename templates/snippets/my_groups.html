@@ -16,7 +16,7 @@
 {% else %}
 <div class="info-item-bottom">
   <p>
-    {% if cloud_mode %}
+    {% if cloud_mode and org.url_prefix %}
     <a href="{% url 'org_groups' org.url_prefix %}">
     {% else %}
     <a href="{% url 'group_list' %}">    
