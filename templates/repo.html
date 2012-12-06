@@ -243,13 +243,14 @@
 
     <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
         <h3 id="mv-hd"></h3>
-        <div class="con">
-            <h4><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h4>
+        <h4 id="mv-detail"></h4>
+        <div id="mv-dir-list">
+            <h5><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h5>
             <div id="current-repo-dirs"></div>
-            <h4><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h4>
+            <h5><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h5>
             <div id="other-repos-dirs" class="hide"></div>
         </div>
-        <input type="hidden" name="operation" id="operation" value="" />
+        <input type="hidden" name="operation" id="mv-type" value="" />
         <input type="hidden" name="src_repo" value="{{ repo.id }}" />
         <input type="hidden" name="src_path" value="{{ path }}" />
         <input type="hidden" name="obj_name" value="" />
@@ -262,7 +263,8 @@
     </form>
 
     <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="simple-input-popup hide">
-        <h3 id="rename-hd"></h3>
+        <h3>{% trans 'Rename <span id="rename-type"></span>' %}</h3>
+        <p>{% trans 'Rename <span id="rename-obj" class="op-target"></span> as: ' %}</p>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="hidden" name="oldname" value="" />
@@ -343,15 +345,14 @@ $('.hidden-op li').hover(
 );
 
 $('.file-rename, .dir-rename').click(function () {
-    var type = $(this).hasClass('file-rename') ? '{% trans "file" %} ' : '{% trans "directory" %} ',
-        name = $(this).attr('data');
-        newname = $('#rename-form input[name="newname"]');
-    $('#rename-hd').html( '{% trans "Rename " %}' + type + ' <span class="op-target">' + name + '</span> {% trans "to:" %}');
-    $('#rename-form input[name="oldname"]').val(name);
+    var type = $(this).hasClass('file-rename') ? '{% trans "File" %}' : '{% trans "Directory" %}';
+    var name = $(this).attr('data');
+    $('#rename-type').html(type);
+    $('#rename-obj').html(name);
+    $('#rename-form input[name*="name"]').val(name);
     $('#rename-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $(window).resize();// make the popup in the center of the window
-    newname.val(name);
     return false;
 });
 
@@ -392,24 +393,25 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
         mv_type = '',
         file_type = '';
     if ($(this).hasClass('file-cp') || $(this).hasClass('dir-cp')) {
-        $('#operation').val('cp');
+        $('#mv-type').val('cp');
         mv_type = '{% trans "Copy " %}';
     } else {
-        $('#operation').val('mv');
+        $('#mv-type').val('mv');
         mv_type = '{% trans "Move " %}';
     }
 
     if ($(this).hasClass('file-cp') || $(this).hasClass('file-mv')) {
-    file_type = '{% trans "file " %}';
+        file_type = '{% trans "File" %}';
         $('input[name="obj_type"]').val('file');
     } else {
-    file_type = '{% trans "directory " %}';
+        file_type = '{% trans "Directory" %}';
         $('input[name="obj_type"]').val('dir');
     }
 
     $('input[name="obj_name"]').val(obj_name);
-    $('#mv-hd').html(mv_type + file_type + ' <span class="op-target">' + obj_name + '</span> {% trans "to..." %}');
-    $('#mv-form').modal({appendTo:'#main', autoResize:true});
+    $('#mv-hd').html(mv_type + file_type);
+    $('#mv-detail').html(mv_type + ' <span class="op-target">' + obj_name + '</span> {% trans "to:" %}');
+    $('#mv-form').modal({appendTo:'#main', autoResize:true, focus:false});
     renderDirTree($('#current-repo-dirs'), current_repo);
     return false;
 });
@@ -462,7 +464,7 @@ function renderDirTree(container, repo_data) {
         });
 }
 
-$('#mv-form h4').click(function() {
+$('#mv-dir-list h5').click(function() {
     var span = $(this).children('.tri-bg'),
         next = $(this).next();
     if (span.hasClass('tri-right-bg')) {

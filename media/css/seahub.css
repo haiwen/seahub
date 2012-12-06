@@ -919,21 +919,21 @@ textarea:-moz-placeholder {/* for FF */
     width:500px;
     padding:10px 20px;
 }
-#mv-form .con {
+#mv-dir-list {
     padding:5px;
     height:280px;
     overflow:auto;
     border:1px solid #eee;
-    margin:10px 0 20px;
+    margin:5px 0 10px;
 }
-#mv-form h4 span {
+#mv-dir-list .tri-bg {
     margin-right:20px;
     margin-bottom:3px;
 }
-#mv-form .tri-right-bg {
+#mv-dir-list .tri-right-bg {
     border-left-color:#333;
 }
-#mv-form .tri-down-bg {
+#mv-dir-list .tri-down-bg {
     border-top-color:#333;
 }
 #rename-form .new-name {
