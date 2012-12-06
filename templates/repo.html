@@ -408,7 +408,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     }
 
     $('input[name="obj_name"]').val(obj_name);
-    $('#mv-hd').html(mv_type + file_type + ' <span class="op-target">' + obj_name + '</span> {% trans "to:" %}');
+    $('#mv-hd').html(mv_type + file_type + ' <span class="op-target">' + obj_name + '</span> {% trans "to..." %}');
     $('#mv-form').modal({appendTo:'#main', autoResize:true});
     renderDirTree($('#current-repo-dirs'), current_repo);
     return false;

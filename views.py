@@ -2132,7 +2132,7 @@ def repo_rename_file(request):
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
-        messages.success(request, _(u'Successfully rename %(old)s to %(new)s。') % \
+        messages.success(request, _(u'Successfully rename %(old)s to %(new)s') % \
                              {"old":oldname, "new":newname})
     except Exception, e:
         result['error'] = str(e)
