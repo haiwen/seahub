@@ -39,11 +39,6 @@
     border:1px solid #ededed;
     margin-top:12px;
 }
-#sf,
-#md-view {
-    width:624px;
-    padding:40px 96px;
-}
 .CodeMirror {
     color:#000;
     width:950px;

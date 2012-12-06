@@ -1358,7 +1358,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
 }
 #md-view {
-    min-height:200px;
+    width:756px;
 }
 #svg-view {
     min-height:500px;/*for ff*/
@@ -1408,9 +1408,12 @@ textarea:-moz-placeholder {/* for FF */
     background:#efefef url('../img/star.png') no-repeat scroll 3px 48%;
 }
 #sf {
+    width:624px;
     font-size:15px;
-    min-height:380px;
     background:#fff;
+}
+#sf, #md-view {
+    padding:40px 96px;
 }
 /*overwrite aloha.css*/
 #file-edit .aloha-editable-active, .aloha-editable-active[contenteditable="true"]:focus {
