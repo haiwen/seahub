@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-06 11:06+0800\n"
+"POT-Creation-Date: 2012-12-06 18:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,8 +70,8 @@ msgstr "parent dir 为必填项"
 msgid "File name is too long"
 msgstr "文件名过长"
 
-#: forms.py:118 forms.py:142 templates/repo.html:485
-#: templates/repo.html.py:526
+#: forms.py:118 forms.py:142 templates/repo.html:484
+#: templates/repo.html.py:525
 msgid "File name can't be empty"
 msgstr "文件名不能为空"
 
@@ -88,7 +88,7 @@ msgstr "需要 oldname"
 msgid "Directory name is too long"
 msgstr "目录名过长"
 
-#: forms.py:165 templates/repo.html:564
+#: forms.py:165 templates/repo.html:563
 msgid "Directory name can't be empty"
 msgstr "目录名不能为空"
 
@@ -408,8 +408,8 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
-#: templates/repo.html:224 templates/repo.html.py:240 templates/repo.html:260
-#: templates/repo.html.py:271 templates/repo_edit_file.html:88
+#: templates/repo.html:221 templates/repo.html.py:237 templates/repo.html:258
+#: templates/repo.html.py:270 templates/repo_edit_file.html:86
 #: templates/repo_view_file.html:202 templates/repo_view_file.html.py:228
 #: templates/userinfo.html:87 templates/registration/login.html:13
 #: templates/registration/password_change_form.html:18
@@ -527,7 +527,7 @@ msgstr "客户端"
 
 #: templates/base.html:137
 msgid "Seafile for Windows, Mac and Linux"
-msgstr ""
+msgstr "Windows, Mac and Linux"
 
 #: templates/base.html:141
 msgid "Documents"
@@ -634,7 +634,7 @@ msgstr "个人基本信息"
 msgid "No Nickname"
 msgstr "暂无昵称"
 
-#: templates/myhome.html:15 templates/repo_edit_file.html:71
+#: templates/myhome.html:15 templates/repo_edit_file.html:69
 #: templates/repo_view_file.html:167
 msgid "Edit"
 msgstr "编辑"
@@ -857,20 +857,20 @@ msgstr "系统自动生成"
 msgid "You can't access this library."
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo.html:74 templates/repo_edit_file.html:74
+#: templates/repo.html:74 templates/repo_edit_file.html:72
 #: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
 msgid "Current path: "
 msgstr "当前路径："
 
-#: templates/repo.html:85 templates/repo.html.py:183
+#: templates/repo.html:85 templates/repo.html.py:180
 msgid "Upload"
 msgstr "上传"
 
-#: templates/repo.html:86 templates/repo.html.py:218
+#: templates/repo.html:86 templates/repo.html.py:215
 msgid "New Directory"
 msgstr "新建目录"
 
-#: templates/repo.html:87 templates/repo.html.py:229
+#: templates/repo.html:87 templates/repo.html.py:226
 msgid "New File"
 msgstr "新建文件"
 
@@ -902,12 +902,12 @@ msgstr "移动"
 msgid "Copy"
 msgstr "复制"
 
-#: templates/repo.html:131 templates/repo_history_view.html:66
-#: templates/repo_recycle_view.html:58
+#: templates/repo.html:131 templates/repo.html.py:345 templates/repo.html:401
+#: templates/repo_history_view.html:66 templates/repo_recycle_view.html:58
 msgid "File"
 msgstr "文件"
 
-#: templates/repo.html:142 templates/repo.html.py:205
+#: templates/repo.html:142 templates/repo.html.py:202
 msgid "Update"
 msgstr "更新"
 
@@ -920,134 +920,122 @@ msgid "Upload Files"
 msgstr "上传文件"
 
 #: templates/repo.html:169
-msgid "The owner of this library has ran out of space. Upload failed."
-msgstr "该资料库拥有者的空间已用完， 文件上传失败。"
+msgid "The owner of this library has ran out of space."
+msgstr "该资料库拥有者的空间已用完。"
+
+#: templates/repo.html:174
+msgid "Add files"
+msgstr "添加文件"
 
 #: templates/repo.html:175
-msgid "Add files..."
-msgstr "添加文件..."
-
-#: templates/repo.html:179
-msgid "Selected files will be populated here..."
-msgstr "所选的文件会显示在这里..."
-
-#: templates/repo.html:180 templates/repo.html.py:203
-msgid "Smaller than"
+msgid "smaller than"
 msgstr "文件总大小小于"
 
-#: templates/repo.html:186 templates/repo.html.py:209
+#: templates/repo.html:183 templates/repo.html.py:206
 msgid "Uploading rate:"
 msgstr "上传速度："
 
-#: templates/repo.html:186
+#: templates/repo.html:183
 msgid "Fetching ..."
 msgstr "获取中...请稍侯"
 
-#: templates/repo.html:188 templates/repo.html.py:211 templates/repo.html:225
-#: templates/repo.html.py:241 templates/repo.html:261
-#: templates/repo.html.py:272 templates/repo_edit_file.html:89
+#: templates/repo.html:185 templates/repo.html.py:208 templates/repo.html:222
+#: templates/repo.html.py:238 templates/repo.html:259
+#: templates/repo.html.py:271 templates/repo_edit_file.html:87
 #: templates/snippets/events.html:73
 msgid "Cancel"
 msgstr "取消"
 
-#: templates/repo.html:198
+#: templates/repo.html:195
 msgid "The owner of this library has ran out of space. Update failed."
 msgstr "该资料库拥有者的空间已用完， 文件更新失败。"
 
-#: templates/repo.html:209
+#: templates/repo.html:200
+msgid "Smaller than"
+msgstr "文件总大小小于"
+
+#: templates/repo.html:206
 msgid "Fetching..."
 msgstr "获取中...请稍侯"
 
-#: templates/repo.html:219
+#: templates/repo.html:216
 msgid "Directory Name"
 msgstr "目录名"
 
-#: templates/repo.html:231
+#: templates/repo.html:228
 msgid "Featured File Type"
-msgstr ""
+msgstr "特色文件类型"
 
-#: templates/repo.html:232 templates/repo.html.py:233
-#, fuzzy
+#: templates/repo.html:229 templates/repo.html.py:230
 msgid "Click to choose"
-msgstr "点此下载"
+msgstr "点击选择"
 
-#: templates/repo.html:232
+#: templates/repo.html:229
 msgid "online Rich Text format ( experimental ) ."
-msgstr ""
+msgstr "在线富文本格式（实验版）"
 
-#: templates/repo.html:232 templates/repo.html.py:233
+#: templates/repo.html:229 templates/repo.html.py:230
 msgid "more"
-msgstr ""
+msgstr "详细"
 
-#: templates/repo.html:233
+#: templates/repo.html:230
 msgid "simple markup format."
-msgstr ""
+msgstr "简单的标记格式"
 
-#: templates/repo.html:235 templates/snippets/my_owned_repos.html:99
+#: templates/repo.html:232 templates/snippets/my_owned_repos.html:99
 msgid "File Name"
 msgstr "文件名称"
 
-#: templates/repo.html:247
+#: templates/repo.html:245
 msgid "Current Library"
 msgstr "当前资料库"
 
-#: templates/repo.html:249
+#: templates/repo.html:247
 msgid "Other Libraries"
 msgstr "其他资料库"
 
-#: templates/repo.html:259
+#: templates/repo.html:257
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: templates/repo.html:346
-msgid "file"
-msgstr "文件"
+#: templates/repo.html:263
+msgid "Rename <span id=\"rename-type\"></span>"
+msgstr "重命名<span id=\"rename-type\"></span>"
 
-#: templates/repo.html:346
-msgid "directory"
+#: templates/repo.html:264
+msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
+msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
+
+#: templates/repo.html:345 templates/repo.html.py:404
+#: templates/repo_history_view.html:58 templates/repo_recycle_view.html:41
+msgid "Directory"
 msgstr "目录"
 
-#: templates/repo.html:349
-msgid "Rename "
-msgstr "重命名"
-
-#: templates/repo.html:349
-msgid "to:"
-msgstr "为："
-
-#: templates/repo.html:396
+#: templates/repo.html:394
 msgid "Copy "
 msgstr "复制"
 
-#: templates/repo.html:399
+#: templates/repo.html:397
 msgid "Move "
 msgstr "移动"
 
-#: templates/repo.html:403
-msgid "file "
-msgstr "文件"
+#: templates/repo.html:410
+msgid "to:"
+msgstr "到："
 
-#: templates/repo.html:406
-msgid "directory "
-msgstr "目录"
-
-#: templates/repo.html:411
-msgid "to..."
-msgstr "到..."
+#: templates/repo.html:611
+msgid "Click to remove"
+msgstr "点击删除"
 
 #: templates/repo.html:612
-msgid "Click to remove"
-msgstr "点此取消"
-
-#: templates/repo.html:613
 msgid "This file has already been selected:\\n$file!"
 msgstr "这个文件已经被添加：\\n$file!"
 
-#: templates/repo_edit_file.html:85
+#: templates/repo_edit_file.html:83
 msgid "Continue editing"
 msgstr "继续修改"
 
-#: templates/repo_edit_file.html:86
+#: templates/repo_edit_file.html:84
 msgid "Preview"
 msgstr "预览"
 
@@ -1111,10 +1099,6 @@ msgstr "返回镜像列表"
 #: templates/repo_history_view.html:33
 msgid "Can't view this library"
 msgstr "无法在线查看该资料库。"
-
-#: templates/repo_history_view.html:58 templates/repo_recycle_view.html:41
-msgid "Directory"
-msgstr "目录"
 
 #: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
 #: templates/repo_view_file.html:51 templates/repo_view_file.html.py:70
@@ -1624,6 +1608,18 @@ msgstr "注册"
 msgid "Welcome back, you are already signed in."
 msgstr "欢迎回来，你已登录。"
 
+#: templates/snippets/avatar_upload_js.html:40
+msgid " is not supported. Please choose an image file."
+msgstr " 不是被支持的文件格式。请选择图片文件。"
+
+#: templates/snippets/avatar_upload_js.html:45
+msgid " is not supported. File extensions can only be "
+msgstr " 不是被支持的文件格式。文件扩展名只能是 "
+
+#: templates/snippets/avatar_upload_js.html:52
+msgid " is too large. Allowed maximum size is 1MB."
+msgstr " 太大。不得超过 1MB。"
+
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
 msgid "Recommend"
@@ -1889,6 +1885,27 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Selected files will be populated here..."
+#~ msgstr "所选的文件会显示在这里..."
+
+#~ msgid "file"
+#~ msgstr "文件"
+
+#~ msgid "directory"
+#~ msgstr "目录"
+
+#~ msgid "Rename "
+#~ msgstr "重命名"
+
+#~ msgid "file "
+#~ msgstr "文件"
+
+#~ msgid "directory "
+#~ msgstr "目录"
+
+#~ msgid "to..."
+#~ msgstr "到..."
 
 #~ msgid "Can not access library"
 #~ msgstr "无法访问该资料库"
