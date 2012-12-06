@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 21:32+0800\n"
+"POT-Creation-Date: 2012-12-06 19:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,15 +44,19 @@ msgstr ""
 msgid "Avatar for %s"
 msgstr ""
 
-#: views.py:77
+#: views.py:78
 msgid "Successfully uploaded a new avatar."
-msgstr "上传成功。"
+msgstr "修改成功。"
 
-#: views.py:150
+#: views.py:128
+msgid "Successfully uploaded a new group avatar."
+msgstr "修改成功。"
+
+#: views.py:166
 msgid "Successfully updated your avatar."
 msgstr "更新成功。"
 
-#: views.py:192
+#: views.py:208
 msgid "Successfully deleted the requested avatars."
 msgstr "删除成功。"
 
