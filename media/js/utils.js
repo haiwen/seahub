@@ -285,18 +285,24 @@ function apply_form_error(formid, error_msg) {
 }
 
 // handle messages
-if ($('.messages')) {
+if ($('.messages')[0]) {
     $('#main').append($('.messages')).css('position','relative');
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
-// show 'messages' for ajax request
-function feedback(con, type) {
-    var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
-    $('#main').append(html).css('position','relative');
+// show feedback
+function feedback(con, type, time) {
+    var time = time || 5000;
+    if ($('.messages')[0]) {
+        $('.messages').html('<li class="' + type + '">' + con + '</li>');
+    } else {
+        var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+        $('#main').append(html);
+    }
+    $('#main').css('position','relative');
     $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, 2000);
+    setTimeout(function() { $('.messages').addClass('hide'); }, time);
 }
 
 function disable(btn) {

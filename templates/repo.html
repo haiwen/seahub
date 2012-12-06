@@ -166,19 +166,16 @@
     <div id="upload-file-dialog" class="hide">
         <h3>{% trans "Upload Files" %}</h3>
       {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has ran out of space. Upload failed." %}</p>
+        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
       {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">
           <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
-          <span class="fileinput-button">
-              <i class="icon-plus"></i>
-              <span class="op">{% trans "Add files..." %}</span>
-              <input type="file" name="file" id="file" />
-          </span>
-          <div id="upload-file-list" style="border:#999 solid 3px; padding:10px;">
-            <p>{% trans "Selected files will be populated here..." %}</p>
-            <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
+          <div class="files-add">
+              <span class="op">{% trans "Add files" %}</span>
+              <span>({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
+              <input type="file" name="file" id="file-upload-input" />
           </div>
+          <div id="upload-file-list"></div>
           <p class="error">{{ error_msg }}</p>
           <input type="submit" value="{% trans "Upload" %}" class="submit" />
         </form>
@@ -607,15 +604,14 @@ $('#mv-form .submit').click(function() {
 });
 
 $('#upload-file').click(function () {
-    $('#upload-file-dialog').modal({minWidth: 400});
-    $('#file').MultiFile({
+    $('#upload-file-dialog').modal({focus:false});
+    $('#file-upload-input').MultiFile({
         list: '#upload-file-list',
         STRING: {
-            file: '<em title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</em>',
+            file: '<span title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</span>',
             duplicate: '{% trans "This file has already been selected:\n$file!" %}'
         }});     // init MultiFile 
-    $('#simplemodal-container').css('height', 'auto');
-    return false;
+    $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
 });
 
 $('a.update-file').click(function() {
@@ -623,8 +619,8 @@ $('a.update-file').click(function() {
     var target_file = $(this).data("target");
     $('#update-file-form input[name="target_file"]').val(target_file);
 
-    $('#update-file-dialog').modal({minWidth: 400});
-    $('#simplemodal-container').css('height', 'auto');
+    $('#update-file-dialog').modal({focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     return false;
 });
 

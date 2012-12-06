@@ -5,14 +5,13 @@
 {% block right_panel %}
 <div id="user-basic-info">
     <h2>{% trans "Profile Setting" %}</h2>
-
-    <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
-    <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}" style="display:inline-block;">
-      <span class="fileinput-button">
-        <a href="#">{% trans "Change picture" %}</a>
-        <input type="file" name="avatar" id="id_avatar" />
-      </span>
-    </form>
+    <div id="user-avatar-change">
+        <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
+        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">
+            <button type="button" id="user-avatar-chg-btn">{% trans "Change" %}</button>
+            <input type="file" name="avatar" id="user-avatar-input" />
+        </form>
+    </div>
 
     <form action="" method="post">
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
@@ -32,5 +31,8 @@
 {% endblock %}
 
 {% block extra_script %}
-{% include "snippets/avatar_upload_js.html" %}
+{% include 'snippets/avatar_upload_js.html' %}
+<script type="text/javascript">
+changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar-form'));
+</script>
 {% endblock %}

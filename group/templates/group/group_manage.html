@@ -13,11 +13,9 @@
   <div class="info-item-top"><h3>Group Avatar</h3></div>
   <div class="info-item-bottom ovhd">
     <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar fleft" />
-      <form id="id_avatar_form" enctype="multipart/form-data" method="POST" action="{% url 'avatar_group_add' group.id %}" style="padding-left: 5px; display:inline-block;">
-        <span class="fileinput-button" style="margin-right: 0px; padding-top: 0px; ">
-          <a href="#">{% trans "Change picture" %}</a>
-          <input type="file" name="avatar" id="id_avatar" />
-        </span>
+      <form id="grp-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_group_add' group.id %}" class="fleft">
+          <button type="button" id="grp-avatar-chg-btn">{% trans "Change" %}</button>
+          <input type="file" name="avatar" id="grp-avatar-input" />
       </form>
   </div>
 </div>
@@ -84,7 +82,9 @@
 {% endblock %}
 
 {% block extra_script %}
+{% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
+changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
 addConfirmTo($("#group-dismiss"), '{% trans "Dismiss Group" %}', '{% trans "Really want to dismiss this group" %}');
 addConfirmTo($(".member-remove-btn"), '{% trans "Delete Member" %}', '{% trans "Really want to delete Member" %}');
 var contact_list = [], contact_email;
@@ -103,5 +103,4 @@ contact_list.push({value:contact_email, label:contact_email});
 {% include 'group/grpadmin_add_js.html' %}
 {% endwith %}
 </script>
-{% include "snippets/avatar_upload_js.html" %}
 {% endblock %}
