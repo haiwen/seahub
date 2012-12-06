@@ -105,7 +105,6 @@ case $1 in
     compile-all)
         printf "\033[1;32m[i18n]\033[m >>>>>  compile po of seahub <<<<<\n"
         ${django_admin} compilemessages
-        apps="avatar base contacts group notifications organizations profile share"
         for app in ${apps}; do
             printf "\033[1;32m[i18n]\033[m >>>>>  compile po of ${app} <<<<<\n"
             pushd ${app} 2>/dev/null 1>&2
