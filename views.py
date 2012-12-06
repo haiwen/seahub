@@ -781,7 +781,7 @@ def modify_token(request, repo_id):
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 @login_required
-def remove_repo(request, repo_id):
+def repo_remove(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         return render_error(request, _(u'Library not exists'))
