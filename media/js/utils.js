@@ -228,7 +228,7 @@ function filesizeformat(bytes, precision) {
     var gigabyte = megabyte * 1024;
     var terabyte = gigabyte * 1024;
 
-    precision = precision || 0;
+    var precision = precision || 0;
    
     if ((bytes >= 0) && (bytes < kilobyte)) {
         return bytes + ' B';

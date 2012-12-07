@@ -27,7 +27,7 @@ function submit_and_real_time_show (dialog_id) {
             cache: false,
             success: function(data) {
                 if (data) {
-                    $(dialog_id + ' #upload-progress-text').html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $(dialog_id + ' #upload-progress-text').html(filesizeformat(data.uploaded, 2) + ' / ' +  filesizeformat(data.length, 2));
                     $(dialog_id + ' #task-progress-bar').removeClass('hide').progressbar({
                             value: data.uploaded / data.length * 100
                     });

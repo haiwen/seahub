@@ -11,7 +11,7 @@
             cache: false,
             success: function(data) {
                 if (data) {
-                    $(dialog_id + ' #upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded) + ' / ' +  filesizeformat(data.length));
+                    $(dialog_id + ' #upload-progress-text', window.parent.document).html(filesizeformat(data.uploaded, 2) + ' / ' +  filesizeformat(data.length, 2));
                     $(dialog_id + ' #task-progress-bar', window.parent.document).removeClass('hide').progressbar({
                             value: data.uploaded / data.length * 100
                     });
