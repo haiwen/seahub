@@ -172,7 +172,7 @@
           <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
           <div class="files-add">
               <span class="op">{% trans "Add files" %}</span>
-              <span>({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
+              <span id="upload-add-tip">({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
               <input type="file" name="file" id="file-upload-input" />
           </div>
           <div id="upload-file-list"></div>
@@ -610,8 +610,14 @@ $('#upload-file').click(function () {
         STRING: {
             file: '<span title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</span>',
             duplicate: '{% trans "This file has already been selected:\n$file!" %}'
-        }});     // init MultiFile 
+        },
+        afterFileAppend:function() {
+            $('#upload-file-form .files-add input').css({'right':$('#upload-add-tip').width()});
+        }
+    });     // init MultiFile 
     $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
+    $('#upload-file-form .files-add').css({'width':$('#upload-file-form .files-add').width()});
+    $('#upload-file-form .files-add input').css({'right':$('#upload-add-tip').width()});
 });
 
 $('a.update-file').click(function() {

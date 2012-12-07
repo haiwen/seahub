@@ -1312,6 +1312,7 @@ textarea:-moz-placeholder {/* for FF */
 #user-avatar-input,
 #grp-avatar-input,
 #upload-file-form .files-add input {
+    cursor:pointer;
     position: absolute;
     top: 0;
     margin: 0;
@@ -1321,7 +1322,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #user-avatar-input,
 #grp-avatar-input {
-    cursor:pointer;
     right:0;
 }
 #upload-file-form .MultiFile-label {
