@@ -261,7 +261,7 @@ def valid_previewed_file(filename):
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
         # Check whether this kind of file can be previewd.
-        if filetype == 'Document':
+        if filetype == 'Document' or filetype == 'PDF':
             return (filetype, fileExt) if DOCUMENT_CONVERTOR_ROOT \
                 else ('Unknown', fileExt)
         else:
