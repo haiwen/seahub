@@ -1337,22 +1337,17 @@ textarea:-moz-placeholder {/* for FF */
 #upload-file-form .MultiFile-remove:hover {
     text-decoration:none;
 }
-#upload-progress {
+.upload-progress-con,
+.upload-cancel {
     margin-top:.8em;
 }
-#task-progress-bar {/*for progress container*/
-    width:95%;
+.upload-progress-bar {/*for progress container*/
     height:1em;
-}
-#task-progress-bar .ui-progressbar-value {/*for progress*/
-    background:#e83;
-    margin:0;
-}
-#task-progress-bar {
     margin-top:-3px;
 }
-#upload-cancel {
-    margin-top:.8em;
+.upload-progress-bar .ui-progressbar-value {/*for progress*/
+    background:#e83;
+    margin:0;
 }
 
 /* file view online, file edit */

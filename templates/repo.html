@@ -165,50 +165,50 @@
     <!-- popup dialog for file upload -->
     <div id="upload-file-dialog" class="hide">
         <h3>{% trans "Upload Files" %}</h3>
-      {% if no_quota %}
+        {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
-      {% else %}
+        {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">
-          <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
-          <div class="files-add">
-              <span class="op">{% trans "Add files" %}</span>
-              <span id="upload-add-tip">({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
-              <input type="file" name="file" id="file-upload-input" />
-          </div>
-          <div id="upload-file-list"></div>
-          <p class="error">{{ error_msg }}</p>
-          <input type="submit" value="{% trans "Upload" %}" class="submit" />
+            <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
+            <div class="files-add">
+                <span class="op">{% trans "Add files" %}</span>
+                <span id="upload-add-tip">({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
+                <input type="file" name="file" id="file-upload-input" />
+            </div>
+            <div id="upload-file-list"></div>
+            <p class="error">{{ error_msg }}</p>
+            <input type="submit" value="{% trans "Upload" %}" class="submit" />
         </form>
-        <div id="upload-progress" class="hide">
-          <p>{% trans "Uploaded:" %} <span id="upload-progress-text">{% trans "Fetching ..." %}</span></p>
-          <div id="task-progress-bar" class="hide"></div>
-          <button id="upload-cancel">{% trans "Cancel" %}</button>
+        <div id="upload-progress-con" class="upload-progress-con hide">
+            <p>{% trans "Uploaded:" %} <span class="upload-progress-text">{% trans "Fetching ..." %}</span></p>
+            <div class="upload-progress-bar"></div>
+            <button class="upload-cancel">{% trans "Cancel" %}</button>
+            <iframe class="hide"><!--for chrome--></iframe>
         </div>
-        <iframe id="request-progress" class="hide"><!--for chrome--></iframe>
-      {% endif %}
+        {% endif %}
     </div>
 
     <!-- popup dialog for file update -->
     <div id="update-file-dialog" class="hide">
         <h3>Update File</h3>
-      {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has ran out of space. Update failed." %}</p>
-      {% else %}      
+        {% if no_quota %}
+        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
+        {% else %}      
         <form id="update-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}?head={{ head_id }}">
-          <input type="hidden" name="target_file" />
-          <input type="file" name="file" id="id_update_file" />
-          <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
-          <p class="error">{{ error_msg }}</p>
-          <input type="submit" value="{% trans "Update" %}" class="submit" />
+            <input type="hidden" name="target_file" />
+            <input type="file" name="file" id="file-update-input" />
+            <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
+            <p class="error">{{ error_msg }}</p>
+            <input type="submit" value="{% trans "Update" %}" class="submit" />
         </form>
-        
-        <div id="upload-progress" class="hide">
-          <p>{% trans "Uploaded:" %} <span id="upload-progress-text">{% trans "Fetching..." %}</span></p>
-          <div id="task-progress-bar" class="hide"></div>
-          <button id="upload-cancel">{% trans "Cancel" %}</button>
+
+        <div id="update-progress-con" class="upload-progress-con hide">
+            <p>{% trans "Uploaded:" %} <span class="upload-progress-text">{% trans "Fetching..." %}</span></p>
+            <div class="upload-progress-bar"></div>
+            <button class="upload-cancel">{% trans "Cancel" %}</button>
+            <iframe class="hide"><!--for chrome--></iframe>
         </div>
-        <iframe id="request-progress" class="hide"><!--for chrome--></iframe>
-      {% endif %}
+        {% endif %}
     </div>
 
     <form id="add-new-dir-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
@@ -616,8 +616,8 @@ $('#upload-file').click(function () {
         }
     });     // init MultiFile 
     $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
-    $('#upload-file-form .files-add').css({'width':$('#upload-file-form .files-add').width()});
-    $('#upload-file-form .files-add input').css({'right':$('#upload-add-tip').width()});
+    $('#upload-file-form .files-add').css({'width':$('#upload-file-form .files-add').width() + 1}); // '+ 1' for ie
+    $('#file-upload-input').css({'right':$('#upload-add-tip').width()});
 });
 
 $('a.update-file').click(function() {

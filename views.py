@@ -2030,11 +2030,11 @@ def file_upload_progress_page(request):
     '''
     uuid = request.GET.get('uuid', '')
     httpserver_root = get_httpserver_root()
-    dialog_id = request.GET.get('dlg_id', '')
+    upload_progress_con_id = request.GET.get('upload_progress_con_id', '')
     return render_to_response('file_upload_progress_page.html', {
             'uuid': uuid,
             'httpserver_root': httpserver_root,
-            'dialog_id': '#' + dialog_id,
+            'upload_progress_con_id': upload_progress_con_id,
             }, context_instance=RequestContext(request))
 
 @login_required        
