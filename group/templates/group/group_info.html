@@ -224,14 +224,6 @@ contact_list.push({value:contact_email, label:contact_email});
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
 
-$('.msg-delete').hover(
-    function() {
-        $(this).css('color', '#f93');
-    },
-    function() {
-        $(this).css('color', '#4b4');
-    }
-);
 $('.msg-delete').click(function() {
     var url = $(this).attr('data');
     var msg = $(this).parents('.msg');

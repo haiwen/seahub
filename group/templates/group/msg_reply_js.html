@@ -1,5 +1,5 @@
 {% load i18n %}
-$('.reply, .replyclose').hover(
+$('.reply, .replyclose, .msg-delete').hover(
     function() {
         $(this).css('color', '#f93');
     },
@@ -72,7 +72,7 @@ $('.reply').click(function() {
 });
 
 $('.replyclose').click(function() {
-    $('.reply-bd').addClass('hide'); // hide 'reply-bd'
+    $(this).parents('.msg-bd').find('.reply-bd').addClass('hide');
     $(this).addClass('hide');
     $(this).prev().removeClass('hide'); // show 'reply'
 });
