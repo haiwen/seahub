@@ -280,8 +280,9 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.MultiFile.pack.js"></script>
 <script type="text/javascript">
-var clicked_more_op_icon, no_file_op_popup = true;
-$("table tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
+var popup_tr = ''; // the tr which the shown popup belongs to
+var no_file_op_popup = true;
+$("tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
     function() {
         if (no_file_op_popup) {
             $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
@@ -293,45 +294,47 @@ $("table tr:gt(0)").unbind().hover( // remove previously binded hover handler at
         }
     }
 );
-
 $('#main-panel').removeClass('ovhd');
 $('.more-op-icon').click(function(e) {
-    var its_op_list = $(this).next();
+    var hidden_op = $(this).next();
     if ($(this).attr('data')) { // no popup
-        clicked_more_op_icon = $(this);
-        $(this).parent().css('position','relative');
-        its_op_list.css('left', $(this).position().left + $(this).width() + 5);
-        if ($(this).offset().top + its_op_list.height() <= $('#main').offset().top + $('#main').height()) {
-            its_op_list.css('top', 6);
+        hidden_op.css({'left': $(this).position().left + $(this).width() + 5});
+        if ($(this).offset().top + hidden_op.height() <= $('#main').offset().top + $('#main').height()) {
+            hidden_op.css('top', 6);
         } else {
-            its_op_list.css('bottom', 2);
+            hidden_op.css('bottom', 2);
         }
-        its_op_list.removeClass('hide');
+        hidden_op.removeClass('hide');
         $(this).attr('data','');
         no_file_op_popup = false;
+        popup_tr = $(this).parents('tr');
     } else {
-        its_op_list.addClass('hide');
+        hidden_op.addClass('hide');
         $(this).attr('data','no-popup');
         no_file_op_popup = true;
+        popup_tr = '';
     }
 });
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
-    if (clicked_more_op_icon && target != clicked_more_op_icon[0]) {
-        clicked_more_op_icon.next().addClass('hide'); // hide the popup
-        clicked_more_op_icon.attr('data','no-popup');
-        var its_tr = clicked_more_op_icon.parent().parent().parent();
-        if (!(its_tr.find('*').is(target))) {
-            clicked_more_op_icon.parent().addClass('vh');
-            its_tr.removeClass('hl');
-            if ($('table tr:gt(0)').find('*').is(target)) {
-                target.parentNode.className += 'hl';
-                target.parentNode.getElementsByTagName('div')[0].className = 'repo-file-op';
-            }
-        }
+    if (!no_file_op_popup &&
+        !$('.more-op-icon, .hidden-op').is(target) &&
+        !$('.hidden-op').find('*').is(target)) {
+        $('.hidden-op').addClass('hide');
+        $('.more-op-icon').attr('data', 'no-popup');
         no_file_op_popup = true;
+
+        if (!popup_tr.find('*').is(target)) {
+            popup_tr.removeClass('hl').find('.repo-file-op').addClass('vh'); // clicked place: the first tr, place out of the table
+            $('tr:gt(0)').each(function() { // when other tr is clicked
+                if ($(this).find('*').is(target)) {
+                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+                }
+            });
+        }
     }
 });
+
 $('.hidden-op li').hover(
     function() {
         $(this).css('background', '#eee');

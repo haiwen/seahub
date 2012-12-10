@@ -918,6 +918,9 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list {
     margin:15px 0 0;
 }
+.repo-file-list .repo-file-op {
+    position:relative;
+}
 .displayed-op {
     display:inline;
     margin-right:8px;
@@ -927,7 +930,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list .hidden-op {
     position:absolute;
-    left:18px;
     background:#fff;
     padding:6px 1px;
     border:1px solid #eee;
