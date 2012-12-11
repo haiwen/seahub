@@ -1,7 +1,7 @@
 {% load i18n %}
 <script type="text/javascript">
 function changeAvatar(chg_btn, input, form) {
-    var chg_btn_orig_bg = chg_btn.css('background');
+    var chg_btn_orig_bg = chg_btn.css('background-color'); // ie 7,8: chg_btn.css('background') gets 'undefined'
     form.css({'width': chg_btn.outerWidth()});
     input
     .css({'height': chg_btn.outerHeight()})
