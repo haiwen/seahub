@@ -3,15 +3,15 @@ function addConfirmTo(ele, confirm_hd, confirm_con) {
     ele.click(function() {
         var con = '<h3>' + confirm_hd + '</h3>',
             target = '';
-        if ($(this).attr('data-target')) {
-            target = ' <span class="op-target">' + $(this).attr('data-target') + '</span>';
+        if ($(this).data('target')) {
+            target = ' <span class="op-target">' + $(this).data('target') + '</span>';
         }
         con += '<p>' + confirm_con + target + ' ?</p>';
         $('#confirm-con').html(con);
         $('#confirm-popup').modal({appendTo:'#main'});
         $('#confirm-yes')
-        .attr('data', $(this).attr('data-url'))
-        .click(function() { location.href = $(this).attr('data'); });
+        .data('url', $(this).data('url'))
+        .click(function() { location.href = $(this).data('url'); });
         return false;//in case ele is '<a>'
     });
 }

@@ -34,6 +34,7 @@ img { border:none; }
 textarea {
     border: 1px solid #ddd;
     overflow: auto; /* rm default vertical scrollbar in ie */
+    resize: vertical; /* for drag */
 }
 input { 
     height:22px;
@@ -1088,15 +1089,17 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
 }
 /*repo-share-form*/
-#email,
+#link-send-input,
 #email_or_group,
 #share-link,
 #added-member-name,
 #added-admin-name {
     width:260px;
     height:80px;
-    padding: 2px;
-    resize: vertical;
+    padding:2px;
+}
+#added-member-name {
+    width:97%;
 }
 #repo-share-form {
     width:266px;
@@ -1206,10 +1209,7 @@ textarea:-moz-placeholder {/* for FF */
     font-size:12px;
     color:#333;
 }
-#message,
-#comment-input {
-    font: 13px/1.5 Arial, Helvetica, sans-serif;
-    word-wrap: break-word;
+#message {
     width: 600px;
     height: 80px;
     margin-top: 4px;
@@ -1524,10 +1524,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #comment-input {
     width:315px;
-    max-width:315px;/*limit width when drag*/
     padding-left:1px;
-    height:36px;
-    margin:0;
+    height:3em;
 }
 .comment {
     width:380px;

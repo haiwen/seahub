@@ -32,7 +32,7 @@
         {% endif %}
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
-            <img src="{{ MEDIA_URL }}img/share-20.png" data="{{ repo.props.id }}" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" alt="{% trans "Share" %}" />
+            <img src="{{ MEDIA_URL }}img/share-20.png" data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" alt="{% trans "Share" %}" />
             <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" alt="{% trans "Delete" %}" />
         </td>
     </tr>

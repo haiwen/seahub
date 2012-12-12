@@ -1,18 +1,19 @@
 {% load i18n %}
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
-    <p>{% trans "Share to"%}</p>
-    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups, Seperate by ','"%}"></textarea>
-    {% if cloud_mode %}
-      {% if org %}
-      <p class="tip">{% trans "Tip: must be org members or org groups, type all to share to public library."%}</p>
-      {% endif %}
-    {% else %}
-    <p class="tip">{% trans "Tip: type all to share to public library."%}</p>
-    {% endif %}
+    <h3>{% trans "Share Library"%}</h3>
+    <p>{% trans 'Share <span class="op-target"></span> to' %}</p>
+    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups, Seperated by ','"%}"></textarea>
     <select name="permission" class="share-permission-select">
       <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
       <option value="r">{% trans "Read-Only"%}</option>
     </select>
+    {% if cloud_mode %}
+      {% if org %}
+      <p class="tip">{% trans 'Tip: must be organization members or organization groups, enter "all" to share to public library.' %}</p>
+      {% endif %}
+    {% else %}
+    <p class="tip">{% trans 'Tip: enter "all" to share to public library.' %}</p>
+    {% endif %}
     <input id="repo_id" type="hidden" name="repo_id" value="" />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />

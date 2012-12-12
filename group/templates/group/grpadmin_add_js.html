@@ -1,6 +1,7 @@
 {% load i18n %}
 $("#group-admin-add").click(function() {
     $("#admin-add-form").modal({appendTo: "#main", focus: false});
+    $('#simplemodal-container').css({'height':'auto'});
     addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
     return false;
 })
@@ -14,10 +15,13 @@ $("#group-admin-add").click(function() {
 );
 
 $('#admin-add-submit').click(function() {
-    if (!$.trim($('#added-admin-name').attr('value'))) {
+    if (!$.trim($('#added-admin-name').val())) {
         apply_form_error('admin-add-form', '{% trans 'It can not be blank.' %}');
         return false;
     }
+
+    var submit_btn = $(this);
+    disable(submit_btn);
     $.ajax({
         url: '{{ post_url }}',
         type: 'POST',
@@ -35,6 +39,7 @@ $('#admin-add-submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('admin-add-form', value);
             });
+            enable(submit_btn);
         }
     });
 

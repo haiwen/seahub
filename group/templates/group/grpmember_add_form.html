@@ -1,7 +1,7 @@
 {% load i18n %}
 <form id="member-add-form"  method="post" name="member-add-form" class="hide">
     <h3>{% trans "Add members"%}</h3>
-    <textarea id="added-member-name" name="user_name" placeholder="{% trans "Type emails, separated by ','"%}"></textarea><br />
+    <textarea id="added-member-name" name="user_name" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
     {% if cloud_mode and not org %}
     <p class="tip">{% trans "Tip: an invitation will be sent if the email is not registered."%}</p>
@@ -12,8 +12,8 @@
     <input type="submit" value="{% trans "Submit"%}" id="member-add-submit" />
 </form>
 <form id="admin-add-form" method="post" name="admin-add-form" class="hide">
-    <label>{% trans "Add administrators "%}</label><br />
-    <textarea id="added-admin-name" name="user_name" placeholder="{% trans "Type emails, separated by ','"%}"></textarea><br />
+    <h3>{% trans "Add administrators"%}</h3>
+    <textarea id="added-admin-name" name="user_name" placeholder="{% trans "emails, separated by ',' " %}"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
     <p class="error hide" id="admin-add-error"></p>
     <input type="submit" value="{% trans "Submit"%}" id="admin-add-submit" />

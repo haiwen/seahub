@@ -195,9 +195,10 @@
     </div>
 
     {% if not view_history %}
-    <form id="link-send-form" action="" method="post" name="link-send-form" class="hide">
-        <label>{% trans "Emails"%}</label><br />
-        <textarea id="email" name="email" placeholder="{% trans "Emails, Seperate by ','"%}"></textarea><br />
+    <form id="link-send-form" action="" method="post" class="hide">
+        <h3>Send Link</h3>
+        <label>{% trans "Send to:"%}</label><br />
+        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperate by ','"%}"></textarea><br />
         <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <p class="error hide"></p>
@@ -341,44 +342,51 @@ $('#send-shared-link').click(function() {
     contact_email = '{{ contact.contact_email }}';
     share_list.push({value:contact_email, label:contact_email});
     {% endfor %}
-    addAutocomplete('#email', '#link-send-form', share_list);
+    addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });
 
 $("#link-send-form").submit(function(event) {
-    $('#link-send-form .error').addClass('hide');
-    $('#sending').removeClass('hide');
-    
     var form = $(this), 
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
-        email = $.trim(form.children('textarea[name="email"]').val());
+        email = $.trim(form.children('textarea[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]');
+    
+    if (!email) {
+        apply_form_error('link-send-form', '{% trans "Please input at least an email." %}');
+        return false;
+    }
 
-       $.ajax({
-           type: "POST",
-           url: "{% url 'send_shared_link' %}",
-           dataType: 'json',
-           cache: false,
-           contentType: 'application/json; charset=utf-8',
-           beforeSend: prepareCSRFToken,
-           data: {file_shared_link: file_shared_link, email: email},
-           success: function(data) {
-               $.modal.close();
-               feedback('{% trans "Sending successfully" %}', "success");
-           },
-           error: function(data, textStatus, jqXHR) {
-               $('#sending').addClass('hide');
-               var errors = $.parseJSON(data.responseText);
-               $.each(errors, function(index, value) {
-                   if (index == 'error') {
-                       apply_form_error('link-send-form', value);
-                   } else {
-                       apply_form_error('link-send-form', value[0]);
-                   }
-               });
-           }
-       });
+    disable(submit_btn);
+    $('#link-send-form .error').addClass('hide');
+    $('#sending').removeClass('hide');
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'send_shared_link' %}",
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {file_shared_link: file_shared_link, email: email},
+        success: function(data) {
+            $.modal.close();
+            feedback('{% trans "Sending successfully" %}', "success");
+        },
+        error: function(data, textStatus, jqXHR) {
+            $('#sending').addClass('hide');
+            enable(submit_btn);
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                if (index == 'error') {
+                    apply_form_error('link-send-form', value);
+                } else {
+                    apply_form_error('link-send-form', value[0]);
+                }
+            });
+        }
+    });
    return false;
 });
-
 $('#shared-link').click(function() {
     $(this).select();
 });

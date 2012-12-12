@@ -15,7 +15,8 @@ $(function() {
     {% endfor %}
 
     $(".repo-share-btn").click(function() {
-        $("#repo_id").val($(this).attr("data"));
+        $("#repo_id").val($(this).data("id"));
+        $("#repo-share-form .op-target").html($(this).data("name"));
         $("#repo-share-form").modal({appendTo: "#main", focus:false});
         $('#simplemodal-container').css('height', 'auto');
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);
@@ -24,13 +25,15 @@ $(function() {
     //check before post
     $('#share-submit-btn').click(function() {
         if (!$.trim($('#email_or_group').attr('value'))) {
-            apply_form_error('repo-share-form', '{% trans "Input cannot be empty" %}');
+            apply_form_error('repo-share-form', '{% trans "Please enter emails or groups." %}');
             return false;
         }
+        $("#repo-share-form").submit();
+        disable($(this));
     });
 
     $('.unshare-btn').click(function() {
-        location.href = $(this).attr('data-url');
+        location.href = $(this).data('url');
     });
     addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
 

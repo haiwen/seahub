@@ -1,6 +1,7 @@
 {% load i18n %}
 $("#group-member-add").click(function() {
     $("#member-add-form").modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'height':'auto'});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;
 })
@@ -18,6 +19,9 @@ $('#member-add-submit').click(function() {
         apply_form_error('member-add-form', '{% trans 'It can not be blank.' %}');
         return false;
     }
+
+    var submit_btn = $(this);
+    disable(submit_btn);
     $.ajax({
         url: '{{ post_url }}',
         type: 'POST',
@@ -35,6 +39,7 @@ $('#member-add-submit').click(function() {
             $.each(errors, function(index, value) {
                 apply_form_error('member-add-form', value);
             });
+            enable(submit_btn);
         }
     });
 
