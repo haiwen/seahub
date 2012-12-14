@@ -1,4 +1,3 @@
-<!-- <script type="text/javascript"> -->
 {% load i18n %}
 {% if filetype == 'Text' %}
     {% ifnotequal file_content None %}
@@ -15,7 +14,7 @@
     {% endifnotequal %}
 
     {% if err %}
-    $('#file-view').html('<div class="CodeMirror"><p class="error file-view-tip">{{ err }}</p></div>');
+    $('#file-view').html('<div id="file-view-tip"><p class="error">{{ err }}</p></div>');
     {% endif %}
 {% endif %}
 
@@ -37,11 +36,8 @@
 {% endif %}
 
 {% if filetype == 'PDF' and not pdf_use_flash %}
-    // Use pdf.js to view pdf in firefox/chrome
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
     $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">{% trans "Previous" %}</button></span>{% blocktrans %}<span id="pdf-page"><label for="page-number">Page</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span></span>{% endblocktrans %}<span id="pdf-page-right"><button id="next" style="margin-right:15px;">{% trans "Next" %}</button><button id="full-screen">{% trans "Full Screen" %}</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="{% trans "loading..." %}" id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
-    $('#pdf-page-right').append($('#file-op').html());
-    $('#file-op').html('');
     $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
     $('#pdf-page-left').css({'text-align':'right', 'width': $('#pdf-page-right').width()});
     $('#pdf-op-bar').removeClass('vh');
@@ -101,24 +97,24 @@
     {% endifnotequal %}
 
     {% if err %}
-    $('#file-view').html('<div id="md-view" class="article"><p class="error">{{ err }}</p></div>');
+    $('#file-view').html('<div id="file-view-tip"><p class="error">{{ err }}</p></div>');
     {% endif %}
 {% endif %}
 
 {% if filetype == 'Unknown' %}
-$('#file-view').html('<p>{% trans "This type of file cannot be viewed online." %}</p>').addClass('file-view-tip');
+$('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file cannot be viewed online." %}</p></div>');
 {% endif %}
 
 {% if filetype == 'Document' or filetype == 'PDF' and pdf_use_flash %}
   {% if err %}
-  $('#file-view').html('<p class="error">{{ err }}</p>').addClass('file-view-tip');
+  $('#file-view').html('<div id="file-view-tip"><p class="error">{{ err }}</p></div>');
   {% else %}
+  $('#file-view').html('<div id="flash"></div>');
   function load_flexpaper() {
-      $('#file-view').css('height', '480px');
       var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
       var fp = new FlexPaperViewer(
           '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
-          'file-view', { config : {
+          'flash', { config : {
               SwfFile : escape(swf_url),
               Scale : 1.0, 
               ZoomTransition : 'easeOut',
@@ -159,24 +155,19 @@ $('#file-view').html('<p>{% trans "This type of file cannot be viewed online." %
           crossDomain: true,
           success: function(data) {
               if (data['error']) {
-                  $('#file-view').html('<p class="error">' + data['error'] + '</p>');
+                  $('#file-view').html('<div id="file-view-tip"><p class="error">' + data['error'] + '</p></div>');
               } else {
                   var status = data['status'];
-                  if (status == 'QUEUED') {
-                  // $('#file-view').html('<p class="msg">' + '文档转换任务正在排队，请稍后...' + '</p>');
-                      setTimeout(check_status, 2000);
-                  } else if (status == 'PROCESSING') {
-                      // $('#file-view').html('<p class="msg">' + '文档正在转换，请稍候...' + '</p>');
+                  if (status == 'QUEUED' || status == 'PROCESSING') {
                       setTimeout(check_status, 2000);
                   } else {
-                      // $('#file-view').html('<p class="msg">' + '文档转换成功。正在打开...' + '</p>');
                       load_flexpaper();
                   }
               }
           },
           error: function(xhr, ajaxOptions, thrownError) {
               var jsonVal = jQuery.parseJSON(xhr.responseText);
-              $('#file-view').html('<p class="error">' + jsonVal['error'] + '</p>');
+              $('#file-view').html('<div id="file-view-tip"><p class="error">' + jsonVal['error'] + '</p></div>');
           }
       });
   }

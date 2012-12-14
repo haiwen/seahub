@@ -2,28 +2,25 @@
 {% load seahub_tags i18n %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+{% if fileext == 'txt' or fileext == 'text' %}
+<style type="text/css">
+.CodeMirror {
+    width:624px;
+    padding:40px 96px;
+}
+</style>
 {% endif %}
-{% if filetype == 'Sf' or filetype == 'Markdown' or filetype == 'Text' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% endif %}
 {% endblock %}
 
 {% block main_panel %}
     <h2 id="view-hd">{{ file_name }}</h2>
-    {% if filetype != 'Markdown' and filetype != 'Sf' and filetype != 'Text' %}
-    <p class="file-share-from">{% trans "Shared by: " %}{{ username }}</p>
-    {% endif %}
     <div id="file">
-        {% if filetype == 'PDF' and not pdf_use_flas %}
-        <div id="file-op" class="hide">
-        {% else %}
         <div id="file-op">
-        {% endif %}
-            {% if filetype == 'Markdown' or filetype == 'Sf' or filetype == 'Text' %}
             <p class="fleft">{% trans "Shared by: " %}{{ username }}</p>
-            {% endif %}
 
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">{% trans "Raw" %}</button>
@@ -40,14 +37,6 @@
                 <div id="sf" class="article">{{ file_content|safe }}</div>
                 {% endif %}
                 {% endifnotequal %}
-            {% else %}
-                {% if filetype == 'Markdown' %}
-                <div id="md-view" class="article">
-                    <p>{% trans "Loading..."%}</p>
-                </div>
-                {% else %}
-                <p>{% trans "Loading..." %}</p>
-                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -56,9 +45,9 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-    {% include "snippets/repo_file_get.html" %}
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
+{% include "snippets/repo_file_get.html" %}
 </script>
 {% endblock %}
