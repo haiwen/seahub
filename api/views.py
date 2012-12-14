@@ -375,7 +375,7 @@ class RepoView(ResponseMixin, View):
             "desc":repo.desc,
             "mtime":repo.lastest_modify,
             "size":repo.size,
-            "encrypted":r.encrypted,
+            "encrypted":r.encrypted, # Typo: repo.encrypted ?
             "root":current_commit.root_id,
             "password_need":repo.password_need,
             }

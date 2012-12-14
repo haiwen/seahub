@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'seahub.share',
     'seahub.subdomain',
     'seahub.api',
+    'api2',
 )
 
 AUTHENTICATION_BACKENDS = (
