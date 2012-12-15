@@ -97,6 +97,9 @@ def get_emailusers(start, limit):
         users = []
     return users
 
+def get_session_info():
+    return ccnet_rpc.get_session_info()
+
 # group
 def get_group(group_id):
     group_id_int = int(group_id)
@@ -308,6 +311,9 @@ def list_personal_repos_by_owner(owner):
     except SearpcError:
         repos = []
     return repos
+
+def get_repo_token_nonnull(repo_id, username):
+    return seafserv_threaded_rpc.get_repo_token_nonnull (repo_id, username)
     
 def is_repo_owner(user, repo_id):
     """

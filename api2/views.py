@@ -22,11 +22,12 @@ from base.accounts import User
 from share.models import FileShare
 from seahub.views import access_to_repo, validate_owner
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
-    check_filename_with_rename, get_starred_files
+    check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
+    get_ccnet_server_addr_port
 
 from pysearpc import SearpcError
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
-    get_personal_groups_by_user, \
+    get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
     get_group_repos, get_repo, check_permission, get_commits
 
 json_content_type = 'application/json; charset=utf-8'
@@ -40,6 +41,9 @@ class Ping(APIView):
     def get(self, request, format=None):
         return Response('pong')
 
+    def head(self, request, format=None):
+        return Response(headers={'foo': 'bar',})
+    
 class AuthPing(APIView):
     """
     Returns a simple `pong` message when client provided an auth token.
@@ -229,6 +233,10 @@ class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
 
+    def head(self, request, repo_id, format=None):
+        # TODO
+        assert False
+
     def get(self, request, repo_id, format=None):
         # check whether user can view repo
         repo = get_repo(repo_id)
@@ -252,6 +260,21 @@ class Repo(APIView):
         # query repo infomation
         repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
+
+        # generate download url for client
+        ccnet_applet_root = get_ccnetapplet_root()
+        relay_id = get_session_info().id
+        addr, port = get_ccnet_server_addr_port ()
+        email = quote(request.user.username)
+        token = get_repo_token_nonnull(repo_id, request.user.username)
+        quote_repo_name = quote(repo.name.encode('utf-8'))
+        enc = 1 if repo.encrypted else ''
+
+        url = ccnet_applet_root + "/repo/download/"
+        url += "?relay_id=%s&relay_addr=%s&relay_port=%s" % (relay_id, addr, port)
+        url += "&email=%s&token=%s" % (email, token)
+        url += "&repo_id=%s&repo_name=%s&encrypted=%s" % (repo_id, quote_repo_name, enc)
+        
         repo_json = {
             "type":"repo",
             "id":repo.id,
@@ -263,6 +286,7 @@ class Repo(APIView):
             "encrypted":repo.encrypted,
             "root":current_commit.root_id,
             "password_need":repo.password_need,
+            "download_url": url,
             }
 
         return Response(repo_json)
@@ -604,7 +628,7 @@ class OpMoveView(APIView):
         dst_dir     = unquote(request.POST.get('dst_dir')).decode('utf-8')
         op          = request.POST.get('operation')
         obj_names   = request.POST.get('obj_names')
-        print src_repo_id, dst_repo_id, src_dir, dst_dir, op, obj_names
+
         if not (src_repo_id and src_dir  and dst_repo_id \
                 and dst_dir and op and obj_names):
             return api_error('400')

@@ -43,7 +43,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
-    get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff
+    get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
+    get_session_info
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -1608,7 +1609,7 @@ def repo_download(request):
         enc = '1'
     else:
         enc = ''
-    relay_id = ccnet_rpc.get_session_info().id
+    relay_id = get_session_info().id
     if not relay_id:
         return render_to_response('error.html', {
                 "error_msg": _(u"Failed to download library, unable to find servre")
