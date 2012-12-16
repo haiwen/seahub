@@ -1,6 +1,7 @@
 # encoding: utf-8
 import os
 import stat
+import simplejson as json
 from urllib2 import unquote, quote
 import seahub.settings as settings
 
@@ -11,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.sites.models import RequestSite
+from django.http import HttpResponse
 
 from models import Token
 from mime import get_file_mime
@@ -26,6 +28,8 @@ from pysearpc import SearpcError
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     get_personal_groups_by_user, \
     get_group_repos, get_repo, check_permission, get_commits
+
+json_content_type = 'application/json; charset=utf-8'
 
 class Ping(APIView):
     """
@@ -325,11 +329,11 @@ def get_dir_entrys_by_id(request, dir_id):
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
         dentrys.append(entry)
-    return Response(dentrys)
-    # response = HttpResponse(json.dumps(dentrys), status=200,
-    #                         content_type=json_content_type)
-    # response["oid"] = dir_id
-    # return response
+    #return Response(dentrys)
+    response = HttpResponse(json.dumps(dentrys), status=200,
+                            content_type=json_content_type)
+    response["oid"] = dir_id
+    return response
         
 class RepoDirents(APIView):
     """
@@ -415,11 +419,11 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         token = seafserv_rpc.web_get_access_token(repo_id, file_id,
                                                   op, request.user.username)
         redirect_url = gen_file_get_url(token, file_name)
-        return Response(redirect_url)
-        # response = HttpResponse(json.dumps(redirect_url), status=200,
-        #                         content_type=json_content_type)
-        # response["oid"] = file_id
-        # return response
+        #return Response(redirect_url)
+        response = HttpResponse(json.dumps(redirect_url), status=200,
+                                content_type=json_content_type)
+        response["oid"] = file_id
+        return response
 
     if op == 'sharelink':
         path = request.GET.get('p', None)
