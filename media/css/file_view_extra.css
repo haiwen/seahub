@@ -53,7 +53,6 @@
     box-shadow:0 0 6px #ccc;
 }
 #sf,
-#md-view,
-.CodeMirror-scroll {
+#md-view {
     min-height:400px;
 }
