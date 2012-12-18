@@ -69,17 +69,19 @@
             <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
-        <td>{{ repo.props.repo_desc }}</td>
-        {% if repo.props.last_modified %}
-        <td>{{ repo.props.last_modified|translate_seahub_time }}</td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.repo_id }}">{{ repo.repo_name }}</a></td>
+        <td>{{ repo.repo_desc }}</td>
+        {% if repo.last_modified %}
+        <td>{{ repo.last_modified|translate_seahub_time }}</td>
         {% else %}
         <td>--</td>
         {% endif %}
-        <td>{{ repo.props.user|email2nickname }}</td>
+        <td>{{ repo.user|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ repo.props.user }}&to={{ request.user }}" data-target="{{repo.props.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
+            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
+            {% if repo.share_type == 'personal' %}
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user }}&to={{ request.user }}" data-target="{{repo.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
@@ -87,7 +89,7 @@
 {% else %}
 <div class="empty-tips">
   <h2 class="center-contents">{% trans "No library is shared to you" %}</h2>
-  <p>{% trans "Libraries shared to you will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
+  <p>{% trans "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
 </div>
 {% endif %}
 </div>

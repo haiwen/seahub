@@ -44,7 +44,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
-    get_session_info
+    get_session_info, get_group_repoids, get_repo_owner
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -838,14 +838,41 @@ def myhome(request):
     quota = seafserv_threaded_rpc.get_user_quota(email)
     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
 
-    # Personal repos that I own
+    # Get all personal groups I joined.
+    joined_groups = get_personal_groups_by_user(request.user.username)
+
+    # Personal repos that I owned.
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Personal repos others shared to me
     in_repos = list_personal_shared_repos(email,'to_email', -1, -1)
-    
+    # For each group I joined... 
+    for grp in joined_groups:
+        # Get group repos, and for each group repos...
+        for r_id in get_group_repoids(grp.id):
+            # No need to list my own repo
+            if is_repo_owner(email, r_id):
+                continue
+            # Convert repo properties due to the different collumns in Repo
+            # and SharedRepo
+            r = get_repo(r_id)
+            if not r:
+                continue
+            r.repo_id = r.id
+            r.repo_name = r.name
+            r.repo_desc = r.desc
+            try:
+                r.last_modified = get_commits(r_id, 0, 1)[0].ctime
+            except:
+                r.last_modified = 0
+            r.share_type = 'group'
+            r.user = get_repo_owner(r_id)
+            r.user_perm = check_permission(r_id, email)
+            in_repos.append(r)
+    in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+
     # user notifications
     grpmsg_list = []
     grpmsg_reply_list = []
@@ -861,9 +888,6 @@ def myhome(request):
             grpmsg_reply_list.append(n.detail)
         elif n.msg_type == 'org_join_msg':
             orgmsg_list.append(n.detail)
-
-    # Get all personal groups I joined.
-    joined_groups = get_personal_groups_by_user(request.user.username)
 
     # get nickname
     profiles = Profile.objects.filter(user=request.user.username)
@@ -1732,10 +1756,7 @@ def sys_seafadmin(request):
         if is_org_repo(repo.id):
             repo.owner = get_org_repo_owner(repo.id)
         else:
-            try:
-                repo.owner = seafserv_threaded_rpc.get_repo_owner(repo.id)
-            except:
-                repo.owner = None
+            repo.owner = get_repo_owner(repo.id)
             
     return render_to_response(
         'sys_seafadmin.html', {

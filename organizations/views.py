@@ -14,12 +14,14 @@ from django.utils.translation import ugettext as _
 
 from auth.decorators import login_required
 from pysearpc import SearpcError
-from seaserv import ccnet_threaded_rpc, seafserv_rpc, seafserv_threaded_rpc, get_repo, \
+from seaserv import ccnet_threaded_rpc, seafserv_rpc, seafserv_threaded_rpc,\
     get_orgs_by_user, get_org_repos, list_org_inner_pub_repos, \
     get_org_by_url_prefix, create_org, get_user_current_org, add_org_user, \
     remove_org_user, get_org_groups, is_valid_filename, org_user_exists, \
     create_org_repo, get_org_id_by_group, get_org_groups_by_user, \
-    get_org_users_by_url_prefix, list_org_shared_repos, is_personal_repo
+    get_org_users_by_url_prefix, list_org_shared_repos, is_personal_repo, \
+    get_org_group_repoids, is_org_repo_owner, get_repo, get_commits, \
+    check_permission, get_org_repo_owner
 
 from decorators import org_staff_required
 from forms import OrgCreateForm
@@ -108,11 +110,35 @@ def org_personal(request, url_prefix):
     calculate_repo_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    # Org repos others shared to me
-    in_repos = list_org_shared_repos(org.org_id, user,'to_email', -1, -1)
-    
     # Org groups user created
     groups = get_org_groups_by_user(org.org_id, user)
+
+    # Org repos others shared to me
+    in_repos = list_org_shared_repos(org.org_id, user,'to_email', -1, -1)
+    # For each org group I joined...
+    for grp in groups:
+        # Get org group repos, and for each group repos...
+        for r_id in get_org_group_repoids(org.org_id, grp.id):
+            # No need to list my own repo
+            if is_org_repo_owner(org.org_id, r_id, user):
+                continue
+            # Convert repo properties due to the different collumns in Repo
+            # and SharedRepo
+            r = get_repo(r_id)
+            if not r:
+                continue
+            r.repo_id = r.id
+            r.repo_name = r.name
+            r.repo_desc = r.desc
+            try:
+                r.last_modified = get_commits(r_id, 0, 1)[0].ctime
+            except:
+                r.last_modified = 0
+            r.share_type = 'group'
+            r.user = get_org_repo_owner(r_id)
+            r.user_perm = check_permission(r_id, user)
+            in_repos.append(r)
+    in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
     # All org groups used in auto complete.
     org_groups = get_org_groups(org.org_id, -1, -1)

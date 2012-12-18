@@ -314,6 +314,16 @@ def list_personal_repos_by_owner(owner):
 
 def get_repo_token_nonnull(repo_id, username):
     return seafserv_threaded_rpc.get_repo_token_nonnull (repo_id, username)
+
+def get_repo_owner(repo_id):
+    """
+    Get owner of a repo.
+    """
+    try:
+        ret = seafserv_threaded_rpc.get_repo_owner(repo_id)
+    except SearpcError:
+        ret = ''
+    return ret
     
 def is_repo_owner(user, repo_id):
     """
@@ -387,7 +397,7 @@ def is_org_repo_owner(org_id, repo_id, user):
 
 def get_org_repo_owner(repo_id):
     """
-    Get owner of repo repo.
+    Get owner of org repo.
     """
     try:
         owner = seafserv_threaded_rpc.get_org_repo_owner(repo_id)
@@ -423,6 +433,20 @@ def get_shared_groups_by_repo(repo_id):
             groups.append(group)
     return groups
 
+def conv_repoids_to_list(repo_ids):
+    """
+    Convert repo ids seperated by "\n" to list.
+    """
+    if not repo_ids:
+        return []
+
+    repoid_list = []
+    for repo_id in repo_ids.split("\n"):
+        if repo_id == '':
+            continue
+        repoid_list.append(repo_id)
+    return repoid_list
+    
 def get_group_repoids(group_id):
     """Get repo ids of a given group id."""
     try:
@@ -430,31 +454,11 @@ def get_group_repoids(group_id):
     except SearpcError:
         return []
 
-    if not repo_ids:
-        return []
-    
-    repoid_list = []
-    for repo_id in repo_ids.split("\n"):
-        if repo_id == '':
-            continue
-        repoid_list.append(repo_id)
-    return repoid_list
+    return conv_repoids_to_list(repo_ids)
 
 def get_group_repos(group_id, user):
     """Get repos of a given group id."""
-    try:
-        repo_ids = seafserv_threaded_rpc.get_group_repoids(group_id)
-    except SearpcError:
-        return []
-
-    if not repo_ids:
-        return []
-    
-    repoid_list = []
-    for repo_id in repo_ids.split("\n"):
-        if repo_id == '':
-            continue
-        repoid_list.append(repo_id)
+    repoid_list = get_group_repoids(group_id)
 
     repos = []
     for repo_id in repoid_list:
@@ -480,23 +484,21 @@ def get_group_repos(group_id, user):
 # org group repo
 def del_org_group_repo(repo_id, org_id, group_id):
     seafserv_threaded_rpc.del_org_group_repo(repo_id, org_id, group_id)
-        
-def get_org_group_repos(org_id, group_id, user):
-    """Get org repos of a given group id."""
+
+def get_org_group_repoids(org_id, group_id):
     try:
         repo_ids = seafserv_threaded_rpc.get_org_group_repoids(org_id, group_id)
     except SearpcError:
-        return []
+        repo_ids = ''
 
-    if not repo_ids:
+    return conv_repoids_to_list(repo_ids)
+
+def get_org_group_repos(org_id, group_id, user):
+    """Get org repos of a given group id."""
+    repoid_list = get_org_group_repoids(org_id, group_id)
+    if not repoid_list:
         return []
     
-    repoid_list = []
-    for repo_id in repo_ids.split("\n"):
-        if repo_id == '':
-            continue
-        repoid_list.append(repo_id)
-
     repos = []
     for repo_id in repoid_list:
         if not repo_id:
