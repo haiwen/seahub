@@ -191,6 +191,9 @@ def translate_seahub_time(value):
 
 @register.filter(name='email2nickname')
 def email2nickname(value):
+    """
+    Return nickname or short email.
+    """
     if not value:
         return ''
     
