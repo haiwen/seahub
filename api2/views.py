@@ -163,6 +163,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
+                "permission": 'rw', # Always have read-write permission to owned repo
                 }
             repos_json.append(repo)
         
@@ -175,6 +176,7 @@ class Repos(APIView):
             r.root = commit.root_id
             r.size = server_repo_size(r.repo_id)
             r.password_need = is_passwd_set(r.repo_id, email)
+            r.permission = check_permission(r.repo_id, email)
             repo = {
                 "type":"srepo",
                 "id":r.repo_id,
@@ -185,6 +187,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
+                "permission": r.permission,
                 }
             repos_json.append(repo)
 
@@ -204,6 +207,7 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
+                    "permission": check_permission(r.id, email),
                     }
                 repos_json.append(repo)
 
