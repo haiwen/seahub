@@ -1,67 +1,9 @@
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
-{% load url from future %}
+{% load i18n %}
 <h3>{% trans 'Recent Events' %}</h3>
-<ul id="events" class="hide">
-{% for ev in events %}
-    <li class="event-item w100 ovhd">
-    {% if ev.etype == 'repo-update' %}
-        {% with author=ev.commit.creator_name commit=ev.commit repo=ev.repo %}
-        <div class="pic fleft" data="{{ author }}">
-            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
-        </div>
-        <div class="txt fright">
-            <div class="event-hd">
-                <span class="time">{{ commit.ctime|translate_seahub_time }}</span>
-                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
-            </div>
-            <p>{% trans 'Updated library' %} <a href="{{SITE_ROOT}}repo/{{repo.id}}">{{ repo.name }}</a></p>
-            <p class="commit-msg ovhd">{{ commit.desc|translate_commit_desc }}
-            {% if repo.encrypted %}
-                {% if repo.password_set %}
-                <a class="lsch-encrypted" password_set="true" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
-                {% else %}
-                <a class="lsch-encrypted" password_set="false" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" repo_id="{{repo.id}}" repo_name="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
-                {% endif %}
-            {% else %}
-                <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
-                {% endif %}
-            </p>
-        </div>
-        {% endwith %}
-    {% endif %}
-
-    {% if ev.etype == 'repo-create' %}
-        {% with author=ev.creator repo_id=ev.repo_id repo_name=ev.repo_name %}
-        <div class="pic fleft" data="{{ author }}">
-            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
-        </div>
-        <div class="txt fright">
-            <div class="event-hd">
-                <span class="time">{{ ev.timestamp|translate_seahub_time }}</span>
-                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
-            </div>
-            <p>{% trans 'Created library' %} <a href="{{SITE_ROOT}}repo/{{repo_id}}">{{ repo_name }}</a></p>
-        </div>
-        {% endwith %}
-    {% endif %}
-
-    {% if ev.etype == 'repo-delete' %}
-        {% with author=ev.repo_owner repo_name=ev.repo_name %}
-        <div class="pic fleft" data="{{ author }}">
-            <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{% avatar author 40 %}</a>
-        </div>
-        <div class="txt fright">
-            <div class="event-hd">
-                <span class="time">{{ ev.timestamp|translate_seahub_time }}</span>
-                <a href="{% url 'user_profile' author %}" title="{{ author|email2nickname}}">{{ author|email2nickname }}</a>
-            </div>
-            <p>{% trans 'Deleted library' %} {{ repo_name }}</p>
-        </div>
-        {% endwith %}
-    {% endif %}
-    </li>
-{% endfor %}
-</ul>
+<ul id="events" class="hide"></ul>
+<div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+<button id="events-more" class="hide">{% trans 'More' %}</button>
+<p id="events-error" class="error hide"></p>
 <form id="repo-set-password-form" class="hide">
     <h3>{% trans 'Library' %} <span class="repo-name"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />

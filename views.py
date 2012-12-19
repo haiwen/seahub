@@ -70,7 +70,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo, \
-    get_file_contributors, EVENTS_ENABLED, get_user_events, \
+    get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
@@ -915,7 +915,7 @@ def myhome(request):
 
     # events
     if EVENTS_ENABLED:
-        events = get_user_events(request.user.username)
+        events = True
     else:
         events = None
 
@@ -2679,3 +2679,24 @@ def repo_download_dir(request, repo_id):
     url = gen_file_get_url(token, filename)
 
     return redirect(url)
+
+def events(request):
+    username = request.user.username
+    start = int(request.GET.get('start', 0))
+    if request.cloud_mode:
+        org_id = request.GET.get('org_id')
+        events = get_org_user_events(org_id, username, start)
+    else:
+        events = get_user_events(username, start)
+   
+    events_more = False
+    if len(events) == 11:
+        events_more = True
+        events = events[:10]
+
+    ctx = {}
+    ctx['events'] = events
+    html = render_to_string("snippets/events_.html", ctx)
+
+    return HttpResponse(json.dumps({'html':html, 'more':events_more}),
+                            content_type='application/json; charset=utf-8')

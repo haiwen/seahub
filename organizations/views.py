@@ -38,7 +38,7 @@ from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
     validate_group_name, string2list, calculate_repo_last_modify, MAX_INT, \
-    EVENTS_ENABLED, get_org_user_events, get_starred_files
+    EVENTS_ENABLED, get_starred_files
 from seahub.views import myhome
 from seahub.signals import repo_created
 
@@ -159,9 +159,9 @@ def org_personal(request, url_prefix):
         
     # events
     if EVENTS_ENABLED:
-        events = get_org_user_events(org.org_id, user)
+        events = True
     else:
-        events = None
+        events = False
 
     quota_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org.org_id, user)
     starred_files = get_starred_files(user, org_id=org.org_id)

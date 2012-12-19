@@ -451,9 +451,9 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(settings.EVENTS_CONFIG_FILE)
 
-    def get_user_events(username):
+    def get_user_events(username, start):
         ev_session = SeafEventsSession()
-        events = seafevents.get_user_events(ev_session, username, 0, 10)
+        events = seafevents.get_user_events(ev_session, username, start, start + 11)
         ev_session.close()
         for ev in events:
             if ev.etype == 'repo-update':
@@ -468,10 +468,10 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
         return events
 
-    def get_org_user_events(org_id, username):
+    def get_org_user_events(org_id, username, start):
         ev_session = SeafEventsSession()
         events = seafevents.get_org_user_events(ev_session, \
-                            org_id, username, 0, 10)
+                            org_id, username, start, start + 11)
         ev_session.close()
         for ev in events:
             if ev.etype == 'repo-update':

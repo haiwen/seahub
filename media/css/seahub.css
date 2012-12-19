@@ -774,6 +774,20 @@ textarea:-moz-placeholder {/* for FF */
 .event-item .avatar {
     border-radius:3px;
 }
+#events-loading,
+#events-more {
+    text-align:center;
+    width:610px;
+    margin-left:60px;
+}
+#events-more {
+    color:#777;
+    padding:.5em 0;
+}
+#events-more:hover {
+    color:#000;
+    background:#dfdfdf;
+}
 /* avatar */
 .avatar-op .avatar,
 .home-profile .avatar,

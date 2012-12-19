@@ -1,30 +1,71 @@
-{% include 'snippets/list_commit_detail.html' %}
-$('.event-item').each(function(index) {
-    if (index > 0 && $(this).children('.pic').attr('data') == $(this).prev().children('.pic').attr('data')) {
-        $(this).children('.pic').addClass('hide');
-    }
-});
-$('#events').removeClass('hide');
+{% load i18n %}
+function reqEvents(start) {
+    $('#events-loading').removeClass('hide');
+    $.ajax({
+        url:'{{SITE_ROOT}}events/?start=' + start{% if org %} + '&org_id={{ org.org_id }}'{% endif %},
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            $('#events').append(data['html']);
 
-// 查看加密 repo 的详情时， 先为其设置密码
-var cur_event;
-$('a.lsch-encrypted').click(function() {
-    if ($(this).attr('password_set') == 'true') {
-        list_commit_change($(this));
-    } else {
-        cur_event = $(this);
-        $('#repo-set-password-form input[name="repo_id"]').val($(this).attr('repo_id'));
-        $('#repo-set-password-form .repo-name').html($(this).attr('repo_name'));
-        $('#repo-set-password-form').modal({appendTo:'#main'});
-    }
-    return false;
+            $('.event-item').each(function(index) {
+                if (index > 0 && $(this).children('.pic').attr('data') == $(this).prev().children('.pic').attr('data')) {
+                    $(this).children('.pic').addClass('hide');
+                }
+            });
+            if (start == 0) {
+                $('#events').removeClass('hide');
+            }
+            
+            $('#events-loading').addClass('hide');
+
+            if (data['more']) {
+                $('#events-more').data('start', start + 10).removeClass('hide');
+            } else {
+                $('#events-more').addClass('hide');
+            }
+
+            // 查看加密 repo 的详情时， 先为其设置密码 
+            $('a.lsch-encrypted').click(function() {
+                if ($(this).data('passwordset')) {
+                    list_commit_change($(this));
+                } else {
+                    $('#repo-set-password-form input[name="repo_id"]').val($(this).data('repoid'));
+                    $('#repo-set-password-form .repo-name').html($(this).data('reponame'));
+                    $('#repo-set-password-form').data('cur_event', $(this)).modal({appendTo:'#main'});
+                }
+                return false;
+            });
+            $('.lsch').click(function() {
+                list_commit_change($(this));
+                return false;
+            });
+        },
+        error: function() {
+            var str = '{% trans "Unknown error." %}'; 
+            if ($('#events-more').hasClass('hide')) {
+                str += '{% trans "Please refresh the page later." %}';
+            } else {
+                str += '{% trans "Please try again later." %}';
+            }
+            $('#events-error').html(str).removeClass('hide');  
+        }
+    });
+}
+reqEvents(0);
+$('#events-more').click(function() {
+    $(this).addClass('hide');
+    reqEvents($(this).data('start'));
 });
+
+{% include 'snippets/list_commit_detail.html' %}
+
 $('#repo-set-password-form .submit').click(function() {
     var input_password = $('#repo-set-password-form input[name="password"]');
     var repo_id = $('#repo-set-password-form input[name="repo_id"]').val();
     var password = input_password.val();
     if (!password) {
-        apply_form_error('repo-set-password-form', "密码不能为空"); 
+        apply_form_error('repo-set-password-form', '{% trans "Password is required." %}'); 
     } else {
         apply_form_error('repo-set-password-form', '');
         $.ajax({
@@ -41,15 +82,15 @@ $('#repo-set-password-form .submit').click(function() {
             success: function(data) {
                 if (data['success']) {
                     $.modal.close();
-                    $('a.lsch-encrypted[repo_id="' + repo_id + '"]').attr('password_set', 'true');
-                    list_commit_change(cur_event);
+                    $('a.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
+                    list_commit_change($('#repo-set-password-form').data('cur_event'));
                 } else {
                     input_password.val('');
                     apply_form_error('repo-set-password-form', data['error']);
                 }   
             },  
             error: function(data, textStatus, jqXHR) {
-                apply_form_error('repo-set-password-form', '访问网站出错'); 
+                apply_form_error('repo-set-password-form', '{% trans "Unknown error." %}'); 
             }   
         }); 
     }   
