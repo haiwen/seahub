@@ -1,0 +1,97 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block extra_style %}
+{% include 'snippets/file_view_style.html' %}
+<style type="text/css">
+.path { margin-top:.5em; }
+</style>
+{% endblock %}
+
+{% block main_panel %}
+    <div id="view-hd" class="w100 ovhd">
+        {% if page_from == 'snapshot' %}
+        <h2>
+            {{repo.props.name}} {% trans "snapshots" %}
+            <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        </h2>
+        {% endif %}
+
+        {% if page_from == 'file_history' %}
+            <h2 class="fleft">
+                {{repo.props.name}} {% trans "history"%}
+                <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+            </h2>
+            <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
+        {% endif %}
+        
+        {% if page_from == 'recycle' %}
+            <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
+            <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
+        {% endif %}
+    </div>
+
+    <div id="file">
+        <div id="file-op">
+            <p class="path fleft">
+            {% trans "Current Path: "%}
+
+            {% if page_from == 'recycle' %}
+                <a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a> /
+            {% endif %}
+
+            {% for name, link in zipped %}
+                {% if not forloop.last %}
+                    {% if page_from == 'snapshot' %}
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    {% endif %}
+
+                    {% if page_from == 'recycle' %}
+                    <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    {% endif %}
+
+                    {% if page_from == 'file_history' %}
+                    {{ name }} /
+                    {% endif %}
+                {% else %}
+                    {{ name }}
+                {% endif %}
+            {% endfor %}
+            </p>
+
+            {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">{% trans "Raw"%}</button>
+            {% endif %}
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+        </div>
+        <div id="file-view">
+            {% if filetype == 'Text' or filetype == 'Sf' %}
+            {% ifnotequal file_content None %}
+                {% if filetype == 'Text' %}
+                <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
+                {% else %}
+                <div id="sf" class="article">{{ file_content|safe }}</div>
+                {% endif %}
+            {% endifnotequal %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+{% include "snippets/file_view_js.html" %}
+<script type="text/javascript">
+$('#view-original, #download').click(function() {
+    window.open($(this).attr('data'));
+});
+
+{% include "snippets/repo_file_get.html" %}
+
+{% if page_from == 'file_history' or page_from == 'recycle' %}
+$('#back').click(function() {
+        location.href = $(this).attr('data');
+});
+{% endif %}
+</script>
+{% endblock %}

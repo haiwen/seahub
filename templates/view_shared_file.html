@@ -2,18 +2,11 @@
 {% load seahub_tags i18n %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
-{% if filetype == 'Text' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
-{% if fileext == 'txt' or fileext == 'text' %}
+{% include 'snippets/file_view_style.html' %}
 <style type="text/css">
-.CodeMirror {
-    width:624px;
-    padding:40px 96px;
-}
+.CodeMirror { margin-bottom:0; }
+#footer { display:block; }
 </style>
-{% endif %}
-{% endif %}
 {% endblock %}
 
 {% block main_panel %}

@@ -1243,7 +1243,7 @@ def repo_view_file(request, repo_id):
             err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
 
     if view_history:
-        return render_to_response('repo_view_file.html', {
+        return render_to_response('history_file_view.html', {
                 'repo': repo,
                 'obj_id': obj_id,
                 'u_filename': u_filename,
@@ -1319,7 +1319,7 @@ def repo_view_file(request, repo_id):
 
     user_perm = get_user_permission(request, repo_id)
         
-    return render_to_response('repo_view_file.html', {
+    return render_to_response('file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
             'u_filename': u_filename,

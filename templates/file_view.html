@@ -3,89 +3,26 @@
 {% load url from future %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
-<style type="text/css">
-#footer { display:none; }
-</style>
-{% if filetype == 'Text' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
-<style type="text/css">
-.CodeMirror-scroll { min-height:400px; }
-.CodeMirror { margin-bottom:40px; }
-{% if fileext == 'txt' or fileext == 'text' %}
-.CodeMirror {
-    width:624px;
-    padding:40px 96px;
-}
-{% endif %}
-</style>
-{% endif %}
+{% include 'snippets/file_view_style.html' %}
 {% endblock %}
 
 {% block main_panel %}
-    <div id="view-hd" class="w100 ovhd">
-    {% if not view_history %}
+    <div id="view-hd">
         <h2>{{ u_filename }}</h2>
-    {% else %}
-
-        {% if page_from == 'snapshot' %}
-        <h2>
-            {{repo.props.name}} {% trans "snapshots" %}
-            <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
-        </h2>
-        {% endif %}
-
-        {% if page_from == 'file_history' %}
-            <h2 class="fleft">
-                {{repo.props.name}} {% trans "history"%}
-                <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
-            </h2>
-            <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
-        {% endif %}
-        
-        {% if page_from == 'recycle' %}
-            <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
-            <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
-        {% endif %}
-    {% endif %}
     </div>
 
-    {% if view_history %}
-    <div id="view-path-op" class="hide">
-    {% else %}
     <div id="view-path-op" class="w100 ovhd">
-    {% endif %}
         <p class="path fleft">
         {% trans "Current Path: "%}
-
-	    {% if page_from == 'recycle' %}
-        <a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a> /
-	    {% endif %}
-
         {% for name, link in zipped %}
             {% if not forloop.last %}
-                {% if view_history %}
-                    {% if page_from == 'snapshot' %}
-                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
-                    {% endif %}
-
-	                {% if page_from == 'recycle' %}
-                    <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a> /
-                    {% endif %}
-
-	                {% if page_from == 'file_history' %}
-                    {{ name }} /
-                    {% endif %}
-                {% else %}
                 <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /               
-                {% endif %}
             {% else %}
                 {{ name }}
             {% endif %}
         {% endfor %}
         </p>
 
-        {% if not view_history %}
         <div class="file-op fright">
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
             <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">{% trans "Share link"%}</button>
@@ -97,12 +34,10 @@
             <button id="star" data="unstarred">{% trans "Star"%}</button>
             {% endif %}
         </div>
-        {% endif %}
     </div>
 
     <div id="file">
         <div id="file-op">
-        {% if not view_history %}
             <div class="commit fleft">
                 {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a><span class="time">{{ last_modified|translate_seahub_time}}</span>
 
@@ -135,13 +70,13 @@
                 {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}{% comment %} not view_history ends here. {% endcomment %}
 
         {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">{% trans "Raw"%}</button>
         {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
+
         <div id="file-view">
             {% if filetype == 'Text' or filetype == 'Sf' %}
             {% ifnotequal file_content None %}
@@ -155,7 +90,6 @@
         </div>
     </div>
 
-    {% if not view_history %}
     <form id="link-send-form" action="" method="post" class="hide">
         <h3>Send Link</h3>
         <label>{% trans "Send to:"%}</label><br />
@@ -214,7 +148,6 @@
         </div>
     </div>
     {% endif %}
-    {% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -224,7 +157,6 @@ $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
 
-{% if not view_history %}
 $('#edit').click(function() {
     location.href = $(this).attr('data');
 });
@@ -469,12 +401,10 @@ $('#open-local').click(function () {
 $('#file-op .history').click(function () {
     location.href = $(this).data('url');
 });
-{% endif %}{%comment%}not view_history ends here.{% endcomment%}
 
 {% include "snippets/repo_file_get.html" %}
 
 //bottom bar: after repo_file_get
-{% if not view_history %}
 {% include "snippets/bottom_bar.html" %}
 {% if request.user.is_authenticated %}
 $('#main-panel').css({'margin-bottom':0});
@@ -553,18 +483,6 @@ $('#file-comment-form .submit').click(function() {
     });
     return false;
 });
-{% endif %}
-{% endif %}//'bottom_bar' ends here
-
-
-{% if view_history %}
-$('.path').css('margin-top', '.5em');
-$('#file-op').prepend($('.path'));
-{% if page_from == 'file_history' or page_from == 'recycle' %}
-$('#back').click(function() {
-        location.href = $(this).attr('data');
-});
-{% endif %}
 {% endif %}
 </script>
 {% endblock %}
