@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from models import Token
 from mime import get_file_mime
 from authentication import TokenAuthentication
+from permissions import IsRepoWritable
 from serializers import AuthTokenSerializer
 from base.accounts import User
 from share.models import FileShare
@@ -232,8 +233,8 @@ class Repo(APIView):
         if not repo:
             return api_error('404')
 
-        if not can_access_repo(request, repo.id):
-            return api_error('403')
+        # if not can_access_repo(request, repo.id):
+        #     return api_error('403')
 
         # check whether use is repo owner
         if validate_owner(request, repo_id):
@@ -545,7 +546,7 @@ class OpDeleteView(APIView):
     Delete a file.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoWritable, )    
 
     def post(self, request, repo_id, format=None):
         resp = check_repo_access_permission(request, get_repo(repo_id))
@@ -575,7 +576,7 @@ class OpRenameView(APIView):
     Rename a file.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def post(self, request, repo_id, format=None):
         resp = check_repo_access_permission(request, get_repo(repo_id))
@@ -613,7 +614,7 @@ class OpMoveView(APIView):
     TODO: should be refactored and splited.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoWritable, )    
 
     def post(self, request, repo_id, format=None):
         src_repo_id = request.POST.get('src_repo')
@@ -660,13 +661,12 @@ class OpMkdirView(APIView):
     Make a new directory.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def post(self, request, repo_id, format=None):
         resp = check_repo_access_permission(request, get_repo(repo_id))
         if resp:
             return resp
-
         path = request.GET.get('p')
         if not path or path[0] != '/':
             return api_error('400')
@@ -688,7 +688,7 @@ class OpUploadView(APIView):
     Upload a file.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
