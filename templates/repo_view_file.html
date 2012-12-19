@@ -10,6 +10,7 @@
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
+.CodeMirror-scroll { min-height:400px; }
 .CodeMirror { margin-bottom:40px; }
 {% if fileext == 'txt' or fileext == 'text' %}
 .CodeMirror {
