@@ -194,6 +194,9 @@ SITE_NAME = 'Seafile'
 # server.
 SERVE_STATIC = True
 
+# Enalbe or disalbe registration on web.
+ENABLE_SIGNUP = False
+
 try:
     import local_settings
 except ImportError:

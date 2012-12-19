@@ -64,7 +64,7 @@
                   <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
                   {% else %}
                   <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
-                    {% if cloud_mode %}
+                    {% if cloud_mode or enable_signup %}
                     <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
                     {% endif %}
                   {% endif %}

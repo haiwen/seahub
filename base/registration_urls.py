@@ -34,7 +34,9 @@ try:
     from settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-if CLOUD_MODE:
+from settings import ENABLE_SIGNUP
+
+if CLOUD_MODE or ENABLE_SIGNUP:
     urlpatterns += patterns('',
         url(r'^register/$',
             register,
