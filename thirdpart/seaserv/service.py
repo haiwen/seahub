@@ -335,6 +335,13 @@ def is_repo_owner(user, repo_id):
         ret = 0
     return ret
 
+def server_repo_size(repo_id):
+    try:
+        size = seafserv_threaded_rpc.server_repo_size(repo_id)
+    except SearpcError:
+        size = 0
+    return size
+
 # org repo
 def create_org_repo(repo_name, repo_desc, user, passwd, org_id):
     """
@@ -408,7 +415,11 @@ def get_org_repo_owner(repo_id):
 # commit
 def get_commits(repo_id, offset, limit):
     """Get commit lists."""
-    return seafserv_threaded_rpc.get_commit_list(repo_id, offset, limit)
+    try:
+        ret = seafserv_threaded_rpc.get_commit_list(repo_id, offset, limit)
+    except SearpcError:
+        ret = None
+    return ret
 
 # branch
 def get_branches(repo_id):
@@ -471,10 +482,8 @@ def get_group_repos(group_id, user):
         repo.owner = seafserv_threaded_rpc.get_group_repo_owner(repo_id)
         repo.share_from_me = True if user == repo.owner else False
 
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
+        last_commit = get_commits(repo.id, 0, 1)[0]
+        repo.latest_modify = last_commit.ctime if last_commit else None
 
         repos.append(repo)
     repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
@@ -512,10 +521,8 @@ def get_org_group_repos(org_id, group_id, user):
                                                                     repo_id)
         repo.sharecd_from_me = True if user == repo.owner else False
 
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
+        last_commit = get_commits(repo.id, 0, 1)[0]
+        repo.latest_modify = last_commit.ctime if last_commit else None
 
         repos.append(repo)
     repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))

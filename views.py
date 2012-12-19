@@ -215,8 +215,7 @@ class RepoMixin(object):
 
     def get_current_commit(self):
         # Get newest commit by default, subclasses can override this method.
-        current_commit = get_commits(self.repo.id, 0, 1)[0]
-        return current_commit
+        return get_commits(self.repo.id, 0, 1)[0]
 
     def get_success_url(self):
         next = self.request.GET.get('next', '')
@@ -863,10 +862,8 @@ def myhome(request):
             r.repo_id = r.id
             r.repo_name = r.name
             r.repo_desc = r.desc
-            try:
-                r.last_modified = get_commits(r_id, 0, 1)[0].ctime
-            except:
-                r.last_modified = 0
+            last_commit = get_commits(r_id, 0, 1)[0]
+            r.last_modified = last_commit.ctime if last_commit else 0
             r.share_type = 'group'
             r.user = get_repo_owner(r_id)
             r.user_perm = check_permission(r_id, email)

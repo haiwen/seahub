@@ -26,9 +26,10 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_ccnet_server_addr_port
 
 from pysearpc import SearpcError
-from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
+from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
-    get_group_repos, get_repo, check_permission, get_commits
+    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
+    list_personal_repos_by_owner, list_personal_shared_repos
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -98,6 +99,7 @@ HTTP_ERRORS = {
     '419':'Failed to move',
     '420':'Failed to rename',
     '421':'Failed to mkdir',
+    '422':'Failed to get current commit',
 
     '499':'Unknow Error',
 
@@ -132,28 +134,13 @@ def calculate_repo_info(repo_list, username):
 
     """
     for repo in repo_list:
-        try:
-            commit = get_commits(repo.id, 0, 1)[0]
-            repo.latest_modify = commit.ctime
-            repo.root = commit.root_id
-            repo.size = seafserv_threaded_rpc.server_repo_size(repo.id)
-            if not repo.size :
-                repo.size = 0;
-
-            password_need = False
-            if repo.encrypted:
-                try:
-                    ret = seafserv_rpc.is_passwd_set(repo.id, username)
-                    if ret != 1:
-                        password_need = True
-                except SearpcErroe, e:
-                    pass
-            repo.password_need = password_need
-        except Exception,e:
-            repo.latest_modify = 0
-            repo.commit = None
-            repo.size = -1
-            repo.password_need = None
+        commit = get_commits(repo.id, 0, 1)[0]
+        if not commit:
+            continue
+        repo.latest_modify = commit.ctime
+        repo.root = commit.root_id
+        repo.size = server_repo_size(repo.id)
+        repo.password_need = is_passwd_set(repo.id, username)
     
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -161,17 +148,11 @@ class Repos(APIView):
 
     def get(self, request, format=None):
         email = request.user.username
-
-        owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
-        calculate_repo_info (owned_repos, email)
-        owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
-        n_repos = seafserv_threaded_rpc.list_share_repos(email,
-                                                         'to_email', -1, -1)
-        calculate_repo_info (n_repos, email)
-        owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
         repos_json = []
+
+        owned_repos = list_personal_repos_by_owner(email)
+        calculate_repo_info(owned_repos, email)
+        owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
         for r in owned_repos:
             repo = {
                 "type":"repo",
@@ -186,14 +167,22 @@ class Repos(APIView):
                 "password_need":r.password_need,
                 }
             repos_json.append(repo)
-
-        for r in n_repos:
+        
+        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
+        for r in shared_repos:
+            commit = get_commits(r.repo_id, 0, 1)[0]
+            if not commit:
+                continue
+            r.latest_modify = commit.ctime
+            r.root = commit.root_id
+            r.size = server_repo_size(r.repo_id)
+            r.password_need = is_passwd_set(r.repo_id, email)
             repo = {
                 "type":"srepo",
-                "id":r.id,
-                "owner":r.shared_email,
-                "name":r.name,
-                "desc":r.desc,
+                "id":r.repo_id,
+                "owner":r.user,
+                "name":r.repo_name,
+                "desc":r.repo_desc,
                 "mtime":r.latest_modify,
                 "root":r.root,
                 "size":r.size,
@@ -206,7 +195,7 @@ class Repos(APIView):
         for group in groups:
             g_repos = get_group_repos(group.id, email)
             calculate_repo_info (g_repos, email)
-            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            g_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
             for r in g_repos:
                 repo = {
                     "type":"grepo",
@@ -252,14 +241,13 @@ class Repo(APIView):
         else:
             owner = "share"
 
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
+        last_commit = get_commits(repo.id, 0, 1)[0].ctime
+        repo.latest_modify = last_commit.ctime if last_commit else None
 
         # query repo infomation
         repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
+        root_id = current_commit.root_id if current_commit else None
 
         # generate download url for client
         ccnet_applet_root = get_ccnetapplet_root()
@@ -284,7 +272,7 @@ class Repo(APIView):
             "mtime":repo.lastest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
-            "root":current_commit.root_id,
+            "root":root_id,
             "password_need":repo.password_need,
             "download_url": url,
             }
@@ -374,6 +362,9 @@ class RepoDirents(APIView):
             return resp
 
         current_commit = get_commits(repo_id, 0, 1)[0]
+        if not current_commit:
+            return api_error('422')
+
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
@@ -536,6 +527,9 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
         return Response('success')
 
     current_commit = get_commits(repo_id, 0, 1)[0]
+    if not current_commit:
+        return api_error('422')
+
     try:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
                                                          parent_dir.encode('utf-8'))

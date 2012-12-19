@@ -140,13 +140,12 @@ def calculate_repo_last_modify(repo_list):
     
     """
     for repo in repo_list:
-        try:
-            repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
-        except:
-            repo.latest_modify = None
+        repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
     latest_commit = get_commits(repo_id, 0, 1)[0]
+    if not latest_commit:
+        return ''
     dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id,
                                          parent_dir.encode('utf-8'))
 
@@ -210,6 +209,8 @@ def get_accessible_repos(request, repo):
     """
     def check_has_subdir(repo):
         latest_commit = get_commits(repo.id, 0, 1)[0]
+        if not latest_commit:
+            return False
         if latest_commit.root_id == EMPTY_SHA1:
             return False
 

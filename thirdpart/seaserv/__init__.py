@@ -15,7 +15,8 @@ from service import get_repos, get_repo, get_commits, get_branches, remove_repo,
     list_org_inner_pub_repos, get_org_id_by_repo_id, list_org_shared_repos, \
     list_personal_shared_repos, is_personal_repo, list_inner_pub_repos, \
     is_org_repo_owner, get_org_repo_owner, is_org_repo, get_file_size,\
-    list_personal_repos_by_owner, get_repo_token_nonnull, get_repo_owner
+    list_personal_repos_by_owner, get_repo_token_nonnull, get_repo_owner, \
+    server_repo_size
 
 from service import get_binding_peerids, is_valid_filename, check_permission,\
     is_passwd_set
