@@ -15,7 +15,6 @@ from django.contrib.sites.models import RequestSite
 from django.http import HttpResponse
 
 from models import Token
-from mime import get_file_mime
 from authentication import TokenAuthentication
 from permissions import IsRepoWritable
 from serializers import AuthTokenSerializer
@@ -141,7 +140,6 @@ def calculate_repo_info(repo_list, username):
         repo.latest_modify = commit.ctime
         repo.root = commit.root_id
         repo.size = server_repo_size(repo.id)
-        repo.password_need = is_passwd_set(repo.id, username)
     
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -165,7 +163,6 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "password_need":r.password_need,
                 }
             repos_json.append(repo)
         
@@ -188,7 +185,6 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "password_need":r.password_need,
                 }
             repos_json.append(repo)
 
@@ -208,7 +204,6 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
-                    "password_need":r.password_need,
                     }
                 repos_json.append(repo)
 
@@ -274,7 +269,6 @@ class Repo(APIView):
             "size":repo.size,
             "encrypted":repo.encrypted,
             "root":root_id,
-            "password_need":repo.password_need,
             "download_url": url,
             }
 
@@ -330,9 +324,6 @@ def get_dir_entrys_by_id(request, dir_id):
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
-            mime = get_file_mime(dirent.obj_name)
-            if mime:
-                entry["mime"] = mime
             try:
                 entry["size"] = get_file_size(dirent.obj_id)
             except Exception, e:
