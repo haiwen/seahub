@@ -21,17 +21,7 @@
 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">{% trans "Download" %}</button>
         </div>
-        <div id="file-view">
-            {% if filetype == 'Text' or filetype == 'Sf' %}
-                {% ifnotequal file_content None %}
-                {% if filetype == 'Text' %}
-                <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
-                {% else %}
-                <div id="sf" class="article">{{ file_content|safe }}</div>
-                {% endif %}
-                {% endifnotequal %}
-            {% endif %}
-        </div>
+        {% include 'snippets/file_content_html.html' %}
     </div>
 {% endblock %}
 
@@ -41,6 +31,6 @@
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
-{% include "snippets/repo_file_get.html" %}
+{% include "snippets/file_content_js.html" %}
 </script>
 {% endblock %}

@@ -1,0 +1,111 @@
+{% load i18n %}
+{% if not err %}
+
+{% if filetype == 'Text' %}
+    {% ifnotequal file_content None %}
+    var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
+        {% include 'snippets/editor_set_mode.html' %}
+        theme: 'default',
+        indentUnit: 4,
+        {% if fileext != 'txt' and fileext != 'text' %}
+        lineNumbers: true,
+        {% endif %}
+        lineWrapping: true,
+        readOnly: true
+    });
+    {% endifnotequal %}
+{% endif %}
+
+{% if filetype == 'Image' %}
+    window.onload = function() {
+        if ($('#image-view').width() > $('#file-view').width()) {
+            $('#image-view').css('width', $('#file-view').width() - 4);
+        }
+    }
+{% endif %}
+
+{% if filetype == 'SVG' %}
+    if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
+        $('#file-view').html('<div id="file-view-tip"><p>{% trans "To view it online, you can use firefox, chrome or IE 9." %}</p></div>');
+    } else {
+        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe>');
+    }
+{% endif %}
+
+{% if filetype == 'Markdown' %}
+    {% ifnotequal file_content None %}
+    var converter = new Showdown.converter();
+    $('#file-view').html('<div id="md-view" class="article">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
+    $('#md-view').children(':first').css('margin-top', '0');
+    {% endifnotequal %}
+{% endif %}
+
+{% if filetype == 'Document' or filetype == 'PDF' %}
+  $('#file-view').html('<div id="flash"></div>');
+  function load_flexpaper() {
+      var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
+      var fp = new FlexPaperViewer(
+          '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
+          'flash', { config : {
+              SwfFile : escape(swf_url),
+              Scale : 1.0, 
+              ZoomTransition : 'easeOut',
+              ZoomTime : 0.5,
+              ZoomInterval : 0.2,
+              FitPageOnLoad : false,
+              FitWidthOnLoad : true,
+              FullScreenAsMaxWindow : false,
+              ProgressiveLoading : false,
+              MinZoomSize : 0.2,
+              MaxZoomSize : 5,
+              SearchMatchAll : false,
+              InitViewMode : 'Portrait',
+              PrintPaperAsBitmap : false,
+              
+              ViewModeToolsVisible : true,
+              ZoomToolsVisible : true,
+              NavToolsVisible : true,
+              CursorToolsVisible : true,
+              SearchToolsVisible : true,
+              
+              localeChain: 'en_US'
+          }});
+  }
+  
+  {% if swf_exists %}
+  load_flexpaper();
+  {% else %}
+  function check_status () {
+      $.ajax({
+          url: '{{ DOCUMENT_CONVERTOR_ROOT }}status?file_id={{ obj_id }}',
+          cache: false,
+          dataType: 'jsonp',
+          jsonpCallback: 'xx',
+          crossDomain: true,
+          success: function(data) {
+              if (data['error']) {
+                  $('#file-view').html('<div id="file-view-tip"><p class="error">' + data['error'] + '</p></div>');
+              } else {
+                  var status = data['status'];
+                  if (status == 'QUEUED' || status == 'PROCESSING') {
+                      setTimeout(check_status, 2000);
+                  } else {
+                      load_flexpaper();
+                  }
+              }
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+              var jsonVal = jQuery.parseJSON(xhr.responseText);
+              $('#file-view').html('<div id="file-view-tip"><p class="error">' + jsonVal['error'] + '</p></div>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
+{% endif %}
+
+{% if filetype == 'Unknown' %}
+$('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file cannot be viewed online." %}</p></div>');
+{% endif %}
+
+{% endif %}

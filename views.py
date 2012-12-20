@@ -1232,15 +1232,10 @@ def repo_view_file(request, repo_id):
     err = ''
     file_content = ''
     swf_exists = False
-    pdf_use_flash = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
-    elif filetype == 'Document':
+    elif filetype == 'Document' or filetype == 'PDF':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-    elif filetype == 'PDF':
-        pdf_use_flash = use_flash_for_pdf(request)
-        if pdf_use_flash:
-            err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
 
     if view_history:
         return render_to_response('history_file_view.html', {
@@ -1259,7 +1254,6 @@ def repo_view_file(request, repo_id):
                 'err': err,
                 'file_content': file_content,
                 'swf_exists': swf_exists,
-                'pdf_use_flash': pdf_use_flash,
                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
                 'page_from': page_from,
                 'basedir': basedir,
@@ -1344,7 +1338,6 @@ def repo_view_file(request, repo_id):
             'comments': comments,
             'comment_open':comment_open,
             'swf_exists': swf_exists,
-            'pdf_use_flash': pdf_use_flash,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
@@ -1448,19 +1441,6 @@ def repo_file_get(raw_path):
     else:
         newline_mode = 'windows'
     return err, file_content, encoding, newline_mode
-
-
-def pdf_full_view(request):
-    repo_id = request.GET.get('repo_id', '')
-    obj_id = request.GET.get('obj_id', '')
-    file_name = request.GET.get('file_name', '')
-
-    token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
-                                              'view', request.user.username)
-    file_src = gen_file_get_url(token, file_name)
-    return render_to_response('pdf_full_view.html', {
-            'file_src': file_src,
-                }, context_instance=RequestContext(request))
 
 def update_file_after_edit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
@@ -2422,22 +2402,17 @@ def view_shared_file(request, token):
     err = ''
     file_content = ''
     swf_exists = False
-    pdf_use_flash = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding, newline_mode = repo_file_get(raw_path)
-    elif filetype == 'Document':
+    elif filetype == 'Document' or filetype == 'PDF':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-    elif filetype == 'PDF':
-        pdf_use_flash = use_flash_for_pdf(request)
-        if pdf_use_flash:
-            err, swf_exists = flash_prepare(raw_path, obj_id, 'pdf')
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
     
-    return render_to_response('view_shared_file.html', {
+    return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
             'path': path,
@@ -2451,7 +2426,6 @@ def view_shared_file(request, token):
             'err': err,
             'file_content': file_content,
             'swf_exists': swf_exists,
-            'pdf_use_flash': pdf_use_flash,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
 
@@ -2472,17 +2446,6 @@ def flash_prepare(raw_path, obj_id, doctype):
             return ret_dict['error'], False
         else:
             return None, ret_dict['exists']
-
-def use_flash_for_pdf(request):
-    """Only use pdfjs to display PDF in Firefox. For IE/Chrome/Others, use flash.
-
-    """
-    ua = request.META.get('HTTP_USER_AGENT', '')
-    if 'firefox' in ua.lower():
-        # Browser is firefox
-        return False
-    else:
-        return True
 
 def demo(request):
     """

@@ -71,23 +71,12 @@
                 {% endif %}
             {% endif %}
 
-        {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
+            {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">{% trans "Raw"%}</button>
-        {% endif %}
+            {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
-
-        <div id="file-view">
-            {% if filetype == 'Text' or filetype == 'Sf' %}
-            {% ifnotequal file_content None %}
-                {% if filetype == 'Text' %}
-                <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
-                {% else %}
-                <div id="sf" class="article">{{ file_content|safe }}</div>
-                {% endif %}
-            {% endifnotequal %}
-            {% endif %}
-        </div>
+        {% include 'snippets/file_content_html.html' %}
     </div>
 
     <form id="link-send-form" action="" method="post" class="hide">
@@ -402,9 +391,10 @@ $('#file-op .history').click(function () {
     location.href = $(this).data('url');
 });
 
-{% include "snippets/repo_file_get.html" %}
+//places file_content_js here so that op-btns can work before file content is fully loaded.
+{% include "snippets/file_content_js.html" %}
 
-//bottom bar: after repo_file_get
+//bottom bar
 {% include "snippets/bottom_bar.html" %}
 {% if request.user.is_authenticated %}
 $('#main-panel').css({'margin-bottom':0});

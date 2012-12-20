@@ -8,11 +8,14 @@
 <style type="text/css">
 .CodeMirror-scroll { min-height:400px; }                               
 .CodeMirror { margin-bottom:40px; }                                    
-{% if fileext == 'txt' or fileext == 'text' %}                         
-.CodeMirror { 
-    width:624px;
-    padding:40px 96px;                                                 
-}   
+    {% if fileext == 'txt' or fileext == 'text' %}
+.CodeMirror { width:624px; padding:40px 96px; }
+    {% endif %}
+</style>
 {% endif %}
-</style>                                                               
-{% endif %}          
+
+{% if filetype == 'Image' %}                                            
+<style type="text/css">
+#file-view { text-align:center; padding:30px 0; }
+</style>
+{% endif %}

@@ -1,0 +1,25 @@
+{%comment%}
+content of files that can be viewed online shows here.
+For details please refer to 'snippets/file_content_js.html'.
+{%endcomment%}
+<div id="file-view">
+    {% if not err %}
+        {% if filetype == 'Text' or filetype == 'Sf' %}
+            {% ifnotequal file_content None %}
+                {% if filetype == 'Text' %}
+                <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
+                {% else %}
+                <div id="sf" class="article">{{ file_content|safe }}</div>
+                {% endif %}
+            {% endifnotequal %}
+        {% endif %}
+
+        {% if filetype == 'Image' %}
+        <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />
+        {% endif %}
+    {% else %}
+    <div id="file-view-tip">
+        <p class="error">{{ err }}</p>
+    </div>
+    {% endif %}
+</div>
