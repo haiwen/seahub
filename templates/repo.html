@@ -91,14 +91,16 @@
             <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
+                    <th width="3%"></th>
                     <th width="5%"></th>
-                    <th width="60%">{% trans "Name"%}</th>
+                    <th width="55%">{% trans "Name"%}</th>
                     <th width="10%">{% trans "Size"%}</th>
-                    <th width="30%">{% trans "Operations"%}</th>
+                    <th width="27%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
+                    <td></td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>
                         <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
@@ -128,6 +130,13 @@
 
                 {% for dirent in file_list %}
                 <tr>
+                    <td class="icon-container">
+                        {% if dirent.starred %}
+                        <img src="{{ MEDIA_URL }}img/gray-star-icon.png" alt="{% trans 'Starred' %}" title="{% trans 'Starred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="starred" />
+                        {% else %}
+                        <img src="{{ MEDIA_URL }}img/gray-unstar-icon.png" alt="{% trans 'Unstarred' %}" title="{% trans 'Unstarred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="unstarred" />
+                        {% endif %}
+                    </td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td>
                         <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
@@ -663,7 +672,40 @@ $('#repo-download-btn').click(function() {
 $('#recycle-btn').click(function() {
     location.href = $(this).attr('data');
 });
-
+$('.file-star').click(function() {
+    var it = $(this);
+    var state = it.data('status');
+    var path = it.data('path');
+    $.ajax({
+        url: '{{ SITE_ROOT }}repo/star_file/{{ repo.props.id }}/',
+        type: 'POST',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        dataType: 'json',
+        data: {
+            path: path,
+            state: state,
+            org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
+        },
+        success:function(data) {
+            if (data['success']) {
+                if (state == 'starred') {
+                    feedback('{% trans "Unstarred successfully" %}', 'success');
+                    it.attr('src', '{{ MEDIA_URL }}img/gray-unstar-icon.png').attr('alt','{% trans 'Unstarred' %}').attr('title','{% trans 'Unstarred' %}').data('status','unstarred');
+                } else {
+                    feedback('{% trans "Starred successfully" %}', 'success');
+                    it.attr('src', '{{ MEDIA_URL }}img/gray-star-icon.png').attr('alt','{% trans 'Starred' %}').attr('title','{% trans 'Starred' %}').data('status','starred');
+                }
+            } else {
+                feedback('{% trans "Failed:" %}' + data['err_msg'], 'error');
+            }
+        },
+        error:function(jqXHR, textStatus, errorThrown) {
+            feedback(textStatus + '{% trans ", failed" %}', 'error');
+        }
+   });
+});
 {% include "snippets/list_commit_detail.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>

@@ -71,7 +71,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
-    get_starred_files, star_file, unstar_file, is_file_starred
+    get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -151,7 +151,7 @@ def gen_path_link(path, repo_name):
     
     return zipped
 
-def get_repo_dirents(commit, path):
+def get_repo_dirents(request, repo_id, commit, path):
     dir_list = []
     file_list = []
     if commit.root_id == EMPTY_SHA1:
@@ -162,12 +162,22 @@ def get_repo_dirents(commit, path):
         except SearpcError, e:
             raise Http404
             # return render_error(self.request, e.msg)
+
+        org_id = -1
+        if request.user.org:
+            org_id = request.user.org['org_id']
+        starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
+
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
                 dirent.file_size = get_file_size(dirent.obj_id)
+                dirent.starred = False
+                fpath = os.path.join(path, dirent.obj_name)
+                if fpath in starred_files:
+                    dirent.starred = True
 
         dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                         y.obj_name.lower()))
@@ -241,7 +251,7 @@ class RepoMixin(object):
             self.zipped = None
             self.applet_root = None
         else:
-            self.file_list, self.dir_list = get_repo_dirents(self.current_commit, self.path)
+            self.file_list, self.dir_list = get_repo_dirents(self.request, self.repo_id, self.current_commit, self.path)
             self.zipped = self.get_nav_path()
             self.applet_root = self.get_applet_root()
         
@@ -435,7 +445,7 @@ def render_recycle_dir(request, repo_id, commit_id):
         raise Http404
 
     zipped = gen_path_link(path, '')
-    file_list, dir_list = get_repo_dirents(commit, basedir + path)
+    file_list, dir_list = get_repo_dirents(request, repo_id, commit, basedir + path)
 
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
@@ -1305,11 +1315,10 @@ def repo_view_file(request, repo_id):
         repogrp_str = '' 
 
     is_starred = False
-    if page_from != 'recycle':
-        org_id = -1
-        if request.user.org:
-            org_id = request.user.org['org_id']
-        is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
+    org_id = -1
+    if request.user.org:
+        org_id = request.user.org['org_id']
+    is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
 
     user_perm = get_user_permission(request, repo_id)
         

@@ -627,3 +627,13 @@ def is_file_starred(email, repo_id, path, org_id=-1):
         return True
     except UserStarredFiles.DoesNotExist:
         return False
+
+def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1): 
+    '''Get starred files under parent_dir.
+
+    '''
+    starred_files = UserStarredFiles.objects.filter(email=email,
+                                         repo_id=repo_id,
+                                         path__startswith=parent_dir,
+                                         org_id=org_id)
+    return [ f.path for f in starred_files ]
