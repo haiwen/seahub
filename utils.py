@@ -501,16 +501,6 @@ class StarredFile(object):
         if path[-1:] == '/':
             path = path[:-1]
         return path.replace('/', ' / ')
-            
-    def __init__(self, org_id, repo, path, is_dir, last_modified):
-        # always 0 for non-org repo
-        self.org_id = org_id
-        self.repo = repo
-        self.path = path
-        self.formatted_path = self.format_path()
-        self.is_dir = is_dir
-        # always 0 for dir
-        self.last_modified = last_modified
 
     def __init__(self, org_id, repo, path, is_dir, last_modified, size):
         # always 0 for non-org repo
@@ -522,6 +512,8 @@ class StarredFile(object):
         # always 0 for dir
         self.last_modified = last_modified
         self.size = size;
+        if not is_dir:
+            self.name = path.split('/')[-1]
 
 
 # org_id > 0: get starred files in org repos
