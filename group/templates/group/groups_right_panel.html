@@ -6,10 +6,10 @@
 {% if joined_groups %}
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}
-    <li class="group fleft">
+    <li class="group ovhd">
     <div class="pic fleft">
         <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
-            <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar" />
+            <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}" title="{{ group.props.group_name }}" class="avatar" />
         </a>
     </div>
     <div class="txt fright">
