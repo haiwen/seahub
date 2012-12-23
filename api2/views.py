@@ -8,6 +8,7 @@ import seahub.settings as settings
 from rest_framework import parsers
 from rest_framework import status
 from rest_framework import renderers
+from rest_framework.reverse import reverse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +24,7 @@ from share.models import FileShare
 from seahub.views import access_to_repo, validate_owner
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
-    get_ccnet_server_addr_port
+    get_ccnet_server_addr_port, star_file, unstar_file, string2list
 
 from pysearpc import SearpcError
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
@@ -32,6 +33,10 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_personal_repos_by_owner, list_personal_shared_repos
 
 json_content_type = 'application/json; charset=utf-8'
+
+# Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
+HTTP_440_REPO_PASSWD_REQUIRED = 440
+HTTP_520_OPERATION_FAILED = 520
 
 class Ping(APIView):
     """
@@ -77,39 +82,8 @@ class ObtainAuthToken(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-HTTP_ERRORS = {
-    '400':'Bad arguments',
-    '401':'Login required',
-    '402':'Incorrect repo password',
-    '403':'Can not access repo',
-    '404':'Repo not found',
-    '405':'Query password set error',
-    '406':'Repo is not encrypted',
-    '407':'Method not supported',
-    '408':'Login failed',
-    '409':'Repo password required',
-    '410':'Path does not exist',
-    '411':'Failed to get dirid by path',
-    '412':'Failed to get fileid by path',
-    '413':'Above quota',
-    '415':'Operation not supported',
-    '416':'Failed to list dir',
-    '417':'Set password error',
-    '418':'Failed to delete',
-    '419':'Failed to move',
-    '420':'Failed to rename',
-    '421':'Failed to mkdir',
-    '422':'Failed to get current commit',
-
-    '499':'Unknow Error',
-
-    '500':'Internal server error',
-    '501':'Failed to get shared link',
-    '502':'Failed to send shared link',
-}
-
-def api_error(code='499', msg=None):
-    err_resp = {'error_msg': msg if msg else HTTP_ERRORS[code]}
+def api_error(code, msg):
+    err_resp = {'error_msg': msg}
     return Response(err_resp, status=code)
 
 class Account(APIView):
@@ -217,7 +191,32 @@ def can_access_repo(request, repo_id):
     if not check_permission(repo_id, request.user.username):
         return False
     return True
-    
+
+def check_repo_access_permission(request, repo):
+    if not repo:
+        return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+    if not can_access_repo(request, repo.id):
+        return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
+
+    password_set = False
+    if repo.encrypted:
+        try:
+            ret = seafserv_rpc.is_passwd_set(repo.id, request.user.username)
+            if ret == 1:
+                password_set = True
+        except SearpcError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             "SearpcError:" + e.msg)
+
+        if not password_set:
+            password = request.REQUEST.get('password', default=None)
+            if not password:
+                return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
+                                 'Repo password is needed.')
+
+            return set_repo_password(request, repo, password)
+
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -230,7 +229,7 @@ class Repo(APIView):
         # check whether user can view repo
         repo = get_repo(repo_id)
         if not repo:
-            return api_error('404')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
         # if not can_access_repo(request, repo.id):
         #     return api_error('403')
@@ -241,7 +240,7 @@ class Repo(APIView):
         else:
             owner = "share"
 
-        last_commit = get_commits(repo.id, 0, 1)[0].ctime
+        last_commit = get_commits(repo.id, 0, 1)[0]
         repo.latest_modify = last_commit.ctime if last_commit else None
 
         # query repo infomation
@@ -249,20 +248,6 @@ class Repo(APIView):
         current_commit = get_commits(repo_id, 0, 1)[0]
         root_id = current_commit.root_id if current_commit else None
 
-        # generate download url for client
-        ccnet_applet_root = get_ccnetapplet_root()
-        relay_id = get_session_info().id
-        addr, port = get_ccnet_server_addr_port ()
-        email = quote(request.user.username)
-        token = get_repo_token_nonnull(repo_id, request.user.username)
-        quote_repo_name = quote(repo.name.encode('utf-8'))
-        enc = 1 if repo.encrypted else ''
-
-        url = ccnet_applet_root + "/repo/download/"
-        url += "?relay_id=%s&relay_addr=%s&relay_port=%s" % (relay_id, addr, port)
-        url += "&email=%s&token=%s" % (email, token)
-        url += "&repo_id=%s&repo_name=%s&encrypted=%s" % (repo_id, quote_repo_name, enc)
-        
         repo_json = {
             "type":"repo",
             "id":repo.id,
@@ -273,7 +258,6 @@ class Repo(APIView):
             "size":repo.size,
             "encrypted":repo.encrypted,
             "root":root_id,
-            "download_url": url,
             }
 
         return Response(repo_json)
@@ -288,29 +272,39 @@ class Repo(APIView):
 
         return Response("unsupported operation")
 
-def check_repo_access_permission(request, repo):
-    if not repo:
-        return api_error('404')
+class DownloadRepo(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
 
-    if not can_access_repo(request, repo.id):
-        return api_error('403')
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
-    password_set = False
-    if repo.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo.id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return api_error('405', "SearpcError:" + e.msg)
+        # TODO: check whether user can access this repo
 
-        if not password_set:
-            password = request.REQUEST.get('password', default=None)
-            if not password:
-                return api_error('409')
+        # generate download url for client
+        ccnet_applet_root = get_ccnetapplet_root()
+        relay_id = get_session_info().id
+        addr, port = get_ccnet_server_addr_port ()
+        email = quote(request.user.username)
+        token = get_repo_token_nonnull(repo_id, request.user.username)
+        quote_repo_name = quote(repo.name.encode('utf-8'))
+        enc = 1 if repo.encrypted else ''
 
-            return set_repo_password(request, repo, password)
-
+        info_json = {
+            'applet_root': ccnet_applet_root,
+            'relay_id': relay_id,
+            'relay_addr': addr,
+            'relay_port': port,
+            'email': email,
+            'token': token,
+            'repo_id': repo_id,
+            'repo_name': quote_repo_name,
+            'encrypted': enc,
+            }
+        return Response(info_json)
+    
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
     return size if size else 0
@@ -320,7 +314,8 @@ def get_dir_entrys_by_id(request, dir_id):
     try:
         dirs = seafserv_threaded_rpc.list_dir(dir_id)
     except SearpcError, e:
-        return api_error("416")
+        return api_error(HTTP_520_OPERATION_FAILED,
+                         "Failed to list dir.")
 
     for dirent in dirs:
         dtype = "file"
@@ -359,7 +354,8 @@ class RepoDirents(APIView):
 
         current_commit = get_commits(repo_id, 0, 1)[0]
         if not current_commit:
-            return api_error('422')
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             'Failed to get current commit of repo %s.' % repo_id)
 
         path = request.GET.get('p', '/')
         if path[-1] != '/':
@@ -370,10 +366,12 @@ class RepoDirents(APIView):
             dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error("411", "SearpcError:" + e.msg)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get dir id by path.")
 
         if not dir_id:
-            return api_error('410')
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             "Path does not exist")
 
         old_oid = request.GET.get('oid', None)
         if old_oid and old_oid == dir_id :
@@ -418,11 +416,12 @@ def get_shared_link(request, repo_id, path):
         try:
             fs.save()
         except IntegrityError, e:
-            return api_err('501')
+            return api_err(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
+    http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
-    file_shared_link = 'http://%s%sf/%s/' % (domain,
-                                             settings.SITE_ROOT, token)
+    file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
+                                           settings.SITE_ROOT, token)
     return Response(file_shared_link)
     
 def get_repo_file(request, repo_id, file_id, file_name, op):
@@ -456,17 +455,18 @@ class RepoFilepath(APIView):
 
         path = request.GET.get('p', None)
         if not path:
-            return api_error('413')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         file_id = None
         try:
             file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
-            return api_error('412', "SearpcError:" + e.msg)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
 
         if not file_id:
-            return api_error('410')
+            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
         file_name = request.GET.get('file_name', file_id)
         op = request.GET.get('op', 'download')
@@ -480,22 +480,17 @@ class RepoFilepath(APIView):
 
         path = request.GET.get('p', None)
         if not path:
-            return api_error('413', 'Path needed')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path needed')
 
-        op = request.GET.get('op', 'sendsharelink')
-        if op == 'sendsharelink':
-            emails = request.POST.get('email', None)
-            if not emails:
-                return api_error('400', "Email required")
-            return send_share_link(request, path, emails)
-        elif op == 'star':
+        op = request.GET.get('op', '')
+        if op == 'star':
             org_id = int(request.GET.get('org', '-1'))
             star_file(request.user.username, repo_id, path, False, org_id=org_id)
             return HttpResponse('success')
         elif op == 'unstar':
             unstar_file(request.user.username, repo_id, path)
             return HttpResponse('success')
-        return api_error('415')
+        return api_error(status.HTTP_400_BAD_REQUEST, 'Operation not supported')
 
 class RepoFiles(APIView):
     """
@@ -513,6 +508,24 @@ class RepoFiles(APIView):
         file_name = request.GET.get('file_name', file_id)
         return get_repo_file(request, repo_id, file_id, file_name, 'download')
 
+def reloaddir(request, repo_id, parent_dir):
+    current_commit = get_commits(repo_id, 0, 1)[0]
+    if not current_commit:
+        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         'Failed to get current commit of repo %s.' % repo_id)
+
+    try:
+        dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                         parent_dir.encode('utf-8'))
+    except SearpcError, e:
+        return api_error(HTTP_520_OPERATION_FAILED,
+                         "Failed to get dir id by path")
+
+    if not dir_id:
+        return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+
+    return get_dir_entrys_by_id(request, dir_id)
+    
 def reloaddir_if_neccessary (request, repo_id, parent_dir):
     reloaddir = False
     s = request.GET.get('reloaddir', None)
@@ -522,20 +535,8 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
     if not reloaddir:
         return Response('success')
 
-    current_commit = get_commits(repo_id, 0, 1)[0]
-    if not current_commit:
-        return api_error('422')
+    reloaddir(request, repo_id, parent_dir)
 
-    try:
-        dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
-                                                         parent_dir.encode('utf-8'))
-    except SearpcError, e:
-        return api_error("411", "SearpcError:" + e.msg)
-
-    if not dir_id:
-        return api_error('410')
-    return get_dir_entrys_by_id(request, dir_id)
-    
 class OpDeleteView(APIView):
     """
     Delete a file.
@@ -552,7 +553,8 @@ class OpDeleteView(APIView):
         file_names = request.POST.get("file_names")
 
         if not parent_dir or not file_names:
-            return api_error('400')
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'File or directory not found.')
 
         names =  file_names.split(':')
         names = map(lambda x: unquote(x).decode('utf-8'), names)
@@ -562,7 +564,8 @@ class OpDeleteView(APIView):
                 seafserv_threaded_rpc.del_file(repo_id, parent_dir,
                                                file_name, request.user.username)
             except SearpcError,e:
-                return api_error('418', 'SearpcError:' + e.msg)
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 "Failed to delete file.")
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
         
@@ -581,17 +584,19 @@ class OpRenameView(APIView):
         path = request.GET.get('p')
         newname = request.POST.get("newname")
         if not path or path[0] != '/' or not newname:
-            return api_error('400')
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Path or newname is missing.')
 
         newname = unquote(newname).decode('utf-8')
         if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-            return api_error('420', 'New name too long')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'New name too long')
 
         parent_dir = os.path.dirname(path)
         oldname = os.path.basename(path)
 
         if oldname == newname:
-            return api_error('420', 'The new name is the same to the old')
+            return api_error(status.HTTP_409_CONFLICT,
+                             'The new name is the same to the old')
 
         newname = check_filename_with_rename(repo_id, parent_dir, newname)
 
@@ -599,7 +604,8 @@ class OpRenameView(APIView):
             seafserv_threaded_rpc.rename_file (repo_id, parent_dir, oldname,
                                                newname, request.user.username)
         except SearpcError,e:
-            return api_error('420', "SearpcError:" + e.msg)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to rename file.")
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
         
@@ -621,10 +627,11 @@ class OpMoveView(APIView):
 
         if not (src_repo_id and src_dir  and dst_repo_id \
                 and dst_dir and op and obj_names):
-            return api_error('400')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Missing arguments.')
 
         if src_repo_id == dst_repo_id and src_dir == dst_dir:
-            return api_error('419', 'The src_dir is same to dst_dir')
+            return api_error(status.HTTP_409_CONFLICT,
+                             'The src_dir is same to dst_dir')
 
         names = obj_names.split(':')
         names = map(lambda x: unquote(x).decode('utf-8'), names)
@@ -632,7 +639,8 @@ class OpMoveView(APIView):
         if dst_dir.startswith(src_dir):
             for obj_name in names:
                 if dst_dir.startswith('/'.join([src_dir, obj_name])):
-                    return api_error('419', 'Can not move a dirctory to its subdir')
+                    return api_error(status.HTTP_409_CONFLICT,
+                                     'Can not move a dirctory to its subdir')
 
         for obj_name in names:
             new_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, obj_name)
@@ -647,7 +655,8 @@ class OpMoveView(APIView):
                                                      dst_repo_id, dst_dir, new_obj_name,
                                                      request.user.username)
             except SearpcError, e:
-                return api_error('419', "SearpcError:" + e.msg)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "SearpcError:" + e.msg)
 
         return reloaddir_if_neccessary (request, dst_repo_id, dst_dir)
 
@@ -664,7 +673,7 @@ class OpMkdirView(APIView):
             return resp
         path = request.GET.get('p')
         if not path or path[0] != '/':
-            return api_error('400')
+            return api_error(status.HTTP_400_BAD_REQUEST, "Path is missing.")
 
         parent_dir = os.path.dirname(path)
         new_dir_name = os.path.basename(path)
@@ -674,7 +683,8 @@ class OpMkdirView(APIView):
             seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name,
                                            request.user.username)
         except SearpcError, e:
-            return api_error('421', e.msg)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             'Failed to make directory.')
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
         
@@ -693,10 +703,11 @@ class OpUploadView(APIView):
                                                       'upload',
                                                       request.user.username)
         else:
-            return api_error('403')
+            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
 
         if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
-            return api_error('413')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Above quota')
 
         upload_url = gen_file_upload_url(token, 'upload')
         return Response(upload_url)
@@ -720,12 +731,376 @@ def api_starred_files(request):
     
 class StarredFileView(APIView):
     """
-    Get starred files list.
+    Support uniform interface for starred file operation,
+    including add/delete/list starred files.
     """
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
+        # list starred files
         return api_starred_files(request)
 
+    def post(self, request, format=None):
+        # add starred file
+        repo_id = request.POST.get('repo_id', '')
+        path = unquote(request.POST.get('p', ''))
+
+        if not (repo_id and path):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Repo_id or path is missing.')
+
+        if path[-1] == '/':     # Should not contain '/' at the end of path.
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid file path.')
+
+        star_file(request.user.username, repo_id, path, is_dir=False,
+                  org_id=-1)
+
+        resp = Response('success', status=status.HTTP_201_CREATED)
+        resp['Location'] = reverse('starredfiles')
+
+        return resp
+
+    def delete(self, request, format=None):
+        # remove starred file
+        repo_id = request.GET.get('repo_id', '')
+        path = request.GET.get('p', '')
+        if not (repo_id and path):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Repo_id or path is missing.')
+
+        if path[-1] == '/':     # Should not contain '/' at the end of path.
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid file path.')
+        
+        unstar_file(request.user.username, repo_id, path)
+        return Response('success', status=status.HTTP_200_OK)
+        
+class FileView(APIView):
+    """
+    Support uniform interface for file related operations,
+    including create/delete/rename/view, etc.
+    """
+
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
+
+    def get(self, request, repo_id, format=None):
+        # view file
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        path = request.GET.get('p', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        return get_repo_file(request, repo_id, file_id, file_name, 'download')
+
+    def post(self, request, repo_id, format=None):
+        # rename or move file
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+
+        path = request.GET.get('p', '')
+        if not path or path[0] != '/':
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Path is missing or invalid.')
+
+        operation = request.POST.get('operation', '')
+        if operation.lower() == 'rename':
+            newname = request.POST.get('newname', '')
+            if not newname:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'Newname is missing')
+            newname = unquote(newname).decode('utf-8')
+            if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
+            
+            parent_dir = os.path.dirname(path)
+            parent_dir_utf8 = parent_dir.decode('utf-8')
+            oldname = os.path.basename(path)
+            oldname_utf8 = oldname.decode('utf-8')
+
+            if oldname == newname:
+                return api_error(status.HTTP_409_CONFLICT,
+                                 'The new name is the same to the old')
+
+            newname = check_filename_with_rename(repo_id, parent_dir, newname)
+            try:
+                seafserv_threaded_rpc.rename_file (repo_id, parent_dir_utf8,
+                                                   oldname_utf8, newname,
+                                                   request.user.username)
+            except SearpcError,e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 "Failed to rename file.")
+
+            if request.GET.get('reloaddir', '').lower() == 'true':
+                reloaddir(request, repo_id, parent_dir)
+            else:
+                resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
+                uri = reverse('FileView', args=[repo_id], request=request)
+                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname)
+                return resp
+
+        elif operation.lower() == 'move':
+            src_dir = os.path.dirname(path)
+            src_dir_utf8 = src_dir.decode('utf-8')
+            src_repo_id = repo_id
+            dst_repo_id = request.POST.get('dst_repo', '')
+            dst_dir = unquote(request.POST.get('dst_dir', ''))
+            if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
+                dst_dir += '/'  
+            dst_dir_utf8 = dst_dir.decode('utf-8')
+            # obj_names   = request.POST.get('obj_names', '')
+
+            if not (dst_repo_id and dst_dir):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Missing arguments.')
+
+            if src_repo_id == dst_repo_id and src_dir == dst_dir:
+                return Response('success', status=status.HTTP_200_OK)
+
+            # names = obj_names.split(':')
+            # names = map(lambda x: unquote(x).decode('utf-8'), names)
+
+            # if dst_dir.startswith(src_dir):
+            #     for obj_name in names:
+            #         if dst_dir.startswith('/'.join([src_dir, obj_name])):
+            #             return api_error(status.HTTP_409_CONFLICT,
+            #                              'Can not move a dirctory to its subdir')
+            
+            filename = os.path.basename(path)
+            filename_utf8 = filename.decode('utf-8')
+            new_filename = check_filename_with_rename(dst_repo_id, dst_dir,
+                                                      filename)
+            new_filename_utf8 = new_filename.decode('utf-8')
+
+            try:
+                seafserv_threaded_rpc.move_file(src_repo_id, src_dir_utf8,
+                                                filename_utf8, dst_repo_id,
+                                                dst_dir_utf8, new_filename_utf8,
+                                                request.user.username)
+            except SearpcError, e:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "SearpcError:" + e.msg)
+
+            if request.GET.get('reloaddir', '').lower() == 'true':
+                reloaddir(request, dst_repo_id, dst_dir)
+            else:
+                resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
+                uri = reverse('FileView', args=[repo_id], request=request)
+                resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
+                return resp
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             "Operation can only be rename or move.")
+
+    def put(self, request, repo_id, format=None):
+        # update file
+        # TODO
+        pass
+
+    def delete(self, request, repo_id, format=None):
+        # delete file
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        path = request.GET.get('p', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        parent_dir = os.path.dirname(path)
+        parent_dir_utf8 = os.path.dirname(path).decode('utf-8')
+        file_name_utf8 = os.path.basename(path).decode('utf-8')
+
+        try:
+            seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
+                                           file_name_utf8,
+                                           request.user.username)
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to delete file.")
+
+        return reloaddir_if_neccessary(request, repo_id, parent_dir)
+
+class FileSharedLinkView(APIView):
+    """
+    Support uniform interface for file shared link.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    
+    def put(self, request, repo_id, format=None):
+        # generate file shared link
+        path = unquote(request.DATA.get('p', ''))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        if path[-1] == '/':
+            path = path[:-1]
+        l = FileShare.objects.filter(repo_id=repo_id).filter(
+            username=request.user.username).filter(path=path)
+        if len(l) > 0:
+            fileshare = l[0]
+            token = fileshare.token
+        else:
+            token = gen_token(max_length=10)
+
+            fs = FileShare()
+            fs.username = request.user.username
+            fs.repo_id = repo_id
+            fs.path = path
+            fs.token = token
+
+            try:
+                fs.save()
+            except IntegrityError, e:
+                return api_err(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
+
+        http_or_https = request.is_secure() and 'https' or 'http'
+        domain = RequestSite(request).domain
+        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
+                                               settings.SITE_ROOT, token)
+        resp = Response(status=status.HTTP_201_CREATED)
+        resp['Location'] = file_shared_link
+        return resp
+
+class DirView(APIView):
+    """
+    Support uniform interface for directory operations, including
+    create/delete/rename/list, etc.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
+
+    def get(self, request, repo_id, format=None):
+        # list dir
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        if not current_commit:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             'Failed to get current commit of repo %s.' % repo_id)
+
+        path = request.GET.get('p', '/')
+        if path[-1] != '/':
+            path = path + '/'
+
+        dir_id = None
+        try:
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get dir id by path.")
+
+        if not dir_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+
+        old_oid = request.GET.get('oid', None)
+        if old_oid and old_oid == dir_id :
+            response = HttpResponse(json.dumps("uptodate"), status=200,
+                                    content_type=json_content_type)
+            response["oid"] = dir_id
+            return response
+        else:
+            return get_dir_entrys_by_id(request, dir_id)
+
+    def post(self, request, repo_id, format=None):
+        # new dir
+        resp = check_repo_access_permission(request, get_repo(repo_id))
+        if resp:
+            return resp
+        path = request.GET.get('p', '')
+        if not path or path[0] != '/':
+            return api_error(status.HTTP_400_BAD_REQUEST, "Path is missing.")
+
+        if path == '/':         # Can not make root dir.
+            return api_error(status.HTTP_400_BAD_REQUEST, "Path is invalid.")
+
+        if path[-1] == '/':     # Cut out last '/' if possible.
+            path = path[:-1]
+
+        operation = request.POST.get('operation', '')
+        if operation.lower() == 'mkdir':
+            parent_dir = os.path.dirname(path)
+            parent_dir = parent_dir.decode('utf-8')
+            new_dir_name = os.path.basename(path)
+            new_dir_name = check_filename_with_rename(repo_id, parent_dir,
+                                                      new_dir_name)
+            new_dir_name_utf8 = new_dir_name.decode('utf-8')
+
+            try:
+                seafserv_threaded_rpc.post_dir(repo_id, parent_dir,
+                                               new_dir_name,
+                                               request.user.username)
+            except SearpcError, e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 'Failed to make directory.')
+
+            if request.GET.get('reloaddir', '').lower() == 'true':
+                reloaddir(request, repo_id, parent_dir)
+            else:
+                resp = Response('success', status=status.HTTP_201_CREATED)
+                uri = reverse('DirView', args=[repo_id], request=request)
+                resp['Location'] = uri + '?p=' + quote(parent_dir) + \
+                    quote(new_dir_name_utf8)
+                return resp
+        # elif operation.lower() == 'rename':
+        #     pass
+        # elif operation.lower() == 'move':
+        #     pass
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             "Operation not supported.")
+        
+    def delete(self, request, repo_id, format=None):
+        # delete dir or file
+        repo = get_repo(repo_id)
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        path = request.GET.get('p', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        if path == '/':         # Can not delete root path.
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is invalid.')
+
+        if path[-1] == '/':     # Cut out last '/' if possible.
+            path = path[:-1]
+            
+        parent_dir = os.path.dirname(path)
+        parent_dir_utf8 = os.path.dirname(path).decode('utf-8')
+        file_name_utf8 = os.path.basename(path).decode('utf-8')
+
+        try:
+            seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
+                                           file_name_utf8,
+                                           request.user.username)
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to delete file.")
+
+        return reloaddir_if_neccessary(request, repo_id, parent_dir)
+        
