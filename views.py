@@ -1453,8 +1453,8 @@ def repo_file_get(raw_path):
 
 def update_file_after_edit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
-    def error_json(error_msg=_(u'Internal Error')):
-        return HttpResponse(json.dumps({'error': error_msg}),
+    def error_json(error_msg=_(u'Internal Error'), todo=None):
+        return HttpResponse(json.dumps({'error': error_msg, 'todo': todo}),
                             status=400,
                             content_type=content_type)
     def ok_json():
@@ -1462,17 +1462,22 @@ def update_file_after_edit(request, repo_id):
                             content_type=content_type)
 
     if get_user_permission(request, repo_id) != 'rw':
-        return error_json('Permission denied')
+        return error_json(_(u'Permission denied'))
         
+    repo = get_repo(repo_id)
+    if not repo:
+        return error_json(_(u'The library does not exist.'))
+    if repo.encrypted:
+        repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+        if not repo.password_set:
+            return error_json(_(u'The library is encrypted.'), 'decrypt')
+
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
     path = request.GET.get('p')
-    if content is None or not path:
+    if content is None or not path or encoding not in ["gbk", "utf-8"]:
         return error_json(_(u'Invalid arguments'))
     head_id = request.GET.get('head', None)
-
-    if encoding not in ["gbk", "utf-8"]:
-        return error_json(_(u'Invalid arguments'))
 
     content = content.encode(encoding)
 
@@ -1498,7 +1503,7 @@ def update_file_after_edit(request, repo_id):
     parent_dir = os.path.dirname(path).encode('utf-8')
     filename = os.path.basename(path).encode('utf-8')
     try:
-        seafserv_threaded_rpc.put_file (repo_id, tmpfile, parent_dir,
+        seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
                                  filename, request.user.username, head_id)
         remove_tmp_file()
         return ok_json()
@@ -1546,11 +1551,13 @@ def repo_file_edit(request, repo_id):
 
     filetype, fileext = valid_previewed_file(filename)
 
-    # get file content
-    raw_path = gen_file_get_url(token, filename)
-    err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf': 
+        raw_path = gen_file_get_url(token, filename)
+        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+    else:
+        err = _(u'Edit online is not offered for this type of file.')
 
-    return render_to_response('repo_edit_file.html', {
+    return render_to_response('file_edit.html', {
         'repo':repo,
         'u_filename':u_filename,
         'path':path,

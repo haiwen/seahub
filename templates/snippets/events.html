@@ -4,11 +4,11 @@
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
 <button id="events-more" class="hide">{% trans 'More' %}</button>
 <p id="events-error" class="error hide"></p>
-<form id="repo-set-password-form" class="hide">
-    <h3>{% trans 'Library' %} <span class="repo-name"></span> {% trans 'is encrypted' %}</h3>
+<form id="repo-decrypt-form" class="simple-input-popup hide">
+    <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />
-    <label>{% trans 'Password：' %}</label>
-    <input type="password" name="password" maxlength="64" />
+    <label>{% trans 'Password：' %}</label><br />
+    <input type="password" name="password" maxlength="15" class="long-input" />
     <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
     <p class="error"></p>
     <input type="submit" class="submit" value="{% trans 'Submit' %}" />

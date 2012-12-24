@@ -30,9 +30,9 @@ function reqEvents(start) {
                 if ($(this).data('passwordset')) {
                     list_commit_change($(this));
                 } else {
-                    $('#repo-set-password-form input[name="repo_id"]').val($(this).data('repoid'));
-                    $('#repo-set-password-form .repo-name').html($(this).data('reponame'));
-                    $('#repo-set-password-form').data('cur_event', $(this)).modal({appendTo:'#main'});
+                    $('#repo-decrypt-form input[name="repo_id"]').val($(this).data('repoid'));
+                    $('#repo-decrypt-form .op-target').html($(this).data('reponame'));
+                    $('#repo-decrypt-form').data('cur_event', $(this)).modal({appendTo:'#main'});
                 }
                 return false;
             });
@@ -60,14 +60,14 @@ $('#events-more').click(function() {
 
 {% include 'snippets/list_commit_detail.html' %}
 
-$('#repo-set-password-form .submit').click(function() {
-    var input_password = $('#repo-set-password-form input[name="password"]');
-    var repo_id = $('#repo-set-password-form input[name="repo_id"]').val();
+$('#repo-decrypt-form .submit').click(function() {
+    var input_password = $('#repo-decrypt-form input[name="password"]');
+    var repo_id = $('#repo-decrypt-form input[name="repo_id"]').val();
     var password = input_password.val();
     if (!password) {
-        apply_form_error('repo-set-password-form', '{% trans "Password is required." %}'); 
+        apply_form_error('repo-decrypt-form', '{% trans "Password is required." %}'); 
     } else {
-        apply_form_error('repo-set-password-form', '');
+        apply_form_error('repo-decrypt-form', '');
         $.ajax({
             url: '{% url repo_set_password %}',
             type: 'POST',
@@ -83,14 +83,14 @@ $('#repo-set-password-form .submit').click(function() {
                 if (data['success']) {
                     $.modal.close();
                     $('a.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
-                    list_commit_change($('#repo-set-password-form').data('cur_event'));
+                    list_commit_change($('#repo-decrypt-form').data('cur_event'));
                 } else {
                     input_password.val('');
-                    apply_form_error('repo-set-password-form', data['error']);
+                    apply_form_error('repo-decrypt-form', data['error']);
                 }   
             },  
             error: function(data, textStatus, jqXHR) {
-                apply_form_error('repo-set-password-form', '{% trans "Unknown error." %}'); 
+                apply_form_error('repo-decrypt-form', '{% trans "Unknown error." %}'); 
             }   
         }); 
     }   

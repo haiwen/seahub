@@ -40,10 +40,17 @@
     background:#f4f4f4;
     border-top:1px solid #ededed;
 }
-#sf, #md-view {
+#sf, #md-view, #edit-tip {
     box-shadow:0 0 6px #ccc;
     min-height:620px;
     border:1px solid #ccc;
+    margin:0 auto;
+}
+#edit-tip {
+    min-height:200px;
+    padding:10px;
+    width:928px;
+    background:#fff;
     margin:0 auto;
 }
 .fixed-path-op {
@@ -88,27 +95,49 @@
          </div>
     </div>
     <div id="file-edit">
-        {% ifnotequal file_content None %}
-        {% ifnotequal filetype 'Sf' %}
-        <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
+        {% if err %}
+            <div id="edit-tip" class="article">
+                <p class="error">{{ err }}</p>
+            </div>
         {% else %}
-        <div id="sf" class="article">{{ file_content|safe }}</div>
-        {% endifnotequal %}
-        {% endifnotequal %}
-        {% if filetype == 'Markdown' %}
-        <div id="md-view" class="article hide"></div>
+            {% if file_content != None %}
+                {% if filetype == 'Text' or filetype == 'Markdown' %}
+                    <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
+                {% endif %}
+
+                {% if filetype == 'Sf' %}
+                    <div id="sf" class="article">{{ file_content|safe }}</div>
+                {% endif %}
+            {% endif %}
+
+            {% if filetype == 'Markdown' %}
+            <div id="md-view" class="article hide"></div>{% comment %} for preview {%endcomment%}
+            {% endif %}
         {% endif %}
     </div>
+
+    {% if not err and file_content != None and repo.encrypted %}
+    <form id="repo-decrypt-form" class="simple-input-popup hide">
+        <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
+        <label>{% trans 'Password：' %}</label><br />
+        <input type="password" name="password" maxlength="15" class="long-input" />
+        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+        <p class="error"></p>
+        <input type="submit" class="submit" value="{% trans 'Submit' %}" />
+        <button class="simplemodal-close">{% trans 'Cancel' %}</button>
+    </form>
+    {% endif %}
 {% endblock %}
 
 {% block extra_script %}
+{% if not err and file_content != None %}
 {% if filetype == 'Sf' %}
 <script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/require.js"></script>
 <script type="text/javascript">
 //settings must be before aloha.js
 Aloha = window.Aloha || {}; 
 Aloha.settings = Aloha.settings || {}; 
-if ($('#lang-context').attr('data-lang') == 'zh-cn') {
+if ($('#lang-context').data('lang') == 'zh-cn') {
     Aloha.settings.locale = "zh-hans";
 }
 </script>
@@ -120,7 +149,6 @@ if ($('#lang-context').attr('data-lang') == 'zh-cn') {
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 {% endif %}
 <script type="text/javascript">
-{% ifnotequal file_content None %}
 $(window).scroll(function() {
     var offset = $('#edit-hd').offset();
     if ($(window).scrollTop() > offset.top + $('#edit-hd').height()) {
@@ -177,8 +205,10 @@ $('#preview-btn').click(function() {
 {% endif %}
 
 $('#file-edit-submit').click(function () {
-    var submit_btn = $(this);
-    disable(submit_btn);
+    disable($(this));
+    editSubmit();
+});
+function editSubmit() {
     {% if filetype == 'Sf' %}
     var content = $('#sf').html();
     {% else %}
@@ -198,15 +228,51 @@ $('#file-edit-submit').click(function () {
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#op-after-edit').prepend('<p class="error">' + jsonVal['error'] + '</p>');
-            enable(submit_btn);
+            feedback(jsonVal['error'], 'error');
+            if (jsonVal['todo'] == 'decrypt') {
+                $('#repo-decrypt-form').modal();
+                $('#simplemodal-container').css({'height':'auto'});
+            }
+            enable($('#file-edit-submit'));
         }
     });
+}
+$('#repo-decrypt-form').submit(function() {
+    var pwd_input = $(this).find('input[name="password"]');
+    var pwd = $.trim(pwd_input.val());
+    var err = $(this).find('.error');
+    if (!pwd) {
+        err.html('{% trans "Password is required." %}');
+    } else if (pwd.length < 3 || pwd.length > 15) {
+        err.html('{% trans "Password should be 3 to 15 characters." %}');
+    } else {
+        $.ajax({
+            url: '{% url repo_set_password %}',
+            type: 'POST',
+            dataType: 'json',
+            cache: 'false',
+            beforeSend: prepareCSRFToken,
+            data: {
+                repo_id: '{{repo.id}}',
+                password: pwd,
+                username: '{{request.user.username}}'
+            },  
+            success: function(data) {
+                if (data['success']) {
+                    $.modal.close();
+                    editSubmit();
+                } else {
+                    pwd_input.val('');
+                    err.html(data['error']);
+                }   
+            },  
+            error: function(data, textStatus, jqXHR) {
+                err.html('{% trans "Unknown error." %}'); 
+            }   
+        }); 
+    }
+    return false;
 });
-{% endifnotequal %}
-
-{% if err %}
-$('#file-edit').html('<div id="sf" class="article"><p class="error">{{ err }}</p></div>');
 {% endif %}
 </script>
 {% endblock %}
