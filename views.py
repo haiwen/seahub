@@ -1197,7 +1197,7 @@ def repo_view_file(request, repo_id):
         obj_id = request.GET.get('obj_id', '')
     else:
         try:
-            obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
+            obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
         except:
             obj_id = None
 
@@ -1529,7 +1529,7 @@ def repo_file_edit(request, repo_id):
     head_id = repo.head_cmmt_id
 
     try:
-        obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
+        obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
     except:
         obj_id = None
     if not obj_id:
@@ -2388,7 +2388,7 @@ def view_shared_file(request, token):
     quote_filename = urllib2.quote(filename.encode('utf-8'))
 
     try:
-        obj_id = seafserv_threaded_rpc.get_file_by_path(repo_id, path)
+        obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
     except:
         obj_id = None
 

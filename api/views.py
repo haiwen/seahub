@@ -558,7 +558,7 @@ class RepoFilePathView(ResponseMixin, View):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
             return api_error(request, '412', "SearpcError:" + e.msg)

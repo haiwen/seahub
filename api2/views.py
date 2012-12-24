@@ -254,7 +254,7 @@ class Repo(APIView):
             "owner":owner,
             "name":repo.name,
             "desc":repo.desc,
-            "mtime":repo.lastest_modify,
+            "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
             "root":root_id,
@@ -459,7 +459,7 @@ class RepoFilepath(APIView):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -799,7 +799,7 @@ class FileView(APIView):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_by_path(repo_id,
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -808,6 +808,7 @@ class FileView(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
+        print file_id
         return get_repo_file(request, repo_id, file_id, file_name, 'download')
 
     def post(self, request, repo_id, format=None):
@@ -996,18 +997,12 @@ class DirView(APIView):
         if resp:
             return resp
 
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        if not current_commit:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             'Failed to get current commit of repo %s.' % repo_id)
-
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
 
-        dir_id = None
         try:
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+            dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo_id,
                                                              path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,

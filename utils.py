@@ -543,7 +543,7 @@ def get_starred_files(email, org_id=-1):
         size = -1;
         if sfile.path != "/":
             try:
-                file_id = seafserv_threaded_rpc.get_file_by_path(sfile.repo_id, sfile.path)
+                file_id = seafserv_threaded_rpc.get_file_id_by_path(sfile.repo_id, sfile.path)
                 size = seafserv_threaded_rpc.get_file_size(file_id)
             except SearpcError:
                 continue
