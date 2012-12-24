@@ -1,5 +1,5 @@
 {% extends "myhome_base.html" %}
-{% load avatar_tags i18n %}
+{% load avatar_tags i18n seahub_tags %}
 
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
@@ -31,7 +31,7 @@
         <td>{{ contact.note }}</td>
         <td>
             <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
-            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|quote}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}

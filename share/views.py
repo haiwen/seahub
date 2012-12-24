@@ -146,7 +146,7 @@ def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')
     group_id = request.GET.get('gid', '')
     from_email = request.GET.get('from', '')
-    
+
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
     if not group_id:

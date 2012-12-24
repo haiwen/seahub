@@ -80,7 +80,7 @@
         <td>
             <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
             {% if repo.share_type == 'personal' %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user }}&to={{ request.user }}" data-target="{{repo.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
+            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|quote }}&to={{ request.user.username|quote }}" data-target="{{repo.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
             {% endif %}
         </td>
     </tr>

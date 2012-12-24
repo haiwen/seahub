@@ -12,7 +12,7 @@
         <a href="{% url 'organizations.views.org_groups' org.url_prefix %}" {% block nav_group_class %}{% endblock %}>{% trans "Groups" %}</a>
     </li>
     <li>
-        <a href="{% url 'organizations.views.org_shareadmin' org.url_prefix %}" {% block nav_shareadmin_class %}{% endblock %}>{% trans "Share" %}</a>
+        <a href="{% url 'organizations.views.org_shareadmin' org.url_prefix %}" {% block nav_share_class %}{% endblock %}>{% trans "Share" %}</a>
     </li>
     <li>
         <a href="{% url 'organizations.views.org_public' org.url_prefix %}" {% block nav_org_class %}{% endblock %}>{% trans "Public Library" %}</a>

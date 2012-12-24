@@ -256,3 +256,8 @@ def translate_permission(value):
         return _(u'Read-Only')
     else:
         return ''
+
+@register.filter(name='quote')
+def quote(value):
+    from urllib2 import quote
+    return quote(value)
