@@ -10,7 +10,7 @@ SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
 
 class IsRepoWritable(BasePermission):
     """
-    Allows access only for users who has write permission to the repo.
+    Allows access only for user who has write permission to the repo.
     """
 
     def has_permission(self, request, view, obj=None):
@@ -23,3 +23,14 @@ class IsRepoWritable(BasePermission):
         if user and check_permission(repo_id, user) == 'rw':
             return True
         return False
+    
+class IsRepoAccessible(BasePermission):
+    """
+    Check whether user has Read or Write permission to a repo.
+    """
+    def has_permission(self, request, view, obj=None):
+        repo_id = view.kwargs.get('repo_id', '')
+        user = request.user.username if request.user else ''
+
+        return True if check_permission(repo_id, user) else False
+

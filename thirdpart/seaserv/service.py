@@ -558,9 +558,7 @@ def list_inner_pub_repos(username):
         shared_repos = []
 
     for repo in shared_repos:
-        perm = seafserv_threaded_rpc.check_permission(repo.props.repo_id,
-                                                      username)
-        repo.user_perm = perm
+        repo.user_perm = check_permission(repo.props.repo_id, username)
 
     shared_repos.sort(lambda x, y: cmp(y.props.last_modified, x.props.last_modified))
     return shared_repos
@@ -588,9 +586,7 @@ def list_org_inner_pub_repos(org_id, username, start=None, limit=None):
         shared_repos = []
 
     for repo in shared_repos:
-        perm = seafserv_threaded_rpc.check_permission(repo.props.repo_id,
-                                                      username)
-        repo.user_perm = perm
+        repo.user_perm = check_permission(repo.props.repo_id, username)
 
     # sort repos by last modify time
     shared_repos.sort(lambda x, y: cmp(y.props.last_modified, x.props.last_modified))
@@ -600,12 +596,12 @@ def list_org_inner_pub_repos(org_id, username, start=None, limit=None):
 def check_permission(repo_id, user):
     """
     Check whether user has permission to access repo.
-    Return true if user has permission otherwise false.
+    Return values can be 'rw' or 'r' or None.
     """
     try:
         ret = seafserv_threaded_rpc.check_permission(repo_id, user)
     except SearpcError:
-        ret = ""
+        ret = None
     return ret
 
 def is_personal_repo(repo_id):

@@ -17,7 +17,7 @@ from django.http import HttpResponse
 
 from models import Token
 from authentication import TokenAuthentication
-from permissions import IsRepoWritable
+from permissions import IsRepoWritable, IsRepoAccessible
 from serializers import AuthTokenSerializer
 from base.accounts import User
 from share.models import FileShare
@@ -99,7 +99,6 @@ class Account(APIView):
         info['email'] = email
         info['usage'] = seafserv_threaded_rpc.get_user_quota_usage(email)
         info['total'] = seafserv_threaded_rpc.get_user_quota(email)
-        info['feedback'] = settings.DEFAULT_FROM_EMAIL
         return Response(info)
     
 def calculate_repo_info(repo_list, username):
@@ -193,9 +192,6 @@ def can_access_repo(request, repo_id):
     return True
 
 def check_repo_access_permission(request, repo):
-    if not repo:
-        return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-
     if not can_access_repo(request, repo.id):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
@@ -219,22 +215,14 @@ def check_repo_access_permission(request, repo):
 
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-
-    def head(self, request, repo_id, format=None):
-        # TODO
-        assert False
+    permission_classes = (IsAuthenticated, IsRepoAccessible, )
 
     def get(self, request, repo_id, format=None):
-        # check whether user can view repo
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
-        # if not can_access_repo(request, repo.id):
-        #     return api_error('403')
-
-        # check whether use is repo owner
+        # check whether user is repo owner
         if validate_owner(request, repo_id):
             owner = "self"
         else:
@@ -263,7 +251,11 @@ class Repo(APIView):
         return Response(repo_json)
 
     def post(self, request, repo_id, format=None):
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
         op = request.GET.get('op', 'setpassword')
@@ -274,22 +266,20 @@ class Repo(APIView):
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoAccessible, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
-        # TODO: check whether user can access this repo
-
         # generate download url for client
         ccnet_applet_root = get_ccnetapplet_root()
         relay_id = get_session_info().id
         addr, port = get_ccnet_server_addr_port ()
-        email = quote(request.user.username)
+        email = request.user.username
         token = get_repo_token_nonnull(repo_id, request.user.username)
-        quote_repo_name = quote(repo.name.encode('utf-8'))
+        repo_name = repo.name
         enc = 1 if repo.encrypted else ''
 
         info_json = {
@@ -300,10 +290,30 @@ class DownloadRepo(APIView):
             'email': email,
             'token': token,
             'repo_id': repo_id,
-            'repo_name': quote_repo_name,
+            'repo_name': repo_name,
             'encrypted': enc,
             }
         return Response(info_json)
+
+class UploadLinkView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if check_permission(repo_id, request.user.username) == 'rw':
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'upload',
+                                                      request.user.username)
+        else:
+            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
+
+        if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Above quota')
+
+        upload_url = gen_file_upload_url(token, 'upload')
+        return Response(upload_url)
     
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
@@ -348,6 +358,9 @@ class RepoDirents(APIView):
     
     def get(self, request, repo_id):
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -391,6 +404,9 @@ class RepoDirs(APIView):
 
     def get(self, request, repo_id, dir_id, format=None):
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -449,6 +465,9 @@ class RepoFilepath(APIView):
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -474,6 +493,9 @@ class RepoFilepath(APIView):
 
     def post(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -501,6 +523,9 @@ class RepoFiles(APIView):
 
     def get(self, request, repo_id, file_id, format=None):
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -545,7 +570,11 @@ class OpDeleteView(APIView):
     permission_classes = (IsAuthenticated, IsRepoWritable, )    
 
     def post(self, request, repo_id, format=None):
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
 
@@ -577,7 +606,11 @@ class OpRenameView(APIView):
     permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def post(self, request, repo_id, format=None):
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
 
@@ -668,7 +701,11 @@ class OpMkdirView(APIView):
     permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def post(self, request, repo_id, format=None):
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
         path = request.GET.get('p')
@@ -788,6 +825,9 @@ class FileView(APIView):
     def get(self, request, repo_id, format=None):
         # view file
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -813,7 +853,11 @@ class FileView(APIView):
 
     def post(self, request, repo_id, format=None):
         # rename or move file
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
 
@@ -918,6 +962,9 @@ class FileView(APIView):
     def delete(self, request, repo_id, format=None):
         # delete file
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -993,6 +1040,9 @@ class DirView(APIView):
     def get(self, request, repo_id, format=None):
         # list dir
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -1022,7 +1072,11 @@ class DirView(APIView):
 
     def post(self, request, repo_id, format=None):
         # new dir
-        resp = check_repo_access_permission(request, get_repo(repo_id))
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
+        resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
         path = request.GET.get('p', '')
@@ -1071,6 +1125,9 @@ class DirView(APIView):
     def delete(self, request, repo_id, format=None):
         # delete dir or file
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp

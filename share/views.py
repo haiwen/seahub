@@ -108,15 +108,6 @@ def share_repo(request):
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
-            # Record share info to db.
-            try:
-                seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
-                                                permission)
-            except SearpcError, e:
-                msg = _(u'Failed to share to %s .') % to_email
-                messages.add_message(request, messages.ERROR, msg)
-                continue
-            
             if not is_registered_user(to_email):
                 # Generate shared link and send mail if user has not registered.
                 # kwargs = {'repo_id': repo_id,
@@ -129,6 +120,15 @@ def share_repo(request):
                 messages.add_message(request, messages.ERROR, msg)
                 continue
             else:
+                # Record share info to db.
+                try:
+                    seafserv_threaded_rpc.add_share(repo_id, from_email, to_email,
+                                                    permission)
+                except SearpcError, e:
+                    msg = _(u'Failed to share to %s .') % to_email
+                    messages.add_message(request, messages.ERROR, msg)
+                    continue
+
                 msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
                         {'email':to_email, 'share':reverse('share_admin')}
                 messages.add_message(request, messages.INFO, msg)
