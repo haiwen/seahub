@@ -191,6 +191,23 @@ def can_access_repo(request, repo_id):
         return False
     return True
 
+def set_repo_password(request, repo, password):
+    assert password, 'password must not be none'
+
+    try:
+        seafserv_threaded_rpc.set_passwd(repo.id, request.user.username, password)
+    except SearpcError, e:
+        if e.msg == 'Bad arguments':
+            return api_error(request, '400')
+        elif e.msg == 'Repo is not encrypted':
+            return api_error(request, '406')
+        elif e.msg == 'Incorrect password':
+            return api_error(request, '402')
+        elif e.msg == 'Internal server error':
+            return api_error(request, '500')
+        else:
+            return api_error(request, '417', "SearpcError:" + e.msg)
+
 def check_repo_access_permission(request, repo):
     if not can_access_repo(request, repo.id):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
