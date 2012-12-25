@@ -1243,7 +1243,7 @@ def repo_view_file(request, repo_id):
     file_content = ''
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+        err, file_content, encoding = repo_file_get(raw_path)
     elif filetype == 'Document' or filetype == 'PDF':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
 
@@ -1413,7 +1413,6 @@ def repo_file_get(raw_path):
     err = ''
     file_content = ''
     encoding = ''
-    newline_mode = ''
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
@@ -1442,23 +1441,13 @@ def repo_file_get(raw_path):
 
         file_content = u_content
 
-    # detect newline mode for ace editor
-    if '\r\n' in u_content:
-        newline_mode = 'windows'
-    elif '\n' in u_content:
-        newline_mode = 'unix'
-    else:
-        newline_mode = 'windows'
-    return err, file_content, encoding, newline_mode
+    return err, file_content, encoding
 
-def update_file_after_edit(request, repo_id):
+def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
-    def error_json(error_msg=_(u'Internal Error'), todo=None):
-        return HttpResponse(json.dumps({'error': error_msg, 'todo': todo}),
+    def error_json(error_msg=_(u'Internal Error'), op=None):
+        return HttpResponse(json.dumps({'error': error_msg, 'op': op}),
                             status=400,
-                            content_type=content_type)
-    def ok_json():
-        return HttpResponse(json.dumps({'status': 'ok'}),
                             content_type=content_type)
 
     if get_user_permission(request, repo_id) != 'rw':
@@ -1506,7 +1495,7 @@ def update_file_after_edit(request, repo_id):
         seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
                                  filename, request.user.username, head_id)
         remove_tmp_file()
-        return ok_json()
+        return HttpResponse(json.dumps({'status': 'ok'}), content_type=content_type)
     except SearpcError, e:
         remove_tmp_file()
         return error_json(str(e))
@@ -1514,9 +1503,9 @@ def update_file_after_edit(request, repo_id):
 
 @login_required
 @ctx_switch_required
-def repo_file_edit(request, repo_id):
+def file_edit(request, repo_id):
     if request.method == 'POST':
-        return update_file_after_edit(request, repo_id)
+        return file_edit_submit(request, repo_id)
 
     if get_user_permission(request, repo_id) != 'rw':
         return render_permission_error(request, _(u'Unable to edit file'))
@@ -1538,7 +1527,7 @@ def repo_file_edit(request, repo_id):
     except:
         obj_id = None
     if not obj_id:
-        return render_error(request, _(u'File not exists'))
+        return render_error(request, _(u'The file does not exist.'))
 
     if access_to_repo(request, repo_id, ''):
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
@@ -1551,9 +1540,18 @@ def repo_file_edit(request, repo_id):
 
     filetype, fileext = valid_previewed_file(filename)
 
+    op = None
+    err = ''
+    file_content = None
+    encoding = ''
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf': 
-        raw_path = gen_file_get_url(token, filename)
-        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+        if repo.encrypted:
+            repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if not repo.password_set:
+                op = 'decrypt'
+        if not op:
+            raw_path = gen_file_get_url(token, filename)
+            err, file_content, encoding = repo_file_get(raw_path)
     else:
         err = _(u'Edit online is not offered for this type of file.')
 
@@ -1564,10 +1562,10 @@ def repo_file_edit(request, repo_id):
         'zipped':zipped,
         'filetype':filetype,
         'fileext':fileext,
+        'op':op,
         'err':err,
         'file_content':file_content,
         'encoding': encoding,
-        'newline_mode': newline_mode,
         'head_id': head_id,
     }, context_instance=RequestContext(request))
 
@@ -2430,7 +2428,7 @@ def view_shared_file(request, token):
     file_content = ''
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+        err, file_content, encoding = repo_file_get(raw_path)
     elif filetype == 'Document' or filetype == 'PDF':
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
     
@@ -2540,7 +2538,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
         raw_path = gen_file_get_url(token, urllib2.quote(filename))
 
         try:
-            err, file_content, encoding, newline_mode = repo_file_get(raw_path)
+            err, file_content, encoding = repo_file_get(raw_path)
         except Exception, e:
             return None, 'error when read file from httpserver: %s' % e
         return file_content, err

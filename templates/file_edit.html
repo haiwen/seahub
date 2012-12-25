@@ -103,20 +103,19 @@
             {% if file_content != None %}
                 {% if filetype == 'Text' or filetype == 'Markdown' %}
                     <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
+                    {% if filetype == 'Markdown' %}
+                    <div id="md-view" class="article hide"></div>{% comment %} for preview {%endcomment%}
+                    {% endif %}
                 {% endif %}
 
                 {% if filetype == 'Sf' %}
                     <div id="sf" class="article">{{ file_content|safe }}</div>
                 {% endif %}
             {% endif %}
-
-            {% if filetype == 'Markdown' %}
-            <div id="md-view" class="article hide"></div>{% comment %} for preview {%endcomment%}
-            {% endif %}
         {% endif %}
     </div>
 
-    {% if not err and file_content != None and repo.encrypted %}
+    {% if not err and repo.encrypted %}
     <form id="repo-decrypt-form" class="simple-input-popup hide">
         <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label>{% trans 'Password：' %}</label><br />
@@ -144,11 +143,13 @@ if ($('#lang-context').data('lang') == 'zh-cn') {
 <script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/aloha.js" data-aloha-plugins="common/format, common/abbr, common/align, common/characterpicker, common/image, common/link, common/list, common/table, common/undo, common/ui"></script>
 {% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
-{% endif %}
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 {% endif %}
+{% endif %}
+{% endif %}
 <script type="text/javascript">
+{% if not err and file_content != None %}
 $(window).scroll(function() {
     var offset = $('#edit-hd').offset();
     if ($(window).scrollTop() > offset.top + $('#edit-hd').height()) {
@@ -229,7 +230,7 @@ function editSubmit() {
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
             feedback(jsonVal['error'], 'error');
-            if (jsonVal['todo'] == 'decrypt') {
+            if (jsonVal['op'] == 'decrypt') {
                 $('#repo-decrypt-form').modal();
                 $('#simplemodal-container').css({'height':'auto'});
             }
@@ -237,6 +238,13 @@ function editSubmit() {
         }
     });
 }
+{% endif %}
+
+{% if op == 'decrypt' %}
+$('#repo-decrypt-form').modal();
+$('#simplemodal-container').css({'height':'auto'});
+{% endif %}
+
 $('#repo-decrypt-form').submit(function() {
     var pwd_input = $(this).find('input[name="password"]');
     var pwd = $.trim(pwd_input.val());
@@ -260,7 +268,12 @@ $('#repo-decrypt-form').submit(function() {
             success: function(data) {
                 if (data['success']) {
                     $.modal.close();
+                    {% if file_content != None %}
                     editSubmit();
+                    {% endif %}
+                    {% if op == 'decrypt' %}
+                    location.reload(true);
+                    {% endif %}
                 } else {
                     pwd_input.val('');
                     err.html(data['error']);
@@ -273,6 +286,5 @@ $('#repo-decrypt-form').submit(function() {
     }
     return false;
 });
-{% endif %}
 </script>
 {% endblock %}

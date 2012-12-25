@@ -54,7 +54,7 @@ urlpatterns = patterns('',
     url(r'^repo/history/changes/(?P<repo_id>[^/]+)/$', repo_history_changes, name='repo_history_changes'),
     (r'^repo/remove/(?P<repo_id>[^/]+)/$', repo_remove),
     url(r'^repo/(?P<repo_id>[^/]+)/files/$', repo_view_file, name="repo_view_file"),
-    (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', repo_file_edit),
+    (r'^repo/(?P<repo_id>[^/]+)/file/edit/$', file_edit),
     url(r'^repo/(?P<repo_id>[^/]+)/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
 
     url(r'^f/(?P<token>[^/]+)/$', view_shared_file, name='view_shared_file'),
