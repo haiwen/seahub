@@ -52,9 +52,10 @@ class RepoCreateForm(forms.Form):
     """
     Form for creating repo and org repo.
     """
-    repo_name = forms.CharField(max_length=50, error_messages={
+    repo_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
+                                error_messages={
             'required': _(u'Name can\'t be empty'),
-            'max_length': _(u'Name is too long (maximum is 50 characters)')
+            'max_length': _(u'Name is too long (maximum is 255 characters)')
             })
     repo_desc = forms.CharField(max_length=100, error_messages={
             'required': _(u'Description can\'t be empty'),
@@ -112,7 +113,7 @@ class RepoNewFileForm(forms.Form):
     """
     repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
     parent_dir = forms.CharField(error_messages={'required': _('Parent dir is required')})
-    new_file_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+    new_file_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
                                     'max_length': _('File name is too long'),
                                     'required': _('File name can\'t be empty'),
@@ -136,7 +137,7 @@ class RepoRenameFileForm(forms.Form):
     repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
     parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
     oldname = forms.CharField(error_messages={'required': _("Oldname is required")})
-    newname = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+    newname = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
                                     'max_length': _('File name is too long'),
                                     'required': _('File name can\'t be empty'),
@@ -159,7 +160,7 @@ class RepoNewDirForm(forms.Form):
     """
     repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
     parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
-    new_dir_name = forms.CharField(max_length=settings.MAX_UPLOAD_FILE_NAME_LEN,
+    new_dir_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
                                     'max_length': _('Directory name is too long'),
                                     'required': _('Directory name can\'t be empty'),

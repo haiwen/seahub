@@ -225,7 +225,7 @@
         <label>{% trans "Directory Name" %}</label>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
-        <input type="text" name="new_dir_name" value="" class="long-input" /><br />
+        <input type="text" name="new_dir_name" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -241,7 +241,7 @@
         <label>{% trans "File Name" %}</label>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
-        <input type="text" name="new_file_name" value="" class="long-input" />
+        <input type="text" name="new_file_name" value="" class="long-input" maxlength="{{max_file_name}}"/>
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
@@ -274,7 +274,7 @@
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="hidden" name="oldname" value="" />
-        <input type="text" name="newname" value="" class="long-input" /><br />
+        <input type="text" name="newname" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>

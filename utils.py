@@ -20,7 +20,7 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user
+    list_org_repos_by_owner, get_org_groups_by_user, check_permission
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -236,7 +236,7 @@ def get_accessible_repos(request, repo):
         return False
 
     accessible_repos = []
-    for r in owned_repos + groups_repos:
+    for r in owned_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
             r.has_subdir = check_has_subdir(r)
             accessible_repos.append(r)
@@ -249,8 +249,15 @@ def get_accessible_repos(request, repo):
         r.desc = r.repo_desc
 
         if not has_repo(accessible_repos, r) and not r.encrypted:
-            r.has_subdir = check_has_subdir(r)
-            accessible_repos.append(r)
+            if check_permission(r.id, request.user.username) == 'rw':
+                r.has_subdir = check_has_subdir(r)
+                accessible_repos.append(r)
+
+    for r in groups_repos:
+        if not has_repo(accessiable_repos, r) and not r.encrypted :
+            if check_permission(r.id, request.user.username) == 'rw':
+                r.has_subdir = check_has_subdir(r)
+                accessible_repos.append(r)
 
     return accessible_repos
 

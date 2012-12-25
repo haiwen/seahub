@@ -1668,6 +1668,18 @@ def file_move(request):
             and dst_path and obj_name and obj_type and op):
         return render_error(request)
 
+    # check file path
+    if len(dst_path+obj_name) > settings.MAX_PATH:
+        messages.error(request, _('Destination path is too long.'))
+        url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
+        return HttpResponseRedirect(url)
+    
+    # check whether user has write permission to dest repo
+    if check_permission(dst_repo_id, request.user.username) != 'rw':
+        messages.error(request, _('You can not modify that library.'))
+        url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
+        return HttpResponseRedirect(url)
+        
     # do nothing when dst is the same as src
     if src_repo_id == dst_repo_id and src_path == dst_path:
         url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
@@ -1681,7 +1693,6 @@ def file_move(request):
                         % {'op': _(u"copy") if op == 'cp' else _(u"move"),
                            'src': src_dir,
                            'des': dst_path}
-            #return render_error(request, error_msg)
             messages.add_message(request, messages.ERROR, error_msg)
             url = reverse('repo', args=[src_repo_id]) + ('?p=%s' % urllib2.quote(src_path.encode('utf-8')))
             return HttpResponseRedirect(url)

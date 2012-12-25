@@ -164,14 +164,14 @@ CACHES = {
 }
 
 MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
-MAX_UPLOAD_FILE_NAME_LEN    = 256
+MAX_UPLOAD_FILE_NAME_LEN    = 255
+MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
+MAX_PATH 		    = 4096
 
 # Set to True when user will be activaed after registration,
 # and no email sending
 ACTIVATE_AFTER_REGISTRATION = True
-
-# In order to use email sending,
-# ACTIVATE_AFTER_REGISTRATION MUST set to False
+# In order to use email sending, `ACTIVATE_AFTER_REGISTRATION` must set to False
 REGISTRATION_SEND_MAIL = False
 
 # Seafile httpserver address and port

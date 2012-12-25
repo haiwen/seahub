@@ -2,7 +2,7 @@
 <form id="repo-create-form" action="" method="post" class="hide">
     <h3>{% trans "New Library"%}</h3>
     <label>{% trans "Name"%}</label><br/>
-    <input id="repo-name" type="text" name="repo_name" value="" /><br />
+    <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}"/><br />
     <label>{% trans "Description"%}</label><br/>
     <textarea id="repo-desc" name="repo_desc"></textarea>
     {% if create_shared_repo %}
