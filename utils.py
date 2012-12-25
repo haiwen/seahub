@@ -254,7 +254,7 @@ def get_accessible_repos(request, repo):
                 accessible_repos.append(r)
 
     for r in groups_repos:
-        if not has_repo(accessiable_repos, r) and not r.encrypted :
+        if not has_repo(accessible_repos, r) and not r.encrypted :
             if check_permission(r.id, request.user.username) == 'rw':
                 r.has_subdir = check_has_subdir(r)
                 accessible_repos.append(r)
