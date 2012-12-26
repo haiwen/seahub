@@ -676,9 +676,21 @@ textarea:-moz-placeholder {/* for FF */
 
 /* for separate pages */
 /*myhome*/
-.home-profile .avatar {
-    float:left;
-    margin:0 15px 0 9px;
+.home-profile .pic {
+    margin-left:9px;
+}
+.home-profile .txt {
+    width:135px;
+}
+.home-profile .edit {
+    font-weight:normal;
+    color:#999;
+    font-size:12px;
+    display:inline-block;
+    margin-top:5px;
+}
+.home-profile .edit:hover {
+    color:#333;
 }
 .mygroup {
     display:inline-block; /*to handle different height of items*/

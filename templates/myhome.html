@@ -8,12 +8,11 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Account" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
-        <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
-        {% if nickname %}
-        <p class="fleft">{{ nickname }}</p>
-        {% else %}
-        <p class="fleft">{% trans "No Nickname" %} <a href="{{ SITE_ROOT }}profile/"><img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit" %}" title="{% trans "Edit" %}" /></a></p>
-        {% endif %}
+        <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Edit" %}">{% avatar request.user 48 %}</a>
+        <div class="txt fright">
+            <p>{% if nickname %}{{ nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
+            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Edit" %}</a>
+        </div>
     </div>
 </div>
 

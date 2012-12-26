@@ -17,140 +17,136 @@
 </head>
 
 <body>
-<div id="wrapper">
-  {% block info_bar_message %}
-    {% if request.user.is_authenticated and request.cur_note %}
-    <div id="info-bar">
-      <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
-      <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
-    </div>
-    {% endif %}
-  {% endblock info_bar_message %}
+    <div id="wrapper">
+        {% block info_bar_message %}
+        {% if request.user.is_authenticated and request.cur_note %}
+        <div id="info-bar">
+            <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
+            <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
+        </div>
+        {% endif %}
+        {% endblock info_bar_message %}
 
-    <div id="top-bar">
-        <div class="top-bar-inner">
-            <div class="top-bar-con">
-                <div class="manage fleft">
-                {% if request.user.is_authenticated %}
-                    {% if cloud_mode %}
-                    <a href="#" id="account-context" data="no-popup">
-                        {% if org %} {{ org.org_name }} {% else %} {% trans "Personal" %} {% endif %}
-                        <span class="tri-bg tri-down-bg"></span>
-                    </a>
-                    <ul class="hide" id="account-context-selector">
-                        <li><a href="{% url 'myhome' %}">{% trans "Personal" %}</a></li>
-                        {% for org in request.user.orgs %}
-                        <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
-                        {% endfor %}
-                        <li><a href="{% url 'create_org' %}">{% trans "New Organization" %}</a></li>
-                    </ul>
-                    {% endif %}
-                {% endif %}
+        <div id="top-bar">
+            <div class="top-bar-inner">
+                <div class="top-bar-con">
+                    <div class="manage fleft">
+                        {% if request.user.is_authenticated %}
+                        {% if cloud_mode %}
+                        <a href="#" id="account-context" data="no-popup">
+                            {% if org %} {{ org.org_name }} {% else %} {% trans "Personal" %} {% endif %}
+                            <span class="tri-bg tri-down-bg"></span>
+                        </a>
+                        <ul class="hide" id="account-context-selector">
+                            <li><a href="{% url 'myhome' %}">{% trans "Personal" %}</a></li>
+                            {% for org in request.user.orgs %}
+                            <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
+                            {% endfor %}
+                            <li><a href="{% url 'create_org' %}">{% trans "New Organization" %}</a></li>
+                        </ul>
+                        {% endif %}
+                        {% endif %}
 
-                {% if request.user.is_staff %}
-                <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
-                <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
-                {% endif %}
-                
-                {% if org.is_staff %}
-                <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>{% trans "Admin" %}</a>
-                <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
-                {% endif %}
+                        {% if request.user.is_staff %}
+                        <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
+                        <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
+                        {% endif %}
+
+                        {% if org.is_staff %}
+                        <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>{% trans "Admin" %}</a>
+                        <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="account fright">
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'edit_profile' %}" class="avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
+                        <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
+                        {% else %}
+                        <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
+                            {% if cloud_mode or enable_signup %}
+                        <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
+                            {% endif %}
+                        {% endif %}
+                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="tri-bg tri-down-bg"></span></a>
+                        <ul class="hide" id="lang-context-selector">
+                            {% for LANG in LANGUAGES %}
+                            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="account fright">
-                  {% if request.user.is_authenticated %}
-                  <a href="{% url 'edit_profile' %}" class="avatar-link">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
-                  <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
-                  {% else %}
-                  <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
-                    {% if cloud_mode or enable_signup %}
-                    <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
-                    {% endif %}
-                  {% endif %}
-                  <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}">
-                    {{ LANGUAGE_CODE|language_name_local }}
-                    <span class="tri-bg tri-down-bg"></span>
-                  </a>
-                  <ul class="hide" id="lang-context-selector">
-                    {% for LANG in LANGUAGES %}
-                    <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+        <div id="header">
+            <div id="header-inner">
+                <a href="http://seafile.com/">
+                    <img src="{{ MEDIA_URL }}img/logo.png?t=1352500800" title="Seafile" alt="Seafile logo" id="logo" class="fleft" />
+                </a>
+                {% block nav %}{% endblock %}
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="title-panel" class="w100 ovhd">
+                {% block title_panel %}{% endblock %}
+            </div>
+            <div id="left-panel">
+                {% block left_panel %}{% endblock %}
+            </div>
+            <div id="right-panel">
+                {% block right_panel %}{% endblock %}
+            </div>
+            <div id="main-panel" class="clear w100 ovhd">
+                {% if messages %}
+                {% autoescape off %}
+                <ul class="messages hide">
+                    {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
                     {% endfor %}
-                  </ul>
-                </div>            <!-- /.account -->
-            </div>
-        </div>
-    </div>
-
-    <div id="header">
-      <div id="header-inner">
-        <a href="http://seafile.com/">
-          <img src="{{ MEDIA_URL }}img/logo.png?t=1352500800" title="Seafile" alt="Seafile logo" id="logo" class="fleft" />
-        </a>
-        {% block nav %}{% endblock %}
-      </div>
-    </div>
-
-    <div id="main">
-        <div id="title-panel" class="w100 ovhd">
-            {% block title_panel %}{% endblock %}
-        </div>
-        <div id="left-panel">
-            {% block left_panel %}{% endblock %}
-        </div>
-        <div id="right-panel">
-            {% block right_panel %}{% endblock %}
-        </div>
-        <div id="main-panel" class="clear w100 ovhd">
-            {% if messages %}
-            {% autoescape off %}
-            <ul class="messages hide">
-              {% for message in messages %}
-              <li class="{{ message.tags }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-            {% endautoescape %}
-            {% endif %}
-          
-            {% block main_panel %} {% endblock %}
-        </div>
-        <div id="confirm-popup" class="hide">
-            <div id="confirm-con"></div>
-            <button id="confirm-yes">{% trans "Yes"%}</button>
-            <button class="simplemodal-close">{% trans "No"%}</button>
-        </div>
-    </div>
-
-    <div id="footer" class="ovhd">
-        <div class="items fleft">
-            <div class="item">
-                <h4>Seafile</h4>
-                <ul>
-                    <li><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
-                    <li><a href="https://github.com/haiwen/seafile/wiki{% if LANGUAGE_CODE == 'zh-cn' %}/Seafile-服务器手册中文版{% endif %}" target="_blank">Wiki</a></li>
-                    {% if LANGUAGE_CODE == 'zh-cn' %}<li><a href="http://gonggeng.org/vanilla/" target="_blank">{% trans "Forum" %}</a></li>{% endif %}
                 </ul>
-            </div>
-            <div class="item">
-                <h4>{% trans "Client" %}</h4>
-                <ul>
-                    <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
-                </ul>
-            </div>
-            <div class="item">
-                <h4>{% trans "Documents" %}</h4>
-                <ul>
-                    <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="other-info fright">
-            <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
-            <p>© 2012 {% trans "Seafile" %}</p>
-            <p><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
-        </div>
-    </div>
+                {% endautoescape %}
+                {% endif %}
 
+                {% block main_panel %} {% endblock %}
+            </div>
+            <div id="confirm-popup" class="hide">
+                <div id="confirm-con"></div>
+                <button id="confirm-yes">{% trans "Yes"%}</button>
+                <button class="simplemodal-close">{% trans "No"%}</button>
+            </div>
+        </div>
+
+        <div id="footer" class="ovhd">
+            <div class="items fleft">
+                <div class="item">
+                    <h4>Seafile</h4>
+                    <ul>
+                        <li><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
+                        <li><a href="https://github.com/haiwen/seafile/wiki{% if LANGUAGE_CODE == 'zh-cn' %}/Seafile-服务器手册中文版{% endif %}" target="_blank">Wiki</a></li>
+                        {% if LANGUAGE_CODE == 'zh-cn' %}<li><a href="http://gonggeng.org/vanilla/" target="_blank">{% trans "Forum" %}</a></li>{% endif %}
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>{% trans "Client" %}</h4>
+                    <ul>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>{% trans "Documents" %}</h4>
+                    <ul>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="other-info fright">
+                <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
+                <p>© 2012 {% trans "Seafile" %}</p>
+                <p><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
+            </div>
+        </div>
 
 </div><!-- wrapper -->
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
