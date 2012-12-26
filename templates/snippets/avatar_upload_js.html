@@ -27,7 +27,7 @@ function changeAvatar(chg_btn, input, form) {
             filename = this.value;
         }
         if (filename.lastIndexOf('.') != -1) { // ext exists
-            ext = filename.substr((filename.lastIndexOf('.') + 1));
+            ext = filename.substr((filename.lastIndexOf('.') + 1)).toLowerCase();
         }
         if (ext) {
             for (var i = 0, len = allowed_ext.length; i < len; i++) {
