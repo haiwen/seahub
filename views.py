@@ -1174,6 +1174,10 @@ def repo_view_file(request, repo_id):
     """
     Preview file on web, including files in current worktree and history.
     """
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+    
     http_server_root = get_httpserver_root()
     path = request.GET.get('p', '/')
     u_filename = os.path.basename(path)
@@ -1203,10 +1207,6 @@ def repo_view_file(request, repo_id):
 
     if not obj_id:
         return render_error(request, _(u'File not exists'))
-    
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         # Redirect uesr to decrypt repo page.
@@ -1504,6 +1504,10 @@ def file_edit_submit(request, repo_id):
 @login_required
 @ctx_switch_required
 def file_edit(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
     if request.method == 'POST':
         return file_edit_submit(request, repo_id)
 
@@ -1515,10 +1519,6 @@ def file_edit(request, repo_id):
         path = path[:-1]
     u_filename = os.path.basename(path)
     filename = urllib2.quote(u_filename.encode('utf-8'))
-
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
 
     head_id = repo.head_cmmt_id
 
