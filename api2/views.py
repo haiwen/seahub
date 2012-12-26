@@ -343,13 +343,13 @@ def get_file_size (id):
     return size if size else 0
 
 def get_dir_entrys_by_id(request, dir_id):
-    dentrys = []
     try:
         dirs = seafserv_threaded_rpc.list_dir(dir_id)
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
+    dir_list, file_list = [], []
     for dirent in dirs:
         dtype = "file"
         entry={}
@@ -364,8 +364,15 @@ def get_dir_entrys_by_id(request, dir_id):
         entry["type"]=dtype
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
-        dentrys.append(entry)
-    #return Response(dentrys)
+        if dtype == 'dir':
+            dir_list.append(entry)
+        else:
+            file_list.append(entry)
+
+    dir_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
+    file_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
+    dentrys = dir_list + file_list
+    
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
     response["oid"] = dir_id
