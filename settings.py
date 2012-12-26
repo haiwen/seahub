@@ -242,4 +242,4 @@ else:
     del seahub_settings
 
 # Remove install_topdir from path
-sys.path.pop()
+sys.path.pop(0)
