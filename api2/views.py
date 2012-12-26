@@ -8,9 +8,10 @@ import seahub.settings as settings
 from rest_framework import parsers
 from rest_framework import status
 from rest_framework import renderers
-from rest_framework.reverse import reverse
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.reverse import reverse
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 from django.contrib.sites.models import RequestSite
 from django.http import HttpResponse
@@ -68,7 +69,7 @@ class ObtainAuthToken(APIView):
     For example:
     	curl -d "username=xiez1989@gmail.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
     """
-    throttle_classes = ()
+    throttle_classes = (AnonRateThrottle, )
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,) 
@@ -92,6 +93,7 @@ class Account(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         info = {}
@@ -117,6 +119,7 @@ def calculate_repo_info(repo_list, username):
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         email = request.user.username
@@ -233,6 +236,7 @@ def check_repo_access_permission(request, repo):
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoAccessible, )
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
@@ -284,6 +288,7 @@ class Repo(APIView):
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoAccessible, )
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
@@ -315,6 +320,7 @@ class DownloadRepo(APIView):
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
@@ -791,6 +797,7 @@ class StarredFileView(APIView):
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, format=None):
         # list starred files
@@ -838,6 +845,7 @@ class FileView(APIView):
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoWritable, )
+    throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, repo_id, format=None):
         # view file
@@ -1010,6 +1018,7 @@ class FileSharedLinkView(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )    
     
     def put(self, request, repo_id, format=None):
         # generate file shared link
@@ -1053,7 +1062,8 @@ class DirView(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoWritable, )
-
+    throttle_classes = (UserRateThrottle, )
+    
     def get(self, request, repo_id, format=None):
         # list dir
         repo = get_repo(repo_id)

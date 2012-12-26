@@ -161,6 +161,17 @@ CACHES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',
+        'user': '300/minute',
+    },
+}
+
 MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
 MAX_UPLOAD_FILE_NAME_LEN    = 255
 MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
