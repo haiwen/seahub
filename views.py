@@ -1417,15 +1417,15 @@ def repo_file_get(raw_path):
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses 10M, can not be previewed online.')
-            return err, '', '', ''
+            return err, '', ''
         else:
             content = file_response.read()
     except urllib2.HTTPError, e:
         err = _(u'HTTPError: failed to open file online')
-        return err, '', '', ''
+        return err, '', ''
     except urllib2.URLError as e:
         err = _(u'URLError: failed to open file online')
-        return err, '', '', ''
+        return err, '', ''
     else:
         try:
             u_content = content.decode('utf-8')
@@ -1437,7 +1437,7 @@ def repo_file_get(raw_path):
                 encoding = 'gbk'
             except UnicodeDecodeError:
                 err = _(u'Unknown file encoding')
-                return err, '', '', ''
+                return err, '', ''
 
         file_content = u_content
 
