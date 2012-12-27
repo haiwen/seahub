@@ -211,6 +211,49 @@ SEAFILE_VERSION = '1.3.0'
 
 USE_SUBDOMAIN = False
 
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'default': {
+            'level':'WARN',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/seahub.log',
+            'maxBytes': 1024*1024*10, # 10 MB
+            'formatter':'standard',
+        },  
+        'request_handler': {
+                'level':'WARN',
+                'class':'logging.handlers.RotatingFileHandler',
+                'filename': 'logs/django_request.log',
+                'maxBytes': 1024*1024*10, # 10 MB
+                'formatter':'standard',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'WARN',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['request_handler', 'mail_admins'],
+            'level': 'WARN',
+            'propagate': False
+        },
+    }
+}
+
 def load_local_settings(module):
     '''Import any symbols that begin with A-Z. Append to lists any symbols
     that begin with "EXTRA_".
@@ -254,3 +297,4 @@ else:
 
 # Remove install_topdir from path
 sys.path.pop(0)
+
