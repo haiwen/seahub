@@ -1,0 +1,56 @@
+Introduction
+==========
+
+Seahub is the web frontend for Seafle.
+
+Preparation
+==========
+
+* Build and deploy Seafile server from source. See <https://github.com/haiwen/seafile/wiki/Build-and-deploy-seafile-server-from-source>
+
+* Django 1.3, download from <https://www.djangoproject.com/download/1.3.5/tarball/>
+
+* Djblets
+
+    easy_install --upgrade Djblets
+
+* rest_framework. Home page is <http://django-rest-framework.org/>
+
+Getting it
+==========
+
+You can grab souce code from GitHub.
+
+    $ git clone git://github.com/haiwen/seahub.git
+
+Configuration
+==========
+
+Modify `CCNET_CONF_DIR` and `PYTHONPATH` in `setenv.sh` to fit your path.
+
+Run and Verify
+==========
+
+Run as:
+
+    ./run-seahub.sh.template
+
+Then open your browser, and input `http://localhost:8000/`, there should be a Login page. You can create admin account using `seahub-admin.py` script under `tools/` directory.
+
+Internationalization (I18n)
+==========
+
+You are welcome to add translation in your language. For example, if you like to add Russian translation.
+
+First, you need to add your language code to Settings.py. In this case, add `('ru', gettext_noop(u'Русский')),` to LANGUAGES tuple.
+
+Then, run this command:
+
+    django-admin.py makemessages -l ru -e py,html
+
+There will be a file named `django.po` under `locale/ru/LC_MESSAGES`.
+
+After you modified `django.po`, you can run `./i18n.sh compile-all`, this will create `.mo` file under same directory with `django.po`.
+
+That's it. After restart Seahub, you can select popup button at right top, and your translations are ready for use.
+
