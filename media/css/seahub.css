@@ -1412,6 +1412,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #image-view {
     padding:1px;
+    width:946px;
     background:#fff;
     border:1px solid #eee;
 }
