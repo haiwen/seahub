@@ -69,7 +69,6 @@ MIDDLEWARE_CLASSES = (
     'auth.middleware.AuthenticationMiddleware',
     'base.middleware.BaseMiddleware',
     'base.middleware.InfobarMiddleware',
-    'seahub.subdomain.middleware.SubdomainMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -82,7 +81,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(os.path.dirname(__file__), "templates"),
-    os.path.join(os.path.dirname(__file__),'thirdpart/djangorestframework/templates'),
+#    os.path.join(os.path.dirname(__file__),'thirdpart/djangorestframework/templates'),
 )
 
 # This is defined here as a do-nothing function because we can't import
@@ -107,18 +106,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'seahub.base.context_processors.base',
-#    'seahub.organizations.context_processors.org',
 )
 
 
 INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-#    'django.contrib.sites',
-#    'django.contrib.admin',
     'django.contrib.messages',
 
-    # 'auth',
     'avatar',
     'registration',
 
@@ -129,7 +124,6 @@ INSTALLED_APPS = (
     'seahub.organizations',
     'seahub.profile',
     'seahub.share',
-    'seahub.subdomain',
     'seahub.api',
     'api2',
 )
@@ -162,6 +156,7 @@ CACHES = {
     }
 }
 
+# rest_framwork
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
@@ -173,6 +168,7 @@ REST_FRAMEWORK = {
     },
 }
 
+# file and path
 MAX_UPLOAD_FILE_SIZE        = 100 * 1024 * 1024 # 100 MB
 MAX_UPLOAD_FILE_NAME_LEN    = 255
 MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
@@ -208,9 +204,7 @@ SERVE_STATIC = True
 ENABLE_SIGNUP = False
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-SEAFILE_VERSION = '1.3.0'
-
-USE_SUBDOMAIN = False
+SEAFILE_VERSION = '1.4'
 
 # Logging
 LOGGING = {
