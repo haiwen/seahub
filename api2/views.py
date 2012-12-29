@@ -67,7 +67,7 @@ class ObtainAuthToken(APIView):
     """
     Returns auth token if username and password are valid.
     For example:
-    	curl -d "username=xiez1989@gmail.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
+    	curl -d "username=foo@example.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
     """
     throttle_classes = (AnonRateThrottle, )
     permission_classes = ()
@@ -377,71 +377,6 @@ def get_dir_entrys_by_id(request, dir_id):
                             content_type=json_content_type)
     response["oid"] = dir_id
     return response
-        
-class RepoDirents(APIView):
-    """
-    List directory entries of a repo.
-    TODO: may be better use dirent id instead of path.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    
-    def get(self, request, repo_id):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        if not current_commit:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             'Failed to get current commit of repo %s.' % repo_id)
-
-        path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
-
-        dir_id = None
-        try:
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
-                                                             path.encode('utf-8'))
-        except SearpcError, e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             "Failed to get dir id by path.")
-
-        if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             "Path does not exist")
-
-        old_oid = request.GET.get('oid', None)
-        if old_oid and old_oid == dir_id :
-            response = HttpResponse(json.dumps("uptodate"), status=200,
-                                    content_type=json_content_type)
-            response["oid"] = dir_id
-            return response
-        else:
-            return get_dir_entrys_by_id(request, dir_id)
-    
-class RepoDirs(APIView):
-    """
-    List directory entries based on dir_id.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, repo_id, dir_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        return get_dir_entrys_by_id(request, dir_id)
 
 def get_shared_link(request, repo_id, path):
     l = FileShare.objects.filter(repo_id=repo_id).filter(\
@@ -486,83 +421,6 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         assert path, 'path must be passed in the url'
         return get_shared_link(request, repo_id, path)
 
-class RepoFilepath(APIView):
-    """
-    
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        path = request.GET.get('p', None)
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-
-        file_id = None
-        try:
-            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
-                                                             path.encode('utf-8'))
-        except SearpcError, e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             "Failed to get file id by path.")
-
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
-
-        file_name = request.GET.get('file_name', file_id)
-        op = request.GET.get('op', 'download')
-        return get_repo_file(request, repo_id, file_id, file_name, op)
-
-    def post(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        path = request.GET.get('p', None)
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path needed')
-
-        op = request.GET.get('op', '')
-        if op == 'star':
-            org_id = int(request.GET.get('org', '-1'))
-            star_file(request.user.username, repo_id, path, False, org_id=org_id)
-            return HttpResponse('success')
-        elif op == 'unstar':
-            unstar_file(request.user.username, repo_id, path)
-            return HttpResponse('success')
-        return api_error(status.HTTP_400_BAD_REQUEST, 'Operation not supported')
-
-class RepoFiles(APIView):
-    """
-    
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, repo_id, file_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        file_name = request.GET.get('file_name', file_id)
-        return get_repo_file(request, repo_id, file_id, file_name, 'download')
-
 def reloaddir(request, repo_id, parent_dir):
     current_commit = get_commits(repo_id, 0, 1)[0]
     if not current_commit:
@@ -592,6 +450,7 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
 
     reloaddir(request, repo_id, parent_dir)
 
+# deprecated    
 class OpDeleteView(APIView):
     """
     Delete a file.
@@ -628,157 +487,6 @@ class OpDeleteView(APIView):
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
         
-class OpRenameView(APIView):
-    """
-    Rename a file.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
-
-    def post(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        path = request.GET.get('p')
-        newname = request.POST.get("newname")
-        if not path or path[0] != '/' or not newname:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Path or newname is missing.')
-
-        newname = unquote(newname).decode('utf-8')
-        if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'New name too long')
-
-        parent_dir = os.path.dirname(path)
-        oldname = os.path.basename(path)
-
-        if oldname == newname:
-            return api_error(status.HTTP_409_CONFLICT,
-                             'The new name is the same to the old')
-
-        newname = check_filename_with_rename(repo_id, parent_dir, newname)
-
-        try:
-            seafserv_threaded_rpc.rename_file (repo_id, parent_dir, oldname,
-                                               newname, request.user.username)
-        except SearpcError,e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             "Failed to rename file.")
-
-        return reloaddir_if_neccessary (request, repo_id, parent_dir)
-        
-class OpMoveView(APIView):
-    """
-    Move a file.
-    TODO: should be refactored and splited.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )    
-
-    def post(self, request, repo_id, format=None):
-        src_repo_id = request.POST.get('src_repo')
-        src_dir     = unquote(request.POST.get('src_dir')).decode('utf-8')
-        dst_repo_id = request.POST.get('dst_repo')
-        dst_dir     = unquote(request.POST.get('dst_dir')).decode('utf-8')
-        op          = request.POST.get('operation')
-        obj_names   = request.POST.get('obj_names')
-
-        if not (src_repo_id and src_dir  and dst_repo_id \
-                and dst_dir and op and obj_names):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Missing arguments.')
-
-        if src_repo_id == dst_repo_id and src_dir == dst_dir:
-            return api_error(status.HTTP_409_CONFLICT,
-                             'The src_dir is same to dst_dir')
-
-        names = obj_names.split(':')
-        names = map(lambda x: unquote(x).decode('utf-8'), names)
-
-        if dst_dir.startswith(src_dir):
-            for obj_name in names:
-                if dst_dir.startswith('/'.join([src_dir, obj_name])):
-                    return api_error(status.HTTP_409_CONFLICT,
-                                     'Can not move a dirctory to its subdir')
-
-        for obj_name in names:
-            new_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, obj_name)
-
-            try:
-                if op == 'cp':
-                    seafserv_threaded_rpc.copy_file (src_repo_id, src_dir, obj_name,
-                                                     dst_repo_id, dst_dir, new_obj_name,
-                                                     request.user.username)
-                elif op == 'mv':
-                    seafserv_threaded_rpc.move_file (src_repo_id, src_dir, obj_name,
-                                                     dst_repo_id, dst_dir, new_obj_name,
-                                                     request.user.username)
-            except SearpcError, e:
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                 "SearpcError:" + e.msg)
-
-        return reloaddir_if_neccessary (request, dst_repo_id, dst_dir)
-
-class OpMkdirView(APIView):
-    """
-    Make a new directory.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
-
-    def post(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-        path = request.GET.get('p')
-        if not path or path[0] != '/':
-            return api_error(status.HTTP_400_BAD_REQUEST, "Path is missing.")
-
-        parent_dir = os.path.dirname(path)
-        new_dir_name = os.path.basename(path)
-        new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
-
-        try:
-            seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name,
-                                           request.user.username)
-        except SearpcError, e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             'Failed to make directory.')
-
-        return reloaddir_if_neccessary (request, repo_id, parent_dir)
-        
-class OpUploadView(APIView):
-    """
-    Upload a file.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
-
-    def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if check_permission(repo_id, request.user.username) == 'rw':
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'upload',
-                                                      request.user.username)
-        else:
-            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
-
-        if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             'Above quota')
-
-        upload_url = gen_file_upload_url(token, 'upload')
-        return Response(upload_url)
-
 def append_starred_files(array, files):
     for f in files:
         sfile = {'org' : f.org_id,
