@@ -277,17 +277,14 @@ function prepareCSRFToken(xhr, settings) {
 }
 
 function apply_form_error(formid, error_msg) {
-    var form_err = $("#" + formid + " .error"),
-        container = $("#simplemodal-container");
-
-    form_err.html(error_msg).attr('class', 'error').removeClass('hide');
-    container.css('height', $('#'+formid).height());
+    $("#" + formid + " .error").html(error_msg).removeClass('hide');
+    $("#simplemodal-container").css({'height':'auto'});
 }
 
 // handle messages
 if ($('.messages')[0]) {
-    $('#main').append($('.messages')).css('position','relative');
-    $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
+    $('#main').append($('.messages'));
+    $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
@@ -300,14 +297,24 @@ function feedback(con, type, time) {
         var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
         $('#main').append(html);
     }
-    $('#main').css('position','relative');
-    $('.messages').css({'left':($('#main').width() - $('.messages').width())/2 + 'px', 'top':'-20px'}).removeClass('hide');
+    $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
     setTimeout(function() { $('.messages').addClass('hide'); }, time);
 }
-
 function disable(btn) {
     btn.attr('disabled', 'disabled').addClass('btn-disabled');
 }
 function enable(btn) {
     btn.removeAttr('disabled').removeClass('btn-disabled');
+}
+
+// get substr according to character numbers
+function trimByChar(str, n) {
+    var len = str.length;
+    var new_str = '';
+    if (len > n) {
+        new_str = str.substr(0, n) + '...';
+    } else {
+        new_str = str;
+    }
+    return new_str;
 }

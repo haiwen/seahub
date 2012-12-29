@@ -481,7 +481,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* for messages like 'contact added successfully' */
 .messages {
-    position:absolute;
+    position:fixed;
     border-radius: 2px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -490,12 +490,12 @@ textarea:-moz-placeholder {/* for FF */
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 .messages .info,
-.messages .success{
+.messages .success {
     padding:5px;
     background:#C4ECA9;
     margin:0;
 }
-.messages .error{
+.messages .error {
     padding:5px;
     background:#FDF;
     margin:0;
@@ -1365,7 +1365,6 @@ textarea:-moz-placeholder {/* for FF */
     text-align:right;
 }
 #shared-link {
-    display: inline-block;
     border:0;
 }
 .file-op {

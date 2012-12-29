@@ -168,6 +168,10 @@ def get_repo_dirents(request, repo_id, commit, path):
             org_id = request.user.org['org_id']
         starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
 
+        fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
+        http_or_https = request.is_secure() and 'https' or 'http'
+        domain = RequestSite(request).domain
+
         for dirent in dirs:
             if stat.S_ISDIR(dirent.props.mode):
                 dir_list.append(dirent)
@@ -175,9 +179,15 @@ def get_repo_dirents(request, repo_id, commit, path):
                 file_list.append(dirent)
                 dirent.file_size = get_file_size(dirent.obj_id)
                 dirent.starred = False
+                dirent.sharelink = ''
                 fpath = os.path.join(path, dirent.obj_name)
                 if fpath in starred_files:
                     dirent.starred = True
+                for share in fileshares:
+                    if fpath == share.path:
+                        dirent.sharelink = '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, share.token)
+                        dirent.sharetoken = share.token
+                        break
 
         dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                         y.obj_name.lower()))
@@ -254,6 +264,9 @@ class RepoMixin(object):
             self.file_list, self.dir_list = get_repo_dirents(self.request, self.repo_id, self.current_commit, self.path)
             self.zipped = self.get_nav_path()
             self.applet_root = self.get_applet_root()
+            self.protocol = self.request.is_secure() and 'https' or 'http'
+            self.domain = RequestSite(self.request).domain
+            self.contacts = Contact.objects.filter(user_email=self.request.user.username)
         
     def get(self, request, *args, **kwargs):
         self.prepare_property()
@@ -359,6 +372,9 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         kwargs['update_url'] = self.get_update_url()
         kwargs['httpserver_root'] = self.get_httpserver_root()
         kwargs['head_id'] = self.repo.head_cmmt_id
+        kwargs['protocol'] = self.protocol
+        kwargs['domain'] = self.domain
+        kwargs['contacts'] = self.contacts
 
         return kwargs
 
@@ -1277,9 +1293,7 @@ def repo_view_file(request, repo_id):
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
     if fileshare:
-        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
-                                               settings.SITE_ROOT,
-                                               fileshare.token)
+        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, fileshare.token)
     else:
         file_shared_link = ''
 

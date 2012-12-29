@@ -379,7 +379,6 @@ def get_shared_link(request):
     content_type = 'application/json; charset=utf-8'
     
     repo_id = request.GET.get('repo_id')
-    obj_id = request.GET.get('obj_id')
     path = request.GET.get('p', '/')
     if path[-1] == '/':
         path = path[:-1]
@@ -401,7 +400,7 @@ def get_shared_link(request):
         try:
             fs.save()
         except IntegrityError, e:
-            err = _('Failed to get shared link, please retry.')
+            err = _('Failed to get the link, please retry it.')
             data = json.dumps([{'error': err}])
             return HttpResponse(data, status=500, content_type=content_type)
     
@@ -466,11 +465,11 @@ def send_shared_link(request):
                 }
 
             try:
-                send_mail(_(u'Your friend sharing a file to you on Seafile'),
+                send_mail(_(u'Your friend shared a file to you on Seafile'),
                           t.render(Context(c)), None, [to_email],
                           fail_silently=False)
             except:
-                data = json.dumps({'error':_(u'Failed to send mail')})
+                data = json.dumps({'error':_(u'Send failed.')})
                 return HttpResponse(data, status=500, content_type=content_type)
 
         data = json.dumps("success")

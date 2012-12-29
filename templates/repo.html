@@ -93,9 +93,9 @@
                 <tr>
                     <th width="3%"></th>
                     <th width="5%"></th>
-                    <th width="55%">{% trans "Name"%}</th>
+                    <th width="53%">{% trans "Name"%}</th>
                     <th width="10%">{% trans "Size"%}</th>
-                    <th width="27%">{% trans "Operations"%}</th>
+                    <th width="29%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -149,6 +149,7 @@
                                 <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">{% trans "Download"%}</a>
                                 {% if user_perm == 'rw' %}
                                 <a class="op update-file" data-target="{{ path }}{{dirent.obj_name}}" href="#">{% trans "Update"%}</a>
+                                <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
                                 {% endif %}
                             </div>
                             {% if user_perm == 'rw' %}
@@ -279,6 +280,20 @@
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
+
+    <div id="file-share" class="hide">
+        <h3>{% trans 'Share' %} <span class="op-target"></span></h3>
+        <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link" /></p>
+        <button id="send-link">{% trans 'Send' %}</button>
+        <form id="link-send-form" class="hide">
+            <label>{% trans "Send to:"%}</label><br />
+            <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+            <input type="hidden" name="file_shared_link" value="" />
+            <input type="submit" value="{% trans "Submit"%}" class="submit" />
+            <p class="error hide"></p>
+            <p id="sending" class="hide">{% trans "Sending..."%}</p>     
+        </form>
+    </div>
 
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
@@ -704,6 +719,112 @@ $('.file-star').click(function() {
         }
    });
 });
+//file share
+function trimFilename(name, n) {
+    var len = name.length;
+    var ext = '';
+    var str = '';
+    if (len > n) {
+        if (name.lastIndexOf('.') != -1) { // with extension 
+            ext = name.split('.').reverse()[0];
+            str = name.substr(0, n - ext.length - 3) + '...' + name.substr(name.lastIndexOf('.') - 2);
+        } else {
+            str = name.substr(0, n) + '...';
+        }
+    } else {
+        str = name;
+    }
+    return str;
+}
+$('.file-share').click(function() {
+    var filename = $(this).data('name');
+    function showPopup(link) {
+        $('#file-share .op-target').html(trimFilename(filename, 30));
+        $('#shared-link, #link-send-form input[name="file_shared_link"]').val(link);
+        $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
+        $('#shared-link').css({'width':$('#linkwidth').width() + 2});
+        $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link' gets the focus
+        $('#linkwidth').remove();
+        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    }
+    if ($(this).data('link')) {
+        showPopup($(this).data('link'));
+    } else {
+        $.ajax({
+            url: '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename),
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                if (data.length > 0) {
+                    showPopup('{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + data[0]['token'] + '/');
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var jsonVal = jQuery.parseJSON(xhr.responseText);
+                feedback(jsonVal[0]['error'], 'error');
+            }
+        });
+    }
+    return false;
+});
+
+var share_list = [];    
+{% for contact in contacts %}
+share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
+{% endfor %}
+$('#send-link').click(function() {
+    $(this).addClass('hide');
+    var input = $('#link-send-input');
+    input.css({'min-width':input.css('width'), 'width': $('#file-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
+    $('#link-send-form').removeClass('hide');
+    addAutocomplete('#link-send-input', '#link-send-form', share_list);
+});
+$("#link-send-form").submit(function() {
+    var form = $(this), 
+        file_shared_link = form.children('input[name="file_shared_link"]').val(),
+        email = $.trim(form.children('textarea[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]'),
+        err = form.children('.error');
+    
+    if (!email) {
+        err.html('{% trans "Please input at least an email." %}').removeClass('hide');
+        return false;
+    }
+
+    disable(submit_btn);
+    err.addClass('hide');
+    $('#sending').removeClass('hide');
+
+   $.ajax({
+        type: "POST",
+        url: "{% url 'send_shared_link' %}",
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {file_shared_link: file_shared_link, email: email},
+        success: function(data) {
+            $.modal.close();
+            feedback('{% trans "Successfully shared." %}', "success");
+        },
+        error: function(data, textStatus, jqXHR) {
+            $('#sending').addClass('hide');
+            enable(submit_btn);
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                if (index == 'error') {
+                    err.html(value);
+                } else {
+                    err.html(value[0]);
+                }
+                err.removeClass('hide');
+            });
+        }
+    });
+   return false;
+});
+$('#shared-link').click(function() { $(this).select(); });
 {% include "snippets/list_commit_detail.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>

@@ -25,7 +25,7 @@
 
         <div class="file-op fright">
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
-            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&file_name={{ file_name }}" id="get-shared-link">{% trans "Share link"%}</button>
+            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}" id="get-shared-link">{% trans "Share link"%}</button>
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% if is_starred %}
@@ -82,7 +82,7 @@
     <form id="link-send-form" action="" method="post" class="hide">
         <h3>Send Link</h3>
         <label>{% trans "Send to:"%}</label><br />
-        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperate by ','"%}"></textarea><br />
+        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
         <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <p class="error hide"></p>
@@ -182,19 +182,16 @@ $('#get-shared-link').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             if (data.length > 0) {
-                var t = data[0]['token'],
-                    shared_link = '{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/';
-                $('#shared-link').val(shared_link);
+                var t = data[0]['token'];
+                $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + t);
+                $('#shared-link, input[name="file_shared_link"]').val('{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + t + '/');
                 setLinkWidth();
-                var remove_link = '{% url 'remove_shared_link' %}';
-                $('#rm-shared-link').attr('data', remove_link + '?t=' + t);
-                $('input[name="file_shared_link"]').val(shared_link);
                 showLink();
             }
         },
         error: function(xhr, ajaxOptions, thrownError) {
             var jsonVal = jQuery.parseJSON(xhr.responseText);
-            $('#get-shared-link').replaceWith('<span class="error">' + jsonVal[0]['error'] + '</span>');
+            feedback(jsonVal[0]['error'], 'error');
         }
     });
 });
@@ -213,15 +210,13 @@ $('#rm-shared-link').click(function() {
     });
 });
 
+var share_list = [];    
+{% for contact in contacts %}
+share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
+{% endfor %}
 $('#send-shared-link').click(function() {
     $("#link-send-form").modal({appendTo: "#main", focus: false});
     $('#simplemodal-container').css('height', 'auto');
-    // link-send-form email autocomplete
-    var share_list = [], contact_email;    
-    {% for contact in contacts %}
-    contact_email = '{{ contact.contact_email }}';
-    share_list.push({value:contact_email, label:contact_email});
-    {% endfor %}
     addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });
 
