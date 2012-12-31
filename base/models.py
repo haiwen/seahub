@@ -161,3 +161,24 @@ class UserStarredFiles(models.Model):
     
     path = models.TextField()
     is_dir = models.BooleanField()
+
+class DirFilesLastModifiedInfo(models.Model):
+    '''Cache the results of the calculation of last modified time of all the
+    files under a directory <parent_dir> in repo <repo_id>.
+
+    The field "last_modified_info" is the json format of a dict whose keys are
+    the file names and values are their corresponding last modified
+    timestamps.
+
+    The field "dir_id" is used to check whether the cache should be
+    re-computed
+
+    '''
+    repo_id = models.CharField(max_length=36)
+    parent_dir = models.TextField()
+    parent_dir_hash = models.CharField(max_length=12)
+    dir_id = models.CharField(max_length=40)
+    last_modified_info = models.TextField()
+
+    class Meta:
+        unique_together = ('repo_id', 'parent_dir_hash')

@@ -93,9 +93,10 @@
                 <tr>
                     <th width="3%"></th>
                     <th width="5%"></th>
-                    <th width="53%">{% trans "Name"%}</th>
+                    <th width="40%">{% trans "Name"%}</th>
                     <th width="10%">{% trans "Size"%}</th>
-                    <th width="29%">{% trans "Operations"%}</th>
+                    <th width="15%">{% trans "Modified" %}</th>
+                    <th width="27%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -107,6 +108,13 @@
                     </td>
 
                     <td></td>
+                    <td>
+                        {% if dirent.last_modified %}
+                        {{ dirent.last_modified|translate_seahub_time }}
+                        {% else %}
+                        {% trans "Internal Server Error" %}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if user_perm %}
                         <div class="repo-file-op vh">
@@ -143,6 +151,13 @@
                     </td>
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
+                    <td>
+                        {% if dirent.last_modified %}
+                        {{ dirent.last_modified|translate_seahub_time }}
+                        {% else %}
+                        {% trans "Internal Server Error" %}
+                        {% endif %}
+                    </td>
                     <td>
                         <div class="repo-file-op vh">
                             <div class="displayed-op">
