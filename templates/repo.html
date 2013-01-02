@@ -24,10 +24,15 @@
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% endif %}
             {% if path == '/' %}
-            <button id="repo-download-btn">{% trans "Download"%}</button>
-            {% if user_perm == 'rw' %}
-            <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
-            {% endif %}
+	        {% if user_perm %}
+                <button id="repo-download-btn">{% trans "Download"%}</button>
+	        {% endif %}
+	        {% if is_repo_owner or request.user.is_staff %}
+	        <button id="repo-setting-btn">{% trans "Settings" %}</button>
+	        {% endif %}
+                {% if user_perm == 'rw' %}
+                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -247,6 +252,21 @@
         </div>
         {% endif %}
     </div>
+
+    {% if is_repo_owner or request.user.is_staff %}
+    <form id="repo-setting-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+        <h3>{% trans "Library Settings" %}</h3>
+        <label>{% trans "History" %}</label><br />
+        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+	<input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} /> {% trans "Keep full history" %}<br />
+	<input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} /> {% trans "Don't keep history" %}<br />
+	<input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} /> {% trans "Only keep a period of history:" %}
+	<input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}<br />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+    {% endif %}
 
     <form id="add-new-dir-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans "New Directory" %}</h3>
@@ -698,7 +718,7 @@ $('#featured-filetype button').click(function() {
    setCaretPos(file_name[0], 0); 
 });
 
-$('#upload-file, #add-new-dir, #add-new-file, #repo-download-btn, #recycle-btn').hover(
+$('#upload-file, #add-new-dir, #add-new-file, #repo-download-btn, #repo-setting-btn, #recycle-btn').hover(
     function() {
         $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
     },
@@ -714,6 +734,7 @@ $('#repo-download-btn').click(function() {
 $('#recycle-btn').click(function() {
     location.href = $(this).attr('data');
 });
+
 $('.file-star').click(function() {
     var it = $(this);
     var state = it.data('status');
@@ -746,6 +767,64 @@ $('.file-star').click(function() {
         }
    });
 });
+
+{% if is_repo_owner or request.user.is_staff %}
+$('#repo-setting-btn').click(function () {
+    $('#repo-setting-form').modal({appendTo:'#main'});
+});
+
+$('#repo-setting-form input[name="history"]').change(function() {
+    var value = $(this).attr('value');
+    if (value == 'full_history' || value == 'no_history') {
+        $('#repo-setting-form input[name="days"]').attr('disabled', true).addClass('input-disabled');
+    } else {
+        $('#repo-setting-form input[name="days"]').attr('disabled', false).removeClass('input-disabled');
+    }
+});
+
+$('#repo-setting-form').submit(function() {
+    var days;
+    var value = $(this).find('input[name="history"]:checked').val();
+
+    if (value == 'partial_history') {
+        days = $(this).find('input[name="days"]').val();
+    } else if (value == 'full_history') {
+        days = -1;
+    } else {
+        days = 0;
+    }
+
+    var submit_btn = $(this).children('input[type="submit"]');  
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'views.repo_save_settings' %}',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': $('#repo-setting-form input[name="repo_id"]').val(),
+            'days': days 
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            } else {
+                apply_form_error('repo-setting-form', data['error']);
+                enable(submit_btn);
+            }
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('repo-setting-form', value[0]);
+            });
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
+{% endif %}
+
 //file share
 function trimFilename(name, n) {
     var len = name.length;

@@ -773,3 +773,17 @@ def is_passwd_set(repo_id, user):
         ret = -1
     return True if ret == 1 else False
 
+# repo history limit
+def get_repo_history_limit(repo_id):
+    try:
+        ret = seafserv_threaded_rpc.get_repo_history_limit(repo_id)
+    except SearpcError, e:
+        ret = -1
+    return ret
+
+def set_repo_history_limit(repo_id, days):
+    try:
+        ret = seafserv_threaded_rpc.set_repo_history_limit(repo_id, days)
+    except SearpcError, e:
+        ret = -1
+    return ret
