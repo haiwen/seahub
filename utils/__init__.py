@@ -7,6 +7,7 @@ import stat
 import urllib2
 import json
 
+from django.contrib.sites.models import RequestSite
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
@@ -701,3 +702,13 @@ def calc_file_path_hash(path, bits=12):
     path_hash = md5_constructor(urllib2.quote(path)).hexdigest()[:bits]
     
     return path_hash
+
+def gen_shared_link(request, token, s_type):
+    http_or_https = request.is_secure() and 'https' or 'http'
+    domain = RequestSite(request).domain
+
+    if s_type == 'f':
+        return '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
+    else:
+        return '%s://%s%sd/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
+

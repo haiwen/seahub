@@ -12,7 +12,7 @@ class AnonymousShare(models.Model):
 
 class FileShare(models.Model):
     """
-    Model used for file share link.
+    Model used for file or dir shared link.
     """
     username = models.EmailField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
@@ -20,3 +20,4 @@ class FileShare(models.Model):
     token = models.CharField(max_length=10, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
+    s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`

@@ -669,6 +669,13 @@ def get_file_size(file_id):
         fs = 0
     return fs
 
+def get_file_id_by_path(repo_id, path):
+    try:
+        ret = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
+    except SearpcError, e:
+        ret = ''
+    return ret
+
 def get_related_users_by_repo(repo_id):
     """Give a repo id, returns a list of users of:
     - the repo owner

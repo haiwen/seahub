@@ -80,18 +80,22 @@
 {% if fileshares %}
 <table class="sharelink-list">
   <tr>
-    <th width="45%">{% trans "File"%}</th>
+    <th width="45%">{% trans "File or Folder"%}</th>
     <th width="25%">{% trans "Library"%}</th>
     <th width="15%">{% trans "Visits"%}</th>
     <th width="15%">{% trans "Operations"%}</th>
   </tr>
   {% for fs in fileshares %}
   <tr>
-    <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/files/?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    {% if fs.s_type == 'f' %}
+    <td><a href="{% url 'repo_view_file' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    {% else %}
+    <td><a href="{% url 'repo' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    {% endif %}
     <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
     <td>{{ fs.view_cnt }}</td>
     <td>
-        <a href="#" class="op view-link" data="{{ fs.token }}">{% trans "View" %}</a>
+        <a href="#" class="op view-link" data="{{ fs.shared_link }}">{% trans "View" %}</a>
         <a class="op" href="{% url 'remove_shared_link' %}?t={{ fs.token }}">{% trans "Remove"%}</a>
     </td>
   </tr>
@@ -173,8 +177,7 @@ $('.cancel-share').click(function() {
 });
 
 $(".view-link").click(function() {
-    var token = $(this).attr('data'),
-        link = '{{ protocol }}://' + '{{ domain }}{{ SITE_ROOT }}f/' + token + '/';
+    var link = $(this).attr('data');
     $('#link').before('<p class="hide">' + link + '</p>');
     $('#shared-link').val(link).css('width', $('#link').prev().width() + 2);
     $("#link").modal({appendTo:'#main'});

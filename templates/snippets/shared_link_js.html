@@ -1,0 +1,117 @@
+{% load i18n %}
+{% load url from future %}
+function showLink() {
+    $('#get-shared-link').addClass('hide');
+    $('#shared-link, #send-shared-link, #rm-shared-link').removeClass('hide');
+}
+function hideLink() {
+    $('#shared-link, #send-shared-link, #rm-shared-link').addClass('hide');
+    $('#get-shared-link').removeClass('hide');
+}
+function setLinkWidth() {
+    var link = $('#shared-link');
+    link.before('<p class="hide">' + link.val() + '</p>');
+    link.css('width', link.prev().width() + 2);
+    link.prev().remove();
+}
+if ($.trim($('#shared-link').val())) {
+    setLinkWidth();
+}
+{% if fileshare.token %}
+showLink();
+{% else %}
+hideLink();
+{% endif %}
+
+$('#get-shared-link').click(function() {
+    var url = $(this).attr('data');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            if (data.length > 0) {
+                var t = data[0]['token'];
+                $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + t);
+                $('#shared-link, input[name="file_shared_link"]').val(data[0]['shared_link']);
+                setLinkWidth();
+                showLink();
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            var jsonVal = jQuery.parseJSON(xhr.responseText);
+            feedback(jsonVal[0]['error'], 'error');
+        }
+    });
+});
+
+$('#rm-shared-link').click(function() {
+    var url = $(this).attr('data');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            hideLink();
+            $('#shared-link').val('');
+        }
+    });
+});
+
+var share_list = [];    
+{% for contact in contacts %}
+share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
+{% endfor %}
+$('#send-shared-link').click(function() {
+    $("#link-send-form").modal({appendTo: "#main", focus: false});
+    $('#simplemodal-container').css('height', 'auto');
+    addAutocomplete('#link-send-input', '#link-send-form', share_list);
+});
+
+$("#link-send-form").submit(function(event) {
+    var form = $(this), 
+        file_shared_link = form.children('input[name="file_shared_link"]').val(),
+        email = $.trim(form.children('textarea[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]');
+    
+    if (!email) {
+        apply_form_error('link-send-form', '{% trans "Please input at least an email." %}');
+        return false;
+    }
+
+    disable(submit_btn);
+    $('#link-send-form .error').addClass('hide');
+    $('#sending').removeClass('hide');
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'send_shared_link' %}",
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {file_shared_link: file_shared_link, email: email},
+        success: function(data) {
+            $.modal.close();
+            feedback('{% trans "Successfully sent." %}', "success");
+        },
+        error: function(data, textStatus, jqXHR) {
+            $('#sending').addClass('hide');
+            enable(submit_btn);
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                if (index == 'error') {
+                    apply_form_error('link-send-form', value);
+                } else {
+                    apply_form_error('link-send-form', value[0]);
+                }
+            });
+        }
+    });
+   return false;
+});
+$('#shared-link').click(function() {
+    $(this).select();
+});

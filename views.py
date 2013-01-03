@@ -44,7 +44,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
-    get_session_info, get_group_repoids, get_repo_owner
+    get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -64,7 +64,7 @@ from forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
     FileCommentForm, RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm
 from utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, \
+    get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
@@ -165,7 +165,7 @@ def get_repo_dirents(request, repo_id, commit, path):
             # return render_error(self.request, e.msg)
 
         org_id = -1
-        if request.user.org:
+        if hasattr(request.user, 'org') and request.user.org:
             org_id = request.user.org['org_id']
         starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
 
@@ -177,20 +177,27 @@ def get_repo_dirents(request, repo_id, commit, path):
 
         for dirent in dirs:
             dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
-
+            dirent.sharelink = ''
             if stat.S_ISDIR(dirent.props.mode):
+                dpath = os.path.join(path, dirent.obj_name)
+                if dpath[-1] != '/':
+                    dpath += '/'
+                for share in fileshares:
+                    if dpath == share.path:
+                        dirent.sharelink = gen_shared_link(request, share.token, 'd')
+                        dirent.sharetoken = share.token
+                        break
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
                 dirent.file_size = get_file_size(dirent.obj_id)
                 dirent.starred = False
-                dirent.sharelink = ''
                 fpath = os.path.join(path, dirent.obj_name)
                 if fpath in starred_files:
                     dirent.starred = True
                 for share in fileshares:
                     if fpath == share.path:
-                        dirent.sharelink = '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, share.token)
+                        dirent.sharelink = gen_shared_link(request, share.token, 'f')
                         dirent.sharetoken = share.token
                         break
         dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
@@ -346,6 +353,26 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
             return gen_file_upload_url(token, 'update')
         else:
             return ''
+
+    def get_fileshare(self, repo_id, user, path):
+        if path == '/':    # no shared link for root dir
+            return None
+        
+        l = FileShare.objects.filter(repo_id=repo_id).filter(\
+            username=user).filter(path=path)
+        fileshare = l[0] if len(l) > 0 else None
+        return fileshare
+
+    def get_shared_link(self, fileshare):
+        # dir shared link
+        http_or_https = self.request.is_secure() and 'https' or 'http'
+        domain = RequestSite(self.request).domain
+        
+        if fileshare:
+            dir_shared_link = gen_shared_link(self.request, fileshare.token, 'd')
+        else:
+            dir_shared_link = ''
+        return dir_shared_link
         
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
@@ -379,6 +406,9 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         kwargs['protocol'] = self.protocol
         kwargs['domain'] = self.domain
         kwargs['contacts'] = self.contacts
+        kwargs['fileshare'] = self.get_fileshare(\
+            self.repo_id, self.request.user.username, self.path)
+        kwargs['dir_shared_link'] = self.get_shared_link(kwargs['fileshare'])
 
         return kwargs
 
@@ -1297,13 +1327,12 @@ def repo_view_file(request, repo_id):
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
     if fileshare:
-        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, fileshare.token)
+        file_shared_link = gen_shared_link(request, fileshare.token, 'f')
     else:
         file_shared_link = ''
 
     # my constacts
     contacts = Contact.objects.filter(user_email=request.user.username)
-
         
     # Get groups this repo is shared.    
     if request.user.org:
@@ -2416,7 +2445,7 @@ def view_shared_file(request, token):
     path = fileshare.path
 
     http_server_root = get_httpserver_root()
-    if path[-1] == '/':
+    if path[-1] == '/':         # Normalize file path 
         path = path[:-1]
     filename = os.path.basename(path)
     quote_filename = urllib2.quote(filename.encode('utf-8'))
@@ -2472,7 +2501,113 @@ def view_shared_file(request, token):
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
 
+def view_shared_dir(request, token):
+    assert token is not None    # Checked by URLconf
 
+    try:
+        fileshare = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        raise Http404
+
+    username = fileshare.username
+    repo_id = fileshare.repo_id
+    path = request.GET.get('p', '')
+    path = fileshare.path if not path else path
+    if path[-1] != '/':         # Normalize dir path 
+        path += '/'
+    
+    if not path.startswith(fileshare.path): 
+        path = fileshare.path   # Can not view upper dir of shared dir
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    dir_name = os.path.basename(path[:-1])
+    current_commit = get_commits(repo_id, 0, 1)[0]
+    file_list, dir_list = get_repo_dirents(request, repo_id, current_commit,
+                                           path)
+    zipped = gen_path_link(path, '')
+
+    if path == fileshare.path:  # When user view the shared dir..
+        # increase shared link view_cnt, 
+        fileshare = FileShare.objects.get(token=token)
+        fileshare.view_cnt = F('view_cnt') + 1
+        fileshare.save()
+    
+    return render_to_response('view_shared_dir.html', {
+            'repo': repo,
+            'token': token,
+            'path': path,
+            'username': username,
+            'dir_name': dir_name,
+            'file_list': file_list,
+            'dir_list': dir_list,
+            'zipped': zipped,
+            }, context_instance=RequestContext(request))
+
+def view_file_via_shared_dir(request, token):
+    assert token is not None    # Checked by URLconf
+
+    try:
+        fileshare = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        raise Http404
+
+    username = fileshare.username
+    repo_id = fileshare.repo_id
+    path = request.GET.get('p', '')
+    if not path:
+        raise Http404
+    
+    if not path.startswith(fileshare.path): # Can not view upper dir of shared dir
+        raise Http404
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    file_name = os.path.basename(path)
+    quote_filename = urllib2.quote(file_name.encode('utf-8'))
+    file_id = get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return render_error(request, _(u'File not exists'))
+
+    access_token = seafserv_rpc.web_get_access_token(repo.id, file_id,
+                                                     'view', '')
+    filetype, fileext = valid_previewed_file(file_name)
+    # Raw path
+    raw_path = gen_file_get_url(access_token, quote_filename)
+    # get file content
+    err = ''
+    file_content = ''
+    swf_exists = False
+    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
+        err, file_content, encoding = repo_file_get(raw_path)
+    elif filetype == 'Document' or filetype == 'PDF':
+        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+
+    zipped = gen_path_link(path, '')
+        
+    return render_to_response('shared_file_view.html', {
+            'repo': repo,
+            'obj_id': file_id,
+            'path': path,
+            'file_name': file_name,
+            'shared_token': token,
+            'access_token': access_token,
+            'filetype': filetype,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'username': username,
+            'err': err,
+            'file_content': file_content,
+            'swf_exists': swf_exists,
+            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+            'zipped': zipped,
+            'token': token,
+            }, context_instance=RequestContext(request))
+    
 def flash_prepare(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
     data = {'doctype': doctype,
@@ -2653,22 +2788,34 @@ def repo_star_file(request, repo_id):
         unstar_file(request.user.username, repo_id, path)
     return HttpResponse(json.dumps({'success':True}), content_type=content_type)
 
-@login_required
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         return render_error(request, _(u'Library not exists'))
 
-    try:
-        parent_dir = request.GET['parent']
-        dirname = request.GET['dirname']
-    except KeyError:
-        return render_error(request, _(u'Invalid arguments'))
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':         # Normalize dir path
+        path += '/'
 
-    path = os.path.join(parent_dir, dirname.rstrip('/'))
+    if len(path) > 1:
+        dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
+    else:
+        dirname = repo.name
+        
+    allow_download = False
+    fileshare_token = request.GET.get('t', '')
+    if fileshare_token:         # download dir from dir shared link
+        try:
+            fileshare = FileShare.objects.get(token=fileshare_token)
+        except FileShare.DoesNotExist:
+            raise Http404
 
-    permission = get_user_permission(request, repo_id)
-    if permission:
+        # Can not download upper dir of shared dir.
+        allow_download = True if path.startswith(fileshare.path) else False
+    else:
+        allow_download = True if get_user_permission(request, repo_id) else False
+
+    if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
                                                           path.encode('utf-8'))
         token = seafserv_rpc.web_get_access_token(repo_id,
@@ -2676,14 +2823,9 @@ def repo_download_dir(request, repo_id):
                                                   'download-dir',
                                                   request.user.username)
     else:
-        return render_permission_error(request, _(u'Unable to access file'))
+        return render_error(request, _(u'Unable to download "%s"') % dirname )
 
-    if len(path) > 1:
-        filename = os.path.basename(path)
-    else:
-        filename = repo.name
-    url = gen_file_get_url(token, filename)
-
+    url = gen_file_get_url(token, dirname)
     return redirect(url)
 
 def events(request):

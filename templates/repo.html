@@ -17,9 +17,17 @@
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}}</h2>
         <div class="fright">
+            {% if path != '/' %}
+            <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
+            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link">{% trans "Share link"%}</button>
+            <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
+            <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+            {% endif %}
+            {% if path == '/' %}
             <button id="repo-download-btn">{% trans "Download"%}</button>
             {% if user_perm == 'rw' %}
             <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+            {% endif %}
             {% endif %}
         </div>
     </div>
@@ -80,13 +88,16 @@
                 {% endif %}
                 {% endfor %}
                 </p>
-                {% if user_perm == 'rw' %}
                 <div class="repo-op fright">
+                  {% if user_perm and path != '/' %}
+                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}" id="download-dir" class="op-btn">{% trans "Download"%}</button>
+                  {% endif %}
+                  {% if user_perm == 'rw' %}
                     <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">{% trans "Upload"%}</button>
                     <button id="add-new-dir" class="op-btn">{% trans "New Directory"%}</button>
                     <button id="add-new-file" class="op-btn">{% trans "New File"%}</button>
+                  {% endif %}
                 </div>
-                {% endif %}
             </div>
             <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
@@ -119,7 +130,8 @@
                         {% if user_perm %}
                         <div class="repo-file-op vh">
                             <div class="displayed-op">
-                                <a class="op" href="{{ SITE_ROOT }}repo/download_dir/{{ repo.id }}/?parent={{ path|urlencode }}&dirname={{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
+                                <a class="op" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
+                                <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-type="d">{% trans "Share" %}</a>
                             </div>
                             {% if user_perm == 'rw' %}
                             <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon" data="no-popup" />
@@ -298,15 +310,16 @@
 
     <div id="file-share" class="hide">
         <h3>{% trans 'Share' %} <span class="op-target"></span></h3>
-        <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link" /></p>
+        <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link-text" /></p>
         <button id="send-link">{% trans 'Send' %}</button>
-        <form id="link-send-form" class="hide">
-            <label>{% trans "Send to:"%}</label><br />
-            <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
-            <input type="hidden" name="file_shared_link" value="" />
-            <input type="submit" value="{% trans "Submit"%}" class="submit" />
-            <p class="error hide"></p>
-            <p id="sending" class="hide">{% trans "Sending..."%}</p>     
+        <form id="link-send-form" action="" method="post" class="hide">
+          <h3>Send Link</h3>
+          <label>{% trans "Send to:"%}</label><br />
+          <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+          <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
+          <input type="submit" value="{% trans "Submit"%}" class="submit" />
+          <p class="error hide"></p>
+          <p id="sending" class="hide">{% trans "Sending..."%}</p>        
         </form>
     </div>
 
@@ -602,7 +615,7 @@ $('#add-new-file-form').submit(function() {
 $('#add-new-dir-form').submit(function() {
     var new_dir = $(this).find('input[name="new_dir_name"]').val();
     if (!$.trim(new_dir)) {
-        apply_form_error('add-new-dir-form', "{% trans "Directory name can't be empty" %}");
+        apply_form_error('add-new-dir-form', "{% trans "Directory name can not be empty" %}");
         return false;
     }
 
@@ -755,24 +768,31 @@ $('.file-share').click(function() {
     var filename = $(this).data('name');
     function showPopup(link) {
         $('#file-share .op-target').html(trimFilename(filename, 30));
-        $('#shared-link, #link-send-form input[name="file_shared_link"]').val(link);
+        $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
-        $('#shared-link').css({'width':$('#linkwidth').width() + 2});
-        $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link' gets the focus
+        $('#shared-link-text').css({'width':$('#linkwidth').width() + 2});
+        $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
         $('#linkwidth').remove();
         $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     }
     if ($(this).data('link')) {
         showPopup($(this).data('link'));
     } else {
+        var aj_url = '';
+        if ($(this).data('type') == 'd') {
+            aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename) + '&type=d';
+        } else {
+            aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename);
+        }
+
         $.ajax({
-            url: '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename),
+            url: aj_url,
             dataType: 'json',
             cache: false,
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 if (data.length > 0) {
-                    showPopup('{{ protocol }}://{{ domain }}{{ SITE_ROOT }}f/' + data[0]['token'] + '/');
+                    showPopup(data[0]['shared_link']);
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -839,9 +859,15 @@ $("#link-send-form").submit(function() {
     });
    return false;
 });
-$('#shared-link').click(function() { $(this).select(); });
+$('#shared-link-text').click(function() { $(this).select(); });
+
+$('#download-dir').click(function() {
+    location.href = $(this).attr('data');
+});
+{% include "snippets/shared_link_js.html" %}
 {% include "snippets/list_commit_detail.html" %}
 {% include "snippets/bottom_bar.html" %}
+
 </script>
 {% include 'snippets/file_upload_progress_js.html' %}
 {% endblock %}
