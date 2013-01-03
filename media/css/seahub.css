@@ -896,9 +896,13 @@ textarea:-moz-placeholder {/* for FF */
 .repo-op .op-btn {
     *margin-left:5px;/* for ie 7*/
 }
-#upload-file {
+#upload-file{
     padding-left:19px;
     background-image:url('../img/upload.png?v=1');
+}
+#download-dir {
+    padding-left:19px;
+    background-image:url('../img/download-blue.png?t=1352500800');
 }
 #add-new-dir {
     padding-left:23px;
@@ -1364,7 +1368,8 @@ textarea:-moz-placeholder {/* for FF */
     color:#444;
     text-align:right;
 }
-#shared-link {
+#shared-link,
+#shared-link-text {
     border:0;
 }
 .file-op {

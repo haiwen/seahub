@@ -6,6 +6,7 @@ import random
 import stat
 import urllib2
 
+from django.contrib.sites.models import RequestSite
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
@@ -637,3 +638,12 @@ def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1):
                                          path__startswith=parent_dir,
                                          org_id=org_id)
     return [ f.path for f in starred_files ]
+
+def gen_shared_link(request, token, s_type):
+    http_or_https = request.is_secure() and 'https' or 'http'
+    domain = RequestSite(request).domain
+
+    if s_type == 'f':
+        return '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
+    else:
+        return '%s://%s%sd/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)

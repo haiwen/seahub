@@ -3,7 +3,8 @@ import os
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, \
+    HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.utils.translation import ugettext as _
@@ -25,12 +26,13 @@ from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
-    gen_token
+    gen_token, gen_shared_link
 
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+from seahub.settings import SITE_ROOT
 
 @login_required
 def share_repo(request):
@@ -176,7 +178,6 @@ def repo_remove_share(request):
         
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        from seahub.settings import SITE_ROOT
         next = SITE_ROOT
 
     return HttpResponseRedirect(next)
@@ -233,13 +234,17 @@ def share_admin(request):
     #     link.repo_name = repo.name
     #     link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
 
-    # File shared links
+    # Shared links
     fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
     for fs in fileshares:
-        if is_personal_repo(fs.repo_id):
-            # only list files in personal repos
-            fs.filename = os.path.basename(fs.path)
+        if is_personal_repo(fs.repo_id):  # only list files in personal repos
+            if fs.s_type == 'f':
+                fs.filename = os.path.basename(fs.path)
+                fs.shared_link = gen_shared_link(request, fs.token, 'f') 
+            else:
+                fs.filename = os.path.basename(fs.path[:-1])
+                fs.shared_link = gen_shared_link(request, fs.token, 'd') 
             fs.repo = get_repo(fs.repo_id)
             p_fileshares.append(fs)
         
@@ -248,8 +253,6 @@ def share_admin(request):
             "shared_repos": shared_repos,
             # "out_links": out_links,
             "fileshares": p_fileshares,
-            "protocol": request.is_secure() and 'https' or 'http',
-            "domain": RequestSite(request).domain,
             }, context_instance=RequestContext(request))
     
 @login_required
@@ -371,17 +374,32 @@ def remove_anonymous_share(request, token):
 @login_required
 def get_shared_link(request):
     """
-    Handle ajax request to generate file shared link.
+    Handle ajax request to generate file or dir shared link.
     """
     if not request.is_ajax():
         raise Http404
     
     content_type = 'application/json; charset=utf-8'
     
-    repo_id = request.GET.get('repo_id')
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
+    repo_id = request.GET.get('repo_id', '')
+    share_type = request.GET.get('type', 'f') # `f` or `d`
+    path = request.GET.get('p', '')
+    if not (repo_id and  path):
+        err = _('Invalid arguments')
+        data = json.dumps([{'error': err}])
+        return HttpResponse(data, status=400, content_type=content_type)
+    
+    if share_type == 'f':
+        if path[-1] == '/':     # cut out last '/' at end of path
+            path = path[:-1]
+    else:
+        if path == '/':         # can not share root dir
+            err = _('Can not share root dir.')
+            data = json.dumps([{'error': err}])
+            return HttpResponse(data, status=400, content_type=content_type)
+        else:
+            if path[-1] != '/': # append '/' at end of path
+                path += '/'
 
     l = FileShare.objects.filter(repo_id=repo_id).filter(
         username=request.user.username).filter(path=path)
@@ -396,6 +414,7 @@ def get_shared_link(request):
         fs.repo_id = repo_id
         fs.path = path
         fs.token = token
+        fs.s_type = 'f' if share_type == 'f' else 'd'
 
         try:
             fs.save()
@@ -403,8 +422,10 @@ def get_shared_link(request):
             err = _('Failed to get the link, please retry it.')
             data = json.dumps([{'error': err}])
             return HttpResponse(data, status=500, content_type=content_type)
-    
-    data = json.dumps([{'token': token}])
+
+    shared_link = gen_shared_link(request, token, fs.s_type)
+
+    data = json.dumps([{'token': token, 'shared_link': shared_link}])
     return HttpResponse(data, status=200, content_type=content_type)
 
 @login_required
