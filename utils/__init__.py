@@ -5,12 +5,13 @@ import re
 import random
 import stat
 import urllib2
+import json
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor
 
-from base.models import FileContributors, UserStarredFiles
+from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
 from django.utils.hashcompat import md5_constructor
 
 from pysearpc import SearpcError
@@ -376,22 +377,25 @@ def get_file_contributors_from_revisions(repo_id, file_path):
     commits = []
     try:
         commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1)
-    except SearpcError:
-        return []
+    except SearpcError, e:
+        return [], 0, ''
+
+    if not commits:
+        return [], 0, ''
 
     # Commits are already sorted by date, so the user list is also sorted.
     users = [ commit.creator_name for commit in commits if commit.creator_name ]
 
     # Remove duplicate elements in a list
-    ret = []
+    email_list = []
     for user in users:
-        if user not in ret:
-            ret.append(user)
+        if user not in email_list:
+            email_list.append(user)
 
-    return ret, commits[0].ctime, commits[0].id
+    return email_list, commits[0].ctime, commits[0].id
 
 def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
-    """Get file contributors list and last modfied time from database cache.
+    """Get file contributors list and last modified time from database cache.
     If not found in cache, try to get it from seaf-server.
 
     """
@@ -414,7 +418,7 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
         # has no cache yet
         contributors, last_modified, last_commit_id = get_file_contributors_from_revisions (repo_id, file_path)
         if not contributors:
-            return [], 0
+            return [], 0, ''
         emails = ','.join(contributors)
         file_contributors = FileContributors(repo_id=repo_id,
                                              file_id=file_id,
@@ -634,3 +638,66 @@ def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1):
                                          path__startswith=parent_dir,
                                          org_id=org_id)
     return [ f.path for f in starred_files ]
+
+def calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id):
+    try:
+        ret_list = seafserv_threaded_rpc.calc_files_last_modified(repo_id, parent_dir.encode('utf-8'))
+    except:
+        return {}
+
+    # ret_list is like:
+    # [
+    #    {'file_name': 'xxx', 'last_modified': t1}
+    #    {'file_name': 'yyy', 'last_modified': t2}
+    # ]
+    # and we transform it to:
+    # {'xxx': t1, 'yyy': t2}
+    last_modified_info = {}
+    for entry in ret_list:
+        key = entry.file_name
+        value = entry.last_modified
+        last_modified_info[key] = value
+        
+    info = DirFilesLastModifiedInfo(repo_id=repo_id,
+                                    parent_dir=parent_dir,
+                                    parent_dir_hash=parent_dir_hash,
+                                    dir_id=dir_id,
+                                    last_modified_info=json.dumps(last_modified_info))
+    info.save()
+
+    return last_modified_info
+
+def get_dir_files_last_modified(repo_id, parent_dir):
+    '''Calc the last modified time of all the files under the directory
+    <parent_dir> of the repo <repo_id>. Return a dict whose keys are the file
+    names and values are their corresponding last modified timestamps.
+
+    '''
+    dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo_id, parent_dir)
+    parent_dir_hash = calc_file_path_hash(parent_dir)
+    if not dir_id:
+        return {}
+        
+    try:
+        info = DirFilesLastModifiedInfo.objects.get(repo_id=repo_id,
+                                                    parent_dir_hash=parent_dir_hash)
+    except DirFilesLastModifiedInfo.DoesNotExist:
+        # no cache yet
+        return calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id)
+    else:
+        # cache exist
+        if info.dir_id != dir_id:
+            # cache is outdated
+            info.delete()
+            return calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id)
+        else:
+            # cache is valid
+            return json.loads(info.last_modified_info)
+
+def calc_file_path_hash(path, bits=12):
+    if isinstance(path, unicode):
+        path = path.encode('UTF-8')
+
+    path_hash = md5_constructor(urllib2.quote(path)).hexdigest()[:bits]
+    
+    return path_hash

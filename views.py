@@ -71,7 +71,8 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_get_url, string2list, MAX_INT, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
-    get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files
+    get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
+    get_dir_files_last_modified
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -168,11 +169,15 @@ def get_repo_dirents(request, repo_id, commit, path):
             org_id = request.user.org['org_id']
         starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
 
+        last_modified_info = get_dir_files_last_modified(repo_id, path)
+
         fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
         http_or_https = request.is_secure() and 'https' or 'http'
         domain = RequestSite(request).domain
 
         for dirent in dirs:
+            dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
+
             if stat.S_ISDIR(dirent.props.mode):
                 dir_list.append(dirent)
             else:
@@ -188,7 +193,6 @@ def get_repo_dirents(request, repo_id, commit, path):
                         dirent.sharelink = '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, share.token)
                         dirent.sharetoken = share.token
                         break
-
         dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                         y.obj_name.lower()))
         file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
@@ -1319,7 +1323,7 @@ def repo_view_file(request, repo_id):
     comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
     contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
-    latest_contributor = contributors[0]
+    latest_contributor = contributors[0] if contributors else None
 
     if len(groups) > 1:
         ctx = {}
