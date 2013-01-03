@@ -459,39 +459,36 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(settings.EVENTS_CONFIG_FILE)
 
+    def _get_events(username, start, org_id=None):
+        ev_session = SeafEventsSession()
+        if org_id == None:
+            events = seafevents.get_user_events(ev_session, username, start, start + 11)
+        else:
+            events = seafevents.get_org_user_events(ev_session, \
+                                    org_id, username, start, start + 11)
+        valid_events = []
+        ev_session.close()
+        for ev in events:
+            if ev.etype == 'repo-update':
+                repo = get_repo(ev.repo_id)
+                if not repo:
+                    continue
+                if repo.encrypted:
+                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                ev.repo = repo
+                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+
+            valid_events.append(ev)
+
+        return valid_events
+
     def get_user_events(username, start):
-        ev_session = SeafEventsSession()
-        events = seafevents.get_user_events(ev_session, username, start, start + 11)
-        ev_session.close()
-        for ev in events:
-            if ev.etype == 'repo-update':
-                repo = get_repo(ev.repo_id)
-                if not repo:
-                    ev.etype = 'dummy'
-                    continue
-                if repo.encrypted:
-                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
-                ev.repo = repo
-                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
-
-        return events
-
+        return _get_events(username, start)
+        
     def get_org_user_events(org_id, username, start):
-        ev_session = SeafEventsSession()
-        events = seafevents.get_org_user_events(ev_session, \
-                            org_id, username, start, start + 11)
-        ev_session.close()
-        for ev in events:
-            if ev.etype == 'repo-update':
-                repo = get_repo(ev.repo_id)
-                if not repo:
-                    ev.etype = 'dummy'
-                    continue
-                if repo.encrypted:
-                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
-                ev.repo = repo
-                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
-        return events
+        return _get_events(username, start, org_id=org_id)
+        
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -519,7 +516,7 @@ class StarredFile(object):
         self.is_dir = is_dir
         # always 0 for dir
         self.last_modified = last_modified
-        self.size = size;
+        self.size = size
         if not is_dir:
             self.name = path.split('/')[-1]
 
@@ -547,7 +544,7 @@ def get_starred_files(email, org_id=-1):
 
         # file still exists?
         file_id = ''
-        size = -1;
+        size = -1
         if sfile.path != "/":
             try:
                 file_id = seafserv_threaded_rpc.get_file_id_by_path(sfile.repo_id, sfile.path)
