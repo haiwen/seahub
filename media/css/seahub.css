@@ -1015,7 +1015,7 @@ textarea:-moz-placeholder {/* for FF */
     background-image: url('../img/delete-16.png');
 }
 #repo-setting-btn {
-    background-image: url('../img/settings-16.png');
+    background-image: url('../img/config-16.png');
 }
 #repo-latest-commit {
     word-wrap:break-word;

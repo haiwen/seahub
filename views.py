@@ -44,7 +44,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
-    get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path \
+    get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit
 from pysearpc import SearpcError
 
