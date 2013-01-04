@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">

@@ -217,6 +217,20 @@ ul.with-bg li {
     border-style: dashed dashed dashed solid;
     border-left-color: #bbb;
 }
+.tri-down-order-bg {
+    padding-top: 1px;
+    border-width: 4px 4px 0;
+    border-style: solid dashed dashed;
+    border-top-color: #000;
+    cursor:pointer;
+}
+.tri-up-order-bg {
+    padding-bottom: 1px;
+    border-width: 0 4px 4px;
+    border-style: dashed dashed solid;
+    border-bottom-color: #000;
+    cursor:pointer;
+}
 .outer-caret,
 .inner-caret {
     height:0;
@@ -946,6 +960,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list {
     margin:15px 0 0;
+}
+#name-up,
+#time-up {
+    display:none;
+}
+.zh-cn .dirent-name {
+    width:50%;
+}
+.zh-cn .dirent-op {
+    width:20%;
 }
 .file-star {
     cursor:pointer;
