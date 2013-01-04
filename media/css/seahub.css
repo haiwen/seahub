@@ -711,8 +711,6 @@ textarea:-moz-placeholder {/* for FF */
 #org-user-add,
 #group-member-add,
 #group-admin-add,
-#repo-download-btn,
-#recycle-btn,
 .repo-op .op-btn {
     padding-left:21px;
     background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
@@ -1002,14 +1000,22 @@ textarea:-moz-placeholder {/* for FF */
 .icon-container {
     text-align:center;
 }
-#repo-download-btn, #recycle-btn {
+#repo-download-btn, #repo-setting-btn, #recycle-btn {
     font-size:14px;
+    padding-left:21px;
+    background-color:#f5f5f5;
+    background-attachment:scroll;
+    background-repeat:no-repeat;
+    background-position:3px 48%;
 }
 #repo-download-btn {
     background-image: url('../img/download-16.png');
 }
 #recycle-btn {
     background-image: url('../img/delete-16.png');
+}
+#repo-setting-btn {
+    background-image: url('../img/config-16.png');
 }
 #repo-latest-commit {
     word-wrap:break-word;

@@ -712,3 +712,17 @@ def gen_shared_link(request, token, s_type):
     else:
         return '%s://%s%sd/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
 
+def show_delete_days(request):
+    if request.method == 'GET':
+        days_str = request.GET.get('days', '')
+    elif request.method == 'POST':
+        days_str = request.POST.get('days', '')
+    else:
+        days_str = ''
+
+    try:
+        days = int(days_str)
+    except ValueError:
+        days = 7
+
+    return days

@@ -213,3 +213,11 @@ class SetUserQuotaForm(forms.Form):
     quota = forms.IntegerField(min_value=0,
                                error_messages={'required': _('Quota can\'t be empty'),
                                                'min_value': _('Quota is too low (minimum value is 0)')})
+
+class RepoSettingForm(forms.Form):
+    """
+    Form for saving repo settings.
+    """
+    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
+    days = forms.IntegerField(error_messages={'required': _('Days can\'t be empty'),
+                                              'invalid': _('Please enter a number')})

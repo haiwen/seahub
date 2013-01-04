@@ -38,7 +38,7 @@
             {% trans "Current Path: "%}
 
             {% if page_from == 'recycle' %}
-                <a href="{% url 'repo_recycle_view' repo.id %}">{{repo.props.name}} {% trans "'s trash" %}</a> /
+                <a href="{% url 'repo_recycle_view' repo.id %}?days={{days}}">{{repo.props.name}} {% trans "'s trash" %}</a> /
             {% endif %}
 
             {% for name, link in zipped %}
@@ -48,7 +48,7 @@
                     {% endif %}
 
                     {% if page_from == 'recycle' %}
-                    <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a> /
+                    <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}">{{ name }}</a> /
                     {% endif %}
 
                     {% if page_from == 'file_history' %}
