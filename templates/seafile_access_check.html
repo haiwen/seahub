@@ -4,7 +4,7 @@
 {% block main_panel %}
 <div class="text-panel">
     <p id="msg-wait">{% trans 'Preparing, please wait...' %}</p>
-    <p id="msg-client"  class="error hide">{% trans "Make sure Seafile client is running." %}</p>
+    <p id="msg-client"  class="error hide">{% trans "No running Seafile client is detected. If you're sure Seafile client is running, click the following link to continue downloading:" %} <br/><a href="{{ download_url }}">{{ download_url|slice:"40" }}...</a></p>
     <p id="msg-version" class="error hide">{% trans "Your Seafile client is out of date, please upgrade to latest version." %}<a href="http://www.seafile.com/download">{% trans "Click to download." %}</a></p>
 </div>
 {% endblock %}

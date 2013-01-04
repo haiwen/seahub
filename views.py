@@ -1697,11 +1697,8 @@ def repo_access_file(request, repo_id, obj_id):
 
     redirect_url = gen_file_get_url(token, file_name)
     return HttpResponseRedirect(redirect_url)
- 
-@login_required
-def repo_download(request):
-    repo_id = request.GET.get('repo_id', '')
 
+def get_repo_download_url(request, repo_id):
     repo = seafserv_threaded_rpc.get_repo(repo_id)    
     repo_name = repo.props.name
     quote_repo_name = quote(repo_name.encode('utf-8'))
@@ -1712,20 +1709,18 @@ def repo_download(request):
         enc = ''
     relay_id = get_session_info().id
     if not relay_id:
-        return render_to_response('error.html', {
-                "error_msg": _(u"Failed to download library, unable to find servre")
-                }, context_instance=RequestContext(request))
+        return '', _(u"Failed to download library, unable to find server")
 
     try:
         token = seafserv_threaded_rpc.get_repo_token_nonnull \
                 (repo_id, request.user.username)
     except Exception, e:
-        return render_error(request, str(e))
+        return '', str(e)
 
     addr, port = get_ccnet_server_addr_port ()
 
     if not (addr and port):
-        return render_error(request, _(u"Invalid server setting"))
+        return '', _(u"Invalid server setting")
 
     ccnet_applet_root = get_ccnetapplet_root()
     email = urllib2.quote(request.user.username)
@@ -1736,7 +1731,19 @@ def repo_download(request):
     url += "&email=%s&token=%s" % (email, token)
     url += "&repo_id=%s&repo_name=%s&encrypted=%s" % (repo_id, quote_repo_name, enc)
 
-    return HttpResponseRedirect(url)
+    return url, ''
+ 
+@login_required
+def repo_download(request):
+    repo_id = request.GET.get('repo_id', '')
+
+    download_url, err = get_repo_download_url(request, repo_id)
+    if err:
+        return render_to_response('error.html', {
+            "error_msg": err
+        }, context_instance=RequestContext(request))
+
+    return HttpResponseRedirect(download_url)
 
 @login_required    
 def file_move(request):
@@ -1804,16 +1811,21 @@ def file_move(request):
 
     return HttpResponseRedirect(url)
 
-        
-
+@login_required
 def seafile_access_check(request):
     repo_id = request.GET.get('repo_id', '')
     applet_root = get_ccnetapplet_root()
+    download_url, err = get_repo_download_url (request, repo_id)
+    if err:
+        return render_to_response('error.html', {
+            "error_msg": err
+        }, context_instance=RequestContext(request))
     
     return render_to_response(
         'seafile_access_check.html', {
             'repo_id': repo_id,
             'applet_root': applet_root,
+            'download_url': download_url,
         },
         context_instance=RequestContext(request))
 
