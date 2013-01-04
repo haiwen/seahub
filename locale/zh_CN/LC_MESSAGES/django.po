@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-02 14:39+0800\n"
+"POT-Creation-Date: 2013-01-04 11:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,227 +154,227 @@ msgstr ""
 msgid "Русский"
 msgstr ""
 
-#: views.py:485
+#: views.py:493
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: views.py:510
+#: views.py:518
 #, fuzzy
 msgid "Failed to save settings on server"
 msgstr "内部错误，设置失败"
 
-#: views.py:519
+#: views.py:527
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: views.py:521
+#: views.py:529
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: views.py:523
+#: views.py:531
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:525 views.py:1254 views.py:2455
+#: views.py:533 views.py:1264 views.py:2466
 msgid "File not exists"
 msgstr "文件不存在"
 
-#: views.py:527
+#: views.py:535
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: views.py:529
+#: views.py:537
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: views.py:531
+#: views.py:539
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: views.py:542 views.py:563
+#: views.py:550 views.py:571
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: views.py:627
+#: views.py:635
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: views.py:673
+#: views.py:681
 msgid "Unable to view library snapshots"
 msgstr "无法查看该资料库镜像"
 
-#: views.py:723
+#: views.py:731
 msgid "You have no permission to restore library"
 msgstr "你没有权限进行还原操作"
 
-#: views.py:739
+#: views.py:747
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:745 views.py:1511 views.py:2330 views.py:2365 views.py:2669
-#: views.py:2691
+#: views.py:753 views.py:1522 views.py:2341 views.py:2376 views.py:2680
+#: views.py:2702
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:747 views.py:842 views.py:2284 views.py:2685
+#: views.py:755 views.py:850 views.py:2295 views.py:2696
 msgid "Library not exists"
 msgstr "资料库不存在"
 
-#: views.py:749
+#: views.py:757
 msgid "History you specified is not exists"
 msgstr "指定的历史记录不存在"
 
-#: views.py:751
+#: views.py:759
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: views.py:862 views.py:878
+#: views.py:870 views.py:886
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1152
+#: views.py:1160
 msgid "Failed to create repo"
 msgstr "创建失败"
 
-#: views.py:1170
+#: views.py:1178
 msgid "Operation successful"
 msgstr "操作成功"
 
-#: views.py:1172
+#: views.py:1180
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: views.py:1203
+#: views.py:1211
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1210
+#: views.py:1218
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1212
+#: views.py:1220
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1270 views.py:1579
+#: views.py:1280 views.py:1590
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views.py:1462
+#: views.py:1473
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1467
+#: views.py:1478
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1470
+#: views.py:1481
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1482
+#: views.py:1493
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1491
+#: views.py:1502
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1497
+#: views.py:1508
 #, fuzzy
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views.py:1501
+#: views.py:1512
 #, fuzzy
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views.py:1505
+#: views.py:1516
 #, fuzzy
 msgid "The library is encrypted."
 msgstr "已加密"
 
-#: views.py:1558
+#: views.py:1569
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views.py:1573
+#: views.py:1584
 #, fuzzy
 msgid "The file does not exist."
 msgstr "文件不存在"
 
-#: views.py:1599
+#: views.py:1610
 msgid "Edit online is not offered for this type of file."
 msgstr ""
 
-#: views.py:1653 views.py:2704
+#: views.py:1664 views.py:2715
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views.py:1673
+#: views.py:1684
 msgid "Failed to download library, unable to find servre"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1685
+#: views.py:1696
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1714
+#: views.py:1725
 #, fuzzy
 msgid "Destination path is too long."
 msgstr "目录名过长"
 
-#: views.py:1720
+#: views.py:1731
 #, fuzzy
 msgid "You can not modify that library."
 msgstr "无法在线查看该资料库。"
 
-#: views.py:1733
+#: views.py:1744
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1734
+#: views.py:1745
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1734
+#: views.py:1745
 msgid "move"
 msgstr "移动"
 
-#: views.py:1749
+#: views.py:1760
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1755
+#: views.py:1766
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1865
+#: views.py:1876
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:1939 templates/sys_useradmin.html:78
+#: views.py:1950 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:1941
+#: views.py:1952
 #, python-format
 msgid ""
 "Successfully resetting password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s"
 
-#: views.py:1945
+#: views.py:1956
 #, python-format
 msgid ""
 "Successfully resetting password to %(passwd)s, but failed to send email to "
@@ -383,53 +383,53 @@ msgstr ""
 "成功将重置密码为 %(passwd)s, 发送通知邮件到 %(user)s 失败，请检查你的邮件配"
 "置。"
 
-#: views.py:1961
+#: views.py:1972
 #, python-format
 msgid "Successfully resetting password to %s"
 msgstr "成功将密码重置为 %s"
 
-#: views.py:1963
+#: views.py:1974
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:1985
+#: views.py:1996
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:1987
+#: views.py:1998
 msgid "Successfully sending mail"
 msgstr "邮件发送成功"
 
-#: views.py:1989
+#: views.py:2000
 msgid "Failed to send mail"
 msgstr "邮件发送失败"
 
-#: views.py:2202
+#: views.py:2213
 #, python-format
 msgid "Successfully rename %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2258
+#: views.py:2269
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2351
+#: views.py:2362
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2355 views.py:2381
+#: views.py:2366 views.py:2392
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2377
+#: views.py:2388
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2509
+#: views.py:2520
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -703,12 +703,12 @@ msgid "Last Modifier"
 msgstr "最后修改者"
 
 #: templates/file_revisions.html:25 templates/repo.html:102
-#: templates/repo_history_view.html:53 templates/repo_recycle_view.html:35
+#: templates/repo_history_view.html:53 templates/repo_recycle_view.html:55
 msgid "Size"
 msgstr "大小"
 
 #: templates/file_revisions.html:26 templates/public_home.html:28
-#: templates/repo.html:103 templates/repo_recycle_view.html:36
+#: templates/repo.html:103 templates/repo_recycle_view.html:56
 #: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:14
 #: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
 #: templates/sys_useradmin.html:6 templates/sys_useradmin.html.py:18
@@ -727,8 +727,8 @@ msgstr "(当前版本)"
 msgid "Unknown"
 msgstr "未知"
 
-#: templates/file_revisions.html:50 templates/repo_recycle_view.html:46
-#: templates/repo_recycle_view.html:63 templates/repo_view_snapshot.html:44
+#: templates/file_revisions.html:50 templates/repo_recycle_view.html:66
+#: templates/repo_recycle_view.html:83 templates/repo_view_snapshot.html:44
 msgid "Restore"
 msgstr "还原"
 
@@ -1059,7 +1059,7 @@ msgid "New Library"
 msgstr "新建资料库"
 
 #: templates/public_home.html:24 templates/repo.html:101
-#: templates/repo_history_view.html:52 templates/repo_recycle_view.html:33
+#: templates/repo_history_view.html:52 templates/repo_recycle_view.html:53
 #: templates/sys_group_admin.html:11 templates/sys_org_admin.html:11
 #: templates/sys_seafadmin.html:11 templates/userinfo.html:38
 #: templates/userinfo.html.py:63 templates/snippets/my_owned_repos.html:18
@@ -1189,7 +1189,7 @@ msgid "Unstarred"
 msgstr "取消星标"
 
 #: templates/repo.html:145 templates/repo.html.py:392 templates/repo.html:448
-#: templates/repo_history_view.html:66 templates/repo_recycle_view.html:58
+#: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
 msgid "File"
 msgstr "文件"
 
@@ -1306,7 +1306,7 @@ msgid "Link: "
 msgstr ""
 
 #: templates/repo.html:392 templates/repo.html.py:451
-#: templates/repo_history_view.html:58 templates/repo_recycle_view.html:41
+#: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
 msgstr "目录"
 
@@ -1392,7 +1392,19 @@ msgstr "返回镜像列表"
 msgid "Can't view this library"
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo_recycle_view.html:34
+#: templates/repo_recycle_view.html:32 templates/repo_recycle_view.html:34
+msgid "a week"
+msgstr "一周内"
+
+#: templates/repo_recycle_view.html:37 templates/repo_recycle_view.html:39
+msgid "a month"
+msgstr "一个月内"
+
+#: templates/repo_recycle_view.html:42 templates/repo_recycle_view.html:44
+msgid "all"
+msgstr "全部"
+
+#: templates/repo_recycle_view.html:54
 msgid "Delete Time"
 msgstr "删除时间"
 

@@ -73,7 +73,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
-    get_dir_files_last_modified
+    get_dir_files_last_modified, show_delete_days
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -454,8 +454,10 @@ def render_recycle_root(request, repo_id):
     if not repo:
         raise Http404
 
+    days = show_delete_days(request)
+
     try:
-        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id)
+        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days)
     except:
         deleted_entries = []
 
@@ -467,16 +469,18 @@ def render_recycle_root(request, repo_id):
         else:
             file_list.append(dirent)
 
-    dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                    y.obj_name.lower()))
-    file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                     y.obj_name.lower()))
+    # Entries sort by deletion time in descending order.
+    dir_list.sort(lambda x, y : cmp(y.delete_time,
+                                    x.delete_time))
+    file_list.sort(lambda x, y : cmp(y.delete_time,
+                                     x.delete_time))
 
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'dir_list': dir_list,
             'file_list': file_list,
+            'days': days,
             }, context_instance=RequestContext(request))
 
 def render_recycle_dir(request, repo_id, commit_id):
@@ -501,6 +505,8 @@ def render_recycle_dir(request, repo_id, commit_id):
     zipped = gen_path_link(path, '')
     file_list, dir_list = get_repo_dirents(request, repo_id, commit, basedir + path)
 
+    days = show_delete_days(request)
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
@@ -510,6 +516,7 @@ def render_recycle_dir(request, repo_id, commit_id):
             'commit_id': commit_id,
             'basedir': basedir,
             'path': path,
+            'days': days,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1271,10 +1278,12 @@ def repo_view_file(request, repo_id):
         current_commit = get_commits(repo_id, 0, 1)[0]
 
     basedir = ''
+    days = 0
     if page_from == 'recycle':
         basedir = request.GET.get('base', '')
         if not basedir:
             raise Http404
+        days = show_delete_days(request)
 
     if view_history:
         obj_id = request.GET.get('obj_id', '')
@@ -1346,6 +1355,7 @@ def repo_view_file(request, repo_id):
                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
                 'page_from': page_from,
                 'basedir': basedir,
+                'days': days,
                 }, context_instance=RequestContext(request))
     
     # file share link
