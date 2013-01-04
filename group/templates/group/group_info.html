@@ -37,13 +37,19 @@
     </div>
     <div class="info-item-bottom">
         {% if common_members %}
-        <ul>
+          <ul>
             {% for member in common_members %}
-            <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+              {% if forloop.counter0 < group_members_default_display %}
+                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+              {% else %}
+                {% if forloop.last %}
+                  <li class="member">...</li>
+                {% endif %}
+              {% endif %}
             {% endfor %}
-        </ul>
+          </ul>
         {% else %}
-        <p>{% blocktrans %}You can click "Add" above to add members.{% endblocktrans %}</p>
+          <p>{% blocktrans %}You can click "Add" above to add members.{% endblocktrans %}</p>
         {% endif %}
     </div>
 </div>

@@ -146,7 +146,7 @@ def remove_group_user(user):
     """
     return ccnet_threaded_rpc.remove_group_user(user)
 
-def get_group_members(group_id):
+def get_group_members(group_id, start=-1, limit=-1):
     group_id_int = int(group_id)
     try:
         members = ccnet_threaded_rpc.get_group_members(group_id_int)

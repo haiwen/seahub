@@ -1,13 +1,16 @@
-from seaserv import ccnet_threaded_rpc
-
 from signals import grpmsg_added
 from models import GroupMessage
 from notifications.models import UserNotification
 
+from seaserv import get_group_members
+
 def grpmsg_added_cb(sender, **kwargs):
     group_id = kwargs['group_id']
     from_email = kwargs['from_email']
-    group_members = ccnet_threaded_rpc.get_group_members(int(group_id))
+    group_members = get_group_members(int(group_id))
+    if len(group_members) > 15: # No need to send notification when group is 
+        return                  # too large
+
     for m in group_members:
         if from_email == m.user_name:
             continue

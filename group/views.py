@@ -29,6 +29,7 @@ from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm
 from signals import grpmsg_added, grpmsg_reply_added
+from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from base.decorators import ctx_switch_required
 from base.mixins import LoginRequiredMixin
 from seahub.contacts.models import Contact
@@ -222,8 +223,8 @@ def render_group_info(request, group_id, form):
         current_page = 1
         per_page = 15
 
-    msgs_plus_one = GroupMessage.objects.filter(\
-        group_id=group_id).order_by(\
+    msgs_plus_one = GroupMessage.objects.filter(
+        group_id=group_id).order_by(
         '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
 
     if len(msgs_plus_one) == per_page + 1:
@@ -279,6 +280,7 @@ def render_group_info(request, group_id, form):
             'page_next': page_next,
             'create_shared_repo': True,
             'contacts': contacts,
+            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
 @login_required
@@ -912,9 +914,12 @@ def attention(request):
 
     member_names = []
     for m in members:
+        if len(result) == 10:   # Return at most 10 results.
+            break
+        
         if m.user_name == user:
             continue
-
+        
         if m.user_name in member_names:
             # Remove duplicated member names
             continue
