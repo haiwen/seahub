@@ -26,7 +26,7 @@
                 {% endfor %}
                 </p>
                 <div class="repo-op fright">
-                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" id="download-dir" class="op-btn">{% trans "Download"%}</button>
+                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" id="download-dir" class="op-btn">{% trans "ZIP"%}</button>
                 </div>
                 
             </div>

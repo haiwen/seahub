@@ -90,7 +90,7 @@
                 </p>
                 <div class="repo-op fright">
                   {% if user_perm and path != '/' %}
-                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}" id="download-dir" class="op-btn">{% trans "Download"%}</button>
+                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}" id="download-dir" class="op-btn">{% trans "ZIP"%}</button>
                   {% endif %}
                   {% if user_perm == 'rw' %}
                     <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn">{% trans "Upload"%}</button>
