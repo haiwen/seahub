@@ -202,9 +202,6 @@ SERVE_STATIC = True
 
 # Enalbe or disalbe registration on web.
 ENABLE_SIGNUP = False
-LOGIN_URL = SITE_ROOT + 'accounts/login'
-
-SEAFILE_VERSION = '1.4'
 
 # Logging
 LOGGING = {
@@ -293,3 +290,8 @@ else:
 # Remove install_topdir from path
 sys.path.pop(0)
 
+SEAFILE_VERSION = '1.4'
+
+# Put here after loading other settings files if `SITE_ROOT` is modified in
+# other settings files.
+LOGIN_URL = SITE_ROOT + 'accounts/login'
