@@ -1459,6 +1459,9 @@ textarea:-moz-placeholder {/* for FF */
 #md-view {
     width:756px;
 }
+#md-view h2 {
+    border-bottom: 1px solid #ccc;
+}
 #svg-view {
     min-height:500px;/*for ff*/
 }
