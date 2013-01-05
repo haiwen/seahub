@@ -227,12 +227,18 @@ function editSubmit() {
         success: function(data) {
             location.href = $('#file-edit-cancel').attr('href');
         },
-        error: function(xhr, ajaxOptions, thrownError) {
-            var jsonVal = jQuery.parseJSON(xhr.responseText);
-            feedback(jsonVal['error'], 'error');
-            if (jsonVal['op'] == 'decrypt') {
-                $('#repo-decrypt-form').modal();
-                $('#simplemodal-container').css({'height':'auto'});
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                var resp = jQuery.parseJSON(xhr.responseText);
+                feedback(resp['error'], 'error');
+                if (resp['op'] == 'decrypt') {
+                    $('#repo-decrypt-form').modal();
+                    $('#simplemodal-container').css({'height':'auto'});
+                }
+            } else if (xhr.readyState == 0) {
+                feedback('{% trans "Submit failed. Please check the network." %}', 'error');
+            } else {
+                feedback('{% trans "Submit failed." %}', 'error');
             }
             enable($('#file-edit-submit'));
         }
