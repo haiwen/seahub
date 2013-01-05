@@ -70,7 +70,8 @@ ccnet_config.read(os.path.join(CCNET_CONF_PATH, 'ccnet.conf'))
 
 if ccnet_config.has_option('General', 'SERVICE_URL') and \
    ccnet_config.has_option('Network', 'PORT'):
-    service_url = ccnet_config.get('General', 'SERVICE_URL').lstrip('http://')
+    service_url = ccnet_config.get('General', 'SERVICE_URL')
+    service_url = service_url.lstrip('http://').lstrip('https://')
     if ':' in service_url:
         # strip http port such as ':8000' in 'http://192.168.1.101:8000'
         idx = service_url.rindex(':')
