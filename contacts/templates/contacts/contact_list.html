@@ -29,7 +29,7 @@
         <td>{{ contact.contact_email }}</td>
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
-        <td>
+        <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
             <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
             <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|quote}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
@@ -43,24 +43,22 @@
 </div>
 {% endif %}
 
-<form action="{% url contact_add_post %}" method="post" id="contact-add-form" class="hide">
+<form action="" method="post" id="contact-add-form" class="hide">
     <h3>{% trans "Add Contacts"%}</h3>
-    {{ form.user_email.as_hidden }}
     <label>{% trans "Email"%}</label><br />
     {{ form.contact_email }}<br />
     <label>{% trans "Name(optional)"%}</label><br />{{ form.contact_name }}<br />
     <label>{% trans "Note(optional)"%}</label><br />{{ form.note }}<br />
-    <p class="error hide" id="contact-add-error">{% trans "Please input email address"%}</p>
+    <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
-<form action="{% url contact_edit %}" method="post" id="contact-edit-form" class="hide">
+<form action="" method="post" id="contact-edit-form" class="hide">
     <h3>{% trans "Edit Contact"%}</h3>
-    {{ edit_form.user_email.as_hidden }}
     <label>{% trans "Email"%}</label><br />
     {{ edit_form.contact_email }}<br />
     <label>{% trans "Name(optional)"%}</label><br />{{ edit_form.contact_name }}<br />
     <label>{% trans "Note(optional)"%}</label><br />{{ edit_form.note }}<br />
-    <p class="error hide" id="contact-edit-error"></p>
+    <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
 
@@ -69,42 +67,45 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('.contact-edit').click(function() {
-    var note_container = $(this).parent().prev(),
-        contact_note = note_container.html(),
-        contact_name = note_container.prev().html(),
-        contact_email = note_container.prev().prev().html();
-    $('#contact-edit-form [name="contact_email"]').val(contact_email);
-    $('#contact-edit-form [name="contact_name"]').val(contact_name);
-    $('#contact-edit-form [name="note"]').val(contact_note);
-    $('#contact-edit-form').modal({appendTo: '#main'});
+    var contact = $(this).parent();
+    var form = $('#contact-edit-form');
+    form.find('[name="contact_email"]').val(contact.data('email'));
+    form.find('[name="contact_name"]').val(contact.data('name'));
+    form.find('[name="note"]').val(contact.data('note'));
+    form.modal({appendTo: '#main'});
     return false;
 });
 $('#contact-edit-form').submit(function() {
+    var form = $(this);
     $.ajax({
-        url: $('#contact-edit-form').attr('action'),
+        url: '{% url contact_edit %}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {
-            'user_email': $('#contact-edit-form input[name="user_email"]').val(),
-            'contact_email': $('#contact-edit-form input[name="contact_email"]').val(),
-            'contact_name': $('#contact-edit-form input[name="contact_name"]').val(),
-            'note': $('#contact-edit-form input[name="note"]').val()
+            'user_email': '{{request.user.username}}',
+            'contact_email': form.find('input[name="contact_email"]').val(),
+            'contact_name': form.find('input[name="contact_name"]').val(),
+            'note': form.find('input[name="note"]').val()
         },  
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            } else {
-                apply_form_error('contact-edit-form', data['error']);
-            }   
+            }
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('contact-edit-form', value[0]);
-            });
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                var errors = $.parseJSON(jqXHR.responseText);
+                var str = '';
+                for (var i in errors) {
+                    str += errors[i].join();
+                }
+                apply_form_error('contact-edit-form', str);
+            } else {
+                apply_form_error('contact-edit-form', '{% trans "Failed." %}');
+            }
         }
     });
 
@@ -126,38 +127,46 @@ $('#contact-add')
     }   
 );
 $('#contact-add-form').submit(function() {
-
-    if(!$.trim($('#contact-add-form input[name="contact_email"]').val())) {
-       $('#contact-add-error').removeClass('hide') 
-       $('#simplemodal-container').css('height', $(this).height());
+    var form = $(this);
+    var email = $.trim(form.find('input[name="contact_email"]').val());
+    if(!email) {
+        apply_form_error('contact-add-form', '{% trans "Email is required." %}');
+        return false;
+    }
+    if (email == '{{request.user.username}}') {
+        apply_form_error('contact-add-form', "{% trans "You can't add yourself." %}");
         return false;
     }
 
     $.ajax({
-        url: $('#contact-add-form').attr('action'),
+        url: '{% url contact_add_post %}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {
-            'user_email': $('#contact-add-form input[name="user_email"]').val(),
-            'contact_email': $('#contact-add-form input[name="contact_email"]').val(),
-            'contact_name': $('#contact-add-form input[name="contact_name"]').val(),
-            'note': $('#contact-add-form input[name="note"]').val()
+            'user_email': '{{request.user.username}}',
+            'contact_email': email,
+            'contact_name': form.find('input[name="contact_name"]').val(),
+            'note': form.find('input[name="note"]').val()
         },  
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            } else {
-                apply_form_error('contact-add-form', data['error']);
-            }   
+            }
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('contact-add-form', value[0]);
-            });
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                var errors = $.parseJSON(jqXHR.responseText);
+                var str = '';
+                for (var i in errors) {
+                    str += errors[i].join();
+                }
+                apply_form_error('contact-add-form', str);
+            } else {
+                apply_form_error('contact-add-form', '{% trans "Failed." %}');
+            }
         }
     });
 

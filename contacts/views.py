@@ -65,7 +65,7 @@ def contact_add_post(request):
         contact.save()
 
         result['success'] = True
-        messages.success(request, _(u"Successfully adding %s to contacts.") % contact_email)
+        messages.success(request, _(u"Successfully added %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -90,7 +90,7 @@ def contact_add(request):
         contact.note = form.cleaned_data['note']
         contact.save()
             
-        messages.success(request, _(u"Successfully adding %s to contacts.") % contact_email)
+        messages.success(request, _(u"Successfully added %s.") % contact_email)
     else:
         messages.error(request, _('Failed to add an contact.'))
     
@@ -117,7 +117,7 @@ def contact_edit(request):
         contact.note = note
         contact.save()
         result['success'] = True
-        messages.success(request, _(u'Editting Successfully'))
+        messages.success(request, _(u'Successfully edited %s.') % contact_email)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
@@ -130,6 +130,6 @@ def contact_delete(request):
     contact_email = request.GET.get('email')
 
     Contact.objects.filter(user_email=user_email, contact_email=contact_email).delete()
-    messages.success(request, _(u'Deleting Successfully'))
+    messages.success(request, _(u'Successfully Deleted %s') % contact_email)
     
     return HttpResponseRedirect(reverse("contact_list"))

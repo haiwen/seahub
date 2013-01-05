@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 21:31+0800\n"
+"POT-Creation-Date: 2013-01-05 19:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,22 +17,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: views.py:68 views.py:93
-#, python-format
-msgid "Successfully adding %s to contacts."
-msgstr "你已成功添加 %s 为联系人"
+#: models.py:25 templates/contacts/contact_list.html:133
+msgid "Email is required."
+msgstr "邮箱为必填项。"
+
+#: models.py:30 templates/contacts/contact_list.html:137
+msgid "You can't add yourself."
+msgstr "不能添加自己。"
+
+#: models.py:33
+msgid "It is already your contact."
+msgstr "该邮箱已在列表中。"
+
+#: views.py:68
+msgid "Successfully added %s to contacts."
+msgstr "你已成功添加 %s 为联系人。"
+
+#: views.py:93
+msgid "Successfully added %s."
+msgstr "你已成功添加 %s 为联系人。"
 
 #: views.py:95
 msgid "Failed to add an contact."
-msgstr "添加联系人失败"
+msgstr "添加失败"
 
 #: views.py:120
-msgid "Editting Successfully"
-msgstr "编辑成功"
+msgid "Successfully edited %s."
+msgstr "编辑 %s 成功。"
 
 #: views.py:133
-msgid "Deleting Successfully"
-msgstr "删除成功"
+msgid "Successfully Deleted"
+msgstr "成功删除 %s 。"
 
 #: templates/contacts/contact_list.html:8
 msgid "Tips"
@@ -88,41 +103,51 @@ msgid ""
 "link."
 msgstr "联系人用来在共享资料库和发送文件外链时的快速补全。"
 
-#: templates/contacts/contact_list.html:49
-#: templates/contacts/contact_list.html:59
+#: templates/contacts/contact_list.html:48
+#: templates/contacts/contact_list.html:57
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/contacts/contact_list.html:51
-#: templates/contacts/contact_list.html:61
+#: templates/contacts/contact_list.html:50
+#: templates/contacts/contact_list.html:59
 msgid "Name(optional)"
 msgstr "名字(可选)"
 
-#: templates/contacts/contact_list.html:52
-#: templates/contacts/contact_list.html:62
+#: templates/contacts/contact_list.html:51
+#: templates/contacts/contact_list.html:60
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
 #: templates/contacts/contact_list.html:53
-msgid "Please input email address"
-msgstr "请输入邮箱地址。"
-
-#: templates/contacts/contact_list.html:54
-#: templates/contacts/contact_list.html:64
+#: templates/contacts/contact_list.html:62
 msgid "Submit"
 msgstr "提交"
 
-#: templates/contacts/contact_list.html:57
+#: templates/contacts/contact_list.html:56
 msgid "Edit Contact"
 msgstr "编辑联系人"
 
-#: templates/contacts/contact_list.html:114
+#: templates/contacts/contact_list.html:107
+#: templates/contacts/contact_list.html:168
+msgid "Failed."
+msgstr "提交失败。"
+
+#: templates/contacts/contact_list.html:115
 msgid "Delete Contact"
 msgstr "删除联系人"
 
-#: templates/contacts/contact_list.html:114
+#: templates/contacts/contact_list.html:115
 msgid "Are you sure you want to delete"
 msgstr "确定要删除"
+
+#~ msgid "Editting Successfully"
+#~ msgstr "编辑成功"
+
+#~ msgid "Deleting Successfully"
+#~ msgstr "删除成功"
+
+#~ msgid "Please input email address"
+#~ msgstr "请输入邮箱地址。"
 
 #~ msgid "Tip"
 #~ msgstr "小提示"

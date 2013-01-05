@@ -2,6 +2,7 @@
 from django import forms
 from django.db import models
 from django.forms import ModelForm
+from django.utils.translation import ugettext as _
 
 class Contact(models.Model):
     """Record user's contacts."""
@@ -21,15 +22,15 @@ class ContactAddForm(ModelForm):
 
     def clean(self):
         if not 'contact_email' in self.cleaned_data:
-            raise forms.ValidationError('请输入邮箱地址。')
+            raise forms.ValidationError(_('Email is required.'))
             
         user_email = self.cleaned_data['user_email']
         contact_email = self.cleaned_data['contact_email']
         if user_email == contact_email:
-            raise forms.ValidationError('不能添加自己为联系人')
+            raise forms.ValidationError(_("You can't add yourself."))
         elif Contact.objects.filter(user_email=user_email,
                                     contact_email=contact_email).count() > 0:
-            raise forms.ValidationError('联系人列表中已有该用户')
+            raise forms.ValidationError(_("It is already your contact."))
         else:
             return self.cleaned_data
 
