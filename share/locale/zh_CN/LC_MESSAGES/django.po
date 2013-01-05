@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-06 13:18+0800\n"
+"POT-Creation-Date: 2013-01-05 10:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,119 +25,124 @@ msgstr "请输入邮箱"
 msgid "Email is not longer than 512 characters"
 msgstr "邮箱不能超过512个字符"
 
-#: views.py:61
+#: views.py:63
 msgid "Only the owner of the library has permission to share it."
 msgstr "只有资料库拥有者才有共享权限。"
 
-#: views.py:73
+#: views.py:75
 msgid "Failed to share to all members"
 msgstr "共享到公共资料失败"
 
-#: views.py:77
+#: views.py:79
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享</a> 查看。"
 
-#: views.py:97
+#: views.py:99
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr ""
-"共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享</a> 查看。"
+msgstr "共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
-#: views.py:103
+#: views.py:105
 #, python-format
 msgid "Failed to share to %s，as it does not exists."
 msgstr "共享到 %s 失败，该小组不存在。"
 
-#: views.py:116
-#, python-format
-msgid "Failed to share to %s ."
-msgstr "共享给 %s 失败。"
-
-#: views.py:128
+#: views.py:121
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
 msgstr "共享给 %s 失败，该用户尚未注册。"
 
-#: views.py:132
+#: views.py:130
+#, python-format
+msgid "Failed to share to %s ."
+msgstr "共享给 %s 失败。"
+
+#: views.py:134
 #, python-format
 msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr ""
-"共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
+msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
-#: views.py:156 views.py:166
+#: views.py:158 views.py:168
 msgid "Failed to remove share"
 msgstr "取消共享失败"
 
-#: views.py:162
+#: views.py:164
 msgid "group id is not valid"
 msgstr "无效的group id"
 
-#: views.py:175
+#: views.py:177
 msgid "Successfully removed share"
 msgstr "取消共享成功"
 
-#: views.py:211
+#: views.py:213
 msgid "all members"
 msgstr "所有成员"
 
-#: views.py:217 templates/repo/share_admin.html:36
+#: views.py:219 templates/repo/share_admin.html:36
 #: templates/repo/share_admin.html.py:49
 msgid "Read-Write"
 msgstr "可读写"
 
-#: views.py:219 templates/repo/share_admin.html:47
+#: views.py:221 templates/repo/share_admin.html:47
 msgid "Read-Only"
 msgstr "只可浏览"
 
-#: views.py:301
+#: views.py:305
 #, python-format
 msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr "共享给 %s 失败， 加密的资料库不能共享给站外邮箱。"
 
-#: views.py:316 views.py:338
+#: views.py:320 views.py:342
 #, python-format
 msgid "Failed to share to %s."
 msgstr "共享给 %s 失败。"
 
-#: views.py:334
+#: views.py:338
 msgid "You are shared with a library in Seafile"
 msgstr "有人在Seafile上共享了一个资料库给你"
 
-#: views.py:341
+#: views.py:345
 #, python-format
 msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr ""
-"共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
+msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
-#: views.py:366
+#: views.py:370
 msgid "Deleted successfully."
 msgstr "删除成功"
 
-#: views.py:403
-msgid "Failed to get shared link, please retry."
-msgstr "获取分享链接失败，请重新获取"
+#: views.py:388
+msgid "Invalid arguments"
+msgstr "参数错误"
 
-#: views.py:423 views.py:431
+#: views.py:397
+msgid "Can not share root dir."
+msgstr "无法共享根目录"
+
+#: views.py:422
+msgid "Failed to get the link, please retry later."
+msgstr "获取分享链接失败，请稍后重试。"
+
+#: views.py:444 views.py:452
 msgid "Removed successfully"
 msgstr "删除成功"
 
-#: views.py:465
-msgid "Your friend sharing a file to you on Seafile"
-msgstr "你的朋友在Seafile上共享了一个文件给你"
+#: views.py:489
+msgid "Your friend shared a file to you on Seafile"
+msgstr "你的朋友在 Seafile 上共享了一个文件给你"
 
-#: views.py:469
-msgid "Failed to send mail"
-msgstr "邮件发送失败"
+#: views.py:493
+msgid "Send failed."
+msgstr "发送失败"
 
 #: templates/repo/share_admin.html:15
 msgid "Tips"
@@ -197,12 +202,12 @@ msgid ""
 msgstr "点击资料库旁的“共享”图标将你的资料库共享给你的朋友和同事。"
 
 #: templates/repo/share_admin.html:79
-msgid "Links"
-msgstr "文件外链"
+msgid "Shared Links"
+msgstr "我的共享外链"
 
 #: templates/repo/share_admin.html:83
-msgid "File"
-msgstr "文件"
+msgid "File or Folder"
+msgstr "文件或文件夹"
 
 #: templates/repo/share_admin.html:84
 msgid "Library"
@@ -212,33 +217,41 @@ msgstr "资料库"
 msgid "Visits"
 msgstr "访问次数"
 
-#: templates/repo/share_admin.html:94
+#: templates/repo/share_admin.html:98
 msgid "View"
 msgstr "查看"
 
-#: templates/repo/share_admin.html:95
+#: templates/repo/share_admin.html:99
 msgid "Remove"
 msgstr "删除"
 
-#: templates/repo/share_admin.html:103
+#: templates/repo/share_admin.html:107
 msgid "You don't have any file shared links"
 msgstr "你还没有文件外链"
 
-#: templates/repo/share_admin.html:104
+#: templates/repo/share_admin.html:108
 msgid ""
 "Share files to your friends and colleagues by clicking \"Share link\" button "
 "on file viewing page. "
 msgstr "在文件浏览页面点击“获取共享链接”按钮可以把文件共享给你的朋友和同事。"
 
-#: templates/repo/share_admin.html:147
+#: templates/repo/share_admin.html:151
 msgid "Edit succeeded"
 msgstr "权限修改成功"
 
-#: templates/repo/share_admin.html:150
+#: templates/repo/share_admin.html:154
 msgid "Edit failed"
 msgstr "权限修改失败"
 
-#: templates/repo/share_admin.html:156
+#: templates/repo/share_admin.html:160
 msgid "edit failed"
 msgstr "权限修改失败"
 
+#~ msgid "Links"
+#~ msgstr "文件外链"
+
+#~ msgid "Failed to send mail"
+#~ msgstr "邮件发送失败"
+
+#~ msgid "File"
+#~ msgstr "文件"

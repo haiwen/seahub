@@ -419,7 +419,7 @@ def get_shared_link(request):
         try:
             fs.save()
         except IntegrityError, e:
-            err = _('Failed to get the link, please retry it.')
+            err = _('Failed to get the link, please retry later.')
             data = json.dumps([{'error': err}])
             return HttpResponse(data, status=500, content_type=content_type)
 
