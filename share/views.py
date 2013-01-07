@@ -386,7 +386,7 @@ def get_shared_link(request):
     path = request.GET.get('p', '')
     if not (repo_id and  path):
         err = _('Invalid arguments')
-        data = json.dumps([{'error': err}])
+        data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
     
     if share_type == 'f':
@@ -394,8 +394,8 @@ def get_shared_link(request):
             path = path[:-1]
     else:
         if path == '/':         # can not share root dir
-            err = _('Can not share root dir.')
-            data = json.dumps([{'error': err}])
+            err = _('You cannot share the repo in this way.')
+            data = json.dumps({'error': err})
             return HttpResponse(data, status=400, content_type=content_type)
         else:
             if path[-1] != '/': # append '/' at end of path
@@ -420,12 +420,12 @@ def get_shared_link(request):
             fs.save()
         except IntegrityError, e:
             err = _('Failed to get the link, please retry later.')
-            data = json.dumps([{'error': err}])
+            data = json.dumps({'error': err})
             return HttpResponse(data, status=500, content_type=content_type)
 
     shared_link = gen_shared_link(request, token, fs.s_type)
 
-    data = json.dumps([{'token': token, 'shared_link': shared_link}])
+    data = json.dumps({'token': token, 'shared_link': shared_link})
     return HttpResponse(data, status=200, content_type=content_type)
 
 @login_required
@@ -449,8 +449,8 @@ def remove_shared_link(request):
     
     FileShare.objects.filter(token=token).delete()
 
-    msg = _('Removed successfully')
-    data = json.dumps([{'msg': msg}])
+    msg = _('Deleted successfully')
+    data = json.dumps({'msg': msg})
     return HttpResponse(data, status=200, content_type=content_type)
     
 @login_required
@@ -490,10 +490,10 @@ def send_shared_link(request):
                           t.render(Context(c)), None, [to_email],
                           fail_silently=False)
             except:
-                data = json.dumps({'error':_(u'Send failed.')})
+                data = json.dumps({'error':_(u'Internal server error. Send failed.')})
                 return HttpResponse(data, status=500, content_type=content_type)
 
-        data = json.dumps("success")
+        data = json.dumps({"msg": _(u'Successfully sent.')})
         return HttpResponse(data, status=200, content_type=content_type)
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),

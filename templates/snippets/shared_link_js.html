@@ -31,17 +31,17 @@ $('#get-shared-link').click(function() {
         cache: false,
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
-            if (data.length > 0) {
-                var t = data[0]['token'];
-                $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + t);
-                $('#shared-link, input[name="file_shared_link"]').val(data[0]['shared_link']);
-                setLinkWidth();
-                showLink();
-            }
+            $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + data['token']);
+            $('#shared-link, input[name="file_shared_link"]').val(data['shared_link']);
+            setLinkWidth();
+            showLink();
         },
-        error: function(xhr, ajaxOptions, thrownError) {
-            var jsonVal = jQuery.parseJSON(xhr.responseText);
-            feedback(jsonVal[0]['error'], 'error');
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback('{% trans "Failed. Please check the network." %}', 'error');
+            }
         }
     });
 });
@@ -55,7 +55,11 @@ $('#rm-shared-link').click(function() {
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
             hideLink();
+            feedback(data['msg'], 'success');
             $('#shared-link').val('');
+        },
+        error: function() {
+            feedback('{% trans "Failed. Please check the network." %}', 'error');
         }
     });
 });
@@ -64,9 +68,16 @@ var share_list = [];
 {% for contact in contacts %}
 share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
 {% endfor %}
-$('#send-shared-link').click(function() {
+$('#send-shared-link').click(function() { // for file_view.html and subdir page
     $("#link-send-form").modal({appendTo: "#main", focus: false});
     $('#simplemodal-container').css('height', 'auto');
+    addAutocomplete('#link-send-input', '#link-send-form', share_list);
+});
+$('#send-link').click(function() { // for 'file-share' in repo.html
+    $(this).addClass('hide');
+    var input = $('#link-send-input');
+    input.css({'min-width':input.css('width'), 'width': $('#file-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
+    $('#link-send-form').removeClass('hide');
     addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });
 
@@ -95,23 +106,29 @@ $("#link-send-form").submit(function(event) {
         data: {file_shared_link: file_shared_link, email: email},
         success: function(data) {
             $.modal.close();
-            feedback('{% trans "Successfully sent." %}', "success");
+            feedback(data['msg'], "success");
         },
-        error: function(data, textStatus, jqXHR) {
+        error: function(xhr, textStatus, errorThrown) {
             $('#sending').addClass('hide');
             enable(submit_btn);
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                if (index == 'error') {
-                    apply_form_error('link-send-form', value);
+            var err_str = '';
+            if (xhr.responseText) {
+                var err = jQuery.parseJSON(xhr.responseText);
+                if (err.error) {
+                    err_str = err.error;
                 } else {
-                    apply_form_error('link-send-form', value[0]);
+                    for (var i in err) {
+                        err_str += err[i];
+                    }
                 }
-            });
+            } else {
+                err_str = '{% trans "Failed. Please check the network." %}';
+            }
+            apply_form_error('link-send-form', err_str);
         }
     });
    return false;
 });
-$('#shared-link').click(function() {
+$('#shared-link, #shared-link-text').click(function() {
     $(this).select();
 });

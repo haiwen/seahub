@@ -661,25 +661,24 @@ $('.file-share').click(function() {
     if ($(this).data('link')) {
         showPopup($(this).data('link'));
     } else {
-        var aj_url = '';
+        var aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename);
         if ($(this).data('type') == 'd') {
-            aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename) + '&type=d';
-        } else {
-            aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename);
-        } 
+            aj_url += '&type=d';
+        }
         $.ajax({
             url: aj_url,
             dataType: 'json',
             cache: false,
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                if (data.length > 0) {
-                    showPopup(data[0]['shared_link']);
-                }
+                showPopup(data['shared_link']);
             },
-            error: function(xhr, ajaxOptions, thrownError) {
-                var jsonVal = jQuery.parseJSON(xhr.responseText);
-                feedback(jsonVal[0]['error'], 'error');
+            error: function(xhr, textStatus, errorThrown) {
+                if (xhr.responseText) {
+                    feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+                } else {
+                    feedback('{% trans "Failed. Please check the network." %}', 'error');
+                }   
             }
         });
     }
@@ -952,69 +951,10 @@ $('#rename-form').submit(function() {
     });
     return false;
 });
-
-// file share form
-var share_list = [];    
-{% for contact in contacts %}
-share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
-{% endfor %}
-$('#send-link').click(function() {
-    $(this).addClass('hide');
-    var input = $('#link-send-input');
-    input.css({'min-width':input.css('width'), 'width': $('#file-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
-    $('#link-send-form').removeClass('hide');
-    addAutocomplete('#link-send-input', '#link-send-form', share_list);
-});
-$("#link-send-form").submit(function() {
-    var form = $(this), 
-        file_shared_link = form.children('input[name="file_shared_link"]').val(),
-        email = $.trim(form.children('textarea[name="email"]').val()),
-        submit_btn = form.children('input[type="submit"]'),
-        err = form.children('.error');
-    
-    if (!email) {
-        err.html('{% trans "Please input at least an email." %}').removeClass('hide');
-        return false;
-    }
-
-    disable(submit_btn);
-    err.addClass('hide');
-    $('#sending').removeClass('hide');
-
-   $.ajax({
-        type: "POST",
-        url: "{% url 'send_shared_link' %}",
-        dataType: 'json',
-        cache: false,
-        contentType: 'application/json; charset=utf-8',
-        beforeSend: prepareCSRFToken,
-        data: {file_shared_link: file_shared_link, email: email},
-        success: function(data) {
-            $.modal.close();
-            feedback('{% trans "Successfully shared." %}', "success");
-        },
-        error: function(data, textStatus, jqXHR) {
-            $('#sending').addClass('hide');
-            enable(submit_btn);
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                if (index == 'error') {
-                    err.html(value);
-                } else {
-                    err.html(value[0]);
-                }
-                err.removeClass('hide');
-            });
-        }
-    });
-   return false;
-});
-$('#shared-link-text').click(function() { $(this).select(); });
 {% if path == '/' %}
 {% include "snippets/list_commit_detail.html" %}
-{% else %}
-{% include "snippets/shared_link_js.html" %}
 {% endif %}
+{% include "snippets/shared_link_js.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>
 {% include 'snippets/file_upload_progress_js.html' %}
