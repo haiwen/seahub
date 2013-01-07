@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-05 10:17+0800\n"
+"POT-Creation-Date: 2013-01-07 13:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,15 +659,23 @@ msgstr "密码："
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存一小时。"
 
-#: templates/file_edit.html:254 templates/snippets/events_js.html:68
+#: templates/file_edit.html:240
+msgid "Submit failed. Please check the network."
+msgstr ""
+
+#: templates/file_edit.html:242
+msgid "Submit failed."
+msgstr "提交失败。"
+
+#: templates/file_edit.html:260 templates/snippets/events_js.html:68
 msgid "Password is required."
 msgstr "密码为必填项"
 
-#: templates/file_edit.html:256
+#: templates/file_edit.html:262
 msgid "Password should be 3 to 15 characters."
 msgstr "密码太长（不超过15个字符）"
 
-#: templates/file_edit.html:284 templates/snippets/events_js.html:45
+#: templates/file_edit.html:290 templates/snippets/events_js.html:45
 #: templates/snippets/events_js.html:93
 msgid "Unknown error."
 msgstr "未知错误"
@@ -1215,6 +1223,10 @@ msgstr "上传进度："
 msgid "Fetching ..."
 msgstr "获取中...请稍侯"
 
+#: templates/repo.html:232
+msgid "Update File"
+msgstr "更新文件 "
+
 #: templates/repo.html:239
 msgid "Smaller than"
 msgstr "文件总大小小于"
@@ -1293,7 +1305,7 @@ msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
 
 #: templates/repo.html:330
 msgid "Link: "
-msgstr ""
+msgstr "链接："
 
 #: templates/repo.html:427
 msgid "Click to remove"
