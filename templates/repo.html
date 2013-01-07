@@ -398,16 +398,14 @@ $('#repo-setting-form').submit(function() {
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            } else {
-                apply_form_error('repo-setting-form', data['error']);
-                enable(submit_btn);
             }
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('repo-setting-form', value[0]);
-            });
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error('repo-setting-form', $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error('repo-setting-form', '{% trans "Failed. Please check the network." %}');
+            }
             enable(submit_btn);
         }
     });
@@ -764,76 +762,63 @@ function trimFilename(name, n) {
     return str;
 }
 
-$('#add-new-file-form').submit(function() {
-    var new_file = $(this).find('input[name="new_file_name"]').val();
-    if (!$.trim(new_file)) {
-        apply_form_error('add-new-file-form', "{% trans "File name can't be empty" %}");
-        return false;
-    }
+$('#add-new-file-form, #add-new-dir-form, #rename-form').submit(function() {
+    var form = $(this);
+    var form_id = form.attr('id');
+    var post_url = '';
+    var post_data = {
+        'repo_id': form.find('input[name="repo_id"]').val(),
+        'parent_dir': form.find('input[name="parent_dir"]').val(),
+    };
 
-    var submit_btn = $(this).children('input[type="submit"]');  
-    disable(submit_btn);
-    $.ajax({
-        url: '{% url 'views.repo_new_file' %}',
-        type: 'POST',
-        dataType: 'json',
-        beforeSend: prepareCSRFToken,
-        data: {
-            'repo_id': $('#add-new-file-form input[name="repo_id"]').val(),
-            'parent_dir': $('#add-new-file-form input[name="parent_dir"]').val(),
-            'new_file_name': new_file
-        },
-        success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            } else {
-                apply_form_error('add-new-file-form', data['error']);
-                enable(submit_btn);
-            }
-        },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('add-new-file-form', value[0]);
-            });
-            enable(submit_btn);
+    if (form_id == 'add-new-file-form') {
+        var new_file =$.trim(form.find('input[name="new_file_name"]').val());
+        if (!new_file) {
+            apply_form_error(form_id, "{% trans "It can't be blank." %}");
+            return false;
         }
-    });
-    return false;
-});
-
-$('#add-new-dir-form').submit(function() {
-    var new_dir = $(this).find('input[name="new_dir_name"]').val();
-    if (!$.trim(new_dir)) {
-        apply_form_error('add-new-dir-form', "{% trans "Directory name can not be empty" %}");
-        return false;
+        post_url = '{% url 'views.repo_new_file' %}';
+        post_data['new_file_name'] = new_file;
+    } else if (form_id == 'add-new-dir-form') {
+        var new_dir = $.trim(form.find('input[name="new_dir_name"]').val());
+        if (!new_dir) {
+            apply_form_error(form_id, "{% trans "It can't be blank." %}");
+            return false;
+        }
+        post_url = '{% url 'views.repo_new_dir' %}';
+        post_data['new_dir_name'] = new_dir;
+    } else {
+        var new_name = $.trim(form.find('input[name="newname"]').val());
+        if (!new_name) {
+            apply_form_error(form_id, "{% trans "It can't be blank." %}");
+            return false;
+        }
+        post_url = '{% url 'views.repo_rename_file' %}';
+        post_data['oldname'] = form.find('input[name="oldname"]').val();
+        post_data['newname'] = new_name
     }
 
-    var submit_btn = $(this).children('input[type="submit"]');  
+    var submit_btn = form.children('input[type="submit"]');  
     disable(submit_btn);
     $.ajax({
-        url: '{% url 'views.repo_new_dir' %}',
+        url: post_url,
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: {
-            'repo_id': $('#add-new-dir-form input[name="repo_id"]').val(),
-            'parent_dir': $('#add-new-dir-form input[name="parent_dir"]').val(),
-            'new_dir_name': new_dir 
-        },
+        data: post_data,
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            } else {
-                apply_form_error('add-new-dir-form', data['error']);
-                enable(submit_btn);
             }
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('add-new-dir-form', value[0]);
-            });
+        error: function(xhr, textStatus, errorThrown) {
+            var err;
+            if (xhr.responseText) {
+                err = $.parseJSON(xhr.responseText).error;
+            } else {
+                err = '{% trans "Failed. Please check the network." %}';
+            }
+            apply_form_error(form_id, err);
             enable(submit_btn);
         }
     });
@@ -911,47 +896,6 @@ $('#mv-dir-list h5').click(function() {
         span.attr('class','tri-bg tri-right-bg');
         next.addClass('hide');
     }
-});
-
-$('#rename-form').submit(function() {
-    var new_name = $(this).find('input[name="newname"]').val();
-    if (!$.trim(new_name)) {
-        apply_form_error('rename-form', "{% trans "File name can't be empty" %}");
-        return false;
-    }
-
-    var submit_btn = $(this).children('input[type="submit"]');  
-    disable(submit_btn);
-    
-    $.ajax({
-        url: '{% url 'views.repo_rename_file' %}',
-        type: 'POST',
-        dataType: 'json',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        data: {
-            'repo_id': $('#rename-form input[name="repo_id"]').val(),
-            'parent_dir': $('#rename-form input[name="parent_dir"]').val(),
-            'oldname': $('#rename-form input[name="oldname"]').val(),
-            'newname': new_name
-        },
-        success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            } else {
-                apply_form_error('rename-form', data['error']);
-                enable(submit_btn);
-            }
-        },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('rename-form', value[0]);
-            });
-            enable(submit_btn);
-        }
-    });
-    return false;
 });
 {% if path == '/' %}
 {% include "snippets/list_commit_detail.html" %}

@@ -535,7 +535,6 @@ def repo_recycle_view(request, repo_id):
 @ctx_switch_required
 def repo_save_settings(request):
     if request.method == 'POST':
-        ret = {}
         content_type = 'application/json; charset=utf-8'
 
         form = RepoSettingForm(request.POST)
@@ -545,16 +544,14 @@ def repo_save_settings(request):
 
             res = set_repo_history_limit(repo_id, days)
             if res == 0:
-                ret['success'] = True
+                messages.success(request, _(u'Settings saved.'))
+                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
             else:
-                ret['success'] = False
-                ret['error'] = _(u'Failed to save settings on server')
+                return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
+                        status=400, content_type=content_type)
         else:
-            ret['success'] = False
-            ret['error'] = str(form.errors.values()[0])
-
-        return HttpResponse(json.dumps(ret),
-                            content_type=content_type)
+            return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
+                    status=400, content_type=content_type)
 
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
@@ -2172,11 +2169,11 @@ def repo_new_dir(request):
         user          = request.user.username
     else:
         result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = 'Permission denied'
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
 
@@ -2184,12 +2181,11 @@ def repo_new_dir(request):
         seafserv_threaded_rpc.post_dir(repo_id, parent_dir, new_dir_name, user)
     except Exception, e:
         result['error'] = str(e)
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
         
     url = reverse('repo', args=[repo_id]) + \
         ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     
 @login_required        
 def repo_new_file(request):        
@@ -2204,11 +2200,11 @@ def repo_new_file(request):
         user          = request.user.username
     else:
         result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = 'Permission denied'
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
         
     new_file_name = check_filename_with_rename(repo_id, parent_dir,
                                                new_file_name)
@@ -2218,12 +2214,11 @@ def repo_new_file(request):
                                               new_file_name, user)
     except Exception, e:
         result['error'] = str(e)
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
         
     url = reverse('repo', args=[repo_id]) + \
         ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required    
 def repo_rename_file(request):
@@ -2239,11 +2234,11 @@ def repo_rename_file(request):
         user          = request.user.username
     else:
         result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = 'Permission denied'
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if newname == oldname:
         return HttpResponse(json.dumps({'success': True}),
@@ -2254,16 +2249,15 @@ def repo_rename_file(request):
     try:
         seafserv_threaded_rpc.rename_file (repo_id, parent_dir,
                                            oldname, newname, user)
-        messages.success(request, _(u'Successfully rename %(old)s to %(new)s') % \
+        messages.success(request, _(u'Successfully renamed %(old)s to %(new)s') % \
                              {"old":oldname, "new":newname})
     except Exception, e:
         result['error'] = str(e)
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     url = reverse('repo', args=[repo_id]) + \
         ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required    
 def validate_filename(request):
