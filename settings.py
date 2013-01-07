@@ -216,14 +216,14 @@ LOGGING = {
         'default': {
             'level':'WARN',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/seahub.log',
+            'filename': '/tmp/seahub.log',
             'maxBytes': 1024*1024*10, # 10 MB
             'formatter':'standard',
         },  
         'request_handler': {
                 'level':'WARN',
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': 'logs/django_request.log',
+                'filename': '/tmp/seahub_django_request.log',
                 'maxBytes': 1024*1024*10, # 10 MB
                 'formatter':'standard',
         },
