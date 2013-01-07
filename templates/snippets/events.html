@@ -2,7 +2,7 @@
 <h3>{% trans 'Recent Events' %}</h3>
 <ul id="events" class="hide"></ul>
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-<button id="events-more" class="hide">{% trans 'More' %}</button>
+{% trans '<button id="events-more" class="hide">More</button>' %}
 <p id="events-error" class="error hide"></p>
 <form id="repo-decrypt-form" class="simple-input-popup hide">
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>

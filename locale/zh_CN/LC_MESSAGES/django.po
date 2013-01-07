@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-07 13:59+0800\n"
+"POT-Creation-Date: 2013-01-07 21:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,8 +70,7 @@ msgstr "parent dir 为必填项"
 msgid "File name is too long"
 msgstr "文件名过长"
 
-#: forms.py:119 forms.py:143 templates/repo.html:769
-#: templates/repo.html.py:918
+#: forms.py:119 forms.py:143
 msgid "File name can't be empty"
 msgstr "文件名不能为空"
 
@@ -157,215 +156,219 @@ msgstr ""
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: views.py:551
+#: views.py:547
+msgid "Settings saved."
+msgstr "设置已保存。"
+
+#: views.py:550
 msgid "Failed to save settings on server"
 msgstr "设置失败"
 
-#: views.py:560
+#: views.py:557
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: views.py:562
+#: views.py:559
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: views.py:564
+#: views.py:561
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:566 views.py:1297 views.py:2510 views.py:2625
+#: views.py:563 views.py:1294 views.py:2504 views.py:2619
 msgid "File not exists"
 msgstr "文件不存在"
 
-#: views.py:568
+#: views.py:565
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: views.py:570
+#: views.py:567
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: views.py:572
+#: views.py:569
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: views.py:583 views.py:604
+#: views.py:580 views.py:601
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: views.py:668
+#: views.py:665
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: views.py:714
+#: views.py:711
 msgid "Unable to view library snapshots"
 msgstr "无法查看该资料库镜像"
 
-#: views.py:764
+#: views.py:761
 msgid "You have no permission to restore library"
 msgstr "你没有权限进行还原操作"
 
-#: views.py:780
+#: views.py:777
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:786 views.py:1554 views.py:2385 views.py:2420 views.py:2830
+#: views.py:783 views.py:1551 views.py:2379 views.py:2414 views.py:2824
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:788 views.py:883 views.py:2339 views.py:2845
+#: views.py:785 views.py:880 views.py:2333 views.py:2839
 msgid "Library not exists"
 msgstr "资料库不存在"
 
-#: views.py:790
+#: views.py:787
 msgid "History you specified is not exists"
 msgstr "指定的历史记录不存在"
 
-#: views.py:792
+#: views.py:789
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: views.py:903 views.py:919
+#: views.py:900 views.py:916
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1193
+#: views.py:1190
 msgid "Failed to create repo"
 msgstr "创建失败"
 
-#: views.py:1211
+#: views.py:1208
 msgid "Operation successful"
 msgstr "操作成功"
 
-#: views.py:1213
+#: views.py:1210
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: views.py:1244
+#: views.py:1241
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1251
+#: views.py:1248
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1253
+#: views.py:1250
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1313 views.py:1622
+#: views.py:1310 views.py:1619
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views.py:1505
+#: views.py:1502
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1510
+#: views.py:1507
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1513
+#: views.py:1510
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1525
+#: views.py:1522
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1534
+#: views.py:1531
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1540
+#: views.py:1537 views.py:2175 views.py:2206 views.py:2240
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views.py:1544
+#: views.py:1541
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views.py:1548
+#: views.py:1545
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: views.py:1601
+#: views.py:1598
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views.py:1616
+#: views.py:1613
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: views.py:1642
+#: views.py:1639
 msgid "Edit online is not offered for this type of file."
-msgstr ""
+msgstr "该类型文件不能在线编辑。"
 
-#: views.py:1696
+#: views.py:1693
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views.py:1712
+#: views.py:1709
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1723
+#: views.py:1720
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1764
+#: views.py:1761
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views.py:1770
+#: views.py:1767
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views.py:1783
+#: views.py:1780
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1784
+#: views.py:1781
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1784
+#: views.py:1781
 msgid "move"
 msgstr "移动"
 
-#: views.py:1799
+#: views.py:1796
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1805
+#: views.py:1802
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1920
+#: views.py:1917
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:1994 templates/sys_useradmin.html:78
+#: views.py:1991 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:1996
+#: views.py:1993
 #, python-format
 msgid ""
 "Successfully resetting password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s"
 
-#: views.py:2000
+#: views.py:1997
 #, python-format
 msgid ""
 "Successfully resetting password to %(passwd)s, but failed to send email to "
@@ -374,57 +377,57 @@ msgstr ""
 "成功将重置密码为 %(passwd)s, 发送通知邮件到 %(user)s 失败，请检查你的邮件配"
 "置。"
 
-#: views.py:2016
+#: views.py:2013
 #, python-format
 msgid "Successfully resetting password to %s"
 msgstr "成功将密码重置为 %s"
 
-#: views.py:2018
+#: views.py:2015
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:2040
+#: views.py:2037
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2042
+#: views.py:2039
 msgid "Successfully sending mail"
 msgstr "邮件发送成功"
 
-#: views.py:2044
+#: views.py:2041
 msgid "Failed to send mail"
 msgstr "邮件发送失败"
 
-#: views.py:2257
+#: views.py:2252
 #, python-format
-msgid "Successfully rename %(old)s to %(new)s"
+msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2313
+#: views.py:2307
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2406
+#: views.py:2400
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2410 views.py:2436
+#: views.py:2404 views.py:2430
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2432
+#: views.py:2426
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2670
+#: views.py:2664
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views.py:2877
+#: views.py:2871
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -661,7 +664,7 @@ msgstr "密码将在服务器上保存一小时。"
 
 #: templates/file_edit.html:240
 msgid "Submit failed. Please check the network."
-msgstr ""
+msgstr "提交失败。请检查网络是否已连接。"
 
 #: templates/file_edit.html:242
 msgid "Submit failed."
@@ -847,50 +850,50 @@ msgstr "星标取消成功"
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/file_view.html:190 templates/repo.html:640
-msgid "Failed:"
-msgstr "操作失败："
+#: templates/file_view.html:196 templates/file_view.html.py:359
+#: templates/repo.html:407 templates/repo.html.py:643 templates/repo.html:680
+#: templates/repo.html.py:819 templates/snippets/shared_link_js.html:43
+#: templates/snippets/shared_link_js.html:62
+#: templates/snippets/shared_link_js.html:125
+msgid "Failed. Please check the network."
+msgstr "操作失败。请检查网络是否已连接。"
 
-#: templates/file_view.html:195 templates/repo.html:644
-msgid ", failed"
-msgstr "，操作失败"
-
-#: templates/file_view.html:224
+#: templates/file_view.html:226
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/file_view.html:228
+#: templates/file_view.html:230
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/file_view.html:230
+#: templates/file_view.html:232
 msgid "The file is not synchronized, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/file_view.html:234
+#: templates/file_view.html:236
 msgid "An error occurred when open the local file."
 msgstr "打开本地文件时出错"
 
-#: templates/file_view.html:262
+#: templates/file_view.html:264
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
-msgstr ""
+msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升级</a>。"
 
-#: templates/file_view.html:274
+#: templates/file_view.html:276
 msgid ""
 "Your Seafile client is not running or its version is too old. Please check "
 "it."
-msgstr ""
+msgstr "您的 Seafile 客户端版本太低或者没有启动， 请检查下。"
 
-#: templates/file_view.html:290
+#: templates/file_view.html:292
 msgid "Comment"
 msgstr "评论"
 
-#: templates/file_view.html:337
-msgid "Please type a message"
-msgstr "请先输入你的评论"
+#: templates/file_view.html:339
+msgid "Please input a message."
+msgstr "请先输入评论。"
 
 #: templates/history_file_view.html:16 templates/repo_view_snapshot.html:7
 msgid "snapshots"
@@ -1176,16 +1179,16 @@ msgstr "移动"
 msgid "Copy"
 msgstr "复制"
 
-#: templates/repo.html:159 templates/repo.html.py:637
+#: templates/repo.html:159 templates/repo.html.py:635
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
 msgstr "星标文件"
 
-#: templates/repo.html:161 templates/repo.html.py:635
+#: templates/repo.html:161 templates/repo.html.py:633
 msgid "Unstarred"
 msgstr "取消星标"
 
-#: templates/repo.html:164 templates/repo.html.py:569 templates/repo.html:593
+#: templates/repo.html:164 templates/repo.html.py:567 templates/repo.html:591
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
 #: templates/view_shared_dir.html:65
 msgid "File"
@@ -1307,42 +1310,34 @@ msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
 msgid "Link: "
 msgstr "链接："
 
-#: templates/repo.html:427
+#: templates/repo.html:425
 msgid "Click to remove"
 msgstr "点击删除"
 
-#: templates/repo.html:428
+#: templates/repo.html:426
 msgid "This file has already been selected:\\n$file!"
 msgstr "这个文件已经被添加：\\n$file!"
 
-#: templates/repo.html:569 templates/repo.html.py:596
+#: templates/repo.html:567 templates/repo.html.py:594
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
 msgstr "目录"
 
-#: templates/repo.html:586
+#: templates/repo.html:584
 msgid "Copy "
 msgstr "复制"
 
-#: templates/repo.html:589
+#: templates/repo.html:587
 msgid "Move "
 msgstr "移动"
 
-#: templates/repo.html:602
+#: templates/repo.html:600
 msgid "to:"
 msgstr "到："
 
-#: templates/repo.html:807
-msgid "Directory name can not be empty"
-msgstr "目录名不能为空"
-
-#: templates/repo.html:976 templates/snippets/shared_link_js.html:80
-msgid "Please input at least an email."
-msgstr "请输入至少一个邮箱。"
-
-#: templates/repo.html:994
-msgid "Successfully shared."
-msgstr "共享成功。"
+#: templates/repo.html:777 templates/repo.html.py:785 templates/repo.html:793
+msgid "It can't be blank."
+msgstr "输入不能为空。"
 
 #: templates/repo_history.html:7
 msgid "modification history"
@@ -1367,7 +1362,6 @@ msgid "None"
 msgstr "无"
 
 #: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
-#: templates/snippets/events.html:5
 msgid "More"
 msgstr "详情"
 
@@ -1442,6 +1436,8 @@ msgid ""
 "No running Seafile client is detected. If you're sure Seafile client is "
 "running, click the following link to continue downloading:"
 msgstr ""
+"没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接以完成"
+"下载："
 
 #: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
@@ -1807,6 +1803,10 @@ msgstr "最近事件"
 msgid "Loading..."
 msgstr "加载中..."
 
+#: templates/snippets/events.html:5
+msgid "<button id=\"events-more\" class=\"hide\">More</button>"
+msgstr "<button id=\"events-more\" class=\"hide\">更多</button>"
+
 #: templates/snippets/events_.html:16
 msgid "Updated library"
 msgstr "更新了资料库"
@@ -1825,7 +1825,7 @@ msgstr "删除了资料库"
 
 #: templates/snippets/events_js.html:47
 msgid "Please refresh the page later."
-msgstr ""
+msgstr "请稍后刷新页面。"
 
 #: templates/snippets/events_js.html:49
 msgid "Please try again later."
@@ -2001,9 +2001,8 @@ msgid "Share Library"
 msgstr "共享资料库"
 
 #: templates/snippets/repo_share_form.html:4
-#, fuzzy
 msgid "Share <span class=\"op-target\"></span> to"
-msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
+msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 共享给："
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
@@ -2019,9 +2018,9 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 msgid "Tip: enter \"all\" to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
 
-#: templates/snippets/shared_link_js.html:98
-msgid "Successfully sent."
-msgstr "邮件发送成功"
+#: templates/snippets/shared_link_js.html:91
+msgid "Please input at least an email."
+msgstr "请输入至少一个邮箱。"
 
 #: templates/snippets/user_profile_html.html:21
 msgid "Add to contacts"
@@ -2034,6 +2033,21 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Failed:"
+#~ msgstr "操作失败："
+
+#~ msgid ", failed"
+#~ msgstr "，操作失败"
+
+#~ msgid "Directory name can not be empty"
+#~ msgstr "目录名不能为空"
+
+#~ msgid "Successfully shared."
+#~ msgstr "共享成功。"
+
+#~ msgid "Successfully sent."
+#~ msgstr "邮件发送成功"
 
 #~ msgid "Make sure Seafile client is running."
 #~ msgstr "请确认本地Seafile程序已启动。"
