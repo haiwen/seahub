@@ -104,6 +104,8 @@
             <button data="{{ SITE_ROOT }}download/repo/?repo_id={{ repo.id }}" id="download-repo">{% trans "Click to download"%}</button>
         </div>
     </div>
+
+    <iframe class="hide" id="open-local-iframe"></iframe>
     
     {% with attach_type='file' %}
     {% include "snippets/group_recommend_form.html" %}
@@ -262,20 +264,22 @@ $('#open-local').click(function () {
             if (version < 1) {
                 $('#open-local-handling-tip').addClass('hide');
                 $('#open-local-error').html('{% trans 'You are running an old version of Seafile client, please <a target="_blank">upgrade</a> it.' %}');
-                $('#open-local-error a').attr('href', 'http://www.seafile.com/{% if LANGUAGE_CODE == "en" %}en/{% endif %}download/');
+                $('#open-local-error a').attr('href', 'http://www.seafile.com/');
             } else {
                 send_open_local_file_request(path);
             }
         }
     });
 
-    // if jsonp response doesn't arrive in 2 seconds, we can say local client is not running yet.
+    var url = '{{ applet_root }}/open-local-file/?repo_id={{ repo.id }}&commit_id={{current_commit.id}}&path=' + e(path) + '&callback=xx';
+    var url_short = url.slice(0, 40) + '...';
+
     setTimeout(function() {
         if (!local_applet_running) {
             $('#open-local-handling-tip').addClass('hide');
-            $('#open-local-error').html('{% trans "Your Seafile client is not running or its version is too old. Please check it." %}');
+            $('#open-local-error').html('{% trans "Your Seafile client is not running or its version is too old. You can open the local file manually by clicking the following link:" %} <br/><a href=' + url + ' target="open-local-iframe">' + url_short + '</a>');
         }
-    }, 2000);
+      }, 2000);
 });
 
 $('#file-op .history').click(function () {
