@@ -2827,8 +2827,8 @@ def repo_star_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not (path and state):
-        return HttpResponse(json.dumps({'success':False, 'err_msg':_(u'Invalid arguments')}),
-                            content_type=content_type)
+        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
+                            status=400, content_type=content_type)
 
     org_id = int(request.POST.get('org_id'))
     path = urllib2.unquote(path.encode('utf-8'))

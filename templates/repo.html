@@ -636,12 +636,14 @@ $('.file-star').click(function() {
                 } else {
                     it.attr('src', '{{ MEDIA_URL }}img/gray-star-icon.png').attr('alt','{% trans 'Starred' %}').attr('title','{% trans 'Starred' %}').data('status','starred');
                 }
-            } else {
-                feedback('{% trans "Failed:" %}' + data['err_msg'], 'error');
             }
         },
-        error:function(jqXHR, textStatus, errorThrown) {
-            feedback(textStatus + '{% trans ", failed" %}', 'error');
+        error:function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback('{% trans "Failed. Please check the network." %}', 'error');
+            }
         }
    });
 });

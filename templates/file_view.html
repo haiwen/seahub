@@ -29,9 +29,9 @@
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% if is_starred %}
-            <button id="star" data="starred">{% trans "Unstar"%}</button>
+            <button id="star" data-status="starred">{% trans "Unstar"%}</button>
             {% else %}
-            <button id="star" data="unstarred">{% trans "Star"%}</button>
+            <button id="star" data-status="unstarred">{% trans "Star"%}</button>
             {% endif %}
         </div>
     </div>
@@ -164,9 +164,9 @@ $('#edit').click(function() {
 $('#star').click(function() {
     var star_btn = $(this);
     disable(star_btn);
-    var state = star_btn.attr('data');
+    var state = star_btn.data('status');
     $.ajax({
-        url: '{{ SITE_ROOT }}repo/star_file/{{ repo.id }}/',
+        url: '{% url 'repo_star_file' repo.id %}',
         type: 'POST',
         cache: false,
         contentType: 'application/json; charset=utf-8',
@@ -181,18 +181,20 @@ $('#star').click(function() {
             if (data['success']) {
                 if (state == 'starred') {
                     feedback('{% trans "Unstarred successfully" %}', 'success');
-                    star_btn.attr('data', 'unstarred').text('{% trans "Star" %}');
+                    star_btn.data('status', 'unstarred').text('{% trans "Star" %}');
                 } else {
                     feedback('{% trans "Starred successfully" %}', 'success');
-                    star_btn.attr('data', 'starred').text('{% trans "Unstar" %}');
+                    star_btn.data('status', 'starred').text('{% trans "Unstar" %}');
                 }
-            } else {
-                feedback('{% trans "Failed:" %}' + data['err_msg'], 'error');
+                enable(star_btn);
             }
-            enable(star_btn);
         },
-        error:function(jqXHR, textStatus, errorThrown) {
-            feedback(textStatus + '{% trans ", failed" %}', 'error');
+        error:function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback('{% trans "Failed. Please check the network." %}', 'error');
+            }
             enable(star_btn);
         }
    });
@@ -334,7 +336,7 @@ $('#comment-input').css('color', '#999').click(function() {
 });
 $('#file-comment-form .submit').click(function() {
     if (!$.trim($('#comment-input').val())) {
-        $('#file-comment-form .error').html('{% trans "Please type a message" %}').removeClass('hide');
+        $('#file-comment-form .error').html('{% trans "Please input a message." %}').removeClass('hide');
         return false;
     }
     $.ajax({
@@ -353,11 +355,8 @@ $('#file-comment-form .submit').click(function() {
             $('#file-comment-form .submit, #file-comment-form .error').addClass('hide');
             $('#comment-list').html(data.html);
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                $('#file-comment-form .error').html(value[0]).removeClass('hide');
-            }); 
+        error: function() {
+            $('#file-comment-form .error').html('{% trans "Failed. Please check the network." %}').removeClass('hide');
         }   
     });
     return false;
