@@ -42,19 +42,23 @@ import ccnet
 import seafile
 from pysearpc import SearpcError
 
-if 'win' in sys.platform:
-    DEFAULT_CCNET_CONF_PATH = "~/ccnet"
-else:    
-    DEFAULT_CCNET_CONF_PATH = "~/.ccnet"
+ENVIRONMENT_VARIABLES = ('CCNET_CONF_DIR', 'SEAFILE_CONF_DIR')
 
-if 'CCNET_CONF_DIR' in os.environ:
-    CCNET_CONF_PATH = os.environ['CCNET_CONF_DIR']
+# Used to fix bug in some rpc calls, will be removed in near future.
+MAX_INT = 2147483647            
+
+### Loading ccnet and seafile configurations ###
+'''ccnet'''
+try:
+    CCNET_CONF_PATH = os.environ[ENVIRONMENT_VARIABLES[0]]
+    if not CCNET_CONF_PATH: # If it's set but is an empty string.
+        raise KeyError
+except KeyError:
+    raise ImportError("Seaserv cannot be imported, because environment variable %s is undefined." % ENVIRONMENT_VARIABLES[0])
 else:
-    CCNET_CONF_PATH = DEFAULT_CCNET_CONF_PATH
+    print "Loading ccnet config from " + CCNET_CONF_PATH
 
-print "Load config from " + CCNET_CONF_PATH
 CCNET_CONF_PATH = os.path.normpath(os.path.expanduser(CCNET_CONF_PATH))
-MAX_INT = 2147483647
 
 pool = ccnet.ClientPool(CCNET_CONF_PATH)
 ccnet_rpc = ccnet.CcnetRpcClient(pool, req_pool=True)
@@ -65,12 +69,12 @@ seafserv_threaded_rpc = seafile.ServerThreadedRpcClient(pool, req_pool=True)
 
 # load ccnet server addr and port from ccnet.conf.
 # 'addr:port' is used when downloading a repo
-ccnet_config = ConfigParser.ConfigParser()
-ccnet_config.read(os.path.join(CCNET_CONF_PATH, 'ccnet.conf'))
+config = ConfigParser.ConfigParser()
+config.read(os.path.join(CCNET_CONF_PATH, 'ccnet.conf'))
 
-if ccnet_config.has_option('General', 'SERVICE_URL') and \
-   ccnet_config.has_option('Network', 'PORT'):
-    service_url = ccnet_config.get('General', 'SERVICE_URL')
+if config.has_option('General', 'SERVICE_URL') and \
+   config.has_option('Network', 'PORT'):
+    service_url = config.get('General', 'SERVICE_URL')
     service_url = service_url.lstrip('http://').lstrip('https://')
     if ':' in service_url:
         # strip http port such as ':8000' in 'http://192.168.1.101:8000'
@@ -82,12 +86,40 @@ if ccnet_config.has_option('General', 'SERVICE_URL') and \
         service_url = service_url[:idx]
 
     CCNET_SERVER_ADDR = service_url
-    CCNET_SERVER_PORT = ccnet_config.get('Network', 'PORT')
+    CCNET_SERVER_PORT = config.get('Network', 'PORT')
 else:
     print "Warning: SERVICE_URL not set in ccnet.conf"
     CCNET_SERVER_ADDR = None
     CCNET_SERVER_PORT = None
-    
+
+'''seafile'''
+try:
+    SEAFILE_CONF_DIR = os.environ[ENVIRONMENT_VARIABLES[1]]
+    if not SEAFILE_CONF_DIR: # If it's set but is an empty string.
+        raise KeyError
+except KeyError:
+    raise ImportError("Seaserv cannot be imported, because environment variable %s is undefined." % ENVIRONMENT_VARIABLES[1])
+else:
+    print "Loading seafile config from " + SEAFILE_CONF_DIR
+
+SEAFILE_CONF_DIR = os.path.normpath(os.path.expanduser(SEAFILE_CONF_DIR))
+config.read(os.path.join(SEAFILE_CONF_DIR, 'seafile.conf'))
+
+MAX_UPLOAD_FILE_SIZE = 100 * (2 ** 20) # Default max upload size, set in httpserver.c
+if config.has_option('httpserver', 'max_upload_size'):
+    try:
+        max_upload_size_mb = config.getint('httpserver', 'max_upload_size')
+        if max_upload_size_mb > 0:
+            MAX_UPLOAD_FILE_SIZE = max_upload_size_mb * (2 ** 20)
+    except ValueError:
+        pass
+
+if CCNET_SERVER_ADDR:
+    port = config.get('httpserver', 'port') if \
+        config.has_option('httpserver', 'port') else '8082'
+    HTTP_SERVER_ROOT = CCNET_SERVER_ADDR + ':' + port
+else:
+    HTTP_SERVER_ROOT = None
 
 #### Basic ccnet API ####
 

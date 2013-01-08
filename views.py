@@ -45,7 +45,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
-    get_repo_history_limit, set_repo_history_limit
+    get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -333,7 +333,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         return True if check_quota(self.repo_id) < 0 else False
 
     def get_max_upload_file_size(self):
-        return settings.MAX_UPLOAD_FILE_SIZE
+        return MAX_UPLOAD_FILE_SIZE
 
     def get_upload_url(self):
         if get_user_permission(self.request, self.repo_id) == 'rw':

@@ -22,7 +22,8 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user, check_permission
+    list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
+    HTTP_SERVER_ROOT
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -95,15 +96,10 @@ def list_to_string(l):
 
 def get_httpserver_root():
     """
-    Get seafile http server address and port from settings.py,
-    and cut out last '/'.
+    Get seafile http server address and port from seaserv.
 
     """
-    if settings.HTTP_SERVER_ROOT[-1] == '/':
-        http_server_root = settings.HTTP_SERVER_ROOT[:-1]
-    else:
-        http_server_root = settings.HTTP_SERVER_ROOT
-    return http_server_root
+    return HTTP_SERVER_ROOT if HTTP_SERVER_ROOT else ''
 
 def get_ccnetapplet_root():
     """

@@ -28,7 +28,8 @@ from service import create_org, get_orgs_by_user, get_org_by_url_prefix, \
 
 from service import get_related_users_by_repo, get_related_users_by_org_repo
 
-from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT
+from service import CCNET_CONF_PATH, CCNET_SERVER_ADDR, CCNET_SERVER_PORT, \
+    MAX_UPLOAD_FILE_SIZE, HTTP_SERVER_ROOT
 
 from htmldiff import HtmlDiff
 
