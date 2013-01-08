@@ -26,7 +26,11 @@ You can grab souce code from GitHub.
 Configuration
 ==========
 
-Modify `CCNET_CONF_DIR` and `PYTHONPATH` in `setenv.sh` to fit your path.
+Modify `CCNET_CONF_DIR`, `SEAFILE_CONF_DIR` and `PYTHONPATH` in `setenv.sh.template` to fit your path.
+
+`CCNET_CONF_DIR` is the directory contains `ccnet.conf`.
+
+`SEAFILE_CONF_DIR` is the directory contains `seafile.conf`.
 
 Run and Verify
 ==========
