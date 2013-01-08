@@ -78,11 +78,11 @@ if config.has_option('General', 'SERVICE_URL') and \
     service_url = service_url.lstrip('http://').lstrip('https://')
     if ':' in service_url:
         # strip http port such as ':8000' in 'http://192.168.1.101:8000'
-        idx = service_url.rindex(':')
+        idx = service_url.index(':')
         service_url = service_url[:idx]
     if '/' in service_url:
         # strip url suffix like the '/seahub' part of www.gonggeng.org/seahub
-        idx = service_url.rindex('/')
+        idx = service_url.index('/')
         service_url = service_url[:idx]
 
     CCNET_SERVER_ADDR = service_url
@@ -115,9 +115,13 @@ if config.has_option('httpserver', 'max_upload_size'):
         pass
 
 if CCNET_SERVER_ADDR:
+    enable_https = config.getboolean('httpserver', 'https') if \
+        config.has_option('httpserver', 'https') else False
+    http_or_https = 'https://' if enable_https else 'http://'
+    
     port = config.get('httpserver', 'port') if \
         config.has_option('httpserver', 'port') else '8082'
-    HTTP_SERVER_ROOT = CCNET_SERVER_ADDR + ':' + port
+    HTTP_SERVER_ROOT = http_or_https + CCNET_SERVER_ADDR + ':' + port
 else:
     HTTP_SERVER_ROOT = None
 
