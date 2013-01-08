@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 10:44+0800\n"
+"POT-Creation-Date: 2013-01-08 11:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,7 +460,7 @@ msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
 #: templates/file_edit.html:93 templates/file_edit.html.py:126
-#: templates/file_view.html:94 templates/file_view.html.py:120
+#: templates/file_view.html:94 templates/file_view.html.py:122
 #: templates/repo.html:263 templates/repo.html.py:275 templates/repo.html:291
 #: templates/repo.html.py:312 templates/repo.html:324
 #: templates/repo.html.py:336 templates/userinfo.html:87
@@ -773,11 +773,11 @@ msgstr "发送"
 msgid "Delete"
 msgstr "删除"
 
-#: templates/file_view.html:32 templates/file_view.html.py:187
+#: templates/file_view.html:32 templates/file_view.html.py:189
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/file_view.html:34 templates/file_view.html.py:184
+#: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
 msgstr "添加星标"
 
@@ -838,19 +838,19 @@ msgstr "。"
 msgid "Click to download"
 msgstr "点此下载"
 
-#: templates/file_view.html:118
+#: templates/file_view.html:120
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/file_view.html:183
+#: templates/file_view.html:185
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/file_view.html:186
+#: templates/file_view.html:188
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/file_view.html:196 templates/file_view.html.py:359
+#: templates/file_view.html:198 templates/file_view.html.py:363
 #: templates/repo.html:407 templates/repo.html.py:643 templates/repo.html:680
 #: templates/repo.html.py:819 templates/snippets/shared_link_js.html:43
 #: templates/snippets/shared_link_js.html:62
@@ -858,40 +858,40 @@ msgstr "星标添加成功"
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
-#: templates/file_view.html:226
+#: templates/file_view.html:228
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/file_view.html:230
+#: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/file_view.html:232
+#: templates/file_view.html:234
 msgid "The file is not synchronized, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/file_view.html:236
+#: templates/file_view.html:238
 msgid "An error occurred when open the local file."
 msgstr "打开本地文件时出错"
 
-#: templates/file_view.html:264
+#: templates/file_view.html:266
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升级</a>。"
 
-#: templates/file_view.html:276
+#: templates/file_view.html:280
 msgid ""
-"Your Seafile client is not running or its version is too old. Please check "
-"it."
-msgstr "您的 Seafile 客户端版本太低或者没有启动， 请检查下。"
+"Your Seafile client is not running or its version is too old. You can open "
+"the local file manually by clicking the following link:"
+msgstr "您的 Seafile 客户端版本太低或者没有启动， 您可以点击下面的链接手动打开本地文件："
 
-#: templates/file_view.html:292
+#: templates/file_view.html:296
 msgid "Comment"
 msgstr "评论"
 
-#: templates/file_view.html:339
+#: templates/file_view.html:343
 msgid "Please input a message."
 msgstr "请先输入评论。"
 
@@ -1361,7 +1361,8 @@ msgid "None"
 msgstr "无"
 
 #: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
-msgid "More"
+#: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
+msgid "Details"
 msgstr "详情"
 
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
@@ -1803,16 +1804,12 @@ msgid "Loading..."
 msgstr "加载中..."
 
 #: templates/snippets/events.html:5
-msgid "<button id=\"events-more\" class=\"hide\">More</button>"
-msgstr "<button id=\"events-more\" class=\"hide\">更多</button>"
+msgid "More"
+msgstr "更多"
 
 #: templates/snippets/events_.html:16
 msgid "Updated library"
 msgstr "更新了资料库"
-
-#: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
-msgid "Details"
-msgstr "详情"
 
 #: templates/snippets/events_.html:38
 msgid "Created library"
@@ -2036,6 +2033,9 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "<button id=\"events-more\" class=\"hide\">More</button>"
+#~ msgstr "<button id=\"events-more\" class=\"hide\">更多</button>"
 
 #~ msgid "Failed:"
 #~ msgstr "操作失败："

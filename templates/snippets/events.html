@@ -2,7 +2,7 @@
 <h3>{% trans 'Recent Events' %}</h3>
 <ul id="events" class="hide"></ul>
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-{% trans '<button id="events-more" class="hide">More</button>' %}
+<button id="events-more" class="hide">{% trans 'More' %}</button>
 <p id="events-error" class="error hide"></p>
 <form id="repo-decrypt-form" class="simple-input-popup hide">
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
@@ -14,4 +14,4 @@
     <input type="submit" class="submit" value="{% trans 'Submit' %}" />
     <button class="simplemodal-close">{% trans 'Cancel' %}</button>
 </form>
-<div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
+<div id="ls-ch" class="hide"></div><!--for details of some events-->
