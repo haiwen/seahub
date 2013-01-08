@@ -19,7 +19,7 @@
         <div class="fright">
             {% if path != '/' %}
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
-            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link">{% trans "Share link"%}</button>
+            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
             {% endif %}
@@ -267,7 +267,7 @@
 
     <form id="add-new-dir-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans "New Directory" %}</h3>
-        <label>{% trans "Directory Name" %}</label>
+        <label>{% trans "Directory Name" %}</label><br /><!-- <br/> for ie 7 -->
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
         <input type="text" name="new_dir_name" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
@@ -280,13 +280,13 @@
         <h3>{% trans "New File" %}</h3>
         <div id="featured-filetype">
             <label>{% trans "Featured File Type" %}</label><br />
-            <button type="button" data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format ( experimental ) ." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/seaf/" target="_blank">{% trans 'more' %}</a><br />
-            <button type="button" data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/markdown/" target="_blank">{% trans 'more' %}</a>
+            <button type="button" data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format (experimental)." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
+            <button type="button" data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/markdown/" target="_blank">{% trans 'Details' %}</a>
         </div>
-        <label>{% trans "File Name" %}</label>
+        <label>{% trans "File Name" %}</label><br/>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="parent_dir" value="{{ path }}" />
-        <input type="text" name="new_file_name" value="" class="long-input" maxlength="{{max_file_name}}"/>
+        <input type="text" name="new_file_name" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
@@ -768,7 +768,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form').submit(function() {
     var post_url = '';
     var post_data = {
         'repo_id': form.find('input[name="repo_id"]').val(),
-        'parent_dir': form.find('input[name="parent_dir"]').val(),
+        'parent_dir': form.find('input[name="parent_dir"]').val()
     };
 
     if (form_id == 'add-new-file-form') {

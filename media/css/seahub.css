@@ -596,6 +596,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .simple-input-popup .long-input {
     width:99%;
+    *width:252px;
 }
 
 /*ui-autocomplete*/
@@ -712,6 +713,9 @@ textarea:-moz-placeholder {/* for FF */
     width:64px;
     text-align:center;
     margin:0 1px 5px 1px;
+}
+.mygroup {
+    *display:inline; /* for ie 6,7 */
 }
 .mygroup .name {
     display:inline-block;
@@ -1161,6 +1165,9 @@ textarea:-moz-placeholder {/* for FF */
     width:315px;
     margin:0 17px 25px 0;
 }
+.group-list .group {
+    *display:inline; /* for ie 6,7 */
+}
 .group .txt {
     color:#333;
     width:250px;
@@ -1401,6 +1408,9 @@ textarea:-moz-placeholder {/* for FF */
 #shared-link,
 #shared-link-text {
     border:0;
+}
+#shared-link-text {
+    vertical-align:middle; /*for ie 7*/
 }
 .file-op {
     margin-top:0.8em;

@@ -10,14 +10,12 @@ function hideLink() {
 }
 function setLinkWidth() {
     var link = $('#shared-link');
-    link.before('<p class="hide">' + link.val() + '</p>');
-    link.css('width', link.prev().width() + 2);
-    link.prev().remove();
-}
-if ($.trim($('#shared-link').val())) {
-    setLinkWidth();
+    $('#main').append('<p id="linkcp" class="hide">' + link.val() + '</p>');
+    link.css('width', $('#linkcp').width() + 2);
+    $('#linkcp').remove();
 }
 {% if fileshare.token %}
+setLinkWidth();
 showLink();
 {% else %}
 hideLink();
