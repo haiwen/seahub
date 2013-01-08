@@ -156,9 +156,9 @@
                 <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }} {%else %}0{% endif %}">
                     <td class="icon-container">
                         {% if dirent.starred %}
-                        <img src="{{ MEDIA_URL }}img/gray-star-icon.png" alt="{% trans 'Starred' %}" title="{% trans 'Starred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="starred" />
+                        <img src="{{ MEDIA_URL }}img/gray-star-icon.png" alt="{% trans 'starred' %}" title="{% trans 'starred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="starred" />
                         {% else %}
-                        <img src="{{ MEDIA_URL }}img/gray-unstar-icon.png" alt="{% trans 'Unstarred' %}" title="{% trans 'Unstarred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="unstarred" />
+                        <img src="{{ MEDIA_URL }}img/gray-unstar-icon.png" alt="{% trans 'unstarred' %}" title="{% trans 'unstarred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="unstarred" />
                         {% endif %}
                     </td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
@@ -630,9 +630,9 @@ $('.file-star').click(function() {
         success:function(data) {
             if (data['success']) {
                 if (state == 'starred') {
-                    it.attr('src', '{{ MEDIA_URL }}img/gray-unstar-icon.png').attr('alt','{% trans 'Unstarred' %}').attr('title','{% trans 'Unstarred' %}').data('status','unstarred');
+                    it.attr('src', '{{ MEDIA_URL }}img/gray-unstar-icon.png').attr('alt','{% trans 'unstarred' %}').attr('title','{% trans 'unstarred' %}').data('status','unstarred');
                 } else {
-                    it.attr('src', '{{ MEDIA_URL }}img/gray-star-icon.png').attr('alt','{% trans 'Starred' %}').attr('title','{% trans 'Starred' %}').data('status','starred');
+                    it.attr('src', '{{ MEDIA_URL }}img/gray-star-icon.png').attr('alt','{% trans 'starred' %}').attr('title','{% trans 'starred' %}').data('status','starred');
                 }
             }
         },

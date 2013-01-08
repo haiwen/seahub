@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-07 21:49+0800\n"
+"POT-Creation-Date: 2013-01-08 10:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1180,13 +1180,12 @@ msgid "Copy"
 msgstr "复制"
 
 #: templates/repo.html:159 templates/repo.html.py:635
-#: templates/snippets/my_owned_repos.html:9
-msgid "Starred"
-msgstr "星标文件"
+msgid "starred"
+msgstr "已加星标"
 
 #: templates/repo.html:161 templates/repo.html.py:633
-msgid "Unstarred"
-msgstr "取消星标"
+msgid "unstarred"
+msgstr "未加星标"
 
 #: templates/repo.html:164 templates/repo.html.py:567 templates/repo.html:591
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
@@ -1903,6 +1902,10 @@ msgstr "现在创建群组"
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
 msgstr "我拥有的"
+
+#: templates/snippets/my_owned_repos.html:9
+msgid "Starred"
+msgstr "星标文件"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
