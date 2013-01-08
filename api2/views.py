@@ -31,7 +31,7 @@ from pysearpc import SearpcError
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
-    list_personal_repos_by_owner, list_personal_shared_repos
+    list_personal_repos_by_owner, list_personal_shared_repos, check_quota
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -332,8 +332,8 @@ class UploadLinkView(APIView):
         else:
             return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
 
-        if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Above quota')
+        if check_quota(repo_id) < 0:
+            return api_error(status.HTTP_520_OPERATION_FAILED, 'Above quota')
 
         upload_url = gen_file_upload_url(token, 'upload-api')
         return Response(upload_url)

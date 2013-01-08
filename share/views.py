@@ -185,7 +185,7 @@ def repo_remove_share(request):
 @login_required
 def share_admin(request):
     """
-    List personal repos I share to others, include groups and users.
+    List personal shared repos and shared links.
     """
     username = request.user.username
 
@@ -244,8 +244,11 @@ def share_admin(request):
                 fs.shared_link = gen_shared_link(request, fs.token, 'f') 
             else:
                 fs.filename = os.path.basename(fs.path[:-1])
-                fs.shared_link = gen_shared_link(request, fs.token, 'd') 
-            fs.repo = get_repo(fs.repo_id)
+                fs.shared_link = gen_shared_link(request, fs.token, 'd')
+            r = get_repo(fs.repo_id)
+            if not r:           # get_repo may returns None
+                continue
+            fs.repo = r
             p_fileshares.append(fs)
         
     return render_to_response('repo/share_admin.html', {

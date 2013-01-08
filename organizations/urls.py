@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import *
 
 from views import *
-# from seahub.views import RepoView, RepoHistoryView
 
 urlpatterns = patterns('',
     url(r'^create/$', create_org, name='create_org'),

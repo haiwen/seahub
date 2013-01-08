@@ -38,7 +38,7 @@ from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 import seahub.settings as seahub_settings
 from seahub.utils import render_error, render_permission_error, gen_token, \
     validate_group_name, string2list, calculate_repo_last_modify, MAX_INT, \
-    EVENTS_ENABLED, get_starred_files
+    EVENTS_ENABLED, get_starred_files, gen_shared_link
 from seahub.views import myhome
 from seahub.signals import repo_created
 
@@ -678,7 +678,7 @@ def org_repo_share(request, url_prefix):
 @login_required
 def org_shareadmin(request, url_prefix):
     """
-    List personal repos I share to others, include groups and users.
+    List org shared repos and org shared links.
     """
     username = request.user.username
 
@@ -688,7 +688,7 @@ def org_shareadmin(request, url_prefix):
     
     shared_repos = []
 
-    # personal repos shared by this user
+    # org repos shared by this user
     shared_repos += seafserv_threaded_rpc.list_org_share_repos(org.org_id,
                                                                username,
                                                                'from_email',
@@ -727,16 +727,24 @@ def org_shareadmin(request, url_prefix):
 
     shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
 
-    # File shared links
+    # shared links
     fileshares = FileShare.objects.filter(username=request.user.username)
-    o_fileshares = []           # shared files in org repos
+    o_fileshares = []           # shared links in org repos
     for fs in fileshares:
-        if not is_personal_repo(fs.repo_id):
-            # only list files in org repos
-            fs.filename = os.path.basename(fs.path)
-            fs.repo = get_repo(fs.repo_id)
+        if not is_personal_repo(fs.repo_id):   # only list links in org repos
+            if fs.s_type == 'f':
+                fs.filename = os.path.basename(fs.path)                
+                fs.shared_link = gen_shared_link(request, fs.token, 'f')
+            else:
+                fs.filename = os.path.basename(fs.path[:-1])
+                fs.shared_link = gen_shared_link(request, fs.token, 'd')
+            r = get_repo(fs.repo_id) # get_repo may returns None
+            if not r:
+                continue
+            fs.repo = r
             o_fileshares.append(fs)
 
+    # use org base template
     request.base_template = 'org_base.html'
     
     return render_to_response('repo/share_admin.html', {
