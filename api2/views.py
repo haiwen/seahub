@@ -335,7 +335,7 @@ class UploadLinkView(APIView):
         if request.cloud_mode and seafserv_threaded_rpc.check_quota(repo_id) < 0:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Above quota')
 
-        upload_url = gen_file_upload_url(token, 'upload')
+        upload_url = gen_file_upload_url(token, 'upload-api')
         return Response(upload_url)
     
 def get_file_size (id):
