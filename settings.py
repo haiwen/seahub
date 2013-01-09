@@ -13,8 +13,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'seahub.db')
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.path.join(os.path.dirname(__file__), 'seahub.db'),                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -277,7 +285,7 @@ except ImportError:
     pass
 else:
     # In server release, sqlite3 db file is <topdir>/seahub.db 
-    DATABASE_NAME = os.path.join(install_topdir, 'seahub.db')
+    DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
     # In server release, gunicorn is used to deploy seahub
     INSTALLED_APPS += ('gunicorn', )
     load_local_settings(seahub_settings)
