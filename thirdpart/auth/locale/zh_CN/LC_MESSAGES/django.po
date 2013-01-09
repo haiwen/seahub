@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 14:17+0800\n"
+"POT-Creation-Date: 2013-01-09 19:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,72 +43,82 @@ msgstr ""
 msgid "Change password: %s"
 msgstr ""
 
-#: forms.py:17
+#: forms.py:18
 msgid "Username"
 msgstr ""
 
-#: forms.py:18 forms.py:151
+#: forms.py:19 forms.py:155
 msgid "Password"
 msgstr ""
 
-#: forms.py:38
+#: forms.py:39
 msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
 msgstr ""
 
-#: forms.py:40
+#: forms.py:41
 msgid "This account is inactive."
 msgstr ""
 
-#: forms.py:45
+#: forms.py:46
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr ""
 
-#: forms.py:58
+#: forms.py:59
 msgid "E-mail"
 msgstr ""
 
-#: forms.py:70
+#: forms.py:66
+msgid ""
+"Failed to send email, email service is not properly configured, please "
+"contact administrator."
+msgstr "由于邮件服务未正确配置，发送邮件失败，请联系管理员。"
+
+#: forms.py:74
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr ""
+msgstr "该邮件地址未关联任何用户帐号，确定已注册？"
 
-#: forms.py:100
+#: forms.py:104
 #, python-format
 msgid "Password reset on %s"
-msgstr ""
+msgstr "%s 密码重置"
 
-#: forms.py:108
+#: forms.py:112
 msgid "New password"
 msgstr ""
 
-#: forms.py:109
+#: forms.py:113
 msgid "New password confirmation"
 msgstr ""
 
-#: forms.py:121 forms.py:163
+#: forms.py:125 forms.py:167
 msgid "The two password fields didn't match."
 msgstr ""
 
-#: forms.py:135
+#: forms.py:139
 msgid "Old password"
 msgstr ""
 
-#: forms.py:143
+#: forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "当前密码错误，请重新输入。"
 
-#: forms.py:152
+#: forms.py:156
 msgid "Password (again)"
 msgstr ""
 
-#: views.py:85
+#: views.py:90
 msgid "Logged out"
 msgstr ""
+
+#: views.py:138
+msgid "Failed to send email, please contact administrator."
+msgstr "发送邮件失败，请联系管理员。"
 
 #: management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
