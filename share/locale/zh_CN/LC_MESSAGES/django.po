@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-05 10:30+0800\n"
+"POT-Creation-Date: 2013-01-09 19:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,56 +93,70 @@ msgstr "可读写"
 msgid "Read-Only"
 msgstr "只可浏览"
 
-#: views.py:305
+#: views.py:308
 #, python-format
 msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr "共享给 %s 失败， 加密的资料库不能共享给站外邮箱。"
 
-#: views.py:320 views.py:342
+#: views.py:323 views.py:345
 #, python-format
 msgid "Failed to share to %s."
 msgstr "共享给 %s 失败。"
 
-#: views.py:338
+#: views.py:341
 msgid "You are shared with a library in Seafile"
 msgstr "有人在Seafile上共享了一个资料库给你"
 
-#: views.py:345
+#: views.py:348
 #, python-format
 msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
-#: views.py:370
+#: views.py:373
 msgid "Deleted successfully."
 msgstr "删除成功"
 
-#: views.py:388
+#: views.py:391
 msgid "Invalid arguments"
 msgstr "参数错误"
 
-#: views.py:397
-msgid "Can not share root dir."
-msgstr "无法共享根目录"
+#: views.py:400
+msgid "You cannot share the repo in this way."
+msgstr ""
 
-#: views.py:422
+#: views.py:425
 msgid "Failed to get the link, please retry later."
 msgstr "获取分享链接失败，请稍后重试。"
 
-#: views.py:444 views.py:452
+#: views.py:447
 msgid "Removed successfully"
 msgstr "删除成功"
 
-#: views.py:489
+#: views.py:455
+msgid "Deleted successfully"
+msgstr "删除成功"
+
+#: views.py:471
+msgid ""
+"Sending shared link failed. Email service is not properly configured, please "
+"contact administrator."
+msgstr "由于邮箱服务未正确配置，发送共享链接失败，请联系管理员。"
+
+#: views.py:496
 msgid "Your friend shared a file to you on Seafile"
 msgstr "你的朋友在 Seafile 上共享了一个文件给你"
 
-#: views.py:493
-msgid "Send failed."
-msgstr "发送失败"
+#: views.py:500
+msgid "Internal server error. Send failed."
+msgstr "服务器内部错误，发送失败。"
+
+#: views.py:503
+msgid "Successfully sent."
+msgstr "发送成功"
 
 #: templates/repo/share_admin.html:15
 msgid "Tips"
@@ -246,6 +260,12 @@ msgstr "权限修改失败"
 #: templates/repo/share_admin.html:160
 msgid "edit failed"
 msgstr "权限修改失败"
+
+#~ msgid "Can not share root dir."
+#~ msgstr "无法共享根目录"
+
+#~ msgid "Send failed."
+#~ msgstr "发送失败"
 
 #~ msgid "Links"
 #~ msgstr "文件外链"

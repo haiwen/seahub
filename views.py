@@ -2092,14 +2092,14 @@ def user_add(request):
                     if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
                         try:
                             send_user_add_mail(request, email, password)
-                            messages.success(request, _(u'Successfully added user %s. An email notification has been sent.' % email))
+                            messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
                         except Exception, e:
                             logger.error(str(e))
-                            messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.' % email))
+                            messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
                     else:
-                        messages.success(request, _(u'Successfully added user %s.' % email))
+                        messages.success(request, _(u'Successfully added user %s.') % email)
                 else:
-                    messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.' % email))
+                    messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.') % email)
 
                 return HttpResponseRedirect(reverse('sys_useradmin', args=[]))
     else:

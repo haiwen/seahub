@@ -1,5 +1,6 @@
 # encoding: utf-8
 import os
+import logging
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -33,6 +34,9 @@ try:
 except ImportError:
     CLOUD_MODE = False
 from seahub.settings import SITE_ROOT
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 def share_repo(request):
@@ -496,7 +500,8 @@ def send_shared_link(request):
                 send_mail(_(u'Your friend shared a file to you on Seafile'),
                           t.render(Context(c)), None, [to_email],
                           fail_silently=False)
-            except:
+            except Exception, e:
+                logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
                 return HttpResponse(data, status=500, content_type=content_type)
 
