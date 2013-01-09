@@ -264,7 +264,7 @@ def valid_previewed_file(filename):
     Check whether file can preview on web
     
     """
-    fileExt = os.path.splitext(filename)[1][1:]
+    fileExt = os.path.splitext(filename)[1][1:].lower()
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
         # Check whether this kind of file can be previewd.
