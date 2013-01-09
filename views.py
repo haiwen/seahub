@@ -1334,8 +1334,21 @@ def repo_view_file(request, repo_id):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
-        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+    elif filetype == 'Document':
+        if DOCUMENT_CONVERTOR_ROOT:
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            filetype = 'Unknown'
+    elif filetype == 'PDF':
+        if USE_PDFJS:
+            # use pdfjs to preview PDF
+            pass
+        elif DOCUMENT_CONVERTOR_ROOT:
+            # use flash to prefiew PDF
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            # can't preview PDF
+            filetype = 'Unknown'
 
     if view_history:
         return render_to_response('history_file_view.html', {
@@ -2537,8 +2550,21 @@ def view_shared_file(request, token):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
-        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+    elif filetype == 'Document':
+        if DOCUMENT_CONVERTOR_ROOT:
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            filetype = 'Unknown'
+    elif filetype == 'PDF':
+        if USE_PDFJS:
+            # use pdfjs to preview PDF
+            pass
+        elif DOCUMENT_CONVERTOR_ROOT:
+            # use flash to prefiew PDF
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            # can't preview PDF
+            filetype = 'Unknown'
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -2645,8 +2671,21 @@ def view_file_via_shared_dir(request, token):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
-        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+    elif filetype == 'Document':
+        if DOCUMENT_CONVERTOR_ROOT:
+            err, swf_exists = flash_prepare(raw_path, file_id, fileext)
+        else:
+            filetype = 'Unknown'
+    elif filetype == 'PDF':
+        if USE_PDFJS:
+            # use pdfjs to preview PDF
+            pass
+        elif DOCUMENT_CONVERTOR_ROOT:
+            # use flash to prefiew PDF
+            err, swf_exists = flash_prepare(raw_path, file_id, fileext)
+        else:
+            # can't preview PDF
+            filetype = 'Unknown'
 
     zipped = gen_path_link(path, '')
         

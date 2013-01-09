@@ -272,12 +272,7 @@ def valid_previewed_file(filename):
     fileExt = os.path.splitext(filename)[1][1:].lower()
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
-        # Check whether this kind of file can be previewd.
-        if filetype == 'Document' or filetype == 'PDF':
-            return (filetype, fileExt) if DOCUMENT_CONVERTOR_ROOT \
-                else ('Unknown', fileExt)
-        else:
-            return (filetype, fileExt)
+        return (filetype, fileExt)
     else:
         return ('Unknown', fileExt)
 
