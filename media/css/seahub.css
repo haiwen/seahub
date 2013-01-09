@@ -970,10 +970,10 @@ textarea:-moz-placeholder {/* for FF */
     display:none;
 }
 .zh-cn .dirent-name {
-    width:50%;
+    width:49%;
 }
 .zh-cn .dirent-op {
-    width:20%;
+    width:21%;
 }
 .file-star {
     cursor:pointer;
