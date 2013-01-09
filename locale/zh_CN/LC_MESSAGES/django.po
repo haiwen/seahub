@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 11:15+0800\n"
+"POT-Creation-Date: 2013-01-09 10:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,15 +140,15 @@ msgstr "天数不能为空"
 msgid "Please enter a number"
 msgstr "请输入数字"
 
-#: settings.py:91
+#: settings.py:99
 msgid "English"
 msgstr ""
 
-#: settings.py:92
+#: settings.py:100
 msgid "简体中文"
 msgstr ""
 
-#: settings.py:93
+#: settings.py:101
 msgid "Русский"
 msgstr ""
 
@@ -852,9 +852,9 @@ msgstr "星标添加成功"
 
 #: templates/file_view.html:198 templates/file_view.html.py:363
 #: templates/repo.html:407 templates/repo.html.py:643 templates/repo.html:680
-#: templates/repo.html.py:819 templates/snippets/shared_link_js.html:43
-#: templates/snippets/shared_link_js.html:62
-#: templates/snippets/shared_link_js.html:125
+#: templates/repo.html.py:819 templates/snippets/shared_link_js.html:41
+#: templates/snippets/shared_link_js.html:60
+#: templates/snippets/shared_link_js.html:123
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
@@ -885,7 +885,9 @@ msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升�
 msgid ""
 "Your Seafile client is not running or its version is too old. You can open "
 "the local file manually by clicking the following link:"
-msgstr "您的 Seafile 客户端版本太低或者没有启动， 您可以点击下面的链接手动打开本地文件："
+msgstr ""
+"您的 Seafile 客户端版本太低或者没有启动， 您可以点击下面的链接手动打开本地文"
+"件："
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -1270,12 +1272,14 @@ msgid "Click to choose"
 msgstr "点击选择"
 
 #: templates/repo.html:283
-msgid "online Rich Text format ( experimental ) ."
+msgid "online Rich Text format (experimental)."
 msgstr "在线富文本格式（实验版）"
 
 #: templates/repo.html:283 templates/repo.html.py:284
-msgid "more"
-msgstr "详细"
+#: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
+#: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
+msgid "Details"
+msgstr "详情"
 
 #: templates/repo.html:284
 msgid "simple markup format."
@@ -1359,11 +1363,6 @@ msgstr "修改者"
 #: templates/repo_history.html:30 templates/repo_view_snapshot.html:30
 msgid "None"
 msgstr "无"
-
-#: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
-#: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
-msgid "Details"
-msgstr "详情"
 
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
 #: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
@@ -2018,7 +2017,7 @@ msgstr "Tip：必须是团体内成员或群组，输入 all 共享到公共资�
 msgid "Tip: enter \"all\" to share to public library."
 msgstr "Tip：输入 all 共享到公共资料"
 
-#: templates/snippets/shared_link_js.html:91
+#: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
 msgstr "请输入至少一个邮箱。"
 
@@ -2033,6 +2032,9 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "more"
+#~ msgstr "详细"
 
 #~ msgid "<button id=\"events-more\" class=\"hide\">More</button>"
 #~ msgstr "<button id=\"events-more\" class=\"hide\">更多</button>"
