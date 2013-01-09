@@ -3,9 +3,6 @@
 {% load seahub_tags i18n %}
 {% load url from future %}
 
-{% block info_bar_message %}
-{% endblock %}
-
 {% block main_panel %}
     <h2 id="view-hd">{{ dir_name }}</h2>
     <div>
@@ -28,21 +25,17 @@
                 <div class="repo-op fright">
                     <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" id="download-dir" class="op-btn">{% trans "ZIP"%}</button>
                 </div>
-                
             </div>
-            <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
-                    <th width="3%"></th>
                     <th width="5%"></th>
-                    <th width="53%">{% trans "Name"%}</th>
+                    <th width="56%">{% trans "Name"%}</th>
                     <th width="10%">{% trans "Size"%}</th>
                     <th width="29%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
-                    <td></td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>
                         <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
@@ -61,7 +54,6 @@
 
                 {% for dirent in file_list %}
                 <tr>
-                    <td></td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td>
                         <a class="op" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
@@ -78,80 +70,22 @@
                 </tr>
                 {% endfor %}
             </table>
-            <!-- /.repo-file-list -->
         </div>
     </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-var popup_tr = ''; // the tr which the shown popup belongs to
-var no_file_op_popup = true;
-$("tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
+$("tr:gt(0)").hover(
     function() {
-        if (no_file_op_popup) {
-            $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
-        }
+        $(this).find('.repo-file-op').removeClass('vh');
     },
     function() {
-        if (no_file_op_popup) {
-            $(this).removeClass('hl').find('.repo-file-op').addClass('vh');
-        }
+        $(this).find('.repo-file-op').addClass('vh');
     }
 );
-$('#main-panel').removeClass('ovhd');
-$('.more-op-icon').click(function(e) {
-    var hidden_op = $(this).next();
-    if ($(this).attr('data')) { // no popup
-        hidden_op.css({'left': $(this).position().left + $(this).width() + 5});
-        if ($(this).offset().top + hidden_op.height() <= $('#main').offset().top + $('#main').height()) {
-            hidden_op.css('top', 6);
-        } else {
-            hidden_op.css('bottom', 2);
-        }
-        hidden_op.removeClass('hide');
-        $(this).attr('data','');
-        no_file_op_popup = false;
-        popup_tr = $(this).parents('tr');
-    } else {
-        hidden_op.addClass('hide');
-        $(this).attr('data','no-popup');
-        no_file_op_popup = true;
-        popup_tr = '';
-    }
-});
-$(document).click(function(e) {
-    var target =  e.target || event.srcElement;
-    if (!no_file_op_popup &&
-        !$('.more-op-icon, .hidden-op').is(target) &&
-        !$('.hidden-op').find('*').is(target)) {
-        $('.hidden-op').addClass('hide');
-        $('.more-op-icon').attr('data', 'no-popup');
-        no_file_op_popup = true;
-
-        if (!popup_tr.find('*').is(target)) {
-            popup_tr.removeClass('hl').find('.repo-file-op').addClass('vh'); // clicked place: the first tr, place out of the table
-            $('tr:gt(0)').each(function() { // when other tr is clicked
-                if ($(this).find('*').is(target)) {
-                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
-                }
-            });
-        }
-    }
-});
-
-$('.hidden-op li').hover(
-    function() {
-        $(this).css('background', '#eee');
-    },
-    function() {
-        $(this).css('background', '#fff');
-    }
-);
-
 $('#download-dir').click(function() {
     location.href = $(this).attr('data');
 });
-
 </script>
 {% endblock %}
