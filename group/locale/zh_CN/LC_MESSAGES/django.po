@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-06 19:50+0800\n"
+"POT-Creation-Date: 2013-01-09 19:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,147 +77,147 @@ msgstr "验证信息不能为空"
 msgid "Verification message is too long (maximun is 255 characters)"
 msgstr "验证信息太长，不超过255个字符"
 
-#: views.py:68
+#: views.py:69
 msgid "There is already a group with that name."
 msgstr "已有同名群组"
 
-#: views.py:101
+#: views.py:102
 msgid "Only administrators can delete the group."
 msgstr "只有管理员才能删除群组。"
 
-#: views.py:138
+#: views.py:139
 msgid "Only administrators can dismiss the group"
 msgstr "只有管理员才能解散群组"
 
-#: views.py:161
+#: views.py:162
 msgid "group id  is not a valid argument."
 msgstr "群组 id 无效"
 
-#: views.py:300
+#: views.py:302
 msgid "The message doesn't exist"
 msgstr "该留言不存在"
 
-#: views.py:310
+#: views.py:312
 msgid "You don't have the permission."
 msgstr "你的权限不够。"
 
-#: views.py:474
+#: views.py:476
 #, python-format
 msgid "Failed to add, %s is not in current organization."
 msgstr "添加失败，%s 不在当前团体中。"
 
-#: views.py:504
+#: views.py:506
 msgid "Your friend added you to a group in SeaCloud."
 msgstr "你的朋友在 SeaCloud 上把你加入到了一个群组中。"
 
-#: views.py:509
+#: views.py:511
 msgid "Failed to send mail."
 msgstr "邮件发送失败。"
 
-#: views.py:526
+#: views.py:528
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "添加失败，%s 未注册。"
 
-#: views.py:540
+#: views.py:542
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "添加群组成员成功，%(count)s 封邀请邮件已发送。"
 
-#: views.py:548
+#: views.py:550
 msgid "Successfully added."
 msgstr "添加成功。"
 
-#: views.py:588
+#: views.py:590
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "添加失败，%s 还没注册。"
 
-#: views.py:611 views.py:624 views.py:651
+#: views.py:613 views.py:626 views.py:653
 msgid "Operation succeeded."
 msgstr "操作成功"
 
-#: views.py:641
+#: views.py:643
 msgid "group id is not valid"
 msgstr "群组 id 无效"
 
-#: views.py:653
+#: views.py:655
 #, python-format
 msgid "Failed：%s"
 msgstr "删除失败：%s"
 
-#: views.py:665
+#: views.py:667
 msgid "Failed to share: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:668
+#: views.py:670
 msgid "Failed to share: internal error."
 msgstr "共享失败： 内部错误。"
 
-#: views.py:678
+#: views.py:680
 msgid "Failed to unshare: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:683
+#: views.py:685
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr "操作失败：只有管理员和资料库拥有者才能取消共享。"
 
-#: views.py:686
+#: views.py:688
 msgid "Failed to unshare: internal error."
 msgstr "取消共享失败：内部错误。"
 
-#: views.py:714
+#: views.py:716
 msgid "Error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
-#: views.py:722
+#: views.py:724
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "推荐到 %s 失败：你不在该群组中。"
 
-#: views.py:742
+#: views.py:744
 #, python-format
 msgid ""
 "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
 msgstr "推荐到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
 
-#: views.py:747
+#: views.py:749
 msgid "Failed to recommend."
 msgstr "推荐失败。"
 
-#: views.py:762
+#: views.py:764
 msgid "Failed to create: the group does not exist."
 msgstr "创建失败：该群组不存在。"
 
-#: views.py:766
+#: views.py:768
 msgid "Failed to create: you are not in the group."
 msgstr "创建失败：你不在该群组中。"
 
-#: views.py:788 views.py:816
+#: views.py:790 views.py:818
 msgid "Failed to create"
 msgstr "创建失败。"
 
-#: views.py:802 views.py:829
+#: views.py:804 views.py:831
 msgid "Failed to create: internal error."
 msgstr "创建团体群组失败。"
 
-#: views.py:856
+#: views.py:858
 msgid "You are already in the group."
 msgstr "你已在该群组中。"
 
-#: views.py:875
+#: views.py:877
 msgid "apply to join the group"
 msgstr "申请加入群组"
 
-#: views.py:877
+#: views.py:879
 msgid "Sent successfully, the group admin will handle it."
 msgstr "发送成功，请等候管理员处理。"
 
-#: views.py:881
+#: views.py:883
 msgid "Failed to send. You can try it again later."
 msgstr "发送失败, 请稍侯再试。"
 
@@ -244,7 +244,6 @@ msgid "Basic Info"
 msgstr "基本信息"
 
 #: templates/group/group_info.html:16 templates/group/group_manage.html:15
-#: templates/group/groups_right_panel.html:12
 msgid "'s icon"
 msgstr "的图标"
 
@@ -264,88 +263,88 @@ msgstr "成员"
 msgid "Add"
 msgstr "添加"
 
-#: templates/group/group_info.html:46
+#: templates/group/group_info.html:52
 msgid "You can click \"Add\" above to add members."
 msgstr "你可以点击上方的“添加”来加入成员。"
 
-#: templates/group/group_info.html:53 templates/group/group_info.html.py:76
+#: templates/group/group_info.html:59 templates/group/group_info.html.py:82
 #: templates/group/group_manage.html:24 templates/group/group_manage.html:42
 #: templates/group/group_manage.html:64
 msgid "Operations"
 msgstr "操作"
 
-#: templates/group/group_info.html:56
+#: templates/group/group_info.html:62
 msgid "Administration"
 msgstr "管理"
 
-#: templates/group/group_info.html:58
+#: templates/group/group_info.html:64
 msgid "Quit"
 msgstr "退出"
 
-#: templates/group/group_info.html:66
+#: templates/group/group_info.html:72
 msgid "Libraries"
 msgstr "群组里共享的资料库"
 
-#: templates/group/group_info.html:67
+#: templates/group/group_info.html:73
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/group/group_info.html:72
+#: templates/group/group_info.html:78
 msgid "Name"
 msgstr "名字"
 
-#: templates/group/group_info.html:73
+#: templates/group/group_info.html:79
 msgid "Description"
 msgstr "描述"
 
-#: templates/group/group_info.html:74
+#: templates/group/group_info.html:80
 msgid "Last Update"
 msgstr "更新时间"
 
-#: templates/group/group_info.html:75
+#: templates/group/group_info.html:81
 msgid "Shared By"
 msgstr "共享来源"
 
-#: templates/group/group_info.html:83
+#: templates/group/group_info.html:89
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templates/group/group_info.html:83 templates/group/group_info.html.py:85
+#: templates/group/group_info.html:89 templates/group/group_info.html.py:91
 msgid "directory icon"
 msgstr "目录图标"
 
-#: templates/group/group_info.html:99
+#: templates/group/group_info.html:105
 msgid "Download"
 msgstr "下载"
 
-#: templates/group/group_info.html:101
+#: templates/group/group_info.html:107
 msgid "Unshare"
 msgstr "取消共享"
 
-#: templates/group/group_info.html:110
+#: templates/group/group_info.html:116
 msgid "Messages"
 msgstr "信息栏"
 
-#: templates/group/group_info.html:118 templates/group/group_pubinfo.html:24
+#: templates/group/group_info.html:124 templates/group/group_pubinfo.html:24
 #: templates/group/groups_right_panel.html:34
 #: templates/group/grpmember_add_form.html:12
 #: templates/group/grpmember_add_form.html:19
 msgid "Submit"
 msgstr "提交"
 
-#: templates/group/group_info.html:138 templates/group/new_msg_reply.html:22
+#: templates/group/group_info.html:144 templates/group/new_msg_reply.html:22
 msgid "Recommended"
 msgstr "推荐"
 
-#: templates/group/group_info.html:150
+#: templates/group/group_info.html:156
 msgid "File "
 msgstr "文件"
 
-#: templates/group/group_info.html:150
+#: templates/group/group_info.html:156
 msgid "has a new comment:"
 msgstr "有新的评注："
 
-#: templates/group/group_info.html:157
+#: templates/group/group_info.html:163
 #: templates/group/group_reply_list.html:10
 #: templates/group/group_reply_list.html:16
 #: templates/group/group_reply_new.html:8 templates/group/msg_reply_js.html:59
@@ -354,7 +353,7 @@ msgstr "有新的评注："
 msgid "Reply"
 msgstr "回复"
 
-#: templates/group/group_info.html:159
+#: templates/group/group_info.html:165
 #, python-format
 msgid ""
 "\n"
@@ -369,60 +368,60 @@ msgstr[0] ""
 "                    <span class=\"reply-cnt\">%(counter)s</span> 回复\n"
 "                    "
 
-#: templates/group/group_info.html:166 templates/group/new_msg_reply.html:34
+#: templates/group/group_info.html:172 templates/group/new_msg_reply.html:34
 msgid "Hide"
 msgstr "隐藏回复"
 
-#: templates/group/group_info.html:168 templates/group/group_manage.html:50
+#: templates/group/group_info.html:174 templates/group/group_manage.html:50
 #: templates/group/group_manage.html:73
 msgid "Delete"
 msgstr "删除"
 
-#: templates/group/group_info.html:180
+#: templates/group/group_info.html:186
 msgid "Previous"
 msgstr "前一页"
 
-#: templates/group/group_info.html:183
+#: templates/group/group_info.html:189
 msgid "Next"
 msgstr "下一页"
 
-#: templates/group/group_info.html:196
+#: templates/group/group_info.html:202
 msgid "Quit Group"
 msgstr "退出群组"
 
-#: templates/group/group_info.html:196
+#: templates/group/group_info.html:202
 msgid "Are you sure you want to quit this group"
 msgstr "确定要退出该群组"
 
-#: templates/group/group_info.html:197
+#: templates/group/group_info.html:203
 msgid "Unshare Library"
 msgstr "取消共享资料库"
 
-#: templates/group/group_info.html:197
+#: templates/group/group_info.html:203
 msgid "Are you sure you want to unshare"
 msgstr "确定要取消共享"
 
-#: templates/group/group_info.html:238
+#: templates/group/group_info.html:236
 msgid "Really want to delete this message?"
 msgstr "确定要删除这条留言？"
 
-#: templates/group/group_info.html:238
+#: templates/group/group_info.html:236
 msgid "Yes"
 msgstr "确定"
 
-#: templates/group/group_info.html:238
+#: templates/group/group_info.html:236
 msgid "No"
 msgstr "取消"
 
-#: templates/group/group_info.html:250
+#: templates/group/group_info.html:248
 msgid "Successfully deleted"
 msgstr "删除成功。"
 
-#: templates/group/group_info.html:252
+#: templates/group/group_info.html:250
 msgid "Failed to delete: "
 msgstr "删除失败："
 
-#: templates/group/group_info.html:256
+#: templates/group/group_info.html:254
 msgid ", failed to delete."
 msgstr "，删除失败。"
 
@@ -556,8 +555,8 @@ msgstr ""
 msgid "Group Name"
 msgstr "群组名称"
 
-#: templates/group/grpadmin_add_js.html:18
-#: templates/group/grpmember_add_js.html:18
+#: templates/group/grpadmin_add_js.html:19
+#: templates/group/grpmember_add_js.html:19
 msgid "It can not be blank."
 msgstr "输入不能为空"
 
@@ -566,8 +565,7 @@ msgid "Add members"
 msgstr "添加成员"
 
 #: templates/group/grpmember_add_form.html:4
-#: templates/group/grpmember_add_form.html:16
-msgid "Type emails, separated by ','"
+msgid "emails, separated by ','"
 msgstr "输入邮箱，多个邮箱请以 , 分隔"
 
 #: templates/group/grpmember_add_form.html:7
@@ -579,8 +577,12 @@ msgid "Tip: the emails should be already registered."
 msgstr "提示：必须是已注册的邮箱。"
 
 #: templates/group/grpmember_add_form.html:15
-msgid "Add administrators "
+msgid "Add administrators"
 msgstr "添加管理员"
+
+#: templates/group/grpmember_add_form.html:16
+msgid "emails, separated by ',' "
+msgstr "输入邮箱，多个邮箱请以 , 分隔"
 
 #: templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
@@ -601,4 +603,3 @@ msgstr "输入不能为空且应应少于 150 个字符。"
 #: templates/group/new_msg_reply.html:57
 msgid "None"
 msgstr "暂无"
-
