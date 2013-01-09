@@ -13,8 +13,8 @@
     <h2 id="view-hd">{{ file_name }}</h2>
     <div id="file">
         <div id="file-op">
+            <p class="fleft">
             {% if zipped %}
-            <p class="path fleft">
               {% trans "Current path: "%} 
               {% for name, link in zipped %}
                 {% if not forloop.last %}
@@ -23,10 +23,10 @@
                 {{ name }}
                 {% endif %}
               {% endfor %}
-            </p>
             {% else %}
-            <p class="fleft">{% trans "Shared by: " %}{{ username|email2nickname }}</p>
+            {% trans "Shared by: " %}{{ username|email2nickname }}
             {% endif %}
+            </p>
 
             {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">{% trans "Raw" %}</button>

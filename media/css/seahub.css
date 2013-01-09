@@ -1141,9 +1141,6 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
-#added-member-name {
-    width:97%;
-}
 #repo-share-form {
     width:266px;
 }

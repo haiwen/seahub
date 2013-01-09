@@ -656,7 +656,7 @@ $('.file-share').click(function() {
         $('#shared-link-text').css({'width':$('#linkwidth').width() + 2});
         $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
         $('#linkwidth').remove();
-        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+        $('#simplemodal-container').css({'height':'auto'});
     }
     if ($(this).data('link')) {
         showPopup($(this).data('link'));

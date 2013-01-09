@@ -74,7 +74,7 @@ $('#send-shared-link').click(function() { // for file_view.html and subdir page
 $('#send-link').click(function() { // for 'file-share' in repo.html
     $(this).addClass('hide');
     var input = $('#link-send-input');
-    input.css({'min-width':input.css('width'), 'width': $('#file-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
+    input.css({'width': $('#file-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
     $('#link-send-form').removeClass('hide');
     addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });

@@ -267,6 +267,7 @@ $('.grp-admin-add').click(function() {
 
 $('#grp-member-add').click(function() {
     $("#member-add-form").modal({appendTo: "#main", focus: false});
+    $('#simplemodal-container').css({'height':'auto'});
     addAutocomplete('#added-member-name', '#member-add-form', contact_list);
     return false;
 });
