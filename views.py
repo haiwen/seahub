@@ -271,7 +271,6 @@ class RepoMixin(object):
         self.user_perm = get_user_permission(self.request, self.repo_id)
         self.current_commit = self.get_current_commit()
         self.password_set = self.is_password_set()
-        self.is_repo_owner = is_repo_owner(self.get_user().username, self.repo_id)
         if self.repo.encrypt and not self.password_set:
             # Repo is encrypt and password is not set, then no need to
             # query following informations.
@@ -380,11 +379,18 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         else:
             dir_shared_link = ''
         return dir_shared_link
-        
+
+    def is_repo_owner(self, username, repo_id):
+        if self.request.user.org:
+            return is_org_repo_owner(self.request.user.org['org_id'],
+                                     repo_id, username)
+        else:
+            return is_repo_owner(username, repo_id)
+    
     def get_context_data(self, **kwargs):
         kwargs['repo'] = self.repo
         kwargs['user_perm'] = self.user_perm
-        kwargs['is_repo_owner'] = self.is_repo_owner
+        kwargs['is_repo_owner'] = self.is_repo_owner(self.get_user().username, self.repo.id)
         kwargs['current_commit'] = self.get_current_commit()
         kwargs['password_set'] = self.password_set
         kwargs['repo_size'] = self.repo_size
