@@ -28,6 +28,11 @@ try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
+try:
+    from settings import EMAIL_HOST
+    IS_EMAIL_CONFIGURED = True
+except ImportError:
+    IS_EMAIL_CONFIGURED = False
     
 import settings
 
@@ -722,3 +727,4 @@ def show_delete_days(request):
         days = 7
 
     return days
+

@@ -1,8 +1,10 @@
 import re
+import logging
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponseRedirect, Http404
@@ -19,6 +21,9 @@ from auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from auth.tokens import default_token_generator
 
 from seahub.base.accounts import User
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @csrf_protect
 @never_cache
@@ -126,8 +131,16 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['email_template_name'] = email_template_name
                 if not Site._meta.installed:
                     opts['domain_override'] = RequestSite(request).domain
-            form.save(**opts)
-            return HttpResponseRedirect(post_reset_redirect)
+            try:
+                form.save(**opts)
+            except Exception, e:
+                logger.error(str(e))
+                messages.error(request, _(u'Failed to send email, please contact administrator.'))
+                return render_to_response(template_name, {
+                        'form': form,
+                        }, context_instance=RequestContext(request))
+            else:
+                return HttpResponseRedirect(post_reset_redirect)
     else:
         form = password_reset_form()
     return render_to_response(template_name, {

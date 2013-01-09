@@ -8,6 +8,7 @@ import tempfile
 import sys
 import urllib
 import urllib2
+import logging
 from urllib import quote
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -69,7 +70,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, string2list, MAX_INT, \
+    gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
@@ -80,7 +81,11 @@ try:
         DOCUMENT_CONVERTOR_ROOT += '/'
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
-from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS
+from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS,\
+    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 def root(request):
@@ -1987,17 +1992,9 @@ def send_user_reset_email(request, email, password):
         'password': password,
         'site_name': settings.SITE_NAME,
         }
-    try:
-        send_mail(_(u'Password Reset'), t.render(Context(c)),
-                  None, [email], fail_silently=False)
-        msg = _('Successfully resetting password to %(passwd)s, an email has been sent to %(user)s.') % \
-            {'passwd': password, 'user': email}
-        messages.success(request, msg)
-    except:
-        msg = _('Successfully resetting password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
-            {'passwd':password, 'user': email}
-        messages.error(request, msg)
-
+    send_mail(_(u'Password Reset'), t.render(Context(c)),
+              None, [email], fail_silently=False)
+    
 @login_required
 @sys_staff_required
 def user_reset(request, user_id):
@@ -2007,10 +2004,24 @@ def user_reset(request, user_id):
         user.set_password(INIT_PASSWD)
         user.save()
 
-        if hasattr(settings, 'EMAIL_HOST'):
-            send_user_reset_email(request, user.email, INIT_PASSWD)
+        if IS_EMAIL_CONFIGURED:
+            if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
+                try:
+                    send_user_reset_email(request, user.email, INIT_PASSWD)
+                    msg = _('Successfully resetted password to %(passwd)s, an email has been sent to %(user)s.') % \
+                        {'passwd': INIT_PASSWD, 'user': user.email}
+                    messages.success(request, msg)
+                except Exception, e:
+                    logger.error(str(e))
+                    msg = _('Successfully resetted password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
+                        {'passwd':INIT_PASSWD, 'user': user.email}
+                    messages.success(request, msg)
+            else:
+                messages.success(request, _(u'Successfully resetted password to %(passwd)s for user %(user)s.') % \
+                                     {'passwd':INIT_PASSWD,'user': user.email})
         else:
-            messages.success(request, _(u'Successfully resetting password to %s') % INIT_PASSWD)
+            messages.success(request, _(u'Successfully resetted password to %(passwd)s for user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % \
+                                 {'passwd':INIT_PASSWD,'user': user.email})
     except User.DoesNotExist:
         msg = _(u'Failed to reset password: user does not exist')
         messages.error(request, msg)
@@ -2033,12 +2044,8 @@ def send_user_add_mail(request, email, password):
         'protocol': use_https and 'https' or 'http',
         'site_name': settings.SITE_NAME,
         }
-    try:
-        send_mail(_(u'Seafile Registration Information'), t.render(Context(c)),
-                  None, [email], fail_silently=False)
-        messages.success(request, _(u'Successfully sending mail'))
-    except:
-        messages.error(request, _(u'Failed to send mail'))
+    send_mail(_(u'Seafile Registration Information'), t.render(Context(c)),
+              None, [email], fail_silently=False)
 
 @login_required
 def user_add(request):
@@ -2055,8 +2062,7 @@ def user_add(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
 
-            user = User.objects.create_user(email, password,
-                                            is_staff=False,
+            user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
             
             if request.user.org:
@@ -2069,9 +2075,19 @@ def user_add(request):
                 return HttpResponseRedirect(reverse('org_useradmin',
                                                     args=[url_prefix]))
             else:
-                if hasattr(settings, 'EMAIL_HOST'):
-                    send_user_add_mail(request, email, password)
-                
+                if IS_EMAIL_CONFIGURED:
+                    if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
+                        try:
+                            send_user_add_mail(request, email, password)
+                            messages.success(request, _(u'Successfully added user %s. An email notification has been sent.' % email))
+                        except Exception, e:
+                            logger.error(str(e))
+                            messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.' % email))
+                    else:
+                        messages.success(request, _(u'Successfully added user %s.' % email))
+                else:
+                    messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.' % email))
+
                 return HttpResponseRedirect(reverse('sys_useradmin', args=[]))
     else:
         form = AddUserForm()

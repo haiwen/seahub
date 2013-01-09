@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
 
 from seahub.base.accounts import User
+from seahub.utils import IS_EMAIL_CONFIGURED
 
 class AuthenticationForm(forms.Form):
     """
@@ -61,6 +62,9 @@ class PasswordResetForm(forms.Form):
         """
         Validates that a user exists with the given e-mail address.
         """
+        if not IS_EMAIL_CONFIGURED:
+            raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
+        
         email = self.cleaned_data["email"]
 
         # TODO: add filter method to UserManager

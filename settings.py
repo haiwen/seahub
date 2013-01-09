@@ -214,7 +214,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
         },
     },
     'handlers': {
@@ -250,6 +250,17 @@ LOGGING = {
         },
     }
 }
+
+#################
+# Email sending #
+#################
+
+SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
+SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
+
+#####################
+# External settings #
+#####################
 
 def load_local_settings(module):
     '''Import any symbols that begin with A-Z. Append to lists any symbols

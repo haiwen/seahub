@@ -26,7 +26,7 @@ from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
-    gen_token, gen_shared_link
+    gen_token, gen_shared_link, IS_EMAIL_CONFIGURED
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -467,6 +467,10 @@ def send_shared_link(request):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
+    if not IS_EMAIL_CONFIGURED:
+        data = json.dumps({'error':_(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')})
+        return HttpResponse(data, status=500, content_type=content_type)
+    
     from seahub.settings import SITE_NAME
 
     form = FileLinkShareForm(request.POST)
