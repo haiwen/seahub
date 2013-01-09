@@ -80,7 +80,7 @@ try:
         DOCUMENT_CONVERTOR_ROOT += '/'
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
-from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD
+from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS
 
 @login_required
 def root(request):
@@ -1329,7 +1329,7 @@ def repo_view_file(request, repo_id):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF':
+    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
 
     if view_history:
@@ -2521,7 +2521,7 @@ def view_shared_file(request, token):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF':
+    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
     
     # Increase file shared link view_cnt, this operation should be atomic
@@ -2629,7 +2629,7 @@ def view_file_via_shared_dir(request, token):
     swf_exists = False
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document' or filetype == 'PDF':
+    elif filetype == 'Document' or filetype == 'PDF' and not USE_PDFJS:
         err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
 
     zipped = gen_path_link(path, '')
@@ -2893,3 +2893,16 @@ def events(request):
 
     return HttpResponse(json.dumps({'html':html, 'more':events_more}),
                             content_type='application/json; charset=utf-8')
+
+def pdf_full_view(request):
+    '''For pdf view with pdf.js.'''
+    
+    repo_id = request.GET.get('repo_id', '')
+    obj_id = request.GET.get('obj_id', '')
+    file_name = request.GET.get('file_name', '')
+    token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                              'view', request.user.username)
+    file_src = gen_file_get_url(token, file_name)
+    return render_to_response('pdf_full_view.html', {
+            'file_src': file_src,
+           }, context_instance=RequestContext(request))

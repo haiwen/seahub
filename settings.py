@@ -144,6 +144,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
+USE_PDFJS = True
 
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'

@@ -1,8 +1,11 @@
 {% if filetype == 'Text' %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
 {% endif %}
-{% if filetype == 'Document' or filetype == 'PDF' %}
+{% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
 <script type="text/javascript" src="{{MEDIA_URL}}flexpaper/js/flexpaper_flash.js"></script>
+{% endif %}
+{% if filetype == 'PDF' and use_pdfjs %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 {% endif %}
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>

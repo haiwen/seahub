@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-09 10:35+0800\n"
+"POT-Creation-Date: 2013-01-09 15:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1366,13 +1366,13 @@ msgstr "无"
 
 #: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
 #: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
-#: templates/sys_useradmin.html:41
+#: templates/sys_useradmin.html:41 templates/snippets/file_content_js.html:110
 msgid "Previous"
 msgstr "前一页"
 
 #: templates/repo_history.html:50 templates/repo_view_snapshot.html:54
 #: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
-#: templates/sys_useradmin.html:44
+#: templates/sys_useradmin.html:44 templates/snippets/file_content_js.html:110
 msgid "Next"
 msgstr "下一页"
 
@@ -1830,7 +1830,29 @@ msgstr "请稍后尝试。"
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
 
-#: templates/snippets/file_content_js.html:108
+#: templates/snippets/file_content_js.html:110
+msgid ""
+"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span></span>"
+msgstr ""
+"<span id=\"pdf-page\"><label for=\"page-number\">第</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span> 页</span>"
+
+#: templates/snippets/file_content_js.html:110
+msgid "Full Screen"
+msgstr "全屏"
+
+#: templates/snippets/file_content_js.html:110
+msgid "loading..."
+msgstr "加载中..."
+
+#: templates/snippets/file_content_js.html:157
+msgid "You can use other browsers, for example, firefox, to view it online."
+msgstr "如果您想在线查看该文件，您可以使用其他浏览器比如 firefox 。"
+
+#: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
 msgstr "该类型文件无法在线查看。"
 

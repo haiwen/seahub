@@ -7,7 +7,7 @@ These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
 from settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
-    ENABLE_SIGNUP, MAX_FILE_NAME
+    ENABLE_SIGNUP, MAX_FILE_NAME, USE_PDFJS
 try:
     from settings import BUSINESS_MODE
 except ImportError:
@@ -37,5 +37,6 @@ def base(request):
         'site_name': SITE_NAME,
         'enable_signup': ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
+        'use_pdfjs': USE_PDFJS,
         }
 
