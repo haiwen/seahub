@@ -503,7 +503,7 @@ def group_manage(request, group_id):
                             }
                     
                         try:
-                            send_mail(_(u'Your friend added you to a group in SeaCloud.'),
+                            send_mail(_(u'Your friend added you to a group at Seafile.'),
                                       t.render(Context(c)), None, [email],
                                       fail_silently=False)
                             mail_sended_list.append(email)

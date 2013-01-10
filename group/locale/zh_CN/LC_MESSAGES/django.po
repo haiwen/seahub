@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-09 19:42+0800\n"
+"POT-Creation-Date: 2013-01-10 14:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,8 +107,8 @@ msgid "Failed to add, %s is not in current organization."
 msgstr "添加失败，%s 不在当前团体中。"
 
 #: views.py:506
-msgid "Your friend added you to a group in SeaCloud."
-msgstr "你的朋友在 SeaCloud 上把你加入到了一个群组中。"
+msgid "Your friend added you to a group at Seafile."
+msgstr "你的朋友在 Seafile 上把你加入到了一个群组中。"
 
 #: views.py:511
 msgid "Failed to send mail."
@@ -269,7 +269,7 @@ msgstr "你可以点击上方的“添加”来加入成员。"
 
 #: templates/group/group_info.html:59 templates/group/group_info.html.py:82
 #: templates/group/group_manage.html:24 templates/group/group_manage.html:42
-#: templates/group/group_manage.html:64
+#: templates/group/group_manage.html:66
 msgid "Operations"
 msgstr "操作"
 
@@ -372,8 +372,8 @@ msgstr[0] ""
 msgid "Hide"
 msgstr "隐藏回复"
 
-#: templates/group/group_info.html:174 templates/group/group_manage.html:50
-#: templates/group/group_manage.html:73
+#: templates/group/group_info.html:174 templates/group/group_manage.html:51
+#: templates/group/group_manage.html:75
 msgid "Delete"
 msgstr "删除"
 
@@ -456,31 +456,31 @@ msgstr "返回"
 msgid "Add Members"
 msgstr "添加成员"
 
-#: templates/group/group_manage.html:41 templates/group/group_manage.html:63
+#: templates/group/group_manage.html:41 templates/group/group_manage.html:65
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/group/group_manage.html:57
+#: templates/group/group_manage.html:59
 msgid "Administrators"
 msgstr "管理员"
 
-#: templates/group/group_manage.html:58
+#: templates/group/group_manage.html:60
 msgid "Add Administrators"
 msgstr "添加管理员"
 
-#: templates/group/group_manage.html:88
+#: templates/group/group_manage.html:90
 msgid "Dismiss Group"
 msgstr "解散群组"
 
-#: templates/group/group_manage.html:88
+#: templates/group/group_manage.html:90
 msgid "Really want to dismiss this group"
 msgstr "确定要解散该群组"
 
-#: templates/group/group_manage.html:89
+#: templates/group/group_manage.html:91
 msgid "Delete Member"
 msgstr "删除成员"
 
-#: templates/group/group_manage.html:89
+#: templates/group/group_manage.html:91
 msgid "Really want to delete Member"
 msgstr "确定要删除成员"
 
