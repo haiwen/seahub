@@ -1945,7 +1945,7 @@ msgstr "我的群组"
 
 #: templates/snippets/my_groups.html:24
 msgid "Create a group now"
-msgstr "马上创建群组"
+msgstr "立即创建群组"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"

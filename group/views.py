@@ -115,7 +115,7 @@ def group_remove(request, group_id):
         ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
     except SearpcError, e:
-        return render_error(request, e.msg)
+        return render_error(request, _(e.msg))
 
     return HttpResponseRedirect(next)
 
@@ -150,7 +150,7 @@ def group_dismiss(request, group_id):
                                                 args=[url_prefix]))
 
     except SearpcError, e:
-        return render_error(request, e.msg)
+        return render_error(request, _(e.msg))
     
     return HttpResponseRedirect(reverse('group_list'))
 
@@ -166,7 +166,7 @@ def group_quit(request, group_id):
         seafserv_threaded_rpc.remove_repo_group(group_id_int,
                                                 request.user.username)
     except SearpcError, e:
-        return render_error(request, e.msg)
+        return render_error(request, _(e.msg))
         
     return HttpResponseRedirect(reverse('group_list', args=[]))
 
@@ -625,7 +625,7 @@ def group_remove_admin(request, group_id):
         ccnet_threaded_rpc.group_unset_admin(int(group_id), user)
         messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
-        messages.error(request, e.msg)
+        messages.error(request, _(e.msg))
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
     
 @login_required
@@ -652,7 +652,7 @@ def group_remove_member(request, group_id, user_name):
         seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
         messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
-        messages.error(request, _(u'Failed：%s') % e.msg)
+        messages.error(request, _(u'Failed：%s') % _(e.msg))
 
     return HttpResponseRedirect(reverse('group_members', args=[group_id]))
 
