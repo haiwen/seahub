@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-10 10:56+0800\n"
+"POT-Creation-Date: 2013-01-10 11:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -910,11 +910,10 @@ msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升�
 
 #: templates/file_view.html:280
 msgid ""
-"Your Seafile client is not running or its version is too old. You can open "
-"the local file manually by clicking the following link:"
+"No running Seafile client is detected. If you are sure Seafile client is "
+"running, click the following link:"
 msgstr ""
-"您的 Seafile 客户端版本太低或者没有启动， 您可以点击下面的链接手动打开本地文"
-"件："
+"没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接："
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -2085,6 +2084,13 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid ""
+#~ "Your Seafile client is not running or its version is too old. You can "
+#~ "open the local file manually by clicking the following link:"
+#~ msgstr ""
+#~ "您的 Seafile 客户端版本太低或者没有启动， 您可以点击下面的链接手动打开本地"
+#~ "文件："
 
 #~ msgid "Successfully resetting password to %s"
 #~ msgstr "成功将密码重置为 %s"
