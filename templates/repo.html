@@ -17,22 +17,21 @@
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}}</h2>
         <div class="fright">
-            {% if path != '/' %}
+            {% if path == '/' %}
+                {% if user_perm %}
+                <button id="repo-download-btn">{% trans "Download"%}</button>
+                {% endif %}
+                {% if is_repo_owner or request.user.is_staff %}
+                <button id="repo-setting-btn">{% trans "Settings" %}</button>
+                {% endif %}
+                {% if user_perm == 'rw' %}
+                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+                {% endif %}
+            {% else %}
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
             <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
-            {% endif %}
-            {% if path == '/' %}
-	        {% if user_perm %}
-                <button id="repo-download-btn">{% trans "Download"%}</button>
-	        {% endif %}
-	        {% if is_repo_owner or request.user.is_staff %}
-	        <button id="repo-setting-btn">{% trans "Settings" %}</button>
-	        {% endif %}
-                {% if user_perm == 'rw' %}
-                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
-                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -505,15 +504,15 @@ function opOnDirent() {
 
 var popup_tr = ''; // the tr which the shown popup belongs to
 $('#main-panel').removeClass('ovhd');
-$('.more-op-icon').click(function(e) {
+$('.more-op-icon').click(function() {
     var hidden_op = $(this).next();
     if ($(this).attr('data')) { // no popup
         if ($(this).position().left + $(this).width() + hidden_op.width() < $(this).parent().width()) {
             hidden_op.css({'left': $(this).position().left + $(this).width() + 5});
             if ($(this).offset().top + hidden_op.height() <= $('#main').offset().top + $('#main').height()) {
-            hidden_op.css('top', 6);
+                hidden_op.css('top', 6);
             } else {
-            hidden_op.css('bottom', 2);
+                hidden_op.css('bottom', 2);
             }
         } else {
             hidden_op.css({'right':0});
@@ -526,25 +525,27 @@ $('.more-op-icon').click(function(e) {
         hidden_op.removeClass('hide');
         $(this).attr('data','');
         no_file_op_popup = false;
-        popup_tr = $(this).parents('tr');
+        $('.dirent-op').data('popup_tr', $(this).parents('tr'));
     } else {
         hidden_op.addClass('hide');
         $(this).attr('data','no-popup');
         no_file_op_popup = true;
-        popup_tr = '';
+        $('.dirent-op').data('popup_tr', '');
     }
 });
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
+    var popup_tr = $('.dirent-op').data('popup_tr');
+
     if (!no_file_op_popup &&
         !$('.more-op-icon, .hidden-op').is(target) &&
         !$('.hidden-op').find('*').is(target)) {
         $('.hidden-op').addClass('hide');
         $('.more-op-icon').attr('data', 'no-popup');
         no_file_op_popup = true;
-
         if (!popup_tr.find('*').is(target)) {
             popup_tr.removeClass('hl').find('.repo-file-op').addClass('vh'); // clicked place: the first tr, place out of the table
+            $('.dirent-op').data('popup_tr', '');
             $('tr:gt(0)').each(function() { // when other tr is clicked
                 if ($(this).find('*').is(target)) {
                     $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
