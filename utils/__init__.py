@@ -638,7 +638,7 @@ def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1):
 
 def calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id):
     try:
-        ret_list = seafserv_threaded_rpc.calc_files_last_modified(repo_id, parent_dir.encode('utf-8'))
+        ret_list = seafserv_threaded_rpc.calc_files_last_modified(repo_id, parent_dir.encode('utf-8'), 0)
     except:
         return {}
 

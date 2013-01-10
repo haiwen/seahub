@@ -277,7 +277,7 @@ $('#open-local').click(function () {
     setTimeout(function() {
         if (!local_applet_running) {
             $('#open-local-handling-tip').addClass('hide');
-            $('#open-local-error').html("{% trans 'No running Seafile client is detected. If you are sure Seafile client is running, click the following link:' %}" +  '<br/><a href="' + url + '" target="open-local-iframe">' + url_short + '</a>');
+            $('#open-local-error').html("{% trans 'No running Seafile client is detected. If you are sure Seafile client is running, click the following link to open the local file:' %}" +  '<br/><a href="' + url + '" target="open-local-iframe">' + url_short + '</a>');
         }
       }, 2000);
 });
