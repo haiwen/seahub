@@ -401,7 +401,7 @@ def get_shared_link(request):
             path = path[:-1]
     else:
         if path == '/':         # can not share root dir
-            err = _('You cannot share the repo in this way.')
+            err = _('You cannot share the library in this way.')
             data = json.dumps({'error': err})
             return HttpResponse(data, status=400, content_type=content_type)
         else:
