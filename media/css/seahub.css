@@ -906,6 +906,7 @@ textarea:-moz-placeholder {/* for FF */
 .repo-op {
     text-align:right;
 }
+#repo-setting-btn,
 #recycle-btn,
 .file-op button,
 #file-op button,

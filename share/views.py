@@ -279,21 +279,21 @@ def share_permission_admin(request):
         try:
             seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
     if share_type == 'group':
         try:
             seafserv_threaded_rpc.set_group_repo_permission(int(email_or_group), repo_id, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
     if share_type == 'public':
         try:
             seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 # 2 views for anonymous share:

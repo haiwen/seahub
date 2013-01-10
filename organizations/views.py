@@ -773,7 +773,7 @@ def org_share_permission_admin(request, url_prefix):
         try:
             seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
     if share_type == 'group':
@@ -781,14 +781,14 @@ def org_share_permission_admin(request, url_prefix):
         try:
             seafserv_threaded_rpc.set_org_group_repo_permission(org_id, group_id, repo_id, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
     if share_type == 'public':
         try:
             seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id, permission)
         except:
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=400, content_type=content_type)
         return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required

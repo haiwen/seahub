@@ -14,7 +14,7 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Tips" %}</h3>
     <div class="info-item-bottom">
-        <p>{% blocktrans %}If you don't want others to change contents of library, you may set share permission to "read-only" when sharing it.{% endblocktrans %}</p>
+        <p>{% blocktrans %}If you don't want others to change the contents of your shared libraries, you can set the share permission to "read-only" when sharing them.{% endblocktrans %}</p>
     </div>
 </div>
 {% endblock %}
@@ -71,8 +71,8 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You are not sharing any libraries" %}</h2>
-  <p>{% blocktrans %}Share library to your friends and colleagues by clicking the "Share" icon near the library.{% endblocktrans %}</p>
+  <h2 class="center-contents">{% trans "You have not shared any library" %}</h2>
+  <p>{% trans "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
 </div>
 {% endif %}
 
@@ -101,17 +101,18 @@
   </tr>
   {% endfor %}
 </table>
-<p id="link" class="hide"><input type="text" readonly="readonly" value="" id="shared-link" /></p>
+<input type="text" readonly="readonly" value="" id="shared-link" class="hide" />
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any file shared links"%}</h2>
-  <p>{% blocktrans %}Share files to your friends and colleagues by clicking "Share link" button on file viewing page. {% endblocktrans %}</p>
+  <h2 class="center-contents">{% trans "You don't have any shared link"%}</h2>
+  <p>{% trans "You can share a folder or a file when you view a library, or share a file when you view it." %}</p>
 </div>
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+{% if shared_repos %}
 $('tr:gt(0)').hover(
     function() {
         $(this).find('.share-permission-edit-icon').removeClass('vh');
@@ -150,14 +151,12 @@ $('.share-permission-select').change(function() {
             if (data['success']) {
                 feedback('{% trans "Edit succeeded" %}', 'success');
                 select.prev().children('.share-permission-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
-            } else {
-                feedback('{% trans "Edit failed" %}', 'error');
             }
             select.addClass('hide');
             select.prev().removeClass('hide');
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            feedback(textStatus + '，{% trans "edit failed" %}', 'error');
+        error: function() {
+            feedback('{% trans "Edit failed." %}', 'error');
             select.addClass('hide');
             select.prev().removeClass('hide');
         }   
@@ -175,17 +174,20 @@ $(document).click(function(e) {
 $('.cancel-share').click(function() {
     location.href = $(this).attr('data');
 });
+{% endif %}
 
+{% if fileshares %}
 $(".view-link").click(function() {
     var link = $(this).attr('data');
-    $('#link').before('<p class="hide">' + link + '</p>');
-    $('#shared-link').val(link).css('width', $('#link').prev().width() + 2);
-    $("#link").modal({appendTo:'#main'});
-    $('#link').prev().remove();
+    $('#shared-link').before('<p class="hide">' + link + '</p>')
+    .val(link).css('width', $('#shared-link').prev().width() + 2)
+    .modal({focus:false});
+    $('#shared-link').prev().remove();
     return false;
 });
 $('#shared-link').click(function() {
     $(this).select();
 });
+{% endif %}
 </script>
 {% endblock %}
