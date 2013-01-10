@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-09 18:59+0800\n"
+"POT-Creation-Date: 2013-01-10 10:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,308 +152,308 @@ msgstr ""
 msgid "Русский"
 msgstr ""
 
-#: views.py:531
+#: views.py:537
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: views.py:552
+#: views.py:558
 msgid "Settings saved."
 msgstr "设置已保存。"
 
-#: views.py:555
+#: views.py:561
 msgid "Failed to save settings on server"
 msgstr "设置失败"
 
-#: views.py:562
+#: views.py:568
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: views.py:564
+#: views.py:570
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: views.py:566
+#: views.py:572
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:568 views.py:1299 views.py:2533 views.py:2661
+#: views.py:574 views.py:1305 views.py:2539 views.py:2667
 msgid "File not exists"
 msgstr "文件不存在"
 
-#: views.py:570
+#: views.py:576
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: views.py:572
+#: views.py:578
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: views.py:574
+#: views.py:580
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: views.py:585 views.py:606
+#: views.py:591 views.py:612
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: views.py:670
+#: views.py:676
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: views.py:716
+#: views.py:722
 msgid "Unable to view library snapshots"
 msgstr "无法查看该资料库镜像"
 
-#: views.py:766
+#: views.py:772
 msgid "You have no permission to restore library"
 msgstr "你没有权限进行还原操作"
 
-#: views.py:782
+#: views.py:788
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:788 views.py:1569 views.py:2408 views.py:2443 views.py:2879
+#: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2885
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:790 views.py:885 views.py:2362 views.py:2894
+#: views.py:796 views.py:891 views.py:2368 views.py:2900
 msgid "Library not exists"
 msgstr "资料库不存在"
 
-#: views.py:792
+#: views.py:798
 msgid "History you specified is not exists"
 msgstr "指定的历史记录不存在"
 
-#: views.py:794
+#: views.py:800
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: views.py:905 views.py:921
+#: views.py:911 views.py:927
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1195
+#: views.py:1201
 msgid "Failed to create repo"
 msgstr "创建失败"
 
-#: views.py:1213
+#: views.py:1219
 msgid "Operation successful"
 msgstr "操作成功"
 
-#: views.py:1215
+#: views.py:1221
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: views.py:1246
+#: views.py:1252
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1253
+#: views.py:1259
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1255
+#: views.py:1261
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1315 views.py:1637
+#: views.py:1321 views.py:1643
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views.py:1520
+#: views.py:1526
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1525
+#: views.py:1531
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1528
+#: views.py:1534
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1540
+#: views.py:1546
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1549
+#: views.py:1555
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1555 views.py:2204 views.py:2235 views.py:2269
+#: views.py:1561 views.py:2210 views.py:2241 views.py:2275
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views.py:1559
+#: views.py:1565
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views.py:1563
+#: views.py:1569
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: views.py:1616
+#: views.py:1622
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views.py:1631
+#: views.py:1637
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: views.py:1657
+#: views.py:1663
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
-#: views.py:1711
+#: views.py:1717
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views.py:1727
+#: views.py:1733
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1738
+#: views.py:1744
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1779
+#: views.py:1785
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views.py:1785
+#: views.py:1791
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views.py:1798
+#: views.py:1804
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1799
+#: views.py:1805
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1799
+#: views.py:1805
 msgid "move"
 msgstr "移动"
 
-#: views.py:1814
+#: views.py:1820
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1820
+#: views.py:1826
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1935
+#: views.py:1941
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:2008 templates/sys_useradmin.html:78
+#: views.py:2014 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:2024
+#: views.py:2030
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views.py:2029
+#: views.py:2035
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
-"成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮件"
-"配置。"
+"成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
+"件配置。"
 
-#: views.py:2033
+#: views.py:2039
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views.py:2036
+#: views.py:2042
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
-"成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配"
-"置，通知邮件无法发送。"
+"成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
+"邮件无法发送。"
 
-#: views.py:2039
+#: views.py:2045
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:2060
+#: views.py:2066
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2095
+#: views.py:2101
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views.py:2098
+#: views.py:2104
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views.py:2100
+#: views.py:2106
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views.py:2102
+#: views.py:2108
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views.py:2281
+#: views.py:2287
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2336
+#: views.py:2342
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2429
+#: views.py:2435
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2433 views.py:2459
+#: views.py:2439 views.py:2465
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2455
+#: views.py:2461
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2719
+#: views.py:2725
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views.py:2926
+#: views.py:2932
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -878,7 +878,8 @@ msgstr "星标添加成功"
 
 #: templates/file_view.html:198 templates/file_view.html.py:363
 #: templates/repo.html:407 templates/repo.html.py:643 templates/repo.html:680
-#: templates/repo.html.py:819 templates/snippets/shared_link_js.html:41
+#: templates/repo.html.py:819 templates/snippets/file_content_js.html:97
+#: templates/snippets/shared_link_js.html:41
 #: templates/snippets/shared_link_js.html:60
 #: templates/snippets/shared_link_js.html:123
 msgid "Failed. Please check the network."
@@ -1472,7 +1473,7 @@ msgstr "你的 Seafile 客户端版本太旧，请升级到最新版本。"
 msgid "Click to download."
 msgstr "点此下载"
 
-#: templates/shared_file_view.html:28 templates/view_shared_dir.html:9
+#: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
 msgstr "共享来源："
 
@@ -1855,6 +1856,10 @@ msgstr "请稍后尝试。"
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
+
+#: templates/snippets/file_content_js.html:95
+msgid "Document convertion failed."
+msgstr "文档转换失败。"
 
 #: templates/snippets/file_content_js.html:110
 msgid ""
