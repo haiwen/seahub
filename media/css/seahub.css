@@ -1325,6 +1325,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .reply-at {
     font-size:12px;
+    *height:18px;
+    *vertical-align:middle;
 }
 .reply-at:hover {
     color:#f93;

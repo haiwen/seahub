@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-10 13:16+0800\n"
+"POT-Creation-Date: 2013-01-10 17:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -487,9 +487,9 @@ msgstr "确认密码"
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
 #: templates/file_edit.html:93 templates/file_edit.html.py:126
 #: templates/file_view.html:94 templates/file_view.html.py:122
-#: templates/repo.html:263 templates/repo.html.py:275 templates/repo.html:291
-#: templates/repo.html.py:312 templates/repo.html:324
-#: templates/repo.html.py:336 templates/userinfo.html:87
+#: templates/repo.html:268 templates/repo.html.py:280 templates/repo.html:296
+#: templates/repo.html.py:317 templates/repo.html:329
+#: templates/repo.html.py:341 templates/userinfo.html:87
 #: templates/registration/login.html:13
 #: templates/registration/password_change_form.html:18
 #: templates/registration/password_reset_confirm.html:19
@@ -649,7 +649,7 @@ msgstr "密码："
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/file_edit.html:79 templates/repo.html:87
+#: templates/file_edit.html:79 templates/repo.html:88
 #: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
 #: templates/shared_file_view.html:18 templates/view_shared_dir.html:16
 msgid "Current path: "
@@ -664,9 +664,9 @@ msgid "Preview"
 msgstr "预览"
 
 #: templates/file_edit.html:94 templates/file_edit.html.py:127
-#: templates/repo.html:225 templates/repo.html.py:247 templates/repo.html:264
-#: templates/repo.html.py:276 templates/repo.html:292
-#: templates/repo.html.py:313 templates/repo.html:325
+#: templates/repo.html:230 templates/repo.html.py:252 templates/repo.html:269
+#: templates/repo.html.py:281 templates/repo.html:297
+#: templates/repo.html.py:318 templates/repo.html:330
 #: templates/snippets/events.html:15
 msgid "Cancel"
 msgstr "取消"
@@ -732,14 +732,14 @@ msgstr "时间"
 msgid "Last Modifier"
 msgstr "最后修改者"
 
-#: templates/file_revisions.html:25 templates/repo.html:112
+#: templates/file_revisions.html:25 templates/repo.html:113
 #: templates/repo_history_view.html:53 templates/repo_recycle_view.html:55
 #: templates/view_shared_dir.html:33
 msgid "Size"
 msgstr "大小"
 
 #: templates/file_revisions.html:26 templates/public_home.html:28
-#: templates/repo.html:114 templates/repo_recycle_view.html:56
+#: templates/repo.html:115 templates/repo_recycle_view.html:56
 #: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:14
 #: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
 #: templates/sys_useradmin.html:6 templates/sys_useradmin.html.py:18
@@ -753,7 +753,7 @@ msgstr "操作"
 msgid "(current version)"
 msgstr "(当前版本)"
 
-#: templates/file_revisions.html:43 templates/repo.html:69
+#: templates/file_revisions.html:43 templates/repo.html:70
 #: templates/repo_history.html:33 templates/repo_history_view.html:21
 #: templates/repo_view_snapshot.html:33
 msgid "Unknown"
@@ -766,7 +766,7 @@ msgstr "还原"
 
 #: templates/file_revisions.html:52 templates/file_view.html:84
 #: templates/history_file_view.html:66 templates/public_home.html:48
-#: templates/repo.html:28 templates/repo.html.py:137 templates/repo.html:180
+#: templates/repo.html:22 templates/repo.html.py:138 templates/repo.html:183
 #: templates/shared_file_view.html:35 templates/view_shared_dir.html:48
 #: templates/view_shared_dir.html.py:66
 #: templates/snippets/my_owned_repos.html:34
@@ -782,17 +782,17 @@ msgstr "查看"
 msgid "Current Path: "
 msgstr "当前路径："
 
-#: templates/file_view.html:28 templates/repo.html:22
+#: templates/file_view.html:28 templates/repo.html:33
 msgid "Share link"
 msgstr "获取共享链接"
 
-#: templates/file_view.html:29 templates/repo.html:23
-#: templates/repo.html.py:331
+#: templates/file_view.html:29 templates/repo.html:34
+#: templates/repo.html.py:336
 msgid "Send"
 msgstr "发送"
 
-#: templates/file_view.html:30 templates/repo.html:24
-#: templates/repo.html.py:143 templates/repo.html:189
+#: templates/file_view.html:30 templates/repo.html:35
+#: templates/repo.html.py:146 templates/repo.html:194
 #: templates/sys_group_admin.html:21 templates/sys_org_admin.html:23
 #: templates/sys_seafadmin.html:22 templates/sys_useradmin.html:31
 #: templates/userinfo.html:49 templates/snippets/my_owned_repos.html:36
@@ -811,7 +811,7 @@ msgstr "添加星标"
 msgid "updated this file"
 msgstr "更新了该文件"
 
-#: templates/file_view.html:51 templates/repo.html:53
+#: templates/file_view.html:51 templates/repo.html:54
 #: templates/repo_view_snapshot.html:17
 msgid "Detail"
 msgstr "修改内容"
@@ -822,8 +822,8 @@ msgid "one contributor"
 msgid_plural " %(counter)s contributors "
 msgstr[0] " %(counter)s 个贡献者 "
 
-#: templates/file_view.html:66 templates/repo.html:56
-#: templates/repo.html.py:193 templates/repo.html:256
+#: templates/file_view.html:66 templates/repo.html:57
+#: templates/repo.html.py:198 templates/repo.html:261
 msgid "History"
 msgstr "历史"
 
@@ -836,15 +836,15 @@ msgstr "打开本地文件"
 msgid "Raw"
 msgstr "原始文件"
 
-#: templates/file_view.html:91 templates/repo.html:333
+#: templates/file_view.html:91 templates/repo.html:338
 msgid "Send to:"
 msgstr "发送到："
 
-#: templates/file_view.html:92 templates/repo.html:334
+#: templates/file_view.html:92 templates/repo.html:339
 msgid "Emails, Seperated by ','"
 msgstr "输入邮箱，多个以,分隔"
 
-#: templates/file_view.html:96 templates/repo.html:338
+#: templates/file_view.html:96 templates/repo.html:343
 msgid "Sending..."
 msgstr "发送中..."
 
@@ -877,8 +877,8 @@ msgid "Starred successfully"
 msgstr "星标添加成功"
 
 #: templates/file_view.html:198 templates/file_view.html.py:363
-#: templates/repo.html:407 templates/repo.html.py:643 templates/repo.html:680
-#: templates/repo.html.py:819 templates/snippets/file_content_js.html:97
+#: templates/repo.html:412 templates/repo.html.py:650 templates/repo.html:687
+#: templates/repo.html.py:826 templates/snippets/file_content_js.html:97
 #: templates/snippets/shared_link_js.html:41
 #: templates/snippets/shared_link_js.html:60
 #: templates/snippets/shared_link_js.html:123
@@ -913,7 +913,8 @@ msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接来打开本地文件："
+"没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接来打开"
+"本地文件："
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -1010,7 +1011,7 @@ msgid "My Home"
 msgstr "我的页面"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
-#: templates/repo.html:138 templates/repo.html.py:183 templates/repo.html:329
+#: templates/repo.html:140 templates/repo.html.py:187 templates/repo.html:334
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
@@ -1078,7 +1079,7 @@ msgstr "公开的资料库"
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/public_home.html:24 templates/repo.html:111
+#: templates/public_home.html:24 templates/repo.html:112
 #: templates/repo_history_view.html:52 templates/repo_recycle_view.html:53
 #: templates/sys_group_admin.html:11 templates/sys_org_admin.html:11
 #: templates/sys_seafadmin.html:11 templates/userinfo.html:38
@@ -1097,7 +1098,7 @@ msgstr "名称"
 msgid "Description"
 msgstr "描述"
 
-#: templates/public_home.html:26 templates/repo.html:113
+#: templates/public_home.html:26 templates/repo.html:114
 #: templates/repo_history.html:16 templates/snippets/my_owned_repos.html:20
 #: templates/snippets/my_owned_repos.html:58
 #: templates/snippets/my_owned_repos.html:103
@@ -1143,228 +1144,228 @@ msgstr ""
 "当前链接会在短期内失效，欢迎你 <a href=\"http://seafile.com/\" target="
 "\"_blank\">加入Seafile </a>体验更多功能。"
 
-#: templates/repo.html:31
+#: templates/repo.html:25
 msgid "Settings"
 msgstr "设置"
 
-#: templates/repo.html:34
+#: templates/repo.html:28
 msgid "Trash"
 msgstr "回收站"
 
-#: templates/repo.html:40
+#: templates/repo.html:41
 msgid "This library is read-only, and you can only view the files."
 msgstr "这个资料库设置了只读共享，你只能在线浏览文件。"
 
-#: templates/repo.html:46
+#: templates/repo.html:47
 msgid "Size: "
 msgstr "大小："
 
-#: templates/repo.html:66
+#: templates/repo.html:67
 msgid "Generated by system"
 msgstr "系统自动生成"
 
-#: templates/repo.html:82
+#: templates/repo.html:83
 msgid "You can't access this library."
 msgstr "无法在线查看该资料库。"
 
-#: templates/repo.html:98 templates/view_shared_dir.html:26
+#: templates/repo.html:99 templates/view_shared_dir.html:26
 msgid "ZIP"
 msgstr ""
 
-#: templates/repo.html:101 templates/repo.html.py:220
+#: templates/repo.html:102 templates/repo.html.py:225
 msgid "Upload"
 msgstr "上传"
 
-#: templates/repo.html:102 templates/repo.html.py:269
+#: templates/repo.html:103 templates/repo.html.py:274
 msgid "New Directory"
 msgstr "新建目录"
 
-#: templates/repo.html:103 templates/repo.html.py:280
+#: templates/repo.html:104 templates/repo.html.py:285
 msgid "New File"
 msgstr "新建文件"
 
-#: templates/repo.html:120 templates/view_shared_dir.html:39
+#: templates/repo.html:121 templates/view_shared_dir.html:39
 msgid "Directory icon"
 msgstr "目录图标"
 
-#: templates/repo.html:130 templates/repo.html.py:174
+#: templates/repo.html:131 templates/repo.html.py:177
 msgid "Fetch failed"
 msgstr "获取失败"
 
-#: templates/repo.html:141
+#: templates/repo.html:144
 msgid "More operations"
 msgstr "更多操作"
 
-#: templates/repo.html:144 templates/repo.html.py:190
+#: templates/repo.html:147 templates/repo.html.py:195
 msgid "Rename"
 msgstr "重命名"
 
-#: templates/repo.html:145 templates/repo.html.py:191
+#: templates/repo.html:148 templates/repo.html.py:196
 msgid "Move"
 msgstr "移动"
 
-#: templates/repo.html:146 templates/repo.html.py:192
+#: templates/repo.html:149 templates/repo.html.py:197
 msgid "Copy"
 msgstr "复制"
 
-#: templates/repo.html:159 templates/repo.html.py:635
+#: templates/repo.html:162 templates/repo.html.py:642
 msgid "starred"
 msgstr "已加星标"
 
-#: templates/repo.html:161 templates/repo.html.py:633
+#: templates/repo.html:164 templates/repo.html.py:640
 msgid "unstarred"
 msgstr "未加星标"
 
-#: templates/repo.html:164 templates/repo.html.py:567 templates/repo.html:591
+#: templates/repo.html:167 templates/repo.html.py:574 templates/repo.html:598
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
 #: templates/view_shared_dir.html:57
 msgid "File"
 msgstr "文件"
 
-#: templates/repo.html:182 templates/repo.html.py:241
+#: templates/repo.html:185 templates/repo.html.py:246
 msgid "Update"
 msgstr "更新"
 
-#: templates/repo.html:187
+#: templates/repo.html:192
 msgid "More Operations"
 msgstr "更多操作"
 
-#: templates/repo.html:207
+#: templates/repo.html:212
 msgid "Upload Files"
 msgstr "上传文件"
 
-#: templates/repo.html:209 templates/repo.html.py:234
+#: templates/repo.html:214 templates/repo.html.py:239
 msgid "The owner of this library has ran out of space."
 msgstr "该资料库拥有者的空间已用完。"
 
-#: templates/repo.html:214
+#: templates/repo.html:219
 msgid "Add files"
 msgstr "添加文件"
 
-#: templates/repo.html:215
+#: templates/repo.html:220
 msgid "smaller than"
 msgstr "文件总大小小于"
 
-#: templates/repo.html:223 templates/repo.html.py:245
+#: templates/repo.html:228 templates/repo.html.py:250
 msgid "Uploaded:"
 msgstr "上传进度："
 
-#: templates/repo.html:223
+#: templates/repo.html:228
 msgid "Fetching ..."
 msgstr "获取中...请稍侯"
 
-#: templates/repo.html:232
+#: templates/repo.html:237
 msgid "Update File"
 msgstr "更新文件 "
 
-#: templates/repo.html:239
+#: templates/repo.html:244
 msgid "Smaller than"
 msgstr "文件总大小小于"
 
-#: templates/repo.html:245
+#: templates/repo.html:250
 msgid "Fetching..."
 msgstr "获取中...请稍侯"
 
-#: templates/repo.html:255
+#: templates/repo.html:260
 msgid "Library Settings"
 msgstr "资料库设置"
 
-#: templates/repo.html:258
+#: templates/repo.html:263
 msgid "Keep full history"
 msgstr "保留所有历史"
 
-#: templates/repo.html:259
+#: templates/repo.html:264
 msgid "Don't keep history"
 msgstr "不保留历史"
 
-#: templates/repo.html:260
+#: templates/repo.html:265
 msgid "Only keep a period of history:"
 msgstr "仅保留一段时间的历史:"
 
-#: templates/repo.html:261
+#: templates/repo.html:266
 msgid "days"
 msgstr "天"
 
-#: templates/repo.html:270
+#: templates/repo.html:275
 msgid "Directory Name"
 msgstr "目录名"
 
-#: templates/repo.html:282
+#: templates/repo.html:287
 msgid "Featured File Type"
 msgstr "特色文件类型"
 
-#: templates/repo.html:283 templates/repo.html.py:284
+#: templates/repo.html:288 templates/repo.html.py:289
 msgid "Click to choose"
 msgstr "点击选择"
 
-#: templates/repo.html:283
+#: templates/repo.html:288
 msgid "online Rich Text format (experimental)."
 msgstr "在线富文本格式（实验版）"
 
-#: templates/repo.html:283 templates/repo.html.py:284
+#: templates/repo.html:288 templates/repo.html.py:289
 #: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
 #: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
 msgid "Details"
 msgstr "详情"
 
-#: templates/repo.html:284
+#: templates/repo.html:289
 msgid "simple markup format."
 msgstr "简单的标记格式"
 
-#: templates/repo.html:286 templates/snippets/my_owned_repos.html:101
+#: templates/repo.html:291 templates/snippets/my_owned_repos.html:101
 msgid "File Name"
 msgstr "文件名称"
 
-#: templates/repo.html:299
+#: templates/repo.html:304
 msgid "Current Library"
 msgstr "当前资料库"
 
-#: templates/repo.html:301
+#: templates/repo.html:306
 msgid "Other Libraries"
 msgstr "其他资料库"
 
-#: templates/repo.html:311
+#: templates/repo.html:316
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: templates/repo.html:317
+#: templates/repo.html:322
 msgid "Rename <span id=\"rename-type\"></span>"
 msgstr "重命名<span id=\"rename-type\"></span>"
 
-#: templates/repo.html:318
+#: templates/repo.html:323
 msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
 msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
 
-#: templates/repo.html:330
+#: templates/repo.html:335
 msgid "Link: "
 msgstr "链接："
 
-#: templates/repo.html:425
+#: templates/repo.html:430
 msgid "Click to remove"
 msgstr "点击删除"
 
-#: templates/repo.html:426
+#: templates/repo.html:431
 msgid "This file has already been selected:\\n$file!"
 msgstr "这个文件已经被添加：\\n$file!"
 
-#: templates/repo.html:567 templates/repo.html.py:594
+#: templates/repo.html:574 templates/repo.html.py:601
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
 msgstr "目录"
 
-#: templates/repo.html:584
+#: templates/repo.html:591
 msgid "Copy "
 msgstr "复制"
 
-#: templates/repo.html:587
+#: templates/repo.html:594
 msgid "Move "
 msgstr "移动"
 
-#: templates/repo.html:600
+#: templates/repo.html:607
 msgid "to:"
 msgstr "到："
 
-#: templates/repo.html:777 templates/repo.html.py:785 templates/repo.html:793
+#: templates/repo.html:784 templates/repo.html.py:792 templates/repo.html:800
 msgid "It can't be blank."
 msgstr "输入不能为空。"
 
@@ -1879,8 +1880,9 @@ msgid "loading..."
 msgstr "加载中..."
 
 #: templates/snippets/file_content_js.html:157
-msgid "You can use other browsers, for example, firefox, to view it online."
-msgstr "如果您想在线查看该文件，您可以使用其他浏览器比如 firefox 。"
+msgid ""
+"You can use IE 10 or other browsers, for example, firefox, to view it online."
+msgstr "如果您想在线查看该文件，您可以使用 IE 10 或其他浏览器比如 firefox 。"
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
