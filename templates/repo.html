@@ -19,19 +19,21 @@
         <div class="fright">
             {% if path == '/' %}
                 {% if user_perm %}
-                <button id="repo-download-btn">{% trans "Download"%}</button>
+                  <button id="repo-download-btn">{% trans "Download"%}</button>
                 {% endif %}
-                {% if is_repo_owner or request.user.is_staff %}
-                <button id="repo-setting-btn">{% trans "Settings" %}</button>
+                {% if is_repo_owner %}
+                  <button id="repo-setting-btn">{% trans "Settings" %}</button>
                 {% endif %}
                 {% if user_perm == 'rw' %}
-                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+                  <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
                 {% endif %}
             {% else %}
-            <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
-            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
-            <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
-            <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+              {% if is_repo_owner %}
+                <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
+                <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
+                <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
+                <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+              {% endif %}
             {% endif %}
         </div>
     </div>
@@ -134,7 +136,7 @@
                         <div class="repo-file-op vh">
                             <div class="displayed-op">
                                 <a class="op" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
-                                {% if user_perm == 'rw' %}
+                                {% if is_repo_owner %}
                                   <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-type="d">{% trans "Share" %}</a>
                                 {% endif %}
                             </div>
@@ -180,8 +182,10 @@
                             <div class="displayed-op">
                                 <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download">{% trans "Download"%}</a>
                                 {% if user_perm == 'rw' %}
-                                <a class="op update-file" data-target="{{ path }}{{dirent.obj_name}}" href="#">{% trans "Update"%}</a>
-                                <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                                  <a class="op update-file" data-target="{{ path }}{{dirent.obj_name}}" href="#">{% trans "Update"%}</a>
+                                  {% if is_repo_owner %}
+                                    <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                                  {% endif %}
                                 {% endif %}
                             </div>
                             {% if user_perm == 'rw' %}
