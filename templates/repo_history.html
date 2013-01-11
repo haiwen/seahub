@@ -36,7 +36,7 @@
                 <td>
                     {{ commit.props.desc|translate_commit_desc }}
                     {% if page_next or not forloop.last %}
-                    <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
+                    <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
                     {% endif %}
                 </td>
             </tr>
@@ -69,7 +69,6 @@
             <a href="?per_page=100" class="per-page">100</a>
             {% endif %}
         </div>
-        <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
     </div>
 </div>
 {% endblock %}

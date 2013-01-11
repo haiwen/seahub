@@ -7,7 +7,6 @@ function reqEvents(start) {
         cache: false,
         success: function(data) {
             $('#events').append(data['html']);
-
             $('.event-item').each(function(index) {
                 if (index > 0 && $(this).children('.pic').attr('data') == $(this).prev().children('.pic').attr('data')) {
                     $(this).children('.pic').addClass('hide');
@@ -16,33 +15,27 @@ function reqEvents(start) {
             if (start == 0) {
                 $('#events').removeClass('hide');
             }
-            
             $('#events-loading').addClass('hide');
-
             if (data['more']) {
                 $('#events-more').data('start', start + 10).removeClass('hide');
             } else {
                 $('#events-more').addClass('hide');
             }
-
-            // 查看加密 repo 的详情时， 先为其设置密码 
-            $('a.lsch-encrypted').click(function() {
+            {% include 'snippets/list_commit_detail.html' %}
+            $('.lsch-encrypted').click(function() {
                 if ($(this).data('passwordset')) {
-                    list_commit_change($(this));
+                    listCommitDetails($(this));
                 } else {
-                    $('#repo-decrypt-form input[name="repo_id"]').val($(this).data('repoid'));
-                    $('#repo-decrypt-form .op-target').html($(this).data('reponame'));
-                    $('#repo-decrypt-form').data('cur_event', $(this)).modal({appendTo:'#main'});
+                    var form = $('#repo-decrypt-form');
+                    form.find('input[name="repo_id"]').val($(this).data('repoid'));
+                    form.find('.op-target').html($(this).data('reponame'));
+                    form.data('cur_event', $(this)).modal({appendTo:'#main'});
                 }
-                return false;
-            });
-            $('.lsch').click(function() {
-                list_commit_change($(this));
                 return false;
             });
         },
         error: function() {
-            var str = '{% trans "Unknown error." %}'; 
+            var str = '{% trans "Unknown error." %} '; 
             if ($('#events-more').hasClass('hide')) {
                 str += '{% trans "Please refresh the page later." %}';
             } else {
@@ -58,16 +51,16 @@ $('#events-more').click(function() {
     reqEvents($(this).data('start'));
 });
 
-{% include 'snippets/list_commit_detail.html' %}
-
 $('#repo-decrypt-form .submit').click(function() {
-    var input_password = $('#repo-decrypt-form input[name="password"]');
-    var repo_id = $('#repo-decrypt-form input[name="repo_id"]').val();
+    var form = $('#repo-decrypt-form');
+    var form_id = form.attr('id');
+    var input_password = form.find('input[name="password"]');
+    var repo_id = form.find('input[name="repo_id"]').val();
     var password = input_password.val();
     if (!password) {
-        apply_form_error('repo-decrypt-form', '{% trans "Password is required." %}'); 
+        apply_form_error(form_id, '{% trans "Password is required." %}'); 
     } else {
-        apply_form_error('repo-decrypt-form', '');
+        apply_form_error(form_id, '');
         $.ajax({
             url: '{% url repo_set_password %}',
             type: 'POST',
@@ -82,15 +75,15 @@ $('#repo-decrypt-form .submit').click(function() {
             success: function(data) {
                 if (data['success']) {
                     $.modal.close();
-                    $('a.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
-                    list_commit_change($('#repo-decrypt-form').data('cur_event'));
+                    $('.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
+                    listCommitDetails(form.data('cur_event'));
                 } else {
                     input_password.val('');
-                    apply_form_error('repo-decrypt-form', data['error']);
+                    apply_form_error(form_id, data['error']);
                 }   
             },  
-            error: function(data, textStatus, jqXHR) {
-                apply_form_error('repo-decrypt-form', '{% trans "Unknown error." %}'); 
+            error: function(jqXHR, textStatus, errorThrown) {
+                apply_form_error(form_id, '{% trans "Unknown error." %}'); 
             }   
         }); 
     }   

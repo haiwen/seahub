@@ -51,7 +51,7 @@
         <p class="commit-msg ovhd">
         <span class="fleft">
             {{ current_commit.props.desc|translate_commit_desc }}
-            <a class="lsch" href="{{ SITE_ROOT }}repo/history/changes/{{ repo.id }}/?commit_id={{ current_commit.id }}" data="{{ current_commit.props.ctime|tsstr_sec }}">{% trans "Detail"%}</a>
+            <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ current_commit.id }}" data-time="{{ current_commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
         </span>
         {% if user_perm == 'rw' %}
         <a href="{% url 'seahub.views.repo_history' repo.id %}" class="more fright">{% trans "History"%}</a>
@@ -72,7 +72,6 @@
         </span>
         <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
         </p>
-        <div id="ls-ch" class="hide"></div><!--list modification details of a commit-->
     </div>
     {% endif %}
 

@@ -16,9 +16,9 @@
             <p>{% trans 'Updated library' %} <a href="{% url 'repo' repo.id %}">{{ repo.name }}</a></p>
             <p class="commit-msg ovhd">{{ commit.desc|translate_commit_desc }}
             {% if repo.encrypted %}
-                <a class="lsch-encrypted"{% if repo.password_set %} data-passwordset="true"{% endif %} href="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-repoid="{{repo.id}}" data-reponame="{{repo.name}}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+                <a class="lsch-encrypted"{% if repo.password_set %} data-passwordset="true"{% endif %} href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-repoid="{{repo.id}}" data-reponame="{{repo.name}}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
             {% else %}
-                <a class="lsch" href="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+                <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
                 {% endif %}
             </p>
         </div>
