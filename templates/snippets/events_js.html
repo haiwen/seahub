@@ -41,6 +41,7 @@ function reqEvents(start) {
             } else {
                 str += '{% trans "Please try again later." %}';
             }
+            $('#events-loading').addClass('hide');
             $('#events-error').html(str).removeClass('hide');  
         }
     });
