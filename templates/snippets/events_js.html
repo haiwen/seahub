@@ -1,4 +1,5 @@
 {% load i18n %}
+{% include 'snippets/list_commit_detail.html' %}
 function reqEvents(start) {
     $('#events-loading').removeClass('hide');
     $.ajax({
@@ -21,15 +22,18 @@ function reqEvents(start) {
             } else {
                 $('#events-more').addClass('hide');
             }
-            {% include 'snippets/list_commit_detail.html' %}
+            $('.lsch').click(function() {
+                listCommitDetails($(this).data('url'), $(this).data('time'));
+                return false;
+            });
             $('.lsch-encrypted').click(function() {
                 if ($(this).data('passwordset')) {
-                    listCommitDetails($(this));
+                    listCommitDetails($(this).data('url'), $(this).data('time'));
                 } else {
                     var form = $('#repo-decrypt-form');
                     form.find('input[name="repo_id"]').val($(this).data('repoid'));
                     form.find('.op-target').html($(this).data('reponame'));
-                    form.data('cur_event', $(this)).modal({appendTo:'#main'});
+                    form.data({'url':$(this).data('url'), 'time':$(this).data('time')}).modal({appendTo:'#main'});
                 }
                 return false;
             });
@@ -52,12 +56,13 @@ $('#events-more').click(function() {
     reqEvents($(this).data('start'));
 });
 
-$('#repo-decrypt-form .submit').click(function() {
-    var form = $('#repo-decrypt-form');
+$('#repo-decrypt-form').submit(function() {
+    var form = $(this);
     var form_id = form.attr('id');
     var input_password = form.find('input[name="password"]');
     var repo_id = form.find('input[name="repo_id"]').val();
     var password = input_password.val();
+    var cur_data = form.data();
     if (!password) {
         apply_form_error(form_id, '{% trans "Password is required." %}'); 
     } else {
@@ -76,14 +81,14 @@ $('#repo-decrypt-form .submit').click(function() {
             success: function(data) {
                 $.modal.close();
                 $('.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
-                listCommitDetails(form.data('cur_event'));
+                listCommitDetails(cur_data.url, cur_data.time);
             },  
             error: function(jqXHR, textStatus, errorThrown) {
                 var err = '';
                 if (jqXHR.responseText) {
                     err = $.parseJSON(jqXHR.responseText).error;
                 } else {
-                    err = '{% trans "Failed.Please check the network." %}';
+                    err = '{% trans "Failed. Please check the network." %}';
                 }
                 apply_form_error(form_id, err); 
                 input_password.val('');

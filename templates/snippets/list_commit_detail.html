@@ -1,15 +1,15 @@
 {% load i18n %}
-function listCommitDetails(obj) {
+function listCommitDetails(url, t) {
     $.modal('<div id="ls-ch"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" style="margin-top:30px;" /></div>', {autoResize:true});
     $('#ls-ch').css('text-align', 'center');
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $.ajax({
-        url: obj.data('url'),
+        url: url,
         dataType: 'json',
         cache: false,
         success: function(data) {
             var heading = '<h3>{% trans "Modification Details" %}</h3>';
-            var time = '<p class="commit-time">' + obj.data('time') + '</p>';
+            var time = '<p class="commit-time">' + t + '</p>';
             var con = '';
             function show(data_, hd) {
                 if (data_.length > 0) {
@@ -40,6 +40,6 @@ function listCommitDetails(obj) {
     });
 }
 $('.lsch').click(function() {
-    listCommitDetails($(this));
+    listCommitDetails($(this).data('url'), $(this).data('time'));
     return false;
 });

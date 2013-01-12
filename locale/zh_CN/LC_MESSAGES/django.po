@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 17:11+0800\n"
+"POT-Creation-Date: 2013-01-12 16:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,11 +212,11 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2885
+#: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2881
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:796 views.py:891 views.py:2368 views.py:2900
+#: views.py:796 views.py:891 views.py:2368 views.py:2896
 msgid "Library not exists"
 msgstr "资料库不存在"
 
@@ -453,7 +453,7 @@ msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views.py:2932
+#: views.py:2928
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -696,7 +696,7 @@ msgstr "提交失败。请检查网络是否已连接。"
 msgid "Submit failed."
 msgstr "提交失败。"
 
-#: templates/file_edit.html:260 templates/snippets/events_js.html:61
+#: templates/file_edit.html:260 templates/snippets/events_js.html:67
 msgid "Password is required."
 msgstr "密码为必填项"
 
@@ -704,11 +704,16 @@ msgstr "密码为必填项"
 msgid "Password should be 3 to 15 characters."
 msgstr "密码太长（不超过15个字符）"
 
-#: templates/file_edit.html:290 templates/snippets/events_js.html:38
-#: templates/snippets/events_js.html:86
-#: templates/snippets/list_commit_detail.html:37
-msgid "Unknown error."
-msgstr "未知错误"
+#: templates/file_edit.html:291 templates/file_view.html:198
+#: templates/file_view.html.py:363 templates/repo.html:411
+#: templates/repo.html.py:649 templates/repo.html:686
+#: templates/repo.html.py:825 templates/snippets/events_js.html:91
+#: templates/snippets/file_content_js.html:97
+#: templates/snippets/shared_link_js.html:41
+#: templates/snippets/shared_link_js.html:60
+#: templates/snippets/shared_link_js.html:123
+msgid "Failed. Please check the network."
+msgstr "操作失败。请检查网络是否已连接。"
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
@@ -875,15 +880,6 @@ msgstr "星标取消成功"
 #: templates/file_view.html:188
 msgid "Starred successfully"
 msgstr "星标添加成功"
-
-#: templates/file_view.html:198 templates/file_view.html.py:363
-#: templates/repo.html:411 templates/repo.html.py:649 templates/repo.html:686
-#: templates/repo.html.py:825 templates/snippets/file_content_js.html:97
-#: templates/snippets/shared_link_js.html:41
-#: templates/snippets/shared_link_js.html:60
-#: templates/snippets/shared_link_js.html:123
-msgid "Failed. Please check the network."
-msgstr "操作失败。请检查网络是否已连接。"
 
 #: templates/file_view.html:228
 msgid ""
@@ -1846,13 +1842,18 @@ msgstr "创建了资料库"
 msgid "Deleted library"
 msgstr "删除了资料库"
 
-#: templates/snippets/events_js.html:40
+#: templates/snippets/events_js.html:42
+#: templates/snippets/list_commit_detail.html:37
+msgid "Unknown error."
+msgstr "未知错误"
+
+#: templates/snippets/events_js.html:44
 msgid "Please refresh the page later."
 msgstr "请稍后刷新页面。"
 
-#: templates/snippets/events_js.html:42
+#: templates/snippets/events_js.html:46
 msgid "Please try again later."
-msgstr "请稍后尝试。"
+msgstr "请稍后再试。"
 
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
@@ -2087,6 +2088,9 @@ msgstr "名字(可选)"
 #: templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
+
+#~ msgid "Failed.Please check the network."
+#~ msgstr "操作失败。请检查网络是否已连接。"
 
 #~ msgid ""
 #~ "No running Seafile client is detected. If you are sure Seafile client is "
