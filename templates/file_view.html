@@ -294,7 +294,7 @@ $('#file-op .history').click(function () {
 {% if request.user.is_authenticated %}
 $('#main-panel').css({'margin-bottom':0});
 $('#bottom-bar').append('<button id="comment">{% trans "Comment" %}</button>');
-$('#file-comment').css({'max-height':$(window).height() - parseInt($('#file-comment').css('bottom'))});
+$('#file-comment').css({'max-height':$(window).height() - $('#bottom-bar').height() - $('#comment-caret').height()});
 {% if groups %}
 var gids = '';
 {% for g in groups %}
@@ -313,6 +313,7 @@ $('#comment-input').bind('autocompleteopen', function(e, ui) {
 {% if comment_open %}
 $('#file-comment, #comment-caret').removeClass('hide');
 $(function() { $('#comment-caret').css({'left': $('#comment').offset().left}); });
+$('#comment-list').css({'max-height':parseInt($('#file-comment').css('max-height')) - $('#file-comment-form').outerHeight(true), 'overflow':'auto'});
 {% endif %}
 $('#comment').click(function() {
     if ($('#file-comment').hasClass('hide')) {
