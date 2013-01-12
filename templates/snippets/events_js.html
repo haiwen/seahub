@@ -74,17 +74,19 @@ $('#repo-decrypt-form .submit').click(function() {
                 username: '{{request.user.username}}'
             },  
             success: function(data) {
-                if (data['success']) {
-                    $.modal.close();
-                    $('.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
-                    listCommitDetails(form.data('cur_event'));
-                } else {
-                    input_password.val('');
-                    apply_form_error(form_id, data['error']);
-                }   
+                $.modal.close();
+                $('.lsch-encrypted[data-repoid="' + repo_id + '"]').attr('data-passwordset', true);
+                listCommitDetails(form.data('cur_event'));
             },  
             error: function(jqXHR, textStatus, errorThrown) {
-                apply_form_error(form_id, '{% trans "Unknown error." %}'); 
+                var err = '';
+                if (jqXHR.responseText) {
+                    err = $.parseJSON(jqXHR.responseText).error;
+                } else {
+                    err = '{% trans "Failed.Please check the network." %}';
+                }
+                apply_form_error(form_id, err); 
+                input_password.val('');
             }   
         }); 
     }   

@@ -280,13 +280,17 @@ $('#repo-decrypt-form').submit(function() {
                     {% if op == 'decrypt' %}
                     location.reload(true);
                     {% endif %}
-                } else {
-                    pwd_input.val('');
-                    err.html(data['error']);
                 }   
             },  
-            error: function(data, textStatus, jqXHR) {
-                err.html('{% trans "Unknown error." %}'); 
+            error: function(jqXHR, textStatus, errorThrown) {
+                var err_str = ''; 
+                if (jqXHR.responseText) {
+                    err_str = $.parseJSON(jqXHR.responseText).error;
+                } else {
+                    err_str = '{% trans "Failed.Please check the network." %}';
+                }   
+                err.html(err_str); 
+                pwd_input.val('');
             }   
         }); 
     }

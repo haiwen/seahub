@@ -2760,18 +2760,14 @@ def pubinfo(request):
                 }, context_instance=RequestContext(request))
     
 def repo_set_password(request):
-    ret = {}
     content_type = 'application/json; charset=utf-8'
 
     form = RepoPassowrdForm(request.POST)
     if form.is_valid():
-        ret['success'] = True
+        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
-        ret['success'] = False
-        ret['error'] = str(form.errors.values()[0])
-
-    return HttpResponse(json.dumps(ret),
-                        content_type=content_type)
+        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
+                status=400, content_type=content_type)
 
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
     try:
