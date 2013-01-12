@@ -261,3 +261,10 @@ def translate_permission(value):
 def quote(value):
     from urllib2 import quote
     return quote(value)
+
+@register.filter(name='trim')
+def trim(value, length):
+    if len(value) > length:
+        return value[:length-2] + '...'
+    else:
+        return value

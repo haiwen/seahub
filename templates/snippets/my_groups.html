@@ -1,4 +1,4 @@
-{% load group_avatar_tags i18n %}
+{% load seahub_tags group_avatar_tags i18n %}
 {% load url from future %}
 <div class="info-item">
 <h3 class="info-item-top">{% trans "My Groups" %}</h3>
@@ -7,9 +7,9 @@
     {% for group in groups %}
     <li class="mygroup">
     <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}的图标" title="{{ group.props.group_name }}" class="avatar" />
+        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}" title="{{ group.props.group_name }}" class="avatar" />
     </a>
-	<a class="name" href="{{ SITE_ROOT }}group/{{ group.props.id }}/" title="{{ group.props.group_name }}">{{ group.props.group_name }}</a>
+    <a class="name" href="{{ SITE_ROOT }}group/{{ group.props.id }}/" title="{{ group.props.group_name }}">{{ group.props.group_name|trim:12 }}</a>
 	</li>
     {% endfor %}
 </ul>

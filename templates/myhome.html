@@ -56,14 +56,13 @@
     <p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
 </div>
 
-<!-- 我的群组 -->
 {% with groups=joined_groups %}
 {% include "snippets/my_groups.html" %}
 {% endwith %}
 {% endblock %}
 
 {% block right_panel %}
-<!-- 我拥有的资料库 共享给我的资料库 星标文件 -->
+<!--mine shared stared -->
 {% include "snippets/my_owned_repos.html" %}
 
 {% if events %}
