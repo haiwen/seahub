@@ -783,6 +783,10 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form').submit(function() {
             apply_form_error(form_id, "{% trans "It can't be blank." %}");
             return false;
         }
+        if (new_file.lastIndexOf('.') != -1 && new_file.substr(0, new_file.lastIndexOf('.')).length == 0) { // if it has an extension
+            apply_form_error(form_id, "{% trans "Only an extension there, please input a name." %}");
+            return false;
+        }
         post_url = '{% url 'views.repo_new_file' %}';
         post_data['new_file_name'] = new_file;
     } else if (form_id == 'add-new-dir-form') {
