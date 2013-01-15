@@ -1542,6 +1542,22 @@ textarea:-moz-placeholder {/* for FF */
 #aloha-attribute-field-imageTitle {
     width:300px; 
 }
+.aloha-color-picker-overlay {
+    border:1px solid #ddd;
+    width:400px;
+    margin:0;
+    background:#fff;
+    z-index:10111;
+}
+.aloha-color-picker-overlay td {
+    padding:2px;
+    border:0;
+}
+.aloha-color-picker-overlay div {
+    width:22px;
+    height:22px;
+    cursor:pointer;
+}
 /* shareadmin */
 .view-link-alert p {
     display: inline-block;

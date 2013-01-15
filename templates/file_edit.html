@@ -3,7 +3,7 @@
 
 {% block extra_style %}
 {% if filetype == 'Sf' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}aloha-0.22.3/css/aloha.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}aloha-0.22.7/css/aloha.css" />
 {% else %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
@@ -131,16 +131,17 @@
 {% block extra_script %}
 {% if not err and file_content != None %}
 {% if filetype == 'Sf' %}
-<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/require.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.7/lib/require.js"></script>
 <script type="text/javascript">
 //settings must be before aloha.js
 Aloha = window.Aloha || {}; 
 Aloha.settings = Aloha.settings || {}; 
-if ($('#lang-context').data('lang') == 'zh-cn') {
-    Aloha.settings.locale = "zh-hans";
+switch($('#lang-context').data('lang')) {
+    case 'zh-cn': Aloha.settings.locale = "zh-hans";break;
+    case 'ru': Aloha.settings.locale = "ru";break;
 }
 </script>
-<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.3/lib/aloha.js" data-aloha-plugins="common/format, common/abbr, common/align, common/characterpicker, common/image, common/link, common/list, common/table, common/undo, common/ui"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.7/lib/aloha.js" data-aloha-plugins="common/format, common/abbr, common/align, common/characterpicker, common/dom-to-xhtml, common/image, common/link, common/list, common/table, common/undo, common/ui, extra/textcolor"></script>
 {% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
 {% if filetype == 'Markdown' %}
