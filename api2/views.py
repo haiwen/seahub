@@ -440,15 +440,16 @@ def reloaddir(request, repo_id, parent_dir):
     return get_dir_entrys_by_id(request, dir_id)
     
 def reloaddir_if_neccessary (request, repo_id, parent_dir):
-    reloaddir = False
+
+    reload_dir = False
     s = request.GET.get('reloaddir', None)
     if s and s.lower() == 'true':
-        reloaddir = True
+        reload_dir = True
 
-    if not reloaddir:
+    if not reload_dir:
         return Response('success')
 
-    reloaddir(request, repo_id, parent_dir)
+    return reloaddir(request, repo_id, parent_dir)
 
 # deprecated    
 class OpDeleteView(APIView):
