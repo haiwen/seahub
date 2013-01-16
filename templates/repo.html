@@ -259,10 +259,10 @@
         <h3>{% trans "Library Settings" %}</h3>
         <label>{% trans "History" %}</label><br />
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-	<input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} /> {% trans "Keep full history" %}<br />
-	<input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} /> {% trans "Don't keep history" %}<br />
-	<input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} /> {% trans "Only keep a period of history:" %}
-	<input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}<br />
+        <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} /> {% trans "Keep full history" %}<br />
+        <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} /> {% trans "Don't keep history" %}<br />
+        <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} /> {% trans "Only keep a period of history:" %}
+        <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}<br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
