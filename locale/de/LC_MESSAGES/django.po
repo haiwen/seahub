@@ -1,4 +1,4 @@
-#
+# 
 # Copyright (C) 2013
 # This file is distributed under the same license as the seahub package.
 # Phillip Thelen <viirus@pherth.net>, 2013.
@@ -8,25 +8,31 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-16 18:11+0100\n"
-"PO-Revision-Date: 2013-01-16 22:55+0100\n"
-"Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
+"PO-Revision-Date: 2013-01-17 00:08+0100\n"
+"Last-Translator: Robin Nehls <translate@manol.is>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: forms.py:26 base/accounts.py:366
+#: forms.py:26
+#: base/accounts.py:366
+#, fuzzy
 msgid "A user with this email already"
-msgstr "Ein benutzer mit dieser Email existiert bereits"
+msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail Adresse"
 
-#: forms.py:40 base/accounts.py:383 thirdpart/auth/forms.py:125
-#: thirdpart/auth/forms.py:167 thirdpart/registration/forms.py:58
+#: forms.py:40
+#: base/accounts.py:383
+#: thirdpart/auth/forms.py:125
+#: thirdpart/auth/forms.py:167
+#: thirdpart/registration/forms.py:58
 msgid "The two password fields didn't match."
 msgstr "Die Passwortfelder stimmen nicht überein."
 
-#: forms.py:57 templates/snippets/repo_create_js.html:28
+#: forms.py:57
+#: templates/snippets/repo_create_js.html:28
 msgid "Name can't be empty"
 msgstr "Name darf nicht leer sein"
 
@@ -34,7 +40,8 @@ msgstr "Name darf nicht leer sein"
 msgid "Name is too long (maximum is 255 characters)"
 msgstr "Name ist zu lang (maximal 255 Zeichen)"
 
-#: forms.py:61 templates/snippets/repo_create_js.html:32
+#: forms.py:61
+#: templates/snippets/repo_create_js.html:32
 msgid "Description can't be empty"
 msgstr "Beschreibung darf nicht leer sein"
 
@@ -42,43 +49,57 @@ msgstr "Beschreibung darf nicht leer sein"
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "Beschreibung ist zu lang (maximal 100 Zeichen)"
 
-#: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:41
+#: forms.py:67
+#: forms.py:72
+#: templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
-msgstr "Passwort ist zu lang (mindestens 3 Zeichen)"
+msgstr "Passwort ist zu kurz (minimum 3 Zeichen)"
 
-#: forms.py:68 forms.py:73 templates/snippets/repo_create_js.html:45
+#: forms.py:68
+#: forms.py:73
+#: templates/snippets/repo_create_js.html:45
 msgid "Password is too long (maximum is 15 characters)"
 msgstr "Passwort ist zu lang (maximal 15 Zeichen)"
 
 #: forms.py:79
 #, python-format
 msgid "Name %s is not valid"
-msgstr "Name %s ist nicht gültig"
+msgstr "Name %s ist ungültig"
 
-#: forms.py:101 templates/snippets/repo_create_js.html:53
+#: forms.py:101
+#: templates/snippets/repo_create_js.html:53
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: forms.py:114 forms.py:137 forms.py:161 forms.py:184 forms.py:221
+#: forms.py:114
+#: forms.py:137
+#: forms.py:161
+#: forms.py:184
+#: forms.py:221
 msgid "Repo id is required"
 msgstr "Repo ID wird benötigt"
 
-#: forms.py:115 forms.py:138 forms.py:162
+#: forms.py:115
+#: forms.py:138
+#: forms.py:162
 msgid "Parent dir is required"
-msgstr "Enternordner wird benötigt"
+msgstr "Elternverzeichnis wird benötigt"
 
-#: forms.py:118 forms.py:142
+#: forms.py:118
+#: forms.py:142
 msgid "File name is too long"
 msgstr "Dateiname ist zu lang"
 
-#: forms.py:119 forms.py:143
+#: forms.py:119
+#: forms.py:143
 msgid "File name can't be empty"
-msgstr "Dateiname kann nicht leer sein"
+msgstr "Dateiname darf nicht leer sein"
 
-#: forms.py:126 forms.py:150
+#: forms.py:126
+#: forms.py:150
 #, python-format
 msgid "File name \"%s\" is not valid"
-msgstr "Dateiname \"%s\" ist nicht gültig"
+msgstr "Dateiname \"%s\" ist ungültig"
 
 #: forms.py:139
 msgid "Oldname is required"
@@ -86,20 +107,20 @@ msgstr "Alter Name wird benötigt"
 
 #: forms.py:165
 msgid "Directory name is too long"
-msgstr "Ordnername ist zu lang"
+msgstr "Verzeichnisname ist zu lang"
 
 #: forms.py:166
 msgid "Directory name can't be empty"
-msgstr "Ordnername darf nicht leer sein"
+msgstr "Verzeichnisname darf nicht leer sein"
 
 #: forms.py:173
 #, python-format
 msgid "Directory name \"%s\" is not valid"
-msgstr "Ordnername \"%s\" ist nicht gültig"
+msgstr "Verzeichnisname \"%s\" ist ungülti "
 
 #: forms.py:185
 msgid "Username is required"
-msgstr "Benutzername wird benötigt"
+msgstr "Nutzername wird benötigt"
 
 #: forms.py:186
 msgid "Password can't be empty"
@@ -121,9 +142,10 @@ msgstr "Interner Server Fehler"
 msgid "Decrypt library error"
 msgstr ""
 
-#: forms.py:212 share/forms.py:19
+#: forms.py:212
+#: share/forms.py:19
 msgid "Email is required"
-msgstr "Email wird benötigt"
+msgstr "E-Mail wird benötigt"
 
 #: forms.py:214
 msgid "Quota can't be empty"
@@ -135,7 +157,7 @@ msgstr "Quota ist zu niedrig (mindestestwert ist 0)"
 
 #: forms.py:222
 msgid "Days can't be empty"
-msgstr "Tage dürfen nicht leer sein"
+msgstr "Tage darf nicht leer sein"
 
 #: forms.py:223
 msgid "Please enter a number"
@@ -143,19 +165,19 @@ msgstr "Bitte eine Nummer eingeben"
 
 #: settings.py:99
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: settings.py:100
 msgid "简体中文"
-msgstr ""
+msgstr "简体中文"
 
 #: settings.py:101
 msgid "Русский"
-msgstr ""
+msgstr "Русский"
 
 #: settings.py:102
 msgid "Deutsch"
-msgstr ""
+msgstr "Deutsch"
 
 #: views.py:537
 msgid "Unable to view recycle page"
@@ -163,25 +185,28 @@ msgstr ""
 
 #: views.py:558
 msgid "Settings saved."
-msgstr "Einstellungen wurden gespeichert."
+msgstr "Einstellungen gespeichert."
 
 #: views.py:561
 msgid "Failed to save settings on server"
-msgstr "Speichern der Einstellungen ist fehlgeschlagen"
+msgstr "Speichern der Einstellungen auf dem Server fehlgeschlagen"
 
 #: views.py:568
 msgid "Internal Server Error"
-msgstr "Interner Server Fehler"
+msgstr "Interner Serverfehler"
 
 #: views.py:570
 msgid "Filename contains invalid character"
-msgstr "Dateiname enthält ungülte Zeichen"
+msgstr "Dateiname enthält unzulässiges Zeichen"
 
 #: views.py:572
 msgid "Duplicated filename"
 msgstr "Doppelter Dateiname"
 
-#: views.py:574 views.py:1305 views.py:2539 views.py:2667
+#: views.py:574
+#: views.py:1305
+#: views.py:2539
+#: views.py:2667
 msgid "File not exists"
 msgstr "Datei existiert nicht"
 
@@ -195,53 +220,61 @@ msgstr "Der Speicher des Benutzers ist aufgebraucht. Upload schlug fehl"
 
 #: views.py:580
 msgid "An error occurs during file transfer"
-msgstr "Ein Fehler trat während der Dateiübertragung auf"
+msgstr "Es ist ein Fehler beim Dateitransfer augetreten"
 
-#: views.py:591 views.py:612
+#: views.py:591
+#: views.py:612
 msgid "Invalid url"
 msgstr "Ungültige URL"
 
 #: views.py:676
 msgid "Unable to view library modification"
-msgstr ""
+msgstr "Konnte Bibliotheksänderungen nicht anzeigen"
 
 #: views.py:722
 msgid "Unable to view library snapshots"
-msgstr ""
+msgstr "Konnte Bibliotheksschapschüsse nicht anzeigen"
 
 #: views.py:772
 msgid "You have no permission to restore library"
-msgstr ""
+msgstr "Sie haben keine berechtigung die Bibliothek wiederherzustellen"
 
 #: views.py:788
 msgid "Please specify history ID"
-msgstr "Bitte die Historien ID angeben"
+msgstr "Bitte geben sie eine Verlaufs ID an"
 
-#: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2881
+#: views.py:794
+#: views.py:1575
+#: views.py:2414
+#: views.py:2449
+#: views.py:2881
 #: share/views.py:396
 msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
-#: views.py:796 views.py:891 views.py:2368 views.py:2896
+#: views.py:796
+#: views.py:891
+#: views.py:2368
+#: views.py:2896
 msgid "Library not exists"
-msgstr ""
+msgstr "Bibliothek nicht gefunden"
 
 #: views.py:798
 msgid "History you specified is not exists"
-msgstr "Angegebene Historie existiert nicht"
+msgstr "Der von ihnen gewählte Verlauf existiert nicht"
 
 #: views.py:800
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-#: views.py:911 views.py:927
-msgid ""
-"Failed to remove library. Only staff or owner can perform this operation."
-msgstr ""
+#: views.py:911
+#: views.py:927
+msgid "Failed to remove library. Only staff or owner can perform this operation."
+msgstr "Entfernen der Bibliothek fehlgeschlagen. Nur der Besitzer oder ein Administrator ist dazu berechtigt."
 
 #: views.py:1201
 msgid "Failed to create repo"
-msgstr "Erstellen des Repos ist fehlgeschlagen"
+msgstr "Repo konnte nicht erstellt werden"
 
 #: views.py:1219
 msgid "Operation successful"
@@ -253,7 +286,7 @@ msgstr "Operation fehlgeschlagen"
 
 #: views.py:1252
 msgid "Failed to delete file."
-msgstr "Dateilöschung fehlgeschlagen"
+msgstr "Fehler beim löschen der Datei"
 
 #: views.py:1259
 #, python-format
@@ -263,80 +296,84 @@ msgstr "%s wurde erfolgreich gelöscht"
 #: views.py:1261
 #, python-format
 msgid "Internal error. Failed to delete %s."
-msgstr "Interner Fehler. Löschung von %s ist fehlgeschlagen"
+msgstr "Interner Fehler: Datei %s konnte nicht gelöscht werden."
 
-#: views.py:1321 views.py:1643
+#: views.py:1321
+#: views.py:1643
 msgid "Unable to view file"
-msgstr ""
+msgstr "Kann die Datei nicht anzeigen"
 
 #: views.py:1526
 msgid "File size surpasses 10M, can not be previewed online."
-msgstr ""
+msgstr "Für Dateien größer als 10M ist keine Onlinevorschau möglich"
 
 #: views.py:1531
 msgid "HTTPError: failed to open file online"
-msgstr ""
+msgstr "HTTP Fehler: Datei konnte nicht online geöffnet werden"
 
 #: views.py:1534
 msgid "URLError: failed to open file online"
-msgstr ""
+msgstr "URL Fehler: Datei konnte nicht online geöffnet werden"
 
 #: views.py:1546
 msgid "Unknown file encoding"
-msgstr ""
+msgstr "Unbekannte Datenkodierung"
 
 #: views.py:1555
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
-#: views.py:1561 views.py:2210 views.py:2241 views.py:2275
+#: views.py:1561
+#: views.py:2210
+#: views.py:2241
+#: views.py:2275
 msgid "Permission denied"
-msgstr ""
+msgstr "Zugriff verweigert"
 
 #: views.py:1565
 msgid "The library does not exist."
-msgstr ""
+msgstr "Die Bibliothek existiert nicht."
 
 #: views.py:1569
 msgid "The library is encrypted."
-msgstr ""
+msgstr "Diese Bibliothek ist verschlüsselt."
 
 #: views.py:1622
 msgid "Unable to edit file"
-msgstr ""
+msgstr "Kann die Datei nicht editieren"
 
 #: views.py:1637
 msgid "The file does not exist."
-msgstr ""
+msgstr "Datei existiert nicht"
 
 #: views.py:1663
 msgid "Edit online is not offered for this type of file."
-msgstr ""
+msgstr "Onlinebearbeitung ist für diesen Dateityp nicht verfügbar."
 
 #: views.py:1717
 msgid "Unable to access file"
-msgstr ""
+msgstr "Kein Zugriff auf Datei"
 
 #: views.py:1733
 msgid "Failed to download library, unable to find server"
-msgstr ""
+msgstr "Bibliothek konnte nicht heruntergeladen werden, konnte Server nicht finden"
 
 #: views.py:1744
 msgid "Invalid server setting"
-msgstr ""
+msgstr "Ungültiger Serverkonfiguration"
 
 #: views.py:1785
 msgid "Destination path is too long."
-msgstr ""
+msgstr "Zielpfad ist zu lang."
 
 #: views.py:1791
 msgid "You can not modify that library."
-msgstr ""
+msgstr "Sie können diese Bibliothek nicht verändern."
 
 #: views.py:1804
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
-msgstr ""
+msgstr "%(op)s des Verzeichnisses nicht möglich, %(src)s ist ein Unterverzeichnis von %(des)s"
 
 #: views.py:1805
 msgid "copy"
@@ -344,23 +381,24 @@ msgstr "kopieren"
 
 #: views.py:1805
 msgid "move"
-msgstr "bewegen"
+msgstr "verschieben"
 
 #: views.py:1820
-#, python-format
+#, fuzzy, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
-msgstr ""
+msgstr "%(name)s erfolgreich kopiert: <a href=\"%(url)s\">anzeigen</a>"
 
 #: views.py:1826
-#, python-format
+#, fuzzy, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
-msgstr ""
+msgstr "%(name)s erfolgreich verschoben: <a href=\"%(url)s\">anzeigen</a>"
 
 #: views.py:1941
 msgid "Failed to set quota: internal error"
 msgstr "Quota konnte nicht gesetzt werden: Interner Fehler"
 
-#: views.py:2014 templates/sys_useradmin.html:78
+#: views.py:2014
+#: templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
@@ -369,17 +407,13 @@ msgstr "Passwort zurücksetzen"
 
 #: views.py:2030
 #, python-format
-msgid ""
-"Successfully resetted password to %(passwd)s, an email has been sent to "
-"%(user)s."
-msgstr ""
+msgid "Successfully resetted password to %(passwd)s, an email has been sent to %(user)s."
+msgstr "Passwort erfolgreich auf %(passwd)s gesetzt, eine E-Mail wurde an den Nutzer %(user)s versand."
 
 #: views.py:2035
 #, python-format
-msgid ""
-"Successfully resetted password to %(passwd)s, but failed to send email to "
-"%(user)s, please check your email configuration."
-msgstr ""
+msgid "Successfully resetted password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration."
+msgstr "Passwort erfolgreich auf %(passwd)s gesetzt, aber es konnte eine E-Mail an den Nutzer %(user)s gesendet werden. Bitte prüfen sie ihre E-Mail Konfiguration."
 
 #: views.py:2039
 #, python-format
@@ -388,19 +422,16 @@ msgstr ""
 
 #: views.py:2042
 #, python-format
-msgid ""
-"Successfully resetted password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
-"configured."
+msgid "Successfully resetted password to %(passwd)s for user %(user)s. But email notification can not be sent, because Email service is not properly configured."
 msgstr ""
 
 #: views.py:2045
 msgid "Failed to reset password: user does not exist"
-msgstr ""
+msgstr "Zurücksetzen des Passworts fehlgeschlagen: Nutzer existiert nicht"
 
 #: views.py:2066
 msgid "Seafile Registration Information"
-msgstr ""
+msgstr "Seafile Registrierungs Informationen"
 
 #: views.py:2101
 #, python-format
@@ -409,39 +440,35 @@ msgstr ""
 
 #: views.py:2104
 #, python-format
-msgid ""
-"Successfully added user %s. An error accurs when sending email notification, "
-"please check your email configuration."
+msgid "Successfully added user %s. An error accurs when sending email notification, please check your email configuration."
 msgstr ""
 
 #: views.py:2106
 #, python-format
 msgid "Successfully added user %s."
-msgstr ""
+msgstr "User %s erfolgreich hinzugefügt."
 
 #: views.py:2108
 #, python-format
-msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
-"Email service is not properly configured."
+msgid "Successfully added user %s. But email notification can not be sent, because Email service is not properly configured."
 msgstr ""
 
 #: views.py:2287
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
-msgstr ""
+msgstr "Erfolgreich %(old)s in %(new)s umbenannt."
 
 #: views.py:2342
 msgid "Failed to create library"
-msgstr ""
+msgstr "Bibliothek konnte nicht erstellt werden"
 
 #: views.py:2435
 #, python-format
-msgid ""
-"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
+msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
 
-#: views.py:2439 views.py:2465
+#: views.py:2439
+#: views.py:2465
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr ""
@@ -453,71 +480,70 @@ msgstr ""
 
 #: views.py:2725
 msgid "Internal error"
-msgstr ""
+msgstr "Interner Fehler"
 
 #: views.py:2928
 #, python-format
 msgid "Unable to download \"%s\""
+msgstr "Konnte \"%s\" nicht herunterladen"
+
+#: avatar/forms.py:34
+#: avatar/forms.py:57
+#, python-format
+msgid "%(ext)s is an invalid file extension. Authorized extensions are : %(valid_exts_list)s"
 msgstr ""
 
-#: avatar/forms.py:34 avatar/forms.py:57
+#: avatar/forms.py:38
+#: avatar/forms.py:61
 #, python-format
-msgid ""
-"%(ext)s is an invalid file extension. Authorized extensions are : "
-"%(valid_exts_list)s"
-msgstr ""
-
-#: avatar/forms.py:38 avatar/forms.py:61
-#, python-format
-msgid ""
-"Your file is too big (%(size)s), the maximum allowed size is "
-"%(max_valid_size)s"
+msgid "Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s"
 msgstr ""
 
 #: avatar/forms.py:44
 #, python-format
-msgid ""
-"You already have %(nb_avatars)d avatars, and the maximum allowed is "
-"%(nb_max_avatars)d."
+msgid "You already have %(nb_avatars)d avatars, and the maximum allowed is %(nb_max_avatars)d."
 msgstr ""
 
-#: avatar/models.py:136 avatar/models.py:161
+#: avatar/models.py:136
+#: avatar/models.py:161
 #, python-format
 msgid "Avatar for %s"
-msgstr ""
+msgstr "Avatar für %s"
 
 #: avatar/views.py:78
 msgid "Successfully uploaded a new avatar."
-msgstr ""
+msgstr "Neues Avatar erfolgreich hochgeladen"
 
 #: avatar/views.py:128
 msgid "Successfully uploaded a new group avatar."
-msgstr ""
+msgstr "Neues Gruppenavatar erfolgreich hochgeladen."
 
 #: avatar/views.py:166
 msgid "Successfully updated your avatar."
-msgstr ""
+msgstr "Ihr Avatar wurde geändert."
 
 #: avatar/views.py:208
 msgid "Successfully deleted the requested avatars."
-msgstr ""
+msgstr "Avatar erfolgreich gelöscht."
 
 #: avatar/templates/avatar/add.html:6
 msgid "Upload Avatar"
-msgstr ""
+msgstr "Avatar hochladen"
 
-#: avatar/templates/avatar/add.html:7 avatar/templates/avatar/change.html:8
+#: avatar/templates/avatar/add.html:7
+#: avatar/templates/avatar/change.html:8
 msgid "Your current avatar: "
-msgstr ""
+msgstr "Ihr aktuelles Avatar:"
 
 #: avatar/templates/avatar/add.html:9
 #: avatar/templates/avatar/set_avatar.html:12
 msgid "Upload New Avatar: "
-msgstr ""
+msgstr "Neues Avatar hochladen:"
 
-#: avatar/templates/avatar/add.html:13 avatar/templates/avatar/change.html:30
+#: avatar/templates/avatar/add.html:13
+#: avatar/templates/avatar/change.html:30
 msgid "Upload New Image"
-msgstr ""
+msgstr "Neues Bild hochladen"
 
 #: avatar/templates/avatar/confirm_delete.html:6
 msgid "Please select the avatars that you would like to delete."
@@ -525,26 +551,26 @@ msgstr ""
 
 #: avatar/templates/avatar/confirm_delete.html:11
 #, python-format
-msgid ""
-"You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
-"\">upload one</a> now."
+msgid "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s\">upload one</a> now."
 msgstr ""
 
 #: avatar/templates/avatar/confirm_delete.html:18
+#, fuzzy
 msgid "Delete These"
-msgstr ""
+msgstr "Lösche diese"
 
 #: avatar/templates/avatar/set_avatar.html:8
+#, fuzzy
 msgid "Avatar Change"
-msgstr ""
+msgstr "Avatar ändern"
 
 #: avatar/templates/avatar/set_avatar.html:9
 msgid "Current avatar: "
-msgstr ""
+msgstr "Aktuelles Avatar:"
 
 #: avatar/templates/avatar/set_avatar.html:10
 msgid "Current Avatar"
-msgstr ""
+msgstr "Aktuelles Avatar"
 
 #: avatar/templates/avatar/set_avatar.html:16
 #: contacts/templates/contacts/contact_list.html:53
@@ -559,12 +585,19 @@ msgstr ""
 #: organizations/templates/organizations/org_admin.html:74
 #: profile/templates/profile/set_profile.html:28
 #: profile/templates/profile/user_profile.html:36
-#: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
-#: templates/file_edit.html:93 templates/file_edit.html.py:126
-#: templates/file_view.html:94 templates/file_view.html.py:122
-#: templates/repo.html:267 templates/repo.html.py:279 templates/repo.html:295
-#: templates/repo.html.py:316 templates/repo.html:328
-#: templates/repo.html.py:340 templates/userinfo.html:87
+#: templates/add_user_form.html:17
+#: templates/decrypt_repo_form.html:15
+#: templates/file_edit.html:93
+#: templates/file_edit.html.py:126
+#: templates/file_view.html:94
+#: templates/file_view.html.py:122
+#: templates/repo.html:267
+#: templates/repo.html.py:279
+#: templates/repo.html:295
+#: templates/repo.html.py:316
+#: templates/repo.html:328
+#: templates/repo.html.py:340
+#: templates/userinfo.html:87
 #: templates/registration/login.html:13
 #: templates/registration/password_change_form.html:18
 #: templates/registration/password_reset_confirm.html:19
@@ -576,13 +609,11 @@ msgstr ""
 #: templates/snippets/repo_share_form.html:19
 #: templates/snippets/user_profile_html.html:34
 msgid "Submit"
-msgstr ""
+msgstr "Absenden"
 
 #: avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
-msgid ""
-"<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
-"href=\"%(avatar_url)s\">%(avatar)s</a>."
+msgid "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
 
 #: avatar/templates/notification/avatar_updated/notice.html:2
@@ -592,103 +623,120 @@ msgstr ""
 
 #: avatar/templatetags/avatar_tags.py:46
 msgid "Default Avatar"
-msgstr ""
+msgstr "Standard Avatar"
 
-#: base/accounts.py:347 thirdpart/registration/forms.py:34
+#: base/accounts.py:347
+#: thirdpart/registration/forms.py:34
 msgid "Email address"
-msgstr ""
+msgstr "E-Mail Adresse"
 
-#: base/accounts.py:352 thirdpart/auth/forms.py:18
+#: base/accounts.py:352
+#: thirdpart/auth/forms.py:18
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 #: base/accounts.py:353
 msgid "This value must be of length 40"
 msgstr ""
 
-#: base/accounts.py:356 templates/add_user_form.html:11
+#: base/accounts.py:356
+#: templates/add_user_form.html:11
 #: templates/registration/login.html:10
 #: templates/registration/registration_form.html:13
-#: templates/snippets/repo_create_form.html:17 thirdpart/auth/forms.py:19
-#: thirdpart/auth/forms.py:155 thirdpart/registration/forms.py:36
+#: templates/snippets/repo_create_form.html:17
+#: thirdpart/auth/forms.py:19
+#: thirdpart/auth/forms.py:155
+#: thirdpart/registration/forms.py:36
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
-#: base/accounts.py:358 thirdpart/auth/forms.py:156
+#: base/accounts.py:358
+#: thirdpart/auth/forms.py:156
 #: thirdpart/registration/forms.py:38
+#, fuzzy
 msgid "Password (again)"
-msgstr ""
+msgstr "Kennwort erneut eingeben:"
 
 #: base/accounts.py:370
 msgid "Invalid user id."
-msgstr ""
+msgstr "Ungültige Benutzer-ID"
 
 #: base/templatetags/seahub_tags.py:145
 msgid "Just now"
-msgstr ""
+msgstr "Gerade jetzt"
 
 #: base/templatetags/seahub_tags.py:154
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vor einem Tag"
+msgstr[1] "vor %(days)d Tagen"
 
 #: base/templatetags/seahub_tags.py:161
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vor einer Stunde"
+msgstr[1] "vor %(hours)d Stunden"
 
 #: base/templatetags/seahub_tags.py:168
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vor einer Minute"
+msgstr[1] "vor %(minutes)d Minuten"
 
 #: base/templatetags/seahub_tags.py:174
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vor einer Sekunde"
+msgstr[1] "vor %(seconds)d Sekunden"
 
 #: base/templatetags/seahub_tags.py:179
 msgid "0 second ago"
-msgstr ""
+msgstr "vor 0 Sekunden"
 
 #: base/templatetags/seahub_tags.py:254
-#: group/templates/group/group_info.html:89 organizations/views.py:719
+#: group/templates/group/group_info.html:89
+#: organizations/views.py:719
 #: organizations/templates/organizations/org_public.html:38
 #: organizations/templates/organizations/org_seafadmin.html:19
-#: share/views.py:224 share/templates/repo/share_admin.html:36
-#: share/templates/repo/share_admin.html:49 templates/public_home.html:34
-#: templates/sys_seafadmin.html:18 templates/userinfo.html:45
-#: templates/userinfo.html.py:70 templates/snippets/my_owned_repos.html:25
+#: share/views.py:224
+#: share/templates/repo/share_admin.html:36
+#: share/templates/repo/share_admin.html:49
+#: templates/public_home.html:34
+#: templates/sys_seafadmin.html:18
+#: templates/userinfo.html:45
+#: templates/userinfo.html.py:70
+#: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:67
 #: templates/snippets/repo_create_form.html:11
 #: templates/snippets/repo_share_form.html:7
 msgid "Read-Write"
-msgstr ""
+msgstr "Lesen & Schreiben"
 
-#: base/templatetags/seahub_tags.py:256 organizations/views.py:721
-#: organizations/templates/organizations/org_public.html:40 share/views.py:226
-#: share/templates/repo/share_admin.html:47 templates/public_home.html:36
+#: base/templatetags/seahub_tags.py:256
+#: organizations/views.py:721
+#: organizations/templates/organizations/org_public.html:40
+#: share/views.py:226
+#: share/templates/repo/share_admin.html:47
+#: templates/public_home.html:36
 #: templates/snippets/my_owned_repos.html:69
 #: templates/snippets/repo_create_form.html:12
 #: templates/snippets/repo_share_form.html:8
 msgid "Read-Only"
-msgstr ""
+msgstr "Nur Lesen"
 
-#: contacts/models.py:25 contacts/templates/contacts/contact_list.html:133
+#: contacts/models.py:25
+#: contacts/templates/contacts/contact_list.html:133
 msgid "Email is required."
-msgstr ""
+msgstr "E-Mail ist erforderlich"
 
-#: contacts/models.py:30 contacts/templates/contacts/contact_list.html:137
+#: contacts/models.py:30
+#: contacts/templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
-msgstr ""
+msgstr "Sie können sich nicht selbst hinzufügen."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
@@ -697,74 +745,79 @@ msgstr ""
 #: contacts/views.py:68
 #, python-format
 msgid "Successfully added %s to contacts."
-msgstr ""
+msgstr "%s erfolgrich zu den Kontakten hinzugefügt."
 
 #: contacts/views.py:93
 #, python-format
 msgid "Successfully added %s."
-msgstr ""
+msgstr "%s erfolgrich hinzugefügt."
 
 #: contacts/views.py:95
 msgid "Failed to add an contact."
-msgstr ""
+msgstr "Hinzufügen des Kontaktes fehlgeschlagen."
 
 #: contacts/views.py:120
 #, python-format
 msgid "Successfully edited %s."
-msgstr ""
+msgstr "%s erfolgrich editiert."
 
 #: contacts/views.py:133
 #, python-format
 msgid "Successfully Deleted %s"
-msgstr ""
+msgstr "%s erfolgrich gelöscht"
 
 #: contacts/templates/contacts/contact_list.html:8
 #: group/templates/group/groups_left_panel.html:3
 #: organizations/templates/organizations/org_groups.html:13
 #: organizations/templates/organizations/org_public.html:13
-#: share/templates/repo/share_admin.html:15 templates/public_home.html:9
+#: share/templates/repo/share_admin.html:15
+#: templates/public_home.html:9
 msgid "Tips"
-msgstr ""
+msgstr "Tips"
 
 #: contacts/templates/contacts/contact_list.html:9
-msgid ""
-"When you share libraries or file links to a friend, his/her email will be "
-"added to contacts."
+msgid "When you share libraries or file links to a friend, his/her email will be added to contacts."
 msgstr ""
 
 #: contacts/templates/contacts/contact_list.html:15
 #: templates/myhome_base.html:17
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakte"
 
 #: contacts/templates/contacts/contact_list.html:16
 #: contacts/templates/contacts/contact_list.html:47
 msgid "Add Contacts"
-msgstr ""
+msgstr "Kontakte hinzufügen"
 
 #: contacts/templates/contacts/contact_list.html:21
 msgid "Email "
-msgstr ""
+msgstr "_E-Mail"
 
 #: contacts/templates/contacts/contact_list.html:22
 #: group/templates/group/group_info.html:78
 #: organizations/templates/organizations/org_group_admin.html:11
 #: organizations/templates/organizations/org_public.html:28
 #: organizations/templates/organizations/org_seafadmin.html:12
-#: share/templates/repo/share_admin.html:28 templates/public_home.html:24
-#: templates/repo.html:111 templates/repo_history_view.html:52
-#: templates/repo_recycle_view.html:53 templates/sys_group_admin.html:11
-#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
-#: templates/userinfo.html:38 templates/userinfo.html.py:63
-#: templates/view_shared_dir.html:32 templates/snippets/my_owned_repos.html:18
+#: share/templates/repo/share_admin.html:28
+#: templates/public_home.html:24
+#: templates/repo.html:111
+#: templates/repo_history_view.html:52
+#: templates/repo_recycle_view.html:53
+#: templates/sys_group_admin.html:11
+#: templates/sys_org_admin.html:11
+#: templates/sys_seafadmin.html:11
+#: templates/userinfo.html:38
+#: templates/userinfo.html.py:63
+#: templates/view_shared_dir.html:32
+#: templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:56
 #: templates/snippets/repo_create_form.html:4
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: contacts/templates/contacts/contact_list.html:23
 msgid "Note"
-msgstr ""
+msgstr "Anmerkung"
 
 #: contacts/templates/contacts/contact_list.html:24
 #: group/templates/group/group_info.html:59
@@ -779,25 +832,34 @@ msgstr ""
 #: organizations/templates/organizations/org_public.html:32
 #: organizations/templates/organizations/org_seafadmin.html:15
 #: share/templates/repo/share_admin.html:32
-#: share/templates/repo/share_admin.html:86 templates/file_revisions.html:26
-#: templates/public_home.html:28 templates/repo.html:114
-#: templates/repo_recycle_view.html:56 templates/repo_view_snapshot.html:18
-#: templates/sys_group_admin.html:14 templates/sys_org_admin.html:15
-#: templates/sys_seafadmin.html:14 templates/sys_useradmin.html:6
-#: templates/sys_useradmin.html.py:18 templates/userinfo.html:40
-#: templates/view_shared_dir.html:34 templates/snippets/my_owned_repos.html:21
+#: share/templates/repo/share_admin.html:86
+#: templates/file_revisions.html:26
+#: templates/public_home.html:28
+#: templates/repo.html:114
+#: templates/repo_recycle_view.html:56
+#: templates/repo_view_snapshot.html:18
+#: templates/sys_group_admin.html:14
+#: templates/sys_org_admin.html:15
+#: templates/sys_seafadmin.html:14
+#: templates/sys_useradmin.html:6
+#: templates/sys_useradmin.html.py:18
+#: templates/userinfo.html:40
+#: templates/view_shared_dir.html:34
+#: templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:60
 msgid "Operations"
-msgstr ""
+msgstr "Operationen"
 
 #: contacts/templates/contacts/contact_list.html:33
 #: organizations/templates/organizations/personal.html:15
 #: organizations/templates/organizations/personal.html:18
-#: share/templates/repo/share_admin.html:42 templates/file_edit.html:76
-#: templates/file_view.html:76 templates/myhome.html:11
+#: share/templates/repo/share_admin.html:42
+#: templates/file_edit.html:76
+#: templates/file_view.html:76
+#: templates/myhome.html:11
 #: templates/myhome.html.py:14
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: contacts/templates/contacts/contact_list.html:34
 #: group/templates/group/group_info.html:174
@@ -807,22 +869,25 @@ msgstr ""
 #: organizations/templates/organizations/org_admin.html:34
 #: organizations/templates/organizations/org_group_admin.html:21
 #: organizations/templates/organizations/org_seafadmin.html:23
-#: templates/file_view.html:30 templates/repo.html:35
-#: templates/repo.html.py:145 templates/repo.html:193
-#: templates/sys_group_admin.html:21 templates/sys_org_admin.html:23
-#: templates/sys_seafadmin.html:22 templates/sys_useradmin.html:31
-#: templates/userinfo.html:49 templates/snippets/my_owned_repos.html:36
+#: templates/file_view.html:30
+#: templates/repo.html:35
+#: templates/repo.html.py:145
+#: templates/repo.html:193
+#: templates/sys_group_admin.html:21
+#: templates/sys_org_admin.html:23
+#: templates/sys_seafadmin.html:22
+#: templates/sys_useradmin.html:31
+#: templates/userinfo.html:49
+#: templates/snippets/my_owned_repos.html:36
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: contacts/templates/contacts/contact_list.html:41
 msgid "You don't have any contacts"
-msgstr ""
+msgstr "Sie haben keine Kontakte."
 
 #: contacts/templates/contacts/contact_list.html:42
-msgid ""
-"Add your contacts so you can quickly share libraries and send file shared "
-"link."
+msgid "Add your contacts so you can quickly share libraries and send file shared link."
 msgstr ""
 
 #: contacts/templates/contacts/contact_list.html:48
@@ -830,18 +895,19 @@ msgstr ""
 #: group/templates/group/group_manage.html:41
 #: group/templates/group/group_manage.html:65
 #: organizations/templates/organizations/org_admin.html:19
-#: templates/add_user_form.html:9 templates/sys_useradmin.html:16
+#: templates/add_user_form.html:9
+#: templates/sys_useradmin.html:16
 #: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
 #: templates/snippets/user_profile_html.html:28
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: contacts/templates/contacts/contact_list.html:50
 #: contacts/templates/contacts/contact_list.html:59
 #: templates/snippets/user_profile_html.html:30
 msgid "Name(optional)"
-msgstr ""
+msgstr "Name(optional)"
 
 #: contacts/templates/contacts/contact_list.html:51
 #: contacts/templates/contacts/contact_list.html:60
@@ -851,35 +917,38 @@ msgstr ""
 
 #: contacts/templates/contacts/contact_list.html:56
 msgid "Edit Contact"
-msgstr ""
+msgstr "Kontakt bearbeiten"
 
 #: contacts/templates/contacts/contact_list.html:107
 #: contacts/templates/contacts/contact_list.html:168
 msgid "Failed."
-msgstr ""
+msgstr "Fehlgeschlagen"
 
 #: contacts/templates/contacts/contact_list.html:115
 msgid "Delete Contact"
-msgstr ""
+msgstr "Kontakt löschen"
 
 #: contacts/templates/contacts/contact_list.html:115
 #: notifications/templates/notifications/notification_list.html:70
 #: organizations/templates/organizations/org_admin.html:99
 #: organizations/templates/organizations/org_group_admin.html:60
 #: organizations/templates/organizations/org_seafadmin.html:62
-#: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
-#: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:77
-#: templates/userinfo.html:133 templates/snippets/myhome_extra_script.html:38
+#: templates/sys_group_admin.html:60
+#: templates/sys_org_admin.html:61
+#: templates/sys_seafadmin.html:61
+#: templates/sys_useradmin.html:77
+#: templates/userinfo.html:133
+#: templates/snippets/myhome_extra_script.html:38
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Sind sie sicher, dass sie löschen möchten"
 
 #: group/error_msg.py:7
 msgid "The group has already created"
-msgstr ""
+msgstr "Die Gruppe existiert bereits"
 
 #: group/error_msg.py:8
 msgid "Failed to create group"
-msgstr ""
+msgstr "Erstellen er Gruppe fehlgeschlagen"
 
 #: group/error_msg.py:11
 msgid "The group has already created in this org."
@@ -893,13 +962,14 @@ msgstr ""
 msgid "Permission error: only group staff can add member"
 msgstr ""
 
-#: group/error_msg.py:16 group/error_msg.py:22
+#: group/error_msg.py:16
+#: group/error_msg.py:22
 msgid "Group not exists"
-msgstr ""
+msgstr "Gruppe existiert nicht"
 
 #: group/error_msg.py:17
 msgid "Group is full"
-msgstr ""
+msgstr "Gruppe ist voll"
 
 #: group/error_msg.py:18
 msgid "Failed to add member to group"
@@ -913,9 +983,10 @@ msgstr ""
 msgid "Can not remove myself"
 msgstr ""
 
-#: group/forms.py:28 templates/snippets/group_add_js.html:8
+#: group/forms.py:28
+#: templates/snippets/group_add_js.html:8
 msgid "Group name can't be empty"
-msgstr ""
+msgstr "Gruppenname darf nicht leer sein"
 
 #: group/forms.py:29
 msgid "Group name is too long (maximum is 255 characters)"
@@ -968,7 +1039,7 @@ msgstr ""
 
 #: group/views.py:511
 msgid "Failed to send mail."
-msgstr ""
+msgstr "Senden der E-Mail fehlgeschlagen."
 
 #: group/views.py:528
 #, python-format
@@ -984,25 +1055,28 @@ msgstr[1] ""
 
 #: group/views.py:550
 msgid "Successfully added."
-msgstr ""
+msgstr "Erfolgreich hinzugefügt."
 
 #: group/views.py:590
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr ""
 
-#: group/views.py:613 group/views.py:626 group/views.py:653
+#: group/views.py:613
+#: group/views.py:626
+#: group/views.py:653
 msgid "Operation succeeded."
-msgstr ""
+msgstr "Operation erfolgrich."
 
-#: group/views.py:643 share/views.py:169
+#: group/views.py:643
+#: share/views.py:169
 msgid "group id is not valid"
-msgstr ""
+msgstr "Gruppen ID ist ungültig"
 
 #: group/views.py:655
 #, python-format
 msgid "Failed：%s"
-msgstr ""
+msgstr "Fehlgeschlagen: %s"
 
 #: group/views.py:667
 msgid "Failed to share: the group doesn't exist."
@@ -1017,9 +1091,7 @@ msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
 
 #: group/views.py:685
-msgid ""
-"Operation failed: only administrators and the owner of the library can "
-"unshare it."
+msgid "Operation failed: only administrators and the owner of the library can unshare it."
 msgstr ""
 
 #: group/views.py:688
@@ -1037,9 +1109,7 @@ msgstr ""
 
 #: group/views.py:744
 #, python-format
-msgid ""
-"Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
-"a>."
+msgid "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a>."
 msgstr ""
 
 #: group/views.py:749
@@ -1054,11 +1124,14 @@ msgstr ""
 msgid "Failed to create: you are not in the group."
 msgstr ""
 
-#: group/views.py:790 group/views.py:818 organizations/views.py:473
+#: group/views.py:790
+#: group/views.py:818
+#: organizations/views.py:473
 msgid "Failed to create"
 msgstr ""
 
-#: group/views.py:804 group/views.py:831
+#: group/views.py:804
+#: group/views.py:831
 msgid "Failed to create: internal error."
 msgstr ""
 
@@ -1080,14 +1153,13 @@ msgstr ""
 
 #: group/templates/group/add_member_email.html:2
 #, python-format
-msgid ""
-"%(email)s invite you to join group %(group.group_name)s. Please go to the "
-"following page and sign up:"
+msgid "%(email)s invite you to join group %(group.group_name)s. Please go to the following page and sign up:"
 msgstr ""
 
 #: group/templates/group/add_member_email.html:5
 #: group/templates/group/group_join_email.html:6
-#: templates/shared_link_email.html:7 templates/user_add_email.html:14
+#: templates/shared_link_email.html:7
+#: templates/user_add_email.html:14
 #: templates/user_reset_email.html:6
 #: templates/registration/password_reset_email.html:10
 msgid "Thanks for using our site!"
@@ -1095,14 +1167,16 @@ msgstr ""
 
 #: group/templates/group/add_member_email.html:7
 #: group/templates/group/group_join_email.html:8
-#: templates/shared_link_email.html:9 templates/user_add_email.html:16
+#: templates/shared_link_email.html:9
+#: templates/user_add_email.html:16
 #: templates/user_reset_email.html:8
 #: templates/registration/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
 msgstr ""
 
-#: group/templates/group/group_info.html:14 templates/org_admin_base.html:8
+#: group/templates/group/group_info.html:14
+#: templates/org_admin_base.html:8
 msgid "Basic Info"
 msgstr ""
 
@@ -1128,7 +1202,7 @@ msgstr ""
 
 #: group/templates/group/group_info.html:35
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 #: group/templates/group/group_info.html:52
 msgid "You can click \"Add\" above to add members."
@@ -1140,16 +1214,19 @@ msgstr ""
 
 #: group/templates/group/group_info.html:64
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
-#: group/templates/group/group_info.html:72 templates/admin_base.html:8
-#: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
+#: group/templates/group/group_info.html:72
+#: templates/admin_base.html:8
+#: templates/org_admin_base.html:11
+#: templates/snippets/my_owned_repos.html:3
 msgid "Libraries"
 msgstr ""
 
 #: group/templates/group/group_info.html:73
 #: organizations/templates/organizations/org_public.html:23
-#: templates/public_home.html:19 templates/snippets/my_owned_repos.html:11
+#: templates/public_home.html:19
+#: templates/snippets/my_owned_repos.html:11
 #: templates/snippets/repo_create_form.html:3
 msgid "New Library"
 msgstr ""
@@ -1157,17 +1234,22 @@ msgstr ""
 #: group/templates/group/group_info.html:79
 #: organizations/templates/organizations/org_public.html:29
 #: organizations/templates/organizations/org_seafadmin.html:14
-#: share/templates/repo/share_admin.html:31 templates/public_home.html:25
-#: templates/repo_history.html:18 templates/sys_seafadmin.html:13
-#: templates/userinfo.html:39 templates/userinfo.html.py:65
+#: share/templates/repo/share_admin.html:31
+#: templates/public_home.html:25
+#: templates/repo_history.html:18
+#: templates/sys_seafadmin.html:13
+#: templates/userinfo.html:39
+#: templates/userinfo.html.py:65
 #: templates/snippets/my_owned_repos.html:19
 #: templates/snippets/my_owned_repos.html:57
 #: templates/snippets/repo_create_form.html:6
 msgid "Description"
 msgstr ""
 
-#: group/templates/group/group_info.html:80 templates/public_home.html:26
-#: templates/repo.html:113 templates/repo_history.html:16
+#: group/templates/group/group_info.html:80
+#: templates/public_home.html:26
+#: templates/repo.html:113
+#: templates/repo_history.html:16
 #: templates/snippets/my_owned_repos.html:20
 #: templates/snippets/my_owned_repos.html:58
 #: templates/snippets/my_owned_repos.html:103
@@ -1185,8 +1267,10 @@ msgstr ""
 #: organizations/templates/organizations/org_public.html:38
 #: organizations/templates/organizations/org_public.html:40
 #: organizations/templates/organizations/org_seafadmin.html:19
-#: share/templates/repo/share_admin.html:36 templates/sys_seafadmin.html:18
-#: templates/userinfo.html:45 templates/snippets/my_owned_repos.html:25
+#: share/templates/repo/share_admin.html:36
+#: templates/sys_seafadmin.html:18
+#: templates/userinfo.html:45
+#: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:67
 #: templates/snippets/my_owned_repos.html:69
 msgid "directory icon"
@@ -1194,10 +1278,15 @@ msgstr ""
 
 #: group/templates/group/group_info.html:105
 #: organizations/templates/organizations/org_public.html:52
-#: templates/file_revisions.html:52 templates/file_view.html:84
-#: templates/history_file_view.html:66 templates/public_home.html:48
-#: templates/repo.html:22 templates/repo.html.py:137 templates/repo.html:182
-#: templates/shared_file_view.html:35 templates/view_shared_dir.html:48
+#: templates/file_revisions.html:52
+#: templates/file_view.html:84
+#: templates/history_file_view.html:66
+#: templates/public_home.html:48
+#: templates/repo.html:22
+#: templates/repo.html.py:137
+#: templates/repo.html:182
+#: templates/shared_file_view.html:35
+#: templates/view_shared_dir.html:48
 #: templates/view_shared_dir.html.py:66
 #: templates/snippets/my_owned_repos.html:34
 #: templates/snippets/my_owned_repos.html:81
@@ -1262,21 +1351,27 @@ msgstr ""
 #: organizations/templates/organizations/org_admin.html:43
 #: organizations/templates/organizations/org_group_admin.html:28
 #: organizations/templates/organizations/org_seafadmin.html:30
-#: templates/repo_history.html:47 templates/repo_view_snapshot.html:51
-#: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
-#: templates/sys_useradmin.html:41 templates/snippets/file_content_js.html:110
+#: templates/repo_history.html:47
+#: templates/repo_view_snapshot.html:51
+#: templates/sys_group_admin.html:28
+#: templates/sys_seafadmin.html:29
+#: templates/sys_useradmin.html:41
+#: templates/snippets/file_content_js.html:110
 msgid "Previous"
-msgstr ""
+msgstr "Vorheriges"
 
 #: group/templates/group/group_info.html:189
 #: organizations/templates/organizations/org_admin.html:46
 #: organizations/templates/organizations/org_group_admin.html:31
 #: organizations/templates/organizations/org_seafadmin.html:33
-#: templates/repo_history.html:50 templates/repo_view_snapshot.html:54
-#: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
-#: templates/sys_useradmin.html:44 templates/snippets/file_content_js.html:110
+#: templates/repo_history.html:50
+#: templates/repo_view_snapshot.html:54
+#: templates/sys_group_admin.html:31
+#: templates/sys_seafadmin.html:32
+#: templates/sys_useradmin.html:44
+#: templates/snippets/file_content_js.html:110
 msgid "Next"
-msgstr ""
+msgstr "Nächstes"
 
 #: group/templates/group/group_info.html:202
 msgid "Quit Group"
@@ -1298,13 +1393,15 @@ msgstr ""
 msgid "Really want to delete this message?"
 msgstr ""
 
-#: group/templates/group/group_info.html:236 templates/base.html:116
+#: group/templates/group/group_info.html:236
+#: templates/base.html:116
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
-#: group/templates/group/group_info.html:236 templates/base.html:117
+#: group/templates/group/group_info.html:236
+#: templates/base.html:117
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: group/templates/group/group_info.html:248
 msgid "Successfully deleted"
@@ -1320,9 +1417,7 @@ msgstr ""
 
 #: group/templates/group/group_join_email.html:2
 #, python-format
-msgid ""
-"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
-"message: "
+msgid "%(user)s want to join to Group \"%(group_name)s\", here is the verification message: "
 msgstr ""
 
 #: group/templates/group/group_manage.html:8
@@ -1336,7 +1431,7 @@ msgstr ""
 #: group/templates/group/group_manage.html:17
 #: profile/templates/profile/set_profile.html:11
 msgid "Change"
-msgstr ""
+msgstr "Ändern"
 
 #: group/templates/group/group_manage.html:27
 msgid "Dismiss"
@@ -1344,7 +1439,7 @@ msgstr ""
 
 #: group/templates/group/group_manage.html:28
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: group/templates/group/group_manage.html:36
 #: organizations/templates/organizations/org_admin.html:16
@@ -1408,8 +1503,7 @@ msgid "It can not be blank and should be no more than 150 characters."
 msgstr ""
 
 #: group/templates/group/groups_left_panel.html:5
-msgid ""
-"After creating a group, you can add members and share libraries into it."
+msgid "After creating a group, you can add members and share libraries into it."
 msgstr ""
 
 #: group/templates/group/groups_left_panel.html:7
@@ -1437,9 +1531,7 @@ msgid "You are not in any groups"
 msgstr ""
 
 #: group/templates/group/groups_right_panel.html:26
-msgid ""
-"You can create a group by clicking \"New Group\" button. Group is a place "
-"for you and your friends leaving messages and collaborating on libraries."
+msgid "You can create a group by clicking \"New Group\" button. Group is a place for you and your friends leaving messages and collaborating on libraries."
 msgstr ""
 
 #: group/templates/group/groups_right_panel.html:31
@@ -1495,7 +1587,8 @@ msgstr ""
 #: organizations/templates/organizations/org_group_admin.html:54
 #: organizations/templates/organizations/org_pubinfo.html:20
 #: organizations/templates/organizations/org_seafadmin.html:56
-#: templates/repo_history.html:30 templates/repo_view_snapshot.html:30
+#: templates/repo_history.html:30
+#: templates/repo_view_snapshot.html:30
 msgid "None"
 msgstr ""
 
@@ -1526,9 +1619,12 @@ msgid "Set to current"
 msgstr ""
 
 #: notifications/templates/notifications/notification_list.html:64
-#: templates/pubinfo.html:16 templates/sys_group_admin.html:54
-#: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
-#: templates/userinfo.html:55 templates/userinfo.html.py:78
+#: templates/pubinfo.html:16
+#: templates/sys_group_admin.html:54
+#: templates/sys_org_admin.html:55
+#: templates/sys_seafadmin.html:55
+#: templates/userinfo.html:55
+#: templates/userinfo.html.py:78
 msgid "Empty"
 msgstr ""
 
@@ -1570,9 +1666,7 @@ msgstr ""
 
 #: organizations/views.py:428
 #, python-format
-msgid ""
-"%(from_email)s added you to Organization <a href=\"%(org_url)s\">"
-"%(org_name)s</a>"
+msgid "%(from_email)s added you to Organization <a href=\"%(org_url)s\">%(org_name)s</a>"
 msgstr ""
 
 #: organizations/views.py:467
@@ -1587,25 +1681,24 @@ msgstr ""
 msgid "Only the owner of this library has permission to share it."
 msgstr ""
 
-#: organizations/views.py:621 share/views.py:80
+#: organizations/views.py:621
+#: share/views.py:80
 msgid "Failed to share to all members"
 msgstr ""
 
 #: organizations/views.py:625
 #, python-format
-msgid ""
-"Shared to all members successfully, you can go check it at <a href=\"%s"
-"\">Share</a>."
+msgid "Shared to all members successfully, you can go check it at <a href=\"%s\">Share</a>."
 msgstr ""
 
 #: organizations/views.py:646
 #, python-format
-msgid ""
-"Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
-"\">Share</a>."
+msgid "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s\">Share</a>."
 msgstr ""
 
-#: organizations/views.py:652 organizations/views.py:671 share/views.py:328
+#: organizations/views.py:652
+#: organizations/views.py:671
+#: share/views.py:328
 #: share/views.py:350
 #, python-format
 msgid "Failed to share to %s."
@@ -1618,12 +1711,11 @@ msgstr ""
 
 #: organizations/views.py:666
 #, python-format
-msgid ""
-"Shared to %(share_to)s successfully，you can go check it at <a href="
-"\"%(share)s\">Share</a>."
+msgid "Shared to %(share_to)s successfully，you can go check it at <a href=\"%(share)s\">Share</a>."
 msgstr ""
 
-#: organizations/views.py:713 share/views.py:218
+#: organizations/views.py:713
+#: share/views.py:218
 msgid "all members"
 msgstr ""
 
@@ -1659,8 +1751,10 @@ msgstr ""
 #: organizations/templates/organizations/org_admin.html:51
 #: organizations/templates/organizations/org_group_admin.html:36
 #: organizations/templates/organizations/org_seafadmin.html:38
-#: templates/repo_history.html:55 templates/repo_view_snapshot.html:56
-#: templates/sys_group_admin.html:36 templates/sys_seafadmin.html:37
+#: templates/repo_history.html:55
+#: templates/repo_view_snapshot.html:56
+#: templates/sys_group_admin.html:36
+#: templates/sys_seafadmin.html:37
 #: templates/sys_useradmin.html:49
 msgid "Per page: "
 msgstr ""
@@ -1679,14 +1773,18 @@ msgstr ""
 
 #: organizations/templates/organizations/org_group_admin.html:7
 #: organizations/templates/organizations/org_pubinfo.html:26
-#: templates/admin_base.html:14 templates/myhome_base.html:11
-#: templates/org_admin_base.html:14 templates/org_base.html:12
-#: templates/pubinfo.html:22 thirdpart/auth/admin.py:32
+#: templates/admin_base.html:14
+#: templates/myhome_base.html:11
+#: templates/org_admin_base.html:14
+#: templates/org_base.html:12
+#: templates/pubinfo.html:22
+#: thirdpart/auth/admin.py:32
 msgid "Groups"
 msgstr ""
 
 #: organizations/templates/organizations/org_group_admin.html:12
-#: templates/sys_group_admin.html:12 templates/sys_org_admin.html:13
+#: templates/sys_group_admin.html:12
+#: templates/sys_org_admin.html:13
 msgid "Creator"
 msgstr ""
 
@@ -1714,8 +1812,7 @@ msgstr ""
 
 #: organizations/templates/organizations/org_pubinfo.html:46
 #: templates/pubinfo.html:42
-msgid ""
-"You can click \"Add Group\" button under \"Group\" label to create a group. "
+msgid "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr ""
 
 #: organizations/templates/organizations/org_public.html:15
@@ -1725,9 +1822,7 @@ msgstr ""
 
 #: organizations/templates/organizations/org_public.html:16
 #: templates/public_home.html:12
-msgid ""
-"Afterwards, updates on server will be downloaded automatically, but updates "
-"on local files will not be uploaded."
+msgid "Afterwards, updates on server will be downloaded automatically, but updates on local files will not be uploaded."
 msgstr ""
 
 #: organizations/templates/organizations/org_public.html:22
@@ -1746,9 +1841,7 @@ msgstr ""
 
 #: organizations/templates/organizations/org_public.html:60
 #: templates/public_home.html:56
-msgid ""
-"You can create a public library by clicking \"New Library\" button, others "
-"can view and download this library."
+msgid "You can create a public library by clicking \"New Library\" button, others can view and download this library."
 msgstr ""
 
 #: organizations/templates/organizations/org_seafadmin.html:7
@@ -1762,7 +1855,8 @@ msgid "Owner"
 msgstr ""
 
 #: organizations/templates/organizations/org_seafadmin.html:62
-#: templates/sys_seafadmin.html:61 templates/userinfo.html:133
+#: templates/sys_seafadmin.html:61
+#: templates/userinfo.html:133
 #: templates/snippets/myhome_extra_script.html:38
 msgid "Delete Library"
 msgstr ""
@@ -1811,12 +1905,14 @@ msgstr ""
 msgid "Failed to edit profile"
 msgstr ""
 
-#: profile/views.py:80 profile/views.py:119
+#: profile/views.py:80
+#: profile/views.py:119
 msgid "Has not accepted invitation yet"
 msgstr ""
 
 #: profile/templates/profile/profile_base.html:4
-#: profile/templates/profile/set_profile.html:7 templates/base.html:63
+#: profile/templates/profile/set_profile.html:7
+#: templates/base.html:63
 msgid "Profile Setting"
 msgstr ""
 
@@ -1828,7 +1924,8 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
-#: profile/templates/profile/set_profile.html:17 templates/repo.html:184
+#: profile/templates/profile/set_profile.html:17
+#: templates/repo.html:184
 #: templates/repo.html.py:245
 msgid "Update"
 msgstr ""
@@ -1868,15 +1965,12 @@ msgstr ""
 
 #: share/views.py:84
 #, python-format
-msgid ""
-"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
+msgid "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
 
 #: share/views.py:104
 #, python-format
-msgid ""
-"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
+msgid "Shared to %(group)s successfully，go check it at <a href=\"%(share)s\">Share</a>."
 msgstr ""
 
 #: share/views.py:110
@@ -1896,12 +1990,11 @@ msgstr ""
 
 #: share/views.py:139
 #, python-format
-msgid ""
-"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
+msgid "Shared to %(email)s successfully，go check it at <a href=\"%(share)s\">Share</a>."
 msgstr ""
 
-#: share/views.py:163 share/views.py:173
+#: share/views.py:163
+#: share/views.py:173
 msgid "Failed to remove share"
 msgstr ""
 
@@ -1911,9 +2004,7 @@ msgstr ""
 
 #: share/views.py:313
 #, python-format
-msgid ""
-"Failed to share to %s, as encrypted libraries cannot be shared to emails "
-"outside the site."
+msgid "Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site."
 msgstr ""
 
 #: share/views.py:346
@@ -1922,9 +2013,7 @@ msgstr ""
 
 #: share/views.py:353
 #, python-format
-msgid ""
-"Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
-"\">Share</a>."
+msgid "Shared to %(email)s successfully, go check it at <a href=\"%(share)s\">Share</a>."
 msgstr ""
 
 #: share/views.py:378
@@ -1948,9 +2037,7 @@ msgid "Deleted successfully"
 msgstr ""
 
 #: share/views.py:476
-msgid ""
-"Sending shared link failed. Email service is not properly configured, please "
-"contact administrator."
+msgid "Sending shared link failed. Email service is not properly configured, please contact administrator."
 msgstr ""
 
 #: share/views.py:501
@@ -1966,9 +2053,7 @@ msgid "Successfully sent."
 msgstr ""
 
 #: share/templates/repo/share_admin.html:17
-msgid ""
-"If you don't want others to change the contents of your shared libraries, "
-"you can set the share permission to \"read-only\" when sharing them."
+msgid "If you don't want others to change the contents of your shared libraries, you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
 
 #: share/templates/repo/share_admin.html:23
@@ -1988,10 +2073,7 @@ msgid "You have not shared any library"
 msgstr ""
 
 #: share/templates/repo/share_admin.html:75
-msgid ""
-"You can share libraries to your friends and colleagues by clicking the share "
-"icon of your own libraries in your home page or creating a new library in "
-"groups you are in."
+msgid "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in."
 msgstr ""
 
 #: share/templates/repo/share_admin.html:79
@@ -2002,8 +2084,10 @@ msgstr ""
 msgid "File or Folder"
 msgstr ""
 
-#: share/templates/repo/share_admin.html:84 templates/file_edit.html:121
-#: templates/snippets/events.html:8 templates/snippets/my_owned_repos.html:102
+#: share/templates/repo/share_admin.html:84
+#: templates/file_edit.html:121
+#: templates/snippets/events.html:8
+#: templates/snippets/my_owned_repos.html:102
 msgid "Library"
 msgstr ""
 
@@ -2011,7 +2095,8 @@ msgstr ""
 msgid "Visits"
 msgstr ""
 
-#: share/templates/repo/share_admin.html:98 templates/file_revisions.html:53
+#: share/templates/repo/share_admin.html:98
+#: templates/file_revisions.html:53
 #: templates/repo_view_snapshot.html:43
 msgid "View"
 msgstr ""
@@ -2025,9 +2110,7 @@ msgid "You don't have any shared link"
 msgstr ""
 
 #: share/templates/repo/share_admin.html:108
-msgid ""
-"You can share a folder or a file when you view a library, or share a file "
-"when you view it."
+msgid "You can share a folder or a file when you view a library, or share a file when you view it."
 msgstr ""
 
 #: share/templates/repo/share_admin.html:152
@@ -2042,7 +2125,8 @@ msgstr ""
 msgid "Sorry, but the requested page could not be found."
 msgstr ""
 
-#: templates/add_user_form.html:3 templates/add_user_form.html.py:7
+#: templates/add_user_form.html:3
+#: templates/add_user_form.html.py:7
 msgid "Add User"
 msgstr ""
 
@@ -2051,12 +2135,14 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: templates/add_user_form.html:26 templates/registration/login.html:28
+#: templates/add_user_form.html:26
+#: templates/registration/login.html:28
 #: templates/registration/registration_form.html:28
 msgid "Email cannot be blank"
 msgstr ""
 
-#: templates/add_user_form.html:30 templates/registration/login.html:32
+#: templates/add_user_form.html:30
+#: templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
 msgid "Password cannot be blank"
 msgstr ""
@@ -2071,7 +2157,8 @@ msgstr ""
 msgid "The two password fields not match"
 msgstr ""
 
-#: templates/admin_base.html:11 templates/pubinfo.html:8
+#: templates/admin_base.html:11
+#: templates/pubinfo.html:8
 msgid "Users"
 msgstr ""
 
@@ -2087,7 +2174,9 @@ msgstr ""
 msgid "File Collaboration Team Organization"
 msgstr ""
 
-#: templates/base.html:37 templates/base.html.py:41 templates/org_base.html:9
+#: templates/base.html:37
+#: templates/base.html.py:41
+#: templates/org_base.html:9
 msgid "Personal"
 msgstr ""
 
@@ -2099,7 +2188,8 @@ msgstr ""
 msgid "System Admin"
 msgstr ""
 
-#: templates/base.html:52 templates/base.html.py:57
+#: templates/base.html:52
+#: templates/base.html.py:57
 msgid "Workspace"
 msgstr ""
 
@@ -2111,13 +2201,15 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: templates/base.html:66 templates/registration/login.html:3
+#: templates/base.html:66
+#: templates/registration/login.html:3
 #: templates/registration/login.html:6
 #: templates/registration/password_reset_complete.html:8
 msgid "Log In"
 msgstr ""
 
-#: templates/base.html:68 templates/registration/registration_form.html:9
+#: templates/base.html:68
+#: templates/registration/registration_form.html:9
 msgid "Signup"
 msgstr ""
 
@@ -2158,18 +2250,19 @@ msgid "Contact Us"
 msgstr ""
 
 #: templates/decrypt_repo_form.html:9
-msgid ""
-"This library is encrypted. Please input the password if you want to browse "
-"it online. And the password will be kept on the server for only 1 hour."
+msgid "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
 msgstr ""
 
-#: templates/file_edit.html:79 templates/repo.html:87
-#: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
-#: templates/shared_file_view.html:18 templates/view_shared_dir.html:16
+#: templates/file_edit.html:79
+#: templates/repo.html:87
+#: templates/repo_history_view.html:38
+#: templates/repo_recycle_view.html:16
+#: templates/shared_file_view.html:18
+#: templates/view_shared_dir.html:16
 msgid "Current path: "
 msgstr ""
 
@@ -2181,23 +2274,31 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: templates/file_edit.html:94 templates/file_edit.html.py:127
-#: templates/repo.html:229 templates/repo.html.py:251 templates/repo.html:268
-#: templates/repo.html.py:280 templates/repo.html:296
-#: templates/repo.html.py:317 templates/repo.html:329
+#: templates/file_edit.html:94
+#: templates/file_edit.html.py:127
+#: templates/repo.html:229
+#: templates/repo.html.py:251
+#: templates/repo.html:268
+#: templates/repo.html.py:280
+#: templates/repo.html:296
+#: templates/repo.html.py:317
+#: templates/repo.html:329
 #: templates/snippets/events.html:15
 msgid "Cancel"
 msgstr ""
 
-#: templates/file_edit.html:121 templates/snippets/events.html:8
+#: templates/file_edit.html:121
+#: templates/snippets/events.html:8
 msgid "is encrypted"
 msgstr ""
 
-#: templates/file_edit.html:122 templates/snippets/events.html:10
+#: templates/file_edit.html:122
+#: templates/snippets/events.html:10
 msgid "Password："
 msgstr ""
 
-#: templates/file_edit.html:124 templates/snippets/events.html:12
+#: templates/file_edit.html:124
+#: templates/snippets/events.html:12
 msgid "The password will be kept in the server for only 1 hour."
 msgstr ""
 
@@ -2209,7 +2310,8 @@ msgstr ""
 msgid "Submit failed."
 msgstr ""
 
-#: templates/file_edit.html:261 templates/snippets/events_js.html:67
+#: templates/file_edit.html:261
+#: templates/snippets/events_js.html:67
 msgid "Password is required."
 msgstr ""
 
@@ -2217,10 +2319,14 @@ msgstr ""
 msgid "Password should be 3 to 15 characters."
 msgstr ""
 
-#: templates/file_edit.html:292 templates/file_view.html:198
-#: templates/file_view.html.py:364 templates/repo.html:411
-#: templates/repo.html.py:649 templates/repo.html:686
-#: templates/repo.html.py:829 templates/snippets/events_js.html:91
+#: templates/file_edit.html:292
+#: templates/file_view.html:198
+#: templates/file_view.html.py:364
+#: templates/repo.html:411
+#: templates/repo.html.py:649
+#: templates/repo.html:686
+#: templates/repo.html.py:829
+#: templates/snippets/events_js.html:91
 #: templates/snippets/file_content_js.html:97
 #: templates/snippets/shared_link_js.html:41
 #: templates/snippets/shared_link_js.html:60
@@ -2233,12 +2339,11 @@ msgid "'s Version History"
 msgstr ""
 
 #: templates/file_revisions.html:7
-msgid ""
-"Tip:a new version will be generated after each modification, and you can "
-"restore the file to a previous version."
+msgid "Tip:a new version will be generated after each modification, and you can restore the file to a previous version."
 msgstr ""
 
-#: templates/file_revisions.html:10 templates/text_diff.html:8
+#: templates/file_revisions.html:10
+#: templates/text_diff.html:8
 msgid "Current Path:"
 msgstr ""
 
@@ -2246,12 +2351,15 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: templates/file_revisions.html:24 templates/repo_view_snapshot.html:16
+#: templates/file_revisions.html:24
+#: templates/repo_view_snapshot.html:16
 msgid "Last Modifier"
 msgstr ""
 
-#: templates/file_revisions.html:25 templates/repo.html:112
-#: templates/repo_history_view.html:53 templates/repo_recycle_view.html:55
+#: templates/file_revisions.html:25
+#: templates/repo.html:112
+#: templates/repo_history_view.html:53
+#: templates/repo_recycle_view.html:55
 #: templates/view_shared_dir.html:33
 msgid "Size"
 msgstr ""
@@ -2260,43 +2368,54 @@ msgstr ""
 msgid "(current version)"
 msgstr ""
 
-#: templates/file_revisions.html:43 templates/repo.html:70
-#: templates/repo_history.html:33 templates/repo_history_view.html:21
+#: templates/file_revisions.html:43
+#: templates/repo.html:70
+#: templates/repo_history.html:33
+#: templates/repo_history_view.html:21
 #: templates/repo_view_snapshot.html:33
 msgid "Unknown"
 msgstr ""
 
-#: templates/file_revisions.html:50 templates/repo_recycle_view.html:66
-#: templates/repo_recycle_view.html:83 templates/repo_view_snapshot.html:44
+#: templates/file_revisions.html:50
+#: templates/repo_recycle_view.html:66
+#: templates/repo_recycle_view.html:83
+#: templates/repo_view_snapshot.html:44
 msgid "Restore"
 msgstr ""
 
-#: templates/file_view.html:16 templates/history_file_view.html:38
+#: templates/file_view.html:16
+#: templates/history_file_view.html:38
 msgid "Current Path: "
 msgstr ""
 
-#: templates/file_view.html:28 templates/repo.html:33
+#: templates/file_view.html:28
+#: templates/repo.html:33
 msgid "Share link"
 msgstr ""
 
-#: templates/file_view.html:29 templates/repo.html:34
+#: templates/file_view.html:29
+#: templates/repo.html:34
 #: templates/repo.html.py:335
 msgid "Send"
 msgstr ""
 
-#: templates/file_view.html:32 templates/file_view.html.py:189
+#: templates/file_view.html:32
+#: templates/file_view.html.py:189
 msgid "Unstar"
 msgstr ""
 
-#: templates/file_view.html:34 templates/file_view.html.py:186
+#: templates/file_view.html:34
+#: templates/file_view.html.py:186
 msgid "Star"
 msgstr ""
 
-#: templates/file_view.html:51 templates/file_view.html.py:55
+#: templates/file_view.html:51
+#: templates/file_view.html.py:55
 msgid "updated this file"
 msgstr ""
 
-#: templates/file_view.html:51 templates/repo_view_snapshot.html:17
+#: templates/file_view.html:51
+#: templates/repo_view_snapshot.html:17
 msgid "Detail"
 msgstr ""
 
@@ -2307,8 +2426,10 @@ msgid_plural " %(counter)s contributors "
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/file_view.html:66 templates/repo.html:57
-#: templates/repo.html.py:197 templates/repo.html:260
+#: templates/file_view.html:66
+#: templates/repo.html:57
+#: templates/repo.html.py:197
+#: templates/repo.html:260
 msgid "History"
 msgstr ""
 
@@ -2316,20 +2437,24 @@ msgstr ""
 msgid "Open local file"
 msgstr ""
 
-#: templates/file_view.html:82 templates/history_file_view.html:64
+#: templates/file_view.html:82
+#: templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
 msgid "Raw"
 msgstr ""
 
-#: templates/file_view.html:91 templates/repo.html:337
+#: templates/file_view.html:91
+#: templates/repo.html:337
 msgid "Send to:"
 msgstr ""
 
-#: templates/file_view.html:92 templates/repo.html:338
+#: templates/file_view.html:92
+#: templates/repo.html:338
 msgid "Emails, Seperated by ','"
 msgstr ""
 
-#: templates/file_view.html:96 templates/repo.html:342
+#: templates/file_view.html:96
+#: templates/repo.html:342
 msgid "Sending..."
 msgstr ""
 
@@ -2362,8 +2487,7 @@ msgid "Starred successfully"
 msgstr ""
 
 #: templates/file_view.html:228
-msgid ""
-"Failed to find an application to open the file. Seafile will open the folder."
+msgid "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
 
 #: templates/file_view.html:232
@@ -2379,15 +2503,11 @@ msgid "An error occurred when open the local file."
 msgstr ""
 
 #: templates/file_view.html:266
-msgid ""
-"You are running an old version of Seafile client, please <a target=\"_blank"
-"\">upgrade</a> it."
+msgid "You are running an old version of Seafile client, please <a target=\"_blank\">upgrade</a> it."
 msgstr ""
 
 #: templates/file_view.html:280
-msgid ""
-"No running Seafile client is detected. If you are sure Seafile client is "
-"running, click the following link to open the local file:"
+msgid "No running Seafile client is detected. If you are sure Seafile client is running, click the following link to open the local file:"
 msgstr ""
 
 #: templates/file_view.html:296
@@ -2398,7 +2518,8 @@ msgstr ""
 msgid "Please input a message."
 msgstr ""
 
-#: templates/history_file_view.html:16 templates/repo_view_snapshot.html:7
+#: templates/history_file_view.html:16
+#: templates/repo_view_snapshot.html:7
 msgid "snapshots"
 msgstr ""
 
@@ -2410,12 +2531,15 @@ msgstr ""
 msgid "Back to file versions"
 msgstr ""
 
-#: templates/history_file_view.html:30 templates/history_file_view.html:41
-#: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
+#: templates/history_file_view.html:30
+#: templates/history_file_view.html:41
+#: templates/repo_recycle_view.html:8
+#: templates/repo_recycle_view.html:17
 msgid "'s trash"
 msgstr ""
 
-#: templates/history_file_view.html:31 templates/repo_history.html:8
+#: templates/history_file_view.html:31
+#: templates/repo_history.html:8
 #: templates/repo_recycle_view.html:9
 msgid "Back to Library"
 msgstr ""
@@ -2470,28 +2594,32 @@ msgstr ""
 msgid "My Home"
 msgstr ""
 
-#: templates/myhome_base.html:14 templates/org_base.html:15
-#: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
+#: templates/myhome_base.html:14
+#: templates/org_base.html:15
+#: templates/repo.html:139
+#: templates/repo.html.py:186
+#: templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr ""
 
-#: templates/myhome_base.html:21 templates/org_base.html:18
+#: templates/myhome_base.html:21
+#: templates/org_base.html:18
 msgid "Public Library"
 msgstr ""
 
-#: templates/myhome_base.html:24 templates/org_base.html:21
+#: templates/myhome_base.html:24
+#: templates/org_base.html:21
 msgid "Public Info"
 msgstr ""
 
-#: templates/public_home.html:27 templates/userinfo.html:64
+#: templates/public_home.html:27
+#: templates/userinfo.html:64
 msgid "Share From"
 msgstr ""
 
 #: templates/repo.html:11
-msgid ""
-"This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
-"\" target=\"_blank\">Seafile</a> to experience more."
+msgid "This page will be invalid shortly, you can join <a href=\"http://seafile.com/\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
 
 #: templates/repo.html:25
@@ -2510,9 +2638,13 @@ msgstr ""
 msgid "Size: "
 msgstr ""
 
-#: templates/repo.html:54 templates/repo.html.py:287 templates/repo.html:288
-#: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
-#: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
+#: templates/repo.html:54
+#: templates/repo.html.py:287
+#: templates/repo.html:288
+#: templates/repo_history.html:39
+#: templates/repo_view_snapshot.html:39
+#: templates/snippets/events_.html:19
+#: templates/snippets/events_.html.py:21
 msgid "Details"
 msgstr ""
 
@@ -2524,27 +2656,33 @@ msgstr ""
 msgid "You can't access this library."
 msgstr ""
 
-#: templates/repo.html:98 templates/view_shared_dir.html:26
+#: templates/repo.html:98
+#: templates/view_shared_dir.html:26
 msgid "ZIP"
 msgstr ""
 
-#: templates/repo.html:101 templates/repo.html.py:224
+#: templates/repo.html:101
+#: templates/repo.html.py:224
 msgid "Upload"
 msgstr ""
 
-#: templates/repo.html:102 templates/repo.html.py:273
+#: templates/repo.html:102
+#: templates/repo.html.py:273
 msgid "New Directory"
 msgstr ""
 
-#: templates/repo.html:103 templates/repo.html.py:284
+#: templates/repo.html:103
+#: templates/repo.html.py:284
 msgid "New File"
 msgstr ""
 
-#: templates/repo.html:120 templates/view_shared_dir.html:39
+#: templates/repo.html:120
+#: templates/view_shared_dir.html:39
 msgid "Directory icon"
 msgstr ""
 
-#: templates/repo.html:130 templates/repo.html.py:176
+#: templates/repo.html:130
+#: templates/repo.html.py:176
 msgid "Fetch failed"
 msgstr ""
 
@@ -2552,28 +2690,36 @@ msgstr ""
 msgid "More operations"
 msgstr ""
 
-#: templates/repo.html:146 templates/repo.html.py:194
+#: templates/repo.html:146
+#: templates/repo.html.py:194
 msgid "Rename"
 msgstr ""
 
-#: templates/repo.html:147 templates/repo.html.py:195
+#: templates/repo.html:147
+#: templates/repo.html.py:195
 msgid "Move"
 msgstr ""
 
-#: templates/repo.html:148 templates/repo.html.py:196
+#: templates/repo.html:148
+#: templates/repo.html.py:196
 msgid "Copy"
 msgstr ""
 
-#: templates/repo.html:161 templates/repo.html.py:641
+#: templates/repo.html:161
+#: templates/repo.html.py:641
 msgid "starred"
 msgstr ""
 
-#: templates/repo.html:163 templates/repo.html.py:639
+#: templates/repo.html:163
+#: templates/repo.html.py:639
 msgid "unstarred"
 msgstr ""
 
-#: templates/repo.html:166 templates/repo.html.py:573 templates/repo.html:597
-#: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
+#: templates/repo.html:166
+#: templates/repo.html.py:573
+#: templates/repo.html:597
+#: templates/repo_history_view.html:66
+#: templates/repo_recycle_view.html:78
 #: templates/view_shared_dir.html:57
 msgid "File"
 msgstr ""
@@ -2586,7 +2732,8 @@ msgstr ""
 msgid "Upload Files"
 msgstr ""
 
-#: templates/repo.html:213 templates/repo.html.py:238
+#: templates/repo.html:213
+#: templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
 msgstr ""
 
@@ -2598,7 +2745,8 @@ msgstr ""
 msgid "smaller than"
 msgstr ""
 
-#: templates/repo.html:227 templates/repo.html.py:249
+#: templates/repo.html:227
+#: templates/repo.html.py:249
 msgid "Uploaded:"
 msgstr ""
 
@@ -2646,7 +2794,8 @@ msgstr ""
 msgid "Featured File Type"
 msgstr ""
 
-#: templates/repo.html:287 templates/repo.html.py:288
+#: templates/repo.html:287
+#: templates/repo.html.py:288
 msgid "Click to choose"
 msgstr ""
 
@@ -2658,7 +2807,8 @@ msgstr ""
 msgid "simple markup format."
 msgstr ""
 
-#: templates/repo.html:290 templates/snippets/my_owned_repos.html:101
+#: templates/repo.html:290
+#: templates/snippets/my_owned_repos.html:101
 msgid "File Name"
 msgstr ""
 
@@ -2691,11 +2841,15 @@ msgid "Click to remove"
 msgstr ""
 
 #: templates/repo.html:430
-msgid "This file has already been selected:\\n$file!"
+msgid ""
+"This file has already been selected:\\n"
+"$file!"
 msgstr ""
 
-#: templates/repo.html:573 templates/repo.html.py:600
-#: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
+#: templates/repo.html:573
+#: templates/repo.html.py:600
+#: templates/repo_history_view.html:58
+#: templates/repo_recycle_view.html:61
 msgid "Directory"
 msgstr ""
 
@@ -2711,7 +2865,9 @@ msgstr ""
 msgid "to:"
 msgstr ""
 
-#: templates/repo.html:783 templates/repo.html.py:795 templates/repo.html:803
+#: templates/repo.html:783
+#: templates/repo.html.py:795
+#: templates/repo.html:803
 msgid "It can't be blank."
 msgstr ""
 
@@ -2724,9 +2880,7 @@ msgid "modification history"
 msgstr ""
 
 #: templates/repo_history.html:11
-msgid ""
-"Tip: A snapshot will be generated after modification, which records the "
-"library state before this modification."
+msgid "Tip: A snapshot will be generated after modification, which records the library state before this modification."
 msgstr ""
 
 #: templates/repo_history.html:11
@@ -2749,15 +2903,18 @@ msgstr ""
 msgid "Can't view this library"
 msgstr ""
 
-#: templates/repo_recycle_view.html:32 templates/repo_recycle_view.html:34
+#: templates/repo_recycle_view.html:32
+#: templates/repo_recycle_view.html:34
 msgid "a week"
 msgstr ""
 
-#: templates/repo_recycle_view.html:37 templates/repo_recycle_view.html:39
+#: templates/repo_recycle_view.html:37
+#: templates/repo_recycle_view.html:39
 msgid "a month"
 msgstr ""
 
-#: templates/repo_recycle_view.html:42 templates/repo_recycle_view.html:44
+#: templates/repo_recycle_view.html:42
+#: templates/repo_recycle_view.html:44
 msgid "all"
 msgstr ""
 
@@ -2786,9 +2943,7 @@ msgid "Preparing, please wait..."
 msgstr ""
 
 #: templates/seafile_access_check.html:7
-msgid ""
-"No running Seafile client is detected. If you're sure Seafile client is "
-"running, click the following link to continue downloading:"
+msgid "No running Seafile client is detected. If you're sure Seafile client is running, click the following link to continue downloading:"
 msgstr ""
 
 #: templates/seafile_access_check.html:8
@@ -2799,15 +2954,14 @@ msgstr ""
 msgid "Click to download."
 msgstr ""
 
-#: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
+#: templates/shared_file_view.html:27
+#: templates/view_shared_dir.html:9
 msgid "Shared by: "
 msgstr ""
 
 #: templates/shared_link_email.html:2
 #, python-format
-msgid ""
-"You're receiving this e-mail because %(email)s is sharing a file to you on "
-"%(site_name)s."
+msgid "You're receiving this e-mail because %(email)s is sharing a file to you on %(site_name)s."
 msgstr ""
 
 #: templates/shared_link_email.html:4
@@ -2818,7 +2972,8 @@ msgstr ""
 msgid "All Groups"
 msgstr ""
 
-#: templates/sys_group_admin.html:13 templates/sys_org_admin.html:14
+#: templates/sys_group_admin.html:13
+#: templates/sys_org_admin.html:14
 msgid "Create At"
 msgstr ""
 
@@ -2878,7 +3033,8 @@ msgstr ""
 msgid "Update file "
 msgstr ""
 
-#: templates/update_file_error.html:14 templates/upload_file_error.html:10
+#: templates/update_file_error.html:14
+#: templates/upload_file_error.html:10
 msgid "error: "
 msgstr ""
 
@@ -2892,15 +3048,12 @@ msgstr ""
 
 #: templates/user_add_email.html:3
 #, python-format
-msgid ""
-"You're receiving this e-mail because %(user)s added you to organization "
-"\"%(org.org_name)s\" on %(site_name)s."
+msgid "You're receiving this e-mail because %(user)s added you to organization \"%(org.org_name)s\" on %(site_name)s."
 msgstr ""
 
 #: templates/user_add_email.html:5
 #, python-format
-msgid ""
-"You're receiving this e-mail because %(user)s added you to %(site_name)s."
+msgid "You're receiving this e-mail because %(user)s added you to %(site_name)s."
 msgstr ""
 
 #: templates/user_add_email.html:7
@@ -2923,16 +3076,12 @@ msgstr ""
 
 #: templates/user_reset_email.html:2
 #, python-format
-msgid ""
-"You're receiving this e-mail because staff has reset your password at "
-"%(site_name)s. "
+msgid "You're receiving this e-mail because staff has reset your password at %(site_name)s. "
 msgstr ""
 
 #: templates/user_reset_email.html:4
 #, python-format
-msgid ""
-"Your new password is %(password)s, please modify your password as soon as "
-"possible."
+msgid "Your new password is %(password)s, please modify your password as soon as possible."
 msgstr ""
 
 #: templates/userinfo.html:13
@@ -2947,7 +3096,8 @@ msgstr ""
 msgid "Owned"
 msgstr ""
 
-#: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
+#: templates/userinfo.html:58
+#: templates/snippets/my_owned_repos.html:8
 msgid "Shared"
 msgstr ""
 
@@ -3032,9 +3182,7 @@ msgstr ""
 
 #: templates/registration/password_reset_email.html:2
 #, python-format
-msgid ""
-"You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s. "
+msgid "You're receiving this e-mail because you requested a password reset for your user account at %(site_name)s. "
 msgstr ""
 
 #: templates/registration/password_reset_email.html:4
@@ -3133,10 +3281,7 @@ msgid "Document convertion failed."
 msgstr ""
 
 #: templates/snippets/file_content_js.html:110
-msgid ""
-"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
-"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
-"\"page-nums\"></span></span>"
+msgid "<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type=\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id=\"page-nums\"></span></span>"
 msgstr ""
 
 #: templates/snippets/file_content_js.html:110
@@ -3148,8 +3293,7 @@ msgid "loading..."
 msgstr ""
 
 #: templates/snippets/file_content_js.html:157
-msgid ""
-"You can use IE 10 or other browsers, for example, firefox, to view it online."
+msgid "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
 
 #: templates/snippets/file_content_js.html:162
@@ -3223,10 +3367,7 @@ msgid "You have not created any libraries"
 msgstr ""
 
 #: templates/snippets/my_owned_repos.html:44
-msgid ""
-"You can create a library to organize your files. For example, you can create "
-"one for each of your projects. Each library can be synchronized and shared "
-"separately."
+msgid "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately."
 msgstr ""
 
 #: templates/snippets/my_owned_repos.html:45
@@ -3250,11 +3391,7 @@ msgid "No library is shared to you"
 msgstr ""
 
 #: templates/snippets/my_owned_repos.html:92
-msgid ""
-"Libraries shared to you or shared to groups you joined will be listed here. "
-"Libraries shared as writable can be downloaded and synced. Read only "
-"libraries can only be downloaded, updates on local files will not be "
-"uploaded."
+msgid "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded."
 msgstr ""
 
 #: templates/snippets/my_owned_repos.html:107
@@ -3266,9 +3403,7 @@ msgid "You don't have any starred files yet"
 msgstr ""
 
 #: templates/snippets/my_owned_repos.html:119
-msgid ""
-"You can star important files by clicking the \"Star\" button on file viewing "
-"page, and they will be listed here."
+msgid "You can star important files by clicking the \"Star\" button on file viewing page, and they will be listed here."
 msgstr ""
 
 #: templates/snippets/myhome_extra_script.html:28
@@ -3312,9 +3447,7 @@ msgid "Emails or Groups, Seperated by ','"
 msgstr ""
 
 #: templates/snippets/repo_share_form.html:12
-msgid ""
-"Tip: must be organization members or organization groups, enter \"all\" to "
-"share to public library."
+msgid "Tip: must be organization members or organization groups, enter \"all\" to share to public library."
 msgstr ""
 
 #: templates/snippets/repo_share_form.html:15
@@ -3347,9 +3480,7 @@ msgid "Change password: %s"
 msgstr ""
 
 #: thirdpart/auth/forms.py:39
-msgid ""
-"Please enter a correct username and password. Note that both fields are case-"
-"sensitive."
+msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
 msgstr ""
 
 #: thirdpart/auth/forms.py:41
@@ -3357,9 +3488,7 @@ msgid "This account is inactive."
 msgstr ""
 
 #: thirdpart/auth/forms.py:46
-msgid ""
-"Your Web browser doesn't appear to have cookies enabled. Cookies are "
-"required for logging in."
+msgid "Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in."
 msgstr ""
 
 #: thirdpart/auth/forms.py:59
@@ -3367,15 +3496,11 @@ msgid "E-mail"
 msgstr ""
 
 #: thirdpart/auth/forms.py:66
-msgid ""
-"Failed to send email, email service is not properly configured, please "
-"contact administrator."
+msgid "Failed to send email, email service is not properly configured, please contact administrator."
 msgstr ""
 
 #: thirdpart/auth/forms.py:74
-msgid ""
-"That e-mail address doesn't have an associated user account. Are you sure "
-"you've registered?"
+msgid "That e-mail address doesn't have an associated user account. Are you sure you've registered?"
 msgstr ""
 
 #: thirdpart/auth/forms.py:104
@@ -3432,20 +3557,16 @@ msgid "You must agree to the terms to register"
 msgstr ""
 
 #: thirdpart/registration/forms.py:86
-msgid ""
-"This email address is already in use. Please supply a different email "
-"address."
+msgid "This email address is already in use. Please supply a different email address."
 msgstr ""
 
 #: thirdpart/registration/forms.py:113
-msgid ""
-"Registration using free email addresses is prohibited. Please supply a "
-"different email address."
+msgid "Registration using free email addresses is prohibited. Please supply a different email address."
 msgstr ""
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
-msgstr "Aktivierungsschlüssel"
+msgstr ""
 
 #: thirdpart/registration/models.py:196
 msgid "registration profile"
@@ -3454,3 +3575,4 @@ msgstr ""
 #: thirdpart/registration/models.py:197
 msgid "registration profiles"
 msgstr ""
+
