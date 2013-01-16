@@ -4,6 +4,7 @@ import logging
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
@@ -411,8 +412,8 @@ def get_shared_link(request):
     l = FileShare.objects.filter(repo_id=repo_id).filter(
         username=request.user.username).filter(path=path)
     if len(l) > 0:
-        fileshare = l[0]
-        token = fileshare.token
+        fs = l[0]
+        token = fs.token
     else:
         token = gen_token(max_length=10)
         
