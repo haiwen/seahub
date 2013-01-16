@@ -64,7 +64,6 @@ $('#upload-file-form .submit').click(function () {
     }
 
     $('#upload-file-form .error').addClass('hide');
-    
     $.fn.MultiFile.disableEmpty(); // disable dummy element before submiting the form
     submitAndShowProgress($('#upload-file-form'), $('#upload-progress-con'))
     return false;
@@ -76,12 +75,23 @@ $('#update-file-form .submit').click(function () {
         $('#update-file-form .error').html('{% trans "Please choose a file at first." %}').removeClass('hide');
         return false;
     }
+    var file = $('#file-update-input')[0];
+    var size = 0;
+    if (file.files && file.files.length > 0) {
+        size = file.files[0].size;
+    }
+
+    if (size > {{ max_upload_file_size }}) {
+        $('#update-file-form .error').html('{% trans "File size surpasses the limit." %}').removeClass('hide');
+        return false;
+    }
+
     $('#update-file-form .error').addClass('hide');
     submitAndShowProgress($('#update-file-form'), $('#update-progress-con'))
     return false;
 });
 
-$('#upload-progress-con .upload-cancel, #update-progress-con .unload-cancel').click(function() {
+$('.upload-cancel').click(function() {
     location.reload();
 });
 </script>
