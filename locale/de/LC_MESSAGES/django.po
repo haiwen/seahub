@@ -1,122 +1,121 @@
-# 
+#
 # Copyright (C) 2013
 # This file is distributed under the same license as the seahub package.
 # Phillip Thelen <viirus@pherth.net>, 2013.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-16 18:11+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-01-16 22:55+0100\n"
+"Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: forms.py:26 base/accounts.py:366
 msgid "A user with this email already"
-msgstr ""
+msgstr "Ein benutzer mit dieser Email existiert bereits"
 
 #: forms.py:40 base/accounts.py:383 thirdpart/auth/forms.py:125
 #: thirdpart/auth/forms.py:167 thirdpart/registration/forms.py:58
 msgid "The two password fields didn't match."
-msgstr ""
+msgstr "Die Passwortfelder stimmen nicht überein."
 
 #: forms.py:57 templates/snippets/repo_create_js.html:28
 msgid "Name can't be empty"
-msgstr ""
+msgstr "Name darf nicht leer sein"
 
 #: forms.py:58
 msgid "Name is too long (maximum is 255 characters)"
-msgstr ""
+msgstr "Name ist zu lang (maximal 255 Zeichen)"
 
 #: forms.py:61 templates/snippets/repo_create_js.html:32
 msgid "Description can't be empty"
-msgstr ""
+msgstr "Beschreibung darf nicht leer sein"
 
 #: forms.py:62
 msgid "Description is too long (maximum is 100 characters)"
-msgstr ""
+msgstr "Beschreibung ist zu lang (maximal 100 Zeichen)"
 
 #: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
-msgstr ""
+msgstr "Passwort ist zu lang (mindestens 3 Zeichen)"
 
 #: forms.py:68 forms.py:73 templates/snippets/repo_create_js.html:45
 msgid "Password is too long (maximum is 15 characters)"
-msgstr ""
+msgstr "Passwort ist zu lang (maximal 15 Zeichen)"
 
 #: forms.py:79
 #, python-format
 msgid "Name %s is not valid"
-msgstr ""
+msgstr "Name %s ist nicht gültig"
 
 #: forms.py:101 templates/snippets/repo_create_js.html:53
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Passwörter stimmen nicht überein"
 
 #: forms.py:114 forms.py:137 forms.py:161 forms.py:184 forms.py:221
 msgid "Repo id is required"
-msgstr ""
+msgstr "Repo ID wird benötigt"
 
 #: forms.py:115 forms.py:138 forms.py:162
 msgid "Parent dir is required"
-msgstr ""
+msgstr "Enternordner wird benötigt"
 
 #: forms.py:118 forms.py:142
 msgid "File name is too long"
-msgstr ""
+msgstr "Dateiname ist zu lang"
 
 #: forms.py:119 forms.py:143
 msgid "File name can't be empty"
-msgstr ""
+msgstr "Dateiname kann nicht leer sein"
 
 #: forms.py:126 forms.py:150
 #, python-format
 msgid "File name \"%s\" is not valid"
-msgstr ""
+msgstr "Dateiname \"%s\" ist nicht gültig"
 
 #: forms.py:139
 msgid "Oldname is required"
-msgstr ""
+msgstr "Alter Name wird benötigt"
 
 #: forms.py:165
 msgid "Directory name is too long"
-msgstr ""
+msgstr "Ordnername ist zu lang"
 
 #: forms.py:166
 msgid "Directory name can't be empty"
-msgstr ""
+msgstr "Ordnername darf nicht leer sein"
 
 #: forms.py:173
 #, python-format
 msgid "Directory name \"%s\" is not valid"
-msgstr ""
+msgstr "Ordnername \"%s\" ist nicht gültig"
 
 #: forms.py:185
 msgid "Username is required"
-msgstr ""
+msgstr "Benutzername wird benötigt"
 
 #: forms.py:186
 msgid "Password can't be empty"
-msgstr ""
+msgstr "Passwort darf nicht leer sein"
 
 #: forms.py:197
 msgid "Bad url format"
-msgstr ""
+msgstr "Ungültiges URL-Format"
 
 #: forms.py:202
 msgid "Wrong password"
-msgstr ""
+msgstr "Falsches Passwort"
 
 #: forms.py:204
 msgid "Inernal server error"
-msgstr ""
+msgstr "Interner Server Fehler"
 
 #: forms.py:206
 msgid "Decrypt library error"
@@ -124,23 +123,23 @@ msgstr ""
 
 #: forms.py:212 share/forms.py:19
 msgid "Email is required"
-msgstr ""
+msgstr "Email wird benötigt"
 
 #: forms.py:214
 msgid "Quota can't be empty"
-msgstr ""
+msgstr "Quota darf nicht leer sein"
 
 #: forms.py:215
 msgid "Quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "Quota ist zu niedrig (mindestestwert ist 0)"
 
 #: forms.py:222
 msgid "Days can't be empty"
-msgstr ""
+msgstr "Tage dürfen nicht leer sein"
 
 #: forms.py:223
 msgid "Please enter a number"
-msgstr ""
+msgstr "Bitte eine Nummer eingeben"
 
 #: settings.py:99
 msgid "English"
@@ -164,43 +163,43 @@ msgstr ""
 
 #: views.py:558
 msgid "Settings saved."
-msgstr ""
+msgstr "Einstellungen wurden gespeichert."
 
 #: views.py:561
 msgid "Failed to save settings on server"
-msgstr ""
+msgstr "Speichern der Einstellungen ist fehlgeschlagen"
 
 #: views.py:568
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Interner Server Fehler"
 
 #: views.py:570
 msgid "Filename contains invalid character"
-msgstr ""
+msgstr "Dateiname enthält ungülte Zeichen"
 
 #: views.py:572
 msgid "Duplicated filename"
-msgstr ""
+msgstr "Doppelter Dateiname"
 
 #: views.py:574 views.py:1305 views.py:2539 views.py:2667
 msgid "File not exists"
-msgstr ""
+msgstr "Datei existiert nicht"
 
 #: views.py:576
 msgid "File size surpasses the limit"
-msgstr ""
+msgstr "Dateigröße überschreitet das Limit"
 
 #: views.py:578
 msgid "The space of owner is used up, upload failed"
-msgstr ""
+msgstr "Der Speicher des Benutzers ist aufgebraucht. Upload schlug fehl"
 
 #: views.py:580
 msgid "An error occurs during file transfer"
-msgstr ""
+msgstr "Ein Fehler trat während der Dateiübertragung auf"
 
 #: views.py:591 views.py:612
 msgid "Invalid url"
-msgstr ""
+msgstr "Ungültige URL"
 
 #: views.py:676
 msgid "Unable to view library modification"
@@ -216,12 +215,12 @@ msgstr ""
 
 #: views.py:788
 msgid "Please specify history ID"
-msgstr ""
+msgstr "Bitte die Historien ID angeben"
 
 #: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2881
 #: share/views.py:396
 msgid "Invalid arguments"
-msgstr ""
+msgstr "Ungültige Argumente"
 
 #: views.py:796 views.py:891 views.py:2368 views.py:2896
 msgid "Library not exists"
@@ -229,11 +228,11 @@ msgstr ""
 
 #: views.py:798
 msgid "History you specified is not exists"
-msgstr ""
+msgstr "Angegebene Historie existiert nicht"
 
 #: views.py:800
 msgid "Unknown error"
-msgstr ""
+msgstr "Unbekannter Fehler"
 
 #: views.py:911 views.py:927
 msgid ""
@@ -242,29 +241,29 @@ msgstr ""
 
 #: views.py:1201
 msgid "Failed to create repo"
-msgstr ""
+msgstr "Erstellen des Repos ist fehlgeschlagen"
 
 #: views.py:1219
 msgid "Operation successful"
-msgstr ""
+msgstr "Operation erfolgreich"
 
 #: views.py:1221
 msgid "Operation failed"
-msgstr ""
+msgstr "Operation fehlgeschlagen"
 
 #: views.py:1252
 msgid "Failed to delete file."
-msgstr ""
+msgstr "Dateilöschung fehlgeschlagen"
 
 #: views.py:1259
 #, python-format
 msgid "%s successfully deleted."
-msgstr ""
+msgstr "%s wurde erfolgreich gelöscht"
 
 #: views.py:1261
 #, python-format
 msgid "Internal error. Failed to delete %s."
-msgstr ""
+msgstr "Interner Fehler. Löschung von %s ist fehlgeschlagen"
 
 #: views.py:1321 views.py:1643
 msgid "Unable to view file"
@@ -288,7 +287,7 @@ msgstr ""
 
 #: views.py:1555
 msgid "Internal Error"
-msgstr ""
+msgstr "Interner Fehler"
 
 #: views.py:1561 views.py:2210 views.py:2241 views.py:2275
 msgid "Permission denied"
@@ -341,11 +340,11 @@ msgstr ""
 
 #: views.py:1805
 msgid "copy"
-msgstr ""
+msgstr "kopieren"
 
 #: views.py:1805
 msgid "move"
-msgstr ""
+msgstr "bewegen"
 
 #: views.py:1820
 #, python-format
@@ -359,14 +358,14 @@ msgstr ""
 
 #: views.py:1941
 msgid "Failed to set quota: internal error"
-msgstr ""
+msgstr "Quota konnte nicht gesetzt werden: Interner Fehler"
 
 #: views.py:2014 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
-msgstr ""
+msgstr "Passwort zurücksetzen"
 
 #: views.py:2030
 #, python-format
@@ -3446,7 +3445,7 @@ msgstr ""
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
-msgstr ""
+msgstr "Aktivierungsschlüssel"
 
 #: thirdpart/registration/models.py:196
 msgid "registration profile"
