@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-12 16:25+0800\n"
+"POT-Creation-Date: 2013-01-17 11:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -705,9 +705,9 @@ msgid "Password should be 3 to 15 characters."
 msgstr "密码太长（不超过15个字符）"
 
 #: templates/file_edit.html:291 templates/file_view.html:198
-#: templates/file_view.html.py:363 templates/repo.html:411
+#: templates/file_view.html.py:364 templates/repo.html:411
 #: templates/repo.html.py:649 templates/repo.html:686
-#: templates/repo.html.py:825 templates/snippets/events_js.html:91
+#: templates/repo.html.py:829 templates/snippets/events_js.html:91
 #: templates/snippets/file_content_js.html:97
 #: templates/snippets/shared_link_js.html:41
 #: templates/snippets/shared_link_js.html:60
@@ -841,6 +841,10 @@ msgstr "打开本地文件"
 msgid "Raw"
 msgstr "原始文件"
 
+#: templates/file_view.html:90
+msgid "Send Link"
+msgstr "发送链接"
+
 #: templates/file_view.html:91 templates/repo.html:337
 msgid "Send to:"
 msgstr "发送到："
@@ -916,7 +920,7 @@ msgstr ""
 msgid "Comment"
 msgstr "评论"
 
-#: templates/file_view.html:343
+#: templates/file_view.html:344
 msgid "Please input a message."
 msgstr "请先输入评论。"
 
@@ -1361,9 +1365,13 @@ msgstr "移动"
 msgid "to:"
 msgstr "到："
 
-#: templates/repo.html:783 templates/repo.html.py:791 templates/repo.html:799
+#: templates/repo.html:783 templates/repo.html.py:795 templates/repo.html:803
 msgid "It can't be blank."
 msgstr "输入不能为空。"
+
+#: templates/repo.html:787
+msgid "Only an extension there, please input a name."
+msgstr "请输入完整的文件名。"
 
 #: templates/repo_history.html:7
 msgid "modification history"
@@ -1891,11 +1899,12 @@ msgid "This type of file cannot be viewed online."
 msgstr "该类型文件无法在线查看。"
 
 #: templates/snippets/file_upload_progress_js.html:51
-#: templates/snippets/file_upload_progress_js.html:76
+#: templates/snippets/file_upload_progress_js.html:75
 msgid "Please choose a file at first."
 msgstr "请先选择一个文件。"
 
 #: templates/snippets/file_upload_progress_js.html:62
+#: templates/snippets/file_upload_progress_js.html:85
 msgid "File size surpasses the limit."
 msgstr "文件大小超过限制, 无法上传。"
 
