@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-30 11:19+0800\n"
+"POT-Creation-Date: 2013-01-17 11:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+
+#: forms.py:16
+msgid "Nickname can only contain characters, numbers or underscore."
+msgstr "昵称只能包含中英文字符、数字及下划线"
 
 #: views.py:41
 msgid "Successfully edited profile."
@@ -29,31 +33,35 @@ msgstr "修改失败"
 msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
-#: templates/profile/profile_base.html:4 templates/profile/set_profile.html:6
+#: templates/profile/profile_base.html:4 templates/profile/set_profile.html:7
 msgid "Profile Setting"
 msgstr "个人信息设置"
 
-#: templates/profile/set_profile.html:8
+#: templates/profile/set_profile.html:9
 msgid "Avatar:"
 msgstr "头像："
 
-#: templates/profile/set_profile.html:9 templates/profile/set_profile.html:10
-msgid "Update"
+#: templates/profile/set_profile.html:11
+msgid "Change"
 msgstr "更改"
 
-#: templates/profile/set_profile.html:10
+#: templates/profile/set_profile.html:17
 msgid "Password:"
 msgstr "密码："
 
-#: templates/profile/set_profile.html:11
+#: templates/profile/set_profile.html:17
+msgid "Update"
+msgstr "更改"
+
+#: templates/profile/set_profile.html:18
 msgid "Nickname:"
 msgstr "昵称："
 
-#: templates/profile/set_profile.html:16
+#: templates/profile/set_profile.html:23
 msgid "About me:"
 msgstr "关于我："
 
-#: templates/profile/set_profile.html:21
+#: templates/profile/set_profile.html:28
 #: templates/profile/user_profile.html:36
 msgid "Submit"
 msgstr "提交"
@@ -79,9 +87,6 @@ msgstr "备注(可选)："
 
 #~ msgid "Modify Personal Infos"
 #~ msgstr "个人基本信息修改"
-
-#~ msgid "Change"
-#~ msgstr "更改"
 
 #~ msgid "Introduction: "
 #~ msgstr "一句话介绍: "
