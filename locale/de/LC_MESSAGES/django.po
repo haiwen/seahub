@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-16 18:11+0100\n"
-"PO-Revision-Date: 2013-01-17 14:31+0100\n"
+"PO-Revision-Date: 2013-01-17 16:31+0100\n"
 "Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -705,7 +705,7 @@ msgstr "Sie können sich nicht selbst hinzufügen."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
-msgstr ""
+msgstr "Ist bereits in Ihren Kontakten"
 
 #: contacts/views.py:68
 #, python-format
@@ -900,7 +900,7 @@ msgstr ""
 
 #: group/error_msg.py:12
 msgid "Failed to create org group."
-msgstr ""
+msgstr "Erstellen der Organisationsgruppe fehlgeschlagen"
 
 #: group/error_msg.py:15
 msgid "Permission error: only group staff can add member"
@@ -1694,7 +1694,7 @@ msgstr "URL-Präfix darf nur Buchstaben und Zahlen enthalten"
 #: organizations/templates/organizations/personal.html:25
 #: templates/userinfo.html:24
 msgid "Space Used"
-msgstr "verbrauchter Platz"
+msgstr "verbrauchter Speicherplatz"
 
 #: organizations/templates/organizations/org_admin.html:15
 #: templates/sys_useradmin.html:13
@@ -1965,7 +1965,7 @@ msgstr ""
 
 #: share/views.py:346
 msgid "You are shared with a library in Seafile"
-msgstr ""
+msgstr "Es wurde eine Bibliothek in Seafile mit ihnen geteilt."
 
 #: share/views.py:353
 #, python-format
@@ -1976,7 +1976,7 @@ msgstr ""
 
 #: share/views.py:378
 msgid "Deleted successfully."
-msgstr ""
+msgstr "Erfolgreicht gelöscht"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
@@ -1988,11 +1988,11 @@ msgstr ""
 
 #: share/views.py:452
 msgid "Removed successfully"
-msgstr ""
+msgstr "Erfolgreich entfernt"
 
 #: share/views.py:460
 msgid "Deleted successfully"
-msgstr ""
+msgstr "Erfolgreich gelöscht"
 
 #: share/views.py:476
 msgid ""
@@ -2020,19 +2020,19 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:23
 msgid "Shared Libraries"
-msgstr ""
+msgstr "Geteilte Bibliotheken"
 
 #: share/templates/repo/share_admin.html:29
 msgid "Share To"
-msgstr ""
+msgstr "Teilen mit"
 
 #: share/templates/repo/share_admin.html:30
 msgid "Permission"
-msgstr ""
+msgstr "Berechtigung"
 
 #: share/templates/repo/share_admin.html:74
 msgid "You have not shared any library"
-msgstr ""
+msgstr "Sie haben keine Bibliothek geteilt"
 
 #: share/templates/repo/share_admin.html:75
 msgid ""
@@ -2043,33 +2043,33 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:79
 msgid "Shared Links"
-msgstr ""
+msgstr "Geteilte Links"
 
 #: share/templates/repo/share_admin.html:83
 msgid "File or Folder"
-msgstr ""
+msgstr "Datei oder Ordner"
 
 #: share/templates/repo/share_admin.html:84 templates/file_edit.html:121
 #: templates/snippets/events.html:8 templates/snippets/my_owned_repos.html:102
 msgid "Library"
-msgstr ""
+msgstr "Bibliothek"
 
 #: share/templates/repo/share_admin.html:85
 msgid "Visits"
-msgstr ""
+msgstr "Besuche"
 
 #: share/templates/repo/share_admin.html:98 templates/file_revisions.html:53
 #: templates/repo_view_snapshot.html:43
 msgid "View"
-msgstr ""
+msgstr "Ansicht"
 
 #: share/templates/repo/share_admin.html:99
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: share/templates/repo/share_admin.html:107
 msgid "You don't have any shared link"
-msgstr ""
+msgstr "Sie haben keine geteilten Links"
 
 #: share/templates/repo/share_admin.html:108
 msgid ""
@@ -2079,56 +2079,56 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
-msgstr ""
+msgstr "Erfolgreich editiert"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr ""
+msgstr "Editieren fehlgeschlagen"
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
-msgstr ""
+msgstr "Es tut uns leid, aber die angefragte Seite wurde nicht gefunden."
 
 #: templates/add_user_form.html:3 templates/add_user_form.html.py:7
 msgid "Add User"
-msgstr ""
+msgstr "Benutzer*in hinzufügen"
 
 #: templates/add_user_form.html:13
 #: templates/registration/registration_form.html:15
 msgid "Confirm Password"
-msgstr ""
+msgstr "Passwort bestätigen"
 
 #: templates/add_user_form.html:26 templates/registration/login.html:28
 #: templates/registration/registration_form.html:28
 msgid "Email cannot be blank"
-msgstr ""
+msgstr "Email darf nicht leer sein"
 
 #: templates/add_user_form.html:30 templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
 msgid "Password cannot be blank"
-msgstr ""
+msgstr "Passwort darf nicht leer sein"
 
 #: templates/add_user_form.html:34
 #: templates/registration/registration_form.html:36
 msgid "Confirm password cannot be blank"
-msgstr ""
+msgstr "Passwortbestätigung darf nicht leer sein"
 
 #: templates/add_user_form.html:38
 #: templates/registration/registration_form.html:40
 msgid "The two password fields not match"
-msgstr ""
+msgstr "Die beiden Passwortfelder stimmen nicht überein"
 
 #: templates/admin_base.html:11 templates/pubinfo.html:8
 msgid "Users"
-msgstr ""
+msgstr "Benutzer*innen"
 
 #: templates/admin_base.html:18
 msgid "Organizations"
-msgstr ""
+msgstr "Organisationen"
 
 #: templates/admin_base.html:22
 msgid "Notifications"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 #: templates/base.html:9
 msgid "File Collaboration Team Organization"
@@ -2136,97 +2136,101 @@ msgstr ""
 
 #: templates/base.html:37 templates/base.html.py:41 templates/org_base.html:9
 msgid "Personal"
-msgstr ""
+msgstr "Persönlich"
 
 #: templates/base.html:45
 msgid "New Organization"
-msgstr ""
+msgstr "Neue Organisation"
 
 #: templates/base.html:51
 msgid "System Admin"
-msgstr ""
+msgstr "Systemadministration"
 
 #: templates/base.html:52 templates/base.html.py:57
 msgid "Workspace"
-msgstr ""
+msgstr "Arbeitsplatz"
 
 #: templates/base.html:56
 msgid "Admin"
-msgstr ""
+msgstr "Administrator*in"
 
 #: templates/base.html:64
 msgid "Log out"
-msgstr ""
+msgstr "Ausloggen"
 
 #: templates/base.html:66 templates/registration/login.html:3
 #: templates/registration/login.html:6
 #: templates/registration/password_reset_complete.html:8
 msgid "Log In"
-msgstr ""
+msgstr "Einloggen"
 
 #: templates/base.html:68 templates/registration/registration_form.html:9
 msgid "Signup"
-msgstr ""
+msgstr "Anmelden"
 
 #: templates/base.html:126
 msgid "Introduction"
-msgstr ""
+msgstr "Einführung"
 
 #: templates/base.html:128
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 #: templates/base.html:132
 msgid "Client"
-msgstr ""
+msgstr "Client"
 
 #: templates/base.html:134
 msgid "Seafile for Windows, Mac and Linux"
-msgstr ""
+msgstr "Seafile für Windows, Mac und Linux"
 
 #: templates/base.html:138
 msgid "Documents"
-msgstr ""
+msgstr "Dokumente"
 
 #: templates/base.html:140
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: templates/base.html:145
 msgid "Server Version: "
-msgstr ""
+msgstr "Serverversion:"
 
 #: templates/base.html:146
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: templates/base.html:147
 msgid "Contact Us"
-msgstr ""
+msgstr "Kontaktiere uns"
 
 #: templates/decrypt_repo_form.html:9
+#, fuzzy
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
+"Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn "
+"sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
+"Server nur für eine Stunde bleiben."
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
-msgstr ""
+msgstr "Passwort:"
 
 #: templates/file_edit.html:79 templates/repo.html:87
 #: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
 #: templates/shared_file_view.html:18 templates/view_shared_dir.html:16
 msgid "Current path: "
-msgstr ""
+msgstr "Aktueller Pfad:"
 
 #: templates/file_edit.html:90
 msgid "Continue editing"
-msgstr ""
+msgstr "Editieren fortsetzen"
 
 #: templates/file_edit.html:91
 msgid "Preview"
-msgstr ""
+msgstr "Vorschau"
 
 #: templates/file_edit.html:94 templates/file_edit.html.py:127
 #: templates/repo.html:229 templates/repo.html.py:251 templates/repo.html:268
@@ -2234,35 +2238,37 @@ msgstr ""
 #: templates/repo.html.py:317 templates/repo.html:329
 #: templates/snippets/events.html:15
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: templates/file_edit.html:121 templates/snippets/events.html:8
 msgid "is encrypted"
-msgstr ""
+msgstr "ist verschlüsselt"
 
 #: templates/file_edit.html:122 templates/snippets/events.html:10
 msgid "Password："
-msgstr ""
+msgstr "Passwort:"
 
 #: templates/file_edit.html:124 templates/snippets/events.html:12
+#, fuzzy
 msgid "The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "Das Passwort wird nur für eine Stunde auf dem Server bleiben."
 
 #: templates/file_edit.html:241
 msgid "Submit failed. Please check the network."
 msgstr ""
+"Abschicken fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_edit.html:243
 msgid "Submit failed."
-msgstr ""
+msgstr "Abschicken fehlgeschlagen."
 
 #: templates/file_edit.html:261 templates/snippets/events_js.html:67
 msgid "Password is required."
-msgstr ""
+msgstr "Passwort wird benötigt"
 
 #: templates/file_edit.html:263
 msgid "Password should be 3 to 15 characters."
-msgstr ""
+msgstr "Passwort sollte 3 bis 15 Zeichen lang sein."
 
 #: templates/file_edit.html:292 templates/file_view.html:198
 #: templates/file_view.html.py:364 templates/repo.html:411
@@ -2273,116 +2279,118 @@ msgstr ""
 #: templates/snippets/shared_link_js.html:60
 #: templates/snippets/shared_link_js.html:123
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung"
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
-msgstr ""
+msgstr "s Versionshistorie"
 
 #: templates/file_revisions.html:7
 msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr ""
+"Tipp: Nach jedem Bearbeiten wird eine neue Version generiert und Sie können "
+"eine vorheride Version wieder herstellen."
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
 msgid "Current Path:"
-msgstr ""
+msgstr "Aktueller Pfad:"
 
 #: templates/file_revisions.html:23
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: templates/file_revisions.html:24 templates/repo_view_snapshot.html:16
 msgid "Last Modifier"
-msgstr ""
+msgstr "Letzter Bearbeiter/Letzte Bearbeiterin"
 
 #: templates/file_revisions.html:25 templates/repo.html:112
 #: templates/repo_history_view.html:53 templates/repo_recycle_view.html:55
 #: templates/view_shared_dir.html:33
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: templates/file_revisions.html:33
 msgid "(current version)"
-msgstr ""
+msgstr "(aktuelle Version)"
 
 #: templates/file_revisions.html:43 templates/repo.html:70
 #: templates/repo_history.html:33 templates/repo_history_view.html:21
 #: templates/repo_view_snapshot.html:33
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: templates/file_revisions.html:50 templates/repo_recycle_view.html:66
 #: templates/repo_recycle_view.html:83 templates/repo_view_snapshot.html:44
 msgid "Restore"
-msgstr ""
+msgstr "Wiederherstellen"
 
 #: templates/file_view.html:16 templates/history_file_view.html:38
 msgid "Current Path: "
-msgstr ""
+msgstr "Aktueller Pfad:"
 
 #: templates/file_view.html:28 templates/repo.html:33
 msgid "Share link"
-msgstr ""
+msgstr "Link teilen"
 
 #: templates/file_view.html:29 templates/repo.html:34
 #: templates/repo.html.py:335
 msgid "Send"
-msgstr ""
+msgstr "Senden"
 
 #: templates/file_view.html:32 templates/file_view.html.py:189
 msgid "Unstar"
-msgstr ""
+msgstr "nicht mehr favorisieren"
 
 #: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
-msgstr ""
+msgstr "Favorisieren"
 
 #: templates/file_view.html:51 templates/file_view.html.py:55
 msgid "updated this file"
-msgstr ""
+msgstr "Datei wurde aktualisiert"
 
 #: templates/file_view.html:51 templates/repo_view_snapshot.html:17
 msgid "Detail"
-msgstr ""
+msgstr "Details"
 
 #: templates/file_view.html:59
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein*e Mitwirker*in"
+msgstr[1] " %(counter)s Mitwirker*innen"
 
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
 msgid "History"
-msgstr ""
+msgstr "Historie"
 
 #: templates/file_view.html:71
 msgid "Open local file"
-msgstr ""
+msgstr "lokale Datei öffnen"
 
 #: templates/file_view.html:82 templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
 msgid "Raw"
-msgstr ""
+msgstr "Rohansicht"
 
 #: templates/file_view.html:91 templates/repo.html:337
 msgid "Send to:"
-msgstr ""
+msgstr "Snenden an:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr ""
+msgstr "Emails, getrennt durch ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
-msgstr ""
+msgstr "Senden…"
 
 #: templates/file_view.html:100
 msgid "Processing..."
-msgstr ""
+msgstr "Verarbeiten…"
 
 #: templates/file_view.html:103
 msgid "You have not downloaded "
@@ -2390,23 +2398,23 @@ msgstr ""
 
 #: templates/file_view.html:103
 msgid "."
-msgstr ""
+msgstr "."
 
 #: templates/file_view.html:104
 msgid "Click to download"
-msgstr ""
+msgstr "Klicken zum Herunterladen"
 
 #: templates/file_view.html:120
 msgid "Leave a message~"
-msgstr ""
+msgstr "Eine Nachricht hinterlassen~"
 
 #: templates/file_view.html:185
 msgid "Unstarred successfully"
-msgstr ""
+msgstr "erfolgreicht nicht mehr favorisiert"
 
 #: templates/file_view.html:188
 msgid "Starred successfully"
-msgstr ""
+msgstr "erfolgreich favorisiert"
 
 #: templates/file_view.html:228
 msgid ""
@@ -2439,37 +2447,37 @@ msgstr ""
 
 #: templates/file_view.html:296
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: templates/file_view.html:344
 msgid "Please input a message."
-msgstr ""
+msgstr "Bitte geben Sie eine Nachricht ein."
 
 #: templates/history_file_view.html:16 templates/repo_view_snapshot.html:7
 msgid "snapshots"
-msgstr ""
+msgstr "Schnappschuss"
 
 #: templates/history_file_view.html:23
 msgid "history"
-msgstr ""
+msgstr "Historie"
 
 #: templates/history_file_view.html:26
 msgid "Back to file versions"
-msgstr ""
+msgstr "Zurück zu Dateiversionen"
 
 #: templates/history_file_view.html:30 templates/history_file_view.html:41
 #: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
 msgid "'s trash"
-msgstr ""
+msgstr "s Mülleimer"
 
 #: templates/history_file_view.html:31 templates/repo_history.html:8
 #: templates/repo_recycle_view.html:9
 msgid "Back to Library"
-msgstr ""
+msgstr "Zurück zur Bibliothek"
 
 #: templates/myhome.html:21
 msgid "Reminding..."
-msgstr ""
+msgstr "Erinnern…"
 
 #: templates/myhome.html:26
 msgid ""
@@ -2481,7 +2489,13 @@ msgid_plural ""
 "        have new messages\n"
 "        "
 msgstr[0] ""
+"\n"
+"        hat eine neue Nachricht\n"
+"        "
 msgstr[1] ""
+"\n"
+"        hat neue Nachrichten\n"
+"        "
 
 #: templates/myhome.html:35
 #, python-format
@@ -2494,7 +2508,13 @@ msgid_plural ""
 "        %(counter)s group messages have new replies\n"
 "        "
 msgstr[0] ""
+"\n"
+"        eine Gruppennachricht hat eine neue Antwort\n"
+"        "
 msgstr[1] ""
+"\n"
+"        %(counter)s Gruppennachrichten haben neue Antworten\n"
+"        "
 
 #: templates/myhome.html:44
 #, python-format
@@ -2511,25 +2531,26 @@ msgstr[1] ""
 
 #: templates/myhome.html:55
 msgid "Space used"
-msgstr ""
+msgstr "Verbrauchter Speicherplatz"
 
 #: templates/myhome_base.html:8
+#, fuzzy
 msgid "My Home"
-msgstr ""
+msgstr "Mein Heim"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
-msgstr ""
+msgstr "Teilen"
 
 #: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
-msgstr ""
+msgstr "Öffentliche Bibliothek"
 
 #: templates/myhome_base.html:24 templates/org_base.html:21
 msgid "Public Info"
-msgstr ""
+msgstr "Öffentliche Informationen"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
@@ -2543,151 +2564,154 @@ msgstr ""
 
 #: templates/repo.html:25
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: templates/repo.html:28
 msgid "Trash"
-msgstr ""
+msgstr "Mülleimer"
 
 #: templates/repo.html:41
 msgid "This library is read-only, and you can only view the files."
 msgstr ""
+"Diese Bibliothek ist Schreibgeschützt und Sie können die Dateien nur "
+"betrachten."
 
 #: templates/repo.html:47
 msgid "Size: "
-msgstr ""
+msgstr "Größe:"
 
 #: templates/repo.html:54 templates/repo.html.py:287 templates/repo.html:288
 #: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
 #: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: templates/repo.html:67
 msgid "Generated by system"
-msgstr ""
+msgstr "Vom System generiert"
 
 #: templates/repo.html:82
 msgid "You can't access this library."
-msgstr ""
+msgstr "Sie können nicht auf diese Bibliothek zugreifen."
 
 #: templates/repo.html:98 templates/view_shared_dir.html:26
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: templates/repo.html:101 templates/repo.html.py:224
 msgid "Upload"
-msgstr ""
+msgstr "Hochladen"
 
 #: templates/repo.html:102 templates/repo.html.py:273
 msgid "New Directory"
-msgstr ""
+msgstr "Neuer Ordner"
 
 #: templates/repo.html:103 templates/repo.html.py:284
 msgid "New File"
-msgstr ""
+msgstr "Neue Datei"
 
 #: templates/repo.html:120 templates/view_shared_dir.html:39
 msgid "Directory icon"
-msgstr ""
+msgstr "Ordnersymbol"
 
 #: templates/repo.html:130 templates/repo.html.py:176
 msgid "Fetch failed"
-msgstr ""
+msgstr "Abrufen fehlgeschlagen"
 
 #: templates/repo.html:143
 msgid "More operations"
-msgstr ""
+msgstr "Mehr Operationen"
 
 #: templates/repo.html:146 templates/repo.html.py:194
 msgid "Rename"
-msgstr ""
+msgstr "Umbenennen"
 
 #: templates/repo.html:147 templates/repo.html.py:195
 msgid "Move"
-msgstr ""
+msgstr "Verschieben"
 
 #: templates/repo.html:148 templates/repo.html.py:196
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #: templates/repo.html:161 templates/repo.html.py:641
 msgid "starred"
-msgstr ""
+msgstr "favorisiert"
 
 #: templates/repo.html:163 templates/repo.html.py:639
 msgid "unstarred"
-msgstr ""
+msgstr "nicht mehr favorisiert"
 
 #: templates/repo.html:166 templates/repo.html.py:573 templates/repo.html:597
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
 #: templates/view_shared_dir.html:57
 msgid "File"
-msgstr ""
+msgstr "Datei"
 
 #: templates/repo.html:191
 msgid "More Operations"
-msgstr ""
+msgstr "Mehr Operateionen"
 
 #: templates/repo.html:211
 msgid "Upload Files"
-msgstr ""
+msgstr "Dateien Hochladen"
 
 #: templates/repo.html:213 templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
 msgstr ""
+"Der/Die Besitzer*in dieser Bibliothek hat keinen freien Speicherplatz mehr."
 
 #: templates/repo.html:218
 msgid "Add files"
-msgstr ""
+msgstr "Dateien hinzufügen"
 
 #: templates/repo.html:219
 msgid "smaller than"
-msgstr ""
+msgstr "kleiner als"
 
 #: templates/repo.html:227 templates/repo.html.py:249
 msgid "Uploaded:"
-msgstr ""
+msgstr "Hochgeladen:"
 
 #: templates/repo.html:227
 msgid "Fetching ..."
-msgstr ""
+msgstr "Abrufen…"
 
 #: templates/repo.html:236
 msgid "Update File"
-msgstr ""
+msgstr "Datei aktualisieren"
 
 #: templates/repo.html:243
 msgid "Smaller than"
-msgstr ""
+msgstr "kleiner als"
 
 #: templates/repo.html:249
 msgid "Fetching..."
-msgstr ""
+msgstr "Abrufen…"
 
 #: templates/repo.html:259
 msgid "Library Settings"
-msgstr ""
+msgstr "Bibliothekseinstellungen"
 
 #: templates/repo.html:262
 msgid "Keep full history"
-msgstr ""
+msgstr "Komplette Historie speichern"
 
 #: templates/repo.html:263
 msgid "Don't keep history"
-msgstr ""
+msgstr "Historie nicht speichern"
 
 #: templates/repo.html:264
 msgid "Only keep a period of history:"
-msgstr ""
+msgstr "Historie nur für einen bestimmten Zeitraum speichern:"
 
 #: templates/repo.html:265
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #: templates/repo.html:274
 msgid "Directory Name"
-msgstr ""
+msgstr "Ordnername"
 
 #: templates/repo.html:286
 msgid "Featured File Type"
@@ -2695,7 +2719,7 @@ msgstr ""
 
 #: templates/repo.html:287 templates/repo.html.py:288
 msgid "Click to choose"
-msgstr ""
+msgstr "Klicken zum auswählen"
 
 #: templates/repo.html:287
 msgid "online Rich Text format (experimental)."
@@ -2703,72 +2727,72 @@ msgstr ""
 
 #: templates/repo.html:288
 msgid "simple markup format."
-msgstr ""
+msgstr "einfaches Markup Format"
 
 #: templates/repo.html:290 templates/snippets/my_owned_repos.html:101
 msgid "File Name"
-msgstr ""
+msgstr "Dateiname"
 
 #: templates/repo.html:303
 msgid "Current Library"
-msgstr ""
+msgstr "Aktuelle Bibliothek"
 
 #: templates/repo.html:305
 msgid "Other Libraries"
-msgstr ""
+msgstr "Andere Bibliotheken"
 
 #: templates/repo.html:315
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "Bitte eine Bibliothek auswählen"
 
 #: templates/repo.html:321
 msgid "Rename <span id=\"rename-type\"></span>"
-msgstr ""
+msgstr "Umbenennen <span id=\"rename-type\"></span>"
 
 #: templates/repo.html:322
 msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
-msgstr ""
+msgstr "<span id=\"rename-obj\" class=\"op-target\"></span> umbenennen in:"
 
 #: templates/repo.html:334
 msgid "Link: "
-msgstr ""
+msgstr "Link:"
 
 #: templates/repo.html:429
 msgid "Click to remove"
-msgstr ""
+msgstr "Klicken zum entfernen"
 
 #: templates/repo.html:430
 msgid "This file has already been selected:\\n$file!"
-msgstr ""
+msgstr "Diese Datei wurde bereits ausgewählt:\\n$file!"
 
 #: templates/repo.html:573 templates/repo.html.py:600
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
-msgstr ""
+msgstr "Ordner"
 
 #: templates/repo.html:590
 msgid "Copy "
-msgstr ""
+msgstr "Kopie"
 
 #: templates/repo.html:593
 msgid "Move "
-msgstr ""
+msgstr "Verschieben"
 
 #: templates/repo.html:606
 msgid "to:"
-msgstr ""
+msgstr "zu:"
 
 #: templates/repo.html:783 templates/repo.html.py:795 templates/repo.html:803
 msgid "It can't be blank."
-msgstr ""
+msgstr "Darf nicht leer sein."
 
 #: templates/repo.html:787
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "Nur eine Erweiterung. Bitte einen Namen angeben."
 
 #: templates/repo_history.html:7
 msgid "modification history"
-msgstr ""
+msgstr "Bearbeitungshistorie"
 
 #: templates/repo_history.html:11
 msgid ""
@@ -2778,77 +2802,82 @@ msgstr ""
 
 #: templates/repo_history.html:11
 msgid "View Snapshot"
-msgstr ""
+msgstr "Schnappschuss ansehen"
 
 #: templates/repo_history.html:17
 msgid "Modifier"
-msgstr ""
+msgstr "Bearbeitung"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
-msgstr ""
+msgstr "Schnappschuss"
 
 #: templates/repo_history_view.html:9
 msgid "Back to snapshots"
-msgstr ""
+msgstr "Zurück zu Schnappschüssen"
 
 #: templates/repo_history_view.html:33
 msgid "Can't view this library"
-msgstr ""
+msgstr "Kann die Bibliothek nicht anzeigen"
 
 #: templates/repo_recycle_view.html:32 templates/repo_recycle_view.html:34
 msgid "a week"
-msgstr ""
+msgstr "eine Woche"
 
 #: templates/repo_recycle_view.html:37 templates/repo_recycle_view.html:39
 msgid "a month"
-msgstr ""
+msgstr "ein Monat"
 
 #: templates/repo_recycle_view.html:42 templates/repo_recycle_view.html:44
 msgid "all"
-msgstr ""
+msgstr "Alles"
 
 #: templates/repo_recycle_view.html:54
 msgid "Delete Time"
-msgstr ""
+msgstr "Zeit löschen"
 
 #: templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
-msgstr ""
+msgstr "Zurück zur Bearbeitungshistorie"
 
 #: templates/repo_view_snapshot.html:15
 msgid "Create Time"
-msgstr ""
+msgstr "Erstellungszeit"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Restore Library"
-msgstr ""
+msgstr "Bibliothek wiederherstellen"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Are you sure you want to restore this library"
-msgstr ""
+msgstr "Sind Sie sicher das Sie diese Bibliothek wiederherstellen möchten?"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
-msgstr ""
+msgstr "Vorbereiten, bitte warten…"
 
 #: templates/seafile_access_check.html:7
 msgid ""
 "No running Seafile client is detected. If you're sure Seafile client is "
 "running, click the following link to continue downloading:"
 msgstr ""
+"Es wurde kein laufender Seafile Client gefunden. Wenn Sie sich sicher sind, "
+"das ein Seafile Client am laufen ist, klicken Sie den folgen Link um "
+"fortzufahren:"
 
 #: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
 msgstr ""
+"Ihr Seafile Client ist nicht mehr aktuell. Bitte aktualisieren Sie auf die "
+"neueste Version."
 
 #: templates/seafile_access_check.html:8
 msgid "Click to download."
-msgstr ""
+msgstr "Klicken zum Herunterladen."
 
 #: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
-msgstr ""
+msgstr "Geteilt von:"
 
 #: templates/shared_link_email.html:2
 #, python-format
@@ -2859,47 +2888,47 @@ msgstr ""
 
 #: templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
-msgstr ""
+msgstr "Bitte gehen Sie zur folgenden Seite um die Datei anzusehen:"
 
 #: templates/sys_group_admin.html:7
 msgid "All Groups"
-msgstr ""
+msgstr "Alle Gruppen"
 
 #: templates/sys_group_admin.html:13 templates/sys_org_admin.html:14
 msgid "Create At"
-msgstr ""
+msgstr "Erstellt am"
 
 #: templates/sys_org_admin.html:7
 msgid "All Organizations"
-msgstr ""
+msgstr "Alle Organisationen"
 
 #: templates/sys_org_admin.html:61
 msgid "Delete Organization"
-msgstr ""
+msgstr "Organisation löschen"
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
-msgstr ""
+msgstr "Neuen Benutzer/Neue Benitzerin hinzufügen"
 
 #: templates/sys_useradmin.html:17
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: templates/sys_useradmin.html:25
 msgid "Activated"
-msgstr ""
+msgstr "Aktiviert"
 
 #: templates/sys_useradmin.html:27
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: templates/sys_useradmin.html:32
 msgid "ResetPwd"
-msgstr ""
+msgstr "Passwort Zurücksetzen"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
-msgstr ""
+msgstr "Benutzer*in löschen"
 
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
@@ -2907,35 +2936,35 @@ msgstr ""
 
 #: templates/text_diff.html:6
 msgid "modification details"
-msgstr ""
+msgstr "Bearbeitungsdetails"
 
 #: templates/text_diff.html:19
 msgid "It's a newly-created blank file."
-msgstr ""
+msgstr "Ist eine neu erstellte leere Datei."
 
 #: templates/text_diff.html:26
 msgid "before modification"
-msgstr ""
+msgstr "bevor Bearbeitung"
 
 #: templates/text_diff.html:28
 msgid "after modification"
-msgstr ""
+msgstr "nach Bearbeitung"
 
 #: templates/update_file_error.html:6
 msgid "Update file "
-msgstr ""
+msgstr "Datei aktualisieren"
 
 #: templates/update_file_error.html:14 templates/upload_file_error.html:10
 msgid "error: "
-msgstr ""
+msgstr "Fehler:"
 
 #: templates/upload_file_error.html:6
 msgid "Upload file"
-msgstr ""
+msgstr "Datei Hochladen"
 
 #: templates/upload_file_error.html:6
 msgid "to"
-msgstr ""
+msgstr "zu"
 
 #: templates/user_add_email.html:3
 #, python-format
@@ -2952,21 +2981,21 @@ msgstr ""
 
 #: templates/user_add_email.html:7
 msgid "Following is your account information:"
-msgstr ""
+msgstr "Nachfolgend sind Ihre Benutzerkonteninformationen:"
 
 #: templates/user_add_email.html:8
 #, python-format
 msgid "Email: %(email)s"
-msgstr ""
+msgstr "Email: %(email)s"
 
 #: templates/user_add_email.html:9
 #, python-format
 msgid "Password:  %(password)s"
-msgstr ""
+msgstr "Passwort:  %(password)s"
 
 #: templates/user_add_email.html:11
 msgid "Please go to the following page and log in:"
-msgstr ""
+msgstr "Bitte besuchen Sie die folgende Seite um sich einzuloggen:"
 
 #: templates/user_reset_email.html:2
 #, python-format
@@ -2984,86 +3013,86 @@ msgstr ""
 
 #: templates/userinfo.html:13
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: templates/userinfo.html:25
 msgid "Set Quota"
-msgstr ""
+msgstr "Quota setzen"
 
 #: templates/userinfo.html:33
 msgid "Owned"
-msgstr ""
+msgstr "Besitzer*in"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
-msgstr ""
+msgstr "Geteilt"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
-msgstr ""
+msgstr "Speicherplatz für Benutzer*in limitieren"
 
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
-msgstr ""
+msgstr "Tipp: 0 heißt es wird das Standardlimit verwendet"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
-msgstr ""
+msgstr "Passwort vergessen?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
-msgstr ""
+msgstr "Email oder Passwort sind falsch"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
-msgstr ""
+msgstr "Ausloggen"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr ""
+msgstr "Danke für ihre Teilname!"
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
-msgstr ""
+msgstr "Wieder Einloggen"
 
 #: templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr ""
+msgstr "Passwort wurde erfolgreich geändert"
 
 #: templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr ""
+msgstr "Ihr Passwort wurde erfolgreich geändert."
 
 #: templates/registration/password_change_form.html:3
 #: templates/registration/password_change_form.html:7
 msgid "Password Modification"
-msgstr ""
+msgstr "Passwortänderung"
 
 #: templates/registration/password_change_form.html:9
 msgid "Current Password: "
-msgstr ""
+msgstr "Aktuelles Passwort:"
 
 #: templates/registration/password_change_form.html:11
 #: templates/registration/password_reset_confirm.html:13
 msgid "New Password: "
-msgstr ""
+msgstr "Neues Passwort:"
 
 #: templates/registration/password_change_form.html:13
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
-msgstr ""
+msgstr "Passwort bestätigen:"
 
 #: templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr ""
+msgstr "Passwort wurde erfolgreich zurückgesetzt"
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr ""
+msgstr "Passwort wurde erfolgreich zurückgesetzt"
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
-msgstr ""
+msgstr "Neues Passwort eingeben"
 
 #: templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
@@ -3071,7 +3100,7 @@ msgstr ""
 
 #: templates/registration/password_reset_done.html:4
 msgid "Password Reset Successfully"
-msgstr ""
+msgstr "Passwort wurde erfolgreich zurückgesetzt"
 
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
@@ -3090,86 +3119,86 @@ msgstr ""
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Ihr Benutzername, falls Sie ihn vergessen haben:"
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr ""
+msgstr "Ihre Email, welche Sie beim Login verwendet haben:"
 
 #: templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
-msgstr ""
+msgstr "Wir werden Ihnen eine Email zusenden um das neue Passwort zu setzen"
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
-msgstr ""
+msgstr "Registrieren"
 
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
-msgstr ""
+msgstr "Willkommen zurück, Sie sind bereits Eingeloggt."
 
 #: templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr ""
+msgstr "wird nicht unterstützt. Bitte wählen Sie eine Bilddatei."
 
 #: templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
-msgstr ""
+msgstr "wird nicht unterstützt. Dateiendung muss eine der folgenden sein"
 
 #: templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
-msgstr ""
+msgstr "ist zu groß. Die maximale Größe beträgt 1MB."
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
 msgid "Recommend"
-msgstr ""
+msgstr "Empfehlen"
 
 #: templates/snippets/bottom_bar.html:3
 msgid "Back to group"
-msgstr ""
+msgstr "Zurück zur Gruppe"
 
 #: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
-msgstr ""
+msgstr "Bitte geben Sie eine Empfehlungsnachricht an."
 
 #: templates/snippets/events.html:2
 msgid "Recent Events"
-msgstr ""
+msgstr "Aktuelle Ereignisse"
 
 #: templates/snippets/events.html:4
 #: templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
-msgstr ""
+msgstr "Laden…"
 
 #: templates/snippets/events.html:5
 msgid "More"
-msgstr ""
+msgstr "Mehr"
 
 #: templates/snippets/events_.html:16
 msgid "Updated library"
-msgstr ""
+msgstr "Bibliothek aktualisiert"
 
 #: templates/snippets/events_.html:38
 msgid "Created library"
-msgstr ""
+msgstr "Bibliothek erstellt"
 
 #: templates/snippets/events_.html:53
 msgid "Deleted library"
-msgstr ""
+msgstr "Bibiliothek gelöscht"
 
 #: templates/snippets/events_js.html:42
 #: templates/snippets/list_commit_detail.html:37
 msgid "Unknown error."
-msgstr ""
+msgstr "Unbekannter Fehler"
 
 #: templates/snippets/events_js.html:44
 msgid "Please refresh the page later."
-msgstr ""
+msgstr "Bitte aktualisieren Sie diese Seite später."
 
 #: templates/snippets/events_js.html:46
 msgid "Please try again later."
-msgstr ""
+msgstr "Bitte versuchen Sie es später erneut."
 
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
@@ -3177,7 +3206,7 @@ msgstr ""
 
 #: templates/snippets/file_content_js.html:95
 msgid "Document convertion failed."
-msgstr ""
+msgstr "Dokumentkonvertierung fehlgeschlagen."
 
 #: templates/snippets/file_content_js.html:110
 msgid ""
@@ -3188,11 +3217,11 @@ msgstr ""
 
 #: templates/snippets/file_content_js.html:110
 msgid "Full Screen"
-msgstr ""
+msgstr "Vollbild"
 
 #: templates/snippets/file_content_js.html:110
 msgid "loading..."
-msgstr ""
+msgstr "Laden…"
 
 #: templates/snippets/file_content_js.html:157
 msgid ""
@@ -3201,73 +3230,73 @@ msgstr ""
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
-msgstr ""
+msgstr "Diese Dateiart kann nicht Online betrachtet werden."
 
 #: templates/snippets/file_upload_progress_js.html:51
 #: templates/snippets/file_upload_progress_js.html:75
 msgid "Please choose a file at first."
-msgstr ""
+msgstr "Bitte wählen Sie zuerst eine Datei."
 
 #: templates/snippets/file_upload_progress_js.html:62
 #: templates/snippets/file_upload_progress_js.html:85
 msgid "File size surpasses the limit."
-msgstr ""
+msgstr "Die Dateigröße überschreitet das Limit."
 
 #: templates/snippets/group_recommend_form.html:10
 msgid "to group:"
-msgstr ""
+msgstr "für Gruppe:"
 
 #: templates/snippets/group_recommend_form.html:17
 msgid "Recommend Message"
-msgstr ""
+msgstr "Empfehlungsnachricht"
 
 #: templates/snippets/list_commit_detail.html:11
 msgid "Modification Details"
-msgstr ""
+msgstr "Bearbeitungsdetails"
 
 #: templates/snippets/list_commit_detail.html:24
 msgid "New files"
-msgstr ""
+msgstr "Neue Dateien"
 
 #: templates/snippets/list_commit_detail.html:25
 msgid "Deleted files"
-msgstr ""
+msgstr "Gelösche Dateien"
 
 #: templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Umbenannte oder verschobene Dateien"
 
 #: templates/snippets/list_commit_detail.html:27
 msgid "Modified files"
-msgstr ""
+msgstr "Bearbeitete Dateien"
 
 #: templates/snippets/list_commit_detail.html:28
 msgid "New directories"
-msgstr ""
+msgstr "Neue Ordner"
 
 #: templates/snippets/list_commit_detail.html:29
 msgid "Deleted directories"
-msgstr ""
+msgstr "Gelöschte Ordner"
 
 #: templates/snippets/list_commit_detail.html:31
 msgid "No conflict in the merge."
-msgstr ""
+msgstr "Keine konflikt bei der Zusammenführung."
 
 #: templates/snippets/my_groups.html:24
 msgid "Create a group now"
-msgstr ""
+msgstr "Jetzt eine neue Gruppe erstellen"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
-msgstr ""
+msgstr "Meine"
 
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
-msgstr ""
+msgstr "Favorisiert"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
-msgstr ""
+msgstr "Sie haben noch keine Bibliotheken erstellt"
 
 #: templates/snippets/my_owned_repos.html:44
 msgid ""
@@ -3278,7 +3307,7 @@ msgstr ""
 
 #: templates/snippets/my_owned_repos.html:45
 msgid "Synchronize libraries with PC client"
-msgstr ""
+msgstr "Bibliothek mit Client sychronisieren"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
@@ -3294,7 +3323,7 @@ msgstr ""
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
-msgstr ""
+msgstr "Es wird keine Bibliothek mit ihnen geteilt"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
@@ -3306,11 +3335,11 @@ msgstr ""
 
 #: templates/snippets/my_owned_repos.html:107
 msgid "icon"
-msgstr ""
+msgstr "Symbol"
 
 #: templates/snippets/my_owned_repos.html:118
 msgid "You don't have any starred files yet"
-msgstr ""
+msgstr "Sie haben noch keine Dateien favorisiert."
 
 #: templates/snippets/my_owned_repos.html:119
 msgid ""
@@ -3320,7 +3349,7 @@ msgstr ""
 
 #: templates/snippets/myhome_extra_script.html:28
 msgid "Please enter emails or groups."
-msgstr ""
+msgstr "Bitte geben sie Emails oder Gruppen an."
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -3328,35 +3357,35 @@ msgstr ""
 
 #: templates/snippets/repo_create_form.html:16
 msgid "Encrypt"
-msgstr ""
+msgstr "Verschlüsseln"
 
 #: templates/snippets/repo_create_form.html:17
 msgid "(3-15 characters)"
-msgstr ""
+msgstr "(3-15 Zeichen)"
 
 #: templates/snippets/repo_create_form.html:19
 msgid "Password again"
-msgstr ""
+msgstr "Passwort erneut eingeben"
 
 #: templates/snippets/repo_create_js.html:37
 msgid "Please enter password"
-msgstr ""
+msgstr "Bitte geben Sie ein Passwort an"
 
 #: templates/snippets/repo_create_js.html:49
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Bitte geben Sie das Passwort erneut an"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
-msgstr ""
+msgstr "Bibliothek teilen"
 
 #: templates/snippets/repo_share_form.html:4
 msgid "Share <span class=\"op-target\"></span> to"
-msgstr ""
+msgstr "<span class=\"op-target\"></span> teilen mit"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
-msgstr ""
+msgstr "Emails oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
 msgid ""
@@ -3370,28 +3399,28 @@ msgstr ""
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Bitte geben Sie mindestens eine Email an."
 
 #: thirdpart/auth/admin.py:29
 msgid "Personal info"
-msgstr ""
+msgstr "Persönliche Informationen"
 
 #: thirdpart/auth/admin.py:30
 msgid "Permissions"
-msgstr ""
+msgstr "Berechtigungen"
 
 #: thirdpart/auth/admin.py:31
 msgid "Important dates"
-msgstr ""
+msgstr "Wichtige Daten"
 
 #: thirdpart/auth/admin.py:114
 msgid "Password changed successfully."
-msgstr ""
+msgstr "Passwort erfolgreich geändert."
 
 #: thirdpart/auth/admin.py:124
 #, python-format
 msgid "Change password: %s"
-msgstr ""
+msgstr "Passwort ändern: %s"
 
 #: thirdpart/auth/forms.py:39
 msgid ""
@@ -3401,7 +3430,7 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
-msgstr ""
+msgstr "Dieses Benutzerkonto ist inaktiv."
 
 #: thirdpart/auth/forms.py:46
 msgid ""
@@ -3411,7 +3440,7 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:59
 msgid "E-mail"
-msgstr ""
+msgstr "Email"
 
 #: thirdpart/auth/forms.py:66
 msgid ""
@@ -3432,39 +3461,43 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:112
 msgid "New password"
-msgstr ""
+msgstr "Neues Passwort"
 
 #: thirdpart/auth/forms.py:113
 msgid "New password confirmation"
-msgstr ""
+msgstr "Neues Passwort bestätigen"
 
 #: thirdpart/auth/forms.py:139
 msgid "Old password"
-msgstr ""
+msgstr "Altes Passwort"
 
 #: thirdpart/auth/forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
+"Das alte Passwort das Sie eingegeben haben war nicht korrekt. Bitte geben "
+"Sie es erneut ein."
 
 #: thirdpart/auth/views.py:90
 msgid "Logged out"
-msgstr ""
+msgstr "Ausgeloggt"
 
 #: thirdpart/auth/views.py:138
 msgid "Failed to send email, please contact administrator."
 msgstr ""
+"Email konnte nicht versendet werden. Bitte wenden Sie sich an einen "
+"Administrator/eine Administratorin."
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
-msgstr ""
+msgstr "Geben Sie eine valide Email an."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
-msgstr ""
+msgstr "Aktive Benutzer*innen"
 
 #: thirdpart/registration/admin.py:43
 msgid "Re-send activation emails"
-msgstr ""
+msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
@@ -3472,11 +3505,12 @@ msgstr ""
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
-msgstr ""
+msgstr "Ich habe Die Nutzungsbedingungen gelesen und verstanden"
 
 #: thirdpart/registration/forms.py:70
 msgid "You must agree to the terms to register"
 msgstr ""
+"Sie müssen den Nutzungsbedingungen zustimmen um sich registrieren zu können"
 
 #: thirdpart/registration/forms.py:86
 msgid ""
@@ -3492,7 +3526,7 @@ msgstr ""
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
-msgstr ""
+msgstr "Aktivierungsschlüssel"
 
 #: thirdpart/registration/models.py:196
 msgid "registration profile"
