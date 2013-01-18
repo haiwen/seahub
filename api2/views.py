@@ -850,13 +850,13 @@ class DirView(APIView):
                                  'Failed to make directory.')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                reloaddir(request, repo_id, parent_dir)
+                resp = reloaddir(request, repo_id, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(parent_dir) + \
                     quote(new_dir_name_utf8)
-                return resp
+            return resp
         # elif operation.lower() == 'rename':
         #     pass
         # elif operation.lower() == 'move':
