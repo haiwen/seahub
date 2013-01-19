@@ -2,21 +2,19 @@
 # encoding: utf-8
 import os
 import re
-import random
 import stat
 import urllib2
+import uuid
 import json
 
 from django.contrib.sites.models import RequestSite
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.hashcompat import sha_constructor
+from django.utils.hashcompat import sha_constructor, md5_constructor
 
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
-from django.utils.hashcompat import md5_constructor
 
 from pysearpc import SearpcError
-
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
@@ -123,11 +121,8 @@ def gen_token(max_length=5):
     Generate a random token.
 
     """
-
-    secret_key = settings.SECRET_KEY
-    rstr = str(random.random())
-    token = sha_constructor(secret_key + rstr).hexdigest()[:max_length]
-    return token
+    
+    return md5_constructor(uuid.uuid4().hex).hexdigest()[:max_length]
 
 def validate_group_name(group_name):
     """
