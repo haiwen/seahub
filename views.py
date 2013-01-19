@@ -1750,7 +1750,9 @@ def get_repo_download_url(request, repo_id):
     
     url += "?relay_id=%s&relay_addr=%s&relay_port=%s" % (relay_id, addr, port)
     url += "&email=%s&token=%s" % (email, token)
-    url += "&repo_id=%s&repo_name=%s&encrypted=%s" % (repo_id, quote_repo_name, enc)
+    url += "&repo_id=%s&repo_name=%s" % (repo_id, quote_repo_name)
+    if enc:
+        url += "&encrypted=1&magic=%s" % repo.magic
 
     return url, ''
  
