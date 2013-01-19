@@ -20,8 +20,7 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
-    HTTP_SERVER_ROOT
+    list_org_repos_by_owner, get_org_groups_by_user, check_permission
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -102,6 +101,11 @@ def get_httpserver_root():
     Get seafile http server address and port from seaserv.
 
     """
+    try:
+        from settings import HTTP_SERVER_ROOT # First load from settings
+    except ImportError:
+        # If load settings failed, then use default config
+        from seaserv import HTTP_SERVER_ROOT
     return HTTP_SERVER_ROOT if HTTP_SERVER_ROOT else ''
 
 def get_ccnetapplet_root():
