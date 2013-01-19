@@ -126,7 +126,7 @@ def gen_token(max_length=5):
 
     """
     
-    return md5_constructor(uuid.uuid4().hex).hexdigest()[:max_length]
+    return uuid.uuid4().hex[:max_length]
 
 def validate_group_name(group_name):
     """
