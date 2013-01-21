@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from seaserv import get_group_members
 
 from shortcuts import get_first_object_or_none
-from base.templatetags.seahub_tags import at_pattern
 from notifications.models import UserNotification
 from profile.models import Profile
 
@@ -54,7 +53,8 @@ def msgreply_save_handler(sender, instance, **kwargs):
     reply_msg =  instance.message
     group_msg =  instance.reply_to
     to_user = ''
-    
+
+    from base.templatetags.seahub_tags import at_pattern
     m = re.match(at_pattern, reply_msg)
     if m:
         nickname_or_emailprefix = m.group()[1:]
