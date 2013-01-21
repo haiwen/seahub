@@ -11,6 +11,7 @@ from django.contrib.sites.models import RequestSite
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor, md5_constructor
+from django.utils.translation import ugettext as _
 
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
 
@@ -65,7 +66,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or u'权限错误'
+    ctx['error_msg'] = msg or _('permissiong error')
 
     if extra_ctx:
         for k in extra_ctx:
@@ -80,7 +81,7 @@ def render_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or u'内部错误'
+    ctx['error_msg'] = msg or _('Internal error')
 
     if extra_ctx:
         for k in extra_ctx:

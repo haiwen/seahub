@@ -117,8 +117,8 @@ def access_to_repo(request, repo_id, repo_ap=None):
     Check whether user in the request can access to repo, which means user can
     view directory entries on repo page. Only repo owner or person who is shared
     can access to repo.
-    NOTE: `repo_ap` may be used in future.
 
+    NOTE: This function is deprecated, use `get_user_permission`.
     """
     if not request.user.is_authenticated():
         token = request.COOKIES.get('anontoken', None)
@@ -670,9 +670,10 @@ def get_subdir(request):
 @ctx_switch_required
 def repo_history(request, repo_id):
     """
-    View repo history.
+    List library modification histories.
     """
-    if not access_to_repo(request, repo_id, ''):
+    user_perm = get_user_permission(request, repo_id)
+    if not user_perm:
         return render_permission_error(request, _(u'Unable to view library modification'))
 
     repo = get_repo(repo_id)
@@ -713,6 +714,7 @@ def repo_history(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'user_perm': user_perm,
             }, context_instance=RequestContext(request))
 
 @login_required
