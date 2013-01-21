@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils import translation
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
+from django.utils.translation import pgettext
 
 from profile.models import Profile
 from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
@@ -74,25 +75,39 @@ def file_icon_filter(value):
     else:
         return FILEEXT_ICON_MAP.get('default')
 
+# This way of translation looks silly, but works well.
+COMMIT_MSG_TRANSLATION_MAP = {  
+    'Added' : _('Added'),
+    'Deleted' : _('Deleted'),
+    'Removed' : _('Removed'),
+    'Modified' : _('Modified'),
+    'Renamed' : _('Renamed'),
+    'Moved' : _('Moved'),
+    'Added directory' : _('Added directory'),
+    'Removed directory' : _('Removed directory'),
+    'Renamed directory' : _('Renamed directory'),
+    'Moved directory' : _('Moved directory'),
+}
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
-    """Translate commit description to Chinese."""
-    # Do nothing if current language is English
+    """Translate commit description."""
+
+    # Do nothing if current language is English.
     if translation.get_language() == 'en':
         return value
     
     if value.startswith('Reverted repo'):
-        return value.replace('Reverted repo to status at', u'资料库内容还原到')
+        return value.replace('Reverted repo to status at', _('Reverted repo to status at'))
     elif value.startswith('Reverted file'):
-        value = value.replace('Reverted file', u'还原文件')
-        value = value.replace('to status at', u'内容到')
-        return value
+        return value.replace('Reverted file to status at', _('Reverted file to status at'))
     elif value.startswith('Recovered deleted directory'):
-        return value.replace('Recovered deleted directory', u'还原已删除的目录')
+        return value.replace('Recovered deleted directory', _('Recovered deleted directory'))
     elif value.startswith('Merged') or value.startswith('Auto merge'):
-        return u'系统自动合并修改'
+        return _('Auto merge by seafile system')
     else:
-        operations = '|'.join(TRANSLATION_MAP.keys())
+        # Use regular expression to translate commit description.
+        # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
+        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         ret_list = []
@@ -105,21 +120,23 @@ def translate_commit_desc(value):
                 ret_list.append(e)
                 continue
         
-            op = m.group(1)
-            op_trans = TRANSLATION_MAP.get(op)
-            file_name = m.group(2)
-            more = m.group(3)
-            n_files = m.group(4)
-            more_type = m.group(5)
+            op = m.group(1)     # e.g., "Added"
+            op_trans = _(op)
+            file_name = m.group(2) # e.g., "foo.txt"
+            has_more = m.group(3)  # e.g., "and 3 more files"
+            n_files = m.group(4)   # e.g., "3"
+            more_type = m.group(5) # e.g., "files"
     
-            if not more:
-                ret = op_trans + u' "' + file_name + u'".'
-            else:
-                if more_type == 'files':
-                    typ = u'文件'
+            if has_more:
+                if translation.get_language() == 'zh-cn':
+                    typ = u'文件' if more_type == 'files' else u'目录'
+                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                # elif translation.get_language() == 'ru':
+                #     ret = ...
                 else:
-                    typ = u'目录'
-                ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                    ret = e
+            else:
+                ret = op_trans + u' "' + file_name + u'".'
             ret_list.append(ret)
 
         return '\n'.join(ret_list)
@@ -176,7 +193,7 @@ def translate_seahub_time(value):
             seconds ) % { 'seconds': seconds }
         return ret
     else:
-        return _(u'0 second ago')
+        return _('Just now')
     
 # @register.filter(name='translate_remain_time')
 # def translate_remain_time(value):
