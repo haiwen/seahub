@@ -2939,7 +2939,10 @@ def events(request):
         org_id = request.GET.get('org_id')
         events = get_org_user_events(org_id, username, start)
     else:
-        events = get_user_events(username, start)
+        try:
+            events = get_user_events(username, start)
+        except Exception, e:
+            print e
    
     events_more = False
     if len(events) == 11:

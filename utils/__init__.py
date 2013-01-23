@@ -462,17 +462,35 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
     def _get_events(username, start, org_id=None):
         ev_session = SeafEventsSession()
+        total = 11
+        valid_events = []
+        while total == 11 and len(valid_events) < 11:
+            total, events = _get_events_inner(ev_session, username, start, org_id)
+            start += len(events)
+            valid_events.extend(events)
+
+        ev_session.close()
+
+        return valid_events[:11]
+
+    def _get_events_inner(ev_session, username, start, org_id=None):
+        '''Read 11 events from seafevents database, and remove events that are
+        no longer valid
+
+        '''
         if org_id == None:
             events = seafevents.get_user_events(ev_session, username, start, start + 11)
         else:
             events = seafevents.get_org_user_events(ev_session, \
                                     org_id, username, start, start + 11)
+        total = len(events)
         valid_events = []
-        ev_session.close()
         for ev in events:
             if ev.etype == 'repo-update':
                 repo = get_repo(ev.repo_id)
                 if not repo:
+                    # delete the update event for repo which has been deleted
+                    seafevents.delete_event(ev_session, ev.uuid)
                     continue
                 if repo.encrypted:
                     repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
@@ -481,7 +499,7 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
             valid_events.append(ev)
 
-        return valid_events
+        return total, valid_events
 
     def get_user_events(username, start):
         return _get_events(username, start)
