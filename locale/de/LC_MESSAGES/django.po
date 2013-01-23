@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-16 18:11+0100\n"
+"POT-Creation-Date: 2013-01-23 15:24+0100\n"
 "PO-Revision-Date: 2013-01-17 16:31+0100\n"
 "Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -182,8 +183,9 @@ msgstr "Dateiname enthält unzulässiges Zeichen"
 msgid "Duplicated filename"
 msgstr "Doppelter Dateiname"
 
-#: views.py:574 views.py:1305 views.py:2539 views.py:2667
-msgid "File not exists"
+#: views.py:574 views.py:1305 views.py:2541 views.py:2669
+#, fuzzy
+msgid "File does not exist"
 msgstr "Datei existiert nicht"
 
 #: views.py:576
@@ -218,17 +220,19 @@ msgstr "Sie haben keine berechtigung die Bibliothek wiederherzustellen"
 msgid "Please specify history ID"
 msgstr "Bitte geben sie eine Verlaufs ID an"
 
-#: views.py:794 views.py:1575 views.py:2414 views.py:2449 views.py:2881
+#: views.py:794 views.py:1575 views.py:2416 views.py:2451 views.py:2883
 #: share/views.py:396
 msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
-#: views.py:796 views.py:891 views.py:2368 views.py:2896
-msgid "Library not exists"
-msgstr "Bibliothek nicht gefunden"
+#: views.py:796 views.py:891 views.py:2370 views.py:2898
+#, fuzzy
+msgid "Library does not exist"
+msgstr "Die Bibliothek existiert nicht."
 
 #: views.py:798
-msgid "History you specified is not exists"
+#, fuzzy
+msgid "History you specified does not exist"
 msgstr "Der von ihnen gewählte Verlauf existiert nicht"
 
 #: views.py:800
@@ -292,7 +296,7 @@ msgstr "Unbekannte Datenkodierung"
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
-#: views.py:1561 views.py:2210 views.py:2241 views.py:2275
+#: views.py:1561 views.py:2212 views.py:2243 views.py:2277
 msgid "Permission denied"
 msgstr "Zugriff verweigert"
 
@@ -329,51 +333,51 @@ msgstr ""
 msgid "Invalid server setting"
 msgstr "Ungültiger Serverkonfiguration"
 
-#: views.py:1785
+#: views.py:1787
 msgid "Destination path is too long."
 msgstr "Zielpfad ist zu lang."
 
-#: views.py:1791
+#: views.py:1793
 msgid "You can not modify that library."
 msgstr "Sie können diese Bibliothek nicht verändern."
 
-#: views.py:1804
+#: views.py:1806
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr ""
 "%(op)s des Verzeichnisses nicht möglich, %(src)s ist ein Unterverzeichnis "
 "von %(des)s"
 
-#: views.py:1805
+#: views.py:1807
 msgid "copy"
 msgstr "kopieren"
 
-#: views.py:1805
+#: views.py:1807
 msgid "move"
 msgstr "verschieben"
 
-#: views.py:1820
+#: views.py:1822
 #, fuzzy, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich kopiert: <a href=\"%(url)s\">anzeigen</a>"
 
-#: views.py:1826
+#: views.py:1828
 #, fuzzy, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich verschoben: <a href=\"%(url)s\">anzeigen</a>"
 
-#: views.py:1941
+#: views.py:1943
 msgid "Failed to set quota: internal error"
 msgstr "Quota konnte nicht gesetzt werden: Interner Fehler"
 
-#: views.py:2014 templates/sys_useradmin.html:78
+#: views.py:2016 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "Passwort zurücksetzen"
 
-#: views.py:2030
+#: views.py:2032
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
@@ -382,7 +386,7 @@ msgstr ""
 "Passwort erfolgreich auf %(passwd)s gesetzt, eine E-Mail wurde an den Nutzer "
 "%(user)s versand."
 
-#: views.py:2035
+#: views.py:2037
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -392,12 +396,12 @@ msgstr ""
 "den Nutzer %(user)s gesendet werden. Bitte prüfen sie ihre E-Mail "
 "Konfiguration."
 
-#: views.py:2039
+#: views.py:2041
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr ""
 
-#: views.py:2042
+#: views.py:2044
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -405,68 +409,68 @@ msgid ""
 "configured."
 msgstr ""
 
-#: views.py:2045
+#: views.py:2047
 msgid "Failed to reset password: user does not exist"
 msgstr "Zurücksetzen des Passworts fehlgeschlagen: Nutzer existiert nicht"
 
-#: views.py:2066
+#: views.py:2068
 msgid "Seafile Registration Information"
 msgstr "Seafile Registrierungs Informationen"
 
-#: views.py:2101
+#: views.py:2103
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
 
-#: views.py:2104
+#: views.py:2106
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr ""
 
-#: views.py:2106
+#: views.py:2108
 #, python-format
 msgid "Successfully added user %s."
 msgstr "User %s erfolgreich hinzugefügt."
 
-#: views.py:2108
+#: views.py:2110
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
 
-#: views.py:2287
+#: views.py:2289
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "Erfolgreich %(old)s in %(new)s umbenannt."
 
-#: views.py:2342
+#: views.py:2344
 msgid "Failed to create library"
 msgstr "Bibliothek konnte nicht erstellt werden"
 
-#: views.py:2435
+#: views.py:2437
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
 
-#: views.py:2439 views.py:2465
+#: views.py:2441 views.py:2467
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr ""
 
-#: views.py:2461
+#: views.py:2463
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
 
-#: views.py:2725
+#: views.py:2727
 msgid "Internal error"
 msgstr "Interner Fehler"
 
-#: views.py:2928
+#: views.py:2930
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Konnte \"%s\" nicht herunterladen"
@@ -907,7 +911,8 @@ msgid "Permission error: only group staff can add member"
 msgstr ""
 
 #: group/error_msg.py:16 group/error_msg.py:22
-msgid "Group not exists"
+#, fuzzy
+msgid "Group does not exist"
 msgstr "Gruppe existiert nicht"
 
 #: group/error_msg.py:17
@@ -1927,9 +1932,9 @@ msgid ""
 msgstr ""
 
 #: share/views.py:110
-#, python-format
-msgid "Failed to share to %s，as it does not exists."
-msgstr ""
+#, fuzzy, python-format
+msgid "Failed to share to %s，as it does not exist."
+msgstr "Teilen mit %s fehlgeschlagen: Es existiert nicht."
 
 #: share/views.py:126
 #, python-format
@@ -3535,3 +3540,9 @@ msgstr ""
 #: thirdpart/registration/models.py:197
 msgid "registration profiles"
 msgstr ""
+
+#~ msgid "File not exists"
+#~ msgstr "Datei existiert nicht"
+
+#~ msgid "Library not exists"
+#~ msgstr "Bibliothek nicht gefunden"
