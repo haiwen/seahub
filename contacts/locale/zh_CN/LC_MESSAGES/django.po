@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-05 19:46+0800\n"
+"POT-Creation-Date: 2013-01-23 14:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,10 +30,12 @@ msgid "It is already your contact."
 msgstr "该邮箱已在列表中。"
 
 #: views.py:68
+#, python-format
 msgid "Successfully added %s to contacts."
 msgstr "你已成功添加 %s 为联系人。"
 
 #: views.py:93
+#, python-format
 msgid "Successfully added %s."
 msgstr "你已成功添加 %s 为联系人。"
 
@@ -42,12 +44,14 @@ msgid "Failed to add an contact."
 msgstr "添加失败"
 
 #: views.py:120
+#, python-format
 msgid "Successfully edited %s."
 msgstr "编辑 %s 成功。"
 
 #: views.py:133
-msgid "Successfully Deleted"
-msgstr "成功删除 %s 。"
+#, python-format
+msgid "Successfully Deleted %s"
+msgstr "成功删除 %s "
 
 #: templates/contacts/contact_list.html:8
 msgid "Tips"
@@ -140,32 +144,3 @@ msgstr "删除联系人"
 msgid "Are you sure you want to delete"
 msgstr "确定要删除"
 
-#~ msgid "Editting Successfully"
-#~ msgstr "编辑成功"
-
-#~ msgid "Deleting Successfully"
-#~ msgstr "删除成功"
-
-#~ msgid "Please input email address"
-#~ msgstr "请输入邮箱地址。"
-
-#~ msgid "Tip"
-#~ msgstr "小提示"
-
-#~ msgid ""
-#~ "System will record emails used in sharing and file link sending "
-#~ "automatically."
-#~ msgstr ""
-#~ "在共享和发送外链的时候，系统会自动记录下你用过的通讯地址，以方便下次使用。"
-
-#~ msgid "Registered Contacts"
-#~ msgstr "站内联系人"
-
-#~ msgid "Here will show all registered users when adding contacts."
-#~ msgstr "添加联系人时，如果该用户已注册，则显示为你的站内联系人。"
-
-#~ msgid "Unregistered Contacts"
-#~ msgstr "站外联系人"
-
-#~ msgid "Here will show all unregistered users when adding contacts."
-#~ msgstr "添加联系人时，如果该用户未注册，则显示为你的站外联系人。"
