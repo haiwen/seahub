@@ -48,7 +48,7 @@ msgstr "共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享</a>
 
 #: views.py:109
 #, python-format
-msgid "Failed to share to %s，as it does not exists."
+msgid "Failed to share to %s，as it does not exist."
 msgstr "共享到 %s 失败，该小组不存在。"
 
 #: views.py:125

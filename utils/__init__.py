@@ -149,7 +149,7 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
     latest_commit = get_commits(repo_id, 0, 1)[0]
     if not latest_commit:
         return ''
-    # TODO: what if parrent_dir does not exists?
+    # TODO: what if parrent_dir does not exist?
     dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id,
                                          parent_dir.encode('utf-8'))
 
