@@ -571,7 +571,7 @@ def upload_error_msg (code):
     elif (code == 1):
         err_msg = _(u'Duplicated filename')
     elif (code == 2):
-        err_msg = _(u'File not exists')
+        err_msg = _(u'File does not exist')
     elif (code == 3):
         err_msg = _(u'File size surpasses the limit')
     elif (code == 4):
@@ -793,9 +793,9 @@ def repo_history_revert(request, repo_id):
         if e.msg == 'Bad arguments':
             return render_error(request, _(u'Invalid arguments'))
         elif e.msg == 'No such repo':
-            return render_error(request, _(u'Library not exists'))
+            return render_error(request, _(u'Library does not exist'))
         elif e.msg == "Commit doesn't exist":
-            return render_error(request, _(u'History you specified is not exists'))
+            return render_error(request, _(u'History you specified does not exist'))
         else:
             return render_error(request, _(u'Unknown error'))
 
@@ -888,7 +888,7 @@ def modify_token(request, repo_id):
 def repo_remove(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Library not exists'))
+        return render_error(request, _(u'Library does not exist'))
         
     user = request.user.username
     org, base_template = check_and_get_org_by_repo(repo_id, user)
@@ -1302,7 +1302,7 @@ def repo_view_file(request, repo_id):
             obj_id = None
 
     if not obj_id:
-        return render_error(request, _(u'File not exists'))
+        return render_error(request, _(u'File does not exist'))
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         # Redirect uesr to decrypt repo page.
@@ -2367,7 +2367,7 @@ def render_file_revisions (request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = _(u"Library not exists")
+        error_msg = _(u"Library does not exist")
         return render_error(request, error_msg)
 
     try:
@@ -2538,7 +2538,7 @@ def view_shared_file(request, token):
         obj_id = None
 
     if not obj_id:
-        return render_error(request, _(u'File not exists'))
+        return render_error(request, _(u'File does not exist'))
     
     repo = get_repo(repo_id)
     if not repo:
@@ -2666,7 +2666,7 @@ def view_file_via_shared_dir(request, token):
     quote_filename = urllib2.quote(file_name.encode('utf-8'))
     file_id = get_file_id_by_path(repo_id, path)
     if not file_id:
-        return render_error(request, _(u'File not exists'))
+        return render_error(request, _(u'File does not exist'))
 
     access_token = seafserv_rpc.web_get_access_token(repo.id, file_id,
                                                      'view', '')
@@ -2895,7 +2895,7 @@ def repo_star_file(request, repo_id):
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Library not exists'))
+        return render_error(request, _(u'Library does not exist'))
 
     path = request.GET.get('p', '/')
     if path[-1] != '/':         # Normalize dir path

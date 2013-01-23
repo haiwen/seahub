@@ -164,7 +164,7 @@ msgid "Duplicated filename"
 msgstr "Дубликат файла"
 
 #: views.py:470 views.py:1173 views.py:1525 views.py:2388
-msgid "File not exists"
+msgid "File does not exist"
 msgstr "Файл не существует"
 
 #: views.py:472
@@ -205,11 +205,11 @@ msgid "Invalid arguments"
 msgstr "Недопустимые аргументы"
 
 #: views.py:692 views.py:787 views.py:2217 views.py:2635
-msgid "Library not exists"
+msgid "Library does not exist"
 msgstr "Библиотека не существует"
 
 #: views.py:694
-msgid "History you specified is not exists"
+msgid "History you specified does not exist"
 msgstr "История который вы указали, не существует"
 
 #: views.py:696
@@ -829,7 +829,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Ошибка доступа: только сотрудники группы могут добавлять членов"
 
 #: group/error_msg.py:16 group/error_msg.py:22
-msgid "Group not exists"
+msgid "Group does not exist"
 msgstr "Группа не существует"
 
 #: group/error_msg.py:17
@@ -1826,7 +1826,7 @@ msgstr ""
 
 #: share/views.py:103
 #, python-format
-msgid "Failed to share to %s，as it does not exists."
+msgid "Failed to share to %s，as it does not exist."
 msgstr ""
 
 #: share/views.py:116

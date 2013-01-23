@@ -107,7 +107,7 @@ def share_repo(request):
                     messages.add_message(request, messages.INFO, msg)
                     break
             if not find:
-                msg = _(u'Failed to share to %s，as it does not exists.') % group_name
+                msg = _(u'Failed to share to %s，as it does not exist.') % group_name
                 messages.add_message(request, messages.ERROR, msg)
         else:
             ''' Share repo to user '''

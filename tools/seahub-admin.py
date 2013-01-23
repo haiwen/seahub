@@ -20,7 +20,7 @@ else:
 # Test usermgr.db exists
 usermgr_db = os.path.join(ccnet_dir, 'PeerMgr/usermgr.db')
 if not os.path.exists(usermgr_db):
-    print '%s NOT exists. FAILED' % usermgr_db
+    print '%s DOES NOT exist. FAILED' % usermgr_db
     sys.exit(1)
 
 # Connect db
