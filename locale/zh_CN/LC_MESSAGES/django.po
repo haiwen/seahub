@@ -177,7 +177,7 @@ msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
 #: views.py:574 views.py:1305 views.py:2539 views.py:2667
-msgid "File not exists"
+msgid "File does not exist"
 msgstr "文件不存在"
 
 #: views.py:576
@@ -217,11 +217,11 @@ msgid "Invalid arguments"
 msgstr "非法参数"
 
 #: views.py:796 views.py:891 views.py:2368 views.py:2896
-msgid "Library not exists"
+msgid "Library does not exist"
 msgstr "资料库不存在"
 
 #: views.py:798
-msgid "History you specified is not exists"
+msgid "History you specified does not exist"
 msgstr "指定的历史记录不存在"
 
 #: views.py:800
