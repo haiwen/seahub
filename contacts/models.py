@@ -4,11 +4,13 @@ from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
+from settings import CONTACT_EMAIL_LENGTH
+
 class Contact(models.Model):
     """Record user's contacts."""
 
-    user_email = models.CharField(max_length=255)
-    contact_email = models.CharField(max_length=255)
+    user_email = models.CharField(max_length=CONTACT_EMAIL_LENGTH)
+    contact_email = models.CharField(max_length=CONTACT_EMAIL_LENGTH)
     contact_name = models.CharField(max_length=255, blank=True, null=True, \
                                         default='')
     note = models.CharField(max_length=255, blank=True, null=True, default='')
