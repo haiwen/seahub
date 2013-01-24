@@ -9,7 +9,7 @@ from settings import CONTACT_EMAIL_LENGTH
 class Contact(models.Model):
     """Record user's contacts."""
 
-    user_email = models.CharField(max_length=CONTACT_EMAIL_LENGTH)
+    user_email = models.CharField(max_length=CONTACT_EMAIL_LENGTH, db_index=True)
     contact_email = models.CharField(max_length=CONTACT_EMAIL_LENGTH)
     contact_name = models.CharField(max_length=255, blank=True, null=True, \
                                         default='')
