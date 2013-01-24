@@ -120,6 +120,15 @@ if config.has_option('httpserver', 'max_upload_size'):
     except ValueError:
         pass
 
+MAX_DOWNLOAD_DIR_SIZE = 100 * (2 ** 20) # Default max size of a downloadable dir
+if config.has_option('httpserver', 'max_download_dir_size'):
+    try:
+        max_download_dir_size_mb = config.getint('httpserver', 'max_download_dir_size')
+        if max_download_dir_size_mb > 0:
+            MAX_DOWNLOAD_DIR_SIZE = max_download_dir_size_mb * (2 ** 20)
+    except ValueError:
+        pass
+
 if CCNET_SERVER_ADDR:
     enable_https = config.getboolean('httpserver', 'https') if \
         config.has_option('httpserver', 'https') else False

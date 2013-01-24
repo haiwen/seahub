@@ -47,7 +47,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
-    get_commit
+    get_commit, MAX_DOWNLOAD_DIR_SIZE
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -2927,6 +2927,16 @@ def repo_download_dir(request, repo_id):
     if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
                                                           path.encode('utf-8'))
+
+        try:
+            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+        except Exception, e:
+            logger.error(str(e))
+            return render_error(request, _(u'Internal Error'))
+
+        if total_size > MAX_DOWNLOAD_DIR_SIZE:
+            return render_error(request, _(u'Unable to download directory "%s": size too large') % dirname)
+
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   dir_id,
                                                   'download-dir',
@@ -2944,10 +2954,7 @@ def events(request):
         org_id = request.GET.get('org_id')
         events = get_org_user_events(org_id, username, start)
     else:
-        try:
-            events = get_user_events(username, start)
-        except Exception, e:
-            print e
+        events = get_user_events(username, start)
    
     events_more = False
     if len(events) == 11:
