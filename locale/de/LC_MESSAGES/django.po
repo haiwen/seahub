@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-23 15:24+0100\n"
-"PO-Revision-Date: 2013-01-17 16:31+0100\n"
+"PO-Revision-Date: 2013-01-24 17:15+0100\n"
 "Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -160,8 +160,9 @@ msgid "Deutsch"
 msgstr "Deutsch"
 
 #: views.py:537
+#, fuzzy
 msgid "Unable to view recycle page"
-msgstr ""
+msgstr "Konte Mülleimer nicht anzeigen"
 
 #: views.py:558
 msgid "Settings saved."
@@ -399,7 +400,7 @@ msgstr ""
 #: views.py:2041
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
-msgstr ""
+msgstr "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt."
 
 #: views.py:2044
 #, python-format
@@ -408,6 +409,9 @@ msgid ""
 "notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
+"Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt. Es konnte "
+"jedoch keine E-Mail Benachrichtigung gesendet werden, da die E-Mail "
+"Konfiguration nicht korrekt ist."
 
 #: views.py:2047
 msgid "Failed to reset password: user does not exist"
@@ -421,6 +425,8 @@ msgstr "Seafile Registrierungs Informationen"
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
+"Benutzer %s wurde erfolgrich hinzugefügt. Eine E-Mail Benachrichtigung wurde "
+"versand."
 
 #: views.py:2106
 #, python-format
@@ -428,6 +434,9 @@ msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr ""
+"Benutzer %s wurde erfolgrich hinzugefügt. Es trat jedoch ein Fehler beim "
+"senden der E-Mail Benachrichtigung auf. Bitte überprüfen sie ihre E-Mail "
+"konfiguration."
 
 #: views.py:2108
 #, python-format
@@ -440,6 +449,9 @@ msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
+"Benutzer %s wurde erfolgrich hinzugefügt. Es konnte jedoch keine E-Mail "
+"Benachrichtigung gesendet werden, da die E-Mail Konfiguration nicht korrekt "
+"ist."
 
 #: views.py:2289
 #, python-format
@@ -481,6 +493,8 @@ msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
 msgstr ""
+"%(ext)s ist eine ungültige Dateierweiterung. Erlaubte Dateierweiterungen "
+"sind: %(valid_exts_list)s"
 
 #: avatar/forms.py:38 avatar/forms.py:61
 #, python-format
@@ -488,6 +502,8 @@ msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
 msgstr ""
+"Ihre Datei ist zu groß (%(size)s), das erlaube Maximum beträgt "
+"%(max_valid_size)s"
 
 #: avatar/forms.py:44
 #, python-format
@@ -495,6 +511,8 @@ msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
 msgstr ""
+"Sie haben bereits %(nb_avatars)d Avatare. Maximal sind %(nb_max_avatars)d "
+"erlaubt."
 
 #: avatar/models.py:136 avatar/models.py:161
 #, python-format
@@ -536,7 +554,7 @@ msgstr "Neues Bild hochladen"
 
 #: avatar/templates/avatar/confirm_delete.html:6
 msgid "Please select the avatars that you would like to delete."
-msgstr ""
+msgstr "Bitte wählen sie die Avatare die sie löschen möchten."
 
 #: avatar/templates/avatar/confirm_delete.html:11
 #, python-format
@@ -544,6 +562,8 @@ msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
 "\">upload one</a> now."
 msgstr ""
+"Sie haben keine Avatare die sie löchen können. Bitte <a href="
+"\"%(avatar_change_url)s\">laden sie eins hoch</a>."
 
 #: avatar/templates/avatar/confirm_delete.html:18
 #, fuzzy
@@ -601,11 +621,14 @@ msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
+"<a href=\"%(user_url)s\">%(avatar_creator)s</a> hat sein Avatar aktualisiert "
+"<a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templates/notification/avatar_updated/notice.html:2
 #, python-format
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
+"Sie haben ihr Avatar aktualisiert <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templatetags/avatar_tags.py:46
 msgid "Default Avatar"
@@ -748,6 +771,8 @@ msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
 msgstr ""
+"Wenn sie Bibliotheken oder Links auf Dateien mit Freunden teilen, wird seine/"
+"ihre E-Mail AAdresse zu ihren Kontakten hinzugefügt."
 
 #: contacts/templates/contacts/contact_list.html:15
 #: templates/myhome_base.html:17
@@ -841,6 +866,8 @@ msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
 msgstr ""
+"Fügen sie Kontakte hinzu um schneller Biliotheken freigeben oder Links auf "
+"Dateien verschicken können. "
 
 #: contacts/templates/contacts/contact_list.html:48
 #: contacts/templates/contacts/contact_list.html:57
@@ -900,7 +927,7 @@ msgstr "Erstellen er Gruppe fehlgeschlagen"
 
 #: group/error_msg.py:11
 msgid "The group has already created in this org."
-msgstr ""
+msgstr "Die Gruppe wurde bereits in dieser Organisation erstellt."
 
 #: group/error_msg.py:12
 msgid "Failed to create org group."
@@ -909,6 +936,7 @@ msgstr "Erstellen der Organisationsgruppe fehlgeschlagen"
 #: group/error_msg.py:15
 msgid "Permission error: only group staff can add member"
 msgstr ""
+"Berechtigungsfehler: nur Gruppenadministratoren dürfen Mitglieder hinzufügen"
 
 #: group/error_msg.py:16 group/error_msg.py:22
 #, fuzzy
@@ -1480,6 +1508,9 @@ msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
 msgstr ""
+"Sie könnein eine Gruppe anlegen, indem sie auf \"Neue Gruppe\" klicken. Eine "
+"Gruppe ermöglicht es ihnen und ihren Freunden Nachrichten zu hinterlassen "
+"und gemeinsam an Bibliotheken zu arbeiten."
 
 #: group/templates/group/groups_right_panel.html:31
 msgid "Group Name"
@@ -1645,6 +1676,8 @@ msgid ""
 "Shared to all members successfully, you can go check it at <a href=\"%s"
 "\">Share</a>."
 msgstr ""
+"Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
+"href=\"%s\">Freigabe</a> prüfen."
 
 #: organizations/views.py:646
 #, python-format
@@ -1652,6 +1685,8 @@ msgid ""
 "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
+"Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
+"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
 
 #: organizations/views.py:652 organizations/views.py:671 share/views.py:328
 #: share/views.py:350
@@ -1672,6 +1707,8 @@ msgid ""
 "Shared to %(share_to)s successfully，you can go check it at <a href="
 "\"%(share)s\">Share</a>."
 msgstr ""
+"Erfolgreich für %(share_to)s freigegeben. Sie können den Status unter <a "
+"href=\"%(share)s\">Freigabe</a> prüfen."
 
 #: organizations/views.py:713 share/views.py:218
 msgid "all members"
@@ -1769,11 +1806,15 @@ msgstr "Niemand hat bisher eine Gruppe erstellt"
 msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr ""
+"Sie können eine Gruppe erstellen, indem sie auf \"Gruppe hinzufügen\" im "
+"Gruppenmenu klicken."
 
 #: organizations/templates/organizations/org_public.html:15
 #: templates/public_home.html:11
 msgid "A library marked as read-only can be downloaded."
 msgstr ""
+"Eine Bibliothek welche als nur lesen markiert ist, kann heruntergeladen "
+"werden."
 
 #: organizations/templates/organizations/org_public.html:16
 #: templates/public_home.html:12
@@ -1802,6 +1843,9 @@ msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
+"Sie können eine öffendliche Bibliothek erstellen, indem sie auf den \"Neue "
+"Bibliothek\" Button klicken. Andere können sie Biblothek sehen und "
+"herunterladen."
 
 #: organizations/templates/organizations/org_seafadmin.html:7
 #: templates/sys_seafadmin.html:6
@@ -1823,6 +1867,7 @@ msgstr "Bibliothek löschen"
 #, python-format
 msgid "%(user)s added you to Organization %(org_name)s on Seafile. "
 msgstr ""
+"%(user)s hat sie zur Organisation %(org_name)s auf Seafile hinzugefügt."
 
 #: organizations/templates/organizations/org_user_add_email.html:3
 #, python-format
@@ -1834,9 +1879,15 @@ msgid ""
 "\n"
 "Please click the link to log in:\n"
 msgstr ""
+"\n"
+"Hier sind ihe Anmeldeinformationen:\n"
+"E-Mail: %(email)s\n"
+"Password: %(password)s\n"
+"\n"
+"Bitte klicken sie auf den Link, um sich einzuloggen: \n"
 
 #: organizations/templates/organizations/org_user_add_email.html:11
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
 "and reset your password later.\n"
@@ -1844,6 +1895,11 @@ msgid ""
 "\n"
 "The %(site_name)s team\n"
 msgstr ""
+"\n"
+"und ihr Passwort später zurücksetzen.\n"
+"Danke, dass sie unsere Seite verwenden!\n"
+"\n"
+"Das %(site_name)s Team\n"
 
 #: organizations/templates/organizations/personal.html:13
 #: templates/myhome.html:9
@@ -1916,13 +1972,15 @@ msgstr "Email darf nicht lönger als 512 Zeichen sein"
 
 #: share/views.py:68
 msgid "Only the owner of the library has permission to share it."
-msgstr ""
+msgstr "Nur der Besitzer der Bibliothek hat die Berechtigung sie freizugeben."
 
 #: share/views.py:84
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
+"Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
+"href=\"%s\">Freigabe</a> prüfen."
 
 #: share/views.py:104
 #, python-format
@@ -1930,6 +1988,8 @@ msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
+"Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
+"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
 
 #: share/views.py:110
 #, fuzzy, python-format
@@ -1939,12 +1999,12 @@ msgstr "Teilen mit %s fehlgeschlagen: Es existiert nicht."
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr ""
+msgstr "Freigabe für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr ""
+msgstr "Freigabe für %s fehlgeschlagen."
 
 #: share/views.py:139
 #, python-format
@@ -1952,14 +2012,16 @@ msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
+"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
+"\"%(share)s\">Freigabe</a> prüfen."
 
 #: share/views.py:163 share/views.py:173
 msgid "Failed to remove share"
-msgstr ""
+msgstr "Entfernen der Freigabe fehlgeschlagen"
 
 #: share/views.py:182
 msgid "Successfully removed share"
-msgstr ""
+msgstr "Freigabe erfolgrich entfernt"
 
 #: share/views.py:313
 #, python-format
@@ -1967,6 +2029,8 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
+"Freigabe für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
+"E-Mails außerhalb der Seite freigegeben werden."
 
 #: share/views.py:346
 msgid "You are shared with a library in Seafile"
@@ -1978,6 +2042,8 @@ msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
+"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
+"\"%(share)s\">Freigabe</a> prüfen."
 
 #: share/views.py:378
 msgid "Deleted successfully."
@@ -1985,11 +2051,12 @@ msgstr "Erfolgreicht gelöscht"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
-msgstr ""
+msgstr "So können sie die Bibliothek nicht freigeben."
 
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
 msgstr ""
+"Holen des Links fehlgeschlagen. bitte versuchen sie es später noch ein mal."
 
 #: share/views.py:452
 msgid "Removed successfully"
@@ -2004,24 +2071,29 @@ msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
+"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail konfiguration ist "
+"nicht korrekt. Bitte wenden sie sich an den Administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr ""
+msgstr "Ihr Freund hat eine Datei für sie auf Seafile Freigegeben."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
-msgstr ""
+msgstr "Interner Serverfehler: Senden fehlgeschalgen."
 
 #: share/views.py:509
 msgid "Successfully sent."
-msgstr ""
+msgstr "Erfolgreich versendet."
 
 #: share/templates/repo/share_admin.html:17
 msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
+"Wenn sie nicht wollen, das andere den Inhalt ihrer freigegebenen Bibliothek "
+"ändern können, setzen sie die Freigabeberechtigung auf \"nur lesen\" wenn "
+"Sie sie freigeben."
 
 #: share/templates/repo/share_admin.html:23
 msgid "Shared Libraries"
