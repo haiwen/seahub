@@ -15,8 +15,8 @@ class Contact(models.Model):
                                         default='')
     note = models.CharField(max_length=255, blank=True, null=True, default='')
 
-    class Meta:
-        unique_together = ("user_email", "contact_email")
+    # class Meta:
+    #     unique_together = ("user_email", "contact_email")
 
 class ContactAddForm(ModelForm):
     class Meta:
