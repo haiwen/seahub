@@ -2370,6 +2370,12 @@ def render_file_revisions (request, repo_id):
         error_msg = _(u"Library not exists")
         return render_error(request, error_msg)
 
+    filetype = valid_previewed_file(u_filename)[0].lower()
+    if filetype == 'text' or filetype == 'markdown':
+        can_compare = True
+    else:
+        can_compare = False
+
     try:
         commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path, 0)
     except SearpcError, e:
@@ -2378,7 +2384,7 @@ def render_file_revisions (request, repo_id):
     if not commits:
         return render_error(request)
         
-    # Check whether use is repo owner
+    # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
@@ -2404,6 +2410,7 @@ def render_file_revisions (request, repo_id):
         'zipped': zipped,
         'commits': commits,
         'is_owner': is_owner,
+        'can_compare': can_compare,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -2840,7 +2847,7 @@ def text_diff(request, repo_id):
     else:
         diff = HtmlDiff()
         diff_result_table = diff.make_table(prev_content.splitlines(),
-                                        current_content.splitlines())
+                                        current_content.splitlines(), True)
 
     zipped = gen_path_link(path, repo.name)
 
