@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-23 14:15+0800\n"
+"POT-Creation-Date: 2013-01-25 10:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,11 +43,11 @@ msgstr "描述太长（不超过100个汉字）"
 
 #: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
-msgstr "密码太短（不少于3个汉字）"
+msgstr "密码太短（不少于3个字符）"
 
 #: forms.py:68 forms.py:73 templates/snippets/repo_create_js.html:45
-msgid "Password is too long (maximum is 15 characters)"
-msgstr "密码太长（不超过15个汉字）"
+msgid "Password is too long (maximum is 30 characters)"
+msgstr "密码太长（不超过30个字符）"
 
 #: forms.py:79
 #, python-format
@@ -2046,8 +2046,8 @@ msgid "Encrypt"
 msgstr "加密"
 
 #: templates/snippets/repo_create_form.html:17
-msgid "(3-15 characters)"
-msgstr "(3到15个字符)"
+msgid "(at lease 3 characters)"
+msgstr "(至少3个字符)"
 
 #: templates/snippets/repo_create_form.html:19
 msgid "Password again"
@@ -2102,4 +2102,3 @@ msgstr "备注(可选)"
 #: utils/__init__.py:69
 msgid "permissiong error"
 msgstr "权限错误"
-
