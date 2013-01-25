@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-10 14:46+0800\n"
+"POT-Creation-Date: 2013-01-25 10:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -321,39 +321,56 @@ msgstr "下载"
 msgid "Unshare"
 msgstr "取消共享"
 
+#: templates/group/group_info.html:115
+msgid "No library is sharing to this group"
+msgstr "还没有资料库共享到当前群组"
+
 #: templates/group/group_info.html:116
+msgid ""
+"You can share libraries by clicking the \"New Library\" button above or the "
+"\"Share\" icon on your libraries list."
+msgstr "你可以通过点击上方的“新建资料库”按钮或资料库列表里的“共享”图标来共享资料库。"
+
+#: templates/group/group_info.html:117
+msgid ""
+"Libraries shared as writable can be downloaded and synced by other group "
+"members. Read only libraries can only be downloaded, updates by others will "
+"not be uploaded."
+msgstr "以可读写方式共享的资料库可以被其他群组成员下载和同步，而以只读方式共享的资料库只能被下载，其他人的修改将不会被上传。"
+
+#: templates/group/group_info.html:122
 msgid "Messages"
 msgstr "信息栏"
 
-#: templates/group/group_info.html:124 templates/group/group_pubinfo.html:24
+#: templates/group/group_info.html:130 templates/group/group_pubinfo.html:24
 #: templates/group/groups_right_panel.html:34
 #: templates/group/grpmember_add_form.html:12
 #: templates/group/grpmember_add_form.html:19
 msgid "Submit"
 msgstr "提交"
 
-#: templates/group/group_info.html:144 templates/group/new_msg_reply.html:22
+#: templates/group/group_info.html:150 templates/group/new_msg_reply.html:22
 msgid "Recommended"
 msgstr "推荐"
 
-#: templates/group/group_info.html:156
+#: templates/group/group_info.html:162
 msgid "File "
 msgstr "文件"
 
-#: templates/group/group_info.html:156
+#: templates/group/group_info.html:162
 msgid "has a new comment:"
 msgstr "有新的评注："
 
-#: templates/group/group_info.html:163
+#: templates/group/group_info.html:169
 #: templates/group/group_reply_list.html:10
 #: templates/group/group_reply_list.html:16
-#: templates/group/group_reply_new.html:8 templates/group/msg_reply_js.html:59
+#: templates/group/group_reply_new.html:7 templates/group/msg_reply_js.html:59
 #: templates/group/new_msg_reply.html:33 templates/group/new_msg_reply.html:42
 #: templates/group/new_msg_reply.html:48
 msgid "Reply"
 msgstr "回复"
 
-#: templates/group/group_info.html:165
+#: templates/group/group_info.html:171
 #, python-format
 msgid ""
 "\n"
@@ -368,60 +385,60 @@ msgstr[0] ""
 "                    <span class=\"reply-cnt\">%(counter)s</span> 回复\n"
 "                    "
 
-#: templates/group/group_info.html:172 templates/group/new_msg_reply.html:34
+#: templates/group/group_info.html:178 templates/group/new_msg_reply.html:34
 msgid "Hide"
 msgstr "隐藏回复"
 
-#: templates/group/group_info.html:174 templates/group/group_manage.html:51
+#: templates/group/group_info.html:180 templates/group/group_manage.html:51
 #: templates/group/group_manage.html:75
 msgid "Delete"
 msgstr "删除"
 
-#: templates/group/group_info.html:186
+#: templates/group/group_info.html:192
 msgid "Previous"
 msgstr "前一页"
 
-#: templates/group/group_info.html:189
+#: templates/group/group_info.html:195
 msgid "Next"
 msgstr "下一页"
 
-#: templates/group/group_info.html:202
+#: templates/group/group_info.html:208
 msgid "Quit Group"
 msgstr "退出群组"
 
-#: templates/group/group_info.html:202
+#: templates/group/group_info.html:208
 msgid "Are you sure you want to quit this group"
 msgstr "确定要退出该群组"
 
-#: templates/group/group_info.html:203
+#: templates/group/group_info.html:209
 msgid "Unshare Library"
 msgstr "取消共享资料库"
 
-#: templates/group/group_info.html:203
+#: templates/group/group_info.html:209
 msgid "Are you sure you want to unshare"
 msgstr "确定要取消共享"
 
-#: templates/group/group_info.html:236
+#: templates/group/group_info.html:242
 msgid "Really want to delete this message?"
 msgstr "确定要删除这条留言？"
 
-#: templates/group/group_info.html:236
+#: templates/group/group_info.html:242
 msgid "Yes"
 msgstr "确定"
 
-#: templates/group/group_info.html:236
+#: templates/group/group_info.html:242
 msgid "No"
 msgstr "取消"
 
-#: templates/group/group_info.html:248
+#: templates/group/group_info.html:254
 msgid "Successfully deleted"
 msgstr "删除成功。"
 
-#: templates/group/group_info.html:250
+#: templates/group/group_info.html:256
 msgid "Failed to delete: "
 msgstr "删除失败："
 
-#: templates/group/group_info.html:254
+#: templates/group/group_info.html:260
 msgid ", failed to delete."
 msgstr "，删除失败。"
 
