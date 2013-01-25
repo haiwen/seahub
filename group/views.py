@@ -17,7 +17,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
@@ -210,10 +210,23 @@ def render_group_info(request, group_id, form):
                                     request.user.username)
     else:
         repos = get_group_repos(group_id_int, request.user.username)
-
+    
+    recent_commits = []
     for repo in repos:
         repo.user_perm = check_permission(repo.props.id, request.user.username)
+        recent_commits += get_commits(repo.props.id, 0, 10)
 
+    recent_commits.sort(lambda x, y : cmp(y.props.ctime, x.props.ctime))
+    recent_commits = recent_commits[0:15]
+    for cmt in recent_commits:
+        cmt.repo = get_repo(cmt.props.repo_id)
+        if cmt.repo:
+            cmt.repo.password_set = seafserv_rpc.is_passwd_set(cmt.props.repo_id, request.user.username)
+        else:
+            del cmt
+        # get type 
+        cmt.tp = cmt.props.desc[0]
+        
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -267,6 +280,7 @@ def render_group_info(request, group_id, form):
             "common_members": common_members,
             "members": members,
             "repos": repos,
+            "recent_commits": recent_commits,
             "group_id": group_id,
             "group" : group,
             "is_staff": is_staff,

@@ -318,3 +318,6 @@ function trimByChar(str, n) {
     }
     return new_str;
 }
+
+$('#tabs').tabs({cookie:{expires:1}});
+$('#tabs-nav a').focus(function() { $(this).blur(); });
