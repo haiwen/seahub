@@ -132,8 +132,9 @@
     <tr>
         <th width="5%"></th>
         <th width="17%">{% trans "Library" %}</th>
-        <th width="15%">{% trans "Time" %}</th>
-        <th width="63%">{% trans "Description" %}</th>
+        <th width="49%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="14%">{% trans "Modifier" %}</th>
     </tr>
 
     {% for cmt in recent_commits %}
@@ -150,7 +151,6 @@
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ cmt.repo.props.id }}/">{{ cmt.repo.props.name }}</a></td>
-        <td>{{cmt.props.ctime|translate_seahub_time}}</td>
         <td>
             {{cmt.props.desc|translate_commit_desc}}
             {% if cmt.repo.encrypted %}
@@ -159,6 +159,8 @@
                 <a class="lsch" href="#" data-url="{% url 'repo_history_changes' cmt.repo.id %}?commit_id={{ cmt.id }}" data-time="{{ cmt.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
             {% endif %}
         </td>
+        <td>{{cmt.props.ctime|translate_seahub_time}}</td>
+        <td>{{cmt.creator_name|email2nickname}}</td>
     </tr>
     {% endfor %}
 </table>

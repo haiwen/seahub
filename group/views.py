@@ -1,5 +1,8 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
+import fpformat
+import logging
 import os
+import time
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -17,15 +20,15 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission
+    get_org_groups_by_user, check_permission, is_passwd_set
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
+from models import GroupMessage, MessageReply, MessageAttachment
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm
 from signals import grpmsg_added, grpmsg_reply_added
@@ -43,6 +46,9 @@ from seahub.utils import render_error, render_permission_error, \
     check_and_get_org_by_repo
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 def group_list(request):
@@ -210,23 +216,27 @@ def render_group_info(request, group_id, form):
                                     request.user.username)
     else:
         repos = get_group_repos(group_id_int, request.user.username)
-    
+
+    start_time = time.time()
     recent_commits = []
+    cmt_repo_dict = {}
     for repo in repos:
         repo.user_perm = check_permission(repo.props.id, request.user.username)
-        recent_commits += get_commits(repo.props.id, 0, 10)
+        cmmts = get_commits(repo.props.id, 0, 10)
+        for c in cmmts:
+            cmt_repo_dict[c.id] = repo
+        recent_commits += cmmts
 
     recent_commits.sort(lambda x, y : cmp(y.props.ctime, x.props.ctime))
-    recent_commits = recent_commits[0:15]
+    recent_commits = recent_commits[:15]
     for cmt in recent_commits:
-        cmt.repo = get_repo(cmt.props.repo_id)
-        if cmt.repo:
-            cmt.repo.password_set = seafserv_rpc.is_passwd_set(cmt.props.repo_id, request.user.username)
-        else:
-            del cmt
-        # get type 
+        cmt.repo = cmt_repo_dict[cmt.id]
+        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
+                                              request.user.username)
         cmt.tp = cmt.props.desc[0]
-        
+    logger.info("Show group recent commits cost %s seconds" % \
+                    fpformat.fix(time.time()-start_time, 10))
+
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
