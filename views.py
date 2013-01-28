@@ -46,7 +46,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
-    get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE
+    get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
+    get_commit
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -838,6 +839,7 @@ def get_diff(repo_id, arg1, arg2):
 
     return lists
 
+@login_required
 def repo_history_changes(request, repo_id):
     changes = {}
     content_type = 'application/json; charset=utf-8'
@@ -851,17 +853,7 @@ def repo_history_changes(request, repo_id):
         return HttpResponse(json.dumps(changes),
                             content_type=content_type)
 
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except:
-            return HttpResponse(json.dumps(changes),
-                                content_type=content_type)
-
-    if repo.props.encrypted and not password_set:
+    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps(changes),
                             content_type=content_type)
 
@@ -872,8 +864,14 @@ def repo_history_changes(request, repo_id):
 
     changes = get_diff(repo_id, '', commit_id)
 
-    return HttpResponse(json.dumps(changes),
-                        content_type=content_type)
+    if get_commit(commit_id).parent_id is None:
+        # A commit is a first commit only if it's parent id is None.
+        changes['init_commit'] = True
+        changes['cmt_desc'] = repo.desc
+    else:
+        changes['init_commit'] = False
+    
+    return HttpResponse(json.dumps(changes), content_type=content_type)
 
 @login_required
 def modify_token(request, repo_id):

@@ -456,6 +456,14 @@ def get_org_repo_owner(repo_id):
     return owner
 
 # commit
+def get_commit(cmt_id):
+    """ Get a commit. """
+    try:
+        ret = seafserv_threaded_rpc.get_commit(cmt_id)
+    except SearpcError:
+        ret = None
+    return ret
+    
 def get_commits(repo_id, offset, limit):
     """Get commit lists."""
     try:
