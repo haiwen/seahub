@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import fpformat
 import logging
 import os
-import time
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -217,7 +215,6 @@ def render_group_info(request, group_id, form):
     else:
         repos = get_group_repos(group_id_int, request.user.username)
 
-    start_time = time.time()
     recent_commits = []
     cmt_repo_dict = {}
     for repo in repos:
@@ -234,8 +231,6 @@ def render_group_info(request, group_id, form):
         cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
                                               request.user.username)
         cmt.tp = cmt.props.desc.split(' ')[0]
-    logger.info("Show group recent commits cost %s seconds" % \
-                    fpformat.fix(time.time()-start_time, 10))
 
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.

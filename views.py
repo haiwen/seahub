@@ -2935,7 +2935,7 @@ def repo_download_dir(request, repo_id):
             return render_error(request, _(u'Internal Error'))
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _(u'Unable to download directory "%s": size too large') % dirname)
+            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
 
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   dir_id,

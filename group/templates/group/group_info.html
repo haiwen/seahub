@@ -133,7 +133,7 @@
         <th width="5%"></th>
         <th width="17%">{% trans "Library" %}</th>
         <th width="49%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="15%">{% trans "Modified at" %}</th>
         <th width="14%">{% trans "Modifier" %}</th>
     </tr>
 
@@ -160,7 +160,17 @@
             {% endif %}
         </td>
         <td>{{cmt.props.ctime|translate_seahub_time}}</td>
-        <td>{{cmt.creator_name|email2nickname}}</td>
+        <td>
+        {% if cmt.creator_name %}
+            {% if cmt.second_parent_id %}
+                {% trans "None" %}
+            {% else %}
+                {{cmt.creator_name|email2nickname}}
+            {% endif %}
+        {% else %}
+            {% trans "Unknown"%}
+        {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>
