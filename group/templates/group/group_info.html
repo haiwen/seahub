@@ -140,8 +140,8 @@
     {% for cmt in recent_commits %}
     <tr>
         <td class="icon-container">
-            {% if cmt.tp == 'A' or cmt.tp == 'D' %}
-                {% if cmt.tp == 'A' %}
+            {% if cmt.tp == 'Added' or cmt.tp == 'Deleted' or cmt.tp == 'Removed' %}
+                {% if cmt.tp == 'Added' %}
                 <img src="{{MEDIA_URL}}img/plus-16.png" alt="" />
                 {% else %}
                 <img src="{{MEDIA_URL}}img/minus-16.png" alt="" />

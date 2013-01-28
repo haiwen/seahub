@@ -233,7 +233,7 @@ def render_group_info(request, group_id, form):
         cmt.repo = cmt_repo_dict[cmt.id]
         cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
                                               request.user.username)
-        cmt.tp = cmt.props.desc[0]
+        cmt.tp = cmt.props.desc.split(' ')[0]
     logger.info("Show group recent commits cost %s seconds" % \
                     fpformat.fix(time.time()-start_time, 10))
 
