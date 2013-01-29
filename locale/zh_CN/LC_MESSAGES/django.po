@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 13:57+0800\n"
+"POT-Creation-Date: 2013-01-29 19:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:575 views.py:1305 views.py:2546 views.py:2674
+#: views.py:575 views.py:1320 views.py:2576 views.py:2704
 msgid "File not exists"
 msgstr "文件不存在"
 
@@ -212,11 +212,11 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:797 views.py:1575 views.py:2421 views.py:2456 views.py:2888
+#: views.py:797 views.py:1590 views.py:2451 views.py:2486 views.py:2918
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:799 views.py:891 views.py:2368 views.py:2903
+#: views.py:799 views.py:891 views.py:2398 views.py:2933
 msgid "Library not exists"
 msgstr "资料库不存在"
 
@@ -233,142 +233,142 @@ msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1201
+#: views.py:1216
 msgid "Failed to create repo"
 msgstr "创建失败"
 
-#: views.py:1219
+#: views.py:1234
 msgid "Operation successful"
 msgstr "操作成功"
 
-#: views.py:1221
+#: views.py:1236
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: views.py:1252
+#: views.py:1267
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1259
+#: views.py:1274
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1261
+#: views.py:1276
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1321 views.py:1643
+#: views.py:1336 views.py:1658
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views.py:1526
+#: views.py:1541
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1531
+#: views.py:1546
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1534
+#: views.py:1549
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1546
+#: views.py:1561
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1555
+#: views.py:1570 views.py:2965
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1561 views.py:2210 views.py:2241 views.py:2275
+#: views.py:1576 views.py:2240 views.py:2271 views.py:2305
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views.py:1565
+#: views.py:1580
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views.py:1569
+#: views.py:1584
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: views.py:1622
+#: views.py:1637
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views.py:1637
+#: views.py:1652
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: views.py:1663
+#: views.py:1678
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
-#: views.py:1717
+#: views.py:1732
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views.py:1733
+#: views.py:1748
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1744
+#: views.py:1759
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1785
+#: views.py:1800
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views.py:1791
+#: views.py:1806
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views.py:1804
+#: views.py:1819
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1805
+#: views.py:1820
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1805
+#: views.py:1820
 msgid "move"
 msgstr "移动"
 
-#: views.py:1820
+#: views.py:1835
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1826
+#: views.py:1841
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1941
+#: views.py:1956
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:2014 templates/sys_useradmin.html:78
+#: views.py:2044 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:2030
+#: views.py:2060
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views.py:2035
+#: views.py:2065
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -377,12 +377,12 @@ msgstr ""
 "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
 "件配置。"
 
-#: views.py:2039
+#: views.py:2069
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views.py:2042
+#: views.py:2072
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -392,73 +392,73 @@ msgstr ""
 "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
 "邮件无法发送。"
 
-#: views.py:2045
+#: views.py:2075
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:2066
+#: views.py:2096
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2101
+#: views.py:2131
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views.py:2104
+#: views.py:2134
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views.py:2106
+#: views.py:2136
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views.py:2108
+#: views.py:2138
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views.py:2287
+#: views.py:2317
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2342
+#: views.py:2372
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views.py:2442
+#: views.py:2472
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2446 views.py:2472
+#: views.py:2476 views.py:2502
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2468
+#: views.py:2498
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2732 utils/__init__.py:84
+#: views.py:2762 utils/__init__.py:84
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views.py:2939
+#: views.py:2968
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: views.py:2946
+#: views.py:2975
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -494,7 +494,7 @@ msgstr "确认密码"
 #: templates/file_view.html:94 templates/file_view.html.py:122
 #: templates/repo.html:267 templates/repo.html.py:279 templates/repo.html:295
 #: templates/repo.html.py:316 templates/repo.html:328
-#: templates/repo.html.py:340 templates/userinfo.html:87
+#: templates/repo.html.py:340 templates/userinfo.html:95
 #: templates/registration/login.html:13
 #: templates/registration/password_change_form.html:18
 #: templates/registration/password_reset_confirm.html:19
@@ -754,7 +754,7 @@ msgstr "大小"
 #: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:14
 #: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
 #: templates/sys_useradmin.html:6 templates/sys_useradmin.html.py:18
-#: templates/userinfo.html:40 templates/view_shared_dir.html:34
+#: templates/userinfo.html:48 templates/view_shared_dir.html:34
 #: templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:60
 msgid "Operations"
@@ -810,7 +810,7 @@ msgstr "发送"
 #: templates/repo.html.py:145 templates/repo.html:193
 #: templates/sys_group_admin.html:21 templates/sys_org_admin.html:23
 #: templates/sys_seafadmin.html:22 templates/sys_useradmin.html:31
-#: templates/userinfo.html:49 templates/snippets/my_owned_repos.html:36
+#: templates/userinfo.html:57 templates/snippets/my_owned_repos.html:36
 msgid "Delete"
 msgstr "删除"
 
@@ -1015,6 +1015,19 @@ msgstr[0] ""
 msgid "Space used"
 msgstr "已用空间"
 
+#: templates/myhome.html:58 templates/userinfo.html:29
+msgid "Total"
+msgstr "总空间"
+
+#: templates/myhome.html:60 templates/myhome.html.py:62
+msgid "Self"
+msgstr "个人"
+
+#: templates/myhome.html:60 templates/myhome.html.py:62
+#: templates/userinfo.html:31
+msgid "Sharing"
+msgstr "共享"
+
 #: templates/myhome_base.html:8
 msgid "My Home"
 msgstr "我的页面"
@@ -1043,7 +1056,7 @@ msgstr "基本信息"
 
 #: templates/pubinfo.html:16 templates/sys_group_admin.html:54
 #: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
-#: templates/userinfo.html:55 templates/userinfo.html.py:78
+#: templates/userinfo.html:63 templates/userinfo.html.py:86
 msgid "Empty"
 msgstr "暂无"
 
@@ -1091,8 +1104,8 @@ msgstr "新建资料库"
 #: templates/public_home.html:24 templates/repo.html:111
 #: templates/repo_history_view.html:52 templates/repo_recycle_view.html:53
 #: templates/sys_group_admin.html:11 templates/sys_org_admin.html:11
-#: templates/sys_seafadmin.html:11 templates/userinfo.html:38
-#: templates/userinfo.html.py:63 templates/view_shared_dir.html:32
+#: templates/sys_seafadmin.html:11 templates/userinfo.html:46
+#: templates/userinfo.html.py:71 templates/view_shared_dir.html:32
 #: templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:56
 #: templates/snippets/repo_create_form.html:4
@@ -1100,8 +1113,8 @@ msgid "Name"
 msgstr "名称"
 
 #: templates/public_home.html:25 templates/repo_history.html:21
-#: templates/sys_seafadmin.html:13 templates/userinfo.html:39
-#: templates/userinfo.html.py:65 templates/snippets/my_owned_repos.html:19
+#: templates/sys_seafadmin.html:13 templates/userinfo.html:47
+#: templates/userinfo.html.py:73 templates/snippets/my_owned_repos.html:19
 #: templates/snippets/my_owned_repos.html:57
 #: templates/snippets/repo_create_form.html:6
 msgid "Description"
@@ -1114,12 +1127,12 @@ msgstr "描述"
 msgid "Last Update"
 msgstr "更新时间"
 
-#: templates/public_home.html:27 templates/userinfo.html:64
+#: templates/public_home.html:27 templates/userinfo.html:72
 msgid "Share From"
 msgstr "共享来源"
 
 #: templates/public_home.html:34 templates/sys_seafadmin.html:18
-#: templates/userinfo.html:45 templates/userinfo.html.py:70
+#: templates/userinfo.html:53 templates/userinfo.html.py:78
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:67
 #: templates/snippets/repo_create_form.html:11
@@ -1533,7 +1546,7 @@ msgstr "删除群组"
 
 #: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
 #: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:77
-#: templates/userinfo.html:133 templates/snippets/myhome_extra_script.html:37
+#: templates/userinfo.html:141 templates/snippets/myhome_extra_script.html:37
 msgid "Are you sure you want to delete"
 msgstr "确定要删除"
 
@@ -1557,14 +1570,14 @@ msgstr "所有资料库"
 msgid "Owner"
 msgstr "拥有者"
 
-#: templates/sys_seafadmin.html:18 templates/userinfo.html:45
+#: templates/sys_seafadmin.html:18 templates/userinfo.html:53
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:67
 #: templates/snippets/my_owned_repos.html:69
 msgid "directory icon"
 msgstr "目录图标"
 
-#: templates/sys_seafadmin.html:61 templates/userinfo.html:133
+#: templates/sys_seafadmin.html:61 templates/userinfo.html:141
 #: templates/snippets/myhome_extra_script.html:37
 msgid "Delete Library"
 msgstr "删除资料库"
@@ -1692,19 +1705,23 @@ msgstr "已用空间"
 msgid "Set Quota"
 msgstr "设置容量"
 
-#: templates/userinfo.html:33
+#: templates/userinfo.html:30
+msgid "Used"
+msgstr "我使用的"
+
+#: templates/userinfo.html:41
 msgid "Owned"
 msgstr "我拥有的"
 
-#: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
+#: templates/userinfo.html:66 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
 msgstr "共享给我的"
 
-#: templates/userinfo.html:82
+#: templates/userinfo.html:90
 msgid "Set user storage limit"
 msgstr "设置该用户的存储容量上限"
 
-#: templates/userinfo.html:85
+#: templates/userinfo.html:93
 msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
 

@@ -59,7 +59,7 @@
         {% if quota > 0 %}
         <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
         {% endif %}
-        <p id="usage-details">{% trans "Self / Sharing" %}: {{ my_usage|filesizeformat }} / {{ share_usage|filesizeformat }}</p>
+        <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
         {% else %}
         <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
