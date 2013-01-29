@@ -47,7 +47,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
-    get_commit, MAX_DOWNLOAD_DIR_SIZE
+    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -935,11 +935,23 @@ def repo_remove(request, repo_id):
 @login_required
 def myhome(request):
     owned_repos = []
-    quota_usage = 0
 
     email = request.user.username
+
     quota = seafserv_threaded_rpc.get_user_quota(email)
-    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+
+    quota_usage = 0
+    share_usage = 0
+    my_usage = 0
+    my_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    if CALC_SHARE_USAGE:
+        try:
+            share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
+        except SearpcError, e:
+            share_usage = 0
+        quota_usage = my_usage + share_usage
+    else:
+        quota_usage = my_usage
 
     # Get all personal groups I joined.
     joined_groups = get_personal_groups_by_user(request.user.username)
@@ -1030,6 +1042,9 @@ def myhome(request):
             "owned_repos": owned_repos,
             "quota": quota,
             "quota_usage": quota_usage,
+            "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
+            "share_usage": share_usage,
+            "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
             "joined_groups": joined_groups,
@@ -1950,8 +1965,20 @@ def user_info(request, email):
     owned_repos = []
 
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+
     quota = seafserv_threaded_rpc.get_user_quota(email)
-    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    quota_usage = 0
+    share_usage = 0
+    my_usage = 0
+    my_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    if CALC_SHARE_USAGE:
+        try:
+            share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
+        except SearcpError, e:
+            share_usage = 0
+        quota_usage = my_usage + share_usage
+    else:
+        quota_usage = my_usage
 
     # Repos that are share to user
     in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email',
@@ -1969,7 +1996,10 @@ def user_info(request, email):
             'owned_repos': owned_repos,
             'quota': quota,
             'quota_usage': quota_usage,
-            "in_repos": in_repos,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'share_usage': share_usage,
+            'my_usage': my_usage,
+            'in_repos': in_repos,
             'email': email,
             'nickname': nickname,
             }, context_instance=RequestContext(request))

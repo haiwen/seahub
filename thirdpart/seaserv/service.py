@@ -140,6 +140,10 @@ if CCNET_SERVER_ADDR:
 else:
     HTTP_SERVER_ROOT = None
 
+CALC_SHARE_USAGE = False
+if config.has_option('quota', 'calc_share_usage'):
+    CALC_SHARE_USAGE = config.getboolean('quota', 'calc_share_usage')
+
 #### Basic ccnet API ####
 
 def get_emailusers(start, limit):

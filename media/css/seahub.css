@@ -707,12 +707,36 @@ textarea:-moz-placeholder {/* for FF */
 .home-profile .edit:hover {
     color:#333;
 }
+#quota-bar {
+    display:block;
+    height:1em;
+    border:1px solid #ddd;
+    margin:5px 0;
+    border-radius:2px;
+    overflow:hidden;/* for usage > 100% */
+}
+#quota-bar span {
+    display:inline-block;
+    height:100%;
+    vertical-align:top;
+}
+#my-usage,
+#quota-usage {
+    background:#ddd;
+}
+#share-usage {
+    background:#eee;
+}
+#usage-details {
+    font-size:12px;
+    color:#888;
+}
 .mygroup {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
     width:64px;
     text-align:center;
-    margin:0 1px 5px 1px;
+    margin:8px 1px 5px 1px;
 }
 .mygroup {
     *display:inline; /* for ie 6,7 */
