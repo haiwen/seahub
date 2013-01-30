@@ -707,12 +707,36 @@ textarea:-moz-placeholder {/* for FF */
 .home-profile .edit:hover {
     color:#333;
 }
+#quota-bar {
+    display:block;
+    height:1em;
+    border:1px solid #ddd;
+    margin:5px 0;
+    border-radius:2px;
+    overflow:hidden;/* for usage > 100% */
+}
+#quota-bar span {
+    display:inline-block;
+    height:100%;
+    vertical-align:top;
+}
+#my-usage,
+#quota-usage {
+    background:#ddd;
+}
+#share-usage {
+    background:#eee;
+}
+#usage-details {
+    font-size:12px;
+    color:#888;
+}
 .mygroup {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
     width:64px;
     text-align:center;
-    margin:0 1px 5px 1px;
+    margin:8px 1px 5px 1px;
 }
 .mygroup {
     *display:inline; /* for ie 6,7 */
@@ -756,34 +780,38 @@ textarea:-moz-placeholder {/* for FF */
     width:262px;
     margin-bottom:10px;
 }
-#repos-tabs {
+#tabs {
     font-size:1em;
     padding:0;
     border:0;
     min-height:150px;
     margin-bottom:75px;
 }
-#repos-tabs .ui-tabs-nav {
+#tabs-nav {
     padding:0;
 }
-#repos-tabs .ui-tabs-nav li {
+#tabs-nav li {
+    float:left;
     border:0;
     background:none;
 }
-#repos-tabs .ui-tabs-nav li a {
+#tabs-nav .long-item {
+    margin-left:.4em;
+}
+#tabs-nav li a {
     color:#8A948F;
     font-weight:normal;
     padding:.3em 0;
     margin-right:0.6em;
 }
-#repos-tabs .ui-tabs-nav .ui-state-active a {
+#tabs-nav .ui-state-active a {
     color:#DD4B39;
     border-bottom:2px solid #DD4B39;
 }
-#repos-tabs .ui-tabs-nav li a:hover {
+#tabs-nav li a:hover {
     color:#DD4B39;
 }
-#repos-tabs .ui-tabs-panel {
+#tabs .ui-tabs-panel {
     padding:0;
 }
 .event-item {
@@ -1241,6 +1269,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* group message and replies */
+#grp-repos-commits td {
+    padding:6px 3px;
+}
 #group-reply,
 .new-reply-msg-list {
     width:602px;

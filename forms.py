@@ -62,15 +62,15 @@ class RepoCreateForm(forms.Form):
             'max_length': _(u'Description is too long (maximum is 100 characters)')
             })
     encryption = forms.CharField(max_length=1)
-    passwd = forms.CharField(min_length=3, max_length=15, required=False,
+    passwd = forms.CharField(min_length=3, max_length=30, required=False,
                              error_messages={
             'min_length': _(u'Password is too short (minimum is 3 characters)'),
-            'max_length': _(u'Password is too long (maximum is 15 characters)'),
+            'max_length': _(u'Password is too long (maximum is 30 characters)'),
             })
-    passwd_again = forms.CharField(min_length=3, max_length=15, required=False,
+    passwd_again = forms.CharField(min_length=3, max_length=30, required=False,
                                    error_messages={
             'min_length': _(u'Password is too short (minimum is 3 characters)'),
-            'max_length': _(u'Password is too long (maximum is 15 characters)'),
+            'max_length': _(u'Password is too long (maximum is 30 characters)'),
             })
 
     def clean_repo_name(self):

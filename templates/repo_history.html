@@ -8,7 +8,10 @@
     <button data="{{ SITE_ROOT }}repo/{{ repo.props.id }}/" class="fright" id="back">{% trans "Back to Library"%}</button>
 </div>
 
+{% if user_perm == 'rw' %}
 <p class="tip">{% trans "Tip: A snapshot will be generated after modification, which records the library state before this modification."%}<a href="{% url 'repo_view_snapshot' repo.props.id %}">{% trans "View Snapshot"%}</a></p>
+{% endif %}
+
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
         <table class="commit-list">

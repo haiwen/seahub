@@ -1,4 +1,5 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
+import logging
 import os
 import simplejson as json
 from django.core.mail import send_mail
@@ -21,11 +22,11 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission
+    get_org_groups_by_user, check_permission, is_passwd_set
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment, BusinessGroup
+from models import GroupMessage, MessageReply, MessageAttachment
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm
 from signals import grpmsg_added, grpmsg_reply_added
@@ -43,6 +44,9 @@ from seahub.utils import render_error, render_permission_error, \
     check_and_get_org_by_repo
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 def group_list(request):
@@ -211,8 +215,22 @@ def render_group_info(request, group_id, form):
     else:
         repos = get_group_repos(group_id_int, request.user.username)
 
+    recent_commits = []
+    cmt_repo_dict = {}
     for repo in repos:
         repo.user_perm = check_permission(repo.props.id, request.user.username)
+        cmmts = get_commits(repo.props.id, 0, 10)
+        for c in cmmts:
+            cmt_repo_dict[c.id] = repo
+        recent_commits += cmmts
+
+    recent_commits.sort(lambda x, y : cmp(y.props.ctime, x.props.ctime))
+    recent_commits = recent_commits[:15]
+    for cmt in recent_commits:
+        cmt.repo = cmt_repo_dict[cmt.id]
+        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
+                                              request.user.username)
+        cmt.tp = cmt.props.desc.split(' ')[0]
 
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
@@ -267,6 +285,7 @@ def render_group_info(request, group_id, form):
             "common_members": common_members,
             "members": members,
             "repos": repos,
+            "recent_commits": recent_commits,
             "group_id": group_id,
             "group" : group,
             "is_staff": is_staff,

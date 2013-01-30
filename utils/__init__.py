@@ -2,28 +2,26 @@
 # encoding: utf-8
 import os
 import re
-import random
 import stat
 import urllib2
+import uuid
 import json
 
 from django.contrib.sites.models import RequestSite
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.hashcompat import sha_constructor
+from django.utils.hashcompat import sha_constructor, md5_constructor
+from django.utils.translation import ugettext as _
 
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
-from django.utils.hashcompat import md5_constructor
 
 from pysearpc import SearpcError
-
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
     get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
-    HTTP_SERVER_ROOT
+    list_org_repos_by_owner, get_org_groups_by_user, check_permission
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -68,7 +66,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or u'权限错误'
+    ctx['error_msg'] = msg or _('permissiong error')
 
     if extra_ctx:
         for k in extra_ctx:
@@ -83,7 +81,7 @@ def render_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or u'内部错误'
+    ctx['error_msg'] = msg or _('Internal error')
 
     if extra_ctx:
         for k in extra_ctx:
@@ -104,6 +102,11 @@ def get_httpserver_root():
     Get seafile http server address and port from seaserv.
 
     """
+    try:
+        from settings import HTTP_SERVER_ROOT # First load from settings
+    except ImportError:
+        # If load settings failed, then use default config
+        from seaserv import HTTP_SERVER_ROOT
     return HTTP_SERVER_ROOT if HTTP_SERVER_ROOT else ''
 
 def get_ccnetapplet_root():
@@ -123,11 +126,8 @@ def gen_token(max_length=5):
     Generate a random token.
 
     """
-
-    secret_key = settings.SECRET_KEY
-    rstr = str(random.random())
-    token = sha_constructor(secret_key + rstr).hexdigest()[:max_length]
-    return token
+    
+    return uuid.uuid4().hex[:max_length]
 
 def validate_group_name(group_name):
     """
@@ -462,17 +462,35 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
     def _get_events(username, start, org_id=None):
         ev_session = SeafEventsSession()
+        total = 11
+        valid_events = []
+        while total == 11 and len(valid_events) < 11:
+            total, events = _get_events_inner(ev_session, username, start, org_id)
+            start += len(events)
+            valid_events.extend(events)
+
+        ev_session.close()
+
+        return valid_events[:11]
+
+    def _get_events_inner(ev_session, username, start, org_id=None):
+        '''Read 11 events from seafevents database, and remove events that are
+        no longer valid
+
+        '''
         if org_id == None:
             events = seafevents.get_user_events(ev_session, username, start, start + 11)
         else:
             events = seafevents.get_org_user_events(ev_session, \
                                     org_id, username, start, start + 11)
+        total = len(events)
         valid_events = []
-        ev_session.close()
         for ev in events:
             if ev.etype == 'repo-update':
                 repo = get_repo(ev.repo_id)
                 if not repo:
+                    # delete the update event for repo which has been deleted
+                    seafevents.delete_event(ev_session, ev.uuid)
                     continue
                 if repo.encrypted:
                     repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
@@ -481,7 +499,7 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
             valid_events.append(ev)
 
-        return valid_events
+        return total, valid_events
 
     def get_user_events(username, start):
         return _get_events(username, start)

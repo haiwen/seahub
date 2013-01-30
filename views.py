@@ -46,7 +46,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
-    get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE
+    get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
+    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE
 from pysearpc import SearpcError
 
 from signals import repo_created, repo_deleted
@@ -117,8 +118,8 @@ def access_to_repo(request, repo_id, repo_ap=None):
     Check whether user in the request can access to repo, which means user can
     view directory entries on repo page. Only repo owner or person who is shared
     can access to repo.
-    NOTE: `repo_ap` may be used in future.
 
+    NOTE: This function is deprecated, use `get_user_permission`.
     """
     if not request.user.is_authenticated():
         token = request.COOKIES.get('anontoken', None)
@@ -670,9 +671,10 @@ def get_subdir(request):
 @ctx_switch_required
 def repo_history(request, repo_id):
     """
-    View repo history.
+    List library modification histories.
     """
-    if not access_to_repo(request, repo_id, ''):
+    user_perm = get_user_permission(request, repo_id)
+    if not user_perm:
         return render_permission_error(request, _(u'Unable to view library modification'))
 
     repo = get_repo(repo_id)
@@ -713,6 +715,7 @@ def repo_history(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'user_perm': user_perm,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -836,6 +839,7 @@ def get_diff(repo_id, arg1, arg2):
 
     return lists
 
+@login_required
 def repo_history_changes(request, repo_id):
     changes = {}
     content_type = 'application/json; charset=utf-8'
@@ -849,17 +853,7 @@ def repo_history_changes(request, repo_id):
         return HttpResponse(json.dumps(changes),
                             content_type=content_type)
 
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except:
-            return HttpResponse(json.dumps(changes),
-                                content_type=content_type)
-
-    if repo.props.encrypted and not password_set:
+    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps(changes),
                             content_type=content_type)
 
@@ -870,8 +864,14 @@ def repo_history_changes(request, repo_id):
 
     changes = get_diff(repo_id, '', commit_id)
 
-    return HttpResponse(json.dumps(changes),
-                        content_type=content_type)
+    if get_commit(commit_id).parent_id is None:
+        # A commit is a first commit only if it's parent id is None.
+        changes['init_commit'] = True
+        changes['cmt_desc'] = repo.desc
+    else:
+        changes['init_commit'] = False
+    
+    return HttpResponse(json.dumps(changes), content_type=content_type)
 
 @login_required
 def modify_token(request, repo_id):
@@ -935,11 +935,23 @@ def repo_remove(request, repo_id):
 @login_required
 def myhome(request):
     owned_repos = []
-    quota_usage = 0
 
     email = request.user.username
+
     quota = seafserv_threaded_rpc.get_user_quota(email)
-    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+
+    quota_usage = 0
+    share_usage = 0
+    my_usage = 0
+    my_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    if CALC_SHARE_USAGE:
+        try:
+            share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
+        except SearpcError, e:
+            share_usage = 0
+        quota_usage = my_usage + share_usage
+    else:
+        quota_usage = my_usage
 
     # Get all personal groups I joined.
     joined_groups = get_personal_groups_by_user(request.user.username)
@@ -1030,6 +1042,9 @@ def myhome(request):
             "owned_repos": owned_repos,
             "quota": quota,
             "quota_usage": quota_usage,
+            "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
+            "share_usage": share_usage,
+            "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
             "joined_groups": joined_groups,
@@ -1952,8 +1967,20 @@ def user_info(request, email):
     owned_repos = []
 
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+
     quota = seafserv_threaded_rpc.get_user_quota(email)
-    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    quota_usage = 0
+    share_usage = 0
+    my_usage = 0
+    my_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    if CALC_SHARE_USAGE:
+        try:
+            share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
+        except SearcpError, e:
+            share_usage = 0
+        quota_usage = my_usage + share_usage
+    else:
+        quota_usage = my_usage
 
     # Repos that are share to user
     in_repos = seafserv_threaded_rpc.list_share_repos(email, 'to_email',
@@ -1971,7 +1998,10 @@ def user_info(request, email):
             'owned_repos': owned_repos,
             'quota': quota,
             'quota_usage': quota_usage,
-            "in_repos": in_repos,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'share_usage': share_usage,
+            'my_usage': my_usage,
+            'in_repos': in_repos,
             'email': email,
             'nickname': nickname,
             }, context_instance=RequestContext(request))
@@ -2370,6 +2400,12 @@ def render_file_revisions (request, repo_id):
         error_msg = _(u"Library does not exist")
         return render_error(request, error_msg)
 
+    filetype = valid_previewed_file(u_filename)[0].lower()
+    if filetype == 'text' or filetype == 'markdown':
+        can_compare = True
+    else:
+        can_compare = False
+
     try:
         commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path, 0)
     except SearpcError, e:
@@ -2378,7 +2414,7 @@ def render_file_revisions (request, repo_id):
     if not commits:
         return render_error(request)
         
-    # Check whether use is repo owner
+    # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
@@ -2404,6 +2440,7 @@ def render_file_revisions (request, repo_id):
         'zipped': zipped,
         'commits': commits,
         'is_owner': is_owner,
+        'can_compare': can_compare,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -2840,7 +2877,7 @@ def text_diff(request, repo_id):
     else:
         diff = HtmlDiff()
         diff_result_table = diff.make_table(prev_content.splitlines(),
-                                        current_content.splitlines())
+                                        current_content.splitlines(), True)
 
     zipped = gen_path_link(path, repo.name)
 
@@ -2922,6 +2959,16 @@ def repo_download_dir(request, repo_id):
     if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
                                                           path.encode('utf-8'))
+
+        try:
+            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+        except Exception, e:
+            logger.error(str(e))
+            return render_error(request, _(u'Internal Error'))
+
+        if total_size > MAX_DOWNLOAD_DIR_SIZE:
+            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   dir_id,
                                                   'download-dir',

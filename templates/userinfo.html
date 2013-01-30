@@ -24,7 +24,15 @@
     <h3 class="inbl">{% trans "Space Used" %}</h3>
     <a href="#" class="set-quota op">{% trans "Set Quota" %}</a>
 </div>
-<p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %} / {{ quota|filesizeformat }} {% endif %}</p>
+<div class="info-item-bottom">
+    {% if CALC_SHARE_USAGE %}
+    <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Used" %}: {{ my_usage|filesizeformat }}</p>
+    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }}</p>
+    {% else %}
+    <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+    {% endif %}
+</div>
 </div>
 
 {% endblock %}

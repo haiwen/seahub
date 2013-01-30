@@ -69,8 +69,15 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Libraries" %}</h3>
-<button id="repo-create">{% trans "New Library" %}</button>
+<div id="tabs">
+    <div class="ovhd">
+        <ul class="fleft" id="tabs-nav">
+            <li><a href="#grp-repos">{% trans "Libraries" %}</a></li>
+            <li class="long-item"><a href="#grp-repos-commits">{% trans "Recent Changes" %}</a></li>
+        </ul>
+        <button id="repo-create" class="fright">{% trans "New Library" %}</button>
+    </div>
+    <div id="grp-repos" class="hide">
 {% if repos %}
 <table>
     <tr>
@@ -88,7 +95,7 @@
             {% if repo.user_perm == 'rw' %}
             <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" alt="{% trans "directory icon" %}" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
@@ -97,7 +104,7 @@
         {% if repo.latest_modify %}
         {{ repo.latest_modify|translate_seahub_time }}
         {% else %}
-        —— ——
+        --
         {% endif %}
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
@@ -110,7 +117,76 @@
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<div class="empty-tips" style="margin-bottom:150px;">
+  <h2 class="center-contents">{% trans "No library is sharing to this group" %}</h2>
+  <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
+  <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+</div>
 {% endif %}
+</div>
+
+<div id="grp-repos-commits" class="hide">
+{% if recent_commits|length > 0 %}
+<table>
+    <tr>
+        <th width="5%"></th>
+        <th width="17%">{% trans "Library" %}</th>
+        <th width="49%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Modified at" %}</th>
+        <th width="14%">{% trans "Modifier" %}</th>
+    </tr>
+
+    {% for cmt in recent_commits %}
+    <tr>
+        <td class="icon-container">
+            {% if cmt.tp == 'Added' or cmt.tp == 'Deleted' or cmt.tp == 'Removed' %}
+                {% if cmt.tp == 'Added' %}
+                <img src="{{MEDIA_URL}}img/plus-16.png" alt="" />
+                {% else %}
+                <img src="{{MEDIA_URL}}img/minus-16.png" alt="" />
+                {% endif %}
+            {% else %}
+            <img src="{{MEDIA_URL}}img/modify-16.png" alt="" />
+            {% endif %}
+        </td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ cmt.repo.props.id }}/">{{ cmt.repo.props.name }}</a></td>
+        <td>
+            {{cmt.props.desc|translate_commit_desc}}
+            {% if cmt.repo.encrypted %}
+                <a class="lsch-encrypted"{% if cmt.repo.password_set %} data-passwordset="true"{% endif %} href="#" data-url="{% url 'repo_history_changes' cmt.repo.id %}?commit_id={{ cmt.id }}" data-repoid="{{cmt.repo.id}}" data-reponame="{{cmt.repo.name}}" data-time="{{ cmt.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+            {% else %}
+                <a class="lsch" href="#" data-url="{% url 'repo_history_changes' cmt.repo.id %}?commit_id={{ cmt.id }}" data-time="{{ cmt.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+            {% endif %}
+        </td>
+        <td>{{cmt.props.ctime|translate_seahub_time}}</td>
+        <td>
+        {% if cmt.creator_name %}
+            {% if cmt.second_parent_id %}
+                {% trans "None" %}
+            {% else %}
+                {{cmt.creator_name|email2nickname}}
+            {% endif %}
+        {% else %}
+            {% trans "Unknown"%}
+        {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<form id="repo-decrypt-form" class="simple-input-popup hide">
+    <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
+    <input type="hidden" name="repo_id" value="" />
+    <label>{% trans 'Password：' %}</label><br />
+    <input type="password" name="password" maxlength="15" class="long-input" />
+    <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+    <p class="error"></p>
+    <input type="submit" class="submit" value="{% trans 'Submit' %}" />
+    <button class="simplemodal-close">{% trans 'Cancel' %}</button>
+</form>
+{% endif %}
+</div>
+</div>
 
 <div id="group-reply">
     <h3>{% trans "Messages" %}</h3>
@@ -281,5 +357,21 @@ $('#grp-member-add').click(function() {
 {% with post_url=member_add_url %}
 {% include 'group/grpmember_add_js.html' %}
 {% endwith %}
+
+{% if recent_commits %}
+{% include 'snippets/list_commit_detail.html' %}
+$('.lsch-encrypted').click(function() {
+    if ($(this).data('passwordset')) {
+        listCommitDetails($(this).data('url'), $(this).data('time'));
+    } else {
+        var form = $('#repo-decrypt-form');
+        form.find('input[name="repo_id"]').val($(this).data('repoid'));
+        form.find('.op-target').html($(this).data('reponame'));
+        form.data({'url':$(this).data('url'), 'time':$(this).data('time')}).modal({appendTo:'#main'});
+    }   
+    return false;
+}); 
+{% include 'snippets/repo_decrypt_js.html' %}
+{% endif %}
 </script>
 {% endblock %}

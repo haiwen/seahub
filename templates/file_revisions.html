@@ -51,6 +51,9 @@
                     {% endif %}
                     <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">{% trans 'Download' %}</a>
                     <a href="{% url 'repo_view_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}&from=file_history" class="op">{% trans 'View' %}</a>
+                    {% if can_compare and not forloop.last %}
+                    <a href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{commit.id}}" class="op">{% trans 'Diff' %}</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

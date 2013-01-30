@@ -53,7 +53,20 @@
 
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Space used" %}</h3>
-    <p class="info-item-bottom">{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+    <div class="info-item-bottom">
+        {% if CALC_SHARE_USAGE %}
+        <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+        {% if quota > 0 %}
+        <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
+        {% endif %}
+        <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
+        {% else %}
+        <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+        {% if quota > 0 %}
+        <div id="quota-bar"><span id="quota-usage"></span></div>
+        {% endif %}
+        {% endif %}
+    </div>
 </div>
 
 {% with groups=joined_groups %}
@@ -79,6 +92,15 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+{% if quota > 0 %}
+    {% if CALC_SHARE_USAGE %}  
+    $('#my-usage').css({'width':{{my_usage}}/{{quota}} * 100 + '%'});
+    $('#share-usage').css({'width':{{share_usage}}/{{quota}} * 100 + '%'});
+    {% else %}
+    $('#quota-usage').css({'width':{{quota_usage}}/{{quota}} * 100 + '%'});
+    {% endif %}
+{% endif %}
+
 {% with groups=autocomp_groups %}
 {% include "snippets/myhome_extra_script.html" %}
 {% endwith %}

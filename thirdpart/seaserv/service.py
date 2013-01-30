@@ -40,6 +40,7 @@ import ConfigParser
 
 import ccnet
 import seafile
+import re
 from pysearpc import SearpcError
 
 ENVIRONMENT_VARIABLES = ('CCNET_CONF_DIR', 'SEAFILE_CONF_DIR')
@@ -75,7 +76,12 @@ config.read(os.path.join(CCNET_CONF_PATH, 'ccnet.conf'))
 if config.has_option('General', 'SERVICE_URL') and \
    config.has_option('Network', 'PORT'):
     service_url = config.get('General', 'SERVICE_URL')
-    service_url = service_url.lstrip('http://').lstrip('https://')
+
+    if service_url.startswith('http://'):
+        service_url = service_url[7:]
+    elif service_url.startswith('https://'):
+        service_url = service_url[8:]
+
     if ':' in service_url:
         # strip http port such as ':8000' in 'http://192.168.1.101:8000'
         idx = service_url.index(':')
@@ -114,6 +120,15 @@ if config.has_option('httpserver', 'max_upload_size'):
     except ValueError:
         pass
 
+MAX_DOWNLOAD_DIR_SIZE = 100 * (2 ** 20) # Default max size of a downloadable dir
+if config.has_option('httpserver', 'max_download_dir_size'):
+    try:
+        max_download_dir_size_mb = config.getint('httpserver', 'max_download_dir_size')
+        if max_download_dir_size_mb > 0:
+            MAX_DOWNLOAD_DIR_SIZE = max_download_dir_size_mb * (2 ** 20)
+    except ValueError:
+        pass
+
 if CCNET_SERVER_ADDR:
     enable_https = config.getboolean('httpserver', 'https') if \
         config.has_option('httpserver', 'https') else False
@@ -124,6 +139,10 @@ if CCNET_SERVER_ADDR:
     HTTP_SERVER_ROOT = http_or_https + CCNET_SERVER_ADDR + ':' + port
 else:
     HTTP_SERVER_ROOT = None
+
+CALC_SHARE_USAGE = False
+if config.has_option('quota', 'calc_share_usage'):
+    CALC_SHARE_USAGE = config.getboolean('quota', 'calc_share_usage')
 
 #### Basic ccnet API ####
 
@@ -450,6 +469,14 @@ def get_org_repo_owner(repo_id):
     return owner
 
 # commit
+def get_commit(cmt_id):
+    """ Get a commit. """
+    try:
+        ret = seafserv_threaded_rpc.get_commit(cmt_id)
+    except SearpcError:
+        ret = None
+    return ret
+    
 def get_commits(repo_id, offset, limit):
     """Get commit lists."""
     try:

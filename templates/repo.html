@@ -38,7 +38,7 @@
         </div>
     </div>
     {% if user_perm == 'r' %}
-    <p>{% trans "This library is read-only, and you can only view the files."%}</p>
+    <p>{% trans "This library is read-only, you can not modify the contents of this library."%}</p>
     {% endif %}
 
     {% if user_perm and path == '/' %}
@@ -53,7 +53,7 @@
             {{ current_commit.props.desc|translate_commit_desc }}
             <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ current_commit.id }}" data-time="{{ current_commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
         </span>
-        {% if user_perm == 'rw' %}
+        {% if user_perm  %}
         <a href="{% url 'seahub.views.repo_history' repo.id %}" class="more fright">{% trans "History"%}</a>
         {% endif %}
         </p>

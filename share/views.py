@@ -77,8 +77,7 @@ def share_repo(request):
                 try:
                     seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
                 except:
-                    msg = _(u'Failed to share to all members')
-                    message.add_message(request, message.ERROR, msg)
+                    messages.error(request, _(u'Failed to share to all members'))
                     continue
 
                 msg = _(u'Shared to all members successfully, go check it at <a href="%s">Share</a>.') % \

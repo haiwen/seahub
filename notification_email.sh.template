@@ -1,8 +1,0 @@
-#!/bin/sh
-
-cd /home/gonggeng/seahub
-
-export PYTHONPATH=thirdpart
-export DJANGO_SETTINGS_MODULE=settings
-
-./user_notification.py
