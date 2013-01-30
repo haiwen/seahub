@@ -8,10 +8,9 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-23 15:24+0100\n"
-"PO-Revision-Date: 2013-01-24 17:15+0100\n"
+"PO-Revision-Date: 2013-01-30 12:24+0100\n"
 "Last-Translator: Phillip Thelen <viirus@pherth.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -160,9 +159,8 @@ msgid "Deutsch"
 msgstr "Deutsch"
 
 #: views.py:537
-#, fuzzy
 msgid "Unable to view recycle page"
-msgstr "Konte Mülleimer nicht anzeigen"
+msgstr "Mülleimer konnte nicht angezeigt weden"
 
 #: views.py:558
 msgid "Settings saved."
@@ -185,9 +183,8 @@ msgid "Duplicated filename"
 msgstr "Doppelter Dateiname"
 
 #: views.py:574 views.py:1305 views.py:2541 views.py:2669
-#, fuzzy
 msgid "File does not exist"
-msgstr "Datei existiert nicht"
+msgstr "Die Datei existiert nicht"
 
 #: views.py:576
 msgid "File size surpasses the limit"
@@ -227,7 +224,6 @@ msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
 #: views.py:796 views.py:891 views.py:2370 views.py:2898
-#, fuzzy
 msgid "Library does not exist"
 msgstr "Die Bibliothek existiert nicht."
 
@@ -467,16 +463,20 @@ msgstr "Bibliothek konnte nicht erstellt werden"
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
+"%(path)s wurde erfolgreih zum <a href=\"%(root)s\">Hauptverzeichnis</a> "
+"zurückgesetzt."
 
 #: views.py:2441 views.py:2467
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr ""
+msgstr "<a href=\"%(url)s\">%(path)s</a> wurde erfolgreich zurükgesetzt."
 
 #: views.py:2463
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
+"%(path)s wurde erfolgreih zum <a href=\"%(url)s\">Hauptverzeichnis</a> "
+"zurückgesetzt."
 
 #: views.py:2727
 msgid "Internal error"
@@ -571,7 +571,6 @@ msgid "Delete These"
 msgstr "Lösche diese"
 
 #: avatar/templates/avatar/set_avatar.html:8
-#, fuzzy
 msgid "Avatar Change"
 msgstr "Avatar ändern"
 
@@ -939,7 +938,6 @@ msgstr ""
 "Berechtigungsfehler: nur Gruppenadministratoren dürfen Mitglieder hinzufügen"
 
 #: group/error_msg.py:16 group/error_msg.py:22
-#, fuzzy
 msgid "Group does not exist"
 msgstr "Gruppe existiert nicht"
 
@@ -1118,7 +1116,7 @@ msgstr "Sie sind bereits in der Gruppe."
 
 #: group/views.py:877
 msgid "apply to join the group"
-msgstr ""
+msgstr "Bewerben um der Bruppe beizutreten"
 
 #: group/views.py:879
 msgid "Sent successfully, the group admin will handle it."
@@ -1470,7 +1468,6 @@ msgid "It can not be blank and should be no more than 150 characters."
 msgstr "Darf nicht leer sein und sollte nicht mehr als 150 Zeichen haben."
 
 #: group/templates/group/groups_left_panel.html:5
-#, fuzzy
 msgid ""
 "After creating a group, you can add members and share libraries into it."
 msgstr ""
@@ -1530,10 +1527,9 @@ msgid "emails, separated by ','"
 msgstr "Emails, durch ',' getrennt"
 
 #: group/templates/group/grpmember_add_form.html:7
-#, fuzzy
 msgid "Tip: an invitation will be sent if the email is not registered."
 msgstr ""
-"Tipp: Eine Einladung wird versendet, wenn die Email nicht registriert ist."
+"Tipp: Es wird eine Einladung versendet, wenn die Email nicht registriert ist."
 
 #: group/templates/group/grpmember_add_form.html:9
 #, fuzzy
@@ -1822,6 +1818,8 @@ msgid ""
 "Afterwards, updates on server will be downloaded automatically, but updates "
 "on local files will not be uploaded."
 msgstr ""
+"Später werden Änderungen automatisch vom Server heruntergeladen, lokale "
+"Änderungen aber nicht hochgeladen."
 
 #: organizations/templates/organizations/org_public.html:22
 #: templates/public_home.html:18
@@ -2117,6 +2115,9 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
+"Sie können Bibliotheken mit ihren Freunden und Kollegen teilen, indem Sie "
+"auf den Teilen Knopf in ihren eigenen Bibliotheken klicken oder eine neue "
+"Bibliothek, in einer Gruppe in der Sie Mitglied sind, erstellen."
 
 #: share/templates/repo/share_admin.html:79
 msgid "Shared Links"
@@ -2153,6 +2154,9 @@ msgid ""
 "You can share a folder or a file when you view a library, or share a file "
 "when you view it."
 msgstr ""
+"Sie können einen Ordner oder eine Datei teilen, wenn Sie eine Bibliothek "
+"geöffnet haben. Dateien können auch geteilt werden, wenn Sie die Datei "
+"geöffnet haben."
 
 #: share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
@@ -2209,7 +2213,7 @@ msgstr "Benachrichtigungen"
 
 #: templates/base.html:9
 msgid "File Collaboration Team Organization"
-msgstr ""
+msgstr "File Collaboration Team Organization"
 
 #: templates/base.html:37 templates/base.html.py:41 templates/org_base.html:9
 msgid "Personal"
@@ -2360,7 +2364,7 @@ msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung"
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
-msgstr "s Versionshistorie"
+msgstr "s Versionsverlauf"
 
 #: templates/file_revisions.html:7
 msgid ""
@@ -2442,7 +2446,7 @@ msgstr[1] " %(counter)s Mitwirker*innen"
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
 msgid "History"
-msgstr "Historie"
+msgstr "Verlauf"
 
 #: templates/file_view.html:71
 msgid "Open local file"
@@ -2470,8 +2474,9 @@ msgid "Processing..."
 msgstr "Verarbeiten…"
 
 #: templates/file_view.html:103
+#, fuzzy
 msgid "You have not downloaded "
-msgstr ""
+msgstr "Sie haben nicht heruntergeladen"
 
 #: templates/file_view.html:103
 msgid "."
@@ -2497,30 +2502,38 @@ msgstr "erfolgreich favorisiert"
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
+"Es konnte kein Programm gefunden werden um die Datei zu öffnen. Seafile wird "
+"den Ordner öffnen"
 
 #: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr ""
+"Diese Datei ist nicht synchronisiert. Sie können sie manuell synchronisieren."
 
 #: templates/file_view.html:234
 msgid "The file is not synchronized, please retry later."
-msgstr ""
+msgstr "Diese Datei ist nicht synchronisiert. Bitte versuchen sie es später."
 
 #: templates/file_view.html:238
 msgid "An error occurred when open the local file."
-msgstr ""
+msgstr "Ein Fehler trat auf als die lokale Datei geöffnet wurde."
 
 #: templates/file_view.html:266
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr ""
+"Sie benutzen eine ältere Version des Seafile Clienten. Bitte <a target="
+"\"_blank\">aktualisieren</a> Sie sie."
 
 #: templates/file_view.html:280
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
+"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind das ein "
+"Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
+"Datei zu öffnen:"
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -2536,7 +2549,7 @@ msgstr "Schnappschuss"
 
 #: templates/history_file_view.html:23
 msgid "history"
-msgstr "Historie"
+msgstr "Verlauf"
 
 #: templates/history_file_view.html:26
 msgid "Back to file versions"
@@ -2604,7 +2617,13 @@ msgid_plural ""
 "          %(counter)s org messages\n"
 "          "
 msgstr[0] ""
+"\n"
+"          Eine Organisationsnachricht\n"
+"          "
 msgstr[1] ""
+"\n"
+"          %(counter)s Organisationsnachrichten\n"
+"          "
 
 #: templates/myhome.html:55
 msgid "Space used"
@@ -2631,13 +2650,15 @@ msgstr "Öffentliche Informationen"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr ""
+msgstr "Formular zum teilen"
 
 #: templates/repo.html:11
 msgid ""
 "This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
+"Diese Seite wird in kürze ungültig. Sie können <a href=\"http://seafile.com/"
+"\" target=\"_blank\">Seafile</a> beitreten um mehr zu erfahren."
 
 #: templates/repo.html:25
 msgid "Settings"
@@ -2772,15 +2793,15 @@ msgstr "Bibliothekseinstellungen"
 
 #: templates/repo.html:262
 msgid "Keep full history"
-msgstr "Komplette Historie speichern"
+msgstr "Kompletten Verlauf speichern"
 
 #: templates/repo.html:263
 msgid "Don't keep history"
-msgstr "Historie nicht speichern"
+msgstr "Verlauf nicht speichern"
 
 #: templates/repo.html:264
 msgid "Only keep a period of history:"
-msgstr "Historie nur für einen bestimmten Zeitraum speichern:"
+msgstr "Verlauf nur für einen bestimmten Zeitraum speichern:"
 
 #: templates/repo.html:265
 msgid "days"
@@ -2792,7 +2813,7 @@ msgstr "Ordnername"
 
 #: templates/repo.html:286
 msgid "Featured File Type"
-msgstr ""
+msgstr "Verfügbare Dateiformate"
 
 #: templates/repo.html:287 templates/repo.html.py:288
 msgid "Click to choose"
@@ -2800,7 +2821,7 @@ msgstr "Klicken zum auswählen"
 
 #: templates/repo.html:287
 msgid "online Rich Text format (experimental)."
-msgstr ""
+msgstr "Online Rich Text Format (Experimentell)"
 
 #: templates/repo.html:288
 msgid "simple markup format."
@@ -2869,13 +2890,15 @@ msgstr "Nur eine Erweiterung. Bitte einen Namen angeben."
 
 #: templates/repo_history.html:7
 msgid "modification history"
-msgstr "Bearbeitungshistorie"
+msgstr "Bearbeitungsverlauf"
 
 #: templates/repo_history.html:11
 msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
 "library state before this modification."
 msgstr ""
+"Tipp: Nach der änderung wird ein Schnappschuss erstellt, welcher den Zustand "
+"der Bibliothek vor der änderung darstellt."
 
 #: templates/repo_history.html:11
 msgid "View Snapshot"
@@ -2915,7 +2938,7 @@ msgstr "Zeit löschen"
 
 #: templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
-msgstr "Zurück zur Bearbeitungshistorie"
+msgstr "Zurück zur Bearbeitungsverlauf"
 
 #: templates/repo_view_snapshot.html:15
 msgid "Create Time"
@@ -2962,6 +2985,8 @@ msgid ""
 "You're receiving this e-mail because %(email)s is sharing a file to you on "
 "%(site_name)s."
 msgstr ""
+"Sie erhalten diese Email, weil %(email)s auf %(site_name)s eine Datei mit "
+"ihnen teilt."
 
 #: templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
@@ -3010,6 +3035,8 @@ msgstr "Benutzer*in löschen"
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
 msgstr ""
+"Sind Sie sicher, dass Sie das Passwort für den folgenden Account "
+"zurücksetzen wollen?"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -3049,12 +3076,15 @@ msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
 msgstr ""
+"Sie erhalten diese Email, weil %(user)s Sie zur Organisation  "
+"\"%(org.org_name)s\" auf %(site_name)s hinzugefügt hat."
 
 #: templates/user_add_email.html:5
 #, python-format
 msgid ""
 "You're receiving this e-mail because %(user)s added you to %(site_name)s."
 msgstr ""
+"Sie erhalten diese Email, weil %(user)s Sie zu %(site_name)s hinzugefügt hat."
 
 #: templates/user_add_email.html:7
 msgid "Following is your account information:"
@@ -3080,6 +3110,8 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
+"Sie erhalten diese Emai, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
+"%(site_name)s geändert hat."
 
 #: templates/user_reset_email.html:4
 #, python-format
@@ -3087,6 +3119,7 @@ msgid ""
 "Your new password is %(password)s, please modify your password as soon as "
 "possible."
 msgstr ""
+"Ihr neues Passwort ist %(password)s. Bitte ändern Sie es so bald wie möglich."
 
 #: templates/userinfo.html:13
 msgid "Profile"
@@ -3174,6 +3207,8 @@ msgstr "Neues Passwort eingeben"
 #: templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
 msgstr ""
+"Das Passwort konnte nicht zurückgesetzt werden: Der Link ist nicht länger "
+"verfügbar."
 
 #: templates/registration/password_reset_done.html:4
 msgid "Password Reset Successfully"
@@ -3182,6 +3217,8 @@ msgstr "Passwort wurde erfolgreich zurückgesetzt"
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
 msgstr ""
+"Wir haben ihnen eine Email geschickt, mit der Sie Ihr Passwort zurücksetzen "
+"können."
 
 #: templates/registration/password_reset_email.html:2
 #, python-format
@@ -3189,10 +3226,13 @@ msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
 msgstr ""
+"Sie erhalten diese Email, weil Sie eine Anfrage zum Passwort zurücksetzen "
+"für ihren Benutzeraccount auf %(site_name)s angefordert haben."
 
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
+"Bitte besuchen Sie die folgende Seite und wählen Sie ein neues Passwort:"
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
@@ -3280,6 +3320,7 @@ msgstr "Bitte versuchen Sie es später erneut."
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr ""
+"Um es Online zu betrachten, können Sie Firefox, Chrome oder IE 9 benutzen."
 
 #: templates/snippets/file_content_js.html:95
 msgid "Document convertion failed."
@@ -3291,6 +3332,9 @@ msgid ""
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
 "\"page-nums\"></span></span>"
 msgstr ""
+"<span id=\"pdf-page\"><label for=\"page-number\">Seite</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span></span>"
 
 #: templates/snippets/file_content_js.html:110
 msgid "Full Screen"
@@ -3304,6 +3348,8 @@ msgstr "Laden…"
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
+"Sie können IE 10 oder zum Beispiel Firefo benutzen um es Online zu "
+"betrachten."
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
@@ -3381,6 +3427,9 @@ msgid ""
 "one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr ""
+"Sie können eine Bibliothek erstellen um Ihre Dateien zu organisieren. Zum "
+"Beispiel können Sie eine für jedes Ihrer Projekte erstellen. Jede Bibliothek "
+"kann einzeln synchronisiert und geteilt werden."
 
 #: templates/snippets/my_owned_repos.html:45
 msgid "Synchronize libraries with PC client"
@@ -3388,15 +3437,17 @@ msgstr "Bibliothek mit Client sychronisieren"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
-msgstr ""
+msgstr "1. Bibliothek herunteladen (gehen Sie sicher, das der Client läuft)"
 
 #: templates/snippets/my_owned_repos.html:47
 msgid "2. Add files to the folder and they will be uploaded automatically."
 msgstr ""
+"2. Fügen Sie Dateien zum Ordner hinzu, damit sie automatisch hochgeladen "
+"werden."
 
 #: templates/snippets/my_owned_repos.html:83
 msgid "Leave Share"
-msgstr ""
+msgstr "Geteilte Bibliothek verlassen"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
@@ -3409,6 +3460,11 @@ msgid ""
 "libraries can only be downloaded, updates on local files will not be "
 "uploaded."
 msgstr ""
+"Biblioteken, die mit Ihnen geteilt werden, oder mit Gruppen geteilt werden, "
+"in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken auf die "
+"Sie Schreibzugriff haben, können heruntergeladen und synchronisiert werden. "
+"Dateien mit Lesezugriff werden nur heruntergeladen, lokale änderungen aber "
+"nicht hochgeladen."
 
 #: templates/snippets/my_owned_repos.html:107
 msgid "icon"
@@ -3423,6 +3479,9 @@ msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing "
 "page, and they will be listed here."
 msgstr ""
+"Sie können wichtige Dateien favorisieren, indem Sie den \"Favorisieren\" "
+"Knopf auf der Dateiseite klicken. Favorisierte Dateien werden hier "
+"aufgelistet."
 
 #: templates/snippets/myhome_extra_script.html:28
 msgid "Please enter emails or groups."
@@ -3430,7 +3489,7 @@ msgstr "Bitte geben sie Emails oder Gruppen an."
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
-msgstr ""
+msgstr "Berechtigungen für geteilte Bibliothek"
 
 #: templates/snippets/repo_create_form.html:16
 msgid "Encrypt"
@@ -3469,10 +3528,12 @@ msgid ""
 "Tip: must be organization members or organization groups, enter \"all\" to "
 "share to public library."
 msgstr ""
+"Tipp: Müssen Mitglieder der Organisation oder Organisationsgruppe sein. "
+"Geben Sie \"all\" ein um die Bibliothek öffentlich zu machen."
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr ""
+msgstr "Tipp: Geben Sie \"all\" ein um die Bibliothek öffentlich zu teilen."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
@@ -3504,6 +3565,8 @@ msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
 msgstr ""
+"Bitte geben Sie einen korrekten Benutzernamen und ein korrektes Passwort "
+"ein. Beide Felder berücksichtigen Groß-/Kleinschreibung."
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
@@ -3514,6 +3577,8 @@ msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr ""
+"Ihr Web Browser scheint keine Cookies zu erlauben. Diese werden aber für den "
+"Login benötigt."
 
 #: thirdpart/auth/forms.py:59
 msgid "E-mail"
@@ -3524,17 +3589,21 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
+"Email konnte nicht versendet werden. Der Email Dienst ist nicht korrekt "
+"konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
+"Diese Email Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
+"Sie registriert sind?"
 
 #: thirdpart/auth/forms.py:104
 #, python-format
 msgid "Password reset on %s"
-msgstr ""
+msgstr "Passwort zurücksetzen für %s"
 
 #: thirdpart/auth/forms.py:112
 msgid "New password"
@@ -3578,7 +3647,7 @@ msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr ""
+msgstr "Ein*e Benutzer*in mit dieser Email existiert bereits"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
@@ -3594,12 +3663,15 @@ msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
+"Diese Email wird bereits benutzt. Bitte geben Sie eine andere Email an."
 
 #: thirdpart/registration/forms.py:113
 msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
+"Registrierung mit kostelosen Emails ist nicht erlaubt. Bitte geben Sie eine "
+"andere Email an."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
@@ -3607,11 +3679,11 @@ msgstr "Aktivierungsschlüssel"
 
 #: thirdpart/registration/models.py:196
 msgid "registration profile"
-msgstr ""
+msgstr "Registrierungsprofil"
 
 #: thirdpart/registration/models.py:197
 msgid "registration profiles"
-msgstr ""
+msgstr "Registrierungsprofile"
 
 #~ msgid "File not exists"
 #~ msgstr "Datei existiert nicht"
