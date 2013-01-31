@@ -5,7 +5,7 @@
 
 {% block main_panel %}
     <div class="w100 ovhd">
-        <h2 class="fleft">{{repo.props.name}} {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
+        <h2 class="fleft"><span class="op-target">{{repo.props.name}}</span> {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
         <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">{% trans "Back to snapshots"%}</button>
     </div>
 

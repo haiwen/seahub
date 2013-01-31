@@ -4,7 +4,7 @@
 
 {% block main_panel %}
 <div class="w100 ovhd">
-    <h2 class="fleft">{{repo.props.name}} {% trans "snapshots"%}</h2>
+    <h2 class="fleft"><span class="op-target">{{repo.props.name}}</span> {% trans "snapshots"%}</h2>
     <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="back">{% trans "Back to modification history"%}</button>
 </div>
 
