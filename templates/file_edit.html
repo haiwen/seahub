@@ -120,7 +120,7 @@
         <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label>{% trans 'Password：' %}</label><br />
         <input type="password" name="password" maxlength="15" class="long-input" />
-        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+        <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
         <p class="error"></p>
         <input type="submit" class="submit" value="{% trans 'Submit' %}" />
         <button class="simplemodal-close">{% trans 'Cancel' %}</button>
@@ -183,6 +183,10 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
         var cursor = editor.cursorCoords(true, 'page');
         if (cursor.yBot >= $(window).height() + $(window).scrollTop() - 60) {
            $(window).scrollTop($(window).scrollTop() + parseInt($('#file-edit').css('padding-bottom')));
+        }
+        // keep the cursor visible when path-op fixed and moving the cursor upward
+        if (cursor.y - $(window).scrollTop() < $('#path-op').outerHeight()) {
+            $(window).scrollTop(cursor.y - $('#path-op').outerHeight());
         }
     },
     autofocus: true
