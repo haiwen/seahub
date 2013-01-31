@@ -17,11 +17,21 @@
 {% endif %}
 
 {% if filetype == 'Image' %}
-    window.onload = function() {
-        if ($('#image-view').width() > $('#file-view').width()) {
-            $('#image-view').css('width', $('#file-view').width() - 4);
-        }
+$(window).load(function() {
+    var img_ht = $('#image-view').height();
+    var file_view_ht = parseInt($('#file-view').css('min-height'));
+    var prev_next_ht = 0;
+    if ($('#img-prev-next').length > 0) {
+        prev_next_ht = $('#img-prev-next').outerHeight(true);
     }
+    if (img_ht < file_view_ht - prev_next_ht) {
+        $('#image-view').css({'margin-top':(file_view_ht - img_ht - prev_next_ht)/2});
+    }
+    if ($('#image-view').outerWidth() > 950) { // for ie 6
+        $('#image-view').css('width', 946);
+    }
+    $('#image-view').removeClass('vh');
+});
 {% endif %}
 
 {% if filetype == 'SVG' %}

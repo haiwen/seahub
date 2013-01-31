@@ -83,7 +83,9 @@
             {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
+        {% with page='file_view' %}
         {% include 'snippets/file_content_html.html' %}
+        {% endwith %}
     </div>
 
     <form id="link-send-form" action="" method="post" class="hide">
@@ -151,6 +153,20 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
+{% if filetype == 'Image' %}
+$('body').bind('keydown', function(e) {
+    {% if img_prev %}
+    if (e.keyCode == 37) { // press '<-'
+        location.href = $('#img-prev').attr('href');
+    }
+    {% endif %}
+    {% if img_next %}
+    if (e.keyCode == 39) { // press '->'
+        location.href = $('#img-next').attr('href');
+    }
+    {% endif %}
+})
+{% endif %}
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });

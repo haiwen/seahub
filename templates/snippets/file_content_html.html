@@ -1,7 +1,9 @@
-{%comment%}
+{% load i18n %}
+{% load url from future %}
+{% comment %}
 content of files that can be viewed online shows here.
 For details please refer to 'snippets/file_content_js.html'.
-{%endcomment%}
+{% endcomment %}
 <div id="file-view">
     {% if not err %}
         {% if filetype == 'Text' or filetype == 'Sf' %}
@@ -15,7 +17,22 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
 
         {% if filetype == 'Image' %}
-        <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />
+            {% if page == 'file_view'%}
+            {% if img_prev or img_next %}
+            <div id="img-prev-next">
+                {% if img_prev %}
+                <a href="{% url 'repo_view_file' repo.id %}?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
+                {% endif %}
+                {% if img_prev and img_next %}
+                <span>/</span>
+                {% endif %}
+                {% if img_next %}
+                <a href="{% url 'repo_view_file' repo.id %}?p={{img_next|urlencode}}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endif %}
+            <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
         {% endif %}
     {% else %}
     <div id="file-view-tip">
