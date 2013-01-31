@@ -265,6 +265,10 @@
         <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
         {% endif %}
     </div>
+
+    {% if group_msgs|length > 5 %}
+    <a href="#group-reply" id="msg-upward" class="hide"><img src="{{MEDIA_URL}}img/upload.png" alt="" title="{% trans "Move Upward" %}" /></a>
+    {% endif %}
 </div>
 
 {% include "snippets/user_profile_html.html" %}
@@ -275,6 +279,27 @@
 {% block extra_script %}
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
+{% if group_msgs|length > 5 %}
+$(window).scroll(function() {
+    var up_icon = $('#msg-upward');
+    var msg_panel =  $('#group-reply');
+    var msg_panel_offset = msg_panel.offset();
+    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
+    var win_st = $(window).scrollTop();
+    var win_h = $(window).height() + win_st;
+
+    if (win_st > $('#group-message-form').offset().top) {
+        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 10}).removeClass('hide');
+        if (win_h > msg_panel_bot) {
+            up_icon.css({'bottom': win_h - msg_panel_bot + 15});
+        } else {
+            up_icon.css({'bottom': 15});
+        }
+    } else {
+        up_icon.addClass('hide');
+    }
+});
+{% endif %}
 addConfirmTo($('#quit-group'), '{% trans "Quit Group" %}', '{% trans "Are you sure you want to quit this group" %}');
 addConfirmTo($('.cancel-share'), '{% trans "Unshare Library" %}', '{% trans "Are you sure you want to unshare" %}');
 

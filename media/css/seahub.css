@@ -1372,6 +1372,12 @@ textarea:-moz-placeholder {/* for FF */
 .msg-del-confirm button {
     margin-right:8px;
 }
+#msg-upward {
+    position:fixed;
+    padding:3px 3px 0;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
 /*file upload*/
 #upload-file-form {
     margin-top:10px;
