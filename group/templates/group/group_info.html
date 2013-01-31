@@ -43,7 +43,7 @@
                 <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
               {% else %}
                 {% if forloop.last %}
-                  <li class="member">...</li>
+                  <li>...</li>
                 {% endif %}
               {% endif %}
             {% endfor %}
