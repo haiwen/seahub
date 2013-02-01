@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-21 10:53+0800\n"
+"POT-Creation-Date: 2013-01-31 13:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,10 @@ msgstr ""
 
 #: accounts.py:383
 msgid "The two password fields didn't match."
+msgstr ""
+
+#: management/commands/createsuperuser.py:25
+msgid "Enter a valid e-mail address."
 msgstr ""
 
 #: templatetags/seahub_tags.py:80
@@ -90,55 +94,55 @@ msgstr "重命名了目录"
 msgid "Moved directory"
 msgstr "移动了目录"
 
-#: templatetags/seahub_tags.py:100
-msgid "Reverted repo to status at"
+#: templatetags/seahub_tags.py:102
+msgid "Reverted library to status at"
 msgstr "资料库内容还原到"
 
-#: templatetags/seahub_tags.py:102
+#: templatetags/seahub_tags.py:104
 msgid "Reverted file to status at"
 msgstr "文件内容还原到"
 
-#: templatetags/seahub_tags.py:104
+#: templatetags/seahub_tags.py:106
 msgid "Recovered deleted directory"
 msgstr "还原已删除的目录"
 
-#: templatetags/seahub_tags.py:106
+#: templatetags/seahub_tags.py:108
 msgid "Auto merge by seafile system"
 msgstr "系统自动合并修改"
 
-#: templatetags/seahub_tags.py:163 templatetags/seahub_tags.py:197
+#: templatetags/seahub_tags.py:164 templatetags/seahub_tags.py:198
 msgid "Just now"
 msgstr "刚才"
 
-#: templatetags/seahub_tags.py:172
+#: templatetags/seahub_tags.py:173
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d 天前"
 
-#: templatetags/seahub_tags.py:179
+#: templatetags/seahub_tags.py:180
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d 小时前"
 
-#: templatetags/seahub_tags.py:186
+#: templatetags/seahub_tags.py:187
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "%(minutes)d 分钟前"
 
-#: templatetags/seahub_tags.py:192
+#: templatetags/seahub_tags.py:193
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d 秒前"
 
-#: templatetags/seahub_tags.py:272
+#: templatetags/seahub_tags.py:273
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templatetags/seahub_tags.py:274
+#: templatetags/seahub_tags.py:275
 msgid "Read-Only"
 msgstr "只读"
 

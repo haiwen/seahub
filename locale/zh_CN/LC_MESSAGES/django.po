@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-30 21:15+0800\n"
+"POT-Creation-Date: 2013-01-31 11:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2076,7 +2076,7 @@ msgid "Encrypt"
 msgstr "加密"
 
 #: templates/snippets/repo_create_form.html:17
-msgid "(at lease 3 characters)"
+msgid "(at least 3 characters)"
 msgstr "(至少3个字符)"
 
 #: templates/snippets/repo_create_form.html:19
@@ -2130,5 +2130,5 @@ msgid "Note(optional)"
 msgstr "备注(可选)"
 
 #: utils/__init__.py:69
-msgid "permissiong error"
+msgid "permission error"
 msgstr "权限错误"

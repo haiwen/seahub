@@ -91,13 +91,17 @@ COMMIT_MSG_TRANSLATION_MAP = {
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
     """Translate commit description."""
-
+    if value.startswith('Reverted repo'):
+        # Change 'repo' to 'library' in revert commit msg, since 'repo' is
+        # only used inside of seafile system.
+        value = value.replace('repo', 'library')
+        
     # Do nothing if current language is English.
     if translation.get_language() == 'en':
         return value
     
-    if value.startswith('Reverted repo'):
-        return value.replace('Reverted repo to status at', _('Reverted repo to status at'))
+    if value.startswith('Reverted library'):
+        return value.replace('Reverted library to status at', _('Reverted library to status at'))
     elif value.startswith('Reverted file'):
         return value.replace('Reverted file to status at', _('Reverted file to status at'))
     elif value.startswith('Recovered deleted directory'):

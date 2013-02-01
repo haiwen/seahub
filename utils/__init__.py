@@ -66,7 +66,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or _('permissiong error')
+    ctx['error_msg'] = msg or _('permission error')
 
     if extra_ctx:
         for k in extra_ctx:
