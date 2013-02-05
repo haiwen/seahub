@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-05 10:25-0430\n"
+"PO-Revision-Date: 2013-02-05 13:41-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -723,35 +723,35 @@ msgstr "Se requiere correo electrónico"
 
 #: contacts/models.py:30 contacts/templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
-msgstr "Sie können sich nicht selbst hinzufügen."
+msgstr "You can't add yourself."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
-msgstr "Ist bereits in Ihren Kontakten"
+msgstr "It is already your contact."
 
 #: contacts/views.py:68
 #, python-format
 msgid "Successfully added %s to contacts."
-msgstr "%s erfolgrich zu den Kontakten hinzugefügt."
+msgstr "Successfully added %s to contacts."
 
 #: contacts/views.py:93
 #, python-format
 msgid "Successfully added %s."
-msgstr "%s erfolgrich hinzugefügt."
+msgstr "Successfully added %s."
 
 #: contacts/views.py:95
 msgid "Failed to add an contact."
-msgstr "Hinzufügen des Kontaktes fehlgeschlagen."
+msgstr "Failed to add an contact."
 
 #: contacts/views.py:120
 #, python-format
 msgid "Successfully edited %s."
-msgstr "%s erfolgrich editiert."
+msgstr "Successfully edited %s."
 
 #: contacts/views.py:133
 #, python-format
 msgid "Successfully Deleted %s"
-msgstr "%s erfolgrich gelöscht"
+msgstr "Successfully Deleted %s"
 
 #: contacts/templates/contacts/contact_list.html:8
 #: group/templates/group/groups_left_panel.html:3
@@ -922,44 +922,44 @@ msgstr "Hubo un fallo al crear al grupo"
 
 #: group/error_msg.py:11
 msgid "The group has already created in this org."
-msgstr "Die Gruppe wurde bereits in dieser Organisation erstellt."
+msgstr "The group has already created in this org."
 
 #: group/error_msg.py:12
 msgid "Failed to create org group."
-msgstr "Erstellen der Organisationsgruppe fehlgeschlagen"
+msgstr "Failed to create org group."
 
 #: group/error_msg.py:15
 msgid "Permission error: only group staff can add member"
-msgstr ""
-"Berechtigungsfehler: nur Gruppenadministratoren dürfen Mitglieder hinzufügen"
+msgstr "Error de permisología: sólo miembros del grupo de administradores"
+" pueden agregar miembros"
 
 #: group/error_msg.py:16 group/error_msg.py:22
 msgid "Group does not exist"
-msgstr "Gruppe existiert nicht"
+msgstr "El grupo no existe"
 
 #: group/error_msg.py:17
 msgid "Group is full"
-msgstr "Gruppe ist voll"
+msgstr "El grupo está completo"
 
 #: group/error_msg.py:18
 msgid "Failed to add member to group"
-msgstr "Hinzufügen des Mitglieds zur Gruppe ist fehlgeschlagen"
+msgstr "Hubo un fallo al intentar agregar un miembro al grupo"
 
 #: group/error_msg.py:21
 msgid "Only group staff can remove member"
-msgstr "Nur Gruppenverwalter*innen können Mitglieder entfernen"
+msgstr "Sólo el grupo de administración puede remover miembros"
 
 #: group/error_msg.py:23
 msgid "Can not remove myself"
-msgstr "Sie können sich nicht selbst entfernen"
+msgstr "Can not remove myself"
 
 #: group/forms.py:28 templates/snippets/group_add_js.html:8
 msgid "Group name can't be empty"
-msgstr "Gruppenname darf nicht leer sein"
+msgstr "El nombre del grupo no puede estar vacío"
 
 #: group/forms.py:29
 msgid "Group name is too long (maximum is 255 characters)"
-msgstr "Gruppenname ist zu lang (maximal 255 Zeichen)"
+msgstr "Group name is too long (maximum is 255 characters)"
 
 #: group/forms.py:34
 msgid "Group name can only contain letters, numbers or underline"
