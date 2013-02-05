@@ -55,7 +55,6 @@ class UserManager(object):
     
         user = User(emailuser.email)
         user.id = emailuser.id
-        user.password = emailuser.passwd
         user.is_staff = emailuser.is_staff
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime
@@ -122,9 +121,7 @@ class User(object):
         if raw_password is None:
             self.set_unusable_password()
         else:
-            algo = 'sha1'
-            hsh = get_hexdigest(algo, '', raw_password)
-            self.password = '%s' % hsh
+            self.password = '%s' % raw_password
     
     def check_password(self, raw_password):
         """
@@ -134,11 +131,11 @@ class User(object):
         # Backwards-compatibility check. Older passwords won't include the
         # algorithm or salt.
 
-        if '$' not in self.password:
-            is_correct = (self.password == \
-                              get_hexdigest('sha1', '', raw_password))
-            return is_correct
-        return check_password(raw_password, self.password)
+        # if '$' not in self.password:
+        #     is_correct = (self.password == \
+        #                       get_hexdigest('sha1', '', raw_password))
+        #     return is_correct
+        return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_password) == 0)
     
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
