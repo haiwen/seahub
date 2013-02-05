@@ -19,13 +19,13 @@
         <div class="fright">
             {% if path == '/' %}
                 {% if user_perm %}
-                  <button id="repo-download-btn">{% trans "Download"%}</button>
+                  <button id="repo-download-btn" class="repo-top-op-btn">{% trans "Download"%}</button>
                 {% endif %}
                 {% if is_repo_owner %}
-                  <button id="repo-setting-btn">{% trans "Settings" %}</button>
+                  <button id="repo-setting-btn" class="repo-top-op-btn">{% trans "Settings" %}</button>
                 {% endif %}
                 {% if user_perm == 'rw' %}
-                  <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}">{% trans "Trash"%}</button>
+                  <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}" class="repo-top-op-btn">{% trans "Trash"%}</button>
                 {% endif %}
             {% else %}
               {% if is_repo_owner %}
@@ -215,7 +215,7 @@
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">
             <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
             <div class="files-add">
-                <span class="op">{% trans "Add files" %}</span>
+                <span class="op add">{% trans "Add files" %}</span>
                 <span id="upload-add-tip">({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
                 <input type="file" name="file" id="file-upload-input" />
             </div>

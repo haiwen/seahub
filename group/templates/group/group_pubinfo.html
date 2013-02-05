@@ -5,7 +5,7 @@
 {% block main_panel %}
 <div class="user-profile narrow-panel ovhd">
   <div class="pic fleft">
-    <img src="{% grp_avatar_url group.id 48 %}" alt="{{ group.group_name }}的图标" title="{{ group.group_name }}" class="avatar" />
+    {% grp_avatar group.id 48 %}
     <button id="add">{% trans "Join Group" %}</button>
   </div>
 
@@ -63,7 +63,5 @@ $('#group-join-submit').click(function() {
 
     return false;
 });
-
-
 </script>
 {% endblock %}

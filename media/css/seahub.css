@@ -11,7 +11,7 @@ form,input,textarea,button,img {
 }
 body,
 input, textarea, button, select {
-    font: 13px/1.5 Arial, Helvetica, sans-serif;
+    font: 13px/19px Arial, Helvetica, sans-serif;/* 19px : for ff*/
     color: #333;
     word-wrap:break-word; /* for en */
 }
@@ -84,7 +84,7 @@ input.submit {
 input[type=submit]:hover,
 button:hover { 
     cursor:pointer;
-    background: #FFF;
+    background-color:#fff;
 }
 input[type="file"] {
     border:none;
@@ -191,10 +191,23 @@ input.btn-disabled:hover {/*for input*/
 .no-bold {
     font-weight:normal;
 }
-ul.with-bg li {
+.op-list li,
+.modalCloseImg,
+.add,
+.repo-op .op-btn,
+.repo-top-op-btn,
+#star {
+    background:transparent url('../img/bg.png') no-repeat scroll 0 0;
+}
+.op-list li {
     padding-left:10px;
     line-height:20px;
-    background: #fff url('../img/li.gif') no-repeat scroll left 6px;
+    background-position:0 -102px;
+}
+.add {
+    padding-left:21px;
+    background-color:#f5f5f5;
+    background-position:3px -206px;
 }
 #paginator { margin:10px; }
 .tri-bg { /*triangle bg, <span>*/
@@ -567,9 +580,17 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:4px;
     -moz-border-radius:4px;
 }
-#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
 #simplemodal-container a {font-weight:normal;}
-#simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+.modalCloseImg {
+    position:absolute;
+    width:25px;
+    height:29px;
+    background-position:0 0;
+    cursor:pointer;
+    top:-15px;
+    right:-16px;
+    z-index:3200;
+}
 #simplemodal-container .jstree a {
     color:#000;
 }
@@ -745,16 +766,6 @@ textarea:-moz-placeholder {/* for FF */
     display:inline-block;
     width:100%;
 }
-#repo-create,
-#contact-add,
-#group-add,
-#org-user-add,
-#group-member-add,
-#group-admin-add,
-.repo-op .op-btn {
-    padding-left:21px;
-    background:#f5f5f5 url('../img/add.png') scroll no-repeat 3px 48%;
-}
 #repo-create-form {
     padding:0 20px;
 }
@@ -901,22 +912,12 @@ textarea:-moz-placeholder {/* for FF */
 #grp-avatar-form {
     overflow:hidden;
 }
-/*
-#user-avatar-form .change-btn,
-#grp-avatar-form .change-btn {
-    color:#e83;
-    padding:2px;
-    background:#fff;
-}
-*/
 /*repo page*/
 #repo-basic-info {
     color:#333;
     background:#fafafa;
     border:1px solid #ddd;
     border-radius:3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
     margin: 10px 0;
 }
 #repo-basic-info .desc,
@@ -932,28 +933,31 @@ textarea:-moz-placeholder {/* for FF */
 .repo-op {
     text-align:right;
 }
-#repo-setting-btn,
-#recycle-btn,
+.repo-top-op-btn,
 .file-op button,
 #file-op button,
 .repo-op .op-btn {
     *margin-left:5px;/* for ie 7*/
 }
-#upload-file{
-    padding-left:19px;
-    background-image:url('../img/upload.png?v=1');
+.repo-top-op-btn,
+.repo-op .op-btn {
+    background-color:#f5f5f5;
 }
-#download-dir {
+#upload-file {
     padding-left:19px;
-    background-image:url('../img/download-blue.png?t=1352500800');
+    background-position:3px -118px;
 }
 #add-new-dir {
     padding-left:23px;
-    background-image:url('../img/folder-add.png');
+    background-position:4px -159px;
 }
 #add-new-file {
     padding-left:23px;
-    background-image:url('../img/new-file-icon.png');
+    background-position:3px -184px;
+}
+#download-dir {
+    padding-left:19px;
+    background-position:2px -139px;
 }
 #featured-filetype {
     margin:5px 0;
@@ -1055,22 +1059,18 @@ textarea:-moz-placeholder {/* for FF */
 .icon-container {
     text-align:center;
 }
-#repo-download-btn, #repo-setting-btn, #recycle-btn {
+.repo-top-op-btn {
     font-size:14px;
     padding-left:21px;
-    background-color:#f5f5f5;
-    background-attachment:scroll;
-    background-repeat:no-repeat;
-    background-position:3px 48%;
 }
 #repo-download-btn {
-    background-image: url('../img/download-16.png');
+    background-position:3px -79px;
 }
 #recycle-btn {
-    background-image: url('../img/delete-16.png');
+    background-position:3px -29px;
 }
 #repo-setting-btn {
-    background-image: url('../img/config-16.png');
+    background-position:3px -53px;
 }
 #repo-latest-commit {
     word-wrap:break-word;
@@ -1374,25 +1374,27 @@ textarea:-moz-placeholder {/* for FF */
 }
 #msg-upward {
     position:fixed;
-    padding:3px 3px 0;
-    border:1px solid #ddd;
-    border-radius:3px;
+    font-weight:normal;
+}
+#msg-upward:hover {
+    text-decoration:none;
 }
 /*file upload*/
 #upload-file-form {
     margin-top:10px;
 }
-#upload-file-form .files-add {
+.files-add {
     position: relative;
     overflow: hidden;
     margin-bottom:7px;
 }
-#upload-file-form .files-add .op {
+.files-add .op {
     font-size:1.15em;
     font-weight:bold;
     display:inline-block;
     padding-left:18px;
-    background:#fff url('../img/add.png') scroll no-repeat left 35%;
+    background-color:#fff;
+    background-position:0 -207px;
 }
 #user-avatar-input,
 #grp-avatar-input,
@@ -1402,8 +1404,6 @@ textarea:-moz-placeholder {/* for FF */
     top: 0;
     margin: 0;
     opacity: 0;
-    filter: alpha(opacity=0);
-    transform: translate(-300px, 0) scale(4);
 }
 #user-avatar-input,
 #grp-avatar-input {
@@ -1562,7 +1562,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #star {
     padding-left:18px;
-    background:#efefef url('../img/star.png') no-repeat scroll 3px 48%;
+    background-color:#efefef;
+    background-position:3px -227px;
 }
 #sf {
     width:624px;

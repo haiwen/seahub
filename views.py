@@ -85,6 +85,18 @@ except ImportError:
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS,\
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
+try:
+    from cStringIO import StringIO
+    dir(StringIO) # Placate PyFlakes
+except ImportError:
+    from StringIO import StringIO
+
+try:
+    from PIL import Image
+    dir(Image) # Placate PyFlakes
+except ImportError:
+    import Image
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -1350,9 +1362,8 @@ def repo_view_file(request, repo_id):
     raw_path = gen_file_get_url(token, filename)
    
     # get file content
-    err = ''
-    file_content = ''
-    swf_exists = False
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
+
     img_prev = None
     img_next = None
     if filetype == 'Image' and not view_history:
@@ -1376,24 +1387,6 @@ def repo_view_file(request, repo_id):
                 img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
             if cur_img_index != len(img_list) - 1:
                 img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
-
-    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document':
-        if DOCUMENT_CONVERTOR_ROOT:
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-        else:
-            filetype = 'Unknown'
-    elif filetype == 'PDF':
-        if USE_PDFJS:
-            # use pdfjs to preview PDF
-            pass
-        elif DOCUMENT_CONVERTOR_ROOT:
-            # use flash to prefiew PDF
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-        else:
-            # can't preview PDF
-            filetype = 'Unknown'
 
     if view_history:
         return render_to_response('history_file_view.html', {
@@ -1590,6 +1583,36 @@ def repo_file_get(raw_path):
         file_content = u_content
 
     return err, file_content, encoding
+
+def get_file_content(filetype, raw_path, obj_id, fileext):
+    err = ''
+    file_content = ''
+    swf_exists = False
+
+    if filetype == 'Image':
+        img = Image.open(StringIO(urllib2.urlopen(raw_path).read()))
+        file_content = {}
+        file_content['img_w'], file_content['img_h'] = img.size
+
+    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
+        err, file_content, encoding = repo_file_get(raw_path)
+    elif filetype == 'Document':
+        if DOCUMENT_CONVERTOR_ROOT:
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            filetype = 'Unknown'
+    elif filetype == 'PDF':
+        if USE_PDFJS:
+            # use pdfjs to preview PDF
+            pass
+        elif DOCUMENT_CONVERTOR_ROOT:
+            # use flash to prefiew PDF
+            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        else:
+            # can't preview PDF
+            filetype = 'Unknown'
+    
+    return err, file_content, swf_exists, filetype
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
@@ -2616,26 +2639,7 @@ def view_shared_file(request, token):
     raw_path = gen_file_get_url(access_token, quote_filename)
 
     # get file content
-    err = ''
-    file_content = ''
-    swf_exists = False
-    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document':
-        if DOCUMENT_CONVERTOR_ROOT:
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-        else:
-            filetype = 'Unknown'
-    elif filetype == 'PDF':
-        if USE_PDFJS:
-            # use pdfjs to preview PDF
-            pass
-        elif DOCUMENT_CONVERTOR_ROOT:
-            # use flash to prefiew PDF
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
-        else:
-            # can't preview PDF
-            filetype = 'Unknown'
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -2737,26 +2741,7 @@ def view_file_via_shared_dir(request, token):
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
     # get file content
-    err = ''
-    file_content = ''
-    swf_exists = False
-    if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding = repo_file_get(raw_path)
-    elif filetype == 'Document':
-        if DOCUMENT_CONVERTOR_ROOT:
-            err, swf_exists = flash_prepare(raw_path, file_id, fileext)
-        else:
-            filetype = 'Unknown'
-    elif filetype == 'PDF':
-        if USE_PDFJS:
-            # use pdfjs to preview PDF
-            pass
-        elif DOCUMENT_CONVERTOR_ROOT:
-            # use flash to prefiew PDF
-            err, swf_exists = flash_prepare(raw_path, file_id, fileext)
-        else:
-            # can't preview PDF
-            filetype = 'Unknown'
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
 
     zipped = gen_path_link(path, '')
         

@@ -81,8 +81,8 @@
 
         <div id="header">
             <div id="header-inner">
-                <a href="http://seafile.com/">
-                    <img src="{{ MEDIA_URL }}img/logo.png?t=1359353100" title="Seafile" alt="Seafile logo" id="logo" class="fleft" />
+                <a href="http://seafile.com/" id="logo" class="fleft">
+                    <img src="{{ MEDIA_URL }}img/logo.png?t=1359353100" title="Seafile" alt="Seafile logo" />
                 </a>
                 {% block nav %}{% endblock %}
             </div>
@@ -147,39 +147,11 @@
                 <p><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
             </div>
         </div>
-
 </div><!-- wrapper -->
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js?t=1359353100"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
 <script type="text/javascript">
-$('input, textarea').placeholder();
-$('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
-$('#lang-context').click(function() {
-        if ($(this).attr('data') == 'no-popup') {
-            $(this).parent().css('position', 'relative');
-            $('#lang-context-selector').removeClass('hide');
-            $(this).attr('data', 'has-popup');
-        } else {
-            $('#lang-context-selector').addClass('hide');
-            $(this).attr('data', 'no-popup');
-        }
-        return false;
-    }).focus(function() { $(this).blur(); });
-
-$(document).click(function(e) {
-    var element = e.target || e.srcElement;
-    if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
-        $('#lang-context-selector').addClass('hide');
-        $('#lang-context').attr('data', 'no-popup');
-    }
-});
-
 {% if request.user.is_authenticated %}
-
 {% if request.cur_note %}
 $('#info-bar .close').click(function() {
     $('#info-bar').addClass('hide');
@@ -225,13 +197,6 @@ $(document).click(function(e) {
     }
 });
 {% endif %}
-
-// for ie 7
-$('#title-panel, #left-panel, #right-panel').each(function() {
-    if($(this).children().length == 0) {
-        $(this).addClass('hide');
-    }
-});
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}

@@ -13,14 +13,12 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Basic Info" %}</h3>
     <div class="info-item-bottom group-basic-info ovhd">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar fleft" />
+        <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
         <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
     </div>
 </div>
 <div class="info-item">
-    <div class="info-item-top">
-        <h3>{% trans "Staffs" %}</h3>
-    </div>
+    <h3 class="info-item-top">{% trans "Staffs" %}</h3>
     <ul class="info-item-bottom">
         {% for member in managers %}
         <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
@@ -57,7 +55,7 @@
 {% if is_join %}
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Operations" %}</h3>
-    <ul class="with-bg info-item-bottom">
+    <ul class="info-item-bottom op-list">
         {% if is_staff %}
         <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
         {% else %}
@@ -75,7 +73,7 @@
             <li><a href="#grp-repos">{% trans "Libraries" %}</a></li>
             <li class="long-item"><a href="#grp-repos-commits">{% trans "Recent Changes" %}</a></li>
         </ul>
-        <button id="repo-create" class="fright">{% trans "New Library" %}</button>
+        <button id="repo-create" class="add fright">{% trans "New Library" %}</button>
     </div>
     <div id="grp-repos" class="hide">
 {% if repos %}
@@ -267,7 +265,7 @@
     </div>
 
     {% if group_msgs|length > 5 %}
-    <a href="#group-reply" id="msg-upward" class="hide"><img src="{{MEDIA_URL}}img/upload.png" alt="" title="{% trans "Move Upward" %}" /></a>
+    <a href="#group-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
     {% endif %}
 </div>
 
@@ -289,7 +287,7 @@ $(window).scroll(function() {
     var win_h = $(window).height() + win_st;
 
     if (win_st > $('#group-message-form').offset().top) {
-        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 10}).removeClass('hide');
+        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 60}).removeClass('hide');
         if (win_h > msg_panel_bot) {
             up_icon.css({'bottom': win_h - msg_panel_bot + 15});
         } else {

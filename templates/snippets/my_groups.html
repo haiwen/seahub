@@ -3,13 +3,11 @@
 <div class="info-item">
 <h3 class="info-item-top">{% trans "My Groups" %}</h3>
 {% if groups %}
-<ul class="info-item-bottom ovhd">
+<ul class="info-item-bottom">
     {% for group in groups %}
     <li class="mygroup">
-    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
-        <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}" title="{{ group.props.group_name }}" class="avatar" />
-    </a>
-    <a class="name" href="{{ SITE_ROOT }}group/{{ group.props.id }}/" title="{{ group.props.group_name }}">{{ group.props.group_name|trim:12 }}</a>
+    <a href="{% url 'group_info' group.props.id %}" class="no-deco">{% grp_avatar group.props.id 48 %}</a>
+    <a class="name" href="{% url 'group_info' group.props.id %}" title="{{ group.props.group_name }}">{{ group.props.group_name|trim:12 }}</a>
 	</li>
     {% endfor %}
 </ul>

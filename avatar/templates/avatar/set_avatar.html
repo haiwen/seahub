@@ -7,7 +7,7 @@
 <div class="narrow-panel avatar-op">
     <h2><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a> {% trans "Avatar Change" %}</h2>
     <h3>{% trans "Current avatar: " %}</h3>
-    <img src="{% grp_avatar_url group.id %}" alt="{% trans "Current Avatar" %}" class="avatar" />
+    {% grp_avatar group.id %}
 
     <h3 class="upload-new-avatar-hd">{% trans "Upload New Avatar: " %}</h3>
     <form enctype="multipart/form-data" method="post" action="">

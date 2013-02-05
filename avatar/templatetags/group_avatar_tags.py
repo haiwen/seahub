@@ -26,7 +26,7 @@ def get_default_group_avatar_url():
     return '%s%s' % (base_url, GROUP_AVATAR_DEFAULT_URL)
 
 @register.simple_tag
-def grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
+def grp_avatar(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
     # Get from cache
     key = get_grp_cache_key(group_id, size)
     val = cache.get(key)
@@ -43,9 +43,10 @@ def grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
     if avatar:
         if not avatar.thumbnail_exists(size):
             avatar.create_thumbnail(size)
-        avatar_src = avatar.avatar_url(size)
+        url = avatar.avatar_url(size)
     else:
-        avatar_src = get_default_group_avatar_url()
+        url = get_default_group_avatar_url()
 
-    cache.set(key, avatar_src, AVATAR_CACHE_TIMEOUT)
-    return avatar_src
+    img = """<img src="%s" alt="" width="%s" height="%s" class="avatar" />""" % (url, size, size)
+    cache.set(key, img, AVATAR_CACHE_TIMEOUT)
+    return img

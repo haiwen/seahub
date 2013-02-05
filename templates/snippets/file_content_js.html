@@ -17,8 +17,7 @@
 {% endif %}
 
 {% if filetype == 'Image' %}
-$(window).load(function() {
-    var img_ht = $('#image-view').height();
+    var img_ht = {{file_content.img_h}};
     var file_view_ht = parseInt($('#file-view').css('min-height'));
     var prev_next_ht = 0;
     if ($('#img-prev-next').length > 0) {
@@ -27,11 +26,10 @@ $(window).load(function() {
     if (img_ht < file_view_ht - prev_next_ht) {
         $('#image-view').css({'margin-top':(file_view_ht - img_ht - prev_next_ht)/2});
     }
-    if ($('#image-view').outerWidth() > 950) { // for ie 6
+    if ({{file_content.img_w}} > 946) { // for ie 6
         $('#image-view').css('width', 946);
     }
     $('#image-view').removeClass('vh');
-});
 {% endif %}
 
 {% if filetype == 'SVG' %}

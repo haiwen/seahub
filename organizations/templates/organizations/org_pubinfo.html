@@ -27,11 +27,9 @@
 <ul class="group-list w100 ovhd">
     {% for group in groups %}
     <li class="group fleft">
-    <div class="pic fleft">
-        <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">
-            <img src="{% grp_avatar_url group.props.id 48 %}" alt="{{ group.props.group_name }}{% trans "'s icon" %}" title="{{ group.props.group_name }}" class="avatar" />
-        </a>
-    </div>
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft">
+        {% grp_avatar group.props.id 48 %}
+    </a>
     <div class="txt fright">
         <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
         <p><span class="item-name">{% trans "Creator: "%}</span>{{ group.props.creator_name }}</p>
