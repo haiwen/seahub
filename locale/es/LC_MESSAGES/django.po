@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-05 13:41-0430\n"
+"PO-Revision-Date: 2013-02-06 09:27-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -204,15 +204,15 @@ msgstr "URL inválido"
 
 #: views.py:676
 msgid "Unable to view library modification"
-msgstr "Incapaz de ver las modificaciones de la librería"
+msgstr "Incapaz de ver las modificaciones de la biblioteca"
 
 #: views.py:722
 msgid "Unable to view library snapshots"
-msgstr "Incapaz de ver la instántanea de la librería"
+msgstr "Incapaz de ver la instántanea de la biblioteca"
 
 #: views.py:772
 msgid "You have no permission to restore library"
-msgstr "No posee los permisos adecuados para restaurar la librería"
+msgstr "No posee los permisos adecuados para restaurar la biblioteca"
 
 #: views.py:788
 msgid "Please specify history ID"
@@ -225,7 +225,7 @@ msgstr "Argumento inválido"
 
 #: views.py:796 views.py:891 views.py:2370 views.py:2898
 msgid "Library does not exist"
-msgstr "La librería no existe"
+msgstr "La biblioteca no existe"
 
 #: views.py:798
 #, fuzzy
@@ -240,7 +240,7 @@ msgstr "Error desconocido"
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr ""
-"Hubo un fallo al remover la librería. Sólo administradores o propietarios pueden realizar esta operación"
+"Hubo un fallo al remover la biblioteca. Sólo administradores o propietarios pueden realizar esta operación"
 
 #: views.py:1201
 msgid "Failed to create repo"
@@ -298,11 +298,11 @@ msgstr "Permiso denegado"
 
 #: views.py:1565
 msgid "The library does not exist."
-msgstr "La librería no existe."
+msgstr "La biblioteca no existe."
 
 #: views.py:1569
 msgid "The library is encrypted."
-msgstr "La librería está encriptada."
+msgstr "La biblioteca está encriptada."
 
 #: views.py:1622
 msgid "Unable to edit file"
@@ -323,7 +323,7 @@ msgstr "Incapaz de acceder al archivo"
 #: views.py:1733
 msgid "Failed to download library, unable to find server"
 msgstr ""
-"Hubo un fallo al intentar bajar la librería pues no se pudo encontrar"
+"Hubo un fallo al intentar bajar la biblioteca pues no se pudo encontrar"
 " el servidor"
 
 #: views.py:1744
@@ -336,7 +336,7 @@ msgstr "La ruta de destino es muy extensa"
 
 #: views.py:1793
 msgid "You can not modify that library."
-msgstr "No puedes modificar esta librería"
+msgstr "No puedes modificar esta biblioteca"
 
 #: views.py:1806
 #, python-format
@@ -766,7 +766,7 @@ msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
 msgstr ""
-"Cuando compartes una librería o un enlace con un amigo, su correo "
+"Cuando compartes una biblioteca o un enlace con un amigo, su correo "
 "electrónico será agregado a tus contactos."
 
 #: contacts/templates/contacts/contact_list.html:15
@@ -861,7 +861,7 @@ msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
 msgstr ""
-"Agrega tus contactos para que puedas compartir librerías rápidamente y "
+"Agrega tus contactos para que puedas compartir bibliotecas rápidamente y "
 "enviar los enlaces hacia los archivos compartidos"
 
 #: contacts/templates/contacts/contact_list.html:48
@@ -1193,7 +1193,7 @@ msgstr "Salir"
 #: group/templates/group/group_info.html:72 templates/admin_base.html:8
 #: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
 msgid "Libraries"
-msgstr "Librerías"
+msgstr "Bibliotecas"
 
 #: group/templates/group/group_info.html:73
 #: organizations/templates/organizations/org_public.html:23
@@ -1467,12 +1467,12 @@ msgstr "Darf nicht leer sein und sollte nicht mehr als 150 Zeichen haben."
 msgid ""
 "After creating a group, you can add members and share libraries into it."
 msgstr ""
-"Después de crear un grupo, puedes agregar miembros y compartir librerías entre ellos."
+"Después de crear un grupo, puedes agregar miembros y compartir bibliotecas entre ellos."
 
 #: group/templates/group/groups_left_panel.html:7
 msgid "You can also share libraries into groups that you're not in."
 msgstr ""
-"También puedes compartir librerías entre grupos aunque tú no pertenezcas a ellos "
+"También puedes compartir bibliotecas entre grupos aunque tú no pertenezcas a ellos "
 
 #: group/templates/group/groups_right_panel.html:4
 #: templates/snippets/my_groups.html:4
@@ -1501,7 +1501,7 @@ msgid ""
 msgstr ""
 "Puedes crear un grupo dando click en  el enlace \"Nuevo Grupo\". "
 "El grupo es un lugar para que tú y tus amigos puedan intercambiar mensajes "
-"y colaborar en librerías."
+"y colaborar en bibliotecas."
 
 #: group/templates/group/groups_right_panel.html:31
 msgid "Group Name"
@@ -1779,7 +1779,7 @@ msgstr "Gruppe löschen"
 #: organizations/templates/organizations/org_groups.html:15
 msgid "After creating a group, you can add members and share libraries to it."
 msgstr ""
-"Después de crear un grupo, puedes agregar miembros y compartir librerías entre ellos"
+"Después de crear un grupo, puedes agregar miembros y compartir bibliotecas entre ellos"
 
 #: organizations/templates/organizations/org_groups.html:16
 msgid "You can also share to groups that you're not in."
@@ -1802,7 +1802,7 @@ msgstr ""
 #: templates/public_home.html:11
 msgid "A library marked as read-only can be downloaded."
 msgstr ""
-"Una librería marcada como sólo-lectura puede ser descargada"
+"Una biblioteca marcada como sólo-lectura puede ser descargada"
 
 #: organizations/templates/organizations/org_public.html:16
 #: templates/public_home.html:12
@@ -1817,7 +1817,7 @@ msgstr ""
 #: organizations/templates/organizations/org_public.html:22
 #: templates/public_home.html:18
 msgid "Public Libraries"
-msgstr "Librerías públicas"
+msgstr "Bibliotecas públicas"
 
 #: organizations/templates/organizations/org_public.html:30
 msgid "UpdateTime"
@@ -1826,7 +1826,7 @@ msgstr "FechaActualizada"
 #: organizations/templates/organizations/org_public.html:59
 #: templates/public_home.html:55
 msgid "No public library"
-msgstr "No existen librerías públicas"
+msgstr "No existen bibliotecas públicas"
 
 #: organizations/templates/organizations/org_public.html:60
 #: templates/public_home.html:56
@@ -1834,14 +1834,14 @@ msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
-"Puedes crear una librería pública dando click en el enlace \"Nueva "
-"librería\" . A partir de ese momento, otros usuarios podrán ver y descargar " 
-" dicha librería"
+"Puedes crear una biblioteca pública dando click en el enlace \"Nueva "
+"biblioteca\" . A partir de ese momento, otros usuarios podrán ver y descargar " 
+" dicha biblioteca"
 
 #: organizations/templates/organizations/org_seafadmin.html:7
 #: templates/sys_seafadmin.html:6
 msgid "All Libraries"
-msgstr "Todas las librerías"
+msgstr "Todas las bibliotecas"
 
 #: organizations/templates/organizations/org_seafadmin.html:13
 #: templates/sys_seafadmin.html:12
@@ -1852,7 +1852,7 @@ msgstr "Propietario"
 #: templates/sys_seafadmin.html:61 templates/userinfo.html:133
 #: templates/snippets/myhome_extra_script.html:38
 msgid "Delete Library"
-msgstr "Borrar librería"
+msgstr "Borrar biblioteca"
 
 #: organizations/templates/organizations/org_user_add_email.html:2
 #, python-format
@@ -2082,7 +2082,7 @@ msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
-"Si deseas que otros usuarios no puedan cambiar el contenido de tus librerías "
+"Si deseas que otros usuarios no puedan cambiar el contenido de tus bibliotecas "
 "compartidas, puedes configurar los permisos hacia \"solo-lectura\" cuando "
 " las compartas"
 
@@ -2100,7 +2100,7 @@ msgstr "Permisos"
 
 #: share/templates/repo/share_admin.html:74
 msgid "You have not shared any library"
-msgstr "No has compartido ninguna librería"
+msgstr "No has compartido ninguna biblioteca"
 
 #: share/templates/repo/share_admin.html:75
 msgid ""
@@ -2108,8 +2108,8 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
-"Puedes compartir librerías con tus amigos y colegas dando click al icono"
-" de compartir en tu página de inicio o creando una nueva librería en la"
+"Puedes compartir bibliotecas con tus amigos y colegas dando click al icono"
+" de compartir en tu página de inicio o creando una nueva biblioteca en la"
 " sección grupo al cual perteneces"
 
 #: share/templates/repo/share_admin.html:79
@@ -2147,7 +2147,7 @@ msgid ""
 "You can share a folder or a file when you view a library, or share a file "
 "when you view it."
 msgstr ""
-"Puedes compartir una carpeta o un archivo cuando veas una librería, "
+"Puedes compartir una carpeta o un archivo cuando veas una biblioteca, "
 "o compartir un archivo cuando lo visualices"
 
 #: share/templates/repo/share_admin.html:152
@@ -3410,7 +3410,7 @@ msgstr "Favoritos"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
-msgstr "No ha creado ninguna librería"
+msgstr "No ha creado ninguna biblioteca"
 
 #: templates/snippets/my_owned_repos.html:44
 msgid ""
@@ -3418,17 +3418,17 @@ msgid ""
 "one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr ""
-"Puede crear una librería para organizar sus archivos. Por ejemplo, puede " 
-"crear una para proyecto. Cada librería puede ser sincronizada y compartida "
+"Puede crear una biblioteca para organizar sus archivos. Por ejemplo, puede " 
+"crear una para proyecto. Cada biblioteca puede ser sincronizada y compartida "
 "separadamente."
 
 #: templates/snippets/my_owned_repos.html:45
 msgid "Synchronize libraries with PC client"
-msgstr "Sincronizar librerías con el cliente"
+msgstr "Sincronizar bibliotecas con el cliente"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
-msgstr "1. Bajar la librería (asegurarse de que el cliente esté activo"
+msgstr "1. Bajar la biblioteca (asegurarse de que el cliente esté activo"
 
 #: templates/snippets/my_owned_repos.html:47
 msgid "2. Add files to the folder and they will be uploaded automatically."
@@ -3441,7 +3441,7 @@ msgstr "Dejar de compartir"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
-msgstr "No existen librerías compartidas contigo"
+msgstr "No existen bibliotecas compartidas contigo"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
@@ -3450,9 +3450,9 @@ msgid ""
 "libraries can only be downloaded, updates on local files will not be "
 "uploaded."
 msgstr ""
-"Librerías compartidas contigo o con grupos a los cuales te hayas unido "
+"Bibliotecas compartidas contigo o con grupos a los cuales te hayas unido "
 "serán mostradas acá "
-"Librerías compartidas con el atributo de lectura podrán ser descargadas "
+"Bibliotecas compartidas con el atributo de lectura podrán ser descargadas "
 "y sincronizadas en tanto que las de sólo lectura sólo pueden ser "
 "descargadas; actualizaciones en archivos locales no serán subidas "
 
@@ -3503,7 +3503,7 @@ msgstr "Por favor, escriba la contraseña nuevamente"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
-msgstr "Compartir librería"
+msgstr "Compartir biblioteca"
 
 #: templates/snippets/repo_share_form.html:4
 msgid "Share <span class=\"op-target\"></span> to"
