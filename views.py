@@ -1072,64 +1072,6 @@ def myhome(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def public_home(request):
-    """
-    Show public home page when CLOUD_MODE is False.
-    """
-    # if request.method == 'POST':
-    #     form = MessageForm(request.POST)
-
-    #     if form.is_valid():
-    #         msg = InnerPubMsg()
-    #         msg.from_email = request.user.username
-    #         msg.message = form.cleaned_data['message']
-    #         msg.save()
-
-    #         return HttpResponseRedirect(reverse('public_home'))
-    # else:
-    #     form = MessageForm()
-        
-    public_repos = list_inner_pub_repos(request.user.username)
-
-    # """inner pub messages"""
-    # # Make sure page request is an int. If not, deliver first page.
-    # try:
-    #     current_page = int(request.GET.get('page', '1'))
-    #     per_page= int(request.GET.get('per_page', '15'))
-    # except ValueError:
-    #     current_page = 1
-    #     per_page = 15
-
-    # msgs_plus_one = InnerPubMsg.objects.all()[per_page*(current_page-1) :
-    #                                               per_page*current_page+1]
-    # if len(msgs_plus_one) == per_page + 1:
-    #     page_next = True
-    # else:
-    #     page_next = False
-    # innerpub_msgs = msgs_plus_one[:per_page]
-
-    # msg_replies = InnerPubMsgReply.objects.filter(reply_to__in=innerpub_msgs)
-    # reply_to_list = [ r.reply_to_id for r in msg_replies ]
-    # for msg in innerpub_msgs:
-    #     msg.reply_cnt = reply_to_list.count(msg.id)
-
-    # # remove user notifications
-    # UserNotification.objects.filter(to_user=request.user.username,
-    #                                 msg_type='innerpub_msg').delete()
-
-    return render_to_response('public_home.html', {
-            'public_repos': public_repos,
-            'create_shared_repo': True,
-            # 'form': form,
-            # 'innerpub_msgs': innerpub_msgs,
-            # 'current_page': current_page,
-            # 'prev_page': current_page-1,
-            # 'next_page': current_page+1,
-            # 'per_page': per_page,
-            # 'page_next': page_next,
-            }, context_instance=RequestContext(request))
-
-@login_required
 def innerpub_msg_reply(request, msg_id):
     """Show inner pub message replies, and process message reply in ajax"""
     
@@ -1225,7 +1167,7 @@ def public_repo_create(request):
         except:
             repo_id = None
         if not repo_id:
-            result['error'] = _(u'Failed to create repo')
+            result['error'] = _(u'Failed to create library')
         else:
             result['success'] = True
             repo_created.send(sender=None,

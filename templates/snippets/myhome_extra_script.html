@@ -1,5 +1,4 @@
 {% load seahub_tags avatar_tags i18n %}
-$(function() {
     //repo-share-form share-list autocomplete
     var share_list = [], contact_email, group_name, group_name_py;
     {% for contact in contacts %}
@@ -40,7 +39,6 @@ $(function() {
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
     });
 
-//show op images when mouse hover on
     $("table tr:gt(0)").hover(
         function() {
             $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
@@ -49,4 +47,3 @@ $(function() {
             $(this).find('.op-icon').addClass('vh');
         }
     );
-});

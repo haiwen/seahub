@@ -7,14 +7,14 @@
 {% block left_panel %}
 <h3>{% trans "Users" %}</h3>
 {% if users %}
-<ul class="pubinfo-members">
+<ul>
     {% for member in users %}
 	<li class="member">{% avatar member.email 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a></li>
     {% endfor %}
 </ul>
 {% include "snippets/user_profile_html.html" %}
 {% else %}
-<p>{% trans "Empty"%}</p>
+<p>{% trans "None"%}</p>
 {% endif %}
 {% endblock %}
 
@@ -22,92 +22,92 @@
 <h3>{% trans "Libraries & Groups" %}</h3>
 <div id="tabs">
     <div class="ovhd">
-    <ul id="tabs-nav" class="fleft">
-        <li><a href="#repos">{% trans "Libraries" %}</a></li>
-        <li><a href="#grps">{% trans "Groups" %}</a></li>
-    </ul>
-    <button id="repo-create" class="add fright">{% trans "New Library"%}</button>
-</div>
-<div id="repos" class="hide">
-{% if public_repos %}
-<table>
-    <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name"%}</th>
-        <th width="33%">{% trans "Description"%}</th>
-        <th width="15%">{% trans "Last Update"%}</th>
-        <th width="15%">{% trans "Share From"%}</th>
-        <th width="13%">{% trans "Operations"%}</th>
-    </tr>
-    {% for repo in public_repos %}
-    <tr>
-        <td>
-            {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="目录icon" />
-            {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="目录icon" />
-            {% endif %}
-        </td>
-        <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
-        <td>{{ repo.props.repo_desc }}</td>
-        {% if repo.props.last_modified %}
-        <td>{{ repo.props.last_modified|translate_seahub_time }}</td>
+        <ul id="tabs-nav" class="fleft">
+            <li><a href="#repos">{% trans "Libraries" %}</a></li>
+            <li><a href="#grps">{% trans "Groups" %}</a></li>
+        </ul>
+        <button id="repo-create" class="add fright">{% trans "New Library"%}</button>
+    </div>
+    <div id="repos" class="hide">
+        {% if public_repos %}
+        <table>
+            <tr>
+                <th width="4%"></th>
+                <th width="20%">{% trans "Name"%}</th>
+                <th width="33%">{% trans "Description"%}</th>
+                <th width="15%">{% trans "Last Update"%}</th>
+                <th width="15%">{% trans "Share From"%}</th>
+                <th width="13%">{% trans "Operations"%}</th>
+            </tr>
+            {% for repo in public_repos %}
+            <tr>
+                <td>
+                    {% if repo.user_perm == 'rw' %}
+                    <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "Directory icon"%}" />
+                    {% else %}
+                    <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "Directory icon"%}" />
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
+                <td>{{ repo.props.repo_desc }}</td>
+                <td>{% if repo.props.last_modified %}{{ repo.props.last_modified|translate_seahub_time }}{% else %}--{% endif %}</td>
+                <td>{{ repo.props.user|email2nickname }}</td>
+                <td>
+                    <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
         {% else %}
-        <td>--</td>
+        <div class="empty-tips">
+            <h2 class="center-contents">{% trans "No public library" %}</h2>
+            <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
+        </div>
         {% endif %}
-        <td>{{ repo.props.user|email2nickname }}</td>
-        <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<div class="empty-tips">
-  <h2 class="center-contents">{% trans "No public library" %}</h2>
-  <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
-</div>
-{% endif %}
-{% include "snippets/repo_create_form.html" %}
-</div>
-<div id="grps" class="hide">
-{% if groups %}
-<ul class="group-list w100 ovhd">
-    {% for group in groups %}
-    <li class="group fleft">
-    <div class="pic fleft">
-        <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco">{% grp_avatar group.props.id 48 %}</a>
+        {% include "snippets/repo_create_form.html" %}
     </div>
-    <div class="txt fright">
-        <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
-        <p><span class="item-name">{% trans "Creator: "%}</span>{{ group.props.creator_name }}</p>
-        <p><span class="item-name">{% trans "Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
+    <div id="grps" class="hide">
+        {% if groups %}
+        <ul class="group-list w100 ovhd">
+            {% for group in groups %}
+            <li class="group ovhd">
+            <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco pic fleft">{% grp_avatar group.props.id 48 %}</a>
+            <div class="txt fright">
+                <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
+                <p><span class="item-name">{% trans "Creator: "%}</span>{{ group.props.creator_name }}</p>
+                <p><span class="item-name">{% trans "Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
+            </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="center-contents">{% trans "No one has created any groups yet" %}</h2>
+            <p> {% blocktrans %}You can click "Add Group" button under "Group" label to create a group. {% endblocktrans %}</p>
+        </div>
+        {% endif %}
     </div>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<div class="empty-tips">
-  <h2 class="center-contents">{% trans "No one has created any groups yet" %}</h2>
-  <p> {% blocktrans %}You can click "Add Group" button under "Group" label to create a group. {% endblocktrans %}</p>
-</div>
-{% endif %}
-</div>
 </div>
 {% endblock %}
 
 {% block extra_script %}
 {% include "snippets/user_profile_js.html" %}
 <script type="text/javascript">
-{% include "snippets/myhome_extra_script.html" %}
+    $(".download-btn").click(function() {
+        window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
+    }); 
+
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
+        },  
+        function() {
+            $(this).find('.op-icon').addClass('vh');
+        }   
+    );  
 {% url 'seahub.views.public_repo_create' as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include "snippets/repo_create_js.html" %}
-{% endwith %}
-
-{% url 'group_list' as group_add_url %}
-{% with post_url=group_add_url %}
-{% include "snippets/group_add_js.html" %}
 {% endwith %}
 </script>
 {% endblock %}
