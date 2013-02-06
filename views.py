@@ -2802,11 +2802,14 @@ def pubinfo(request):
         # Users are not allowed to see public information when in cloud mode.
         raise Http404
     else:
+        public_repos = list_inner_pub_repos(request.user.username)
         groups = get_personal_groups(-1, -1)
         users = get_emailusers(-1, -1)
         return render_to_response('pubinfo.html', {
                 'groups': groups,
                 'users': users,
+                'public_repos': public_repos,
+                'create_shared_repo': True,
                 }, context_instance=RequestContext(request))
     
 def repo_set_password(request):
