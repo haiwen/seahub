@@ -8,7 +8,11 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
+<<<<<<< HEAD
 "PO-Revision-Date: 2013-02-07 14:24-0430\n"
+=======
+"PO-Revision-Date: 2013-02-06 09:27-0430\n"
+>>>>>>> 5509328e38981ac0411a5dca56a91781e3bbfe19
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
