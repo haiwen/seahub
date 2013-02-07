@@ -8,11 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-<<<<<<< HEAD
-"PO-Revision-Date: 2013-02-07 14:24-0430\n"
-=======
-"PO-Revision-Date: 2013-02-06 09:27-0430\n"
->>>>>>> 5509328e38981ac0411a5dca56a91781e3bbfe19
+"PO-Revision-Date: 2013-02-07 14:56-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +54,7 @@ msgstr "La contraseña es demasiado extensa (máximo 15 caracteres)"
 #: forms.py:79
 #, python-format
 msgid "Name %s is not valid"
-msgstr "El nombre %ss no es válido"
+msgstr "El nombre %s no es válido"
 
 #: forms.py:101 templates/snippets/repo_create_js.html:53
 msgid "Passwords don't match"
@@ -684,15 +680,15 @@ msgstr[1] "Hace %(hours)d horas"
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] "vor einer Minute"
-msgstr[1] "vor %(minutes)d Minuten"
+msgstr[0] "Hace menos de un minuto"
+msgstr[1] "Hace %(minutes)d minutos"
 
 #: base/templatetags/seahub_tags.py:174
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] "vor einer Sekunde"
-msgstr[1] "vor %(seconds)d Sekunden"
+msgstr[0] "Hace menos de un segundo"
+msgstr[1] "Hace %(seconds)d segundos"
 
 #: base/templatetags/seahub_tags.py:179
 msgid "0 second ago"
@@ -1971,8 +1967,7 @@ msgstr "Sólo el propietario de la biblioteca tiene la permisología para compar
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
-"Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigabe</a> prüfen."
+"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 
 #: share/views.py:104
 #, python-format
@@ -1980,23 +1975,23 @@ msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
+"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
+"\">Share</a>."
 
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Teilen mit %s fehlgeschlagen: Es existiert nicht."
+msgstr "Failed to share to %s，as it does not exist."
 
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Freigabe für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
+msgstr "Failed to share to %s, as the email is not registered."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr "Freigabe für %s fehlgeschlagen."
+msgstr "Falló al intentar compartir con %s."
 
 #: share/views.py:139
 #, python-format
@@ -2004,16 +1999,16 @@ msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigabe</a> prüfen."
+"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
+"\">Share</a>."
 
 #: share/views.py:163 share/views.py:173
 msgid "Failed to remove share"
-msgstr "Entfernen der Freigabe fehlgeschlagen"
+msgstr "Falló al intentar remover el recurso compartido"
 
 #: share/views.py:182
 msgid "Successfully removed share"
-msgstr "Freigabe erfolgrich entfernt"
+msgstr "El recurso compartido fue removido satisfactoriamente"
 
 #: share/views.py:313
 #, python-format
@@ -2021,12 +2016,12 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
-"Freigabe für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
-"E-Mails außerhalb der Seite freigegeben werden."
+"Failed to share to %s, as encrypted libraries cannot be shared to emails "
+"outside the site."
 
 #: share/views.py:346
 msgid "You are shared with a library in Seafile"
-msgstr "Es wurde eine Bibliothek in Seafile mit ihnen geteilt."
+msgstr "You are shared with a library in Seafile"
 
 #: share/views.py:353
 #, python-format
@@ -2034,45 +2029,44 @@ msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigabe</a> prüfen."
+"Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
+"\">Share</a>."
 
 #: share/views.py:378
 msgid "Deleted successfully."
-msgstr "Erfolgreicht gelöscht"
+msgstr "Borrado sastisfactoriamente"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
-msgstr "So können sie die Bibliothek nicht freigeben."
+msgstr "No puedes compartir la librería usando ese método."
 
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
-msgstr ""
-"Holen des Links fehlgeschlagen. bitte versuchen sie es später noch ein mal."
+msgstr "Hubo un fallo al intentar obtener el enlace, por favor intente más tarde"
 
 #: share/views.py:452
 msgid "Removed successfully"
-msgstr "Erfolgreich entfernt"
+msgstr "Removido satisfactoriamente"
 
 #: share/views.py:460
 msgid "Deleted successfully"
-msgstr "Erfolgreich gelöscht"
+msgstr "Borrado satisfactoriamente"
 
 #: share/views.py:476
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail konfiguration ist "
-"nicht korrekt. Bitte wenden sie sich an den Administrator."
+"Sending shared link failed. Email service is not properly configured, please "
+"contact administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr "Ihr Freund hat eine Datei für sie auf Seafile Freigegeben."
+msgstr "Un amigo compartiḉo contigo un archivo en Seafile."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
-msgstr "Interner Serverfehler: Senden fehlgeschalgen."
+msgstr "Error interno del servidor: envío fallido"
 
 #: share/views.py:509
 msgid "Successfully sent."
@@ -2119,12 +2113,12 @@ msgstr "Enlaces compartidos"
 
 #: share/templates/repo/share_admin.html:83
 msgid "File or Folder"
-msgstr "Datei oder Ordner"
+msgstr "Archivo o carpeta"
 
 #: share/templates/repo/share_admin.html:84 templates/file_edit.html:121
 #: templates/snippets/events.html:8 templates/snippets/my_owned_repos.html:102
 msgid "Library"
-msgstr "Bibliothek"
+msgstr "Biblioteca"
 
 #: share/templates/repo/share_admin.html:85
 msgid "Visits"
@@ -2157,7 +2151,7 @@ msgstr "Edición sin inconvenientes"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr "Editieren fehlgeschlagen"
+msgstr "Edición fallida"
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2175,22 +2169,22 @@ msgstr "Confirmar contraseña"
 #: templates/add_user_form.html:26 templates/registration/login.html:28
 #: templates/registration/registration_form.html:28
 msgid "Email cannot be blank"
-msgstr "Email cannot be blank"
+msgstr "Correos no pueden estar en blanco"
 
 #: templates/add_user_form.html:30 templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
 msgid "Password cannot be blank"
-msgstr "Passwort darf nicht leer sein"
+msgstr "Contraseñas no puede estar en blanco"
 
 #: templates/add_user_form.html:34
 #: templates/registration/registration_form.html:36
 msgid "Confirm password cannot be blank"
-msgstr "Passwortbestätigung darf nicht leer sein"
+msgstr "Confirmación de contraseñas no pueden estar en blanco"
 
 #: templates/add_user_form.html:38
 #: templates/registration/registration_form.html:40
 msgid "The two password fields not match"
-msgstr "Die beiden Passwortfelder stimmen nicht überein"
+msgstr "The two password fields not match"
 
 #: templates/admin_base.html:11 templates/pubinfo.html:8
 msgid "Users"
@@ -2284,9 +2278,8 @@ msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
-"Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn "
-"sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
-"Server nur für eine Stunde bleiben."
+"This library is encrypted. Please input the password if you want to browse "
+"it online. And the password will be kept on the server for only 1 hour."
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -2418,11 +2411,11 @@ msgstr "Unstar"
 
 #: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
-msgstr "Favorisieren"
+msgstr "Star"
 
 #: templates/file_view.html:51 templates/file_view.html.py:55
 msgid "updated this file"
-msgstr "Datei wurde aktualisiert"
+msgstr "Actualizar este archivo"
 
 #: templates/file_view.html:51 templates/repo_view_snapshot.html:17
 msgid "Detail"
@@ -2432,8 +2425,8 @@ msgstr "Detalles"
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "Ein*e Mitwirker*in"
-msgstr[1] " %(counter)s Mitwirker*innen"
+msgstr[0] "Único contribuyente"
+msgstr[1] " %(counter)s contribuyentes"
 
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
@@ -2785,100 +2778,100 @@ msgstr "Configuraciones de la biblioteca"
 
 #: templates/repo.html:262
 msgid "Keep full history"
-msgstr "Kompletten Verlauf speichern"
+msgstr "Mantener historial completo"
 
 #: templates/repo.html:263
 msgid "Don't keep history"
-msgstr "Verlauf nicht speichern"
+msgstr "No mantener historial"
 
 #: templates/repo.html:264
 msgid "Only keep a period of history:"
-msgstr "Verlauf nur für einen bestimmten Zeitraum speichern:"
+msgstr "Sólo mantener un período del historial:"
 
 #: templates/repo.html:265
 msgid "days"
-msgstr "Tage"
+msgstr "Días"
 
 #: templates/repo.html:274
 msgid "Directory Name"
-msgstr "Ordnername"
+msgstr "Nombre del directorio"
 
 #: templates/repo.html:286
 msgid "Featured File Type"
-msgstr "Verfügbare Dateiformate"
+msgstr "Featured File Type"
 
 #: templates/repo.html:287 templates/repo.html.py:288
 msgid "Click to choose"
-msgstr "Klicken zum auswählen"
+msgstr "Click para seleccionar"
 
 #: templates/repo.html:287
 msgid "online Rich Text format (experimental)."
-msgstr "Online Rich Text Format (Experimentell)"
+msgstr "Online Rich Text Format (Experimental)"
 
 #: templates/repo.html:288
 msgid "simple markup format."
-msgstr "einfaches Markup Format"
+msgstr "simple markup format."
 
 #: templates/repo.html:290 templates/snippets/my_owned_repos.html:101
 msgid "File Name"
-msgstr "Dateiname"
+msgstr "Fecha del archivo"
 
 #: templates/repo.html:303
 msgid "Current Library"
-msgstr "Aktuelle Bibliothek"
+msgstr "Biblioteca actual"
 
 #: templates/repo.html:305
 msgid "Other Libraries"
-msgstr "Andere Bibliotheken"
+msgstr "Otras bibliotecas"
 
 #: templates/repo.html:315
 msgid "Please click and choose a directory."
-msgstr "Bitte eine Bibliothek auswählen"
+msgstr "Please click and choose a directory."
 
 #: templates/repo.html:321
 msgid "Rename <span id=\"rename-type\"></span>"
-msgstr "Umbenennen <span id=\"rename-type\"></span>"
+msgstr "Renombrar <span id=\"rename-type\"></span>"
 
 #: templates/repo.html:322
 msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
-msgstr "<span id=\"rename-obj\" class=\"op-target\"></span> umbenennen in:"
+msgstr "<span id=\"rename-obj\" class=\"op-target\"></span> Renombrar como:"
 
 #: templates/repo.html:334
 msgid "Link: "
-msgstr "Link:"
+msgstr "Enlace:"
 
 #: templates/repo.html:429
 msgid "Click to remove"
-msgstr "Klicken zum entfernen"
+msgstr "Click para remover"
 
 #: templates/repo.html:430
 msgid "This file has already been selected:\\n$file!"
-msgstr "Diese Datei wurde bereits ausgewählt:\\n$file!"
+msgstr "This file has already been selected:\\n$file!"
 
 #: templates/repo.html:573 templates/repo.html.py:600
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
-msgstr "Ordner"
+msgstr "Directorio"
 
 #: templates/repo.html:590
 msgid "Copy "
-msgstr "Kopie"
+msgstr "Copiar"
 
 #: templates/repo.html:593
 msgid "Move "
-msgstr "Verschieben"
+msgstr "Mover"
 
 #: templates/repo.html:606
 msgid "to:"
-msgstr "zu:"
+msgstr "hacia:"
 
 #: templates/repo.html:783 templates/repo.html.py:795 templates/repo.html:803
 msgid "It can't be blank."
-msgstr "Darf nicht leer sein."
+msgstr "No puede estar en blanco."
 
 #: templates/repo.html:787
 msgid "Only an extension there, please input a name."
-msgstr "Nur eine Erweiterung. Bitte einen Namen angeben."
+msgstr "Only an extension there, please input a name."
 
 #: templates/repo_history.html:7
 msgid "modification history"
@@ -2910,23 +2903,23 @@ msgstr "Regresar a instantáneas"
 
 #: templates/repo_history_view.html:33
 msgid "Can't view this library"
-msgstr "Kann die Bibliothek nicht anzeigen"
+msgstr "Esta biblioteca no puede visualizarse"
 
 #: templates/repo_recycle_view.html:32 templates/repo_recycle_view.html:34
 msgid "a week"
-msgstr "eine Woche"
+msgstr "una semana"
 
 #: templates/repo_recycle_view.html:37 templates/repo_recycle_view.html:39
 msgid "a month"
-msgstr "ein Monat"
+msgstr "un mes"
 
 #: templates/repo_recycle_view.html:42 templates/repo_recycle_view.html:44
 msgid "all"
-msgstr "Alles"
+msgstr "todos"
 
 #: templates/repo_recycle_view.html:54
 msgid "Delete Time"
-msgstr "Zeit löschen"
+msgstr "Borra fecha"
 
 #: templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
@@ -2934,42 +2927,40 @@ msgstr "Regresar al historial de modificaciones"
 
 #: templates/repo_view_snapshot.html:15
 msgid "Create Time"
-msgstr "Erstellungszeit"
+msgstr "Fecha de creación"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Restore Library"
-msgstr "Bibliothek wiederherstellen"
+msgstr "Restaurar biblioteca"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Are you sure you want to restore this library"
-msgstr "Sind Sie sicher das Sie diese Bibliothek wiederherstellen möchten?"
+msgstr "Are you sure you want to restore this library"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
-msgstr "Vorbereiten, bitte warten…"
+msgstr "Preparando archivos, por favor, espere..."
 
 #: templates/seafile_access_check.html:7
 msgid ""
 "No running Seafile client is detected. If you're sure Seafile client is "
 "running, click the following link to continue downloading:"
 msgstr ""
-"Es wurde kein laufender Seafile Client gefunden. Wenn Sie sich sicher sind, "
-"das ein Seafile Client am laufen ist, klicken Sie den folgen Link um "
-"fortzufahren:"
+"No running Seafile client is detected. If you're sure Seafile client is "
+"running, click the following link to continue downloading:"
 
 #: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
 msgstr ""
-"Ihr Seafile Client ist nicht mehr aktuell. Bitte aktualisieren Sie auf die "
-"neueste Version."
+"Your Seafile client is out of date, please upgrade to latest version."
 
 #: templates/seafile_access_check.html:8
 msgid "Click to download."
-msgstr "Klicken zum Herunterladen."
+msgstr "Click para descargar."
 
 #: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
-msgstr "Geteilt von:"
+msgstr "Compartido por:"
 
 #: templates/shared_link_email.html:2
 #, python-format
@@ -2977,12 +2968,12 @@ msgid ""
 "You're receiving this e-mail because %(email)s is sharing a file to you on "
 "%(site_name)s."
 msgstr ""
-"Sie erhalten diese Email, weil %(email)s auf %(site_name)s eine Datei mit "
-"ihnen teilt."
+"You're receiving this e-mail because %(email)s is sharing a file to you on "
+"%(site_name)s."
 
 #: templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
-msgstr "Bitte gehen Sie zur folgenden Seite um die Datei anzusehen:"
+msgstr "Please go to the following page and view the file:"
 
 #: templates/sys_group_admin.html:7
 msgid "All Groups"
@@ -2998,7 +2989,7 @@ msgstr "Todas las organizaciones"
 
 #: templates/sys_org_admin.html:61
 msgid "Delete Organization"
-msgstr "Organisation löschen"
+msgstr "Borrar organización"
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
@@ -3027,7 +3018,7 @@ msgstr "Borrar usuario"
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
 msgstr ""
-"Sind Sie sicher, dass Sie das Passwort für den folgenden Account "
+"¿Estás seguro de que deseas restaurar la contraseña de?"
 "zurücksetzen wollen?"
 
 #: templates/text_diff.html:6
@@ -3036,7 +3027,7 @@ msgstr "Detalles de modificación"
 
 #: templates/text_diff.html:19
 msgid "It's a newly-created blank file."
-msgstr "Ist eine neu erstellte leere Datei."
+msgstr "It's a newly-created blank file."
 
 #: templates/text_diff.html:26
 msgid "before modification"
@@ -3060,7 +3051,7 @@ msgstr "Subir archivo"
 
 #: templates/upload_file_error.html:6
 msgid "to"
-msgstr "zu"
+msgstr "para"
 
 #: templates/user_add_email.html:3
 #, python-format
@@ -3068,33 +3059,33 @@ msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
 msgstr ""
-"Sie erhalten diese Email, weil %(user)s Sie zur Organisation  "
-"\"%(org.org_name)s\" auf %(site_name)s hinzugefügt hat."
+"You're receiving this e-mail because %(user)s added you to organization "
+"\"%(org.org_name)s\" on %(site_name)s."
 
 #: templates/user_add_email.html:5
 #, python-format
 msgid ""
 "You're receiving this e-mail because %(user)s added you to %(site_name)s."
 msgstr ""
-"Sie erhalten diese Email, weil %(user)s Sie zu %(site_name)s hinzugefügt hat."
+"You're receiving this e-mail because %(user)s added you to %(site_name)s."
 
 #: templates/user_add_email.html:7
 msgid "Following is your account information:"
-msgstr "Nachfolgend sind Ihre Benutzerkonteninformationen:"
+msgstr "Following is your account information:"
 
 #: templates/user_add_email.html:8
 #, python-format
 msgid "Email: %(email)s"
-msgstr "Email: %(email)s"
+msgstr "Correo electrónico: %(email)s"
 
 #: templates/user_add_email.html:9
 #, python-format
 msgid "Password:  %(password)s"
-msgstr "Passwort:  %(password)s"
+msgstr "Contraseña:  %(password)s"
 
 #: templates/user_add_email.html:11
 msgid "Please go to the following page and log in:"
-msgstr "Bitte besuchen Sie die folgende Seite um sich einzuloggen:"
+msgstr "Please go to the following page and log in:"
 
 #: templates/user_reset_email.html:2
 #, python-format
@@ -3102,8 +3093,8 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
-"Sie erhalten diese Emai, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
-"%(site_name)s geändert hat."
+"You're receiving this e-mail because staff has reset your password at "
+"%(site_name)s."
 
 #: templates/user_reset_email.html:4
 #, python-format
@@ -3111,23 +3102,24 @@ msgid ""
 "Your new password is %(password)s, please modify your password as soon as "
 "possible."
 msgstr ""
-"Ihr neues Passwort ist %(password)s. Bitte ändern Sie es so bald wie möglich."
+"Your new password is %(password)s, please modify your password as soon as "
+"possible."
 
 #: templates/userinfo.html:13
 msgid "Profile"
-msgstr "Profil"
+msgstr "Perfil"
 
 #: templates/userinfo.html:25
 msgid "Set Quota"
-msgstr "Quota setzen"
+msgstr "Fijar quota"
 
 #: templates/userinfo.html:33
 msgid "Owned"
-msgstr "Besitzer*in"
+msgstr "Owned"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
-msgstr "Compartidas"
+msgstr "Compartida"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
@@ -3163,7 +3155,7 @@ msgstr "Contraseña cambiada satisfactoriamente"
 
 #: templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr "Tu contrasea ha sido cambiada satisfactoriamente."
+msgstr "Tu contraseña ha sido cambiada satisfactoriamente."
 
 #: templates/registration/password_change_form.html:3
 #: templates/registration/password_change_form.html:7
@@ -3186,31 +3178,29 @@ msgstr "Confirmar contraseña:"
 
 #: templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr "Passwort wurde erfolgreich zurückgesetzt"
+msgstr "Contraseña restaurada satisfactoriamente"
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "Passwort wurde erfolgreich zurückgesetzt"
+msgstr "Contraseña restaurada satisfactoriamente"
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
-msgstr "Neues Passwort eingeben"
+msgstr "Input new password"
 
 #: templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
 msgstr ""
-"Das Passwort konnte nicht zurückgesetzt werden: Der Link ist nicht länger "
-"verfügbar."
+"Failed to reset password: this link is no longer available" 
 
 #: templates/registration/password_reset_done.html:4
 msgid "Password Reset Successfully"
-msgstr "Passwort wurde erfolgreich zurückgesetzt"
+msgstr "Password Reset Successfully"
 
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
 msgstr ""
-"Wir haben ihnen eine Email geschickt, mit der Sie Ihr Passwort zurücksetzen "
-"können."
+"We've send a password reset email to your email."
 
 #: templates/registration/password_reset_email.html:2
 #, python-format
@@ -3218,13 +3208,13 @@ msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
 msgstr ""
-"Sie erhalten diese Email, weil Sie eine Anfrage zum Passwort zurücksetzen "
-"für ihren Benutzeraccount auf %(site_name)s angefordert haben."
+"You're receiving this e-mail because you requested a password reset for your "
+"user account at %(site_name)s. "
 
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
-"Bitte besuchen Sie die folgende Seite und wählen Sie ein neues Passwort:"
+"Please go to the following page and choose a new password:"
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
