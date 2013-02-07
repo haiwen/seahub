@@ -154,8 +154,8 @@ switch($('#lang-context').data('lang')) {
 $(window).scroll(function() {
     var offset = $('#edit-hd').offset();
     if ($(window).scrollTop() > offset.top + $('#edit-hd').height()) {
+        $('#edit-hd').css('margin-bottom', $('#path-op').outerHeight(true));
         $('#path-op').addClass('fixed-path-op').css({'left':0, 'top':0, 'padding-left':offset.left, 'padding-right':offset.left});
-        $('#edit-hd').css('margin-bottom', $('#path-op').outerHeight());
     } else {
         $('#path-op').removeClass('fixed-path-op').removeAttr('style');
         $('#edit-hd').css('margin-bottom', 0);
@@ -185,7 +185,7 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
            $(window).scrollTop($(window).scrollTop() + parseInt($('#file-edit').css('padding-bottom')));
         }
         // keep the cursor visible when path-op fixed and moving the cursor upward
-        if (cursor.y - $(window).scrollTop() < $('#path-op').outerHeight()) {
+        if (cursor.y - $(window).scrollTop() < $('#path-op').outerHeight() && !editor.somethingSelected()) {
             $(window).scrollTop(cursor.y - $('#path-op').outerHeight());
         }
     },
