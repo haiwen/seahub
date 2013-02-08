@@ -2,13 +2,14 @@
 # Copyright (C) 2013
 # This file is distributed under the same license as the seahub package.
 # Hector Colina <hcolina@gmail.com>, 2013.
-#
+# This file was generated from german django.po file from previous work 
+# of Phillip Thelen <viirus@pherth.net>"
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-07 14:56-0430\n"
+"PO-Revision-Date: 2013-02-08 14:36-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2435,20 +2436,20 @@ msgstr "Histórico"
 
 #: templates/file_view.html:71
 msgid "Open local file"
-msgstr "lokale Datei öffnen"
+msgstr "Abrir archivo local"
 
 #: templates/file_view.html:82 templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
 msgid "Raw"
-msgstr "Rohansicht"
+msgstr "Formato Crudo"
 
 #: templates/file_view.html:91 templates/repo.html:337
 msgid "Send to:"
-msgstr "Snenden an:"
+msgstr "Envíar a:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr "Emails, getrennt durch ','"
+msgstr "Correos separados por ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
@@ -2461,7 +2462,7 @@ msgstr "Procesando…"
 #: templates/file_view.html:103
 #, fuzzy
 msgid "You have not downloaded "
-msgstr "Sie haben nicht heruntergeladen"
+msgstr "No has descargado"
 
 #: templates/file_view.html:103
 msgid "."
@@ -2469,56 +2470,55 @@ msgstr "."
 
 #: templates/file_view.html:104
 msgid "Click to download"
-msgstr "Klicken zum Herunterladen"
+msgstr "Click para descargar"
 
 #: templates/file_view.html:120
 msgid "Leave a message~"
-msgstr "Eine Nachricht hinterlassen~"
+msgstr "Dejar un mensaje~"
 
 #: templates/file_view.html:185
 msgid "Unstarred successfully"
-msgstr "erfolgreicht nicht mehr favorisiert"
+msgstr "Unstarred successfully"
 
 #: templates/file_view.html:188
 msgid "Starred successfully"
-msgstr "erfolgreich favorisiert"
+msgstr "Starred successfully"
 
 #: templates/file_view.html:228
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
-"Es konnte kein Programm gefunden werden um die Datei zu öffnen. Seafile wird "
-"den Ordner öffnen"
+"Failed to find an application to open the file. Seafile will open the folder."
 
 #: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr ""
-"Diese Datei ist nicht synchronisiert. Sie können sie manuell synchronisieren."
+"Este archivo no se encuentra sincronizado, puedes forzar la sincronización"
+"manualmente"
 
 #: templates/file_view.html:234
 msgid "The file is not synchronized, please retry later."
-msgstr "Diese Datei ist nicht synchronisiert. Bitte versuchen sie es später."
+msgstr "Este archivo no se encuentra sincronizado, por favor, reintente más tarde"
 
 #: templates/file_view.html:238
 msgid "An error occurred when open the local file."
-msgstr "Ein Fehler trat auf als die lokale Datei geöffnet wurde."
+msgstr "Ocurrió un error cuando intentó abrirse el archivo local."
 
 #: templates/file_view.html:266
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr ""
-"Sie benutzen eine ältere Version des Seafile Clienten. Bitte <a target="
-"\"_blank\">aktualisieren</a> Sie sie."
+"You are running an old version of Seafile client, please <a target=\"_blank"
+"\">upgrade</a> it."
 
 #: templates/file_view.html:280
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind das ein "
-"Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
-"Datei zu öffnen:"
+"No running Seafile client is detected. If you are sure Seafile client is "
+"running, click the following link to open the local file:"
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -2526,7 +2526,7 @@ msgstr "Comentar"
 
 #: templates/file_view.html:344
 msgid "Please input a message."
-msgstr "Bitte geben Sie eine Nachricht ein."
+msgstr "Por favor, coloque un mensaje"
 
 #: templates/history_file_view.html:16 templates/repo_view_snapshot.html:7
 msgid "snapshots"
@@ -2538,7 +2538,7 @@ msgstr "Historial"
 
 #: templates/history_file_view.html:26
 msgid "Back to file versions"
-msgstr "Back to file versions"
+msgstr "Regresar a la opción de versiones de archivos"
 
 #: templates/history_file_view.html:30 templates/history_file_view.html:41
 #: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
@@ -2552,7 +2552,7 @@ msgstr "Regresar a la biblioteca"
 
 #: templates/myhome.html:21
 msgid "Reminding..."
-msgstr "Erinnern…"
+msgstr "Reminding..."
 
 #: templates/myhome.html:26
 msgid ""
@@ -2565,11 +2565,11 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"        hat eine neue Nachricht\n"
+"        Tiene un nuevo mensaje\n"
 "        "
 msgstr[1] ""
 "\n"
-"        hat neue Nachrichten\n"
+"        Tiene nuevos mensajes\n"
 "        "
 
 #: templates/myhome.html:35
@@ -2584,11 +2584,11 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"        eine Gruppennachricht hat eine neue Antwort\n"
+"        Un grupo tiene una nueva réplica\n"
 "        "
 msgstr[1] ""
 "\n"
-"        %(counter)s Gruppennachrichten haben neue Antworten\n"
+"        %(counter)s tienen nuevas réplicas\n"
 "        "
 
 #: templates/myhome.html:44
@@ -2603,11 +2603,11 @@ msgid_plural ""
 "          "
 msgstr[0] ""
 "\n"
-"          Eine Organisationsnachricht\n"
+"          one org message\n"
 "          "
 msgstr[1] ""
 "\n"
-"          %(counter)s Organisationsnachrichten\n"
+"          %(counter)s org messages\n"
 "          "
 
 #: templates/myhome.html:55
@@ -2635,15 +2635,15 @@ msgstr "Información Pública"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr "Formular zum teilen"
+msgstr "Compartir desde"
 
 #: templates/repo.html:11
 msgid ""
 "This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
-"Diese Seite wird in kürze ungültig. Sie können <a href=\"http://seafile.com/"
-"\" target=\"_blank\">Seafile</a> beitreten um mehr zu erfahren."
+"This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
+"\" target=\"_blank\">Seafile</a> to experience more."
 
 #: templates/repo.html:25
 msgid "Settings"
@@ -2655,9 +2655,7 @@ msgstr "Papelera"
 
 #: templates/repo.html:41
 msgid "This library is read-only, and you can only view the files."
-msgstr ""
-"Diese Bibliothek ist Schreibgeschützt und Sie können die Dateien nur "
-"betrachten."
+msgstr "Esta biblioteca es de sólo-lectura y sólo podrás visualizar los archivos"
 
 #: templates/repo.html:47
 msgid "Size: "
@@ -2671,11 +2669,11 @@ msgstr "Detalles"
 
 #: templates/repo.html:67
 msgid "Generated by system"
-msgstr "Vom System generiert"
+msgstr "Generado por sistema"
 
 #: templates/repo.html:82
 msgid "You can't access this library."
-msgstr "Sie können nicht auf diese Bibliothek zugreifen."
+msgstr "No puedes acceder a esta biblioteca."
 
 #: templates/repo.html:98 templates/view_shared_dir.html:26
 msgid "ZIP"
@@ -2695,7 +2693,7 @@ msgstr "Nuevo archivo"
 
 #: templates/repo.html:120 templates/view_shared_dir.html:39
 msgid "Directory icon"
-msgstr "Ordnersymbol"
+msgstr "Directorio de iconos"
 
 #: templates/repo.html:130 templates/repo.html.py:176
 msgid "Fetch failed"
@@ -3019,7 +3017,6 @@ msgstr "Borrar usuario"
 msgid "Are you sure you want to reset password of"
 msgstr ""
 "¿Estás seguro de que deseas restaurar la contraseña de?"
-"zurücksetzen wollen?"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -3230,79 +3227,79 @@ msgstr "Al oprimir enviar se te enviarán instrucciones para colocar la nueva co
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
-msgstr "Registrieren"
+msgstr "Registrar"
 
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
-msgstr "Willkommen zurück, Sie sind bereits Eingeloggt."
+msgstr "Bienvenido otra vez, estás autenticado en el sistema."
 
 #: templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr "wird nicht unterstützt. Bitte wählen Sie eine Bilddatei."
+msgstr "no está soportado. pOr favor, seleccioe una imagen de un archivo"
 
 #: templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
-msgstr "wird nicht unterstützt. Dateiendung muss eine der folgenden sein"
+msgstr "no es soportado. Extensiones de archivo sólo pueden ser"
 
 #: templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
-msgstr "ist zu groß. Die maximale Größe beträgt 1MB."
+msgstr "Es demasiado extenso. Tamaño máximo permitido es 1 MB."
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
 msgid "Recommend"
-msgstr "Empfehlen"
+msgstr "Recomendar"
 
 #: templates/snippets/bottom_bar.html:3
 msgid "Back to group"
-msgstr "Zurück zur Gruppe"
+msgstr "Regresar a la sección de Grupo"
 
 #: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
-msgstr "Bitte geben Sie eine Empfehlungsnachricht an."
+msgstr "Please input recommend message."
 
 #: templates/snippets/events.html:2
 msgid "Recent Events"
-msgstr "Aktuelle Ereignisse"
+msgstr "Eventos recientes"
 
 #: templates/snippets/events.html:4
 #: templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
-msgstr "Laden…"
+msgstr "Cargando"
 
 #: templates/snippets/events.html:5
 msgid "More"
-msgstr "Mehr"
+msgstr "Más"
 
 #: templates/snippets/events_.html:16
 msgid "Updated library"
-msgstr "Bibliothek aktualisiert"
+msgstr "Biblioteca actualizad"
 
 #: templates/snippets/events_.html:38
 msgid "Created library"
-msgstr "Bibliothek erstellt"
+msgstr "Biblioteca creada"
 
 #: templates/snippets/events_.html:53
 msgid "Deleted library"
-msgstr "Bibiliothek gelöscht"
+msgstr "Biblioteca eliminada"
 
 #: templates/snippets/events_js.html:42
 #: templates/snippets/list_commit_detail.html:37
 msgid "Unknown error."
-msgstr "Unbekannter Fehler"
+msgstr "Eror desconocido"
 
 #: templates/snippets/events_js.html:44
 msgid "Please refresh the page later."
-msgstr "Bitte aktualisieren Sie diese Seite später."
+msgstr "Por favor, recargue la página posteriormente."
 
 #: templates/snippets/events_js.html:46
 msgid "Please try again later."
-msgstr "Bitte versuchen Sie es später erneut."
+msgstr "Por favor, intente más tarde."
 
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr ""
-"Um es Online zu betrachten, können Sie Firefox, Chrome oder IE 9 benutzen."
+"Para poder visualizar este documento en línea debes usar firefox, chrome o IE9"
 
 #: templates/snippets/file_content_js.html:95
 msgid "Document convertion failed."
@@ -3314,7 +3311,7 @@ msgid ""
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
 "\"page-nums\"></span></span>"
 msgstr ""
-"<span id=\"pdf-page\"><label for=\"page-number\">Seite</label> <input type="
+"<span id=\"pdf-page\"><label for=\"page-number\">Página</label> <input type="
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
 "\"page-nums\"></span></span>"
 
@@ -3330,8 +3327,7 @@ msgstr "Cargando..."
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
-"Sie können IE 10 oder zum Beispiel Firefo benutzen um es Online zu "
-"betrachten."
+"You can use IE 10 or other browsers, for example, firefox, to view it online."
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
@@ -3369,23 +3365,23 @@ msgstr "Borrar archivo"
 
 #: templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
-msgstr "Umbenannte oder verschobene Dateien"
+msgstr "Renombrar o mover archivo"
 
 #: templates/snippets/list_commit_detail.html:27
 msgid "Modified files"
-msgstr "Bearbeitete Dateien"
+msgstr "Archivo modificado"
 
 #: templates/snippets/list_commit_detail.html:28
 msgid "New directories"
-msgstr "Neue Ordner"
+msgstr "Nuevo directorios"
 
 #: templates/snippets/list_commit_detail.html:29
 msgid "Deleted directories"
-msgstr "Gelöschte Ordner"
+msgstr "Directorios eliminados"
 
 #: templates/snippets/list_commit_detail.html:31
 msgid "No conflict in the merge."
-msgstr "Keine konflikt bei der Zusammenführung."
+msgstr "No hubo conflictos al unir."
 
 #: templates/snippets/my_groups.html:24
 msgid "Create a group now"
@@ -3498,88 +3494,88 @@ msgstr "Compartir biblioteca"
 
 #: templates/snippets/repo_share_form.html:4
 msgid "Share <span class=\"op-target\"></span> to"
-msgstr "<span class=\"op-target\"></span> teilen mit"
+msgstr "Compartir <span class=\"op-target\"></span> con"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
-msgstr "Emails oder Gruppen, getrennt durch ','"
+msgstr "Contraseñas o grupos separados por ','"
 
 #: templates/snippets/repo_share_form.html:12
 msgid ""
 "Tip: must be organization members or organization groups, enter \"all\" to "
 "share to public library."
 msgstr ""
-"Tipp: Müssen Mitglieder der Organisation oder Organisationsgruppe sein. "
-"Geben Sie \"all\" ein um die Bibliothek öffentlich zu machen."
+"Tip: must be organization members or organization groups, enter \"all\" to "
+"share to public library."
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tipp: Geben Sie \"all\" ein um die Bibliothek öffentlich zu teilen."
+msgstr "Tip: Selecciones \"Todos\" para compartir la biblioteca pública."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
-msgstr "Bitte geben Sie mindestens eine Email an."
+msgstr "Por favor, introduzca al menos, una dirección de correo."
 
 #: thirdpart/auth/admin.py:29
 msgid "Personal info"
-msgstr "Persönliche Informationen"
+msgstr "Información personal"
 
 #: thirdpart/auth/admin.py:30
 msgid "Permissions"
-msgstr "Berechtigungen"
+msgstr "Permisología"
 
 #: thirdpart/auth/admin.py:31
 msgid "Important dates"
-msgstr "Wichtige Daten"
+msgstr "Fechas importantes"
 
 #: thirdpart/auth/admin.py:114
 msgid "Password changed successfully."
-msgstr "Passwort erfolgreich geändert."
+msgstr "Contraseña cambiada satisfactoriamente."
 
 #: thirdpart/auth/admin.py:124
 #, python-format
 msgid "Change password: %s"
-msgstr "Passwort ändern: %s"
+msgstr "Password cambiado: %s"
 
 #: thirdpart/auth/forms.py:39
 msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
 msgstr ""
-"Bitte geben Sie einen korrekten Benutzernamen und ein korrektes Passwort "
-"ein. Beide Felder berücksichtigen Groß-/Kleinschreibung."
+"Please enter a correct username and password. Note that both fields are case-"
+"sensitive."
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
-msgstr "Dieses Benutzerkonto ist inaktiv."
+msgstr "Esta cuenta se encuentra inactiva."
 
 #: thirdpart/auth/forms.py:46
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr ""
-"Ihr Web Browser scheint keine Cookies zu erlauben. Diese werden aber für den "
-"Login benötigt."
+"Your Web browser doesn't appear to have cookies enabled. Cookies are "
+"required for logging in."
 
 #: thirdpart/auth/forms.py:59
 msgid "E-mail"
-msgstr "Email"
+msgstr "Correo electrónico"
 
 #: thirdpart/auth/forms.py:66
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Email konnte nicht versendet werden. Der Email Dienst ist nicht korrekt "
-"konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
+"Failed to send email, email service is not properly configured, please "
+"contact administrator."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"Diese Email Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
-"Sie registriert sind?"
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
 
 #: thirdpart/auth/forms.py:104
 #, python-format
@@ -3601,8 +3597,7 @@ msgstr "Contraseña antigua"
 #: thirdpart/auth/forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
-"Das alte Passwort das Sie eingegeben haben war nicht korrekt. Bitte geben "
-"Sie es erneut ein."
+"Your old password was entered incorrectly. Please enter it again."
 
 #: thirdpart/auth/views.py:90
 msgid "Logged out"
@@ -3611,28 +3606,28 @@ msgstr "Desconectarse"
 #: thirdpart/auth/views.py:138
 msgid "Failed to send email, please contact administrator."
 msgstr ""
-"Email konnte nicht versendet werden. Bitte wenden Sie sich an einen "
+"Fallo al enviar el correo, por favor, contactate al administrador"
 "Administrator/eine Administratorin."
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
-msgstr "Geben Sie eine valide Email an."
+msgstr "Escriba una dirección de correo electrónica válida."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
-msgstr "Aktive Benutzer*innen"
+msgstr "Usuarios activos"
 
 #: thirdpart/registration/admin.py:43
 msgid "Re-send activation emails"
-msgstr "Aktivierungsmails erneut senden"
+msgstr "Enviar nuevamente correo electrónico de confirmación"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr "Ein*e Benutzer*in mit dieser Email existiert bereits"
+msgstr "Ya existe un usuario con este correo electrónico"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
-msgstr "Ich habe Die Nutzungsbedingungen gelesen und verstanden"
+msgstr "He leido y etsoy de acuerdo con los Términos de Servicio"
 
 #: thirdpart/registration/forms.py:70
 msgid "You must agree to the terms to register"
@@ -3644,15 +3639,16 @@ msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
-"Diese Email wird bereits benutzt. Bitte geben Sie eine andere Email an."
+"This email address is already in use. Please supply a different email "
+"address."
 
 #: thirdpart/registration/forms.py:113
 msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"Registrierung mit kostelosen Emails ist nicht erlaubt. Bitte geben Sie eine "
-"andere Email an."
+"Registration using free email addresses is prohibited. Please supply a "
+"different email address."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
