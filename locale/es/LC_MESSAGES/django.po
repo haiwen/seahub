@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-07 14:56-0430\n"
+"PO-Revision-Date: 2013-02-08 14:16-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2435,20 +2435,20 @@ msgstr "Histórico"
 
 #: templates/file_view.html:71
 msgid "Open local file"
-msgstr "lokale Datei öffnen"
+msgstr "Abrir archivo local"
 
 #: templates/file_view.html:82 templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
 msgid "Raw"
-msgstr "Rohansicht"
+msgstr "Formato Crudo"
 
 #: templates/file_view.html:91 templates/repo.html:337
 msgid "Send to:"
-msgstr "Snenden an:"
+msgstr "Envíar a:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr "Emails, getrennt durch ','"
+msgstr "Correos separados por ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
@@ -2461,7 +2461,7 @@ msgstr "Procesando…"
 #: templates/file_view.html:103
 #, fuzzy
 msgid "You have not downloaded "
-msgstr "Sie haben nicht heruntergeladen"
+msgstr "No has descargado"
 
 #: templates/file_view.html:103
 msgid "."
@@ -2469,56 +2469,55 @@ msgstr "."
 
 #: templates/file_view.html:104
 msgid "Click to download"
-msgstr "Klicken zum Herunterladen"
+msgstr "Click para descargar"
 
 #: templates/file_view.html:120
 msgid "Leave a message~"
-msgstr "Eine Nachricht hinterlassen~"
+msgstr "Dejar un mensaje~"
 
 #: templates/file_view.html:185
 msgid "Unstarred successfully"
-msgstr "erfolgreicht nicht mehr favorisiert"
+msgstr "Unstarred successfully"
 
 #: templates/file_view.html:188
 msgid "Starred successfully"
-msgstr "erfolgreich favorisiert"
+msgstr "Starred successfully"
 
 #: templates/file_view.html:228
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
-"Es konnte kein Programm gefunden werden um die Datei zu öffnen. Seafile wird "
-"den Ordner öffnen"
+"Failed to find an application to open the file. Seafile will open the folder."
 
 #: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr ""
-"Diese Datei ist nicht synchronisiert. Sie können sie manuell synchronisieren."
+"Este archivo no se encuentra sincronizado, puedes forzar la sincronización"
+"manualmente"
 
 #: templates/file_view.html:234
 msgid "The file is not synchronized, please retry later."
-msgstr "Diese Datei ist nicht synchronisiert. Bitte versuchen sie es später."
+msgstr "Este archivo no se encuentra sincronizado, por favor, reintente más tarde"
 
 #: templates/file_view.html:238
 msgid "An error occurred when open the local file."
-msgstr "Ein Fehler trat auf als die lokale Datei geöffnet wurde."
+msgstr "Ocurrió un error cuando intentó abrirse el archivo local."
 
 #: templates/file_view.html:266
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr ""
-"Sie benutzen eine ältere Version des Seafile Clienten. Bitte <a target="
-"\"_blank\">aktualisieren</a> Sie sie."
+"You are running an old version of Seafile client, please <a target=\"_blank"
+"\">upgrade</a> it."
 
 #: templates/file_view.html:280
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind das ein "
-"Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
-"Datei zu öffnen:"
+"No running Seafile client is detected. If you are sure Seafile client is "
+"running, click the following link to open the local file:"
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -2526,7 +2525,7 @@ msgstr "Comentar"
 
 #: templates/file_view.html:344
 msgid "Please input a message."
-msgstr "Bitte geben Sie eine Nachricht ein."
+msgstr "Por favor, coloque un mensaje"
 
 #: templates/history_file_view.html:16 templates/repo_view_snapshot.html:7
 msgid "snapshots"
@@ -2538,7 +2537,7 @@ msgstr "Historial"
 
 #: templates/history_file_view.html:26
 msgid "Back to file versions"
-msgstr "Back to file versions"
+msgstr "Regresar a la opción de versiones de archivos"
 
 #: templates/history_file_view.html:30 templates/history_file_view.html:41
 #: templates/repo_recycle_view.html:8 templates/repo_recycle_view.html:17
@@ -2552,7 +2551,7 @@ msgstr "Regresar a la biblioteca"
 
 #: templates/myhome.html:21
 msgid "Reminding..."
-msgstr "Erinnern…"
+msgstr "Reminding..."
 
 #: templates/myhome.html:26
 msgid ""
@@ -2565,11 +2564,11 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"        hat eine neue Nachricht\n"
+"        Tiene un nuevo mensaje\n"
 "        "
 msgstr[1] ""
 "\n"
-"        hat neue Nachrichten\n"
+"        Tiene nuevos mensajes\n"
 "        "
 
 #: templates/myhome.html:35
@@ -2584,11 +2583,11 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"        eine Gruppennachricht hat eine neue Antwort\n"
+"        Un grupo tiene una nueva réplica\n"
 "        "
 msgstr[1] ""
 "\n"
-"        %(counter)s Gruppennachrichten haben neue Antworten\n"
+"        %(counter)s tienen nuevas réplicas\n"
 "        "
 
 #: templates/myhome.html:44
@@ -2603,11 +2602,11 @@ msgid_plural ""
 "          "
 msgstr[0] ""
 "\n"
-"          Eine Organisationsnachricht\n"
+"          one org message\n"
 "          "
 msgstr[1] ""
 "\n"
-"          %(counter)s Organisationsnachrichten\n"
+"          %(counter)s org messages\n"
 "          "
 
 #: templates/myhome.html:55
@@ -2635,15 +2634,15 @@ msgstr "Información Pública"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr "Formular zum teilen"
+msgstr "Compartir desde"
 
 #: templates/repo.html:11
 msgid ""
 "This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
-"Diese Seite wird in kürze ungültig. Sie können <a href=\"http://seafile.com/"
-"\" target=\"_blank\">Seafile</a> beitreten um mehr zu erfahren."
+"This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
+"\" target=\"_blank\">Seafile</a> to experience more."
 
 #: templates/repo.html:25
 msgid "Settings"
@@ -2655,9 +2654,7 @@ msgstr "Papelera"
 
 #: templates/repo.html:41
 msgid "This library is read-only, and you can only view the files."
-msgstr ""
-"Diese Bibliothek ist Schreibgeschützt und Sie können die Dateien nur "
-"betrachten."
+msgstr "Esta biblioteca es de sólo-lectura y sólo podrás visualizar los archivos"
 
 #: templates/repo.html:47
 msgid "Size: "
@@ -2671,11 +2668,11 @@ msgstr "Detalles"
 
 #: templates/repo.html:67
 msgid "Generated by system"
-msgstr "Vom System generiert"
+msgstr "Generado por sistema"
 
 #: templates/repo.html:82
 msgid "You can't access this library."
-msgstr "Sie können nicht auf diese Bibliothek zugreifen."
+msgstr "No puedes acceder a esta biblioteca."
 
 #: templates/repo.html:98 templates/view_shared_dir.html:26
 msgid "ZIP"
@@ -2695,7 +2692,7 @@ msgstr "Nuevo archivo"
 
 #: templates/repo.html:120 templates/view_shared_dir.html:39
 msgid "Directory icon"
-msgstr "Ordnersymbol"
+msgstr "Directorio de iconos"
 
 #: templates/repo.html:130 templates/repo.html.py:176
 msgid "Fetch failed"
