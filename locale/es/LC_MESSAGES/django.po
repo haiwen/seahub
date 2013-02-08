@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-08 14:46-0430\n"
+"PO-Revision-Date: 2013-02-08 15:05-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1301,11 +1301,11 @@ msgid_plural ""
 "                    "
 msgstr[0] ""
 "\n"
-"                    <span class=\"reply-cnt\">%(counter)s</span> Antwort\n"
+"                    <span class=\"reply-cnt\">%(counter)s</span> Réplica\n"
 "                    "
 msgstr[1] ""
 "\n"
-"                    <span class=\"reply-cnt\">%(counter)s</span> Antworten\n"
+"                    <span class=\"reply-cnt\">%(counter)s</span> Réplicas\n"
 "                    "
 
 #: group/templates/group/group_info.html:172
@@ -1339,7 +1339,7 @@ msgstr "Salir del grupo"
 
 #: group/templates/group/group_info.html:202
 msgid "Are you sure you want to quit this group"
-msgstr "¿Está seguro de que esea salir del grupo?"
+msgstr "¿Está seguro de que desea salir del grupo?"
 
 #: group/templates/group/group_info.html:203
 msgid "Unshare Library"
@@ -1987,7 +1987,7 @@ msgstr "Failed to share to %s，as it does not exist."
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Failed to share to %s, as the email is not registered."
+msgstr "Falló a compartir %s, ya que el correo no está registrado."
 
 #: share/views.py:135
 #, python-format
@@ -2063,7 +2063,7 @@ msgstr ""
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr "Un amigo compartiḉo contigo un archivo en Seafile."
+msgstr "Un amigo compartió contigo un archivo en Seafile."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
