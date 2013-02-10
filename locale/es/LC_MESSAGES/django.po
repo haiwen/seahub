@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-08 15:05-0430\n"
+"PO-Revision-Date: 2013-02-10 13:29-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "Los nombres no pueden estar vacíos"
 
 #: forms.py:58
 msgid "Name is too long (maximum is 255 characters)"
-msgstr "El nombre demasiado extenso (máximo 255 caracteres)"
+msgstr "El nombre es demasiado extenso (máximo 255 caracteres)"
 
 #: forms.py:61 templates/snippets/repo_create_js.html:32
 msgid "Description can't be empty"
@@ -193,7 +193,9 @@ msgstr "El tamaño del archivo sobrepasa el límite"
 
 #: views.py:578
 msgid "The space of owner is used up, upload failed"
-msgstr "El propietario no posee suficiente espacio, falló la subida del archivo"
+msgstr ""
+"El propietario no posee suficiente espacio para almacenamiento,"
+" falló la subida del archivo"
 
 #: views.py:580
 msgid "An error occurs during file transfer"
@@ -231,7 +233,7 @@ msgstr "La biblioteca no existe"
 #: views.py:798
 #, fuzzy
 msgid "History you specified does not exist"
-msgstr "La historia eswpecificada no existe"
+msgstr "El histórico especificado no existe"
 
 #: views.py:800
 msgid "Unknown error"
@@ -342,7 +344,7 @@ msgstr "No puedes modificar esta biblioteca"
 #: views.py:1806
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
-msgstr "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
+msgstr "No se p %(op)s directory %(src)s to its subdirectory %(des)s"
 
 #: views.py:1807
 msgid "copy"
@@ -444,8 +446,9 @@ msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
-"Successfully added user %s. But email notification can not be sent, because "
-"Email service is not properly configured."
+"El usuario %s fue agregado satisfactoriamente sin embargo, la notificación "
+"de correo electrónico no pudo ser envíada ya que el servicio de correo "
+"no se encuentra configurado  adecuadamente"
 
 #: views.py:2289
 #, python-format
@@ -461,19 +464,18 @@ msgstr "Hubo un fallo al crear la biblioteca"
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
-"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-""
+"Se restableció satisfactoriamnte %(path)s al <a href=\"%(root)s\"> directorio raíz.</a>"
 
 #: views.py:2441 views.py:2467
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
+msgstr "Se restableció satusfactoriamente <a href=\"%(url)s\">%(path)s</a>"
 
 #: views.py:2463
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
-"Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
+"Se restableció satisfactoriamnte %(path)s al <a href=\"%(root)s\"> directorio raíz.</a>"
 
 #: views.py:2727
 msgid "Internal error"
@@ -490,7 +492,8 @@ msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
 msgstr ""
-"%(ext)s is an invalid file extension. Authorized extensions are : "
+"La extención %(ext)s no es una extensión válida de archivo. "
+"Las extensiones autorizadas: "
 "%(valid_exts_list)s"
 
 #: avatar/forms.py:38 avatar/forms.py:61
@@ -499,7 +502,7 @@ msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
 msgstr ""
-"Your file is too big (%(size)s), the maximum allowed size is "
+"Tu archivo es demasiado extenso: (%(size)s), el máximo tamaño permitido es "
 "%(max_valid_size)s"
 
 #: avatar/forms.py:44
@@ -508,7 +511,7 @@ msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
 msgstr ""
-"You already have %(nb_avatars)d avatars, and the maximum allowed is "
+"Actualmente tienes %(nb_avatars)d avatars, y el máximo permitido es"
 "%(nb_max_avatars)d."
 
 #: avatar/models.py:136 avatar/models.py:161
@@ -559,8 +562,8 @@ msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
 "\">upload one</a> now."
 msgstr ""
-"You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
-"\">upload one</a> now."
+"No posees avatars que puedan ser borrados. Por favor <a href=\"%(avatar_change_url)s"
+"\">suba uno</a>."
 
 #: avatar/templates/avatar/confirm_delete.html:18
 #, fuzzy
@@ -2681,7 +2684,7 @@ msgstr "ZIP"
 
 #: templates/repo.html:101 templates/repo.html.py:224
 msgid "Upload"
-msgstr "Subir"
+msgstr "Subir archivo..."
 
 #: templates/repo.html:102 templates/repo.html.py:273
 msgid "New Directory"
@@ -2748,7 +2751,7 @@ msgstr "Agregar archivos"
 
 #: templates/repo.html:219
 msgid "smaller than"
-msgstr "más pequeño que"
+msgstr "no puede ser mayor a "
 
 #: templates/repo.html:227 templates/repo.html.py:249
 msgid "Uploaded:"
@@ -2796,7 +2799,7 @@ msgstr "Nombre del directorio"
 
 #: templates/repo.html:286
 msgid "Featured File Type"
-msgstr "Featured File Type"
+msgstr "Funcionalidades del tipo de archivo"
 
 #: templates/repo.html:287 templates/repo.html.py:288
 msgid "Click to choose"
@@ -2804,11 +2807,11 @@ msgstr "Click para seleccionar"
 
 #: templates/repo.html:287
 msgid "online Rich Text format (experimental)."
-msgstr "Online Rich Text Format (Experimental)"
+msgstr "Formato de Texto Enriquecido (RTF)(Experimental)"
 
 #: templates/repo.html:288
 msgid "simple markup format."
-msgstr "simple markup format."
+msgstr "Formato de marcado sencillo (single markup format)"
 
 #: templates/repo.html:290 templates/snippets/my_owned_repos.html:101
 msgid "File Name"
@@ -3361,7 +3364,7 @@ msgstr "Nuevo archivo"
 
 #: templates/snippets/list_commit_detail.html:25
 msgid "Deleted files"
-msgstr "Borrar archivo"
+msgstr "Nombre de(los) archivo(s) borrado(s)"
 
 #: templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
