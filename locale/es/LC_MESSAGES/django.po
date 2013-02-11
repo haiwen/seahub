@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-10 13:29-0430\n"
+"PO-Revision-Date: 2013-02-10 19:41-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -243,11 +243,11 @@ msgstr "Error desconocido"
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr ""
-"Hubo un fallo al remover la biblioteca. Sólo administradores o propietarios pueden realizar esta operación"
+"No se pudo remover la biblioteca. Sólo administradores o propietarios pueden realizar esta operación"
 
 #: views.py:1201
 msgid "Failed to create repo"
-msgstr "Hubo un fallo al crear el repositorio"
+msgstr "No se pudo crear el repositorio"
 
 #: views.py:1219
 msgid "Operation successful"
@@ -259,7 +259,7 @@ msgstr "La operación falló"
 
 #: views.py:1252
 msgid "Failed to delete file."
-msgstr "Hubo un fallo al intentar borra el archivo"
+msgstr "No se pudo borrar el archivo"
 
 #: views.py:1259
 #, python-format
@@ -269,7 +269,7 @@ msgstr "%s borrado satisfactoriamente"
 #: views.py:1261
 #, python-format
 msgid "Internal error. Failed to delete %s."
-msgstr "Error interno. Hubo un fallo al borrar: %s."
+msgstr "Error interno. No se pudo borrar: %s."
 
 #: views.py:1321 views.py:1643
 msgid "Unable to view file"
@@ -281,11 +281,11 @@ msgstr "El archivo sobrepasa los 10 Mb y no podrá ser visualizado en línea"
 
 #: views.py:1531
 msgid "HTTPError: failed to open file online"
-msgstr "Error HTTP: Hubo una falla al intentar abrir el archivo en línea"
+msgstr "Error HTTP: No se pudo abrir el archivo en línea"
 
 #: views.py:1534
 msgid "URLError: failed to open file online"
-msgstr "Error URL: Hubo una falla al intentar abrir el archivo en línea"
+msgstr "Error URL: No se pudo abrir el archivo en línea"
 
 #: views.py:1546
 msgid "Unknown file encoding"
@@ -326,7 +326,7 @@ msgstr "Incapaz de acceder al archivo"
 #: views.py:1733
 msgid "Failed to download library, unable to find server"
 msgstr ""
-"Hubo un fallo al intentar bajar la biblioteca pues no se pudo encontrar"
+"No se pudo bajar la biblioteca pues no se pudo encontrar"
 " el servidor"
 
 #: views.py:1744
@@ -366,7 +366,7 @@ msgstr "%(name)s se movió satisfactoriamente: <a href=\"%(url)s\">ver</a>"
 
 #: views.py:1943
 msgid "Failed to set quota: internal error"
-msgstr "Hubo un fallo al intentar fijar la quota: error interno"
+msgstr "No se pudo fijar la quota: error interno"
 
 #: views.py:2016 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
@@ -407,13 +407,13 @@ msgid ""
 "notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
-"Se cambió satisfcatoriamente la contraseña a %(passwd)s para el usuario; "
+"Se cambió satisfactoriamente la contraseña a %(passwd)s para %(user)s ; "
 "sin embargo, la notificación no pudo ser enviada por correo electrónico "
 "pues dicho servicio no está configurado correctamente."
 
 #: views.py:2047
 msgid "Failed to reset password: user does not exist"
-msgstr "Hubo un fallo al intentar cambiar la contraseña ya que el usuario no existe."
+msgstr "No se pudo cambiar la contraseña ya que el usuario no existe."
 
 #: views.py:2068
 msgid "Seafile Registration Information"
@@ -457,7 +457,7 @@ msgstr "El usuario %(old)s fue renombrado a %(new)s satisfactoriamente"
 
 #: views.py:2344
 msgid "Failed to create library"
-msgstr "Hubo un fallo al crear la biblioteca"
+msgstr "No se pudo crear la biblioteca"
 
 #: views.py:2437
 #, python-format
@@ -469,13 +469,13 @@ msgstr ""
 #: views.py:2441 views.py:2467
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr "Se restableció satusfactoriamente <a href=\"%(url)s\">%(path)s</a>"
+msgstr "Se restableció satisfactoriamente <a href=\"%(url)s\">%(path)s</a>"
 
 #: views.py:2463
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
-"Se restableció satisfactoriamnte %(path)s al <a href=\"%(root)s\"> directorio raíz.</a>"
+"Se restableció satisfactorimente %(path)s al <a href=\"%(url)s\"> directorio raíz.</a>"
 
 #: views.py:2727
 msgid "Internal error"
@@ -563,7 +563,7 @@ msgid ""
 "\">upload one</a> now."
 msgstr ""
 "No posees avatars que puedan ser borrados. Por favor <a href=\"%(avatar_change_url)s"
-"\">suba uno</a>."
+"\">sube uno</a>."
 
 #: avatar/templates/avatar/confirm_delete.html:18
 #, fuzzy
@@ -620,7 +620,7 @@ msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
-"<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
+"<a href=\"%(user_url)s\">%(avatar_creator)s</a> Ha actualizado su avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templates/notification/avatar_updated/notice.html:2
@@ -643,7 +643,7 @@ msgstr "Nombre de usuario"
 
 #: base/accounts.py:353
 msgid "This value must be of length 40"
-msgstr "This value must be of length 40"
+msgstr "Este valor debe tener una longitud de 40"
 
 #: base/accounts.py:356 templates/add_user_form.html:11
 #: templates/registration/login.html:10
@@ -731,7 +731,7 @@ msgstr "No puedes agregarte a tu mismo."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
-msgstr "It is already your contact."
+msgstr "Ya existe en tus contactos."
 
 #: contacts/views.py:68
 #, python-format
@@ -763,7 +763,7 @@ msgstr "%s fue borrado satisfactoriamente"
 #: organizations/templates/organizations/org_public.html:13
 #: share/templates/repo/share_admin.html:15 templates/public_home.html:9
 msgid "Tips"
-msgstr "Tips"
+msgstr "Consejos"
 
 #: contacts/templates/contacts/contact_list.html:9
 msgid ""
@@ -922,15 +922,15 @@ msgstr "El grupo ya ha sido creado"
 
 #: group/error_msg.py:8
 msgid "Failed to create group"
-msgstr "Hubo un fallo al crear al grupo"
+msgstr "No se pudo crear al grupo"
 
 #: group/error_msg.py:11
 msgid "The group has already created in this org."
-msgstr "The group has already created in this org."
+msgstr "El grupo ya ha sido creado en esta org."
 
 #: group/error_msg.py:12
 msgid "Failed to create org group."
-msgstr "Failed to create org group."
+msgstr "No se pudo crear el grupo en org."
 
 #: group/error_msg.py:15
 msgid "Permission error: only group staff can add member"
@@ -947,7 +947,7 @@ msgstr "El grupo está completo"
 
 #: group/error_msg.py:18
 msgid "Failed to add member to group"
-msgstr "Hubo un fallo al intentar agregar un miembro al grupo"
+msgstr "No se pudo agregar un miembro al grupo"
 
 #: group/error_msg.py:21
 msgid "Only group staff can remove member"
@@ -983,11 +983,11 @@ msgstr "Ya existe un grupo con ese nombre"
 
 #: group/views.py:102
 msgid "Only administrators can delete the group."
-msgstr "Sólo administradores pueden borra este grupo"
+msgstr "Sólo administradores pueden borrar este grupo"
 
 #: group/views.py:139
 msgid "Only administrators can dismiss the group"
-msgstr "Only administrators can dismiss the group"
+msgstr "Sólo los administradores pueden cerrar el grupo"
 
 #: group/views.py:162
 msgid "group id  is not a valid argument."
@@ -1004,7 +1004,7 @@ msgstr "No posees la permisología adecuada"
 #: group/views.py:476
 #, python-format
 msgid "Failed to add, %s is not in current organization."
-msgstr "Failed to add, %s is not in current organization."
+msgstr "No se pudo agregar; %s no está en la organización actual."
 
 #: group/views.py:506
 msgid "Your friend added you to a group at Seafile."
@@ -1012,19 +1012,19 @@ msgstr "Un amigo te agregó a un grupo en Seafile"
 
 #: group/views.py:511
 msgid "Failed to send mail."
-msgstr "Hubo un fallo al enviar un correo."
+msgstr "No se pudo enviar un correo."
 
 #: group/views.py:528
 #, python-format
 msgid "Failed to add, %s is not registerd."
-msgstr "Hubo un fallo al intentar agregar a %s pues no está registrado."
+msgstr "No se pudo agregar a %s pues no está registrado."
 
 #: group/views.py:542
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
-msgstr[0] "Erfolgreich hinzugefügt. Eine Email wurde verschickt."
-msgstr[1] "Erfolgreich hinzugefügt. %(count)s Emails wurde verschickt."
+msgstr[0] "Satsifactoriamente agregado. Se envió un correo"
+msgstr[1] "Satisfactoriamente agregado. Se han envíado %(count)s correos."
 
 #: group/views.py:550
 msgid "Successfully added."
@@ -1033,11 +1033,11 @@ msgstr "Satisfactoriamente agregado."
 #: group/views.py:590
 #, python-format
 msgid "Failed to add, %s is not registrated."
-msgstr "Failed to add, %s is not registrated."
+msgstr "No se pudo agregar, %s no se encuentra registrado."
 
 #: group/views.py:613 group/views.py:626 group/views.py:653
 msgid "Operation succeeded."
-msgstr "Operation succeeded."
+msgstr "Operación correcta."
 
 #: group/views.py:643 share/views.py:169
 msgid "group id is not valid"
@@ -1050,28 +1050,28 @@ msgstr "Falló: %s"
 
 #: group/views.py:667
 msgid "Failed to share: the group doesn't exist."
-msgstr "Falló al intentar compartir: el grupo no existe."
+msgstr "No se pudo compartir: el grupo no existe."
 
 #: group/views.py:670
 msgid "Failed to share: internal error."
-msgstr "Falló al intentar compartir: error interno."
+msgstr "No se pudo compartir: error interno."
 
 #: group/views.py:680
 msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
-"Falló a intentar dejar de compartir: el grupo no existe."
+"No se pudo dejar de compartir: el grupo no existe."
 
 #: group/views.py:685
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr ""
-"Operation failed: only administrators and the owner of the library can "
-"unshare it."
+"Operación fallida: sólo administradores y propietarios de una biblioteca "
+"pueden dejar de compartirla."
 
 #: group/views.py:688
 msgid "Failed to unshare: internal error."
-msgstr "Failed to unshare: internal error."
+msgstr "Fallo al intentar dejar de compartir: error interno."
 
 #: group/views.py:716
 msgid "Error: wrong group id"
@@ -1088,28 +1088,28 @@ msgid ""
 "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
 msgstr ""
-"Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
+"Se efectuó con éxito la recomendación a <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
 
 #: group/views.py:749
 msgid "Failed to recommend."
-msgstr "Failed to recommend."
+msgstr "No se pudo recomendar."
 
 #: group/views.py:764
 msgid "Failed to create: the group does not exist."
-msgstr "Fallo al crear: el grupo no existe."
+msgstr "No se pudo crear: el grupo no existe."
 
 #: group/views.py:768
 msgid "Failed to create: you are not in the group."
-msgstr "Fallo al crear: no estás en ningún grupo."
+msgstr "No se pudo crear: no estás en ningún grupo."
 
 #: group/views.py:790 group/views.py:818 organizations/views.py:473
 msgid "Failed to create"
-msgstr "Falló al crear"
+msgstr "No se pudo crear"
 
 #: group/views.py:804 group/views.py:831
 msgid "Failed to create: internal error."
-msgstr "Fallo al crear: error interno."
+msgstr "No se pudo crear: error interno."
 
 #: group/views.py:858
 msgid "You are already in the group."
@@ -1126,7 +1126,7 @@ msgstr ""
 
 #: group/views.py:883
 msgid "Failed to send. You can try it again later."
-msgstr "Falló al enviar. Por favor, intente más tarde."
+msgstr "No se pudo enviar. Por favor, intente más tarde."
 
 #: group/templates/group/add_member_email.html:2
 #, python-format
@@ -1134,8 +1134,8 @@ msgid ""
 "%(email)s invite you to join group %(group.group_name)s. Please go to the "
 "following page and sign up:"
 msgstr ""
-"%(email)s invite you to join group %(group.group_name)s. Please go to the "
-"following page and sign up:"
+"%(email)s de invitación para unirte al grupo %(group.group_name)s. Por favor "
+"ve a la siguiente página e inscríbete: "
 
 #: group/templates/group/add_member_email.html:5
 #: group/templates/group/group_join_email.html:6
@@ -1152,7 +1152,7 @@ msgstr "Gracias por usar nuestro sitio!"
 #: templates/registration/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr "El equipo de tranajo de %(site_name)s"
+msgstr "El equipo de trabajo de %(site_name)s"
 
 #: group/templates/group/group_info.html:14 templates/org_admin_base.html:8
 msgid "Basic Info"
@@ -1184,7 +1184,7 @@ msgstr "Agregar"
 
 #: group/templates/group/group_info.html:52
 msgid "You can click \"Add\" above to add members."
-msgstr "You can click \"Add\" above to add members."
+msgstr "Puedes dar click en \"agregar\" para agregar miembros."
 
 #: group/templates/group/group_info.html:62
 msgid "Administration"
@@ -1279,7 +1279,7 @@ msgstr "Archivos"
 
 #: group/templates/group/group_info.html:156
 msgid "has a new comment:"
-msgstr "Tiene un nuevo comentario:"
+msgstr "Tienes un nuevo comentario:"
 
 #: group/templates/group/group_info.html:163
 #: group/templates/group/group_reply_list.html:10
@@ -1370,11 +1370,11 @@ msgstr "Eliminado satisfactoriamente"
 
 #: group/templates/group/group_info.html:250
 msgid "Failed to delete: "
-msgstr "Falló al eliminar:"
+msgstr "No se pudo eliminar:"
 
 #: group/templates/group/group_info.html:254
 msgid ", failed to delete."
-msgstr ", falló al intentar eliminar."
+msgstr ", no se pudo eliminar."
 
 #: group/templates/group/group_join_email.html:2
 #, python-format
@@ -1382,8 +1382,8 @@ msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
 msgstr ""
-"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
-"message: "
+"%(user)s desean unirse al Grupo \"%(group_name)s\", acá está el mensaje "
+"de verificación: "
 
 #: group/templates/group/group_manage.html:8
 msgid "administration"
@@ -1400,7 +1400,7 @@ msgstr "Cambiar"
 
 #: group/templates/group/group_manage.html:27
 msgid "Dismiss"
-msgstr "Dismiss"
+msgstr "Descartar"
 
 #: group/templates/group/group_manage.html:28
 msgid "Back"
@@ -1421,11 +1421,11 @@ msgstr "Agregar Administradores"
 
 #: group/templates/group/group_manage.html:90
 msgid "Dismiss Group"
-msgstr "Dismiss Group"
+msgstr "Descartar Gupo"
 
 #: group/templates/group/group_manage.html:90
 msgid "Really want to dismiss this group"
-msgstr "Really want to dismiss this group"
+msgstr "¿Realmete desea descartar este grupo?"
 
 #: group/templates/group/group_manage.html:91
 #: organizations/templates/organizations/org_admin.html:99
@@ -1438,7 +1438,7 @@ msgstr "¿Realmente desea borrar este miembro?"
 
 #: group/templates/group/group_pubinfo.html:9
 msgid "Join Group"
-msgstr "Unir al grupo"
+msgstr "Unirse al grupo"
 
 #: group/templates/group/group_pubinfo.html:13
 msgid "Name: "
