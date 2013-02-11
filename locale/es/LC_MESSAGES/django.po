@@ -1,4 +1,3 @@
-
 # Copyright (C) 2013
 # This file is distributed under the same license as the seahub package.
 # Hector Colina <hcolina@gmail.com>, 2013.
@@ -9,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-10 22:46-0430\n"
+"PO-Revision-Date: 2013-02-11 08:48-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +194,7 @@ msgstr "El tamaño del archivo sobrepasa el límite"
 msgid "The space of owner is used up, upload failed"
 msgstr ""
 "El propietario no posee suficiente espacio para almacenamiento,"
-" falló la subida del archivo"
+" no se pudo subir el archivo"
 
 #: views.py:580
 msgid "An error occurs during file transfer"
@@ -326,8 +325,7 @@ msgstr "Incapaz de acceder al archivo"
 #: views.py:1733
 msgid "Failed to download library, unable to find server"
 msgstr ""
-"No se pudo bajar la biblioteca pues no se pudo encontrar"
-" el servidor"
+"No se pudo bajar la biblioteca pues no se encontró el servidor"
 
 #: views.py:1744
 msgid "Invalid server setting"
@@ -344,11 +342,11 @@ msgstr "No puedes modificar esta biblioteca"
 #: views.py:1806
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
-msgstr "No se p %(op)s directory %(src)s to its subdirectory %(des)s"
+msgstr "No se puede copiar/mover %(src)s - %(op)s al subdirectorio  %(des)s"
 
 #: views.py:1807
 msgid "copy"
-msgstr "copia"
+msgstr "copiar"
 
 #: views.py:1807
 msgid "move"
@@ -493,7 +491,7 @@ msgid ""
 "%(valid_exts_list)s"
 msgstr ""
 "La extención %(ext)s no es una extensión válida de archivo. "
-"Las extensiones autorizadas: "
+"Las extensiones autorizadas son: "
 "%(valid_exts_list)s"
 
 #: avatar/forms.py:38 avatar/forms.py:61
@@ -533,7 +531,9 @@ msgstr "La actualización del avatar fue satisfactoria."
 
 #: avatar/views.py:208
 msgid "Successfully deleted the requested avatars."
-msgstr "La solicitud de borrado del avatar seleccionado se realizó satisfactoriamente."
+msgstr ""
+"La solicitud de borrado del avatar seleccionado se realizó "
+"satisfactoriamente."
 
 #: avatar/templates/avatar/add.html:6
 msgid "Upload Avatar"
@@ -727,7 +727,7 @@ msgstr "Se requiere correo electrónico"
 
 #: contacts/models.py:30 contacts/templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
-msgstr "No puedes agregarte a tu mismo."
+msgstr "No puedes agregarte a ti mismo."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
@@ -745,7 +745,7 @@ msgstr "%s fue agregado satisfactoriamente"
 
 #: contacts/views.py:95
 msgid "Failed to add an contact."
-msgstr "Hubo un fallo al agregar un contacto."
+msgstr "No se pudo agregar un contacto."
 
 #: contacts/views.py:120
 #, python-format
@@ -963,7 +963,9 @@ msgstr "El nombre del grupo no puede estar vacío"
 
 #: group/forms.py:29
 msgid "Group name is too long (maximum is 255 characters)"
-msgstr "El nombre del grupo es demasiado extenso (el máximo es de 255 caracteres"
+msgstr ""
+"El nombre del grupo es demasiado extenso (el máximo es de "
+"255 caracteres"
 
 #: group/forms.py:34
 msgid "Group name can only contain letters, numbers or underline"
@@ -1023,7 +1025,7 @@ msgstr "No se pudo agregar a %s pues no está registrado."
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
-msgstr[0] "Satsifactoriamente agregado. Se envió un correo"
+msgstr[0] "Satisfactoriamente agregado. Se envió un correo"
 msgstr[1] "Satisfactoriamente agregado. Se han envíado %(count)s correos."
 
 #: group/views.py:550
@@ -1425,7 +1427,7 @@ msgstr "Descartar Gupo"
 
 #: group/templates/group/group_manage.html:90
 msgid "Really want to dismiss this group"
-msgstr "¿Realmete desea descartar este grupo?"
+msgstr "¿Realmente desea descartar este grupo?"
 
 #: group/templates/group/group_manage.html:91
 #: organizations/templates/organizations/org_admin.html:99
@@ -1465,7 +1467,7 @@ msgstr "Mensaje de verificación"
 
 #: group/templates/group/group_reply_list.html:17
 msgid "It can not be blank and should be no more than 150 characters."
-msgstr "It can not be blank and should be no more than 150 characters."
+msgstr "No puede estar en blanco y debe contener menos de 150 caracteres"
 
 #: group/templates/group/groups_left_panel.html:5
 msgid ""
@@ -1590,7 +1592,7 @@ msgstr "(notificaciones actuales)"
 
 #: notifications/templates/notifications/notification_list.html:30
 msgid "Set to current"
-msgstr "Ajustar a los valires actuales"
+msgstr "Ajustar a los valores actuales"
 
 #: notifications/templates/notifications/notification_list.html:64
 #: templates/pubinfo.html:16 templates/sys_group_admin.html:54
@@ -1609,7 +1611,7 @@ msgstr "No se pudo crear la biblioteca: no te has unido a esta organización"
 
 #: organizations/views.py:217
 msgid "Failed to create."
-msgstr "Falló al crear"
+msgstr "No se pudo crear"
 
 #: organizations/views.py:241
 msgid "Operation Succeeded."
@@ -1782,7 +1784,8 @@ msgstr "Borrar grupo"
 #: organizations/templates/organizations/org_groups.html:15
 msgid "After creating a group, you can add members and share libraries to it."
 msgstr ""
-"Después de crear un grupo, puedes agregar miembros y compartir bibliotecas entre ellos"
+"Después de crear un grupo, puedes agregar miembros y compartir "
+"bibliotecas entre ellos"
 
 #: organizations/templates/organizations/org_groups.html:16
 msgid "You can also share to groups that you're not in."
@@ -1937,11 +1940,11 @@ msgstr "Actualizar"
 
 #: profile/templates/profile/set_profile.html:18
 msgid "Nickname:"
-msgstr "Nickname:"
+msgstr "Alias:"
 
 #: profile/templates/profile/set_profile.html:23
 msgid "About me:"
-msgstr "Acerca de mí:"
+msgstr "Mi información:"
 
 #: profile/templates/profile/user_profile.html:10
 #: templates/snippets/user_profile_html.html:21
@@ -2066,7 +2069,6 @@ msgid ""
 msgstr ""
 "No se pudo enviar el enlace compartido. El servicio de correo electrónico "
 "no está adecuadamente configurado, por favor, contacte al administrador"
-"contact administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
@@ -2130,7 +2132,7 @@ msgstr "Biblioteca"
 
 #: share/templates/repo/share_admin.html:85
 msgid "Visits"
-msgstr "Visitar"
+msgstr "Visitas"
 
 #: share/templates/repo/share_admin.html:98 templates/file_revisions.html:53
 #: templates/repo_view_snapshot.html:43
@@ -2288,7 +2290,7 @@ msgid ""
 msgstr ""
 "Esta biblioteca se encuentra encriptada. Por favor, suministre la contraseña "
 "si desea examinarla. Nota: la contraeña permanacerá almacenada en el "
-"servidor por una hora"
+"servidor por 1 hora"
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -2486,11 +2488,11 @@ msgstr "Dejar un mensaje~"
 
 #: templates/file_view.html:185
 msgid "Unstarred successfully"
-msgstr "Desmuarcado satisfactorio"
+msgstr "Desmarcado satisfactoriamente"
 
 #: templates/file_view.html:188
 msgid "Starred successfully"
-msgstr "Marcado satisfactorio"
+msgstr "Marcado satisfactorimente"
 
 #: templates/file_view.html:228
 msgid ""
@@ -2578,7 +2580,7 @@ msgstr[0] ""
 "        "
 msgstr[1] ""
 "\n"
-"        Tiene nuevos mensajes\n"
+"        Tienes nuevos mensajes\n"
 "        "
 
 #: templates/myhome.html:35
@@ -2678,7 +2680,7 @@ msgstr "Detalles"
 
 #: templates/repo.html:67
 msgid "Generated by system"
-msgstr "Generado por sistema"
+msgstr "Generado por el sistema"
 
 #: templates/repo.html:82
 msgid "You can't access this library."
@@ -2706,7 +2708,7 @@ msgstr "Directorio de iconos"
 
 #: templates/repo.html:130 templates/repo.html.py:176
 msgid "Fetch failed"
-msgstr "Abrufen fehlgeschlagen"
+msgstr "No se pudo obtener"
 
 #: templates/repo.html:143
 msgid "More operations"
@@ -3191,7 +3193,7 @@ msgstr "Contraseña restaurada satisfactoriamente"
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "Contraseña restaurada satisfactoriamente"
+msgstr "Contraseña restaurada satisfactoriamente."
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
@@ -3224,11 +3226,11 @@ msgstr ""
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
-"Por favor, visitar la siguiente página y selecciona una nueva contraseña"
+"Por favor, visita la siguiente página y selecciona una nueva contraseña"
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
-msgstr "Tu nombre de usuariom en caso de que lo hayas olvidado:"
+msgstr "Tu nombre de usuario en caso de que lo hayas olvidado:"
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
@@ -3244,15 +3246,15 @@ msgstr "Registrar"
 
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
-msgstr "Bienvenido otra vez, estás autenticado en el sistema."
+msgstr "Bienvenido otra vez, ya estás autenticado en el sistema."
 
 #: templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr "no está soportado. pOr favor, seleccioe una imagen de un archivo"
+msgstr "no está soportado. Por favor, seleccione una imagen de un archivo"
 
 #: templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
-msgstr "no es soportado. Extensiones de archivo sólo pueden ser"
+msgstr "no es soportado. Extensiones de archivo sólo pueden ser "
 
 #: templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
@@ -3286,7 +3288,7 @@ msgstr "Más"
 
 #: templates/snippets/events_.html:16
 msgid "Updated library"
-msgstr "Biblioteca actualizad"
+msgstr "Biblioteca actualizada"
 
 #: templates/snippets/events_.html:38
 msgid "Created library"
@@ -3548,7 +3550,7 @@ msgstr "Contraseña cambiada satisfactoriamente."
 #: thirdpart/auth/admin.py:124
 #, python-format
 msgid "Change password: %s"
-msgstr "Password cambiado: %s"
+msgstr "Contraseña cambiada: %s"
 
 #: thirdpart/auth/forms.py:39
 msgid ""
@@ -3586,8 +3588,8 @@ msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"La dirección de correo suninistrada no está asociada a ninguna cuenta de "
-"usuario. ¿Estás seguro de que estás registrado rn el sistema?"
+"La dirección de correo suministrada no está asociada a ninguna cuenta de "
+"usuario. ¿Estás seguro de que estás registrado en el sistema?"
 
 #: thirdpart/auth/forms.py:104
 #, python-format
@@ -3609,7 +3611,7 @@ msgstr "Contraseña antigua"
 #: thirdpart/auth/forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
-"El password antiguo suministrado es incorrecto. Por favor, repítalo"
+"La contraseña antigua suministrada es incorrecta. Por favor, repítala"
 
 #: thirdpart/auth/views.py:90
 msgid "Logged out"
@@ -3618,7 +3620,7 @@ msgstr "Desconectarse"
 #: thirdpart/auth/views.py:138
 msgid "Failed to send email, please contact administrator."
 msgstr ""
-"Fallo al enviar el correo, por favor, contactate al administrador"
+"Fallo al enviar el correo, por favor, contacte al administrador"
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
@@ -3638,7 +3640,7 @@ msgstr "Ya existe un usuario con este correo electrónico"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
-msgstr "He leido y etsoy de acuerdo con los Términos de Servicio"
+msgstr "He leido y estoy de acuerdo con los Términos de Servicio"
 
 #: thirdpart/registration/forms.py:70
 msgid "You must agree to the terms to register"
