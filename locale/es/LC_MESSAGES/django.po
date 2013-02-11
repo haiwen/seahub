@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-10 21:18-0430\n"
+"PO-Revision-Date: 2013-02-10 22:46-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2526,7 +2526,7 @@ msgid ""
 "running, click the following link to open the local file:"
 msgstr ""
 "No se detectó un cliente Seafile en funcionamiento. Si estás seguro de que "
-"el cliente Seafile se encuentra funcionando, oprime el siguiente enlace "
+"el cliente Seafile se encuentra funcionando, utilice el siguiente enlace "
 " para abrir el archivo local:"
 
 #: templates/file_view.html:296
@@ -2651,8 +2651,8 @@ msgid ""
 "This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
-"This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
-"\" target=\"_blank\">Seafile</a> to experience more."
+"Esta página dejará de ser válida en poco tiempo, puedes unirte a  <a href=\"http://seafile.com/"
+"\" target=\"_blank\">Seafile</a> para continuar disfrutando de este servicio."
 
 #: templates/repo.html:25
 msgid "Settings"
@@ -2726,11 +2726,11 @@ msgstr "Copiar"
 
 #: templates/repo.html:161 templates/repo.html.py:641
 msgid "starred"
-msgstr "starred"
+msgstr "marcar"
 
 #: templates/repo.html:163 templates/repo.html.py:639
 msgid "unstarred"
-msgstr "unstarred"
+msgstr "desmarcar"
 
 #: templates/repo.html:166 templates/repo.html.py:573 templates/repo.html:597
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
@@ -2749,7 +2749,7 @@ msgstr "Subir archivos"
 #: templates/repo.html:213 templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
 msgstr ""
-"The owner of this library has ran out of space."
+"El propietario de esta biblioteca se ha quedado sin espacio."
 
 #: templates/repo.html:218
 msgid "Add files"
@@ -2773,7 +2773,7 @@ msgstr "Actualizar archivo"
 
 #: templates/repo.html:243
 msgid "Smaller than"
-msgstr "Smaller than"
+msgstr "Más pequeño que"
 
 #: templates/repo.html:249
 msgid "Fetching..."
@@ -2833,7 +2833,7 @@ msgstr "Otras bibliotecas"
 
 #: templates/repo.html:315
 msgid "Please click and choose a directory."
-msgstr "Please click and choose a directory."
+msgstr "Por favor, seleccione un directorio con un click."
 
 #: templates/repo.html:321
 msgid "Rename <span id=\"rename-type\"></span>"
@@ -2853,7 +2853,7 @@ msgstr "Click para remover"
 
 #: templates/repo.html:430
 msgid "This file has already been selected:\\n$file!"
-msgstr "This file has already been selected:\\n$file!"
+msgstr "Este archivo ya ha sido seleccionado:\\n$file!"
 
 #: templates/repo.html:573 templates/repo.html.py:600
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
@@ -2878,7 +2878,7 @@ msgstr "No puede estar en blanco."
 
 #: templates/repo.html:787
 msgid "Only an extension there, please input a name."
-msgstr "Only an extension there, please input a name."
+msgstr "Sólo una extensión, por favor, suministre un nombre."
 
 #: templates/repo_history.html:7
 msgid "modification history"
@@ -2889,8 +2889,9 @@ msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
 "library state before this modification."
 msgstr ""
-"Tip: A snapshot will be generated after modification, which records the "
-"library state before this modification."
+"Consejo: Una instantánea será generada después de cada modificación, con ello "
+" se almacenará un estado previo de la biblioteca antes de esta "
+"modificación"
 
 #: templates/repo_history.html:11
 msgid "View Snapshot"
@@ -2902,7 +2903,7 @@ msgstr "Modificado"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
-msgstr "Schnappschuss"
+msgstr "instantánea"
 
 #: templates/repo_history_view.html:9
 msgid "Back to snapshots"
@@ -2926,7 +2927,7 @@ msgstr "todos"
 
 #: templates/repo_recycle_view.html:54
 msgid "Delete Time"
-msgstr "Borra fecha"
+msgstr "Borrar fecha"
 
 #: templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
@@ -2942,7 +2943,7 @@ msgstr "Restaurar biblioteca"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Are you sure you want to restore this library"
-msgstr "Are you sure you want to restore this library"
+msgstr "¿Estás seguro de que deseas restaurar esta biblioteca?"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -2953,13 +2954,15 @@ msgid ""
 "No running Seafile client is detected. If you're sure Seafile client is "
 "running, click the following link to continue downloading:"
 msgstr ""
-"No running Seafile client is detected. If you're sure Seafile client is "
-"running, click the following link to continue downloading:"
+"No se detectó un cliente Seafile en funcionamiento. Si estás seguro de que "
+" el cliente Seafile está funcionando, de click sobre el siguiente enlace "
+"para continuar descargando:"
 
 #: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
 msgstr ""
-"Your Seafile client is out of date, please upgrade to latest version."
+"Tu cliente Seafile está desactualizado, por favor, actualícelo con la última "
+"versión"
 
 #: templates/seafile_access_check.html:8
 msgid "Click to download."
@@ -2975,12 +2978,12 @@ msgid ""
 "You're receiving this e-mail because %(email)s is sharing a file to you on "
 "%(site_name)s."
 msgstr ""
-"You're receiving this e-mail because %(email)s is sharing a file to you on "
-"%(site_name)s."
+"Estás recibiendo este correo electrónico porque %(email)s está compartiendo "
+"un archivo contigo en %(site_name)s."
 
 #: templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
-msgstr "Please go to the following page and view the file:"
+msgstr "Por favor, visita la siguiente página y obten tu archivo:"
 
 #: templates/sys_group_admin.html:7
 msgid "All Groups"
@@ -3033,7 +3036,7 @@ msgstr "Detalles de modificación"
 
 #: templates/text_diff.html:19
 msgid "It's a newly-created blank file."
-msgstr "It's a newly-created blank file."
+msgstr "Este es un archivo nuevo sin ningún contenido"
 
 #: templates/text_diff.html:26
 msgid "before modification"
@@ -3065,19 +3068,19 @@ msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
 msgstr ""
-"You're receiving this e-mail because %(user)s added you to organization "
-"\"%(org.org_name)s\" on %(site_name)s."
+"Estas recibiendo este archivo porque %(user)s te agregó a su organización: "
+"\"%(org.org_name)s\" en el sitio: %(site_name)s."
 
 #: templates/user_add_email.html:5
 #, python-format
 msgid ""
 "You're receiving this e-mail because %(user)s added you to %(site_name)s."
 msgstr ""
-"You're receiving this e-mail because %(user)s added you to %(site_name)s."
+"Estas recibiendo este correo porque %(user)s te agregó a %(site_name)s."
 
 #: templates/user_add_email.html:7
 msgid "Following is your account information:"
-msgstr "Following is your account information:"
+msgstr "La siguiente es la información de tu cuenta:"
 
 #: templates/user_add_email.html:8
 #, python-format
@@ -3091,7 +3094,7 @@ msgstr "Contraseña:  %(password)s"
 
 #: templates/user_add_email.html:11
 msgid "Please go to the following page and log in:"
-msgstr "Please go to the following page and log in:"
+msgstr "Por favor, visita la siguiente página e inicia sesión:"
 
 #: templates/user_reset_email.html:2
 #, python-format
@@ -3099,8 +3102,8 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
-"You're receiving this e-mail because staff has reset your password at "
-"%(site_name)s."
+"Estás recibiendo este mensaje porque un miembro del equipo de administración "
+"restauró tu contraseña para el sitio %(site_name)s."
 
 #: templates/user_reset_email.html:4
 #, python-format
@@ -3108,8 +3111,8 @@ msgid ""
 "Your new password is %(password)s, please modify your password as soon as "
 "possible."
 msgstr ""
-"Your new password is %(password)s, please modify your password as soon as "
-"possible."
+"Tu nueva contraseña es  %(password)s, por favor, modifícala tan pronto "
+"como sea posible."
 
 #: templates/userinfo.html:13
 msgid "Profile"
@@ -3121,7 +3124,7 @@ msgstr "Fijar quota"
 
 #: templates/userinfo.html:33
 msgid "Owned"
-msgstr "Owned"
+msgstr "Propiedad de"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
@@ -3133,7 +3136,7 @@ msgstr "Especificar límite de almacenamiento de usuario"
 
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
-msgstr "Tip: 0 significa límite por defecto"
+msgstr "Consejo: 0 significa límite por defecto"
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
@@ -3192,21 +3195,22 @@ msgstr "Contraseña restaurada satisfactoriamente"
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
-msgstr "Input new password"
+msgstr "Suministre una nueva contraseña"
 
 #: templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
 msgstr ""
-"Failed to reset password: this link is no longer available" 
+"No se pudo restaurar la contraseña: este enlace ya no es válido" 
 
 #: templates/registration/password_reset_done.html:4
 msgid "Password Reset Successfully"
-msgstr "Password Reset Successfully"
+msgstr "Contraseña restaurada satisfactoriamente"
 
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
 msgstr ""
-"We've send a password reset email to your email."
+"Hemos envíado a tu cuenta de correo las instrucciones para restaurar "
+" tu contraseña."
 
 #: templates/registration/password_reset_email.html:2
 #, python-format
@@ -3214,17 +3218,17 @@ msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
 msgstr ""
-"You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s. "
+"Estás recibiendo este correo porque solicitaste restaurar tu contraseña para "
+" tu cuenta de usuario en el sitio %(site_name)s. "
 
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
-"Please go to the following page and choose a new password:"
+"Por favor, visitar la siguiente página y selecciona una nueva contraseña"
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
-msgstr "Ihr Benutzername, falls Sie ihn vergessen haben:"
+msgstr "Tu nombre de usuariom en caso de que lo hayas olvidado:"
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
@@ -3265,7 +3269,7 @@ msgstr "Regresar a la sección de Grupo"
 
 #: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
-msgstr "Please input recommend message."
+msgstr "Por favor, suministre el mensaje a recomendar."
 
 #: templates/snippets/events.html:2
 msgid "Recent Events"
@@ -3336,7 +3340,7 @@ msgstr "Cargando..."
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
-"You can use IE 10 or other browsers, for example, firefox, to view it online."
+"Puedes usar IE 10 u otros navegadores, por ejemplo, para visualizarlo en línea"
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
@@ -3402,7 +3406,7 @@ msgstr "Mías"
 
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
-msgstr "Favoritos"
+msgstr "Marcadas"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
@@ -3466,7 +3470,7 @@ msgid ""
 "page, and they will be listed here."
 msgstr ""
 "Puedes marcar como favorito archivos que sean importantes dando click "
-"en el botón \"Favoritos\" o visitando la página de ver archivos en donde "
+"en el botón \"Marcar\" o visitando la página de ver archivos en donde "
 " los encontrará listados"
 
 #: templates/snippets/myhome_extra_script.html:28
@@ -3514,12 +3518,12 @@ msgid ""
 "Tip: must be organization members or organization groups, enter \"all\" to "
 "share to public library."
 msgstr ""
-"Tip: must be organization members or organization groups, enter \"all\" to "
-"share to public library."
+"Consejo: debe ser miembro de esta organización para poder compartir biblioteca "
+"públicas utilizando la opción  \"todo\" "
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tip: Selecciones \"Todos\" para compartir la biblioteca pública."
+msgstr "Consejo: Seleccione \"Todos\" para compartir la biblioteca pública."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
@@ -3551,8 +3555,8 @@ msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
 msgstr ""
-"Please enter a correct username and password. Note that both fields are case-"
-"sensitive."
+"Por favor, suministre un nombre de usuario y contraseña correcta. Nota: ambos "
+"datos son sensibles al uso de mayúsculas y minúsculas."
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
@@ -3563,8 +3567,8 @@ msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr ""
-"Your Web browser doesn't appear to have cookies enabled. Cookies are "
-"required for logging in."
+"Tu navegador no parece tener los cookies habilitados los cuales son "
+"requeridos para autenticarse en el sitio."
 
 #: thirdpart/auth/forms.py:59
 msgid "E-mail"
@@ -3575,16 +3579,15 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Failed to send email, email service is not properly configured, please "
-"contact administrator."
+"No se pudo enviar el correo, este servicio no está configurado adecuadamente, ""por favor, contacte al administrador."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"That e-mail address doesn't have an associated user account. Are you sure "
-"you've registered?"
+"La dirección de correo suninistrada no está asociada a ninguna cuenta de "
+"usuario. ¿Estás seguro de que estás registrado rn el sistema?"
 
 #: thirdpart/auth/forms.py:104
 #, python-format
@@ -3606,7 +3609,7 @@ msgstr "Contraseña antigua"
 #: thirdpart/auth/forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
-"Your old password was entered incorrectly. Please enter it again."
+"El password antiguo suministrado es incorrecto. Por favor, repítalo"
 
 #: thirdpart/auth/views.py:90
 msgid "Logged out"
@@ -3616,7 +3619,6 @@ msgstr "Desconectarse"
 msgid "Failed to send email, please contact administrator."
 msgstr ""
 "Fallo al enviar el correo, por favor, contactate al administrador"
-"Administrator/eine Administratorin."
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
@@ -3648,16 +3650,16 @@ msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
-"This email address is already in use. Please supply a different email "
-"address."
+"La dirección de correo ya se encuentra en uso. Por favor, suministre otra "
+"dirección de correo diferente"
 
 #: thirdpart/registration/forms.py:113
 msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"Registration using free email addresses is prohibited. Please supply a "
-"different email address."
+"El registro utilizando una dirección de correo de un proveedor gratuito no "
+"está permitido. Por favor, provea una dirección diferente de otro proveedor"
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
