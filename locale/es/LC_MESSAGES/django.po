@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-03 15:24-0430\n"
-"PO-Revision-Date: 2013-02-10 19:41-0430\n"
+"PO-Revision-Date: 2013-02-10 21:18-0430\n"
 "Last-Translator: Hector Colina <hcolina@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1527,12 +1527,12 @@ msgstr "correos electrónicos separados por ','"
 #: group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
 msgstr ""
-"Tip: una invitación será envíada si la dirección de correo no está registrada"
+"Consejo: una invitación será envíada si la dirección de correo no está registrada"
 
 #: group/templates/group/grpmember_add_form.html:9
 #, fuzzy
 msgid "Tip: the emails should be already registered."
-msgstr "Tip: la dirección de correo debería estar registrada."
+msgstr "Consejo: la dirección de correo debería estar registrada."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
@@ -1544,7 +1544,7 @@ msgstr "Correos electrónicos separados por',' "
 
 #: group/templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
-msgstr "It cannot be blank and should be no more than 150 characters."
+msgstr "No puede estar en blanco y debe ser menor a 150 caracteres"
 
 #: group/templates/group/msg_reply_js.html:62
 msgid "loading ..."
@@ -1556,7 +1556,7 @@ msgstr "Grupo:"
 
 #: group/templates/group/new_msg_reply.html:49
 msgid "It can't be blank and should be no more than 150 characters."
-msgstr "It can't be blank and should be no more than 150 characters."
+msgstr "No puede estar en blanco y debe ser menor a 150 caracteres"
 
 #: group/templates/group/new_msg_reply.html:57
 #: organizations/templates/organizations/org_group_admin.html:54
@@ -1590,7 +1590,7 @@ msgstr "(notificaciones actuales)"
 
 #: notifications/templates/notifications/notification_list.html:30
 msgid "Set to current"
-msgstr "Set to current"
+msgstr "Ajustar a los valires actuales"
 
 #: notifications/templates/notifications/notification_list.html:64
 #: templates/pubinfo.html:16 templates/sys_group_admin.html:54
@@ -1601,11 +1601,11 @@ msgstr "Vacio"
 
 #: notifications/templates/notifications/notification_list.html:70
 msgid "Delete Notification"
-msgstr "Borra notificaciones"
+msgstr "Borrar notificaciones"
 
 #: organizations/views.py:205
 msgid "Failed to create the library: you has not joined this organizatioin."
-msgstr "Failed to create the library: you has not joined this organizatioin."
+msgstr "No se pudo crear la biblioteca: no te has unido a esta organización"
 
 #: organizations/views.py:217
 msgid "Failed to create."
@@ -1613,11 +1613,11 @@ msgstr "Falló al crear"
 
 #: organizations/views.py:241
 msgid "Operation Succeeded."
-msgstr "Operation Succeeded."
+msgstr "Operación realizada con éxito."
 
 #: organizations/views.py:260
 msgid "Group name can only contain letters, digits and underscore"
-msgstr "Group name can only contain letters, digits and underscore"
+msgstr "Nombres de grupos sólo pueden contener letras y dígitos"
 
 #: organizations/views.py:305
 msgid "Seafile Login Information"
@@ -1629,7 +1629,7 @@ msgstr "Correo electrónico envíado satisfactoriamente"
 
 #: organizations/views.py:309
 msgid "Failed to send the email"
-msgstr "Falló al enviar el correo"
+msgstr "No se pudo enviar el correo"
 
 #: organizations/views.py:409
 msgid "Successfully deleted."
@@ -1641,16 +1641,16 @@ msgid ""
 "%(from_email)s added you to Organization <a href=\"%(org_url)s\">"
 "%(org_name)s</a>"
 msgstr ""
-"El corroe %(from_email)s fue agregado a tu organización <a href=\"%(org_url)s\">"
+"El correo %(from_email)s fue agregado a tu organización <a href=\"%(org_url)s\">"
 "%(org_name)s</a>"
 
 #: organizations/views.py:467
 msgid "Failed to create: you has not joined this organization"
-msgstr "Failed to create: you has not joined this organization"
+msgstr "No se pudo crear: no estás en esta organización"
 
 #: organizations/views.py:566
 msgid "This group doesn't belong to current organazation"
-msgstr "This group doesn't belong to current organazation"
+msgstr "Este grupo no pertenece a la organización actual"
 
 #: organizations/views.py:606
 msgid "Only the owner of this library has permission to share it."
@@ -1660,7 +1660,7 @@ msgstr ""
 
 #: organizations/views.py:621 share/views.py:80
 msgid "Failed to share to all members"
-msgstr "Falló al intentar compartir con todos los miembros"
+msgstr "No se pudo compartir con todos los miembros"
 
 #: organizations/views.py:625
 #, python-format
@@ -1669,7 +1669,7 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Compartido con todos los miembros satisfactoriamente, chequear en <a href=\"%s"
-"\">Share</a>."
+"\">Compartido</a>."
 
 #: organizations/views.py:646
 #, python-format
@@ -1677,20 +1677,20 @@ msgid ""
 "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
-"\">Share</a>."
+"Compartido con el %(group)s de forma satisfactoria puedes chequear en <a href=\"%(share)s"
+"\">Compartido</a>."
 
 #: organizations/views.py:652 organizations/views.py:671 share/views.py:328
 #: share/views.py:350
 #, python-format
 msgid "Failed to share to %s."
-msgstr "Falló al compartir %s ."
+msgstr "No se pudo compartir %s ."
 
 #: organizations/views.py:658
 #, python-format
 msgid "Failed to share to %s: this user does not exist in the organization."
 msgstr ""
-"Falló al intentar compartir %s: el usuario no existe en la organización"
+"No se pudo compartir %s: el usuario no existe en la organización"
 
 #: organizations/views.py:666
 #, python-format
@@ -1698,8 +1698,8 @@ msgid ""
 "Shared to %(share_to)s successfully，you can go check it at <a href="
 "\"%(share)s\">Share</a>."
 msgstr ""
-"Shared to %(share_to)s successfully，you can go check it at <a href="
-"\"%(share)s\">Share</a>."
+"El recurso %(share_to)s fue compartido satisfactoriamente; puedes chequearlo en <a href="
+"\"%(share)s\">Compartido</a>."
 
 #: organizations/views.py:713 share/views.py:218
 msgid "all members"
@@ -1716,7 +1716,7 @@ msgstr "Nombre de la organización"
 #: organizations/templates/organizations/create_org.html:9
 #: templates/sys_org_admin.html:12
 msgid "Url Prefix"
-msgstr "URL-Präfix"
+msgstr "Prefijo URL"
 
 #: organizations/templates/organizations/create_org.html:11
 msgid "Url prefix can only contains letters and digits."
@@ -1749,7 +1749,9 @@ msgstr "Correos electrónicos:"
 
 #: organizations/templates/organizations/org_admin.html:72
 msgid "An invitation will be sent if the email is not registered."
-msgstr "An invitation will be sent if the email is not registered."
+msgstr ""
+"Una invitación será envíada si la dirección de correos no se encuentra "
+"registrada."
 
 #: organizations/templates/organizations/org_admin.html:73
 msgid "Emails is required."
@@ -1859,7 +1861,7 @@ msgstr "Borrar biblioteca"
 #, python-format
 msgid "%(user)s added you to Organization %(org_name)s on Seafile. "
 msgstr ""
-"%(user)s added you to Organization %(org_name)s on Seafile. "
+"%(user)s usuarios agregados a tu organización %(org_name)s en Seafile. "
 
 #: organizations/templates/organizations/org_user_add_email.html:3
 #, python-format
@@ -1971,7 +1973,8 @@ msgstr "Sólo el propietario de la biblioteca tiene la permisología para compar
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
-"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
+"Recurso compartido con todos los miembros satisfactoriamente; puede chequear en"
+" <a href=\"%s\">Compartir</a>."
 
 #: share/views.py:104
 #, python-format
@@ -1979,23 +1982,23 @@ msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
+"Compartido con el %(group)s satisfactoraimente; puede chequear en <a href=\"%(share)s"
+"\">Compartido</a>."
 
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Failed to share to %s，as it does not exist."
+msgstr "No se pudo compartir con %s ya que no existe."
 
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Falló a compartir %s, ya que el correo no está registrado."
+msgstr "No se pudo compartir %s, ya que el correo no está registrado."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr "Falló al intentar compartir con %s."
+msgstr "No se pudo compartir con %s."
 
 #: share/views.py:139
 #, python-format
@@ -2003,12 +2006,12 @@ msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
+"Compartido con %(email)s satisfactoriamente ; chequee en  <a href=\"%(share)s"
+"\">Compartido</a>."
 
 #: share/views.py:163 share/views.py:173
 msgid "Failed to remove share"
-msgstr "Falló al intentar remover el recurso compartido"
+msgstr "No se pudo remover el recurso compartido"
 
 #: share/views.py:182
 msgid "Successfully removed share"
@@ -2020,12 +2023,12 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
-"Failed to share to %s, as encrypted libraries cannot be shared to emails "
-"outside the site."
+"No se pudo compartir con  %s, como biblioteca encriptada y estas, a su vez,  "
+"no pueden compartirse con correos externos a este sitio."
 
 #: share/views.py:346
 msgid "You are shared with a library in Seafile"
-msgstr "You are shared with a library in Seafile"
+msgstr "Has compartido una biblioteca en Seafile"
 
 #: share/views.py:353
 #, python-format
@@ -2033,12 +2036,12 @@ msgid ""
 "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr ""
-"Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
-"\">Share</a>."
+"Compartido con %(email)s satisfactoriamente ; chequee en  <a href=\"%(share)s"
+"\">Compartido</a>."
 
 #: share/views.py:378
 msgid "Deleted successfully."
-msgstr "Borrado sastisfactoriamente"
+msgstr "Borrado satisfactoriamente"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
@@ -2046,7 +2049,7 @@ msgstr "No puedes compartir la librería usando ese método."
 
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
-msgstr "Hubo un fallo al intentar obtener el enlace, por favor intente más tarde"
+msgstr "No se pudo obtener el enlace, por favor intente más tarde"
 
 #: share/views.py:452
 msgid "Removed successfully"
@@ -2061,7 +2064,8 @@ msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Sending shared link failed. Email service is not properly configured, please "
+"No se pudo enviar el enlace compartido. El servicio de correo electrónico "
+"no está adecuadamente configurado, por favor, contacte al administrador"
 "contact administrator."
 
 #: share/views.py:501
@@ -2070,7 +2074,7 @@ msgstr "Un amigo compartió contigo un archivo en Seafile."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
-msgstr "Error interno del servidor: envío fallido"
+msgstr "Error interno del servidor: no se pudo enviar"
 
 #: share/views.py:509
 msgid "Successfully sent."
@@ -2155,7 +2159,7 @@ msgstr "Edición sin inconvenientes"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr "Edición fallida"
+msgstr "No se pudo editar"
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2178,7 +2182,7 @@ msgstr "Correos no pueden estar en blanco"
 #: templates/add_user_form.html:30 templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
 msgid "Password cannot be blank"
-msgstr "Contraseñas no puede estar en blanco"
+msgstr "Contraseñas no pueden estar en blanco"
 
 #: templates/add_user_form.html:34
 #: templates/registration/registration_form.html:36
@@ -2188,7 +2192,7 @@ msgstr "Confirmación de contraseñas no pueden estar en blanco"
 #: templates/add_user_form.html:38
 #: templates/registration/registration_form.html:40
 msgid "The two password fields not match"
-msgstr "The two password fields not match"
+msgstr "Las contraseñas suministradas no concuerdan"
 
 #: templates/admin_base.html:11 templates/pubinfo.html:8
 msgid "Users"
@@ -2204,7 +2208,7 @@ msgstr "Notificaciones"
 
 #: templates/base.html:9
 msgid "File Collaboration Team Organization"
-msgstr "File Collaboration Team Organization"
+msgstr "Equipo de colaboración "
 
 #: templates/base.html:37 templates/base.html.py:41 templates/org_base.html:9
 msgid "Personal"
@@ -2282,8 +2286,9 @@ msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
-"This library is encrypted. Please input the password if you want to browse "
-"it online. And the password will be kept on the server for only 1 hour."
+"Esta biblioteca se encuentra encriptada. Por favor, suministre la contraseña "
+"si desea examinarla. Nota: la contraeña permanacerá almacenada en el "
+"servidor por una hora"
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -2297,11 +2302,11 @@ msgstr "Ruta actual:"
 
 #: templates/file_edit.html:90
 msgid "Continue editing"
-msgstr "Continuar edtando"
+msgstr "Continuar editando"
 
 #: templates/file_edit.html:91
 msgid "Preview"
-msgstr "Preview"
+msgstr "Vista preliminar"
 
 #: templates/file_edit.html:94 templates/file_edit.html.py:127
 #: templates/repo.html:229 templates/repo.html.py:251 templates/repo.html:268
@@ -2322,19 +2327,19 @@ msgstr "Contraseña:"
 #: templates/file_edit.html:124 templates/snippets/events.html:12
 #, fuzzy
 msgid "The password will be kept in the server for only 1 hour."
-msgstr "The password will be kept in the server for only 1 hour."
+msgstr "La contraseña será almacenada en el servidor por 1 hora."
 
 #: templates/file_edit.html:241
 msgid "Submit failed. Please check the network."
-msgstr "Falló el envio. Por favor, chequee la red"
+msgstr "No se pudo enviar. Por favor, chequee la red"
 
 #: templates/file_edit.html:243
 msgid "Submit failed."
-msgstr "Falló el envio."
+msgstr "No se pudo enviar."
 
 #: templates/file_edit.html:261 templates/snippets/events_js.html:67
 msgid "Password is required."
-msgstr "Se requiere contraseña"
+msgstr "Contraseña requerida"
 
 #: templates/file_edit.html:263
 msgid "Password should be 3 to 15 characters."
@@ -2360,8 +2365,8 @@ msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr ""
-"Tip:a new version will be generated after each modification, and you can "
-"restore the file to a previous version."
+"Consejo: una nueva versión será generada después de cada modificación y tú "
+" podrás restaurar el archivo desde una versión previa"
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
 msgid "Current Path:"
@@ -2411,11 +2416,11 @@ msgstr "Enviar"
 
 #: templates/file_view.html:32 templates/file_view.html.py:189
 msgid "Unstar"
-msgstr "Unstar"
+msgstr "Desmarcar"
 
 #: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
-msgstr "Star"
+msgstr "Marcar"
 
 #: templates/file_view.html:51 templates/file_view.html.py:55
 msgid "updated this file"
@@ -2481,17 +2486,17 @@ msgstr "Dejar un mensaje~"
 
 #: templates/file_view.html:185
 msgid "Unstarred successfully"
-msgstr "Unstarred successfully"
+msgstr "Desmuarcado satisfactorio"
 
 #: templates/file_view.html:188
 msgid "Starred successfully"
-msgstr "Starred successfully"
+msgstr "Marcado satisfactorio"
 
 #: templates/file_view.html:228
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
-"Failed to find an application to open the file. Seafile will open the folder."
+"No se pudo encontrar una aplicación para abrir este archivo. Seafile abrirá la carpeta"
 
 #: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
@@ -2512,16 +2517,17 @@ msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr ""
-"You are running an old version of Seafile client, please <a target=\"_blank"
-"\">upgrade</a> it."
+"Estás utilizando una versión antigua del cliente Seafile, por favor <a target=\"_blank"
+"\">actualízala</a>."
 
 #: templates/file_view.html:280
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"No running Seafile client is detected. If you are sure Seafile client is "
-"running, click the following link to open the local file:"
+"No se detectó un cliente Seafile en funcionamiento. Si estás seguro de que "
+"el cliente Seafile se encuentra funcionando, oprime el siguiente enlace "
+" para abrir el archivo local:"
 
 #: templates/file_view.html:296
 msgid "Comment"
@@ -2555,7 +2561,7 @@ msgstr "Regresar a la biblioteca"
 
 #: templates/myhome.html:21
 msgid "Reminding..."
-msgstr "Reminding..."
+msgstr "Recordatorio..."
 
 #: templates/myhome.html:26
 msgid ""
@@ -2606,11 +2612,11 @@ msgid_plural ""
 "          "
 msgstr[0] ""
 "\n"
-"          one org message\n"
+"          un mensaje\n"
 "          "
 msgstr[1] ""
 "\n"
-"          %(counter)s org messages\n"
+"          Hay %(counter)s mensajes\n"
 "          "
 
 #: templates/myhome.html:55
