@@ -62,11 +62,9 @@ urlpatterns = patterns('',
     url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]{10})/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     (r'^file_upload_progress_page/$', file_upload_progress_page),
-    (r'^publicrepo/create/$', public_repo_create),
     (r'^events/$', events),
     (r'^file_comment/$', file_comment),
     (r'^pdf_full_view/$', pdf_full_view),
-    (r'^pubinfo/$', pubinfo),
     url(r'^i18n/$', i18n, name='i18n'),
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
@@ -116,6 +114,7 @@ if CLOUD_MODE:
     )
 else:
     urlpatterns += patterns('',
-        url(r'^home/public/$', public_home, name='public_home'),
+        (r'^pubinfo/$', pubinfo),
+        (r'^publicrepo/create/$', public_repo_create),
     )
 
