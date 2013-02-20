@@ -303,9 +303,9 @@ class DownloadRepo(APIView):
         token = get_repo_token_nonnull(repo_id, request.user.username)
         repo_name = repo.name
         enc = 1 if repo.encrypted else ''
+        magic = repo.magic if repo.encrypted else ''
 
         info_json = {
-            'applet_root': ccnet_applet_root,
             'relay_id': relay_id,
             'relay_addr': addr,
             'relay_port': port,
@@ -314,6 +314,7 @@ class DownloadRepo(APIView):
             'repo_id': repo_id,
             'repo_name': repo_name,
             'encrypted': enc,
+            'magic': magic,
             }
         return Response(info_json)
 
