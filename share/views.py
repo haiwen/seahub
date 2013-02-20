@@ -18,7 +18,8 @@ from pysearpc import SearpcError
 from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
     ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
     is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
-    del_org_group_repo
+    del_org_group_repo, list_share_repos, get_group_repos_by_owner, \
+    list_inner_pub_repos_by_owner, remove_share
 
 from forms import RepoShareForm, FileLinkShareForm
 from models import AnonymousShare
@@ -160,7 +161,7 @@ def repo_remove_share(request):
         if request.user.username != from_email and \
                 request.user.username != to_email:
             return render_permission_error(request, _(u'Failed to remove share'))
-        seafserv_threaded_rpc.remove_share(repo_id, from_email, to_email)
+        remove_share(repo_id, from_email, to_email)
     else:
         try:
             group_id_int = int(group_id)
@@ -196,11 +197,10 @@ def share_admin(request):
     shared_repos = []
 
     # personal repos shared by this user
-    shared_repos += seafserv_threaded_rpc.list_share_repos(username, 'from_email',
-                                                           -1, -1)
+    shared_repos += list_share_repos(username, 'from_email', -1, -1)
 
     # repos shared to groups
-    group_repos = seafserv_threaded_rpc.get_group_repos_by_owner(username)
+    group_repos = get_group_repos_by_owner(username)
     for repo in group_repos:
         group = ccnet_threaded_rpc.get_group(int(repo.group_id))
         if not group:
@@ -212,7 +212,7 @@ def share_admin(request):
 
     if not CLOUD_MODE:
         # public repos shared by this user
-        pub_repos = seafserv_threaded_rpc.list_inner_pub_repos_by_owner(username)
+        pub_repos = list_inner_pub_repos_by_owner(username)
         for repo in pub_repos:
             repo.props.user = _(u'all members')
             repo.props.user_info = 'all'

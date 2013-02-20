@@ -18,7 +18,7 @@ from django.http import HttpResponse
 
 from models import Token
 from authentication import TokenAuthentication
-from permissions import IsRepoWritable, IsRepoAccessible
+from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from base.accounts import User
 from share.models import FileShare
@@ -26,12 +26,18 @@ from seahub.views import access_to_repo, validate_owner
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
     get_ccnet_server_addr_port, star_file, unstar_file, string2list
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
-from pysearpc import SearpcError
+from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
-    list_personal_repos_by_owner, list_personal_shared_repos, check_quota
+    list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
+    list_share_repos, get_group_repos_by_owner, list_inner_pub_repos_by_owner,\
+    remove_share, unshare_group_repo, unset_inner_pub_repo
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -899,4 +905,58 @@ class DirView(APIView):
                              "Failed to delete file.")
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
+
+class SharedRepos(APIView):
+    """
+    Support uniform interface for shared libraries.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsRepoOwner)
+    throttle_classes = (UserRateThrottle, )    
+
+    def get(self, request, format=None):
+        """
+        List repos that I share to others or groups or public.
+        """
+        username = request.user.username
+        shared_repos = []
         
+        shared_repos += list_share_repos(username, 'from_email', -1, -1)
+        shared_repos += get_group_repos_by_owner(username)
+        if not CLOUD_MODE:
+            shared_repos += list_inner_pub_repos_by_owner(username)
+
+        return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
+                            status=200, content_type=json_content_type)
+
+class SharedRepo(APIView):
+    """
+    Support uniform interface for shared libraries.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, IsRepoOwner)
+    throttle_classes = (UserRateThrottle, )    
+    
+    def delete(self, request, repo_id, format=None):
+        """
+        Unshare a library. Only repo owner can perform this operation.
+        """
+        share_type = request.GET.get('share_type', '')
+        user = request.GET.get('user', '')
+        group_id = request.GET.get('group_id', '')
+        if not (share_type and user and group_id):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'share_type and user and group_id is required.')
+
+        if share_type == 'personal':
+            remove_share(repo_id, request.user.username, user)
+        elif share_type == 'group':
+            unshare_group_repo(repo_id, group_id, user)
+        elif share_type == 'public':
+            unset_inner_pub_repo(repo_id)
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'share_type can only be personal or group or public.')
+
+        return Response('success', status=status.HTTP_200_OK)
+

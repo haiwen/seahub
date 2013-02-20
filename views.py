@@ -24,17 +24,12 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic.base import TemplateView, TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from auth import login as auth_login
 from auth import authenticate
-from auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, \
-    PasswordChangeForm
-from auth.tokens import default_token_generator
-from share.models import FileShare
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
@@ -47,10 +42,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
-    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE
+    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, unset_inner_pub_repo
 from pysearpc import SearpcError
-
-from signals import repo_created, repo_deleted
 
 from base.accounts import User
 from base.decorators import sys_staff_required, ctx_switch_required
@@ -63,9 +56,11 @@ from group.models import GroupMessage, MessageAttachment
 from group.signals import grpmsg_added
 from notifications.models import UserNotification
 from profile.models import Profile
+from share.models import FileShare
 from forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
     FileCommentForm, RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
+from signals import repo_created, repo_deleted
 from utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
     calculate_repo_last_modify, valid_previewed_file, \
@@ -1184,7 +1179,7 @@ def public_repo_create(request):
 @login_required
 def unset_inner_pub_repo(request, repo_id):
     try:
-        seafserv_threaded_rpc.unset_inner_pub_repo(repo_id)
+        unset_inner_pub_repo(repo_id)
         messages.success(request, _('Operation successful'))
     except SearpcError:
         messages.error(request, _('Operation failed'))

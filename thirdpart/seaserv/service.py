@@ -491,6 +491,16 @@ def get_branches(repo_id):
     return seafserv_threaded_rpc.branch_gets(repo_id)
 
 # group repo
+def get_group_repos_by_owner(user):
+    """
+    List user's repos that are sharing to groups
+    """
+    try:
+        ret = seafserv_threaded_rpc.get_group_repos_by_owner(user)
+    except SearpcError:
+        ret = []
+    return ret
+
 def get_shared_groups_by_repo(repo_id):
     try:
         group_ids = seafserv_threaded_rpc.get_shared_groups_by_repo(repo_id)
@@ -612,6 +622,16 @@ def get_org_groups_by_repo(org_id, repo_id):
     return groups
     
 # inner pub repo
+def list_inner_pub_repos_by_owner(user):
+    """
+    List a user's inner pub repos.
+    """
+    try:
+        ret = seafserv_threaded_rpc.list_inner_pub_repos_by_owner(user)
+    except SearpcError:
+        ret = []
+    return ret
+
 def list_inner_pub_repos(username):
     """
     List inner pub repos, which can be access by everyone.
@@ -639,6 +659,9 @@ def is_inner_pub_repo(repo_id):
 
     return ret
 
+def unset_inner_pub_repo(repo_id):
+    seafserv_threaded_rpc.unset_inner_pub_repo(repo_id)
+        
 # org inner pub repo
 def list_org_inner_pub_repos(org_id, username, start=None, limit=None):
     """
@@ -678,18 +701,29 @@ def is_personal_repo(repo_id):
         owner = ''
     return True if owner else False
 
+# shared repo
+def list_share_repos(user, share_type, start, limit):
+    try:
+        ret = seafserv_threaded_rpc.list_share_repos(user, share_type,
+                                                     start, limit)
+    except SearpcError:
+        ret = []
+    return ret
+
+def remove_share(repo_id, from_user, to_user):
+    seafserv_threaded_rpc.remove_share(repo_id, from_user, to_user)
+
+def unshare_group_repo(repo_id, group_id, from_user):
+    return seafserv_threaded_rpc.group_unshare_repo(repo_id, int(group_id),
+                                                    from_user)
+        
 def list_personal_shared_repos(user, user_type, start, limit):
     """
     List personal repos that user share with others.
     If `user_type` is 'from_email', list repos user shares to others;
-    If `user_type` is 'to_email', list repos others sahre to user.
+    If `user_type` is 'to_email', list repos others share to user.
     """
-    try:
-        share_repos = seafserv_threaded_rpc.list_share_repos(user, user_type,
-                                                             start, limit)
-    except SearpcError:
-        share_repos = []
-
+    share_repos = list_share_repos(user, user_type, start, limit)
     for repo in share_repos:
         repo.user_perm = check_permission(repo.props.repo_id, user)
 
@@ -715,6 +749,7 @@ def list_org_shared_repos(org_id, user, user_type, start, limit):
     share_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
     return share_repos
 
+# misc functions
 def is_valid_filename(file_or_dir):
     """
     Check whether file name or directory name is valid.
@@ -761,9 +796,7 @@ def get_related_users_by_repo(repo_id):
             if member.user_name not in users:
                 users.append(member.user_name)
 
-    share_repos = seafserv_threaded_rpc.list_share_repos(owner, \
-                                        'from_email', -1, -1)
-
+    share_repos = list_share_repos(owner, 'from_email', -1, -1)
     for repo in share_repos:
         if repo.repo_id == repo_id:
             if repo.user not in users:

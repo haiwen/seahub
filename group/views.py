@@ -22,7 +22,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission, is_passwd_set
+    get_org_groups_by_user, check_permission, is_passwd_set, unshare_group_repo
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
@@ -703,7 +703,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
             seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
         return render_permission_error(request, _(u"Operation failed: only administrators and the owner of the library can unshare it."))
         
-    if seafserv_threaded_rpc.group_unshare_repo(repo_id, group_id, from_email) != 0:
+    if unshare_group_repo(repo_id, group_id, from_email) != 0:
         return render_error(request, _(u"Failed to unshare: internal error."))
 
 @login_required
