@@ -362,6 +362,14 @@ def get_repos():
 def get_repo(repo_id):
     return seafserv_threaded_rpc.get_repo(repo_id)
 
+def edit_repo(repo_id, name, desc, user):
+    try:
+        ret = seafserv_threaded_rpc.edit_repo(repo_id, name, desc, user)
+    except SearpcError, e:
+        print str(e)
+        ret = -1
+    return True if ret == 0 else False
+
 def remove_repo(repo_id):
     seafserv_threaded_rpc.remove_repo(repo_id)
 

@@ -257,6 +257,10 @@
     {% if is_repo_owner or request.user.is_staff %}
     <form id="repo-setting-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans "Library Settings" %}</h3>
+        <label>{% trans "Name" %}</label><br />
+        <input type="text" name="repo_name" value="{{ repo.name }}" /><br />
+        <label>{% trans "Description" %}</label></br />
+        <input type="text" name="repo_desc" value="{{ repo.desc }}" /><br />
         <label>{% trans "History" %}</label><br />
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} /> {% trans "Keep full history" %}<br />
@@ -407,6 +411,8 @@ $('#repo-setting-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'repo_id': $('#repo-setting-form input[name="repo_id"]').val(),
+            'repo_name': $('#repo-setting-form input[name="repo_name"]').val(),
+            'repo_desc': $('#repo-setting-form input[name="repo_desc"]').val(),
             'days': days 
         },
         success: function(data) {

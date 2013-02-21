@@ -39,7 +39,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner, is_passwd_set, get_file_size, check_quota, \
+    get_org_repo_owner, is_passwd_set, get_file_size, check_quota, edit_repo,\
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
@@ -555,24 +555,48 @@ def repo_recycle_view(request, repo_id):
 @login_required
 @ctx_switch_required
 def repo_save_settings(request):
-    if request.method == 'POST':
-        content_type = 'application/json; charset=utf-8'
+    if request.method != 'POST':
+        raise Http404
 
-        form = RepoSettingForm(request.POST)
-        if form.is_valid():
-            repo_id = form.cleaned_data['repo_id']
-            days = form.cleaned_data['days']
+    username = request.user.username
+    content_type = 'application/json; charset=utf-8'
 
-            res = set_repo_history_limit(repo_id, days)
-            if res == 0:
-                messages.success(request, _(u'Settings saved.'))
-                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-            else:
-                return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
-                        status=400, content_type=content_type)
+    form = RepoSettingForm(request.POST)
+    if form.is_valid():
+        repo_id = form.cleaned_data['repo_id']
+        if request.user.org:
+            is_owner = True if is_org_repo_owner(
+                request.user.org['org_id'], repo_id, username) else False
         else:
-            return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
-                    status=400, content_type=content_type)
+            is_owner = True if is_repo_owner(username, repo_id) else False
+        if not is_owner:
+            err_msg = _(u'You do not have permission to perform this action.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=403, content_type=content_type)
+
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        days = form.cleaned_data['days']
+
+        if edit_repo(repo_id, repo_name, repo_desc, username):
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=content_type)
+        else:
+            err_msg = _(u'Failed to edit repo information.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=500, content_type=content_type)
+
+        res = set_repo_history_limit(repo_id, days)
+        if res == 0:
+            messages.success(request, _(u'Settings saved.'))
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=content_type)
+        else:
+            return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
+                                status=400, content_type=content_type)
+    else:
+        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
+                            status=400, content_type=content_type)
 
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
@@ -854,31 +878,31 @@ def repo_history_changes(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not access_to_repo(request, repo_id, ''):
-        return HttpResponse(json.dumps(changes),
-                            content_type=content_type)
+        return HttpResponse(json.dumps(changes), content_type=content_type)
 
     repo = get_repo(repo_id)
     if not repo:
-        return HttpResponse(json.dumps(changes),
-                            content_type=content_type)
+        return HttpResponse(json.dumps(changes), content_type=content_type)
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return HttpResponse(json.dumps(changes),
-                            content_type=content_type)
+        return HttpResponse(json.dumps(changes), content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return HttpResponse(json.dumps(changes),
-                            content_type=content_type)
+        return HttpResponse(json.dumps(changes), content_type=content_type)
 
     changes = get_diff(repo_id, '', commit_id)
 
-    if get_commit(commit_id).parent_id is None:
+    c = get_commit(commit_id)
+    if c.parent_id is None:
         # A commit is a first commit only if it's parent id is None.
-        changes['init_commit'] = True
         changes['cmt_desc'] = repo.desc
+    elif c.second_parent_id is None:
+        # Normal commit only has one parent.
+        changes['cmt_desc'] = c.desc
     else:
-        changes['init_commit'] = False
+        # A commit is a merge only if it has two parents.
+        changes['cmt_desc'] = _('No conflict in the merge.')
     
     return HttpResponse(json.dumps(changes), content_type=content_type)
 

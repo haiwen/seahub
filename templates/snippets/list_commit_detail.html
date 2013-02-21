@@ -28,10 +28,8 @@ function listCommitDetails(url, t) {
             show(data['newdir'], '{% trans "New directories" %}');
             show(data['deldir'], '{% trans "Deleted directories" %}');
             if (!con) {
-                if (data['init_commit']) {
+                if (data['cmt_desc']) {
                     con = '<p>' + data['cmt_desc'] + '</p>';
-                } else {
-                    con = '<p>{% trans "No conflict in the merge." %}</p>';
                 }
             }
             $('#ls-ch').css('text-align','left').html(heading + time + con);

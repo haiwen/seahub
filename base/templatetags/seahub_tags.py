@@ -107,6 +107,8 @@ def translate_commit_desc(value):
         return value.replace('Reverted file to status at', _('Reverted file to status at'))
     elif value.startswith('Recovered deleted directory'):
         return value.replace('Recovered deleted directory', _('Recovered deleted directory'))
+    elif value.startswith('Changed library'):
+        return value.replace('Changed library name or description', _('Changed library name or description'))
     elif value.startswith('Merged') or value.startswith('Auto merge'):
         return _('Auto merge by seafile system')
     else:
