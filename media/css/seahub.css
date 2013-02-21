@@ -11,9 +11,12 @@ form,input,textarea,button,img {
 }
 body,
 input, textarea, button, select {
-    font: 13px/19px Arial, Helvetica, sans-serif;/* 19px : for ff*/
+    font: 13px/1.5 Arial, Helvetica, sans-serif;
     color: #333;
     word-wrap:break-word; /* for en */
+}
+input, button, select {
+    line-height:19px;/*for ff*/
 }
 h1 {
     font-size:1.9em;
@@ -303,7 +306,33 @@ textarea:-moz-placeholder {/* for FF */
 .center-contents {
     text-align: center;
 }
-
+.tabnav {
+    height:37px;
+    border-bottom:1px solid #ddd;
+}
+.tabnav-tabs {
+    display:inline-block;
+}
+.tabnav-tab {
+    display:inline-block;
+    font-size:14px;
+    padding:8px 10px;
+    border:1px solid transparent;
+    border-bottom:0;
+}
+.tabnav-tab a {
+    color:#666;
+    font-weight:normal;
+}
+.tabnav-tab a:hover {
+}
+.tabnav-tab-cur {
+    font-weight:bold;
+    border-color:#ddd;
+    border-radius:3px 3px 0 0;
+    background:#fff;
+    margin-bottom:-1px;
+}
 /* container */
 #main, #footer { width:950px; }
 #main { margin:0 auto; }
@@ -1180,19 +1209,23 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
 }
 /* group, org */
-.group-list {
-    margin-top:20px;
+.group-list,
+.user-list {
+    margin-top:30px;
 }
-.group-list .group {
+.group-list .group,
+.user-list .user {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
     width:315px;
     margin:0 17px 25px 0;
 }
-.group-list .group {
+.group-list .group,
+.user-list .user {
     *display:inline; /* for ie 6,7 */
 }
-.group .txt {
+.group .txt,
+.user-list .user .txt {
     color:#333;
     width:250px;
 }
@@ -1745,4 +1778,18 @@ textarea:-moz-placeholder {/* for FF */
 }
 .diff-chg {
     color: #c3f;
+}
+.pubinfo-item {
+    display:inline-block;
+    min-width:66px;
+}
+.pubinfo-item .amount {
+    font-size:28px;
+    line-height:1;
+    font-weight:bold;
+    color:#222;
+}
+.pubinfo-item .obj {
+    font-size:11px;
+    color:#999;
 }

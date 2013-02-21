@@ -1,0 +1,34 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block nav_pubinfo_class %}class="cur"{% endblock %}
+
+{% block left_panel %}
+{% include 'snippets/pubinfo.html' %}
+{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul id="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'pubrepo' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'pubgrp' %}">{% trans "Groups" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Users" %}</li>
+    </ul>
+</div>
+{% if users %}
+<ul class="user-list">
+    {% for member in users %}
+    <li class="user ovhd">
+    <a href="{{ SITE_ROOT }}profile/{{ member.email }}/" class="pic fleft">{% avatar member.email 48 %}</a>
+    <div class="txt fright">
+        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a>
+        <p>{{ member.email }}</p>
+    </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>{% trans "None"%}</p>
+{% endif %}
+{% endblock %}

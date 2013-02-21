@@ -18,7 +18,7 @@
     </li>
     {% if not cloud_mode %}
     <li>
-        <a href="{% url 'seahub.views.pubinfo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Public Info" %}</a>
+        <a href="{% url 'pubrepo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Public Info" %}</a>
     </li>
     {% endif %}
 </ul>

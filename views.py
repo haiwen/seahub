@@ -2736,24 +2736,46 @@ def demo(request):
     return HttpResponseRedirect(redirect_to)
 
 @login_required
-def pubinfo(request):
+def pubrepo(request):
     """
-    Show public information.
+    Show public libraries.
     """
     if request.cloud_mode:
         # Users are not allowed to see public information when in cloud mode.
         raise Http404
     else:
         public_repos = list_inner_pub_repos(request.user.username)
-        groups = get_personal_groups(-1, -1)
-        users = get_emailusers(-1, -1)
-        return render_to_response('pubinfo.html', {
-                'groups': groups,
-                'users': users,
+        return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
                 }, context_instance=RequestContext(request))
-    
+
+def pubgrp(request):
+    """
+    Show public groups.
+    """
+    if request.cloud_mode:
+        # Users are not allowed to see public information when in cloud mode.
+        raise Http404
+    else:
+        groups = get_personal_groups(-1, -1)
+        return render_to_response('pubgrp.html', {
+                'groups': groups,
+                }, context_instance=RequestContext(request))
+
+def pubuser(request):
+    """
+    Show public users.
+    """
+    if request.cloud_mode:
+        # Users are not allowed to see public information when in cloud mode.
+        raise Http404
+    else:
+        users = get_emailusers(-1, -1)
+        return render_to_response('pubuser.html', {
+                'users': users,
+                }, context_instance=RequestContext(request))
+   
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
 

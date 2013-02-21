@@ -114,7 +114,9 @@ if CLOUD_MODE:
     )
 else:
     urlpatterns += patterns('',
-        (r'^pubinfo/$', pubinfo),
+        url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
         (r'^publicrepo/create/$', public_repo_create),
+        url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
+        url(r'^pubinfo/users/$', pubuser, name='pubuser'),
     )
 
