@@ -584,33 +584,8 @@ def get_starred_files(email, org_id=-1):
         f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified, size)
 
         ret.append(f)
-        
-    # First sort by repo
-    # Within the same repo:
-    # dir > file
-    # dirs are sorted by name ascending
-    # files are sorted by last_modified descending
-    def sort_func(fa, fb):
-        # Different repo?
-        if fa.repo.id != fb.repo.id:
-            ret = cmp(fa.repo.name, fb.repo.name)
-            if ret != 0:
-                return ret
-            else:
-                # two different repo has the same name, compare the id
-                return cmp(fa.repo.id, fb.repo.id)
+    ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
-        # OK, same repo
-        if fa.is_dir and fb.is_dir:
-            return cmp(fa.path, fb.path)
-        elif fa.is_dir and not fb.is_dir:
-            return -1
-        elif fb.is_dir and not fa.is_dir:
-            return 1
-        else:
-            return cmp(fb.last_modified, fa.last_modified)
-        
-    ret.sort(sort_func)
     return ret
 
 def star_file(email, repo_id, path, is_dir, org_id=-1):
