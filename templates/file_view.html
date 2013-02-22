@@ -310,7 +310,7 @@ $('#file-op .history').click(function () {
 {% if request.user.is_authenticated %}
 $('#main-panel').css({'margin-bottom':0});
 $('#bottom-bar').append('<button id="comment">{% trans "Comment" %}</button>');
-$('#file-comment').css({'max-height':$(window).height() - $('#bottom-bar').height() - $('#comment-caret').height()});
+$('#file-comment').css({'max-height':$(window).height() * 0.7 - $('#bottom-bar').height() - $('#comment-caret').height()});
 {% if groups %}
 var gids = '';
 {% for g in groups %}
