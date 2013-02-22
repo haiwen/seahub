@@ -2,8 +2,8 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Organization Info"%}</h3>
     <ul class="info-item-bottom">
-        <li class="pubinfo-item"><span class="amount">0</span><br /><span class="obj">{% trans 'Libraries' %}</span></li>
-        <li class="pubinfo-item"><span class="amount">0</span><br /><span class="obj">{% trans 'Groups' %}</span></li>
-        <li class="pubinfo-item"><span class="amount">0</span><br /><span class="obj">{% trans 'Users' %}</span></li>
+        <li class="pubinfo-item"><span class="amount">{{ pubrepos_count }}</span><br /><span class="obj">{% trans 'Libraries' %}</span></li>
+        <li class="pubinfo-item"><span class="amount">{{ groups_count }}</span><br /><span class="obj">{% trans 'Groups' %}</span></li>
+        <li class="pubinfo-item"><span class="amount">{{ emailusers_count}}</span><br /><span class="obj">{% trans 'Users' %}</span></li>
     </ul>
 </div>
