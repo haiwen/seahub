@@ -32,7 +32,7 @@ For details please refer to 'snippets/file_content_js.html'.
             </div>
             {% endif %}
             {% endif %}
-            <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" width="{{file_content.img_w}}" height="{{file_content.img_h}}" />
+            <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" {% if file_content.img_w <= 946 %}width="{{file_content.img_w}}" height="{{file_content.img_h}}" {% else %}width="946"{% endif %} />
         {% endif %}
     {% else %}
     <div id="file-view-tip">

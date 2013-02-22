@@ -26,9 +26,6 @@
     if (img_ht < file_view_ht - prev_next_ht) {
         $('#image-view').css({'margin-top':(file_view_ht - img_ht - prev_next_ht)/2});
     }
-    if ({{file_content.img_w}} > 946) { // for ie 6
-        $('#image-view').css('width', 946);
-    }
     $('#image-view').removeClass('vh');
 {% endif %}
 
