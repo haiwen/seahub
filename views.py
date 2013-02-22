@@ -1177,13 +1177,17 @@ def public_repo_create(request):
                                       content_type=content_type)
 
 @login_required
-def unset_inner_pub_repo(request, repo_id):
+def unsetinnerpub(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        messages.error(request, _('Failed to unshare library. Library does not exist.'))
+        return HttpResponseRedirect(reverse('share_admin'))
+
     try:
         unset_inner_pub_repo(repo_id)
-        messages.success(request, _('Operation successful'))
+        messages.success(request, _('Unshare "%s" successfully.' % repo.name))
     except SearpcError:
-        messages.error(request, _('Operation failed'))
-
+        messages.error(request, _('Failed to unshare "%s".' % repo.name))
     return HttpResponseRedirect(reverse('share_admin'))
 
 @login_required

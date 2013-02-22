@@ -60,7 +60,7 @@
 	  {% endif %}
 	  {% if repo.props.share_type == 'public' %}
 	      {% if not org %}
-	      <a href="#" data="{{ SITE_ROOT }}repo/unsetinnerpub/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
+	      <a href="#" data="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op">{% trans "Unshare"%}</a>
 	      {% else %}
 	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	      {% endif %}
