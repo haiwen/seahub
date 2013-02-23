@@ -3,7 +3,7 @@ import service
 from service import ccnet_rpc, monitor_rpc, seafserv_rpc, \
     seafserv_threaded_rpc, ccnet_threaded_rpc
 from service import send_command, check_quota, web_get_access_token, unset_repo_passwd
-from service import get_emailusers, get_session_info
+from service import get_emailusers, count_emailusers, get_session_info
 from service import get_org_groups, get_personal_groups_by_user, \
     get_group_repoids, get_personal_groups, list_share_repos, remove_share, \
     check_group_staff, remove_group_user, get_group, get_org_id_by_group, \
@@ -18,7 +18,8 @@ from service import get_repos, get_repo, get_commits, get_branches, remove_repo,
     is_org_repo_owner, get_org_repo_owner, is_org_repo, get_file_size,\
     list_personal_repos_by_owner, get_repo_token_nonnull, get_repo_owner, \
     server_repo_size, get_file_id_by_path, get_commit, set_repo_history_limit,\
-    get_repo_history_limit, list_inner_pub_repos_by_owner, unset_inner_pub_repo
+    get_repo_history_limit, list_inner_pub_repos_by_owner, unset_inner_pub_repo,\
+    count_inner_pub_repos    
 
 from service import get_binding_peerids, is_valid_filename, check_permission,\
     is_passwd_set

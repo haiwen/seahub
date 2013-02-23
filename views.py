@@ -42,7 +42,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
-    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, unset_inner_pub_repo
+    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
+    count_inner_pub_repos, unset_inner_pub_repo
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -2735,24 +2736,66 @@ def demo(request):
     return HttpResponseRedirect(redirect_to)
 
 @login_required
-def pubinfo(request):
+def pubrepo(request):
     """
-    Show public information.
+    Show public libraries.
     """
     if request.cloud_mode:
         # Users are not allowed to see public information when in cloud mode.
         raise Http404
     else:
         public_repos = list_inner_pub_repos(request.user.username)
-        groups = get_personal_groups(-1, -1)
-        users = get_emailusers(-1, -1)
-        return render_to_response('pubinfo.html', {
-                'groups': groups,
-                'users': users,
+        pubrepos_count = len(public_repos)
+        groups_count = len(get_personal_groups(-1, -1))
+        emailusers_count = count_emailusers()
+        return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
+                'pubrepos_count': pubrepos_count,
+                'groups_count': groups_count,
+                'emailusers_count': emailusers_count,
                 }, context_instance=RequestContext(request))
-    
+
+@login_required
+def pubgrp(request):
+    """
+    Show public groups.
+    """
+    if request.cloud_mode:
+        # Users are not allowed to see public information when in cloud mode.
+        raise Http404
+    else:
+        groups = get_personal_groups(-1, -1)
+        pubrepos_count = count_inner_pub_repos()
+        groups_count = len(groups)
+        emailusers_count = count_emailusers()
+        return render_to_response('pubgrp.html', {
+                'groups': groups,
+                'pubrepos_count': pubrepos_count,
+                'groups_count': groups_count,
+                'emailusers_count': emailusers_count,
+                }, context_instance=RequestContext(request))
+
+@login_required
+def pubuser(request):
+    """
+    Show public users.
+    """
+    if request.cloud_mode:
+        # Users are not allowed to see public information when in cloud mode.
+        raise Http404
+    else:
+        users = get_emailusers(-1, -1)
+        pubrepos_count = count_inner_pub_repos()
+        groups_count = len(get_personal_groups(-1, -1))
+        emailusers_count = count_emailusers()
+        return render_to_response('pubuser.html', {
+                'users': users,
+                'pubrepos_count': pubrepos_count,
+                'groups_count': groups_count,
+                'emailusers_count': emailusers_count,
+                }, context_instance=RequestContext(request))
+   
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
 

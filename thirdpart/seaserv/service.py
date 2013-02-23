@@ -153,6 +153,13 @@ def get_emailusers(start, limit):
         users = []
     return users
 
+def count_emailusers():
+    try:
+        ret = ccnet_threaded_rpc.count_emailusers()
+    except SearpcError:
+        ret = 0
+    return ret
+
 def get_session_info():
     return ccnet_rpc.get_session_info()
 
@@ -646,6 +653,13 @@ def list_inner_pub_repos(username):
 
     shared_repos.sort(lambda x, y: cmp(y.props.last_modified, x.props.last_modified))
     return shared_repos
+
+def count_inner_pub_repos():
+    try:
+        ret = seafserv_threaded_rpc.count_inner_pub_repos()
+    except SearpcError:
+        ret = 0
+    return ret
 
 def is_inner_pub_repo(repo_id):
     """
