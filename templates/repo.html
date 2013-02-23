@@ -284,8 +284,18 @@
         <h3>{% trans "New File" %}</h3>
         <div id="featured-filetype">
             <label>{% trans "Featured File Type" %}</label><br />
-            <button type="button" data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format (experimental)." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
-            <button type="button" data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span> <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/markdown/" target="_blank">{% trans 'Details' %}</a>
+            <button type="button" data="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format (experimental)." %}</span>
+            {% if LANGUAGE_CODE == 'zh-cn' %}
+            <a href="http://www.seafile.com/help/seaf/" target="_blank">{% trans 'Details' %}</a><br /> 
+            {% else %}
+            <a href="http://www.seafile.com/en/help/seaf/" target="_blank">{% trans 'Details' %}</a><br /> 
+            {% endif %}
+            <button type="button" data="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span>
+            {% if LANGUAGE_CODE == 'zh-cn' %}
+            <a href="http://www.seafile.com/help/markdown/" target="_blank">{% trans 'Details' %}</a>            
+            {% else %}
+            <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>            
+            {% endif %}
         </div>
         <label>{% trans "File Name" %}</label><br/>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
