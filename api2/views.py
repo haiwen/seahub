@@ -482,10 +482,8 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
-        names =  file_names.split(':')
-        names = map(lambda x: unquote(x).decode('utf-8'), names)
-
-        for file_name in names:
+        for file_name in file_names.split(':'):
+            file_name = unquote(file_name.encode('utf-8'))            
             try:
                 seafserv_threaded_rpc.del_file(repo_id, parent_dir,
                                                file_name, request.user.username)

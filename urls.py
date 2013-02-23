@@ -79,7 +79,6 @@ urlpatterns = patterns('',
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     ### Apps ###
-#    (r'^api/', include('api.urls')),
     (r'^api2/', include('api2.urls')),
     (r'^avatar/', include('avatar.urls')),
     (r'^notification/', include('notifications.urls')),
