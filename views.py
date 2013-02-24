@@ -2708,7 +2708,7 @@ def view_file_via_shared_dir(request, token):
     raw_path = gen_file_get_url(access_token, quote_filename)
     # get file content
     file_enc = request.GET.get('file_enc', 'auto')
-    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
 
     zipped = gen_path_link(path, '')
         
