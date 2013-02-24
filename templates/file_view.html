@@ -73,7 +73,7 @@
 
                 {% if not read_only %}
                 {% if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf' %}
-                <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}" id="edit">{% trans "Edit"%}</button>
+                <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
                 {% endif %}
                 {% endif %}
             {% endif %}

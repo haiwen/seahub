@@ -146,6 +146,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # File preview
 FILE_PREVIEW_MAX_SIZE = 10 * 1024 * 1024
 USE_PDFJS = True
+FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'

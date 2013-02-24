@@ -9,6 +9,7 @@ import sys
 import urllib
 import urllib2
 import logging
+import chardet
 from urllib import quote
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -78,7 +79,7 @@ try:
         DOCUMENT_CONVERTOR_ROOT += '/'
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
-from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS,\
+from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
 try:
@@ -1247,6 +1248,7 @@ def repo_view_file(request, repo_id):
     filename = urllib2.quote(u_filename.encode('utf-8'))
     comment_open = request.GET.get('comment_open', '')
     page_from = request.GET.get('from', '')
+    file_enc = request.GET.get('file_enc', 'auto')
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -1304,7 +1306,7 @@ def repo_view_file(request, repo_id):
     raw_path = gen_file_get_url(token, filename)
    
     # get file content
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
 
     img_prev = None
     img_next = None
@@ -1346,6 +1348,7 @@ def repo_view_file(request, repo_id):
                 'raw_path': raw_path,
                 'err': err,
                 'file_content': file_content,
+                'file_enc': file_enc,
                 'swf_exists': swf_exists,
                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
                 'page_from': page_from,
@@ -1423,6 +1426,7 @@ def repo_view_file(request, repo_id):
             'contacts': contacts,
             'err': err,
             'file_content': file_content,
+            'file_enc': file_enc,
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
             'comments': comments,
@@ -1492,10 +1496,13 @@ def file_comment(request):
                                 content_type=content_type)
     
    
-def repo_file_get(raw_path):
+def repo_file_get(raw_path, file_enc):
     err = ''
     file_content = ''
     encoding = ''
+    if file_enc in FILE_ENCODING_LIST and file_enc != 'auto':
+        encoding = file_enc
+
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
@@ -1510,23 +1517,37 @@ def repo_file_get(raw_path):
         err = _(u'URLError: failed to open file online')
         return err, '', ''
     else:
-        try:
-            u_content = content.decode('utf-8')
-            encoding = 'utf-8'
-        except UnicodeDecodeError:
-            # XXX: file in windows is encoded in gbk
+        if encoding:
             try:
-                u_content = content.decode('gbk')
-                encoding = 'gbk'
+                u_content = content.decode(encoding)
             except UnicodeDecodeError:
-                err = _(u'Unknown file encoding')
+                err = _(u'The encoding you chose is not proper.')
                 return err, '', ''
+        else:
+            try:
+                u_content = content.decode('utf-8')
+                encoding = 'utf-8'
+            except UnicodeDecodeError:
+                try:
+                    u_content = content.decode('gbk')
+                    encoding = 'gbk'
+                except UnicodeDecodeError:
+                    encoding = chardet.detect(content)['encoding']
+                    if encoding != None:
+                        try:
+                            u_content = content.decode(encoding)
+                        except UnicodeDecodeError:
+                            err = _(u'Unknown file encoding')
+                            return err, '', ''
+                    else:
+                        err = _(u'Unknown file encoding')
+                        return err, '', ''
 
         file_content = u_content
 
     return err, file_content, encoding
 
-def get_file_content(filetype, raw_path, obj_id, fileext):
+def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
     err = ''
     file_content = ''
     swf_exists = False
@@ -1537,7 +1558,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext):
         file_content['img_w'], file_content['img_h'] = img.size
 
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
-        err, file_content, encoding = repo_file_get(raw_path)
+        err, file_content, encoding = repo_file_get(raw_path, file_enc)
     elif filetype == 'Document':
         if DOCUMENT_CONVERTOR_ROOT:
             err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
@@ -1664,7 +1685,8 @@ def file_edit(request, repo_id):
                 op = 'decrypt'
         if not op:
             raw_path = gen_file_get_url(token, filename)
-            err, file_content, encoding = repo_file_get(raw_path)
+            file_enc = request.GET.get('file_enc', 'auto')
+            err, file_content, encoding = repo_file_get(raw_path, file_enc)
     else:
         err = _(u'Edit online is not offered for this type of file.')
 
@@ -2581,7 +2603,8 @@ def view_shared_file(request, token):
     raw_path = gen_file_get_url(access_token, quote_filename)
 
     # get file content
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
+    file_enc = request.GET.get('file_enc', 'auto')
+    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -2601,6 +2624,7 @@ def view_shared_file(request, token):
             'username': username,
             'err': err,
             'file_content': file_content,
+            'file_enc': file_enc,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
@@ -2683,7 +2707,8 @@ def view_file_via_shared_dir(request, token):
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
     # get file content
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext)
+    file_enc = request.GET.get('file_enc', 'auto')
+    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
 
     zipped = gen_path_link(path, '')
         
@@ -2700,6 +2725,7 @@ def view_file_via_shared_dir(request, token):
             'username': username,
             'err': err,
             'file_content': file_content,
+            'file_enc': file_enc,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'zipped': zipped,

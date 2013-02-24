@@ -40,8 +40,7 @@
 {% if filetype == 'Markdown' %}
     {% ifnotequal file_content None %}
     var converter = new Showdown.converter();
-    $('#file-view').html('<div id="md-view" class="article">' + converter.makeHtml('{{ file_content|escapejs }}') + '</div>');
-    $('#md-view').children(':first').css('margin-top', '0');
+    $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
     {% endifnotequal %}
 {% endif %}
 
@@ -168,3 +167,29 @@ $('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file can
 {% endif %}
 
 {% endif %}{# 'if not err' ends here. #}
+
+{% if filetype == 'Text' or filetype == 'Sf' or filetype == 'Markdown' %}
+    $('#file-enc').change(function() {
+        var file_enc = $(this).val();
+        var s = location.search;
+        if (s.indexOf('?') == -1) {
+            location.search = '?file_enc=' + file_enc;
+        } else {
+            if (s.indexOf('file_enc') == -1) {
+                location.search += '&file_enc=' + file_enc; 
+            } else {
+                var params = s.substr(1).split('&');
+                var param;
+                for (var i = 0, len = params.length; i < len; i++) {
+                    param = params[i].split('=');
+                    if (param[0] == 'file_enc') {
+                        param[1] = file_enc;
+                        params[i] = param.join('=');
+                        break;
+                    }
+                }
+                location.search = '?' + params.join('&');
+            }
+        }
+    })
+{% endif %}
