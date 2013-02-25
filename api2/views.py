@@ -906,16 +906,13 @@ class DirView(APIView):
 
 class SharedRepos(APIView):
     """
-    Support uniform interface for shared libraries.
+    List repos that a user share to others/groups/public.    
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoOwner)
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, format=None):
-        """
-        List repos that I share to others or groups or public.
-        """
         username = request.user.username
         shared_repos = []
         
