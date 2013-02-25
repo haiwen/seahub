@@ -527,8 +527,7 @@ class StarredFileView(APIView):
     def post(self, request, format=None):
         # add starred file
         repo_id = request.POST.get('repo_id', '')
-        path = unquote(request.POST.get('p', ''))
-
+        path = unquote(request.POST.get('p', '').encode('utf-8'))
         if not (repo_id and path):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Repo_id or path is missing.')
@@ -630,6 +629,7 @@ class FileView(APIView):
                                  'The new name is the same to the old')
 
             newname = check_filename_with_rename(repo_id, parent_dir, newname)
+            newname_utf8 = newname.encode('utf-8')
             try:
                 seafserv_threaded_rpc.rename_file (repo_id, parent_dir_utf8,
                                                    oldname_utf8, newname,
@@ -643,7 +643,7 @@ class FileView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname)
+                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname_utf8)
                 return resp
 
         elif operation.lower() == 'move':
@@ -741,7 +741,7 @@ class FileSharedLinkView(APIView):
     
     def put(self, request, repo_id, format=None):
         # generate file shared link
-        path = unquote(request.DATA.get('p', ''))
+        path = unquote(request.DATA.get('p', '').encode('utf-8'))
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
@@ -838,6 +838,7 @@ class DirView(APIView):
         operation = request.POST.get('operation', '')
         if operation.lower() == 'mkdir':
             parent_dir = os.path.dirname(path)
+            parent_dir_utf8 = parent_dir.encode('utf-8')
             new_dir_name = os.path.basename(path)
             new_dir_name = check_filename_with_rename(repo_id, parent_dir,
                                                       new_dir_name)
@@ -856,7 +857,7 @@ class DirView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir) + \
+                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
                     quote(new_dir_name_utf8)
             return resp
         # elif operation.lower() == 'rename':

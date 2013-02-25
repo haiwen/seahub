@@ -1772,7 +1772,7 @@ def get_repo_download_url(request, repo_id):
         return '', _(u"Invalid server setting")
 
     ccnet_applet_root = get_ccnetapplet_root()
-    email = urllib2.quote(request.user.username)
+    email = urllib2.quote(request.user.username.encode('utf-8'))
 
     url = ccnet_applet_root + "/repo/download/"
     
