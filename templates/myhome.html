@@ -54,18 +54,23 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Space used" %}</h3>
     <div class="info-item-bottom">
-        {% if CALC_SHARE_USAGE %}
+      {% if CALC_SHARE_USAGE %}
         <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
-        <a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
+          {% if LANGUAGE_CODE == 'zh-cn' %}
+            <a href="http://www.seafile.com/help/quota/" target="_blank" id="quota-bar">
+          {% else %}
+            <a href="http://www.seafile.com/en/help/quota/" target="_blank" id="quota-bar">
+          {% endif %}
+          <span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
         {% endif %}
         <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
-        {% else %}
+      {% else %}
         <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
-        <div id="quota-bar"><span id="quota-usage"></span></div>
+          <div id="quota-bar"><span id="quota-usage"></span></div>
         {% endif %}
-        {% endif %}
+      {% endif %}
     </div>
 </div>
 
