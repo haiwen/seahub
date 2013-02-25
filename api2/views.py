@@ -594,7 +594,6 @@ class FileView(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
-        print file_id
         return get_repo_file(request, repo_id, file_id, file_name, 'download')
 
     def post(self, request, repo_id, format=None):
@@ -618,15 +617,14 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'Newname is missing')
-            newname = unquote(newname).decode('utf-8')
+            newname = unquote(newname.encode('utf-8'))
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
             
             parent_dir = os.path.dirname(path)
-            parent_dir_utf8 = parent_dir.decode('utf-8')
+            parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
-            oldname_utf8 = oldname.decode('utf-8')
-
+            oldname_utf8 = oldname.encode('utf-8')
             if oldname == newname:
                 return api_error(status.HTTP_409_CONFLICT,
                                  'The new name is the same to the old')
@@ -638,7 +636,7 @@ class FileView(APIView):
                                                    request.user.username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
-                                 "Failed to rename file.")
+                                 "Failed to rename file: %s" % e)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 reloaddir(request, repo_id, parent_dir)
@@ -650,13 +648,13 @@ class FileView(APIView):
 
         elif operation.lower() == 'move':
             src_dir = os.path.dirname(path)
-            src_dir_utf8 = src_dir.decode('utf-8')
+            src_dir_utf8 = src_dir.encode('utf-8')
             src_repo_id = repo_id
             dst_repo_id = request.POST.get('dst_repo', '')
-            dst_dir = unquote(request.POST.get('dst_dir', ''))
+            dst_dir = request.POST.get('dst_dir', '')
+            dst_dir_utf8 = dst_dir.encode('utf-8')
             if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
                 dst_dir += '/'  
-            dst_dir_utf8 = dst_dir.decode('utf-8')
             # obj_names   = request.POST.get('obj_names', '')
 
             if not (dst_repo_id and dst_dir):
@@ -675,10 +673,10 @@ class FileView(APIView):
             #                              'Can not move a dirctory to its subdir')
             
             filename = os.path.basename(path)
-            filename_utf8 = filename.decode('utf-8')
+            filename_utf8 = filename.encode('utf-8')
             new_filename = check_filename_with_rename(dst_repo_id, dst_dir,
                                                       filename)
-            new_filename_utf8 = new_filename.decode('utf-8')
+            new_filename_utf8 = new_filename.encode('utf-8')
 
             try:
                 seafserv_threaded_rpc.move_file(src_repo_id, src_dir_utf8,
@@ -720,8 +718,8 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         parent_dir = os.path.dirname(path)
-        parent_dir_utf8 = os.path.dirname(path).decode('utf-8')
-        file_name_utf8 = os.path.basename(path).decode('utf-8')
+        parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
+        file_name_utf8 = os.path.basename(path).encode('utf-8')
 
         try:
             seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
@@ -840,12 +838,11 @@ class DirView(APIView):
         operation = request.POST.get('operation', '')
         if operation.lower() == 'mkdir':
             parent_dir = os.path.dirname(path)
-            parent_dir = parent_dir.decode('utf-8')
             new_dir_name = os.path.basename(path)
             new_dir_name = check_filename_with_rename(repo_id, parent_dir,
                                                       new_dir_name)
-            new_dir_name_utf8 = new_dir_name.decode('utf-8')
-
+            new_dir_name_utf8 = new_dir_name.encode('utf-8')
+            
             try:
                 seafserv_threaded_rpc.post_dir(repo_id, parent_dir,
                                                new_dir_name,
@@ -891,8 +888,8 @@ class DirView(APIView):
             path = path[:-1]
             
         parent_dir = os.path.dirname(path)
-        parent_dir_utf8 = os.path.dirname(path).decode('utf-8')
-        file_name_utf8 = os.path.basename(path).decode('utf-8')
+        parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
+        file_name_utf8 = os.path.basename(path).encode('utf-8')
 
         try:
             seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
