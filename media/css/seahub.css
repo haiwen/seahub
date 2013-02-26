@@ -309,6 +309,7 @@ textarea:-moz-placeholder {/* for FF */
 .tabnav {
     height:37px;
     border-bottom:1px solid #ddd;
+    margin-bottom:16px;
 }
 .tabnav-tabs {
     display:inline-block;
@@ -632,7 +633,9 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-container h4,
 #simplemodal-container label {
     font-weight:bold;
-    
+}
+#simplemodal-container label {
+    margin:8px 0 4px;
 }
 .simplemodal-close {
     margin-left:5px;
@@ -1097,9 +1100,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #recycle-btn {
     background-position:3px -29px;
-}
-#repo-setting-form input[name^="repo"] {
-    width:100%;
 }
 #repo-setting-btn {
     background-position:3px -53px;

@@ -258,9 +258,9 @@
     <form id="repo-setting-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans "Library Settings" %}</h3>
         <label>{% trans "Name" %}</label><br />
-        <input type="text" name="repo_name" value="{{ repo.name }}" /><br />
+        <input type="text" name="repo_name" value="{{ repo.name }}" class="long-input" /><br />
         <label>{% trans "Description" %}</label></br />
-        <input type="text" name="repo_desc" value="{{ repo.desc }}" /><br />
+        <input type="text" name="repo_desc" value="{{ repo.desc }}" class="long-input" /><br />
         <label>{% trans "History" %}</label><br />
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} /> {% trans "Keep full history" %}<br />
