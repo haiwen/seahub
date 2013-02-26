@@ -564,6 +564,17 @@ def repo_save_settings(request):
     form = RepoSettingForm(request.POST)
     if form.is_valid():
         repo_id = form.cleaned_data['repo_id']
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        days = form.cleaned_data['days']
+        
+        repo = get_repo(repo_id)
+        if not repo:
+            err_msg = _(u'Library does not exist.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=400, content_type=content_type)
+
+        # check permission
         if request.user.org:
             is_owner = True if is_org_repo_owner(
                 request.user.org['org_id'], repo_id, username) else False
@@ -574,18 +585,14 @@ def repo_save_settings(request):
             return HttpResponse(json.dumps({'error': err_msg}),
                                 status=403, content_type=content_type)
 
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        days = form.cleaned_data['days']
+        # Edit library info (name, descryption).
+        if repo.name != repo_name or repo.desc != repo_desc:
+            if not edit_repo(repo_id, repo_name, repo_desc, username):
+                err_msg = _(u'Failed to edit repo information.')
+                return HttpResponse(json.dumps({'error': err_msg}),
+                                    status=500, content_type=content_type)
 
-        if edit_repo(repo_id, repo_name, repo_desc, username):
-            return HttpResponse(json.dumps({'success': True}),
-                                content_type=content_type)
-        else:
-            err_msg = _(u'Failed to edit repo information.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=500, content_type=content_type)
-
+        # set library history
         res = set_repo_history_limit(repo_id, days)
         if res == 0:
             messages.success(request, _(u'Settings saved.'))
