@@ -162,6 +162,15 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
 }
 {% endif %}
 
+{% if filetype == 'Video' %}
+      $('#file-view').html('<div class="video-container"><video src="{{raw_path}}" width="800" height="400"></video></div>');
+$('video').mediaelementplayer(/* Options */);
+{% endif %}
+
+{% if filetype == 'Audio' %}
+      $('#file-view').html('<div class="audio-container"><audio src="{{raw_path}}" width="500" height="30"></audio></div>');
+$('audio').mediaelementplayer(/* Options */);
+{% endif %}
 {% if filetype == 'Unknown' %}
 $('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file cannot be viewed online." %}</p></div>');
 {% endif %}

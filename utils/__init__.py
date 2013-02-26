@@ -45,6 +45,8 @@ PREVIEW_FILEEXT = {
     'PDF': ('pdf',),
     'Markdown': ('markdown', 'md'),
     'Sf': ('seaf',),
+    'Video': ('mp4', 'ogv', 'webm', 'flv'),
+    'Audio': ('mp3',),
 }
 
 def gen_fileext_type_map():
