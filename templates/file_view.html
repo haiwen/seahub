@@ -48,7 +48,7 @@
 
                 {% if filetype == 'Markdown' or filetype == 'Text' %}
                     {% if last_commit_id %}
-                    <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}">{% trans "Detail"%}</a>.</span>
+                    <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
                     {% endif %}
                 {% else %}
                     {% if last_commit_id %}
@@ -73,7 +73,9 @@
 
                 {% if not read_only %}
                 {% if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf' %}
+                {% if not err %}
                 <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
+                {% endif %}
                 {% endif %}
                 {% endif %}
             {% endif %}

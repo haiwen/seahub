@@ -95,6 +95,7 @@
          </div>
     </div>
     <div id="file-edit">
+        {% include 'snippets/file_encoding.html' %}
         {% if err %}
             <div id="edit-tip" class="article">
                 <p class="error">{{ err }}</p>
@@ -228,7 +229,7 @@ function editSubmit() {
         cache: false,
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
-        data: {content: content, encoding: '{{ encoding }}'},
+        data: {content: content, encoding: $('#file-enc').val()},
         success: function(data) {
             location.href = $('#file-edit-cancel').attr('href');
         },

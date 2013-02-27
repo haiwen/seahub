@@ -80,7 +80,7 @@ try:
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
-    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+    FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
 try:
     from cStringIO import StringIO
@@ -1279,7 +1279,11 @@ def repo_view_file(request, repo_id):
     filename = urllib2.quote(u_filename.encode('utf-8'))
     comment_open = request.GET.get('comment_open', '')
     page_from = request.GET.get('from', '')
-    file_enc = request.GET.get('file_enc', 'auto')
+    # enc option a user chose
+    file_enc = request.GET.get('file_enc', 'auto') 
+    # a user may modify the value of 'file_enc' in the address bar of a browser
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
 
     commit_id = request.GET.get('commit_id', '')
     view_history = True if commit_id else False
@@ -1337,7 +1341,10 @@ def repo_view_file(request, repo_id):
     raw_path = gen_file_get_url(token, filename)
    
     # get file content
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    file_encoding_list = FILE_ENCODING_LIST
+    if encoding and encoding not in FILE_ENCODING_LIST:
+        file_encoding_list.append(encoding)
 
     img_prev = None
     img_next = None
@@ -1379,7 +1386,8 @@ def repo_view_file(request, repo_id):
                 'raw_path': raw_path,
                 'err': err,
                 'file_content': file_content,
-                'file_enc': file_enc,
+                'encoding': encoding,
+                'file_encoding_list':file_encoding_list,
                 'swf_exists': swf_exists,
                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
                 'page_from': page_from,
@@ -1458,6 +1466,8 @@ def repo_view_file(request, repo_id):
             'err': err,
             'file_content': file_content,
             'file_enc': file_enc,
+            'encoding': encoding,
+            'file_encoding_list':file_encoding_list,
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
             'comments': comments,
@@ -1530,49 +1540,50 @@ def file_comment(request):
 def repo_file_get(raw_path, file_enc):
     err = ''
     file_content = ''
-    encoding = ''
-    if file_enc in FILE_ENCODING_LIST and file_enc != 'auto':
+    encoding = None
+    if file_enc != 'auto':
         encoding = file_enc
 
     try:
         file_response = urllib2.urlopen(raw_path)
         if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses 10M, can not be previewed online.')
-            return err, '', ''
+            return err, '', None
         else:
             content = file_response.read()
     except urllib2.HTTPError, e:
         err = _(u'HTTPError: failed to open file online')
-        return err, '', ''
+        return err, '', None
     except urllib2.URLError as e:
         err = _(u'URLError: failed to open file online')
-        return err, '', ''
+        return err, '', None
     else:
         if encoding:
             try:
                 u_content = content.decode(encoding)
             except UnicodeDecodeError:
                 err = _(u'The encoding you chose is not proper.')
-                return err, '', ''
+                return err, '', encoding
         else:
-            try:
-                u_content = content.decode('utf-8')
-                encoding = 'utf-8'
-            except UnicodeDecodeError:
+            for enc in FILE_ENCODING_TRY_LIST:
                 try:
-                    u_content = content.decode('gbk')
-                    encoding = 'gbk'
+                    u_content = content.decode(enc)
+                    encoding = enc
+                    break
                 except UnicodeDecodeError:
-                    encoding = chardet.detect(content)['encoding']
-                    if encoding != None:
-                        try:
-                            u_content = content.decode(encoding)
-                        except UnicodeDecodeError:
+                    if enc != FILE_ENCODING_TRY_LIST[-1]:
+                        continue
+                    else:
+                        encoding = chardet.detect(content)['encoding']
+                        if encoding:
+                            try:
+                                u_content = content.decode(encoding)
+                            except UnicodeDecodeError:
+                                err = _(u'Unknown file encoding')
+                                return err, '', ''
+                        else:
                             err = _(u'Unknown file encoding')
                             return err, '', ''
-                    else:
-                        err = _(u'Unknown file encoding')
-                        return err, '', ''
 
         file_content = u_content
 
@@ -1582,6 +1593,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
     err = ''
     file_content = ''
     swf_exists = False
+    encoding = None
 
     if filetype == 'Image':
         img = Image.open(StringIO(urllib2.urlopen(raw_path).read()))
@@ -1606,7 +1618,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
             # can't preview PDF
             filetype = 'Unknown'
     
-    return err, file_content, swf_exists, filetype
+    return err, file_content, swf_exists, filetype, encoding
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
@@ -1708,7 +1720,8 @@ def file_edit(request, repo_id):
     op = None
     err = ''
     file_content = None
-    encoding = ''
+    encoding = None
+    file_encoding_list = FILE_ENCODING_LIST
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf': 
         if repo.encrypted:
             repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
@@ -1717,7 +1730,11 @@ def file_edit(request, repo_id):
         if not op:
             raw_path = gen_file_get_url(token, filename)
             file_enc = request.GET.get('file_enc', 'auto')
+            if not file_enc in FILE_ENCODING_LIST:
+                file_enc = 'auto'
             err, file_content, encoding = repo_file_get(raw_path, file_enc)
+            if encoding and encoding not in FILE_ENCODING_LIST:
+                file_encoding_list.append(encoding)
     else:
         err = _(u'Edit online is not offered for this type of file.')
 
@@ -1732,6 +1749,7 @@ def file_edit(request, repo_id):
         'err':err,
         'file_content':file_content,
         'encoding': encoding,
+        'file_encoding_list':file_encoding_list,
         'head_id': head_id,
     }, context_instance=RequestContext(request))
 
@@ -2635,7 +2653,12 @@ def view_shared_file(request, token):
 
     # get file content
     file_enc = request.GET.get('file_enc', 'auto')
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
+    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    file_encoding_list = FILE_ENCODING_LIST
+    if encoding and encoding not in FILE_ENCODING_LIST:
+        file_encoding_list.append(encoding)
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
@@ -2655,7 +2678,8 @@ def view_shared_file(request, token):
             'username': username,
             'err': err,
             'file_content': file_content,
-            'file_enc': file_enc,
+            'encoding': encoding,
+            'file_encoding_list':file_encoding_list,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             }, context_instance=RequestContext(request))
@@ -2739,7 +2763,12 @@ def view_file_via_shared_dir(request, token):
     raw_path = gen_file_get_url(access_token, quote_filename)
     # get file content
     file_enc = request.GET.get('file_enc', 'auto')
-    err, file_content, swf_exists, filetype = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
+    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
+    file_encoding_list = FILE_ENCODING_LIST
+    if encoding and encoding not in FILE_ENCODING_LIST:
+        file_encoding_list.append(encoding)
 
     zipped = gen_path_link(path, '')
         
@@ -2756,7 +2785,8 @@ def view_file_via_shared_dir(request, token):
             'username': username,
             'err': err,
             'file_content': file_content,
-            'file_enc': file_enc,
+            'encoding': encoding,
+            'file_encoding_list':file_encoding_list,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'zipped': zipped,
@@ -2863,7 +2893,7 @@ def repo_set_password(request):
         return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
                 status=400, content_type=content_type)
 
-def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
+def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:
         obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
                                         commit_id, path)
@@ -2887,7 +2917,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path):
         raw_path = gen_file_get_url(token, urllib2.quote(filename))
 
         try:
-            err, file_content, encoding = repo_file_get(raw_path)
+            err, file_content, encoding = repo_file_get(raw_path, file_enc)
         except Exception, e:
             return None, 'error when read file from httpserver: %s' % e
         return file_content, err
@@ -2897,6 +2927,9 @@ def text_diff(request, repo_id):
     commit_id = request.GET.get('commit', '')
     path = request.GET.get('p', '')
     u_filename = os.path.basename(path)
+    file_enc = request.GET.get('file_enc', 'auto') 
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
 
     if not (commit_id and path):
         return render_error(request, 'bad params')
@@ -2916,12 +2949,12 @@ def text_diff(request, repo_id):
     path = path.encode('utf-8')
 
     current_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, current_commit.id, path)
+                                    repo_id, current_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
         
     prev_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, prev_commit.id, path)
+                                    repo_id, prev_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
 

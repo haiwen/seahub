@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if filetype == 'Text' or filetype == 'Sf' or filetype == 'Markdown' %}
+    {% if encoding != None %}
+    <div id="file-enc-cont">
+        <label for="file-enc">{% trans "Encoding:" %}</label>
+        <select id="file-enc">
+            {% for enc in file_encoding_list %}
+            <option value="{{ enc }}" {% if encoding and encoding == enc %} selected="selected" {% endif %}>{% if enc == 'auto'%}{% trans "auto detect" %}{% else %}{{ enc }}{% endif %}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+{% endif %}
