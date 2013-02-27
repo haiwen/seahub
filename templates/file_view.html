@@ -156,18 +156,23 @@
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
 {% if filetype == 'Image' %}
+{% if img_prev or img_next %}
 $('body').bind('keydown', function(e) {
-    {% if img_prev %}
-    if (e.keyCode == 37) { // press '<-'
-        location.href = $('#img-prev').attr('href');
+    var e = e || event;
+    if (e.target == $('body')[0]) { // so cursor move in form input element can work normally
+        {% if img_prev %}
+        if (e.keyCode == 37) { // press '<-'
+            location.href = $('#img-prev').attr('href');
+        }
+        {% endif %}
+        {% if img_next %}
+        if (e.keyCode == 39) { // press '->'
+            location.href = $('#img-next').attr('href');
+        }
+        {% endif %}
     }
-    {% endif %}
-    {% if img_next %}
-    if (e.keyCode == 39) { // press '->'
-        location.href = $('#img-next').attr('href');
-    }
-    {% endif %}
 })
+{% endif %}
 {% endif %}
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
