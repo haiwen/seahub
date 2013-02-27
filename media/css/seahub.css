@@ -1590,6 +1590,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     -moz-border-radius:3px;
 }
+#pdf-view {
+    max-width:950px;
+}
 #op-after-edit {
     margin-top:.9em;
 }

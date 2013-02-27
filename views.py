@@ -1390,6 +1390,7 @@ def repo_view_file(request, repo_id):
                 'file_encoding_list':file_encoding_list,
                 'swf_exists': swf_exists,
                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+                'use_pdfjs':USE_PDFJS,
                 'page_from': page_from,
                 'basedir': basedir,
                 'days': days,
@@ -1474,6 +1475,7 @@ def repo_view_file(request, repo_id):
             'comment_open':comment_open,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+            'use_pdfjs':USE_PDFJS,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,
@@ -2682,6 +2684,7 @@ def view_shared_file(request, token):
             'file_encoding_list':file_encoding_list,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+            'use_pdfjs':USE_PDFJS,
             }, context_instance=RequestContext(request))
 
 def view_shared_dir(request, token):
@@ -2789,6 +2792,7 @@ def view_file_via_shared_dir(request, token):
             'file_encoding_list':file_encoding_list,
             'swf_exists': swf_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+            'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
             'token': token,
             }, context_instance=RequestContext(request))
