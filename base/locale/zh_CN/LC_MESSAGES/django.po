@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-31 13:07+0800\n"
+"POT-Creation-Date: 2013-02-28 16:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: accounts.py:347
+#: accounts.py:344
 msgid "Email address"
 msgstr ""
 
-#: accounts.py:352
+#: accounts.py:349
 msgid "Username"
 msgstr ""
 
-#: accounts.py:353
+#: accounts.py:350
 msgid "This value must be of length 40"
 msgstr ""
 
-#: accounts.py:356
+#: accounts.py:353
 msgid "Password"
 msgstr ""
 
-#: accounts.py:358
+#: accounts.py:355
 msgid "Password (again)"
 msgstr ""
 
-#: accounts.py:366
+#: accounts.py:363
 msgid "A user with this email already"
 msgstr ""
 
-#: accounts.py:370
+#: accounts.py:367
 msgid "Invalid user id."
 msgstr ""
 
-#: accounts.py:383
+#: accounts.py:380
 msgid "The two password fields didn't match."
 msgstr ""
 
@@ -54,95 +54,99 @@ msgstr ""
 msgid "Enter a valid e-mail address."
 msgstr ""
 
-#: templatetags/seahub_tags.py:80
+#: templatetags/seahub_tags.py:81
 msgid "Added"
 msgstr "添加了"
 
-#: templatetags/seahub_tags.py:81
+#: templatetags/seahub_tags.py:82
 msgid "Deleted"
 msgstr "删除了"
 
-#: templatetags/seahub_tags.py:82
+#: templatetags/seahub_tags.py:83
 msgid "Removed"
 msgstr "删除了"
 
-#: templatetags/seahub_tags.py:83
+#: templatetags/seahub_tags.py:84
 msgid "Modified"
 msgstr "修改了"
 
-#: templatetags/seahub_tags.py:84
+#: templatetags/seahub_tags.py:85
 msgid "Renamed"
 msgstr "重命名或移动了"
 
-#: templatetags/seahub_tags.py:85
+#: templatetags/seahub_tags.py:86
 msgid "Moved"
 msgstr "移动了"
 
-#: templatetags/seahub_tags.py:86
+#: templatetags/seahub_tags.py:87
 msgid "Added directory"
 msgstr "新建了目录"
 
-#: templatetags/seahub_tags.py:87
+#: templatetags/seahub_tags.py:88
 msgid "Removed directory"
 msgstr "删除了目录"
 
-#: templatetags/seahub_tags.py:88
+#: templatetags/seahub_tags.py:89
 msgid "Renamed directory"
 msgstr "重命名了目录"
 
-#: templatetags/seahub_tags.py:89
+#: templatetags/seahub_tags.py:90
 msgid "Moved directory"
 msgstr "移动了目录"
 
-#: templatetags/seahub_tags.py:102
+#: templatetags/seahub_tags.py:105
 msgid "Reverted library to status at"
 msgstr "资料库内容还原到"
 
-#: templatetags/seahub_tags.py:104
+#: templatetags/seahub_tags.py:107
 msgid "Reverted file to status at"
 msgstr "文件内容还原到"
 
-#: templatetags/seahub_tags.py:106
+#: templatetags/seahub_tags.py:109
 msgid "Recovered deleted directory"
 msgstr "还原已删除的目录"
 
-#: templatetags/seahub_tags.py:108
+#: templatetags/seahub_tags.py:111
+msgid "Changed library name or description"
+msgstr "修改了资料库名称或描述"
+
+#: templatetags/seahub_tags.py:113
 msgid "Auto merge by seafile system"
 msgstr "系统自动合并修改"
 
-#: templatetags/seahub_tags.py:164 templatetags/seahub_tags.py:198
+#: templatetags/seahub_tags.py:169 templatetags/seahub_tags.py:203
 msgid "Just now"
 msgstr "刚才"
 
-#: templatetags/seahub_tags.py:173
+#: templatetags/seahub_tags.py:178
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d 天前"
 
-#: templatetags/seahub_tags.py:180
+#: templatetags/seahub_tags.py:185
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d 小时前"
 
-#: templatetags/seahub_tags.py:187
+#: templatetags/seahub_tags.py:192
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "%(minutes)d 分钟前"
 
-#: templatetags/seahub_tags.py:193
+#: templatetags/seahub_tags.py:198
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d 秒前"
 
-#: templatetags/seahub_tags.py:273
+#: templatetags/seahub_tags.py:278
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templatetags/seahub_tags.py:275
+#: templatetags/seahub_tags.py:280
 msgid "Read-Only"
 msgstr "只读"
 

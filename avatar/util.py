@@ -22,7 +22,7 @@ def get_grp_cache_key(group_id, size):
     """
     Returns a cache key consisten of a group id and iamge size.
     """
-    return 'Group_%s_%s' % (group_id, size)
+    return 'Group__%s_%s' % (group_id, size)
 
 def cache_result(func):
     """
