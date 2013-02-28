@@ -894,7 +894,8 @@ def repo_history_changes(request, repo_id):
         changes['cmt_desc'] = repo.desc
     elif c.second_parent_id is None:
         # Normal commit only has one parent.
-        changes['cmt_desc'] = c.desc
+        if c.desc.startswith('Changed library'):
+            changes['cmt_desc'] = _('Changed library name or description')
     else:
         # A commit is a merge only if it has two parents.
         changes['cmt_desc'] = _('No conflict in the merge.')

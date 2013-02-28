@@ -157,8 +157,8 @@ def count_emailusers():
     try:
         ret = ccnet_threaded_rpc.count_emailusers()
     except SearpcError:
-        ret = 0
-    return ret
+        ret = -1
+    return 0 if ret < 0 else ret
 
 def get_session_info():
     return ccnet_rpc.get_session_info()
@@ -666,8 +666,8 @@ def count_inner_pub_repos():
     try:
         ret = seafserv_threaded_rpc.count_inner_pub_repos()
     except SearpcError:
-        ret = 0
-    return ret
+        ret = -1
+    return 0 if ret < 0 else ret
 
 def is_inner_pub_repo(repo_id):
     """
