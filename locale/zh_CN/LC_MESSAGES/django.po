@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-31 11:41+0800\n"
+"POT-Creation-Date: 2013-02-28 15:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,10 +133,18 @@ msgid "Quota is too low (minimum value is 0)"
 msgstr "容量太小（最小为0）"
 
 #: forms.py:222
+msgid "Library name is required"
+msgstr "资料库名称为必填项"
+
+#: forms.py:223
+msgid "Library description is required"
+msgstr "资料库描述为必填项"
+
+#: forms.py:224
 msgid "Days can't be empty"
 msgstr "天数不能为空"
 
-#: forms.py:223
+#: forms.py:225
 msgid "Please enter a number"
 msgstr "请输入数字"
 
@@ -156,223 +164,255 @@ msgstr ""
 msgid "Deutsch"
 msgstr ""
 
-#: views.py:538
+#: settings.py:103
+msgid "Español"
+msgstr ""
+
+#: settings.py:104
+msgid "Italiano"
+msgstr ""
+
+#: views.py:535
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: views.py:559
+#: views.py:561
+msgid "Library does not exist."
+msgstr "资料库不存在"
+
+#: views.py:572
+msgid "You do not have permission to perform this action."
+msgstr "你没有权限进行该操作"
+
+#: views.py:579
+msgid "Failed to edit library information."
+msgstr "资料库信息编辑失败。"
+
+#: views.py:586
 msgid "Settings saved."
 msgstr "设置已保存。"
 
-#: views.py:562
+#: views.py:590
 msgid "Failed to save settings on server"
 msgstr "设置失败"
 
-#: views.py:569
+#: views.py:597
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: views.py:571
+#: views.py:599
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: views.py:573
+#: views.py:601
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views.py:575 views.py:1320 views.py:2578 views.py:2706
+#: views.py:603 views.py:1299 views.py:2625 views.py:2743
 msgid "File does not exist"
 msgstr "文件不存在"
 
-#: views.py:577
+#: views.py:605
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: views.py:579
+#: views.py:607
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: views.py:581
+#: views.py:609
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: views.py:592 views.py:613
+#: views.py:620 views.py:641
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: views.py:678
+#: views.py:706
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: views.py:725
+#: views.py:753
 msgid "Unable to view library snapshots"
 msgstr "无法查看该资料库镜像"
 
-#: views.py:775
+#: views.py:803
 msgid "You have no permission to restore library"
 msgstr "你没有权限进行还原操作"
 
-#: views.py:791
+#: views.py:819
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views.py:797 views.py:1590 views.py:2453 views.py:2488 views.py:2920
+#: views.py:825 views.py:1630 views.py:2500 views.py:2535 views.py:2995
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views.py:799 views.py:891 views.py:2400 views.py:2935
+#: views.py:827 views.py:919 views.py:2447 views.py:3010
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
-#: views.py:801
+#: views.py:829
 msgid "History you specified does not exist"
 msgstr "指定的历史记录不存在"
 
-#: views.py:803
+#: views.py:831
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: views.py:911 views.py:927
+#: views.py:900
+msgid "No conflict in the merge."
+msgstr "合并没有冲突。"
+
+#: views.py:939 views.py:955
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views.py:1216
-msgid "Failed to create repo"
-msgstr "创建失败"
+#: views.py:1186 views.py:2421
+msgid "Failed to create library"
+msgstr "创建资料库失败"
 
-#: views.py:1234
-msgid "Operation successful"
-msgstr "操作成功"
+#: views.py:1204
+msgid "Failed to unshare the library, as it does not exist."
+msgstr "取消共享失败，该资料库不存在"
 
-#: views.py:1236
-msgid "Operation failed"
-msgstr "操作失败"
+#: views.py:1209
+msgid "Unshare \"%s\" successfully."
+msgstr "\"%s\" 取消共享成功"
 
-#: views.py:1267
+#: views.py:1211
+msgid "Failed to unshare \"%s\"."
+msgstr "\"%s\" 取消共享失败"
+
+#: views.py:1241
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views.py:1274
+#: views.py:1248
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views.py:1276
+#: views.py:1250
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views.py:1336 views.py:1658
+#: views.py:1315 views.py:1698
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views.py:1541
+#: views.py:1540
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views.py:1546
+#: views.py:1545
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views.py:1549
+#: views.py:1548
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views.py:1561
+#: views.py:1555
+msgid "The encoding you chose is not proper."
+msgstr "文件编码不合适"
+
+#: views.py:1572 views.py:1575
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views.py:1570 views.py:2967
+#: views.py:1610 views.py:3042
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views.py:1576 views.py:2242 views.py:2273 views.py:2307
+#: views.py:1616 views.py:2289 views.py:2320 views.py:2354
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views.py:1580
+#: views.py:1620
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views.py:1584
+#: views.py:1624
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: views.py:1637
+#: views.py:1677
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views.py:1652
+#: views.py:1692
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: views.py:1678
+#: views.py:1724
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
-#: views.py:1732
+#: views.py:1779
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views.py:1748
+#: views.py:1795
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views.py:1759
+#: views.py:1806
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views.py:1802
+#: views.py:1849
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views.py:1808
+#: views.py:1855
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views.py:1821
+#: views.py:1868
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views.py:1822
+#: views.py:1869
 msgid "copy"
 msgstr "复制"
 
-#: views.py:1822
+#: views.py:1869
 msgid "move"
 msgstr "移动"
 
-#: views.py:1837
+#: views.py:1884
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1843
+#: views.py:1890
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views.py:1958
+#: views.py:2005
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:2046 templates/sys_useradmin.html:78
+#: views.py:2093 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: views.py:2062
+#: views.py:2109
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views.py:2067
+#: views.py:2114
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -381,12 +421,12 @@ msgstr ""
 "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
 "件配置。"
 
-#: views.py:2071
+#: views.py:2118
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views.py:2074
+#: views.py:2121
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -396,73 +436,69 @@ msgstr ""
 "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
 "邮件无法发送。"
 
-#: views.py:2077
+#: views.py:2124
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views.py:2098
+#: views.py:2145
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views.py:2133
+#: views.py:2180
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views.py:2136
+#: views.py:2183
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views.py:2138
+#: views.py:2185
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views.py:2140
+#: views.py:2187
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views.py:2319
+#: views.py:2366
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views.py:2374
-msgid "Failed to create library"
-msgstr "创建资料库失败"
-
-#: views.py:2474
+#: views.py:2521
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views.py:2478 views.py:2504
+#: views.py:2525 views.py:2551
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views.py:2500
+#: views.py:2547
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views.py:2764 utils/__init__.py:84
+#: views.py:2791 utils/__init__.py:86
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views.py:2970
+#: views.py:3045
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: views.py:2977
+#: views.py:3052
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -494,12 +530,12 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
-#: templates/file_edit.html:93 templates/file_edit.html.py:126
-#: templates/file_view.html:94 templates/file_view.html.py:122
-#: templates/repo.html:267 templates/repo.html.py:279 templates/repo.html:295
-#: templates/repo.html.py:316 templates/repo.html:328
-#: templates/repo.html.py:340 templates/userinfo.html:95
-#: templates/registration/login.html:13
+#: templates/file_edit.html:93 templates/file_edit.html.py:127
+#: templates/file_view.html:98 templates/file_view.html.py:126
+#: templates/repo.html:271 templates/repo.html.py:283 templates/repo.html:309
+#: templates/repo.html.py:330 templates/repo.html:342
+#: templates/repo.html.py:354 templates/userinfo.html:95
+#: templates/registration/login.html:18
 #: templates/registration/password_change_form.html:18
 #: templates/registration/password_reset_confirm.html:19
 #: templates/registration/password_reset_form.html:13
@@ -533,17 +569,22 @@ msgid "The two password fields not match"
 msgstr "两次输入的密码不一致"
 
 #: templates/admin_base.html:8 templates/org_admin_base.html:11
-#: templates/snippets/my_owned_repos.html:3
+#: templates/pubgrp.html:14 templates/pubrepo.html:14
+#: templates/pubuser.html:14 templates/snippets/my_owned_repos.html:3
+#: templates/snippets/pubinfo.html:5
 msgid "Libraries"
 msgstr "资料库"
 
-#: templates/admin_base.html:11 templates/pubinfo.html:8
+#: templates/admin_base.html:11 templates/pubgrp.html:16
+#: templates/pubrepo.html:16 templates/pubuser.html:16
+#: templates/snippets/pubinfo.html:7
 msgid "Users"
 msgstr "成员"
 
 #: templates/admin_base.html:14 templates/myhome_base.html:11
 #: templates/org_admin_base.html:14 templates/org_base.html:12
-#: templates/pubinfo.html:22
+#: templates/pubgrp.html:15 templates/pubrepo.html:15
+#: templates/pubuser.html:15 templates/snippets/pubinfo.html:6
 msgid "Groups"
 msgstr "群组"
 
@@ -653,7 +694,7 @@ msgstr ""
 msgid "Password: "
 msgstr "密码："
 
-#: templates/file_edit.html:76 templates/file_view.html:76
+#: templates/file_edit.html:76 templates/file_view.html:77
 #: templates/myhome.html:11 templates/myhome.html.py:14
 msgid "Edit"
 msgstr "编辑"
@@ -672,51 +713,51 @@ msgstr "继续修改"
 msgid "Preview"
 msgstr "预览"
 
-#: templates/file_edit.html:94 templates/file_edit.html.py:127
-#: templates/repo.html:229 templates/repo.html.py:251 templates/repo.html:268
-#: templates/repo.html.py:280 templates/repo.html:296
-#: templates/repo.html.py:317 templates/repo.html:329
+#: templates/file_edit.html:94 templates/file_edit.html.py:128
+#: templates/repo.html:229 templates/repo.html.py:251 templates/repo.html:272
+#: templates/repo.html.py:284 templates/repo.html:310
+#: templates/repo.html.py:331 templates/repo.html:343
 #: templates/snippets/events.html:15
 msgid "Cancel"
 msgstr "取消"
 
-#: templates/file_edit.html:121 templates/snippets/events.html:8
+#: templates/file_edit.html:122 templates/snippets/events.html:8
 #: templates/snippets/my_owned_repos.html:102
 msgid "Library"
 msgstr "资料库"
 
-#: templates/file_edit.html:121 templates/snippets/events.html:8
+#: templates/file_edit.html:122 templates/snippets/events.html:8
 msgid "is encrypted"
 msgstr "已加密"
 
-#: templates/file_edit.html:122 templates/snippets/events.html:10
+#: templates/file_edit.html:123 templates/snippets/events.html:10
 msgid "Password："
 msgstr "密码："
 
-#: templates/file_edit.html:124 templates/snippets/events.html:12
+#: templates/file_edit.html:125 templates/snippets/events.html:12
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存一小时。"
 
-#: templates/file_edit.html:241
+#: templates/file_edit.html:246
 msgid "Submit failed. Please check the network."
 msgstr "提交失败。请检查网络是否已连接。"
 
-#: templates/file_edit.html:243
+#: templates/file_edit.html:248
 msgid "Submit failed."
 msgstr "提交失败。"
 
-#: templates/file_edit.html:261 templates/snippets/repo_decrypt_js.html:11
+#: templates/file_edit.html:266 templates/snippets/repo_decrypt_js.html:11
 msgid "Password is required."
 msgstr "密码为必填项"
 
-#: templates/file_edit.html:263
+#: templates/file_edit.html:268
 msgid "Password should be 3 to 15 characters."
 msgstr "密码太长（不超过15个字符）"
 
-#: templates/file_edit.html:292 templates/file_view.html:198
-#: templates/file_view.html.py:364 templates/repo.html:411
-#: templates/repo.html.py:649 templates/repo.html:686
-#: templates/repo.html.py:829 templates/snippets/file_content_js.html:97
+#: templates/file_edit.html:297 templates/file_view.html:221
+#: templates/file_view.html.py:387 templates/repo.html:427
+#: templates/repo.html.py:665 templates/repo.html:702
+#: templates/repo.html.py:845 templates/snippets/file_content_js.html:108
 #: templates/snippets/repo_decrypt_js.html:35
 #: templates/snippets/shared_link_js.html:41
 #: templates/snippets/shared_link_js.html:60
@@ -739,7 +780,7 @@ msgstr ""
 msgid "Current Path:"
 msgstr "当前路径："
 
-#: templates/file_revisions.html:23
+#: templates/file_revisions.html:23 templates/repo_history.html:19
 msgid "Time"
 msgstr "时间"
 
@@ -753,7 +794,7 @@ msgstr "最后修改者"
 msgid "Size"
 msgstr "大小"
 
-#: templates/file_revisions.html:26 templates/public_home.html:28
+#: templates/file_revisions.html:26 templates/pubrepo.html:28
 #: templates/repo.html:114 templates/repo_recycle_view.html:56
 #: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:14
 #: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
@@ -779,8 +820,8 @@ msgstr "未知"
 msgid "Restore"
 msgstr "还原"
 
-#: templates/file_revisions.html:52 templates/file_view.html:84
-#: templates/history_file_view.html:66 templates/public_home.html:48
+#: templates/file_revisions.html:52 templates/file_view.html:86
+#: templates/history_file_view.html:66 templates/pubrepo.html:44
 #: templates/repo.html:22 templates/repo.html.py:137 templates/repo.html:182
 #: templates/shared_file_view.html:35 templates/view_shared_dir.html:48
 #: templates/view_shared_dir.html.py:66
@@ -806,7 +847,7 @@ msgid "Share link"
 msgstr "获取共享链接"
 
 #: templates/file_view.html:29 templates/repo.html:34
-#: templates/repo.html.py:335
+#: templates/repo.html.py:349
 msgid "Send"
 msgstr "发送"
 
@@ -818,11 +859,11 @@ msgstr "发送"
 msgid "Delete"
 msgstr "删除"
 
-#: templates/file_view.html:32 templates/file_view.html.py:189
+#: templates/file_view.html:32 templates/file_view.html.py:212
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/file_view.html:34 templates/file_view.html.py:186
+#: templates/file_view.html:34 templates/file_view.html.py:209
 msgid "Star"
 msgstr "添加星标"
 
@@ -841,7 +882,7 @@ msgid_plural " %(counter)s contributors "
 msgstr[0] " %(counter)s 个贡献者 "
 
 #: templates/file_view.html:66 templates/repo.html:57
-#: templates/repo.html.py:197 templates/repo.html:260
+#: templates/repo.html.py:197 templates/repo.html:264
 msgid "History"
 msgstr "历史"
 
@@ -849,79 +890,79 @@ msgstr "历史"
 msgid "Open local file"
 msgstr "打开本地文件"
 
-#: templates/file_view.html:82 templates/history_file_view.html:64
+#: templates/file_view.html:84 templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
 msgid "Raw"
 msgstr "原始文件"
 
-#: templates/file_view.html:90
+#: templates/file_view.html:94
 msgid "Send Link"
 msgstr "发送链接"
 
-#: templates/file_view.html:91 templates/repo.html:337
+#: templates/file_view.html:95 templates/repo.html:351
 msgid "Send to:"
 msgstr "发送到："
 
-#: templates/file_view.html:92 templates/repo.html:338
+#: templates/file_view.html:96 templates/repo.html:352
 msgid "Emails, Seperated by ','"
 msgstr "输入邮箱，多个以,分隔"
 
-#: templates/file_view.html:96 templates/repo.html:342
+#: templates/file_view.html:100 templates/repo.html:356
 msgid "Sending..."
 msgstr "发送中..."
 
-#: templates/file_view.html:100
+#: templates/file_view.html:104
 msgid "Processing..."
 msgstr "处理中..."
 
-#: templates/file_view.html:103
+#: templates/file_view.html:107
 msgid "You have not downloaded "
 msgstr "你还未下载"
 
-#: templates/file_view.html:103
+#: templates/file_view.html:107
 msgid "."
 msgstr "。"
 
-#: templates/file_view.html:104
+#: templates/file_view.html:108
 msgid "Click to download"
 msgstr "点此下载"
 
-#: templates/file_view.html:120
+#: templates/file_view.html:124
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/file_view.html:185
+#: templates/file_view.html:208
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/file_view.html:188
+#: templates/file_view.html:211
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/file_view.html:228
+#: templates/file_view.html:251
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/file_view.html:232
+#: templates/file_view.html:255
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/file_view.html:234
+#: templates/file_view.html:257
 msgid "The file is not synchronized, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/file_view.html:238
+#: templates/file_view.html:261
 msgid "An error occurred when open the local file."
 msgstr "打开本地文件时出错"
 
-#: templates/file_view.html:266
+#: templates/file_view.html:289
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升级</a>。"
 
-#: templates/file_view.html:280
+#: templates/file_view.html:303
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
@@ -929,11 +970,11 @@ msgstr ""
 "没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接来打开"
 "本地文件："
 
-#: templates/file_view.html:296
+#: templates/file_view.html:319
 msgid "Comment"
 msgstr "评论"
 
-#: templates/file_view.html:344
+#: templates/file_view.html:367
 msgid "Please input a message."
 msgstr "请先输入评论。"
 
@@ -1023,11 +1064,11 @@ msgstr "已用空间"
 msgid "Total"
 msgstr "总空间"
 
-#: templates/myhome.html:60 templates/myhome.html.py:62
+#: templates/myhome.html:65 templates/myhome.html.py:67
 msgid "Self"
 msgstr "个人"
 
-#: templates/myhome.html:60 templates/myhome.html.py:62
+#: templates/myhome.html:65 templates/myhome.html.py:67
 #: templates/userinfo.html:31
 msgid "Sharing"
 msgstr "共享"
@@ -1037,7 +1078,7 @@ msgid "My Home"
 msgstr "我的页面"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
-#: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
+#: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:347
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
 msgstr "共享"
@@ -1046,11 +1087,7 @@ msgstr "共享"
 msgid "Contacts"
 msgstr "通讯录"
 
-#: templates/myhome_base.html:21 templates/org_base.html:18
-msgid "Public Library"
-msgstr "公共资料"
-
-#: templates/myhome_base.html:24 templates/org_base.html:21
+#: templates/myhome_base.html:21 templates/org_base.html:21
 msgid "Public Info"
 msgstr "公共信息"
 
@@ -1058,84 +1095,64 @@ msgstr "公共信息"
 msgid "Basic Info"
 msgstr "基本信息"
 
-#: templates/pubinfo.html:16 templates/sys_group_admin.html:54
-#: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
-#: templates/userinfo.html:63 templates/userinfo.html.py:86
-msgid "Empty"
-msgstr "暂无"
+#: templates/org_base.html:18
+msgid "Public Library"
+msgstr "公共资料"
 
-#: templates/pubinfo.html:33
+#: templates/pubgrp.html:26
 msgid "Creator: "
 msgstr "创建者："
 
-#: templates/pubinfo.html:34
+#: templates/pubgrp.html:27
 msgid "Time: "
 msgstr "时间："
 
-#: templates/pubinfo.html:41
+#: templates/pubgrp.html:34
 msgid "No one has created any groups yet"
 msgstr "还没有群组被创建"
 
-#: templates/pubinfo.html:42
+#: templates/pubgrp.html:35
 msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
-#: templates/public_home.html:9
-msgid "Tips"
-msgstr "小提示"
-
-#: templates/public_home.html:11
-msgid "A library marked as read-only can be downloaded."
-msgstr "标记为只读的资料库可以被下载。"
-
-#: templates/public_home.html:12
-msgid ""
-"Afterwards, updates on server will be downloaded automatically, but updates "
-"on local files will not be uploaded."
-msgstr ""
-"之后，服务器上的修改会自动同步到本地，而本地文件的修改无法上传到服务器。"
-
-#: templates/public_home.html:18
-msgid "Public Libraries"
-msgstr "公开的资料库"
-
-#: templates/public_home.html:19 templates/snippets/my_owned_repos.html:11
+#: templates/pubrepo.html:18 templates/snippets/my_owned_repos.html:11
 #: templates/snippets/repo_create_form.html:3
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/public_home.html:24 templates/repo.html:111
-#: templates/repo_history_view.html:52 templates/repo_recycle_view.html:53
-#: templates/sys_group_admin.html:11 templates/sys_org_admin.html:11
-#: templates/sys_seafadmin.html:11 templates/userinfo.html:46
-#: templates/userinfo.html.py:71 templates/view_shared_dir.html:32
-#: templates/snippets/my_owned_repos.html:18
+#: templates/pubrepo.html:24 templates/repo.html:111
+#: templates/repo.html.py:260 templates/repo_history_view.html:52
+#: templates/repo_recycle_view.html:53 templates/sys_group_admin.html:11
+#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
+#: templates/userinfo.html:46 templates/userinfo.html.py:71
+#: templates/view_shared_dir.html:32 templates/snippets/my_owned_repos.html:18
 #: templates/snippets/my_owned_repos.html:56
 #: templates/snippets/repo_create_form.html:4
 msgid "Name"
 msgstr "名称"
 
-#: templates/public_home.html:25 templates/repo_history.html:21
-#: templates/sys_seafadmin.html:13 templates/userinfo.html:47
-#: templates/userinfo.html.py:73 templates/snippets/my_owned_repos.html:19
+#: templates/pubrepo.html:25 templates/repo.html:262
+#: templates/repo_history.html:21 templates/sys_seafadmin.html:13
+#: templates/userinfo.html:47 templates/userinfo.html.py:73
+#: templates/snippets/my_owned_repos.html:19
 #: templates/snippets/my_owned_repos.html:57
 #: templates/snippets/repo_create_form.html:6
 msgid "Description"
 msgstr "描述"
 
-#: templates/public_home.html:26 templates/repo.html:113
-#: templates/repo_history.html:19 templates/snippets/my_owned_repos.html:20
+#: templates/pubrepo.html:26 templates/repo.html:113
+#: templates/snippets/my_owned_repos.html:20
 #: templates/snippets/my_owned_repos.html:58
 #: templates/snippets/my_owned_repos.html:103
 msgid "Last Update"
 msgstr "更新时间"
 
-#: templates/public_home.html:27 templates/userinfo.html:72
+#: templates/pubrepo.html:27 templates/userinfo.html:72
 msgid "Share From"
 msgstr "共享来源"
 
-#: templates/public_home.html:34 templates/sys_seafadmin.html:18
+#: templates/pubrepo.html:34 templates/sys_seafadmin.html:18
 #: templates/userinfo.html:53 templates/userinfo.html.py:78
 #: templates/snippets/my_owned_repos.html:25
 #: templates/snippets/my_owned_repos.html:67
@@ -1144,23 +1161,33 @@ msgstr "共享来源"
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templates/public_home.html:36 templates/snippets/my_owned_repos.html:69
+#: templates/pubrepo.html:34 templates/pubrepo.html.py:36
+#: templates/repo.html:120 templates/view_shared_dir.html:39
+msgid "Directory icon"
+msgstr "目录图标"
+
+#: templates/pubrepo.html:36 templates/snippets/my_owned_repos.html:69
 #: templates/snippets/repo_create_form.html:12
 #: templates/snippets/repo_share_form.html:8
 msgid "Read-Only"
 msgstr "只读"
 
-#: templates/public_home.html:55
+#: templates/pubrepo.html:51
 msgid "No public library"
 msgstr "当前没有公共资料"
 
-#: templates/public_home.html:56
+#: templates/pubrepo.html:52
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
 "你可以点击“新建资料库”按钮创建一个公开的资料库，网站内的其他人都可以查看下载"
 "这个资料库。"
+
+#: templates/pubuser.html:32 templates/repo_history.html:33
+#: templates/repo_view_snapshot.html:30
+msgid "None"
+msgstr "无"
 
 #: templates/repo.html:11
 msgid ""
@@ -1187,7 +1214,8 @@ msgstr "这个资料库设置了只读共享，你无法修改此资料库的内
 msgid "Size: "
 msgstr "大小："
 
-#: templates/repo.html:54 templates/repo.html.py:287 templates/repo.html:288
+#: templates/repo.html:54 templates/repo.html.py:293 templates/repo.html:295
+#: templates/repo.html.py:299 templates/repo.html:301
 #: templates/repo_history.html:42 templates/repo_view_snapshot.html:39
 #: templates/snippets/events_.html:19 templates/snippets/events_.html.py:21
 msgid "Details"
@@ -1209,17 +1237,13 @@ msgstr ""
 msgid "Upload"
 msgstr "上传"
 
-#: templates/repo.html:102 templates/repo.html.py:273
+#: templates/repo.html:102 templates/repo.html.py:277
 msgid "New Directory"
 msgstr "新建目录"
 
-#: templates/repo.html:103 templates/repo.html.py:284
+#: templates/repo.html:103 templates/repo.html.py:288
 msgid "New File"
 msgstr "新建文件"
-
-#: templates/repo.html:120 templates/view_shared_dir.html:39
-msgid "Directory icon"
-msgstr "目录图标"
 
 #: templates/repo.html:130 templates/repo.html.py:176
 msgid "Fetch failed"
@@ -1241,15 +1265,15 @@ msgstr "移动"
 msgid "Copy"
 msgstr "复制"
 
-#: templates/repo.html:161 templates/repo.html.py:641
+#: templates/repo.html:161 templates/repo.html.py:657
 msgid "starred"
 msgstr "已加星标"
 
-#: templates/repo.html:163 templates/repo.html.py:639
+#: templates/repo.html:163 templates/repo.html.py:655
 msgid "unstarred"
 msgstr "未加星标"
 
-#: templates/repo.html:166 templates/repo.html.py:573 templates/repo.html:597
+#: templates/repo.html:166 templates/repo.html.py:589 templates/repo.html:613
 #: templates/repo_history_view.html:66 templates/repo_recycle_view.html:78
 #: templates/view_shared_dir.html:57
 msgid "File"
@@ -1303,100 +1327,100 @@ msgstr "获取中...请稍侯"
 msgid "Library Settings"
 msgstr "资料库设置"
 
-#: templates/repo.html:262
+#: templates/repo.html:266
 msgid "Keep full history"
 msgstr "保留所有历史"
 
-#: templates/repo.html:263
+#: templates/repo.html:267
 msgid "Don't keep history"
 msgstr "不保留历史"
 
-#: templates/repo.html:264
+#: templates/repo.html:268
 msgid "Only keep a period of history:"
 msgstr "仅保留一段时间的历史:"
 
-#: templates/repo.html:265
+#: templates/repo.html:269
 msgid "days"
 msgstr "天"
 
-#: templates/repo.html:274
+#: templates/repo.html:278
 msgid "Directory Name"
 msgstr "目录名"
 
-#: templates/repo.html:286
+#: templates/repo.html:290
 msgid "Featured File Type"
 msgstr "特色文件类型"
 
-#: templates/repo.html:287 templates/repo.html.py:288
+#: templates/repo.html:291 templates/repo.html.py:297
 msgid "Click to choose"
 msgstr "点击选择"
 
-#: templates/repo.html:287
+#: templates/repo.html:291
 msgid "online Rich Text format (experimental)."
 msgstr "在线富文本格式（实验版）"
 
-#: templates/repo.html:288
+#: templates/repo.html:297
 msgid "simple markup format."
 msgstr "简单的标记格式"
 
-#: templates/repo.html:290 templates/snippets/my_owned_repos.html:101
+#: templates/repo.html:304 templates/snippets/my_owned_repos.html:101
 msgid "File Name"
 msgstr "文件名称"
 
-#: templates/repo.html:303
+#: templates/repo.html:317
 msgid "Current Library"
 msgstr "当前资料库"
 
-#: templates/repo.html:305
+#: templates/repo.html:319
 msgid "Other Libraries"
 msgstr "其他资料库"
 
-#: templates/repo.html:315
+#: templates/repo.html:329
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: templates/repo.html:321
+#: templates/repo.html:335
 msgid "Rename <span id=\"rename-type\"></span>"
 msgstr "重命名<span id=\"rename-type\"></span>"
 
-#: templates/repo.html:322
+#: templates/repo.html:336
 msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
 msgstr "将 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名为："
 
-#: templates/repo.html:334
+#: templates/repo.html:348
 msgid "Link: "
 msgstr "链接："
 
-#: templates/repo.html:429
+#: templates/repo.html:445
 msgid "Click to remove"
 msgstr "点击删除"
 
-#: templates/repo.html:430
+#: templates/repo.html:446
 msgid "This file has already been selected:\\n$file!"
 msgstr "这个文件已经被添加：\\n$file!"
 
-#: templates/repo.html:573 templates/repo.html.py:600
+#: templates/repo.html:589 templates/repo.html.py:616
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:61
 msgid "Directory"
 msgstr "目录"
 
-#: templates/repo.html:590
+#: templates/repo.html:606
 msgid "Copy "
 msgstr "复制"
 
-#: templates/repo.html:593
+#: templates/repo.html:609
 msgid "Move "
 msgstr "移动"
 
-#: templates/repo.html:606
+#: templates/repo.html:622
 msgid "to:"
 msgstr "到："
 
-#: templates/repo.html:783 templates/repo.html.py:795 templates/repo.html:803
+#: templates/repo.html:799 templates/repo.html.py:811 templates/repo.html:819
 msgid "It can't be blank."
 msgstr "输入不能为空。"
 
-#: templates/repo.html:787
+#: templates/repo.html:803
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
@@ -1418,19 +1442,15 @@ msgstr "查看镜像"
 msgid "Modifier"
 msgstr "修改者"
 
-#: templates/repo_history.html:33 templates/repo_view_snapshot.html:30
-msgid "None"
-msgstr "无"
-
 #: templates/repo_history.html:50 templates/repo_view_snapshot.html:51
 #: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
-#: templates/sys_useradmin.html:41 templates/snippets/file_content_js.html:110
+#: templates/sys_useradmin.html:41 templates/snippets/file_content_js.html:121
 msgid "Previous"
 msgstr "前一页"
 
 #: templates/repo_history.html:53 templates/repo_view_snapshot.html:54
 #: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
-#: templates/sys_useradmin.html:44 templates/snippets/file_content_js.html:110
+#: templates/sys_useradmin.html:44 templates/snippets/file_content_js.html:121
 msgid "Next"
 msgstr "下一页"
 
@@ -1544,13 +1564,19 @@ msgstr "创建者"
 msgid "Create At"
 msgstr "创建时间"
 
+#: templates/sys_group_admin.html:54 templates/sys_org_admin.html:55
+#: templates/sys_seafadmin.html:55 templates/userinfo.html:63
+#: templates/userinfo.html.py:86
+msgid "Empty"
+msgstr "暂无"
+
 #: templates/sys_group_admin.html:60
 msgid "Delete Group"
 msgstr "删除群组"
 
 #: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
 #: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:77
-#: templates/userinfo.html:141 templates/snippets/myhome_extra_script.html:37
+#: templates/userinfo.html:141 templates/snippets/myhome_extra_script.html:36
 msgid "Are you sure you want to delete"
 msgstr "确定要删除"
 
@@ -1582,7 +1608,7 @@ msgid "directory icon"
 msgstr "目录图标"
 
 #: templates/sys_seafadmin.html:61 templates/userinfo.html:141
-#: templates/snippets/myhome_extra_script.html:37
+#: templates/snippets/myhome_extra_script.html:36
 msgid "Delete Library"
 msgstr "删除资料库"
 
@@ -1615,8 +1641,8 @@ msgid "Delete User"
 msgstr "删除用户"
 
 #: templates/sys_useradmin.html:78
-msgid "Are you sure you want to reset password of"
-msgstr "确定要重置该用户的密码："
+msgid "Are you sure you want to reset the password"
+msgstr "确定要重置该密码"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -1730,12 +1756,12 @@ msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
 
 #: templates/registration/login.html:14
-msgid "Forgot password?"
-msgstr "忘记密码？"
-
-#: templates/registration/login.html:37
 msgid "Incorrect email or password"
 msgstr "你输入的邮箱或密码不正确"
+
+#: templates/registration/login.html:19
+msgid "Forgot password?"
+msgstr "忘记密码？"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -1882,7 +1908,7 @@ msgid "Deleted library"
 msgstr "删除了资料库"
 
 #: templates/snippets/events_js.html:42
-#: templates/snippets/list_commit_detail.html:41
+#: templates/snippets/list_commit_detail.html:39
 msgid "Unknown error."
 msgstr "未知错误"
 
@@ -1894,15 +1920,31 @@ msgstr "请稍后刷新页面。"
 msgid "Please try again later."
 msgstr "请稍后再试。"
 
-#: templates/snippets/file_content_js.html:29
+#: templates/snippets/file_content_html.html:31
+msgid "you can also press ← "
+msgstr "可用方向键 ← "
+
+#: templates/snippets/file_content_html.html:31
+msgid "prev"
+msgstr "上一张"
+
+#: templates/snippets/file_content_html.html:37
+msgid "you can also press → "
+msgstr "可用方向键 → "
+
+#: templates/snippets/file_content_html.html:37
+msgid "next"
+msgstr "下一张"
+
+#: templates/snippets/file_content_js.html:41
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
 
-#: templates/snippets/file_content_js.html:95
+#: templates/snippets/file_content_js.html:106
 msgid "Document convertion failed."
 msgstr "文档转换失败。"
 
-#: templates/snippets/file_content_js.html:110
+#: templates/snippets/file_content_js.html:121
 msgid ""
 "<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
@@ -1912,22 +1954,30 @@ msgstr ""
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
 "\"page-nums\"></span> 页</span>"
 
-#: templates/snippets/file_content_js.html:110
+#: templates/snippets/file_content_js.html:121
 msgid "Full Screen"
 msgstr "全屏"
 
-#: templates/snippets/file_content_js.html:110
+#: templates/snippets/file_content_js.html:121
 msgid "loading..."
 msgstr "加载中..."
 
-#: templates/snippets/file_content_js.html:157
+#: templates/snippets/file_content_js.html:168
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr "如果您想在线查看该文件，您可以使用 IE 10 或其他浏览器比如 firefox 。"
 
-#: templates/snippets/file_content_js.html:162
+#: templates/snippets/file_content_js.html:182
 msgid "This type of file cannot be viewed online."
 msgstr "该类型文件无法在线查看。"
+
+#: templates/snippets/file_encoding.html:5
+msgid "Encoding:"
+msgstr "文件编码："
+
+#: templates/snippets/file_encoding.html:8
+msgid "auto detect"
+msgstr "自动检测"
 
 #: templates/snippets/file_upload_progress_js.html:51
 #: templates/snippets/file_upload_progress_js.html:75
@@ -1979,15 +2029,11 @@ msgstr "新目录"
 msgid "Deleted directories"
 msgstr "删除的目录"
 
-#: templates/snippets/list_commit_detail.html:34
-msgid "No conflict in the merge."
-msgstr "合并没有冲突。"
-
 #: templates/snippets/my_groups.html:4
 msgid "My Groups"
 msgstr "我的群组"
 
-#: templates/snippets/my_groups.html:24
+#: templates/snippets/my_groups.html:22
 msgid "Create a group now"
 msgstr "立即创建群组"
 
@@ -2063,9 +2109,13 @@ msgstr ""
 "你可以在文件浏览页面点击“添加星标”按钮给重要的文件加上星标，这些文件会显示在"
 "这里。"
 
-#: templates/snippets/myhome_extra_script.html:27
+#: templates/snippets/myhome_extra_script.html:26
 msgid "Please enter emails or groups."
 msgstr "请输入邮箱或群组。"
+
+#: templates/snippets/pubinfo.html:3
+msgid "Organization Info"
+msgstr "团体信息"
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -2129,6 +2179,33 @@ msgstr "名字(可选)"
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
-#: utils/__init__.py:69
+#: utils/__init__.py:71
 msgid "permission error"
 msgstr "权限错误"
+
+#~ msgid "Repo name is required"
+#~ msgstr "repo id 为必填项"
+
+#~ msgid "Failed to create repo"
+#~ msgstr "创建失败"
+
+#~ msgid "Operation successful"
+#~ msgstr "操作成功"
+
+#~ msgid "Operation failed"
+#~ msgstr "操作失败"
+
+#~ msgid "Tips"
+#~ msgstr "小提示"
+
+#~ msgid "A library marked as read-only can be downloaded."
+#~ msgstr "标记为只读的资料库可以被下载。"
+
+#~ msgid ""
+#~ "Afterwards, updates on server will be downloaded automatically, but "
+#~ "updates on local files will not be uploaded."
+#~ msgstr ""
+#~ "之后，服务器上的修改会自动同步到本地，而本地文件的修改无法上传到服务器。"
+
+#~ msgid "Public Libraries"
+#~ msgstr "公开的资料库"

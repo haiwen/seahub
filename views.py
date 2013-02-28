@@ -576,7 +576,7 @@ def repo_save_settings(request):
         # Edit library info (name, descryption).
         if repo.name != repo_name or repo.desc != repo_desc:
             if not edit_repo(repo_id, repo_name, repo_desc, username):
-                err_msg = _(u'Failed to edit repo information.')
+                err_msg = _(u'Failed to edit library information.')
                 return HttpResponse(json.dumps({'error': err_msg}),
                                     status=500, content_type=content_type)
 
@@ -1201,7 +1201,7 @@ def public_repo_create(request):
 def unsetinnerpub(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        messages.error(request, _('Failed to unshare library. Library does not exist.'))
+        messages.error(request, _('Failed to unshare the library, as it does not exist.'))
         return HttpResponseRedirect(reverse('share_admin'))
 
     try:
