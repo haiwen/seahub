@@ -82,18 +82,6 @@ except ImportError:
 from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
-try:
-    from cStringIO import StringIO
-    dir(StringIO) # Placate PyFlakes
-except ImportError:
-    from StringIO import StringIO
-
-try:
-    from PIL import Image
-    dir(Image) # Placate PyFlakes
-except ImportError:
-    import Image
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -1596,11 +1584,6 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
     file_content = ''
     swf_exists = False
     encoding = None
-
-    if filetype == 'Image':
-        img = Image.open(StringIO(urllib2.urlopen(raw_path).read()))
-        file_content = {}
-        file_content['img_w'], file_content['img_h'] = img.size
 
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path, file_enc)

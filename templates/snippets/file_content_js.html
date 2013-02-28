@@ -17,16 +17,23 @@
 {% endif %}
 
 {% if filetype == 'Image' %}
-    var img_ht = {{file_content.img_h}};
-    var file_view_ht = parseInt($('#file-view').css('min-height'));
-    var prev_next_ht = 0;
-    if ($('#img-prev-next').length > 0) {
-        prev_next_ht = $('#img-prev-next').outerHeight(true);
+window.onload = function () {
+    var img = $('#image-view');
+    var img_h = img.outerHeight();
+    var file_view_h = parseInt($('#file-view').css('min-height'));
+    {% if img_prev or img_next %}
+    var prev_next_h = $('#img-prev-next').outerHeight(true);
+    {% else %}
+    var prev_next_h = 0;
+    {% endif %}
+    if (img_h < file_view_h - prev_next_h) {
+        img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
     }
-    if (img_ht < file_view_ht - prev_next_ht) {
-        $('#image-view').css({'margin-top':(file_view_ht - img_ht - prev_next_ht)/2});
+    if (img.width() > 946) {
+        img.width(946);
     }
-    $('#image-view').removeClass('vh');
+    img.removeClass('vh');
+}
 {% endif %}
 
 {% if filetype == 'SVG' %}
