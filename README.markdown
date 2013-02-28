@@ -54,6 +54,10 @@ Then, run this command:
 
 There will be a file named `django.po` under `locale/ru/LC_MESSAGES`.
 
+**NOTE:** If you install your Django source under thirdpart, you need to ignore all files under Django directory, otherwise the po file will become large.
+
+    django-admin.py makemessages -l ru -e py,html -i "thirdpart/Django-1.3-py2.7-egg/*"
+
 After you modified `django.po`, you can run `./i18n.sh compile-all`, this will create `.mo` file under same directory with `django.po`.
 
 That's it. After restart Seahub, you can select popup button at right top, and your translations are ready for use.
