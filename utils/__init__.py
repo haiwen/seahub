@@ -5,9 +5,11 @@ import re
 import stat
 import urllib2
 import uuid
+import logging
 import json
 
 from django.contrib.sites.models import RequestSite
+from django.db import IntegrityError
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor, md5_constructor
@@ -33,6 +35,9 @@ except ImportError:
     IS_EMAIL_CONFIGURED = False
     
 import settings
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647 
@@ -655,8 +660,13 @@ def calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id):
                                     parent_dir_hash=parent_dir_hash,
                                     dir_id=dir_id,
                                     last_modified_info=json.dumps(last_modified_info))
-    info.save()
 
+    try:
+        info.save()
+    except IntegrityError, e:
+        # If this record is already saved, skip this step.
+        logger.warn(e)
+        
     return last_modified_info
 
 def get_dir_files_last_modified(repo_id, parent_dir):
