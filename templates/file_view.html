@@ -157,9 +157,14 @@
 <script type="text/javascript">
 {% if filetype == 'Image' %}
 {% if img_prev or img_next %}
+var input_focus = false;
+$('input, textarea').focus(function() {
+    input_focus = true;
+}).blur(function() {
+    input_focus = false;
+});
 $('body').bind('keydown', function(e) {
-    var e = e || event;
-    if (e.target == $('body')[0]) { // so cursor move in form input element can work normally
+    if (!input_focus) { // so cursor move in form input element can work normally
         {% if img_prev %}
         if (e.keyCode == 37) { // press '<-'
             location.href = $('#img-prev').attr('href');
