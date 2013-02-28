@@ -19,3 +19,7 @@
 #file-view { text-align:center; padding:30px 0; }
 </style>
 {% endif %}
+
+{% if filetype == 'Video'  or filetype == 'Audio' %}
+<link rel="stylesheet" href="{{MEDIA_URL}}css/mediaelementplayer.css" />
+{% endif %}

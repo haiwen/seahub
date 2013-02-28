@@ -7,6 +7,9 @@
 {% if filetype == 'PDF' and use_pdfjs %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 {% endif %}
+{% if filetype == 'Video'  or filetype == 'Audio' %}
+<script src="{{MEDIA_URL}}js/mediaelement-and-player.min.js"></script>
+{% endif %}
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 {% endif %}

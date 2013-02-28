@@ -1808,3 +1808,13 @@ textarea:-moz-placeholder {/* for FF */
     font-size:11px;
     color:#999;
 }
+.video-container {
+    margin: auto;
+    width: 800px;
+    height: 400px;
+}
+.audio-container {
+    margin: auto;
+    width: 500px;
+    height: 30px;
+}
