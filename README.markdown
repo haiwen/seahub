@@ -14,8 +14,6 @@ Preparation
 
     easy_install --upgrade Djblets
 
-* rest_framework. Home page is <http://django-rest-framework.org/>
-
 Getting it
 ==========
 
