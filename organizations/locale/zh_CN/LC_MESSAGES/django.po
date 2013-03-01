@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 21:52+0800\n"
+"POT-Creation-Date: 2013-03-01 16:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,107 +17,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: views.py:182
+#: views.py:205
 msgid "Failed to create the library: you has not joined this organizatioin."
 msgstr "资料库创建失败：你还没有加入这个团体。"
 
-#: views.py:194
+#: views.py:217
 msgid "Failed to create."
 msgstr "创建失败"
 
-#: views.py:218
+#: views.py:241
 msgid "Operation Succeeded."
 msgstr "操作成功"
 
-#: views.py:237
+#: views.py:260
 msgid "Group name can only contain letters, digits and underscore"
 msgstr "群组名称只能包含中英文字符，数字及下划线。"
 
-#: views.py:282
+#: views.py:305
 msgid "Seafile Login Information"
 msgstr "Seafile 登录信息"
 
-#: views.py:284
+#: views.py:307
 msgid "Mail sent successfully"
 msgstr "邮件发送成功"
 
-#: views.py:286
+#: views.py:309
 msgid "Failed to send the email"
 msgstr "邮件发送失败"
 
-#: views.py:386
+#: views.py:409
 msgid "Successfully deleted."
 msgstr "删除成功"
 
-#: views.py:405
+#: views.py:428
 #, python-format
 msgid ""
 "%(from_email)s added you to Organization <a href=\"%(org_url)s\">"
 "%(org_name)s</a>"
 msgstr "%(from_email)s 将你加入到团体 <a href=\"%(org_url)s\">%(org_name)s</a>"
 
-#: views.py:444
+#: views.py:467
 msgid "Failed to create: you has not joined this organization"
 msgstr "创建失败：你还没有加入这个团体。"
 
-#: views.py:450
+#: views.py:473
 msgid "Failed to create"
 msgstr "创建失败"
 
-#: views.py:543
+#: views.py:566
 msgid "This group doesn't belong to current organazation"
 msgstr "该群组不属于当前团体。"
 
-#: views.py:583
+#: views.py:606
 msgid "Only the owner of this library has permission to share it."
 msgstr "只有资料库拥有者有权共享。"
 
-#: views.py:598
+#: views.py:621
 msgid "Failed to share to all members"
 msgstr "共享到公共资料失败"
 
-#: views.py:602
+#: views.py:625
 #, python-format
 msgid ""
 "Shared to all members successfully, you can go check it at <a href=\"%s"
 "\">Share</a>."
 msgstr "共享到公共资料成功，请前往<a href=\"%s\">共享</a>查看。"
 
-#: views.py:623
+#: views.py:646
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
 "\">Share</a>."
 msgstr "共享到 %(group)s 成功，请前往<a href=\"%(share)s\">共享</a>查看。"
 
-#: views.py:629 views.py:647
+#: views.py:652 views.py:671
 #, python-format
 msgid "Failed to share to %s."
 msgstr "共享给 %s 失败。"
 
-#: views.py:635
+#: views.py:658
 #, python-format
 msgid "Failed to share to %s: this user does not exist in the organization."
 msgstr "共享给 %s 失败：该用户不在这个团体中。"
 
-#: views.py:643
+#: views.py:666
 #, python-format
 msgid ""
 "Shared to %(share_to)s successfully，you can go check it at <a href="
 "\"%(share)s\">Share</a>."
-msgstr ""
-"共享给 %(share_to)s 成功，请前往<a href=\"%(share)s\">共享</a>查看。"
+msgstr "共享给 %(share_to)s 成功，请前往<a href=\"%(share)s\">共享</a>查看。"
 
-#: views.py:689
+#: views.py:713
 msgid "all members"
 msgstr "所有成员"
 
-#: views.py:695 templates/organizations/org_public.html:38
+#: views.py:719 templates/organizations/org_public.html:38
 #: templates/organizations/org_seafadmin.html:19
 msgid "Read-Write"
 msgstr "可读写"
 
-#: views.py:697 templates/organizations/org_public.html:40
+#: views.py:721 templates/organizations/org_public.html:40
 msgid "Read-Only"
 msgstr "只读"
 
@@ -144,7 +143,7 @@ msgstr "提交"
 
 #: templates/organizations/org_admin.html:9
 #: templates/organizations/org_admin.html:20
-#: templates/organizations/personal.html:26
+#: templates/organizations/personal.html:25
 msgid "Space Used"
 msgstr "已用空间"
 
@@ -203,15 +202,16 @@ msgstr "如果该邮箱还未注册，我们将给其发送邀请。"
 msgid "Emails is required."
 msgstr "邮箱为必填项。"
 
-#: templates/organizations/org_admin.html:99
+#: templates/organizations/org_admin.html:100
 msgid "Delete Member"
 msgstr "删除成员"
 
-#: templates/organizations/org_admin.html:99
-#: templates/organizations/org_group_admin.html:60
-#: templates/organizations/org_seafadmin.html:62
-msgid "Are you sure you want to delete"
-msgstr "确定要删除"
+#: templates/organizations/org_admin.html:101
+#: templates/organizations/org_group_admin.html:62
+#: templates/organizations/org_seafadmin.html:64
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "确定要删除 %s 吗？"
 
 #: templates/organizations/org_group_admin.html:7
 #: templates/organizations/org_pubinfo.html:26
@@ -238,7 +238,7 @@ msgstr "创建时间"
 msgid "None"
 msgstr "暂无"
 
-#: templates/organizations/org_group_admin.html:60
+#: templates/organizations/org_group_admin.html:61
 msgid "Delete Group"
 msgstr "删除群组"
 
@@ -259,23 +259,19 @@ msgstr "也可将资料库共享到你没有参加的群组。"
 msgid "Members"
 msgstr "成员"
 
-#: templates/organizations/org_pubinfo.html:32
-msgid "'s icon"
-msgstr "的图标"
-
-#: templates/organizations/org_pubinfo.html:37
+#: templates/organizations/org_pubinfo.html:35
 msgid "Creator: "
 msgstr "创建者："
 
-#: templates/organizations/org_pubinfo.html:38
+#: templates/organizations/org_pubinfo.html:36
 msgid "Time: "
 msgstr "创建时间："
 
-#: templates/organizations/org_pubinfo.html:45
+#: templates/organizations/org_pubinfo.html:43
 msgid "No one has created any groups yet"
 msgstr "还没有群组被创建"
 
-#: templates/organizations/org_pubinfo.html:46
+#: templates/organizations/org_pubinfo.html:44
 msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
@@ -342,7 +338,7 @@ msgstr "所有资料库"
 msgid "Owner"
 msgstr "拥有者"
 
-#: templates/organizations/org_seafadmin.html:62
+#: templates/organizations/org_seafadmin.html:63
 msgid "Delete Library"
 msgstr "删除资料库"
 
@@ -383,17 +379,21 @@ msgstr ""
 "\n"
 "%(site_name)s 团队\n"
 
-#: templates/organizations/personal.html:14
+#: templates/organizations/personal.html:13
 msgid "Account"
 msgstr "我的基本信息"
 
-#: templates/organizations/personal.html:20
+#: templates/organizations/personal.html:15
+#: templates/organizations/personal.html:18
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/organizations/personal.html:17
 msgid "No Nickname"
 msgstr "暂无昵称"
 
-#: templates/organizations/personal.html:20
-msgid "Edit"
-msgstr "编辑"
+#~ msgid "'s icon"
+#~ msgstr "的图标"
 
 #~ msgid "Really want to delete this group?"
 #~ msgstr "确定要删除这个群组？"

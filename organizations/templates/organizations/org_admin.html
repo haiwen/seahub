@@ -96,6 +96,9 @@ $('#org-user-add').click(function() {
     }
 );
 
-addConfirmTo($('.remove-user-btn'), '{% trans "Delete Member" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.remove-user-btn'), {
+        'title':'{% trans "Delete Member" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
 </script>
 {% endblock %}

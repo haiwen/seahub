@@ -67,7 +67,10 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.note-delete-btn'), '{% trans "Delete Notification" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.note-delete-btn'), {
+        'title':'{% trans "Delete Notification" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
 
 $('.note-change-btn').click(function() {
     window.location = $(this).attr('data');

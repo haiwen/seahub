@@ -298,8 +298,14 @@ $(window).scroll(function() {
     }
 });
 {% endif %}
-addConfirmTo($('#quit-group'), '{% trans "Quit Group" %}', '{% trans "Are you sure you want to quit this group" %}');
-addConfirmTo($('.cancel-share'), '{% trans "Unshare Library" %}', '{% trans "Are you sure you want to unshare" %}');
+addConfirmTo($('#quit-group'), {
+        'title':'{% trans "Quit Group" %}',
+        'con':'{% trans "Are you sure you want to quit this group?" %}'
+});
+addConfirmTo($('.cancel-share'), {
+        'title':'{% trans "Unshare Library" %}',
+        'con':'{% trans "Are you sure you want to unshare %s ?" %}'
+});
 
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 

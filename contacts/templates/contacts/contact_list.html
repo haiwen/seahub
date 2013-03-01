@@ -112,7 +112,7 @@ $('#contact-edit-form').submit(function() {
     return false;
 });
 
-addConfirmTo($('.contact-delete'), '{% trans "Delete Contact" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.contact-delete'), {'title':'{% trans "Delete Contact" %}', 'con':'{% trans "Are you sure you want to delete %s ?" %}'});
 
 $('#contact-add')
 .click(function() {

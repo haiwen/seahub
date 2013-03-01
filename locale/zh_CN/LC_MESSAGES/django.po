@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 16:29+0800\n"
+"POT-Creation-Date: 2013-03-01 17:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -404,7 +404,7 @@ msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views.py:2094 templates/sys_useradmin.html:78
+#: views.py:2094 templates/sys_useradmin.html:82
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
 #: templates/registration/password_reset_form.html:7
@@ -1503,13 +1503,13 @@ msgstr "返回修改历史"
 msgid "Create Time"
 msgstr "生成时间"
 
-#: templates/repo_view_snapshot.html:83
+#: templates/repo_view_snapshot.html:84
 msgid "Restore Library"
 msgstr "还原资料库"
 
-#: templates/repo_view_snapshot.html:83
-msgid "Are you sure you want to restore this library"
-msgstr "确定要还原这个资料库"
+#: templates/repo_view_snapshot.html:85
+msgid "Are you sure you want to restore this library?"
+msgstr "确定要还原该资料库？"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -1577,15 +1577,16 @@ msgstr "创建时间"
 msgid "Empty"
 msgstr "暂无"
 
-#: templates/sys_group_admin.html:60
+#: templates/sys_group_admin.html:61
 msgid "Delete Group"
 msgstr "删除群组"
 
-#: templates/sys_group_admin.html:60 templates/sys_org_admin.html:61
-#: templates/sys_seafadmin.html:61 templates/sys_useradmin.html:77
-#: templates/userinfo.html:141 templates/snippets/myhome_extra_script.html:36
-msgid "Are you sure you want to delete"
-msgstr "确定要删除"
+#: templates/sys_group_admin.html:62 templates/sys_org_admin.html:63
+#: templates/sys_seafadmin.html:63 templates/sys_useradmin.html:79
+#: templates/userinfo.html:143 templates/snippets/myhome_extra_script.html:38
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "确定要删除 %s 吗？"
 
 #: templates/sys_org_admin.html:7
 msgid "All Organizations"
@@ -1595,7 +1596,7 @@ msgstr "所有团体"
 msgid "Url Prefix"
 msgstr "个性域名"
 
-#: templates/sys_org_admin.html:61
+#: templates/sys_org_admin.html:62
 msgid "Delete Organization"
 msgstr "删除团体"
 
@@ -1614,8 +1615,8 @@ msgstr "拥有者"
 msgid "directory icon"
 msgstr "目录图标"
 
-#: templates/sys_seafadmin.html:61 templates/userinfo.html:141
-#: templates/snippets/myhome_extra_script.html:36
+#: templates/sys_seafadmin.html:62 templates/userinfo.html:142
+#: templates/snippets/myhome_extra_script.html:37
 msgid "Delete Library"
 msgstr "删除资料库"
 
@@ -1643,13 +1644,14 @@ msgstr "激活"
 msgid "ResetPwd"
 msgstr "重置密码"
 
-#: templates/sys_useradmin.html:77
+#: templates/sys_useradmin.html:78
 msgid "Delete User"
 msgstr "删除用户"
 
-#: templates/sys_useradmin.html:78
-msgid "Are you sure you want to reset the password"
-msgstr "确定要重置该密码"
+#: templates/sys_useradmin.html:83
+#, python-format
+msgid "Are you sure you want to reset the password of %s ?"
+msgstr "确定要重置 %s 的密码吗？"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -2189,4 +2191,3 @@ msgstr "备注(可选)"
 #: utils/__init__.py:76
 msgid "permission error"
 msgstr "权限错误"
-

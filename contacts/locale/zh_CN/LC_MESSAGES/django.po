@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-23 14:17+0800\n"
+"POT-Creation-Date: 2013-03-01 14:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:25 templates/contacts/contact_list.html:133
+#: models.py:27 templates/contacts/contact_list.html:133
 msgid "Email is required."
 msgstr "邮箱为必填项。"
 
-#: models.py:30 templates/contacts/contact_list.html:137
+#: models.py:32 templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
 msgstr "不能添加自己。"
 
-#: models.py:33
+#: models.py:35
 msgid "It is already your contact."
 msgstr "该邮箱已在列表中。"
 
@@ -141,6 +141,6 @@ msgid "Delete Contact"
 msgstr "删除联系人"
 
 #: templates/contacts/contact_list.html:115
-msgid "Are you sure you want to delete"
-msgstr "确定要删除"
-
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "确定要删除 %s 吗？"

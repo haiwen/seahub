@@ -44,21 +44,22 @@ $(document).click(function(e) {
     }
 });
 
-//add op confirm popup
-function addConfirmTo(ele, confirm_hd, confirm_con) {
-    ele.click(function() {
-        var con = '<h3>' + confirm_hd + '</h3>',
-            target = '';
-        if ($(this).data('target')) {
-            target = ' <span class="op-target">' + $(this).data('target') + '</span>';
+/*
+ * add op confirm popup
+ * e.g: <button data-url="" data-target="">xxx</button>
+ * e.g: addConfirmTo($('.user-del'), {'title': 'Delete user', 'con':'Really del user %s ?'});
+ */
+function addConfirmTo(op_ele, popup) {
+    op_ele.click(function() {
+        if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
+            popup['con'] = popup['con'].replace('%s', '<span class="op-target">' + $(this).data('target') + '</span>');
         }
-        con += '<p>' + confirm_con + target + ' ?</p>';
-        $('#confirm-con').html(con);
+        $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + popup['con'] + '</p>');
         $('#confirm-popup').modal({appendTo:'#main'});
-        $('#confirm-yes')
-        .data('url', $(this).data('url'))
-        .click(function() { location.href = $(this).data('url'); });
-        return false;//in case ele is '<a>'
+        $('#confirm-yes').data('url', $(this).data('url')).click(function() {
+            location.href = $(this).data('url');
+        });
+        return false;//in case op_ele is '<a>'
     });
 }
 

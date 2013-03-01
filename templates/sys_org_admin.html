@@ -58,7 +58,10 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.org-remove-btn'), '{% trans "Delete Organization" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.org-remove-btn'), {
+        'title':'{% trans "Delete Organization" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
 </script>
 {% endblock %}
  

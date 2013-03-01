@@ -138,6 +138,9 @@ $('#set-quota-form .submit').click(function() {
     return false;
 });
 
-addConfirmTo($('.remove-user-repo'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.remove-user-repo'), {
+        'title':'{% trans "Delete Library" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
 </script>
 {% endblock %}

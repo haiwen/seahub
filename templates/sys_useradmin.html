@@ -74,7 +74,13 @@ $('.activate').each(function(){
     });
 });
 
-addConfirmTo($('.remove-user-btn'), '{% trans "Delete User" %}', '{% trans "Are you sure you want to delete" %}');
-addConfirmTo($('.reset-user-btn'), '{% trans "Password Reset" %}', '{% trans "Are you sure you want to reset the password" %}');
+addConfirmTo($('.remove-user-btn'), {
+        'title':'{% trans "Delete User" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
+addConfirmTo($('.reset-user-btn'), {
+        'title':'{% trans "Password Reset" %}',
+        'con':'{% trans "Are you sure you want to reset the password of %s ?" %}'
+});
 </script>
 {% endblock %}

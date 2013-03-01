@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 21:50+0800\n"
+"POT-Creation-Date: 2013-03-01 16:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,13 +60,14 @@ msgstr "删除"
 msgid "Empty"
 msgstr "空"
 
-#: templates/notifications/notification_list.html:70
+#: templates/notifications/notification_list.html:71
 msgid "Delete Notification"
 msgstr "删除通知"
 
-#: templates/notifications/notification_list.html:70
-msgid "Are you sure you want to delete"
-msgstr "确定要删除"
+#: templates/notifications/notification_list.html:72
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "确定要删除 %s 吗？"
 
 #~ msgid "Detail"
 #~ msgstr "内容"

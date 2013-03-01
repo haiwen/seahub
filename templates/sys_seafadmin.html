@@ -58,7 +58,10 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    addConfirmTo($('.repo-delete-btn'), '{% trans "Delete Library" %}', '{% trans "Are you sure you want to delete" %}');
+addConfirmTo($('.repo-delete-btn'), {
+        'title':'{% trans "Delete Library" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
 </script>
 {% endblock %}
  

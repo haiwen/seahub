@@ -80,6 +80,9 @@
     $('#back').click(function() {
         location.href = $(this).attr('data');
     });
-    addConfirmTo($('.repo-revert'), '{% trans "Restore Library" %}', '{% trans "Are you sure you want to restore this library" %}');
+addConfirmTo($('.repo-revert'), {
+        'title':'{% trans "Restore Library" %}',
+        'con':'{% trans "Are you sure you want to restore this library?" %}'
+});
 </script>
 {% endblock %}

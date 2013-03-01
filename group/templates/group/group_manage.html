@@ -85,8 +85,14 @@
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
 changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
-addConfirmTo($("#group-dismiss"), '{% trans "Dismiss Group" %}', '{% trans "Really want to dismiss this group" %}');
-addConfirmTo($(".member-remove-btn"), '{% trans "Delete Member" %}', '{% trans "Really want to delete Member" %}');
+addConfirmTo($("#group-dismiss"), {
+        'title':'{% trans "Dismiss Group" %}',
+        'con':'{% trans "Really want to dismiss this group?" %}'
+});
+addConfirmTo($(".member-remove-btn"), {
+        'title':'{% trans "Delete Member" %}',
+        'con':'{% trans "Really want to delete %s ?" %}'
+});
 var contact_list = [], contact_email;
 {% for contact in contacts %}
 contact_email = '{{ contact.contact_email }}';
