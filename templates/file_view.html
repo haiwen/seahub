@@ -80,9 +80,6 @@
                 {% endif %}
             {% endif %}
 
-            {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %} 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view" id="view-original">{% trans "Raw"%}</button>
-            {% endif %}
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
         {% with page='file_view' %}

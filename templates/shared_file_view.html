@@ -28,10 +28,6 @@
             {% endif %}
             </p>
 
-            {% if filetype == 'Text' or filetype == 'Image' or filetype == 'SVG' or filetype == 'Markdown' %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=view&t={{ shared_token }}" id="view-original">{% trans "Raw" %}</button>
-            {% endif %}
-
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download&t={{ shared_token }}" id="download">{% trans "Download" %}</button>
         </div>
         {% include 'snippets/file_content_html.html' %}
