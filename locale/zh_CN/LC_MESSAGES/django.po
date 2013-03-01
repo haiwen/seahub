@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 13:51+0800\n"
+"POT-Creation-Date: 2013-03-01 16:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -509,58 +509,6 @@ msgstr "无法下载 \"%s\"：目录大小超过限制。"
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
 
-#: taggit/forms.py:21
-msgid "Please provide a comma-separated list of tags."
-msgstr ""
-
-#: taggit/managers.py:39 taggit/models.py:57
-msgid "Tags"
-msgstr ""
-
-#: taggit/managers.py:40
-msgid "A comma-separated list of tags."
-msgstr ""
-
-#: taggit/models.py:10 templates/pubrepo.html:24 templates/repo.html:111
-#: templates/repo.html.py:260 templates/repo_history_view.html:52
-#: templates/repo_recycle_view.html:53 templates/sys_group_admin.html:11
-#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
-#: templates/userinfo.html:46 templates/userinfo.html.py:71
-#: templates/view_shared_dir.html:32 templates/snippets/my_owned_repos.html:18
-#: templates/snippets/my_owned_repos.html:56
-#: templates/snippets/repo_create_form.html:4
-msgid "Name"
-msgstr "名称"
-
-#: taggit/models.py:11
-msgid "Slug"
-msgstr ""
-
-#: taggit/models.py:56
-msgid "Tag"
-msgstr ""
-
-#: taggit/models.py:63
-#, python-format
-msgid "%(object)s tagged with %(tag)s"
-msgstr ""
-
-#: taggit/models.py:113
-msgid "Object id"
-msgstr ""
-
-#: taggit/models.py:117 taggit/models.py:123
-msgid "Content type"
-msgstr ""
-
-#: taggit/models.py:159
-msgid "Tagged Item"
-msgstr ""
-
-#: taggit/models.py:160
-msgid "Tagged Items"
-msgstr ""
-
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "对不起，你访问的页面不存在。"
@@ -589,7 +537,7 @@ msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
 #: templates/file_edit.html:93 templates/file_edit.html.py:127
-#: templates/file_view.html:98 templates/file_view.html.py:126
+#: templates/file_view.html:95 templates/file_view.html.py:123
 #: templates/repo.html:271 templates/repo.html.py:283 templates/repo.html:309
 #: templates/repo.html.py:330 templates/repo.html:342
 #: templates/repo.html.py:354 templates/userinfo.html:95
@@ -812,8 +760,8 @@ msgstr "密码为必填项"
 msgid "Password should be 3 to 15 characters."
 msgstr "密码太长（不超过15个字符）"
 
-#: templates/file_edit.html:297 templates/file_view.html:226
-#: templates/file_view.html.py:392 templates/repo.html:427
+#: templates/file_edit.html:297 templates/file_view.html:223
+#: templates/file_view.html.py:389 templates/repo.html:427
 #: templates/repo.html.py:665 templates/repo.html:702
 #: templates/repo.html.py:845 templates/snippets/file_content_js.html:108
 #: templates/snippets/repo_decrypt_js.html:35
@@ -878,10 +826,10 @@ msgstr "未知"
 msgid "Restore"
 msgstr "还原"
 
-#: templates/file_revisions.html:52 templates/file_view.html:86
-#: templates/history_file_view.html:66 templates/pubrepo.html:44
+#: templates/file_revisions.html:52 templates/file_view.html:83
+#: templates/history_file_view.html:63 templates/pubrepo.html:44
 #: templates/repo.html:22 templates/repo.html.py:137 templates/repo.html:182
-#: templates/shared_file_view.html:35 templates/view_shared_dir.html:48
+#: templates/shared_file_view.html:31 templates/view_shared_dir.html:48
 #: templates/view_shared_dir.html.py:66
 #: templates/snippets/my_owned_repos.html:34
 #: templates/snippets/my_owned_repos.html:81
@@ -917,11 +865,11 @@ msgstr "发送"
 msgid "Delete"
 msgstr "删除"
 
-#: templates/file_view.html:32 templates/file_view.html.py:217
+#: templates/file_view.html:32 templates/file_view.html.py:214
 msgid "Unstar"
 msgstr "取消星标"
 
-#: templates/file_view.html:34 templates/file_view.html.py:214
+#: templates/file_view.html:34 templates/file_view.html.py:211
 msgid "Star"
 msgstr "添加星标"
 
@@ -948,79 +896,74 @@ msgstr "历史"
 msgid "Open local file"
 msgstr "打开本地文件"
 
-#: templates/file_view.html:84 templates/history_file_view.html:64
-#: templates/shared_file_view.html:32
-msgid "Raw"
-msgstr "原始文件"
-
-#: templates/file_view.html:94
+#: templates/file_view.html:91
 msgid "Send Link"
 msgstr "发送链接"
 
-#: templates/file_view.html:95 templates/repo.html:351
+#: templates/file_view.html:92 templates/repo.html:351
 msgid "Send to:"
 msgstr "发送到："
 
-#: templates/file_view.html:96 templates/repo.html:352
+#: templates/file_view.html:93 templates/repo.html:352
 msgid "Emails, Seperated by ','"
 msgstr "输入邮箱，多个以,分隔"
 
-#: templates/file_view.html:100 templates/repo.html:356
+#: templates/file_view.html:97 templates/repo.html:356
 msgid "Sending..."
 msgstr "发送中..."
 
-#: templates/file_view.html:104
+#: templates/file_view.html:101
 msgid "Processing..."
 msgstr "处理中..."
 
-#: templates/file_view.html:107
+#: templates/file_view.html:104
 msgid "You have not downloaded "
 msgstr "你还未下载"
 
-#: templates/file_view.html:107
+#: templates/file_view.html:104
 msgid "."
 msgstr "。"
 
-#: templates/file_view.html:108
+#: templates/file_view.html:105
 msgid "Click to download"
 msgstr "点此下载"
 
-#: templates/file_view.html:124
+#: templates/file_view.html:121
 msgid "Leave a message~"
 msgstr "评论一下~"
 
-#: templates/file_view.html:213
+#: templates/file_view.html:210
 msgid "Unstarred successfully"
 msgstr "星标取消成功"
 
-#: templates/file_view.html:216
+#: templates/file_view.html:213
 msgid "Starred successfully"
 msgstr "星标添加成功"
 
-#: templates/file_view.html:256
+#: templates/file_view.html:253
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr "找不到打开该类型文件的程序。Seafile 将为你打开该文件所在目录"
 
-#: templates/file_view.html:260
+#: templates/file_view.html:257
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr "本地文件尚未与服务器同步。请打开本地目录的自动同步，或者手动进行同步"
 
-#: templates/file_view.html:262
+#: templates/file_view.html:259
 msgid "The file is not synchronized, please retry later."
 msgstr "本地文件尚未与服务器同步，请稍后再试"
 
-#: templates/file_view.html:266
+#: templates/file_view.html:263
 msgid "An error occurred when open the local file."
 msgstr "打开本地文件时出错"
 
-#: templates/file_view.html:294
+#: templates/file_view.html:291
 msgid ""
 "You are running an old version of Seafile client, please <a target=\"_blank"
 "\">upgrade</a> it."
 msgstr "您的 Seafile 客户端版本太低， 请先 <a target=\"_blank\">升级</a>。"
 
-#: templates/file_view.html:308
+#: templates/file_view.html:305
 msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
@@ -1028,11 +971,11 @@ msgstr ""
 "没有检测到运行中的 Seafile 客户端。如果您确定它在运行，请点击下面的链接来打开"
 "本地文件："
 
-#: templates/file_view.html:324
+#: templates/file_view.html:321
 msgid "Comment"
 msgstr "评论"
 
-#: templates/file_view.html:372
+#: templates/file_view.html:369
 msgid "Please input a message."
 msgstr "请先输入评论。"
 
@@ -1157,7 +1100,7 @@ msgstr "基本信息"
 msgid ""
 "Organization will be removed in next version, data will be merged into your "
 "current account."
-msgstr "团体将在下版本移除，相关数据会迁移到你当前的帐号下。"
+msgstr "团体将在下个版本移除，相关数据会迁移到你当前的帐号下。"
 
 #: templates/org_base.html:21
 msgid "Public Library"
@@ -1184,6 +1127,17 @@ msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个
 #: templates/snippets/repo_create_form.html:3
 msgid "New Library"
 msgstr "新建资料库"
+
+#: templates/pubrepo.html:24 templates/repo.html:111
+#: templates/repo.html.py:260 templates/repo_history_view.html:52
+#: templates/repo_recycle_view.html:53 templates/sys_group_admin.html:11
+#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
+#: templates/userinfo.html:46 templates/userinfo.html.py:71
+#: templates/view_shared_dir.html:32 templates/snippets/my_owned_repos.html:18
+#: templates/snippets/my_owned_repos.html:56
+#: templates/snippets/repo_create_form.html:4
+msgid "Name"
+msgstr "名称"
 
 #: templates/pubrepo.html:25 templates/repo.html:262
 #: templates/repo_history.html:21 templates/sys_seafadmin.html:13
@@ -2236,29 +2190,3 @@ msgstr "备注(可选)"
 msgid "permission error"
 msgstr "权限错误"
 
-#~ msgid "Repo name is required"
-#~ msgstr "repo id 为必填项"
-
-#~ msgid "Failed to create repo"
-#~ msgstr "创建失败"
-
-#~ msgid "Operation successful"
-#~ msgstr "操作成功"
-
-#~ msgid "Operation failed"
-#~ msgstr "操作失败"
-
-#~ msgid "Tips"
-#~ msgstr "小提示"
-
-#~ msgid "A library marked as read-only can be downloaded."
-#~ msgstr "标记为只读的资料库可以被下载。"
-
-#~ msgid ""
-#~ "Afterwards, updates on server will be downloaded automatically, but "
-#~ "updates on local files will not be uploaded."
-#~ msgstr ""
-#~ "之后，服务器上的修改会自动同步到本地，而本地文件的修改无法上传到服务器。"
-
-#~ msgid "Public Libraries"
-#~ msgstr "公开的资料库"
