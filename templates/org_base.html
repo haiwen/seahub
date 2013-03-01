@@ -3,8 +3,10 @@
 {% load i18n %}
 
 {% block top_bar_org_myaccount_class %} class="cur"{% endblock %}
+{% block notice_panel %}
+<p id="notice"><span id="notice-con">{% trans "Organization will be removed in next version, data will be merged into your current account." %}</span></p>
+{% endblock %}
 {% block nav %}
-<p>{% trans "Organization will be removed in next version, data will be merged into your current account." %}</p>
 <ul class="nav">
     <li>
         <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>{% trans "Personal" %}</a>

@@ -480,6 +480,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* header */
+#notice {
+    text-align:center;
+}
+#notice-con {
+    color:red;
+    padding:3px 5px;
+    background:#ffc;
+    box-shadow:0 0 6px gray;
+    border-radius:1px;
+}
 #logo {
     width:95px;
     height:40px;
