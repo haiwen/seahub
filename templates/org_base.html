@@ -4,6 +4,7 @@
 
 {% block top_bar_org_myaccount_class %} class="cur"{% endblock %}
 {% block nav %}
+<p>{% trans "Organization will be removed in next version, data will be merged into your current account." %}</p>
 <ul class="nav">
     <li>
         <a href="{% url 'organizations.views.org_personal' org.url_prefix %}" {% block nav_org_personal_class %}{% endblock %}>{% trans "Personal" %}</a>
