@@ -3,6 +3,9 @@
 {% load i18n %}
 
 {% block top_bar_org_myaccount_class %} class="cur"{% endblock %}
+{% block notice_panel %}
+<p id="notice"><span id="notice-con">{% trans "Organization will be removed in next version, data will be merged into your current account." %}</span></p>
+{% endblock %}
 {% block nav %}
 <ul class="nav">
     <li>
