@@ -1204,9 +1204,9 @@ def unsetinnerpub(request, repo_id):
 
     try:
         unset_inner_pub_repo(repo_id)
-        messages.success(request, _('Unshare "%s" successfully.' % repo.name))
+        messages.success(request, _('Unshare "%s" successfully.') % repo.name)
     except SearpcError:
-        messages.error(request, _('Failed to unshare "%s".' % repo.name))
+        messages.error(request, _('Failed to unshare "%s".') % repo.name)
     return HttpResponseRedirect(reverse('share_admin'))
 
 @login_required
