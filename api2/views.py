@@ -37,7 +37,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, list_inner_pub_repos_by_owner,\
-    remove_share, unshare_group_repo, unset_inner_pub_repo
+    remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
+    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -105,8 +106,15 @@ class Account(APIView):
         info = {}
         email = request.user.username
         info['email'] = email
-        info['usage'] = seafserv_threaded_rpc.get_user_quota_usage(email)
-        info['total'] = seafserv_threaded_rpc.get_user_quota(email)
+        info['total'] = get_user_quota(email)
+        
+        if CALC_SHARE_USAGE:
+            my_usage = get_user_quota_usage(email)
+            share_usage = get_user_share_usage(email)
+            info['usage'] = my_usage + share_usage
+        else:
+            info['usage'] = get_user_quota_usage(email)
+
         return Response(info)
     
 def calculate_repo_info(repo_list, username):
@@ -340,7 +348,7 @@ class UploadLinkView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
 
         if check_quota(repo_id) < 0:
-            return api_error(status.HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         upload_url = gen_file_upload_url(token, 'upload-api')
         return Response(upload_url)

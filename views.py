@@ -44,7 +44,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
-    count_inner_pub_repos, unset_inner_pub_repo
+    count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
+    get_user_share_usage
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -971,13 +972,9 @@ def myhome(request):
 
     quota_usage = 0
     share_usage = 0
-    my_usage = 0
-    my_usage = seafserv_threaded_rpc.get_user_quota_usage(email)
+    my_usage = get_user_quota_usage(email)
     if CALC_SHARE_USAGE:
-        try:
-            share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
-        except SearpcError, e:
-            share_usage = 0
+        share_usage = get_user_share_usage(email)
         quota_usage = my_usage + share_usage
     else:
         quota_usage = my_usage

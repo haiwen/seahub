@@ -34,6 +34,7 @@ Commit:
 
 from datetime import datetime
 import json
+import logging
 import os
 import sys
 import ConfigParser
@@ -143,6 +144,9 @@ else:
 CALC_SHARE_USAGE = False
 if config.has_option('quota', 'calc_share_usage'):
     CALC_SHARE_USAGE = config.getboolean('quota', 'calc_share_usage')
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 #### Basic ccnet API ####
 
@@ -860,7 +864,32 @@ def check_quota(repo_id):
     try:
         ret = seafserv_threaded_rpc.check_quota(repo_id)
     except SearpcError, e:
+        logger.error(e)
         ret = -1
+    return ret
+
+def get_user_quota(user):
+    try:
+        ret = seafserv_threaded_rpc.get_user_quota(user)
+    except SearpcError, e:
+        logger.error(e)
+        ret = 0
+    return ret
+
+def get_user_quota_usage(user):
+    try:
+        ret = seafserv_threaded_rpc.get_user_quota_usage(user)
+    except SearpcError, e:
+        logger.error(e)
+        ret = 0
+    return ret
+
+def get_user_share_usage(user):
+    try:
+        ret = seafserv_threaded_rpc.get_user_share_usage(user)
+    except SearpcError, e:
+        logger.error(e)
+        ret = 0
     return ret
     
 # access token
