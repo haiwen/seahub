@@ -56,6 +56,7 @@ function addConfirmTo(op_ele, popup) {
         }
         $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + popup['con'] + '</p>');
         $('#confirm-popup').modal({appendTo:'#main'});
+        $('#simplemodal-container').css({'height':'auto'});
         $('#confirm-yes').data('url', $(this).data('url')).click(function() {
             location.href = $(this).data('url');
         });

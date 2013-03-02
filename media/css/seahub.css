@@ -1210,6 +1210,7 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
+#member-add-form,
 #repo-share-form {
     width:266px;
 }
@@ -1252,6 +1253,11 @@ textarea:-moz-placeholder {/* for FF */
     display:inline-block;
     width:5em;
     color:#666;
+}
+.ru .group .item-name,
+.de .group .item-name,
+.it .group .item-name {
+    width:6em;
 }
 .member {
     _height:21px;
@@ -1663,6 +1669,7 @@ textarea:-moz-placeholder {/* for FF */
     cursor:pointer;
 }
 .share-permission-select {
+    position:relative;/*for long text in other lang in 'share admin'*/
     background:#fff;
     border:1px solid #ddd;
     border-radius:2px;
@@ -1807,6 +1814,12 @@ textarea:-moz-placeholder {/* for FF */
 .pubinfo-item {
     display:inline-block;
     min-width:66px;
+}
+.ru .pubinfo-item {
+    min-width:64px;
+}
+.de .pubinfo-item {
+    min-width:63px;
 }
 .pubinfo-item .amount {
     font-size:28px;
