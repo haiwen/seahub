@@ -311,21 +311,23 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom:1px solid #ddd;
     margin-bottom:16px;
 }
-.tabnav-tabs {
+.tabnav-tabs,
+.tabnav-tab {
     display:inline-block;
 }
 .tabnav-tab {
-    display:inline-block;
     font-size:14px;
     padding:8px 10px;
     border:1px solid transparent;
     border-bottom:0;
 }
+.tabnav-tabs,
+.tabnav-tab {
+    *display:inline;
+}
 .tabnav-tab a {
     color:#666;
     font-weight:normal;
-}
-.tabnav-tab a:hover {
 }
 .tabnav-tab-cur {
     font-weight:bold;
@@ -1814,6 +1816,9 @@ textarea:-moz-placeholder {/* for FF */
 .pubinfo-item {
     display:inline-block;
     min-width:66px;
+}
+.pubinfo-item {
+    *display:inline;
 }
 .ru .pubinfo-item {
     min-width:64px;

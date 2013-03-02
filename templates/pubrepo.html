@@ -10,12 +10,12 @@
 
 {% block right_panel %}
 <div class="tabnav">
+    <button id="repo-create" class="add fright">{% trans "New Library"%}</button>
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
         <li class="tabnav-tab"><a href="{% url 'pubgrp' %}">{% trans "Groups" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Users" %}</a></li>
     </ul>
-    <button id="repo-create" class="add fright">{% trans "New Library"%}</button>
 </div>
 {% if public_repos %}
 <table>
