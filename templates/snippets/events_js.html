@@ -22,6 +22,11 @@ function reqEvents(start) {
             } else {
                 $('#events-more').addClass('hide');
             }
+            if ($.browser.mozilla || $.browser.msie) {
+                $('#events a').focus(function() {
+                    $(this).blur();
+                });
+            }
             $('.lsch').click(function() {
                 listCommitDetails($(this).data('url'), $(this).data('time'));
                 return false;

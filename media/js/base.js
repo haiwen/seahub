@@ -5,9 +5,6 @@ $('#title-panel, #left-panel, #right-panel').each(function() { // for ie 7
     }
 });
 $('#tabs').tabs({cookie:{expires:1}});
-$('#tabs-nav a').focus(function() { $(this).blur(); });
-
-$('input, textarea').placeholder();
 
 // handle messages
 if ($('.messages')[0]) {
@@ -25,6 +22,7 @@ $("table tr:gt(0)").hover(
 		$(this).removeClass('hl');
 	}
 );
+$('input, textarea').placeholder();
 $('#lang-context').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -43,6 +41,17 @@ $(document).click(function(e) {
         $('#lang-context').attr('data', 'no-popup');
     }
 });
+
+if ($.browser.mozilla || $.browser.msie) {
+    $('a').focus(function() {
+        $(this).blur();
+    });
+}
+if ($.browser.msie) {
+    $('button, input[type="checkbox"], input[type="radio"], input[type="submit"]').focus(function() {
+        $(this).blur();
+    });
+}
 
 /*
  * add op confirm popup
