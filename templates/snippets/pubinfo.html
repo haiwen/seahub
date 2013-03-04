@@ -2,8 +2,8 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Organization Info"%}</h3>
     <ul class="info-item-bottom">
-        <li class="pubinfo-item"><span class="amount">{{ pubrepos_count }}</span><br /><span class="obj">{% trans 'Libraries' %}</span></li>
-        <li class="pubinfo-item"><span class="amount">{{ groups_count }}</span><br /><span class="obj">{% trans 'Groups' %}</span></li>
-        <li class="pubinfo-item"><span class="amount">{{ emailusers_count}}</span><br /><span class="obj">{% trans 'Users' %}</span></li>
+        <li class="pubinfo-item"><span class="amount">{{ pubrepos_count }}</span><br />{% blocktrans count counter=pubrepos_count %}<span class="obj">Library{% plural %}<span class="obj">Libraries{% endblocktrans %}</span></li>  {% comment %}The reason including span tag to translation is that "Library" is already translated in other place, we need another unique string to mark this. {% endcomment%}
+        <li class="pubinfo-item"><span class="amount">{{ groups_count }}</span><br /><span class="obj">{% blocktrans count counter=groups_count %}Group{% plural %}Groups{% endblocktrans %}</span></li>
+        <li class="pubinfo-item"><span class="amount">{{ emailusers_count}}</span><br /><span class="obj">{% blocktrans count counter=emailusers_count %}User{% plural %}Users{% endblocktrans %}</span></li>
     </ul>
 </div>
