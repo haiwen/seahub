@@ -6,7 +6,23 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<h2>{{ group.group_name }}</h2>
+
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'group_discus' group.id %}">{% trans "Discussions" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Wiki" %}</a></li>
+        {% if is_staff %}
+        <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Admin" %}</a></li>
+        {% endif %}
+
+    </ul>
+    <div class="fright">
+    {% grp_avatar group.props.id 24 %} <span style="font-size: 16px; font-weight:bold; margin: 0 6px;">{{ group.group_name }}</span>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block left_panel %}
@@ -186,88 +202,6 @@
 </div>
 </div>
 
-<div id="group-reply">
-    <h3>{% trans "Messages" %}</h3>
-    <div class="w100 ovhd">
-        <div class="pic fleft">{% avatar request.user.username 48 %}</div>
-        <form id="group-message-form" action="" method="post" class="fright">
-            <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
-            {% for error in form.message.errors %}
-            <p class="error">{{ error|escape }}</p>
-            {% endfor %}
-            <input type="submit" value="{% trans "Submit" %}" class="submit" />
-        </form>
-    </div>
-
-{% if group_msgs %}
-    <ul class="msg-list">
-    {% for msg in group_msgs %}
-        <li class="msg w100 ovhd">
-        <div class="pic fleft">
-            <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/">{% avatar msg.from_email 48 %}</a>
-        </div>
-        <div class="txt fright">
-            <div class="msg-hd">
-                <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
-                <a href="{{ SITE_ROOT }}profile/{{ msg.from_email }}/" title="{{ msg.from_email }}">{{ msg.from_email|email2nickname }}</a>
-            </div>
-            <div class="msg-bd">
-                <p>
-                {% if msg.attachment.src == 'recommend' %}
-                <!-- recommend -->
-                <span class="recommend">{% trans "Recommended" %}
-                  {% if msg.attachment.attach_type == 'file' %}
-                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
-                  {% else %}
-                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
-                  {% endif %}
-                  {{ msg.attachment.name }}</a> :
-                </span>
-                {% endif %}
-
-                {% if msg.attachment.src == 'filecomment' %}
-                <!-- file comment -->
-                <span class="recommend">{% trans "File " %}<a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> {% trans "has a new comment:"%}</span>
-                {% endif %}
-                
-                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
-                </p>
-                <button class="reply op" data="{% url 'msg_reply' msg.id %}">
-                    {% if msg.reply_cnt == 0 %}
-                    <span class="reply-cnt"></span>{% trans 'Reply' %}
-                    {% else %}
-                    {% blocktrans count counter=msg.reply_cnt %}
-                    <span class="reply-cnt">{{ counter }}</span> Reply
-                    {% plural %}
-                    <span class="reply-cnt">{{ counter }}</span> Replies
-                    {% endblocktrans %}
-                    {% endif %}
-                </button>
-                <button class="replyclose op hide">{% trans "Hide" %}</button>
-                {% if is_staff or msg.from_email == request.user.username %}
-                <button class="msg-delete op" data="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</button>
-                {% endif %}
-                <div class="reply-bd"></div>
-            </div>
-        </div>
-        </li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
-    <div id="paginator">
-        {% if current_page != 1 %}
-        <a href="{{ SITE_ROOT }}group/{{ group.id}}/?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
-        {% endif %}
-        {% if page_next %}
-        <a href="{{ SITE_ROOT }}group/{{ group.id }}/?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
-        {% endif %}
-    </div>
-
-    {% if group_msgs|length > 5 %}
-    <a href="#group-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
-    {% endif %}
-</div>
 
 {% include "snippets/user_profile_html.html" %}
 {% include "snippets/repo_create_form.html" %}
@@ -277,27 +211,6 @@
 {% block extra_script %}
 {% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
-{% if group_msgs|length > 5 %}
-$(window).scroll(function() {
-    var up_icon = $('#msg-upward');
-    var msg_panel =  $('#group-reply');
-    var msg_panel_offset = msg_panel.offset();
-    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
-    var win_st = $(window).scrollTop();
-    var win_h = $(window).height() + win_st;
-
-    if (win_st > $('#group-message-form').offset().top) {
-        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 60}).removeClass('hide');
-        if (win_h > msg_panel_bot) {
-            up_icon.css({'bottom': win_h - msg_panel_bot + 15});
-        } else {
-            up_icon.css({'bottom': 15});
-        }
-    } else {
-        up_icon.addClass('hide');
-    }
-});
-{% endif %}
 addConfirmTo($('#quit-group'), {
         'title':'{% trans "Quit Group" %}',
         'con':'{% trans "Are you sure you want to quit this group?" %}'
@@ -307,7 +220,6 @@ addConfirmTo($('.cancel-share'), {
         'con':'{% trans "Are you sure you want to unshare %s ?" %}'
 });
 
-addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'600px', 'height': '80px', 'word-wrap':'break-word', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
 $("table tr:gt(0)").hover(
     function() {
@@ -322,7 +234,6 @@ $('.download').click(function() {
     window.open($(this).attr('data'));
 });
 
-{% include 'group/msg_reply_js.html' %}
 
 var contact_list = [], contact_email;
 {% for contact in contacts %}
@@ -334,36 +245,6 @@ contact_list.push({value:contact_email, label:contact_email});
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
-
-$('.msg-delete').click(function() {
-    var url = $(this).attr('data');
-    var msg = $(this).parents('.msg');
-    var del_confirm = '<div class="msg-del-confirm hide"><p>{% trans "Really want to delete this message?" %}</p><button class="msg-del-yes">{% trans "Yes" %}</button><button class="msg-del-no">{% trans "No" %}</button></div>';
-    $(this).parent().append(del_confirm).css('position', 'relative');
-    del_confirm = $(this).parent().find('.msg-del-confirm');
-    del_confirm.css({'left':$(this).position().left - 15, 'top':$(this).position().top - del_confirm.outerHeight()}).removeClass('hide');
-    del_confirm.children('.msg-del-yes').click(function() {
-        del_confirm.remove();
-        $.ajax({
-            url: url,
-            dataType:'json',
-            success: function(data) {
-                if (data['success']) {
-                    msg.remove();
-                    feedback('{% trans "Successfully deleted" %}', 'success');
-                } else {
-                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                feedback(textStatus + '{% trans ", failed to delete." %}', 'error');
-            }
-        });
-    });
-    del_confirm.children('.msg-del-no').click(function() {
-        del_confirm.remove();
-    });
-});
 
 $('.grp-admin-add').click(function() {
     $("#admin-add-form").modal({appendTo: "#main", focus: false});

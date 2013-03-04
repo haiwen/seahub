@@ -955,3 +955,134 @@ def attention(request):
     
     return HttpResponse(json.dumps(result), content_type=content_type)
     
+
+
+@login_required
+def group_discus(request, group_id):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            msg = form.cleaned_data['message']
+            message = GroupMessage()
+            message.group_id = group_id
+            message.from_email = request.user.username
+            message.message = msg
+            message.save()
+
+            # send signal
+            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+                              from_email=request.user.username)
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data.
+            return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+    else:
+        form = MessageForm()
+        
+        op = request.GET.get('op', '')
+        if op == 'delete':
+            return group_remove(request, group_id)
+        elif op == 'dismiss':
+            return group_dismiss(request, group_id)
+        elif op == 'quit':
+            return group_quit(request, group_id)
+
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    # remove user notifications
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='group_msg',
+                                    detail=str(group_id)).delete()
+    
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
+    # Get all group members.
+    members = get_group_members(group_id_int)
+    is_staff = True if check_group_staff(group.id, request.user) else False
+        
+    managers = []
+    common_members = []
+    for member in members:
+        if member.is_staff == 1:
+            managers.append(member)
+        else:
+            common_members.append(member)
+
+
+    """group messages"""
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page= int(request.GET.get('per_page', '15'))
+    except ValueError:
+        current_page = 1
+        per_page = 15
+
+    msgs_plus_one = GroupMessage.objects.filter(
+        group_id=group_id).order_by(
+        '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
+
+    if len(msgs_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    group_msgs = msgs_plus_one[:per_page]
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
+
+    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
+    reply_to_list = [ r.reply_to_id for r in msg_replies ]
+    
+    for msg in group_msgs:
+        msg.reply_cnt = reply_to_list.count(msg.id)
+            
+        for att in attachments:
+            if msg.id == att.group_message_id:
+                # Attachment name is file name or directory name.
+                # If is top directory, use repo name instead.
+                path = att.path
+                if path == '/':
+                    repo = get_repo(att.repo_id)
+                    if not repo:
+                        # TODO: what should we do here, tell user the repo
+                        # is no longer exists?
+                        continue
+                    att.name = repo.name
+                else:
+                    # cut out last '/'
+                    if path[-1] == '/':
+                        path = path[:-1]
+                    att.name = os.path.basename(path)
+                msg.attachment = att
+
+    contacts = Contact.objects.filter(user_email=request.user.username)
+
+    return render_to_response("group/group_discus.html", {
+            "managers": managers,
+            "common_members": common_members,
+            "members": members,
+            "group_id": group_id,
+            "group" : group,
+            "is_staff": is_staff,
+            "group_msgs": group_msgs,
+            "form": form,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            'contacts': contacts,
+            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            }, context_instance=RequestContext(request));
+

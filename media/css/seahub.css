@@ -330,11 +330,11 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:normal;
 }
 .tabnav-tab-cur {
-    font-weight:bold;
     border-color:#ddd;
     border-radius:3px 3px 0 0;
     background:#fff;
     margin-bottom:-1px;
+    color:#000;
 }
 /* container */
 #main, #footer { width:950px; }
@@ -1329,7 +1329,7 @@ textarea:-moz-placeholder {/* for FF */
 #group-reply,
 .new-reply-msg-list {
     width:602px;
-    margin-top:50px;
+    margin-top:10px;
 }
 .new-reply-msg-list {
     margin-top:0;
