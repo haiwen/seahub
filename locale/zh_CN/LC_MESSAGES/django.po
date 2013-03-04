@@ -2124,7 +2124,7 @@ msgstr "请输入邮箱或群组。"
 
 #: templates/snippets/pubinfo.html:3
 msgid "Organization Info"
-msgstr "团体信息"
+msgstr "机构信息"
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
