@@ -310,7 +310,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         if self.user.is_authenticated():
             accessible_repos = get_accessible_repos(self.request, self.repo)
         else:
-             accessible_repos = []   
+             accessible_repos = []
         return accessible_repos
     
     def get_repo_shared_groups(self):

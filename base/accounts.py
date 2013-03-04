@@ -146,7 +146,7 @@ class User(object):
         """
         Remove all repo decryption passwords stored on server.
         """
-        owned_repos, shared_repos, groups_repos = get_user_repos(self)
+        owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(self)
 
         def has_repo(repos, repo):
             for r in repos:
@@ -159,7 +159,7 @@ class User(object):
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
                     is_passwd_set(r.id, self.email):
                 passwd_setted_repos.append(r)
-        for r in shared_repos:
+        for r in shared_repos + public_repos:
             # For compatibility with diffrent fields names in Repo and
             # SharedRepo objects.
             r.id = r.repo_id

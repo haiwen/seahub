@@ -21,9 +21,10 @@ from pysearpc import SearpcError
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
-    get_org_id_by_group, list_personal_shared_repos, get_org_group_repos,\
+    get_org_id_by_group, list_share_repos, get_org_group_repos, \
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user, check_permission
+    list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
+    list_inner_pub_repos, list_org_inner_pub_repos
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -33,6 +34,10 @@ try:
     IS_EMAIL_CONFIGURED = True
 except ImportError:
     IS_EMAIL_CONFIGURED = False
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
     
 import settings
 
@@ -187,35 +192,43 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
 
 def get_user_repos(user):
     """
-    Get all repos that user can access, including owns, shared, and repo in
-    groups.
+    Get all repos that user can access, including owns, shared, public, and
+    repo in groups.
     NOTE: collumn names in shared_repo struct are not same as owned or group
     repos.
     """
     email = user.username
-    if user.org:
-        # org context
-        org_id = user.org['org_id']
-        owned_repos = list_org_repos_by_owner(org_id, email)
-        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
-        groups_repos = []
-        for group in get_org_groups_by_user(org_id, email):
-            groups_repos += get_org_group_repos(org_id, group.id, email)
+    shared_repos = list_share_repos(email, 'to_email', -1, -1)
+    
+    if CLOUD_MODE:
+        if user.org:
+            org_id = user.org['org_id']
+            owned_repos = list_org_repos_by_owner(org_id, email)
+            groups_repos = []
+            for group in get_org_groups_by_user(org_id, email):
+                groups_repos += get_org_group_repos(org_id, group.id, email)
+            
+            public_repos = list_org_inner_pub_repos(org_id, email, -1, -1)
+        else:
+            owned_repos = list_personal_repos_by_owner(email)
+            groups_repos = []
+            for group in get_personal_groups_by_user(email):
+                groups_repos += get_group_repos(group.id, email)
+            public_repos = []
     else:
-        # personal context
         owned_repos = list_personal_repos_by_owner(email)
-        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
         groups_repos = []
         for group in get_personal_groups_by_user(email):
             groups_repos += get_group_repos(group.id, email)
+        public_repos = list_inner_pub_repos(email)
 
-    return (owned_repos, shared_repos, groups_repos)
+    return (owned_repos, shared_repos, groups_repos, public_repos)
                 
 def get_accessible_repos(request, repo):
     """Get all repos the current user can access when coping/moving files
     online. If the repo is encrypted, then files can only be copied/moved
     within the same repo. Otherwise, files can be copied/moved between
-    owned/shared/group repos of the current user.
+    owned/shared/group/public repos of the current user.
 
     """
     def check_has_subdir(repo):
@@ -237,7 +250,7 @@ def get_accessible_repos(request, repo):
         accessible_repos = [repo]
         return accessible_repos
 
-    owned_repos, shared_repos, groups_repos = get_user_repos(request.user)
+    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(request.user)
 
     def has_repo(repos, repo):
         for r in repos:
@@ -251,7 +264,7 @@ def get_accessible_repos(request, repo):
             r.has_subdir = check_has_subdir(r)
             accessible_repos.append(r)
 
-    for r in shared_repos:
+    for r in shared_repos + public_repos:
         # For compatibility with diffrent fields names in Repo and
         # SharedRepo objects.
         r.id = r.repo_id
