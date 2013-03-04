@@ -5,13 +5,12 @@ import sys
 import os
 import tempfile
 import shutil
-import re
+import commands
 import subprocess
 import atexit
 import optparse
 
 cwd = os.getcwd()
-
 
 ####################
 ### Common helper functions
@@ -80,7 +79,7 @@ def must_copy(src, dst):
         shutil.copy(src, dst)
     except Exception, e:
         error('failed to copy %s to %s: %s' % (src, dst, e))
-        
+
 def must_move(src, dst):
     '''Copy src to dst, exit on failure'''
     try:
@@ -113,14 +112,16 @@ def parse_args():
         sys.exit(1)
 
     return options.version, options.branch
-    
+
 
 def main():
     parse_args()
     version, branch = parse_args()
-        
+
     if not exist_in_path('django-admin') and not exist_in_path('django-admin.py'):
         error('django-admin scripts not found in PATH')
+
+    latest_commit_info = commands.getoutput('git log %s -1' % branch)
 
     # begin
     tmpdir = tempfile.mkdtemp()
@@ -130,26 +131,30 @@ def main():
             shutil.rmtree(tmpdir)
         except:
             pass
-            
+
     atexit.register(remove_tmpdir)
     os.chdir(tmpdir)
-    
+
     tarball_name = 'seahub-%s.tar.gz' % version
     tmp_tarball = os.path.join(tmpdir, tarball_name)
-        
+
     cmd = 'git archive --prefix=seahub-%(version)s/ -o %(tarball)s %(branch)s' \
           % dict(version=version, tarball=tmp_tarball, branch=branch)
 
     if run(cmd, cwd=cwd) != 0:
         error('failed to "git archive"')
-        
-    # uncompress the tarball    
-    if run('tar xf %s' % tmp_tarball) != 0: 
+
+    # uncompress the tarball
+    if run('tar xf %s' % tmp_tarball) != 0:
         error('failed to uncompress the tarball')
 
     seahub_dir = os.path.join(tmpdir, 'seahub-%s' % version)
     if run('./i18n.sh compile-all', cwd=seahub_dir) != 0:
         error('failed to compile messages')
+
+    with open(os.path.join(seahub_dir, 'latest_commit'), 'w') as fp:
+        fp.write(latest_commit_info)
+        fp.write('\n')
 
     if run('tar czvf %s seahub-%s' % (tarball_name, version)) != 0:
         error('failed to generate tarball')
