@@ -2065,6 +2065,32 @@ def user_remove(request, user_id):
 
 @login_required
 @sys_staff_required
+def user_make_admin(request, user_id):
+    """Remove user, also remove group relationship."""
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_staff = True
+        user.save()
+    except User.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('sys_useradmin'))
+
+@login_required
+@sys_staff_required
+def user_remove_admin(request, user_id):
+    """Remove user, also remove group relationship."""
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_staff = False
+        user.save()
+    except User.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('sys_useradmin'))
+
+@login_required
+@sys_staff_required
 def activate_user(request, user_id):
     try:
         user = User.objects.get(id=int(user_id))
