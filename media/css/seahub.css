@@ -1458,6 +1458,7 @@ textarea:-moz-placeholder {/* for FF */
     top: 0;
     margin: 0;
     opacity: 0;
+    filter: alpha(opacity=0);
 }
 #user-avatar-input,
 #grp-avatar-input {
