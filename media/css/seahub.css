@@ -1915,6 +1915,7 @@ textarea:-moz-placeholder {/* for FF */
     height: 30px;
 }
 
+
 /* wiki page */
 #wiki-area.article {
     padding: 0 0;
@@ -1925,3 +1926,55 @@ textarea:-moz-placeholder {/* for FF */
 .wiki-page-missing {
     color:red;
 }
+
+#search-form {
+    float: right;
+    margin-top: 5px;
+    width: 200px;
+    height: 24px;
+    border: 2px solid #CDCDCD;
+    border-color: #9A9A9A #CDCDCD #CDCDCD #9A9A9A;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
+    -moz-box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
+    -webkit-box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
+}
+
+#search-keyword {
+    margin: 0;
+    width: 180px;
+    height: 20px;
+    padding: 2px;
+    padding-left: 18px;
+    font-size: 12px;
+    line-height: 12px;
+    border: 0;
+    outline: 0;
+    background: url('../img/search.png') no-repeat scroll left center;
+}
+
+.search-info {
+    font-size: 16px;
+    border-bottom: 1px solid #8A948F;
+    padding-bottom: 3px;
+}
+
+.search-result-count {
+    font-size: 13px;
+    color: #999;
+    line-height: 35px;
+}
+
+.search-info-keyword {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.search-results {
+    margin-top: 10px;
+}
+

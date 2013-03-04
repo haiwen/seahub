@@ -86,6 +86,12 @@
                     <img src="{{ MEDIA_URL }}img/logo.png?t=1362454620" title="Seafile" alt="Seafile logo" />
                 </a>
                 {% block nav %}{% endblock %}
+
+                {% if request.user.is_authenticated %}
+                <form id="search-form" method="GET" action="{% url 'search' %}">
+                  <input id="search-keyword" name="keyword" placeholder="{% trans 'Search Seafile' %}" />
+                </form>
+                {% endif %}
             </div>
         </div>
 
@@ -162,16 +168,16 @@ $('#info-bar .close').click(function() {
             info_id_exist = false,
             new_info_id = $(this).attr('data') + '_';
         date.setTime(date.getTime() + 14*24*60*60*1000);
-        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}'; 
+        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}';
         for (var i = 0, len = cookies.length; i < len; i++) {
             if (cookies[i].split('=')[0] == 'info_id') {
                 info_id_exist = true;
-                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id; 
+                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
                 break;
             }
         }
         if (!info_id_exist) {
-            document.cookie = 'info_id=' + new_info_id; 
+            document.cookie = 'info_id=' + new_info_id;
         }
     }
 });
@@ -197,6 +203,7 @@ $(document).click(function(e) {
         $('#account-context').attr('data', 'no-popup');
     }
 });
+
 {% endif %}
 {% endif %}
 </script>
