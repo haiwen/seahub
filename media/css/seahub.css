@@ -66,7 +66,6 @@ button {
     overflow:visible;/*for ie 7*/
     padding-bottom:0 \9;/*for ie; to make height right*/
 }
-input[type=checkbox],
 input[type=radio] {
     height:auto;
 }
@@ -126,7 +125,6 @@ td, th {
     border-bottom:1px solid #eee;
 }
 td { color: #333; }
-tr.hl { background-color: #f8f8f8; }/*highlight*/
 table img {
     vertical-align:middle;
 }
@@ -134,6 +132,7 @@ p {
     margin:0.5em 0;
 }
 /*common class*/
+.hl { background-color: #f8f8f8; }/*highlight*/
 .fleft { float:left }
 .fright { float:right }
 .clear { clear:both; }
@@ -145,9 +144,8 @@ p {
 .inbl { display: inline-block; }
 .bold { font-weight:bold; }
 .label { color:#333; font-size:12px; font-style:normal; }
-.w100 {
-	width: 100%;
-}
+.w100 { width: 100%; }
+.vh { visibility:hidden; }
 .notification {
     padding:5px;
     background:#FDF;
@@ -156,9 +154,6 @@ p {
 .tip {
     color:#808080;
     font-size:12px;
-}
-.vh {
-    visibility:hidden;
 }
 .al-rt {
     text-align:right;
@@ -335,6 +330,42 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px 3px 0 0;
     background:#fff;
     margin-bottom:-1px;
+}
+.checkbox-orig {
+    font-size:0;
+    opacity:0;
+    filter: alpha(opacity=0);
+    cursor:pointer;
+    position:absolute;
+    margin:0;
+}
+.checkbox {
+    display:inline-block;
+    border:1px solid #ddd;
+    margin-right:4px;
+    position:relative;
+}
+.checkbox-orig,
+.checkbox {
+    width:13px;
+    height:13px;
+}
+.checkbox-checked {
+    background:transparent url('../img/tick.png') no-repeat scroll 1px 3px;
+}
+.checkbox-label .avatar,
+.checkbox,
+.checkbox-option {
+    vertical-align:middle;
+}
+#simplemodal-container .checkbox-option {
+    font-weight:normal;
+}
+#simplemodal-container .checkbox-label {
+    margin:4px 0;
+}
+.checkbox-label {
+    display:block;
 }
 /* container */
 #main, #footer { width:950px; }
@@ -835,20 +866,42 @@ textarea:-moz-placeholder {/* for FF */
     width:262px;
     margin-bottom:10px;
 }
-#tabs {
+#tabs,
+#repo-share-tabs {
     font-size:1em;
     padding:0;
     border:0;
     min-height:150px;
     margin-bottom:75px;
 }
-#tabs-nav {
+#repo-share-tabs {
+    margin-bottom:0;
+}
+#tabs-nav,
+#repo-share-tabs-nav {
     padding:0;
+}
+#repo-share-tabs-nav {
+    height:30px;
+    border-bottom:1px solid #ddd;
+    border-radius:0;
+    margin-bottom:10px;
 }
 #tabs-nav li {
     float:left;
     border:0;
     background:none;
+}
+#repo-share-tabs-nav li {
+    display:inline-block;
+    border:1px solid transparent;
+    border-bottom:0;
+    background:none;
+}
+#repo-share-tabs-nav li a {
+    color:#666;
+    line-height:16px;
+    padding:6px 13px;
 }
 #tabs-nav .long-item {
     margin-left:.4em;
@@ -863,11 +916,30 @@ textarea:-moz-placeholder {/* for FF */
     color:#DD4B39;
     border-bottom:2px solid #DD4B39;
 }
+#repo-share-tabs-nav .ui-state-active {
+    border-color:#ddd;
+    border-radius:3px 3px 0 0;
+    background:#fff;
+    margin-bottom:-1px;
+}
+#repo-share-tabs-nav .ui-state-active a {
+    font-weight:bold;
+}
 #tabs-nav li a:hover {
     color:#DD4B39;
 }
-#tabs .ui-tabs-panel {
+#repo-share-tabs-nav li a:hover {
+    color:#333;
+}
+#tabs .ui-tabs-panel,
+#repo-share-tabs .ui-tabs-panel {
     padding:0;
+}
+#repo-share-tabs .option-list {
+    max-height:200px;
+    overflow:auto;
+    margin-bottom:5px;
+    position:relative;/* to fix ie7 'scroll position' problem */
 }
 .event-item {
     margin:10px 0 15px;
@@ -1212,9 +1284,14 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
-#member-add-form,
-#repo-share-form {
+#member-add-form {
     width:266px;
+}
+#repo-share-form {
+    width:320px;
+}
+#email_or_group {
+    width:314px;
 }
 #repo-share-form .share-permission-select {
     width:100%;

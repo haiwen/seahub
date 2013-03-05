@@ -14,7 +14,7 @@ if ($('.messages')[0]) {
 }
 
 //highlight the tr when mouse hover on it
-$("table tr:gt(0)").hover(
+$("table tr:gt(0), .checkbox-label").hover(
 	function() {
 		$(this).addClass('hl');
 	},
@@ -22,7 +22,12 @@ $("table tr:gt(0)").hover(
 		$(this).removeClass('hl');
 	}
 );
+
 $('input, textarea').placeholder();
+$('.checkbox-orig').click(function() {
+    $(this).parent().toggleClass('checkbox-checked');
+});
+
 $('#lang-context').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');

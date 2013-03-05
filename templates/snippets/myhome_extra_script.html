@@ -5,7 +5,7 @@
     contact_email = '{{ contact.contact_email }}';
     share_list.push({value:contact_email, label:contact_email});
     {% endfor %}
-
+    
     {% for group in groups %}
     group_name = '{{ group.group_name }}';
     group_name_py = '{{ group.group_name|char2pinyin }}'
@@ -16,14 +16,28 @@
         $("#repo_id").val($(this).data("id"));
         $("#repo-share-form .op-target").html($(this).data("name"));
         $("#repo-share-form").modal({appendTo: "#main", focus:false});
+        $('#repo-share-tabs').tabs();
         $('#simplemodal-container').css('height', 'auto');
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);
     });
 
     //check before post
     $('#share-submit-btn').click(function() {
-        if (!$.trim($('#email_or_group').attr('value'))) {
-            apply_form_error('repo-share-form', '{% trans "Please enter emails or groups." %}');
+        var cur_tab_id = $('#repo-share-tabs-nav .ui-tabs-selected a').attr('href');
+        var post_data = '';
+        switch(cur_tab_id) {
+            case '#share-enter':
+                post_data = $('#email_or_group').val();
+                break;
+            case '#share-grp-options':
+            case '#share-contact-options':
+                $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
+                    post_data += $(this).val() + ',';
+                });
+                $('#email_or_group').val(post_data);
+        }
+        if (!post_data) {
+            apply_form_error('repo-share-form', '{% trans "Please enter emails or groups or select some at first." %}');
             return false;
         }
         $("#repo-share-form").submit();

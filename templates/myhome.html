@@ -88,7 +88,7 @@
 {% endif %}
 
 {% url 'share_repo' as repo_share_url %}
-{% with post_url=repo_share_url %}
+{% with post_url=repo_share_url groups=joined_groups contacts=my_contacts %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 

@@ -1032,6 +1032,7 @@ def myhome(request):
     profiles = Profile.objects.filter(user=request.user.username)
     nickname = profiles[0].nickname if profiles else ''
 
+    my_contacts = []
     if request.cloud_mode:
         allow_public_share = False
         # In cloud mode, list joined groups and registered contacts for
@@ -1054,7 +1055,8 @@ def myhome(request):
                 continue
             u.contact_email = u.email
             contacts.append(u)
-
+        my_contacts = [ c for c in Contact.objects.filter(user_email=email) \
+                         if is_registered_user(c.contact_email) ]
     # events
     if EVENTS_ENABLED:
         events = True
@@ -1073,6 +1075,7 @@ def myhome(request):
             "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
+            "my_contacts": my_contacts,
             "joined_groups": joined_groups,
             "autocomp_groups": autocomp_groups,
             "notes": notes,

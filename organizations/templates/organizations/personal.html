@@ -26,12 +26,10 @@
     <p class="info-item-bottom">{{ quota_usage|filesizeformat }}</p>
 </div>
 
-<!-- 我的群组 -->
 {% include "snippets/my_groups.html" %}
 {% endblock %}
 
 {% block right_panel %}
-<!-- 我拥有的资料库 共享给我的资料库 星标文件 -->
 {% include "snippets/my_owned_repos.html" %}
 
 {% if events %}
@@ -39,7 +37,7 @@
 {% endif %}
 
 {% url 'org_repo_share' org.url_prefix as repo_share_url %}
-{% with post_url=repo_share_url %}
+{% with post_url=repo_share_url groups=org_groups %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 
