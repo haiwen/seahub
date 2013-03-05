@@ -6,10 +6,6 @@ $('#main-panel').css('margin-bottom', $('#bottom-bar button').outerHeight() + 2)
 $('#footer').addClass('hide');
 
 {% if groups %}
-var group_list = []
-{% for group in groups %}
-group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
-{% endfor %}
 $('#recommend').click(function() {
     if ($('#recommend-to-group-form').hasClass('hide')) {
         $('#recommend-to-group-form, #recommend-to-group-caret').removeClass('hide');

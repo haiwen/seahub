@@ -1823,16 +1823,6 @@ textarea:-moz-placeholder {/* for FF */
 #recommend-to-group-form {
     padding-bottom:10px;
 }
-#recommend-to-group-form .groups {
-    margin-bottom:6px;
-}
-#recommend-to-group-form .group-checkbox,
-#recommend-to-group-form .group-name {
-    vertical-align:middle;
-}
-#recommend-to-group-form .group-name {
-    margin:0 10px 0 3px;
-}
 #recommend-to-group-form textarea {
     width:100%;
     height:5em;

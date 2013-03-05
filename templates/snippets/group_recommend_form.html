@@ -11,7 +11,10 @@
         </h3>
         <div class="groups">
             {% for group in groups %}
-            <input type="checkbox" name="groups" value="{{ group.id }}" id="{{ group.id }}" {% if forloop.first and forloop.last %}checked="checked"{% endif %} class="group-checkbox"><label for="{{ group.id }}" class="group-name">{{ group.group_name }}</label>
+            <label for="{{ group.id }}" class="checkbox-label">
+                <span class="checkbox{% if forloop.first and forloop.last %} checkbox-checked{% endif %}"><input type="checkbox" name="groups" value="{{ group.id }}" id="{{ group.id }}" {% if forloop.first and forloop.last %}checked="checked"{% endif %} class="checkbox-orig"></span>
+                <span class="checkbox-option">{{ group.group_name }}</span>
+            </label>
             {% endfor %}
         </div>
         <label>{% trans "Recommend Message"%}</label>
