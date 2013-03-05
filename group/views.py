@@ -19,6 +19,7 @@ from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
+    seafserv_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
@@ -41,7 +42,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
-    check_and_get_org_by_repo
+    check_and_get_org_by_repo, gen_file_get_url
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
@@ -1086,3 +1087,130 @@ def group_discus(request, group_id):
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
+
+
+def find_wiki_repo(request, group_id):
+    repos = get_group_repos(group_id, request.user.username)
+    for repo in repos:
+        if repo.name == "wiki":
+            return repo
+    return None
+
+
+def get_file_url(repo_id, path, filename):
+    obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
+    access_token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                     'view', '')
+    url = gen_file_get_url(access_token, filename)
+    return url
+
+def get_wiki_page(request, group_id, page_name):
+    import urllib2
+    repo = find_wiki_repo(request, group_id)
+    path = "/" + page_name + ".md"
+    filename = page_name + ".md"
+    url = get_file_url(repo.id, path, filename)
+    file_response = urllib2.urlopen(url)
+    content = file_response.read()
+    return content
+
+def convert_wiki_link(content, group):
+    import re
+
+    def repl(matchobj):
+        print matchobj.group(1)
+        linkname = matchobj.group(1)
+        filename = linkname + ".md"
+        path = "/" + filename
+        return "<a href='%sgroup/%d/wiki/%s'>%s</a>" % (SITE_ROOT, 
+                                                        group.id, linkname, linkname)
+
+    return re.sub(r'\[\[(.+)\]\]', repl, content)
+    
+
+@login_required
+def group_wiki(request, group_id, page_name="home"):
+
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
+    is_staff = True if check_group_staff(group.id, request.user) else False
+
+    content = get_wiki_page(request, group_id_int, page_name)
+    content = convert_wiki_link(content, group)
+
+    return render_to_response("group/group_wiki.html", {
+            "group_id": group_id,
+            "group" : group,
+            "is_staff": is_staff,
+            "content": content,
+            "page": page_name,
+            }, context_instance=RequestContext(request));
+
+
+
+@login_required
+def group_wiki_create(request, group_id):
+    
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+    
+    is_staff = True if check_group_staff(group.id, request.user) else False
+
+    
+    # create group repo in user context
+    repo_name = "wiki"
+    repo_desc = "Wiki Pages"
+    user = request.user.username
+    passwd = None
+    permission = "rw"
+
+    content_type = 'application/json; charset=utf-8'
+
+    def json_error(err_msg):
+        result = {'error': [err_msg]}
+        return HttpResponseBadRequest(json.dumps(result),
+                                      content_type=content_type)
+
+    try:
+        repo_id = seafserv_threaded_rpc.create_repo(repo_name,
+                                                    repo_desc,
+                                                    user, passwd)
+    except:
+        return json_error(_(u'Failed to create'))
+    
+    try:
+        status = seafserv_threaded_rpc.group_share_repo(repo_id,
+                                                        int(group_id),
+                                                        user,
+                                                        permission)
+    except SearpcError, e:
+        seafserv_threaded_rpc.remove_repo(repo_id)
+        print e
+        return json_error(_(u'Failed to create: internal error.'))
+
+    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
