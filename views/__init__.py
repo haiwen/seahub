@@ -1040,6 +1040,7 @@ def myhome(request):
         autocomp_groups = joined_groups
         contacts = [ c for c in Contact.objects.filter(user_email=email) \
                          if is_registered_user(c.contact_email) ]
+        my_contacts = contacts
     else:
         allow_public_share = True
 
