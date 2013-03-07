@@ -1214,3 +1214,69 @@ def group_wiki_create(request, group_id):
         return json_error(_(u'Failed to create: internal error.'))
 
     return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+
+
+@login_required
+def group_wiki_page_new(request, group_id, page_name="home"):
+
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
+    is_staff = True if check_group_staff(group.id, request.user) else False
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        page_name = request.POST.get('page_name', '')
+        if not page_name:
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+        repo = find_wiki_repo(request, group.id)
+        if not repo:
+            # todo
+            return None
+        
+        filename = page_name + ".md"
+        filepath = "/" + page_name + ".md"
+        seafserv_threaded_rpc.post_empty_file(
+            repo.id, "/", filename, request.user.username)
+
+        url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
+        return HttpResponseRedirect(url)
+
+@login_required
+def group_wiki_page_edit(request, group_id, page_name="home"):
+
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
+    repo = find_wiki_repo(request, group.id)
+    if not repo:
+        # todo
+        return None
+    filepath = "/" + page_name + ".md"
+    url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
+    return HttpResponseRedirect(url)

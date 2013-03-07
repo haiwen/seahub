@@ -1847,3 +1847,11 @@ textarea:-moz-placeholder {/* for FF */
     width: 500px;
     height: 30px;
 }
+
+/* wiki page */
+#wiki-area.article {
+    padding: 0 0;
+}
+#page-edit {
+    margin-right:6px;
+}
