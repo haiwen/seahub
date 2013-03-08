@@ -41,7 +41,7 @@ textarea {
 }
 input { 
     height:22px;
-    line-height:22px;
+    /*line-height:22px;*/
     border: 1px solid #ddd;
     margin:3px 0;
 }
@@ -376,13 +376,13 @@ textarea:-moz-placeholder {/* for FF */
     width:100%;
     font-size: 14px;
     font-weight: bold;
-    overflow:hidden;
     border-bottom:1px solid #ddd;
     margin-bottom:25px;
 }
 #header-inner {
     width:950px;
     margin:0 auto;
+    overflow:hidden;
 }
 #main {
     min-height: 400px;
@@ -536,6 +536,9 @@ textarea:-moz-placeholder {/* for FF */
     float: left;
     height:21px;
     margin:0 14px;
+}
+.ru #header .nav li {
+    margin:0 11px;
 }
 #header .nav a,
 #header .nav a:visited {
@@ -1915,7 +1918,6 @@ textarea:-moz-placeholder {/* for FF */
     height: 30px;
 }
 
-
 /* wiki page */
 #wiki-area.article {
     padding: 0 0;
@@ -1927,54 +1929,48 @@ textarea:-moz-placeholder {/* for FF */
     color:red;
 }
 
+.search-form {
+    padding-left:5px;
+    height:28px;
+    border:1px solid #ddd;
+    border-radius:3px;
+    background:#fff;
+    overflow:hidden;/*for some chromium*/
+}
+
+#top-search-form {
+    width:214px;
+    *width:218px;
+    margin-top:1px;
+}
+.search-input,
+.search-form .search-submit {
+    height:28px;
+    border:0;
+    margin:0;
+    vertical-align:middle;
+}
+.search-input {
+    width:180px;
+    outline:0;
+}
+.search-form .search-submit {
+    width:30px;
+    padding:0;
+    background:#fff url('../img/search.png') no-repeat scroll 50% 50%;
+}
 #search-form {
-    float: right;
-    margin-top: 5px;
-    width: 200px;
-    height: 24px;
-    border: 2px solid #CDCDCD;
-    border-color: #9A9A9A #CDCDCD #CDCDCD #9A9A9A;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-    box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
-    -moz-box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
-    -webkit-box-shadow: 0 0 0 #000,inset 0px 3px 3px #eee;
+    width:426px;
+    *width:430px;
 }
-
-#search-keyword {
-    margin: 0;
-    width: 180px;
-    height: 20px;
-    padding: 2px;
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 12px;
-    border: 0;
-    outline: 0;
-    background: url('../img/search.png') no-repeat scroll left center;
+#search-form .search-input {
+    width:392px;
 }
-
-.search-info {
-    font-size: 16px;
-    border-bottom: 1px solid #8A948F;
-    padding-bottom: 3px;
+#search-form-container {
+    padding:7px 5px;
+    background:#f7f7f8;
+    border-radius:2px;
 }
-
-.search-result-count {
-    font-size: 13px;
-    color: #999;
-    line-height: 35px;
+#search-results {
+    padding-top:15px;
 }
-
-.search-info-keyword {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.search-results {
-    margin-top: 10px;
-}
-

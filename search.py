@@ -33,7 +33,7 @@ from seahub.utils import search_file_by_name
 
 @login_required
 def search(request):
-    keyword = request.GET['keyword']
+    keyword = request.GET['q']
     current_page = int(request.GET.get('page', '1'))
     per_page= int(request.GET.get('per_page', '25'))
 

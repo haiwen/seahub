@@ -13,6 +13,13 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
+// search: disable submit when input nothing
+$('.search-form').submit(function() {
+    if (!$.trim($(this).find('.search-input').val())) {
+        return false;
+    }
+});
+
 //highlight the tr when mouse hover on it
 $("table tr:gt(0), .checkbox-label").hover(
 	function() {
@@ -56,6 +63,7 @@ if ($.browser.msie) {
     $('button, input[type="checkbox"], input[type="radio"], input[type="submit"]').focus(function() {
         $(this).blur();
     });
+    $('.search-input').css({'line-height':$('.search-input').css('height')});
 }
 
 /*

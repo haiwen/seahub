@@ -4,68 +4,66 @@
 {% load url from future %}
 
 {% block right_panel %}
-<p class="search-info">
-  {% trans 'Search results for' %} <span class="search-info-keyword">"{{ keyword }}"</span>
-</p>
-{% if not results %}
-<p class="search-results-empty">
-  {% trans 'No search result found' %}
-</p>
-{% else %}
-<p class="search-result-count">{% trans 'Found' %} {{ total }} {% trans 'results' %} </p>
-<table class="search-results">
-  <tr>
-    <th width="10%"></th> <!-- icon -->
-    <th width="40%">{% trans 'Name' %}</th>
-    <th width="30%">{% trans 'Library' %}</th>
-    <th width="20%">{% trans 'Owner' %}</th>
-  </tr>
-  {% for file in results %}
-  <tr>
-    <td>
-      <img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" alt="{% trans "File"%}" />
-    </td>
-    <td>
-      <a href="{% url 'repo_view_file' repo_id=file.repo.id %}?p={{ file.fullpath|urlencode }}">{{ file.name }}</a>
-      ({{ file.score }})
-    </td>
-    <td>
-      <a href="{% url 'repo' repo_id=file.repo.id %}">{{ file.repo.name }}</a>
-    </td>
-    <td>
-      {% avatar file.repo.owner 20 %}
-      <a class="name" href="{% url 'profile.views.user_profile' file.repo.owner %}">{{ file.repo.owner|email2nickname }}</a>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-<div id="paginator">
-    {% if current_page != 1 %}
-    <a href="?keyword={{ keyword|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>
-    {% endif %}
-    {% if has_more %}
-    <a href="?keyword={{ keyword|urlencode }}&page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
-    {% endif %}
-{% if current_page != 1 or has_more %}
-|
-{% endif %}
-    <span>{% trans "Per page: "%}</span>
-    {% if per_page == 25 %}
-    <span> 25 </span>
-    {% else %}
-    <a href="?keyword={{ keyword|urlencode }}&page={{ current_page }}&per_page=25" class="per-page">25</a>
-    {% endif %}
-    {% if per_page == 50 %}
-    <span> 50 </span>
-    {% else %}
-    <a href="?keyword={{ keyword|urlencode }}&page={{ current_page }}&per_page=50" class="per-page">50</a>
-    {% endif %}
-    {% if per_page == 100 %}
-    <span> 100 </span> 
-    {% else %}
-    <a href="?keyword={{ keyword|urlencode }}&page={{ current_page }}&per_page=100" class="per-page">100</a>
-    {% endif %}
+<div id="search-form-container">
+    <form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
+        <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+        <input type="submit" value="" class="search-submit" />
+    </form>
 </div>
 
+<div id="search-results">
+{% if not results %}
+    <p>{% trans 'No result found' %}</p>
+{% else %}
+    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
+    <table>
+        <tr>
+            <th width="5%"></th>
+            <th width="45%">{% trans 'Name' %}</th>
+            <th width="22%">{% trans 'Library' %}</th>
+            <th width="28%">{% trans 'Owner' %}</th>
+        </tr>
+        {% for file in results %}
+        <tr>
+            <td><img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+            <td><a href="{% url 'repo_view_file' repo_id=file.repo.id %}?p={{ file.fullpath|urlencode }}" target="_blank">{{ file.name }}</a></td>
+            <td><a href="{% url 'repo' repo_id=file.repo.id %}" target="_blank">{{ file.repo.name }}</a></td>
+            <td>
+                {% avatar file.repo.owner 20 %}
+                <a class="name" href="{% url 'profile.views.user_profile' file.repo.owner %}" target="_blank">{{ file.repo.owner|email2nickname }}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% if total > 25 %}
+    <div id="paginator">
+        {% if current_page != 1 %}
+        <a href="?q={{ keyword|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>
+        {% endif %}
+        {% if has_more %}
+        <a href="?q={{ keyword|urlencode }}&page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
+        {% endif %}
+        {% if current_page != 1 or has_more %}
+        |
+        {% endif %}
+        <span>{% trans "Per page: "%}</span>
+        {% if per_page == 25 %}
+        <span> 25 </span>
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=25" class="per-page">25</a>
+        {% endif %}
+        {% if per_page == 50 %}
+        <span> 50 </span>
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=50" class="per-page">50</a>
+        {% endif %}
+        {% if per_page == 100 %}
+        <span> 100 </span> 
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=100" class="per-page">100</a>
+        {% endif %}
+    </div>
+    {% endif %}
 {% endif %}
+</div>
 {% endblock %}
