@@ -3,6 +3,8 @@ from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
 from seahub.views import *
+from seahub.views.file import view_file, view_history_file, view_trash_file,\
+    view_snapshot_file
 from notifications.views import notification_list
 from group.views import group_list
 
@@ -53,7 +55,10 @@ urlpatterns = patterns('',
     url(r'^repo/snapshot/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_view_snapshot, name='repo_view_snapshot'),
     url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),
     (r'^repo/remove/(?P<repo_id>[-0-9a-f]{36})/$', repo_remove),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', repo_view_file, name="repo_view_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     (r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
     (r'^repo/save_settings$', repo_save_settings),

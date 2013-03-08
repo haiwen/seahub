@@ -1,0 +1,68 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block extra_style %}{{block.super}}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+<style type="text/css">
+.CodeMirror-scroll { min-height:400px; }                               
+.CodeMirror { margin-bottom:40px; }                                    
+    {% if fileext == 'txt' or fileext == 'text' %}
+.CodeMirror { width:624px; padding:40px 96px; }
+    {% endif %}
+</style>
+{% endblock %}
+
+{% block update_detail %}
+{% if last_commit_id %}
+  <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
+{% endif %}
+{% endblock %}
+
+{% block edit_file %}
+{% if user_perm == 'rw' and not err%}
+<button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
+{% endif %}
+{% endblock %}
+
+{% block file_view %}
+    {% if encoding != None %}
+    <div id="file-enc-cont">
+        <label for="file-enc">{% trans "Encoding:" %}</label>
+        <select id="file-enc">
+            {% for enc in file_encoding_list %}
+            <option value="{{ enc }}" {% if encoding and encoding == enc %} selected="selected" {% endif %}>{% if enc == 'auto'%}{% trans "auto detect" %}{% else %}{{ enc }}{% endif %}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+
+    {% if not err %}
+      {% ifnotequal file_content None %}
+        <textarea id="docu-view" class="vh">{{ file_content|escape }}</textarea>
+      {% endifnotequal %}
+    {% else %}
+      <div id="file-view-tip">
+        <p class="error">{{ err }}</p>
+      </div>
+    {% endif %}
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
+
+<script type="text/javascript">
+    {% ifnotequal file_content None %}
+    var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
+        {% include 'snippets/editor_set_mode.html' %}
+        theme: 'default',
+        indentUnit: 4,
+        {% if fileext != 'txt' and fileext != 'text' %}
+        lineNumbers: true,
+        {% endif %}
+        lineWrapping: true,
+        readOnly: true
+    });
+    {% endifnotequal %}
+</script>
+{% endblock%}

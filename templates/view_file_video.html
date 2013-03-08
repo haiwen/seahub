@@ -1,0 +1,13 @@
+{% extends 'view_file_base.html' %}
+
+{% block extra_style %}{{block.super}}
+<link rel="stylesheet" href="{{MEDIA_URL}}css/mediaelementplayer.css" />
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+<script src="{{MEDIA_URL}}js/mediaelement-and-player.min.js"></script>
+<script type="text/javascript">
+  $('#file-view').html('<div class="video-container"><video src="{{raw_path}}" width="800" height="400"></video></div>');
+$('video').mediaelementplayer(/* Options */);
+</script>
+{% endblock %}

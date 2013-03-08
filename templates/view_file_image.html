@@ -1,0 +1,73 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block extra_style %}{{block.super}}
+<style type="text/css">
+#file-view { text-align:center; padding:30px 0; }
+</style>
+{% endblock %}
+
+{% block file_view %}
+{% if img_prev or img_next %}
+<div id="img-prev-next">
+  {% if img_prev %}
+    <a href="{% url 'repo_view_file' repo.id %}?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
+  {% endif %}
+  {% if img_prev and img_next %}
+    <span>/</span>
+  {% endif %}
+  {% if img_next %}
+    <a href="{% url 'repo_view_file' repo.id %}?p={{img_next|urlencode}}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
+  {% endif %}
+</div>
+{% endif %}
+
+<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+
+<script type="text/javascript">
+{% if img_prev or img_next %}
+var input_focus = false;
+$('input, textarea').focus(function() {
+    input_focus = true;
+}).blur(function() {
+    input_focus = false;
+});
+$('body').bind('keydown', function(e) {
+    if (!input_focus) { // so cursor move in form input element can work normally
+        {% if img_prev %}
+        if (e.keyCode == 37) { // press '<-'
+            location.href = $('#img-prev').attr('href');
+        }
+        {% endif %}
+        {% if img_next %}
+        if (e.keyCode == 39) { // press '->'
+            location.href = $('#img-next').attr('href');
+        }
+        {% endif %}
+    }
+})
+{% endif %}
+
+window.onload = function () {
+    var img = $('#image-view');
+    var img_h = img.outerHeight();
+    var file_view_h = parseInt($('#file-view').css('min-height'));
+    {% if img_prev or img_next %}
+    var prev_next_h = $('#img-prev-next').outerHeight(true);
+    {% else %}
+    var prev_next_h = 0;
+    {% endif %}
+    if (img_h < file_view_h - prev_next_h) {
+        img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
+    }
+    if (img.width() > 946) {
+        img.width(946);
+    }
+    img.removeClass('vh');
+}
+</script>
+{% endblock %}

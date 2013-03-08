@@ -1,4 +1,7 @@
 from django.http import Http404
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from seaserv import get_repo, is_passwd_set
 
 from seahub.utils import check_and_get_org_by_repo, check_and_get_org_by_group
 
@@ -45,4 +48,25 @@ def ctx_switch_required(func):
         request.base_template = base_template
         return func(request, *args, **kwargs)
     return _decorated
-    
+
+def repo_passwd_set_required(func):
+    """
+    Decorator for views to redirect user to repo decryption page if repo is
+    encrypt and password is not set by user.
+    """
+    def _decorated(request, *args, **kwargs):
+        repo_id = kwargs.get('repo_id', None)
+        if not repo_id:
+            # TODO: raise error
+            pass
+        repo = get_repo(repo_id)
+        username = request.user.username
+        if repo.encrypted and not is_passwd_set(repo_id, username):
+            # Redirect uesr to decrypt repo page.
+            return render_to_response('decrypt_repo_form.html', {
+                    'repo': repo,
+                    'next': request.get_full_path(),
+                    }, context_instance=RequestContext(request))
+        return func(request, *args, **kwargs)
+    return _decorated
+            

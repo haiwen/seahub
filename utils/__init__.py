@@ -284,9 +284,11 @@ def get_accessible_repos(request, repo):
 
     return accessible_repos
 
+
 def valid_previewed_file(filename):
     """
     Check whether file can preview on web
+    ``NOTE``: This function is deprecated due to the bad name.    
     
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
@@ -296,6 +298,19 @@ def valid_previewed_file(filename):
     else:
         return ('Unknown', fileExt)
 
+def get_file_type_and_ext(filename):
+    """
+    Return file type and extension if the file can be previewd online,
+    otherwise, return unknown type.
+    """
+    fileExt = os.path.splitext(filename)[1][1:].lower()
+    filetype = FILEEXT_TYPE_MAP.get(fileExt)
+    if filetype:
+        return (filetype, fileExt)
+    else:
+        return ('Unknown', fileExt)
+    
+    
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
     and size of the file blob
@@ -316,6 +331,8 @@ def gen_file_get_url(token, filename):
     Generate httpserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
+    if isinstance(filename, unicode):
+        filename = urllib2.quote(filename.encode('utf-8'))
     return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
 
 def gen_file_upload_url(token, op):
@@ -741,3 +758,13 @@ def show_delete_days(request):
 
     return days
 
+def is_textual_file(file_type):
+    """
+    Check whether a file type is a textual file.
+    """
+    if file_type == 'Text' or file_type == 'Markdown' or file_type == 'Sf':
+        return True
+    else:
+        return False
+
+    
