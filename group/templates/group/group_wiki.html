@@ -12,7 +12,7 @@
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'group_discus' group.id %}">{% trans "Discussions" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Wiki" %}</li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
         {% if is_staff %}
         <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Admin" %}</a></li>
         {% endif %}
@@ -23,24 +23,31 @@
     </div>
 </div>
 
-<button id="page-create" class="fright">{% trans "New Page" %}</button>
-<button id="page-edit" class="fright">{% trans "Edit Page" %}</button>
+{% if not wiki_exists %}
+  <a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki" %}</a>
+{% else %}
+  <button id="page-create" class="fright">{% trans "New Page" %}</button>
 
-<a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki" %}</a>
+  {% if wiki_page_missing %}
+  <p>Seems this page is deleted by others, you can create a new page by clicking "New Page" button. </p>
+  {% else %}
+  <button id="page-edit" class="fright">{% trans "Edit Page" %}</button>
 
-<div id="wiki-area" class="article">
+  <div id="wiki-area" class="article">
     <h1>{{ page }}</h1>
     <div id="wiki-content"></div>
-</div>
-
-
-<form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
+  </div>
+  {% endif%}
+  
+  <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
     <h3>{% trans "New Page"%}</h3>
     <label>{% trans "Name"%}</label><br/>
     <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}"/><br />
     <p class="error hide"></p>
     <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
-</form>
+  </form>
+  
+{% endif %}
 
 {% endblock %}
 
@@ -59,10 +66,10 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 <script type="text/javascript">
+{% if wiki_exists %}
 var converter = new Showdown.converter();
 $('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
 
-<!-- wiki page operation -->
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});
 })
@@ -70,7 +77,7 @@ $('#page-create').click(function() {
 $('#page-edit').click(function() {
     window.open("{% url 'group_wiki_page_edit' group.id page %}")
 })
-
+{% endif %}
 
 </script>
 {% endblock %}

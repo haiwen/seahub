@@ -23,7 +23,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission, is_passwd_set, unshare_group_repo
+    get_org_groups_by_user, check_permission, is_passwd_set, \
+    unshare_group_repo, get_file_id_by_path
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
@@ -1088,6 +1089,11 @@ def group_discus(request, group_id):
             }, context_instance=RequestContext(request));
 
 
+class WikiDoesNotExist(Exception):
+    pass
+
+class WikiPageMissing(Exception):
+    pass
 
 def find_wiki_repo(request, group_id):
     repos = get_group_repos(group_id, request.user.username)
@@ -1096,9 +1102,10 @@ def find_wiki_repo(request, group_id):
             return repo
     return None
 
-
 def get_file_url(repo_id, path, filename):
-    obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
+    obj_id = get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        raise WikiPageMissing
     access_token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                      'view', '')
     url = gen_file_get_url(access_token, filename)
@@ -1107,31 +1114,34 @@ def get_file_url(repo_id, path, filename):
 def get_wiki_page(request, group_id, page_name):
     import urllib2
     repo = find_wiki_repo(request, group_id)
+    if not repo:
+        raise WikiDoesNotExist
     path = "/" + page_name + ".md"
     filename = page_name + ".md"
     url = get_file_url(repo.id, path, filename)
     file_response = urllib2.urlopen(url)
     content = file_response.read()
-    return content
+    return content, repo.id
 
-def convert_wiki_link(content, group):
+def convert_wiki_link(content, group, repo_id):
     import re
 
     def repl(matchobj):
-        print matchobj.group(1)
         linkname = matchobj.group(1)
         filename = linkname + ".md"
         path = "/" + filename
-        return "<a href='%sgroup/%d/wiki/%s'>%s</a>" % (SITE_ROOT, 
-                                                        group.id, linkname, linkname)
+        if get_file_id_by_path(repo_id, path):
+            a_tag = "<a href='%sgroup/%d/wiki/%s/'>%s</a>"
+            return  a_tag % (SITE_ROOT, group.id, linkname, linkname)
+        else:
+            a_tag = '''<a class="wiki-page-missing" href='%sgroup/%d/wiki/%s/'>%s</a>'''
+            return a_tag % (SITE_ROOT, group.id, linkname, linkname)
 
     return re.sub(r'\[\[(.+)\]\]', repl, content)
     
-
 @login_required
 def group_wiki(request, group_id, page_name="home"):
-
-    group_id_int = int(group_id) # Checkeb by URL Conf
+    group_id_int = int(group_id) # Checked by URL Conf
 
     group = get_group(group_id_int)
     if not group:
@@ -1148,8 +1158,16 @@ def group_wiki(request, group_id, page_name="home"):
 
     is_staff = True if check_group_staff(group.id, request.user) else False
 
-    content = get_wiki_page(request, group_id_int, page_name)
-    content = convert_wiki_link(content, group)
+    content = ''
+    wiki_exists, wiki_page_missing = True, False
+    try:
+        content, repo_id = get_wiki_page(request, group_id_int, page_name)
+    except WikiDoesNotExist:
+        wiki_exists = False
+    except WikiPageMissing:
+        wiki_page_missing = True
+    else:
+        content = convert_wiki_link(content, group, repo_id)
 
     return render_to_response("group/group_wiki.html", {
             "group_id": group_id,
@@ -1157,9 +1175,9 @@ def group_wiki(request, group_id, page_name="home"):
             "is_staff": is_staff,
             "content": content,
             "page": page_name,
-            }, context_instance=RequestContext(request));
-
-
+            "wiki_exists": wiki_exists,
+            "wiki_page_missing": wiki_page_missing,
+            }, context_instance=RequestContext(request))
 
 @login_required
 def group_wiki_create(request, group_id):
@@ -1213,8 +1231,11 @@ def group_wiki_create(request, group_id):
         print e
         return json_error(_(u'Failed to create: internal error.'))
 
-    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+    # create home page
+    page_name = "home.md"
+    seafserv_threaded_rpc.post_empty_file(repo_id, "/", page_name, user)
 
+    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
 
 @login_required
 def group_wiki_page_new(request, group_id, page_name="home"):

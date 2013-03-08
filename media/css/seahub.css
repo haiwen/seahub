@@ -1855,3 +1855,6 @@ textarea:-moz-placeholder {/* for FF */
 #page-edit {
     margin-right:6px;
 }
+.wiki-page-missing {
+    color:red;
+}
