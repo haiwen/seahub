@@ -1931,7 +1931,7 @@ textarea:-moz-placeholder {/* for FF */
 
 .search-form {
     padding-left:5px;
-    height:28px;
+    height:24px;
     border:1px solid #ddd;
     border-radius:3px;
     background:#fff;
@@ -1941,11 +1941,11 @@ textarea:-moz-placeholder {/* for FF */
 #top-search-form {
     width:214px;
     *width:218px;
-    margin-top:1px;
+    margin-top:4px;
 }
 .search-input,
 .search-form .search-submit {
-    height:28px;
+    height:24px;
     border:0;
     margin:0;
     vertical-align:middle;
