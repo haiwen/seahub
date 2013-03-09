@@ -103,7 +103,6 @@ urlpatterns = patterns('',
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
 
-    url(r'^search/$', search, name='search'),
 )
 
 if settings.SERVE_STATIC:
@@ -127,4 +126,9 @@ else:
         (r'^publicrepo/create/$', public_repo_create),
         url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
         url(r'^pubinfo/users/$', pubuser, name='pubuser'),
+    )
+
+if getattr(settings, 'ENABLE_FILE_SEARCH', False):
+    urlpatterns += patterns('',
+        url(r'^search/$', search, name='search'),
     )

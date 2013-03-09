@@ -87,7 +87,7 @@
                 </a>
                 {% block nav %}{% endblock %}
 
-                {% if request.user.is_authenticated %}
+                {% if enable_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     <input type="submit" value="" class="search-submit" />

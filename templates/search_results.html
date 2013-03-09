@@ -16,26 +16,39 @@
     <p>{% trans 'No result found' %}</p>
 {% else %}
     <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
-    <table>
-        <tr>
-            <th width="5%"></th>
-            <th width="45%">{% trans 'Name' %}</th>
-            <th width="22%">{% trans 'Library' %}</th>
-            <th width="28%">{% trans 'Owner' %}</th>
-        </tr>
-        {% for file in results %}
-        <tr>
-            <td><img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            <td><a href="{% url 'repo_view_file' repo_id=file.repo.id %}?p={{ file.fullpath|urlencode }}" target="_blank">{{ file.name }}</a></td>
-            <td><a href="{% url 'repo' repo_id=file.repo.id %}" target="_blank">{{ file.repo.name }}</a></td>
-            <td>
-                {% avatar file.repo.owner 20 %}
-                <a class="name" href="{% url 'profile.views.user_profile' file.repo.owner %}" target="_blank">{{ file.repo.owner|email2nickname }}</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% if total > 25 %}
+    <ul id="search-results-list">
+    {% for file in results %}
+        <li class="search-results-item">
+          <img class="file-icon" src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" alt="{% trans "File"%}" />
+          <div class="title">
+            <a href="{% url 'repo' repo_id=file.repo.id %}" target="_blank">{{ file.repo.name }}</a>
+            <span>–</span>
+            <a class="filename" href="{% url 'repo_view_file' repo_id=file.repo.id %}?p={{ file.fullpath|urlencode }}" target="_blank" title="{{ file.fullpath|slice:'1:'}}" >
+              {% if file.name_highlight %}
+              {{ file.name_highlight|safe }}
+              {% else %}
+              {{ file.name }}
+              {% endif %}
+            </a>
+            <p>
+            {% if file.last_modified_by %}
+                {% avatar file.last_modified_by 20 %}
+                <a class="name" href="{% url 'profile.views.user_profile' file.last_modified_by %}">{{ file.last_modified_by|email2nickname }}</a>
+            {% endif %}
+            {% if file.last_modified %}
+                {{ file.last_modified|translate_seahub_time }}
+            {% endif %}
+            </p>
+          </div>
+          {% if file.content_highlight %}
+          <div class="content">
+            {{ file.content_highlight|safe }}
+          </div>
+          {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+    {% if total > per_page %}
     <div id="paginator">
         {% if current_page != 1 %}
         <a href="?q={{ keyword|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>

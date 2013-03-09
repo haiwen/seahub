@@ -15,7 +15,7 @@ from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor, md5_constructor
 from django.utils.translation import ugettext as _
 
-from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
+from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
 
 from htmldiff import HtmlDiff
 
@@ -406,6 +406,54 @@ def check_and_get_org_by_group(group_id, user):
     
     return org, base_template
 
+def calc_file_last_modified(repo_id, file_path, file_path_hash, file_id):
+    try:
+        # get the lastest one file revision
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, 1, -1)
+    except SearpcError, e:
+        return '', 0
+
+    if not commits:
+        return '', 0
+
+    email, last_modified = commits[0].creator_name, commits[0].ctime
+
+    info = FileLastModifiedInfo(repo_id=repo_id,
+                                file_path=file_path,
+                                file_path_hash=file_path_hash,
+                                file_id=file_id,
+                                last_modified=last_modified,
+                                email=email)
+    try:
+        info.save()
+    except IntegrityError:
+        pass
+
+    return email, last_modified
+
+def get_file_last_modified(repo_id, file_path):
+    email = ''
+    last_modified = 0
+    file_path_hash = calc_file_path_hash(file_path)
+    file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, file_path)
+    try:
+        fc = FileLastModifiedInfo.objects.get(repo_id=repo_id,
+                                            file_path_hash=file_path_hash)
+    except FileLastModifiedInfo.DoesNotExist:
+        # has no cache yet
+        user, last_modified = calc_file_last_modified(repo_id, file_path, file_path_hash, file_id)
+    else:
+        # cache found
+        if fc.file_id != file_id:
+            # but cache is outdated
+            fc.delete()
+            user, last_modified = calc_file_last_modified(repo_id, file_path, file_path_hash, file_id)
+        else:
+            # cache is valid
+            user, last_modified = fc.email, fc.last_modified
+
+    return user, last_modified
+
 def get_file_contributors_from_revisions(repo_id, file_path):
     """Inspect the file history and get a list of users who have modified the
     it.
@@ -413,7 +461,7 @@ def get_file_contributors_from_revisions(repo_id, file_path):
     """
     commits = []
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1, -1)
     except SearpcError, e:
         return [], 0, ''
 
@@ -770,48 +818,58 @@ def is_textual_file(file_type):
     else:
         return False
 
+if getattr(settings, 'ENABLE_FILE_SEARCH', False):
+    from seafes import es_get_conn, es_search
 
-from seafes import es_get_conn, es_search
+    conn = es_get_conn()
+    def search_file_by_name(request, keyword, start, size):
+        owned_repos, shared_repos, groups_repos, pub_repo_list = get_user_repos(request.user)
 
-conn = es_get_conn()
+        # unify the repo.owner property
+        for repo in owned_repos:
+            repo.owner = request.user.username
+        for repo in shared_repos:
+            repo.owner = repo.user
+        for repo in pub_repo_list:
+            repo.owner = repo.user
 
-def search_file_by_name(request, keyword, start, size):
-    owned_repos, shared_repos, groups_repos, pub_repo_list = get_user_repos(request.user)
+        pubrepo_id_map = {}
+        for repo in pub_repo_list:
+            # fix pub repo obj attr name mismatch in seafile/lib/repo.vala
+            repo.id = repo.repo_id
+            repo.name = repo.repo_name
+            pubrepo_id_map[repo.id] = repo
 
-    # unify the repo.owner property
-    for repo in owned_repos:
-        repo.owner = request.user.username
-    for repo in shared_repos:
-        repo.owner = repo.user
-    for repo in pub_repo_list:
-        repo.owner = repo.user
+        # get a list of pure non-pub repos
+        nonpub_repo_list = []
+        for repo in owned_repos + shared_repos + groups_repos:
+            if repo.id not in pubrepo_id_map:
+                nonpub_repo_list.append(repo)
 
-    pubrepo_id_map = {}
-    for repo in pub_repo_list:
-        # fix pub repo obj attr name mismatch in seafile/lib/repo.vala
-        repo.id = repo.repo_id
-        repo.name = repo.repo_name
-        pubrepo_id_map[repo.id] = repo
+        nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list]
 
-    # get a list of pure non-pub repos
-    nonpub_repo_list = []
-    for repo in owned_repos + shared_repos + groups_repos:
-        if repo.id not in pubrepo_id_map:
-            nonpub_repo_list.append(repo)
+        files_found, total = es_search(conn, nonpub_repo_ids, keyword, start, size)
 
-    nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list]
+        if len(files_found) > 0:
+            # construt a (id, repo) hash table for fast lookup
+            repo_id_map = {}
+            for repo in nonpub_repo_list:
+                repo_id_map[repo.id] = repo
 
-    files_found, total = es_search(conn, nonpub_repo_ids, keyword, start, size)
+            repo_id_map.update(pubrepo_id_map)
 
-    if len(files_found) > 0:
-        # construt a (id, repo) hash table for fast lookup
-        repo_id_map = {}
-        for repo in nonpub_repo_list:
-            repo_id_map[repo.id] = repo
+            for f in files_found:
+                repo = repo_id_map.get(f['repo_id'].encode('UTF-8'), None)
+                if repo:
+                    f['repo'] = repo
+                    f['exists'] = True
+                    f['last_modified_by'], f['last_modified'] = get_file_last_modified(f['repo_id'], f['fullpath'])
+                else:
+                    f['exists'] = False
 
-        repo_id_map.update(pubrepo_id_map)
+            files_found = filter(lambda f: f['exists'], files_found)
 
-        for f in files_found:
-            f['repo'] = repo_id_map[f['repo_id'].encode('UTF-8')]
-
-    return files_found, total
+        return files_found, total
+else:
+    def search_file_by_name(*args):
+        pass
