@@ -203,13 +203,12 @@
 </div>
 
 
-{% include "snippets/user_profile_html.html" %}
 {% include "snippets/repo_create_form.html" %}
 {% include 'group/grpmember_add_form.html' %}
 {% endblock %}
 
 {% block extra_script %}
-{% include 'snippets/user_profile_js.html' %}
+
 <script type="text/javascript">
 addConfirmTo($('#quit-group'), {
         'title':'{% trans "Quit Group" %}',
