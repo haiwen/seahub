@@ -50,6 +50,25 @@ from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def group_check(func):
+    """
+    Decorator for initial group permission check tasks
+    """
+    def _decorated(request, group_id, *args, **kwargs):
+        group_id_int = int(group_id) # Checked by URL Conf
+        group = get_group(group_id_int)
+        if not group:
+            return HttpResponseRedirect(reverse('group_list', args=[]))
+        joined = is_group_user(group_id_int, request.user.username)
+        if not joined and not request.user.is_staff:
+            # Return group public info page.
+            return render_to_response('group/group_pubinfo.html', {
+                    'members': members,
+                    'group': group,
+                    }, context_instance=RequestContext(request))
+        return func(request, group, *args, **kwargs)
+    return _decorated
+
 @login_required
 def group_list(request):
     username = request.user.username
@@ -1140,28 +1159,14 @@ def convert_wiki_link(content, group, repo_id):
     return re.sub(r'\[\[(.+)\]\]', repl, content)
     
 @login_required
-def group_wiki(request, group_id, page_name="home"):
-    group_id_int = int(group_id) # Checked by URL Conf
-
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-
+@group_check
+def group_wiki(request, group, page_name="home"):
     is_staff = True if check_group_staff(group.id, request.user) else False
 
     content = ''
     wiki_exists, wiki_page_missing = True, False
     try:
-        content, repo_id = get_wiki_page(request, group_id_int, page_name)
+        content, repo_id = get_wiki_page(request, group.id, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
     except WikiPageMissing:
@@ -1170,7 +1175,7 @@ def group_wiki(request, group_id, page_name="home"):
         content = convert_wiki_link(content, group, repo_id)
 
     return render_to_response("group/group_wiki.html", {
-            "group_id": group_id,
+            "group_id": group.id,
             "group" : group,
             "is_staff": is_staff,
             "content": content,
@@ -1180,26 +1185,8 @@ def group_wiki(request, group_id, page_name="home"):
             }, context_instance=RequestContext(request))
 
 @login_required
-def group_wiki_create(request, group_id):
-    
-    group_id_int = int(group_id) # Checkeb by URL Conf
-
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-    
-    is_staff = True if check_group_staff(group.id, request.user) else False
-
-    
+@group_check
+def group_wiki_create(request, group):
     # create group repo in user context
     repo_name = "wiki"
     repo_desc = "Wiki Pages"
@@ -1238,24 +1225,8 @@ def group_wiki_create(request, group_id):
     return HttpResponseRedirect(reverse('group_info', args=[group_id]))
 
 @login_required
-def group_wiki_page_new(request, group_id, page_name="home"):
-
-    group_id_int = int(group_id) # Checkeb by URL Conf
-
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-
-    is_staff = True if check_group_staff(group.id, request.user) else False
-
+@group_check
+def group_wiki_page_new(request, group, page_name="home"):
     if request.method == 'POST':
         form = MessageForm(request.POST)
 
@@ -1277,23 +1248,8 @@ def group_wiki_page_new(request, group_id, page_name="home"):
         return HttpResponseRedirect(url)
 
 @login_required
-def group_wiki_page_edit(request, group_id, page_name="home"):
-
-    group_id_int = int(group_id) # Checkeb by URL Conf
-
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-
+@group_check
+def group_wiki_page_edit(request, group, page_name="home"):
     repo = find_wiki_repo(request, group.id)
     if not repo:
         # todo
