@@ -483,12 +483,8 @@ def group_info(request, group_id):
 @login_required
 @ctx_switch_required
 @group_staff_required
-def group_manage(request, group_id):
-    group_id = int(group_id)    # Checked by URL Conf
-
-    group = get_group(group_id)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
+@group_check
+def group_manage(request, group):
 
     user = request.user.username
     
@@ -519,7 +515,7 @@ def group_manage(request, group_id):
                                             content_type=content_type)
                     else:
                         try:
-                            ccnet_threaded_rpc.group_add_member(group_id,
+                            ccnet_threaded_rpc.group_add_member(group.id,
                                                                 user, email)
                         except SearpcError, e:
                             result['error'] = _(e.msg)
@@ -555,7 +551,7 @@ def group_manage(request, group_id):
                     # Add user to group, unregistered user will see the group
                     # when he logs in.
                     try:
-                        ccnet_threaded_rpc.group_add_member(group_id,
+                        ccnet_threaded_rpc.group_add_member(group.id,
                                                             user, email)
                     except SearpcError, e:
                         result['error'] = _(e.msg)
@@ -571,7 +567,7 @@ def group_manage(request, group_id):
                                         content_type=content_type)
                 # Add user to group.
                 try:
-                    ccnet_threaded_rpc.group_add_member(group_id,
+                    ccnet_threaded_rpc.group_add_member(group.id,
                                                user, email)
                 except SearpcError, e:
                     result['error'] = _(e.msg)
@@ -592,7 +588,7 @@ def group_manage(request, group_id):
                             content_type=content_type)
 
     ### GET ###
-    members_all = ccnet_threaded_rpc.get_group_members(group_id)
+    members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [ m for m in members_all if m.is_staff ]    
 
     contacts = Contact.objects.filter(user_email=user)

@@ -14,7 +14,7 @@
         <li class="tabnav-tab"><a href="{% url 'group_discus' group.id %}">{% trans "Discussions" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
         {% if is_staff %}
-        <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Admin" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
         {% endif %}
 
     </ul>
