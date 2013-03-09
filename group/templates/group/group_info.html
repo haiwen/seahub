@@ -31,28 +31,19 @@
     <div class="info-item-bottom group-basic-info ovhd">
         <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
         <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
+        {% if not is_staff %}
+        <p class="txt fright"><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></p>
+        {% endif %}
     </div>
-</div>
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Staffs" %}</h3>
-    <ul class="info-item-bottom">
-        {% for member in managers %}
-        <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
-        {% endfor %}
-    </ul>
 </div>
 
 <div class="info-item">
     <div class="info-item-top ovhd">
         <h3 class="fleft">{% trans "Members" %}</h3>
-        {% if is_staff %}
-        <a href="#" id="grp-member-add" class="op fright">{% trans "Add" %}</a>
-        {% endif %}
     </div>
     <div class="info-item-bottom">
-        {% if common_members %}
-          <ul>
-            {% for member in common_members %}
+        <ul>
+            {% for member in members %}
               {% if forloop.counter0 < group_members_default_display %}
                 <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
               {% else %}
@@ -61,25 +52,10 @@
                 {% endif %}
               {% endif %}
             {% endfor %}
-          </ul>
-        {% else %}
-          <p>{% blocktrans %}You can click "Add" above to add members.{% endblocktrans %}</p>
-        {% endif %}
+        </ul>
     </div>
 </div>
 
-{% if is_join %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Operations" %}</h3>
-    <ul class="info-item-bottom op-list">
-        {% if is_staff %}
-        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
-        {% else %}
-        <li><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
-        {% endif %}
-    </ul>
-</div>
-{% endif %}
 {% endblock %}
 
 {% block right_panel %}
@@ -204,7 +180,6 @@
 
 
 {% include "snippets/repo_create_form.html" %}
-{% include 'group/grpmember_add_form.html' %}
 {% endblock %}
 
 {% block extra_script %}
@@ -234,38 +209,11 @@ $('.download').click(function() {
 });
 
 
-var contact_list = [], contact_email;
-{% for contact in contacts %}
-contact_email = '{{ contact.contact_email }}';
-contact_list.push({value:contact_email, label:contact_email});
-{% endfor %}
-
 {% url 'create_group_repo' group.id as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
 
-$('.grp-admin-add').click(function() {
-    $("#admin-add-form").modal({appendTo: "#main", focus: false});
-    addAutocomplete('#added-admin-name', '#admin-add-form', contact_list);
-});
-
-$('#grp-member-add').click(function() {
-    $("#member-add-form").modal({appendTo: "#main", focus: false});
-    $('#simplemodal-container').css({'height':'auto'});
-    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
-    return false;
-});
-
-{% url 'group_add_admin' group.id as admin_add_url %}
-{% with post_url=admin_add_url %}
-{% include 'group/grpadmin_add_js.html' %}
-{% endwith %}
-
-{% url 'group_members' group.id as member_add_url %}
-{% with post_url=member_add_url %}
-{% include 'group/grpmember_add_js.html' %}
-{% endwith %}
 
 {% if recent_commits %}
 {% include 'snippets/list_commit_detail.html' %}
