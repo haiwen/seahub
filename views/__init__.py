@@ -40,7 +40,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, edit_repo,\
-    get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
+    get_related_users_by_repo, get_related_users_by_org_repo, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
@@ -73,7 +73,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
-    get_dir_files_last_modified, show_delete_days
+    get_dir_files_last_modified, show_delete_days, HtmlDiff
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':

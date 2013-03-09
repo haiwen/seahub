@@ -17,6 +17,8 @@ from django.utils.translation import ugettext as _
 
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
 
+from htmldiff import HtmlDiff
+
 from pysearpc import SearpcError
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
