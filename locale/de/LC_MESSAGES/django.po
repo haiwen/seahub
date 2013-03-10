@@ -2,6 +2,7 @@
 # Copyright (C) 2013
 # This file is distributed under the same license as the seahub package.
 # Phillip Thelen <viirus@pherth.net>, 2013.
+# Matthias Hub <coding@matthiashub.de>, 2013.
 #
 msgid ""
 msgstr ""
@@ -96,7 +97,7 @@ msgstr "Verzeichnisname darf nicht leer sein"
 #: forms.py:173
 #, python-format
 msgid "Directory name \"%s\" is not valid"
-msgstr "Verzeichnisname \"%s\" ist ungülti "
+msgstr "Verzeichnisname \"%s\" ist ungültig"
 
 #: forms.py:185
 msgid "Username is required"
@@ -120,7 +121,7 @@ msgstr "Interner Server Fehler"
 
 #: forms.py:206
 msgid "Decrypt library error"
-msgstr "Fehler beim entschlüsseln der Bibliothek"
+msgstr "Fehler beim Entschlüsseln der Bibliothek"
 
 #: forms.py:212 share/forms.py:19
 msgid "Email is required"
@@ -132,7 +133,7 @@ msgstr "Quota darf nicht leer sein"
 
 #: forms.py:215
 msgid "Quota is too low (minimum value is 0)"
-msgstr "Quota ist zu niedrig (mindestestwert ist 0)"
+msgstr "Quota ist zu niedrig (Mindestwert ist 0)"
 
 #: forms.py:222
 msgid "Days can't be empty"
@@ -225,7 +226,7 @@ msgstr "Ungültige Argumente"
 
 #: views.py:796 views.py:891 views.py:2370 views.py:2898
 msgid "Library does not exist"
-msgstr "Die Bibliothek existiert nicht."
+msgstr "Die Bibliothek existiert nicht"
 
 #: views.py:798
 #, fuzzy
@@ -257,12 +258,12 @@ msgstr "Operation fehlgeschlagen"
 
 #: views.py:1252
 msgid "Failed to delete file."
-msgstr "Fehler beim löschen der Datei"
+msgstr "Fehler beim löschen der Datei."
 
 #: views.py:1259
 #, python-format
 msgid "%s successfully deleted."
-msgstr "%s wurde erfolgreich gelöscht"
+msgstr "%s wurde erfolgreich gelöscht."
 
 #: views.py:1261
 #, python-format
@@ -307,11 +308,11 @@ msgstr "Diese Bibliothek ist verschlüsselt."
 
 #: views.py:1622
 msgid "Unable to edit file"
-msgstr "Kann die Datei nicht editieren"
+msgstr "Die Datei kann nicht editiert werden"
 
 #: views.py:1637
 msgid "The file does not exist."
-msgstr "Datei existiert nicht"
+msgstr "Datei existiert nicht."
 
 #: views.py:1663
 msgid "Edit online is not offered for this type of file."
@@ -381,7 +382,7 @@ msgid ""
 "%(user)s."
 msgstr ""
 "Passwort erfolgreich auf %(passwd)s gesetzt, eine E-Mail wurde an den Nutzer "
-"%(user)s versand."
+"%(user)s versandt."
 
 #: views.py:2037
 #, python-format
@@ -389,8 +390,8 @@ msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
-"Passwort erfolgreich auf %(passwd)s gesetzt, aber es konnte eine E-Mail an "
-"den Nutzer %(user)s gesendet werden. Bitte prüfen sie ihre E-Mail "
+"Passwort erfolgreich auf %(passwd)s gesetzt, aber es konnte keine E-Mail an "
+"den Nutzer %(user)s gesendet werden. Bitte prüfen Sie Ihre E-Mail-Service "
 "Konfiguration."
 
 #: views.py:2041
@@ -406,23 +407,23 @@ msgid ""
 "configured."
 msgstr ""
 "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt. Es konnte "
-"jedoch keine E-Mail Benachrichtigung gesendet werden, da die E-Mail "
+"jedoch keine E-Mail Benachrichtigung gesendet werden, da die E-Mail-Service "
 "Konfiguration nicht korrekt ist."
 
 #: views.py:2047
 msgid "Failed to reset password: user does not exist"
-msgstr "Zurücksetzen des Passworts fehlgeschlagen: Nutzer existiert nicht"
+msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer*in existiert nicht"
 
 #: views.py:2068
 msgid "Seafile Registration Information"
-msgstr "Seafile Registrierungs Informationen"
+msgstr "Seafile Registrierungsinformationen"
 
 #: views.py:2103
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
 "Benutzer %s wurde erfolgrich hinzugefügt. Eine E-Mail Benachrichtigung wurde "
-"versand."
+"versandt."
 
 #: views.py:2106
 #, python-format
@@ -431,8 +432,8 @@ msgid ""
 "please check your email configuration."
 msgstr ""
 "Benutzer %s wurde erfolgrich hinzugefügt. Es trat jedoch ein Fehler beim "
-"senden der E-Mail Benachrichtigung auf. Bitte überprüfen sie ihre E-Mail "
-"konfiguration."
+"senden der E-Mail Benachrichtigung auf. Bitte überprüfen sie ihre E-Mail-Service "
+"Konfiguration."
 
 #: views.py:2108
 #, python-format
@@ -446,7 +447,7 @@ msgid ""
 "Email service is not properly configured."
 msgstr ""
 "Benutzer %s wurde erfolgrich hinzugefügt. Es konnte jedoch keine E-Mail "
-"Benachrichtigung gesendet werden, da die E-Mail Konfiguration nicht korrekt "
+"Benachrichtigung gesendet werden, da die E-Mail-Service Konfiguration nicht korrekt "
 "ist."
 
 #: views.py:2289
@@ -541,12 +542,12 @@ msgstr "Avatar hochladen"
 
 #: avatar/templates/avatar/add.html:7 avatar/templates/avatar/change.html:8
 msgid "Your current avatar: "
-msgstr "Ihr aktuelles Avatar:"
+msgstr "Ihr aktuelles Avatar: "
 
 #: avatar/templates/avatar/add.html:9
 #: avatar/templates/avatar/set_avatar.html:12
 msgid "Upload New Avatar: "
-msgstr "Neues Avatar hochladen:"
+msgstr "Neues Avatar hochladen: "
 
 #: avatar/templates/avatar/add.html:13 avatar/templates/avatar/change.html:30
 msgid "Upload New Image"
@@ -576,7 +577,7 @@ msgstr "Avatar ändern"
 
 #: avatar/templates/avatar/set_avatar.html:9
 msgid "Current avatar: "
-msgstr "Aktuelles Avatar:"
+msgstr "Aktuelles Avatar: "
 
 #: avatar/templates/avatar/set_avatar.html:10
 msgid "Current Avatar"
@@ -643,7 +644,7 @@ msgstr "Benutzername"
 
 #: base/accounts.py:353
 msgid "This value must be of length 40"
-msgstr "Dieser Wert muss eine länge von 40 Zeichen haben"
+msgstr "Dieser Wert muss eine Länge von 40 Zeichen haben"
 
 #: base/accounts.py:356 templates/add_user_form.html:11
 #: templates/registration/login.html:10
@@ -660,7 +661,7 @@ msgstr "Passwort erneut eingeben:"
 
 #: base/accounts.py:370
 msgid "Invalid user id."
-msgstr "Ungültige Benutzer-ID"
+msgstr "Ungültige Benutzer-ID."
 
 #: base/templatetags/seahub_tags.py:145
 msgid "Just now"
@@ -710,7 +711,7 @@ msgstr "vor 0 Sekunden"
 #: templates/snippets/repo_create_form.html:11
 #: templates/snippets/repo_share_form.html:7
 msgid "Read-Write"
-msgstr "Lesen & Schreiben"
+msgstr "Lesen und Schreiben"
 
 #: base/templatetags/seahub_tags.py:256 organizations/views.py:721
 #: organizations/templates/organizations/org_public.html:40 share/views.py:226
@@ -723,7 +724,7 @@ msgstr "Nur Lesen"
 
 #: contacts/models.py:25 contacts/templates/contacts/contact_list.html:133
 msgid "Email is required."
-msgstr "E-Mail ist erforderlich"
+msgstr "E-Mail ist erforderlich."
 
 #: contacts/models.py:30 contacts/templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
@@ -731,7 +732,7 @@ msgstr "Sie können sich nicht selbst hinzufügen."
 
 #: contacts/models.py:33
 msgid "It is already your contact."
-msgstr "Ist bereits in Ihren Kontakten"
+msgstr "Ist bereits in Ihren Kontakten."
 
 #: contacts/views.py:68
 #, python-format
@@ -763,15 +764,15 @@ msgstr "%s erfolgrich gelöscht"
 #: organizations/templates/organizations/org_public.html:13
 #: share/templates/repo/share_admin.html:15 templates/public_home.html:9
 msgid "Tips"
-msgstr "Tips"
+msgstr "Tipps"
 
 #: contacts/templates/contacts/contact_list.html:9
 msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
 msgstr ""
-"Wenn sie Bibliotheken oder Links auf Dateien mit Freunden teilen, wird seine/"
-"ihre E-Mail AAdresse zu ihren Kontakten hinzugefügt."
+"Wenn Sie Bibliotheken oder Links auf Dateien mit Freunden teilen, wird seine/"
+"ihre E-Mail Adresse zu Ihren Kontakten hinzugefügt."
 
 #: contacts/templates/contacts/contact_list.html:15
 #: templates/myhome_base.html:17
@@ -785,7 +786,7 @@ msgstr "Kontakte hinzufügen"
 
 #: contacts/templates/contacts/contact_list.html:21
 msgid "Email "
-msgstr "_E-Mail"
+msgstr "E-Mail "
 
 #: contacts/templates/contacts/contact_list.html:22
 #: group/templates/group/group_info.html:78
@@ -865,8 +866,8 @@ msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
 msgstr ""
-"Fügen sie Kontakte hinzu um schneller Biliotheken freigeben oder Links auf "
-"Dateien verschicken können. "
+"Fügen sie Kontakte hinzu, um schneller Biliotheken freigeben oder Links auf "
+"Dateien verschicken zu können."
 
 #: contacts/templates/contacts/contact_list.html:48
 #: contacts/templates/contacts/contact_list.html:57
@@ -884,7 +885,7 @@ msgstr "E-Mail"
 #: contacts/templates/contacts/contact_list.html:59
 #: templates/snippets/user_profile_html.html:30
 msgid "Name(optional)"
-msgstr "Name(optional)"
+msgstr "Name (optional)"
 
 #: contacts/templates/contacts/contact_list.html:51
 #: contacts/templates/contacts/contact_list.html:60
@@ -899,7 +900,7 @@ msgstr "Kontakt bearbeiten"
 #: contacts/templates/contacts/contact_list.html:107
 #: contacts/templates/contacts/contact_list.html:168
 msgid "Failed."
-msgstr "Fehlgeschlagen"
+msgstr "Fehlgeschlagen."
 
 #: contacts/templates/contacts/contact_list.html:115
 msgid "Delete Contact"
@@ -922,7 +923,7 @@ msgstr "Die Gruppe existiert bereits"
 
 #: group/error_msg.py:8
 msgid "Failed to create group"
-msgstr "Erstellen er Gruppe fehlgeschlagen"
+msgstr "Erstellen der Gruppe fehlgeschlagen"
 
 #: group/error_msg.py:11
 msgid "The group has already created in this org."
@@ -979,11 +980,11 @@ msgstr "Bestätigungsnachricht ist zu lang (maximal 255 Zeichen)"
 
 #: group/views.py:69
 msgid "There is already a group with that name."
-msgstr "Es existiert bereits eine Gruppe mit diesem Namen"
+msgstr "Es existiert bereits eine Gruppe mit diesem Namen."
 
 #: group/views.py:102
 msgid "Only administrators can delete the group."
-msgstr "Nur Administrator*innen können die Gruppe löschen"
+msgstr "Nur Administrator*innen können die Gruppe löschen."
 
 #: group/views.py:139
 msgid "Only administrators can dismiss the group"
@@ -991,7 +992,7 @@ msgstr "Nur Administrator*innen können die Gruppe ausblenden"
 
 #: group/views.py:162
 msgid "group id  is not a valid argument."
-msgstr "Gruppen-ID ist kein gültiges Argument"
+msgstr "Gruppen-ID ist kein gültiges Argument."
 
 #: group/views.py:302
 msgid "The message doesn't exist"
@@ -1008,7 +1009,7 @@ msgstr "Hinzufügen fehlgeschlagen, %s ist nicht in der aktuellen Organisation"
 
 #: group/views.py:506
 msgid "Your friend added you to a group at Seafile."
-msgstr "Ihr Freund hat Sie in einer Gruppe bei Seafile hinzugefügt"
+msgstr "Ihr Freund hat Sie einer Gruppe bei Seafile hinzugefügt"
 
 #: group/views.py:511
 msgid "Failed to send mail."
@@ -1024,7 +1025,7 @@ msgstr "Hinzufügen fehlgeschlagen, %s ist nicht registriert."
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "Erfolgreich hinzugefügt. Eine Email wurde verschickt."
-msgstr[1] "Erfolgreich hinzugefügt. %(count)s Emails wurde verschickt."
+msgstr[1] "Erfolgreich hinzugefügt. %(count)s E-Mails wurde verschickt."
 
 #: group/views.py:550
 msgid "Successfully added."
@@ -1067,7 +1068,7 @@ msgid ""
 "unshare it."
 msgstr ""
 "Operation fehlgeschlagen: Nur Administrator*innen und der/die Besitzer*in "
-"können das teilen einer Bibliothek rückgängig machen"
+"können das Teilen einer Bibliothek rückgängig machen"
 
 #: group/views.py:688
 msgid "Failed to unshare: internal error."
@@ -1116,7 +1117,7 @@ msgstr "Sie sind bereits in der Gruppe."
 
 #: group/views.py:877
 msgid "apply to join the group"
-msgstr "Bewerben um der Bruppe beizutreten"
+msgstr "Bewerben, um der Gruppe beizutreten"
 
 #: group/views.py:879
 msgid "Sent successfully, the group admin will handle it."
@@ -1275,7 +1276,7 @@ msgstr "Empfohlen"
 
 #: group/templates/group/group_info.html:156
 msgid "File "
-msgstr "Datei"
+msgstr "Datei "
 
 #: group/templates/group/group_info.html:156
 msgid "has a new comment:"
@@ -1324,7 +1325,7 @@ msgstr "Verstecken"
 #: templates/sys_group_admin.html:28 templates/sys_seafadmin.html:29
 #: templates/sys_useradmin.html:41 templates/snippets/file_content_js.html:110
 msgid "Previous"
-msgstr "Vorheriges"
+msgstr "Vorherige"
 
 #: group/templates/group/group_info.html:189
 #: organizations/templates/organizations/org_admin.html:46
@@ -1334,7 +1335,7 @@ msgstr "Vorheriges"
 #: templates/sys_group_admin.html:31 templates/sys_seafadmin.html:32
 #: templates/sys_useradmin.html:44 templates/snippets/file_content_js.html:110
 msgid "Next"
-msgstr "Nächstes"
+msgstr "Nächste"
 
 #: group/templates/group/group_info.html:202
 msgid "Quit Group"
@@ -1342,7 +1343,7 @@ msgstr "Gruppe verlassen"
 
 #: group/templates/group/group_info.html:202
 msgid "Are you sure you want to quit this group"
-msgstr "Sind Sie sicher das sie diese Gruppe verlassen möchten?"
+msgstr "Sind Sie sicher, dass Sie diese Gruppe verlassen möchten?"
 
 #: group/templates/group/group_info.html:203
 msgid "Unshare Library"
@@ -1350,11 +1351,11 @@ msgstr "Teilen der Bibliothek rückgängig machen"
 
 #: group/templates/group/group_info.html:203
 msgid "Are you sure you want to unshare"
-msgstr "Sind Sie sicher das sie das Teilen rückgängig machen wollen?"
+msgstr "Sind Sie sicher, dass Sie das Teilen rückgängig machen wollen?"
 
 #: group/templates/group/group_info.html:236
 msgid "Really want to delete this message?"
-msgstr "Sind sie sicher das sie diese Nachricht löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie diese Nachricht löschen möchten?"
 
 #: group/templates/group/group_info.html:236 templates/base.html:116
 msgid "Yes"
@@ -1442,22 +1443,22 @@ msgstr "Gruppe beitreten"
 
 #: group/templates/group/group_pubinfo.html:13
 msgid "Name: "
-msgstr "Name:"
+msgstr "Name: "
 
 #: group/templates/group/group_pubinfo.html:14
 #: group/templates/group/groups_right_panel.html:17
 #: organizations/templates/organizations/org_pubinfo.html:37
 #: templates/pubinfo.html:33
 msgid "Creator: "
-msgstr "Ersteller*in:"
+msgstr "Ersteller*in: "
 
 #: group/templates/group/group_pubinfo.html:15
 msgid "Create at: "
-msgstr "Erstellt am:"
+msgstr "Erstellt am: "
 
 #: group/templates/group/group_pubinfo.html:16
 msgid "Members: "
-msgstr "Mitglieder:"
+msgstr "Mitglieder: "
 
 #: group/templates/group/group_pubinfo.html:21
 msgid "Verification Message"
@@ -1471,7 +1472,7 @@ msgstr "Darf nicht leer sein und sollte nicht mehr als 150 Zeichen haben."
 msgid ""
 "After creating a group, you can add members and share libraries into it."
 msgstr ""
-"Nach dem erstellen einer Gruppe können Sie Mitglieder hinzufügen und "
+"Nach dem Erstellen einer Gruppe können Sie Mitglieder hinzufügen und "
 "Bibliotheken teilen."
 
 #: group/templates/group/groups_left_panel.html:7
@@ -1494,7 +1495,7 @@ msgstr "Neue Gruppe"
 #: organizations/templates/organizations/org_pubinfo.html:38
 #: templates/pubinfo.html:34
 msgid "Time: "
-msgstr "Zeit:"
+msgstr "Zeit: "
 
 #: group/templates/group/groups_right_panel.html:25
 msgid "You are not in any groups"
@@ -1505,8 +1506,8 @@ msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
 msgstr ""
-"Sie könnein eine Gruppe anlegen, indem sie auf \"Neue Gruppe\" klicken. Eine "
-"Gruppe ermöglicht es ihnen und ihren Freunden Nachrichten zu hinterlassen "
+"Sie können eine Gruppe anlegen, indem Sie auf \"Neue Gruppe\" klicken. Eine "
+"Gruppe ermöglicht es Ihnen und Ihren Freunden Nachrichten zu hinterlassen "
 "und gemeinsam an Bibliotheken zu arbeiten."
 
 #: group/templates/group/groups_right_panel.html:31
@@ -1524,17 +1525,17 @@ msgstr "Mitglieder hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:4
 msgid "emails, separated by ','"
-msgstr "Emails, durch ',' getrennt"
+msgstr "E-Mail Adressen, getrennt durch ','"
 
 #: group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
 msgstr ""
-"Tipp: Es wird eine Einladung versendet, wenn die Email nicht registriert ist."
+"Tipp: Es wird eine Einladung versendet, wenn die E-Mail Adresse nicht registriert ist."
 
 #: group/templates/group/grpmember_add_form.html:9
 #, fuzzy
 msgid "Tip: the emails should be already registered."
-msgstr "Tipp: Die Emails sollten bereits registriert sein."
+msgstr "Tipp: Die E-Mail Adressen sollten bereits registriert sein."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
@@ -1542,7 +1543,7 @@ msgstr "Administrator*innen hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:16
 msgid "emails, separated by ',' "
-msgstr "Emails, durch ',' getrennt"
+msgstr "E-Mail Adressen, getrennt durch ',' "
 
 #: group/templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
@@ -1550,11 +1551,11 @@ msgstr "Darf nicht leer sein und sollte nicht mehr als 150 Zeichen haben."
 
 #: group/templates/group/msg_reply_js.html:62
 msgid "loading ..."
-msgstr "Laden…"
+msgstr "Laden ..."
 
 #: group/templates/group/new_msg_reply.html:17
 msgid "Group: "
-msgstr "Gruppe:"
+msgstr "Gruppe: "
 
 #: group/templates/group/new_msg_reply.html:49
 msgid "It can't be blank and should be no more than 150 characters."
@@ -1629,15 +1630,15 @@ msgstr "Seafile Login Informationen"
 
 #: organizations/views.py:307
 msgid "Mail sent successfully"
-msgstr "Email erfolgreich verschickt"
+msgstr "E-Mail erfolgreich verschickt"
 
 #: organizations/views.py:309
 msgid "Failed to send the email"
-msgstr "Versenden der Email fehlgeschlagen"
+msgstr "Versenden der E-Mail fehlgeschlagen"
 
 #: organizations/views.py:409
 msgid "Successfully deleted."
-msgstr "Erfolgreich gelöscht"
+msgstr "Erfolgreich gelöscht."
 
 #: organizations/views.py:428
 #, python-format
@@ -1725,14 +1726,14 @@ msgstr "URL-Präfix"
 
 #: organizations/templates/organizations/create_org.html:11
 msgid "Url prefix can only contains letters and digits."
-msgstr "URL-Präfix darf nur Buchstaben und Zahlen enthalten"
+msgstr "URL-Präfix darf nur Buchstaben und Zahlen enthalten."
 
 #: organizations/templates/organizations/org_admin.html:9
 #: organizations/templates/organizations/org_admin.html:20
 #: organizations/templates/organizations/personal.html:25
 #: templates/userinfo.html:24
 msgid "Space Used"
-msgstr "verbrauchter Speicherplatz"
+msgstr "Verbrauchter Speicherplatz"
 
 #: organizations/templates/organizations/org_admin.html:15
 #: templates/sys_useradmin.html:13
@@ -1746,19 +1747,19 @@ msgstr "Alle Mitglieder"
 #: templates/sys_group_admin.html:36 templates/sys_seafadmin.html:37
 #: templates/sys_useradmin.html:49
 msgid "Per page: "
-msgstr "Pro Seite:"
+msgstr "Pro Seite: "
 
 #: organizations/templates/organizations/org_admin.html:70
 msgid "Emails: "
-msgstr "Emails:"
+msgstr "E-Mail Adressen: "
 
 #: organizations/templates/organizations/org_admin.html:72
 msgid "An invitation will be sent if the email is not registered."
-msgstr "Eine EInladung wird versendet, wenn die Email nicht registriert ist."
+msgstr "Eine EInladung wird versendet, wenn die E-Mail nicht registriert ist."
 
 #: organizations/templates/organizations/org_admin.html:73
 msgid "Emails is required."
-msgstr "Emails werden benötigt"
+msgstr "E-Mail Adressen werden benötigt"
 
 #: organizations/templates/organizations/org_group_admin.html:7
 #: organizations/templates/organizations/org_pubinfo.html:26
@@ -1803,7 +1804,7 @@ msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr ""
 "Sie können eine Gruppe erstellen, indem sie auf \"Gruppe hinzufügen\" im "
-"Gruppenmenu klicken."
+"Gruppenmenü klicken."
 
 #: organizations/templates/organizations/org_public.html:15
 #: templates/public_home.html:11
@@ -1841,8 +1842,8 @@ msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
-"Sie können eine öffendliche Bibliothek erstellen, indem sie auf den \"Neue "
-"Bibliothek\" Button klicken. Andere können sie Biblothek sehen und "
+"Sie können eine öffentliche Bibliothek erstellen, indem Sie auf den \"Neue "
+"Bibliothek\" Button klicken. Andere können die Biblothek sehen und "
 "herunterladen."
 
 #: organizations/templates/organizations/org_seafadmin.html:7
@@ -1880,9 +1881,9 @@ msgstr ""
 "\n"
 "Hier sind ihe Anmeldeinformationen:\n"
 "E-Mail: %(email)s\n"
-"Password: %(password)s\n"
+"Passwort: %(password)s\n"
 "\n"
-"Bitte klicken sie auf den Link, um sich einzuloggen: \n"
+"Bitte klicken sie auf den Link, um sich einzuloggen:\n"
 
 #: organizations/templates/organizations/org_user_add_email.html:11
 #, fuzzy, python-format
@@ -1894,8 +1895,8 @@ msgid ""
 "The %(site_name)s team\n"
 msgstr ""
 "\n"
-"und ihr Passwort später zurücksetzen.\n"
-"Danke, dass sie unsere Seite verwenden!\n"
+"und Ihr Passwort später zurücksetzen.\n"
+"Danke, dass Sie unseren Service verwenden!\n"
 "\n"
 "Das %(site_name)s Team\n"
 
@@ -1911,15 +1912,15 @@ msgstr "Ihr Spitzname"
 
 #: profile/views.py:41
 msgid "Successfully edited profile."
-msgstr "Profil erfolgreicht editiert."
+msgstr "Profil erfolgreich editiert."
 
 #: profile/views.py:47
 msgid "Failed to edit profile"
-msgstr "Editieren des Profils ist fehlgeschlagen."
+msgstr "Editieren des Profils ist fehlgeschlagen"
 
 #: profile/views.py:80 profile/views.py:119
 msgid "Has not accepted invitation yet"
-msgstr "Hat die EInladung noch nicht akzeptiert"
+msgstr "Hat die Einladung noch nicht akzeptiert"
 
 #: profile/templates/profile/profile_base.html:4
 #: profile/templates/profile/set_profile.html:7 templates/base.html:63
@@ -1954,15 +1955,15 @@ msgstr "Zu Kontakten hinzufügen"
 
 #: profile/templates/profile/user_profile.html:30
 msgid "Email: "
-msgstr "Email:"
+msgstr "Email: "
 
 #: profile/templates/profile/user_profile.html:32
 msgid "Name(optional): "
-msgstr "Name (optional):"
+msgstr "Name (optional): "
 
 #: profile/templates/profile/user_profile.html:34
 msgid "Note(optional): "
-msgstr "Notitz (optional):"
+msgstr "Notitz (optional): "
 
 #: share/forms.py:20
 msgid "Email is not longer than 512 characters"
@@ -1992,7 +1993,7 @@ msgstr ""
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Teilen mit %s fehlgeschlagen: Es existiert nicht."
+msgstr "Teilen mit %s fehlgeschlagen: es existiert nicht."
 
 #: share/views.py:126
 #, python-format
@@ -2019,7 +2020,7 @@ msgstr "Entfernen der Freigabe fehlgeschlagen"
 
 #: share/views.py:182
 msgid "Successfully removed share"
-msgstr "Freigabe erfolgrich entfernt"
+msgstr "Freigabe erfolgreich entfernt"
 
 #: share/views.py:313
 #, python-format
@@ -2032,7 +2033,7 @@ msgstr ""
 
 #: share/views.py:346
 msgid "You are shared with a library in Seafile"
-msgstr "Es wurde eine Bibliothek in Seafile mit ihnen geteilt."
+msgstr "Es wurde eine Bibliothek in Seafile mit Ihnen geteilt."
 
 #: share/views.py:353
 #, python-format
@@ -2054,7 +2055,7 @@ msgstr "So können sie die Bibliothek nicht freigeben."
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
 msgstr ""
-"Holen des Links fehlgeschlagen. bitte versuchen sie es später noch ein mal."
+"Abrufen des Links fehlgeschlagen, bitte versuchen Sie es später nochmals."
 
 #: share/views.py:452
 msgid "Removed successfully"
@@ -2069,12 +2070,12 @@ msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail konfiguration ist "
-"nicht korrekt. Bitte wenden sie sich an den Administrator."
+"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail-Service Konfiguration ist "
+"nicht korrekt. Bitte wenden Sie sich an den Administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr "Ihr Freund hat eine Datei für sie auf Seafile Freigegeben."
+msgstr "Ihr Freund hat eine Datei für Sie auf Seafile freigegeben."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
@@ -2164,7 +2165,7 @@ msgstr "Erfolgreich editiert"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr "Editieren fehlgeschlagen"
+msgstr "Editieren fehlgeschlagen."
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2275,7 +2276,7 @@ msgstr "Hilfe"
 
 #: templates/base.html:145
 msgid "Server Version: "
-msgstr "Serverversion:"
+msgstr "Serverversion: "
 
 #: templates/base.html:146
 msgid "Seafile"
@@ -2297,13 +2298,13 @@ msgstr ""
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
-msgstr "Passwort:"
+msgstr "Passwort: "
 
 #: templates/file_edit.html:79 templates/repo.html:87
 #: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
 #: templates/shared_file_view.html:18 templates/view_shared_dir.html:16
 msgid "Current path: "
-msgstr "Aktueller Pfad:"
+msgstr "Aktueller Pfad: "
 
 #: templates/file_edit.html:90
 msgid "Continue editing"
@@ -2327,7 +2328,7 @@ msgstr "ist verschlüsselt"
 
 #: templates/file_edit.html:122 templates/snippets/events.html:10
 msgid "Password："
-msgstr "Passwort:"
+msgstr "Passwort: "
 
 #: templates/file_edit.html:124 templates/snippets/events.html:12
 #, fuzzy
@@ -2360,7 +2361,7 @@ msgstr "Passwort sollte 3 bis 15 Zeichen lang sein."
 #: templates/snippets/shared_link_js.html:60
 #: templates/snippets/shared_link_js.html:123
 msgid "Failed. Please check the network."
-msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung"
+msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
@@ -2372,7 +2373,7 @@ msgid ""
 "restore the file to a previous version."
 msgstr ""
 "Tipp: Nach jedem Bearbeiten wird eine neue Version generiert und Sie können "
-"eine vorheride Version wieder herstellen."
+"eine vorherige Version wiederherstellen."
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
 msgid "Current Path:"
@@ -2409,7 +2410,7 @@ msgstr "Wiederherstellen"
 
 #: templates/file_view.html:16 templates/history_file_view.html:38
 msgid "Current Path: "
-msgstr "Aktueller Pfad:"
+msgstr "Aktueller Pfad: "
 
 #: templates/file_view.html:28 templates/repo.html:33
 msgid "Share link"
@@ -2450,7 +2451,7 @@ msgstr "Verlauf"
 
 #: templates/file_view.html:71
 msgid "Open local file"
-msgstr "lokale Datei öffnen"
+msgstr "Lokale Datei öffnen"
 
 #: templates/file_view.html:82 templates/history_file_view.html:64
 #: templates/shared_file_view.html:32
@@ -2459,24 +2460,24 @@ msgstr "Rohansicht"
 
 #: templates/file_view.html:91 templates/repo.html:337
 msgid "Send to:"
-msgstr "Snenden an:"
+msgstr "Senden an:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr "Emails, getrennt durch ','"
+msgstr "E-Mail Adressen, getrennt durch ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
-msgstr "Senden…"
+msgstr "Senden..."
 
 #: templates/file_view.html:100
 msgid "Processing..."
-msgstr "Verarbeiten…"
+msgstr "Verarbeiten..."
 
 #: templates/file_view.html:103
 #, fuzzy
 msgid "You have not downloaded "
-msgstr "Sie haben nicht heruntergeladen"
+msgstr "Sie haben nicht heruntergeladen "
 
 #: templates/file_view.html:103
 msgid "."
@@ -2502,21 +2503,21 @@ msgstr "erfolgreich favorisiert"
 msgid ""
 "Failed to find an application to open the file. Seafile will open the folder."
 msgstr ""
-"Es konnte kein Programm gefunden werden um die Datei zu öffnen. Seafile wird "
-"den Ordner öffnen"
+"Es konnte kein Programm gefunden werden, um die Datei zu öffnen. Seafile wird "
+"den Ordner öffnen."
 
 #: templates/file_view.html:232
 msgid "The file is not synchronized, you can synchronize it manually."
 msgstr ""
-"Diese Datei ist nicht synchronisiert. Sie können sie manuell synchronisieren."
+"Diese Datei ist nicht synchronisiert, Sie können sie manuell synchronisieren."
 
 #: templates/file_view.html:234
 msgid "The file is not synchronized, please retry later."
-msgstr "Diese Datei ist nicht synchronisiert. Bitte versuchen sie es später."
+msgstr "Diese Datei ist nicht synchronisiert, bitte versuchen Sie es später."
 
 #: templates/file_view.html:238
 msgid "An error occurred when open the local file."
-msgstr "Ein Fehler trat auf als die lokale Datei geöffnet wurde."
+msgstr "Ein Fehler trat auf, als die lokale Datei geöffnet wurde."
 
 #: templates/file_view.html:266
 msgid ""
@@ -2650,7 +2651,7 @@ msgstr "Öffentliche Informationen"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr "Formular zum teilen"
+msgstr "Geteilt von"
 
 #: templates/repo.html:11
 msgid ""
@@ -2658,7 +2659,7 @@ msgid ""
 "\" target=\"_blank\">Seafile</a> to experience more."
 msgstr ""
 "Diese Seite wird in kürze ungültig. Sie können <a href=\"http://seafile.com/"
-"\" target=\"_blank\">Seafile</a> beitreten um mehr zu erfahren."
+"\" target=\"_blank\">Seafile</a> beitreten, um mehr zu erfahren."
 
 #: templates/repo.html:25
 msgid "Settings"
@@ -2671,7 +2672,7 @@ msgstr "Mülleimer"
 #: templates/repo.html:41
 msgid "This library is read-only, and you can only view the files."
 msgstr ""
-"Diese Bibliothek ist Schreibgeschützt und Sie können die Dateien nur "
+"Diese Bibliothek ist schreibgeschützt und Sie können die Dateien nur "
 "betrachten."
 
 #: templates/repo.html:47
@@ -2748,11 +2749,11 @@ msgstr "Datei"
 
 #: templates/repo.html:191
 msgid "More Operations"
-msgstr "Mehr Operateionen"
+msgstr "Weitere Funktionen"
 
 #: templates/repo.html:211
 msgid "Upload Files"
-msgstr "Dateien Hochladen"
+msgstr "Dateien hochladen"
 
 #: templates/repo.html:213 templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
@@ -2773,7 +2774,7 @@ msgstr "Hochgeladen:"
 
 #: templates/repo.html:227
 msgid "Fetching ..."
-msgstr "Abrufen…"
+msgstr "Abrufen ..."
 
 #: templates/repo.html:236
 msgid "Update File"
@@ -2785,7 +2786,7 @@ msgstr "kleiner als"
 
 #: templates/repo.html:249
 msgid "Fetching..."
-msgstr "Abrufen…"
+msgstr "Abrufen..."
 
 #: templates/repo.html:259
 msgid "Library Settings"
@@ -2841,7 +2842,7 @@ msgstr "Andere Bibliotheken"
 
 #: templates/repo.html:315
 msgid "Please click and choose a directory."
-msgstr "Bitte eine Bibliothek auswählen"
+msgstr "Bitte eine Bibliothek auswählen."
 
 #: templates/repo.html:321
 msgid "Rename <span id=\"rename-type\"></span>"
@@ -2849,15 +2850,15 @@ msgstr "Umbenennen <span id=\"rename-type\"></span>"
 
 #: templates/repo.html:322
 msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
-msgstr "<span id=\"rename-obj\" class=\"op-target\"></span> umbenennen in:"
+msgstr "<span id=\"rename-obj\" class=\"op-target\"></span> umbenennen in: "
 
 #: templates/repo.html:334
 msgid "Link: "
-msgstr "Link:"
+msgstr "Link: "
 
 #: templates/repo.html:429
 msgid "Click to remove"
-msgstr "Klicken zum entfernen"
+msgstr "Klicken zum Entfernen"
 
 #: templates/repo.html:430
 msgid "This file has already been selected:\\n$file!"
@@ -2870,11 +2871,11 @@ msgstr "Ordner"
 
 #: templates/repo.html:590
 msgid "Copy "
-msgstr "Kopie"
+msgstr "Kopie "
 
 #: templates/repo.html:593
 msgid "Move "
-msgstr "Verschieben"
+msgstr "Verschieben "
 
 #: templates/repo.html:606
 msgid "to:"
@@ -2886,19 +2887,19 @@ msgstr "Darf nicht leer sein."
 
 #: templates/repo.html:787
 msgid "Only an extension there, please input a name."
-msgstr "Nur eine Erweiterung. Bitte einen Namen angeben."
+msgstr "Nur eine Erweiterung angegeben, bitte einen Namen angeben."
 
 #: templates/repo_history.html:7
 msgid "modification history"
-msgstr "Bearbeitungsverlauf"
+msgstr "Änderungsverlauf"
 
 #: templates/repo_history.html:11
 msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
 "library state before this modification."
 msgstr ""
-"Tipp: Nach der änderung wird ein Schnappschuss erstellt, welcher den Zustand "
-"der Bibliothek vor der änderung darstellt."
+"Tipp: Nach der Änderung wird ein Schnappschuss erstellt, welcher den Zustand "
+"der Bibliothek vor der Änderung enthält."
 
 #: templates/repo_history.html:11
 msgid "View Snapshot"
@@ -2906,7 +2907,7 @@ msgstr "Schnappschuss ansehen"
 
 #: templates/repo_history.html:17
 msgid "Modifier"
-msgstr "Bearbeitung"
+msgstr "Bearbeiter*in"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
@@ -2954,7 +2955,7 @@ msgstr "Sind Sie sicher das Sie diese Bibliothek wiederherstellen möchten?"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
-msgstr "Vorbereiten, bitte warten…"
+msgstr "Vorbereiten, bitte warten..."
 
 #: templates/seafile_access_check.html:7
 msgid ""
@@ -2962,7 +2963,7 @@ msgid ""
 "running, click the following link to continue downloading:"
 msgstr ""
 "Es wurde kein laufender Seafile Client gefunden. Wenn Sie sich sicher sind, "
-"das ein Seafile Client am laufen ist, klicken Sie den folgen Link um "
+"dass ein Seafile Client läuft, klicken Sie den folgen Link um "
 "fortzufahren:"
 
 #: templates/seafile_access_check.html:8
@@ -2985,8 +2986,8 @@ msgid ""
 "You're receiving this e-mail because %(email)s is sharing a file to you on "
 "%(site_name)s."
 msgstr ""
-"Sie erhalten diese Email, weil %(email)s auf %(site_name)s eine Datei mit "
-"ihnen teilt."
+"Sie erhalten diese E-Mail, weil %(email)s auf %(site_name)s eine Datei mit "
+"Ihnen teilt."
 
 #: templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
@@ -3010,7 +3011,7 @@ msgstr "Organisation löschen"
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
-msgstr "Neuen Benutzer/Neue Benitzerin hinzufügen"
+msgstr "Neuen Benutzer/Neue Benutzerin hinzufügen"
 
 #: templates/sys_useradmin.html:17
 msgid "Status"
@@ -3026,7 +3027,7 @@ msgstr "Aktiv"
 
 #: templates/sys_useradmin.html:32
 msgid "ResetPwd"
-msgstr "Passwort Zurücksetzen"
+msgstr "Passwort zurücksetzen"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
@@ -3036,11 +3037,11 @@ msgstr "Benutzer*in löschen"
 msgid "Are you sure you want to reset password of"
 msgstr ""
 "Sind Sie sicher, dass Sie das Passwort für den folgenden Account "
-"zurücksetzen wollen?"
+"zurücksetzen wollen"
 
 #: templates/text_diff.html:6
 msgid "modification details"
-msgstr "Bearbeitungsdetails"
+msgstr "Änderungsdetails"
 
 #: templates/text_diff.html:19
 msgid "It's a newly-created blank file."
@@ -3048,7 +3049,7 @@ msgstr "Ist eine neu erstellte leere Datei."
 
 #: templates/text_diff.html:26
 msgid "before modification"
-msgstr "bevor Bearbeitung"
+msgstr "vor Bearbeitung"
 
 #: templates/text_diff.html:28
 msgid "after modification"
@@ -3056,15 +3057,15 @@ msgstr "nach Bearbeitung"
 
 #: templates/update_file_error.html:6
 msgid "Update file "
-msgstr "Datei aktualisieren"
+msgstr "Datei aktualisieren "
 
 #: templates/update_file_error.html:14 templates/upload_file_error.html:10
 msgid "error: "
-msgstr "Fehler:"
+msgstr "Fehler: "
 
 #: templates/upload_file_error.html:6
 msgid "Upload file"
-msgstr "Datei Hochladen"
+msgstr "Datei hochladen"
 
 #: templates/upload_file_error.html:6
 msgid "to"
@@ -3076,7 +3077,7 @@ msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
 msgstr ""
-"Sie erhalten diese Email, weil %(user)s Sie zur Organisation  "
+"Sie erhalten diese E-Mail, weil %(user)s Sie zur Organisation  "
 "\"%(org.org_name)s\" auf %(site_name)s hinzugefügt hat."
 
 #: templates/user_add_email.html:5
@@ -3110,7 +3111,7 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
-"Sie erhalten diese Emai, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
+"Sie erhalten diese E-Mail, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
 "%(site_name)s geändert hat."
 
 #: templates/user_reset_email.html:4
@@ -3151,7 +3152,7 @@ msgstr "Passwort vergessen?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
-msgstr "Email oder Passwort sind falsch"
+msgstr "E-Mail Adresse oder Passwort sind falsch"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -3159,11 +3160,11 @@ msgstr "Ausloggen"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke für ihre Teilname!"
+msgstr "Danke für ihre Teilnahme! "
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
-msgstr "Wieder Einloggen"
+msgstr "Nochmals einloggen"
 
 #: templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
@@ -3180,17 +3181,17 @@ msgstr "Passwortänderung"
 
 #: templates/registration/password_change_form.html:9
 msgid "Current Password: "
-msgstr "Aktuelles Passwort:"
+msgstr "Aktuelles Passwort: "
 
 #: templates/registration/password_change_form.html:11
 #: templates/registration/password_reset_confirm.html:13
 msgid "New Password: "
-msgstr "Neues Passwort:"
+msgstr "Neues Passwort: "
 
 #: templates/registration/password_change_form.html:13
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
-msgstr "Passwort bestätigen:"
+msgstr "Passwort bestätigen: "
 
 #: templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
@@ -3198,7 +3199,7 @@ msgstr "Passwort wurde erfolgreich zurückgesetzt"
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "Passwort wurde erfolgreich zurückgesetzt"
+msgstr "Passwort wurde erfolgreich zurückgesetzt."
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
@@ -3217,7 +3218,7 @@ msgstr "Passwort wurde erfolgreich zurückgesetzt"
 #: templates/registration/password_reset_done.html:8
 msgid "We've send a password reset email to your email."
 msgstr ""
-"Wir haben ihnen eine Email geschickt, mit der Sie Ihr Passwort zurücksetzen "
+"Wir haben Ihnen eine E-Mail geschickt, mit der Sie Ihr Passwort zurücksetzen "
 "können."
 
 #: templates/registration/password_reset_email.html:2
@@ -3226,8 +3227,8 @@ msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
 "user account at %(site_name)s. "
 msgstr ""
-"Sie erhalten diese Email, weil Sie eine Anfrage zum Passwort zurücksetzen "
-"für ihren Benutzeraccount auf %(site_name)s angefordert haben."
+"Sie erhalten diese E-Mail, weil Sie eine Anfrage zur Passwortrücksetzung "
+"für Ihren Benutzeraccount auf %(site_name)s angefordert haben. "
 
 #: templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
@@ -3236,15 +3237,15 @@ msgstr ""
 
 #: templates/registration/password_reset_email.html:8
 msgid "Your username, in case you've forgotten:"
-msgstr "Ihr Benutzername, falls Sie ihn vergessen haben:"
+msgstr "Ihr Benutzername, falls Sie ihn vergessen haben: "
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr "Ihre Email, welche Sie beim Login verwendet haben:"
+msgstr "Ihre E-Mail Adresse, welche Sie beim Login verwendet haben: "
 
 #: templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
-msgstr "Wir werden Ihnen eine Email zusenden um das neue Passwort zu setzen"
+msgstr "Wir werden Ihnen eine E-Mail senden, um das neue Passwort zu setzen"
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
@@ -3252,19 +3253,19 @@ msgstr "Registrieren"
 
 #: templates/registration/registration_form.html:7
 msgid "Welcome back, you are already signed in."
-msgstr "Willkommen zurück, Sie sind bereits Eingeloggt."
+msgstr "Willkommen zurück, Sie sind bereits eingeloggt."
 
 #: templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr "wird nicht unterstützt. Bitte wählen Sie eine Bilddatei."
+msgstr " wird nicht unterstützt. Bitte wählen Sie eine Bilddatei."
 
 #: templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
-msgstr "wird nicht unterstützt. Dateiendung muss eine der folgenden sein"
+msgstr " wird nicht unterstützt. Dateiendung muss eine der folgenden sein "
 
 #: templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
-msgstr "ist zu groß. Die maximale Größe beträgt 1MB."
+msgstr " ist zu groß. Die maximale Größe beträgt 1MB."
 
 #: templates/snippets/bottom_bar.html:3
 #: templates/snippets/group_recommend_form.html:4
@@ -3277,7 +3278,7 @@ msgstr "Zurück zur Gruppe"
 
 #: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
-msgstr "Bitte geben Sie eine Empfehlungsnachricht an."
+msgstr "Bitte geben Sie eine Empfehlungsnachricht ein."
 
 #: templates/snippets/events.html:2
 msgid "Recent Events"
@@ -3286,7 +3287,7 @@ msgstr "Aktuelle Ereignisse"
 #: templates/snippets/events.html:4
 #: templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
-msgstr "Laden…"
+msgstr "Laden..."
 
 #: templates/snippets/events.html:5
 msgid "More"
@@ -3307,7 +3308,7 @@ msgstr "Bibiliothek gelöscht"
 #: templates/snippets/events_js.html:42
 #: templates/snippets/list_commit_detail.html:37
 msgid "Unknown error."
-msgstr "Unbekannter Fehler"
+msgstr "Unbekannter Fehler."
 
 #: templates/snippets/events_js.html:44
 msgid "Please refresh the page later."
@@ -3320,11 +3321,11 @@ msgstr "Bitte versuchen Sie es später erneut."
 #: templates/snippets/file_content_js.html:29
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr ""
-"Um es Online zu betrachten, können Sie Firefox, Chrome oder IE 9 benutzen."
+"Um es online zu betrachten, können Sie Firefox, Chrome oder IE 9 benutzen."
 
 #: templates/snippets/file_content_js.html:95
 msgid "Document convertion failed."
-msgstr "Dokumentkonvertierung fehlgeschlagen."
+msgstr "Dokumentenkonvertierung fehlgeschlagen."
 
 #: templates/snippets/file_content_js.html:110
 msgid ""
@@ -3348,12 +3349,12 @@ msgstr "Laden…"
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
-"Sie können IE 10 oder zum Beispiel Firefo benutzen um es Online zu "
+"Sie können IE 10 oder zum Beispiel Firefox benutzen, um es online zu "
 "betrachten."
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
-msgstr "Diese Dateiart kann nicht Online betrachtet werden."
+msgstr "Diese Dateiart kann nicht online betrachtet werden."
 
 #: templates/snippets/file_upload_progress_js.html:51
 #: templates/snippets/file_upload_progress_js.html:75
@@ -3375,7 +3376,7 @@ msgstr "Empfehlungsnachricht"
 
 #: templates/snippets/list_commit_detail.html:11
 msgid "Modification Details"
-msgstr "Bearbeitungsdetails"
+msgstr "Änderungsdetails"
 
 #: templates/snippets/list_commit_detail.html:24
 msgid "New files"
@@ -3391,7 +3392,7 @@ msgstr "Umbenannte oder verschobene Dateien"
 
 #: templates/snippets/list_commit_detail.html:27
 msgid "Modified files"
-msgstr "Bearbeitete Dateien"
+msgstr "Geänderte Dateien"
 
 #: templates/snippets/list_commit_detail.html:28
 msgid "New directories"
@@ -3403,7 +3404,7 @@ msgstr "Gelöschte Ordner"
 
 #: templates/snippets/list_commit_detail.html:31
 msgid "No conflict in the merge."
-msgstr "Keine konflikt bei der Zusammenführung."
+msgstr "Kein Konflikt bei der Zusammenführung."
 
 #: templates/snippets/my_groups.html:24
 msgid "Create a group now"
@@ -3437,7 +3438,7 @@ msgstr "Bibliothek mit Client sychronisieren"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
-msgstr "1. Bibliothek herunteladen (gehen Sie sicher, das der Client läuft)"
+msgstr "1. Bibliothek herunteladen (stellen Sie sicher, dass der Client läuft)"
 
 #: templates/snippets/my_owned_repos.html:47
 msgid "2. Add files to the folder and they will be uploaded automatically."
@@ -3463,7 +3464,7 @@ msgstr ""
 "Biblioteken, die mit Ihnen geteilt werden, oder mit Gruppen geteilt werden, "
 "in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken auf die "
 "Sie Schreibzugriff haben, können heruntergeladen und synchronisiert werden. "
-"Dateien mit Lesezugriff werden nur heruntergeladen, lokale änderungen aber "
+"Dateien mit Lesezugriff werden nur heruntergeladen, lokale Änderungen aber "
 "nicht hochgeladen."
 
 #: templates/snippets/my_owned_repos.html:107
@@ -3485,7 +3486,7 @@ msgstr ""
 
 #: templates/snippets/myhome_extra_script.html:28
 msgid "Please enter emails or groups."
-msgstr "Bitte geben sie Emails oder Gruppen an."
+msgstr "Bitte geben sie E-Mail Adressen oder Gruppen an."
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -3505,11 +3506,11 @@ msgstr "Passwort erneut eingeben"
 
 #: templates/snippets/repo_create_js.html:37
 msgid "Please enter password"
-msgstr "Bitte geben Sie ein Passwort an"
+msgstr "Bitte geben Sie ein Passwort ein"
 
 #: templates/snippets/repo_create_js.html:49
 msgid "Please enter the password again"
-msgstr "Bitte geben Sie das Passwort erneut an"
+msgstr "Bitte geben Sie das Passwort erneut ein"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
@@ -3521,7 +3522,7 @@ msgstr "<span class=\"op-target\"></span> teilen mit"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
-msgstr "Emails oder Gruppen, getrennt durch ','"
+msgstr "E-Mail Adressen oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
 msgid ""
@@ -3529,15 +3530,15 @@ msgid ""
 "share to public library."
 msgstr ""
 "Tipp: Müssen Mitglieder der Organisation oder Organisationsgruppe sein. "
-"Geben Sie \"all\" ein um die Bibliothek öffentlich zu machen."
+"Geben Sie \"all\" ein, um die Bibliothek öffentlich zu machen."
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tipp: Geben Sie \"all\" ein um die Bibliothek öffentlich zu teilen."
+msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich zu teilen."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
-msgstr "Bitte geben Sie mindestens eine Email an."
+msgstr "Bitte geben Sie mindestens eine E-Mail Adresse an."
 
 #: thirdpart/auth/admin.py:29
 msgid "Personal info"
@@ -3582,14 +3583,14 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:59
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: thirdpart/auth/forms.py:66
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Email konnte nicht versendet werden. Der Email Dienst ist nicht korrekt "
+"Eine E-Mail konnte nicht versendet werden. Der E-Mail Dienst ist nicht korrekt "
 "konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
 
 #: thirdpart/auth/forms.py:74
@@ -3597,7 +3598,7 @@ msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"Diese Email Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
+"Diese E-Mail Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
 "Sie registriert sind?"
 
 #: thirdpart/auth/forms.py:104
@@ -3620,7 +3621,7 @@ msgstr "Altes Passwort"
 #: thirdpart/auth/forms.py:147
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
-"Das alte Passwort das Sie eingegeben haben war nicht korrekt. Bitte geben "
+"Das alte Passwort, das Sie eingegeben haben, war nicht korrekt. Bitte geben "
 "Sie es erneut ein."
 
 #: thirdpart/auth/views.py:90
@@ -3635,7 +3636,7 @@ msgstr ""
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
-msgstr "Geben Sie eine valide Email an."
+msgstr "Geben Sie eine gültige E-Mail Adresse an."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
@@ -3647,31 +3648,32 @@ msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr "Ein*e Benutzer*in mit dieser Email existiert bereits"
+msgstr "Ein*e Benutzer*in mit dieser E-Mail Adresse existiert bereits"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
-msgstr "Ich habe Die Nutzungsbedingungen gelesen und verstanden"
+msgstr "Ich habe die Nutzungsbedingungen gelesen und verstanden"
 
 #: thirdpart/registration/forms.py:70
 msgid "You must agree to the terms to register"
 msgstr ""
-"Sie müssen den Nutzungsbedingungen zustimmen um sich registrieren zu können"
+"Sie müssen den Nutzungsbedingungen zustimmen, um sich registrieren zu können"
 
 #: thirdpart/registration/forms.py:86
 msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
-"Diese Email wird bereits benutzt. Bitte geben Sie eine andere Email an."
+"Diese E-Mail Adresse wird bereits benutzt. Bitte geben Sie eine andere E-Mail "
+"Adresse an."
 
 #: thirdpart/registration/forms.py:113
 msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"Registrierung mit kostelosen Emails ist nicht erlaubt. Bitte geben Sie eine "
-"andere Email an."
+"Registrierung mit einer kostenlosen E-Mail Adresse ist nicht erlaubt. Bitte geben Sie eine "
+"andere E-Mail Adresse an."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
