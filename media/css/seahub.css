@@ -2016,6 +2016,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* wiki page */
+.wiki-nav li{
+    display: inline-block;
+}
 #wiki-area.article {
     padding: 0 0;
 }

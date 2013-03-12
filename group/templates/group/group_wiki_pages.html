@@ -6,41 +6,41 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
+{% endblock %}
 
-
+{% block main_panel %}
 <div class="tabnav">
-    <div class="grp-profile fright">
-        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
-    </div>
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_discus' group.id %}">{% trans "Discussions" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Wiki" %}</li>
         {% if is_staff %}
         <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
         {% endif %}
+
     </ul>
+    <div class="fright">
+    {% grp_avatar group.props.id 24 %} <span style="font-size: 16px; font-weight:bold; margin: 0 6px;">{{ group.group_name }}</span>
+    </div>
 </div>
 
-{% endblock %}
-
-{% block main_panel %}
-<div id="wiki-home" class="">
-{% if not wiki_exists %}
-  <a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki" %}</a>
-{% else %}
+<div id="">
   <ul class="wiki-nav" id="">
     <li><a href="{% url 'group_wiki' group.id %}">{% trans "Home" %}</a></li>
     <li><a href="{% url 'group_wiki_pages' group.id %}">{% trans "Pages" %}</a></li>
   </ul>
 
   <button id="page-create" class="fright">{% trans "New Page" %}</button>
-  <button id="page-delete" class="fright" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
-  <button id="page-edit" class="fright">{% trans "Edit Page" %}</button>
 
   <div id="wiki-area" class="article">
-    <h1>{{ page }}</h1>
-    <div id="wiki-content"></div>
+    <h1>Pages</h1>
+    <div id="wiki-content">
+      {% for page in pages %}
+      <ul>
+      <li><a href="{% url 'group_wiki' group.id page %}">{{ page }}</a></li>
+      </ul>
+      {% endfor %}
+    </div>
   </div>
   
   <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
@@ -50,10 +50,10 @@
     <p class="error hide"></p>
     <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
   </form>
-{% endif %}
-</div>                          <!--END wiki-home-->
+</div>
 
 {% endblock main_panel %}
+
 
 {% block left_panel %}
 
@@ -67,30 +67,10 @@
 
 
 {% block extra_script %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 <script type="text/javascript">
-{% if wiki_exists %}
-var converter = new Showdown.converter();
-$('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
-
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});
 })
-
-$('#page-edit').click(function() {
-    window.open("{% url 'group_wiki_page_edit' group.id page %}")
-})
-
-$('#page-list').click(function () {
-    location.href = ("{% url 'group_wiki_pages' group.id %}");
-});
-
-addConfirmTo($('#page-delete'), {
-    'title': 'Delete page',
-    'con': 'Are you sure you want to delete this page?'
-});
-
-{% endif %}
 
 </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
+import stat
 import simplejson as json
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -44,6 +45,7 @@ from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
     check_and_get_org_by_repo, gen_file_get_url
+from seahub.utils.slugify import slugify
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
@@ -1076,10 +1078,10 @@ class WikiDoesNotExist(Exception):
 class WikiPageMissing(Exception):
     pass
 
-def find_wiki_repo(request, group_id):
-    repos = get_group_repos(group_id, request.user.username)
+def find_wiki_repo(request, group):
+    repos = get_group_repos(group.id, request.user.username)
     for repo in repos:
-        if repo.name == "wiki":
+        if repo.name == (group.group_name + "-wiki"):
             return repo
     return None
 
@@ -1092,9 +1094,9 @@ def get_file_url(repo_id, path, filename):
     url = gen_file_get_url(access_token, filename)
     return url
 
-def get_wiki_page(request, group_id, page_name):
+def get_wiki_page(request, group, page_name):
     import urllib2
-    repo = find_wiki_repo(request, group_id)
+    repo = find_wiki_repo(request, group)
     if not repo:
         raise WikiDoesNotExist
     path = "/" + page_name + ".md"
@@ -1126,13 +1128,19 @@ def group_wiki(request, group, page_name="home"):
     is_staff = True if check_group_staff(group.id, request.user) else False
 
     content = ''
-    wiki_exists, wiki_page_missing = True, False
+    wiki_exists = True
     try:
-        content, repo_id = get_wiki_page(request, group.id, page_name)
+        content, repo_id = get_wiki_page(request, group, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
     except WikiPageMissing:
-        wiki_page_missing = True
+        '''create that page for user'''
+        repo = find_wiki_repo(request, group)
+        # No need to check whether repo is none, since repo is already created
+        
+        filename = normalize_page_name(page_name) + '.md'
+        seafserv_threaded_rpc.post_empty_file(
+            repo.id, "/", filename, request.user.username)
     else:
         content = convert_wiki_link(content, group, repo_id)
 
@@ -1143,14 +1151,48 @@ def group_wiki(request, group, page_name="home"):
             "content": content,
             "page": page_name,
             "wiki_exists": wiki_exists,
-            "wiki_page_missing": wiki_page_missing,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@group_check
+def group_wiki_pages(request, group):
+    """
+    List wiki pages in group.
+    """
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        return render_error(request, _('Wiki is not found.'))
+
+    try:
+        dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo.id, '/')
+    except SearpcError, e:
+        dir_id = None
+    if not dir_id:
+        return render_error(request, _('Wiki root path is missing.'))
+
+    try:
+        dirs = seafserv_threaded_rpc.list_dir(dir_id)
+    except SearpcError, e:
+        return render_error(request, _('Failed to list wiki directories.'))
+
+    pages = []
+    for e in dirs:
+        if stat.S_ISDIR(e.mode):
+            continue            # skip directories
+        name, ext = os.path.splitext(e.obj_name)
+        if ext == '.md':
+            pages.append(name)
+
+    return render_to_response("group/group_wiki_pages.html", {
+            "group": group,
+            "pages": pages,
             }, context_instance=RequestContext(request))
 
 @login_required
 @group_check
 def group_wiki_create(request, group):
     # create group repo in user context
-    repo_name = "wiki"
+    repo_name = group.group_name + "-wiki"
     repo_desc = "Wiki Pages"
     user = request.user.username
     passwd = None
@@ -1172,19 +1214,26 @@ def group_wiki_create(request, group):
     
     try:
         status = seafserv_threaded_rpc.group_share_repo(repo_id,
-                                                        int(group_id),
+                                                        group.id,
                                                         user,
                                                         permission)
     except SearpcError, e:
         seafserv_threaded_rpc.remove_repo(repo_id)
-        print e
         return json_error(_(u'Failed to create: internal error.'))
 
     # create home page
     page_name = "home.md"
-    seafserv_threaded_rpc.post_empty_file(repo_id, "/", page_name, user)
+    try:
+        seafserv_threaded_rpc.post_empty_file(repo_id, "/", page_name, user)
+    except SearpcError, e:
+        return json_error(_(u'Failed to create home page.'))
 
-    return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+    return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
+
+def normalize_page_name(page_name):
+    # Replace special characters to '-'.
+    # Do not lower page name and spaces are allowed.
+    return slugify(page_name, lower=False, spaces=True)
 
 @login_required
 @group_check
@@ -1195,16 +1244,20 @@ def group_wiki_page_new(request, group, page_name="home"):
         page_name = request.POST.get('page_name', '')
         if not page_name:
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        
-        repo = find_wiki_repo(request, group.id)
+        # Normalize page name
+        page_name = normalize_page_name(page_name)
+
+        repo = find_wiki_repo(request, group)
         if not repo:
-            # todo
-            return None
+            return render_error(request, _('Wiki is not found.'))
         
         filename = page_name + ".md"
         filepath = "/" + page_name + ".md"
-        seafserv_threaded_rpc.post_empty_file(
-            repo.id, "/", filename, request.user.username)
+        try:
+            seafserv_threaded_rpc.post_empty_file(
+                repo.id, "/", filename, request.user.username)
+        except SearpcError, e:
+            return render_error(request, _('Failed to create wiki page.'))
 
         url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
         return HttpResponseRedirect(url)
@@ -1212,10 +1265,28 @@ def group_wiki_page_new(request, group, page_name="home"):
 @login_required
 @group_check
 def group_wiki_page_edit(request, group, page_name="home"):
-    repo = find_wiki_repo(request, group.id)
+    repo = find_wiki_repo(request, group)
     if not repo:
-        # todo
-        return None
+        return render_error(request, _('Wiki is not found.'))
+
     filepath = "/" + page_name + ".md"
     url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
     return HttpResponseRedirect(url)
+
+@login_required
+@group_check
+def group_wiki_page_delete(request, group, page_name):
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        return render_error(request, _('Wiki is not found.'))
+    
+    file_name = page_name + '.md'
+    user = request.user.username
+    try:
+        seafserv_threaded_rpc.del_file(repo.id, '/', file_name, user)
+        messages.success(request, 'Successfully deleted "%s".' % page_name)
+    except SearpcError, e:
+        messages.error(request, 'Failed to delete "%s". Please retry later.' % page_name)
+
+    return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
+    
