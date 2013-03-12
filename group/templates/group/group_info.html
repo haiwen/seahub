@@ -7,20 +7,18 @@
 
 {% block title_panel %}
 
-
 <div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'group_discus' group.id %}">{% trans "Discussions" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
         {% if is_staff %}
         <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
         {% endif %}
-
     </ul>
-    <div class="fright">
-    {% grp_avatar group.props.id 24 %} <span style="font-size: 16px; font-weight:bold; margin: 0 6px;">{{ group.group_name }}</span>
-    </div>
 </div>
 
 {% endblock %}

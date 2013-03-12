@@ -1,17 +1,14 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
-<ul class="reply-list">
-{% for reply in replies %}
-<li class="w100 ovhd">
-<a href="{% url 'user_profile' reply.from_email %}" class="pic fleft">{% avatar reply.from_email 28 %}</a>
+{% for r in replies %}
+<li class="reply w100 ovhd">
+<a href="{% url 'user_profile' r.from_email %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
 <div class="txt fright">
-    <a href="{% url 'user_profile' reply.from_email %}">{{ reply.from_email|email2nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} -- 
-    <button class="reply-at op" data="{{ reply.from_email|email2nickname }}">{% trans 'Reply' %}</button>
+    <a href="{% url 'user_profile' r.from_email %}">{{ r.from_email|email2nickname }}</a>
+    <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
+    <span class="reply-at op vh" data="{{ r.from_email|email2nickname }}">{% trans 'Reply' %}</span>
+    <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
 </div>
 </li>
 {% endfor %}
-</ul>
-<input type="text" name="message" class="reply-input" />
-<button class="submit">{% trans 'Reply' %}</button>
-<p class="error hide">{% trans 'It can not be blank and should be no more than 150 characters.' %}</p>

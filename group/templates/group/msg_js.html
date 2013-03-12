@@ -1,0 +1,143 @@
+{% load i18n %}
+$('.msg-main, .reply').hover(
+    function(){
+        $(this).find('.op').removeClass('vh');
+    },
+    function(){
+        $(this).find('.op').addClass('vh');
+    }
+);
+$('.msg .op').hover(
+    function() {
+        $(this).css({'text-decoration':'underline'});
+    },
+    function() {
+        $(this).css({'text-decoration':'none'});
+    }
+);
+$('.reply-cnt-op').hover(
+    function() {
+        $(this).children().css({'text-decoration':'underline'});
+    },
+    function() {
+        $(this).children().css({'text-decoration':'none'});
+    }
+).click(function() {
+    var cnt_op = $(this); 
+    var r_cnt = cnt_op.children('.reply-cnt'); 
+    var url = r_cnt.data('url');
+    var h_r = cnt_op.children('.hide-reply'); 
+    var p = cnt_op.parent();
+    var r_list = p.find('.reply-list');
+
+    if (cnt_op.data('rstatus') == 'hide') {
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: true,
+            success: function(data) {
+                r_list.html(data['html']);
+                r_cnt.addClass('hide');
+                h_r.removeClass('hide')
+                cnt_op.data('rstatus', 'show').data('cnt', data['r_num']);
+                p.find('.reply').hover(
+                    function() {
+                        $(this).find('.op').removeClass('vh');
+                    },
+                    function(){
+                        $(this).find('.op').addClass('vh');
+                    }
+                );
+                p.find('.reply-at').hover(
+                    function() {
+                        $(this).css({'text-decoration':'underline'});
+                    },
+                    function() {
+                        $(this).css({'text-decoration':'none'});
+                    }
+                ).click(replyAt);
+            }
+        });
+    } else {
+        h_r.addClass('hide'); 
+        r_cnt.removeClass('hide');
+        r_list.children(':lt(' + parseInt(cnt_op.data('cnt')-1) + ')').each(function(index) {
+                $(this).remove();
+        });
+        cnt_op.data('rstatus', 'hide');
+    }
+});
+$('.reply-input').focus(function() {
+    $(this).height(50);
+    $(this).parent().find('.reply-submit, .reply-cancel').removeClass('hide');
+});
+$('.reply-cancel').click(function() {
+    var p = $(this).parent();
+    p.find('.reply-submit, .reply-cancel, .error').addClass('hide');
+    p.find('.reply-input').val('').height(20);
+});
+function replyAt() {
+    var r = $(this).parents('.msg-op'); 
+    var r_input = r.find('.reply-input'); 
+    r_input.height(50).val('@' + $(this).attr('data') + ' ');
+    r.find('.reply-submit, .reply-cancel').removeClass('hide');
+    setCaretPos(r_input[0], r_input.val().length);
+    r_input.focus();
+}
+$('.reply-at').click(replyAt);
+$('.reply-submit').click(function() {
+    var p = $(this).parent();
+    var r_input = p.find('.reply-input');
+    var r = $.trim(r_input.val()); 
+    var err = p.find('.error');
+    if (!r || r.length > 150) {
+        err.removeClass('hide');
+        return false;
+    }
+
+    err.addClass('hide');
+    var sm = $(this);
+    var url = sm.data('url');
+    var r_list = p.find('.reply-list');
+    disable(sm);
+    $.ajax({
+        type: "POST",
+        url: url,
+        dataType: 'json',
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: "message=" + r,
+        success: function(data) {
+            r_list.html(data['html']).removeClass('hide');
+            if (data['r_num'] > 3) {
+                var r_cnt = p.find('.reply-cnt');
+                r_cnt.html(r_cnt.html().replace(/\d+/, data['r_num']));
+                p.find('.reply-cnt-op').removeClass('hide');
+            }
+            enable(sm);
+            r_input.val('').height(20);
+            p.find('.reply-submit, .reply-cancel').addClass('hide');
+            p.find('.reply').hover(
+                function(){
+                    $(this).find('.op').removeClass('vh');
+                },
+                function(){
+                    $(this).find('.op').addClass('vh');
+                }
+            );
+            p.find('.reply-at').hover(
+                function() {
+                    $(this).css({'text-decoration':'underline'});
+                },
+                function() {
+                    $(this).css({'text-decoration':'none'});
+                }
+            ).click(replyAt);
+        },
+        error:function() {
+           err.html('{% trans "Failed." %}').removeClass('hide'); 
+           enable(sm);
+        }
+    }); 
+});

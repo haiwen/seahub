@@ -296,17 +296,17 @@ def msg_reply(request, msg_id):
     content_type = 'application/json; charset=utf-8'
     if request.is_ajax():
         ctx = {}
+        try:
+            group_msg = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            return HttpResponseBadRequest(content_type=content_type)
+
         if request.method == 'POST':
             form = MessageReplyForm(request.POST)
-
             # TODO: invalid form
             if form.is_valid():
                 msg = form.cleaned_data['message']
-                try:
-                    group_msg = GroupMessage.objects.get(id=msg_id)
-                except GroupMessage.DoesNotExist:
-                    return HttpResponseBadRequest(content_type=content_type)
-            
+
                 msg_reply = MessageReply()
                 msg_reply.reply_to = group_msg
                 msg_reply.from_email = request.user.username
@@ -318,22 +318,23 @@ def msg_reply(request, msg_id):
                     grpmsg_reply_added.send(sender=MessageReply,
                                             msg_id=msg_id,
                                             from_email=request.user.username)
-
-                ctx['reply'] = msg_reply
-                html = render_to_string("group/group_reply_new.html", ctx)
+                replies = MessageReply.objects.filter(reply_to=group_msg)
+                r_num = len(replies)
+                if r_num < 4:
+                    ctx['replies'] = replies
+                else:
+                    ctx['replies'] = replies[r_num - 3:]
+                html = render_to_string("group/group_reply_list.html", ctx)
+                serialized_data = json.dumps({"r_num": r_num, "html": html})
+                return HttpResponse(serialized_data, content_type=content_type)
 
         else:
-            try:
-                msg = GroupMessage.objects.get(id=msg_id)
-            except GroupMessage.DoesNotExist:
-                raise HttpResponse(status=400)
-
-            replies = MessageReply.objects.filter(reply_to=msg)
+            replies = MessageReply.objects.filter(reply_to=group_msg)
+            r_num = len(replies)
             ctx['replies'] = replies
             html = render_to_string("group/group_reply_list.html", ctx)
-
-        serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=content_type)
+            serialized_data = json.dumps({"r_num": r_num, "html": html})
+            return HttpResponse(serialized_data, content_type=content_type)
     else:
         return HttpResponseBadRequest(content_type=content_type)
 
@@ -372,7 +373,7 @@ def msg_reply_new(request):
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
 
-            m.reply_list = reply_list
+            m.replies = reply_list
             m.reply_cnt = reply_list.count()
             group_msgs.append(m)
 
@@ -912,7 +913,7 @@ def attention(request):
 
 
 @login_required
-def group_discus(request, group_id):
+def group_discuss(request, group_id):
     if request.method == 'POST':
         form = MessageForm(request.POST)
 
@@ -929,7 +930,7 @@ def group_discus(request, group_id):
                               from_email=request.user.username)
             # Always return an HttpResponseRedirect after successfully dealing
             # with POST data.
-            return HttpResponseRedirect(reverse('group_info', args=[group_id]))
+            return HttpResponseRedirect(reverse('group_discuss', args=[group_id]))
     else:
         form = MessageForm()
         
@@ -978,21 +979,16 @@ def group_discus(request, group_id):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '15'))
     except ValueError:
         current_page = 1
-        per_page = 15
+    per_page = 45
 
-    msgs_plus_one = GroupMessage.objects.filter(
+    group_msgs = GroupMessage.objects.filter(
         group_id=group_id).order_by(
-        '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
+        '-timestamp')[per_page*(current_page-1) : per_page*current_page]
 
-    if len(msgs_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
+    group_msgs = list(group_msgs) # Force evaluate queryset to fix some database error for mysql
 
-    group_msgs = msgs_plus_one[:per_page]
     attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
 
     msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
@@ -1000,6 +996,11 @@ def group_discus(request, group_id):
     
     for msg in group_msgs:
         msg.reply_cnt = reply_to_list.count(msg.id)
+        msg.replies = []
+        for r in msg_replies:
+            if msg.id == r.reply_to_id:
+                msg.replies.append(r)
+        msg.replies = msg.replies[-3:]
             
         for att in attachments:
             if msg.id == att.group_message_id:
@@ -1020,9 +1021,32 @@ def group_discus(request, group_id):
                     att.name = os.path.basename(path)
                 msg.attachment = att
 
-    contacts = Contact.objects.filter(user_email=request.user.username)
+    per_show = 15
+    if current_page == 1 and len(group_msgs) > per_show:
+        msgs_more = True
+    else:
+        msgs_more = False
 
-    return render_to_response("group/group_discus.html", {
+    msg_total_num = GroupMessage.objects.filter(group_id=group_id).count()
+    total_page = msg_total_num/per_page
+    if msg_total_num % per_page > 0:
+        total_page += 1
+    
+    page_next = True if current_page < total_page else False
+
+    # get page numbers shown in the web page
+    first_page = 1
+    if total_page <= 10:
+        last_page = total_page 
+    else:
+        if current_page < 6:
+            last_page = 10
+        else:
+            first_page = current_page - 5
+            last_page = current_page + 4 if current_page + 4 < total_page else total_page
+    pages_show = range(first_page, last_page + 1)
+
+    return render_to_response("group/group_discuss.html", {
             "managers": managers,
             "common_members": common_members,
             "members": members,
@@ -1031,12 +1055,13 @@ def group_discus(request, group_id):
             "is_staff": is_staff,
             "group_msgs": group_msgs,
             "form": form,
+            'per_show': per_show,
+            'msgs_more': msgs_more,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,
-            'per_page': per_page,
             'page_next': page_next,
-            'contacts': contacts,
+            'pages_show': pages_show,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
