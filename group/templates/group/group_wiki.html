@@ -27,7 +27,10 @@
 {% block main_panel %}
 <div id="wiki-home" class="">
 {% if not wiki_exists %}
-  <a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki" %}</a>
+  <div class="empty-tips">
+    <h2 class="center-contents">{% trans "This group currently has no wiki" %}</h2>
+    <p>Wiki is a normal library with pre-defined file/folder structure. It enables group members to manage project documents or take notes using a simplified markup language called Markdown.<a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki Now." %}</a></p>
+  </div>
 {% else %}
   <ul class="wiki-nav" id="">
     <li><a href="{% url 'group_wiki' group.id %}">{% trans "Home" %}</a></li>
@@ -78,7 +81,7 @@ $('#page-create').click(function() {
 })
 
 $('#page-edit').click(function() {
-    window.open("{% url 'group_wiki_page_edit' group.id page %}")
+    location.href = ("{% url 'group_wiki_page_edit' group.id page %}");
 })
 
 $('#page-list').click(function () {

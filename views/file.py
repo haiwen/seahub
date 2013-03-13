@@ -9,6 +9,7 @@ import simplejson as json
 import stat
 import urllib
 import urllib2
+import chardet
 
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \

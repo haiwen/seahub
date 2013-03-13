@@ -20,7 +20,7 @@ from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafserv_rpc, \
+    seafserv_rpc, web_get_access_token, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
@@ -65,7 +65,6 @@ def group_check(func):
         if not joined and not request.user.is_staff:
             # Return group public info page.
             return render_to_response('group/group_pubinfo.html', {
-                    'members': members,
                     'group': group,
                     }, context_instance=RequestContext(request))
         return func(request, group, *args, **kwargs)
@@ -1106,19 +1105,31 @@ def get_wiki_page(request, group, page_name):
     content = file_response.read()
     return content, repo.id
 
-def convert_wiki_link(content, group, repo_id):
+def convert_wiki_link(content, group, repo_id, username):
     import re
 
     def repl(matchobj):
         linkname = matchobj.group(1)
-        filename = linkname + ".md"
-        path = "/" + filename
-        if get_file_id_by_path(repo_id, path):
-            a_tag = "<a href='%sgroup/%d/wiki/%s/'>%s</a>"
-            return  a_tag % (SITE_ROOT, group.id, linkname, linkname)
+        if linkname.lower().startswith('images'):
+            # convert image to clickable link
+            path = "/" + linkname
+            filename = os.path.basename(path)
+            obj_id = get_file_id_by_path(repo_id, path)
+            if not obj_id:
+                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' %\
+                    (reverse('group_wiki', args=[group.id, filename]), linkname)
+            token = web_get_access_token(repo_id, obj_id, 'view', username)
+            
+            return '<img src="%s" />' % gen_file_get_url(token, filename)
         else:
-            a_tag = '''<a class="wiki-page-missing" href='%sgroup/%d/wiki/%s/'>%s</a>'''
-            return a_tag % (SITE_ROOT, group.id, linkname, linkname)
+            # convert markdown to clickable link
+            filename = linkname + ".md"
+            path = "/" + filename
+            if get_file_id_by_path(repo_id, path):
+                a_tag = "<a href='%s'>%s</a>"
+            else:
+                a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
+            return  a_tag % (reverse('group_wiki', args=[group.id, linkname]), linkname)                
 
     return re.sub(r'\[\[(.+)\]\]', repl, content)
     
@@ -1126,7 +1137,7 @@ def convert_wiki_link(content, group, repo_id):
 @group_check
 def group_wiki(request, group, page_name="home"):
     is_staff = True if check_group_staff(group.id, request.user) else False
-
+    username = request.user.username
     content = ''
     wiki_exists = True
     try:
@@ -1139,10 +1150,9 @@ def group_wiki(request, group, page_name="home"):
         # No need to check whether repo is none, since repo is already created
         
         filename = normalize_page_name(page_name) + '.md'
-        seafserv_threaded_rpc.post_empty_file(
-            repo.id, "/", filename, request.user.username)
+        seafserv_threaded_rpc.post_empty_file(repo.id, "/", filename, username)
     else:
-        content = convert_wiki_link(content, group, repo_id)
+        content = convert_wiki_link(content, group, repo_id, username)
 
     return render_to_response("group/group_wiki.html", {
             "group_id": group.id,
@@ -1270,7 +1280,8 @@ def group_wiki_page_edit(request, group, page_name="home"):
         return render_error(request, _('Wiki is not found.'))
 
     filepath = "/" + page_name + ".md"
-    url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
+    url = "%srepo/%s/file/edit/?p=%s&from=wiki&gid=%s" % (SITE_ROOT, repo.id,
+                                                          filepath, group.id)
     return HttpResponseRedirect(url)
 
 @login_required
