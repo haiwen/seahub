@@ -54,7 +54,7 @@ class PasswordResetTokenGenerator(object):
         import datetime
         ctime = datetime.datetime.fromtimestamp(user.ctime/1000000)
         hash = sha_constructor(settings.SECRET_KEY + unicode(user.id) +
-                               user.password + ctime.strftime('%Y-%m-%d %H:%M:%S') +
+                               ctime.strftime('%Y-%m-%d %H:%M:%S') +
                                unicode(timestamp)).hexdigest()[::2]
         
         return "%s-%s" % (ts_b36, hash)
