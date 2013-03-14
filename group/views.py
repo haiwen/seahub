@@ -40,11 +40,11 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.settings import SITE_ROOT, SITE_NAME
+from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
-    check_and_get_org_by_repo, gen_file_get_url
+    check_and_get_org_by_repo, gen_file_get_url, get_file_type_and_ext
 from seahub.utils.slugify import slugify
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
@@ -1109,27 +1109,41 @@ def convert_wiki_link(content, group, repo_id, username):
     import re
 
     def repl(matchobj):
-        linkname = matchobj.group(1)
-        if linkname.lower().startswith('images'):
-            # convert image to clickable link
-            path = "/" + linkname
-            filename = os.path.basename(path)
-            obj_id = get_file_id_by_path(repo_id, path)
-            if not obj_id:
-                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' %\
-                    (reverse('group_wiki', args=[group.id, filename]), linkname)
-            token = web_get_access_token(repo_id, obj_id, 'view', username)
-            
-            return '<img src="%s" />' % gen_file_get_url(token, filename)
-        else:
-            # convert markdown to clickable link
+        linkname = matchobj.group(1).strip()
+        filetype, fileext = get_file_type_and_ext(linkname)
+        filetype = filetype.lower()
+        if fileext == '':
+            # convert linkname that extension is missing to a markdown page
             filename = linkname + ".md"
             path = "/" + filename
             if get_file_id_by_path(repo_id, path):
                 a_tag = "<a href='%s'>%s</a>"
+                return a_tag % (reverse('group_wiki', args=[group.id, linkname]), linkname)                                
             else:
                 a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
-            return  a_tag % (reverse('group_wiki', args=[group.id, linkname]), linkname)                
+                return a_tag % (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)                                
+        elif filetype == 'image':
+            # load image to wiki page
+            path = "/" + linkname
+            filename = os.path.basename(path)
+            obj_id = get_file_id_by_path(repo_id, path)
+            if not obj_id:
+                # Replace '/' in linkname to '-', since wiki name can not
+                # contain '/'.
+                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
+                    (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)
+
+            token = web_get_access_token(repo_id, obj_id, 'view', username)
+            return '<img src="%s" />' % gen_file_get_url(token, filename)
+        else:
+            from base.templatetags.seahub_tags import file_icon_filter
+            
+            # convert other types of filelinks to clickable links
+            path = "/" + linkname
+            icon = file_icon_filter(linkname)
+            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
+            a_tag = '''<a href='%s' target='_blank'><img class="wiki-link-icon" src="%simg/file/%s" />%s</a>'''
+            return a_tag % (s, MEDIA_URL, icon, linkname)
 
     return re.sub(r'\[\[(.+)\]\]', repl, content)
     
@@ -1269,7 +1283,8 @@ def group_wiki_page_new(request, group, page_name="home"):
         except SearpcError, e:
             return render_error(request, _('Failed to create wiki page.'))
 
-        url = "%srepo/%s/file/edit/?p=%s" % (SITE_ROOT, repo.id, filepath)
+        url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_new&gid=%s" % \
+            (SITE_ROOT, repo.id, filepath, group.id)
         return HttpResponseRedirect(url)
 
 @login_required
@@ -1280,8 +1295,8 @@ def group_wiki_page_edit(request, group, page_name="home"):
         return render_error(request, _('Wiki is not found.'))
 
     filepath = "/" + page_name + ".md"
-    url = "%srepo/%s/file/edit/?p=%s&from=wiki&gid=%s" % (SITE_ROOT, repo.id,
-                                                          filepath, group.id)
+    url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_edit&gid=%s" % \
+        (SITE_ROOT, repo.id, filepath, group.id)
     return HttpResponseRedirect(url)
 
 @login_required

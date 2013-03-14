@@ -1654,13 +1654,19 @@ def file_edit_submit(request, repo_id):
         remove_tmp_file()
         return error_json()
 
-    if request.GET.get('from', '') == 'wiki':
+    if request.GET.get('from', '') == 'wiki_page_edit':
         try:
             gid = int(request.GET.get('gid', 0))
         except ValueError:
             gid = 0
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next = reverse('group_wiki', args=[gid, wiki_name])
+    elif request.GET.get('from', '') == 'wiki_page_new':
+        try:
+            gid = int(request.GET.get('gid', 0))
+        except ValueError:
+            gid = 0
+        next = reverse('group_wiki_pages', args=[gid])
     else:
         next = reverse('repo_view_file', args=[repo_id]) + \
             '?p=' + urllib2.quote(path.encode('utf-8'))
