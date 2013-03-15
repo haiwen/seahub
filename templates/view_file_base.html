@@ -105,41 +105,6 @@
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
 
-    {% if request.user.is_authenticated %}
-    <div id="file-comment" class="hide">
-        <form id="file-comment-form" action="" method="post">
-            <div class="w100 ovhd">
-                <a class="pic fleft" href="{% url 'user_profile' request.user.username %}">{% avatar request.user.username 48 %}</a>
-                <div id="comment-container" class="txt fright">
-                    <textarea name="message" id="comment-input">{% trans "Leave a message~"%}</textarea><br />
-                    <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Submit"%}" class="submit hide" />
-                </div>
-            </div>
-        </form>
-        <ul id="comment-list">
-        {% if comments %}
-            {% for comment in comments %}
-            <li class="comment ovhd">
-            <a class="pic fleft" href="{% url 'user_profile' comment.from_email %}">{% avatar comment.from_email 48 %}</a>
-            <div class="txt fright">
-                <div class="comment-hd w100 ovhd">
-                    <a href="{% url 'user_profile' comment.from_email %}" title="{{ comment.from_email }}" class="fleft">{{ comment.from_email|email2nickname }}</a>
-                    <span class="time fright">{{ comment.timestamp|translate_seahub_time }}</span>
-                </div>
-                <p class="comment-bd">{{ comment.message|seahub_urlize|find_at|linebreaksbr }}</p>
-            </div>
-            </li>
-            {% endfor %}
-        {% endif %}
-        </ul>
-    </div>
-    <div id="comment-caret" class="hide">
-        <div class="outer-caret">
-            <div class="inner-caret"></div>
-        </div>
-    </div>
-    {% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -281,81 +246,6 @@ $('#file-op .history').click(function () {
 
 //bottom bar
 {% include "snippets/bottom_bar.html" %}
-{% if request.user.is_authenticated %}
-$('#main-panel').css({'margin-bottom':0});
-$('#bottom-bar').append('<button id="comment">{% trans "Comment" %}</button>');
-$('#file-comment').css({'max-height':$(window).height() * 0.7 - $('#bottom-bar').height() - $('#comment-caret').height()});
-{% if groups %}
-var gids = '';
-{% for g in groups %}
-gids += '{{ g.id }}_';
-{% endfor %}
-addAtAutocomplete('#comment-input', '#comment-container', gids, "{% url 'group_attention' %}", {'width':'315px','padding-left':'1px','height':'36px','margin':'0','font-size':'13px', 'font-family':'Arial, Helvetica, sans-serif', 'line-height': '1.5em', 'border':'1px solid #ddd'});
-{% endif %}
-$('#comment-input').bind('autocompleteopen', function(e, ui) {
-    var menu = $(this).autocomplete('widget');
-    if (parseInt(menu.css('top')) > 0) {
-        menu.css('max-height', $('#file-comment').height() - parseInt(menu.css('top')));
-    } else {
-        menu.css('max-height', $('#file-comment').offset().top);
-    }
-});
-{% if comment_open %}
-$('#file-comment, #comment-caret').removeClass('hide');
-$(function() { $('#comment-caret').css({'left': $('#comment').offset().left}); });
-$('#comment-list').css({'max-height':parseInt($('#file-comment').css('max-height')) - $('#file-comment-form').outerHeight(true), 'overflow':'auto'});
-{% endif %}
-$('#comment').click(function() {
-    if ($('#file-comment').hasClass('hide')) {
-        $('#file-comment, #comment-caret').removeClass('hide');
-        $('#comment-caret').css({'left':$('#comment').offset().left});
-        $('#comment-list').css({'max-height':parseInt($('#file-comment').css('max-height')) - $('#file-comment-form').outerHeight(true), 'overflow':'auto'});
-    } else {
-        $('#file-comment, #comment-caret').addClass('hide');
-    }
-});
-$(document).click(function(e) {
-    var target = e.target || event.srcElement;
-    if (!$('#comment, #file-comment, #comment-caret').is(target) && !($('#file-comment, #comment-caret').find('*').is(target))) {
-        $('#file-comment, #comment-caret').addClass('hide');
-    }
-});
-
-var comment_input_pre_text = $('#comment-input').val();
-$('#comment-input').css('color', '#999').click(function() {
-    if ($(this).val() == comment_input_pre_text) {
-        $(this).val('').css('color', '#000');
-        $('#file-comment-form .submit').removeClass('hide');
-        $('#comment-list').css({'max-height':parseInt($('#file-comment').css('max-height')) - $('#file-comment-form').outerHeight(true), 'overflow':'auto'});
-    }
-});
-$('#file-comment-form .submit').click(function() {
-    if (!$.trim($('#comment-input').val())) {
-        $('#file-comment-form .error').html('{% trans "Please input a message." %}').removeClass('hide');
-        return false;
-    }
-    $.ajax({
-        url: '{% url 'views.file_comment' %}' + '?p={{path}}',
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        beforeSend: prepareCSRFToken,
-        data: {
-            'repo_id': '{{ repo.id }}',
-            'file_path': '{{ path|urlencode }}',
-            'message': $('#comment-input').val()
-        },
-        success: function(data) {
-            $('#comment-input').val(comment_input_pre_text).css('color', '#999');
-            $('#file-comment-form .submit, #file-comment-form .error').addClass('hide');
-            $('#comment-list').html(data.html);
-        },
-        error: function() {
-            $('#file-comment-form .error').html('{% trans "Failed. Please check the network." %}').removeClass('hide');
-        }   
-    });
-    return false;
-});
-{% endif %}
+$('#main-panel').css('margin-bottom',0);
 </script>
 {% endblock %}

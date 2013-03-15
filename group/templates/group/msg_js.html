@@ -15,7 +15,7 @@ $('.msg .op').hover(
         $(this).css({'text-decoration':'none'});
     }
 );
-$('.reply-cnt-op').hover(
+$('.replies-op').hover(
     function() {
         $(this).children().css({'text-decoration':'underline'});
     },
@@ -23,24 +23,28 @@ $('.reply-cnt-op').hover(
         $(this).children().css({'text-decoration':'none'});
     }
 ).click(function() {
-    var cnt_op = $(this); 
-    var r_cnt = cnt_op.children('.reply-cnt'); 
-    var url = r_cnt.data('url');
-    var h_r = cnt_op.children('.hide-reply'); 
-    var p = cnt_op.parent();
-    var r_list = p.find('.reply-list');
+    var op = $(this); 
+    var uf_r = op.children('.unfold-replies'); 
+    var f_r = op.children('.fold-replies'); 
+    var r_list = op.parent().find('.reply-list');
+    var loading = op.children('.replies-loading-icon');
+    loading.css({'left': uf_r.outerWidth() - 7});
 
-    if (cnt_op.data('rstatus') == 'hide') {
+    if (op.data('rstatus') == 'hide') {
+        uf_r.addClass('unfold-replies-nobg');
+        loading.removeClass('hide');
         $.ajax({
-            url: url,
+            url: uf_r.data('url'),
             dataType: 'json',
             cache: true,
             success: function(data) {
+                loading.addClass('hide');
+                uf_r.removeClass('unfold-replies-nobg');
                 r_list.html(data['html']);
-                r_cnt.addClass('hide');
-                h_r.removeClass('hide')
-                cnt_op.data('rstatus', 'show').data('cnt', data['r_num']);
-                p.find('.reply').hover(
+                uf_r.addClass('hide');
+                f_r.removeClass('hide')
+                op.data('rstatus', 'show').data('r_num', data['r_num']);
+                r_list.children().hover(
                     function() {
                         $(this).find('.op').removeClass('vh');
                     },
@@ -48,7 +52,7 @@ $('.reply-cnt-op').hover(
                         $(this).find('.op').addClass('vh');
                     }
                 );
-                p.find('.reply-at').hover(
+                r_list.find('.reply-at').hover(
                     function() {
                         $(this).css({'text-decoration':'underline'});
                     },
@@ -59,12 +63,12 @@ $('.reply-cnt-op').hover(
             }
         });
     } else {
-        h_r.addClass('hide'); 
-        r_cnt.removeClass('hide');
-        r_list.children(':lt(' + parseInt(cnt_op.data('cnt')-1) + ')').each(function(index) {
+        f_r.addClass('hide'); 
+        uf_r.removeClass('hide');
+        r_list.children(':lt(' + parseInt(op.data('r_num')-1) + ')').each(function(index) {
                 $(this).remove();
         });
-        cnt_op.data('rstatus', 'hide');
+        op.data('rstatus', 'hide');
     }
 });
 $('.reply-input').focus(function() {
@@ -111,14 +115,14 @@ $('.reply-submit').click(function() {
         success: function(data) {
             r_list.html(data['html']).removeClass('hide');
             if (data['r_num'] > 3) {
-                var r_cnt = p.find('.reply-cnt');
+                var r_cnt = p.find('.unfold-replies');
                 r_cnt.html(r_cnt.html().replace(/\d+/, data['r_num']));
-                p.find('.reply-cnt-op').removeClass('hide');
+                p.find('.replies-op').removeClass('hide');
             }
             enable(sm);
             r_input.val('').height(20);
             p.find('.reply-submit, .reply-cancel').addClass('hide');
-            p.find('.reply').hover(
+            r_list.children().hover(
                 function(){
                     $(this).find('.op').removeClass('vh');
                 },
@@ -126,7 +130,7 @@ $('.reply-submit').click(function() {
                     $(this).find('.op').addClass('vh');
                 }
             );
-            p.find('.reply-at').hover(
+            r_list.find('.reply-at').hover(
                 function() {
                     $(this).css({'text-decoration':'underline'});
                 },

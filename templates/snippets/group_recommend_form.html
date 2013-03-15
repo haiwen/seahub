@@ -1,14 +1,7 @@
-{% load i18n %}
+{% load seahub_tags i18n %}
 {% load url from future %}
-    <form action="{% url 'group_recommend' %}" method="post" id="recommend-to-group-form" class="hide">{% csrf_token %}
-        <h3>{% trans "Recommend" %}
-        {% for name, link in zipped %}
-            {% if forloop.last %}
-            <span class="op-target">{{ name }}</span>
-            {% endif %}
-        {% endfor %}
-        {% trans "to group:"%}
-        </h3>
+    <form action="{% url 'group_recommend' %}" method="post" id="discuss-to-group-form" class="hide">{% csrf_token %}
+        <h3>{% trans "Post a discussion to group" %}</h3>
         <div class="groups">
             {% for group in groups %}
             <label for="{{ group.id }}" class="checkbox-label">
@@ -17,15 +10,28 @@
             </label>
             {% endfor %}
         </div>
-        <label>{% trans "Recommend Message"%}</label>
-        <textarea name="message"></textarea>
+        <textarea name="message" placeholder="{% trans 'discussion' %}" class="input"></textarea>
+        <div class="attachment">
+            {% if attach_type == 'dir' %}
+            <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans 'Directory icon' %}" height="20" class="vam" />
+            {% endif %}
+
+            {% for name,link in zipped %}
+                {% if forloop.last %}
+                    {% if attach_type == 'file' %}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans 'File' %}" height="18" class="vam" />
+                    {% endif %}
+                <span class="vam">{{ name }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
         <input type="hidden" name="path" value="{{ path }}" />
         <input type="hidden" name="attach_type" value="{{ attach_type }}" />
         <p class="error hide"></p>
-        <input type="submit" id="recommend-submit" class="submit" value="{% trans "Submit"%}" />
+        <input type="submit" id="discuss-submit" class="submit" value="{% trans "Submit"%}" />
     </form>
-    <div id="recommend-to-group-caret" class="hide">
+    <div id="discuss-to-group-caret" class="hide">
         <div class="outer-caret">
             <div class="inner-caret"></div>
         </div>

@@ -17,35 +17,35 @@
                 <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 <span class="group">{% trans "Group: " %}<a href="{% url 'group_info' msg.group_id %}">{{ msg.group_name }}</a></span>
             </div>
-                <p class="msg-con">
-                {% if msg.attachment.src == 'recommend' %}
-                <span class="recommend">{% trans "Recommended" %}
-                  {% if msg.attachment.attach_type == 'file' %}
-                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
-                  {% else %}
-                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}" target="_blank">
-                  {% endif %}
-                  {{ msg.attachment.name }}</a> :
-                </span>
-                {% endif %}
+                <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
+                {% if msg.attachment %}
+                {% with ma=msg.attachment %}
+                <div class="msg-attachment">
+                    {% if ma.src == 'recommend' %}
+                    {% if ma.attach_type == 'file' %}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <a href="{% url 'repo' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
+                    {% endif %}
 
-                {% if msg.attachment.src == 'filecomment' %}
-                <span class="recommend">{% trans "File " %}<a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path|urlencode }}&comment_open=true" target="_blank"> {{ msg.attachment.name }}</a> {% trans "has a new comment:"%}</span>
+                    {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
+                </div>
+                {% endwith %}
                 {% endif %}
-                    
-                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
-
-               </p>
                 <span class="say"></span>
             </div>  
             <div class="msg-op">
-                <div class="reply-cnt-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
-                    <span class="reply-cnt" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
-                    <span class="hide-reply hide">{% trans "Hide replies" %}</span>
+                <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
+                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="fold-replies hide">{% trans "Hide replies" %}</span>
+                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
                 </div>
-                {% if msg.reply_cnt == 0 %}
-                <ul class="reply-list hide"></ul>
-                {% else %}
                 <ul class="reply-list">
                     {% for r in msg.replies %}
                     <li class="reply w100 ovhd">
@@ -59,7 +59,6 @@
                     </li>
                     {% endfor %}
                 </ul>
-                {% endif %}
                 <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
                 <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
                 <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>

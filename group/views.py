@@ -372,9 +372,12 @@ def msg_reply_new(request):
 
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
-
-            m.replies = reply_list
             m.reply_cnt = reply_list.count()
+            if m.reply_cnt > 3:
+                m.replies = reply_list[m.reply_cnt - 3:]
+            else:
+                m.replies = reply_list
+
             group_msgs.append(m)
 
     # remove new group msg reply notification
@@ -665,6 +668,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
 def group_recommend(request):
     """
     Recommend a file or directory to a group.
+    now changed to 'post a discussion'
     """
     if request.method != 'POST':
         raise Http404
@@ -714,8 +718,8 @@ def group_recommend(request):
                                    src='recommend')
             ma.save()
 
-            group_url = reverse('group_info', args=[group_id])
-            msg = _(u'Successfully recommended to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
+            group_url = reverse('group_discuss', args=[group_id])
+            msg = _(u'Successfully posted to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
                 {'url':group_url, 'name':group.group_name}
             messages.add_message(request, messages.INFO, msg)
 

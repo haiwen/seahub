@@ -148,6 +148,7 @@ p {
 .label { color:#333; font-size:12px; font-style:normal; }
 .w100 { width: 100%; }
 .vh { visibility:hidden; }
+.vam { vertical-align:middle; }
 .notification {
     padding:5px;
     background:#FDF;
@@ -1497,6 +1498,11 @@ textarea:-moz-placeholder {/* for FF */
 .msg-main .say {
     background-image:url('../img/say_white.png');
 }
+.msg-attachment {
+    padding-top:10px;
+    border-top:1px solid #e9e9e9;
+    margin-top:12px;
+}
 .msg-hd .author {
     font-weight:bold;
 }
@@ -1522,6 +1528,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0;
 }
 .msg-op {
+    color:#444;
     padding:10px 16px;
     background:#f8f8f8;
     border:1px solid #d5d5d5;
@@ -1529,17 +1536,34 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom-left-radius:3px;
     border-bottom-right-radius:3px;
 }
-.reply-cnt-op {
+.replies-op {
     font-weight:bold;
     cursor:pointer;
     margin-bottom:10px;
+    position:relative;
 }
-.msg .recommend,
+.unfold-replies,
+.fold-replies {
+    padding-right:14px;
+    background:transparent scroll no-repeat right center;
+}
+.unfold-replies {
+    background-image:url('../img/unfold.png');
+}
+.fold-replies {
+    background-image:url('../img/fold.png');
+}
+.unfold-replies-nobg {
+    background-image:none;
+}
+.replies-loading-icon {
+    position:absolute;
+    top:0;
+}
 .msg .at {
     color:#808;
 }
 .reply {
-    color:#444;
     line-height:1.2;
     margin-bottom:15px;
 }
@@ -1547,7 +1571,9 @@ textarea:-moz-placeholder {/* for FF */
     width: 93%;
 }
 .reply-con {
-    margin:0;
+    font-size:12px;
+    line-height:1.3;
+    margin:4px 0 0;
 }
 .reply-input {
     width:530px;
@@ -1842,7 +1868,7 @@ textarea:-moz-placeholder {/* for FF */
 /* File comment */
 #file-comment,
 #to-group,
-#recommend-to-group-form {
+#discuss-to-group-form {
     width:400px;
     padding:0 15px;
     position:fixed;
@@ -1875,7 +1901,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #comment-caret,
 #to-group-caret,
-#recommend-to-group-caret {
+#discuss-to-group-caret {
     width:28px;
     position:fixed;
 }
@@ -1892,12 +1918,13 @@ textarea:-moz-placeholder {/* for FF */
 #to-group a:hover {
     text-decoration:none;
 }
-/*recommend to group*/
-#recommend-to-group-form {
+/*discuss to group*/
+#discuss-to-group-form {
     padding-bottom:10px;
 }
-#recommend-to-group-form textarea {
-    width:100%;
+#discuss-to-group-form .input {
+    padding:5px;
+    width:388px;
     height:5em;
 }
 /* text file diff */

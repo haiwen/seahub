@@ -22,20 +22,20 @@
     <ul class="info-item-bottom">
         {% if grpmsg_list %}
         <li>
-        {% for grp in grpmsg_list %}<a href="{% url 'group_info' grp.id %}" class="no-bold">{{ grp.group_name }} </a>{% endfor %}
+        {% for grp in grpmsg_list %}<a href="{% url 'group_discuss' grp.id %}" class="no-bold">{{ grp.group_name }} </a>{% endfor %}
         {% blocktrans count counter=grpmsg_list|length %}
-        has new message
+        has new discussion
         {% plural %}
-        have new messages
+        have new discussions
         {% endblocktrans %}
         </li>
         {% endif %}
 
         {% if grpmsg_reply_list %}
         <li><a href="{{ SITE_ROOT }}group/reply/new/" class="no-bold">{% blocktrans count counter=grpmsg_reply_list|length %}
-        one group message has new reply
+        one group discussion has new reply
         {% plural %}
-        {{ counter }} group messages have new replies
+        {{ counter }} group discussions have new replies
         {% endblocktrans %}</a></li>
         {% endif %}
 
