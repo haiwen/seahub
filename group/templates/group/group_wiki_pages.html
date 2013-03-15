@@ -24,7 +24,7 @@
     <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
     <ul class="wiki-nav fleft">
         <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
-        <li class="item">{% trans "Pages" %}</li>
+        <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
     </ul>   
 </div>
 

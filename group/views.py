@@ -3,6 +3,7 @@ import logging
 import os
 import stat
 import simplejson as json
+import urllib2
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -12,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
+from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
@@ -44,7 +46,8 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
-    check_and_get_org_by_repo, gen_file_get_url, get_file_type_and_ext
+    check_and_get_org_by_repo, gen_file_get_url, get_file_type_and_ext, \
+    get_file_contributors
 from seahub.utils.slugify import slugify
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
@@ -1095,19 +1098,18 @@ def get_file_url(repo_id, path, filename):
     access_token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
                                                      'view', '')
     url = gen_file_get_url(access_token, filename)
-    return url
+    return url, obj_id
 
 def get_wiki_page(request, group, page_name):
-    import urllib2
     repo = find_wiki_repo(request, group)
     if not repo:
         raise WikiDoesNotExist
     path = "/" + page_name + ".md"
     filename = page_name + ".md"
-    url = get_file_url(repo.id, path, filename)
+    url, obj_id = get_file_url(repo.id, path, filename)
     file_response = urllib2.urlopen(url)
     content = file_response.read()
-    return content, repo.id
+    return content, repo.id, obj_id
 
 def convert_wiki_link(content, group, repo_id, username):
     import re
@@ -1158,8 +1160,9 @@ def group_wiki(request, group, page_name="home"):
     username = request.user.username
     content = ''
     wiki_exists = True
+    last_modified, latest_contributor = None, None
     try:
-        content, repo_id = get_wiki_page(request, group, page_name)
+        content, repo_id, obj_id = get_wiki_page(request, group, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
     except WikiPageMissing:
@@ -1171,6 +1174,13 @@ def group_wiki(request, group, page_name="home"):
         seafserv_threaded_rpc.post_empty_file(repo.id, "/", filename, username)
     else:
         content = convert_wiki_link(content, group, repo_id, username)
+        
+        # fetch file latest contributor and last modified
+        path = '/' + page_name + '.md'
+        file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+        contributors, last_modified, last_commit_id = get_file_contributors(\
+            repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+        latest_contributor = contributors[0] if contributors else None
 
     return render_to_response("group/group_wiki.html", {
             "group_id": group.id,
@@ -1179,6 +1189,8 @@ def group_wiki(request, group, page_name="home"):
             "content": content,
             "page": page_name,
             "wiki_exists": wiki_exists,
+            "last_modified": last_modified,
+            "latest_contributor": latest_contributor,
             }, context_instance=RequestContext(request))
 
 @login_required

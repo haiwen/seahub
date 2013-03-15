@@ -34,9 +34,9 @@
     <form id="wiki-create-form" action="" method="post" class="hide">
         <h3>{% trans "Create Wiki"%}</h3>
         <label>{% trans "Name"%}</label><br/>
-        <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}"/><br />
+        <input id="repo-name" type="text" name="repo_name" value="{{group.group_name}}-wiki" maxlength="{{max_file_name}}"/><br />
         <label>{% trans "Description"%}</label><br/>
-        <textarea id="repo-desc" name="repo_desc"></textarea><br/>
+        <textarea id="repo-desc" name="repo_desc">Wiki Pages</textarea><br/>
         <p class="error hide"></p>
         <input type="submit" id="wiki-create-submit" value="{% trans "Submit"%}" class="submit" />
     </form>
@@ -47,7 +47,7 @@
         <button id="page-delete" class="op-btn" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
         <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>
         <ul class="wiki-nav fleft">
-            <li class="item">{% trans "Home" %}</li>
+            <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
         </ul>
     </div>
@@ -55,6 +55,7 @@
     <div id="wiki-area" class="article">
         <h1>{{ page|capfirst }}</h1>
         <div id="wiki-content"></div><!--content will be offered by js-->
+        <p id="wiki-last-modified">Last modified by {{ latest_contributor|email2nickname}}, {{last_modified|translate_seahub_time}}</p>
     </div>
 
     <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">

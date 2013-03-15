@@ -2036,6 +2036,11 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-area {
     padding: 0 0;
 }
+#wiki-last-modified {
+    margin-top: 10px;
+    font-size:12px;
+    color: #666;
+}
 #wiki-pages {
    list-style-type:disc;
    padding-left:2em;
