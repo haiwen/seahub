@@ -840,13 +840,13 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
             repo.name = repo.repo_name
             pubrepo_id_map[repo.id] = repo
 
-        # get a list of pure non-pub repos
+        # remove duplicates from non-pub repos
         nonpub_repo_list = []
         for repo in owned_repos + shared_repos + groups_repos:
-            if repo.id not in pubrepo_id_map:
+            if repo.id not in nonpub_repo_list:
                 nonpub_repo_list.append(repo)
 
-        nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list]
+        nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list ]
 
         files_found, total = es_search(conn, nonpub_repo_ids, keyword, start, size)
 
