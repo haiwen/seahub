@@ -2022,6 +2022,15 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-area.article {
     padding: 0 0;
 }
+#wiki-create-form {
+    width: 262px;
+}
+#wiki-create-form input[type="text"]{
+    width: 100%;
+}
+#wiki-create-form textarea {
+    width: 100%;
+}
 #page-edit {
     margin-right:6px;
 }

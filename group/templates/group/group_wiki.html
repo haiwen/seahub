@@ -29,8 +29,19 @@
 {% if not wiki_exists %}
   <div class="empty-tips">
     <h2 class="center-contents">{% trans "This group currently has no wiki" %}</h2>
-    <p>Wiki is a normal library with pre-defined file/folder structure. It enables group members to manage project documents or take notes using a simplified markup language called Markdown.<a href="{% url 'group_wiki_create' group.id %}">{% trans "Create Wiki Now." %}</a></p>
+    <p>Wiki is a normal library with pre-defined file/folder structure. It enables group members to manage project documents or take notes using a simplified markup language called Markdown.<a id="wiki-create" href="#">{% trans "Create Wiki Now." %}</a></p>
   </div>
+  <form id="wiki-create-form" action="" method="post" class="hide">
+    <h3>{% trans "Create Wiki"%}</h3>
+    <label>{% trans "Name"%}</label><br/>
+    <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}"/><br />
+    <label>{% trans "Description"%}</label><br/>
+    <textarea id="repo-desc" name="repo_desc"></textarea>
+
+    <p class="error hide"></p>
+    <input type="submit" id="wiki-create-submit" value="{% trans "Submit"%}" class="submit"/>
+  </form>
+  
 {% else %}
   <ul class="wiki-nav" id="">
     <li><a href="{% url 'group_wiki' group.id %}">{% trans "Home" %}</a></li>
@@ -42,7 +53,7 @@
   <button id="page-edit" class="fright">{% trans "Edit Page" %}</button>
 
   <div id="wiki-area" class="article">
-    <h1>{{ page }}</h1>
+    <h1>{{ page|capfirst }}</h1>
     <div id="wiki-content"></div>
   </div>
   
@@ -72,6 +83,7 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
 <script type="text/javascript">
+
 {% if wiki_exists %}
 var converter = new Showdown.converter();
 $('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
@@ -93,7 +105,45 @@ addConfirmTo($('#page-delete'), {
     'con': 'Are you sure you want to delete this page?'
 });
 
-{% endif %}
+{% else %}
+
+$('#wiki-create').click(function() {
+    $('#wiki-create-form').modal({appendTo: '#main', autoResize: true});
+    return false;
+});
+$('#wiki-create-submit').click(function () {
+    // if (!$.trim($('#repo-name').val()) || !$.trim($('#repo-desc').val())) {
+    //     apply_form_error('wiki-create-form', '{% trans 'Name and description can not be blank.' %}');
+    //     return false;
+    // }
+
+    var submit_btn = $(this);
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'group_wiki_create' group.id %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_name': $('#repo-name').val(),
+            'repo_desc': $('#repo-desc').val()
+        },
+        success: function(data) {
+            location.href = data['href'];
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('wiki-create-form', value);
+            });
+            enable(submit_btn);
+        }
+    });
+
+    return false;
+});
+{% endif %}                     // END if wiki_exists
 
 </script>
 {% endblock %}

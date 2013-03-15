@@ -29,9 +29,9 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment
+from models import GroupMessage, MessageReply, MessageAttachment, GroupWiki
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm, GroupJoinMsgForm
+    GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
 from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from base.decorators import ctx_switch_required
@@ -1078,11 +1078,15 @@ class WikiPageMissing(Exception):
     pass
 
 def find_wiki_repo(request, group):
-    repos = get_group_repos(group.id, request.user.username)
-    for repo in repos:
-        if repo.name == (group.group_name + "-wiki"):
-            return repo
-    return None
+    try:
+        groupwiki = GroupWiki.objects.get(group_id=group.id)
+        repos = get_group_repos(group.id, request.user.username)
+        for repo in repos:
+            if repo.id == groupwiki.repo_id:
+                return repo
+        return None
+    except GroupWiki.DoesNotExist:
+        return None
 
 def get_file_url(repo_id, path, filename):
     obj_id = get_file_id_by_path(repo_id, path)
@@ -1215,26 +1219,33 @@ def group_wiki_pages(request, group):
 @login_required
 @group_check
 def group_wiki_create(request, group):
-    # create group repo in user context
-    repo_name = group.group_name + "-wiki"
-    repo_desc = "Wiki Pages"
-    user = request.user.username
-    passwd = None
-    permission = "rw"
+    if request.method != 'POST':
+        raise Http404
 
     content_type = 'application/json; charset=utf-8'
 
-    def json_error(err_msg):
-        result = {'error': [err_msg]}
-        return HttpResponseBadRequest(json.dumps(result),
-                                      content_type=content_type)
+    def json_error(err_msg, status=400):
+        result = {'error': err_msg}
+        return HttpResponse(json.dumps(result), status=status,
+                            content_type=content_type)
+    
+    form = WikiCreateForm(request.POST)
+    if not form.is_valid():
+        return json_error(str(form.errors.values()[0]))
+
+    # create group repo in user context
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    user = request.user.username
+    passwd = None
+    permission = "rw"
 
     try:
         repo_id = seafserv_threaded_rpc.create_repo(repo_name,
                                                     repo_desc,
                                                     user, passwd)
     except:
-        return json_error(_(u'Failed to create'))
+        return json_error(_(u'Failed to create'), 500)
     
     try:
         status = seafserv_threaded_rpc.group_share_repo(repo_id,
@@ -1243,16 +1254,19 @@ def group_wiki_create(request, group):
                                                         permission)
     except SearpcError, e:
         seafserv_threaded_rpc.remove_repo(repo_id)
-        return json_error(_(u'Failed to create: internal error.'))
+        return json_error(_(u'Failed to create: internal error.'), 500)
+
+    GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
     try:
         seafserv_threaded_rpc.post_empty_file(repo_id, "/", page_name, user)
     except SearpcError, e:
-        return json_error(_(u'Failed to create home page.'))
+        return json_error(_(u'Failed to create home page.'), 500)
 
-    return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
+    next = reverse('group_wiki', args=[group.id])
+    return HttpResponse(json.dumps({'href': next}), content_type=content_type)
 
 def normalize_page_name(page_name):
     # Replace special characters to '-'.
@@ -1268,8 +1282,7 @@ def group_wiki_page_new(request, group, page_name="home"):
         page_name = request.POST.get('page_name', '')
         if not page_name:
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        # Normalize page name
-        page_name = normalize_page_name(page_name)
+        page_name = normalize_page_name(page_name) # normalize page name
 
         repo = find_wiki_repo(request, group)
         if not repo:
