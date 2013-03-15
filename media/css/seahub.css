@@ -1745,7 +1745,8 @@ textarea:-moz-placeholder {/* for FF */
 #md-view {
     width:756px;
 }
-#md-view h2 {
+#md-view h2,
+#wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
 #svg-view {
@@ -2016,31 +2017,35 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* wiki page */
-.wiki-nav li{
-    display: inline-block;
+.wiki-top {
+    text-align:right;
+    padding-bottom:8px;
+    border-bottom:1px solid #eee;
 }
-#wiki-area.article {
+.wiki-top .op-btn {
+    margin-left:3px;
+}
+.wiki-nav .item {
+    float:left;
+    font-size:15px;
+    margin:4px 5px 0 10px;
+}
+.wiki-nav .link {
+    font-weight:normal;
+}
+#wiki-area {
     padding: 0 0;
 }
-#wiki-create-form {
-    width: 262px;
-}
-#wiki-create-form input[type="text"]{
-    width: 100%;
-}
-#wiki-create-form textarea {
-    width: 100%;
-}
-#page-edit {
-    margin-right:6px;
+#wiki-pages {
+   list-style-type:disc;
+   padding-left:2em;
+   margin-top:1.6em;
 }
 .wiki-page-missing {
     color:red;
 }
-.wiki-link-icon {
-    margin: 0 3px -5px 0;
-}
 
+/* search */
 .search-form {
     padding-left:5px;
     height:24px;

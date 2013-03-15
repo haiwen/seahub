@@ -1138,7 +1138,7 @@ def convert_wiki_link(content, group, repo_id, username):
                     (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)
 
             token = web_get_access_token(repo_id, obj_id, 'view', username)
-            return '<img src="%s" />' % gen_file_get_url(token, filename)
+            return '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
             from base.templatetags.seahub_tags import file_icon_filter
             
@@ -1146,8 +1146,8 @@ def convert_wiki_link(content, group, repo_id, username):
             path = "/" + linkname
             icon = file_icon_filter(linkname)
             s = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
-            a_tag = '''<a href='%s' target='_blank'><img class="wiki-link-icon" src="%simg/file/%s" />%s</a>'''
-            return a_tag % (s, MEDIA_URL, icon, linkname)
+            a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
+            return a_tag % (MEDIA_URL, icon, icon, s, linkname)
 
     return re.sub(r'\[\[(.+)\]\]', repl, content)
     
@@ -1211,9 +1211,12 @@ def group_wiki_pages(request, group):
         if ext == '.md':
             pages.append(name)
 
+    is_staff = True if check_group_staff(group.id, request.user) else False
+
     return render_to_response("group/group_wiki_pages.html", {
             "group": group,
             "pages": pages,
+            "is_staff": is_staff,
             }, context_instance=RequestContext(request))
 
 @login_required
