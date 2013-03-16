@@ -24,10 +24,10 @@ from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     seafserv_rpc, web_get_access_token, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
-    get_personal_groups_by_user, get_group, get_group_members, \
+    get_personal_groups_by_user, get_group, get_group_members, create_repo, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission, is_passwd_set, \
-    unshare_group_repo, get_file_id_by_path
+    get_org_groups_by_user, check_permission, is_passwd_set, remove_repo, \
+    unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
@@ -782,7 +782,7 @@ def create_group_repo(request, group_id):
                 
             # if share failed, remove the newly created repo
             if status != 0:
-                seafserv_threaded_rpc.remove_repo(repo_id)
+                remove_repo(repo_id)
                 return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
@@ -790,12 +790,7 @@ def create_group_repo(request, group_id):
                                     content_type=content_type)
         else:
             # create group repo in user context
-            try:
-                repo_id = seafserv_threaded_rpc.create_repo(repo_name,
-                                                            repo_desc,
-                                                            user, passwd)
-            except:
-                repo_id = None
+            repo_id = create_repo(repo_name, repo_desc, user, passwd)
             if not repo_id:
                 return json_error(_(u'Failed to create'))
 
@@ -809,7 +804,7 @@ def create_group_repo(request, group_id):
                 
             # if share failed, remove the newly created repo
             if status != 0:
-                seafserv_threaded_rpc.remove_repo(repo_id)
+                remove_repo(repo_id)
                 return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
@@ -1171,7 +1166,9 @@ def group_wiki(request, group, page_name="home"):
         # No need to check whether repo is none, since repo is already created
         
         filename = normalize_page_name(page_name) + '.md'
-        seafserv_threaded_rpc.post_empty_file(repo.id, "/", filename, username)
+        if not post_empty_file(repo.id, "/", filename, username):
+            return render_error(request, _("Faied to create wiki page. Please retry later."))
+        return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
     else:
         content = convert_wiki_link(content, group, repo_id, username)
         
@@ -1255,11 +1252,8 @@ def group_wiki_create(request, group):
     passwd = None
     permission = "rw"
 
-    try:
-        repo_id = seafserv_threaded_rpc.create_repo(repo_name,
-                                                    repo_desc,
-                                                    user, passwd)
-    except:
+    repo_id = create_repo(repo_name, repo_desc, user, passwd)
+    if not repo_id:
         return json_error(_(u'Failed to create'), 500)
     
     try:
@@ -1268,17 +1262,15 @@ def group_wiki_create(request, group):
                                                         user,
                                                         permission)
     except SearpcError, e:
-        seafserv_threaded_rpc.remove_repo(repo_id)
+        remove_repo(repo_id)
         return json_error(_(u'Failed to create: internal error.'), 500)
 
     GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
 
     # create home page
     page_name = "home.md"
-    try:
-        seafserv_threaded_rpc.post_empty_file(repo_id, "/", page_name, user)
-    except SearpcError, e:
-        return json_error(_(u'Failed to create home page.'), 500)
+    if not post_empty_file(repo_id, "/", page_name, user):
+        return json_error(_(u'Failed to create home page. Please retry later'), 500)
 
     next = reverse('group_wiki', args=[group.id])
     return HttpResponse(json.dumps({'href': next}), content_type=content_type)
@@ -1305,11 +1297,8 @@ def group_wiki_page_new(request, group, page_name="home"):
         
         filename = page_name + ".md"
         filepath = "/" + page_name + ".md"
-        try:
-            seafserv_threaded_rpc.post_empty_file(
-                repo.id, "/", filename, request.user.username)
-        except SearpcError, e:
-            return render_error(request, _('Failed to create wiki page.'))
+        if not post_empty_file(repo.id, "/", filename, request.user.username):
+            return render_error(request, _('Failed to create wiki page. Please retry later.'))
 
         url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_new&gid=%s" % \
             (SITE_ROOT, repo.id, filepath, group.id)
@@ -1336,10 +1325,9 @@ def group_wiki_page_delete(request, group, page_name):
     
     file_name = page_name + '.md'
     user = request.user.username
-    try:
-        seafserv_threaded_rpc.del_file(repo.id, '/', file_name, user)
+    if del_file(repo.id, '/', file_name, user):
         messages.success(request, 'Successfully deleted "%s".' % page_name)
-    except SearpcError, e:
+    else:
         messages.error(request, 'Failed to delete "%s". Please retry later.' % page_name)
 
     return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
