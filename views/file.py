@@ -21,7 +21,7 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
-    is_group_user, get_file_id_by_path, get_commit, send_message
+    is_group_user, get_file_id_by_path, get_commit
 from pysearpc import SearpcError
 
 from base.decorators import ctx_switch_required, repo_passwd_set_required
@@ -331,9 +331,6 @@ def view_file(request, repo_id):
     if request.user.org:
         org_id = request.user.org['org_id']
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
-
-    # send logging message
-    send_message('seahub.stats', 'view-file\t%s\t%s' % (repo.id, obj_id))
 
     template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     return render_to_response(template, {

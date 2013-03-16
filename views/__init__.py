@@ -45,7 +45,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
     count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
-    get_user_share_usage
+    get_user_share_usage, send_message
 from pysearpc import SearpcError
 
 from base.accounts import User
@@ -1802,6 +1802,16 @@ def repo_access_file(request, repo_id, obj_id):
         return render_permission_error(request, _(u'Unable to access file'))
 
     redirect_url = gen_file_get_url(token, file_name)
+
+    if from_shared_link:
+        # send stats message
+        try:
+            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            send_message('seahub.stats', 'file-download\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
+        except:
+            logging.exception('Error when sending file-download message:')
+            pass
+
     return HttpResponseRedirect(redirect_url)
 
 def get_repo_download_url(request, repo_id):
@@ -2693,6 +2703,14 @@ def view_shared_file(request, token):
     file_encoding_list = FILE_ENCODING_LIST
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
+
+    if not err:
+        try:
+            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
+        except:
+            logging.exception('Error when sending file-view message:')
+            pass
     
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
