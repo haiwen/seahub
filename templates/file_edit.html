@@ -224,14 +224,14 @@ function editSubmit() {
 
     $.ajax({
         type: "POST",
-        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}',
+        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}',
         dataType: 'json',
         cache: false,
         contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {content: content, encoding: $('#file-enc').val()},
         success: function(data) {
-            location.href = $('#file-edit-cancel').attr('href');
+            location.href = data['href'];
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {

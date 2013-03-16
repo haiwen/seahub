@@ -96,9 +96,14 @@ class User(object):
     def save(self):
         emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
         if emailuser:
-            ccnet_threaded_rpc.update_emailuser(emailuser.id, self.password,
-                                                int(self.is_staff),
-                                                int(self.is_active))
+            if hasattr(self, 'password'): # setted by set_password()
+                ccnet_threaded_rpc.update_emailuser(emailuser.id,
+                                                    self.password,
+                                                    int(self.is_staff),
+                                                    int(self.is_active))
+            else:
+                # TODO: need a new rpc tp update is_staff and is_active
+                raise NotImplementedError 
         else:
             ccnet_threaded_rpc.add_emailuser(self.username, self.password,
                                              int(self.is_staff),

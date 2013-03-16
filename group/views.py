@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
+import stat
 import simplejson as json
+import urllib2
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -11,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
+from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
@@ -19,16 +22,18 @@ from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
+    seafserv_rpc, web_get_access_token, \
     get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
-    get_personal_groups_by_user, get_group, get_group_members, \
+    get_personal_groups_by_user, get_group, get_group_members, create_repo, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
-    get_org_groups_by_user, check_permission, is_passwd_set, unshare_group_repo
+    get_org_groups_by_user, check_permission, is_passwd_set, remove_repo, \
+    unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment
+from models import GroupMessage, MessageReply, MessageAttachment, GroupWiki
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm, GroupJoinMsgForm
+    GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
 from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from base.decorators import ctx_switch_required
@@ -37,16 +42,36 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.settings import SITE_ROOT, SITE_NAME
+from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
-    check_and_get_org_by_repo
+    check_and_get_org_by_repo, gen_file_get_url, get_file_type_and_ext, \
+    get_file_contributors
+from seahub.utils.slugify import slugify
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+def group_check(func):
+    """
+    Decorator for initial group permission check tasks
+    """
+    def _decorated(request, group_id, *args, **kwargs):
+        group_id_int = int(group_id) # Checked by URL Conf
+        group = get_group(group_id_int)
+        if not group:
+            return HttpResponseRedirect(reverse('group_list', args=[]))
+        joined = is_group_user(group_id_int, request.user.username)
+        if not joined and not request.user.is_staff:
+            # Return group public info page.
+            return render_to_response('group/group_pubinfo.html', {
+                    'group': group,
+                    }, context_instance=RequestContext(request))
+        return func(request, group, *args, **kwargs)
+    return _decorated
 
 @login_required
 def group_list(request):
@@ -200,13 +225,6 @@ def render_group_info(request, group_id, form):
 
     is_staff = True if check_group_staff(group.id, request.user) else False
         
-    managers = []
-    common_members = []
-    for member in members:
-        if member.is_staff == 1:
-            managers.append(member)
-        else:
-            common_members.append(member)
 
     org = request.user.org
     if org:
@@ -232,57 +250,8 @@ def render_group_info(request, group_id, form):
                                               request.user.username)
         cmt.tp = cmt.props.desc.split(' ')[0]
 
-    """group messages"""
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '15'))
-    except ValueError:
-        current_page = 1
-        per_page = 15
-
-    msgs_plus_one = GroupMessage.objects.filter(
-        group_id=group_id).order_by(
-        '-timestamp')[per_page*(current_page-1) : per_page*current_page+1]
-
-    if len(msgs_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    group_msgs = msgs_plus_one[:per_page]
-    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
-
-    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
-    reply_to_list = [ r.reply_to_id for r in msg_replies ]
-    
-    for msg in group_msgs:
-        msg.reply_cnt = reply_to_list.count(msg.id)
-            
-        for att in attachments:
-            if msg.id == att.group_message_id:
-                # Attachment name is file name or directory name.
-                # If is top directory, use repo name instead.
-                path = att.path
-                if path == '/':
-                    repo = get_repo(att.repo_id)
-                    if not repo:
-                        # TODO: what should we do here, tell user the repo
-                        # is no longer exists?
-                        continue
-                    att.name = repo.name
-                else:
-                    # cut out last '/'
-                    if path[-1] == '/':
-                        path = path[:-1]
-                    att.name = os.path.basename(path)
-                msg.attachment = att
-
-    contacts = Contact.objects.filter(user_email=request.user.username)
 
     return render_to_response("group/group_info.html", {
-            "managers": managers,
-            "common_members": common_members,
             "members": members,
             "repos": repos,
             "recent_commits": recent_commits,
@@ -290,15 +259,8 @@ def render_group_info(request, group_id, form):
             "group" : group,
             "is_staff": is_staff,
             "is_join": joined,
-            "group_msgs": group_msgs,
             "form": form,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
             'create_shared_repo': True,
-            'contacts': contacts,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
@@ -338,17 +300,17 @@ def msg_reply(request, msg_id):
     content_type = 'application/json; charset=utf-8'
     if request.is_ajax():
         ctx = {}
+        try:
+            group_msg = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            return HttpResponseBadRequest(content_type=content_type)
+
         if request.method == 'POST':
             form = MessageReplyForm(request.POST)
-
             # TODO: invalid form
             if form.is_valid():
                 msg = form.cleaned_data['message']
-                try:
-                    group_msg = GroupMessage.objects.get(id=msg_id)
-                except GroupMessage.DoesNotExist:
-                    return HttpResponseBadRequest(content_type=content_type)
-            
+
                 msg_reply = MessageReply()
                 msg_reply.reply_to = group_msg
                 msg_reply.from_email = request.user.username
@@ -360,22 +322,23 @@ def msg_reply(request, msg_id):
                     grpmsg_reply_added.send(sender=MessageReply,
                                             msg_id=msg_id,
                                             from_email=request.user.username)
-
-                ctx['reply'] = msg_reply
-                html = render_to_string("group/group_reply_new.html", ctx)
+                replies = MessageReply.objects.filter(reply_to=group_msg)
+                r_num = len(replies)
+                if r_num < 4:
+                    ctx['replies'] = replies
+                else:
+                    ctx['replies'] = replies[r_num - 3:]
+                html = render_to_string("group/group_reply_list.html", ctx)
+                serialized_data = json.dumps({"r_num": r_num, "html": html})
+                return HttpResponse(serialized_data, content_type=content_type)
 
         else:
-            try:
-                msg = GroupMessage.objects.get(id=msg_id)
-            except GroupMessage.DoesNotExist:
-                raise HttpResponse(status=400)
-
-            replies = MessageReply.objects.filter(reply_to=msg)
+            replies = MessageReply.objects.filter(reply_to=group_msg)
+            r_num = len(replies)
             ctx['replies'] = replies
             html = render_to_string("group/group_reply_list.html", ctx)
-
-        serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=content_type)
+            serialized_data = json.dumps({"r_num": r_num, "html": html})
+            return HttpResponse(serialized_data, content_type=content_type)
     else:
         return HttpResponseBadRequest(content_type=content_type)
 
@@ -413,9 +376,12 @@ def msg_reply_new(request):
 
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
-
-            m.reply_list = reply_list
             m.reply_cnt = reply_list.count()
+            if m.reply_cnt > 3:
+                m.replies = reply_list[m.reply_cnt - 3:]
+            else:
+                m.replies = reply_list
+
             group_msgs.append(m)
 
     # remove new group msg reply notification
@@ -462,12 +428,8 @@ def group_info(request, group_id):
 @login_required
 @ctx_switch_required
 @group_staff_required
-def group_manage(request, group_id):
-    group_id = int(group_id)    # Checked by URL Conf
-
-    group = get_group(group_id)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
+@group_check
+def group_manage(request, group):
 
     user = request.user.username
     
@@ -498,7 +460,7 @@ def group_manage(request, group_id):
                                             content_type=content_type)
                     else:
                         try:
-                            ccnet_threaded_rpc.group_add_member(group_id,
+                            ccnet_threaded_rpc.group_add_member(group.id,
                                                                 user, email)
                         except SearpcError, e:
                             result['error'] = _(e.msg)
@@ -534,7 +496,7 @@ def group_manage(request, group_id):
                     # Add user to group, unregistered user will see the group
                     # when he logs in.
                     try:
-                        ccnet_threaded_rpc.group_add_member(group_id,
+                        ccnet_threaded_rpc.group_add_member(group.id,
                                                             user, email)
                     except SearpcError, e:
                         result['error'] = _(e.msg)
@@ -550,7 +512,7 @@ def group_manage(request, group_id):
                                         content_type=content_type)
                 # Add user to group.
                 try:
-                    ccnet_threaded_rpc.group_add_member(group_id,
+                    ccnet_threaded_rpc.group_add_member(group.id,
                                                user, email)
                 except SearpcError, e:
                     result['error'] = _(e.msg)
@@ -571,7 +533,7 @@ def group_manage(request, group_id):
                             content_type=content_type)
 
     ### GET ###
-    members_all = ccnet_threaded_rpc.get_group_members(group_id)
+    members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [ m for m in members_all if m.is_staff ]    
 
     contacts = Contact.objects.filter(user_email=user)
@@ -710,6 +672,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
 def group_recommend(request):
     """
     Recommend a file or directory to a group.
+    now changed to 'post a discussion'
     """
     if request.method != 'POST':
         raise Http404
@@ -759,8 +722,8 @@ def group_recommend(request):
                                    src='recommend')
             ma.save()
 
-            group_url = reverse('group_info', args=[group_id])
-            msg = _(u'Successfully recommended to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
+            group_url = reverse('group_discuss', args=[group_id])
+            msg = _(u'Successfully posted to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
                 {'url':group_url, 'name':group.group_name}
             messages.add_message(request, messages.INFO, msg)
 
@@ -819,7 +782,7 @@ def create_group_repo(request, group_id):
                 
             # if share failed, remove the newly created repo
             if status != 0:
-                seafserv_threaded_rpc.remove_repo(repo_id)
+                remove_repo(repo_id)
                 return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
@@ -827,12 +790,7 @@ def create_group_repo(request, group_id):
                                     content_type=content_type)
         else:
             # create group repo in user context
-            try:
-                repo_id = seafserv_threaded_rpc.create_repo(repo_name,
-                                                            repo_desc,
-                                                            user, passwd)
-            except:
-                repo_id = None
+            repo_id = create_repo(repo_name, repo_desc, user, passwd)
             if not repo_id:
                 return json_error(_(u'Failed to create'))
 
@@ -846,7 +804,7 @@ def create_group_repo(request, group_id):
                 
             # if share failed, remove the newly created repo
             if status != 0:
-                seafserv_threaded_rpc.remove_repo(repo_id)
+                remove_repo(repo_id)
                 return json_error(_(u'Failed to create: internal error.'))
             else:
                 result = {'success': True}
@@ -954,4 +912,423 @@ def attention(request):
     content_type = 'application/json; charset=utf-8'
     
     return HttpResponse(json.dumps(result), content_type=content_type)
+    
+
+
+@login_required
+def group_discuss(request, group_id):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            msg = form.cleaned_data['message']
+            message = GroupMessage()
+            message.group_id = group_id
+            message.from_email = request.user.username
+            message.message = msg
+            message.save()
+
+            # send signal
+            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+                              from_email=request.user.username)
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data.
+            return HttpResponseRedirect(reverse('group_discuss', args=[group_id]))
+    else:
+        form = MessageForm()
+        
+        op = request.GET.get('op', '')
+        if op == 'delete':
+            return group_remove(request, group_id)
+        elif op == 'dismiss':
+            return group_dismiss(request, group_id)
+        elif op == 'quit':
+            return group_quit(request, group_id)
+
+    group_id_int = int(group_id) # Checkeb by URL Conf
+
+    # remove user notifications
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='group_msg',
+                                    detail=str(group_id)).delete()
+    
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+    
+    # Check whether user belongs to the group.
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'members': members,
+                'group': group,
+                }, context_instance=RequestContext(request))
+
+    # Get all group members.
+    members = get_group_members(group_id_int)
+    is_staff = True if check_group_staff(group.id, request.user) else False
+        
+    managers = []
+    common_members = []
+    for member in members:
+        if member.is_staff == 1:
+            managers.append(member)
+        else:
+            common_members.append(member)
+
+
+    """group messages"""
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+    except ValueError:
+        current_page = 1
+    per_page = 45
+
+    group_msgs = GroupMessage.objects.filter(
+        group_id=group_id).order_by(
+        '-timestamp')[per_page*(current_page-1) : per_page*current_page]
+
+    group_msgs = list(group_msgs) # Force evaluate queryset to fix some database error for mysql
+
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
+
+    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
+    reply_to_list = [ r.reply_to_id for r in msg_replies ]
+    
+    for msg in group_msgs:
+        msg.reply_cnt = reply_to_list.count(msg.id)
+        msg.replies = []
+        for r in msg_replies:
+            if msg.id == r.reply_to_id:
+                msg.replies.append(r)
+        msg.replies = msg.replies[-3:]
+            
+        for att in attachments:
+            if msg.id == att.group_message_id:
+                # Attachment name is file name or directory name.
+                # If is top directory, use repo name instead.
+                path = att.path
+                if path == '/':
+                    repo = get_repo(att.repo_id)
+                    if not repo:
+                        # TODO: what should we do here, tell user the repo
+                        # is no longer exists?
+                        continue
+                    att.name = repo.name
+                else:
+                    # cut out last '/'
+                    if path[-1] == '/':
+                        path = path[:-1]
+                    att.name = os.path.basename(path)
+                msg.attachment = att
+
+    per_show = 15
+    if current_page == 1 and len(group_msgs) > per_show:
+        msgs_more = True
+    else:
+        msgs_more = False
+
+    msg_total_num = GroupMessage.objects.filter(group_id=group_id).count()
+    total_page = msg_total_num/per_page
+    if msg_total_num % per_page > 0:
+        total_page += 1
+    
+    page_next = True if current_page < total_page else False
+
+    # get page numbers shown in the web page
+    first_page = 1
+    if total_page <= 10:
+        last_page = total_page 
+    else:
+        if current_page < 6:
+            last_page = 10
+        else:
+            first_page = current_page - 5
+            last_page = current_page + 4 if current_page + 4 < total_page else total_page
+    pages_show = range(first_page, last_page + 1)
+
+    return render_to_response("group/group_discuss.html", {
+            "managers": managers,
+            "common_members": common_members,
+            "members": members,
+            "group_id": group_id,
+            "group" : group,
+            "is_staff": is_staff,
+            "group_msgs": group_msgs,
+            "form": form,
+            'per_show': per_show,
+            'msgs_more': msgs_more,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'page_next': page_next,
+            'pages_show': pages_show,
+            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            }, context_instance=RequestContext(request));
+
+
+class WikiDoesNotExist(Exception):
+    pass
+
+class WikiPageMissing(Exception):
+    pass
+
+def find_wiki_repo(request, group):
+    try:
+        groupwiki = GroupWiki.objects.get(group_id=group.id)
+        repos = get_group_repos(group.id, request.user.username)
+        for repo in repos:
+            if repo.id == groupwiki.repo_id:
+                return repo
+        return None
+    except GroupWiki.DoesNotExist:
+        return None
+
+def get_file_url(repo_id, path, filename):
+    obj_id = get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        raise WikiPageMissing
+    access_token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                     'view', '')
+    url = gen_file_get_url(access_token, filename)
+    return url, obj_id
+
+def get_wiki_page(request, group, page_name):
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        raise WikiDoesNotExist
+    path = "/" + page_name + ".md"
+    filename = page_name + ".md"
+    url, obj_id = get_file_url(repo.id, path, filename)
+    file_response = urllib2.urlopen(url)
+    content = file_response.read()
+    return content, repo.id, obj_id
+
+def convert_wiki_link(content, group, repo_id, username):
+    import re
+
+    def repl(matchobj):
+        linkname = matchobj.group(1).strip()
+        filetype, fileext = get_file_type_and_ext(linkname)
+        filetype = filetype.lower()
+        if fileext == '':
+            # convert linkname that extension is missing to a markdown page
+            filename = linkname + ".md"
+            path = "/" + filename
+            if get_file_id_by_path(repo_id, path):
+                a_tag = "<a href='%s'>%s</a>"
+                return a_tag % (reverse('group_wiki', args=[group.id, linkname]), linkname)                                
+            else:
+                a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
+                return a_tag % (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)                                
+        elif filetype == 'image':
+            # load image to wiki page
+            path = "/" + linkname
+            filename = os.path.basename(path)
+            obj_id = get_file_id_by_path(repo_id, path)
+            if not obj_id:
+                # Replace '/' in linkname to '-', since wiki name can not
+                # contain '/'.
+                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
+                    (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)
+
+            token = web_get_access_token(repo_id, obj_id, 'view', username)
+            return '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+        else:
+            from base.templatetags.seahub_tags import file_icon_filter
+            
+            # convert other types of filelinks to clickable links
+            path = "/" + linkname
+            icon = file_icon_filter(linkname)
+            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
+            a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
+            return a_tag % (MEDIA_URL, icon, icon, s, linkname)
+
+    return re.sub(r'\[\[(.+)\]\]', repl, content)
+    
+@login_required
+@group_check
+def group_wiki(request, group, page_name="home"):
+    is_staff = True if check_group_staff(group.id, request.user) else False
+    username = request.user.username
+    content = ''
+    wiki_exists = True
+    last_modified, latest_contributor = None, None
+    try:
+        content, repo_id, obj_id = get_wiki_page(request, group, page_name)
+    except WikiDoesNotExist:
+        wiki_exists = False
+    except WikiPageMissing:
+        '''create that page for user'''
+        repo = find_wiki_repo(request, group)
+        # No need to check whether repo is none, since repo is already created
+        
+        filename = normalize_page_name(page_name) + '.md'
+        if not post_empty_file(repo.id, "/", filename, username):
+            return render_error(request, _("Faied to create wiki page. Please retry later."))
+        return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
+    else:
+        content = convert_wiki_link(content, group, repo_id, username)
+        
+        # fetch file latest contributor and last modified
+        path = '/' + page_name + '.md'
+        file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+        contributors, last_modified, last_commit_id = get_file_contributors(\
+            repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+        latest_contributor = contributors[0] if contributors else None
+
+    return render_to_response("group/group_wiki.html", {
+            "group_id": group.id,
+            "group" : group,
+            "is_staff": is_staff,
+            "content": content,
+            "page": page_name,
+            "wiki_exists": wiki_exists,
+            "last_modified": last_modified,
+            "latest_contributor": latest_contributor,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@group_check
+def group_wiki_pages(request, group):
+    """
+    List wiki pages in group.
+    """
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        return render_error(request, _('Wiki is not found.'))
+
+    try:
+        dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo.id, '/')
+    except SearpcError, e:
+        dir_id = None
+    if not dir_id:
+        return render_error(request, _('Wiki root path is missing.'))
+
+    try:
+        dirs = seafserv_threaded_rpc.list_dir(dir_id)
+    except SearpcError, e:
+        return render_error(request, _('Failed to list wiki directories.'))
+
+    pages = []
+    for e in dirs:
+        if stat.S_ISDIR(e.mode):
+            continue            # skip directories
+        name, ext = os.path.splitext(e.obj_name)
+        if ext == '.md':
+            pages.append(name)
+
+    is_staff = True if check_group_staff(group.id, request.user) else False
+
+    return render_to_response("group/group_wiki_pages.html", {
+            "group": group,
+            "pages": pages,
+            "is_staff": is_staff,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@group_check
+def group_wiki_create(request, group):
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    def json_error(err_msg, status=400):
+        result = {'error': err_msg}
+        return HttpResponse(json.dumps(result), status=status,
+                            content_type=content_type)
+    
+    form = WikiCreateForm(request.POST)
+    if not form.is_valid():
+        return json_error(str(form.errors.values()[0]))
+
+    # create group repo in user context
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    user = request.user.username
+    passwd = None
+    permission = "rw"
+
+    repo_id = create_repo(repo_name, repo_desc, user, passwd)
+    if not repo_id:
+        return json_error(_(u'Failed to create'), 500)
+    
+    try:
+        status = seafserv_threaded_rpc.group_share_repo(repo_id,
+                                                        group.id,
+                                                        user,
+                                                        permission)
+    except SearpcError, e:
+        remove_repo(repo_id)
+        return json_error(_(u'Failed to create: internal error.'), 500)
+
+    GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
+
+    # create home page
+    page_name = "home.md"
+    if not post_empty_file(repo_id, "/", page_name, user):
+        return json_error(_(u'Failed to create home page. Please retry later'), 500)
+
+    next = reverse('group_wiki', args=[group.id])
+    return HttpResponse(json.dumps({'href': next}), content_type=content_type)
+
+def normalize_page_name(page_name):
+    # Replace special characters to '-'.
+    # Do not lower page name and spaces are allowed.
+    return slugify(page_name, lower=False, spaces=True)
+
+@login_required
+@group_check
+def group_wiki_page_new(request, group, page_name="home"):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+
+        page_name = request.POST.get('page_name', '')
+        if not page_name:
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        page_name = normalize_page_name(page_name) # normalize page name
+
+        repo = find_wiki_repo(request, group)
+        if not repo:
+            return render_error(request, _('Wiki is not found.'))
+        
+        filename = page_name + ".md"
+        filepath = "/" + page_name + ".md"
+        if not post_empty_file(repo.id, "/", filename, request.user.username):
+            return render_error(request, _('Failed to create wiki page. Please retry later.'))
+
+        url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_new&gid=%s" % \
+            (SITE_ROOT, repo.id, filepath, group.id)
+        return HttpResponseRedirect(url)
+
+@login_required
+@group_check
+def group_wiki_page_edit(request, group, page_name="home"):
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        return render_error(request, _('Wiki is not found.'))
+
+    filepath = "/" + page_name + ".md"
+    url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_edit&gid=%s" % \
+        (SITE_ROOT, repo.id, filepath, group.id)
+    return HttpResponseRedirect(url)
+
+@login_required
+@group_check
+def group_wiki_page_delete(request, group, page_name):
+    repo = find_wiki_repo(request, group)
+    if not repo:
+        return render_error(request, _('Wiki is not found.'))
+    
+    file_name = page_name + '.md'
+    user = request.user.username
+    if del_file(repo.id, '/', file_name, user):
+        messages.success(request, 'Successfully deleted "%s".' % page_name)
+    else:
+        messages.error(request, 'Failed to delete "%s". Please retry later.' % page_name)
+
+    return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
     

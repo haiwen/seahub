@@ -13,6 +13,11 @@ try:
 except ImportError:
     BUSINESS_MODE = False
 
+try:
+    from settings import ENABLE_FILE_SEARCH
+except ImportError:
+    ENABLE_FILE_SEARCH = False
+
 def base(request):
     """
     Add seahub base configure to the context.
@@ -37,5 +42,6 @@ def base(request):
         'site_name': SITE_NAME,
         'enable_signup': ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
+        'enable_file_search': ENABLE_FILE_SEARCH,
         }
 

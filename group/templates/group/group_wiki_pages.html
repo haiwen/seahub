@@ -1,0 +1,53 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block main_panel %}
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Wiki" %}</li>
+        {% if is_staff %}
+        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="wiki-top ovhd">
+    <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
+    <ul class="wiki-nav fleft">
+        <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
+        <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
+    </ul>   
+</div>
+
+<ul id="wiki-pages">
+    {% for page in pages %}
+    <li><a href="{% url 'group_wiki' group.id page %}">{{ page }}</a></li>
+    {% endfor %}
+</ul>
+
+<form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
+    <h3>{% trans "New Page"%}</h3>
+    <label>{% trans "Name"%}</label><br/>
+    <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}"/><br />
+    <p class="error hide"></p>
+    <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit" />
+</form>
+
+{% endblock main_panel %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#page-create').click(function() {
+    $('#page-create-form').modal({appendTo: '#main', autoResize: true});
+})
+</script>
+{% endblock %}

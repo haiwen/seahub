@@ -85,4 +85,25 @@ def msgreply_save_handler(sender, instance, **kwargs):
                                      msg_type='grpmsg_reply',
                                      detail=group_msg.id)
                 n.save()
-                
+
+class GroupWikiManager(models.Manager):
+    def save_group_wiki(self, group_id, repo_id):
+        """
+        Create or update group wiki.
+        """
+        try:
+            groupwiki = self.get(group_id=group_id)
+            groupwiki.repo_id = repo_id
+        except self.model.DoesNotExist:
+            groupwiki = self.model(group_id=group_id, repo_id=repo_id)
+        groupwiki.save(using=self._db)
+        return groupwiki
+
+class GroupWiki(models.Model):
+    group_id = models.IntegerField()
+    repo_id = models.CharField(max_length=36)
+    objects = GroupWikiManager()
+
+    class Meta:
+        unique_together = ('group_id', 'repo_id')
+

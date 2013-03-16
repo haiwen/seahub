@@ -1,0 +1,74 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block update_detail %}
+{% if last_commit_id %}
+  <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
+{% endif %}
+{% endblock %}
+
+{% block edit_file %}
+{% if user_perm == 'rw' and not err%}
+<button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
+{% endif %}
+{% endblock %}
+
+{% block file_view %}
+    {% if encoding != None %}
+    <div id="file-enc-cont">
+        <label for="file-enc">{% trans "Encoding:" %}</label>
+        <select id="file-enc">
+            {% for enc in file_encoding_list %}
+            <option value="{{ enc }}" {% if encoding and encoding == enc %} selected="selected" {% endif %}>{% if enc == 'auto'%}{% trans "auto detect" %}{% else %}{{ enc }}{% endif %}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+
+    {% if not err %}
+      {% ifnotequal file_content None %}
+        <div id="md-view" class="article"></div>
+      {% endifnotequal %}
+    {% else %}
+      <div id="file-view-tip">
+        <p class="error">{{ err }}</p>
+      </div>
+    {% endif %}
+    
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
+
+<script type="text/javascript">
+    {% ifnotequal file_content None %}
+    var converter = new Showdown.converter();
+    $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
+    {% endifnotequal %}
+
+    $('#file-enc').change(function() {
+        var file_enc = $(this).val();
+        var s = location.search;
+        if (s.indexOf('?') == -1) {
+            location.search = '?file_enc=' + file_enc;
+        } else {
+            if (s.indexOf('file_enc') == -1) {
+                location.search += '&file_enc=' + file_enc; 
+            } else {
+                var params = s.substr(1).split('&');
+                var param;
+                for (var i = 0, len = params.length; i < len; i++) {
+                    param = params[i].split('=');
+                    if (param[0] == 'file_enc') {
+                        param[1] = file_enc;
+                        params[i] = param.join('=');
+                        break;
+                    }
+                }
+                location.search = '?' + params.join('&');
+            }
+        }
+    })
+</script>
+{% endblock%}

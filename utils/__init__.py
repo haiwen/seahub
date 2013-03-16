@@ -15,7 +15,9 @@ from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor, md5_constructor
 from django.utils.translation import ugettext as _
 
-from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo
+from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
+
+from htmldiff import HtmlDiff
 
 from pysearpc import SearpcError
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -284,9 +286,11 @@ def get_accessible_repos(request, repo):
 
     return accessible_repos
 
+
 def valid_previewed_file(filename):
     """
     Check whether file can preview on web
+    ``NOTE``: This function is deprecated due to the bad name.    
     
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
@@ -296,6 +300,19 @@ def valid_previewed_file(filename):
     else:
         return ('Unknown', fileExt)
 
+def get_file_type_and_ext(filename):
+    """
+    Return file type and extension if the file can be previewd online,
+    otherwise, return unknown type.
+    """
+    fileExt = os.path.splitext(filename)[1][1:].lower()
+    filetype = FILEEXT_TYPE_MAP.get(fileExt)
+    if filetype:
+        return (filetype, fileExt)
+    else:
+        return ('Unknown', fileExt)
+    
+    
 def get_file_revision_id_size (commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
     and size of the file blob
@@ -316,6 +333,9 @@ def gen_file_get_url(token, filename):
     Generate httpserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
+    if isinstance(filename, unicode):
+        filename = urllib2.quote(filename.encode('utf-8'))
+
     return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
 
 def gen_file_upload_url(token, op):
@@ -386,6 +406,54 @@ def check_and_get_org_by_group(group_id, user):
     
     return org, base_template
 
+def calc_file_last_modified(repo_id, file_path, file_path_hash, file_id):
+    try:
+        # get the lastest one file revision
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, 1, -1)
+    except SearpcError, e:
+        return '', 0
+
+    if not commits:
+        return '', 0
+
+    email, last_modified = commits[0].creator_name, commits[0].ctime
+
+    info = FileLastModifiedInfo(repo_id=repo_id,
+                                file_path=file_path,
+                                file_path_hash=file_path_hash,
+                                file_id=file_id,
+                                last_modified=last_modified,
+                                email=email)
+    try:
+        info.save()
+    except IntegrityError:
+        pass
+
+    return email, last_modified
+
+def get_file_last_modified(repo_id, file_path):
+    email = ''
+    last_modified = 0
+    file_path_hash = calc_file_path_hash(file_path)
+    file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, file_path)
+    try:
+        fc = FileLastModifiedInfo.objects.get(repo_id=repo_id,
+                                            file_path_hash=file_path_hash)
+    except FileLastModifiedInfo.DoesNotExist:
+        # has no cache yet
+        user, last_modified = calc_file_last_modified(repo_id, file_path, file_path_hash, file_id)
+    else:
+        # cache found
+        if fc.file_id != file_id:
+            # but cache is outdated
+            fc.delete()
+            user, last_modified = calc_file_last_modified(repo_id, file_path, file_path_hash, file_id)
+        else:
+            # cache is valid
+            user, last_modified = fc.email, fc.last_modified
+
+    return user, last_modified
+
 def get_file_contributors_from_revisions(repo_id, file_path):
     """Inspect the file history and get a list of users who have modified the
     it.
@@ -393,7 +461,7 @@ def get_file_contributors_from_revisions(repo_id, file_path):
     """
     commits = []
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, -1, -1)
     except SearpcError, e:
         return [], 0, ''
 
@@ -741,3 +809,67 @@ def show_delete_days(request):
 
     return days
 
+def is_textual_file(file_type):
+    """
+    Check whether a file type is a textual file.
+    """
+    if file_type == 'Text' or file_type == 'Markdown' or file_type == 'Sf':
+        return True
+    else:
+        return False
+
+if getattr(settings, 'ENABLE_FILE_SEARCH', False):
+    from seafes import es_get_conn, es_search
+
+    conn = es_get_conn()
+    def search_file_by_name(request, keyword, start, size):
+        owned_repos, shared_repos, groups_repos, pub_repo_list = get_user_repos(request.user)
+
+        # unify the repo.owner property
+        for repo in owned_repos:
+            repo.owner = request.user.username
+        for repo in shared_repos:
+            repo.owner = repo.user
+        for repo in pub_repo_list:
+            repo.owner = repo.user
+
+        pubrepo_id_map = {}
+        for repo in pub_repo_list:
+            # fix pub repo obj attr name mismatch in seafile/lib/repo.vala
+            repo.id = repo.repo_id
+            repo.name = repo.repo_name
+            pubrepo_id_map[repo.id] = repo
+
+        # remove duplicates from non-pub repos
+        nonpub_repo_list = []
+        for repo in owned_repos + shared_repos + groups_repos:
+            if repo.id not in nonpub_repo_list:
+                nonpub_repo_list.append(repo)
+
+        nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list ]
+
+        files_found, total = es_search(conn, nonpub_repo_ids, keyword, start, size)
+
+        if len(files_found) > 0:
+            # construt a (id, repo) hash table for fast lookup
+            repo_id_map = {}
+            for repo in nonpub_repo_list:
+                repo_id_map[repo.id] = repo
+
+            repo_id_map.update(pubrepo_id_map)
+
+            for f in files_found:
+                repo = repo_id_map.get(f['repo_id'].encode('UTF-8'), None)
+                if repo:
+                    f['repo'] = repo
+                    f['exists'] = True
+                    f['last_modified_by'], f['last_modified'] = get_file_last_modified(f['repo_id'], f['fullpath'])
+                else:
+                    f['exists'] = False
+
+            files_found = filter(lambda f: f['exists'], files_found)
+
+        return files_found, total
+else:
+    def search_file_by_name(*args):
+        pass

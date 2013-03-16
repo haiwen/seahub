@@ -13,9 +13,9 @@
 <h3>{% trans "All Members" %}</h3>
 <table>
     <tr>
-        <th width="55%">{% trans "Email" %}</th>
+        <th width="45%">{% trans "Email" %}</th>
         <th width="20%">{% trans "Status" %}</th>
-        <th width="25%">{% trans "Operations" %}</th>
+        <th width="35%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -30,6 +30,11 @@
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          {% if user.is_staff %}
+          <a href="#" class="take-admin-btn op" data="{% url 'user_remove_admin' user.id %}">{% trans "Take Admin" %}</a>
+          {% else %}
+          <a href="#" class="give-admin-btn op" data="{% url 'user_make_admin' user.id %}">{% trans "Give Admin" %}</a>
+          {% endif %}
           {% endif %}
         </td>
     </tr>
@@ -68,7 +73,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.activate').each(function(){
+$('.activate,.give-admin-btn,take-admin-btn').each(function(){
     $(this).click(function(){
         location.href = $(this).attr('data');
     });

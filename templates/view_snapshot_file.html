@@ -1,0 +1,17 @@
+{% extends 'view_history_file.html' %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block view_hd %}
+  <h2>
+    {{repo.props.name}} {% trans "snapshots" %}
+    <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+  </h2>
+{% endblock %}
+
+{% block file_path %}
+  {% trans "Current Path: "%}
+  {% for name, link in zipped %}
+    {% if not forloop.last %} <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> / {% else %} {{ name }} {% endif %}
+  {% endfor %}
+{% endblock %}

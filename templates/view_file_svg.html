@@ -1,0 +1,12 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript">
+    if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
+        $('#file-view').html('<div id="file-view-tip"><p>{% trans "To view it online, you can use firefox, chrome or IE 9." %}</p></div>');
+    } else {
+        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe>');
+    }
+</script>
+{% endblock %}

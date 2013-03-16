@@ -5,7 +5,17 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<h2>{{ group.group_name }} {% trans "administration"%}</h2>
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Admin" %}</li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block left_panel %}
@@ -24,7 +34,6 @@
     <h3 class="info-item-top">{% trans "Operations"%}</h3>
     <ul class="info-item-bottom op-list">
         <li><a id="group-dismiss" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
-        <li><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{% trans "Back"%}</a></li>
     </ul>
 </div>
 {% endblock %}

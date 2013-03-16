@@ -40,7 +40,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, edit_repo,\
-    get_related_users_by_repo, get_related_users_by_org_repo, HtmlDiff, \
+    get_related_users_by_repo, get_related_users_by_org_repo, \
     get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
     get_repo_history_limit, set_repo_history_limit, MAX_UPLOAD_FILE_SIZE, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
@@ -73,7 +73,7 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
-    get_dir_files_last_modified, show_delete_days
+    get_dir_files_last_modified, show_delete_days, HtmlDiff
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -1032,6 +1032,7 @@ def myhome(request):
     profiles = Profile.objects.filter(user=request.user.username)
     nickname = profiles[0].nickname if profiles else ''
 
+    my_contacts = []
     if request.cloud_mode:
         allow_public_share = False
         # In cloud mode, list joined groups and registered contacts for
@@ -1039,6 +1040,7 @@ def myhome(request):
         autocomp_groups = joined_groups
         contacts = [ c for c in Contact.objects.filter(user_email=email) \
                          if is_registered_user(c.contact_email) ]
+        my_contacts = contacts
     else:
         allow_public_share = True
 
@@ -1054,7 +1056,8 @@ def myhome(request):
                 continue
             u.contact_email = u.email
             contacts.append(u)
-
+        my_contacts = [ c for c in Contact.objects.filter(user_email=email) \
+                         if is_registered_user(c.contact_email) ]
     # events
     if EVENTS_ENABLED:
         events = True
@@ -1073,6 +1076,7 @@ def myhome(request):
             "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
+            "my_contacts": my_contacts,
             "joined_groups": joined_groups,
             "autocomp_groups": autocomp_groups,
             "notes": notes,
@@ -1250,230 +1254,230 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
 
-@ctx_switch_required
-def repo_view_file(request, repo_id):
-    """
-    Preview file on web, including files in current worktree and history.
-    """
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
+# @ctx_switch_required
+# def repo_view_file(request, repo_id):
+#     """
+#     Preview file on web, including files in current worktree and history.
+#     """
+#     repo = get_repo(repo_id)
+#     if not repo:
+#         raise Http404
     
-    http_server_root = get_httpserver_root()
-    path = request.GET.get('p', '/')
-    u_filename = os.path.basename(path)
-    filename = urllib2.quote(u_filename.encode('utf-8'))
-    comment_open = request.GET.get('comment_open', '')
-    page_from = request.GET.get('from', '')
-    # enc option a user chose
-    file_enc = request.GET.get('file_enc', 'auto') 
-    # a user may modify the value of 'file_enc' in the address bar of a browser
-    if not file_enc in FILE_ENCODING_LIST:
-        file_enc = 'auto'
+#     http_server_root = get_httpserver_root()
+#     path = request.GET.get('p', '/')
+#     u_filename = os.path.basename(path)
+#     filename = urllib2.quote(u_filename.encode('utf-8'))
+#     comment_open = request.GET.get('comment_open', '')
+#     page_from = request.GET.get('from', '')
+#     # enc option a user chose
+#     file_enc = request.GET.get('file_enc', 'auto') 
+#     # a user may modify the value of 'file_enc' in the address bar of a browser
+#     if not file_enc in FILE_ENCODING_LIST:
+#         file_enc = 'auto'
 
-    commit_id = request.GET.get('commit_id', '')
-    view_history = True if commit_id else False
-    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
-    if not current_commit:
-        current_commit = get_commits(repo_id, 0, 1)[0]
+#     commit_id = request.GET.get('commit_id', '')
+#     view_history = True if commit_id else False
+#     current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+#     if not current_commit:
+#         current_commit = get_commits(repo_id, 0, 1)[0]
 
-    basedir = ''
-    days = 0
-    if page_from == 'recycle':
-        basedir = request.GET.get('base', '')
-        if not basedir:
-            raise Http404
-        days = show_delete_days(request)
+#     basedir = ''
+#     days = 0
+#     if page_from == 'recycle':
+#         basedir = request.GET.get('base', '')
+#         if not basedir:
+#             raise Http404
+#         days = show_delete_days(request)
 
-    if view_history:
-        obj_id = request.GET.get('obj_id', '')
-    else:
-        try:
-            obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
-        except:
-            obj_id = None
+#     if view_history:
+#         obj_id = request.GET.get('obj_id', '')
+#     else:
+#         try:
+#             obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
+#         except:
+#             obj_id = None
 
-    if not obj_id:
-        return render_error(request, _(u'File does not exist'))
+#     if not obj_id:
+#         return render_error(request, _(u'File does not exist'))
 
-    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        # Redirect uesr to decrypt repo page.
-        return render_to_response('decrypt_repo_form.html', {
-                'repo': repo,
-                'next': request.get_full_path(),
-                }, context_instance=RequestContext(request))
-    permission = get_user_permission(request, repo_id)
-    if permission:
-        # Get a token to visit file
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  obj_id,
-                                                  'view',
-                                                  request.user.username)
-    else:
-        return render_permission_error(request, _(u'Unable to view file'))
+#     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+#         # Redirect uesr to decrypt repo page.
+#         return render_to_response('decrypt_repo_form.html', {
+#                 'repo': repo,
+#                 'next': request.get_full_path(),
+#                 }, context_instance=RequestContext(request))
+#     permission = get_user_permission(request, repo_id)
+#     if permission:
+#         # Get a token to visit file
+#         token = seafserv_rpc.web_get_access_token(repo_id,
+#                                                   obj_id,
+#                                                   'view',
+#                                                   request.user.username)
+#     else:
+#         return render_permission_error(request, _(u'Unable to view file'))
 
-    read_only = True if permission == 'r' else False
+#     read_only = True if permission == 'r' else False
 
-    # generate path and link
-    if page_from == 'recycle':
-        zipped = gen_path_link(path, '')
-    else:
-        zipped = gen_path_link(path, repo.name)
+#     # generate path and link
+#     if page_from == 'recycle':
+#         zipped = gen_path_link(path, '')
+#     else:
+#         zipped = gen_path_link(path, repo.name)
 
-    # determin whether file can preview on web
-    filetype, fileext = valid_previewed_file(filename)
+#     # determin whether file can preview on web
+#     filetype, fileext = valid_previewed_file(filename)
         
-    # raw path
-    raw_path = gen_file_get_url(token, filename)
+#     # raw path
+#     raw_path = gen_file_get_url(token, filename)
    
-    # get file content
-    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
-    file_encoding_list = FILE_ENCODING_LIST
-    if encoding and encoding not in FILE_ENCODING_LIST:
-        file_encoding_list.append(encoding)
+#     # get file content
+#     err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+#     file_encoding_list = FILE_ENCODING_LIST
+#     if encoding and encoding not in FILE_ENCODING_LIST:
+#         file_encoding_list.append(encoding)
 
-    img_prev = None
-    img_next = None
-    if filetype == 'Image' and not view_history:
-        parent_dir = os.path.dirname(path)
-        try:
-            dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id, parent_dir.encode('utf-8'))
-        except SearpcError, e:
-            raise Http404
+#     img_prev = None
+#     img_next = None
+#     if filetype == 'Image' and not view_history:
+#         parent_dir = os.path.dirname(path)
+#         try:
+#             dirs = seafserv_threaded_rpc.list_dir_by_path(current_commit.id, parent_dir.encode('utf-8'))
+#         except SearpcError, e:
+#             raise Http404
 
-        img_list = []
-        for dirent in dirs:
-            if not stat.S_ISDIR(dirent.props.mode):
-                fltype, flext = valid_previewed_file(dirent.obj_name)
-                if fltype == 'Image':
-                    img_list.append(dirent.obj_name)
+#         img_list = []
+#         for dirent in dirs:
+#             if not stat.S_ISDIR(dirent.props.mode):
+#                 fltype, flext = valid_previewed_file(dirent.obj_name)
+#                 if fltype == 'Image':
+#                     img_list.append(dirent.obj_name)
 
-        if len(img_list) > 1:
-            img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
-            cur_img_index = img_list.index(u_filename) 
-            if cur_img_index != 0:
-                img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
-            if cur_img_index != len(img_list) - 1:
-                img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
+#         if len(img_list) > 1:
+#             img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
+#             cur_img_index = img_list.index(u_filename) 
+#             if cur_img_index != 0:
+#                 img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
+#             if cur_img_index != len(img_list) - 1:
+#                 img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
 
-    if view_history:
-        return render_to_response('history_file_view.html', {
-                'repo': repo,
-                'obj_id': obj_id,
-                'u_filename': u_filename,
-                'file_name': filename,
-                'path': path,
-                'zipped': zipped,
-                'view_history': view_history,
-                'current_commit': current_commit,
-                'token': token,
-                'filetype': filetype,
-                'fileext': fileext,
-                'raw_path': raw_path,
-                'err': err,
-                'file_content': file_content,
-                'encoding': encoding,
-                'file_encoding_list':file_encoding_list,
-                'swf_exists': swf_exists,
-                'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
-                'use_pdfjs':USE_PDFJS,
-                'page_from': page_from,
-                'basedir': basedir,
-                'days': days,
-                }, context_instance=RequestContext(request))
+#     if view_history:
+#         return render_to_response('history_file_view.html', {
+#                 'repo': repo,
+#                 'obj_id': obj_id,
+#                 'u_filename': u_filename,
+#                 'file_name': filename,
+#                 'path': path,
+#                 'zipped': zipped,
+#                 'view_history': view_history,
+#                 'current_commit': current_commit,
+#                 'token': token,
+#                 'filetype': filetype,
+#                 'fileext': fileext,
+#                 'raw_path': raw_path,
+#                 'err': err,
+#                 'file_content': file_content,
+#                 'encoding': encoding,
+#                 'file_encoding_list':file_encoding_list,
+#                 'swf_exists': swf_exists,
+#                 'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+#                 'use_pdfjs':USE_PDFJS,
+#                 'page_from': page_from,
+#                 'basedir': basedir,
+#                 'days': days,
+#                 }, context_instance=RequestContext(request))
     
-    # file share link
-    l = FileShare.objects.filter(repo_id=repo_id).filter(\
-        username=request.user.username).filter(path=path)
-    fileshare = l[0] if len(l) > 0 else None
+#     # file share link
+#     l = FileShare.objects.filter(repo_id=repo_id).filter(\
+#         username=request.user.username).filter(path=path)
+#     fileshare = l[0] if len(l) > 0 else None
 
-    http_or_https = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
-    if fileshare:
-        file_shared_link = gen_shared_link(request, fileshare.token, 'f')
-    else:
-        file_shared_link = ''
+#     http_or_https = request.is_secure() and 'https' or 'http'
+#     domain = RequestSite(request).domain
+#     if fileshare:
+#         file_shared_link = gen_shared_link(request, fileshare.token, 'f')
+#     else:
+#         file_shared_link = ''
 
-    # my constacts
-    contacts = Contact.objects.filter(user_email=request.user.username)
+#     # my constacts
+#     contacts = Contact.objects.filter(user_email=request.user.username)
         
-    # Get groups this repo is shared.    
-    if request.user.org:
-        org_id = request.user.org['org_id']
-        repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
-    else:
-        repo_shared_groups = get_shared_groups_by_repo(repo_id)
+#     # Get groups this repo is shared.    
+#     if request.user.org:
+#         org_id = request.user.org['org_id']
+#         repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
+#     else:
+#         repo_shared_groups = get_shared_groups_by_repo(repo_id)
 
-    # Filter out groups that user in joined.
-    groups = [ x for x in repo_shared_groups if \
-                   is_group_user(x.id, request.user.username)]
+#     # Filter out groups that user in joined.
+#     groups = [ x for x in repo_shared_groups if \
+#                    is_group_user(x.id, request.user.username)]
 
-    """file comments"""
-    # Make sure page request is an int. If not, deliver first page.
+#     """file comments"""
+#     # Make sure page request is an int. If not, deliver first page.
             
-    file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-    comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
+#     file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+#     comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
-    contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
-    latest_contributor = contributors[0] if contributors else None
+#     contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+#     latest_contributor = contributors[0] if contributors else None
 
-    if len(groups) > 1:
-        ctx = {}
-        ctx['groups'] = groups
-        repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
-    else:
-        repogrp_str = '' 
+#     if len(groups) > 1:
+#         ctx = {}
+#         ctx['groups'] = groups
+#         repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
+#     else:
+#         repogrp_str = '' 
 
-    is_starred = False
-    org_id = -1
-    if request.user.org:
-        org_id = request.user.org['org_id']
-    is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
+#     is_starred = False
+#     org_id = -1
+#     if request.user.org:
+#         org_id = request.user.org['org_id']
+#     is_starred = is_file_starred(request.user.username, repo.id, path.encode('utf-8'), org_id)
 
-    user_perm = get_user_permission(request, repo_id)
+#     user_perm = get_user_permission(request, repo_id)
         
-    return render_to_response('file_view.html', {
-            'repo': repo,
-            'obj_id': obj_id,
-            'u_filename': u_filename,
-            'file_name': filename,
-            'path': path,
-            'zipped': zipped,
-            'view_history': view_history,
-            'current_commit': current_commit,
-            'token': token,
-            'filetype': filetype,
-            'fileext': fileext,
-            'raw_path': raw_path,
-            'fileshare': fileshare,
-            'protocol': http_or_https,
-            'domain': domain,
-            'file_shared_link': file_shared_link,
-            'contacts': contacts,
-            'err': err,
-            'file_content': file_content,
-            'file_enc': file_enc,
-            'encoding': encoding,
-            'file_encoding_list':file_encoding_list,
-            "applet_root": get_ccnetapplet_root(),
-            'groups': groups,
-            'comments': comments,
-            'comment_open':comment_open,
-            'swf_exists': swf_exists,
-            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
-            'use_pdfjs':USE_PDFJS,
-            'contributors': contributors,
-            'latest_contributor': latest_contributor,
-            'last_modified': last_modified,
-            'last_commit_id': last_commit_id,
-            'read_only': read_only,
-            'page_from': page_from,
-            'repo_group_str': repogrp_str,
-            'is_starred': is_starred,
-            'user_perm': user_perm,
-            'img_prev': img_prev,
-            'img_next': img_next,
-            }, context_instance=RequestContext(request))
+#     return render_to_response('file_view.html', {
+#             'repo': repo,
+#             'obj_id': obj_id,
+#             'u_filename': u_filename,
+#             'file_name': filename,
+#             'path': path,
+#             'zipped': zipped,
+#             'view_history': view_history,
+#             'current_commit': current_commit,
+#             'token': token,
+#             'filetype': filetype,
+#             'fileext': fileext,
+#             'raw_path': raw_path,
+#             'fileshare': fileshare,
+#             'protocol': http_or_https,
+#             'domain': domain,
+#             'file_shared_link': file_shared_link,
+#             'contacts': contacts,
+#             'err': err,
+#             'file_content': file_content,
+#             'file_enc': file_enc,
+#             'encoding': encoding,
+#             'file_encoding_list':file_encoding_list,
+#             "applet_root": get_ccnetapplet_root(),
+#             'groups': groups,
+#             'comments': comments,
+#             'comment_open':comment_open,
+#             'swf_exists': swf_exists,
+#             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
+#             'use_pdfjs':USE_PDFJS,
+#             'contributors': contributors,
+#             'latest_contributor': latest_contributor,
+#             'last_modified': last_modified,
+#             'last_commit_id': last_commit_id,
+#             'read_only': read_only,
+#             'page_from': page_from,
+#             'repo_group_str': repogrp_str,
+#             'is_starred': is_starred,
+#             'user_perm': user_perm,
+#             'img_prev': img_prev,
+#             'img_next': img_next,
+#             }, context_instance=RequestContext(request))
 
 def file_comment(request):
     if request.method == 'POST':
@@ -1624,6 +1628,7 @@ def file_edit_submit(request, repo_id):
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
     path = request.GET.get('p')
+
     if content is None or not path or encoding not in ["gbk", "utf-8"]:
         return error_json(_(u'Invalid arguments'))
     head_id = request.GET.get('head', None)
@@ -1649,13 +1654,31 @@ def file_edit_submit(request, repo_id):
         remove_tmp_file()
         return error_json()
 
+    if request.GET.get('from', '') == 'wiki_page_edit':
+        try:
+            gid = int(request.GET.get('gid', 0))
+        except ValueError:
+            gid = 0
+        wiki_name = os.path.splitext(os.path.basename(path))[0]
+        next = reverse('group_wiki', args=[gid, wiki_name])
+    elif request.GET.get('from', '') == 'wiki_page_new':
+        try:
+            gid = int(request.GET.get('gid', 0))
+        except ValueError:
+            gid = 0
+        next = reverse('group_wiki_pages', args=[gid])
+    else:
+        next = reverse('repo_view_file', args=[repo_id]) + \
+            '?p=' + urllib2.quote(path.encode('utf-8'))
+
     parent_dir = os.path.dirname(path).encode('utf-8')
     filename = os.path.basename(path).encode('utf-8')
     try:
         seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
                                  filename, request.user.username, head_id)
         remove_tmp_file()
-        return HttpResponse(json.dumps({'status': 'ok'}), content_type=content_type)
+        return HttpResponse(json.dumps({'href': next}),
+                            content_type=content_type)
     except SearpcError, e:
         remove_tmp_file()
         return error_json(str(e))
@@ -1734,6 +1757,8 @@ def file_edit(request, repo_id):
         'encoding': encoding,
         'file_encoding_list':file_encoding_list,
         'head_id': head_id,
+        'from': request.GET.get('from', ''),
+        'gid': request.GET.get('gid', ''),
     }, context_instance=RequestContext(request))
 
 
@@ -2058,6 +2083,32 @@ def user_remove(request, user_id):
     try:
         user = User.objects.get(id=int(user_id))
         user.delete()
+    except User.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('sys_useradmin'))
+
+@login_required
+@sys_staff_required
+def user_make_admin(request, user_id):
+    """Remove user, also remove group relationship."""
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_staff = True
+        user.save()
+    except User.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('sys_useradmin'))
+
+@login_required
+@sys_staff_required
+def user_remove_admin(request, user_id):
+    """Remove user, also remove group relationship."""
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_staff = False
+        user.save()
     except User.DoesNotExist:
         pass
     

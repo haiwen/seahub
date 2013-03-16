@@ -13,8 +13,15 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
+// search: disable submit when input nothing
+$('.search-form').submit(function() {
+    if (!$.trim($(this).find('.search-input').val())) {
+        return false;
+    }
+});
+
 //highlight the tr when mouse hover on it
-$("table tr:gt(0)").hover(
+$("table tr:gt(0), .checkbox-label").hover(
 	function() {
 		$(this).addClass('hl');
 	},
@@ -22,7 +29,12 @@ $("table tr:gt(0)").hover(
 		$(this).removeClass('hl');
 	}
 );
+
 $('input, textarea').placeholder();
+$('.checkbox-orig').click(function() {
+    $(this).parent().toggleClass('checkbox-checked');
+});
+
 $('#lang-context').click(function() {
         if ($(this).attr('data') == 'no-popup') {
             $(this).parent().css('position', 'relative');
@@ -51,6 +63,7 @@ if ($.browser.msie) {
     $('button, input[type="checkbox"], input[type="radio"], input[type="submit"]').focus(function() {
         $(this).blur();
     });
+    $('.search-input').css({'line-height':$('.search-input').css('height')});
 }
 
 /*

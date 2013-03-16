@@ -11,43 +11,58 @@
             <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
         </div>
         <div class="txt fright">
+            <div class="msg-main">
             <div class="msg-hd">
+                <a href="{% url 'user_profile' msg.from_email %}" title="{{msg.from_email}}" class="author">{{ msg.from_email|email2nickname }}</a>
                 <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
-                <a href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
                 <span class="group">{% trans "Group: " %}<a href="{% url 'group_info' msg.group_id %}">{{ msg.group_name }}</a></span>
             </div>
-            <div class="msg-bd">
-                <p>
+                <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
                 {% if msg.attachment %}
-                <span class="recommend">{% trans 'Recommended' %}
-                  {% if msg.attachment.attach_type == 'file' %}
-                  <a href="{% url 'repo_view_file' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
-                  {% else %}
-                  <a href="{% url 'repo' msg.attachment.repo_id %}?p={{ msg.attachment.path }}" target="_blank">
-                  {% endif %}
-                  {{ msg.attachment.name }}</a> :
-                </span>
-                {% endif %}
-                {{ msg.message|seahub_urlize|find_at|linebreaksbr }}
-                </p>
-                <button class="reply op hide" data="{% url 'msg_reply' msg.id %}"><span class="reply-cnt">{{ msg.reply_cnt }} </span>{% trans 'Reply' %}</a>
-                <button class="replyclose op">{% trans 'Hide' %}</button>
-                <div class="reply-bd">
-                    <ul class="reply-list">
-                        {% for reply in msg.reply_list %}
-                        <li class="w100 ovhd">
-                        <a href="{% url 'user_profile' reply.from_email %}" class="pic fleft">{% avatar reply.from_email 28 %}</a>
-                        <div class="txt fright">
-                            <a href="{% url 'user_profile' reply.from_email %}">{{ reply.from_email|email2nickname }}</a> : {{ reply.message|seahub_urlize|find_at }} --
-                            <button class="reply-at op" data="{{ reply.from_email|email2nickname }}">{% trans 'Reply' %}</button>
-                        </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <input type="text" name="message" class="reply-input" />
-                    <button class="submit">{% trans 'Reply' %}</button>
-                    <p class="error hide">输入不能为空且应少于150个字符。{% trans "It can't be blank and should be no more than 150 characters." %}</p>
+                {% with ma=msg.attachment %}
+                <div class="msg-attachment">
+                    {% if ma.src == 'recommend' %}
+                    {% if ma.attach_type == 'file' %}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <a href="{% url 'repo' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
                 </div>
+                {% endwith %}
+                {% endif %}
+                <span class="say"></span>
+            </div>  
+            <div class="msg-op">
+                <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
+                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="fold-replies hide">{% trans "Hide replies" %}</span>
+                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                </div>
+                <ul class="reply-list">
+                    {% for r in msg.replies %}
+                    <li class="reply w100 ovhd">
+                    <a href="{% url 'user_profile' r.from_email %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
+                    <div class="txt fright">
+                        <a href="{% url 'user_profile' r.from_email %}">{{ r.from_email|email2nickname }}</a>
+                        <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
+                        <span class="reply-at op vh" data="{{ r.from_email|email2nickname }}">{% trans 'Reply' %}</span>
+                        <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
+                    </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
+                <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
+                <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>
+                <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
             </div>
         </div>
         </li>
@@ -60,7 +75,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-{% include 'group/msg_reply_js.html' %}
-{% include 'group/new_msg_reply_js.html' %}
+{% include 'group/msg_js.html' %}
 </script>
 {% endblock %}

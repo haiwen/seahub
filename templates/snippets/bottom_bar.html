@@ -1,33 +1,33 @@
 {% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="recommend">{% trans "Recommend" %}</button><button id="click-into-group">{% trans "Back to group" %}</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss">{% trans "Discuss" %}</button><button id="click-into-group">{% trans "To group" %}</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
-$('#main-panel').css('margin-bottom', $('#bottom-bar button').outerHeight() + 2);
+$('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
 $('#footer').addClass('hide');
 
 {% if groups %}
-var group_list = []
-{% for group in groups %}
-group_list.push('{{ group.props.group_name }} <{{ group.props.creator_name }}>');
-{% endfor %}
-$('#recommend').click(function() {
-    if ($('#recommend-to-group-form').hasClass('hide')) {
-        $('#recommend-to-group-form, #recommend-to-group-caret').removeClass('hide');
-        $('#recommend-to-group-caret').css('left', $('#recommend').offset().left);
+$('#discuss').click(function() {
+    var form = $('#discuss-to-group-form');
+    var caret = $('#discuss-to-group-caret');
+    if (form.hasClass('hide')) {
+        form.removeClass('hide');
+        caret.removeClass('hide');
+        caret.css({'left': $(this).offset().left});
     } else {
-        $('#recommend-to-group-form, #recommend-to-group-caret').addClass('hide');
+        form.addClass('hide');
+        caret.addClass('hide');
     }
 });
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
-    if (!$('#recommend, #recommend-to-group-form, #recommend-to-group-caret').is(target) && !($('#recommend-to-group-form, #recommend-to-group-caret').find('*').is(target))) {
-        $('#recommend-to-group-form, #recommend-to-group-caret').addClass('hide');
+    if (!$('#discuss, #discuss-to-group-form, #discuss-to-group-caret').is(target) && !($('#discuss-to-group-form, #discuss-to-group-caret').find('*').is(target))) {
+        $('#discuss-to-group-form, #discuss-to-group-caret').addClass('hide');
     }   
 });
 
-$('#recommend-submit').click(function() {
-    if (!$.trim($('#recommend-to-group-form [name="message"]').val())) {
-        apply_form_error('recommend-to-group-form', '{% trans "Please input recommend message." %}');
+$('#discuss-submit').click(function() {
+    if (!$.trim($('#discuss-to-group-form .input').val())) {
+        apply_form_error('discuss-to-group-form', '{% trans "Please input a discussion." %}');
         return false;   
     }
 });
@@ -63,6 +63,6 @@ $(document).click(function(e) {
 
 $(function() {
     var btn_height = $('#bottom-bar button').outerHeight();
-    $('#recommend-to-group-caret, #to-group-caret, #comment-caret').css({'bottom': btn_height + 1});
-    $('#file-comment, #to-group, #recommend-to-group-form').css({'bottom': btn_height + 1 + $('.outer-caret').outerHeight()});
+    $('#discuss-to-group-caret, #to-group-caret, #comment-caret').css({'bottom': btn_height + 1});
+    $('#file-comment, #to-group, #discuss-to-group-form').css({'bottom': btn_height + 1 + $('.outer-caret').outerHeight()});
 });

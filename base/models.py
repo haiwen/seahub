@@ -182,3 +182,16 @@ class DirFilesLastModifiedInfo(models.Model):
 
     class Meta:
         unique_together = ('repo_id', 'parent_dir_hash')
+
+class FileLastModifiedInfo(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    file_id = models.CharField(max_length=40)
+    
+    file_path = models.TextField()
+    file_path_hash = models.CharField(max_length=12)
+
+    last_modified = models.BigIntegerField()
+    email = models.EmailField()
+
+    class Meta:
+        unique_together = ('repo_id', 'file_path_hash')

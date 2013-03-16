@@ -1,0 +1,271 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Discussion" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+        {% if is_staff %}
+        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block left_panel %}
+<div class="info-item">
+    <div class="info-item-top ovhd">
+        <h3 class="fleft">{% trans "Members" %}</h3>
+    </div>
+    <div class="info-item-bottom">
+        {% if common_members %}
+          <ul>
+            {% for member in common_members %}
+              {% if forloop.counter0 < group_members_default_display %}
+                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+              {% else %}
+                {% if forloop.last %}
+                  <li>...</li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>{% blocktrans %}No members{% endblocktrans %}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if is_join %}
+<div class="info-item">
+    <h3 class="info-item-top">{% trans "Operations" %}</h3>
+    <ul class="info-item-bottom op-list">
+        {% if is_staff %}
+        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
+        {% else %}
+        <li><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block right_panel %}
+
+<div id="group-reply">
+    <div class="w100 ovhd">
+        <div class="pic fleft">{% avatar request.user.username 48 %}</div>
+        <form id="group-message-form" action="" method="post" class="fright">
+            <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
+            {% for error in form.message.errors %}
+            <p class="error">{{ error|escape }}</p>
+            {% endfor %}
+            <button type="submit" class="submit hide">{% trans "Submit" %}</button>
+            <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
+            <span class="say"></span>
+        </form>
+    </div>
+
+    {% if group_msgs %}
+    <ul class="msg-list">
+    {% for msg in group_msgs %}
+        {% if msgs_more and forloop.counter0 > per_show %}
+        <li class="msg w100 ovhd msg-hide hide">
+        {% else %}
+        <li class="msg w100 ovhd">
+        {% endif %}
+        <div class="pic fleft">
+            <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
+        </div>
+        <div class="txt fright">
+            <div class="msg-main">
+                <div class="msg-hd w100 ovhd">
+                    {% if is_staff or msg.from_email == request.user.username %}
+                    <span class="msg-del op fright vh" data-url="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</span>
+                    {% endif %}
+                    <a href="{% url 'user_profile' msg.from_email %}" title="{{ msg.from_email }}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
+                </div>
+                <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
+                {% if msg.attachment %}
+                {% with ma=msg.attachment %}
+                <div class="msg-attachment">
+                    {% if ma.src == 'recommend' %}
+                    {% if ma.attach_type == 'file' %}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <a href="{% url 'repo' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    {% endif %}
+                </div>
+                {% endwith %}
+                {% endif %}
+                <span class="say"></span>
+            </div>
+            <div class="msg-op">
+                <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
+                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="fold-replies hide">{% trans "Hide replies" %}</span>
+                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                </div>
+                {% if msg.reply_cnt == 0 %}
+                <ul class="reply-list hide"></ul>
+                {% else %}
+                <ul class="reply-list">
+                    {% for r in msg.replies %}
+                    <li class="reply w100 ovhd">
+                    <a href="{% url 'user_profile' r.from_email %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
+                    <div class="txt fright">
+                        <a href="{% url 'user_profile' r.from_email %}">{{ r.from_email|email2nickname }}</a>
+                        <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
+                        <span class="reply-at op vh" data="{{ r.from_email|email2nickname }}">{% trans 'Reply' %}</span>
+                        <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
+                    </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
+                <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
+                <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>
+                <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if msgs_more %}
+    <button id="msgs-more" class="big-more-btn">{% trans "More" %}</button>
+    {% endif %}
+
+    {% if pages_show|length > 1 %}
+    <div id="paginator"{% if msgs_more %} class="hide"{% endif %}>
+        {% if current_page != 1 %}
+        <a href="?page={{ prev_page }}" class="prev">{% trans "Previous" %}</a>
+        {% endif %}
+        {% for p in pages_show %}
+            {% if p == current_page %}
+            <span class="cur">{{ p }}</span>
+            {% else %}
+            <a href="?page={{ p }}" class="pg">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_next %}
+        <a href="?page={{ next_page }}" class="next">{% trans "Next"%}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if group_msgs|length > 5 %}
+    <a href="#group-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
+    {% endif %}
+</div>
+
+{% include "snippets/user_profile_html.html" %}
+{% endblock %}
+
+{% block extra_script %}
+{% include 'snippets/user_profile_js.html' %}
+<script type="text/javascript">
+{% if msgs_more %}
+$('#msgs-more').click(function() {
+    $('.msg-hide:lt({{per_show}})').removeClass('msg-hide hide');
+    if ($('.msg-hide').length == 0) {
+        $(this).hide();
+        $('#paginator').removeClass('hide');
+    }
+});
+{% endif %}
+{% if group_msgs|length > 5 %}
+$(window).scroll(function() {
+    var up_icon = $('#msg-upward');
+    var msg_panel =  $('#group-reply');
+    var msg_panel_offset = msg_panel.offset();
+    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
+    var win_st = $(window).scrollTop();
+    var win_h = $(window).height() + win_st;
+
+    if (win_st > $('#group-message-form').offset().top) {
+        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 60}).removeClass('hide');
+        if (win_h > msg_panel_bot) {
+            up_icon.css({'bottom': win_h - msg_panel_bot + 15});
+        } else {
+            up_icon.css({'bottom': 15});
+        }
+    } else {
+        up_icon.addClass('hide');
+    }
+});
+{% endif %}
+
+addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'550px', 'height': '75px', 'padding':'3px 5px', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
+
+$('#message').focus(function() {
+    $(this).height(75);
+    $('#group-message-form').find('.submit, .cancel').removeClass('hide');
+});
+$('#group-message-form .cancel').click(function() {
+    $(this).addClass('hide');
+    $('#group-message-form .submit').addClass('hide');
+    $('#message').val('').height(25);
+});
+
+{% include 'group/msg_js.html' %}
+
+$('.msg-del').click(function() {
+    var url = $(this).data('url');
+    var msg = $(this).parents('.msg');
+    var cfm;
+    if (msg.find('.msg-del-confirm').length > 0) {
+        cfm = msg.find('.msg-del-confirm');
+    } else {
+        cfm = '<div class="msg-del-confirm hide"><p>{% trans "Really want to delete this message?" %}</p><button class="yes">{% trans "Yes" %}</button><button class="no">{% trans "No" %}</button></div>';
+        var msg_main = msg.find('.msg-main');
+        var msg_hd = msg.find('.msg-hd');
+        cfm = msg_main.append(cfm).children(':last');
+        cfm.css({'right':msg_main.css('padding-right'), 'top':msg_hd.position().top + msg_hd.height()});
+    }
+    cfm.removeClass('hide');
+    cfm.children('.yes').click(function() {
+        cfm.addClass('hide');
+        $.ajax({
+            url: url,
+            dataType:'json',
+            success: function(data) {
+                if (data['success']) {
+                    msg.remove();
+                    feedback('{% trans "Successfully deleted" %}', 'success');
+                } else {
+                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
+                }
+            },
+            error: function() {
+                feedback('{% trans "Failed." %}', 'error');
+            }
+        });
+    });
+    cfm.children('.no').click(function() {
+        cfm.addClass('hide');
+    });
+});
+</script>
+{% endblock %}

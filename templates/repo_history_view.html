@@ -64,7 +64,7 @@
                 {% for dirent in file_list %}
                 <tr>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-                    <td><a class="op" href="{% url 'repo_view_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&from=snapshot">{{ dirent.props.obj_name }}</a></td>              
+                    <td><a class="op" href="{% url 'view_snapshot_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
                     </td>

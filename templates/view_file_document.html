@@ -1,0 +1,69 @@
+{% extends 'view_file_base.html' %}
+{% load i18n%}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}flexpaper/js/flexpaper_flash.js"></script>
+<script type="text/javascript">
+    $('#file-view').html('<div id="flash"></div>');
+    function load_flexpaper() {
+        var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
+        var fp = new FlexPaperViewer(
+          '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
+          'flash', { config : {
+              SwfFile : escape(swf_url),
+              Scale : 1.0, 
+              ZoomTransition : 'easeOut',
+              ZoomTime : 0.5,
+              ZoomInterval : 0.2,
+              FitPageOnLoad : false,
+              FitWidthOnLoad : true,
+              FullScreenAsMaxWindow : false,
+              ProgressiveLoading : false,
+              MinZoomSize : 0.2,
+              MaxZoomSize : 5,
+              SearchMatchAll : false,
+              InitViewMode : 'Portrait',
+              PrintPaperAsBitmap : false,
+              
+              ViewModeToolsVisible : true,
+              ZoomToolsVisible : true,
+              NavToolsVisible : true,
+              CursorToolsVisible : true,
+              SearchToolsVisible : true,
+              
+              localeChain: 'en_US'
+          }});
+    }
+    {% if swf_exists %}
+    load_flexpaper();
+    {% else %}
+    function check_status () {
+        $.ajax({
+            url: '{{ DOCUMENT_CONVERTOR_ROOT }}status?file_id={{ obj_id }}',
+            cache: false,
+            dataType: 'jsonp',
+            jsonpCallback: 'xx',
+            crossDomain: true,
+            success: function(data) {
+                var status = data['status'];
+                if (status == 'QUEUED' || status == 'PROCESSING') {
+                    setTimeout(check_status, 2000);
+                } else {
+                    load_flexpaper();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = '{% trans "Document convertion failed." %}';
+                } else {
+                    str = '{% trans "Failed. Please check the network." %}';
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
+</script>
+{% endblock %}

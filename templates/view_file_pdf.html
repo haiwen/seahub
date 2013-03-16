@@ -1,0 +1,126 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+
+{% block extra_script %}{{ block.super }}
+{% if use_pdfjs %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
+<script type="text/javascript">
+if (!($.browser.msie && parseInt($.browser.version) < 10)) {
+    PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
+    $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">{% trans "Previous" %}</button></span>{% blocktrans %}<span id="pdf-page"><label for="page-number">Page</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span></span>{% endblocktrans %}<span id="pdf-page-right"><button id="next" style="margin-right:15px;">{% trans "Next" %}</button><button id="full-screen">{% trans "Full Screen" %}</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="{% trans "loading..." %}" id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
+    $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
+    $('#pdf-page-left').css({'text-align':'right', 'width': $('#pdf-page-right').width()});
+    $('#pdf-op-bar').removeClass('vh');
+    var seahub_getPage = function (pdf, page_number) {
+        pdf.getPage(page_number).then(function(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+            var canvas = $('#pdf-view')[0];
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = { 
+                canvasContext: context,
+                viewport: viewport
+            };  
+            page.render(renderContext);
+        }); 
+    };
+    PDFJS.getDocument($('#pdf-view').attr('data')).then(function(pdf) {
+        $('#page-nums').html(pdf.numPages);
+        $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
+        seahub_getPage(pdf, 1);
+        $('#pdf-loading').addClass('hide');
+        $('#pdf-view').removeClass('hide');
+        $('#page-number').change(function() {
+            seahub_getPage(pdf, $(this).val());
+        });
+        $('#prev').click(function() {
+            var current = $('#page-number').val();
+            if (current > 1) {
+                seahub_getPage(pdf, --current);
+                $('#page-number').val(current);
+            }
+        });
+        $('#next').click(function() {
+            var current = $('#page-number').val();
+            if (current < pdf.numPages) {
+                seahub_getPage(pdf, ++current);
+                $('#page-number').val(current);
+            }
+        });
+        $('#full-screen').click(function() {
+            window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
+        });
+    });
+} else {
+    $('#file-view').html('<div id="file-view-tip"><p>{% trans "You can use IE 10 or other browsers, for example, firefox, to view it online." %}</p></div>');
+}
+</script>
+{% else %}
+<script type="text/javascript" src="{{MEDIA_URL}}flexpaper/js/flexpaper_flash.js"></script>
+<script type="text/javascript">
+    $('#file-view').html('<div id="flash"></div>');
+    function load_flexpaper() {
+        var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
+        var fp = new FlexPaperViewer(
+          '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
+          'flash', { config : {
+              SwfFile : escape(swf_url),
+              Scale : 1.0, 
+              ZoomTransition : 'easeOut',
+              ZoomTime : 0.5,
+              ZoomInterval : 0.2,
+              FitPageOnLoad : false,
+              FitWidthOnLoad : true,
+              FullScreenAsMaxWindow : false,
+              ProgressiveLoading : false,
+              MinZoomSize : 0.2,
+              MaxZoomSize : 5,
+              SearchMatchAll : false,
+              InitViewMode : 'Portrait',
+              PrintPaperAsBitmap : false,
+              
+              ViewModeToolsVisible : true,
+              ZoomToolsVisible : true,
+              NavToolsVisible : true,
+              CursorToolsVisible : true,
+              SearchToolsVisible : true,
+              
+              localeChain: 'en_US'
+          }});
+    }
+    {% if swf_exists %}
+    load_flexpaper();
+    {% else %}
+    function check_status () {
+        $.ajax({
+            url: '{{ DOCUMENT_CONVERTOR_ROOT }}status?file_id={{ obj_id }}',
+            cache: false,
+            dataType: 'jsonp',
+            jsonpCallback: 'xx',
+            crossDomain: true,
+            success: function(data) {
+                var status = data['status'];
+                if (status == 'QUEUED' || status == 'PROCESSING') {
+                    setTimeout(check_status, 2000);
+                } else {
+                    load_flexpaper();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = '{% trans "Document convertion failed." %}';
+                } else {
+                    str = '{% trans "Failed. Please check the network." %}';
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
+</script>
+{% endif %}
+{% endblock %}

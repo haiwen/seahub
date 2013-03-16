@@ -1,0 +1,53 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block extra_style %}
+{% include 'snippets/file_view_style.html' %}
+<style type="text/css">
+.path { margin-top:.5em; }
+</style>
+{% endblock %}
+
+{% block main_panel %}
+    <div id="view-hd" class="w100 ovhd">
+      {% block view_hd %}
+        <h2 class="fleft">
+          {{repo.props.name}} {% trans "history"%}
+          <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+        </h2>
+        <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
+      {% endblock %}
+    </div>
+
+    <div id="file">
+        <div id="file-op">
+            <p class="path fleft">
+              {% block file_path %}
+                {% trans "Current Path: "%}
+                {% for name, link in zipped %}
+                  {% if not forloop.last %} {{ name }} / {% else %} {{ name }} {% endif %}
+                {% endfor %}
+              {% endblock %}
+            </p>
+
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+        </div>
+        {% include 'snippets/file_content_html.html' %}
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+{% include "snippets/file_view_js.html" %}
+<script type="text/javascript">
+$('#view-original, #download').click(function() {
+    window.open($(this).attr('data'));
+});
+
+{% include "snippets/file_content_js.html" %}
+
+$('#back').click(function() {
+        location.href = $(this).attr('data');
+});
+</script>
+{% endblock %}

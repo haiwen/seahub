@@ -3,6 +3,9 @@ from django.conf import settings
 from django.views.generic.simple import direct_to_template
 
 from seahub.views import *
+from seahub.views.file import view_file, view_history_file, view_trash_file,\
+    view_snapshot_file
+from seahub.search import search
 from notifications.views import notification_list
 from group.views import group_list
 
@@ -53,7 +56,10 @@ urlpatterns = patterns('',
     url(r'^repo/snapshot/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_view_snapshot, name='repo_view_snapshot'),
     url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),
     (r'^repo/remove/(?P<repo_id>[-0-9a-f]{36})/$', repo_remove),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', repo_view_file, name="repo_view_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     (r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
     (r'^repo/save_settings$', repo_save_settings),
@@ -74,6 +80,8 @@ urlpatterns = patterns('',
 
     (r'^useradmin/add/$', user_add),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
+    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
+    url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
@@ -94,6 +102,7 @@ urlpatterns = patterns('',
     url(r'^sys/useradmin/$', sys_useradmin, name='sys_useradmin'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+
 )
 
 if settings.SERVE_STATIC:
@@ -119,3 +128,7 @@ else:
         url(r'^pubinfo/users/$', pubuser, name='pubuser'),
     )
 
+if getattr(settings, 'ENABLE_FILE_SEARCH', False):
+    urlpatterns += patterns('',
+        url(r'^search/$', search, name='search'),
+    )

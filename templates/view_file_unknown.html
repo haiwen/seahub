@@ -1,0 +1,8 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript">
+$('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file cannot be viewed online." %}</p></div>');
+</script>
+{% endblock %}

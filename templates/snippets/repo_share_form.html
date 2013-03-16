@@ -1,19 +1,52 @@
-{% load i18n %}
+{% load i18n avatar_tags group_avatar_tags %}
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
     <h3>{% trans "Share Library"%}</h3>
     <p>{% trans 'Share <span class="op-target"></span> to' %}</p>
-    <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups, Seperated by ','"%}"></textarea>
+    <div id="repo-share-tabs">
+        <ul id="repo-share-tabs-nav">
+            <li><a href="#share-enter">{% trans 'Enter' %}</a></li>
+            <li><a href="#share-grp-options">{% trans 'Groups' %}</a></li>
+            <li><a href="#share-contact-options">{% trans 'Contacts' %}</a></li>
+        </ul>
+        <div id="share-enter">
+            <textarea id="email_or_group" name="email_or_group" placeholder="{% trans "Emails or Groups, Seperated by ','"%}"></textarea>
+            {% if cloud_mode %}
+            {% if org %}
+            <p class="tip">{% trans 'Tip: must be organization members or organization groups, enter "all" to share to public library.' %}</p>
+            {% endif %}
+            {% else %}
+            <p class="tip">{% trans 'Tip: enter "all" to share to public library.' %}</p>
+            {% endif %}
+        </div>
+        <div id="share-grp-options" class="hide">
+            <ul class="option-list">
+                {% for group in groups %}
+                <li>
+                <label class="checkbox-label">
+                    <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span>
+                    {% grp_avatar group.id 20 %} <span class="checkbox-option">{{ group.group_name }}</span>
+                </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="share-contact-options" class="hide">
+            <ul class="option-list">
+            {% for contact in contacts %}
+            <li>
+            <label class="checkbox-label">
+                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
+                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
+            </label>
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
     <select name="permission" class="share-permission-select">
-      <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-      <option value="r">{% trans "Read-Only"%}</option>
+        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+        <option value="r">{% trans "Read-Only"%}</option>
     </select>
-    {% if cloud_mode %}
-      {% if org %}
-      <p class="tip">{% trans 'Tip: must be organization members or organization groups, enter "all" to share to public library.' %}</p>
-      {% endif %}
-    {% else %}
-    <p class="tip">{% trans 'Tip: enter "all" to share to public library.' %}</p>
-    {% endif %}
     <input id="repo_id" type="hidden" name="repo_id" value="" />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />

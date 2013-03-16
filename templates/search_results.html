@@ -1,0 +1,82 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block right_panel %}
+<div id="search-form-container">
+    <form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
+        <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+        <input type="submit" value="" class="search-submit" />
+    </form>
+</div>
+
+<div id="search-results">
+{% if not results %}
+    <p>{% trans 'No result found' %}</p>
+{% else %}
+    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
+    <ul id="search-results-list">
+    {% for file in results %}
+        <li class="search-results-item">
+          <img class="file-icon" src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" alt="{% trans "File"%}" />
+          <div class="title">
+            <a href="{% url 'repo' repo_id=file.repo.id %}" target="_blank">{{ file.repo.name }}</a>
+            <span>–</span>
+            <a class="filename" href="{% url 'repo_view_file' repo_id=file.repo.id %}?p={{ file.fullpath|urlencode }}" target="_blank" title="{{ file.fullpath|slice:'1:'}}" >
+              {% if file.name_highlight %}
+              {{ file.name_highlight|safe }}
+              {% else %}
+              {{ file.name }}
+              {% endif %}
+            </a>
+            <p>
+            {% if file.last_modified_by %}
+                {% avatar file.last_modified_by 20 %}
+                <a class="name" href="{% url 'profile.views.user_profile' file.last_modified_by %}">{{ file.last_modified_by|email2nickname }}</a>
+            {% endif %}
+            {% if file.last_modified %}
+                {{ file.last_modified|translate_seahub_time }}
+            {% endif %}
+            </p>
+          </div>
+          {% if file.content_highlight %}
+          <div class="content">
+            {{ file.content_highlight|safe }}
+          </div>
+          {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+    {% if total > per_page %}
+    <div id="paginator">
+        {% if current_page != 1 %}
+        <a href="?q={{ keyword|urlencode }}&page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>
+        {% endif %}
+        {% if has_more %}
+        <a href="?q={{ keyword|urlencode }}&page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
+        {% endif %}
+        {% if current_page != 1 or has_more %}
+        |
+        {% endif %}
+        <span>{% trans "Per page: "%}</span>
+        {% if per_page == 25 %}
+        <span> 25 </span>
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=25" class="per-page">25</a>
+        {% endif %}
+        {% if per_page == 50 %}
+        <span> 50 </span>
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=50" class="per-page">50</a>
+        {% endif %}
+        {% if per_page == 100 %}
+        <span> 100 </span> 
+        {% else %}
+        <a href="?q={{ keyword|urlencode }}&page={{ current_page }}&per_page=100" class="per-page">100</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock %}
