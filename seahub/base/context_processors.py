@@ -12,6 +12,10 @@ try:
     from seahub.settings import BUSINESS_MODE
 except ImportError:
     BUSINESS_MODE = False
+try:
+    from seahub.settings import SEACLOUD_MODE
+except ImportError:
+    SEACLOUD_MODE = False
 
 from seahub.utils import HAS_FILE_SEARCH
 
@@ -41,6 +45,7 @@ def base(request):
         'logo_path': LOGO_PATH,
         'logo_url': LOGO_URL,
         'business_mode': BUSINESS_MODE,
+        'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
         'base_template': base_template,

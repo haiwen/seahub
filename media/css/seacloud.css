@@ -1,0 +1,181 @@
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,pre,form,input,button { margin:0; padding:0; }
+ul { list-style:none; }
+img { border:none; }
+a { color:#ee8833; text-decoration:none; font-weight:bold; }
+a:hover { color: #ff9933; text-decoration: underline; }
+em {
+    font-style:normal;
+    font-weight:bold;
+    font-size:1.1em;
+}
+h2 { font-size:1.5em; color:#322;}
+h3 { font-size:1.2em; color:#322; font-weight:normal; margin:0.95em 0 0.4em; }
+h4 { font-size:1.1em; color:#322; font-weight:normal; margin:0.5em 0 0.2em; }
+p { line-height: 1.6; margin: 0.8em 0; }
+ol { padding-left:2em; }
+/* table */
+table { border-spacing: 0; border-collapse: collapse; }
+caption {font-size:1.1em; font-weight:bold; margin-bottom:.6em;}
+td, th { padding:5px; border: 1px solid #ccc; }
+tr:nth-child(2n) { background-color:#f8f8f8; }
+
+.clear { clear:both;}
+.fleft { float:left; }
+.fright { float:right; }
+.cleft { clear:left; }
+.center { text-align:center; }
+.show { display:block; }
+.hide { display:none; }
+.ovhd { overflow:hidden; }
+.bold { font-weight:bold; }
+.w100 { width:100%; }
+.block {
+    padding:20px;
+    background:#fff;
+    border:1px solid #ddd;
+    box-shadow: 0 1px 1px #aaa;
+}
+
+/* container */
+#wrapper { 
+    font: 13px/1.5 Arial, Helvetica, sans-serif;
+    color:#333;
+    background:#f8f8f8;
+}
+#main, #footer { width:950px; }
+#main {
+    min-height:300px;
+    _height:300px;
+    margin:0 auto;
+}
+#left-panel {
+    float:left;
+    width:245px;
+}
+#right-panel {
+    float:right;
+    width:665px;
+}
+
+/* #header */
+#header { 
+    background:#fff;
+    padding-bottom:20px;
+    border-bottom:1px solid #ccc;
+    margin-bottom:40px; 
+    box-shadow:0 2px 4px #bbb;
+}
+#header .header-inner {
+    width:950px;
+    margin:0 auto;
+}
+.top-bar {
+    text-align:right;
+    padding:5px 0 20px;
+}
+.top-bar a {
+    display:inline-block;
+    line-height:1.1em;
+    padding:0 15px;
+    border-right:1px solid #ddd;
+}
+.top-bar .demo-account {
+    color:#fff;
+    padding:8px 14px;
+    background:#e83;
+    border:0;
+    border-radius:3px;
+    margin-top:4px;
+}
+
+/* footer */
+#footer { 
+    color:#636363;
+    font-size:12px;
+    padding:20px 0 10px;
+    margin:80px auto 25px;
+    border-top:1px solid #DDD;
+}
+#footer .items {
+    width:65%;
+}
+#footer .other-info {
+    width:30%;
+}
+#footer .item {
+    float:left;
+    width:28%;
+    padding:0 3% 0 2%;
+}
+#footer .item h4 {
+    font-size:12px;
+    color:#636363;
+    padding-bottom:3px;
+}
+#footer a {
+    color:#888;
+    font-weight:normal;
+}
+
+
+.home .register {
+    display:block;
+    padding:15px 30px;
+    width:200px;
+    font-size:20px;
+    line-height:1.1em;
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
+    color:#fff;
+    text-align:center;
+    text-decoration:none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    background:#e83;
+    background: -moz-linear-gradient(#e83,#b50);
+    background: -webkit-linear-gradient(#e83,#b50);
+    border-radius:5px;
+    margin:0 auto 10px;
+}
+.home .register span {
+    font-size:13px;
+    font-weight:normal;
+}
+.home .use {
+    color:#666;
+    text-align:center;
+}
+.home .use a {
+    color:#666;
+    font-weight:normal;
+    text-decoration:underline;
+}
+.home .use a:hover {
+    color:#f93;
+}
+#seacloud-intro {
+    text-align: center;
+    margin-top:25px;
+}
+#screenshot {
+    padding:5px;
+    background:#f3f3f3;
+    border-radius:5px;
+}
+#seacloud-slogan {
+    font-size: 24px;
+    margin-top: 40px;
+}
+#seacloud-feature {
+    font-size:22px;
+    color: #e83;
+}
+#seacloud-base {
+    font-size:16px;
+}
+#pricing {
+    border-radius:5px;
+    margin: 40px 0;
+}
+#pricing table {
+    width: 75%;
+    margin: 0 auto;
+}

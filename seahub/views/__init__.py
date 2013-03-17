@@ -93,9 +93,16 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-@login_required
+
 def root(request):
-    return HttpResponseRedirect(reverse(myhome))
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse(myhome))
+    else:
+        if hasattr(settings, 'SEACLOUD_MODE'):
+            return render_to_response('seacloud/home.html', {},
+                                      context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect(settings.LOGIN_URL)
 
 def validate_owner(request, repo_id):
     """

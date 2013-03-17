@@ -85,9 +85,15 @@
         <div id="header">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
+                {% if seacloud_mode %}
+                <a href="http://seacloud.cc/" id="seacloud-logo" class="fleft">
+                    <img src="{{ MEDIA_URL }}img/seacloud-logo.png?t=1362454620" title="Seacloud" alt="Seacloud logo" />
+                </a>
+                {% else %}
                 <a href="{{logo_url}}" id="logo" class="fleft">
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="Seafile logo" />
                 </a>
+                {% endif %}
                 {% block nav %}{% endblock %}
 
                 {% if has_file_search and request.user.is_authenticated %}
@@ -182,8 +188,9 @@
             </div>
         </div>
 
-        <div id="footer" class="ovhd">
+        <div id="footer" class="ovhd">           
             <div class="items fleft">
+                {% if not seacloud_mode %}
                 <div class="item">
                     <h4>Seafile</h4>
                     <ul>
@@ -204,6 +211,29 @@
                         <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
                     </ul>
                 </div>
+                {% else %}
+                <div class="item">
+                    <h4>Seacloud</h4>
+                    <ul>
+                        <li><a href="https://seacloud.cc/group/2/wiki/" target="_blank">{% trans "Introduction" %}</a></li>
+                        <li><a href="https://seacloud.cc/group/2/wiki/">Wiki</a></li>
+                        <li><a href="https://seacloud.cc/group/2/wiki/terms/">Privacy & Terms</a></li>
+
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>{% trans "Syncing Client" %}</h4>
+                    <ul>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <h4>{% trans "Documents" %}</h4>
+                    <ul>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
+                    </ul>
+                </div>
+                {% endif %}
             </div>
             <div class="other-info fright">
                 <p>{% trans "Server Version: " %}{{ seafile_version }}</p>

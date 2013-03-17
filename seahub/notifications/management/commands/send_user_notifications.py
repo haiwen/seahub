@@ -11,18 +11,19 @@ import seahub.settings as settings
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-email_template = u'''${username}您好：
+email_template = u'''Hi ${username}：
 
-您有${cnt}条新消息，请点击下面的链接查看：
+You have new message today, please go to following page to check out：
+
 ${msg_url}
 
-感谢使用我们的网站！
+Thanks for using our site!
 
-${site_name}团队
+${site_name} team
 '''
 
 site_name = settings.SITE_NAME
-subject = u'%s：新消息' % site_name
+subject = u'%s：new message' % site_name
 url = settings.SITE_BASE.rstrip('/') + settings.SITE_ROOT + 'home/my/'
 
 class Command(BaseCommand):
@@ -49,8 +50,7 @@ class Command(BaseCommand):
 
         for user,cnt in d.items():
             template = string.Template(email_template)
-            content = template.substitute(username=user, cnt=cnt, msg_url=url, \
-                                              site_name=site_name)
+            content = template.substitute(username=user, msg_url=url, site_name=site_name)
             try:
                 send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [user], \
                               fail_silently=False)
