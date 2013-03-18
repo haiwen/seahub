@@ -4,15 +4,11 @@
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 {% block left_panel %}
-<!--
-<ul>
-    <li><a href="{{ SITE_ROOT }}useradmin/add/">添加用户</a></li>
-</ul>
--->
+
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Profile" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
-        <a href="{{ SITE_ROOT }}profile/" class="no-deco">{% avatar request.user 48 %}</a>
+        {% avatar email 48 %}
         {% if nickname %}
         <p class="fleft">{{ nickname }}</p>
         {% endif %}
