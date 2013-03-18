@@ -984,7 +984,7 @@ def group_discuss(request, group_id):
         current_page = int(request.GET.get('page', '1'))
     except ValueError:
         current_page = 1
-    per_page = 45
+    per_page = 15
 
     group_msgs = GroupMessage.objects.filter(
         group_id=group_id).order_by(
@@ -1024,12 +1024,6 @@ def group_discuss(request, group_id):
                     att.name = os.path.basename(path)
                 msg.attachment = att
 
-    per_show = 15
-    if current_page == 1 and len(group_msgs) > per_show:
-        msgs_more = True
-    else:
-        msgs_more = False
-
     msg_total_num = GroupMessage.objects.filter(group_id=group_id).count()
     total_page = msg_total_num/per_page
     if msg_total_num % per_page > 0:
@@ -1058,8 +1052,6 @@ def group_discuss(request, group_id):
             "is_staff": is_staff,
             "group_msgs": group_msgs,
             "form": form,
-            'per_show': per_show,
-            'msgs_more': msgs_more,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,

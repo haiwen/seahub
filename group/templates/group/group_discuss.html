@@ -79,11 +79,7 @@
     {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs %}
-        {% if msgs_more and forloop.counter0 > per_show %}
-        <li class="msg w100 ovhd msg-hide hide">
-        {% else %}
         <li class="msg w100 ovhd">
-        {% endif %}
         <div class="pic fleft">
             <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
         </div>
@@ -180,21 +176,10 @@
     {% endif %}
 </div>
 
-{% include "snippets/user_profile_html.html" %}
 {% endblock %}
 
 {% block extra_script %}
-{% include 'snippets/user_profile_js.html' %}
 <script type="text/javascript">
-{% if msgs_more %}
-$('#msgs-more').click(function() {
-    $('.msg-hide:lt({{per_show}})').removeClass('msg-hide hide');
-    if ($('.msg-hide').length == 0) {
-        $(this).hide();
-        $('#paginator').removeClass('hide');
-    }
-});
-{% endif %}
 {% if group_msgs|length > 5 %}
 $(window).scroll(function() {
     var up_icon = $('#msg-upward');
