@@ -607,14 +607,14 @@ def group_remove_admin(request, group_id):
         messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
         messages.error(request, _(e.msg))
-    return HttpResponseRedirect(reverse('group_members', args=[group_id]))
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
     
 @login_required
 def group_member_operations(request, group_id, user_name):
     if request.GET.get('op','') == 'delete':
         return group_remove_member(request, group_id, user_name)
     else:
-        return HttpResponseRedirect(reverse('group_members', args=[group_id]))
+        return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
 @login_required
 def group_remove_member(request, group_id, user_name):
@@ -635,7 +635,7 @@ def group_remove_member(request, group_id, user_name):
     except SearpcError, e:
         messages.error(request, _(u'Failed：%s') % _(e.msg))
 
-    return HttpResponseRedirect(reverse('group_members', args=[group_id]))
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
 def group_share_repo(request, repo_id, group_id, from_email, permission):
     """
@@ -969,15 +969,6 @@ def group_discuss(request, group_id):
     members = get_group_members(group_id_int)
     is_staff = True if check_group_staff(group.id, request.user) else False
         
-    managers = []
-    common_members = []
-    for member in members:
-        if member.is_staff == 1:
-            managers.append(member)
-        else:
-            common_members.append(member)
-
-
     """group messages"""
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -1044,8 +1035,6 @@ def group_discuss(request, group_id):
     pages_show = range(first_page, last_page + 1)
 
     return render_to_response("group/group_discuss.html", {
-            "managers": managers,
-            "common_members": common_members,
             "members": members,
             "group_id": group_id,
             "group" : group,

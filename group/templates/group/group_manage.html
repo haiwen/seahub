@@ -108,7 +108,7 @@ contact_email = '{{ contact.contact_email }}';
 contact_list.push({value:contact_email, label:contact_email});
 {% endfor %}
 
-{% url 'group_members' group.id as member_add_url %}
+{% url 'group_manage' group.id as member_add_url %}
 {% with post_url=member_add_url %}
 {% include 'group/grpmember_add_js.html' %}
 {% endwith %}

@@ -27,9 +27,9 @@
         <h3 class="fleft">{% trans "Members" %}</h3>
     </div>
     <div class="info-item-bottom">
-        {% if common_members %}
+        {% if members %}
           <ul>
-            {% for member in common_members %}
+            {% for member in members %}
               {% if forloop.counter0 < group_members_default_display %}
                 <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
               {% else %}

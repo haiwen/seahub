@@ -152,20 +152,25 @@ FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
-GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
 AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
-GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 24 * 60 * 60
 AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 AUTO_GENERATE_AVATAR_SIZES = (16, 20, 28, 40, 48, 60, 80)
+# Group avatar
+GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
+GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
+AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48)
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/tmp/seahub_cache',
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000000
+        }
     }
 }
 
