@@ -74,7 +74,7 @@
                 {% endblock %}
             {% endif %}
 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
 
         <div id="file-view"> {% block file_view %}{% endblock %} </div>
