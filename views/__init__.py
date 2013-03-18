@@ -1808,8 +1808,8 @@ def repo_access_file(request, repo_id, obj_id):
         try:
             obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
             send_message('seahub.stats', 'file-download\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
-        except:
-            logging.exception('Error when sending file-download message:')
+        except Exception, e:
+            logger.error('Error when sending file-download message: %s' % str(e))
             pass
 
     return HttpResponseRedirect(redirect_url)
@@ -2708,8 +2708,8 @@ def view_shared_file(request, token):
         try:
             obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
             send_message('seahub.stats', 'file-view\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
-        except:
-            logging.exception('Error when sending file-view message:')
+        except Exception, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
             pass
     
     # Increase file shared link view_cnt, this operation should be atomic
