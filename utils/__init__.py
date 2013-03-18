@@ -873,3 +873,17 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
 else:
     def search_file_by_name(*args):
         pass
+
+TRAFFIC_STATS_ENABLED = False
+if hasattr(settings, 'TRAFFIC_STATS_CONFIG_FILE'):
+    import seafstats
+
+    TRAFFIC_STATS_ENABLED = True
+    SeafStatsSession = seafstats.init_db_session_class(settings.TRAFFIC_STATS_CONFIG_FILE)
+    def get_user_traffic_stat(username):
+        session = SeafStatsSession()
+        stat = seafstats.get_user_traffic_stat(session, username)
+        return stat
+else:
+    def get_user_traffic(username):
+        pass

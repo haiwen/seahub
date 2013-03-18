@@ -71,6 +71,9 @@
           <div id="quota-bar"><span id="quota-usage"></span></div>
         {% endif %}
       {% endif %}
+      {% if TRAFFIC_STATS_ENABLED %}
+        <p>{% trans "Traffic used:" %} {{ traffic_stat|filesizeformat }}</p>
+      {% endif %}
     </div>
 </div>
 

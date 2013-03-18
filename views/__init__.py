@@ -73,7 +73,8 @@ from utils import render_permission_error, render_error, list_to_string, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
-    get_dir_files_last_modified, show_delete_days, HtmlDiff
+    get_dir_files_last_modified, show_delete_days, HtmlDiff, \
+    TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 try:
     from settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -1066,6 +1067,13 @@ def myhome(request):
 
     starred_files = get_starred_files(request.user.username)
 
+    traffic_stat = 0
+    if TRAFFIC_STATS_ENABLED:
+        # User's network traffic stat in this month 
+        stat = get_user_traffic_stat(request.user.username)
+        if stat:
+            traffic_stat = stat['block_download'] + stat['file_view'] + stat['file_download']
+
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -1087,6 +1095,8 @@ def myhome(request):
             "allow_public_share": allow_public_share,
             "events": events,
             "starred_files": starred_files,
+            "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
+            "traffic_stat": traffic_stat,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1789,8 +1799,11 @@ def repo_access_file(request, repo_id, obj_id):
     # then we know the vistor is from file shared link.
     share_token = request.GET.get('t', '')
     path = '/' + file_name
-    if FileShare.objects.filter(token=share_token).filter(path=path) > 0:
+    fileshare = FileShare.objects.get(token=share_token, path=path) if share_token else None
+    shared_by = None
+    if fileshare:
         from_shared_link = True
+        shared_by = fileshare.username
     else:
         from_shared_link = False
 
@@ -1807,7 +1820,8 @@ def repo_access_file(request, repo_id, obj_id):
         # send stats message
         try:
             obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
-            send_message('seahub.stats', 'file-download\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
+            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, obj_size))
         except Exception, e:
             logger.error('Error when sending file-download message: %s' % str(e))
             pass
@@ -2704,18 +2718,21 @@ def view_shared_file(request, token):
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
 
-    if not err:
-        try:
-            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s' % (repo.id, obj_id, obj_size))
-        except Exception, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
-            pass
-    
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare = FileShare.objects.get(token=token)
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
+
+    if not err:
+        try:
+            shared_by = fileshare.username
+            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, obj_size))
+        except Exception, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
+            pass
+    
     
     return render_to_response('shared_file_view.html', {
             'repo': repo,
