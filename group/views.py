@@ -5,6 +5,7 @@ import stat
 import simplejson as json
 import urllib2
 from django.core.mail import send_mail
+from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.sites.models import RequestSite
@@ -48,6 +49,7 @@ from seahub.utils import render_error, render_permission_error, \
     validate_group_name, string2list, check_and_get_org_by_group, \
     check_and_get_org_by_repo, gen_file_get_url, get_file_type_and_ext, \
     get_file_contributors
+from seahub.utils.paginator import Paginator
 from seahub.utils.slugify import slugify
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
@@ -970,25 +972,33 @@ def group_discuss(request, group_id):
     is_staff = True if check_group_staff(group.id, request.user) else False
         
     """group messages"""
+    # Show 15 group messages per page.
+    paginator = Paginator(GroupMessage.objects.filter(
+            group_id=group_id).order_by('-timestamp'), 15)
+
     # Make sure page request is an int. If not, deliver first page.
     try:
-        current_page = int(request.GET.get('page', '1'))
+        page = int(request.GET.get('page', '1'))
     except ValueError:
-        current_page = 1
-    per_page = 15
+        page = 1
 
-    group_msgs = GroupMessage.objects.filter(
-        group_id=group_id).order_by(
-        '-timestamp')[per_page*(current_page-1) : per_page*current_page]
+    # If page request (9999) is out of range, deliver last page of results.
+    try:
+        group_msgs = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        group_msgs = paginator.page(paginator.num_pages)
 
-    group_msgs = list(group_msgs) # Force evaluate queryset to fix some database error for mysql
+    group_msgs.page_range = paginator.get_page_range(group_msgs.number)
 
-    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs)
+    # Force evaluate queryset to fix some database error for mysql.        
+    group_msgs.object_list = list(group_msgs.object_list) 
 
-    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs)
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
+
+    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs.object_list)
     reply_to_list = [ r.reply_to_id for r in msg_replies ]
     
-    for msg in group_msgs:
+    for msg in group_msgs.object_list:
         msg.reply_cnt = reply_to_list.count(msg.id)
         msg.replies = []
         for r in msg_replies:
@@ -1015,25 +1025,6 @@ def group_discuss(request, group_id):
                     att.name = os.path.basename(path)
                 msg.attachment = att
 
-    msg_total_num = GroupMessage.objects.filter(group_id=group_id).count()
-    total_page = msg_total_num/per_page
-    if msg_total_num % per_page > 0:
-        total_page += 1
-    
-    page_next = True if current_page < total_page else False
-
-    # get page numbers shown in the web page
-    first_page = 1
-    if total_page <= 10:
-        last_page = total_page 
-    else:
-        if current_page < 6:
-            last_page = 10
-        else:
-            first_page = current_page - 5
-            last_page = current_page + 4 if current_page + 4 < total_page else total_page
-    pages_show = range(first_page, last_page + 1)
-
     return render_to_response("group/group_discuss.html", {
             "members": members,
             "group_id": group_id,
@@ -1041,11 +1032,6 @@ def group_discuss(request, group_id):
             "is_staff": is_staff,
             "group_msgs": group_msgs,
             "form": form,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'page_next': page_next,
-            'pages_show': pages_show,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 

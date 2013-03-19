@@ -78,7 +78,7 @@
 
     {% if group_msgs %}
     <ul class="msg-list">
-    {% for msg in group_msgs %}
+    {% for msg in group_msgs.object_list %}
         <li class="msg w100 ovhd">
         <div class="pic fleft">
             <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
@@ -149,29 +149,25 @@
     </ul>
     {% endif %}
 
-    {% if msgs_more %}
-    <button id="msgs-more" class="big-more-btn">{% trans "More" %}</button>
-    {% endif %}
-
-    {% if pages_show|length > 1 %}
-    <div id="paginator"{% if msgs_more %} class="hide"{% endif %}>
-        {% if current_page != 1 %}
-        <a href="?page={{ prev_page }}" class="prev">{% trans "Previous" %}</a>
+    {% if group_msgs.has_other_pages %}
+    <div id="paginator">
+        {% if group_msgs.has_previous %}
+        <a href="?page={{ group_msgs.previous_page_number }}" class="prev">{% trans "Previous" %}</a>
         {% endif %}
-        {% for p in pages_show %}
-            {% if p == current_page %}
-            <span class="cur">{{ p }}</span>
-            {% else %}
-            <a href="?page={{ p }}" class="pg">{{ p }}</a>
-            {% endif %}
+        {% for pr in group_msgs.page_range %}
+          {% if pr == group_msgs.number %}
+          <span class="cur">{{ pr }}</span>
+          {% else %}
+          <a href="?page={{ pr }}" class="pg">{{ pr }}</a>
+          {% endif %}
         {% endfor %}
-        {% if page_next %}
-        <a href="?page={{ next_page }}" class="next">{% trans "Next"%}</a>
+        {% if group_msgs.has_next %}
+        <a href="?page={{ group_msgs.next_page_number }}" class="next">{% trans "Next"%}</a>
         {% endif %}
     </div>
     {% endif %}
 
-    {% if group_msgs|length > 5 %}
+    {% if group_msgs.object_list|length > 5 %}
     <a href="#group-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
     {% endif %}
 </div>
@@ -180,7 +176,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-{% if group_msgs|length > 5 %}
+{% if group_msgs.object_list|length > 5 %}
 $(window).scroll(function() {
     var up_icon = $('#msg-upward');
     var msg_panel =  $('#group-reply');
