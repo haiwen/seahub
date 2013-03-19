@@ -885,5 +885,5 @@ if hasattr(settings, 'TRAFFIC_STATS_CONFIG_FILE'):
         stat = seafstats.get_user_traffic_stat(session, username)
         return stat
 else:
-    def get_user_traffic(username):
+    def get_user_traffic_stat(username):
         pass
