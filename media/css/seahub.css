@@ -1458,10 +1458,17 @@ textarea:-moz-placeholder {/* for FF */
 }
 #group-message-form {
     padding:6px;
+    width:562px;
+    background:#f9f9f9;
     border:1px solid #c4c4c4;
     border-radius:5px;
-    background:#f9f9f9;
+    margin-left:64px;
     position:relative;
+}
+#group-message-form .avatar {
+    position:absolute;
+    left:-64px;
+    top:-1px;
 }
 #message {
     width:550px;

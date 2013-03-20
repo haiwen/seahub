@@ -63,26 +63,22 @@
 {% block right_panel %}
 
 <div id="group-reply">
-    <div class="w100 ovhd">
-        <div class="pic fleft">{% avatar request.user.username 48 %}</div>
-        <form id="group-message-form" action="" method="post" class="fright">
-            <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
-            {% for error in form.message.errors %}
-            <p class="error">{{ error|escape }}</p>
-            {% endfor %}
-            <button type="submit" class="submit hide">{% trans "Submit" %}</button>
-            <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
-            <span class="say"></span>
-        </form>
-    </div>
+    <form id="group-message-form" action="" method="post">
+        {% avatar request.user.username 48 %}
+        <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
+        {% for error in form.message.errors %}
+        <p class="error">{{ error|escape }}</p>
+        {% endfor %}
+        <button type="submit" class="submit hide">{% trans "Submit" %}</button>
+        <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
+        <span class="say"></span>
+    </form>
 
     {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs.object_list %}
         <li class="msg w100 ovhd">
-        <div class="pic fleft">
-            <a href="{% url 'user_profile' msg.from_email %}">{% avatar msg.from_email 48 %}</a>
-        </div>
+        <a href="{% url 'user_profile' msg.from_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         <div class="txt fright">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
