@@ -1798,8 +1798,7 @@ def repo_access_file(request, repo_id, obj_id):
     # If vistor's file shared token in url params matches the token in db,
     # then we know the vistor is from file shared link.
     share_token = request.GET.get('t', '')
-    path = '/' + file_name
-    fileshare = FileShare.objects.get(token=share_token, path=path) if share_token else None
+    fileshare = FileShare.objects.get(token=share_token) if share_token else None
     shared_by = None
     if fileshare:
         from_shared_link = True
@@ -1819,9 +1818,9 @@ def repo_access_file(request, repo_id, obj_id):
     if from_shared_link:
         # send stats message
         try:
-            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            file_size = seafserv_threaded_rpc.get_file_size(obj_id)
             send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, obj_size))
+                         (repo.id, shared_by, obj_id, file_size))
         except Exception, e:
             logger.error('Error when sending file-download message: %s' % str(e))
             pass
@@ -2719,7 +2718,6 @@ def view_shared_file(request, token):
         file_encoding_list.append(encoding)
 
     # Increase file shared link view_cnt, this operation should be atomic
-    fileshare = FileShare.objects.get(token=token)
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
@@ -2841,6 +2839,17 @@ def view_file_via_shared_dir(request, token):
         file_encoding_list.append(encoding)
 
     zipped = gen_path_link(path, '')
+
+    # send stats message
+    if not err:
+        try:
+            shared_by = fileshare.username
+            file_size = seafserv_threaded_rpc.get_file_size(file_id)
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, file_id, file_size))
+        except Exception, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
+            pass
         
     return render_to_response('shared_file_view.html', {
             'repo': repo,
