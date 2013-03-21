@@ -170,10 +170,26 @@ GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48)
 
+LOG_DIR = "/tmp"
+CACHE_DIR = "/tmp"
+install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..'))
+
+if 'win32' in sys.platform:
+    try:
+        CCNET_CONF_PATH = os.environ['CCNET_CONF_DIR']
+        if not CCNET_CONF_PATH: # If it's set but is an empty string.
+            raise KeyError
+    except KeyError:
+        raise ImportError("Settings cannot be imported, because environment variable CCNET_CONF_DIR is undefined.")
+    else:
+        LOG_DIR = os.path.join(CCNET_CONF_PATH, '..')
+        CACHE_DIR = os.path.join(CCNET_CONF_PATH, '..')
+        install_topdir = os.path.join(CCNET_CONF_PATH, '..')
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/seahub_cache',
+        'LOCATION': os.path.join(CACHE_DIR, 'seahub_cache'),
         'OPTIONS': {
             'MAX_ENTRIES': 1000000
         }
@@ -248,14 +264,14 @@ LOGGING = {
         'default': {
             'level':'WARN',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': '/tmp/seahub.log',
+            'filename': os.path.join(LOG_DIR, 'seahub.log'),
             'maxBytes': 1024*1024*10, # 10 MB
             'formatter':'standard',
         },  
         'request_handler': {
                 'level':'WARN',
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': '/tmp/seahub_django_request.log',
+                'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
                 'maxBytes': 1024*1024*10, # 10 MB
                 'formatter':'standard',
         },
@@ -317,7 +333,6 @@ else:
 
 # Load seahub_settings.py in server release
 try:
-    install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..'))
     sys.path.insert(0, install_topdir)
     import seahub_settings
 except ImportError:
