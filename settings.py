@@ -331,6 +331,13 @@ else:
     load_local_settings(local_settings)
     del local_settings
 
+
+if 'win32' in sys.platform:
+    INSTALLED_APPS += ('django_wsgiserver', )
+    fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
+    fp.write("%d\n" % os.getpid())
+    fp.close()
+
 # Load seahub_settings.py in server release
 try:
     sys.path.insert(0, install_topdir)
@@ -340,10 +347,13 @@ except ImportError:
 else:
     # In server release, sqlite3 db file is <topdir>/seahub.db 
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
-    # In server release, gunicorn is used to deploy seahub
-    INSTALLED_APPS += ('gunicorn', )
+    if 'win32' not in sys.platform:
+        # In server release, gunicorn is used to deploy seahub
+        INSTALLED_APPS += ('gunicorn', )
+
     load_local_settings(seahub_settings)
     del seahub_settings
+
 
 # Remove install_topdir from path
 sys.path.pop(0)
