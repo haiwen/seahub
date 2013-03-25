@@ -1077,6 +1077,9 @@ def convert_wiki_link(content, group, repo_id, username):
     import re
 
     def repl(matchobj):
+        if matchobj.group(2):   # return origin string in backquotes
+            return matchobj.group(2)
+
         linkname = matchobj.group(1).strip()
         filetype, fileext = get_file_type_and_ext(linkname)
         filetype = filetype.lower()
@@ -1113,7 +1116,7 @@ def convert_wiki_link(content, group, repo_id, username):
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
             return a_tag % (MEDIA_URL, icon, icon, s, linkname)
 
-    return re.sub(r'\[\[(.+)\]\]', repl, content)
+    return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, content)
     
 @login_required
 @group_check
