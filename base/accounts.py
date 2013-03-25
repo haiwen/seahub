@@ -16,6 +16,8 @@ from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 from profile.models import Profile
 from seahub.utils import get_user_repos
 
+UNUSABLE_PASSWORD = '!' # This will never be a valid hash
+
 class UserManager(object):
     def create_user(self, email, password=None, is_staff=False, is_active=False):
         """
@@ -96,14 +98,12 @@ class User(object):
     def save(self):
         emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
         if emailuser:
-            if hasattr(self, 'password'): # setted by set_password()
-                ccnet_threaded_rpc.update_emailuser(emailuser.id,
-                                                    self.password,
-                                                    int(self.is_staff),
-                                                    int(self.is_active))
-            else:
-                # TODO: need a new rpc tp update is_staff and is_active
-                raise NotImplementedError 
+            if not hasattr(self, 'password'):
+                self.set_unusable_password()
+            ccnet_threaded_rpc.update_emailuser(emailuser.id,
+                                                self.password,
+                                                int(self.is_staff),
+                                                int(self.is_active))
         else:
             ccnet_threaded_rpc.add_emailuser(self.username, self.password,
                                              int(self.is_staff),
@@ -141,6 +141,10 @@ class User(object):
         #                       get_hexdigest('sha1', '', raw_password))
         #     return is_correct
         return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_password) == 0)
+
+    def set_unusable_password(self):
+        # Sets a value that will never be a valid hash
+        self.password = UNUSABLE_PASSWORD
     
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."

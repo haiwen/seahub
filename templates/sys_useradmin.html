@@ -24,16 +24,16 @@
         {% if user.props.is_active %}
         <td>{% trans "Activated" %}</td>
         {% else %}
-        <td><a href="#" data="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
         {% endif %}
         <td>
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
           {% if user.is_staff %}
-          <a href="#" class="take-admin-btn op" data="{% url 'user_remove_admin' user.id %}">{% trans "Take Admin" %}</a>
+          <a href="{% url 'user_remove_admin' user.id %}" class="take-admin-btn op">{% trans "Take Admin" %}</a>
           {% else %}
-          <a href="#" class="give-admin-btn op" data="{% url 'user_make_admin' user.id %}">{% trans "Give Admin" %}</a>
+          <a href="{% url 'user_make_admin' user.id %}" class="give-admin-btn op">{% trans "Give Admin" %}</a>
           {% endif %}
           {% endif %}
         </td>
@@ -73,12 +73,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.activate,.give-admin-btn,take-admin-btn').each(function(){
-    $(this).click(function(){
-        location.href = $(this).attr('data');
-    });
-});
-
 addConfirmTo($('.remove-user-btn'), {
         'title':'{% trans "Delete User" %}',
         'con':'{% trans "Are you sure you want to delete %s ?" %}'

@@ -2114,7 +2114,7 @@ def user_remove(request, user_id):
 @login_required
 @sys_staff_required
 def user_make_admin(request, user_id):
-    """Remove user, also remove group relationship."""
+    """Set user as system admin."""
     try:
         user = User.objects.get(id=int(user_id))
         user.is_staff = True
@@ -2127,7 +2127,7 @@ def user_make_admin(request, user_id):
 @login_required
 @sys_staff_required
 def user_remove_admin(request, user_id):
-    """Remove user, also remove group relationship."""
+    """Unset user admin."""
     try:
         user = User.objects.get(id=int(user_id))
         user.is_staff = False
