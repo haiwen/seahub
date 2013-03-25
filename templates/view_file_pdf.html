@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block extra_script %}{{ block.super }}
+{% if not err %}
 {% if use_pdfjs %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
@@ -122,5 +123,6 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
   check_status();
   {% endif %}
 </script>
+{% endif %}
 {% endif %}
 {% endblock %}

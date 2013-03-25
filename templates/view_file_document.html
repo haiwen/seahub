@@ -2,6 +2,7 @@
 {% load i18n%}
 
 {% block extra_script %}{{ block.super }}
+{% if not err%}
 <script type="text/javascript" src="{{MEDIA_URL}}flexpaper/js/flexpaper_flash.js"></script>
 <script type="text/javascript">
     $('#file-view').html('<div id="flash"></div>');
@@ -66,4 +67,5 @@
   check_status();
   {% endif %}
 </script>
+{% endif %}
 {% endblock %}

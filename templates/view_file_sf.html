@@ -21,13 +21,7 @@
     </div>
     {% endif %}
 
-    {% if not err %}
-      {% ifnotequal file_content None %}
-        <div id="sf" class="article">{{ file_content|safe }}</div>
-      {% endifnotequal %}
-    {% else %}
-      <div id="file-view-tip">
-        <p class="error">{{ err }}</p>
-      </div>
-    {% endif %}
+    {% ifnotequal file_content None %}
+    <div id="sf" class="article">{{ file_content|safe }}</div>
+    {% endifnotequal %}
 {% endblock %}

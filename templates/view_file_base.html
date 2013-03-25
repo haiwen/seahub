@@ -77,7 +77,15 @@
             <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
 
-        <div id="file-view"> {% block file_view %}{% endblock %} </div>
+        <div id="file-view">
+          {% if err %}
+          <div id="file-view-tip">
+            <p class="error">{{ err }}</p>
+          </div>
+          {% else %}
+          {% block file_view %}{% endblock %}
+          {% endif %}
+        </div>
     </div>
 
     <form id="link-send-form" action="" method="post" class="hide">

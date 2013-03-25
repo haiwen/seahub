@@ -21,7 +21,7 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
-    is_group_user, get_file_id_by_path, get_commit
+    is_group_user, get_file_id_by_path, get_commit, get_file_size
 from pysearpc import SearpcError
 
 from base.decorators import ctx_switch_required, repo_passwd_set_required
@@ -94,11 +94,7 @@ def repo_file_get(raw_path, file_enc):
 
     try:
         file_response = urllib2.urlopen(raw_path)
-        if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses 10M, can not be previewed online.')
-            return err, '', None
-        else:
-            content = file_response.read()
+        content = file_response.read()
     except urllib2.HTTPError, e:
         err = _(u'HTTPError: failed to open file online')
         return err, '', None
@@ -248,41 +244,49 @@ def view_file(request, repo_id):
     # get file type and extension
     filetype, fileext = get_file_type_and_ext(u_filename)
 
-    """Choose different approach when dealing with different type of file."""
     img_prev = None
     img_next = None
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'swf_exists': False,
                 'filetype': filetype}
-
-    if is_textual_file(file_type=filetype):
-        handle_textual_file(request, filetype, raw_path, ret_dict)
-    elif filetype == 'Document':
-        handle_document(raw_path, obj_id, fileext, ret_dict)
-    elif filetype == 'PDF':
-        handle_pdf(raw_path, obj_id, fileext, ret_dict)
-    elif filetype == 'Image':
-        parent_dir = os.path.dirname(path)
-        dirs = list_dir_by_path(current_commit.id, parent_dir)
-        if not dirs:
-            raise Http404
-
-        img_list = []
-        for dirent in dirs:
-            if not stat.S_ISDIR(dirent.props.mode):
-                fltype, flext = get_file_type_and_ext(dirent.obj_name)
-                if fltype == 'Image':
-                    img_list.append(dirent.obj_name)
-
-        if len(img_list) > 1:
-            img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
-            cur_img_index = img_list.index(u_filename) 
-            if cur_img_index != 0:
-                img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
-            if cur_img_index != len(img_list) - 1:
-                img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
+    
+    # Check file size
+    fsize = get_file_size(obj_id)
+    if fsize > FILE_PREVIEW_MAX_SIZE:
+        from django.template.defaultfilters import filesizeformat
+        err = _(u'File size surpasses %s, can not be opened online.') % \
+                    filesizeformat(FILE_PREVIEW_MAX_SIZE)
+        ret_dict['err'] = err
     else:
-        pass
+        """Choose different approach when dealing with different type of file."""
+        if is_textual_file(file_type=filetype):
+            handle_textual_file(request, filetype, raw_path, ret_dict)
+        elif filetype == 'Document':
+            handle_document(raw_path, obj_id, fileext, ret_dict)
+        elif filetype == 'PDF':
+            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+        elif filetype == 'Image':
+            parent_dir = os.path.dirname(path)
+            dirs = list_dir_by_path(current_commit.id, parent_dir)
+            if not dirs:
+                raise Http404
+
+            img_list = []
+            for dirent in dirs:
+                if not stat.S_ISDIR(dirent.props.mode):
+                    fltype, flext = get_file_type_and_ext(dirent.obj_name)
+                    if fltype == 'Image':
+                        img_list.append(dirent.obj_name)
+
+            if len(img_list) > 1:
+                img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
+                cur_img_index = img_list.index(u_filename) 
+                if cur_img_index != 0:
+                    img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
+                if cur_img_index != len(img_list) - 1:
+                    img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
+        else:
+            pass
 
     # generate file path navigator
     zipped = gen_path_link(path, repo.name)
@@ -371,7 +375,7 @@ def view_file(request, repo_id):
             'img_next': img_next,
             }, context_instance=RequestContext(request))
 
-def view_file_common(request, repo_id, ret_dict):
+def view_history_file_common(request, repo_id, ret_dict):
     username = request.user.username
     # check arguments
     repo = get_repo(repo_id)
@@ -405,15 +409,23 @@ def view_file_common(request, repo_id, ret_dict):
     filetype, fileext = get_file_type_and_ext(u_filename)
 
     if user_perm:
-        """Choose different approach when dealing with different type of file."""
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, raw_path, ret_dict)
-        elif filetype == 'Document':
-            handle_document(raw_path, obj_id, fileext, ret_dict)
-        elif filetype == 'PDF':
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+        # Check file size
+        fsize = get_file_size(obj_id)
+        if fsize > FILE_PREVIEW_MAX_SIZE:
+            from django.template.defaultfilters import filesizeformat
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            ret_dict['err'] = err
         else:
-            pass
+            """Choose different approach when dealing with different type of file."""
+            if is_textual_file(file_type=filetype):
+                handle_textual_file(request, filetype, raw_path, ret_dict)
+            elif filetype == 'Document':
+                handle_document(raw_path, obj_id, fileext, ret_dict)
+            elif filetype == 'PDF':
+                handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            else:
+                pass
     # populate return value dict
     ret_dict['repo'] = repo
     ret_dict['obj_id'] = obj_id
@@ -431,7 +443,7 @@ def view_file_common(request, repo_id, ret_dict):
 @repo_passwd_set_required
 def view_history_file(request, repo_id):
     ret_dict = {}
-    view_file_common(request, repo_id, ret_dict)
+    view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
         
@@ -447,7 +459,7 @@ def view_history_file(request, repo_id):
 @repo_passwd_set_required
 def view_trash_file(request, repo_id):
     ret_dict = {}
-    view_file_common(request, repo_id, ret_dict)
+    view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
@@ -470,7 +482,7 @@ def view_trash_file(request, repo_id):
 @repo_passwd_set_required
 def view_snapshot_file(request, repo_id):
     ret_dict = {}
-    view_file_common(request, repo_id, ret_dict)
+    view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
     
