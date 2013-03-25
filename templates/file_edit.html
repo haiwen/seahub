@@ -4,18 +4,22 @@
 {% block extra_style %}
 {% if filetype == 'Sf' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}aloha-0.22.7/css/aloha.css" />
-{% else %}
+{% endif %}
+{% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
-.CodeMirror-focused pre.CodeMirror-cursor {
-  visibility: visible;
-}
-.CodeMirror-scroll {
-    height:auto;
-    min-height:700px;
-}
+.CodeMirror-focused pre.CodeMirror-cursor { visibility: visible; }
+.CodeMirror-scroll { height:auto; min-height:700px; }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
+{% endif %}
+{% if filetype == 'Markdown' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pagedown.css" />
+<style type="text/css">
+#top-bar, #header, #edit-hd { display:none; }
+#main { min-height:0; }
+.withpd { padding:40px 96px; }
+</style>
 {% endif %}
 <style type="text/css">
 #main {
@@ -40,11 +44,13 @@
     background:#f4f4f4;
     border-top:1px solid #ededed;
 }
-#sf, #md-view, #edit-tip {
+#sf, #md-edit, #edit-tip {
     box-shadow:0 0 6px #ccc;
-    min-height:620px;
     border:1px solid #ccc;
     margin:0 auto;
+}
+#sf {
+    min-height:620px;
 }
 #edit-tip {
     min-height:200px;
@@ -61,11 +67,7 @@
     z-index:1010;/*make seaf image show below path-op*/
 }
 .CodeMirror {
-    {% if filetype == 'Markdown' or fileext == 'txt' or fileext == 'text' %}
-    width:818px;
-    {% else %}
     width:950px;
-    {% endif %}
     margin:0 auto;
     box-shadow:0 0 6px #272822;
 }
@@ -85,7 +87,7 @@
             {% endif %}
          {% endfor %}
          </p>
-         <div id="op-after-edit" class="fright hide">
+         <div id="op-after-edit" class="fright vh">
              {% if filetype == 'Markdown' %}
              <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
              <button id="preview-btn">{% trans "Preview" %}</button>
@@ -94,7 +96,7 @@
              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
          </div>
     </div>
-    <div id="file-edit">
+    <div id="file-edit"{% if filetype == 'Markdown' %} class="hide"{% endif %}>
         {% include 'snippets/file_encoding.html' %}
         {% if err %}
             <div id="edit-tip" class="article">
@@ -102,15 +104,78 @@
             </div>
         {% else %}
             {% if file_content != None %}
-                {% if filetype == 'Text' or filetype == 'Markdown' %}
-                    <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
-                    {% if filetype == 'Markdown' %}
-                    <div id="md-view" class="article hide"></div>{% comment %} for preview {%endcomment%}
-                    {% endif %}
+                {% if filetype == 'Text' %}
+                <textarea id="docu-view" class="hide">{{ file_content|escape }}</textarea>
                 {% endif %}
 
+                {% if filetype == 'Markdown' %}
+                <div id="md-edit">
+                    <div id="wmd-button-bar"></div>
+                    <textarea class="wmd-input" id="wmd-input">{{ file_content|escape }}</textarea>
+                    <div id="wmd-preview" class="article hide"></div>
+                </div>
+
+                <table id="md-edit-help" class="hide">
+                    <tbody>
+                        <tr>
+                            <th>{% trans "Enter this" %}</th>
+                            <th>{% trans "To see this" %}</th>
+                        </tr>
+                        <tr>
+                            <td><pre>**{% trans "bold" %}** {% trans "text" %}</pre></td>
+                            <td><strong class="bold">{% trans "bold" %}</strong> {% trans "text" %}</td>
+                        </tr>
+                        <tr>
+                            <td><pre>*{% trans "italics" %}* {% trans "text" %}</pre></td>
+                            <td><span class="italic">{% trans "italics" %}</span> {% trans "text" %}</td>
+                        </tr>
+                        <tr>
+                            <td><pre>{% trans "Header" %}
+====== </pre></td>
+                            <td>
+                                <h3>{% trans "Header" %}</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><pre>{% trans "Smaller header" %}
+--------- </pre></td>
+                            <td><h4>{% trans "Smaller header" %}</h4></td>
+                        </tr>
+                        <tr>
+                            <td><pre>[{% trans "Link something" %}](http://cloud.seafile.com/)</pre></td>
+                            <td><a href="http://cloud.seafile.com/">{% trans "Link something" %}</a></td>
+                        </tr>
+                        <tr>
+                            <td><pre>![{% trans "alt text" %}](http://cloud.seafile.com/media/img/logo.png)</pre></td>
+                            <td><img src="http://cloud.seafile.com/media/img/logo.png" alt="" /></td>
+                        </tr>
+                        <tr>
+                    <td><pre>* {% trans "unordered list" %}
+* {% trans "leave empty lines around" %}
+</pre></td>
+                <td>
+                    <ul>
+                        <li>{% trans "unordered list" %}</li>
+                        <li>{% trans "leave empty lines around" %}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>1. {% trans "ordered list" %}
+2. {% trans "leave empty lines" %}
+</pre></td>
+            <td>
+                <ol>
+                    <li>{% trans "ordered list" %}</li>
+                    <li>{% trans "leave empty lines" %}</li>
+                </ol>
+            </td>
+        </tr>
+</tbody></table>
+{% endif %}
+
                 {% if filetype == 'Sf' %}
-                    <div id="sf" class="article">{{ file_content|safe }}</div>
+                <div id="sf" class="article">{{ file_content|safe }}</div>
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -131,6 +196,7 @@
 
 {% block extra_script %}
 {% if not err and file_content != None %}
+
 {% if filetype == 'Sf' %}
 <script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.7/lib/require.js"></script>
 <script type="text/javascript">
@@ -143,12 +209,19 @@ switch($('#lang-context').data('lang')) {
 }
 </script>
 <script type="text/javascript" src="{{MEDIA_URL}}aloha-0.22.7/lib/aloha.js" data-aloha-plugins="common/format, common/abbr, common/align, common/characterpicker, common/dom-to-xhtml, common/image, common/link, common/list, common/table, common/undo, common/ui, extra/textcolor"></script>
-{% else %}
+{% endif %}
+
+{% if filetype == 'Text' %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
+{% endif %}
+
 {% if filetype == 'Markdown' %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Sanitizer.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Editor.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 {% endif %}
-{% endif %}
+
 {% endif %}
 <script type="text/javascript">
 {% if not err and file_content != None %}
@@ -170,12 +243,11 @@ Aloha.ready(function() {
         $('#sf').aloha().focus();
     }
 });
-{% else %}
+{% endif %}
+
+{% if filetype == 'Text' %}
 var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     {% include "snippets/editor_set_mode.html" %}
-    {% if filetype == 'Markdown' %}
-    mode: 'markdown',
-    {% endif %}
     theme: 'monokai',
     indentUnit: 4,
     lineNumbers: true,
@@ -193,23 +265,40 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     autofocus: true
 });
 {% endif %}
-$('#op-after-edit').removeClass('hide');
 
 {% if filetype == 'Markdown' %}
-$('#source-code-btn').click(function() {
-    $('#md-view, #source-code-btn').addClass('hide');
-    $('.CodeMirror, #preview-btn').removeClass('hide');
-    editor.focus();
+var converter = Markdown.getSanitizingConverter();
+converter.hooks.chain("preBlockGamut", function (text, rbg) {
+    return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+        return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+    });
 });
-$('#preview-btn').click(function() {
-    var content = editor.getValue();
-    var converter = new Showdown.converter();
-    $('.CodeMirror, #preview-btn').addClass('hide');
-    $('#md-view').html(converter.makeHtml(content)).removeClass('hide');
-    $('#md-view').children(':first').css('margin-top', '0');
-    $('#source-code-btn').removeClass('hide');
+Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
+var editor = new Markdown.Editor(converter,'',{handler:mdEditHelp, title:'{% trans "Help" %}'});
+editor.run();
+
+var file_edit = $('#file-edit'); 
+var file_edit_styles = {'min-height':0, 'padding-bottom':50, 'height':$(window).height() - $('#path-op').outerHeight() - parseInt(file_edit.css('padding-top')) - 51};
+file_edit.css(file_edit_styles).removeClass('hide');
+$('#wmd-input').css({'height':file_edit.height() - $('#file-enc-conf').outerHeight(true) - $('#wmd-button-bar').outerHeight() - parseInt($('#wmd-input').css('padding-top'))*2});
+
+$('#preview-btn, #source-code-btn').click(function() {
+    $('#wmd-button-bar, #wmd-input, #wmd-preview, #source-code-btn, #preview-btn').toggleClass('hide');
+    $('#md-edit').toggleClass('withpd');
+    if (!$('#wmd-input').hasClass('hide')) {
+        file_edit.css(file_edit_styles);
+    } else {
+        file_edit.removeAttr('style');
+    }
 });
+$('#wmd-preview').children(':first').css('margin-top', '0');
+
+function mdEditHelp() {
+    $('#md-edit-help').modal();
+}
 {% endif %}
+
+$('#op-after-edit').removeClass('vh');
 
 $('#file-edit-submit').click(function () {
     disable($(this));
@@ -218,8 +307,12 @@ $('#file-edit-submit').click(function () {
 function editSubmit() {
     {% if filetype == 'Sf' %}
     var content = $('#sf').html();
-    {% else %}
+    {% endif %}
+    {% if filetype == 'Text' %}
     var content = editor.getValue();
+    {% endif %}
+    {% if filetype == 'Markdown' %}
+    var content = $('#wmd-input').val();
     {% endif %}
 
     $.ajax({

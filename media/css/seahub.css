@@ -42,7 +42,6 @@ textarea {
 }
 input { 
     height:22px;
-    /*line-height:22px;*/
     border: 1px solid #ddd;
     margin:3px 0;
     outline:0;
@@ -52,12 +51,14 @@ button {
     display:inline-block;/*for ie*/
 }
 input[type=submit],
+input[type=button],
 input.submit { 
     height:27px;/*for ff*/
     line-height:1.5;
 }
 button,
 input[type=submit],
+input[type=button],
 input.submit { 
     padding:3px;
     background: #efefef;
@@ -86,6 +87,7 @@ input.submit {
     margin-top:8px;
 }
 input[type=submit]:hover,
+input[type=button]:hover,
 button:hover { 
     cursor:pointer;
     background-color:#fff;
@@ -149,6 +151,7 @@ p {
 .w100 { width: 100%; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
+.italic { font-style:italic; }
 .notification {
     padding:5px;
     background:#FDF;
@@ -760,6 +763,7 @@ textarea:-moz-placeholder {/* for FF */
 .article p {
     margin:0.8em 0;
 }
+#md-edit-help ul,
 .article ul {
     list-style-type:disc;
     padding-left:2em;
@@ -1746,13 +1750,16 @@ textarea:-moz-placeholder {/* for FF */
 #docu-view,
 #svg-view,
 #pdf,
-#md-view {
+#md-view,
+#md-edit {
     background:#fff;
 }
-#md-view {
+#md-view,
+#md-edit {
     width:756px;
 }
 #md-view h2,
+#wmd-preview h2,
 #wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
@@ -1823,6 +1830,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 #sf, #md-view {
     padding:40px 96px;
+}
+#md-edit-help {
+    width:550px;
 }
 /*overwrite aloha.css*/
 #file-edit .aloha-editable-active, .aloha-editable-active[contenteditable="true"]:focus {

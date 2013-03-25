@@ -39,11 +39,13 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
-
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Sanitizer.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 <script type="text/javascript">
     {% ifnotequal file_content None %}
-    var converter = new Showdown.converter();
+    var converter = new Markdown.getSanitizingConverter();
+    Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
     $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
     {% endifnotequal %}
 
