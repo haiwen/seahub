@@ -821,7 +821,7 @@ def is_textual_file(file_type):
 if getattr(settings, 'ENABLE_FILE_SEARCH', False):
     from seafes import es_get_conn, es_search
 
-    conn = es_get_conn()
+    es_conn = None
     def search_file_by_name(request, keyword, start, size):
         owned_repos, shared_repos, groups_repos, pub_repo_list = get_user_repos(request.user)
 
@@ -848,7 +848,10 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
 
         nonpub_repo_ids = [ repo.id for repo in nonpub_repo_list ]
 
-        files_found, total = es_search(conn, nonpub_repo_ids, keyword, start, size)
+        global es_conn
+        if es_conn is None:
+            es_conn = es_get_conn()
+        files_found, total = es_search(es_conn, nonpub_repo_ids, keyword, start, size)
 
         if len(files_found) > 0:
             # construt a (id, repo) hash table for fast lookup
