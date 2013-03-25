@@ -285,7 +285,7 @@ msgstr "Impossibile scaricare la libreria, impossibile trovare il server"
 
 #: views.py:1626
 msgid "Invalid server setting"
-msgstr "Settaggi del server errati"
+msgstr "Impostazioni del server errate"
 
 #: views.py:1662
 #, python-format
@@ -312,7 +312,7 @@ msgstr ""
 
 #: views.py:1798
 msgid "Failed to set quota: internal error"
-msgstr ""
+msgstr "Errore interno di impostazione quota"
 
 #: views.py:1872 templates/sys_useradmin.html:78
 #: templates/registration/password_reset_confirm.html:4
@@ -326,119 +326,124 @@ msgstr "Reset password"
 msgid ""
 "Successfully resetting password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr ""
+msgstr "Password ripristinata con successo a %(passwd)s, inviata mail a"
+"%(user)s."
 
 #: views.py:1878
 #, python-format
 msgid ""
 "Successfully resetting password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr ""
+msgstr "Password ripristinata con successo a %(passwd)s, ma impossibile inviare mail a"
+"%(user)s, controllare configurazione email."
 
 #: views.py:1894
 #, python-format
 msgid "Successfully resetting password to %s"
-msgstr ""
+msgstr "Password ripristinata con successo a %s"
 
 #: views.py:1896
 msgid "Failed to reset password: user does not exist"
-msgstr ""
+msgstr "Impossibile ripristinare password: utente inesistente"
 
 #: views.py:1918
 msgid "Seafile Registration Information"
-msgstr ""
+msgstr "Informazioni Registrazione Seafile"
 
 #: views.py:1920
 msgid "Successfully sending mail"
-msgstr ""
+msgstr "Mail inviata con successo"
 
 #: views.py:1922 share/views.py:473
 msgid "Failed to send mail"
-msgstr ""
+msgstr "Errore di invio mail"
 
 #: views.py:2135
 #, python-format
 msgid "Successfully rename %(old)s to %(new)s"
-msgstr ""
+msgstr "Rinomina %(old)s in %(new)s completata"
 
 #: views.py:2191
 msgid "Failed to create library"
-msgstr ""
+msgstr "Errore di creazione libreria"
 
 #: views.py:2284
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-msgstr ""
+msgstr "Conversione %(path)s in <a href=\"%(root)s\">directory root</a> completa."
 
 #: views.py:2288 views.py:2314
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr ""
+msgstr "Conversione <a href=\"%(url)s\">%(path)s</a> completata."
 
 #: views.py:2310
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
-msgstr ""
+msgstr "Conversione %(path)s in <a href=\"%(url)s\">directory root</a> completa."
 
 #: views.py:2448
 msgid "Internal error"
-msgstr ""
+msgstr "Errore interno"
 
 #: avatar/forms.py:34 avatar/forms.py:57
 #, python-format
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
-msgstr ""
+msgstr "Estensione %(ext)s non valida. Le estensioni autorizzate sono : "
+"%(valid_exts_list)s"
 
 #: avatar/forms.py:38 avatar/forms.py:61
 #, python-format
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
-msgstr ""
+msgstr "File troppo grosso (%(size)s), dimensione massima permessa "
+"%(max_valid_size)s"
 
 #: avatar/forms.py:44
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
-msgstr ""
+msgstr "Hai già %(nb_avatars)d avatar, massimo consentito "
+"%(nb_max_avatars)d."
 
 #: avatar/models.py:136 avatar/models.py:161
 #, python-format
 msgid "Avatar for %s"
-msgstr ""
+msgstr "Avatar per %s"
 
 #: avatar/views.py:78
 msgid "Successfully uploaded a new avatar."
-msgstr ""
+msgstr "Nuovo avatar caricato con successo."
 
 #: avatar/views.py:128
 msgid "Successfully uploaded a new group avatar."
-msgstr ""
+msgstr "Nuovo gruppo di avatar caricato con successo."
 
 #: avatar/views.py:166
 msgid "Successfully updated your avatar."
-msgstr ""
+msgstr "Aggiornamento avatar completato."
 
 #: avatar/views.py:208
 msgid "Successfully deleted the requested avatars."
-msgstr ""
+msgstr "Gli avatar sono stati cancellati con successo."
 
 #: avatar/templates/avatar/add.html:6
 msgid "Upload Avatar"
-msgstr ""
+msgstr "Carica Avatar"
 
 #: avatar/templates/avatar/add.html:7 avatar/templates/avatar/change.html:8
 msgid "Your current avatar: "
-msgstr ""
+msgstr "Il tuo avatar:"
 
 #: avatar/templates/avatar/add.html:9
 #: avatar/templates/avatar/set_avatar.html:12
 msgid "Upload New Avatar: "
-msgstr ""
+msgstr "Carica Nuovo Avatar: "
 
 #: avatar/templates/avatar/add.html:13 avatar/templates/avatar/change.html:30
 msgid "Upload New Image"
@@ -446,30 +451,31 @@ msgstr "Invia una nuova immagine"
 
 #: avatar/templates/avatar/confirm_delete.html:6
 msgid "Please select the avatars that you would like to delete."
-msgstr ""
+msgstr "Seleziona gli avatar che vorresti cancellare."
 
 #: avatar/templates/avatar/confirm_delete.html:11
 #, python-format
 msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
 "\">upload one</a> now."
-msgstr ""
+msgstr "Non hai avatar da cancellare. <a href=\"%(avatar_change_url)s"
+"\">Caricane uno</a> adesso."
 
 #: avatar/templates/avatar/confirm_delete.html:18
 msgid "Delete These"
-msgstr ""
+msgstr "Cancella questi"
 
 #: avatar/templates/avatar/set_avatar.html:8
 msgid "Avatar Change"
-msgstr ""
+msgstr "Modifica Avatar" 
 
 #: avatar/templates/avatar/set_avatar.html:9
 msgid "Current avatar: "
-msgstr ""
+msgstr "Avatar attuale: "
 
 #: avatar/templates/avatar/set_avatar.html:10
 msgid "Current Avatar"
-msgstr ""
+msgstr "Avatar Attuale: "
 
 #: avatar/templates/avatar/set_avatar.html:16
 #: contacts/templates/contacts/contact_list.html:54
@@ -507,14 +513,18 @@ msgid ""
 "%(avatar_creator)s has updated their avatar %(avatar)s.\n"
 "\n"
 "http://%(current_site)s%(avatar_url)s\n"
-msgstr ""
+msgstr "%(avatar_creator)s ha aggiornato i loro avatar %(avatar)s.\n"
+"\n"
+"http://%(current_site)s%(avatar_url)s\n"
+
 
 #: avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
 msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
-msgstr ""
+msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> ha aggiornato i loro avatar <a "
+"href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templates/notification/avatar_updated/full.txt:1
 #, python-format
@@ -522,16 +532,18 @@ msgid ""
 "Your avatar has been updated.  %(avatar)s\n"
 "\n"
 "http://%(current_site)s%(avatar_url)s\n"
-msgstr ""
+msgstr "Avatar aggiornato.  %(avatar)s\n"
+"\n"
+"http://%(current_site)s%(avatar_url)s\n"
 
 #: avatar/templates/notification/avatar_updated/notice.html:2
 #, python-format
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
-msgstr ""
+msgstr "Hai aggiornato il tuo avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templatetags/avatar_tags.py:46
 msgid "Default Avatar"
-msgstr ""
+msgstr "Avatar predefinito"
 
 #: base/accounts.py:347
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/comments/forms.py:110
@@ -549,7 +561,7 @@ msgstr "Nome utente"
 
 #: base/accounts.py:353
 msgid "This value must be of length 40"
-msgstr ""
+msgstr "Questo valore deve essere lungo 40"
 
 #: base/accounts.py:356 templates/add_user_form.html:11
 #: templates/registration/login.html:10
@@ -578,7 +590,7 @@ msgstr "Id utente non valido."
 
 #: base/templatetags/seahub_tags.py:145
 msgid "Just now"
-msgstr "Subuto"
+msgstr "Subito"
 
 #: base/templatetags/seahub_tags.py:154
 #, python-format
@@ -638,15 +650,15 @@ msgstr "Sola lettura"
 #: contacts/views.py:68 contacts/views.py:93
 #, python-format
 msgid "Successfully adding %s to contacts."
-msgstr ""
+msgstr "Aggiunto %s ai contatti"
 
 #: contacts/views.py:95
 msgid "Failed to add an contact."
-msgstr ""
+msgstr "Errore in aggiunta contatto."
 
 #: contacts/views.py:120
 msgid "Editting Successfully"
-msgstr "Editato con successo"
+msgstr "Modificato con successo"
 
 #: contacts/views.py:133
 msgid "Deleting Successfully"
@@ -664,7 +676,8 @@ msgstr "Suggerimento"
 msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
-msgstr ""
+msgstr "Quando condividi librerie o collegamenti a file con un amico, la sua "
+"mail viene aggiunta a contatti."
 
 #: contacts/templates/contacts/contact_list.html:15
 #: templates/myhome_base.html:17
@@ -678,7 +691,7 @@ msgstr "Aggiungi contatti"
 
 #: contacts/templates/contacts/contact_list.html:21
 msgid "Email "
-msgstr ""
+msgstr "Email "
 
 #: contacts/templates/contacts/contact_list.html:22
 #: group/templates/group/group_info.html:72
@@ -759,7 +772,8 @@ msgstr "Non hai alcun contatto"
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
-msgstr ""
+msgstr "Aggiungi contatti per condividere velocemente librerie e inviare link"
+"a file."
 
 #: contacts/templates/contacts/contact_list.html:49
 #: contacts/templates/contacts/contact_list.html:59
@@ -771,7 +785,7 @@ msgstr ""
 #: templates/registration/registration_form.html:11
 #: templates/snippets/user_profile_html.html:28
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: contacts/templates/contacts/contact_list.html:51
 #: contacts/templates/contacts/contact_list.html:61
@@ -870,69 +884,69 @@ msgstr "Il messaggio di verifica è troppo lungo (massimo 255 caratteri)"
 
 #: group/views.py:68
 msgid "There is already a group with that name."
-msgstr ""
+msgstr "Nome gruppo già esistente."
 
 #: group/views.py:101
 msgid "Only administrators can delete the group."
-msgstr ""
+msgstr "Solo gli amministratori possono cancellare un gruppo."
 
 #: group/views.py:138
 msgid "Only administrators can dismiss the group"
-msgstr ""
+msgstr "Solo gli amministratori possono rimuovere il gruppo."
 
 #: group/views.py:161
 msgid "group id  is not a valid argument."
-msgstr ""
+msgstr "Il group id non è un argomento valido"
 
 #: group/views.py:300
 msgid "The message doesn't exist"
-msgstr ""
+msgstr "Il messaggio non esiste"
 
 #: group/views.py:310
 msgid "You don't have the permission."
-msgstr ""
+msgstr "Non hai i permessi."
 
 #: group/views.py:474
 #, python-format
 msgid "Failed to add, %s is not in current organization."
-msgstr ""
+msgstr "Errore in aggiunta, %s non è nella organizzazione."
 
 #: group/views.py:504
 msgid "Your friend added you to a group in SeaCloud."
-msgstr ""
+msgstr "Un tuo amico ti ha aggiunto a SeaCloud."
 
 #: group/views.py:509
 msgid "Failed to send mail."
-msgstr "Ошибка отправки сообщения"
+msgstr "Errore invio mail."
 
 #: group/views.py:526
 #, python-format
 msgid "Failed to add, %s is not registerd."
-msgstr ""
+msgstr "Errore di aggiunta, %s non è registrato."
 
 #: group/views.py:540
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Aggiunta completata con successo. E' stata inviata una mail."
+msgstr[1] "Aggiunta completata con successo. Inviate mail a %(count)s."
 
 #: group/views.py:548
 msgid "Successfully added."
-msgstr ""
+msgstr "Aggiunto."
 
 #: group/views.py:588
 #, python-format
 msgid "Failed to add, %s is not registrated."
-msgstr ""
+msgstr "Errore in aggiunta, %s non è registrato."
 
 #: group/views.py:611 group/views.py:624 group/views.py:651
 msgid "Operation succeeded."
-msgstr ""
+msgstr "Operazione conclusa con successo."
 
 #: group/views.py:641 share/views.py:162
 msgid "group id is not valid"
-msgstr ""
+msgstr "group id non valido"
 
 #: group/views.py:653
 #, python-format
@@ -941,85 +955,87 @@ msgstr "Fallito: %s"
 
 #: group/views.py:665
 msgid "Failed to share: the group doesn't exist."
-msgstr ""
+msgstr "Errore di condivisione: il gruppo non esiste."
 
 #: group/views.py:668
 msgid "Failed to share: internal error."
-msgstr ""
+msgstr "Errore di condivisione: errore interno."
 
 #: group/views.py:678
 msgid "Failed to unshare: the group doesn't exist."
-msgstr ""
+msgstr "Errore di de-condivisione: il gruppo non esiste."
 
 #: group/views.py:683
 msgid ""
-"Operation failed: only administrators and the owner of the library can "
+"Operation failed: only administrators and owners of the library can "
 "unshare it."
-msgstr ""
+msgstr "Operazione fallita: solo gli amministratori e i proprietari della libreria "
+"possono de-condividerla."
 
 #: group/views.py:686
 msgid "Failed to unshare: internal error."
-msgstr ""
+msgstr "Errore in de-condivisione: errore interno."
 
 #: group/views.py:714
 msgid "Error: wrong group id"
-msgstr ""
+msgstr "Errore: group id errato"
 
 #: group/views.py:722
 #, python-format
 msgid "Error: you are not in group %s."
-msgstr ""
+msgstr "Errore: non sei nel gruppo %s."
 
 #: group/views.py:742
 #, python-format
 msgid ""
 "Successfully recommended to <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
 "a>."
-msgstr ""
+msgstr "Raccomandato a <a href=\"%(url)s\" target=\"_blank\">%(name)s</"
+"a>."
 
 #: group/views.py:747
 msgid "Failed to recommend."
-msgstr ""
+msgstr "Errore di raccomandazione."
 
 #: group/views.py:762
 msgid "Failed to create: the group does not exist."
-msgstr ""
+msgstr "Errore di creazione: il gruppo non esiste."
 
 #: group/views.py:766
 msgid "Failed to create: you are not in the group."
-msgstr ""
+msgstr "Errore di creazione: non sei nel gruppo."
 
 #: group/views.py:788 group/views.py:816 organizations/views.py:449
 msgid "Failed to create"
-msgstr ""
+msgstr "Errore di creazione"
 
 #: group/views.py:802 group/views.py:829
 msgid "Failed to create: internal error."
-msgstr ""
+msgstr "Errore di creazione: errore interno."
 
 #: group/views.py:856
 msgid "You are already in the group."
-msgstr ""
+msgstr "Sei già nel gruppo."
 
 #: group/views.py:875
 msgid "apply to join the group"
-msgstr ""
+msgstr "applica per unirti al gruppo"
 
 #: group/views.py:877
 msgid "Sent successfully, the group admin will handle it."
-msgstr ""
+msgstr "Invio completato, il gruppo admin gestirà la richiesta."
 
 #: group/views.py:881
 msgid "Failed to send. You can try it again later."
-msgstr ""
+msgstr "Errore di invio. Prova più tardi."
 
 #: group/templates/group/add_member_email.html:2
 #, python-format
 msgid ""
 "%(email)s invite you to join group %(group.group_name)s. Please go to the "
 "following page and sign up:"
-msgstr ""
-
+msgstr "%(email)s ti ha inviato ad unirti al grouppo %(group.group_name)s."
+"Procedi alla prossima pagina e iscriviti:"
 #: group/templates/group/add_member_email.html:5
 #: group/templates/group/group_join_email.html:6
 #: templates/shared_link_email.html:7 templates/user_add_email.html:14
@@ -1037,7 +1053,7 @@ msgstr "Grazie per aver usato il nostro sito!"
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/admin/templates/registration/password_reset_email.html:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "Il team di %(site_name)s"
 
 #: group/templates/group/group_info.html:14 templates/org_admin_base.html:8
 msgid "Basic Info"
@@ -1048,11 +1064,11 @@ msgstr "Informazioni di base"
 #: group/templates/group/groups_right_panel.html:12
 #: organizations/templates/organizations/org_pubinfo.html:32
 msgid "'s icon"
-msgstr ""
+msgstr "icona"
 
 #: group/templates/group/group_info.html:17
 msgid "created at"
-msgstr ""
+msgstr "creato a"
 
 #: group/templates/group/group_info.html:22
 msgid "Staffs"
@@ -1072,7 +1088,7 @@ msgstr "Aggiungi"
 
 #: group/templates/group/group_info.html:46
 msgid "You can click \"Add\" above to add members."
-msgstr ""
+msgstr "Puoi fare clic su \"Aggiungi\" per aggiungere membri."
 
 #: group/templates/group/group_info.html:56
 msgid "Administration"
@@ -1187,13 +1203,17 @@ msgid_plural ""
 "\n"
 "                    <span class=\"reply-cnt\">%(counter)s</span> Replies\n"
 "                    "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\n"
+"                    <span class=\"reply-cnt\">%(counter)s</span> Risposta\n"
+"                    "
+msgstr[1] "\n"
+"                    <span class=\"reply-cnt\">%(counter)s</span> Risposte\n"
+"                    "
 
 #: group/templates/group/group_info.html:166
 #: group/templates/group/new_msg_reply.html:34
 msgid "Hide"
-msgstr "Скрыть"
+msgstr "Nascondi"
 
 #: group/templates/group/group_info.html:180
 #: organizations/templates/organizations/org_admin.html:43
@@ -1264,7 +1284,8 @@ msgstr ", cancellazione fallita."
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr ""
+msgstr "%(user)s vuole unirsi al Gruppo \"%(group_name)s\", ecco il messaggio "
+"di verifica: "
 
 #: group/templates/group/group_manage.html:8
 msgid "administration"
@@ -1308,7 +1329,7 @@ msgstr "Respingi Gruppo"
 
 #: group/templates/group/group_manage.html:88
 msgid "Really want to dismiss this group"
-msgstr ""
+msgstr "Vuoi davvero respingere questo gruppo"
 
 #: group/templates/group/group_manage.html:89
 #: organizations/templates/organizations/org_admin.html:99
@@ -1317,11 +1338,11 @@ msgstr "Cancella il membro"
 
 #: group/templates/group/group_manage.html:89
 msgid "Really want to delete Member"
-msgstr ""
+msgstr "Vuoi davvero cancellare il Membro"
 
 #: group/templates/group/group_pubinfo.html:9
 msgid "Join Group"
-msgstr ""
+msgstr "Unisciti al Gruppo"
 
 #: group/templates/group/group_pubinfo.html:13
 msgid "Name: "
@@ -1332,32 +1353,33 @@ msgstr "Nome:"
 #: organizations/templates/organizations/org_pubinfo.html:37
 #: templates/pubinfo.html:33
 msgid "Creator: "
-msgstr "Создатель: "
+msgstr "Creatore: "
 
 #: group/templates/group/group_pubinfo.html:15
 msgid "Create at: "
-msgstr ""
+msgstr "Crea a: "
 
 #: group/templates/group/group_pubinfo.html:16
 msgid "Members: "
-msgstr ""
+msgstr "Membri: "
 
 #: group/templates/group/group_pubinfo.html:21
 msgid "Verification Message"
-msgstr ""
+msgstr "Messaggio di verifica"
 
 #: group/templates/group/group_reply_list.html:17
 msgid "It can not be blank and should be no more than 150 characters."
-msgstr ""
+msgstr "Non può essere vuoto e non deve essere oltre 150 caratteri."
 
 #: group/templates/group/groups_left_panel.html:5
 msgid ""
 "After creating a group, you can add members and share libraries into it."
-msgstr ""
+msgstr "Dopo aver creato un gruppo, puoi aggiungere membri e condividere "
+"librerie."
 
 #: group/templates/group/groups_left_panel.html:7
 msgid "You can also share libraries into groups that you're not in."
-msgstr ""
+msgstr "Puoi anche condividere librere di gruppi di cui non sei parte."
 
 #: group/templates/group/groups_right_panel.html:4
 #: templates/snippets/my_groups.html:4
@@ -1383,7 +1405,7 @@ msgstr "Non sei presente in nessun gruppo"
 msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
-msgstr "Puoi creare un gruppo clikkando su \"Nuovo Gruppo\". Un gruppo è un luogo dove tu e i tuoi amici potete lasciare messaggi e collaborare insieme."
+msgstr "Puoi creare un gruppo cliccando su \"Nuovo Gruppo\". Un gruppo è un luogo dove tu e i tuoi amici potete lasciare messaggi e collaborare insieme."
 
 #: group/templates/group/groups_right_panel.html:31
 msgid "Group Name"
@@ -1392,32 +1414,32 @@ msgstr "Nome gruppo"
 #: group/templates/group/grpadmin_add_js.html:18
 #: group/templates/group/grpmember_add_js.html:18
 msgid "It can not be blank."
-msgstr ""
+msgstr "Non può essere vuoto."
 
 #: group/templates/group/grpmember_add_form.html:3
 msgid "Add members"
-msgstr ""
+msgstr "Aggiungi membri"
 
 #: group/templates/group/grpmember_add_form.html:4
 #: group/templates/group/grpmember_add_form.html:16
 msgid "Type emails, separated by ','"
-msgstr ""
+msgstr "Digita le mail, separate da ','"
 
 #: group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
-msgstr ""
+msgstr "Suggerimento: un invito verrà inviato se la mail non è registrata."
 
 #: group/templates/group/grpmember_add_form.html:9
 msgid "Tip: the emails should be already registered."
-msgstr ""
+msgstr "Suggerimento: le mail dovrebbero già essere registrate."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators "
-msgstr ""
+msgstr "Aggiungi amministratori "
 
 #: group/templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
-msgstr ""
+msgstr "Non puà essere vuoto e non deve superare i 150 caratteri."
 
 #: group/templates/group/msg_reply_js.html:62
 msgid "loading ..."
@@ -1425,7 +1447,7 @@ msgstr "caricamento ..."
 
 #: group/templates/group/new_msg_reply.html:17
 msgid "Group: "
-msgstr ""
+msgstr "Gruppo: "
 
 #: group/templates/group/new_msg_reply.html:49
 msgid "It can't be blank and should be no more than 150 characters."
@@ -1445,58 +1467,58 @@ msgstr "Niente"
 #: notifications/templates/notifications/add_notification_form.html:7
 #: notifications/templates/notifications/notification_list.html:9
 msgid "Add new notification"
-msgstr ""
+msgstr "Aggiungi nuova notifica"
 
 #: notifications/templates/notifications/add_notification_form.html:9
 msgid "Notification"
-msgstr ""
+msgstr "Notifica"
 
 #: notifications/templates/notifications/notification_list.html:15
 msgid "All Notifications"
-msgstr ""
+msgstr "Tutte le notifiche"
 
 #: notifications/templates/notifications/notification_list.html:19
 msgid "Notification Detail"
-msgstr ""
+msgstr "Dettagli di notifica"
 
 #: notifications/templates/notifications/notification_list.html:26
 msgid "(current notification)"
-msgstr ""
+msgstr "(notifica corrente)"
 
 #: notifications/templates/notifications/notification_list.html:30
 msgid "Set to current"
-msgstr ""
+msgstr "Imposta a corrente"
 
 #: notifications/templates/notifications/notification_list.html:64
 #: templates/pubinfo.html:16 templates/sys_group_admin.html:54
 #: templates/sys_org_admin.html:55 templates/sys_seafadmin.html:55
 #: templates/userinfo.html:55 templates/userinfo.html.py:78
 msgid "Empty"
-msgstr ""
+msgstr "Vuoto"
 
 #: notifications/templates/notifications/notification_list.html:70
 msgid "Delete Notification"
-msgstr ""
+msgstr "Cancella Notifica"
 
 #: organizations/views.py:181
-msgid "Failed to create the library: you has not joined this organizatioin."
-msgstr ""
+msgid "Failed to create the library: you has not joined this organization."
+msgstr "Errore di creazione libreria: non sei parte di questa organizzazione."
 
 #: organizations/views.py:193
 msgid "Failed to create."
-msgstr ""
+msgstr "Errore di creazione."
 
 #: organizations/views.py:217
 msgid "Operation Succeeded."
-msgstr ""
+msgstr "Operazione conclusa con successo."
 
 #: organizations/views.py:236
 msgid "Group name can only contain letters, digits and underscore"
-msgstr ""
+msgstr "Un nome gruppo può solo contenere lettere, numeri e sottolineatura"
 
 #: organizations/views.py:281
 msgid "Seafile Login Information"
-msgstr ""
+msgstr "Informazioni di login Seafile"
 
 #: organizations/views.py:283
 msgid "Mail sent successfully"
@@ -1515,43 +1537,45 @@ msgstr "Cancellato con successo."
 msgid ""
 "%(from_email)s added you to Organization <a href=\"%(org_url)s\">"
 "%(org_name)s</a>"
-msgstr ""
+msgstr "%(from_email)s aggiunto all'Organizzazione <a href=\"%(org_url)s\">"
+"%(org_name)s</a>"
 
 #: organizations/views.py:443
 msgid "Failed to create: you has not joined this organization"
-msgstr ""
+msgstr "Errore di creazione: non sei parte di questa organizzazione"
 
 #: organizations/views.py:542
-msgid "This group doesn't belong to current organazation"
-msgstr ""
+msgid "This group doesn't belong to current organization"
+msgstr "Questo gruppo non appartiene alla organizzazione corrente"
 
 #: organizations/views.py:582
 msgid "Only the owner of this library has permission to share it."
-msgstr ""
+msgstr "Solo il proprietario di questa libreria ha i permessi per condividerla."
 
 #: organizations/views.py:597 share/views.py:73
 msgid "Failed to share to all members"
-msgstr ""
+msgstr "Errore di condivisione per tutti i membri"
 
 #: organizations/views.py:601
 #, python-format
 msgid ""
 "Shared to all members successfully, you can go check it at <a href=\"%s"
 "\">Share</a>."
-msgstr ""
+msgstr "Completata condivisione con tutti i membri, puoi controllare a <a href=\"%s\">Condivisione</a>." 
 
 #: organizations/views.py:622
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，you can go check it at <a href=\"%(share)s"
 "\">Share</a>."
-msgstr ""
+msgstr "Completata condivisione con %(group)s, controlla a <a href=\"%(share)s\">Condivisione</a>."
+
 
 #: organizations/views.py:628 organizations/views.py:647 share/views.py:317
 #: share/views.py:339
 #, python-format
 msgid "Failed to share to %s."
-msgstr ""
+msgstr "Errore di condivisione con %s."
 
 #: organizations/views.py:634
 #, python-format
@@ -2057,7 +2081,7 @@ msgstr "Registrati"
 
 #: templates/base.html:129
 msgid "Introduction"
-msgstr ""
+msgstr "Introduzione"
 
 #: templates/base.html:131
 msgid "Forum"
@@ -2127,7 +2151,7 @@ msgstr "Ultimo modificatore "
 #: templates/file_revisions.html:25 templates/repo.html:96
 #: templates/repo_history_view.html:53 templates/repo_recycle_view.html:35
 msgid "Size"
-msgstr "Grandezza"
+msgstr "Dimensione"
 
 #: templates/file_revisions.html:33
 msgid "(current version)"
@@ -2225,23 +2249,23 @@ msgstr "Cestino"
 
 #: templates/repo.html:27
 msgid "This library is read-only, and you can only view the files."
-msgstr "Эта библиотека предназначена только для чтения, и вы можете только просматривать файлы."
+msgstr "Questa libreria è in sola lettura, puoi solo vederne i file."
 
 #: templates/repo.html:33
 msgid "Size: "
-msgstr "Размер"
+msgstr "Dimensione: "
 
 #: templates/repo.html:40 templates/repo_view_file.html:143
 #: templates/repo_view_snapshot.html:17
 msgid "Detail"
-msgstr "Подробности"
+msgstr "Dettaglio"
 
 #: templates/repo.html:43 templates/repo.html.py:152
 #: templates/repo_view_file.html:118 templates/repo_view_file.html.py:156
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/admin/templates/admin/change_form.html:31
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/admin/templates/admin/object_history.html:10
 msgid "History"
-msgstr "История"
+msgstr "Storia"
 
 #: templates/repo.html:53
 msgid "Generated by system"
@@ -2249,68 +2273,68 @@ msgstr ""
 
 #: templates/repo.html:69
 msgid "You can't access this library."
-msgstr "У вас нет доступа к этой библиотеке"
+msgstr "Non puoi accedere a questa libreria."
 
 #: templates/repo.html:74 templates/repo_edit_file.html:72
 #: templates/repo_history_view.html:38 templates/repo_recycle_view.html:16
 msgid "Current path: "
-msgstr "Текущий раздел:"
+msgstr "Percorso corrente:"
 
 #: templates/repo.html:85 templates/repo.html.py:180
 msgid "Upload"
-msgstr "Загрузить"
+msgstr "Carica"
 
 #: templates/repo.html:86 templates/repo.html.py:215
 msgid "New Directory"
-msgstr "Новый каталог"
+msgstr "Nuova Cartella"
 
 #: templates/repo.html:87 templates/repo.html.py:226
 msgid "New File"
-msgstr "Новый файл"
+msgstr "Nuovo File"
 
 #: templates/repo.html:102
 msgid "Directory icon"
-msgstr "Значок каталога"
+msgstr "Icona per la Cartella"
 
 #: templates/repo.html:115
 msgid "More operations"
-msgstr "Операции"
+msgstr "Altro"
 
 #: templates/repo.html:118 templates/repo.html.py:149
 msgid "Rename"
-msgstr "Переименовать"
+msgstr "Rinomina"
 
 #: templates/repo.html:119 templates/repo.html.py:150
 msgid "Move"
-msgstr "Переместить"
+msgstr "Sposta"
 
 #: templates/repo.html:120 templates/repo.html.py:151
 msgid "Copy"
-msgstr "Копировать"
+msgstr "Copia"
 
 #: templates/repo.html:146
 msgid "More Operations"
-msgstr "Операции"
+msgstr "Altro"
 
 #: templates/repo.html:167
 msgid "Upload Files"
-msgstr "Загрузить файл"
+msgstr "Carica File"
 
 #: templates/repo.html:169
 msgid "The owner of this library has ran out of space."
-msgstr "Владелец этой библиотеки привысил допустимый лимит"
+msgstr "Il proprietario di questa cartella ha esaurito lo spazio."
 
 #: templates/repo.html:174
 msgid "Add files"
-msgstr "Добавить файл"
+msgstr "Aggiungi file"
 
 #: templates/repo.html:175
 msgid "smaller than"
-msgstr "Меньше, чем"
+msgstr "Inferiore a"
 
 #: templates/repo.html:183 templates/repo.html.py:206
 msgid "Uploaded:"
-msgstr "Загружено"
+msgstr "Caricato:"
 
 #: templates/repo.html:183
 msgid "Fetching ..."
@@ -2321,15 +2345,15 @@ msgstr ""
 #: templates/repo.html.py:271 templates/repo_edit_file.html:87
 #: templates/snippets/events.html:73
 msgid "Cancel"
-msgstr "Отмена"
+msgstr "Annulla"
 
 #: templates/repo.html:195
 msgid "The owner of this library has ran out of space. Update failed."
-msgstr "Владелец этой библиотеки привысил допустимый лимит. Обновление не удалось"
+msgstr "Il proprietario di questa libreria haa esaurito lo spazio. Aggiornamento fallito."
 
 #: templates/repo.html:200
 msgid "Smaller than"
-msgstr "Меньше, чем"
+msgstr "Inferiore a"
 
 #: templates/repo.html:206
 msgid "Fetching..."
@@ -2337,15 +2361,15 @@ msgstr ""
 
 #: templates/repo.html:216
 msgid "Directory Name"
-msgstr "Имя каталога"
+msgstr "Nome Cartella"
 
 #: templates/repo.html:228
 msgid "Featured File Type"
-msgstr "Рекомендуемые типы файлов"
+msgstr "Tipo File"
 
 #: templates/repo.html:229 templates/repo.html.py:230
 msgid "Click to choose"
-msgstr "Нажмите для выбора"
+msgstr "Click per scegliere"
 
 #: templates/repo.html:229
 msgid "online Rich Text format ( experimental ) ."
@@ -2353,7 +2377,7 @@ msgstr ""
 
 #: templates/repo.html:229 templates/repo.html.py:230
 msgid "more"
-msgstr "Подробнее"
+msgstr "ancora"
 
 #: templates/repo.html:230
 msgid "simple markup format."
@@ -2361,19 +2385,19 @@ msgstr ""
 
 #: templates/repo.html:232 templates/snippets/my_owned_repos.html:99
 msgid "File Name"
-msgstr "Имя файла"
+msgstr "Nome File"
 
 #: templates/repo.html:245
 msgid "Current Library"
-msgstr "Текущая библиотека"
+msgstr "Libreria Corrente"
 
 #: templates/repo.html:247
 msgid "Other Libraries"
-msgstr "Другии библиотеки"
+msgstr "Altre Librerie"
 
 #: templates/repo.html:257
 msgid "Please click and choose a directory."
-msgstr "Нажмите для выбова каталога"
+msgstr "Fai clic e scegli una cartella."
 
 #: templates/repo.html:263
 msgid "Rename <span id=\"rename-type\"></span>"
@@ -2386,15 +2410,15 @@ msgstr ""
 #: templates/repo.html:345 templates/repo.html.py:404
 #: templates/repo_history_view.html:58 templates/repo_recycle_view.html:41
 msgid "Directory"
-msgstr "Каталог"
+msgstr "Cartella"
 
 #: templates/repo.html:394
 msgid "Copy "
-msgstr "Копировать"
+msgstr "Copia"
 
 #: templates/repo.html:397
 msgid "Move "
-msgstr "Переместить"
+msgstr "Sposta "
 
 #: templates/repo.html:410
 msgid "to:"
@@ -2402,7 +2426,7 @@ msgstr ""
 
 #: templates/repo.html:611
 msgid "Click to remove"
-msgstr "Назмите, чтобы удалить"
+msgstr "Clic per cancellare"
 
 #: templates/repo.html:612
 msgid "This file has already been selected:\\n$file!"
@@ -2416,16 +2440,16 @@ msgstr ""
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/comments/templates/comments/form.html:18
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/comments/templates/comments/preview.html:33
 msgid "Preview"
-msgstr "Просмотр"
+msgstr "Anteprima"
 
 #: templates/repo_history.html:7
 msgid "modification history"
-msgstr "История обновлений"
+msgstr "Storia modifiche"
 
 #: templates/repo_history.html:8 templates/repo_recycle_view.html:9
 #: templates/repo_view_file.html:52
 msgid "Back to Library"
-msgstr "Назад в библиотеке"
+msgstr "Torna alla Libreria"
 
 #: templates/repo_history.html:11
 msgid ""
@@ -2435,23 +2459,23 @@ msgstr ""
 
 #: templates/repo_history.html:11
 msgid "View Snapshot"
-msgstr "Просмотр снимков"
+msgstr "Visualizza Istantanea"
 
 #: templates/repo_history.html:17
 msgid "Modifier"
-msgstr "Модификатор"
+msgstr "Modificatore"
 
 #: templates/repo_history.html:39 templates/repo_view_snapshot.html:39
 msgid "More"
-msgstr "Подробнее"
+msgstr "Ancora"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
-msgstr "скриншот"
+msgstr "istantanea"
 
 #: templates/repo_history_view.html:9
 msgid "Back to snapshots"
-msgstr "назад к скриншотам"
+msgstr "Torna a istantanee"
 
 #: templates/repo_history_view.html:33
 msgid "Can't view this library"
@@ -2468,11 +2492,11 @@ msgstr ""
 
 #: templates/repo_view_file.html:37 templates/repo_view_snapshot.html:7
 msgid "snapshots"
-msgstr ""
+msgstr "istantanee"
 
 #: templates/repo_view_file.html:44
 msgid "history"
-msgstr "История"
+msgstr "storia"
 
 #: templates/repo_view_file.html:47
 msgid "Back to file versions"
@@ -2488,15 +2512,15 @@ msgstr ""
 
 #: templates/repo_view_file.html:100
 msgid "Send"
-msgstr "Отправить"
+msgstr "Invia"
 
 #: templates/repo_view_file.html:103 templates/repo_view_file.html.py:564
 msgid "Unstar"
-msgstr ""
+msgstr "Smarca"
 
 #: templates/repo_view_file.html:105 templates/repo_view_file.html.py:561
 msgid "Star"
-msgstr "Выделить"
+msgstr "Marca"
 
 #: templates/repo_view_file.html:115 templates/repo_view_file.html.py:143
 #: templates/repo_view_file.html:148
@@ -2507,25 +2531,25 @@ msgstr ""
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "1 владелец"
-msgstr[1] ""
+msgstr[0] "un contributore"
+msgstr[1] " %(counter)s contributori "
 
 #: templates/repo_view_file.html:163
 msgid "Open local file"
-msgstr "Открыть файл локально"
+msgstr "Apri file locale"
 
 #: templates/repo_view_file.html:172 templates/view_shared_file.html:29
 msgid "Raw"
-msgstr "Оригинал"
+msgstr "Grezzo"
 
 #: templates/repo_view_file.html:188 templates/repo_view_file.html.py:191
 #: templates/view_shared_file.html:46 templates/view_shared_file.html.py:49
 msgid "Loading..."
-msgstr "Загрузка..."
+msgstr "Caricamento..."
 
 #: templates/repo_view_file.html:199
 msgid "Emails"
-msgstr "Письма"
+msgstr "Mail"
 
 #: templates/repo_view_file.html:200
 msgid "Emails, Seperate by ','"
@@ -2533,7 +2557,7 @@ msgstr ""
 
 #: templates/repo_view_file.html:204
 msgid "Sending..."
-msgstr "Настройка..."
+msgstr "Invio..."
 
 #: templates/repo_view_file.html:208
 msgid "Processing..."
@@ -2549,7 +2573,7 @@ msgstr ""
 
 #: templates/repo_view_file.html:212
 msgid "Click to download"
-msgstr "Нажмите для скачивания"
+msgstr "Click per trasferire"
 
 #: templates/repo_view_file.html:226
 msgid "Leave a message~"
@@ -2562,11 +2586,11 @@ msgstr ""
 #: templates/repo_view_file.html:388
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/comments/forms.py:112
 msgid "Comment"
-msgstr "Коментарий"
+msgstr "Commento"
 
 #: templates/repo_view_file.html:435
 msgid "Please type a message"
-msgstr "Выберете тип сообщения"
+msgstr "Digitare un messaggio"
 
 #: templates/repo_view_file.html:481
 msgid "Cannot find an application to open file. Seafile will open the folder."
@@ -2596,19 +2620,19 @@ msgstr ""
 
 #: templates/repo_view_file.html:560
 msgid "Unstarred successfully"
-msgstr "Отметка снята"
+msgstr "Smarcato con successo"
 
 #: templates/repo_view_file.html:563
 msgid "Starred successfully"
-msgstr "Успешно отмечено"
+msgstr "Marcato con successo"
 
 #: templates/repo_view_file.html:567
 msgid "Failed:"
-msgstr "Ошибка:"
+msgstr "Fallito:"
 
 #: templates/repo_view_file.html:572
 msgid ", failed"
-msgstr ", Ошибка"
+msgstr ", fallito"
 
 #: templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
@@ -2616,7 +2640,7 @@ msgstr ""
 
 #: templates/repo_view_snapshot.html:15
 msgid "Create Time"
-msgstr "Дата создания"
+msgstr "Ora creazione"
 
 #: templates/repo_view_snapshot.html:84
 msgid "Restore Library"
@@ -2624,7 +2648,7 @@ msgstr ""
 
 #: templates/repo_view_snapshot.html:84
 msgid "Are you sure you want to restore this library"
-msgstr "Вы уверены, что хотите восстановить эту библиотеку"
+msgstr "Sicuro di volere ripristinare questa libreria"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -2640,7 +2664,7 @@ msgstr ""
 
 #: templates/seafile_access_check.html:8
 msgid "Click to download."
-msgstr "Нажмите для скачивания"
+msgstr "Clic per trasferire."
 
 #: templates/shared_link_email.html:2
 #, python-format
@@ -2655,7 +2679,7 @@ msgstr ""
 
 #: templates/sys_group_admin.html:7
 msgid "All Groups"
-msgstr "Все группы"
+msgstr "Tutti i Gruppi"
 
 #: templates/sys_group_admin.html:13 templates/sys_org_admin.html:14
 msgid "Create At"
@@ -2671,35 +2695,35 @@ msgstr ""
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
-msgstr "Добавить нового пользователя"
+msgstr "Aggiungi un nuovo utente"
 
 #: templates/sys_useradmin.html:17
 msgid "Status"
-msgstr "Статус"
+msgstr "Stato"
 
 #: templates/sys_useradmin.html:25
 msgid "Activated"
-msgstr "Активен"
+msgstr "Attivato"
 
 #: templates/sys_useradmin.html:27
 msgid "Active"
-msgstr "Активен"
+msgstr "Attivo"
 
 #: templates/sys_useradmin.html:32
 msgid "ResetPwd"
-msgstr "Сбросить пароль"
+msgstr "Ripristina Password"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
-msgstr "Удалить пользователя"
+msgstr "Cancella Utente"
 
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
-msgstr "Вы уверены, что хотите сбросить пароль"
+msgstr "Sicuro di volere ripristinare la password di"
 
 #: templates/text_diff.html:6
 msgid "modification details"
-msgstr "подробнее"
+msgstr "modifiche"
 
 #: templates/text_diff.html:19
 msgid "It's a newly-created blank file."
@@ -2715,19 +2739,19 @@ msgstr ""
 
 #: templates/update_file_error.html:6
 msgid "Update file "
-msgstr "Обновить файл"
+msgstr "Aggiorna file"
 
 #: templates/update_file_error.html:14 templates/upload_file_error.html:10
 msgid "error: "
-msgstr "ошибка"
+msgstr "errore: "
 
 #: templates/upload_file_error.html:6
 msgid "Upload file"
-msgstr "Загрузить файл"
+msgstr "Carica file"
 
 #: templates/upload_file_error.html:6
 msgid "to"
-msgstr "для"
+msgstr "a"
 
 #: templates/user_add_email.html:3
 #, python-format
@@ -2776,7 +2800,7 @@ msgstr ""
 
 #: templates/userinfo.html:13
 msgid "Profile"
-msgstr "Профиль"
+msgstr "Profilo"
 
 #: templates/userinfo.html:25
 msgid "Set Quota"
@@ -2804,7 +2828,7 @@ msgstr ""
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
-msgstr "Вспомнить пароль?"
+msgstr "Password dimenticata?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
@@ -2812,55 +2836,57 @@ msgstr ""
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
-msgstr "Выйти"
+msgstr "Esci"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Спасибо за ваше посещение! "
+msgstr "Grazie per la partecipazione! "
 
 #: templates/registration/logout.html:8
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/admin/templates/registration/logged_out.html:10
 msgid "Log in again"
-msgstr "Снова войти в систему"
+msgstr "Entra ancora"
 
 #: templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr "Пароль успешно изменен"
+msgstr "Password modificata con successo"
 
 #: templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr "Ваш пароль был успешно изменен."
+msgstr "Password modificata con successo."
 
 #: templates/registration/password_change_form.html:3
 #: templates/registration/password_change_form.html:7
 msgid "Password Modification"
-msgstr "Изменение пароля"
+msgstr "Modifica Password"
 
 #: templates/registration/password_change_form.html:9
 msgid "Current Password: "
-msgstr "Текущий пароль:"
+msgstr "Password attuale: "
 
 #: templates/registration/password_change_form.html:11
 #: templates/registration/password_reset_confirm.html:13
 msgid "New Password: "
-msgstr "Новый пароль"
+msgstr "Nuova Password: "
 
 #: templates/registration/password_change_form.html:13
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
-msgstr "Подтвердите пароль:"
+msgstr "Conferma Password:"
 
 #: templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr "Ваш пароль сброшен"
+msgstr "Password ripristinata con successo"
+
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "Ваш пароль сброшен"
+msgstr "Password ripristinata con successo"
+
 
 #: templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
-msgstr "Введите новый пароль"
+msgstr "Inserisci nuova password"
 
 #: templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
@@ -2938,12 +2964,12 @@ msgstr ""
 
 #: templates/snippets/events.html:17
 msgid "Updated library"
-msgstr "Обновление библиотеки"
+msgstr "Libreria Aggiornata"
 
 #: templates/snippets/events.html:21 templates/snippets/events.html.py:23
 #: templates/snippets/events.html:26
 msgid "Details"
-msgstr "Детали"
+msgstr "Dettagli"
 
 #: templates/snippets/events.html:43
 msgid "Created library"
@@ -3016,7 +3042,7 @@ msgstr ""
 
 #: templates/snippets/my_groups.html:24
 msgid "Create a group now"
-msgstr "Создать группу"
+msgstr "Crea un gruppo ora"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
@@ -3088,23 +3114,23 @@ msgstr ""
 
 #: templates/snippets/repo_create_form.html:16
 msgid "Encrypt"
-msgstr "Требуется шифрование"
+msgstr "Cifra"
 
 #: templates/snippets/repo_create_form.html:17
 msgid "(3-15 characters)"
-msgstr "(от 3 до 15 символов)"
+msgstr "(da 3 a 15 caratteri)"
 
 #: templates/snippets/repo_create_form.html:19
 msgid "Password again"
-msgstr "Подтвердите пароль"
+msgstr "Ridigita password"
 
 #: templates/snippets/repo_create_js.html:37
 msgid "Please enter password"
-msgstr "Пожалуйста введите пароль"
+msgstr "Digita Password"
 
 #: templates/snippets/repo_create_js.html:49
 msgid "Please enter the password again"
-msgstr "Пожалуйста подтвердите пароль"
+msgstr "Rigidita password"
 
 #: templates/snippets/repo_file_get.html:33
 msgid "To view it online, you can use firefox, chrome or IE 9."
@@ -3123,7 +3149,7 @@ msgstr ""
 
 #: templates/snippets/repo_file_get.html:42
 msgid "loading..."
-msgstr "Загрузка..."
+msgstr "Caricamento..."
 
 #: templates/snippets/repo_file_get.html:109
 msgid "This type of file cannot be viewed online."
