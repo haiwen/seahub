@@ -52,7 +52,7 @@
 {% endif %}
 
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Space/Traffic" %}</h3>
+    <h3 class="info-item-top">{% trans "Space/Traffic Usage" %}</h3>
     <div class="info-item-bottom">
       {% if CALC_SHARE_USAGE %}
         <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
