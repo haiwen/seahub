@@ -42,6 +42,7 @@ except ImportError:
     CLOUD_MODE = False
     
 import settings
+from file_types import *
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -50,15 +51,15 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647 
 
 PREVIEW_FILEEXT = {
-    'Text': ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
-    'Image': ('gif', 'jpeg', 'jpg', 'png', 'ico'),
-    'Document': ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
-    'SVG': ('svg',),
-    'PDF': ('pdf',),
-    'Markdown': ('markdown', 'md'),
-    'Sf': ('seaf',),
-    'Video': ('mp4', 'ogv', 'webm', 'flv'),
-    'Audio': ('mp3',),
+    TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml'),
+    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico'),
+    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'),
+    SVG: ('svg',),
+    PDF: ('pdf',),
+    MARKDOWN: ('markdown', 'md'),
+    SF: ('seaf',),
+    VIDEO: ('mp4', 'ogv', 'webm', 'flv'),
+    AUDIO: ('mp3',),
 }
 
 def gen_fileext_type_map():
@@ -813,7 +814,7 @@ def is_textual_file(file_type):
     """
     Check whether a file type is a textual file.
     """
-    if file_type == 'Text' or file_type == 'Markdown' or file_type == 'Sf':
+    if file_type == TEXT or file_type == MARKDOWN or file_type == SF:
         return True
     else:
         return False

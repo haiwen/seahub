@@ -44,7 +44,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 <script type="text/javascript">
     {% ifnotequal file_content None %}
-    var converter = new Markdown.getSanitizingConverter();
+    var converter = new Markdown.Converter();
     Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
     $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
     {% endifnotequal %}

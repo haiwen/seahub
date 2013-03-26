@@ -12,6 +12,7 @@ import urllib2
 import chardet
 
 from django.contrib.sites.models import Site, RequestSite
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
@@ -32,8 +33,9 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error,\
     get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred,\
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days
+from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN)
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 try:
     from seahub.settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -75,17 +77,15 @@ def gen_path_link(path, repo_name):
     return zipped
 
 def get_file_content(file_type, raw_path, file_enc):
-    """Get textual file content.
-    
-    Arguments:
-    - `file_type`:
-    - `raw_path`:
-    - `file_ext`:
+    """Get textual file content, including txt/markdown/seaf.
     """
     return repo_file_get(raw_path, file_enc) if is_textual_file(
         file_type=file_type) else ('', '', '')
 
 def repo_file_get(raw_path, file_enc):
+    """
+    Get file content and encoding.
+    """
     err = ''
     file_content = ''
     encoding = None
@@ -203,6 +203,49 @@ def handle_pdf(raw_path, obj_id, fileext, ret_dict):
     else:
         # can't preview PDF
         ret_dict['filetype'] = 'Unknown'
+
+def convert_md_link(file_content, repo_id, username):
+    import re
+
+    def repl(matchobj):
+        if matchobj.group(2):   # return origin string in backquotes
+            return matchobj.group(2)
+
+        linkname = matchobj.group(1).strip()
+        filetype, fileext = get_file_type_and_ext(linkname)
+        if fileext == '':
+            # convert linkname that extension is missing to a markdown page
+            filename = linkname + ".md"
+            path = "/" + filename
+            href = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
+
+            if get_file_id_by_path(repo_id, path):
+                a_tag = '''<a href="%s">%s</a>'''
+                return a_tag % (href, linkname)
+            else:
+                a_tag = '''<p class="wiki-page-missing">%s</p>'''
+                return a_tag % (linkname)  
+        elif filetype == IMAGE:
+            # load image to current page
+            path = "/" + linkname
+            filename = os.path.basename(path)
+            obj_id = get_file_id_by_path(repo_id, path)
+            if not obj_id:
+                return '''<p class="wiki-page-missing">%s</p>''' %  linkname
+
+            token = web_get_access_token(repo_id, obj_id, 'view', username)
+            return '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+        else:
+            from base.templatetags.seahub_tags import file_icon_filter
+            
+            # convert other types of filelinks to clickable links
+            path = "/" + linkname
+            icon = file_icon_filter(linkname)
+            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
+            a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href="%s" target="_blank" class="vam">%s</a>'''
+            return a_tag % (MEDIA_URL, icon, icon, s, linkname)
+
+    return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, file_content)
     
 @ctx_switch_required
 @repo_passwd_set_required
@@ -261,11 +304,15 @@ def view_file(request, repo_id):
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, raw_path, ret_dict)
-        elif filetype == 'Document':
+            if filetype == MARKDOWN:
+                c = ret_dict['file_content']
+                ret_dict['file_content'] = convert_md_link(c, repo_id, username)
+                f = ret_dict['file_content']
+        elif filetype == DOCUMENT:
             handle_document(raw_path, obj_id, fileext, ret_dict)
-        elif filetype == 'PDF':
+        elif filetype == PDF:
             handle_pdf(raw_path, obj_id, fileext, ret_dict)
-        elif filetype == 'Image':
+        elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
             dirs = list_dir_by_path(current_commit.id, parent_dir)
             if not dirs:
@@ -420,9 +467,9 @@ def view_history_file_common(request, repo_id, ret_dict):
             """Choose different approach when dealing with different type of file."""
             if is_textual_file(file_type=filetype):
                 handle_textual_file(request, filetype, raw_path, ret_dict)
-            elif filetype == 'Document':
+            elif filetype == DOCUMENT:
                 handle_document(raw_path, obj_id, fileext, ret_dict)
-            elif filetype == 'PDF':
+            elif filetype == PDF:
                 handle_pdf(raw_path, obj_id, fileext, ret_dict)
             else:
                 pass
