@@ -69,10 +69,12 @@
 {% endblock main_panel %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/showdown.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 <script type="text/javascript">
 {% if wiki_exists %}
-var converter = new Showdown.converter();
+var converter = new Markdown.Converter();
+Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
 $('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
 
 $('#page-create').click(function() {

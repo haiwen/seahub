@@ -220,7 +220,6 @@ switch($('#lang-context').data('lang')) {
 
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Sanitizer.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Editor.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 {% endif %}
@@ -270,7 +269,7 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
 {% endif %}
 
 {% if filetype == 'Markdown' %}
-var converter = Markdown.getSanitizingConverter();
+var converter = new Markdown.Converter();
 converter.hooks.chain("preBlockGamut", function (text, rbg) {
     return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
         return "<blockquote>" + rbg(inner) + "</blockquote>\n";
