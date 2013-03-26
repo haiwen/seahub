@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 13:58+0800\n"
+"POT-Creation-Date: 2013-03-26 19:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,7 +296,7 @@ msgstr "讨论"
 #: templates/group/group_manage.html:15 templates/group/group_wiki.html:17
 #: templates/group/group_wiki_pages.html:16
 msgid "Wiki"
-msgstr ""
+msgstr "维基"
 
 #: templates/group/group_discuss.html:18 templates/group/group_info.html:19
 #: templates/group/group_manage.html:16 templates/group/group_wiki.html:19
@@ -635,12 +635,12 @@ msgstr "该群组目前还没创建Wiki"
 
 #: templates/group/group_wiki.html:31
 msgid ""
-"Seafile Wiki enables group members to manage project documents or take notes "
-"in a very simple way. The contents of Wiki is stored in a normal library "
-"with pre-defined file/folder structure. This enables you to editor your wiki "
-"in your desktop and then sync back to the server."
+"Seafile Wiki enables group members to create web pages in a very simple way. "
+"The contents of Wiki is stored in a normal library with pre-defined file/"
+"folder structure. This enables you to editor your wiki in your desktop and "
+"then sync back to the server."
 msgstr ""
-"Seafile Wiki 能让群组成员以一种非常简单的方式管理项目文档或者记录笔记。Wiki "
+"Seafile Wiki 能让群组成员以一种非常简单的方式创建网页。Wiki "
 "的内容以预定义的文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，"
 "然后同步回服务器。"
 
@@ -683,7 +683,7 @@ msgstr "页面列表"
 msgid "Last modified by %(modifier)s, %(modify_time)s"
 msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
-#: templates/group/group_wiki.html:102
+#: templates/group/group_wiki.html:104
 msgid "Name and description can not be blank."
 msgstr "名称和描述不能为空"
 

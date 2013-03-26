@@ -285,7 +285,7 @@ msgstr "个人工作台"
 
 #: templates/base.html:56
 msgid "Admin"
-msgstr "管理员工作台"
+msgstr "管理"
 
 #: templates/base.html:63
 msgid "Profile Setting"

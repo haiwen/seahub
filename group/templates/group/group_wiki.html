@@ -28,7 +28,7 @@
     {% if not wiki_exists %}
     <div class="empty-tips">
         <h2 class="center-contents">{% trans "This group currently has no wiki" %}</h2>
-        <p>{% trans "Seafile Wiki enables group members to manage project documents or take notes in a very simple way. The contents of Wiki is stored in a normal library with pre-defined file/folder structure. This enables you to editor your wiki in your desktop and then sync back to the server." %}</p>
+        <p>{% trans "Seafile Wiki enables group members to create web pages in a very simple way. The contents of Wiki is stored in a normal library with pre-defined file/folder structure. This enables you to editor your wiki in your desktop and then sync back to the server." %}</p>
         <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
     </div>
     <form id="wiki-create-form" action="" method="post" class="hide">
@@ -58,10 +58,10 @@
         <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}</p>
     </div>
 
-    <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
+    <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="simple-input-popup hide">
         <h3>{% trans "New Page"%}</h3>
         <label>{% trans "Name"%}</label><br/>
-        <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}"/><br />
+        <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="long-input" /><br />
         <p class="error hide"></p>
         <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
     </form>
