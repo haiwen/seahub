@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% load seahub_tags i18n %}
+{% load url from future %}
 
 {% block extra_style %}
 {% if filetype == 'Sf' %}
@@ -93,7 +94,11 @@
              <button id="preview-btn">{% trans "Preview" %}</button>
              {% endif %}
              <button id="file-edit-submit">{% trans "Submit" %}</button>
+             {% if from == 'wiki_page_edit' %}
+             <a href="{% url 'group_wiki' gid wiki_name %}" id="file-edit-cancel">{% trans "Cancel" %}</a>
+             {% else %}
              <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
+             {% endif %}
          </div>
     </div>
     <div id="file-edit"{% if filetype == 'Markdown' %} class="hide"{% endif %}>
@@ -360,7 +365,7 @@ $('#repo-decrypt-form').submit(function() {
         err.html('{% trans "Password should be 3 to 15 characters." %}');
     } else {
         $.ajax({
-            url: '{% url repo_set_password %}',
+            url: '{% url 'repo_set_password' %}',
             type: 'POST',
             dataType: 'json',
             cache: 'false',

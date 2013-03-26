@@ -1757,6 +1757,7 @@ def file_edit(request, repo_id):
     return render_to_response('file_edit.html', {
         'repo':repo,
         'u_filename':u_filename,
+        'wiki_name': os.path.splitext(u_filename)[0],
         'path':path,
         'zipped':zipped,
         'filetype':filetype,
