@@ -730,7 +730,7 @@ def group_recommend(request):
             messages.add_message(request, messages.INFO, msg)
 
     else:
-        messages.add_message(request, messages.ERROR, _(u'Failed to recommend.'))
+        messages.add_message(request, messages.ERROR, _(u'Failed.'))
     return HttpResponseRedirect(next)
 
 @login_required
@@ -1137,7 +1137,7 @@ def group_wiki(request, group, page_name="home"):
         
         filename = normalize_page_name(page_name) + '.md'
         if not post_empty_file(repo.id, "/", filename, username):
-            return render_error(request, _("Faied to create wiki page. Please retry later."))
+            return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
     else:
         content = convert_wiki_link(content, group, repo_id, username)

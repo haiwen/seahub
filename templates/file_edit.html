@@ -155,29 +155,27 @@
                             <td><img src="http://cloud.seafile.com/media/img/logo.png" alt="" /></td>
                         </tr>
                         <tr>
-                    <td><pre>* {% trans "unordered list" %}
-* {% trans "leave empty lines around" %}
-</pre></td>
-                <td>
-                    <ul>
-                        <li>{% trans "unordered list" %}</li>
-                        <li>{% trans "leave empty lines around" %}</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td><pre>1. {% trans "ordered list" %}
-2. {% trans "leave empty lines" %}
-</pre></td>
-            <td>
-                <ol>
-                    <li>{% trans "ordered list" %}</li>
-                    <li>{% trans "leave empty lines" %}</li>
-                </ol>
-            </td>
-        </tr>
-</tbody></table>
-{% endif %}
+                            <td><pre>* {% trans "unordered list" %}
+* {% trans "leave empty lines around the list" %}</pre></td>
+                            <td>
+                                <ul>
+                                    <li>{% trans "unordered list" %}</li>
+                                    <li>{% trans "leave empty lines around the list" %}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><pre>1. {% trans "ordered list" %}
+2. {% trans "leave empty lines" %}</pre></td>
+                            <td>
+                                <ol>
+                                    <li>{% trans "ordered list" %}</li>
+                                    <li>{% trans "leave empty lines" %}</li>
+                                </ol>
+                            </td>
+                        </tr>
+                </tbody></table>
+                {% endif %}
 
                 {% if filetype == 'Sf' %}
                 <div id="sf" class="article">{{ file_content|safe }}</div>
@@ -279,7 +277,7 @@ converter.hooks.chain("preBlockGamut", function (text, rbg) {
     });
 });
 Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
-var editor = new Markdown.Editor(converter,'',{handler:mdEditHelp, title:'{% trans "Help" %}'});
+var editor = new Markdown.Editor(converter,'',{handler:mdEditHelp, title:'{% trans "Editing Help" %}'});
 editor.run();
 
 var file_edit = $('#file-edit'); 

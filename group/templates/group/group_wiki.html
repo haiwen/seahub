@@ -36,7 +36,7 @@
         <label>{% trans "Name"%}</label><br/>
         <input id="repo-name" type="text" name="repo_name" value="{{group.group_name}}-wiki" maxlength="{{max_file_name}}"/><br />
         <label>{% trans "Description"%}</label><br/>
-        <textarea id="repo-desc" name="repo_desc">Wiki Pages</textarea><br/>
+        <textarea id="repo-desc" name="repo_desc">{% trans 'Wiki Pages' %}</textarea><br/>
         <p class="error hide"></p>
         <input type="submit" id="wiki-create-submit" value="{% trans "Submit"%}" class="submit" />
     </form>
@@ -55,7 +55,7 @@
     <div id="wiki-area" class="article">
         <h1>{{ page|capfirst }}</h1>
         <div id="wiki-content"></div><!--content will be offered by js-->
-        <p id="wiki-last-modified">Last modified by {{ latest_contributor|email2nickname}}, {{last_modified|translate_seahub_time}}</p>
+        <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}</p>
     </div>
 
     <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">
