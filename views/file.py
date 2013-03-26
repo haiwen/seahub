@@ -307,7 +307,6 @@ def view_file(request, repo_id):
             if filetype == MARKDOWN:
                 c = ret_dict['file_content']
                 ret_dict['file_content'] = convert_md_link(c, repo_id, username)
-                f = ret_dict['file_content']
         elif filetype == DOCUMENT:
             handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:

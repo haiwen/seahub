@@ -33,17 +33,6 @@ class MessageAttachment(models.Model):
     path = models.TextField()
     src = models.CharField(max_length=20) # `recommend` or `filecomment`
 
-class BusinessGroup(models.Model):
-    """
-    Model used to represents department group or project group in business
-    mode.
-    """
-    group_id = models.IntegerField()
-    group_type = models.CharField(max_length=10) # `dept` or `proj`
-
-    class Meta:
-        unique_together = ("group_id", "group_type")
-    
 @receiver(post_save, sender=MessageReply)
 def msgreply_save_handler(sender, instance, **kwargs):
     """

@@ -120,7 +120,9 @@
                     <div id="wmd-preview" class="article hide"></div>
                 </div>
 
-                <table id="md-edit-help" class="hide">
+                <div id="md-edit-help" class="hide">
+                  <h3>{% trans "Standard Syntax"%}</h3>
+                  <table>
                     <tbody>
                         <tr>
                             <th>{% trans "Enter this" %}</th>
@@ -147,34 +149,41 @@
                             <td><h4>{% trans "Smaller header" %}</h4></td>
                         </tr>
                         <tr>
-                            <td><pre>[{% trans "Link something" %}](http://cloud.seafile.com/)</pre></td>
-                            <td><a href="http://cloud.seafile.com/">{% trans "Link something" %}</a></td>
+                            <td><pre>[{% trans "Link something" %}](https://cloud.seafile.com/)</pre></td>
+                            <td><a href="https://cloud.seafile.com/">{% trans "Link something" %}</a></td>
                         </tr>
                         <tr>
-                            <td><pre>![{% trans "alt text" %}](http://cloud.seafile.com/media/img/logo.png)</pre></td>
-                            <td><img src="http://cloud.seafile.com/media/img/logo.png" alt="" /></td>
+                            <td><pre>![{% trans "alt text" %}](https://cloud.seafile.com/media/img/logo.png)</pre></td>
+                            <td><img src="https://cloud.seafile.com/media/img/logo.png" alt="" /></td>
                         </tr>
-                        <tr>
-                            <td><pre>* {% trans "unordered list" %}
-* {% trans "leave empty lines around the list" %}</pre></td>
-                            <td>
-                                <ul>
-                                    <li>{% trans "unordered list" %}</li>
-                                    <li>{% trans "leave empty lines around the list" %}</li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><pre>1. {% trans "ordered list" %}
-2. {% trans "leave empty lines" %}</pre></td>
-                            <td>
-                                <ol>
-                                    <li>{% trans "ordered list" %}</li>
-                                    <li>{% trans "leave empty lines" %}</li>
-                                </ol>
-                            </td>
-                        </tr>
-                </tbody></table>
+<!--                         <tr> -->
+<!--                             <td><pre>* {% trans "unordered list" %} -->
+<!-- * {% trans "leave empty lines around the list" %}</pre></td> -->
+<!--                             <td> -->
+<!--                                 <ul> -->
+<!--                                     <li>{% trans "unordered list" %}</li> -->
+<!--                                     <li>{% trans "leave empty lines around the list" %}</li> -->
+<!--                                 </ul> -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td><pre>1. {% trans "ordered list" %} -->
+<!-- 2. {% trans "leave empty lines" %}</pre></td> -->
+<!--                             <td> -->
+<!--                                 <ol> -->
+<!--                                     <li>{% trans "ordered list" %}</li> -->
+<!--                                     <li>{% trans "leave empty lines" %}</li> -->
+<!--                                 </ol> -->
+<!--                             </td> -->
+<!--                         </tr> -->
+                  </tbody></table>
+                  <h3>{% trans "Extended Syntax for Wiki"%}</h3>
+                  <ul>
+                    <li><p>[[page name]]: internal link to another wiki page.</p></li>
+                    <li><p>[[images/pic.jpg]]: internal link to a picture at this-library/images/pic.jpg.</p></li>
+                    <li><p>[[folder/file.doc]]: internal link to a file at this-library/folder/file.doc. </p></li>
+                  </ul>
+                </div>
                 {% endif %}
 
                 {% if filetype == 'Sf' %}
