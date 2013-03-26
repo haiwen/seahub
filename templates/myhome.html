@@ -52,7 +52,7 @@
 {% endif %}
 
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Space used" %}</h3>
+    <h3 class="info-item-top">{% trans "Space/Traffic" %}</h3>
     <div class="info-item-bottom">
       {% if CALC_SHARE_USAGE %}
         <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
@@ -72,7 +72,7 @@
         {% endif %}
       {% endif %}
       {% if TRAFFIC_STATS_ENABLED %}
-        <p>{% trans "Traffic used:" %} {{ traffic_stat|filesizeformat }}</p>
+        <p class="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</p>
       {% endif %}
     </div>
 </div>
