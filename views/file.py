@@ -22,7 +22,8 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
-    is_group_user, get_file_id_by_path, get_commit, get_file_size
+    is_group_user, get_file_id_by_path, get_commit, get_file_size, \
+    get_org_groups_by_repo
 from pysearpc import SearpcError
 
 from base.decorators import ctx_switch_required, repo_passwd_set_required
