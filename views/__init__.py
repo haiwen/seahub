@@ -1072,7 +1072,8 @@ def myhome(request):
         # User's network traffic stat in this month 
         stat = get_user_traffic_stat(request.user.username)
         if stat:
-            traffic_stat = stat['block_download'] + stat['file_view'] + stat['file_download']
+            traffic_stat = stat['block_download'] + stat['file_view'] \
+                           + stat['file_download'] + stat['dir_download']
 
     return render_to_response('myhome.html', {
             "nickname": nickname,
@@ -3114,6 +3115,8 @@ def repo_download_dir(request, repo_id):
         
     allow_download = False
     fileshare_token = request.GET.get('t', '')
+    from_shared_link = False
+    shared_by = None
     if fileshare_token:         # download dir from dir shared link
         try:
             fileshare = FileShare.objects.get(token=fileshare_token)
@@ -3122,6 +3125,8 @@ def repo_download_dir(request, repo_id):
 
         # Can not download upper dir of shared dir.
         allow_download = True if path.startswith(fileshare.path) else False
+        from_shared_link = True
+        shared_by = fileshare.username
     else:
         allow_download = True if get_user_permission(request, repo_id) else False
 
@@ -3142,8 +3147,17 @@ def repo_download_dir(request, repo_id):
                                                   dir_id,
                                                   'download-dir',
                                                   request.user.username)
+
+        if from_shared_link:
+            try:
+                send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' % \
+                             (repo_id, shared_by, dir_id, total_size))
+            except Exception, e:
+                logger.error('Error when sending dir-download message: %s' % str(e))
+                pass
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )
+
 
     url = gen_file_get_url(token, dirname)
     return redirect(url)
