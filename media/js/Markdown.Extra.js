@@ -155,17 +155,17 @@
 
     options = options || {};
     options.extensions = options.extensions || ["all"];
-    if (contains(options.extensions, "all")) {
+    if ("all" in options.extensions) {
       transformations.push("all");
       extra.attributeBlocks = true;
     } else {
-      if (contains(options.extensions, "tables"))
+      if ("tables" in options.extensions)
         transformations.push("tables");
-      if (contains(options.extensions, "fenced_code_gfm"))
+      if ("fenced_code_gfm" in options.extensions)
         transformations.push("fencedCodeBlocks");
-      if (contains(options.extensions, "def_list"))
+      if ("def_list" in options.extensions)
         transformations.push("definitionLists");
-      if (contains(options.extensions, "attr_list"))
+      if ("attr_list" in options.extensions)
         extra.attributeBlocks = true;
     }
 

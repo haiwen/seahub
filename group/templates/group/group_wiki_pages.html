@@ -20,12 +20,12 @@
     </ul>
 </div>
 
-<div class="wiki-top ovhd">
-    <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
+<div class="wiki-top w100 ovhd">
     <ul class="wiki-nav fleft">
         <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
         <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
     </ul>   
+    <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
 </div>
 
 <ul id="wiki-pages">

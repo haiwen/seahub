@@ -2081,7 +2081,6 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     overflow:hidden;/*for some chromium*/
 }
-
 #top-search-form {
     width:214px;
     *width:218px;
@@ -2115,41 +2114,21 @@ textarea:-moz-placeholder {/* for FF */
     background:#f7f7f8;
     border-radius:2px;
 }
-
 #search-results {
     padding-top:15px;
 }
-
 #search-results a {
     font-weight: normal;
 }
-
-#search-results b {
-    font-weight: bold;
-}
-
 .search-results-item {
-    margin-top: 20px;
-    clear: left;
+    margin-top:15px;
 }
-
-.search-results-item .file-icon {
-    display: block;
-    float: left;
+.search-results-item .main-con {
+    margin-left:40px;
 }
-
-.search-results-item .title {
-    margin: 0 0 0 40px;
+.search-results-item .avatar {
+    vertical-align:middle;
 }
-
-.search-results-item .title a,
-.search-results-item .title img,
-.search-results-item .title span
-{
-    vertical-align: middle;
-}
-
-.search-results-item .content {
-    clear: left;
-    margin: 0 0 0 40px;
+.search-results-item .time {
+    color:#666;
 }
