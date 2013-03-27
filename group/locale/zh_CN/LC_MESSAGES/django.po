@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 19:36+0800\n"
+"POT-Creation-Date: 2013-03-27 17:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -636,13 +636,13 @@ msgstr "该群组目前还没创建Wiki"
 #: templates/group/group_wiki.html:31
 msgid ""
 "Seafile Wiki enables group members to create web pages in a very simple way. "
-"The contents of Wiki is stored in a normal library with pre-defined file/"
-"folder structure. This enables you to editor your wiki in your desktop and "
+"The contents of wiki is stored in a normal library with pre-defined file/"
+"folder structure. This enables you to edit your wiki in your desktop and "
 "then sync back to the server."
 msgstr ""
-"Seafile Wiki 能让群组成员以一种非常简单的方式创建网页。Wiki "
-"的内容以预定义的文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，"
-"然后同步回服务器。"
+"Seafile Wiki 能让群组成员以一种非常简单的方式创建网页。Wiki 的内容以预定义的"
+"文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
+"器。"
 
 #: templates/group/group_wiki.html:32
 msgid "Create Wiki Now"
@@ -656,27 +656,27 @@ msgstr "创建 Wiki"
 msgid "Wiki Pages"
 msgstr "Wiki 页面"
 
-#: templates/group/group_wiki.html:46 templates/group/group_wiki.html.py:62
-#: templates/group/group_wiki_pages.html:24
+#: templates/group/group_wiki.html:47 templates/group/group_wiki_pages.html:25
+msgid "Home"
+msgstr "首页"
+
+#: templates/group/group_wiki.html:48 templates/group/group_wiki_pages.html:26
+msgid "Pages"
+msgstr "页面列表"
+
+#: templates/group/group_wiki.html:50 templates/group/group_wiki.html.py:62
+#: templates/group/group_wiki_pages.html:28
 #: templates/group/group_wiki_pages.html:38
 msgid "New Page"
 msgstr "新建页面"
 
-#: templates/group/group_wiki.html:47
+#: templates/group/group_wiki.html:51
 msgid "Delete Page"
 msgstr "删除本页"
 
-#: templates/group/group_wiki.html:48
+#: templates/group/group_wiki.html:52
 msgid "Edit Page"
 msgstr "编辑本页"
-
-#: templates/group/group_wiki.html:50 templates/group/group_wiki_pages.html:26
-msgid "Home"
-msgstr "首页"
-
-#: templates/group/group_wiki.html:51 templates/group/group_wiki_pages.html:27
-msgid "Pages"
-msgstr "页面列表"
 
 #: templates/group/group_wiki.html:58
 #, python-format
