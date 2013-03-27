@@ -868,6 +868,11 @@ textarea:-moz-placeholder {/* for FF */
     margin-top: 5px;
 }
 
+.info-item .traffic-stat a {
+    color: #333;
+    font-weight: normal;
+}
+
 .mygroup {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;

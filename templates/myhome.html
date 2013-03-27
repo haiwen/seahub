@@ -72,7 +72,14 @@
         {% endif %}
       {% endif %}
       {% if TRAFFIC_STATS_ENABLED %}
-        <p class="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</p>
+        <p class="traffic-stat">
+          {% if LANGUAGE_CODE == 'zh-cn' %}
+          <a href="http://www.seafile.com/help/traffic/" target="_blank" title="点击查看帮助">{% trans "Traffic this month:" %}</a>
+          {% else %}
+          <a href="http://www.seafile.com/en/help/traffic/" target="_blank" title="Click to see the help">{% trans "Traffic this month:" %}</a>
+          {% endif %}
+          &nbsp;&nbsp;{{ traffic_stat|filesizeformat }}
+        </p>
       {% endif %}
     </div>
 </div>
