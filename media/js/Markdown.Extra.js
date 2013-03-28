@@ -154,18 +154,18 @@
     var transformations = [];
 
     options = options || {};
-    options.extensions = options.extensions || ["all"];
-    if ("all" in options.extensions) {
+    options.extensions = (options.extensions || ["all"]).join(',');
+    if (contains(options.extensions, "all")) {
       transformations.push("all");
       extra.attributeBlocks = true;
     } else {
-      if ("tables" in options.extensions)
+      if (contains(options.extensions, "tables"))
         transformations.push("tables");
-      if ("fenced_code_gfm" in options.extensions)
+      if (contains(options.extensions, "fenced_code_gfm"))
         transformations.push("fencedCodeBlocks");
-      if ("def_list" in options.extensions)
+      if (contains(options.extensions, "def_list"))
         transformations.push("definitionLists");
-      if ("attr_list" in options.extensions)
+      if (contains(options.extensions, "attr_list"))
         extra.attributeBlocks = true;
     }
 
