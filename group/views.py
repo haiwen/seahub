@@ -37,7 +37,7 @@ from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
 from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
-from base.decorators import ctx_switch_required
+from base.decorators import sys_staff_required
 from base.mixins import LoginRequiredMixin
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -123,15 +123,12 @@ def group_list(request):
             }, context_instance=RequestContext(request))
     
 @login_required
+@sys_staff_required
 def group_remove(request, group_id):
     """
     Remove group from groupadmin page. Only system admin can perform this
     operation.
     """
-    # Check whether user is system admin.
-    if not request.user.is_staff:
-        return render_permission_error(request, _(u'Only administrators can delete the group.'))
-        
     # Request header may missing HTTP_REFERER, we need to handle that case.
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -200,71 +197,6 @@ def group_quit(request, group_id):
         return render_error(request, _(e.msg))
         
     return HttpResponseRedirect(reverse('group_list', args=[]))
-
-def render_group_info(request, group_id, form):
-    group_id_int = int(group_id) # Checkeb by URL Conf
-
-    # remove user notifications
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='group_msg',
-                                    detail=str(group_id)).delete()
-    
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-
-    # Get all group members.
-    members = get_group_members(group_id_int)
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-
-    is_staff = True if check_group_staff(group.id, request.user) else False
-        
-
-    org = request.user.org
-    if org:
-        repos = get_org_group_repos(org['org_id'], group_id_int,
-                                    request.user.username)
-    else:
-        repos = get_group_repos(group_id_int, request.user.username)
-
-    recent_commits = []
-    cmt_repo_dict = {}
-    for repo in repos:
-        repo.user_perm = check_permission(repo.props.id, request.user.username)
-        cmmts = get_commits(repo.props.id, 0, 10)
-        for c in cmmts:
-            cmt_repo_dict[c.id] = repo
-        recent_commits += cmmts
-
-    recent_commits.sort(lambda x, y : cmp(y.props.ctime, x.props.ctime))
-    recent_commits = recent_commits[:15]
-    for cmt in recent_commits:
-        cmt.repo = cmt_repo_dict[cmt.id]
-        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
-                                              request.user.username)
-        cmt.tp = cmt.props.desc.split(' ')[0]
-
-
-    return render_to_response("group/group_info.html", {
-            "members": members,
-            "repos": repos,
-            "recent_commits": recent_commits,
-            "group_id": group_id,
-            "group" : group,
-            "is_staff": is_staff,
-            "is_join": joined,
-            "form": form,
-            'create_shared_repo': True,
-            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
-            }, context_instance=RequestContext(request));
 
 @login_required
 def group_message_remove(request, group_id, msg_id):
@@ -395,40 +327,47 @@ def msg_reply_new(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-@ctx_switch_required
-def group_info(request, group_id):
-    if request.method == 'POST':
-        form = MessageForm(request.POST)
-
-        if form.is_valid():
-            msg = form.cleaned_data['message']
-            message = GroupMessage()
-            message.group_id = group_id
-            message.from_email = request.user.username
-            message.message = msg
-            message.save()
-
-            # send signal
-            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
-                              from_email=request.user.username)
-            # Always return an HttpResponseRedirect after successfully dealing
-            # with POST data.
-            return HttpResponseRedirect(reverse('group_info', args=[group_id]))
-    else:
-        form = MessageForm()
+@group_check
+def group_info(request, group):
+    # Get all group members.
+    members = get_group_members(group.id)
+    is_staff = True if check_group_staff(group.id, request.user) else False
         
-        op = request.GET.get('op', '')
-        if op == 'delete':
-            return group_remove(request, group_id)
-        elif op == 'dismiss':
-            return group_dismiss(request, group_id)
-        elif op == 'quit':
-            return group_quit(request, group_id)
+    org = request.user.org
+    if org:
+        repos = get_org_group_repos(org['org_id'], group.id,
+                                    request.user.username)
+    else:
+        repos = get_group_repos(group.id, request.user.username)
 
-    return render_group_info(request, group_id, form)
+    recent_commits = []
+    cmt_repo_dict = {}
+    for repo in repos:
+        repo.user_perm = check_permission(repo.props.id, request.user.username)
+        cmmts = get_commits(repo.props.id, 0, 10)
+        for c in cmmts:
+            cmt_repo_dict[c.id] = repo
+        recent_commits += cmmts
+
+    recent_commits.sort(lambda x, y : cmp(y.props.ctime, x.props.ctime))
+    recent_commits = recent_commits[:15]
+    for cmt in recent_commits:
+        cmt.repo = cmt_repo_dict[cmt.id]
+        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
+                                              request.user.username)
+        cmt.tp = cmt.props.desc.split(' ')[0]
+
+    return render_to_response("group/group_info.html", {
+            "members": members,
+            "repos": repos,
+            "recent_commits": recent_commits,
+            "group" : group,
+            "is_staff": is_staff,
+            'create_shared_repo': True,
+            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            }, context_instance=RequestContext(request));
 
 @login_required
-@ctx_switch_required
 @group_staff_required
 @group_check
 def group_manage(request, group):

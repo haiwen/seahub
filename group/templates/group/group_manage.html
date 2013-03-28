@@ -34,7 +34,7 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Operations"%}</h3>
     <ul class="info-item-bottom op-list">
-        <li><a id="group-dismiss" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=dismiss">{% trans "Dismiss"%}</a></li>
+        <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss"%}</a></li>
     </ul>
 </div>
 {% endblock %}

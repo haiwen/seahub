@@ -31,7 +31,7 @@
         <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
         <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
         {% if not is_staff %}
-        <p class="txt fright"><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></p>
+        <p class="txt fright"><a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}">{% trans "Quit" %}</a></p>
         {% endif %}
     </div>
 </div>
