@@ -46,7 +46,8 @@ window.onload = function () {
 
 {% if filetype == 'Markdown' %}
     {% ifnotequal file_content None %}
-    var converter = new Showdown.converter();
+    var converter = new Markdown.Converter();
+    Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
     $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
     {% endifnotequal %}
 {% endif %}
