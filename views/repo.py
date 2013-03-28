@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.views.generic.base import TemplateView, TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 from seaserv import server_repo_size, is_passwd_set, get_commits, get_repo, \
