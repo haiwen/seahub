@@ -918,63 +918,41 @@ def attention(request):
 
 
 @login_required
-def group_discuss(request, group_id):
+@group_check
+def group_discuss(request, group):
     if request.method == 'POST':
         form = MessageForm(request.POST)
 
         if form.is_valid():
             msg = form.cleaned_data['message']
             message = GroupMessage()
-            message.group_id = group_id
+            message.group_id = group.id
             message.from_email = request.user.username
             message.message = msg
             message.save()
 
             # send signal
-            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+            grpmsg_added.send(sender=GroupMessage, group_id=group.id,
                               from_email=request.user.username)
             # Always return an HttpResponseRedirect after successfully dealing
             # with POST data.
-            return HttpResponseRedirect(reverse('group_discuss', args=[group_id]))
+            return HttpResponseRedirect(reverse('group_discuss', args=[group.id]))
     else:
         form = MessageForm()
         
-        op = request.GET.get('op', '')
-        if op == 'delete':
-            return group_remove(request, group_id)
-        elif op == 'dismiss':
-            return group_dismiss(request, group_id)
-        elif op == 'quit':
-            return group_quit(request, group_id)
-
-    group_id_int = int(group_id) # Checkeb by URL Conf
-
     # remove user notifications
     UserNotification.objects.filter(to_user=request.user.username,
                                     msg_type='group_msg',
-                                    detail=str(group_id)).delete()
+                                    detail=str(group.id)).delete()
     
-    group = get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-    
-    # Check whether user belongs to the group.
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'members': members,
-                'group': group,
-                }, context_instance=RequestContext(request))
-
     # Get all group members.
-    members = get_group_members(group_id_int)
+    members = get_group_members(group.id)
     is_staff = True if check_group_staff(group.id, request.user) else False
         
     """group messages"""
     # Show 15 group messages per page.
     paginator = Paginator(GroupMessage.objects.filter(
-            group_id=group_id).order_by('-timestamp'), 15)
+            group_id=group.id).order_by('-timestamp'), 15)
 
     # Make sure page request is an int. If not, deliver first page.
     try:
@@ -1027,7 +1005,6 @@ def group_discuss(request, group_id):
 
     return render_to_response("group/group_discuss.html", {
             "members": members,
-            "group_id": group_id,
             "group" : group,
             "is_staff": is_staff,
             "group_msgs": group_msgs,
