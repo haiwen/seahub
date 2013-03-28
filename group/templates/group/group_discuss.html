@@ -83,8 +83,16 @@
                 <div class="msg-attachment">
                     {% if ma.src == 'recommend' %}
                     {% if ma.attach_type == 'file' %}
-                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                        {% if ma.filetype != 'Image'%}
+                        <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                        <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                        {% else %}
+                            {% if ma.err %}
+                            <p class="error">{{ma.err}}</p>
+                            {% else %}
+                            <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="img-cont"><img src="{{ma.img_url}}" alt="{{ma.name}}" class="img" /></a>
+                            {% endif %}
+                        {% endif %}
                     {% else %}
                     <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
                     <a href="{% url 'repo' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>

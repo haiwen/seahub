@@ -1051,6 +1051,16 @@ def group_discuss(request, group):
                     if path[-1] == '/':
                         path = path[:-1]
                     att.name = os.path.basename(path)
+                    if att.attach_type == 'file' and att.src == 'recommend':
+                        att.filetype, att.fileext = get_file_type_and_ext(att.name)
+                        if att.filetype == 'Image':
+                            att.obj_id = get_file_id_by_path(att.repo_id, path)
+                            if not att.obj_id:
+                                att.err = _(u'File does not exist')
+                            else:
+                                att.token = web_get_access_token(att.repo_id, att.obj_id, 'view', request.user.username)
+                                att.img_url = gen_file_get_url(att.token, att.name)
+
                 msg.attachment = att
 
     return render_to_response("group/group_discuss.html", {
