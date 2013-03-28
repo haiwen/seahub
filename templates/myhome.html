@@ -57,12 +57,7 @@
       {% if CALC_SHARE_USAGE %}
         <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
-          {% if LANGUAGE_CODE == 'zh-cn' %}
-            <a href="http://www.seafile.com/help/quota/" target="_blank" id="quota-bar">
-          {% else %}
-            <a href="http://www.seafile.com/en/help/quota/" target="_blank" id="quota-bar">
-          {% endif %}
-          <span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
+        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
         {% endif %}
         <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
       {% else %}
@@ -71,15 +66,9 @@
           <div id="quota-bar"><span id="quota-usage"></span></div>
         {% endif %}
       {% endif %}
+
       {% if TRAFFIC_STATS_ENABLED %}
-        <p class="traffic-stat">
-          {% if LANGUAGE_CODE == 'zh-cn' %}
-          <a href="http://www.seafile.com/help/traffic/" target="_blank" title="点击查看帮助">{% trans "Traffic this month:" %}</a>
-          {% else %}
-          <a href="http://www.seafile.com/en/help/traffic/" target="_blank" title="Click to see the help">{% trans "Traffic this month:" %}</a>
-          {% endif %}
-          &nbsp;&nbsp;{{ traffic_stat|filesizeformat }}
-        </p>
+        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/traffic/" target="_blank" id="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</a>
       {% endif %}
     </div>
 </div>
