@@ -7,6 +7,7 @@ view_trash_file, view_snapshot_file
 import os
 import simplejson as json
 import stat
+import tempfile
 import urllib
 import urllib2
 import chardet
@@ -23,9 +24,10 @@ from django.utils.translation import ugettext as _
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
-    get_org_groups_by_repo
+    get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from auth.decorators import login_required
 from base.decorators import ctx_switch_required, repo_passwd_set_required
 from base.models import UuidObjidMap, FileComment
 from contacts.models import Contact
@@ -34,7 +36,8 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error,\
     get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred,\
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days
-from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN)
+from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
+                                         TEXT, SF)
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 try:
@@ -540,3 +543,151 @@ def view_snapshot_file(request, repo_id):
 
     return render_to_response('view_history_file.html', ret_dict,
                               context_instance=RequestContext(request), )
+
+def file_edit_submit(request, repo_id):
+    content_type = 'application/json; charset=utf-8'
+    def error_json(error_msg=_(u'Internal Error'), op=None):
+        return HttpResponse(json.dumps({'error': error_msg, 'op': op}),
+                            status=400,
+                            content_type=content_type)
+
+    if get_user_permission(request, repo_id) != 'rw':
+        return error_json(_(u'Permission denied'))
+        
+    repo = get_repo(repo_id)
+    if not repo:
+        return error_json(_(u'The library does not exist.'))
+    if repo.encrypted:
+        repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+        if not repo.password_set:
+            return error_json(_(u'The library is encrypted.'), 'decrypt')
+
+    content = request.POST.get('content')
+    encoding = request.POST.get('encoding')
+    path = request.GET.get('p')
+
+    if content is None or not path or encoding not in ["gbk", "utf-8"]:
+        return error_json(_(u'Invalid arguments'))
+    head_id = request.GET.get('head', None)
+
+    content = content.encode(encoding)
+
+    # first dump the file content to a tmp file, then update the file
+    fd, tmpfile = tempfile.mkstemp()
+    def remove_tmp_file():
+        try:
+            os.remove(tmpfile)
+        except:
+            pass
+
+    try:
+        bytesWritten = os.write(fd, content)
+    except:
+        bytesWritten = -1
+    finally:
+        os.close(fd)
+
+    if bytesWritten != len(content):
+        remove_tmp_file()
+        return error_json()
+
+    if request.GET.get('from', '') == 'wiki_page_edit':
+        try:
+            gid = int(request.GET.get('gid', 0))
+        except ValueError:
+            gid = 0
+        wiki_name = os.path.splitext(os.path.basename(path))[0]
+        next = reverse('group_wiki', args=[gid, wiki_name])
+    elif request.GET.get('from', '') == 'wiki_page_new':
+        try:
+            gid = int(request.GET.get('gid', 0))
+        except ValueError:
+            gid = 0
+        next = reverse('group_wiki_pages', args=[gid])
+    else:
+        next = reverse('repo_view_file', args=[repo_id]) + \
+            '?p=' + urllib2.quote(path.encode('utf-8'))
+
+    parent_dir = os.path.dirname(path).encode('utf-8')
+    filename = os.path.basename(path).encode('utf-8')
+    try:
+        seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
+                                 filename, request.user.username, head_id)
+        remove_tmp_file()
+        return HttpResponse(json.dumps({'href': next}),
+                            content_type=content_type)
+    except SearpcError, e:
+        remove_tmp_file()
+        return error_json(str(e))
+
+@login_required
+@ctx_switch_required
+def file_edit(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    if request.method == 'POST':
+        return file_edit_submit(request, repo_id)
+
+    if get_user_permission(request, repo_id) != 'rw':
+        return render_permission_error(request, _(u'Unable to edit file'))
+
+    path = request.GET.get('p', '/')
+    if path[-1] == '/':
+        path = path[:-1]
+    u_filename = os.path.basename(path)
+    filename = urllib2.quote(u_filename.encode('utf-8'))
+
+    head_id = repo.head_cmmt_id
+
+    obj_id = get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        return render_error(request, _(u'The file does not exist.'))
+
+    token = web_get_access_token(repo_id, obj_id, 'view', request.user.username)
+
+    # generate path and link
+    zipped = gen_path_link(path, repo.name)
+
+    filetype, fileext = get_file_type_and_ext(filename)
+
+    op = None
+    err = ''
+    file_content = None
+    encoding = None
+    file_encoding_list = FILE_ENCODING_LIST
+    if filetype == TEXT or filetype == MARKDOWN or filetype == SF: 
+        if repo.encrypted:
+            repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            if not repo.password_set:
+                op = 'decrypt'
+        if not op:
+            raw_path = gen_file_get_url(token, filename)
+            file_enc = request.GET.get('file_enc', 'auto')
+            if not file_enc in FILE_ENCODING_LIST:
+                file_enc = 'auto'
+            err, file_content, encoding = repo_file_get(raw_path, file_enc)
+            if encoding and encoding not in FILE_ENCODING_LIST:
+                file_encoding_list.append(encoding)
+    else:
+        err = _(u'Edit online is not offered for this type of file.')
+
+    return render_to_response('file_edit.html', {
+        'repo':repo,
+        'u_filename':u_filename,
+        'wiki_name': os.path.splitext(u_filename)[0],
+        'path':path,
+        'zipped':zipped,
+        'filetype':filetype,
+        'fileext':fileext,
+        'op':op,
+        'err':err,
+        'file_content':file_content,
+        'encoding': encoding,
+        'file_encoding_list':file_encoding_list,
+        'head_id': head_id,
+        'from': request.GET.get('from', ''),
+        'gid': request.GET.get('gid', ''),
+    }, context_instance=RequestContext(request))
+
