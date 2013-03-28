@@ -6,7 +6,7 @@ from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit
 from seahub.views.repo import RepoView, RepoHistoryView
-from seahub.search import search
+from seahub.views.search import search
 from notifications.views import notification_list
 from group.views import group_list
 
