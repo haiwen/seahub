@@ -3,6 +3,8 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
 {% block info_bar_message %}
 {% if request.user.is_authenticated %}
   {{ block.super }}
