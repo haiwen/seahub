@@ -525,7 +525,7 @@ def view_trash_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render_to_response('view_history_file.html', ret_dict,
+    return render_to_response('view_trash_file.html', ret_dict,
                               context_instance=RequestContext(request), )
     
 @ctx_switch_required
@@ -541,7 +541,7 @@ def view_snapshot_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render_to_response('view_history_file.html', ret_dict,
+    return render_to_response('view_snapshot_file.html', ret_dict,
                               context_instance=RequestContext(request), )
 
 def file_edit_submit(request, repo_id):
