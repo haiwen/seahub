@@ -364,6 +364,8 @@ def upload_error_msg (code):
 def upload_file_error(request, repo_id):
     if request.method == 'GET':
         repo = get_repo(repo_id)
+        if not repo:
+            raise Http404
         parent_dir = request.GET.get('p')
         filename = request.GET.get('fn', '')
         err = request.GET.get('err')
@@ -386,6 +388,8 @@ def upload_file_error(request, repo_id):
 def update_file_error(request, repo_id):
     if request.method == 'GET':
         repo = get_repo(repo_id)
+        if not repo:
+            raise Http404
         target_file = request.GET.get('p')
         err = request.GET.get('err')
         if not target_file or not err:
@@ -457,6 +461,8 @@ def repo_history(request, repo_id):
         return render_permission_error(request, _(u'Unable to view library modification'))
 
     repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
 
     password_set = False
     if repo.props.encrypted:
@@ -504,6 +510,8 @@ def repo_view_snapshot(request, repo_id):
         return render_permission_error(request, _(u'Unable to view library snapshots'))
 
     repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
 
     password_set = False
     if repo.props.encrypted:
