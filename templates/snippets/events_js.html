@@ -39,6 +39,8 @@ function reqEvents(start) {
                     form.find('input[name="repo_id"]').val($(this).data('repoid'));
                     form.find('.op-target').html($(this).data('reponame'));
                     form.data({'url':$(this).data('url'), 'time':$(this).data('time')}).modal({appendTo:'#main'});
+                    $('#simplemodal-container').css({'width':'auto'});
+                    $(window).resize();
                 }
                 return false;
             });
