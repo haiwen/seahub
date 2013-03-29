@@ -14,6 +14,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.hashcompat import sha_constructor, md5_constructor
 from django.utils.translation import ugettext as _
+from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.http import urlquote
 
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
 
@@ -832,3 +834,11 @@ if hasattr(settings, 'TRAFFIC_STATS_CONFIG_FILE'):
 else:
     def get_user_traffic_stat(username):
         pass
+
+
+def redirect_to_login(request):
+    from django.conf import settings
+    login_url = settings.LOGIN_URL
+    path = urlquote(request.get_full_path())
+    tup = login_url, redirect_field_name, path
+    return HttpResponseRedirect('%s?%s=%s' % tup)

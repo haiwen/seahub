@@ -1,0 +1,96 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{{group.group_name}} - {% endblock %}
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block left_panel %}
+<div class="info-item">
+    <h3 class="info-item-top">{% trans "Basic Info" %}</h3>
+    <div class="info-item-bottom group-basic-info ovhd">
+        <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
+        <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block right_panel %}
+
+{% if repos %}
+<table>
+    <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="20%">{% trans "Name" %}</th>
+        <th width="33%">{% trans "Description" %}</th>
+        <th width="16%">{% trans "Last Update" %}</th>
+        <th width="14%">{% trans "Shared By" %}</th>
+        <th width="13%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for repo in repos %}
+    <tr>
+        <td>
+            {% if repo.user_perm == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            {% endif %}
+        </td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        <td>
+        {% if repo.latest_modify %}
+        {{ repo.latest_modify|translate_seahub_time }}
+        {% else %}
+        --
+        {% endif %}
+        </td>
+        <td>{{ repo.owner|email2nickname }}</td>
+        <td>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips" style="margin-bottom:150px;">
+  <h2 class="center-contents">{% trans "No public library is in this group" %}</h2>
+  <p>{% blocktrans %}A library can be made public in its settings page.(Not implemented yet){% endblocktrans %}</p>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block extra_script %}
+
+<script type="text/javascript">
+
+$("table tr:gt(0)").hover(
+    function() {
+        $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
+    },
+    function() {
+        $(this).find('.op-icon').addClass('vh');
+    }
+);
+
+</script>
+{% endblock %}

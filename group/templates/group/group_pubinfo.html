@@ -11,7 +11,7 @@
 
   <div class="txt fright">
     <p>{% trans "Name: " %}{{ group.group_name }}</p>
-    <p>{% trans "Creator: " %}{{ group.creator_name }}</p>
+    <p>{% trans "Creator: " %}{{ group.creator_name|email2nickname }}</p>
     <p>{% trans "Create at: " %}{{ group.timestamp|tsstr_sec }}</p>
     <p>{% trans "Members: " %}{{ members|length }}</p>
   </div>

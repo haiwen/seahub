@@ -44,24 +44,13 @@
     </div>
 </div>
 
-{% if is_join %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Operations" %}</h3>
-    <ul class="info-item-bottom op-list">
-        {% if is_staff %}
-        <li><a id="group-mgr" href="{% url 'group.views.group_manage' group.id %}">{% trans "Administration" %}</a></li>
-        {% else %}
-        <li><a id="quit-group" href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/?op=quit">{% trans "Quit" %}</a></li>
-        {% endif %}
-    </ul>
-</div>
-{% endif %}
 {% endblock %}
 
 
 {% block right_panel %}
 
 <div id="group-reply">
+    {% if request.user.is_authenticated %}
     <form id="group-message-form" action="" method="post">
         {% avatar request.user.username 48 %}
         <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
@@ -72,6 +61,7 @@
         <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
         <span class="say"></span>
     </form>
+    {% endif %}
 
     {% if group_msgs %}
     <ul class="msg-list">

@@ -96,3 +96,9 @@ class GroupWiki(models.Model):
     class Meta:
         unique_together = ('group_id', 'repo_id')
 
+
+class PublicGroup(models.Model):
+    """
+    To record a public group
+    """
+    group_id = models.IntegerField(db_index=True)
