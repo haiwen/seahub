@@ -45,22 +45,22 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_user_share_usage, send_message
 from pysearpc import SearpcError
 
-from base.accounts import User
-from base.decorators import sys_staff_required, ctx_switch_required
-from base.models import UuidObjidMap, FileComment, InnerPubMsg, InnerPubMsgReply
-from contacts.models import Contact
-from contacts.signals import mail_sended
-from group.forms import MessageForm, MessageReplyForm
-from group.models import GroupMessage, MessageAttachment
-from group.signals import grpmsg_added
-from notifications.models import UserNotification
-from profile.models import Profile
-from share.models import FileShare
-from forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
+from seahub.base.accounts import User
+from seahub.base.decorators import sys_staff_required, ctx_switch_required
+from seahub.base.models import UuidObjidMap, FileComment, InnerPubMsg, InnerPubMsgReply
+from seahub.contacts.models import Contact
+from seahub.contacts.signals import mail_sended
+from seahub.group.forms import MessageForm, MessageReplyForm
+from seahub.group.models import GroupMessage, MessageAttachment
+from seahub.group.signals import grpmsg_added
+from seahub.notifications.models import UserNotification
+from seahub.profile.models import Profile
+from seahub.share.models import FileShare
+from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
     FileCommentForm, RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
-from signals import repo_created, repo_deleted
-from utils import render_permission_error, render_error, list_to_string, \
+from seahub.signals import repo_created, repo_deleted
+from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
     calculate_repo_last_modify, valid_previewed_file, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
@@ -72,12 +72,12 @@ from utils import render_permission_error, render_error, list_to_string, \
     get_dir_files_last_modified, show_delete_days, HtmlDiff, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 try:
-    from settings import DOCUMENT_CONVERTOR_ROOT
+    from seahub.settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
         DOCUMENT_CONVERTOR_ROOT += '/'
 except ImportError:
     DOCUMENT_CONVERTOR_ROOT = None
-from settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
+from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
 # Get an instance of a logger
