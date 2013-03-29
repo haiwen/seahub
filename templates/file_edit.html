@@ -367,8 +367,8 @@ $('#repo-decrypt-form').submit(function() {
     var err = $(this).find('.error');
     if (!pwd) {
         err.html('{% trans "Password is required." %}');
-    } else if (pwd.length < 3 || pwd.length > 15) {
-        err.html('{% trans "Password should be 3 to 15 characters." %}');
+    } else if (pwd.length < 3 || pwd.length > 30) {
+        err.html('{% trans "Password should be 3 to 30 characters." %}');
     } else {
         $.ajax({
             url: '{% url 'repo_set_password' %}',
