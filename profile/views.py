@@ -60,37 +60,38 @@ def edit_profile(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def user_profile(request, user):
+def user_profile(request, username_or_id):
     user_nickname = ''
     user_intro = ''
+    user = None
 
+    # fetch the user by username or id, try id first
     try:
-        user_check = User.objects.get(email=user)
-    except User.DoesNotExist:
-        user_check = None
+        user_id = int(username_or_id)
+        try:
+            user = User.objects.get(id=user_id)
+        except:
+            pass
+    except ValueError:
+        try:
+            user = User.objects.get(email=username_or_id)
+        except User.DoesNotExist:
+            pass
         
-    if user_check:
+    if user:
         profile = Profile.objects.filter(user=user)
         if profile:
             profile = profile[0]
             user_nickname = profile.nickname
             user_intro = profile.intro
     else:
-        nickname = user
+        user_nickname = ""
         user_intro = _(u'Has not accepted invitation yet')
 
-    if user == request.user.username or \
-            Contact.objects.filter(user_email=request.user.username,
-                                   contact_email=user).count() > 0:
-        new_user = False
-    else:
-        new_user = True
-    print new_user
     return render_to_response('profile/user_profile.html', {
-            'email': user,
+            'email': user.username,
             'nickname': user_nickname,
             'intro': user_intro,
-            'new_user': new_user,
             }, context_instance=RequestContext(request))
 
 @login_required

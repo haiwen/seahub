@@ -32,7 +32,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment, GroupWiki
+from models import GroupMessage, MessageReply, MessageAttachment, GroupWiki, \
+    PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
@@ -57,23 +58,62 @@ from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
+def is_group_staff(group, user):
+    if user.is_anonymous():
+        return False
+    return ccnet_threaded_rpc.check_group_staff(group.id, user.username)
+
+
 def group_check(func):
     """
     Decorator for initial group permission check tasks
+
+    un-login user & group not pub --> public info page
+    un-login user & group pub --> view_perm = "pub"
+    login user & non group member & group not pub --> public info page
+    login user & non group member & group pub --> view_perm = "pub"
+    group member --> view_perm = "joined"
+    sys admin --> view_perm = "sys_admin"
     """
     def _decorated(request, group_id, *args, **kwargs):
         group_id_int = int(group_id) # Checked by URL Conf
         group = get_group(group_id_int)
         if not group:
             return HttpResponseRedirect(reverse('group_list', args=[]))
+        group.is_staff = False
+
+        if not request.user.is_authenticated():
+            if not PublicGroup.objects.filter(group_id=group_id_int):
+                return render_to_response('group/group_pubinfo.html', {
+                        'group': group,
+                        }, context_instance=RequestContext(request))
+            else:
+                group.view_perm = "pub"
+                return func(request, group, *args, **kwargs)
+
         joined = is_group_user(group_id_int, request.user.username)
-        if not joined and not request.user.is_staff:
-            # Return group public info page.
-            return render_to_response('group/group_pubinfo.html', {
-                    'group': group,
-                    }, context_instance=RequestContext(request))
-        return func(request, group, *args, **kwargs)
+        if joined:
+            group.view_perm = "joined"
+            group.is_staff = is_group_staff(group, request.user)
+            return func(request, group, *args, **kwargs)
+        if request.user.is_staff:
+            # viewed by system admin
+            group.view_perm = "sys_admin"
+            return func(request, group, *args, **kwargs)
+
+        pub = PublicGroup.objects.filter(group_id=group_id_int)
+        if pub:
+            group.view_perm = "pub"
+            return func(request, group, *args, **kwargs)
+            
+        # Return group public info page.
+        return render_to_response('group/group_pubinfo.html', {
+                'group': group,
+                }, context_instance=RequestContext(request))
+
     return _decorated
+
 
 @login_required
 def group_list(request):
@@ -152,43 +192,84 @@ def group_dismiss(request, group_id):
     """
     Dismiss a group, only group staff can perform this operation.
     """
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
 
     # Check whether user is group staff
-    user = request.user.username
-    if not ccnet_threaded_rpc.check_group_staff(group_id_int, user):
+    if not is_group_staff(group, request.user):
         return render_permission_error(request, _(u'Only administrators can dismiss the group'))
 
+    username = request.user.username
     try:
-        ccnet_threaded_rpc.remove_group(group_id_int, user)
-        seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
-
-        if request.user.org:
-            org_id = request.user.org['org_id']
-            url_prefix = request.user.org['url_prefix']
-            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
-            return HttpResponseRedirect(reverse('org_groups',
-                                                args=[url_prefix]))
-
+        ccnet_threaded_rpc.remove_group(group.id, username)
+        seafserv_threaded_rpc.remove_repo_group(group.id, None)
     except SearpcError, e:
         return render_error(request, _(e.msg))
     
     return HttpResponseRedirect(reverse('group_list'))
 
 @login_required
+def group_make_public(request, group_id):
+    """
+    Make a group public, only group staff can perform this operation.
+    """
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    # Check whether user is group staff
+    if not is_group_staff(group, request.user):
+        return render_permission_error(request, _(u'Only administrators can make the group public'))
+
+    p = PublicGroup(group_id=group.id)
+    p.save()
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
+
+@login_required
+def group_revoke_public(request, group_id):
+    """
+    Revoke a group from public, only group staff can perform this operation.
+    """
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    # Check whether user is group staff
+    if not is_group_staff(group, request.user):
+        return render_permission_error(request, _(u'Only administrators can make the group public'))
+
+    try:
+        p = PublicGroup.objects.get(id=group.id)
+        p.delete()
+    except:
+        pass
+
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
+
+
+@login_required
 def group_quit(request, group_id):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return render_error(request, _(u'group id  is not a valid argument.'))
-    
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
     try:
         ccnet_threaded_rpc.quit_group(group_id_int, request.user.username)
         seafserv_threaded_rpc.remove_repo_group(group_id_int,
@@ -204,11 +285,14 @@ def group_message_remove(request, group_id, msg_id):
     Remove group message and all message replies and attachments.
     """
     # Checked by URL Conf
-    group_id = int(group_id)
+    group_id_int = int(group_id)
     msg_id = int(msg_id)
-    
+    group = get_group(group_id_int)
+    if not group:
+        raise Http404
+
     # Test whether user is in the group
-    if not is_group_user(group_id, request.user.username):
+    if not is_group_user(group_id_int, request.user.username):
         raise Http404
 
     try:
@@ -218,7 +302,7 @@ def group_message_remove(request, group_id, msg_id):
                                    content_type='application/json; charset=utf-8')
     else:
         # Test whether user is group admin or message owner.
-        if check_group_staff(group_id, request.user) or \
+        if check_group_staff(group.id, request.user) or \
                 gm.from_email == request.user.username:
             gm.delete()
             return HttpResponse(json.dumps({'success': True}),
@@ -326,12 +410,22 @@ def msg_reply_new(request):
             'group_msgs': group_msgs,
             }, context_instance=RequestContext(request))
 
-@login_required
+
+def group_info_for_pub(request, group):
+    return render_to_response("group/group_info_for_pub.html", {
+            "repos": [],
+            "group": group,
+            }, context_instance=RequestContext(request))
+    
+
 @group_check
 def group_info(request, group):
+
+    if group.view_perm == "pub":
+        return group_info_for_pub(request, group)
+
     # Get all group members.
     members = get_group_members(group.id)
-    is_staff = True if check_group_staff(group.id, request.user) else False
         
     org = request.user.org
     if org:
@@ -362,16 +456,18 @@ def group_info(request, group):
             "repos": repos,
             "recent_commits": recent_commits,
             "group" : group,
-            "is_staff": is_staff,
+            "is_staff": group.is_staff,
             'create_shared_repo': True,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
 @login_required
 @group_staff_required
-@group_check
-def group_manage(request, group):
-
+def group_manage(request, group_id):
+    group_id_int = int(group_id) # Checked by URL Conf
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
     user = request.user.username
     
     if request.method == 'POST':
@@ -479,11 +575,17 @@ def group_manage(request, group):
 
     contacts = Contact.objects.filter(user_email=user)
 
+    if PublicGroup.objects.filter(group_id=group.id):
+        is_pub = True
+    else:
+        is_pub = False
+
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members_all,
             'admins': admins,
             'contacts': contacts,
+            'is_pub': is_pub,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -557,21 +659,25 @@ def group_member_operations(request, group_id, user_name):
     else:
         return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
-@login_required
+
 def group_remove_member(request, group_id, user_name):
     try:
         group_id_int = int(group_id)
     except ValueError:
-        return render_error(request, _(u'group id is not valid'))        
-    
-    if not check_group_staff(group_id_int, request.user):
+        return render_error(request, _(u'group id is not valid'))
+
+    group = get_group(group_id_int)
+    if not group:
+        raise Http404
+
+    if not is_group_staff(group, request.user):
         raise Http404
 
     try:
-        ccnet_threaded_rpc.group_remove_member(group_id_int,
+        ccnet_threaded_rpc.group_remove_member(group.id,
                                                request.user.username,
                                                user_name)
-        seafserv_threaded_rpc.remove_repo_group(group_id_int, user_name)
+        seafserv_threaded_rpc.remove_repo_group(group.id, user_name)
         messages.success(request, _(u'Operation succeeded.'))
     except SearpcError, e:
         messages.error(request, _(u'Failed：%s') % _(e.msg))
@@ -683,7 +789,8 @@ def create_group_repo(request, group_id):
         return HttpResponseBadRequest(json.dumps(result),
                                       content_type=content_type)
     group_id = int(group_id)
-    if not get_group(group_id):
+    group = get_group(group_id)
+    if not group:
         return json_error(_(u'Failed to create: the group does not exist.'))
 
     # Check whether user belongs to the group.
@@ -701,7 +808,7 @@ def create_group_repo(request, group_id):
         passwd = form.cleaned_data['passwd']
         user = request.user.username
 
-        org, base_template = check_and_get_org_by_group(group_id, user)
+        org, base_template = check_and_get_org_by_group(group.id, user)
         if org:
             # create group repo in org context
             try:
@@ -715,7 +822,7 @@ def create_group_repo(request, group_id):
             try:
                 status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
                                                                   org.org_id,
-                                                                  group_id,
+                                                                  group.id,
                                                                   user,
                                                                   permission)
             except SearpcError, e:
@@ -737,7 +844,7 @@ def create_group_repo(request, group_id):
 
             try:
                 status = seafserv_threaded_rpc.group_share_repo(repo_id,
-                                                                group_id,
+                                                                group.id,
                                                                 user,
                                                                 permission)
             except SearpcError, e:
@@ -764,7 +871,7 @@ def group_joinrequest(request, group_id):
     content_type = 'application/json; charset=utf-8'
 
     group_id = int(group_id)
-    group =get_group(group_id) 
+    group = get_group(group_id) 
     if not group:
         raise Http404
 
@@ -855,11 +962,14 @@ def attention(request):
     return HttpResponse(json.dumps(result), content_type=content_type)
     
 
-
-@login_required
 @group_check
 def group_discuss(request, group):
+
     if request.method == 'POST':
+        # only login user can post to public group
+        if group.view_perm == "pub" and not request.user.is_authenticated():
+            raise Http404
+
         form = MessageForm(request.POST)
 
         if form.is_valid():
@@ -886,7 +996,6 @@ def group_discuss(request, group):
     
     # Get all group members.
     members = get_group_members(group.id)
-    is_staff = True if check_group_staff(group.id, request.user) else False
         
     """group messages"""
     # Show 15 group messages per page.
@@ -945,7 +1054,7 @@ def group_discuss(request, group):
     return render_to_response("group/group_discuss.html", {
             "members": members,
             "group" : group,
-            "is_staff": is_staff,
+            "is_staff": group.is_staff,
             "group_msgs": group_msgs,
             "form": form,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
@@ -1034,10 +1143,9 @@ def convert_wiki_link(content, group, repo_id, username):
 
     return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, content)
     
-@login_required
+
 @group_check
 def group_wiki(request, group, page_name="home"):
-    is_staff = True if check_group_staff(group.id, request.user) else False
     username = request.user.username
     content = ''
     wiki_exists = True
@@ -1068,7 +1176,7 @@ def group_wiki(request, group, page_name="home"):
     return render_to_response("group/group_wiki.html", {
             "group_id": group.id,
             "group" : group,
-            "is_staff": is_staff,
+            "is_staff": group.is_staff,
             "content": content,
             "page": page_name,
             "wiki_exists": wiki_exists,
@@ -1076,7 +1184,7 @@ def group_wiki(request, group, page_name="home"):
             "latest_contributor": latest_contributor,
             }, context_instance=RequestContext(request))
 
-@login_required
+
 @group_check
 def group_wiki_pages(request, group):
     """
@@ -1106,17 +1214,18 @@ def group_wiki_pages(request, group):
         if ext == '.md':
             pages.append(name)
 
-    is_staff = True if check_group_staff(group.id, request.user) else False
-
     return render_to_response("group/group_wiki_pages.html", {
             "group": group,
             "pages": pages,
-            "is_staff": is_staff,
+            "is_staff": group.is_staff,
             }, context_instance=RequestContext(request))
 
-@login_required
+
 @group_check
 def group_wiki_create(request, group):
+    if group.view_perm == "pub":
+        raise Http404
+
     if request.method != 'POST':
         raise Http404
 
@@ -1166,9 +1275,12 @@ def normalize_page_name(page_name):
     # Do not lower page name and spaces are allowed.
     return slugify(page_name, lower=False, spaces=True)
 
-@login_required
+
 @group_check
 def group_wiki_page_new(request, group, page_name="home"):
+    if group.view_perm == "pub":
+        raise Http404
+
     if request.method == 'POST':
         form = MessageForm(request.POST)
 
@@ -1190,9 +1302,12 @@ def group_wiki_page_new(request, group, page_name="home"):
             (SITE_ROOT, repo.id, filepath, group.id)
         return HttpResponseRedirect(url)
 
-@login_required
+
 @group_check
 def group_wiki_page_edit(request, group, page_name="home"):
+    if group.view_perm == "pub":
+        raise Http404
+
     repo = find_wiki_repo(request, group)
     if not repo:
         return render_error(request, _('Wiki is not found.'))
@@ -1202,9 +1317,12 @@ def group_wiki_page_edit(request, group, page_name="home"):
         (SITE_ROOT, repo.id, filepath, group.id)
     return HttpResponseRedirect(url)
 
-@login_required
+
 @group_check
 def group_wiki_page_delete(request, group, page_name):
+    if group.view_perm == "pub":
+        raise Http404
+
     repo = find_wiki_repo(request, group)
     if not repo:
         return render_error(request, _('Wiki is not found.'))

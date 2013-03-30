@@ -32,9 +32,14 @@
 </div>
 
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Operations"%}</h3>
+    <h3 class="info-item-top">{% trans "Operations" %}</h3>
     <ul class="info-item-bottom op-list">
-        <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss"%}</a></li>
+        <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss" %}</a></li>
+        {% if is_pub %}
+        <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
+        {% else %}
+        <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
@@ -64,7 +69,7 @@
 </table>
 {% endif %}
 
-<h3>{% trans "Administrators"%}</h3>
+<h3>{% trans "Administrators" %}</h3>
 <button id="group-admin-add" class="add">{% trans "Add Administrators"%}</button>
 {% if admins %}
 <table>
@@ -87,6 +92,7 @@
     {% endfor %}
 </table>
 {% endif %}
+
 
 {% include 'group/grpmember_add_form.html' %}
 {% endblock %}
