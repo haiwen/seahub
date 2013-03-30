@@ -95,7 +95,7 @@ def group_check(func):
         joined = is_group_user(group_id_int, request.user.username)
         if joined:
             group.view_perm = "joined"
-            group.is_staff = is_group_staff(group, user)
+            group.is_staff = is_group_staff(group, request.user)
             return func(request, group, *args, **kwargs)
         if request.user.is_staff:
             # viewed by system admin
@@ -243,7 +243,7 @@ def group_message_remove(request, group_id, msg_id):
         raise Http404
 
     # Test whether user is in the group
-    if not is_group_user(group, request.user):
+    if not is_group_user(group_id_int, request.user.username):
         raise Http404
 
     try:
