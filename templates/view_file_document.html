@@ -46,11 +46,16 @@
             jsonpCallback: 'xx',
             crossDomain: true,
             success: function(data) {
-                var status = data['status'];
-                if (status == 'QUEUED' || status == 'PROCESSING') {
-                    setTimeout(check_status, 2000);
+                if (data['error']) {
+                    var str = '{% trans "Document convertion failed." %}';
+                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
                 } else {
-                    load_flexpaper();
+                    var status = data['status'];
+                    if (status == 'QUEUED' || status == 'PROCESSING') {
+                        setTimeout(check_status, 2000);
+                    } else {
+                        load_flexpaper();
+                    }
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
