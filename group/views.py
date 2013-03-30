@@ -53,6 +53,7 @@ from seahub.utils import render_error, render_permission_error, \
     get_file_contributors
 from seahub.utils.paginator import Paginator
 from seahub.utils.slugify import slugify
+from seahub.utils.file_types import IMAGE
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
@@ -966,7 +967,7 @@ def attention(request):
 
 @group_check
 def group_discuss(request, group):
-
+    username = request.user.username
     if request.method == 'POST':
         # only login user can post to public group
         if group.view_perm == "pub" and not request.user.is_authenticated():
@@ -984,7 +985,7 @@ def group_discuss(request, group):
 
             # send signal
             grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                              from_email=request.user.username)
+                              from_email=username)
             # Always return an HttpResponseRedirect after successfully dealing
             # with POST data.
             return HttpResponseRedirect(reverse('group_discuss', args=[group.id]))
@@ -992,8 +993,7 @@ def group_discuss(request, group):
         form = MessageForm()
         
     # remove user notifications
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='group_msg',
+    UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
     
     # Get all group members.
@@ -1035,33 +1035,36 @@ def group_discuss(request, group):
         msg.replies = msg.replies[-3:]
             
         for att in attachments:
-            if msg.id == att.group_message_id:
-                # Attachment name is file name or directory name.
-                # If is top directory, use repo name instead.
-                path = att.path
-                if path == '/':
-                    repo = get_repo(att.repo_id)
-                    if not repo:
-                        # TODO: what should we do here, tell user the repo
-                        # is no longer exists?
-                        continue
-                    att.name = repo.name
-                else:
-                    # cut out last '/'
-                    if path[-1] == '/':
-                        path = path[:-1]
-                    att.name = os.path.basename(path)
-                    if att.attach_type == 'file' and att.src == 'recommend':
-                        att.filetype, att.fileext = get_file_type_and_ext(att.name)
-                        if att.filetype == 'Image':
-                            att.obj_id = get_file_id_by_path(att.repo_id, path)
-                            if not att.obj_id:
-                                att.err = _(u'File does not exist')
-                            else:
-                                att.token = web_get_access_token(att.repo_id, att.obj_id, 'view', request.user.username)
-                                att.img_url = gen_file_get_url(att.token, att.name)
+            if att.group_message_id != msg.id:
+                continue
 
-                msg.attachment = att
+            # Attachment name is file name or directory name.
+            # If is top directory, use repo name instead.
+            path = att.path
+            if path == '/':
+                repo = get_repo(att.repo_id)
+                if not repo:
+                    # TODO: what should we do here, tell user the repo
+                    # is no longer exists?
+                    continue
+                att.name = repo.name
+            else:
+                path = path.rstrip('/') # cut out last '/' if possible
+                att.name = os.path.basename(path)
+
+            # Load to discuss page if attachment is a image and from recommend.
+            if att.attach_type == 'file' and att.src == 'recommend':
+                att.filetype, att.fileext = get_file_type_and_ext(att.name)
+                if att.filetype == IMAGE:
+                    att.obj_id = get_file_id_by_path(att.repo_id, path)
+                    if not att.obj_id:
+                        att.err = _(u'File does not exist')
+                    else:
+                        att.token = web_get_access_token(att.repo_id, att.obj_id,
+                                                         'view', username)
+                        att.img_url = gen_file_get_url(att.token, att.name)
+
+            msg.attachment = att
 
     return render_to_response("group/group_discuss.html", {
             "members": members,
@@ -1119,7 +1122,6 @@ def convert_wiki_link(content, group, repo_id, username):
 
         linkname = matchobj.group(1).strip()
         filetype, fileext = get_file_type_and_ext(linkname)
-        filetype = filetype.lower()
         if fileext == '':
             # convert linkname that extension is missing to a markdown page
             filename = linkname + ".md"
@@ -1130,7 +1132,7 @@ def convert_wiki_link(content, group, repo_id, username):
             else:
                 a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
                 return a_tag % (reverse('group_wiki', args=[group.id, linkname.replace('/', '-')]), linkname)                                
-        elif filetype == 'image':
+        elif filetype == IMAGE:
             # load image to wiki page
             path = "/" + linkname
             filename = os.path.basename(path)
