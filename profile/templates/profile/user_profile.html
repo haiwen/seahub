@@ -1,12 +1,16 @@
 {% extends "profile/profile_base.html" %}
-{% load avatar_tags i18n %}
+{% load avatar_tags i18n seahub_tags %}
 
 {% block main_panel %}
-{% if not err_msg %}
+
 <div class="user-profile narrow-panel ovhd">
     <div class="pic fleft">
-        {% avatar email 80 %}
-        {% if new_user %}
+        {% if user %}
+        {% avatar user.username 80 %}
+        {% else %}
+        {% avatar "" 80 %}
+        {% endif %}
+        {% if add_to_contact %}
         <button id="add">{% trans "Add to contacts" %}</button>
         {% endif %}
     </div>
@@ -14,9 +18,9 @@
     <div class="txt fright">
         {% if nickname %}
         <p>{{ nickname }}</p>
+        {% else %}
+        <p>{{ email|email2nickname }}</p>
         {% endif %}
-
-        <p>{{ email }}</p>
 
         {% if intro %}
         <p class="intro">{{ intro }}</p>
@@ -24,7 +28,7 @@
     </div>
 </div>
 
-{% if new_user %}
+{% if add_to_contact %}
 <form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
     <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
     <label>{% trans "Email: " %}</label><br />
@@ -37,11 +41,6 @@
 </form>
 {% endif %}
 
-{% else %}
-<div class="text-panel">
-    <p class="error">{{ err_msg }}</p>
-</div>
-{% endif %}
 {% endblock %}
 
 {% block extra_script %}

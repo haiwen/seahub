@@ -14,7 +14,7 @@ from registration import signals
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
 from profile.models import Profile
-from seahub.utils import get_user_repos
+
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -155,6 +155,7 @@ class User(object):
         """
         Remove all repo decryption passwords stored on server.
         """
+        from seahub.utils import get_user_repos
         owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(self)
 
         def has_repo(repos, repo):

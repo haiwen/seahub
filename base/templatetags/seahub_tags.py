@@ -14,10 +14,12 @@ from django.utils.translation import ungettext
 from django.utils.translation import pgettext
 
 from profile.models import Profile
-from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX
+from profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX, \
+    EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX
 from seahub.cconvert import CConvert
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
+from base.accounts import User
 
 
 register = template.Library()
@@ -227,6 +229,25 @@ def email2nickname(value):
         nickname = profile.nickname if profile else value.split('@')[0]
         cache.set(NICKNAME_CACHE_PREFIX+value, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
+
+@register.filter(name='email2id')
+def email2id(value):
+    """
+    Return the user id of an email or -1.
+    """
+    if not value:
+        return -1
+    
+    user_id = cache.get(EMAIL_ID_CACHE_PREFIX+value)
+    if not user_id:
+        try:
+            user = User.objects.get(email=value)
+            user_id = user.id
+        except User.DoesNotExist:
+            user_id = -1
+        cache.set(EMAIL_ID_CACHE_PREFIX+value, user_id, EMAIL_ID_CACHE_TIMEOUT)
+    return user_id
+
     
 @register.filter(name='url_target_blank')
 def url_target_blank(text):

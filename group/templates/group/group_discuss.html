@@ -30,7 +30,7 @@
           <ul>
             {% for member in members %}
               {% if forloop.counter0 < group_members_default_display %}
-                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a></li>
+                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name|email2id }}/">{{ member.user_name|email2nickname }}</a></li>
               {% else %}
                 {% if forloop.last %}
                   <li>...</li>
@@ -74,7 +74,7 @@
                     {% if is_staff or msg.from_email == request.user.username %}
                     <span class="msg-del op fright vh" data-url="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</span>
                     {% endif %}
-                    <a href="{% url 'user_profile' msg.from_email %}" title="{{ msg.from_email }}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <a href="{{ SITE_ROOT }}profile/{{ msg.from_email|email2id }}/" title="{{ msg.from_email }}" class="author">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
@@ -114,7 +114,7 @@
                     <li class="reply w100 ovhd">
                     <a href="{% url 'user_profile' r.from_email %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
                     <div class="txt fright">
-                        <a href="{% url 'user_profile' r.from_email %}">{{ r.from_email|email2nickname }}</a>
+                        <a href="{{ SITE_ROOT }}profile/{{ r.from_email|email2id }}/">{{ r.from_email|email2nickname }}</a>
                         <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
                         <span class="reply-at op vh" data="{{ r.from_email|email2nickname }}">{% trans 'Reply' %}</span>
                         <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
