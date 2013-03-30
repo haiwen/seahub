@@ -102,7 +102,7 @@ def add(request, extra_context=None, next_override=None,
 def group_add(request, gid):
     group_id_int = int(gid)     # Checked by URL Conf
 
-    if not check_group_staff(group_id_int, request.user):
+    if not check_group_staff(group_id_int, request.user.username):
         raise Http404
 
     group = ccnet_threaded_rpc.get_group(group_id_int)

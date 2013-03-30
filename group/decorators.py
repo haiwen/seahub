@@ -10,7 +10,7 @@ def group_staff_required(func):
     def _decorated(request, *args, **kwargs):
         group_id = int(kwargs.get('group_id', '0')) # Checked by URL Conf
 
-        if check_group_staff(group_id, request.user):
+        if check_group_staff(group_id, request.user.username):
             return func(request, *args, **kwargs)
         raise Http404
     return _decorated

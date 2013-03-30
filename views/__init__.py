@@ -31,7 +31,7 @@ from auth import authenticate
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
-    check_group_staff, get_personal_groups_by_user, is_inner_pub_repo, \
+    get_personal_groups_by_user, is_inner_pub_repo, \
     del_org_group_repo, get_personal_groups, web_get_access_token, remove_repo, \
     get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\

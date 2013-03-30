@@ -168,7 +168,7 @@ def repo_remove_share(request):
         except:
             return render_error(request, _(u'group id is not valid'))
 
-        if not check_group_staff(group_id_int, request.user) \
+        if not check_group_staff(group_id_int, request.user.username) \
                 and request.user.username != from_email: 
             return render_permission_error(request, _(u'Failed to remove share'))
 

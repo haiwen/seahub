@@ -188,6 +188,7 @@ def group_remove(request, group_id):
     return HttpResponseRedirect(next)
 
 @login_required
+@group_staff_required
 def group_dismiss(request, group_id):
     """
     Dismiss a group, only group staff can perform this operation.
@@ -201,14 +202,18 @@ def group_dismiss(request, group_id):
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    # Check whether user is group staff
-    if not is_group_staff(group, request.user):
-        return render_permission_error(request, _(u'Only administrators can dismiss the group'))
-
     username = request.user.username
     try:
         ccnet_threaded_rpc.remove_group(group.id, username)
         seafserv_threaded_rpc.remove_repo_group(group.id, None)
+
+        if request.user.org:
+            org_id = request.user.org['org_id']
+            url_prefix = request.user.org['url_prefix']
+            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
+            return HttpResponseRedirect(reverse('org_groups',
+                                                args=[url_prefix]))
+
     except SearpcError, e:
         return render_error(request, _(e.msg))
     
@@ -302,7 +307,7 @@ def group_message_remove(request, group_id, msg_id):
                                    content_type='application/json; charset=utf-8')
     else:
         # Test whether user is group admin or message owner.
-        if check_group_staff(group.id, request.user) or \
+        if check_group_staff(group_id, request.user.username) or \
                 gm.from_email == request.user.username:
             gm.delete()
             return HttpResponse(json.dumps({'success': True}),
@@ -659,19 +664,15 @@ def group_member_operations(request, group_id, user_name):
     else:
         return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
-
 def group_remove_member(request, group_id, user_name):
-    try:
-        group_id_int = int(group_id)
-    except ValueError:
-        return render_error(request, _(u'group id is not valid'))
+    group_id_int = int(group_id) # Checked by URLConf
 
     group = get_group(group_id_int)
     if not group:
         raise Http404
 
     if not is_group_staff(group, request.user):
-        raise Http404
+        raise Http404    
 
     try:
         ccnet_threaded_rpc.group_remove_member(group.id,
@@ -1147,6 +1148,7 @@ def convert_wiki_link(content, group, repo_id, username):
 @group_check
 def group_wiki(request, group, page_name="home"):
     username = request.user.username
+    is_staff = check_group_staff(group.id, username)
     content = ''
     wiki_exists = True
     last_modified, latest_contributor = None, None
