@@ -688,7 +688,10 @@ def star_file(email, repo_id, path, is_dir, org_id=-1):
                          repo_id=repo_id,
                          path=path,
                          is_dir=is_dir)
-    f.save()
+    try:
+        f.save()
+    except IntegrityError, e:
+        logger.warn(e)
 
 def unstar_file(email, repo_id, path):
     # Should use "get", but here we use "filter" to fix the bug caused by no

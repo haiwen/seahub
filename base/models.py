@@ -157,7 +157,7 @@ class UserStarredFiles(models.Model):
 
     email = models.EmailField()
     org_id = models.IntegerField()
-    repo_id = models.CharField(max_length=36)
+    repo_id = models.CharField(max_length=36, db_index=True)
     
     path = models.TextField()
     is_dir = models.BooleanField()
