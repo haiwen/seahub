@@ -22,9 +22,10 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import BaseFormView, FormMixin
 
 from auth.decorators import login_required
+import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     seafserv_rpc, web_get_access_token, \
-    get_repo, get_group_repos, check_group_staff, get_commits, is_group_user, \
+    get_repo, get_group_repos, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, create_repo, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
     get_org_groups_by_user, check_permission, is_passwd_set, remove_repo, \
@@ -62,7 +63,7 @@ logger = logging.getLogger(__name__)
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False
-    return ccnet_threaded_rpc.check_group_staff(group.id, user.username)
+    return seaserv.check_group_staff(group.id, user.username)
 
 
 def group_check(func):
@@ -307,7 +308,7 @@ def group_message_remove(request, group_id, msg_id):
                                    content_type='application/json; charset=utf-8')
     else:
         # Test whether user is group admin or message owner.
-        if check_group_staff(group_id, request.user.username) or \
+        if seaserv.check_group_staff(group_id, request.user.username) or \
                 gm.from_email == request.user.username:
             gm.delete()
             return HttpResponse(json.dumps({'success': True}),
@@ -709,7 +710,7 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
         return render_error(request, _(u"Failed to unshare: the group doesn't exist."))
 
     # Check whether user is group staff or the one share the repo
-    if not check_group_staff(group_id, from_email) and \
+    if not seaserv.check_group_staff(group_id, from_email) and \
             seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
         return render_permission_error(request, _(u"Operation failed: only administrators and the owner of the library can unshare it."))
         
@@ -1148,7 +1149,6 @@ def convert_wiki_link(content, group, repo_id, username):
 @group_check
 def group_wiki(request, group, page_name="home"):
     username = request.user.username
-    is_staff = check_group_staff(group.id, username)
     content = ''
     wiki_exists = True
     last_modified, latest_contributor = None, None
