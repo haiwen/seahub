@@ -162,6 +162,9 @@ class UserStarredFiles(models.Model):
     path = models.TextField()
     is_dir = models.BooleanField()
 
+    class Meta:
+        unique_together = ('email', 'repo_id', 'path')
+
 class DirFilesLastModifiedInfo(models.Model):
     '''Cache the results of the calculation of last modified time of all the
     files under a directory <parent_dir> in repo <repo_id>.

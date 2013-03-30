@@ -691,24 +691,30 @@ def star_file(email, repo_id, path, is_dir, org_id=-1):
     f.save()
 
 def unstar_file(email, repo_id, path):
-    try:
-        f = UserStarredFiles.objects.get(email=email,
-                                         repo_id=repo_id,
-                                         path=path)
-    except UserStarredFiles.DoesNotExist:
-        pass
-    else:
-        f.delete()
+    # Should use "get", but here we use "filter" to fix the bug caused by no
+    # unique constraint in the table
+    result = UserStarredFiles.objects.filter(email=email,
+                                             repo_id=repo_id,
+                                             path=path)
+    for r in result:
+        r.delete()
             
 def is_file_starred(email, repo_id, path, org_id=-1):
-    try:
-        f = UserStarredFiles.objects.get(email=email,
-                                         repo_id=repo_id,
-                                         path=path,
-                                         org_id=org_id)
-        return True
-    except UserStarredFiles.DoesNotExist:
+    # Should use "get", but here we use "filter" to fix the bug caused by no
+    # unique constraint in the table
+    result = UserStarredFiles.objects.filter(email=email,
+                                             repo_id=repo_id,
+                                             path=path,
+                                             org_id=org_id)
+    n = len(result)
+    if n == 0:
         return False
+    else:
+        # Fix the bug caused by no unique constraint in the table
+        if n > 1:
+            for r in result[1:]:
+                r.delete()
+        return True
 
 def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1): 
     '''Get starred files under parent_dir.
