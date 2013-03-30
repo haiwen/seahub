@@ -32,8 +32,8 @@ from base.decorators import ctx_switch_required, repo_passwd_set_required
 from base.models import UuidObjidMap, FileComment
 from contacts.models import Contact
 from share.models import FileShare
-from seahub.utils import get_httpserver_root, show_delete_days, render_error,\
-    get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred,\
+from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
+    get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
@@ -67,7 +67,7 @@ def gen_path_link(path, repo_name):
     links = []
     if path and path != '/':
         paths = path[1:-1].split('/')
-        i=1
+        i = 1
         for name in paths:
             link = '/' + '/'.join(paths[:i])
             i = i + 1

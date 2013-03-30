@@ -478,7 +478,7 @@ def repo_history(request, repo_id):
 
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '25'))
     except ValueError:
         current_page = 1
         per_page = 25
@@ -527,7 +527,7 @@ def repo_view_snapshot(request, repo_id):
 
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '25'))
     except ValueError:
         current_page = 1
         per_page = 25
@@ -746,7 +746,7 @@ def myhome(request):
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Personal repos others shared to me
-    in_repos = list_personal_shared_repos(email,'to_email', -1, -1)
+    in_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
     # For each group I joined... 
     for grp in joined_groups:
         # Get group repos, and for each group repos...
@@ -1014,7 +1014,7 @@ def repo_del_file(request, repo_id):
     file_name = request.GET.get("file_name")
     user = request.user.username
     try:
-        seafserv_threaded_rpc.del_file(repo_id, parent_dir,file_name, user)
+        seafserv_threaded_rpc.del_file(repo_id, parent_dir, file_name, user)
         messages.success(request, _(u'%s successfully deleted.') % file_name)
     except:
         messages.error(request, _(u'Internal error. Failed to delete %s.') % file_name)
@@ -1026,7 +1026,7 @@ def file_comment(request):
     if request.method == 'POST':
         # handle post request to leave comment on a file
         content_type = 'application/json; charset=utf-8'
-        path = request.GET.get('p', '');
+        path = request.GET.get('p', '')
         
         f = FileCommentForm(request.POST)
         if f.is_valid():
@@ -1447,7 +1447,7 @@ def user_info(request, email):
     if CALC_SHARE_USAGE:
         try:
             share_usage = seafserv_threaded_rpc.get_user_share_usage(email)
-        except SearcpError, e:
+        except SearpcError, e:
             share_usage = 0
         quota_usage = my_usage + share_usage
     else:
@@ -2458,7 +2458,7 @@ def i18n(request):
 @login_required    
 def repo_star_file(request, repo_id):
     path = request.POST.get('path')
-    state = request.POST.get('state');
+    state = request.POST.get('state')
 
     content_type = 'application/json; charset=utf-8'
 

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import Site, RequestSite
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect
+from django.contrib.sites.models import RequestSite
+from django.http import Http404, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic.base import TemplateView, TemplateResponseMixin
-from django.views.generic.edit import BaseFormView, FormMixin
+from django.views.generic.edit import BaseFormView
 from seaserv import server_repo_size, is_passwd_set, get_commits, get_repo, \
     get_org_groups_by_repo, get_shared_groups_by_repo, is_group_user, \
     check_quota, MAX_UPLOAD_FILE_SIZE, web_get_access_token, is_repo_owner, \
@@ -116,7 +115,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
         if self.user.is_authenticated():
             accessible_repos = get_accessible_repos(self.request, self.repo)
         else:
-             accessible_repos = []
+            accessible_repos = []
         return accessible_repos
     
     def get_repo_shared_groups(self):
@@ -176,9 +175,6 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
 
     def get_shared_link(self, fileshare):
         # dir shared link
-        http_or_https = self.request.is_secure() and 'https' or 'http'
-        domain = RequestSite(self.request).domain
-        
         if fileshare:
             dir_shared_link = gen_shared_link(self.request, fileshare.token, 'd')
         else:
@@ -247,10 +243,10 @@ class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
     def get_current_commit(self):
         commit_id = self.request.GET.get('commit_id', '')
         if not commit_id:
-            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+            return HttpResponseRedirect(reverse('repo', args=[self.repo.id]))
         current_commit = get_commit(commit_id)
         if not current_commit:
-            current_commit = get_commits(repo_id, 0, 1)[0]
+            current_commit = get_commits(self.repo.id, 0, 1)[0]
         return current_commit
 
     def get_context_data(self, **kwargs):
