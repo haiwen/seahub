@@ -215,6 +215,55 @@ def group_dismiss(request, group_id):
     return HttpResponseRedirect(reverse('group_list'))
 
 @login_required
+def group_make_public(request, group_id):
+    """
+    Make a group public, only group staff can perform this operation.
+    """
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    # Check whether user is group staff
+    if not is_group_staff(group, request.user):
+        return render_permission_error(request, _(u'Only administrators can make the group public'))
+
+    p = PublicGroup(group_id=group.id)
+    p.save()
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
+
+@login_required
+def group_revoke_public(request, group_id):
+    """
+    Revoke a group from public, only group staff can perform this operation.
+    """
+    try:
+        group_id_int = int(group_id)
+    except ValueError:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    group = get_group(group_id_int)
+    if not group:
+        return HttpResponseRedirect(reverse('group_list', args=[]))
+
+    # Check whether user is group staff
+    if not is_group_staff(group, request.user):
+        return render_permission_error(request, _(u'Only administrators can make the group public'))
+
+    try:
+        p = PublicGroup.objects.get(id=group.id)
+        p.delete()
+    except:
+        pass
+
+    return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
+
+
+@login_required
 def group_quit(request, group_id):
     try:
         group_id_int = int(group_id)
@@ -526,11 +575,17 @@ def group_manage(request, group_id):
 
     contacts = Contact.objects.filter(user_email=user)
 
+    if PublicGroup.objects.filter(group_id=group.id):
+        is_pub = True
+    else:
+        is_pub = False
+
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members_all,
             'admins': admins,
             'contacts': contacts,
+            'is_pub': is_pub,
             }, context_instance=RequestContext(request))
 
 @login_required
