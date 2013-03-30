@@ -204,17 +204,6 @@ def translate_seahub_time(value):
     else:
         return _('Just now')
     
-# @register.filter(name='translate_remain_time')
-# def translate_remain_time(value):
-#     if value > 24 * 60 * 60:
-#         return u'%d 天' % (value/24/3600)
-#     elif value > 60 * 60:
-#         return u'%d 小时' % (value/3600)
-#     elif value > 60:
-#         return u'%d 分钟' % (value/60)
-#     else:
-#         return u'%d 秒' % (value)
-
 @register.filter(name='email2nickname')
 def email2nickname(value):
     """
