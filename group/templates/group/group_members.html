@@ -1,0 +1,65 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{{group.group_name}} - {% endblock %}
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Members" %}</li>
+        {% if is_staff %}
+        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block right_panel %}
+<ul class="user-list">
+    {% for member in members %}
+    <li class="user ovhd">
+    <a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/" class="pic fleft">{% avatar member.user_name 48 %}</a>
+    <div class="txt fright">
+        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a>
+        <p>{{ member.user_name }}</p>
+        {% if member.can_be_contact %}
+        <button class="add-as-contact" data-email="{{ member.user_name }}">{% trans "Add as contact" %}</button>
+        {% endif %}
+    </div>
+    </li>
+    {% endfor %}
+</ul>
+<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <label>{% trans "Email" %}</label><br />
+    <input id="contact_email" type="text" name="contact_email" maxlength="255" value="" /><br />
+    <label>{% trans "Name(optional)" %}</label><br />
+    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <label>{% trans "Note(optional)" %}</label><br />
+    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.add-as-contact').click(function() {
+    $('#contact_email').val($(this).data('email'));
+    $('#add-as-contact-form').submit();
+});
+</script>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from views import group_info, group_member_operations, group_add_admin, \
+from views import group_info, group_members, group_member_operations, group_add_admin, \
     group_manage, msg_reply, msg_reply_new, group_recommend, \
     create_group_repo, group_joinrequest, attention, group_message_remove, \
     group_remove_admin, group_discuss, group_wiki, group_wiki_create, \
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/revoke_pub/$', group_revoke_public, name='group_revoke_pub'),
     url(r'^(?P<group_id>\d+)/quit/$', group_quit, name='group_quit'),
     url(r'^(?P<group_id>[\d]+)/create-repo/$', create_group_repo, name='create_group_repo'),
+    url(r'^(?P<group_id>[\d]+)/members/$', group_members, name='group_members'),
     (r'^(?P<group_id>[\d]+)/member/(?P<user_name>[^/]+)/$', group_member_operations),
     url(r'^(?P<group_id>\d+)/msgdel/(?P<msg_id>\d+)/$', group_message_remove, name='group_message_remove'),
     url(r'^(?P<group_id>\d+)/admin/add/$', group_add_admin, name='group_add_admin'),

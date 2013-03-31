@@ -468,6 +468,29 @@ def group_info(request, group):
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request));
 
+@group_check
+def group_members(request, group):
+
+    # Get all group members.
+    members = get_group_members(group.id)
+
+    user = request.user.username
+    contacts = Contact.objects.filter(user_email=user)
+    contact_emails = []
+    for c in contacts:
+        contact_emails.append(c.contact_email)
+    for m in members:
+        if m.user_name == user or m.user_name in contact_emails:
+            m.can_be_contact = False
+        else:
+            m.can_be_contact = True
+
+    return render_to_response("group/group_members.html", {
+            "members": members,
+            "group" : group,
+            "is_staff": group.is_staff,
+            }, context_instance=RequestContext(request));
+
 @login_required
 @group_staff_required
 def group_manage(request, group_id):
