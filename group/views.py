@@ -262,7 +262,7 @@ def group_revoke_public(request, group_id):
         return render_permission_error(request, _(u'Only administrators can make the group public'))
 
     try:
-        p = PublicGroup.objects.get(id=group.id)
+        p = PublicGroup.objects.get(group_id=group.id)
         p.delete()
     except:
         pass
