@@ -1194,7 +1194,10 @@ def group_wiki(request, group, page_name="home"):
     except WikiDoesNotExist:
         wiki_exists = False
     except WikiPageMissing:
-        '''create that page for user'''
+        '''create that page for user if he/she is a group member'''
+        if not is_group_user(group.id, username):
+            raise Http404
+
         repo = find_wiki_repo(request, group)
         # No need to check whether repo is none, since repo is already created
         
