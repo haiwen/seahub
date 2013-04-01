@@ -829,8 +829,7 @@ def myhome(request):
         # User's network traffic stat in this month 
         stat = get_user_traffic_stat(request.user.username)
         if stat:
-            traffic_stat = stat['block_download'] + stat['file_view'] \
-                           + stat['file_download'] + stat['dir_download']
+            traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
     return render_to_response('myhome.html', {
             "nickname": nickname,
