@@ -64,6 +64,8 @@
         <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
         <span class="say"></span>
     </form>
+    {% else %}
+    <p>{% trans "After login, you can post a discussion and add replies." %}</p>
     {% endif %}
 
     {% if group_msgs %}
@@ -134,10 +136,12 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
+                {% if request.user.is_authenticated %}
                 <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
                 <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
                 <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>
                 <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+                {% endif %}
             </div>
         </div>
         </li>
@@ -181,7 +185,7 @@ $(window).scroll(function() {
     var win_st = $(window).scrollTop();
     var win_h = $(window).height() + win_st;
 
-    if (win_st > $('#group-message-form').offset().top) {
+    if (win_st > msg_panel_offset.top) {
         up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 60}).removeClass('hide');
         if (win_h > msg_panel_bot) {
             up_icon.css({'bottom': win_h - msg_panel_bot + 15});
@@ -194,6 +198,7 @@ $(window).scroll(function() {
 });
 {% endif %}
 
+{% if request.user.is_authenticated %}
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'550px', 'height': '75px', 'padding':'3px 5px', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
 $('#message').focus(function() {
@@ -205,6 +210,7 @@ $('#group-message-form .cancel').click(function() {
     $('#group-message-form .submit').addClass('hide');
     $('#message').val('').height(25);
 });
+{% endif %}
 
 {% include 'group/msg_js.html' %}
 

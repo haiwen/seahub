@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if request.user.is_authenticated %}{# 'reply' is enabled only after login#}
 $('.msg-main, .reply').hover(
     function(){
         $(this).find('.op').removeClass('vh');
@@ -15,6 +16,8 @@ $('.msg .op').hover(
         $(this).css({'text-decoration':'none'});
     }
 );
+{% endif %}
+
 $('.replies-op').hover(
     function() {
         $(this).children().css({'text-decoration':'underline'});
@@ -44,6 +47,7 @@ $('.replies-op').hover(
                 uf_r.addClass('hide');
                 f_r.removeClass('hide')
                 op.data('rstatus', 'show').data('r_num', data['r_num']);
+                {% if request.user.is_authenticated %}
                 r_list.children().hover(
                     function() {
                         $(this).find('.op').removeClass('vh');
@@ -60,6 +64,7 @@ $('.replies-op').hover(
                         $(this).css({'text-decoration':'none'});
                     }
                 ).click(replyAt);
+                {% endif %}
             }
         });
     } else {
@@ -71,6 +76,7 @@ $('.replies-op').hover(
         op.data('rstatus', 'hide');
     }
 });
+{% if request.user.is_authenticated %}
 $('.reply-input').focus(function() {
     $(this).height(50);
     $(this).parent().find('.reply-submit, .reply-cancel').removeClass('hide');
@@ -145,3 +151,4 @@ $('.reply-submit').click(function() {
         }
     }); 
 });
+{% endif %}

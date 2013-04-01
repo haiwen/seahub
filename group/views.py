@@ -318,7 +318,6 @@ def group_message_remove(request, group_id, msg_id):
             return HttpResponse(json.dumps({'success': False, 'err_msg': _(u"You don't have the permission.")}),
                                         content_type='application/json; charset=utf-8')
 
-@login_required
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
     
