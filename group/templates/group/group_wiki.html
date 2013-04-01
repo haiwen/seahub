@@ -52,11 +52,14 @@
         <ul class="wiki-nav fleft">
             <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
+            <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
         </ul>
+        
         {% if group.view_perm != "pub" %}
         <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
         <button id="page-delete" class="op-btn" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
         <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>
+        <button id="page-history" class="op-btn">{% trans "Page History" %}</button>
         {% endif %}
     </div>
 
@@ -95,6 +98,10 @@ $('#page-edit').click(function() {
 
 $('#page-list').click(function () {
     location.href = ("{% url 'group_wiki_pages' group.id %}");
+});
+
+$('#page-history').click(function () {
+    window.open("{% url 'file_revisions' repo_id %}" + "?p=" + "{{path}}");
 });
 
 addConfirmTo($('#page-delete'), {
@@ -139,6 +146,6 @@ $('#wiki-create-submit').click(function () {
 
     return false;
 });
-{% endif %}                     // END if wiki_exists
+{% endif %}                     // END wiki_exists
 </script>
 {% endblock %}

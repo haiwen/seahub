@@ -2,6 +2,8 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block sub_title %}{% trans "History" %} - {% endblock %}
+
 {% block main_panel %}
 <div class="w100 ovhd">
     <h2 class="fleft"><span class="op-target">{{repo.props.name}}</span> {% trans "modification history" %}</h2>

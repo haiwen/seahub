@@ -28,6 +28,7 @@
     <ul class="wiki-nav fleft">
         <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
         <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
+        <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
     </ul>
     {% if group.view_perm != "pub" %}
     <button id="page-create" class="op-btn">{% trans "New Page" %}</button>

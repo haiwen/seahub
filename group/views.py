@@ -1213,14 +1213,15 @@ def group_wiki(request, group, page_name="home"):
         latest_contributor = contributors[0] if contributors else None
 
     return render_to_response("group/group_wiki.html", {
-            "group_id": group.id,
             "group" : group,
             "is_staff": group.is_staff,
             "content": content,
             "page": page_name,
+            "path": path,
             "wiki_exists": wiki_exists,
             "last_modified": last_modified,
             "latest_contributor": latest_contributor,
+            "repo_id": repo_id,
             }, context_instance=RequestContext(request))
 
 
@@ -1257,6 +1258,7 @@ def group_wiki_pages(request, group):
             "group": group,
             "pages": pages,
             "is_staff": group.is_staff,
+            "repo_id": repo.id
             }, context_instance=RequestContext(request))
 
 
