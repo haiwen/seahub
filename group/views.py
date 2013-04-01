@@ -1309,6 +1309,11 @@ def group_wiki_page_new(request, group, page_name="home"):
         
         filename = page_name + ".md"
         filepath = "/" + page_name + ".md"
+
+        # check whether file exists
+        if get_file_id_by_path(repo.id, filepath):
+            return render_error(request, _('Page "%s" already exists.') % filename)
+
         if not post_empty_file(repo.id, "/", filename, request.user.username):
             return render_error(request, _('Failed to create wiki page. Please retry later.'))
 
