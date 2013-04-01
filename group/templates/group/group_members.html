@@ -30,17 +30,19 @@
 
 {% block right_panel %}
 <ul class="user-list">
-    {% for member in members %}
+    {% for m in members %}
+    {% with e=m.user_name id=m.user_name|email2id %}
     <li class="user ovhd">
-    <a href="{{ SITE_ROOT }}profile/{{ member.user_name|email2id }}/" class="pic fleft">{% avatar member.user_name 48 %}</a>
+    <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">
-        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name|email2id }}/">{{ member.user_name|email2nickname }}</a>
-        <p>{{ member.user_name }}</p>
-        {% if member.can_be_contact %}
-        <button class="add-as-contact" data-email="{{ member.user_name }}">{% trans "Add as contact" %}</button>
+        <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
+        <p>{{ e }}</p>
+        {% if m.can_be_contact %}
+        <button class="add-as-contact" data-email="{{ e }}">{% trans "Add as contact" %}</button>
         {% endif %}
     </div>
     </li>
+    {% endwith %}
     {% endfor %}
 </ul>
 <form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">

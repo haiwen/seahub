@@ -18,17 +18,42 @@
 </div>
 {% if users %}
 <ul class="user-list">
-    {% for member in users %}
+    {% for u in users %}
+    {% with e=u.email id=u.email|email2id %}
     <li class="user ovhd">
-    <a href="{{ SITE_ROOT }}profile/{{ member.email }}/" class="pic fleft">{% avatar member.email 48 %}</a>
+    <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">
-        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.email }}/">{{ member.email|email2nickname }}</a>
-        <p>{{ member.email }}</p>
+        <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
+        <p>{{ e }}</p>
+        {% if u.can_be_contact %}
+        <button class="add-as-contact" data-email="{{e}}">{% trans "Add as contact" %}</button>
+        {% endif %}
     </div>
     </li>
+    {% endwith %}
     {% endfor %}
 </ul>
+<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <label>{% trans "Email" %}</label><br />
+    <input id="contact_email" type="text" name="contact_email" maxlength="255" value="" /><br />
+    <label>{% trans "Name(optional)" %}</label><br />
+    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <label>{% trans "Note(optional)" %}</label><br />
+    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
+</form>
 {% else %}
 <p>{% trans "None"%}</p>
 {% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.add-as-contact').click(function() {
+    $('#contact_email').val($(this).data('email'));
+    $('#add-as-contact-form').submit();
+});
+</script>
 {% endblock %}

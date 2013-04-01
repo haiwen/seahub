@@ -2331,6 +2331,18 @@ def pubuser(request):
         raise Http404
     else:
         users = get_emailusers(-1, -1)
+        
+        user = request.user.username
+        contacts = Contact.objects.filter(user_email=user)
+        contact_emails = [] 
+        for c in contacts:
+            contact_emails.append(c.contact_email)
+        for u in users:
+            if u.email == user or u.email in contact_emails:
+                u.can_be_contact = False
+            else:
+                u.can_be_contact = True 
+
         pubrepos_count = count_inner_pub_repos()
         groups_count = len(get_personal_groups(-1, -1))
         emailusers_count = count_emailusers()
