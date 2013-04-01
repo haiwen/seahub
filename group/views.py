@@ -471,6 +471,9 @@ def group_info(request, group):
 @group_check
 def group_members(request, group):
 
+    if group.view_perm == 'pub':
+        raise Http404
+
     # Get all group members.
     members = get_group_members(group.id)
 

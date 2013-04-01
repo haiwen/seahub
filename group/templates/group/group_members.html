@@ -32,9 +32,9 @@
 <ul class="user-list">
     {% for member in members %}
     <li class="user ovhd">
-    <a href="{{ SITE_ROOT }}profile/{{ member.user_name }}/" class="pic fleft">{% avatar member.user_name 48 %}</a>
+    <a href="{{ SITE_ROOT }}profile/{{ member.user_name|email2id }}/" class="pic fleft">{% avatar member.user_name 48 %}</a>
     <div class="txt fright">
-        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name }}/">{{ member.user_name|email2nickname }}</a>
+        <a class="name" href="{{ SITE_ROOT }}profile/{{ member.user_name|email2id }}/">{{ member.user_name|email2nickname }}</a>
         <p>{{ member.user_name }}</p>
         {% if member.can_be_contact %}
         <button class="add-as-contact" data-email="{{ member.user_name }}">{% trans "Add as contact" %}</button>
