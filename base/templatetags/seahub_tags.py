@@ -106,7 +106,10 @@ def translate_commit_desc(value):
     if value.startswith('Reverted library'):
         return value.replace('Reverted library to status at', _('Reverted library to status at'))
     elif value.startswith('Reverted file'):
-        return value.replace('Reverted file to status at', _('Reverted file to status at'))
+        def repl(matchobj):
+            return _('Reverted file "%(file)s" to status at %(time)s.') % \
+                {'file':matchobj.group(1), 'time':matchobj.group(2)}
+        return re.sub('Reverted file "(.*)" to status at (.*)', repl, value)
     elif value.startswith('Recovered deleted directory'):
         return value.replace('Recovered deleted directory', _('Recovered deleted directory'))
     elif value.startswith('Changed library'):
