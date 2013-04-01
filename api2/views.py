@@ -338,20 +338,27 @@ class UploadLinkView(APIView):
     throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if check_permission(repo_id, request.user.username) == 'rw':
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'upload',
-                                                      request.user.username)
-        else:
+        if check_permission(repo_id, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
 
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        upload_url = gen_file_upload_url(token, 'upload-api')
-        return Response(upload_url)
+        update = request.GET.get('update', None)
+        if update == 'true':
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'update',
+                                                      request.user.username)
+            url = gen_file_upload_url(token, 'update-api')
+        else:
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      'dummy',
+                                                      'upload',
+                                                      request.user.username)
+            url = gen_file_upload_url(token, 'upload-api')
+
+        return Response(url)
     
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
