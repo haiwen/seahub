@@ -54,10 +54,10 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
           {% if repo.props.share_type == 'group' %}
-          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|quote }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
           {% if repo.props.share_type == 'personal' %}
-          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|quote }}&to={{ repo.props.user|quote }}" class="cancel-share op">{% trans "Unshare"%}</a>
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op">{% trans "Unshare"%}</a>
 	  {% endif %}
 	  {% if repo.props.share_type == 'public' %}
 	      {% if not org %}

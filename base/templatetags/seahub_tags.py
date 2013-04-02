@@ -3,7 +3,6 @@ import datetime as dt
 from datetime import datetime
 import re
 import time
-from urllib2 import quote as default_quote
 
 from django import template
 from django.core.cache import cache
@@ -293,11 +292,6 @@ def translate_permission(value):
         return _(u'Read-Only')
     else:
         return ''
-
-@register.filter(name='quote')
-def quote(value):
-    """Replace special characters in value using the %xx escape."""
-    return default_quote(value.encode('utf-8'))
 
 @register.filter(name='trim')
 def trim(value, length):

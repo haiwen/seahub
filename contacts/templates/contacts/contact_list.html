@@ -32,7 +32,7 @@
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
             <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
-            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|quote}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|urlencode}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}
