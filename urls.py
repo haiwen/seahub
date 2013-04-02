@@ -31,7 +31,6 @@ urlpatterns = patterns('',
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
-    url(r'^home/public/reply/new/$', innerpub_msg_reply_new, name='innerpub_msg_reply_new'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
     (r'^repo/new_dir/$', repo_new_dir),

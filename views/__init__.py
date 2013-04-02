@@ -898,31 +898,6 @@ def innerpub_msg_reply(request, msg_id):
     else:
         return HttpResponseBadRequest(content_type=content_type)
 
-@login_required
-def innerpub_msg_reply_new(request):
-    notes = UserNotification.objects.filter(to_user=request.user.username)
-    innerpub_reply_list = [ n.detail for n in notes if \
-                              n.msg_type == 'innerpubmsg_reply']
-
-    innerpub_msgs = []
-    for msg_id in innerpub_reply_list:
-        try:
-            m = InnerPubMsg.objects.get(id=msg_id)
-        except InnerPubMsg.DoesNotExist:
-            continue
-        else:
-            m.reply_list = InnerPubMsgReply.objects.filter(reply_to=m)
-            m.reply_cnt = m.reply_list.count()
-            innerpub_msgs.append(m)
-
-    # remove new innerpub msg reply notification
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='innerpubmsg_reply').delete()
-            
-    return render_to_response("new_innerpubmsg_reply.html", {
-            'innerpub_msgs': innerpub_msgs,
-            }, context_instance=RequestContext(request))
-    
 @login_required    
 def public_repo_create(request):
     '''
