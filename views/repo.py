@@ -10,7 +10,7 @@ from seaserv import server_repo_size, is_passwd_set, get_commits, get_repo, \
     check_quota, MAX_UPLOAD_FILE_SIZE, web_get_access_token, is_repo_owner, \
     is_org_repo_owner, get_repo_history_limit, get_commit
 
-from base.mixins import LoginRequiredMixin, CtxSwitchRequiredMixin
+from base.mixins import LoginRequiredMixin
 from contacts.models import Contact
 from share.models import FileShare
 from seahub.forms import RepoPassowrdForm
@@ -97,8 +97,8 @@ class RepoMixin(object):
         self.prepare_property()
         return super(RepoMixin, self).post(request, *args, **kwargs)
         
-class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
-               TemplateResponseMixin, BaseFormView):
+class RepoView(LoginRequiredMixin, RepoMixin, TemplateResponseMixin, 
+               BaseFormView):
     """
     View to show repo page and handle post request to decrypt repo.
     """
@@ -228,8 +228,7 @@ class RepoView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
 
         return kwargs
 
-class RepoHistoryView(LoginRequiredMixin, CtxSwitchRequiredMixin, RepoMixin,
-                      TemplateView):
+class RepoHistoryView(LoginRequiredMixin, RepoMixin, TemplateView):
     """
     View to show repo page in history.
     """

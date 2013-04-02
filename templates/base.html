@@ -31,30 +31,9 @@
             <div class="top-bar-inner">
                 <div class="top-bar-con">
                     <div class="manage fleft">
-                        {% if request.user.is_authenticated %}
-                        {% if cloud_mode %}
-                        <a href="#" id="account-context" data="no-popup">
-                            {% if org %} {{ org.org_name }} {% else %} {% trans "Personal" %} {% endif %}
-                            <span class="tri-bg tri-down-bg"></span>
-                        </a>
-                        <ul class="hide" id="account-context-selector">
-                            <li><a href="{% url 'myhome' %}">{% trans "Personal" %}</a></li>
-                            {% for org in request.user.orgs %}
-                            <li><a href="{% url 'org_personal' org.url_prefix %}">{{ org.org_name }}</a></li>
-                            {% endfor %}
-                            <li><a href="{% url 'create_org' %}">{% trans "New Organization" %}</a></li>
-                        </ul>
-                        {% endif %}
-                        {% endif %}
-
                         {% if request.user.is_staff %}
                         <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
                         <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
-                        {% endif %}
-
-                        {% if org.is_staff %}
-                        <a href="{% url 'org_admin' org.url_prefix %}"{% block top_bar_org_manager_class %}{% endblock %}>{% trans "Admin" %}</a>
-                        <a href="{% url 'org_personal' org.url_prefix %}"{% block top_bar_org_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
                         {% endif %}
                     </div>
 
@@ -133,7 +112,7 @@
                     <ul>
                         <li><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
                         <li><a href="https://github.com/haiwen/seafile/wiki{% if LANGUAGE_CODE == 'zh-cn' %}/Seafile-服务器手册中文版{% endif %}" target="_blank">Wiki</a></li>
-                        {% if LANGUAGE_CODE == 'zh-cn' %}<li><a href="http://gonggeng.org/vanilla/" target="_blank">{% trans "Forum" %}</a></li>{% endif %}
+                        {% if LANGUAGE_CODE == 'zh-cn' %}<li><a href="http://bbs.seafile.com/" target="_blank"> {% else %}<li><a href="https://groups.google.com/forum/#!forum/seafile" target="_blank"> {% endif %}{% trans "Forum" %}</a></li>
                     </ul>
                 </div>
                 <div class="item">
@@ -182,29 +161,6 @@ $('#info-bar .close').click(function() {
         }
     }
 });
-{% endif %}
-
-{% if request.cloud_mode %}
-    $('#account-context').click(function() {
-        if ($(this).attr('data') == 'no-popup') {
-            $(this).parent().css('position', 'relative');
-            $('#account-context-selector').removeClass('hide');
-            $(this).attr('data', 'has-popup');
-        } else {
-            $('#account-context-selector').addClass('hide');
-            $(this).attr('data', 'no-popup');
-        }
-        return false;
-    }).focus(function() { $(this).blur(); });
-
-$(document).click(function(e) {
-    var element = e.target || e.srcElement;
-    if (element.id != 'account-context-selector' && element.id != 'account-context') {
-        $('#account-context-selector').addClass('hide');
-        $('#account-context').attr('data', 'no-popup');
-    }
-});
-
 {% endif %}
 {% endif %}
 </script>

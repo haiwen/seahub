@@ -46,7 +46,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
-from seahub.base.decorators import sys_staff_required, ctx_switch_required
+from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, FileComment, InnerPubMsg, InnerPubMsgReply
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -280,7 +280,6 @@ def render_recycle_dir(request, repo_id, commit_id):
             }, context_instance=RequestContext(request))
 
 @login_required
-@ctx_switch_required
 def repo_recycle_view(request, repo_id):
     if get_user_permission(request, repo_id) != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
@@ -292,7 +291,6 @@ def repo_recycle_view(request, repo_id):
         return render_recycle_dir(request, repo_id, commit_id)
 
 @login_required
-@ctx_switch_required
 def repo_save_settings(request):
     if request.method != 'POST':
         raise Http404
@@ -360,7 +358,6 @@ def upload_error_msg (code):
         err_msg = _(u'An error occurs during file transfer')
     return err_msg
 
-@ctx_switch_required
 def upload_file_error(request, repo_id):
     if request.method == 'GET':
         repo = get_repo(repo_id)
@@ -384,7 +381,6 @@ def upload_file_error(request, repo_id):
                 'err_msg': err_msg,
                 }, context_instance=RequestContext(request))
 
-@ctx_switch_required    
 def update_file_error(request, repo_id):
     if request.method == 'GET':
         repo = get_repo(repo_id)
@@ -451,7 +447,6 @@ def get_subdir(request):
                             content_type=content_type)
 
 @login_required
-@ctx_switch_required
 def repo_history(request, repo_id):
     """
     List library modification histories.
@@ -504,7 +499,6 @@ def repo_history(request, repo_id):
             }, context_instance=RequestContext(request))
 
 @login_required
-@ctx_switch_required
 def repo_view_snapshot(request, repo_id):
     if not access_to_repo(request, repo_id, ''):
         return render_permission_error(request, _(u'Unable to view library snapshots'))
@@ -697,7 +691,7 @@ def repo_remove(request, repo_id):
                           )
         else:
             err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
-            return render_permission_error(request, err_msg)
+            messages.error(request, err_msg)
     else:
         # Remove repo in personal context, only repo owner or site staff can
         # perform this operation.
@@ -711,9 +705,10 @@ def repo_remove(request, repo_id):
                               repo_id=repo_id,
                               repo_name=repo.name,
                           )
+            messages.success(request, _(u'Successfully deleted library "%s".') % repo.name)
         else:
             err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
-            return render_permission_error(request, err_msg)
+            messages.error(request, err_msg)
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -1977,7 +1972,6 @@ def repo_revert_dir (request, repo_id):
         return HttpResponseRedirect(url)
 
 @login_required
-@ctx_switch_required
 def file_revisions(request, repo_id):
     if request.method != 'GET':
         return render_error(request)

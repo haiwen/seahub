@@ -28,7 +28,7 @@ from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
 from pysearpc import SearpcError
 
 from auth.decorators import login_required
-from base.decorators import ctx_switch_required, repo_passwd_set_required
+from base.decorators import repo_passwd_set_required
 from base.models import UuidObjidMap, FileComment
 from contacts.models import Contact
 from share.models import FileShare
@@ -251,7 +251,6 @@ def convert_md_link(file_content, repo_id, username):
 
     return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, file_content)
     
-@ctx_switch_required
 @repo_passwd_set_required
 def view_file(request, repo_id):
     """
@@ -489,7 +488,6 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['DOCUMENT_CONVERTOR_ROOT'] = DOCUMENT_CONVERTOR_ROOT
     ret_dict['use_pdfjs'] = USE_PDFJS
 
-@ctx_switch_required
 @repo_passwd_set_required
 def view_history_file(request, repo_id):
     ret_dict = {}
@@ -505,7 +503,6 @@ def view_history_file(request, repo_id):
     return render_to_response('view_history_file.html', ret_dict,
                               context_instance=RequestContext(request))
 
-@ctx_switch_required
 @repo_passwd_set_required
 def view_trash_file(request, repo_id):
     ret_dict = {}
@@ -528,7 +525,6 @@ def view_trash_file(request, repo_id):
     return render_to_response('view_trash_file.html', ret_dict,
                               context_instance=RequestContext(request), )
     
-@ctx_switch_required
 @repo_passwd_set_required
 def view_snapshot_file(request, repo_id):
     ret_dict = {}
@@ -621,7 +617,6 @@ def file_edit_submit(request, repo_id):
         return error_json(str(e))
 
 @login_required
-@ctx_switch_required
 def file_edit(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
