@@ -335,6 +335,26 @@ class DownloadRepo(APIView):
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        if check_permission(repo_id, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'upload',
+                                                  request.user.username)
+        url = gen_file_upload_url(token, 'upload-api')
+
+        return Response(url)
+
+class UpdateLinkView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, repo_id, format=None):
@@ -344,19 +364,11 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        update = request.GET.get('update', None)
-        if update == 'true':
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'update',
-                                                      request.user.username)
-            url = gen_file_upload_url(token, 'update-api')
-        else:
-            token = seafserv_rpc.web_get_access_token(repo_id,
-                                                      'dummy',
-                                                      'upload',
-                                                      request.user.username)
-            url = gen_file_upload_url(token, 'upload-api')
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'update',
+                                                  request.user.username)
+        url = gen_file_upload_url(token, 'update-api')
 
         return Response(url)
     
