@@ -765,8 +765,8 @@ def group_recommend(request):
         groups = request.POST.getlist('groups') # groups is a group_id list, e.g. [u'1', u'7']
         username = request.user.username
 
-        # Check group id format
         for group_id in groups:
+            # Check group id format
             try:
                 group_id = int(group_id)
             except ValueError:
@@ -775,6 +775,8 @@ def group_recommend(request):
 
             # Get that group
             group = get_group(group_id)
+            if not group:
+                continue
 
             # TODO: Check whether repo is in the group and Im in the group
             if not is_group_user(group_id, username):
@@ -1314,11 +1316,11 @@ def group_wiki_create(request, group):
     next = reverse('group_wiki', args=[group.id])
     return HttpResponse(json.dumps({'href': next}), content_type=content_type)
 
+SLUG_OK = "!@#$%^&()_+-,.;'"
 def normalize_page_name(page_name):
     # Replace special characters to '-'.
     # Do not lower page name and spaces are allowed.
-    return slugify(page_name, lower=False, spaces=True)
-
+    return slugify(page_name, ok=SLUG_OK, lower=False, spaces=True)
 
 @group_check
 def group_wiki_page_new(request, group, page_name="home"):
