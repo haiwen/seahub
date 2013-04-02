@@ -64,7 +64,7 @@
             </div>
 
             {% if user_perm == 'rw' %}
-            <button data-url="{% url 'file_revisions' repo.id %}?p={{ path }}" class="history">{% trans "History"%}</button>
+            <button data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" class="history">{% trans "History"%}</button>
             {% endif %}
 
             {% if request.user.is_authenticated %}
@@ -76,7 +76,7 @@
                 {% endblock %}
             {% endif %}
 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename|urlencode }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
 
         <div id="file-view">
@@ -143,7 +143,7 @@ $('#star').click(function() {
         beforeSend: prepareCSRFToken,
         dataType: 'json',
         data: {
-            path: '{{ path }}',
+            path: '{{ path|urlencode }}',
             state: state,
             org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
         },

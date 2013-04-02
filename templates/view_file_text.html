@@ -21,7 +21,7 @@
 
 {% block edit_file %}
 {% if user_perm == 'rw' and not err%}
-<button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
+<button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path|urlencode }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>
 {% endif %}
 {% endblock %}
 

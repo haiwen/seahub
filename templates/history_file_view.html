@@ -60,7 +60,7 @@
             {% endfor %}
             </p>
 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
