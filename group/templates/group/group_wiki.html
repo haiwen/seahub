@@ -103,7 +103,7 @@ $('#page-list').click(function () {
 });
 
 $('#page-history').click(function () {
-    window.open("{% url 'file_revisions' repo_id %}" + "?p=" + "{{path}}");
+    window.open("{% url 'file_revisions' repo_id %}" + "?p=" + "{{path|urlencode}}");
 });
 
 addConfirmTo($('#page-delete'), {

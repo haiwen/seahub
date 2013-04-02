@@ -60,7 +60,7 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
-    (r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit, name='file_edit'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[^/]+)/$', repo_access_file, name='repo_access_file'),
     (r'^repo/save_settings$', repo_save_settings),
 

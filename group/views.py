@@ -1338,7 +1338,7 @@ def group_wiki_page_new(request, group, page_name="home"):
         repo = find_wiki_repo(request, group)
         if not repo:
             return render_error(request, _('Wiki is not found.'))
-        
+
         filename = page_name + ".md"
         filepath = "/" + page_name + ".md"
 
@@ -1349,8 +1349,9 @@ def group_wiki_page_new(request, group, page_name="home"):
         if not post_empty_file(repo.id, "/", filename, request.user.username):
             return render_error(request, _('Failed to create wiki page. Please retry later.'))
 
-        url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_new&gid=%s" % \
-            (SITE_ROOT, repo.id, filepath, group.id)
+        url = "%s?p=%s&from=wiki_page_new&gid=%s" % (
+            reverse('file_edit', args=[repo.id]),
+            urllib2.quote(filepath.encode('utf-8')), group.id)
         return HttpResponseRedirect(url)
 
 
@@ -1364,8 +1365,10 @@ def group_wiki_page_edit(request, group, page_name="home"):
         return render_error(request, _('Wiki is not found.'))
 
     filepath = "/" + page_name + ".md"
-    url = "%srepo/%s/file/edit/?p=%s&from=wiki_page_edit&gid=%s" % \
-        (SITE_ROOT, repo.id, filepath, group.id)
+    url = "%s?p=%s&from=wiki_page_edit&gid=%s" % (
+            reverse('file_edit', args=[repo.id]),
+            urllib2.quote(filepath.encode('utf-8')), group.id)
+
     return HttpResponseRedirect(url)
 
 
