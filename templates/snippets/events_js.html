@@ -9,7 +9,7 @@ function reqEvents(start) {
         success: function(data) {
             $('#events').append(data['html']);
             $('.event-item').each(function(index) {
-                if (index > 0 && $(this).children('.pic').attr('data') == $(this).prev().children('.pic').attr('data')) {
+                if (index > 0 && $(this).children('.pic').data('author') == $(this).prev().children('.pic').data('author')) {
                     $(this).children('.pic').addClass('hide');
                 }
             });

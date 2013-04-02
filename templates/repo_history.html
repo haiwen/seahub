@@ -29,8 +29,8 @@
                 <td>
                 {% if commit.creator_name %}
                     {% if not commit.second_parent_id %}
-                    <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{% avatar commit.creator_name 16 %}</a>
-                    <a href="{{ SITE_ROOT }}profile/{{ commit.creator_name }}/">{{ commit.creator_name|email2nickname }}</a>
+                    {% avatar commit.creator_name 16 %}
+                    <a href="{% url 'user_profile' commit.creator_name|email2id %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
                     {% else %}
                     {% trans "None"%}
                     {% endif %}

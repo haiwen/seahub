@@ -45,7 +45,7 @@
         <div id="file-op">
             <div class="commit fleft">
                 {% if latest_contributor %}
-                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a>
+                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor|email2id %}" class="name">{{ latest_contributor|email2nickname }}</a>
                 {% endif %}
                 {% if last_modified %}
                 <span class="time">{{ last_modified|translate_seahub_time}}</span>
@@ -58,8 +58,8 @@
                 {% endblock %}
 
                 <span class="contributors">{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
-                {% for user in contributors %}
-                <a href="{% url 'user_profile' user %}" title="{{ user|email2nickname}}">{% avatar user 16 %}</a>
+                {% for user in contributors|slice:":6" %}
+                <a href="{% url 'user_profile' user|email2id %}" title="{{ user|email2nickname}}">{% avatar user 16 %}</a>
                 {% endfor %}
             </div>
 
