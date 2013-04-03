@@ -14,6 +14,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
+from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
@@ -1178,7 +1179,8 @@ def convert_wiki_link(content, group, repo_id, username):
             # convert other types of filelinks to clickable links
             path = "/" + linkname
             icon = file_icon_filter(linkname)
-            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
+            s = reverse('repo_view_file', args=[repo_id]) + \
+                '?p=' + urllib2.quote(smart_str(path))
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
             return a_tag % (MEDIA_URL, icon, icon, s, linkname)
 
