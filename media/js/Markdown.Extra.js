@@ -199,8 +199,6 @@
 
   // Setup state vars, do conversion
   Markdown.Extra.prototype.doConversion = function(transformations, text) {
-    this.hashBlocks = [];
-
     text = processEscapes(text);
 
     if (this.attributeBlocks)
