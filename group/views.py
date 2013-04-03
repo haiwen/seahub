@@ -1193,6 +1193,7 @@ def group_wiki(request, group, page_name="home"):
     content = ''
     wiki_exists = True
     last_modified, latest_contributor = None, None
+    path, repo_id = '', ''
     try:
         content, repo_id, obj_id = get_wiki_page(request, group, page_name)
     except WikiDoesNotExist:
@@ -1224,10 +1225,10 @@ def group_wiki(request, group, page_name="home"):
             "is_staff": group.is_staff,
             "content": content,
             "page": page_name,
-            "path": path,
             "wiki_exists": wiki_exists,
             "last_modified": last_modified,
             "latest_contributor": latest_contributor,
+            "path": path,
             "repo_id": repo_id,
             }, context_instance=RequestContext(request))
 
