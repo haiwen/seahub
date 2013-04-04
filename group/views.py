@@ -15,6 +15,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
+from django.utils import datetime_safe
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
@@ -42,6 +43,7 @@ from signals import grpmsg_added, grpmsg_reply_added
 from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from base.decorators import sys_staff_required
 from base.mixins import LoginRequiredMixin
+from base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
@@ -55,6 +57,7 @@ from seahub.utils import render_error, render_permission_error, \
 from seahub.utils.paginator import Paginator
 from seahub.utils.slugify import slugify
 from seahub.utils.file_types import IMAGE
+from seahub.utils import calc_file_path_hash
 from seahub.views import is_registered_user
 from seahub.forms import RepoCreateForm, SharedRepoCreateForm
 
@@ -748,66 +751,108 @@ def group_unshare_repo(request, repo_id, group_id, from_email):
 def group_recommend(request):
     """
     Recommend a file or directory to a group.
-    now changed to 'post a discussion'
+    now changed to 'Discuss'
+    for ajax post/get
     """
-    if request.method != 'POST':
-        raise Http404
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+    if request.method == 'POST':
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-    
-    form = GroupRecommendForm(request.POST)
-    if form.is_valid():
-        repo_id = form.cleaned_data['repo_id']
-        attach_type = form.cleaned_data['attach_type']
-        path = form.cleaned_data['path']
-        message = form.cleaned_data['message']
-        groups = request.POST.getlist('groups') # groups is a group_id list, e.g. [u'1', u'7']
-        username = request.user.username
+        form = GroupRecommendForm(request.POST)
+        if form.is_valid():
+            repo_id = form.cleaned_data['repo_id']
+            attach_type = form.cleaned_data['attach_type']
+            path = form.cleaned_data['path']
+            message = form.cleaned_data['message']
+            groups = request.POST.getlist('groups') # groups is a group_id list, e.g. [u'1', u'7']
+            username = request.user.username
 
-        for group_id in groups:
-            # Check group id format
-            try:
-                group_id = int(group_id)
-            except ValueError:
-                messages.error(request, _(u'Error: wrong group id'))
-                return HttpResponseRedirect(next)
+            groups_not_in = []
+            groups_posted_to = []
+            for group_id in groups:
+                # Check group id format
+                try:
+                    group_id = int(group_id)
+                except ValueError:
+                    result['err'] = _(u'Error: wrong group id')
+                    return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-            # Get that group
-            group = get_group(group_id)
-            if not group:
-                continue
+                group = get_group(group_id)
+                if not group:
+                    result['err'] = _(u'Error: the group does not exist.')
+                    return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-            # TODO: Check whether repo is in the group and Im in the group
-            if not is_group_user(group_id, username):
-                err_msg = _(u'Error: you are not in group %s.')
-                messages.error(request, err_msg %  group.group_name)
-                continue
+                # TODO: Check whether repo is in the group and Im in the group
+                if not is_group_user(group_id, username):
+                    groups_not_in.append(group.group_name)
+                    continue
 
-            # save message to group
-            gm = GroupMessage(group_id=group_id, from_email=username,
+                # save message to group
+                gm = GroupMessage(group_id=group_id, from_email=username,
                               message=message)
-            gm.save()
+                gm.save()
 
-            # send signal
-            grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+                # send signal
+                grpmsg_added.send(sender=GroupMessage, group_id=group_id,
                               from_email=request.user.username)
                     
-            # save attachment
-            ma = MessageAttachment(group_message=gm, repo_id=repo_id,
+                # save attachment
+                ma = MessageAttachment(group_message=gm, repo_id=repo_id,
                                    attach_type=attach_type, path=path,
                                    src='recommend')
-            ma.save()
+                ma.save()
 
-            group_url = reverse('group_discuss', args=[group_id])
-            msg = _(u'Successfully posted to <a href="%(url)s" target="_blank">%(name)s</a>.') %\
-                {'url':group_url, 'name':group.group_name}
-            messages.add_message(request, messages.INFO, msg)
+                # save discussion
+                fd = FileDiscuss(group_message=gm, repo_id=repo_id, path=path)
+                fd.save()
 
+                group_url = reverse('group_discuss', args=[group_id])
+                groups_posted_to.append(u'<a href="%(url)s" target="_blank">%(name)s</a>' % \
+                {'url':group_url, 'name':group.group_name})
+
+            if len(groups_posted_to) > 0:
+                result['success'] = _(u'Successfully posted to %(groups)s.') % {'groups': ', '.join(groups_posted_to)}
+
+            if len(groups_not_in) > 0:
+                result['err'] = _(u'Error: you are not in group %s.') % (', '.join(groups_not_in))
+
+        else:
+            result['err'] =  _(u'Failed')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    
+    # request.method == 'GET'
     else:
-        messages.add_message(request, messages.ERROR, _(u'Failed.'))
-    return HttpResponseRedirect(next)
+        repo_id = request.GET.get('repo_id')
+        path = request.GET.get('path', None)
+        repo = get_repo(repo_id)
+        if not repo:
+            result['err'] = _(u'Error: the library does not exist.')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+        if path is None:
+            result['err'] = _(u'Error: no path.')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    
+    # get discussions & replies
+    path_hash = calc_file_path_hash(path)
+    discussions = FileDiscuss.objects.filter(path_hash=path_hash, repo_id=repo_id)
+    msg_ids = [ e.group_message_id for e in discussions ]
+
+    grp_msgs = GroupMessage.objects.filter(id__in=msg_ids).order_by('-timestamp')
+    msg_replies = MessageReply.objects.filter(reply_to__in=grp_msgs)
+    for msg in grp_msgs:
+        msg.replies = []
+        for reply in msg_replies:
+            if msg.id == reply.reply_to_id:
+                msg.replies.append(reply)
+        msg.reply_cnt = len(msg.replies)
+        msg.replies = msg.replies[-3:]
+
+    ctx = {}
+    ctx['messages'] = grp_msgs
+    html = render_to_string("snippets/discussion_list.html", ctx)
+    result['html'] = html
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
 
 @login_required
 def create_group_repo(request, group_id):

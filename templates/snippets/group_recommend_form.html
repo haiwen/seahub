@@ -1,6 +1,7 @@
 {% load seahub_tags i18n %}
 {% load url from future %}
-    <form action="{% url 'group_recommend' %}" method="post" id="discuss-to-group-form" class="hide">{% csrf_token %}
+<div id="discuss-to-group" class="hide">
+    <form action="{% url 'group_recommend' %}" method="post" id="discuss-to-group-form">{% csrf_token %}
         <h3>{% trans "Post a discussion to group" %}</h3>
         <div class="groups">
             {% for group in groups %}
@@ -31,6 +32,8 @@
         <p class="error hide"></p>
         <input type="submit" id="discuss-submit" class="submit" value="{% trans "Submit"%}" />
     </form>
+    <ul id="discussions-to-grp" class="hide"></ul>
+</div>
     <div id="discuss-to-group-caret" class="hide">
         <div class="outer-caret">
             <div class="inner-caret"></div>

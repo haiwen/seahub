@@ -5,7 +5,7 @@
 {% with id=r.from_email|email2id name=r.from_email|email2nickname %}
 <li class="reply w100 ovhd">
 <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
-<div class="txt fright">
+<div class="txt">
     <a href="{% url 'user_profile' id %}">{{ name }}</a>
     <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
     <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>

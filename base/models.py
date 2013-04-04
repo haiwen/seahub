@@ -8,6 +8,7 @@ from seaserv import get_emailusers
 
 from shortcuts import get_first_object_or_none
 from base.templatetags.seahub_tags import at_pattern
+from group.models import GroupMessage
 from notifications.models import UserNotification
 from profile.models import Profile
 
@@ -33,6 +34,21 @@ class FileComment(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+
+class FileDiscuss(models.Model):
+    """
+    Model used to represents the relationship between group message and file/dir.
+    """
+    group_message = models.ForeignKey(GroupMessage)
+    repo_id = models.CharField(max_length=36)
+    path = models.TextField()
+    path_hash = models.CharField(max_length=12, db_index=True)
+
+    def save(self, *args, **kwargs):
+        if not self.path_hash:
+            from seahub.utils import calc_file_path_hash
+            self.path_hash = calc_file_path_hash(self.path)
+        super(FileDiscuss, self).save(*args, **kwargs)
 
 class FileContributors(models.Model):        
     """(repo_id, file path, file_id, contributors)"""

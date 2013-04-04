@@ -73,7 +73,7 @@
     {% for msg in group_msgs.object_list %}
         <li class="msg w100 ovhd">
         <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
-        <div class="txt fright">
+        <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
                     {% if is_staff or msg.from_email == request.user.username %}
@@ -127,7 +127,7 @@
                     <li class="reply w100 ovhd">
                     {% with id=r.from_email|email2id name=r.from_email|email2nickname %}
                     <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
-                    <div class="txt fright">
+                    <div class="txt">
                         <a href="{% url 'user_profile' id %}">{{ name }}</a>
                         <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
                         <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>

@@ -1497,7 +1497,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:15px 0 20px;
 }
 .msg .txt {
-    width:576px;
+    margin-left:64px;
 }
 .msg a {
     font-weight: normal;
@@ -1545,7 +1545,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:5px;
 }
 .msg-hd .group,
-.comment-hd .time {
+.discussion-to-grp .time {
     color: #808080;
 }
 .msg-hd .group {
@@ -1595,7 +1595,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:15px;
 }
 .reply .txt {
-    width: 93%;
+    margin-left:38px;
 }
 .reply-con {
     font-size:12px;
@@ -1899,10 +1899,8 @@ textarea:-moz-placeholder {/* for FF */
     background:#646464;
     margin-left:5px;
 }
-/* File comment */
-#file-comment,
 #to-group,
-#discuss-to-group-form {
+#discuss-to-group {
     width:400px;
     padding:0 15px;
     position:fixed;
@@ -1913,27 +1911,19 @@ textarea:-moz-placeholder {/* for FF */
     -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
 }
-#comment-input {
-    width:315px;
-    padding-left:1px;
-    height:3em;
+#discuss-to-group {
+    padding-bottom:10px;
 }
-.comment {
+#discussions-to-grp {
+    height:auto;
+    overflow:auto;
+}
+#discussions-to-grp .msg {
     width:380px;
-    padding:15px 0;
-    border-top:1px solid #e8e8e8;
 }
-.comment .txt {
-    width:318px;
+#discussions-to-grp .reply-input {
+    width:272px;
 }
-#file-comment-form {
-    width:380px;
-    margin:15px 0;
-}
-.comment-bd {
-    word-wrap:break-word;
-}
-#comment-caret,
 #to-group-caret,
 #discuss-to-group-caret {
     width:28px;
@@ -1953,8 +1943,11 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:none;
 }
 /*discuss to group*/
-#discuss-to-group-form {
-    padding-bottom:10px;
+#discuss-to-group-form .checkbox-label {
+    display:inline-block;
+    white-space:nowrap;
+    padding-right:3px;
+    margin-right:10px;
 }
 #discuss-to-group-form .input {
     padding:5px;
