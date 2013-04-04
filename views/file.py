@@ -39,6 +39,7 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     is_textual_file, show_delete_days
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
+from seahub.utils.wiki import get_wiki_dirent
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 try:
@@ -220,11 +221,14 @@ def convert_md_link(file_content, repo_id, username):
         filetype, fileext = get_file_type_and_ext(linkname)
         if fileext == '':
             # convert linkname that extension is missing to a markdown page
-            filename = linkname + ".md"
-            path = "/" + filename
+            dirent = get_wiki_dirent(repo_id, linkname)
+
+            # filename = linkname + ".md"
+            path = "/" + dirent.obj_name
             href = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
 
-            if get_file_id_by_path(repo_id, path):
+            if dirent is not None:            
+            # if get_file_id_by_path(repo_id, path):
                 a_tag = '''<a href="%s">%s</a>'''
                 return a_tag % (href, linkname)
             else:

@@ -110,6 +110,13 @@ addConfirmTo($('#page-delete'), {
     'title': 'Delete Page',
     'con': 'Are you sure you want to delete this page?'
 });
+$('a.wiki-page-missing').each(function(){
+    $(this).click(function() {
+        $('#page-name').val($(this).text());
+        $('#page-create-form').modal({appendTo: '#main', autoResize: true});
+        return false;
+    });
+});
 
 {% else %}
 $('#wiki-create').click(function() {

@@ -38,8 +38,8 @@
 </div>
 
 <ul id="wiki-pages">
-    {% for page in pages %}
-    <li><a href="{% url 'group_wiki' group.id page %}">{{ page }}</a></li>
+    {% for page_slug, page in pages.items %}
+    <li><a href="{% url 'group_wiki' group.id page_slug %}">{{ page }}</a></li>
     {% endfor %}
 </ul>
 
