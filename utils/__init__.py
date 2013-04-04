@@ -555,12 +555,13 @@ if hasattr(settings, 'EVENTS_CONFIG_FILE'):
         ev_session = SeafEventsSession()
         total = 11
         valid_events = []
-        while total == 11 and len(valid_events) < 11:
-            total, events = _get_events_inner(ev_session, username, start, org_id)
-            start += len(events)
-            valid_events.extend(events)
-
-        ev_session.close()
+        try:
+            while total == 11 and len(valid_events) < 11:
+                total, events = _get_events_inner(ev_session, username, start, org_id)
+                start += len(events)
+                valid_events.extend(events)
+        finally:
+            ev_session.close()
 
         return valid_events[:11]
 
@@ -838,7 +839,10 @@ if hasattr(settings, 'TRAFFIC_STATS_CONFIG_FILE'):
     SeafStatsSession = seafstats.init_db_session_class(settings.TRAFFIC_STATS_CONFIG_FILE)
     def get_user_traffic_stat(username):
         session = SeafStatsSession()
-        stat = seafstats.get_user_traffic_stat(session, username)
+        try:
+            stat = seafstats.get_user_traffic_stat(session, username)
+        finally:
+            session.close()
         return stat
 else:
     def get_user_traffic_stat(username):
