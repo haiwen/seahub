@@ -47,7 +47,7 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
-from seahub.base.models import UuidObjidMap, FileComment, InnerPubMsg, InnerPubMsgReply
+from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
@@ -990,56 +990,6 @@ def repo_del_file(request, repo_id):
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
-
-def file_comment(request):
-    if request.method == 'POST':
-        # handle post request to leave comment on a file
-        content_type = 'application/json; charset=utf-8'
-        path = request.GET.get('p', '')
-        
-        f = FileCommentForm(request.POST)
-        if f.is_valid():
-            repo_id = f.cleaned_data['repo_id']
-            file_path = f.cleaned_data['file_path']
-            file_path_hash = md5_constructor(file_path).hexdigest()[:12]
-            message = f.cleaned_data['message']
-            fc = FileComment(repo_id=repo_id, file_path=file_path,
-                             file_path_hash=file_path_hash,
-                             from_email=request.user.username, message=message)
-            fc.save()
-
-            # Get repo groups
-            org, base_template = check_and_get_org_by_repo(repo_id,
-                                                           request.user.username)
-            if org:
-                repo_shared_groups = get_org_groups_by_repo(org.org_id,
-                                                            repo_id)
-            else:
-                repo_shared_groups = get_shared_groups_by_repo(repo_id)
-
-            for group in repo_shared_groups:
-                # save group message, and length should be less than 500
-                gm = GroupMessage(group_id=group.id,
-                                  from_email=request.user.username,
-                                  message=message[:500])
-                gm.save()
-                # send signal
-                grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                                  from_email=request.user.username)
-
-                # save attachment
-                ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                       attach_type='file', path=path,
-                                       src='filecomment')
-                ma.save()
-
-            comments = FileComment.objects.filter(file_path_hash=file_path_hash,
-                                                  repo_id=repo_id)
-            html = render_to_string("file_comments.html", {
-                    'comments':comments})
-            return HttpResponse(json.dumps({'html': html}),
-                                content_type=content_type)
-    
    
 def repo_file_get(raw_path, file_enc):
     err = ''

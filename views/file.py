@@ -30,7 +30,7 @@ from pysearpc import SearpcError
 
 from auth.decorators import login_required
 from base.decorators import repo_passwd_set_required
-from base.models import UuidObjidMap, FileComment
+from base.models import UuidObjidMap
 from contacts.models import Contact
 from share.models import FileShare
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
@@ -278,7 +278,6 @@ def view_file(request, repo_id):
     # construct some varibles
     u_filename = os.path.basename(path)
     filename_utf8 = urllib2.quote(u_filename.encode('utf-8'))
-    comment_open = request.GET.get('comment_open', '')
     current_commit = get_commits(repo_id, 0, 1)[0]
 
     # Check whether user has permission to view file and get file raw path,
@@ -371,9 +370,7 @@ def view_file(request, repo_id):
     else:
         repogrp_str = '' 
     
-    # fetch file comments
     file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-    comments = FileComment.objects.filter(file_path_hash=file_path_hash, repo_id=repo_id)
 
     # fetch file contributors and latest contributor
     contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
@@ -410,8 +407,6 @@ def view_file(request, repo_id):
             'filetype': ret_dict['filetype'],
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
-            'comments': comments,
-            'comment_open':comment_open,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             'contributors': contributors,
