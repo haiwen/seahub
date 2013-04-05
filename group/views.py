@@ -817,7 +817,7 @@ def group_recommend(request):
                 result['err'] = _(u'Error: you are not in group %s.') % (', '.join(groups_not_in))
 
         else:
-            result['err'] =  _(u'Failed')
+            result['err'] = str(form.errors)
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     
     # request.method == 'GET'
@@ -849,7 +849,7 @@ def group_recommend(request):
 
     ctx = {}
     ctx['messages'] = grp_msgs
-    html = render_to_string("snippets/discussion_list.html", ctx)
+    html = render_to_string("group/discussion_list.html", ctx)
     result['html'] = html
     return HttpResponse(json.dumps(result), content_type=content_type)
 

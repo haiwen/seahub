@@ -1948,11 +1948,17 @@ textarea:-moz-placeholder {/* for FF */
     white-space:nowrap;
     padding-right:3px;
     margin-right:10px;
+    margin-top:0;
 }
 #discuss-to-group-form .input {
     padding:5px;
     width:388px;
     height:5em;
+    resize:none;
+    vertical-align:top;
+}
+#discuss-to-group-form .attachment {
+    margin-left:5px;
 }
 /* text file diff */
 .file-modification-hd .modifier,

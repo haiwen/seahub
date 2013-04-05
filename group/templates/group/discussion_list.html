@@ -1,6 +1,7 @@
 {% load i18n seahub_tags avatar_tags%}
 {% load url from future %}
 
+{# for file/dir 'discuss to grp' #}
 {% for msg in messages %}
 <li class="msg ovhd">
 <a class="pic fleft" href="{% url 'user_profile' msg.from_email|email2id %}">{% avatar msg.from_email 48 %}</a>

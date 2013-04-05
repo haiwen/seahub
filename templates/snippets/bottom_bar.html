@@ -41,6 +41,7 @@ $('#discuss').click(function() {
         caret.addClass('hide');
     }
 });
+
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
     if (!$('#discuss, #discuss-to-group, #discuss-to-group-caret').is(target) && !($('#discuss-to-group, #discuss-to-group-caret').find('*').is(target))) {
