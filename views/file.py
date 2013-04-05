@@ -19,8 +19,8 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
-from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor
+from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
@@ -222,13 +222,9 @@ def convert_md_link(file_content, repo_id, username):
         if fileext == '':
             # convert linkname that extension is missing to a markdown page
             dirent = get_wiki_dirent(repo_id, linkname)
-
-            # filename = linkname + ".md"
-            path = "/" + dirent.obj_name
-            href = reverse('repo_view_file', args=[repo_id]) + '?p=' + path
-
-            if dirent is not None:            
-            # if get_file_id_by_path(repo_id, path):
+            if dirent is not None:
+                path = "/" + dirent.obj_name
+                href = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
                 a_tag = '''<a href="%s">%s</a>'''
                 return a_tag % (href, linkname)
             else:
@@ -250,8 +246,7 @@ def convert_md_link(file_content, repo_id, username):
             # convert other types of filelinks to clickable links
             path = "/" + linkname
             icon = file_icon_filter(linkname)
-            s = reverse('repo_view_file', args=[repo_id]) + \
-                '?p=' + urllib2.quote(smart_str(path))
+            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href="%s" target="_blank" class="vam">%s</a>'''
             return a_tag % (MEDIA_URL, icon, icon, s, linkname)
 
@@ -607,8 +602,7 @@ def file_edit_submit(request, repo_id):
             gid = 0
         next = reverse('group_wiki_pages', args=[gid])
     else:
-        next = reverse('repo_view_file', args=[repo_id]) + \
-            '?p=' + urllib2.quote(path.encode('utf-8'))
+        next = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
 
     parent_dir = os.path.dirname(path).encode('utf-8')
     filename = os.path.basename(path).encode('utf-8')
