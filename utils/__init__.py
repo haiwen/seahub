@@ -336,10 +336,7 @@ def gen_file_get_url(token, filename):
     Generate httpserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
-    if isinstance(filename, unicode):
-        filename = urllib2.quote(filename.encode('utf-8'))
-
-    return '%s/files/%s/%s' % (get_httpserver_root(), token, filename)
+    return '%s/files/%s/%s' % (get_httpserver_root(), token, urlquote(filename))
 
 def gen_file_upload_url(token, op):
     return '%s/%s/%s' % (get_httpserver_root(), op, token)
