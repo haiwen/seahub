@@ -1213,7 +1213,8 @@ def convert_wiki_link(content, group, repo_id, username):
                     (reverse('group_wiki', args=[group.id, page_name.replace('/', '-')]), page_name)
 
             token = web_get_access_token(repo_id, obj_id, 'view', username)
-            return '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+            r = '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+            return r.encode('utf-8')
         else:
             from base.templatetags.seahub_tags import file_icon_filter
             
