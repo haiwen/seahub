@@ -1,0 +1,146 @@
+{% extends "myhome_base.html" %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Personal Wiki" %}{% endblock %}
+{% block nav_myhome_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Personal Wiki" %}</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block main_panel %}
+
+    {% if not wiki_exists %}
+    <div class="empty-tips">
+        <h2 class="center-contents">{% trans "You do not have personal wiki" %}</h2>
+        <p>{% trans "Seafile Wiki enables you to take notes in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server." %}</p>
+        <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
+    </div>
+    <form id="wiki-create-form" action="" method="post" class="hide">
+        <h3>{% trans "Create Wiki" %}</h3>
+        <label>{% trans "Name" %}</label><br/>
+        <input id="repo-name" type="text" name="repo_name" value="personal-wiki" maxlength="{{max_file_name}}"/><br />
+        <label>{% trans "Description" %}</label><br/>
+        <textarea id="repo-desc" name="repo_desc">{% trans "Personal Wiki Pages" %}</textarea><br/>
+        <p class="error hide"></p>
+        <input type="submit" id="wiki-create-submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+
+    {% else %}
+    <div class="wiki-top w100 ovhd">
+        <ul class="wiki-nav fleft">
+            <li class="item"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
+            <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
+            {% if group.view_perm != "pub" %}
+            <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
+            {% endif %}
+        </ul>
+        
+        <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
+        <button id="page-delete" class="op-btn" data-url="{% url 'personal_wiki_page_delete' page %}">{% trans "Delete Page" %}</button>
+        <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>
+        <button id="page-history" class="op-btn">{% trans "Page History" %}</button>
+    </div>
+
+    <div id="wiki-area" class="article">
+        <h1>{{ page|capfirst }}</h1>
+        <div id="wiki-content"></div><!--content will be offered by js-->
+        <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}</p>
+    </div>
+
+    <form id="page-create-form" action="{% url 'personal_wiki_page_new' %}" method="post" class="simple-input-popup hide">
+        <h3>{% trans "New Page"%}</h3>
+        <label>{% trans "Name"%}</label><br/>
+        <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="long-input" /><br />
+        <p class="error hide"></p>
+        <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
+    </form>
+    {% endif %}
+{% endblock main_panel %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
+<script type="text/javascript">
+{% if wiki_exists %}
+var converter = new Markdown.Converter();
+Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
+$('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
+
+$('#page-create').click(function() {
+    $('#page-create-form').modal({appendTo: '#main', autoResize: true});
+})
+
+$('#page-edit').click(function() {
+    location.href = ("{% url 'personal_wiki_page_edit' page %}");
+})
+
+$('#page-list').click(function () {
+    location.href = ("{% url 'personal_wiki_pages' %}");
+});
+
+$('#page-history').click(function () {
+    window.open("{% url 'file_revisions' repo_id %}" + "?p=" + "{{path|urlencode}}");
+});
+
+addConfirmTo($('#page-delete'), {
+    'title': 'Delete Page',
+    'con': 'Are you sure you want to delete this page?'
+});
+$('a.wiki-page-missing').each(function(){
+    $(this).click(function() {
+        $('#page-name').val($(this).text());
+        $('#page-create-form').modal({appendTo: '#main', autoResize: true});
+        return false;
+    });
+});
+
+{% else %}
+$('#wiki-create').click(function() {
+    $('#wiki-create-form').modal({appendTo: '#main', autoResize: true});
+    return false;
+});
+$('#wiki-create-submit').click(function () {
+    if (!$.trim($('#repo-name').val()) || !$.trim($('#repo-desc').val())) {
+         apply_form_error('wiki-create-form', '{% trans 'Name and description can not be blank.' %}');
+         return false;
+    }
+
+    var submit_btn = $(this);
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'personal_wiki_create' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_name': $('#repo-name').val(),
+            'repo_desc': $('#repo-desc').val()
+        },
+        success: function(data) {
+            location.href = data['href'];
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error('wiki-create-form', value);
+            });
+            enable(submit_btn);
+        }
+    });
+
+    return false;
+});
+{% endif %}                     // END wiki_exists
+</script>
+{% endblock %}
