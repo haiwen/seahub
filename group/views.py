@@ -1190,13 +1190,17 @@ def convert_wiki_link(content, group, repo_id, username):
         filetype, fileext = get_file_type_and_ext(page_name)
         if fileext == '':
             # convert page_name that extension is missing to a markdown page
+            page_alias = page_name
+            if len(page_name.split('|')) > 1:
+                page_alias = page_name.split('|')[0]
+                page_name = page_name.split('|')[1]
             dirent = get_wiki_dirent(repo_id, page_name)
             if dirent is not None:
                 a_tag = "<a href='%s'>%s</a>"
-                return a_tag % (reverse('group_wiki', args=[group.id, normalize_page_name(page_name)]), page_name)
+                return a_tag % (reverse('group_wiki', args=[group.id, normalize_page_name(page_name)]), page_alias)
             else:
                 a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
-                return a_tag % (reverse('group_wiki', args=[group.id, page_name.replace('/', '-')]), page_name)                                
+                return a_tag % (reverse('group_wiki', args=[group.id, page_name.replace('/', '-')]), page_alias)                                
         elif filetype == IMAGE:
             # load image to wiki page
             path = "/" + page_name
