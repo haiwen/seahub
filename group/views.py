@@ -455,6 +455,12 @@ def group_info(request, group):
                                               request.user.username)
         cmt.tp = cmt.props.desc.split(' ')[0]
 
+    if PublicGroup.objects.filter(group_id=group.id):
+        group.is_pub = True
+    else:
+        group.is_pub = False
+
+
     return render_to_response("group/group_info.html", {
             "members": members,
             "repos": repos,

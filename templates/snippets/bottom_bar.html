@@ -1,9 +1,13 @@
 {% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss">{% trans "Discuss" %}</button><button id="click-into-group">{% trans "To group" %}</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss"><span class="icon-comment-alt"></span>{% trans "Discuss" %}</button><button id="click-into-group"><span class="icon-double-angle-right"></span>{% trans "Group" %}</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
 $('#footer').addClass('hide');
+if ($.browser.msie && $.browser.version < 8) {
+    $('.icon-comment-alt').html('&#xf0e5;');
+    $('.icon-double-angle-right').html('&#xf101;');
+}
 
 {% if groups %}
 function getAndHandleDiscussions(data_html) {

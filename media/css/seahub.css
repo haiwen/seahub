@@ -1417,9 +1417,14 @@ textarea:-moz-placeholder {/* for FF */
 .grp-profile .name {
     vertical-align:middle;
 }
+.group-basic-info [class^="icon-"] {
+    margin-left:8px;
+}
+.group-basic-info .avatar {
+    float:left;
+}
 .group-basic-info .txt {
-    width:145px;
-    word-wrap:break-word;
+    margin-left:63px;
 }
 #grp-member-add {
     margin-top:2px;
@@ -1898,6 +1903,9 @@ textarea:-moz-placeholder {/* for FF */
     font-size:15px;
     background:#646464;
     margin-left:5px;
+}
+#bottom-bar [class^='icon-'] {
+    margin-right:3px;
 }
 #to-group,
 #discuss-to-group {

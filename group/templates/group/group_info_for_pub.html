@@ -22,11 +22,12 @@
 {% endblock %}
 
 {% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Basic Info" %}</h3>
-    <div class="info-item-bottom group-basic-info ovhd">
-        <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
-        <p class="txt fright">{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
+<div class="info-item group-basic-info">
+    <h3 class="info-item-top">{% trans "Basic Info" %}<span class="icon-eye-open" title="{% trans "This group is public." %}"></span></h3>
+    <div class="info-item-bottom ovhd">
+        {% grp_avatar group.props.id 48 %}
+        <div class="txt">
+            {{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</div>
     </div>
 </div>
 
@@ -82,6 +83,9 @@
 {% block extra_script %}
 
 <script type="text/javascript">
+if ($.browser.msie && $.browser.version < 8) {
+    $('.icon-eye-open').html('&#xf06e;');
+}
 
 $("table tr:gt(0)").hover(
     function() {
