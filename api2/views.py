@@ -25,6 +25,7 @@ from share.models import FileShare
 from seahub.views import access_to_repo, validate_owner
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
+    get_dir_files_last_modified, \
     get_ccnet_server_addr_port, star_file, unstar_file, string2list
 try:
     from seahub.settings import CLOUD_MODE
@@ -376,12 +377,14 @@ def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
     return size if size else 0
 
-def get_dir_entrys_by_id(request, dir_id):
+def get_dir_entrys_by_id(request, repo_id, path, dir_id):
     try:
         dirs = seafserv_threaded_rpc.list_dir(dir_id)
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
+
+    mtimes = get_dir_files_last_modified (repo_id, path, dir_id)
 
     dir_list, file_list = [], []
     for dirent in dirs:
@@ -398,10 +401,12 @@ def get_dir_entrys_by_id(request, dir_id):
         entry["type"]=dtype
         entry["name"]=dirent.obj_name
         entry["id"]=dirent.obj_id
+        entry["mtime"]=mtimes.get(dirent.obj_name, None)
         if dtype == 'dir':
             dir_list.append(entry)
         else:
             file_list.append(entry)
+
 
     dir_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
     file_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
@@ -471,7 +476,7 @@ def reloaddir(request, repo_id, parent_dir):
     if not dir_id:
         return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
-    return get_dir_entrys_by_id(request, dir_id)
+    return get_dir_entrys_by_id(request, repo_id, parent_dir, dir_id)
     
 def reloaddir_if_neccessary (request, repo_id, parent_dir):
 
@@ -841,7 +846,7 @@ class DirView(APIView):
             response["oid"] = dir_id
             return response
         else:
-            return get_dir_entrys_by_id(request, dir_id)
+            return get_dir_entrys_by_id(request, repo_id, path, dir_id)
 
     def post(self, request, repo_id, format=None):
         # new dir
