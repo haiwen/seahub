@@ -103,6 +103,7 @@ LANGUAGES = (
     ('es', gettext_noop('Español')),
     ('it', gettext_noop('Italiano')),
     ('fr', gettext_noop('Français')),
+    ('hu', gettext_noop('Magyar')),
 )
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
