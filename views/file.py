@@ -33,13 +33,14 @@ from base.decorators import repo_passwd_set_required
 from base.models import UuidObjidMap
 from contacts.models import Contact
 from share.models import FileShare
+from seahub.wiki.utils import get_wiki_dirent
+from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
-from seahub.utils.wiki import get_wiki_dirent
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 try:
@@ -221,13 +222,13 @@ def convert_md_link(file_content, repo_id, username):
         filetype, fileext = get_file_type_and_ext(linkname)
         if fileext == '':
             # convert linkname that extension is missing to a markdown page
-            dirent = get_wiki_dirent(repo_id, linkname)
-            if dirent is not None:
+            try:
+                dirent = get_wiki_dirent(repo_id, linkname)
                 path = "/" + dirent.obj_name
                 href = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
                 a_tag = '''<a href="%s">%s</a>'''
                 return a_tag % (href, linkname)
-            else:
+            except (WikiDoesNotExist, WikiPageMissing):
                 a_tag = '''<p class="wiki-page-missing">%s</p>'''
                 return a_tag % (linkname)  
         elif filetype == IMAGE:

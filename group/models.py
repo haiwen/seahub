@@ -89,13 +89,9 @@ class GroupWikiManager(models.Manager):
         return groupwiki
 
 class GroupWiki(models.Model):
-    group_id = models.IntegerField()
+    group_id = models.IntegerField(unique=True)
     repo_id = models.CharField(max_length=36)
     objects = GroupWikiManager()
-
-    class Meta:
-        unique_together = ('group_id', 'repo_id')
-
 
 class PublicGroup(models.Model):
     """

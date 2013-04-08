@@ -43,6 +43,10 @@ from base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
+from wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
+    get_wiki_pages
+from wiki.models import WikiDoesNotExist, WikiPageMissing
+from wiki.utils import clean_page_name, get_wiki_dirent
 from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
@@ -51,7 +55,6 @@ from seahub.utils import render_error, render_permission_error, string2list, \
 from seahub.utils.file_types import IMAGE
 from seahub.utils import calc_file_path_hash
 from seahub.utils.paginator import Paginator
-from seahub.utils.wiki import normalize_page_name, clean_page_name, get_wiki_dirent
 from seahub.views import is_registered_user
 from seahub.forms import SharedRepoCreateForm
 
@@ -1148,99 +1151,12 @@ def group_discuss(request, group):
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             }, context_instance=RequestContext(request))
 
-
-class WikiDoesNotExist(Exception):
-    pass
-
-class WikiPageMissing(Exception):
-    pass
-
-def find_wiki_repo(request, group):
-    try:
-        groupwiki = GroupWiki.objects.get(group_id=group.id)
-        repos = get_group_repos(group.id, request.user.username)
-        for repo in repos:
-            if repo.id == groupwiki.repo_id:
-                return repo
-        return None
-    except GroupWiki.DoesNotExist:
-        return None
-
-def get_file_url(repo, obj_id, file_name):
-    repo_id = repo.id
-    access_token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
-                                                     'view', '')
-    url = gen_file_get_url(access_token, file_name)
-    return url
-
-def get_wiki_page(request, group, page_name):
-    repo = find_wiki_repo(request, group)
-    if not repo:
-        raise WikiDoesNotExist
-    dirent = get_wiki_dirent(repo.id, page_name)
-    if not dirent:
-        raise WikiPageMissing
-    url = get_file_url(repo, dirent.obj_id, dirent.obj_name)
-    file_response = urllib2.urlopen(url)
-    content = file_response.read()
-    return content, repo.id, dirent
-
-def convert_wiki_link(content, group, repo_id, username):
-    import re
-
-    def repl(matchobj):
-        if matchobj.group(2):   # return origin string in backquotes
-            return matchobj.group(2)
-
-        page_name = matchobj.group(1).strip()
-        filetype, fileext = get_file_type_and_ext(page_name)
-        if fileext == '':
-            # convert page_name that extension is missing to a markdown page
-            page_alias = page_name
-            if len(page_name.split('|')) > 1:
-                page_alias = page_name.split('|')[0]
-                page_name = page_name.split('|')[1]
-            dirent = get_wiki_dirent(repo_id, page_name)
-            if dirent is not None:
-                a_tag = "<a href='%s'>%s</a>"
-                return a_tag % (reverse('group_wiki', args=[group.id, normalize_page_name(page_name)]), page_alias)
-            else:
-                a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
-                return a_tag % (reverse('group_wiki', args=[group.id, page_name.replace('/', '-')]), page_alias)                                
-        elif filetype == IMAGE:
-            # load image to wiki page
-            path = "/" + page_name
-            filename = os.path.basename(path)
-            obj_id = get_file_id_by_path(repo_id, path)
-            if not obj_id:
-                # Replace '/' in page_name to '-', since wiki name can not
-                # contain '/'.
-                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
-                    (reverse('group_wiki', args=[group.id, page_name.replace('/', '-')]), page_name)
-
-            token = web_get_access_token(repo_id, obj_id, 'view', username)
-            r = '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
-            return r.encode('utf-8')
-        else:
-            from base.templatetags.seahub_tags import file_icon_filter
-            
-            # convert other types of filelinks to clickable links
-            path = "/" + page_name
-            icon = file_icon_filter(page_name)
-            s = reverse('repo_view_file', args=[repo_id]) + \
-                '?p=' + urllib2.quote(smart_str(path))
-            a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
-            return a_tag % (MEDIA_URL, icon, icon, s, page_name)
-
-    return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, content)
-    
-
 @group_check
 def group_wiki(request, group, page_name="home"):
     username = request.user.username
     wiki_exists = True
     try:
-        content, repo_id, dirent = get_wiki_page(request, group, page_name)
+        content, repo, dirent = get_group_wiki_page(username, group, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
         return render_to_response("group/group_wiki.html", {
@@ -1253,7 +1169,7 @@ def group_wiki(request, group, page_name="home"):
         if not is_group_user(group.id, username):
             raise Http404
 
-        repo = find_wiki_repo(request, group)
+        repo = get_group_wiki_repo(group, username)
         # No need to check whether repo is none, since repo is already created
         
         filename = clean_page_name(page_name) + '.md'
@@ -1261,13 +1177,14 @@ def group_wiki(request, group, page_name="home"):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
     else:
-        content = convert_wiki_link(content, group, repo_id, username)
+        url_prefix = reverse('group_wiki', args=[group.id])
+        content = convert_wiki_link(content, url_prefix, repo.id, username)
         
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
         file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
         contributors, last_modified, last_commit_id = get_file_contributors(\
-            repo_id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
+            repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None
 
         return render_to_response("group/group_wiki.html", {
@@ -1279,7 +1196,7 @@ def group_wiki(request, group, page_name="home"):
                 "last_modified": last_modified,
                 "latest_contributor": latest_contributor,
                 "path": path,
-                "repo_id": repo_id,
+                "repo_id": repo.id,
                 }, context_instance=RequestContext(request))
 
 @group_check
@@ -1287,38 +1204,19 @@ def group_wiki_pages(request, group):
     """
     List wiki pages in group.
     """
-    repo = find_wiki_repo(request, group)
-    if not repo:
-        return render_error(request, _('Wiki is not found.'))
-
     try:
-        dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo.id, '/')
-    except SearpcError, e:
-        dir_id = None
-    if not dir_id:
-        return render_error(request, _('Wiki root path is missing.'))
-
-    try:
-        dirs = seafserv_threaded_rpc.list_dir(dir_id)
-    except SearpcError, e:
-        return render_error(request, _('Failed to list wiki directories.'))
-
-    pages = {}
-    for e in dirs:
-        if stat.S_ISDIR(e.mode):
-            continue            # skip directories
-        name, ext = os.path.splitext(e.obj_name)
-        if ext == '.md':
-            key = normalize_page_name(name)
-            pages[key] = name
-
+        repo = get_group_wiki_repo(group, request.user.username)
+        pages = get_wiki_pages(repo)
+    except SearpcError:
+        return render_error(request, _('Internal Server Error'))
+    except WikiDoesNotExist:
+        return render_error(request, _('Wiki does not exists.'))
     return render_to_response("group/group_wiki_pages.html", {
             "group": group,
             "pages": pages,
             "is_staff": group.is_staff,
             "repo_id": repo.id
             }, context_instance=RequestContext(request))
-
 
 @group_check
 def group_wiki_create(request, group):
@@ -1382,8 +1280,9 @@ def group_wiki_page_new(request, group, page_name="home"):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         page_name = clean_page_name(page_name)
 
-        repo = find_wiki_repo(request, group)
-        if not repo:
+        try:
+            repo = get_group_wiki_repo(group, request.user.username)
+        except WikiDoesNotExist:
             return render_error(request, _('Wiki is not found.'))
 
         filename = page_name + ".md"
@@ -1407,8 +1306,9 @@ def group_wiki_page_edit(request, group, page_name="home"):
     if group.view_perm == "pub":
         raise Http404
 
-    repo = find_wiki_repo(request, group)
-    if not repo:
+    try:
+        repo = get_group_wiki_repo(group, request.user.username)
+    except WikiDoesNotExist:
         return render_error(request, _('Wiki is not found.'))
 
     filepath = "/" + page_name + ".md"
@@ -1424,8 +1324,9 @@ def group_wiki_page_delete(request, group, page_name):
     if group.view_perm == "pub":
         raise Http404
 
-    repo = find_wiki_repo(request, group)
-    if not repo:
+    try:
+        repo = get_group_wiki_repo(group, request.user.username)
+    except WikiDoesNotExist:
         return render_error(request, _('Wiki is not found.'))
     
     file_name = page_name + '.md'
