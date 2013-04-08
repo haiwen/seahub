@@ -9,6 +9,9 @@ from seahub.views.repo import RepoView, RepoHistoryView
 from seahub.views.search import search
 from notifications.views import notification_list
 from group.views import group_list
+from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
+    personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
+    personal_wiki_page_delete
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -30,6 +33,14 @@ urlpatterns = patterns('',
     (r'^$', root),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^home/my/$', myhome, name='myhome'),
+    url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
+    url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
+    url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
+    url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
+    url(r'^home/wiki_page_new/$', personal_wiki_page_new, name='personal_wiki_page_new'),
+    url(r'^home/wiki_page_edit/(?P<page_name>[^/]+)$', personal_wiki_page_edit, name='personal_wiki_page_edit'),
+    url(r'^home/wiki_page_delete/(?P<page_name>[^/]+)$', personal_wiki_page_delete, name='personal_wiki_page_delete'),
+
     url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
     url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 

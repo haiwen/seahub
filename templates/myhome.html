@@ -5,6 +5,19 @@
 {% block sub_title %}{% trans "My Home" %} - {% endblock %}
 {% block nav_myhome_class %}class="cur"{% endblock %}
 
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
+    </ul>
+</div>
+
+{% endblock %}
+
+
 {% block left_panel %}
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Account" %}</h3>

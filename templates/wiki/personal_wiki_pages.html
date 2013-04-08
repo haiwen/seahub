@@ -1,0 +1,53 @@
+{% extends "myhome_base.html" %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Personal Wiki" %}{% endblock %}
+{% block nav_myhome_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Personal Wiki" %}</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block main_panel %}
+
+<div class="wiki-top w100 ovhd">
+    <ul class="wiki-nav fleft">
+        <li class="item"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
+        <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
+        <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
+    </ul>
+    <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
+</div>
+
+<ul id="wiki-pages">
+    {% for page_slug, page in pages.items %}
+    <li><a href="{% url 'personal_wiki' page_slug %}">{{ page }}</a></li>
+    {% endfor %}
+</ul>
+
+<form id="page-create-form" action="{% url 'personal_wiki_page_new' %}" method="post" class="hide">
+    <h3>{% trans "New Page"%}</h3>
+    <label>{% trans "Name"%}</label><br/>
+    <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}"/><br />
+    <p class="error hide"></p>
+    <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit" />
+</form>
+
+{% endblock main_panel %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#page-create').click(function() {
+    $('#page-create-form').modal({appendTo: '#main', autoResize: true});
+})
+</script>
+{% endblock %}

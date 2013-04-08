@@ -821,6 +821,20 @@ textarea:-moz-placeholder {/* for FF */
 
 /* for separate pages */
 /*myhome*/
+.personal-nav {
+    border-bottom:1px solid #ddd;
+    margin-bottom:16px;
+    margin-top:-12px;
+    text-align:right;
+}
+.personal-nav .item {
+    float:left;
+    font-size:15px;
+    margin:8px 16px 0 0;
+}
+.personal-nav a {
+    font-weight:normal;
+}
 .home-profile .pic {
     margin-left:9px;
 }
