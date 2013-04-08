@@ -17,8 +17,6 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 
-from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
-
 from htmldiff import HtmlDiff
 
 from pysearpc import SearpcError
@@ -852,3 +850,6 @@ def redirect_to_login(request):
     path = urlquote(request.get_full_path())
     tup = login_url, redirect_field_name, path
     return HttpResponseRedirect('%s?%s=%s' % tup)
+
+# Move to here to avoid circular import.
+from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo

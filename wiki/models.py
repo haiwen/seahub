@@ -20,6 +20,6 @@ class PersonalWikiManager(models.Manager):
         return wiki
 
 class PersonalWiki(models.Model):
-    username = models.CharField(max_length=256, unique=True)
+    username = models.CharField(max_length=255, unique=True)
     repo_id = models.CharField(max_length=36)
     objects = PersonalWikiManager()
