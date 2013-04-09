@@ -111,7 +111,7 @@
                 <div class="item">
                     <h4>Seafile</h4>
                     <ul>
-                        <li><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
+                        <li><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
                         <li><a href="https://github.com/haiwen/seafile/wiki{% if LANGUAGE_CODE == 'zh-cn' %}/Seafile-服务器手册中文版{% endif %}" target="_blank">Wiki</a></li>
                         {% if LANGUAGE_CODE == 'zh-cn' %}<li><a href="http://bbs.seafile.com/" target="_blank"> {% else %}<li><a href="https://groups.google.com/forum/#!forum/seafile" target="_blank"> {% endif %}{% trans "Forum" %}</a></li>
                     </ul>
@@ -119,20 +119,20 @@
                 <div class="item">
                     <h4>{% trans "Client" %}</h4>
                     <ul>
-                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
                     </ul>
                 </div>
                 <div class="item">
                     <h4>{% trans "Documents" %}</h4>
                     <ul>
-                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
+                        <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
                     </ul>
                 </div>
             </div>
             <div class="other-info fright">
                 <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
                 <p>© 2013 {% trans "Seafile" %}</p>
-                <p><a href="http://seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
+                <p><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
             </div>
         </div>
 </div><!-- wrapper -->
