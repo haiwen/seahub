@@ -94,11 +94,7 @@
              <button id="preview-btn">{% trans "Preview" %}</button>
              {% endif %}
              <button id="file-edit-submit">{% trans "Submit" %}</button>
-             {% if from == 'wiki_page_edit' or from == 'wiki_page_new' %}
-             <a href="{% url 'group_wiki' gid wiki_name %}" id="file-edit-cancel">{% trans "Cancel" %}</a>
-             {% else %}
-             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path|urlencode }}" id="file-edit-cancel">{% trans "Cancel" %}</a>
-             {% endif %}
+             <a href="{{cancel_url}}" id="file-edit-cancel">{% trans "Cancel" %}</a>
          </div>
     </div>
     <div id="file-edit"{% if filetype == 'Markdown' %} class="hide"{% endif %}>

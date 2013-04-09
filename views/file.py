@@ -597,6 +597,11 @@ def file_edit_submit(request, repo_id):
         except ValueError:
             gid = 0
         next = reverse('group_wiki_pages', args=[gid])
+    elif request.GET.get('from', '') == 'personal_wiki_page_edit':
+        wiki_name = os.path.splitext(os.path.basename(path))[0]
+        next = reverse('personal_wiki', args=[wiki_name])
+    elif request.GET.get('from', '') == 'personal_wiki_page_new':
+        next = reverse('personal_wiki_pages')
     else:
         next = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
 
@@ -664,10 +669,21 @@ def file_edit(request, repo_id):
     else:
         err = _(u'Edit online is not offered for this type of file.')
 
+    # Redirect to different place according to from page when user click
+    # cancel button on file edit page.
+    cancel_url = reverse('repo_view_file', args=[repo.id]) + '?p=' + urlquote(path)
+    page_from = request.GET.get('from', '')
+    gid = request.GET.get('gid', '')
+    wiki_name = os.path.splitext(u_filename)[0]
+    if page_from == 'wiki_page_edit' or page_from == 'wiki_page_new':
+        cancel_url = reverse('group_wiki', args=[gid, wiki_name])
+    elif page_from == 'personal_wiki_page_edit' or page_from == 'personal_wiki_page_new':
+        cancel_url = reverse('personal_wiki', args=[wiki_name])
+
     return render_to_response('file_edit.html', {
         'repo':repo,
         'u_filename':u_filename,
-        'wiki_name': os.path.splitext(u_filename)[0],
+        'wiki_name': wiki_name,
         'path':path,
         'zipped':zipped,
         'filetype':filetype,
@@ -678,7 +694,8 @@ def file_edit(request, repo_id):
         'encoding': encoding,
         'file_encoding_list':file_encoding_list,
         'head_id': head_id,
-        'from': request.GET.get('from', ''),
-        'gid': request.GET.get('gid', ''),
+        'from': page_from,
+        'gid': gid,
+        'cancel_url': cancel_url,
     }, context_instance=RequestContext(request))
 

@@ -14,6 +14,7 @@ import chardet
 
 from django.contrib.sites.models import Site, RequestSite
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
@@ -33,6 +34,7 @@ from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
+from seahub.wiki.utils import clean_page_name
 from seahub.utils import get_file_contributors, render_error
 
 @login_required
@@ -138,23 +140,24 @@ def personal_wiki_page_new(request, page_name="home"):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         page_name = clean_page_name(page_name)
 
-        repo = find_wiki_repo(request, group)
-        if not repo:
+        try:
+            repo = get_personal_wiki_repo(request.user.username)
+        except WikiDoesNotExist:
             return render_error(request, _('Wiki is not found.'))
 
         filename = page_name + ".md"
         filepath = "/" + page_name + ".md"
 
         # check whether file exists
-        if get_file_id_by_path(repo.id, filepath):
+        if seaserv.get_file_id_by_path(repo.id, filepath):
             return render_error(request, _('Page "%s" already exists.') % filename)
 
-        if not post_empty_file(repo.id, "/", filename, request.user.username):
+        if not seaserv.post_empty_file(repo.id, "/", filename, request.user.username):
             return render_error(request, _('Failed to create wiki page. Please retry later.'))
 
-        url = "%s?p=%s&from=wiki_page_new&gid=%s" % (
+        url = "%s?p=%s&from=personal_wiki_page_new" % (
             reverse('file_edit', args=[repo.id]),
-            urllib2.quote(filepath.encode('utf-8')), group.id)
+            urlquote(filepath.encode('utf-8')))
         return HttpResponseRedirect(url)
 
 
@@ -182,7 +185,7 @@ def personal_wiki_page_delete(request, page_name):
     
     file_name = page_name + '.md'
     username = request.user.username
-    if del_file(repo.id, '/', file_name, username):
+    if seaserv.del_file(repo.id, '/', file_name, username):
         messages.success(request, 'Successfully deleted "%s".' % page_name)
     else:
         messages.error(request, 'Failed to delete "%s". Please retry later.' % page_name)
