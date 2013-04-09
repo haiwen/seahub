@@ -9,7 +9,6 @@ from django.utils.encoding import smart_str
 
 import seaserv
 from pysearpc import SearpcError
-from group.models import GroupWiki
 from seahub.utils import EMPTY_SHA1
 from seahub.utils.repo import list_dir_by_path
 from seahub.utils.slugify import slugify
@@ -17,8 +16,7 @@ from seahub.utils import render_error, render_permission_error, string2list, \
     gen_file_get_url, get_file_type_and_ext, \
     get_file_contributors
 from seahub.utils.file_types import IMAGE
-from models import WikiPageMissing, WikiDoesNotExist, \
-    PersonalWiki
+from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
 __all__ = ["get_wiki_dirent", "clean_page_name"]
 

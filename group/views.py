@@ -32,8 +32,7 @@ from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment, GroupWiki, \
-    PublicGroup
+from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
@@ -45,7 +44,7 @@ from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
 from wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
-from wiki.models import WikiDoesNotExist, WikiPageMissing
+from wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from wiki.utils import clean_page_name, get_wiki_dirent
 from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
