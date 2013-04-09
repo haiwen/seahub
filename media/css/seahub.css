@@ -1939,12 +1939,16 @@ textarea:-moz-placeholder {/* for FF */
 #discussions-to-grp {
     height:auto;
     overflow:auto;
+    position:relative;/*for ie7*/
 }
 #discussions-to-grp .msg {
     width:380px;
 }
+#discussions-to-grp .msg-main {
+    width:282px;/*for ie7*/
+}
 #discussions-to-grp .reply-input {
-    width:272px;
+    width:270px;
 }
 #to-group-caret,
 #discuss-to-group-caret {

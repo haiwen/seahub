@@ -7,7 +7,7 @@
 <a class="pic fleft" href="{% url 'user_profile' msg.from_email|email2id %}">{% avatar msg.from_email 48 %}</a>
 <div class="txt">
     <div class="msg-main">
-        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="fleft">{{ msg.from_email|email2nickname }}</a>
+        <a href="{% url 'user_profile' msg.from_email|email2id %}">{{ msg.from_email|email2nickname }}</a>
         <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
         <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
         <span class="say"></span>
