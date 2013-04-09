@@ -2991,8 +2991,8 @@ msgstr "Nincs találat"
 #, python-format
 msgid "%(total)s result"
 msgid_plural "%(total)s results"
-msgstr[0] "%(total) találat"
-msgstr[1] "%(total) találat"
+msgstr[0] "%(total)s találat"
+msgstr[1] "%(total)s találat"
 
 #: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
@@ -4139,7 +4139,7 @@ msgstr "Nem módosíthatja a könyvtárat."
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr ""
-"Nem lehetséges a(z) %(op)s művelet %(src) könyvtárból az ő %(des) "
+"Nem lehetséges a(z) %(op)s művelet %(src)s könyvtárból az ő %(des)s "
 "alkönyvtárába."
 
 #: views/__init__.py:1212
@@ -4170,7 +4170,7 @@ msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr ""
-"Jelszó sikeresen átállítva erre: %(password)s. Egy e-mailt küldtünk "
+"Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk "
 "%(user)s részére."
 
 #: views/__init__.py:1483
@@ -4179,13 +4179,13 @@ msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
-"Jelszó sikeresen átállítva erre: %(password)s. Egy e-mailt küldtünk "
+"Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk "
 "%(user)s részére, de a konfiguráció hibás."
 
 #: views/__init__.py:1487
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
-msgstr "%(user)s jelszava sikeresen átállítva erre: %(password)s."
+msgstr "%(user)s jelszava sikeresen átállítva erre: %(passwd)s."
 
 #: views/__init__.py:1490
 #, python-format
@@ -4194,7 +4194,7 @@ msgid ""
 "notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
-"Jelszó sikeresen átállítva erre: %(password)s. Egy e-mailt küldtünk volna "
+"Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk volna "
 "%(user)s részére, de a konfiguráció hibás."
 
 #: views/__init__.py:1493
