@@ -718,7 +718,7 @@ def group_remove_member(request, group_id, user_name):
 
     return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
-def group_share_repo(request, repo_id, group_id, from_email, permission):
+def add_group_repo(request, repo_id, group_id, from_email, permission):
     """
     Share a repo to a group.
     
@@ -726,10 +726,10 @@ def group_share_repo(request, repo_id, group_id, from_email, permission):
     # Check whether group exists
     group = get_group(group_id)
     if not group:
-        return render_error(request, _(u"Failed to share: the group doesn't exist."))
+        raise Exception, _(u"Failed to share: the group doesn't exist.")
     
-    if seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email, permission) != 0:
-        return render_error(request, _(u"Failed to share: internal error."))
+    seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email,
+                                           permission)
 
 def group_unshare_repo(request, repo_id, group_id, from_email):
     """
