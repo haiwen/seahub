@@ -201,7 +201,7 @@ ACTIVATE_AFTER_REGISTRATION = True
 REGISTRATION_SEND_MAIL = False
 
 # Seafile-applet address and port, used in repo download
-CCNET_APPLET_ROOT = "http://localhost:13420"
+CCNET_APPLET_ROOT = "http://127.0.0.1:13420"
 
 # Account initial password, for password resetting.
 INIT_PASSWD = '123456'
