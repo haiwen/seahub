@@ -309,7 +309,7 @@ msgstr "Diese Bibliothek ist verschlüsselt."
 
 #: views.py:1622
 msgid "Unable to edit file"
-msgstr "Die Datei kann nicht editiert werden"
+msgstr "Die Datei kann nicht bearbeitet werden"
 
 #: views.py:1637
 msgid "The file does not exist."
@@ -750,7 +750,7 @@ msgstr "Hinzufügen des Kontakts fehlgeschlagen."
 #: contacts/views.py:120
 #, python-format
 msgid "Successfully edited %s."
-msgstr "%s erfolgreich editiert."
+msgstr "%s erfolgreich bearbeitet."
 
 #: contacts/views.py:133
 #, python-format
@@ -1809,7 +1809,7 @@ msgstr ""
 #: templates/public_home.html:11
 msgid "A library marked as read-only can be downloaded."
 msgstr ""
-"Eine Bibliothek welche als nur lesen markiert ist, kann heruntergeladen "
+"Eine Bibliothek welche als Nur-Lesen markiert ist, kann heruntergeladen "
 "werden."
 
 #: organizations/templates/organizations/org_public.html:16
@@ -1878,11 +1878,11 @@ msgid ""
 "Please click the link to log in:\n"
 msgstr ""
 "\n"
-"Hier sind ihe Anmeldeinformationen:\n"
+"Hier sind Ihre Anmeldeinformationen:\n"
 "E-Mail: %(email)s\n"
 "Passwort: %(password)s\n"
 "\n"
-"Bitte klicken sie auf den Link, um sich einzuloggen:\n"
+"Bitte klicken Sie auf den Link, um sich einzuloggen:\n"
 
 #: organizations/templates/organizations/org_user_add_email.html:11
 #, fuzzy, python-format
@@ -1911,11 +1911,11 @@ msgstr "Ihr Spitzname"
 
 #: profile/views.py:41
 msgid "Successfully edited profile."
-msgstr "Profil erfolgreich editiert."
+msgstr "Profil erfolgreich bearbeitet."
 
 #: profile/views.py:47
 msgid "Failed to edit profile"
-msgstr "Editieren des Profils ist fehlgeschlagen"
+msgstr "Bearbeiten des Profils ist fehlgeschlagen"
 
 #: profile/views.py:80 profile/views.py:119
 msgid "Has not accepted invitation yet"
@@ -1966,7 +1966,7 @@ msgstr "Notitz (optional): "
 
 #: share/forms.py:20
 msgid "Email is not longer than 512 characters"
-msgstr "Email darf nicht lönger als 512 Zeichen sein"
+msgstr "Email darf nicht länger als 512 Zeichen sein"
 
 #: share/views.py:68
 msgid "Only the owner of the library has permission to share it."
@@ -2049,7 +2049,7 @@ msgstr "Erfolgreicht gelöscht"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
-msgstr "So können sie die Bibliothek nicht freigeben."
+msgstr "So können Sie die Bibliothek nicht freigeben."
 
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
@@ -2069,12 +2069,12 @@ msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail-Service Konfiguration ist "
-"nicht korrekt. Bitte wenden Sie sich an den Administrator."
+"Senden des freigegebenen Links fehlgeschlagen. Der E-Mail-Service ist" 
+"nicht korrekt konfiguriert. Bitte wenden Sie sich an den Administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr "Ihr Freund hat eine Datei für Sie auf Seafile freigegeben."
+msgstr "Jemand hat eine Datei für Sie auf Seafile freigegeben."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
@@ -2089,8 +2089,8 @@ msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
-"Wenn sie nicht wollen, das andere den Inhalt ihrer freigegebenen Bibliothek "
-"ändern können, setzen sie die Freigabeberechtigung auf \"nur lesen\" wenn "
+"Wenn Sie nicht wollen, das andere den Inhalt Ihrer freigegebenen Bibliothek "
+"ändern können, setzen Sie die Freigabeberechtigung auf \"nur lesen\" wenn "
 "Sie sie freigeben."
 
 #: share/templates/repo/share_admin.html:23
@@ -2115,9 +2115,9 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
-"Sie können Bibliotheken mit ihren Freunden und Kollegen teilen, indem Sie "
-"auf den Teilen Knopf in ihren eigenen Bibliotheken klicken oder eine neue "
-"Bibliothek, in einer Gruppe in der Sie Mitglied sind, erstellen."
+"Sie können Bibliotheken mit Ihren Freunden und Kollegen teilen, indem Sie "
+"auf den Teilen Knopf in Ihren eigenen Bibliotheken klicken oder eine neue "
+"Bibliothek erstellen in einer Gruppe, in der Sie Mitglied sind."
 
 #: share/templates/repo/share_admin.html:79
 msgid "Shared Links"
@@ -2160,11 +2160,11 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
-msgstr "Erfolgreich editiert"
+msgstr "Erfolgreich bearbeitet"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr "Editieren fehlgeschlagen."
+msgstr "Bearbeiten fehlgeschlagen."
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2292,8 +2292,8 @@ msgid ""
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
 "Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn "
-"sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
-"Server nur für eine Stunde bleiben."
+"Sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
+"Server nur für eine Stunde behalten."
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -2307,7 +2307,7 @@ msgstr "Aktueller Pfad: "
 
 #: templates/file_edit.html:90
 msgid "Continue editing"
-msgstr "Editieren fortsetzen"
+msgstr "Bearbeiten fortsetzen"
 
 #: templates/file_edit.html:91
 msgid "Preview"
@@ -2332,16 +2332,16 @@ msgstr "Passwort: "
 #: templates/file_edit.html:124 templates/snippets/events.html:12
 #, fuzzy
 msgid "The password will be kept in the server for only 1 hour."
-msgstr "Das Passwort wird nur für eine Stunde auf dem Server bleiben."
+msgstr "Das Passwort wird nur für eine Stunde auf dem Server behalten."
 
 #: templates/file_edit.html:241
 msgid "Submit failed. Please check the network."
 msgstr ""
-"Abschicken fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
+"Senden fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_edit.html:243
 msgid "Submit failed."
-msgstr "Abschicken fehlgeschlagen."
+msgstr "Senden fehlgeschlagen."
 
 #: templates/file_edit.html:261 templates/snippets/events_js.html:67
 msgid "Password is required."
@@ -2364,14 +2364,14 @@ msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
-msgstr "s Versionsverlauf"
+msgstr "s Versionen"
 
 #: templates/file_revisions.html:7
 msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr ""
-"Tipp: Nach jedem Bearbeiten wird eine neue Version generiert und Sie können "
+"Tipp: Nach jeder Änderung wird eine neue Version erzeugt. Sie können "
 "eine vorherige Version wiederherstellen."
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
@@ -2422,7 +2422,7 @@ msgstr "Senden"
 
 #: templates/file_view.html:32 templates/file_view.html.py:189
 msgid "Unstar"
-msgstr "nicht mehr favorisieren"
+msgstr "Nicht mehr favorisieren"
 
 #: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
@@ -2531,7 +2531,7 @@ msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind das ein "
+"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind dass ein "
 "Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
 "Datei zu öffnen:"
 
@@ -2718,7 +2718,7 @@ msgstr "Abrufen fehlgeschlagen"
 
 #: templates/repo.html:143
 msgid "More operations"
-msgstr "Mehr Operationen"
+msgstr "Mehr Aktionen"
 
 #: templates/repo.html:146 templates/repo.html.py:194
 msgid "Rename"
@@ -2950,7 +2950,7 @@ msgstr "Bibliothek wiederherstellen"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Are you sure you want to restore this library"
-msgstr "Sind Sie sicher das Sie diese Bibliothek wiederherstellen möchten?"
+msgstr "Sind Sie sicher dass Sie diese Bibliothek wiederherstellen möchten?"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -3353,7 +3353,7 @@ msgstr ""
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
-msgstr "Diese Dateiart kann nicht online betrachtet werden."
+msgstr "Dieser Dateityp kann nicht online betrachtet werden."
 
 #: templates/snippets/file_upload_progress_js.html:51
 #: templates/snippets/file_upload_progress_js.html:75
@@ -3383,7 +3383,7 @@ msgstr "Neue Dateien"
 
 #: templates/snippets/list_commit_detail.html:25
 msgid "Deleted files"
-msgstr "Gelösche Dateien"
+msgstr "Gelöschte Dateien"
 
 #: templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
@@ -3437,7 +3437,7 @@ msgstr "Bibliothek mit Client sychronisieren"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
-msgstr "1. Bibliothek herunteladen (stellen Sie sicher, dass der Client läuft)"
+msgstr "1. Bibliothek herunterladen (stellen Sie sicher, dass der Client läuft)"
 
 #: templates/snippets/my_owned_repos.html:47
 msgid "2. Add files to the folder and they will be uploaded automatically."
@@ -3460,8 +3460,8 @@ msgid ""
 "libraries can only be downloaded, updates on local files will not be "
 "uploaded."
 msgstr ""
-"Biblioteken, die mit Ihnen geteilt werden, oder mit Gruppen geteilt werden, "
-"in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken auf die "
+"Bibliotheken, die mit Ihnen oder mit Gruppen geteilt werden, "
+"in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken, auf die "
 "Sie Schreibzugriff haben, können heruntergeladen und synchronisiert werden. "
 "Dateien mit Lesezugriff werden nur heruntergeladen, lokale Änderungen aber "
 "nicht hochgeladen."
@@ -3485,7 +3485,7 @@ msgstr ""
 
 #: templates/snippets/myhome_extra_script.html:28
 msgid "Please enter emails or groups."
-msgstr "Bitte geben sie E-Mail Adressen oder Gruppen an."
+msgstr "Bitte geben Sie E-Mail-Adressen oder Gruppen an."
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -3520,7 +3520,7 @@ msgid "Share <span class=\"op-target\"></span> to"
 msgstr "<span class=\"op-target\"></span> teilen mit"
 
 #: templates/snippets/repo_share_form.html:5
-msgid "Emails or Groups, Seperated by ','"
+msgid "Emails or Groups, Separated by ','"
 msgstr "E-Mail Adressen oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
@@ -3537,7 +3537,7 @@ msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich zu teilen."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
-msgstr "Bitte geben Sie mindestens eine E-Mail Adresse an."
+msgstr "Bitte geben Sie mindestens eine E-Mail-Adresse an."
 
 #: thirdpart/auth/admin.py:29
 msgid "Personal info"
@@ -3570,7 +3570,7 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
-msgstr "Dieses Benutzerkonto ist inaktiv."
+msgstr "Dieses Benutzerkonto ist deaktiviert."
 
 #: thirdpart/auth/forms.py:46
 msgid ""
@@ -3589,8 +3589,7 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Eine E-Mail konnte nicht versendet werden. Der E-Mail Dienst ist nicht korrekt "
-"konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
+"Eine E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
