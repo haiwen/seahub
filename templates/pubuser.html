@@ -33,6 +33,22 @@
     {% endwith %}
     {% endfor %}
 </ul>
+<div id="paginator">
+    {% if has_prev %}
+    <a href="?page={{ current_page|add:"-1" }}">{% trans "Previous" %}</a>
+    {% endif %}
+    {% for pr in page_range %}
+      {% if pr == current_page %}
+      <span class="cur">{{ pr }}</span>
+      {% else %}
+      <a href="?page={{ pr }}" class="pg">{{ pr }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if has_next %}
+    <a href="?page={{ current_page|add:"1" }}">{% trans "Next" %}</a>
+    {% endif %}
+</div>
+
 <form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
     <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
     <label>{% trans "Email" %}</label><br />

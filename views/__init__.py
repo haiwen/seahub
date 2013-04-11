@@ -9,6 +9,7 @@ import urllib
 import urllib2
 import logging
 import chardet
+from math import ceil
 from urllib import quote
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -28,6 +29,7 @@ from django.utils.translation import ugettext as _
 from auth.decorators import login_required
 from auth import login as auth_login
 from auth import authenticate
+import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
@@ -71,6 +73,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
     get_dir_files_last_modified, show_delete_days, HtmlDiff, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
+from seahub.utils.paginator import get_page_range
 try:
     from seahub.settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
@@ -2248,27 +2251,45 @@ def pubuser(request):
         # Users are not allowed to see public information when in cloud mode.
         raise Http404
     else:
-        users = get_emailusers(-1, -1)
-        
-        user = request.user.username
-        contacts = Contact.objects.filter(user_email=user)
+        emailusers_count = seaserv.count_emailusers()
+        pubrepos_count = seaserv.count_inner_pub_repos()
+        groups_count = len(seaserv.get_personal_groups(-1, -1))
+
+        '''paginate'''
+        # Make sure page request is an int. If not, deliver first page.
+        try:
+            current_page = int(request.GET.get('page', '1'))
+        except ValueError:
+            current_page = 1
+        per_page = 20           # show 20 users per-page
+        users_plus_one = seaserv.get_emailusers(per_page * (current_page - 1),
+                                                per_page + 1)
+        has_prev = False if current_page == 1 else True
+        has_next = True if len(users_plus_one) == per_page + 1 else False
+        num_pages = int(ceil(emailusers_count / float(per_page)))
+        page_range = get_page_range(current_page, num_pages)
+
+        users = users_plus_one[:per_page]
+        username = request.user.username
+        contacts = Contact.objects.filter(user_email=username)
         contact_emails = [] 
         for c in contacts:
             contact_emails.append(c.contact_email)
         for u in users:
-            if u.email == user or u.email in contact_emails:
+            if u.email == username or u.email in contact_emails:
                 u.can_be_contact = False
             else:
                 u.can_be_contact = True 
 
-        pubrepos_count = count_inner_pub_repos()
-        groups_count = len(get_personal_groups(-1, -1))
-        emailusers_count = count_emailusers()
         return render_to_response('pubuser.html', {
                 'users': users,
                 'pubrepos_count': pubrepos_count,
                 'groups_count': groups_count,
                 'emailusers_count': emailusers_count,
+                'current_page': current_page,
+                'has_prev': has_prev,
+                'has_next': has_next,
+                'page_range': page_range, 
                 }, context_instance=RequestContext(request))
    
 def repo_set_password(request):
