@@ -1400,7 +1400,7 @@ msgstr "Ändern"
 
 #: group/templates/group/group_manage.html:27
 msgid "Dismiss"
-msgstr "Ausblenden"
+msgstr "Löschen"
 
 #: group/templates/group/group_manage.html:28
 msgid "Back"
