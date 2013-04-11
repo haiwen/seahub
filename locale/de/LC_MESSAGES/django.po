@@ -1425,7 +1425,7 @@ msgstr "Gruppe löschen"
 
 #: group/templates/group/group_manage.html:90
 msgid "Really want to dismiss this group?"
-msgstr "Sind Sie sicher das Sie die Gruppe löschen möchten?"
+msgstr "Sind Sie sicher dass Sie die Gruppe löschen möchten?"
 
 #: group/templates/group/group_manage.html:91
 #: organizations/templates/organizations/org_admin.html:99
