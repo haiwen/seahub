@@ -3520,7 +3520,7 @@ msgid "Share <span class=\"op-target\"></span> to"
 msgstr "<span class=\"op-target\"></span> teilen mit"
 
 #: templates/snippets/repo_share_form.html:5
-msgid "Emails or Groups, Separated by ','"
+msgid "Emails or Groups, Seperated by ','"
 msgstr "E-Mail Adressen oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
