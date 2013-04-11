@@ -3415,7 +3415,7 @@ msgstr "Meine"
 
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
-msgstr "Favorisiert"
+msgstr "Favoriten"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
