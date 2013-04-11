@@ -1050,16 +1050,16 @@ msgstr "Fehlgeschlagen: %s"
 
 #: group/views.py:667
 msgid "Failed to share: the group doesn't exist."
-msgstr "Teilen fehlgeschlagen: Die Gruppe existiert nicht."
+msgstr "Freigeben fehlgeschlagen: Die Gruppe existiert nicht."
 
 #: group/views.py:670
 msgid "Failed to share: internal error."
-msgstr "Teilen fehlgeschlagen: Interner Fehler."
+msgstr "Freigeben fehlgeschlagen: Interner Fehler."
 
 #: group/views.py:680
 msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
-"Teilen konnte nicht rückgängig gemacht werden: Die Gruppe existiert nicht."
+"Freigeben konnte nicht rückgängig gemacht werden: Die Gruppe existiert nicht."
 
 #: group/views.py:685
 msgid ""
@@ -1067,11 +1067,11 @@ msgid ""
 "unshare it."
 msgstr ""
 "Operation fehlgeschlagen: Nur Administrator*innen und der/die Besitzer*in "
-"können das Teilen einer Bibliothek rückgängig machen"
+"können das Freigeben einer Bibliothek rückgängig machen"
 
 #: group/views.py:688
 msgid "Failed to unshare: internal error."
-msgstr "Teilen konnte nicht rückgängig gemacht werden: Interner Fehler"
+msgstr "Freigeben konnte nicht rückgängig gemacht werden: Interner Fehler"
 
 #: group/views.py:716
 msgid "Error: wrong group id"
@@ -1262,7 +1262,7 @@ msgstr "Herunterladen"
 #: share/templates/repo/share_admin.html:63
 #: share/templates/repo/share_admin.html:65
 msgid "Unshare"
-msgstr "Teilen rückgängig machen"
+msgstr "Freigeben rückgängig machen"
 
 #: group/templates/group/group_info.html:116
 msgid "Messages"
@@ -1346,11 +1346,11 @@ msgstr "Sind Sie sicher, dass Sie diese Gruppe verlassen möchten?"
 
 #: group/templates/group/group_info.html:203
 msgid "Unshare Library"
-msgstr "Teilen der Bibliothek rückgängig machen"
+msgstr "Freigeben der Bibliothek rückgängig machen"
 
 #: group/templates/group/group_info.html:203
 msgid "Are you sure you want to unshare"
-msgstr "Sind Sie sicher, dass Sie das Teilen rückgängig machen wollen?"
+msgstr "Sind Sie sicher, dass Sie die Freigabe rückgängig machen wollen?"
 
 #: group/templates/group/group_info.html:236
 msgid "Really want to delete this message?"
@@ -1664,7 +1664,7 @@ msgstr ""
 
 #: organizations/views.py:621 share/views.py:80
 msgid "Failed to share to all members"
-msgstr "Teilen mit allen Mitgliedern ist fehlgeschlagen"
+msgstr "Freigeben an alle Mitglieder ist fehlgeschlagen"
 
 #: organizations/views.py:625
 #, python-format
@@ -1673,7 +1673,7 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigabe</a> prüfen."
+"href=\"%s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:646
 #, python-format
@@ -1682,19 +1682,19 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
+"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:652 organizations/views.py:671 share/views.py:328
 #: share/views.py:350
 #, python-format
 msgid "Failed to share to %s."
-msgstr "Teilen mit %s ist fehlgeschlagen."
+msgstr "Freigeben an %s ist fehlgeschlagen."
 
 #: organizations/views.py:658
 #, python-format
 msgid "Failed to share to %s: this user does not exist in the organization."
 msgstr ""
-"Teilen mit %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
+"Freigeben an %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
 "Teil dieser Organisation"
 
 #: organizations/views.py:666
@@ -1704,7 +1704,7 @@ msgid ""
 "\"%(share)s\">Share</a>."
 msgstr ""
 "Erfolgreich für %(share_to)s freigegeben. Sie können den Status unter <a "
-"href=\"%(share)s\">Freigabe</a> prüfen."
+"href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:713 share/views.py:218
 msgid "all members"
@@ -1978,7 +1978,7 @@ msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
 "Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigabe</a> prüfen."
+"href=\"%s\">Freigaben</a> prüfen."
 
 #: share/views.py:104
 #, python-format
@@ -1987,22 +1987,22 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
+"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Teilen mit %s fehlgeschlagen: es existiert nicht."
+msgstr "Freigeben an %s fehlgeschlagen: es existiert nicht."
 
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Freigabe für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
+msgstr "Freigeben an %s fehlgeschlagen. Die E-Mail ist nicht registriert."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr "Freigabe für %s fehlgeschlagen."
+msgstr "Freigeben an %s fehlgeschlagen."
 
 #: share/views.py:139
 #, python-format
@@ -2011,7 +2011,7 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigabe</a> prüfen."
+"\"%(share)s\">Freigaben</a> prüfen."
 
 #: share/views.py:163 share/views.py:173
 msgid "Failed to remove share"
@@ -2027,7 +2027,7 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
-"Freigabe für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
+"Freigeben an %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
 "E-Mails außerhalb der Seite freigegeben werden."
 
 #: share/views.py:346
@@ -2099,7 +2099,7 @@ msgstr "Geteilte Bibliotheken"
 
 #: share/templates/repo/share_admin.html:29
 msgid "Share To"
-msgstr "Teilen mit"
+msgstr "Freigeben an"
 
 #: share/templates/repo/share_admin.html:30
 msgid "Permission"
@@ -2107,7 +2107,7 @@ msgstr "Berechtigung"
 
 #: share/templates/repo/share_admin.html:74
 msgid "You have not shared any library"
-msgstr "Sie haben keine Bibliothek geteilt"
+msgstr "Sie haben keine Bibliothek freigegeben"
 
 #: share/templates/repo/share_admin.html:75
 msgid ""
@@ -2115,13 +2115,13 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
-"Sie können Bibliotheken mit Ihren Freunden und Kollegen teilen, indem Sie "
-"auf den Teilen Knopf in Ihren eigenen Bibliotheken klicken oder eine neue "
+"Sie können Bibliotheken an Ihre Freunde und Kollege freigeben, indem Sie "
+"auf den Freigabe-Knopf in Ihren eigenen Bibliotheken klicken oder eine neue "
 "Bibliothek erstellen in einer Gruppe, in der Sie Mitglied sind."
 
 #: share/templates/repo/share_admin.html:79
 msgid "Shared Links"
-msgstr "Geteilte Links"
+msgstr "Freigegebene Links"
 
 #: share/templates/repo/share_admin.html:83
 msgid "File or Folder"
@@ -2638,7 +2638,7 @@ msgstr "Mein Heim"
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
-msgstr "Teilen"
+msgstr "Freigeben"
 
 #: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
@@ -3159,7 +3159,7 @@ msgstr "Ausloggen"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke für ihre Teilnahme! "
+msgstr "Danke für Ihre Teilnahme! "
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
@@ -3451,7 +3451,7 @@ msgstr "Geteilte Bibliothek verlassen"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
-msgstr "Es wird keine Bibliothek mit ihnen geteilt"
+msgstr "Es wird keine Bibliothek mit Ihnen geteilt"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
