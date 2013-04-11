@@ -38,7 +38,7 @@
         <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
         <p>{{ e }}</p>
         {% if m.can_be_contact %}
-        <button class="add-as-contact" data-email="{{ e }}">{% trans "Add as contact" %}</button>
+        <button class="add-as-contact" data-email="{{ e }}">{% trans "Add to Contacts" %}</button>
         {% endif %}
     </div>
     </li>
