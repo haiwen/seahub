@@ -1421,11 +1421,11 @@ msgstr "Administrator*in hinzufügen"
 
 #: group/templates/group/group_manage.html:90
 msgid "Dismiss Group"
-msgstr "Gruppe ausblenden"
+msgstr "Gruppe löschen"
 
 #: group/templates/group/group_manage.html:90
-msgid "Really want to dismiss this group"
-msgstr "Sind Sie sicher das Sie die Gruppe ausblenden möchten?"
+msgid "Really want to dismiss this group?"
+msgstr "Sind Sie sicher das Sie die Gruppe löschen möchten?"
 
 #: group/templates/group/group_manage.html:91
 #: organizations/templates/organizations/org_admin.html:99
