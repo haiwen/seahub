@@ -1664,7 +1664,7 @@ msgstr ""
 
 #: organizations/views.py:621 share/views.py:80
 msgid "Failed to share to all members"
-msgstr "Freigeben an alle Mitglieder ist fehlgeschlagen"
+msgstr "Freigeben für alle Mitglieder ist fehlgeschlagen"
 
 #: organizations/views.py:625
 #, python-format
@@ -1688,13 +1688,13 @@ msgstr ""
 #: share/views.py:350
 #, python-format
 msgid "Failed to share to %s."
-msgstr "Freigeben an %s ist fehlgeschlagen."
+msgstr "Freigeben für %s ist fehlgeschlagen."
 
 #: organizations/views.py:658
 #, python-format
 msgid "Failed to share to %s: this user does not exist in the organization."
 msgstr ""
-"Freigeben an %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
+"Freigeben für %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
 "Teil dieser Organisation"
 
 #: organizations/views.py:666
@@ -1992,17 +1992,17 @@ msgstr ""
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Freigeben an %s fehlgeschlagen: es existiert nicht."
+msgstr "Freigeben für %s fehlgeschlagen: es existiert nicht."
 
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Freigeben an %s fehlgeschlagen. Die E-Mail ist nicht registriert."
+msgstr "Freigeben für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr "Freigeben an %s fehlgeschlagen."
+msgstr "Freigeben für %s fehlgeschlagen."
 
 #: share/views.py:139
 #, python-format
@@ -2027,7 +2027,7 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
-"Freigeben an %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
+"Freigeben für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
 "E-Mails außerhalb der Seite freigegeben werden."
 
 #: share/views.py:346
@@ -2099,7 +2099,7 @@ msgstr "Geteilte Bibliotheken"
 
 #: share/templates/repo/share_admin.html:29
 msgid "Share To"
-msgstr "Freigeben an"
+msgstr "Freigegeben für"
 
 #: share/templates/repo/share_admin.html:30
 msgid "Permission"
@@ -2638,7 +2638,7 @@ msgstr "Mein Heim"
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
-msgstr "Freigeben"
+msgstr "Freigaben"
 
 #: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
