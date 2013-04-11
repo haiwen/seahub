@@ -22,7 +22,7 @@ msgstr ""
 #: forms.py:26 base/accounts.py:366
 #, fuzzy
 msgid "A user with this email already"
-msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail Adresse"
+msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail-Adresse"
 
 #: forms.py:40 base/accounts.py:383 thirdpart/auth/forms.py:125
 #: thirdpart/auth/forms.py:167 thirdpart/registration/forms.py:58
@@ -635,7 +635,7 @@ msgstr "Standard-Avatar"
 
 #: base/accounts.py:347 thirdpart/registration/forms.py:34
 msgid "Email address"
-msgstr "E-Mail Adresse"
+msgstr "E-Mail-Adresse"
 
 #: base/accounts.py:352 thirdpart/auth/forms.py:18
 msgid "Username"
@@ -1524,17 +1524,17 @@ msgstr "Mitglieder hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:4
 msgid "emails, separated by ','"
-msgstr "E-Mail Adressen, getrennt durch ','"
+msgstr "E-Mail-Adressen, getrennt durch ','"
 
 #: group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
 msgstr ""
-"Tipp: Es wird eine Einladung versendet, wenn die E-Mail Adresse nicht registriert ist."
+"Tipp: Es wird eine Einladung versendet, wenn die E-Mail-Adresse nicht registriert ist."
 
 #: group/templates/group/grpmember_add_form.html:9
 #, fuzzy
 msgid "Tip: the emails should be already registered."
-msgstr "Tipp: Die E-Mail Adressen sollten bereits registriert sein."
+msgstr "Tipp: Die E-Mail-Adressen sollten bereits registriert sein."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
@@ -1542,7 +1542,7 @@ msgstr "Administrator*innen hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:16
 msgid "emails, separated by ',' "
-msgstr "E-Mail Adressen, getrennt durch ',' "
+msgstr "E-Mail-Adressen, getrennt durch ',' "
 
 #: group/templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
@@ -1750,7 +1750,7 @@ msgstr "Pro Seite: "
 
 #: organizations/templates/organizations/org_admin.html:70
 msgid "Emails: "
-msgstr "E-Mail Adressen: "
+msgstr "E-Mail-Adressen: "
 
 #: organizations/templates/organizations/org_admin.html:72
 msgid "An invitation will be sent if the email is not registered."
@@ -1758,7 +1758,7 @@ msgstr "Eine Einladung wird versendet, wenn die E-Mail nicht registriert ist."
 
 #: organizations/templates/organizations/org_admin.html:73
 msgid "Emails is required."
-msgstr "E-Mail Adressen werden benötigt"
+msgstr "E-Mail-Adressen werden benötigt"
 
 #: organizations/templates/organizations/org_group_admin.html:7
 #: organizations/templates/organizations/org_pubinfo.html:26
@@ -2463,7 +2463,7 @@ msgstr "Senden an:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr "E-Mail Adressen, getrennt durch ','"
+msgstr "E-Mail-Adressen, getrennt durch ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
@@ -3151,7 +3151,7 @@ msgstr "Passwort vergessen?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
-msgstr "E-Mail Adresse oder Passwort sind falsch"
+msgstr "E-Mail-Adresse oder Passwort sind falsch"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -3240,7 +3240,7 @@ msgstr "Ihr Benutzername, falls Sie ihn vergessen haben: "
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr "Ihre E-Mail Adresse, welche Sie beim Login verwendet haben: "
+msgstr "Ihre E-Mail-Adresse, welche Sie beim Login verwendet haben: "
 
 #: templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
@@ -3521,7 +3521,7 @@ msgstr "<span class=\"op-target\"></span> teilen mit"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
-msgstr "E-Mail Adressen oder Gruppen, getrennt durch ','"
+msgstr "E-Mail-Adressen oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
 msgid ""
@@ -3596,7 +3596,7 @@ msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"Diese E-Mail Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
+"Diese E-Mail-Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
 "Sie registriert sind?"
 
 #: thirdpart/auth/forms.py:104
@@ -3634,7 +3634,7 @@ msgstr ""
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
-msgstr "Geben Sie eine gültige E-Mail Adresse an."
+msgstr "Geben Sie eine gültige E-Mail-Adresse an."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
@@ -3646,7 +3646,7 @@ msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr "Ein*e Benutzer*in mit dieser E-Mail Adresse existiert bereits"
+msgstr "Ein*e Benutzer*in mit dieser E-Mail-Adresse existiert bereits"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
@@ -3662,7 +3662,7 @@ msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
-"Diese E-Mail Adresse wird bereits benutzt. Bitte geben Sie eine andere E-Mail "
+"Diese E-Mail-Adresse wird bereits benutzt. Bitte geben Sie eine andere E-Mail "
 "Adresse an."
 
 #: thirdpart/registration/forms.py:113
@@ -3670,8 +3670,8 @@ msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"Registrierung mit einer kostenlosen E-Mail Adresse ist nicht erlaubt. Bitte geben Sie eine "
-"andere E-Mail Adresse an."
+"Registrierung mit einer kostenlosen E-Mail-Adresse ist nicht erlaubt. Bitte geben Sie eine "
+"andere E-Mail-Adresse an."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
