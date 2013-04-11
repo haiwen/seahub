@@ -2090,7 +2090,7 @@ msgid ""
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
 "Wenn Sie nicht wollen, das andere den Inhalt Ihrer freigegebenen Bibliothek "
-"ändern können, setzen Sie die Freigabeberechtigung auf \"nur lesen\" wenn "
+"ändern können, setzen Sie die Freigabeberechtigung auf \"Nur Lesen\" wenn "
 "Sie sie freigeben."
 
 #: share/templates/repo/share_admin.html:23
