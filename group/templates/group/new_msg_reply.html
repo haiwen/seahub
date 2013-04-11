@@ -10,7 +10,7 @@
         <div class="pic fleft">
             <a href="{% url 'user_profile' msg.from_email|email2id %}">{% avatar msg.from_email 48 %}</a>
         </div>
-        <div class="txt fright">
+        <div class="txt">
             <div class="msg-main">
             <div class="msg-hd">
                 <a href="{% url 'user_profile' msg.from_email|email2id %}" title="{{msg.from_email|email2id}}" class="author">{{ msg.from_email|email2nickname }}</a>
@@ -50,7 +50,7 @@
                     {% for r in msg.replies %}
                     <li class="reply w100 ovhd">
                     <a href="{% url 'user_profile' r.from_email|email2id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
-                    <div class="txt fright">
+                    <div class="txt">
                         <a href="{% url 'user_profile' r.from_email|email2id %}">{{ r.from_email|email2nickname }}</a>
                         <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
                         <span class="reply-at op vh" data="{{ r.from_email|email2nickname }}">{% trans 'Reply' %}</span>
