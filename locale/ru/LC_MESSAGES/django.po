@@ -2229,7 +2229,7 @@ msgstr "Эта библиотека предназначена только дл
 
 #: templates/repo.html:33
 msgid "Size: "
-msgstr "Размер"
+msgstr "Размер: "
 
 #: templates/repo.html:40 templates/repo_view_file.html:143
 #: templates/repo_view_snapshot.html:17
@@ -2298,7 +2298,7 @@ msgstr "Загрузить файл"
 
 #: templates/repo.html:169
 msgid "The owner of this library has ran out of space."
-msgstr "Владелец этой библиотеки привысил допустимый лимит"
+msgstr "Владелец этой библиотеки превысил допустимый лимит"
 
 #: templates/repo.html:174
 msgid "Add files"
@@ -2310,7 +2310,7 @@ msgstr "Меньше, чем"
 
 #: templates/repo.html:183 templates/repo.html.py:206
 msgid "Uploaded:"
-msgstr "Загружено"
+msgstr "Загружено: "
 
 #: templates/repo.html:183
 msgid "Fetching ..."
@@ -2369,11 +2369,11 @@ msgstr "Текущая библиотека"
 
 #: templates/repo.html:247
 msgid "Other Libraries"
-msgstr "Другии библиотеки"
+msgstr "Другие библиотеки"
 
 #: templates/repo.html:257
 msgid "Please click and choose a directory."
-msgstr "Нажмите для выбова каталога"
+msgstr "Нажмите для выбора каталога"
 
 #: templates/repo.html:263
 msgid "Rename <span id=\"rename-type\"></span>"
@@ -2390,11 +2390,11 @@ msgstr "Каталог"
 
 #: templates/repo.html:394
 msgid "Copy "
-msgstr "Копировать"
+msgstr "Копировать "
 
 #: templates/repo.html:397
 msgid "Move "
-msgstr "Переместить"
+msgstr "Переместить "
 
 #: templates/repo.html:410
 msgid "to:"
@@ -2562,7 +2562,7 @@ msgstr ""
 #: templates/repo_view_file.html:388
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/comments/forms.py:112
 msgid "Comment"
-msgstr "Коментарий"
+msgstr "Комментарий"
 
 #: templates/repo_view_file.html:435
 msgid "Please type a message"
@@ -2804,7 +2804,7 @@ msgstr ""
 
 #: templates/registration/login.html:14
 msgid "Forgot password?"
-msgstr "Вспомнить пароль?"
+msgstr "Забыли пароль?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
@@ -2816,7 +2816,7 @@ msgstr "Выйти"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Спасибо за ваше посещение! "
+msgstr "Спасибо за посещение! "
 
 #: templates/registration/logout.html:8
 #: thirdpart/Django-1.3-py2.7.egg/django/contrib/admin/templates/registration/logged_out.html:10
@@ -2843,12 +2843,12 @@ msgstr "Текущий пароль:"
 #: templates/registration/password_change_form.html:11
 #: templates/registration/password_reset_confirm.html:13
 msgid "New Password: "
-msgstr "Новый пароль"
+msgstr "Новый пароль: "
 
 #: templates/registration/password_change_form.html:13
 #: templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
-msgstr "Подтвердите пароль:"
+msgstr "Подтвердите пароль: "
 
 #: templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
