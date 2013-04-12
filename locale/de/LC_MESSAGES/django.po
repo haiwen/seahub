@@ -2440,8 +2440,8 @@ msgstr "Details"
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "Ein*e Mitwirker*in"
-msgstr[1] " %(counter)s Mitwirker*innen"
+msgstr[0] "Ein*e Bearbeiter*in"
+msgstr[1] " %(counter)s Bearbeiter*innen"
 
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
@@ -3531,7 +3531,7 @@ msgstr ""
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich zu teilen."
+msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich freizugeben."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
