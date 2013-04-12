@@ -412,7 +412,7 @@ msgstr ""
 
 #: views.py:2047
 msgid "Failed to reset password: user does not exist"
-msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer*in existiert nicht"
+msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer existiert nicht"
 
 #: views.py:2068
 msgid "Seafile Registration Information"
@@ -951,7 +951,7 @@ msgstr "Hinzufügen des Mitglieds zur Gruppe ist fehlgeschlagen"
 
 #: group/error_msg.py:21
 msgid "Only group staff can remove member"
-msgstr "Nur Gruppenverwalter*innen können Mitglieder entfernen"
+msgstr "Nur Gruppenverwalter können Mitglieder entfernen"
 
 #: group/error_msg.py:23
 msgid "Can not remove myself"
@@ -983,11 +983,11 @@ msgstr "Es existiert bereits eine Gruppe mit diesem Namen."
 
 #: group/views.py:102
 msgid "Only administrators can delete the group."
-msgstr "Nur Administrator*innen können die Gruppe löschen."
+msgstr "Nur Administratoren können die Gruppe löschen."
 
 #: group/views.py:139
 msgid "Only administrators can dismiss the group"
-msgstr "Nur Administrator*innen können die Gruppe ausblenden"
+msgstr "Nur Administratoren können die Gruppe ausblenden"
 
 #: group/views.py:162
 msgid "group id  is not a valid argument."
@@ -1066,7 +1066,7 @@ msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr ""
-"Operation fehlgeschlagen: Nur Administrator*innen und der/die Besitzer*in "
+"Operation fehlgeschlagen: Nur Administratoren und der Besitzer "
 "können das Freigeben einer Bibliothek rückgängig machen"
 
 #: group/views.py:688
@@ -1121,7 +1121,7 @@ msgstr "Bewerben, um der Gruppe beizutreten"
 #: group/views.py:879
 msgid "Sent successfully, the group admin will handle it."
 msgstr ""
-"Erfolgreicht versandt, der/die Gruppenadministrator*in wird die Nachricht "
+"Erfolgreicht versandt, der Gruppenadministrator wird die Nachricht "
 "behandeln."
 
 #: group/views.py:883
@@ -1413,11 +1413,11 @@ msgstr "Mitglieder hinzufügen"
 
 #: group/templates/group/group_manage.html:59
 msgid "Administrators"
-msgstr "Administrator*innen"
+msgstr "Administratoren"
 
 #: group/templates/group/group_manage.html:60
 msgid "Add Administrators"
-msgstr "Administrator*in hinzufügen"
+msgstr "Administrator hinzufügen"
 
 #: group/templates/group/group_manage.html:90
 msgid "Dismiss Group"
@@ -1449,7 +1449,7 @@ msgstr "Name: "
 #: organizations/templates/organizations/org_pubinfo.html:37
 #: templates/pubinfo.html:33
 msgid "Creator: "
-msgstr "Ersteller*in: "
+msgstr "Ersteller: "
 
 #: group/templates/group/group_pubinfo.html:15
 msgid "Create at: "
@@ -1538,7 +1538,7 @@ msgstr "Tipp: Die E-Mail-Adressen sollten bereits registriert sein."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
-msgstr "Administrator*innen hinzufügen"
+msgstr "Administratoren hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:16
 msgid "emails, separated by ',' "
@@ -1659,7 +1659,7 @@ msgstr "Diese Gruppe gehört nicht zur aktuellen Organisation"
 #: organizations/views.py:606
 msgid "Only the owner of this library has permission to share it."
 msgstr ""
-"Nur der/die Besitzer*in dieser Bibliothek hat die Berechtigung diese zu "
+"Nur der/die Besitzer dieser Bibliothek hat die Berechtigung diese zu "
 "teilen."
 
 #: organizations/views.py:621 share/views.py:80
@@ -1771,7 +1771,7 @@ msgstr "Gruppen"
 #: organizations/templates/organizations/org_group_admin.html:12
 #: templates/sys_group_admin.html:12 templates/sys_org_admin.html:13
 msgid "Creator"
-msgstr "Ersteller*in"
+msgstr "Ersteller"
 
 #: organizations/templates/organizations/org_group_admin.html:13
 msgid "Created At"
@@ -1853,7 +1853,7 @@ msgstr "Alle Bilbliotheken"
 #: organizations/templates/organizations/org_seafadmin.html:13
 #: templates/sys_seafadmin.html:12
 msgid "Owner"
-msgstr "Besitzer*in"
+msgstr "Besitzer"
 
 #: organizations/templates/organizations/org_seafadmin.html:62
 #: templates/sys_seafadmin.html:61 templates/userinfo.html:133
@@ -2172,7 +2172,7 @@ msgstr "Es tut uns leid, aber die angefragte Seite wurde nicht gefunden."
 
 #: templates/add_user_form.html:3 templates/add_user_form.html.py:7
 msgid "Add User"
-msgstr "Benutzer*in hinzufügen"
+msgstr "Benutzer hinzufügen"
 
 #: templates/add_user_form.html:13
 #: templates/registration/registration_form.html:15
@@ -2201,7 +2201,7 @@ msgstr "Die beiden Passwortfelder stimmen nicht überein"
 
 #: templates/admin_base.html:11 templates/pubinfo.html:8
 msgid "Users"
-msgstr "Benutzer*innen"
+msgstr "Benutzer"
 
 #: templates/admin_base.html:18
 msgid "Organizations"
@@ -2233,7 +2233,7 @@ msgstr "Arbeitsplatz"
 
 #: templates/base.html:56
 msgid "Admin"
-msgstr "Administrator*in"
+msgstr "Administrator"
 
 #: templates/base.html:64
 msgid "Log out"
@@ -2440,8 +2440,8 @@ msgstr "Details"
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "Ein*e Bearbeiter*in"
-msgstr[1] " %(counter)s Bearbeiter*innen"
+msgstr[0] "Ein Bearbeiter"
+msgstr[1] " %(counter)s Bearbeiter"
 
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
@@ -2755,7 +2755,7 @@ msgstr "Dateien hochladen"
 #: templates/repo.html:213 templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
 msgstr ""
-"Der/Die Besitzer*in dieser Bibliothek hat keinen freien Speicherplatz mehr."
+"Der Besitzer dieser Bibliothek hat keinen freien Speicherplatz mehr."
 
 #: templates/repo.html:218
 msgid "Add files"
@@ -2904,7 +2904,7 @@ msgstr "Schnappschuss ansehen"
 
 #: templates/repo_history.html:17
 msgid "Modifier"
-msgstr "Bearbeiter*in"
+msgstr "Bearbeiter"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
@@ -3008,7 +3008,7 @@ msgstr "Organisation löschen"
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
-msgstr "Neuen Benutzer/Neue Benutzerin hinzufügen"
+msgstr "Neuen Benutzer hinzufügen"
 
 #: templates/sys_useradmin.html:17
 msgid "Status"
@@ -3028,7 +3028,7 @@ msgstr "Passwort zurücksetzen"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
-msgstr "Benutzer*in löschen"
+msgstr "Benutzer löschen"
 
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
@@ -3108,7 +3108,7 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
-"Sie erhalten diese E-Mail, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
+"Sie erhalten diese E-Mail, weil ein Gruppenverwalter Ihr Passwort auf "
 "%(site_name)s geändert hat."
 
 #: templates/user_reset_email.html:4
@@ -3129,7 +3129,7 @@ msgstr "Quota setzen"
 
 #: templates/userinfo.html:33
 msgid "Owned"
-msgstr "Besitzer*in"
+msgstr "Besitzer"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
@@ -3137,7 +3137,7 @@ msgstr "Freigaben"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
-msgstr "Speicherplatz für Benutzer*in limitieren"
+msgstr "Speicherplatz für Benutzer limitieren"
 
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
@@ -3587,7 +3587,7 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Eine E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
+"Eine E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
@@ -3636,7 +3636,7 @@ msgstr "Geben Sie eine gültige E-Mail-Adresse an."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
-msgstr "Aktive Benutzer*innen"
+msgstr "Aktive Benutzer"
 
 #: thirdpart/registration/admin.py:43
 msgid "Re-send activation emails"
@@ -3644,7 +3644,7 @@ msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr "Ein*e Benutzer*in mit dieser E-Mail-Adresse existiert bereits"
+msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
