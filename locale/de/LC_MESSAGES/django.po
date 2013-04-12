@@ -1230,7 +1230,7 @@ msgstr "Letzte Aktualisierung"
 #: organizations/templates/organizations/org_public.html:31
 #: templates/snippets/my_owned_repos.html:59
 msgid "Shared By"
-msgstr "Geteilt von"
+msgstr "Freigegeben von"
 
 #: group/templates/group/group_info.html:89
 #: group/templates/group/group_info.html:91
@@ -2095,7 +2095,7 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:23
 msgid "Shared Libraries"
-msgstr "Geteilte Bibliotheken"
+msgstr "Freigegebene Bibliotheken"
 
 #: share/templates/repo/share_admin.html:29
 msgid "Share To"
@@ -2474,7 +2474,6 @@ msgid "Processing..."
 msgstr "Verarbeiten..."
 
 #: templates/file_view.html:103
-#, fuzzy
 msgid "You have not downloaded "
 msgstr "Sie haben nicht heruntergeladen "
 
@@ -2630,9 +2629,8 @@ msgid "Space used"
 msgstr "Benutzter Speicherplatz"
 
 #: templates/myhome_base.html:8
-#, fuzzy
 msgid "My Home"
-msgstr "Mein Heim"
+msgstr "Start"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
@@ -2650,7 +2648,7 @@ msgstr "Öffentliche Informationen"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr "Geteilt von"
+msgstr "Freigegeben von"
 
 #: templates/repo.html:11
 msgid ""
@@ -2977,7 +2975,7 @@ msgstr "Klicken zum Herunterladen."
 
 #: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
-msgstr "Geteilt von:"
+msgstr "Freigegeben von:"
 
 #: templates/shared_link_email.html:2
 #, python-format
@@ -3135,7 +3133,7 @@ msgstr "Besitzer*in"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
-msgstr "Geteilt"
+msgstr "Freigegeben"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
@@ -3411,7 +3409,7 @@ msgstr "Jetzt eine neue Gruppe erstellen"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
-msgstr "Meine"
+msgstr "Meine Bibliotheken"
 
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
@@ -3447,11 +3445,11 @@ msgstr ""
 
 #: templates/snippets/my_owned_repos.html:83
 msgid "Leave Share"
-msgstr "Geteilte Bibliothek verlassen"
+msgstr "Freigegebene Bibliothek verlassen"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
-msgstr "Es wird keine Bibliothek mit Ihnen geteilt"
+msgstr "Es ist keine Bibliothek für Sie freigegeben"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
