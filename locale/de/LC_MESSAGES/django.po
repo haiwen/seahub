@@ -2413,7 +2413,7 @@ msgstr "Aktueller Pfad: "
 
 #: templates/file_view.html:28 templates/repo.html:33
 msgid "Share link"
-msgstr "Link teilen"
+msgstr "Link freigeben"
 
 #: templates/file_view.html:29 templates/repo.html:34
 #: templates/repo.html.py:335
