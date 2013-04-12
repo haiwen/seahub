@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the seahub package.
 # Phillip Thelen <viirus@pherth.net>, 2013.
 # Matthias Hub <coding@matthiashub.de>, 2013.
+# Henri Wahl <h.wahl@ifw-dresden.de>, 2013.
 #
 msgid ""
 msgstr ""
@@ -21,7 +22,7 @@ msgstr ""
 #: forms.py:26 base/accounts.py:366
 #, fuzzy
 msgid "A user with this email already"
-msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail Adresse"
+msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail-Adresse"
 
 #: forms.py:40 base/accounts.py:383 thirdpart/auth/forms.py:125
 #: thirdpart/auth/forms.py:167 thirdpart/registration/forms.py:58
@@ -46,7 +47,7 @@ msgstr "Beschreibung ist zu lang (maximal 100 Zeichen)"
 
 #: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
-msgstr "Passwort ist zu kurz (minimum 3 Zeichen)"
+msgstr "Passwort ist zu kurz (mindestens 3 Zeichen)"
 
 #: forms.py:68 forms.py:73 templates/snippets/repo_create_js.html:45
 msgid "Password is too long (maximum is 15 characters)"
@@ -63,11 +64,11 @@ msgstr "Passwörter stimmen nicht überein"
 
 #: forms.py:114 forms.py:137 forms.py:161 forms.py:184 forms.py:221
 msgid "Repo id is required"
-msgstr "Repo ID wird benötigt"
+msgstr "Repo-ID wird benötigt"
 
 #: forms.py:115 forms.py:138 forms.py:162
 msgid "Parent dir is required"
-msgstr "Elternverzeichnis wird benötigt"
+msgstr "Übergeordnetes Verzeichnis wird benötigt"
 
 #: forms.py:118 forms.py:142
 msgid "File name is too long"
@@ -117,7 +118,7 @@ msgstr "Falsches Passwort"
 
 #: forms.py:204
 msgid "Inernal server error"
-msgstr "Interner Server Fehler"
+msgstr "Interner Serverfehler"
 
 #: forms.py:206
 msgid "Decrypt library error"
@@ -193,11 +194,11 @@ msgstr "Dateigröße überschreitet das Limit"
 
 #: views.py:578
 msgid "The space of owner is used up, upload failed"
-msgstr "Der Speicher des Benutzers ist aufgebraucht. Upload schlug fehl"
+msgstr "Der Speicherplatz des Benutzers ist aufgebraucht. Upload schlug fehl"
 
 #: views.py:580
 msgid "An error occurs during file transfer"
-msgstr "Es ist ein Fehler beim Dateitransfer augetreten"
+msgstr "Es ist ein Fehler beim Dateitransfer aufgetreten"
 
 #: views.py:591 views.py:612
 msgid "Invalid url"
@@ -209,15 +210,15 @@ msgstr "Konnte Bibliotheksänderungen nicht anzeigen"
 
 #: views.py:722
 msgid "Unable to view library snapshots"
-msgstr "Konnte Bibliotheksschapschüsse nicht anzeigen"
+msgstr "Konnte Bibliotheksschappschüsse nicht anzeigen"
 
 #: views.py:772
 msgid "You have no permission to restore library"
-msgstr "Sie haben keine berechtigung die Bibliothek wiederherzustellen"
+msgstr "Sie haben keine Berechtigung die Bibliothek wiederherzustellen"
 
 #: views.py:788
 msgid "Please specify history ID"
-msgstr "Bitte geben sie eine Verlaufs ID an"
+msgstr "Bitte geben Sie eine Verlaufs-ID an"
 
 #: views.py:794 views.py:1575 views.py:2416 views.py:2451 views.py:2883
 #: share/views.py:396
@@ -231,7 +232,7 @@ msgstr "Die Bibliothek existiert nicht"
 #: views.py:798
 #, fuzzy
 msgid "History you specified does not exist"
-msgstr "Der von ihnen gewählte Verlauf existiert nicht"
+msgstr "Der von Ihnen gewählte Verlauf existiert nicht"
 
 #: views.py:800
 msgid "Unknown error"
@@ -258,7 +259,7 @@ msgstr "Operation fehlgeschlagen"
 
 #: views.py:1252
 msgid "Failed to delete file."
-msgstr "Fehler beim löschen der Datei."
+msgstr "Fehler beim Löschen der Datei."
 
 #: views.py:1259
 #, python-format
@@ -280,11 +281,11 @@ msgstr "Für Dateien größer als 10M ist keine Onlinevorschau möglich"
 
 #: views.py:1531
 msgid "HTTPError: failed to open file online"
-msgstr "HTTP Fehler: Datei konnte nicht online geöffnet werden"
+msgstr "HTTP-Fehler: Datei konnte nicht online geöffnet werden"
 
 #: views.py:1534
 msgid "URLError: failed to open file online"
-msgstr "URL Fehler: Datei konnte nicht online geöffnet werden"
+msgstr "URL-Fehler: Datei konnte nicht online geöffnet werden"
 
 #: views.py:1546
 msgid "Unknown file encoding"
@@ -308,7 +309,7 @@ msgstr "Diese Bibliothek ist verschlüsselt."
 
 #: views.py:1622
 msgid "Unable to edit file"
-msgstr "Die Datei kann nicht editiert werden"
+msgstr "Die Datei kann nicht bearbeitet werden"
 
 #: views.py:1637
 msgid "The file does not exist."
@@ -329,7 +330,7 @@ msgstr ""
 
 #: views.py:1744
 msgid "Invalid server setting"
-msgstr "Ungültiger Serverkonfiguration"
+msgstr "Ungültige Serverkonfiguration"
 
 #: views.py:1787
 msgid "Destination path is too long."
@@ -391,8 +392,7 @@ msgid ""
 "%(user)s, please check your email configuration."
 msgstr ""
 "Passwort erfolgreich auf %(passwd)s gesetzt, aber es konnte keine E-Mail an "
-"den Nutzer %(user)s gesendet werden. Bitte prüfen Sie Ihre E-Mail-Service "
-"Konfiguration."
+"den Nutzer %(user)s gesendet werden. Bitte prüfen Sie die Konfiguration " "Ihres E-Mail-Services."
 
 #: views.py:2041
 #, python-format
@@ -407,12 +407,12 @@ msgid ""
 "configured."
 msgstr ""
 "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt. Es konnte "
-"jedoch keine E-Mail Benachrichtigung gesendet werden, da die E-Mail-Service "
-"Konfiguration nicht korrekt ist."
+"jedoch keine E-Mail Benachrichtigung gesendet werden, da der E-Mail-Service "
+"nicht korrekt konfiguriert ist."
 
 #: views.py:2047
 msgid "Failed to reset password: user does not exist"
-msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer*in existiert nicht"
+msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer existiert nicht"
 
 #: views.py:2068
 msgid "Seafile Registration Information"
@@ -422,7 +422,7 @@ msgstr "Seafile Registrierungsinformationen"
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
-"Benutzer %s wurde erfolgrich hinzugefügt. Eine E-Mail Benachrichtigung wurde "
+"Benutzer %s wurde erfolgreich hinzugefügt. Eine E-Mail Benachrichtigung wurde "
 "versandt."
 
 #: views.py:2106
@@ -431,8 +431,8 @@ msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr ""
-"Benutzer %s wurde erfolgrich hinzugefügt. Es trat jedoch ein Fehler beim "
-"senden der E-Mail Benachrichtigung auf. Bitte überprüfen sie ihre E-Mail-Service "
+"Benutzer %s wurde erfolgreich hinzugefügt. Es trat jedoch ein Fehler beim "
+"Senden der Benachrichtigungs-E-Mail auf. Bitte überprüfen Sie Ihren E-Mail-Service."
 "Konfiguration."
 
 #: views.py:2108
@@ -446,9 +446,8 @@ msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
-"Benutzer %s wurde erfolgrich hinzugefügt. Es konnte jedoch keine E-Mail "
-"Benachrichtigung gesendet werden, da die E-Mail-Service Konfiguration nicht korrekt "
-"ist."
+"Benutzer %s wurde erfolgreich hinzugefügt. Es konnte jedoch keine E-Mail-"
+"Benachrichtigung gesendet werden, da der E-Mail-Service nicht korrekt " "konfiguriert ist."
 
 #: views.py:2289
 #, python-format
@@ -464,7 +463,7 @@ msgstr "Bibliothek konnte nicht erstellt werden"
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
-"%(path)s wurde erfolgreih zum <a href=\"%(root)s\">Hauptverzeichnis</a> "
+"%(path)s wurde erfolgreich zum <a href=\"%(root)s\">Hauptverzeichnis</a> "
 "zurückgesetzt."
 
 #: views.py:2441 views.py:2467
@@ -476,7 +475,7 @@ msgstr "<a href=\"%(url)s\">%(path)s</a> wurde erfolgreich zurükgesetzt."
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
-"%(path)s wurde erfolgreih zum <a href=\"%(url)s\">Hauptverzeichnis</a> "
+"%(path)s wurde erfolgreich zum <a href=\"%(url)s\">Hauptverzeichnis</a> "
 "zurückgesetzt."
 
 #: views.py:2727
@@ -494,7 +493,7 @@ msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
 msgstr ""
-"%(ext)s ist eine ungültige Dateierweiterung. Erlaubte Dateierweiterungen "
+"%(ext)s ist eine ungültige Dateiendung. Erlaubte Dateiendungen "
 "sind: %(valid_exts_list)s"
 
 #: avatar/forms.py:38 avatar/forms.py:61
@@ -503,7 +502,7 @@ msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
 msgstr ""
-"Ihre Datei ist zu groß (%(size)s), das erlaube Maximum beträgt "
+"Ihre Datei ist zu groß (%(size)s), das erlaubte Maximum beträgt "
 "%(max_valid_size)s"
 
 #: avatar/forms.py:44
@@ -522,11 +521,11 @@ msgstr "Avatar für %s"
 
 #: avatar/views.py:78
 msgid "Successfully uploaded a new avatar."
-msgstr "Neues Avatar erfolgreich hochgeladen"
+msgstr "Neuer Avatar erfolgreich hochgeladen"
 
 #: avatar/views.py:128
 msgid "Successfully uploaded a new group avatar."
-msgstr "Neues Gruppenavatar erfolgreich hochgeladen."
+msgstr "Neuer Gruppenavatar erfolgreich hochgeladen."
 
 #: avatar/views.py:166
 msgid "Successfully updated your avatar."
@@ -542,12 +541,12 @@ msgstr "Avatar hochladen"
 
 #: avatar/templates/avatar/add.html:7 avatar/templates/avatar/change.html:8
 msgid "Your current avatar: "
-msgstr "Ihr aktuelles Avatar: "
+msgstr "Ihr aktueller Avatar: "
 
 #: avatar/templates/avatar/add.html:9
 #: avatar/templates/avatar/set_avatar.html:12
 msgid "Upload New Avatar: "
-msgstr "Neues Avatar hochladen: "
+msgstr "Neuen Avatar hochladen: "
 
 #: avatar/templates/avatar/add.html:13 avatar/templates/avatar/change.html:30
 msgid "Upload New Image"
@@ -555,7 +554,7 @@ msgstr "Neues Bild hochladen"
 
 #: avatar/templates/avatar/confirm_delete.html:6
 msgid "Please select the avatars that you would like to delete."
-msgstr "Bitte wählen sie die Avatare die sie löschen möchten."
+msgstr "Bitte wählen Sie die Avatare die Sie löschen möchten."
 
 #: avatar/templates/avatar/confirm_delete.html:11
 #, python-format
@@ -563,8 +562,8 @@ msgid ""
 "You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
 "\">upload one</a> now."
 msgstr ""
-"Sie haben keine Avatare die sie löchen können. Bitte <a href="
-"\"%(avatar_change_url)s\">laden sie eins hoch</a>."
+"Sie haben keine Avatare die Sie löschen können. Bitte <a href="
+"\"%(avatar_change_url)s\">laden Sie einen hoch</a>."
 
 #: avatar/templates/avatar/confirm_delete.html:18
 #, fuzzy
@@ -577,11 +576,11 @@ msgstr "Avatar ändern"
 
 #: avatar/templates/avatar/set_avatar.html:9
 msgid "Current avatar: "
-msgstr "Aktuelles Avatar: "
+msgstr "Aktueller Avatar: "
 
 #: avatar/templates/avatar/set_avatar.html:10
 msgid "Current Avatar"
-msgstr "Aktuelles Avatar"
+msgstr "Aktueller Avatar"
 
 #: avatar/templates/avatar/set_avatar.html:16
 #: contacts/templates/contacts/contact_list.html:53
@@ -621,22 +620,22 @@ msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
-"<a href=\"%(user_url)s\">%(avatar_creator)s</a> hat sein Avatar aktualisiert "
+"<a href=\"%(user_url)s\">%(avatar_creator)s</a> hat seinen Avatar aktualisiert "
 "<a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templates/notification/avatar_updated/notice.html:2
 #, python-format
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
-"Sie haben ihr Avatar aktualisiert <a href=\"%(avatar_url)s\">%(avatar)s</a>."
+"Sie haben Ihren Avatar aktualisiert <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: avatar/templatetags/avatar_tags.py:46
 msgid "Default Avatar"
-msgstr "Standard Avatar"
+msgstr "Standard-Avatar"
 
 #: base/accounts.py:347 thirdpart/registration/forms.py:34
 msgid "Email address"
-msgstr "E-Mail Adresse"
+msgstr "E-Mail-Adresse"
 
 #: base/accounts.py:352 thirdpart/auth/forms.py:18
 msgid "Username"
@@ -665,7 +664,7 @@ msgstr "Ungültige Benutzer-ID."
 
 #: base/templatetags/seahub_tags.py:145
 msgid "Just now"
-msgstr "Gerade jetzt"
+msgstr "Gerade eben"
 
 #: base/templatetags/seahub_tags.py:154
 #, python-format
@@ -737,26 +736,26 @@ msgstr "Ist bereits in Ihren Kontakten."
 #: contacts/views.py:68
 #, python-format
 msgid "Successfully added %s to contacts."
-msgstr "%s erfolgrich zu den Kontakten hinzugefügt."
+msgstr "%s erfolgreich zu den Kontakten hinzugefügt."
 
 #: contacts/views.py:93
 #, python-format
 msgid "Successfully added %s."
-msgstr "%s erfolgrich hinzugefügt."
+msgstr "%s erfolgreich hinzugefügt."
 
 #: contacts/views.py:95
 msgid "Failed to add an contact."
-msgstr "Hinzufügen des Kontaktes fehlgeschlagen."
+msgstr "Hinzufügen des Kontakts fehlgeschlagen."
 
 #: contacts/views.py:120
 #, python-format
 msgid "Successfully edited %s."
-msgstr "%s erfolgrich editiert."
+msgstr "%s erfolgreich bearbeitet."
 
 #: contacts/views.py:133
 #, python-format
 msgid "Successfully Deleted %s"
-msgstr "%s erfolgrich gelöscht"
+msgstr "%s erfolgreich gelöscht"
 
 #: contacts/templates/contacts/contact_list.html:8
 #: group/templates/group/groups_left_panel.html:3
@@ -772,7 +771,7 @@ msgid ""
 "added to contacts."
 msgstr ""
 "Wenn Sie Bibliotheken oder Links auf Dateien mit Freunden teilen, wird seine/"
-"ihre E-Mail Adresse zu Ihren Kontakten hinzugefügt."
+"ihre E-Mail-Adresse zu Ihren Kontakten hinzugefügt."
 
 #: contacts/templates/contacts/contact_list.html:15
 #: templates/myhome_base.html:17
@@ -830,7 +829,7 @@ msgstr "Anmerkung"
 #: templates/view_shared_dir.html:34 templates/snippets/my_owned_repos.html:21
 #: templates/snippets/my_owned_repos.html:60
 msgid "Operations"
-msgstr "Operationen"
+msgstr "Aktionen"
 
 #: contacts/templates/contacts/contact_list.html:33
 #: organizations/templates/organizations/personal.html:15
@@ -866,7 +865,7 @@ msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
 msgstr ""
-"Fügen sie Kontakte hinzu, um schneller Biliotheken freigeben oder Links auf "
+"Fügen Sie Kontakte hinzu, um schneller Bibliotheken freigeben oder Links auf "
 "Dateien verschicken zu können."
 
 #: contacts/templates/contacts/contact_list.html:48
@@ -952,7 +951,7 @@ msgstr "Hinzufügen des Mitglieds zur Gruppe ist fehlgeschlagen"
 
 #: group/error_msg.py:21
 msgid "Only group staff can remove member"
-msgstr "Nur Gruppenverwalter*innen können Mitglieder entfernen"
+msgstr "Nur Gruppenverwalter können Mitglieder entfernen"
 
 #: group/error_msg.py:23
 msgid "Can not remove myself"
@@ -984,11 +983,11 @@ msgstr "Es existiert bereits eine Gruppe mit diesem Namen."
 
 #: group/views.py:102
 msgid "Only administrators can delete the group."
-msgstr "Nur Administrator*innen können die Gruppe löschen."
+msgstr "Nur Administratoren können die Gruppe löschen."
 
 #: group/views.py:139
 msgid "Only administrators can dismiss the group"
-msgstr "Nur Administrator*innen können die Gruppe ausblenden"
+msgstr "Nur Administratoren können die Gruppe ausblenden"
 
 #: group/views.py:162
 msgid "group id  is not a valid argument."
@@ -1009,7 +1008,7 @@ msgstr "Hinzufügen fehlgeschlagen, %s ist nicht in der aktuellen Organisation"
 
 #: group/views.py:506
 msgid "Your friend added you to a group at Seafile."
-msgstr "Ihr Freund hat Sie einer Gruppe bei Seafile hinzugefügt"
+msgstr "Jemand hat Sie einer Gruppe bei Seafile hinzugefügt"
 
 #: group/views.py:511
 msgid "Failed to send mail."
@@ -1038,11 +1037,11 @@ msgstr "Hinzufügen fehlgeschlagen, %s ist nicht registriert."
 
 #: group/views.py:613 group/views.py:626 group/views.py:653
 msgid "Operation succeeded."
-msgstr "Operation erfolgrich."
+msgstr "Aktion erfolgreich."
 
 #: group/views.py:643 share/views.py:169
 msgid "group id is not valid"
-msgstr "Gruppen ID ist ungültig"
+msgstr "Gruppen-ID ist ungültig"
 
 #: group/views.py:655
 #, python-format
@@ -1051,28 +1050,28 @@ msgstr "Fehlgeschlagen: %s"
 
 #: group/views.py:667
 msgid "Failed to share: the group doesn't exist."
-msgstr "Teilen fehlgeschlagen: Die Gruppe existiert nicht."
+msgstr "Freigeben fehlgeschlagen: Die Gruppe existiert nicht."
 
 #: group/views.py:670
 msgid "Failed to share: internal error."
-msgstr "Teilen fehlgeschlagen: Interner Fehler."
+msgstr "Freigeben fehlgeschlagen: Interner Fehler."
 
 #: group/views.py:680
 msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
-"Teilen konnte nicht rückgängig gemacht werden: Die Gruppe existiert nicht."
+"Freigeben konnte nicht rückgängig gemacht werden: Die Gruppe existiert nicht."
 
 #: group/views.py:685
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr ""
-"Operation fehlgeschlagen: Nur Administrator*innen und der/die Besitzer*in "
-"können das Teilen einer Bibliothek rückgängig machen"
+"Operation fehlgeschlagen: Nur Administratoren und der Besitzer "
+"können das Freigeben einer Bibliothek rückgängig machen"
 
 #: group/views.py:688
 msgid "Failed to unshare: internal error."
-msgstr "Teilen konnte nicht rückgängig gemacht werden: Interner Fehler"
+msgstr "Freigeben konnte nicht rückgängig gemacht werden: Interner Fehler"
 
 #: group/views.py:716
 msgid "Error: wrong group id"
@@ -1122,7 +1121,7 @@ msgstr "Bewerben, um der Gruppe beizutreten"
 #: group/views.py:879
 msgid "Sent successfully, the group admin will handle it."
 msgstr ""
-"Erfolgreicht versandt, der/die Gruppenadministrator*in wird die Nachricht "
+"Erfolgreicht versandt, der Gruppenadministrator wird die Nachricht "
 "behandeln."
 
 #: group/views.py:883
@@ -1135,8 +1134,8 @@ msgid ""
 "%(email)s invite you to join group %(group.group_name)s. Please go to the "
 "following page and sign up:"
 msgstr ""
-"%(email)s hat sie eingelaen der Gruppe %(group.group_name)s beizutreten. "
-"Bitte besuchen Sie die folgende Seite und melden sich an."
+"%(email)s hat sie eingeladen der Gruppe %(group.group_name)s beizutreten. "
+"Bitte besuchen Sie die folgende Seite und melden Sie sich an."
 
 #: group/templates/group/add_member_email.html:5
 #: group/templates/group/group_join_email.html:6
@@ -1185,7 +1184,7 @@ msgstr "Hinzufügen"
 
 #: group/templates/group/group_info.html:52
 msgid "You can click \"Add\" above to add members."
-msgstr "Sie können \"Hinzufügen\" anklicken um Mitglider hinzuzufügen."
+msgstr "Sie können \"Hinzufügen\" anklicken um Mitglieder hinzuzufügen."
 
 #: group/templates/group/group_info.html:62
 msgid "Administration"
@@ -1231,7 +1230,7 @@ msgstr "Letzte Aktualisierung"
 #: organizations/templates/organizations/org_public.html:31
 #: templates/snippets/my_owned_repos.html:59
 msgid "Shared By"
-msgstr "Geteilt von"
+msgstr "Freigegeben von"
 
 #: group/templates/group/group_info.html:89
 #: group/templates/group/group_info.html:91
@@ -1263,7 +1262,7 @@ msgstr "Herunterladen"
 #: share/templates/repo/share_admin.html:63
 #: share/templates/repo/share_admin.html:65
 msgid "Unshare"
-msgstr "Teilen rückgängig machen"
+msgstr "Freigeben rückgängig machen"
 
 #: group/templates/group/group_info.html:116
 msgid "Messages"
@@ -1347,11 +1346,11 @@ msgstr "Sind Sie sicher, dass Sie diese Gruppe verlassen möchten?"
 
 #: group/templates/group/group_info.html:203
 msgid "Unshare Library"
-msgstr "Teilen der Bibliothek rückgängig machen"
+msgstr "Freigeben der Bibliothek rückgängig machen"
 
 #: group/templates/group/group_info.html:203
 msgid "Are you sure you want to unshare"
-msgstr "Sind Sie sicher, dass Sie das Teilen rückgängig machen wollen?"
+msgstr "Sind Sie sicher, dass Sie die Freigabe rückgängig machen wollen?"
 
 #: group/templates/group/group_info.html:236
 msgid "Really want to delete this message?"
@@ -1375,7 +1374,7 @@ msgstr "Löschen fehlgeschlagen:"
 
 #: group/templates/group/group_info.html:254
 msgid ", failed to delete."
-msgstr ", könnte nicht gelöscht werden."
+msgstr ", konnte nicht gelöscht werden."
 
 #: group/templates/group/group_join_email.html:2
 #, python-format
@@ -1401,7 +1400,7 @@ msgstr "Ändern"
 
 #: group/templates/group/group_manage.html:27
 msgid "Dismiss"
-msgstr "Ausblenden"
+msgstr "Löschen"
 
 #: group/templates/group/group_manage.html:28
 msgid "Back"
@@ -1414,19 +1413,19 @@ msgstr "Mitglieder hinzufügen"
 
 #: group/templates/group/group_manage.html:59
 msgid "Administrators"
-msgstr "Administrator*innen"
+msgstr "Administratoren"
 
 #: group/templates/group/group_manage.html:60
 msgid "Add Administrators"
-msgstr "Administrator*in hinzufügen"
+msgstr "Administrator hinzufügen"
 
 #: group/templates/group/group_manage.html:90
 msgid "Dismiss Group"
-msgstr "Gruppe ausblenden"
+msgstr "Gruppe löschen"
 
 #: group/templates/group/group_manage.html:90
-msgid "Really want to dismiss this group"
-msgstr "Sind Sie sicher das Sie die Gruppe ausblenden möchten?"
+msgid "Really want to dismiss this group?"
+msgstr "Sind Sie sicher dass Sie die Gruppe löschen möchten?"
 
 #: group/templates/group/group_manage.html:91
 #: organizations/templates/organizations/org_admin.html:99
@@ -1435,7 +1434,7 @@ msgstr "Mitglied löschen"
 
 #: group/templates/group/group_manage.html:91
 msgid "Really want to delete Member"
-msgstr "Sind sie sicher das sie das Mitglied löschen möchten"
+msgstr "Sind Sie sicher das Sie das Mitglied löschen möchten"
 
 #: group/templates/group/group_pubinfo.html:9
 msgid "Join Group"
@@ -1450,7 +1449,7 @@ msgstr "Name: "
 #: organizations/templates/organizations/org_pubinfo.html:37
 #: templates/pubinfo.html:33
 msgid "Creator: "
-msgstr "Ersteller*in: "
+msgstr "Ersteller: "
 
 #: group/templates/group/group_pubinfo.html:15
 msgid "Create at: "
@@ -1525,25 +1524,25 @@ msgstr "Mitglieder hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:4
 msgid "emails, separated by ','"
-msgstr "E-Mail Adressen, getrennt durch ','"
+msgstr "E-Mail-Adressen, getrennt durch ','"
 
 #: group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
 msgstr ""
-"Tipp: Es wird eine Einladung versendet, wenn die E-Mail Adresse nicht registriert ist."
+"Tipp: Es wird eine Einladung versendet, wenn die E-Mail-Adresse nicht registriert ist."
 
 #: group/templates/group/grpmember_add_form.html:9
 #, fuzzy
 msgid "Tip: the emails should be already registered."
-msgstr "Tipp: Die E-Mail Adressen sollten bereits registriert sein."
+msgstr "Tipp: Die E-Mail-Adressen sollten bereits registriert sein."
 
 #: group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
-msgstr "Administrator*innen hinzufügen"
+msgstr "Administratoren hinzufügen"
 
 #: group/templates/group/grpmember_add_form.html:16
 msgid "emails, separated by ',' "
-msgstr "E-Mail Adressen, getrennt durch ',' "
+msgstr "E-Mail-Adressen, getrennt durch ',' "
 
 #: group/templates/group/msg_reply_js.html:59
 msgid "It cannot be blank and should be no more than 150 characters."
@@ -1660,12 +1659,12 @@ msgstr "Diese Gruppe gehört nicht zur aktuellen Organisation"
 #: organizations/views.py:606
 msgid "Only the owner of this library has permission to share it."
 msgstr ""
-"Nur der/die Besitzer*in dieser Bibliothek hat die Berechtigung diese zu "
+"Nur der/die Besitzer dieser Bibliothek hat die Berechtigung diese zu "
 "teilen."
 
 #: organizations/views.py:621 share/views.py:80
 msgid "Failed to share to all members"
-msgstr "Teilen mit allen Mitgliedern ist fehlgeschlagen"
+msgstr "Freigeben für alle Mitglieder ist fehlgeschlagen"
 
 #: organizations/views.py:625
 #, python-format
@@ -1674,7 +1673,7 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigabe</a> prüfen."
+"href=\"%s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:646
 #, python-format
@@ -1683,19 +1682,19 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
+"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:652 organizations/views.py:671 share/views.py:328
 #: share/views.py:350
 #, python-format
 msgid "Failed to share to %s."
-msgstr "Teilen mit %s ist fehlgeschlagen."
+msgstr "Freigeben für %s ist fehlgeschlagen."
 
 #: organizations/views.py:658
 #, python-format
 msgid "Failed to share to %s: this user does not exist in the organization."
 msgstr ""
-"Teilen mit %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
+"Freigeben für %s ist fehlgeschlagen: Dieser Benutzer/Diese Benutzerin ist nicht "
 "Teil dieser Organisation"
 
 #: organizations/views.py:666
@@ -1705,7 +1704,7 @@ msgid ""
 "\"%(share)s\">Share</a>."
 msgstr ""
 "Erfolgreich für %(share_to)s freigegeben. Sie können den Status unter <a "
-"href=\"%(share)s\">Freigabe</a> prüfen."
+"href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: organizations/views.py:713 share/views.py:218
 msgid "all members"
@@ -1733,7 +1732,7 @@ msgstr "URL-Präfix darf nur Buchstaben und Zahlen enthalten."
 #: organizations/templates/organizations/personal.html:25
 #: templates/userinfo.html:24
 msgid "Space Used"
-msgstr "Verbrauchter Speicherplatz"
+msgstr "Benutzter Speicherplatz"
 
 #: organizations/templates/organizations/org_admin.html:15
 #: templates/sys_useradmin.html:13
@@ -1751,15 +1750,15 @@ msgstr "Pro Seite: "
 
 #: organizations/templates/organizations/org_admin.html:70
 msgid "Emails: "
-msgstr "E-Mail Adressen: "
+msgstr "E-Mail-Adressen: "
 
 #: organizations/templates/organizations/org_admin.html:72
 msgid "An invitation will be sent if the email is not registered."
-msgstr "Eine EInladung wird versendet, wenn die E-Mail nicht registriert ist."
+msgstr "Eine Einladung wird versendet, wenn die E-Mail nicht registriert ist."
 
 #: organizations/templates/organizations/org_admin.html:73
 msgid "Emails is required."
-msgstr "E-Mail Adressen werden benötigt"
+msgstr "E-Mail-Adressen werden benötigt"
 
 #: organizations/templates/organizations/org_group_admin.html:7
 #: organizations/templates/organizations/org_pubinfo.html:26
@@ -1772,7 +1771,7 @@ msgstr "Gruppen"
 #: organizations/templates/organizations/org_group_admin.html:12
 #: templates/sys_group_admin.html:12 templates/sys_org_admin.html:13
 msgid "Creator"
-msgstr "Ersteller*in"
+msgstr "Ersteller"
 
 #: organizations/templates/organizations/org_group_admin.html:13
 msgid "Created At"
@@ -1786,7 +1785,7 @@ msgstr "Gruppe löschen"
 #: organizations/templates/organizations/org_groups.html:15
 msgid "After creating a group, you can add members and share libraries to it."
 msgstr ""
-"Nach dem erstellen einer Gruppe können Sie Mitglieder hinzufügen und "
+"Nach dem Erstellen einer Gruppe können Sie Mitglieder hinzufügen und "
 "Bibliotheken teilen."
 
 #: organizations/templates/organizations/org_groups.html:16
@@ -1803,14 +1802,14 @@ msgstr "Niemand hat bisher eine Gruppe erstellt"
 msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr ""
-"Sie können eine Gruppe erstellen, indem sie auf \"Gruppe hinzufügen\" im "
+"Sie können eine Gruppe erstellen, indem Sie auf \"Gruppe hinzufügen\" im "
 "Gruppenmenü klicken."
 
 #: organizations/templates/organizations/org_public.html:15
 #: templates/public_home.html:11
 msgid "A library marked as read-only can be downloaded."
 msgstr ""
-"Eine Bibliothek welche als nur lesen markiert ist, kann heruntergeladen "
+"Eine Bibliothek welche als Nur-Lesen markiert ist, kann heruntergeladen "
 "werden."
 
 #: organizations/templates/organizations/org_public.html:16
@@ -1854,7 +1853,7 @@ msgstr "Alle Bilbliotheken"
 #: organizations/templates/organizations/org_seafadmin.html:13
 #: templates/sys_seafadmin.html:12
 msgid "Owner"
-msgstr "Besitzer*in"
+msgstr "Besitzer"
 
 #: organizations/templates/organizations/org_seafadmin.html:62
 #: templates/sys_seafadmin.html:61 templates/userinfo.html:133
@@ -1879,11 +1878,11 @@ msgid ""
 "Please click the link to log in:\n"
 msgstr ""
 "\n"
-"Hier sind ihe Anmeldeinformationen:\n"
+"Hier sind Ihre Anmeldeinformationen:\n"
 "E-Mail: %(email)s\n"
 "Passwort: %(password)s\n"
 "\n"
-"Bitte klicken sie auf den Link, um sich einzuloggen:\n"
+"Bitte klicken Sie auf den Link, um sich einzuloggen:\n"
 
 #: organizations/templates/organizations/org_user_add_email.html:11
 #, fuzzy, python-format
@@ -1912,11 +1911,11 @@ msgstr "Ihr Spitzname"
 
 #: profile/views.py:41
 msgid "Successfully edited profile."
-msgstr "Profil erfolgreich editiert."
+msgstr "Profil erfolgreich bearbeitet."
 
 #: profile/views.py:47
 msgid "Failed to edit profile"
-msgstr "Editieren des Profils ist fehlgeschlagen"
+msgstr "Bearbeiten des Profils ist fehlgeschlagen"
 
 #: profile/views.py:80 profile/views.py:119
 msgid "Has not accepted invitation yet"
@@ -1967,7 +1966,7 @@ msgstr "Notitz (optional): "
 
 #: share/forms.py:20
 msgid "Email is not longer than 512 characters"
-msgstr "Email darf nicht lönger als 512 Zeichen sein"
+msgstr "Email darf nicht länger als 512 Zeichen sein"
 
 #: share/views.py:68
 msgid "Only the owner of the library has permission to share it."
@@ -1979,7 +1978,7 @@ msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
 msgstr ""
 "Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigabe</a> prüfen."
+"href=\"%s\">Freigaben</a> prüfen."
 
 #: share/views.py:104
 #, python-format
@@ -1988,22 +1987,22 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigabe</a> prüfen."
+"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
 
 #: share/views.py:110
 #, fuzzy, python-format
 msgid "Failed to share to %s，as it does not exist."
-msgstr "Teilen mit %s fehlgeschlagen: es existiert nicht."
+msgstr "Freigeben für %s fehlgeschlagen: es existiert nicht."
 
 #: share/views.py:126
 #, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "Freigabe für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
+msgstr "Freigeben für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
 
 #: share/views.py:135
 #, python-format
 msgid "Failed to share to %s ."
-msgstr "Freigabe für %s fehlgeschlagen."
+msgstr "Freigeben für %s fehlgeschlagen."
 
 #: share/views.py:139
 #, python-format
@@ -2012,7 +2011,7 @@ msgid ""
 "\">Share</a>."
 msgstr ""
 "Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigabe</a> prüfen."
+"\"%(share)s\">Freigaben</a> prüfen."
 
 #: share/views.py:163 share/views.py:173
 msgid "Failed to remove share"
@@ -2028,7 +2027,7 @@ msgid ""
 "Failed to share to %s, as encrypted libraries cannot be shared to emails "
 "outside the site."
 msgstr ""
-"Freigabe für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
+"Freigeben für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht für "
 "E-Mails außerhalb der Seite freigegeben werden."
 
 #: share/views.py:346
@@ -2050,7 +2049,7 @@ msgstr "Erfolgreicht gelöscht"
 
 #: share/views.py:405
 msgid "You cannot share the library in this way."
-msgstr "So können sie die Bibliothek nicht freigeben."
+msgstr "So können Sie die Bibliothek nicht freigeben."
 
 #: share/views.py:430
 msgid "Failed to get the link, please retry later."
@@ -2070,12 +2069,12 @@ msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Senden des freigegebenen Links fehlgeschlagen. Die E-Mail-Service Konfiguration ist "
-"nicht korrekt. Bitte wenden Sie sich an den Administrator."
+"Senden des freigegebenen Links fehlgeschlagen. Der E-Mail-Service ist" 
+"nicht korrekt konfiguriert. Bitte wenden Sie sich an den Administrator."
 
 #: share/views.py:501
 msgid "Your friend shared a file to you on Seafile"
-msgstr "Ihr Freund hat eine Datei für Sie auf Seafile freigegeben."
+msgstr "Jemand hat eine Datei für Sie auf Seafile freigegeben."
 
 #: share/views.py:506
 msgid "Internal server error. Send failed."
@@ -2090,17 +2089,17 @@ msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
-"Wenn sie nicht wollen, das andere den Inhalt ihrer freigegebenen Bibliothek "
-"ändern können, setzen sie die Freigabeberechtigung auf \"nur lesen\" wenn "
+"Wenn Sie nicht wollen, das andere den Inhalt Ihrer freigegebenen Bibliothek "
+"ändern können, setzen Sie die Freigabeberechtigung auf \"Nur Lesen\" wenn "
 "Sie sie freigeben."
 
 #: share/templates/repo/share_admin.html:23
 msgid "Shared Libraries"
-msgstr "Geteilte Bibliotheken"
+msgstr "Freigegebene Bibliotheken"
 
 #: share/templates/repo/share_admin.html:29
 msgid "Share To"
-msgstr "Teilen mit"
+msgstr "Freigegeben für"
 
 #: share/templates/repo/share_admin.html:30
 msgid "Permission"
@@ -2108,7 +2107,7 @@ msgstr "Berechtigung"
 
 #: share/templates/repo/share_admin.html:74
 msgid "You have not shared any library"
-msgstr "Sie haben keine Bibliothek geteilt"
+msgstr "Sie haben keine Bibliothek freigegeben"
 
 #: share/templates/repo/share_admin.html:75
 msgid ""
@@ -2116,13 +2115,13 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
-"Sie können Bibliotheken mit ihren Freunden und Kollegen teilen, indem Sie "
-"auf den Teilen Knopf in ihren eigenen Bibliotheken klicken oder eine neue "
-"Bibliothek, in einer Gruppe in der Sie Mitglied sind, erstellen."
+"Sie können Bibliotheken an Ihre Freunde und Kollege freigeben, indem Sie "
+"auf den Freigabe-Knopf in Ihren eigenen Bibliotheken klicken oder eine neue "
+"Bibliothek erstellen in einer Gruppe, in der Sie Mitglied sind."
 
 #: share/templates/repo/share_admin.html:79
 msgid "Shared Links"
-msgstr "Geteilte Links"
+msgstr "Freigegebene Links"
 
 #: share/templates/repo/share_admin.html:83
 msgid "File or Folder"
@@ -2161,11 +2160,11 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
-msgstr "Erfolgreich editiert"
+msgstr "Erfolgreich bearbeitet"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
-msgstr "Editieren fehlgeschlagen."
+msgstr "Bearbeiten fehlgeschlagen."
 
 #: templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2173,7 +2172,7 @@ msgstr "Es tut uns leid, aber die angefragte Seite wurde nicht gefunden."
 
 #: templates/add_user_form.html:3 templates/add_user_form.html.py:7
 msgid "Add User"
-msgstr "Benutzer*in hinzufügen"
+msgstr "Benutzer hinzufügen"
 
 #: templates/add_user_form.html:13
 #: templates/registration/registration_form.html:15
@@ -2202,7 +2201,7 @@ msgstr "Die beiden Passwortfelder stimmen nicht überein"
 
 #: templates/admin_base.html:11 templates/pubinfo.html:8
 msgid "Users"
-msgstr "Benutzer*innen"
+msgstr "Benutzer"
 
 #: templates/admin_base.html:18
 msgid "Organizations"
@@ -2234,7 +2233,7 @@ msgstr "Arbeitsplatz"
 
 #: templates/base.html:56
 msgid "Admin"
-msgstr "Administrator*in"
+msgstr "Administrator"
 
 #: templates/base.html:64
 msgid "Log out"
@@ -2293,8 +2292,8 @@ msgid ""
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr ""
 "Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn "
-"sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
-"Server nur für eine Stunde bleiben."
+"Sie die Bibliothek online durchsuchen wollen. Das Passwort wird auf dem "
+"Server nur für eine Stunde behalten."
 
 #: templates/decrypt_repo_form.html:11
 msgid "Password: "
@@ -2308,7 +2307,7 @@ msgstr "Aktueller Pfad: "
 
 #: templates/file_edit.html:90
 msgid "Continue editing"
-msgstr "Editieren fortsetzen"
+msgstr "Bearbeiten fortsetzen"
 
 #: templates/file_edit.html:91
 msgid "Preview"
@@ -2333,16 +2332,16 @@ msgstr "Passwort: "
 #: templates/file_edit.html:124 templates/snippets/events.html:12
 #, fuzzy
 msgid "The password will be kept in the server for only 1 hour."
-msgstr "Das Passwort wird nur für eine Stunde auf dem Server bleiben."
+msgstr "Das Passwort wird nur für eine Stunde auf dem Server behalten."
 
 #: templates/file_edit.html:241
 msgid "Submit failed. Please check the network."
 msgstr ""
-"Abschicken fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
+"Senden fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_edit.html:243
 msgid "Submit failed."
-msgstr "Abschicken fehlgeschlagen."
+msgstr "Senden fehlgeschlagen."
 
 #: templates/file_edit.html:261 templates/snippets/events_js.html:67
 msgid "Password is required."
@@ -2365,14 +2364,14 @@ msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: templates/file_revisions.html:6
 msgid "'s Version History"
-msgstr "s Versionsverlauf"
+msgstr "s Versionen"
 
 #: templates/file_revisions.html:7
 msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr ""
-"Tipp: Nach jedem Bearbeiten wird eine neue Version generiert und Sie können "
+"Tipp: Nach jeder Änderung wird eine neue Version erzeugt. Sie können "
 "eine vorherige Version wiederherstellen."
 
 #: templates/file_revisions.html:10 templates/text_diff.html:8
@@ -2414,7 +2413,7 @@ msgstr "Aktueller Pfad: "
 
 #: templates/file_view.html:28 templates/repo.html:33
 msgid "Share link"
-msgstr "Link teilen"
+msgstr "Link freigeben"
 
 #: templates/file_view.html:29 templates/repo.html:34
 #: templates/repo.html.py:335
@@ -2423,7 +2422,7 @@ msgstr "Senden"
 
 #: templates/file_view.html:32 templates/file_view.html.py:189
 msgid "Unstar"
-msgstr "nicht mehr favorisieren"
+msgstr "Nicht mehr favorisieren"
 
 #: templates/file_view.html:34 templates/file_view.html.py:186
 msgid "Star"
@@ -2441,8 +2440,8 @@ msgstr "Details"
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "Ein*e Mitwirker*in"
-msgstr[1] " %(counter)s Mitwirker*innen"
+msgstr[0] "Ein Bearbeiter"
+msgstr[1] " %(counter)s Bearbeiter"
 
 #: templates/file_view.html:66 templates/repo.html:57
 #: templates/repo.html.py:197 templates/repo.html:260
@@ -2464,7 +2463,7 @@ msgstr "Senden an:"
 
 #: templates/file_view.html:92 templates/repo.html:338
 msgid "Emails, Seperated by ','"
-msgstr "E-Mail Adressen, getrennt durch ','"
+msgstr "E-Mail-Adressen, getrennt durch ','"
 
 #: templates/file_view.html:96 templates/repo.html:342
 msgid "Sending..."
@@ -2475,7 +2474,6 @@ msgid "Processing..."
 msgstr "Verarbeiten..."
 
 #: templates/file_view.html:103
-#, fuzzy
 msgid "You have not downloaded "
 msgstr "Sie haben nicht heruntergeladen "
 
@@ -2532,7 +2530,7 @@ msgid ""
 "No running Seafile client is detected. If you are sure Seafile client is "
 "running, click the following link to open the local file:"
 msgstr ""
-"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind das ein "
+"Es wurde kein Seafile Client gefunden. Falls Sie sich sicher sind dass ein "
 "Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
 "Datei zu öffnen:"
 
@@ -2628,18 +2626,17 @@ msgstr[1] ""
 
 #: templates/myhome.html:55
 msgid "Space used"
-msgstr "Verbrauchter Speicherplatz"
+msgstr "Benutzter Speicherplatz"
 
 #: templates/myhome_base.html:8
-#, fuzzy
 msgid "My Home"
-msgstr "Mein Heim"
+msgstr "Start"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
-msgstr "Teilen"
+msgstr "Freigaben"
 
 #: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
@@ -2651,7 +2648,7 @@ msgstr "Öffentliche Informationen"
 
 #: templates/public_home.html:27 templates/userinfo.html:64
 msgid "Share From"
-msgstr "Geteilt von"
+msgstr "Freigegeben von"
 
 #: templates/repo.html:11
 msgid ""
@@ -2719,7 +2716,7 @@ msgstr "Abrufen fehlgeschlagen"
 
 #: templates/repo.html:143
 msgid "More operations"
-msgstr "Mehr Operationen"
+msgstr "Mehr Aktionen"
 
 #: templates/repo.html:146 templates/repo.html.py:194
 msgid "Rename"
@@ -2758,7 +2755,7 @@ msgstr "Dateien hochladen"
 #: templates/repo.html:213 templates/repo.html.py:238
 msgid "The owner of this library has ran out of space."
 msgstr ""
-"Der/Die Besitzer*in dieser Bibliothek hat keinen freien Speicherplatz mehr."
+"Der Besitzer dieser Bibliothek hat keinen freien Speicherplatz mehr."
 
 #: templates/repo.html:218
 msgid "Add files"
@@ -2907,7 +2904,7 @@ msgstr "Schnappschuss ansehen"
 
 #: templates/repo_history.html:17
 msgid "Modifier"
-msgstr "Bearbeiter*in"
+msgstr "Bearbeiter"
 
 #: templates/repo_history_view.html:8
 msgid "snapshot"
@@ -2951,7 +2948,7 @@ msgstr "Bibliothek wiederherstellen"
 
 #: templates/repo_view_snapshot.html:83
 msgid "Are you sure you want to restore this library"
-msgstr "Sind Sie sicher das Sie diese Bibliothek wiederherstellen möchten?"
+msgstr "Sind Sie sicher dass Sie diese Bibliothek wiederherstellen möchten?"
 
 #: templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -2978,7 +2975,7 @@ msgstr "Klicken zum Herunterladen."
 
 #: templates/shared_file_view.html:27 templates/view_shared_dir.html:9
 msgid "Shared by: "
-msgstr "Geteilt von:"
+msgstr "Freigegeben von:"
 
 #: templates/shared_link_email.html:2
 #, python-format
@@ -3011,7 +3008,7 @@ msgstr "Organisation löschen"
 
 #: templates/sys_useradmin.html:8
 msgid "Add new user"
-msgstr "Neuen Benutzer/Neue Benutzerin hinzufügen"
+msgstr "Neuen Benutzer hinzufügen"
 
 #: templates/sys_useradmin.html:17
 msgid "Status"
@@ -3031,7 +3028,7 @@ msgstr "Passwort zurücksetzen"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
-msgstr "Benutzer*in löschen"
+msgstr "Benutzer löschen"
 
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
@@ -3111,7 +3108,7 @@ msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
 msgstr ""
-"Sie erhalten diese E-Mail, weil ein*e Gruppenverwalter*in Ihr Passwort auf "
+"Sie erhalten diese E-Mail, weil ein Gruppenverwalter Ihr Passwort auf "
 "%(site_name)s geändert hat."
 
 #: templates/user_reset_email.html:4
@@ -3132,15 +3129,15 @@ msgstr "Quota setzen"
 
 #: templates/userinfo.html:33
 msgid "Owned"
-msgstr "Besitzer*in"
+msgstr "Besitzer"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
-msgstr "Geteilt"
+msgstr "Freigaben"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
-msgstr "Speicherplatz für Benutzer*in limitieren"
+msgstr "Speicherplatz für Benutzer limitieren"
 
 #: templates/userinfo.html:85
 msgid "Tip: 0 means default limit"
@@ -3152,7 +3149,7 @@ msgstr "Passwort vergessen?"
 
 #: templates/registration/login.html:37
 msgid "Incorrect email or password"
-msgstr "E-Mail Adresse oder Passwort sind falsch"
+msgstr "E-Mail-Adresse oder Passwort sind falsch"
 
 #: templates/registration/logout.html:4
 msgid "Log Out"
@@ -3160,7 +3157,7 @@ msgstr "Ausloggen"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke für ihre Teilnahme! "
+msgstr "Danke für Ihre Teilnahme! "
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
@@ -3241,7 +3238,7 @@ msgstr "Ihr Benutzername, falls Sie ihn vergessen haben: "
 
 #: templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr "Ihre E-Mail Adresse, welche Sie beim Login verwendet haben: "
+msgstr "Ihre E-Mail-Adresse, welche Sie beim Login verwendet haben: "
 
 #: templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
@@ -3354,7 +3351,7 @@ msgstr ""
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
-msgstr "Diese Dateiart kann nicht online betrachtet werden."
+msgstr "Dieser Dateityp kann nicht online betrachtet werden."
 
 #: templates/snippets/file_upload_progress_js.html:51
 #: templates/snippets/file_upload_progress_js.html:75
@@ -3384,7 +3381,7 @@ msgstr "Neue Dateien"
 
 #: templates/snippets/list_commit_detail.html:25
 msgid "Deleted files"
-msgstr "Gelösche Dateien"
+msgstr "Gelöschte Dateien"
 
 #: templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
@@ -3412,11 +3409,11 @@ msgstr "Jetzt eine neue Gruppe erstellen"
 
 #: templates/snippets/my_owned_repos.html:7
 msgid "Mine"
-msgstr "Meine"
+msgstr "Meine Bibliotheken"
 
 #: templates/snippets/my_owned_repos.html:9
 msgid "Starred"
-msgstr "Favorisiert"
+msgstr "Favoriten"
 
 #: templates/snippets/my_owned_repos.html:43
 msgid "You have not created any libraries"
@@ -3438,7 +3435,7 @@ msgstr "Bibliothek mit Client sychronisieren"
 
 #: templates/snippets/my_owned_repos.html:46
 msgid "1. Download the library (make sure PC client is running)."
-msgstr "1. Bibliothek herunteladen (stellen Sie sicher, dass der Client läuft)"
+msgstr "1. Bibliothek herunterladen (stellen Sie sicher, dass der Client läuft)"
 
 #: templates/snippets/my_owned_repos.html:47
 msgid "2. Add files to the folder and they will be uploaded automatically."
@@ -3448,11 +3445,11 @@ msgstr ""
 
 #: templates/snippets/my_owned_repos.html:83
 msgid "Leave Share"
-msgstr "Geteilte Bibliothek verlassen"
+msgstr "Freigegebene Bibliothek verlassen"
 
 #: templates/snippets/my_owned_repos.html:91
 msgid "No library is shared to you"
-msgstr "Es wird keine Bibliothek mit ihnen geteilt"
+msgstr "Es ist keine Bibliothek für Sie freigegeben"
 
 #: templates/snippets/my_owned_repos.html:92
 msgid ""
@@ -3461,8 +3458,8 @@ msgid ""
 "libraries can only be downloaded, updates on local files will not be "
 "uploaded."
 msgstr ""
-"Biblioteken, die mit Ihnen geteilt werden, oder mit Gruppen geteilt werden, "
-"in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken auf die "
+"Bibliotheken, die mit Ihnen oder mit Gruppen geteilt werden, "
+"in denen Sie Mitglied sind, werden hier aufgelistet. Bibliotheken, auf die "
 "Sie Schreibzugriff haben, können heruntergeladen und synchronisiert werden. "
 "Dateien mit Lesezugriff werden nur heruntergeladen, lokale Änderungen aber "
 "nicht hochgeladen."
@@ -3486,7 +3483,7 @@ msgstr ""
 
 #: templates/snippets/myhome_extra_script.html:28
 msgid "Please enter emails or groups."
-msgstr "Bitte geben sie E-Mail Adressen oder Gruppen an."
+msgstr "Bitte geben Sie E-Mail-Adressen oder Gruppen an."
 
 #: templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -3514,15 +3511,15 @@ msgstr "Bitte geben Sie das Passwort erneut ein"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
-msgstr "Bibliothek teilen"
+msgstr "Bibliothek freigeben"
 
 #: templates/snippets/repo_share_form.html:4
 msgid "Share <span class=\"op-target\"></span> to"
-msgstr "<span class=\"op-target\"></span> teilen mit"
+msgstr "<span class=\"op-target\"></span> freigeben für"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
-msgstr "E-Mail Adressen oder Gruppen, getrennt durch ','"
+msgstr "E-Mail-Adressen oder Gruppen, getrennt durch ','"
 
 #: templates/snippets/repo_share_form.html:12
 msgid ""
@@ -3534,11 +3531,11 @@ msgstr ""
 
 #: templates/snippets/repo_share_form.html:15
 msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich zu teilen."
+msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich freizugeben."
 
 #: templates/snippets/shared_link_js.html:89
 msgid "Please input at least an email."
-msgstr "Bitte geben Sie mindestens eine E-Mail Adresse an."
+msgstr "Bitte geben Sie mindestens eine E-Mail-Adresse an."
 
 #: thirdpart/auth/admin.py:29
 msgid "Personal info"
@@ -3571,7 +3568,7 @@ msgstr ""
 
 #: thirdpart/auth/forms.py:41
 msgid "This account is inactive."
-msgstr "Dieses Benutzerkonto ist inaktiv."
+msgstr "Dieses Benutzerkonto ist deaktiviert."
 
 #: thirdpart/auth/forms.py:46
 msgid ""
@@ -3590,15 +3587,14 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Eine E-Mail konnte nicht versendet werden. Der E-Mail Dienst ist nicht korrekt "
-"konfiguriert. Bitte kontaktieren Sie den/die Administrator*in."
+"Eine E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator."
 
 #: thirdpart/auth/forms.py:74
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"Diese E-Mail Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
+"Diese E-Mail-Adresse ist mit keinem Account verknüpft. Sind Sie sicher, dass "
 "Sie registriert sind?"
 
 #: thirdpart/auth/forms.py:104
@@ -3636,11 +3632,11 @@ msgstr ""
 
 #: thirdpart/auth/management/commands/createsuperuser.py:24
 msgid "Enter a valid e-mail address."
-msgstr "Geben Sie eine gültige E-Mail Adresse an."
+msgstr "Geben Sie eine gültige E-Mail-Adresse an."
 
 #: thirdpart/registration/admin.py:23
 msgid "Activate users"
-msgstr "Aktive Benutzer*innen"
+msgstr "Aktive Benutzer"
 
 #: thirdpart/registration/admin.py:43
 msgid "Re-send activation emails"
@@ -3648,7 +3644,7 @@ msgstr "Aktivierungsmails erneut senden"
 
 #: thirdpart/registration/forms.py:46
 msgid "A user with this email alread"
-msgstr "Ein*e Benutzer*in mit dieser E-Mail Adresse existiert bereits"
+msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
@@ -3664,7 +3660,7 @@ msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
-"Diese E-Mail Adresse wird bereits benutzt. Bitte geben Sie eine andere E-Mail "
+"Diese E-Mail-Adresse wird bereits benutzt. Bitte geben Sie eine andere E-Mail "
 "Adresse an."
 
 #: thirdpart/registration/forms.py:113
@@ -3672,8 +3668,8 @@ msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"Registrierung mit einer kostenlosen E-Mail Adresse ist nicht erlaubt. Bitte geben Sie eine "
-"andere E-Mail Adresse an."
+"Registrierung mit einer kostenlosen E-Mail-Adresse ist nicht erlaubt. Bitte geben Sie eine "
+"andere E-Mail-Adresse an."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
