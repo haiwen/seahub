@@ -1112,7 +1112,7 @@ msgstr "d'icône"
 
 #: group/templates/group/group_info.html:17
 msgid "created at"
-msgstr "créé à"
+msgstr "créé le"
 
 #: group/templates/group/group_info.html:22
 msgid "Staffs"
@@ -1139,7 +1139,7 @@ msgstr "Administration"
 
 #: group/templates/group/group_info.html:64
 msgid "Quit"
-msgstr "Cesser de fumer"
+msgstr "Quitter le groupe"
 
 #: group/templates/group/group_info.html:72 templates/admin_base.html:8
 #: templates/org_admin_base.html:11 templates/snippets/my_owned_repos.html:3
@@ -1237,7 +1237,7 @@ msgstr "a un nouveau commentaire :"
 #: group/templates/group/new_msg_reply.html:42
 #: group/templates/group/new_msg_reply.html:48
 msgid "Reply"
-msgstr "Réponse"
+msgstr "Répondre"
 
 #: group/templates/group/group_info.html:165
 #, fuzzy
@@ -1438,7 +1438,7 @@ msgstr "Nouveau groupe"
 #: organizations/templates/organizations/org_pubinfo.html:38
 #: templates/pubinfo.html:34
 msgid "Time: "
-msgstr "Temps : "
+msgstr "Date :"
 
 #: group/templates/group/groups_right_panel.html:25
 msgid "You are not in any groups"
@@ -2506,7 +2506,7 @@ msgstr[1] ""
 "\n"
 "        a de nouveaux messages\n"
 
-#: templates/myhome.html:35
+#: templates/myhome.html:36
 #, fuzzy
 msgid ""
 "\n"
@@ -2881,8 +2881,8 @@ msgstr ""
 #: templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
 msgstr ""
-"Votre client Seafile est périmé, veuillez mettre à niveau vers la dernière "
-"version."
+"Votre client Seafile est périmé, veuillez le mettre à niveau vers la "
+"dernière version."
 
 #: templates/seafile_access_check.html:8
 msgid "Click to download."
@@ -3251,8 +3251,8 @@ msgstr "chargement..."
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
-"Vous pouvez utiliser IE 10 ou autres navigateurs, par exemple, firefox, à "
-"consulter en ligne."
+"Pour la consultation en ligne, vous pouvez utiliser IE 10 ou d'autres "
+"navigateurs, comme firefox."
 
 #: templates/snippets/file_content_js.html:162
 msgid "This type of file cannot be viewed online."
@@ -3551,7 +3551,7 @@ msgstr "Un utilisateur avec cette adresse mail"
 
 #: thirdpart/registration/forms.py:69
 msgid "I have read and agree to the Terms of Service"
-msgstr "J'ai lu et acceptez les conditions d'utilisation"
+msgstr "J'ai lu et j'accepte les conditions d'utilisation"
 
 #: thirdpart/registration/forms.py:70
 msgid "You must agree to the terms to register"
@@ -3570,8 +3570,8 @@ msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
-"L'enregistrement en utilisant des adresses e-mail gratuites est interdite."
-"Veuillez fournir une adresse e-mail différente."
+"L'enregistrement en utilisant des adresses mail gratuites est interdit. "
+"Veuillez fournir une adresse mail différente."
 
 #: thirdpart/registration/models.py:191
 msgid "activation key"
@@ -3583,7 +3583,7 @@ msgstr "Profil d'inscription"
 
 #: thirdpart/registration/models.py:197
 msgid "registration profiles"
-msgstr "profils d'enregistrement"
+msgstr "Profils d'inscription"
 
 #: thirdpart/Django-1.3-py2.7.egg/django/template/defaultfilters.py:805
 #: thirdpart/Django-1.3-py2.7.egg/django/template/defaultfilters.py:810
