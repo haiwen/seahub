@@ -3133,7 +3133,7 @@ msgstr "Besitzer*in"
 
 #: templates/userinfo.html:58 templates/snippets/my_owned_repos.html:8
 msgid "Shared"
-msgstr "Freigegeben"
+msgstr "Freigaben"
 
 #: templates/userinfo.html:82
 msgid "Set user storage limit"
@@ -3511,11 +3511,11 @@ msgstr "Bitte geben Sie das Passwort erneut ein"
 
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
-msgstr "Bibliothek teilen"
+msgstr "Bibliothek freigeben"
 
 #: templates/snippets/repo_share_form.html:4
 msgid "Share <span class=\"op-target\"></span> to"
-msgstr "<span class=\"op-target\"></span> teilen mit"
+msgstr "<span class=\"op-target\"></span> freigeben für"
 
 #: templates/snippets/repo_share_form.html:5
 msgid "Emails or Groups, Seperated by ','"
