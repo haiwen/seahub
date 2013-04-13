@@ -100,7 +100,7 @@ def share_repo(request):
         quota_usage = seaserv.get_user_quota_usage(from_email)
         current_share_usage = seaserv.get_user_share_usage(from_email)
         if share_usage + quota_usage + current_share_usage > quota:
-            messages.error(request, _('Failed to share "%s", no enough quota. <a href="#">Upgrade account.</a>') % repo.name)
+            messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
             return HttpResponseRedirect(reverse('myhome'))
 
     ''' Share to public '''

@@ -64,7 +64,7 @@ from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFil
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
-    calculate_repo_last_modify, valid_previewed_file, \
+    calculate_repo_last_modify, get_file_type_and_ext, \
     check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
@@ -1819,7 +1819,7 @@ def render_file_revisions (request, repo_id):
         error_msg = _(u"Library does not exist")
         return render_error(request, error_msg)
 
-    filetype = valid_previewed_file(u_filename)[0].lower()
+    filetype = get_file_type_and_ext(u_filename)[0].lower()
     if filetype == 'text' or filetype == 'markdown':
         can_compare = True
     else:
@@ -1991,7 +1991,6 @@ def view_shared_file(request, token):
         obj_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id, path)
     except:
         obj_id = None
-
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
     
@@ -2002,7 +2001,7 @@ def view_shared_file(request, token):
     access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
                                                      'view', '')
     
-    filetype, fileext = valid_previewed_file(filename)
+    filetype, fileext = get_file_type_and_ext(filename)
     
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
@@ -2125,7 +2124,7 @@ def view_file_via_shared_dir(request, token):
 
     access_token = seafserv_rpc.web_get_access_token(repo.id, file_id,
                                                      'view', '')
-    filetype, fileext = valid_previewed_file(file_name)
+    filetype, fileext = get_file_type_and_ext(file_name)
     # Raw path
     raw_path = gen_file_get_url(access_token, quote_filename)
     # get file content
