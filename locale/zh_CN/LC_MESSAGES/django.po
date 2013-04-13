@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-11 15:27+0800\n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,7 +188,7 @@ msgstr "对不起，你访问的页面不存在。"
 msgid "Add User"
 msgstr "添加新用户"
 
-#: templates/add_user_form.html:9 templates/pubuser.html:38
+#: templates/add_user_form.html:9 templates/pubuser.html:54
 #: templates/sys_useradmin.html:16 templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
 #: templates/snippets/user_profile_html.html:28
@@ -208,7 +208,7 @@ msgstr "确认密码"
 
 #: templates/add_user_form.html:17 templates/decrypt_repo_form.html:15
 #: templates/file_edit.html:97 templates/file_edit.html.py:263
-#: templates/pubuser.html:44 templates/repo.html:267
+#: templates/pubuser.html:60 templates/repo.html:267
 #: templates/repo.html.py:279 templates/repo.html:305
 #: templates/repo.html.py:326 templates/repo.html:338
 #: templates/repo.html.py:350 templates/userinfo.html:91
@@ -607,7 +607,7 @@ msgstr "密码为3到30个字符"
 #: templates/repo.html.py:661 templates/repo.html:698
 #: templates/repo.html.py:841 templates/view_file_base.html:166
 #: templates/view_file_document.html:66 templates/view_file_pdf.html:117
-#: templates/snippets/bottom_bar.html:105
+#: templates/snippets/bottom_bar.html:101
 #: templates/snippets/file_content_js.html:109
 #: templates/snippets/repo_decrypt_js.html:35
 #: templates/snippets/shared_link_js.html:41
@@ -678,12 +678,10 @@ msgid "Restore"
 msgstr "还原"
 
 #: templates/file_revisions.html:52 templates/history_file_view.html:63
-#: templates/pubrepo.html:44 templates/repo.html:24 templates/repo.html.py:137
-#: templates/repo.html:180 templates/shared_file_view.html:31
-#: templates/view_file_base.html:79 templates/view_history_file.html:34
-#: templates/view_shared_dir.html:48 templates/view_shared_dir.html.py:66
-#: templates/snippets/my_owned_repos.html:33
-#: templates/snippets/my_owned_repos.html:80
+#: templates/repo.html:24 templates/repo.html.py:137 templates/repo.html:180
+#: templates/shared_file_view.html:31 templates/view_file_base.html:79
+#: templates/view_history_file.html:34 templates/view_shared_dir.html:48
+#: templates/view_shared_dir.html.py:66
 msgid "Download"
 msgstr "下载"
 
@@ -734,9 +732,8 @@ msgstr "我的页面"
 #: templates/wiki/personal_wiki.html:14
 #: templates/wiki/personal_wiki_pages.html:6
 #: templates/wiki/personal_wiki_pages.html:14
-#, fuzzy
 msgid "Personal Wiki"
-msgstr "个人页面"
+msgstr "个人维基"
 
 #: templates/myhome.html:23
 msgid "Account"
@@ -928,6 +925,11 @@ msgstr "目录图标"
 msgid "Read-Only"
 msgstr "只读"
 
+#: templates/pubrepo.html:44 templates/snippets/my_owned_repos.html:33
+#: templates/snippets/my_owned_repos.html:80
+msgid "Download and Sync"
+msgstr "下载和同步"
+
 #: templates/pubrepo.html:51
 msgid "No public library"
 msgstr "当前没有公共资料"
@@ -941,19 +943,34 @@ msgstr ""
 "这个资料库。"
 
 #: templates/pubuser.html:29
-#, fuzzy
 msgid "Add to Contacts"
-msgstr "加为联系人"
+msgstr "加到通讯录"
 
-#: templates/pubuser.html:40 templates/snippets/user_profile_html.html:30
+#: templates/pubuser.html:38 templates/repo_history.html:52
+#: templates/repo_view_snapshot.html:50 templates/search_results.html:46
+#: templates/sys_group_admin.html:29 templates/sys_seafadmin.html:29
+#: templates/sys_useradmin.html:46 templates/view_file_pdf.html:11
+#: templates/snippets/file_content_js.html:122
+msgid "Previous"
+msgstr "前一页"
+
+#: templates/pubuser.html:48 templates/repo_history.html:55
+#: templates/repo_view_snapshot.html:53 templates/search_results.html:49
+#: templates/sys_group_admin.html:32 templates/sys_seafadmin.html:32
+#: templates/sys_useradmin.html:49 templates/view_file_pdf.html:11
+#: templates/snippets/file_content_js.html:122
+msgid "Next"
+msgstr "下一页"
+
+#: templates/pubuser.html:56 templates/snippets/user_profile_html.html:30
 msgid "Name(optional)"
 msgstr "名字(可选)"
 
-#: templates/pubuser.html:42 templates/snippets/user_profile_html.html:32
+#: templates/pubuser.html:58 templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
-#: templates/pubuser.html:47 templates/repo_history.html:35
+#: templates/pubuser.html:63 templates/repo_history.html:35
 #: templates/repo_view_snapshot.html:29
 msgid "None"
 msgstr "无"
@@ -1241,20 +1258,6 @@ msgstr "查看镜像"
 msgid "Modifier"
 msgstr "修改者"
 
-#: templates/repo_history.html:52 templates/repo_view_snapshot.html:50
-#: templates/search_results.html:46 templates/sys_group_admin.html:29
-#: templates/sys_seafadmin.html:29 templates/sys_useradmin.html:46
-#: templates/view_file_pdf.html:11 templates/snippets/file_content_js.html:122
-msgid "Previous"
-msgstr "前一页"
-
-#: templates/repo_history.html:55 templates/repo_view_snapshot.html:53
-#: templates/search_results.html:49 templates/sys_group_admin.html:32
-#: templates/sys_seafadmin.html:32 templates/sys_useradmin.html:49
-#: templates/view_file_pdf.html:11 templates/snippets/file_content_js.html:122
-msgid "Next"
-msgstr "下一页"
-
 #: templates/repo_history.html:60 templates/repo_view_snapshot.html:55
 #: templates/search_results.html:54 templates/sys_group_admin.html:37
 #: templates/sys_seafadmin.html:37 templates/sys_useradmin.html:54
@@ -1455,11 +1458,11 @@ msgstr "重置密码"
 
 #: templates/sys_useradmin.html:34
 msgid "Take Admin"
-msgstr ""
+msgstr "取消管理员"
 
 #: templates/sys_useradmin.html:36
 msgid "Give Admin"
-msgstr ""
+msgstr "设为管理员"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
@@ -1468,7 +1471,7 @@ msgstr "删除用户"
 #: templates/sys_useradmin.html:81
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:7 views/__init__.py:1462
+#: templates/registration/password_reset_form.html:7 views/__init__.py:1465
 msgid "Password Reset"
 msgstr "密码重置"
 
@@ -1860,11 +1863,11 @@ msgstr "讨论"
 msgid "Group"
 msgstr "群组"
 
-#: templates/snippets/bottom_bar.html:61
+#: templates/snippets/bottom_bar.html:57
 msgid "Please select at least 1 group."
 msgstr "请至少选择一个群组。"
 
-#: templates/snippets/bottom_bar.html:66
+#: templates/snippets/bottom_bar.html:62
 msgid "Please input a discussion."
 msgstr "请输入一个讨论。"
 
@@ -2113,9 +2116,8 @@ msgid "Add to contacts"
 msgstr "加为联系人"
 
 #: templates/wiki/personal_wiki.html:24
-#, fuzzy
 msgid "You do not have personal wiki"
-msgstr "你没有权限进行该操作"
+msgstr "你还未创建个人维基"
 
 #: templates/wiki/personal_wiki.html:25
 msgid ""
@@ -2123,296 +2125,289 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr ""
+"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
+"文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
+"器。"
 
 #: templates/wiki/personal_wiki.html:26
-#, fuzzy
 msgid "Create Wiki Now"
-msgstr "生成时间"
+msgstr "现在创建Wiki"
 
 #: templates/wiki/personal_wiki.html:29
-#, fuzzy
 msgid "Create Wiki"
-msgstr "生成时间"
+msgstr "创建Wiki"
 
 #: templates/wiki/personal_wiki.html:33
 msgid "Personal Wiki Pages"
-msgstr ""
+msgstr "个人维基页面"
 
 #: templates/wiki/personal_wiki.html:41
 #: templates/wiki/personal_wiki_pages.html:24
-#, fuzzy
 msgid "Home"
-msgstr "我的页面"
+msgstr "首页"
 
 #: templates/wiki/personal_wiki.html:42
 #: templates/wiki/personal_wiki_pages.html:25
 msgid "Pages"
-msgstr ""
+msgstr "页面"
 
 #: templates/wiki/personal_wiki.html:44
 #: templates/wiki/personal_wiki_pages.html:26
-#, fuzzy
 msgid "Wiki History"
-msgstr "历史"
+msgstr "Wiki历史"
 
 #: templates/wiki/personal_wiki.html:48 templates/wiki/personal_wiki.html:61
 #: templates/wiki/personal_wiki_pages.html:28
 #: templates/wiki/personal_wiki_pages.html:38
-#, fuzzy
 msgid "New Page"
-msgstr "新建文件"
+msgstr "新建页面"
 
 #: templates/wiki/personal_wiki.html:49
-#, fuzzy
 msgid "Delete Page"
-msgstr "删除时间"
+msgstr "删除页面"
 
 #: templates/wiki/personal_wiki.html:50
-#, fuzzy
 msgid "Edit Page"
-msgstr "编辑"
+msgstr "编辑页面"
 
 #: templates/wiki/personal_wiki.html:51
-#, fuzzy
 msgid "Page History"
-msgstr "历史"
+msgstr "页面历史"
 
 #: templates/wiki/personal_wiki.html:57
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
-msgstr ""
+msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
 #: templates/wiki/personal_wiki.html:114
-#, fuzzy
 msgid "Name and description can not be blank."
-msgstr "邮箱不能为空"
+msgstr "名称和描述不能为空"
 
 #: utils/__init__.py:84
 msgid "permission error"
 msgstr "权限错误"
 
-#: utils/__init__.py:99 views/__init__.py:2180 views/file.py:151
+#: utils/__init__.py:99 views/__init__.py:2182 views/file.py:151
 msgid "Internal error"
 msgstr "内部错误"
 
-#: views/__init__.py:285
+#: views/__init__.py:288
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: views/__init__.py:310
+#: views/__init__.py:313
 msgid "Library does not exist."
 msgstr "资料库不存在"
 
-#: views/__init__.py:321
+#: views/__init__.py:324
 msgid "You do not have permission to perform this action."
 msgstr "你没有权限进行该操作"
 
-#: views/__init__.py:328
+#: views/__init__.py:331
 msgid "Failed to edit library information."
 msgstr "资料库信息编辑失败。"
 
-#: views/__init__.py:335
+#: views/__init__.py:338
 msgid "Settings saved."
 msgstr "设置已保存。"
 
-#: views/__init__.py:339
+#: views/__init__.py:342
 msgid "Failed to save settings on server"
 msgstr "设置失败"
 
-#: views/__init__.py:346 views/wiki.py:87
+#: views/__init__.py:349 views/wiki.py:87
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: views/__init__.py:348
+#: views/__init__.py:351
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: views/__init__.py:350
+#: views/__init__.py:353
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views/__init__.py:352 views/__init__.py:1993 views/__init__.py:2121
+#: views/__init__.py:355 views/__init__.py:1995 views/__init__.py:2123
 #: views/file.py:277
 msgid "File does not exist"
 msgstr "文件不存在"
 
-#: views/__init__.py:354
+#: views/__init__.py:357
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: views/__init__.py:356
+#: views/__init__.py:359
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: views/__init__.py:358
+#: views/__init__.py:361
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: views/__init__.py:370 views/__init__.py:392
+#: views/__init__.py:373 views/__init__.py:395
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: views/__init__.py:456
+#: views/__init__.py:459
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: views/__init__.py:504
+#: views/__init__.py:507
 msgid "Unable to view library snapshots"
 msgstr "无法查看该资料库镜像"
 
-#: views/__init__.py:556
+#: views/__init__.py:559
 msgid "You have no permission to restore library"
 msgstr "你没有权限进行还原操作"
 
-#: views/__init__.py:572
+#: views/__init__.py:575
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views/__init__.py:578 views/__init__.py:1869 views/__init__.py:1904
-#: views/__init__.py:2396 views/file.py:563
+#: views/__init__.py:581 views/__init__.py:1872 views/__init__.py:1907
+#: views/__init__.py:2416 views/file.py:563
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views/__init__.py:580 views/__init__.py:673 views/__init__.py:1816
-#: views/__init__.py:2411
+#: views/__init__.py:583 views/__init__.py:676 views/__init__.py:1819
+#: views/__init__.py:2431
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
-#: views/__init__.py:582
+#: views/__init__.py:585
 msgid "History you specified does not exist"
 msgstr "指定的历史记录不存在"
 
-#: views/__init__.py:584
+#: views/__init__.py:587
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: views/__init__.py:651
+#: views/__init__.py:654
 msgid "Changed library name or description"
 msgstr "修改了资料库名称或描述"
 
-#: views/__init__.py:654
+#: views/__init__.py:657
 msgid "No conflict in the merge."
 msgstr "合并没有冲突。"
 
-#: views/__init__.py:693 views/__init__.py:710
+#: views/__init__.py:696 views/__init__.py:713
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
-#: views/__init__.py:708
-#, fuzzy, python-format
+#: views/__init__.py:711
+#, python-format
 msgid "Successfully deleted library \"%s\"."
-msgstr "成功添加用户 %s。"
+msgstr "成功删除资料库 \"%s\"。"
 
-#: views/__init__.py:925 views/__init__.py:1790
+#: views/__init__.py:928 views/__init__.py:1793
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views/__init__.py:943
+#: views/__init__.py:946
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "取消共享失败，该资料库不存在"
 
-#: views/__init__.py:948
+#: views/__init__.py:951
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\" 取消共享成功"
 
-#: views/__init__.py:950
+#: views/__init__.py:953
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "\"%s\" 取消共享失败"
 
-#: views/__init__.py:980
+#: views/__init__.py:983
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views/__init__.py:987
+#: views/__init__.py:990
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views/__init__.py:989
+#: views/__init__.py:992
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views/__init__.py:1004
+#: views/__init__.py:1007
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views/__init__.py:1009 views/file.py:106
+#: views/__init__.py:1012 views/file.py:106
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views/__init__.py:1012 views/file.py:109
+#: views/__init__.py:1015 views/file.py:109
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views/__init__.py:1019 views/file.py:116
+#: views/__init__.py:1022 views/file.py:116
 msgid "The encoding you chose is not proper."
 msgstr "文件编码不合适"
 
-#: views/__init__.py:1036 views/__init__.py:1039 views/file.py:133
+#: views/__init__.py:1039 views/__init__.py:1042 views/file.py:133
 #: views/file.py:136
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views/__init__.py:1111
+#: views/__init__.py:1114
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views/__init__.py:1138
+#: views/__init__.py:1141
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views/__init__.py:1149
+#: views/__init__.py:1152
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views/__init__.py:1192
+#: views/__init__.py:1195
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views/__init__.py:1198
+#: views/__init__.py:1201
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views/__init__.py:1211
+#: views/__init__.py:1214
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views/__init__.py:1212
+#: views/__init__.py:1215
 msgid "copy"
 msgstr "复制"
 
-#: views/__init__.py:1212
+#: views/__init__.py:1215
 msgid "move"
 msgstr "移动"
 
-#: views/__init__.py:1227
+#: views/__init__.py:1230
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views/__init__.py:1233
+#: views/__init__.py:1236
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views/__init__.py:1348
+#: views/__init__.py:1351
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views/__init__.py:1478
+#: views/__init__.py:1481
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views/__init__.py:1483
+#: views/__init__.py:1486
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -2421,12 +2416,12 @@ msgstr ""
 "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
 "件配置。"
 
-#: views/__init__.py:1487
+#: views/__init__.py:1490
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views/__init__.py:1490
+#: views/__init__.py:1493
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -2436,74 +2431,74 @@ msgstr ""
 "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
 "邮件无法发送。"
 
-#: views/__init__.py:1493
+#: views/__init__.py:1496
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views/__init__.py:1514
+#: views/__init__.py:1517
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views/__init__.py:1549
+#: views/__init__.py:1552
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views/__init__.py:1552
+#: views/__init__.py:1555
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views/__init__.py:1554
+#: views/__init__.py:1557
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views/__init__.py:1556
+#: views/__init__.py:1559
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views/__init__.py:1658 views/__init__.py:1689 views/__init__.py:1723
+#: views/__init__.py:1661 views/__init__.py:1692 views/__init__.py:1726
 #: views/file.py:548
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views/__init__.py:1735
+#: views/__init__.py:1738
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views/__init__.py:1890
+#: views/__init__.py:1893
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views/__init__.py:1894 views/__init__.py:1920
+#: views/__init__.py:1897 views/__init__.py:1923
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views/__init__.py:1916
+#: views/__init__.py:1919
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views/__init__.py:2447 views/file.py:542
+#: views/__init__.py:2467 views/file.py:542
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views/__init__.py:2450
+#: views/__init__.py:2470
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: views/__init__.py:2465
+#: views/__init__.py:2485
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -2538,36 +2533,32 @@ msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
 #: views/wiki.py:55 views/wiki.py:156
-#, fuzzy
 msgid "Failed to create wiki page. Please retry later."
-msgstr "本地文件尚未与服务器同步，请稍后再试"
+msgstr "创建维基页面失败，请稍后再试"
 
 #: views/wiki.py:89
-#, fuzzy
 msgid "Wiki does not exists."
-msgstr "文件不存在"
+msgstr "Wiki不存在"
 
 #: views/wiki.py:122
-#, fuzzy
 msgid "Failed to create"
-msgstr "创建资料库失败"
+msgstr "创建失败"
 
 #: views/wiki.py:129
-#, fuzzy
 msgid "Failed to create home page. Please retry later"
-msgstr "本地文件尚未与服务器同步，请稍后再试"
+msgstr "创建首页失败，请稍后再试"
 
 #: views/wiki.py:146 views/wiki.py:169 views/wiki.py:184
 msgid "Wiki is not found."
-msgstr ""
+msgstr "Wiki未找到。"
 
 #: views/wiki.py:153
 #, python-format
 msgid "Page \"%s\" already exists."
-msgstr ""
+msgstr "页面 \"%s\" 已存在。"
 
 #: wiki/forms.py:27
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" is not a valid name"
 msgstr "名称 %s 含有无效字符"
 

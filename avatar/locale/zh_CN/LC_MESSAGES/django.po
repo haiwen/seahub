@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-06 19:52+0800\n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,10 +100,6 @@ msgstr "头像修改"
 msgid "Current avatar: "
 msgstr "当前头像："
 
-#: templates/avatar/set_avatar.html:10
-msgid "Current Avatar"
-msgstr "当前头像"
-
 #: templates/avatar/set_avatar.html:16
 msgid "Submit"
 msgstr "提交"
@@ -123,6 +119,9 @@ msgstr ""
 #: templatetags/avatar_tags.py:46
 msgid "Default Avatar"
 msgstr ""
+
+#~ msgid "Current Avatar"
+#~ msgstr "当前头像"
 
 #~ msgid "choice"
 #~ msgstr "从已有头像中选择"

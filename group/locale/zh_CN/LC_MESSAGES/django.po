@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-27 17:23+0800\n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,169 +98,168 @@ msgstr "描述太长，不超过100个字符"
 msgid "\"%s\" is not a valid name"
 msgstr "\"%s\" 不是一个有效的名称"
 
-#: views.py:100
+#: views.py:142
 msgid "There is already a group with that name."
 msgstr "已有同名群组"
 
-#: views.py:133
-msgid "Only administrators can delete the group."
-msgstr "只有管理员才能删除群组。"
+#: views.py:240 views.py:262
+msgid "Only administrators can make the group public"
+msgstr "只有管理员才能将群组公开。"
 
-#: views.py:170
-msgid "Only administrators can dismiss the group"
-msgstr "只有管理员才能解散群组"
-
-#: views.py:193
-msgid "group id  is not a valid argument."
-msgstr "群组 id 无效"
-
-#: views.py:285
+#: views.py:308
 msgid "The message doesn't exist"
 msgstr "该留言不存在"
 
-#: views.py:295
+#: views.py:318
 msgid "You don't have the permission."
 msgstr "你的权限不够。"
 
-#: views.py:459
+#: views.py:532
 #, python-format
 msgid "Failed to add, %s is not in current organization."
 msgstr "添加失败，%s 不在当前团体中。"
 
-#: views.py:489
+#: views.py:562
 msgid "Your friend added you to a group at Seafile."
 msgstr "你的朋友在 Seafile 上把你加入到了一个群组中。"
 
-#: views.py:494
+#: views.py:567
 msgid "Failed to send mail."
 msgstr "邮件发送失败。"
 
-#: views.py:511
+#: views.py:584
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "添加失败，%s 未注册。"
 
-#: views.py:525
+#: views.py:598
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "添加群组成员成功，%(count)s 封邀请邮件已发送。"
 
-#: views.py:533
+#: views.py:606
 msgid "Successfully added."
 msgstr "添加成功。"
 
-#: views.py:573
+#: views.py:652
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "添加失败，%s 还没注册。"
 
-#: views.py:596 views.py:609 views.py:636
+#: views.py:675 views.py:688 views.py:715
 msgid "Operation succeeded."
 msgstr "操作成功"
 
-#: views.py:626
-msgid "group id is not valid"
-msgstr "群组 id 无效"
-
-#: views.py:638
+#: views.py:717
 #, python-format
 msgid "Failed：%s"
 msgstr "删除失败：%s"
 
-#: views.py:650
+#: views.py:729
 msgid "Failed to share: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:653
-msgid "Failed to share: internal error."
-msgstr "共享失败： 内部错误。"
-
-#: views.py:663
+#: views.py:742
 msgid "Failed to unshare: the group doesn't exist."
 msgstr "共享失败： 该群组不存在。"
 
-#: views.py:668
+#: views.py:747
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
 msgstr "操作失败：只有管理员和资料库拥有者才能取消共享。"
 
-#: views.py:671
+#: views.py:750
 msgid "Failed to unshare: internal error."
 msgstr "取消共享失败：内部错误。"
 
-#: views.py:700
+#: views.py:779
 msgid "Error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
-#: views.py:708
+#: views.py:784
+msgid "Error: the group does not exist."
+msgstr "错误：该群组不存在。"
+
+#: views.py:816
+#, python-format
+msgid "Successfully posted to %(groups)s."
+msgstr "成功发送到 %(groups)s。"
+
+#: views.py:819
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "推荐到 %s 失败：你不在该群组中。"
 
-#: views.py:728
-#, python-format
-msgid ""
-"Successfully posted to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a>."
-msgstr "发送到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
+#: views.py:831
+msgid "Error: the library does not exist."
+msgstr "错误：该资料库不存在。"
 
-#: views.py:733 templates/group/group_discuss.html:239
-#: templates/group/msg_js.html:143
-msgid "Failed."
-msgstr "操作失败"
+#: views.py:834
+msgid "Error: no path."
+msgstr "错误：路径不存在。"
 
-#: views.py:748
+#: views.py:872
 msgid "Failed to create: the group does not exist."
 msgstr "创建失败：该群组不存在。"
 
-#: views.py:752
+#: views.py:876
 msgid "Failed to create: you are not in the group."
 msgstr "创建失败：你不在该群组中。"
 
-#: views.py:774 views.py:797 views.py:1227
+#: views.py:898 views.py:921 views.py:1248
 msgid "Failed to create"
 msgstr "创建失败。"
 
-#: views.py:788 views.py:810 views.py:1236
+#: views.py:912 views.py:934 views.py:1257
 msgid "Failed to create: internal error."
 msgstr "创建团体群组失败。"
 
-#: views.py:837
+#: views.py:961
 msgid "You are already in the group."
 msgstr "你已在该群组中。"
 
-#: views.py:856
+#: views.py:980
 msgid "apply to join the group"
 msgstr "申请加入群组"
 
-#: views.py:858
+#: views.py:982
 msgid "Sent successfully, the group admin will handle it."
 msgstr "发送成功，请等候管理员处理。"
 
-#: views.py:862
+#: views.py:986
 msgid "Failed to send. You can try it again later."
 msgstr "发送失败, 请稍侯再试。"
 
-#: views.py:1140 views.py:1271
+#: views.py:1136
+msgid "File does not exist"
+msgstr "文件不存在。"
+
+#: views.py:1176 views.py:1295
 msgid "Failed to create wiki page. Please retry later."
 msgstr "Wiki 页面创建失败。请稍后再试。"
 
-#: views.py:1171 views.py:1266 views.py:1282 views.py:1294
+#: views.py:1210
+msgid "Internal Server Error"
+msgstr "服务器内部错误"
+
+#: views.py:1212
+msgid "Wiki does not exists."
+msgstr "Wiki不存在。"
+
+#: views.py:1264
+msgid "Failed to create home page. Please retry later"
+msgstr "首页创建失败。请稍后再试。"
+
+#: views.py:1285 views.py:1311 views.py:1329
 msgid "Wiki is not found."
 msgstr "没找到该 Wiki。"
 
-#: views.py:1178
-msgid "Wiki root path is missing."
-msgstr "Wiki 根路径丢失。"
-
-#: views.py:1183
-msgid "Failed to list wiki directories."
-msgstr "Wiki 目录列出失败。"
-
-#: views.py:1243
-msgid "Failed to create home page. Please retry later"
-msgstr "首页创建失败。请稍后再试。"
+#: views.py:1292
+#, python-format
+msgid "Page \"%s\" already exists."
+msgstr "页面 \"%s\" 已经存在。"
 
 #: templates/group/add_member_email.html:2
 #, python-format
@@ -280,62 +279,44 @@ msgstr "感谢使用！"
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s 团队"
 
-#: templates/group/group_discuss.html:14 templates/group/group_info.html:15
-#: templates/group/group_info.html.py:63 templates/group/group_manage.html:13
-#: templates/group/group_wiki.html:15 templates/group/group_wiki_pages.html:14
-msgid "Libraries"
-msgstr "群组里共享的资料库"
+#: templates/group/discussion_list.html:17
+#: templates/group/group_discuss.html:118
+#: templates/group/new_msg_reply.html:45
+#, python-format
+msgid "%(amount)s replies"
+msgstr "%(amount)s 个回复"
 
-#: templates/group/group_discuss.html:15 templates/group/group_info.html:16
-#: templates/group/group_manage.html:14 templates/group/group_wiki.html:16
-#: templates/group/group_wiki_pages.html:15
-msgid "Discussion"
-msgstr "讨论"
+#: templates/group/discussion_list.html:18
+#: templates/group/group_discuss.html:119
+#: templates/group/new_msg_reply.html:46
+msgid "Hide replies"
+msgstr "收起回复"
 
-#: templates/group/group_discuss.html:16 templates/group/group_info.html:17
-#: templates/group/group_manage.html:15 templates/group/group_wiki.html:17
-#: templates/group/group_wiki_pages.html:16
-msgid "Wiki"
-msgstr "维基"
+#: templates/group/discussion_list.html:31
+#: templates/group/group_discuss.html:133
+#: templates/group/group_reply_list.html:11
+#: templates/group/new_msg_reply.html:56
+msgid "Reply"
+msgstr "回复"
 
-#: templates/group/group_discuss.html:18 templates/group/group_info.html:19
-#: templates/group/group_manage.html:16 templates/group/group_wiki.html:19
-#: templates/group/group_wiki_pages.html:18
-msgid "Admin"
-msgstr "管理"
+#: templates/group/discussion_list.html:39
+#: templates/group/group_discuss.html:142
+#: templates/group/new_msg_reply.html:62
+msgid "Add a reply..."
+msgstr "添加回复..."
 
-#: templates/group/group_discuss.html:27 templates/group/group_info.html:40
-#: templates/group/group_manage.html:42
-msgid "Members"
-msgstr "成员"
+#: templates/group/discussion_list.html:40
+#: templates/group/group_discuss.html:143
+#: templates/group/new_msg_reply.html:63
+msgid "It can not be blank and should be no more than 150 characters."
+msgstr "输入不能为空且应少于150个字符。"
 
-#: templates/group/group_discuss.html:43
-msgid "No members"
-msgstr "暂无成员"
-
-#: templates/group/group_discuss.html:50 templates/group/group_info.html:77
-#: templates/group/group_manage.html:34 templates/group/group_manage.html:49
-#: templates/group/group_manage.html:73
-msgid "Operations"
-msgstr "操作"
-
-#: templates/group/group_discuss.html:53
-msgid "Administration"
-msgstr "管理"
-
-#: templates/group/group_discuss.html:55 templates/group/group_info.html:33
-msgid "Quit"
-msgstr "退出"
-
-#: templates/group/group_discuss.html:68
-msgid "Add a discussion..."
-msgstr "添加一个讨论..."
-
-#: templates/group/group_discuss.html:72
-#: templates/group/group_discuss.html:139 templates/group/group_info.html:172
-#: templates/group/group_pubinfo.html:24 templates/group/group_wiki.html:41
-#: templates/group/group_wiki.html.py:66
-#: templates/group/group_wiki_pages.html:42
+#: templates/group/discussion_list.html:41
+#: templates/group/group_discuss.html:63
+#: templates/group/group_discuss.html:144 templates/group/group_info.html:174
+#: templates/group/group_members.html:56 templates/group/group_pubinfo.html:24
+#: templates/group/group_wiki.html:47 templates/group/group_wiki.html.py:79
+#: templates/group/group_wiki_pages.html:51
 #: templates/group/groups_right_panel.html:30
 #: templates/group/grpmember_add_form.html:12
 #: templates/group/grpmember_add_form.html:19
@@ -343,154 +324,206 @@ msgstr "添加一个讨论..."
 msgid "Submit"
 msgstr "提交"
 
-#: templates/group/group_discuss.html:73
-#: templates/group/group_discuss.html:140 templates/group/group_info.html:173
+#: templates/group/discussion_list.html:42
+#: templates/group/group_discuss.html:64
+#: templates/group/group_discuss.html:145 templates/group/group_info.html:175
 #: templates/group/new_msg_reply.html:65
 msgid "Cancel"
 msgstr "取消"
 
-#: templates/group/group_discuss.html:86 templates/group/group_manage.html:58
-#: templates/group/group_manage.html:82
+#: templates/group/group_discuss.html:15 templates/group/group_info.html:16
+#: templates/group/group_info.html.py:65
+#: templates/group/group_info_for_pub.html:16
+#: templates/group/group_manage.html:14 templates/group/group_members.html:16
+#: templates/group/group_wiki.html:16 templates/group/group_wiki_pages.html:15
+msgid "Libraries"
+msgstr "群组里共享的资料库"
+
+#: templates/group/group_discuss.html:16 templates/group/group_info.html:17
+#: templates/group/group_info_for_pub.html:17
+#: templates/group/group_manage.html:15 templates/group/group_members.html:17
+#: templates/group/group_wiki.html:17 templates/group/group_wiki_pages.html:16
+msgid "Discussion"
+msgstr "讨论"
+
+#: templates/group/group_discuss.html:17 templates/group/group_info.html:18
+#: templates/group/group_info_for_pub.html:18
+#: templates/group/group_manage.html:16 templates/group/group_members.html:18
+#: templates/group/group_wiki.html:18 templates/group/group_wiki_pages.html:17
+msgid "Wiki"
+msgstr "维基"
+
+#: templates/group/group_discuss.html:19 templates/group/group_discuss.html:30
+#: templates/group/group_info.html:19 templates/group/group_info.html.py:43
+#: templates/group/group_manage.html:17 templates/group/group_manage.html:49
+#: templates/group/group_members.html:19 templates/group/group_wiki.html:20
+#: templates/group/group_wiki_pages.html:19
+msgid "Members"
+msgstr "成员"
+
+#: templates/group/group_discuss.html:22 templates/group/group_info.html:21
+#: templates/group/group_manage.html:18 templates/group/group_members.html:21
+#: templates/group/group_wiki.html:23 templates/group/group_wiki_pages.html:22
+msgid "Admin"
+msgstr "管理"
+
+#: templates/group/group_discuss.html:45
+msgid "No members"
+msgstr "暂无成员"
+
+#: templates/group/group_discuss.html:59
+msgid "Add a discussion..."
+msgstr "添加一个讨论..."
+
+#: templates/group/group_discuss.html:68
+msgid "After login, you can post discussions and add replies."
+msgstr "登录之后，你就可以发起讨论和回复。"
+
+#: templates/group/group_discuss.html:80 templates/group/group_manage.html:65
+#: templates/group/group_manage.html:89
 msgid "Delete"
 msgstr "删除"
 
-#: templates/group/group_discuss.html:97
-#: templates/group/group_discuss.html:106
+#: templates/group/group_discuss.html:92
+#: templates/group/group_discuss.html:108
 #: templates/group/new_msg_reply.html:26 templates/group/new_msg_reply.html:35
 msgid "File"
 msgstr "文件"
 
-#: templates/group/group_discuss.html:100
+#: templates/group/group_discuss.html:102
 #: templates/group/new_msg_reply.html:29
 msgid "Directory icon"
 msgstr "目录图标"
 
-#: templates/group/group_discuss.html:116
-#: templates/group/new_msg_reply.html:45
-#, python-format
-msgid "%(amount)s replies"
-msgstr "%(amount)s 个回复"
-
-#: templates/group/group_discuss.html:117
-#: templates/group/new_msg_reply.html:46
-msgid "Hide replies"
-msgstr "收起回复"
-
-#: templates/group/group_discuss.html:130
-#: templates/group/group_reply_list.html:10
-#: templates/group/new_msg_reply.html:56
-msgid "Reply"
-msgstr "回复"
-
-#: templates/group/group_discuss.html:137
-#: templates/group/new_msg_reply.html:62
-msgid "Add a reply..."
-msgstr "添加回复..."
-
-#: templates/group/group_discuss.html:138
-#: templates/group/new_msg_reply.html:63
-msgid "It can not be blank and should be no more than 150 characters."
-msgstr "输入不能为空且应少于150个字符。"
-
-#: templates/group/group_discuss.html:151
+#: templates/group/group_discuss.html:157
 msgid "Previous"
 msgstr "上一页"
 
-#: templates/group/group_discuss.html:161
+#: templates/group/group_discuss.html:167
 msgid "Next"
 msgstr "下一页"
 
-#: templates/group/group_discuss.html:167
+#: templates/group/group_discuss.html:173
 msgid "↑Top"
 msgstr ""
 
-#: templates/group/group_discuss.html:218
+#: templates/group/group_discuss.html:226
 msgid "Really want to delete this discussion?"
 msgstr "确定要删除这条讨论？"
 
-#: templates/group/group_discuss.html:218
+#: templates/group/group_discuss.html:226
 msgid "Yes"
 msgstr "确定"
 
-#: templates/group/group_discuss.html:218
+#: templates/group/group_discuss.html:226
 msgid "No"
 msgstr "取消"
 
-#: templates/group/group_discuss.html:233
+#: templates/group/group_discuss.html:241
 msgid "Successfully deleted"
 msgstr "删除成功。"
 
-#: templates/group/group_discuss.html:235
+#: templates/group/group_discuss.html:243
 msgid "Failed to delete: "
 msgstr "删除失败："
 
-#: templates/group/group_info.html:28
+#: templates/group/group_discuss.html:247 templates/group/msg_js.html:149
+msgid "Failed."
+msgstr "操作失败"
+
+#: templates/group/group_info.html:30
+#: templates/group/group_info_for_pub.html:26
 msgid "Basic Info"
 msgstr "基本信息"
 
-#: templates/group/group_info.html:31
+#: templates/group/group_info.html:30
+#: templates/group/group_info_for_pub.html:26
+msgid "This group is public."
+msgstr "当前群组为公开群组。"
+
+#: templates/group/group_info.html:34
+#: templates/group/group_info_for_pub.html:30
 msgid "created at"
 msgstr "创建于"
 
-#: templates/group/group_info.html:64
+#: templates/group/group_info.html:36
+msgid "Quit"
+msgstr "退出"
+
+#: templates/group/group_info.html:66
 msgid "Recent Changes"
 msgstr "最近修改"
 
-#: templates/group/group_info.html:66
+#: templates/group/group_info.html:68
 msgid "New Library"
 msgstr "新建资料库"
 
-#: templates/group/group_info.html:73 templates/group/group_wiki.html:36
-#: templates/group/group_wiki.html.py:63
-#: templates/group/group_wiki_pages.html:39
+#: templates/group/group_info.html:75
+#: templates/group/group_info_for_pub.html:42
+#: templates/group/group_wiki.html:42 templates/group/group_wiki.html.py:76
+#: templates/group/group_wiki_pages.html:48
 msgid "Name"
 msgstr "名字"
 
-#: templates/group/group_info.html:74 templates/group/group_info.html:123
-#: templates/group/group_wiki.html:38
+#: templates/group/group_info.html:76 templates/group/group_info.html:125
+#: templates/group/group_info_for_pub.html:43
+#: templates/group/group_wiki.html:44
 msgid "Description"
 msgstr "描述"
 
-#: templates/group/group_info.html:75
+#: templates/group/group_info.html:77
+#: templates/group/group_info_for_pub.html:44
 msgid "Last Update"
 msgstr "更新时间"
 
-#: templates/group/group_info.html:76
+#: templates/group/group_info.html:78
+#: templates/group/group_info_for_pub.html:45
 msgid "Shared By"
 msgstr "共享来源"
 
-#: templates/group/group_info.html:84
+#: templates/group/group_info.html:79
+#: templates/group/group_info_for_pub.html:46
+#: templates/group/group_manage.html:36 templates/group/group_manage.html:56
+#: templates/group/group_manage.html:80
+msgid "Operations"
+msgstr "操作"
+
+#: templates/group/group_info.html:86
+#: templates/group/group_info_for_pub.html:53
 msgid "Read-Write"
 msgstr "可读写"
 
-#: templates/group/group_info.html:84 templates/group/group_info.html.py:86
+#: templates/group/group_info.html:86 templates/group/group_info.html.py:88
+#: templates/group/group_info_for_pub.html:53
+#: templates/group/group_info_for_pub.html:55
 msgid "directory icon"
 msgstr "目录图标"
 
-#: templates/group/group_info.html:86
+#: templates/group/group_info.html:88
+#: templates/group/group_info_for_pub.html:55
 msgid "Read-Only"
-msgstr ""
-
-#: templates/group/group_info.html:100
-msgid "Download"
-msgstr "下载"
+msgstr "只读"
 
 #: templates/group/group_info.html:102
+msgid "Download and Sync"
+msgstr "下载和同步"
+
+#: templates/group/group_info.html:104
 msgid "Unshare"
 msgstr "取消共享"
 
-#: templates/group/group_info.html:110
+#: templates/group/group_info.html:112
 msgid "No library is sharing to this group"
 msgstr "还没有资料库共享到当前群组"
 
-#: templates/group/group_info.html:111
+#: templates/group/group_info.html:113
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
 msgstr ""
 "你可以通过点击上方的“新建资料库”按钮或资料库列表里的“共享”图标来共享资料库。"
 
-#: templates/group/group_info.html:112
+#: templates/group/group_info.html:114
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
@@ -499,58 +532,66 @@ msgstr ""
 "以可读写方式共享的资料库可以被其他群组成员下载和同步，而以只读方式共享的资料"
 "库只能被下载，其他人的修改将不会被上传。"
 
-#: templates/group/group_info.html:122 templates/group/group_info.html:166
+#: templates/group/group_info.html:124 templates/group/group_info.html:168
 msgid "Library"
-msgstr ""
+msgstr "资料库"
 
-#: templates/group/group_info.html:124
+#: templates/group/group_info.html:126
 msgid "Modified at"
 msgstr "修改于"
 
-#: templates/group/group_info.html:125
+#: templates/group/group_info.html:127
 msgid "Modifier"
-msgstr ""
+msgstr "修改者"
 
-#: templates/group/group_info.html:145 templates/group/group_info.html:147
+#: templates/group/group_info.html:147 templates/group/group_info.html:149
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
-#: templates/group/group_info.html:154 templates/group/new_msg_reply.html:72
+#: templates/group/group_info.html:156 templates/group/new_msg_reply.html:72
 msgid "None"
 msgstr "暂无"
 
-#: templates/group/group_info.html:159
+#: templates/group/group_info.html:161
 msgid "Unknown"
-msgstr ""
-
-#: templates/group/group_info.html:166
-msgid "is encrypted"
-msgstr ""
+msgstr "未知"
 
 #: templates/group/group_info.html:168
-msgid "Password："
-msgstr ""
+msgid "is encrypted"
+msgstr "已加密"
 
 #: templates/group/group_info.html:170
-msgid "The password will be kept in the server for only 1 hour."
-msgstr ""
+msgid "Password："
+msgstr "密码："
 
-#: templates/group/group_info.html:187
+#: templates/group/group_info.html:172
+msgid "The password will be kept in the server for only 1 hour."
+msgstr "密码只会在服务器保存1个小时。"
+
+#: templates/group/group_info.html:188
 msgid "Quit Group"
 msgstr "退出群组"
 
-#: templates/group/group_info.html:188
+#: templates/group/group_info.html:189
 msgid "Are you sure you want to quit this group?"
 msgstr "确定要退出该群组吗？"
 
-#: templates/group/group_info.html:191
+#: templates/group/group_info.html:192
 msgid "Unshare Library"
 msgstr "取消共享资料库"
 
-#: templates/group/group_info.html:192
+#: templates/group/group_info.html:193
 #, python-format
 msgid "Are you sure you want to unshare %s ?"
 msgstr "确定要取消共享 %s 吗？"
+
+#: templates/group/group_info_for_pub.html:75
+msgid "No public library is in this group"
+msgstr "当前群组没有公开的资料库"
+
+#: templates/group/group_info_for_pub.html:76
+msgid "A library can be made public in its settings page.(Not implemented yet)"
+msgstr "一个资料库可以在设置页面设为公开。（未实现）"
 
 #: templates/group/group_join_email.html:2
 #, python-format
@@ -559,50 +600,71 @@ msgid ""
 "message: "
 msgstr "%(user)s 申请加入到群组 “%(group_name)s”, 验证信息如下："
 
-#: templates/group/group_manage.html:23
+#: templates/group/group_manage.html:25
 msgid "Group Avatar"
 msgstr "群组头像"
 
-#: templates/group/group_manage.html:27
+#: templates/group/group_manage.html:29
 msgid "Change"
 msgstr "修改"
 
-#: templates/group/group_manage.html:36
+#: templates/group/group_manage.html:38
 msgid "Dismiss"
 msgstr "解散"
 
-#: templates/group/group_manage.html:43
+#: templates/group/group_manage.html:40
+msgid "Revoke Public"
+msgstr "取消公开"
+
+#: templates/group/group_manage.html:42
+msgid "Make Public"
+msgstr "设为公开"
+
+#: templates/group/group_manage.html:50
 msgid "Add Members"
 msgstr "添加成员"
 
-#: templates/group/group_manage.html:48 templates/group/group_manage.html:72
+#: templates/group/group_manage.html:55 templates/group/group_manage.html:79
+#: templates/group/group_members.html:50
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/group/group_manage.html:66
+#: templates/group/group_manage.html:73
 msgid "Administrators"
 msgstr "管理员"
 
-#: templates/group/group_manage.html:67
+#: templates/group/group_manage.html:74
 msgid "Add Administrators"
 msgstr "添加管理员"
 
-#: templates/group/group_manage.html:98
+#: templates/group/group_manage.html:106
 msgid "Dismiss Group"
 msgstr "解散群组"
 
-#: templates/group/group_manage.html:99
+#: templates/group/group_manage.html:107
 msgid "Really want to dismiss this group?"
 msgstr "确定要解散该群组吗？"
 
-#: templates/group/group_manage.html:102
+#: templates/group/group_manage.html:110
 msgid "Delete Member"
 msgstr "删除成员"
 
-#: templates/group/group_manage.html:103
+#: templates/group/group_manage.html:111
 #, python-format
 msgid "Really want to delete %s ?"
 msgstr "确定要删除 %s 吗？"
+
+#: templates/group/group_members.html:41
+msgid "Add to Contacts"
+msgstr "添加到通讯录"
+
+#: templates/group/group_members.html:52
+msgid "Name(optional)"
+msgstr "名称（可选）"
+
+#: templates/group/group_members.html:54
+msgid "Note(optional)"
+msgstr "备注（可选）"
 
 #: templates/group/group_pubinfo.html:9
 msgid "Join Group"
@@ -629,63 +691,75 @@ msgstr "成员数："
 msgid "Verification Message"
 msgstr "验证消息"
 
-#: templates/group/group_wiki.html:30
+#: templates/group/group_wiki.html:34
 msgid "This group currently has no wiki"
 msgstr "该群组目前还没创建Wiki"
 
-#: templates/group/group_wiki.html:31
+#: templates/group/group_wiki.html:35
 msgid ""
-"Seafile Wiki enables group members to create web pages in a very simple way. "
-"The contents of wiki is stored in a normal library with pre-defined file/"
-"folder structure. This enables you to edit your wiki in your desktop and "
-"then sync back to the server."
+"Seafile Wiki enables you to organize your knowledge in a simple way. The "
+"contents of wiki is stored in a normal library with pre-defined file/folder "
+"structure. This enables you to edit your wiki in your desktop and then sync "
+"back to the server."
 msgstr ""
-"Seafile Wiki 能让群组成员以一种非常简单的方式创建网页。Wiki 的内容以预定义的"
+"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
 "文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
 "器。"
 
-#: templates/group/group_wiki.html:32
+#: templates/group/group_wiki.html:37
 msgid "Create Wiki Now"
 msgstr "现在创建"
 
-#: templates/group/group_wiki.html:35
+#: templates/group/group_wiki.html:41
 msgid "Create Wiki"
 msgstr "创建 Wiki"
 
-#: templates/group/group_wiki.html:39
+#: templates/group/group_wiki.html:45
 msgid "Wiki Pages"
 msgstr "Wiki 页面"
 
-#: templates/group/group_wiki.html:47 templates/group/group_wiki_pages.html:25
+#: templates/group/group_wiki.html:53 templates/group/group_wiki_pages.html:29
 msgid "Home"
 msgstr "首页"
 
-#: templates/group/group_wiki.html:48 templates/group/group_wiki_pages.html:26
+#: templates/group/group_wiki.html:54 templates/group/group_wiki_pages.html:30
 msgid "Pages"
 msgstr "页面列表"
 
-#: templates/group/group_wiki.html:50 templates/group/group_wiki.html.py:62
-#: templates/group/group_wiki_pages.html:28
-#: templates/group/group_wiki_pages.html:38
+#: templates/group/group_wiki.html:56 templates/group/group_wiki_pages.html:32
+msgid "Wiki History"
+msgstr "维基历史"
+
+#: templates/group/group_wiki.html:61 templates/group/group_wiki.html.py:75
+#: templates/group/group_wiki_pages.html:36
+#: templates/group/group_wiki_pages.html:47
 msgid "New Page"
 msgstr "新建页面"
 
-#: templates/group/group_wiki.html:51
+#: templates/group/group_wiki.html:62
 msgid "Delete Page"
 msgstr "删除本页"
 
-#: templates/group/group_wiki.html:52
+#: templates/group/group_wiki.html:63
 msgid "Edit Page"
 msgstr "编辑本页"
 
-#: templates/group/group_wiki.html:58
+#: templates/group/group_wiki.html:64
+msgid "Page History"
+msgstr "页面历史"
+
+#: templates/group/group_wiki.html:71
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
 msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
-#: templates/group/group_wiki.html:104
+#: templates/group/group_wiki.html:128
 msgid "Name and description can not be blank."
 msgstr "名称和描述不能为空"
+
+#: templates/group/groups.html:5
+msgid "Groups"
+msgstr "群组"
 
 #: templates/group/groups_left_panel.html:3
 msgid "Tips"
@@ -761,6 +835,31 @@ msgstr "输入邮箱，多个邮箱请以 , 分隔"
 #: templates/group/new_msg_reply.html:18
 msgid "Group: "
 msgstr "所在群组："
+
+#~ msgid "Only administrators can dismiss the group"
+#~ msgstr "只有管理员才能解散群组"
+
+#~ msgid "group id  is not a valid argument."
+#~ msgstr "群组 id 无效"
+
+#~ msgid "group id is not valid"
+#~ msgstr "群组 id 无效"
+
+#~ msgid "Failed to share: internal error."
+#~ msgstr "共享失败： 内部错误。"
+
+#~ msgid ""
+#~ "Successfully posted to <a href=\"%(url)s\" target=\"_blank\">%(name)s</a>."
+#~ msgstr "发送到<a href=\"%(url)s\" target=\"_blank\">%(name)s</a>成功"
+
+#~ msgid "Wiki root path is missing."
+#~ msgstr "Wiki 根路径丢失。"
+
+#~ msgid "Failed to list wiki directories."
+#~ msgstr "Wiki 目录列出失败。"
+
+#~ msgid "Administration"
+#~ msgstr "管理"
 
 #~ msgid "Failed to recommend."
 #~ msgstr "推荐失败。"
