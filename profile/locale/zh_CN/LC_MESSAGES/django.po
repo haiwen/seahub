@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-17 11:04+0800\n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: forms.py:16
-msgid "Nickname can only contain characters, numbers or underscore."
-msgstr "昵称只能包含中英文字符、数字及下划线"
-
 #: views.py:41
 msgid "Successfully edited profile."
 msgstr "修改成功"
@@ -29,58 +25,62 @@ msgstr "修改成功"
 msgid "Failed to edit profile"
 msgstr "修改失败"
 
-#: views.py:80 views.py:119
+#: views.py:93 views.py:125
 msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
-#: templates/profile/profile_base.html:4 templates/profile/set_profile.html:7
+#: templates/profile/profile_base.html:4 templates/profile/set_profile.html:5
+#: templates/profile/set_profile.html:8
 msgid "Profile Setting"
 msgstr "个人信息设置"
 
-#: templates/profile/set_profile.html:9
+#: templates/profile/set_profile.html:10
 msgid "Avatar:"
 msgstr "头像："
 
-#: templates/profile/set_profile.html:11
+#: templates/profile/set_profile.html:12
 msgid "Change"
 msgstr "更改"
 
-#: templates/profile/set_profile.html:17
+#: templates/profile/set_profile.html:18
 msgid "Password:"
 msgstr "密码："
 
-#: templates/profile/set_profile.html:17
+#: templates/profile/set_profile.html:18
 msgid "Update"
 msgstr "更改"
 
-#: templates/profile/set_profile.html:18
+#: templates/profile/set_profile.html:19
 msgid "Nickname:"
 msgstr "昵称："
 
-#: templates/profile/set_profile.html:23
+#: templates/profile/set_profile.html:24
 msgid "About me:"
 msgstr "关于我："
 
-#: templates/profile/set_profile.html:28
-#: templates/profile/user_profile.html:36
+#: templates/profile/set_profile.html:29
+#: templates/profile/user_profile.html:38
 msgid "Submit"
 msgstr "提交"
 
-#: templates/profile/user_profile.html:10
+#: templates/profile/user_profile.html:14
 msgid "Add to contacts"
 msgstr "加为联系人"
 
-#: templates/profile/user_profile.html:30
+#: templates/profile/user_profile.html:32
 msgid "Email: "
 msgstr "邮箱："
 
-#: templates/profile/user_profile.html:32
+#: templates/profile/user_profile.html:34
 msgid "Name(optional): "
 msgstr "名字(可选)："
 
-#: templates/profile/user_profile.html:34
+#: templates/profile/user_profile.html:36
 msgid "Note(optional): "
 msgstr "备注(可选)："
+
+#~ msgid "Nickname can only contain characters, numbers or underscore."
+#~ msgstr "昵称只能包含中英文字符、数字及下划线"
 
 #~ msgid "Profile"
 #~ msgstr "个人基本信息修改"

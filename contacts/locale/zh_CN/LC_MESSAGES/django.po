@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 14:42+0800\n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:27 templates/contacts/contact_list.html:133
+#: models.py:27 templates/contacts/contact_list.html:134
 msgid "Email is required."
 msgstr "邮箱为必填项。"
 
-#: models.py:32 templates/contacts/contact_list.html:137
+#: models.py:32 templates/contacts/contact_list.html:138
 msgid "You can't add yourself."
 msgstr "不能添加自己。"
 
@@ -53,94 +53,95 @@ msgstr "编辑 %s 成功。"
 msgid "Successfully Deleted %s"
 msgstr "成功删除 %s "
 
-#: templates/contacts/contact_list.html:8
+#: templates/contacts/contact_list.html:4
+#: templates/contacts/contact_list.html:16
+msgid "Contacts"
+msgstr "联系人列表"
+
+#: templates/contacts/contact_list.html:9
 msgid "Tips"
 msgstr "小提示"
 
-#: templates/contacts/contact_list.html:9
+#: templates/contacts/contact_list.html:10
 msgid ""
 "When you share libraries or file links to a friend, his/her email will be "
 "added to contacts."
 msgstr ""
 "在共享和发送外链的时候，系统会自动记录下你用过的通讯地址，以方便下次使用。"
 
-#: templates/contacts/contact_list.html:15
-msgid "Contacts"
-msgstr "联系人列表"
-
-#: templates/contacts/contact_list.html:16
-#: templates/contacts/contact_list.html:47
+#: templates/contacts/contact_list.html:17
+#: templates/contacts/contact_list.html:48
 msgid "Add Contacts"
 msgstr "添加联系人"
 
-#: templates/contacts/contact_list.html:21
+#: templates/contacts/contact_list.html:22
 msgid "Email "
 msgstr "邮箱"
 
-#: templates/contacts/contact_list.html:22
+#: templates/contacts/contact_list.html:23
 msgid "Name"
 msgstr "名字"
 
-#: templates/contacts/contact_list.html:23
+#: templates/contacts/contact_list.html:24
 msgid "Note"
 msgstr "备注"
 
-#: templates/contacts/contact_list.html:24
+#: templates/contacts/contact_list.html:25
 msgid "Operations"
 msgstr "备注"
 
-#: templates/contacts/contact_list.html:33
+#: templates/contacts/contact_list.html:34
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/contacts/contact_list.html:34
+#: templates/contacts/contact_list.html:35
 msgid "Delete"
 msgstr "删除"
 
-#: templates/contacts/contact_list.html:41
+#: templates/contacts/contact_list.html:42
 msgid "You don't have any contacts"
 msgstr "你还没有联系人"
 
-#: templates/contacts/contact_list.html:42
+#: templates/contacts/contact_list.html:43
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
 msgstr "联系人用来在共享资料库和发送文件外链时的快速补全。"
 
-#: templates/contacts/contact_list.html:48
-#: templates/contacts/contact_list.html:57
+#: templates/contacts/contact_list.html:49
+#: templates/contacts/contact_list.html:58
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/contacts/contact_list.html:50
-#: templates/contacts/contact_list.html:59
+#: templates/contacts/contact_list.html:51
+#: templates/contacts/contact_list.html:60
 msgid "Name(optional)"
 msgstr "名字(可选)"
 
-#: templates/contacts/contact_list.html:51
-#: templates/contacts/contact_list.html:60
+#: templates/contacts/contact_list.html:52
+#: templates/contacts/contact_list.html:61
 msgid "Note(optional)"
 msgstr "备注(可选)"
 
-#: templates/contacts/contact_list.html:53
-#: templates/contacts/contact_list.html:62
+#: templates/contacts/contact_list.html:54
+#: templates/contacts/contact_list.html:63
 msgid "Submit"
 msgstr "提交"
 
-#: templates/contacts/contact_list.html:56
+#: templates/contacts/contact_list.html:57
 msgid "Edit Contact"
 msgstr "编辑联系人"
 
-#: templates/contacts/contact_list.html:107
-#: templates/contacts/contact_list.html:168
+#: templates/contacts/contact_list.html:108
+#: templates/contacts/contact_list.html:169
 msgid "Failed."
 msgstr "提交失败。"
 
-#: templates/contacts/contact_list.html:115
+#: templates/contacts/contact_list.html:116
 msgid "Delete Contact"
 msgstr "删除联系人"
 
-#: templates/contacts/contact_list.html:115
+#: templates/contacts/contact_list.html:116
 #, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "确定要删除 %s 吗？"
