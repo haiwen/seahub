@@ -49,10 +49,10 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
+{% if not err %}
+{% ifnotequal file_content None %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
-
 <script type="text/javascript">
-    {% ifnotequal file_content None %}
     var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
         {% include 'snippets/editor_set_mode.html' %}
         theme: 'default',
@@ -63,6 +63,7 @@
         lineWrapping: true,
         readOnly: true
     });
-    {% endifnotequal %}
 </script>
+{% endifnotequal %}
+{% endif %}
 {% endblock%}
