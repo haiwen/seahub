@@ -144,7 +144,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
                     (url_prefix + '/' + page_name.replace('/', '-'), page_name)
 
             token = seaserv.web_get_access_token(repo_id, obj_id, 'view', username)
-            ret = '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+            ret = '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
             return smart_str(ret)
         else:
             from base.templatetags.seahub_tags import file_icon_filter

@@ -240,7 +240,7 @@ def convert_md_link(file_content, repo_id, username):
                 return '''<p class="wiki-page-missing">%s</p>''' %  linkname
 
             token = web_get_access_token(repo_id, obj_id, 'view', username)
-            return '<img src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+            return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
             from base.templatetags.seahub_tags import file_icon_filter
             

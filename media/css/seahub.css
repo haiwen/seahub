@@ -1831,6 +1831,11 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
+.wiki-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;     
+}
 #svg-view {
     min-height:500px;/*for ff*/
 }
