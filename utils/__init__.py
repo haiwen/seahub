@@ -758,13 +758,14 @@ def calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id):
         
     return last_modified_info
 
-def get_dir_files_last_modified(repo_id, parent_dir):
+def get_dir_files_last_modified(repo_id, parent_dir, dir_id=None):
     '''Calc the last modified time of all the files under the directory
     <parent_dir> of the repo <repo_id>. Return a dict whose keys are the file
     names and values are their corresponding last modified timestamps.
 
     '''
-    dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo_id, parent_dir)
+    if not dir_id:
+        dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo_id, parent_dir)
     parent_dir_hash = calc_file_path_hash(parent_dir)
     if not dir_id:
         return {}
