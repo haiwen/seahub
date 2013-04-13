@@ -21,33 +21,7 @@
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
   vertical-align: baseline;
-}
-/* more sprites.less reset */
-[class^="icon-"]:before,
-[class*=" icon-"]:before {
-  text-decoration: inherit;
-  display: inline-block;
   speak: none;
-}
-.icon-large:before {
-  vertical-align: -10%;
-  font-size: 1.3333333333333333em;
-}
-.btn [class^="icon-"].icon-large,
-.nav [class^="icon-"].icon-large,
-.btn [class*=" icon-"].icon-large,
-.nav [class*=" icon-"].icon-large {
-  line-height: .9em;
-}
-.nav-tabs [class^="icon-"],
-.nav-pills [class^="icon-"],
-.nav-tabs [class*=" icon-"],
-.nav-pills [class*=" icon-"],
-.nav-tabs [class^="icon-"].icon-large,
-.nav-pills [class^="icon-"].icon-large,
-.nav-tabs [class*=" icon-"].icon-large,
-.nav-pills [class*=" icon-"].icon-large {
-  line-height: .9em;
 }
 li [class^="icon-"],
 .nav li [class^="icon-"],
@@ -108,40 +82,6 @@ li [class*=" icon-"].icon-large,
 [class^="icon-"].fright,
 [class*=" icon-"].fright {
   margin-left: .3em;
-}
-.btn [class^="icon-"].fleft.icon-2x,
-.btn [class*=" icon-"].fleft.icon-2x,
-.btn [class^="icon-"].fright.icon-2x,
-.btn [class*=" icon-"].fright.icon-2x {
-  margin-top: .18em;
-}
-.btn [class^="icon-"].icon-spin.icon-large,
-.btn [class*=" icon-"].icon-spin.icon-large {
-  line-height: .8em;
-}
-.btn.btn-small [class^="icon-"].fleft.icon-2x,
-.btn.btn-small [class*=" icon-"].fleft.icon-2x,
-.btn.btn-small [class^="icon-"].fright.icon-2x,
-.btn.btn-small [class*=" icon-"].fright.icon-2x {
-  margin-top: .25em;
-}
-.btn.btn-large [class^="icon-"],
-.btn.btn-large [class*=" icon-"] {
-  margin-top: 0;
-}
-.btn.btn-large [class^="icon-"].fleft.icon-2x,
-.btn.btn-large [class*=" icon-"].fleft.icon-2x,
-.btn.btn-large [class^="icon-"].fright.icon-2x,
-.btn.btn-large [class*=" icon-"].fright.icon-2x {
-  margin-top: .05em;
-}
-.btn.btn-large [class^="icon-"].fleft.icon-2x,
-.btn.btn-large [class*=" icon-"].fleft.icon-2x {
-  margin-right: .2em;
-}
-.btn.btn-large [class^="icon-"].fright.icon-2x,
-.btn.btn-large [class*=" icon-"].fright.icon-2x {
-  margin-left: .2em;
 }
 /*  Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
     readers do not read off random characters that represent icons */

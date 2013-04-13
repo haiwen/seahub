@@ -76,25 +76,4 @@
   <p>{% blocktrans %}A library can be made public in its settings page.(Not implemented yet){% endblocktrans %}</p>
 </div>
 {% endif %}
-
-
-{% endblock %}
-
-{% block extra_script %}
-
-<script type="text/javascript">
-if ($.browser.msie && $.browser.version < 8) {
-    $('.icon-eye-open').html('&#xf06e;');
-}
-
-$("table tr:gt(0)").hover(
-    function() {
-        $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
-    },
-    function() {
-        $(this).find('.op-icon').addClass('vh');
-    }
-);
-
-</script>
 {% endblock %}

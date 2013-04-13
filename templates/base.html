@@ -8,8 +8,8 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1364382180" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1364382180" />
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1364382180" />
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1364382180"/>
@@ -70,7 +70,7 @@
                 {% if enable_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
-                    <input type="submit" value="" class="search-submit" />
+                    <button type="submit" class="search-submit"><span class="icon-search"></span></button>
                 </form>
                 {% endif %}
             </div>
@@ -166,5 +166,61 @@ $('#info-bar .close').click(function() {
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
+<script type="text/javascript">
+//font icons: for browsers that don't support ':before'
+    var sf_icons = [{'name':'share', 'con':'e001'}];
+    var fa_icons = [ 
+        {'name':'trash', 'con':'f014'},
+        {'name':'cog', 'con':'f013'},
+        {'name':'cloud-download', 'con':'f0ed'},
+        {'name':'search', 'con':'f002'},
+        {'name':'minus', 'con':'f068'},
+        {'name':'plus', 'con':'f067'},
+        {'name':'pencil', 'con':'f040'},
+        {'name':'eye-open', 'con':'f06e'},
+        {'name':'comment-alt', 'con':'f0e5'},
+        {'name':'double-angle-right', 'con':'f101'},
+        {'name':'font', 'con':'f031'},
+        {'name':'text-height', 'con':'f034'},
+        {'name':'tint', 'con':'f043'},
+        {'name':'bold', 'con':'f032'},
+        {'name':'italic', 'con':'f033'},
+        {'name':'strikethrough', 'con':'f0cc'},
+        {'name':'underline', 'con':'f0cd'},
+        {'name':'list-ul', 'con':'f0ca'},
+        {'name':'list-ol', 'con':'f0cb'},
+        {'name':'indent-left', 'con':'f03b'},
+        {'name':'indent-right', 'con':'f03c'},
+        {'name':'align-left', 'con':'f036'},
+        {'name':'align-center', 'con':'f037'},
+        {'name':'align-right', 'con':'f038'},
+        {'name':'align-justify', 'con':'f039'},
+        {'name':'link', 'con':'f0c1'},
+        {'name':'cut', 'con':'f0c4'},
+        {'name':'picture', 'con':'f03e'},
+        {'name':'undo', 'con':'f0e2'},
+        {'name':'repeat', 'con':'f01e'},
+        {'name':'star', 'con':'f005'},
+        {'name':'star-empty', 'con':'f006'}
+    ];  
+    function setCon(icon, icon_class_prefix, icon_list) {
+            for (var i = 0, len = icon_list.length; i < len; i++) {
+                if (icon.hasClass(icon_class_prefix + icon_list[i].name)) {
+                    icon.html('&#x' + icon_list[i].con + ';');
+                    break;
+                }
+            }
+    }
+    var pseudo_test = $('body').append('<span class="sf-icon-share pseudo-test" style="color:#fff;position:fixed;left:0;bottom:0;"></span>').children('.pseudo-test');
+    if (pseudo_test.width() == 0) {
+        $('[class^="sf-icon-"]').each(function() {
+            setCon($(this), 'sf-icon-', sf_icons);
+        }); 
+        $('[class^="icon-"], [class$=" icon-"]').each(function() {
+            setCon($(this), 'icon-', fa_icons);
+        }); 
+    }
+    pseudo_test.remove();
+</script>
 </body>
 </html>

@@ -99,9 +99,9 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" class="download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" alt="{% trans "Download" %}" title="{% trans "Download" %}" />
+            <span class="icon-cloud-download download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" title="{% trans "Download and Sync" %}"></span>
         {% if is_staff or repo.share_from_me  %}
-        <img src="{{ MEDIA_URL }}img/delete-20.png" class="cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}" alt="{% trans "Unshare" %}" />
+        <span class="icon-trash cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}"></span>
         {% endif %}
         </td>
     </tr>
@@ -129,15 +129,15 @@
 
     {% for cmt in recent_commits %}
     <tr>
-        <td class="icon-container">
+        <td>
             {% if cmt.tp == 'Added' or cmt.tp == 'Deleted' or cmt.tp == 'Removed' %}
                 {% if cmt.tp == 'Added' %}
-                <img src="{{MEDIA_URL}}img/plus-16.png" alt="" />
+                <span class="icon-plus"></span>
                 {% else %}
-                <img src="{{MEDIA_URL}}img/minus-16.png" alt="" />
+                <span class="icon-minus"></span>
                 {% endif %}
             {% else %}
-            <img src="{{MEDIA_URL}}img/modify-16.png" alt="" />
+                <span class="icon-pencil"></span>
             {% endif %}
         </td>
         <td><a href="{{ SITE_ROOT }}repo/{{ cmt.repo.props.id }}/">{{ cmt.repo.props.name }}</a></td>
@@ -183,11 +183,7 @@
 {% endblock %}
 
 {% block extra_script %}
-
 <script type="text/javascript">
-if ($.browser.msie && $.browser.version < 8) {
-    $('.icon-eye-open').html('&#xf06e;');
-}
 addConfirmTo($('#quit-group'), {
         'title':'{% trans "Quit Group" %}',
         'con':'{% trans "Are you sure you want to quit this group?" %}'
@@ -196,17 +192,14 @@ addConfirmTo($('.cancel-share'), {
         'title':'{% trans "Unshare Library" %}',
         'con':'{% trans "Are you sure you want to unshare %s ?" %}'
 });
-
-
 $("table tr:gt(0)").hover(
     function() {
-        $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
+        $(this).find('.op-icon').removeClass('vh');
     },
     function() {
         $(this).find('.op-icon').addClass('vh');
     }
 );
-
 $('.download').click(function() {
     window.open($(this).attr('data'));
 });

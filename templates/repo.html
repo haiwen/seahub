@@ -21,13 +21,13 @@
         <div class="fright">
             {% if path == '/' %}
                 {% if user_perm %}
-                  <button id="repo-download-btn" class="repo-top-op-btn">{% trans "Download"%}</button>
+                <button id="repo-download-btn" class="repo-top-op-btn"><span class="icon-cloud-download"></span>{% trans "Download"%}</button>
                 {% endif %}
                 {% if is_repo_owner %}
-                  <button id="repo-setting-btn" class="repo-top-op-btn">{% trans "Settings" %}</button>
+                <button id="repo-setting-btn" class="repo-top-op-btn"><span class="icon-cog"></span>{% trans "Settings" %}</button>
                 {% endif %}
                 {% if user_perm == 'rw' %}
-                  <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}" class="repo-top-op-btn">{% trans "Trash"%}</button>
+                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}" class="repo-top-op-btn"><span class="icon-trash"></span>{% trans "Trash"%}</button>
                 {% endif %}
             {% else %}
                 <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ dir_shared_link }}" />
@@ -154,11 +154,11 @@
 
                 {% for dirent in file_list %}
                 <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }} {%else %}0{% endif %}">
-                    <td class="icon-container">
+                    <td>
                         {% if dirent.starred %}
-                        <img src="{{ MEDIA_URL }}img/gray-star-icon.png" alt="{% trans 'starred' %}" title="{% trans 'starred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="starred" />
+                        <span title="{% trans 'starred' %}" class="icon-star file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="starred"></span>
                         {% else %}
-                        <img src="{{ MEDIA_URL }}img/gray-unstar-icon.png" alt="{% trans 'unstarred' %}" title="{% trans 'unstarred' %}" class="file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="unstarred" />
+                        <span title="{% trans 'unstarred' %}" class="icon-star-empty file-star" data-path="{{ path }}{{dirent.obj_name}}" data-status="unstarred"></span>
                         {% endif %}
                     </td>
                     <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
@@ -648,9 +648,9 @@ $('.file-star').click(function() {
         success:function(data) {
             if (data['success']) {
                 if (state == 'starred') {
-                    it.attr('src', '{{ MEDIA_URL }}img/gray-unstar-icon.png').attr('alt','{% trans 'unstarred' %}').attr('title','{% trans 'unstarred' %}').data('status','unstarred');
+                    it.attr('class', 'file-star icon-star-empty').attr('title','{% trans 'unstarred' %}').data('status','unstarred');
                 } else {
-                    it.attr('src', '{{ MEDIA_URL }}img/gray-star-icon.png').attr('alt','{% trans 'starred' %}').attr('title','{% trans 'starred' %}').data('status','starred');
+                    it.attr('class', 'file-star icon-star').attr('title','{% trans 'starred' %}').data('status','starred');
                 }
             }
         },

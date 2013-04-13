@@ -41,7 +41,7 @@
         <td>{% if repo.props.last_modified %}{{ repo.props.last_modified|translate_seahub_time }}{% else %}--{% endif %}</td>
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download"%}" alt="{% trans "Download"%}" />
+            <span data="{{ repo.props.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync"%}"></span>
         </td>
     </tr>
     {% endfor %}
@@ -63,7 +63,7 @@
 
     $("table tr:gt(0)").hover(
         function() {
-            $(this).find('.op-icon').css('cursor', 'pointer').removeClass('vh');
+            $(this).find('.op-icon').removeClass('vh');
         },  
         function() {
             $(this).find('.op-icon').addClass('vh');

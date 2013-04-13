@@ -1,6 +1,22 @@
-html {
-    background:#fff;
+@font-face {
+    font-family: 'seafile-font';
+    src:url('sf_font/seafile-font.eot');
+    src:url('sf_font/seafile-font.eot?#iefix') format('embedded-opentype'),
+        url('sf_font/seafile-font.woff') format('woff'),
+        url('sf_font/seafile-font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
+[class^="sf-icon-"] {
+    font-family: 'seafile-font';
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+}
+.sf-icon-share:before { content:"\e001"; }
+html { background:#fff; }
 body,
 h1,h2,h3,h4,h5,h6,
 ul,ol,li,dl,dt,dd,
@@ -162,6 +178,21 @@ p {
     color:#808080;
     font-size:12px;
 }
+.icon-plus, .icon-minus, .icon-pencil,
+.icon-star-empty, .icon-star {
+    font-size:16px;
+    line-height:1;
+}
+.icon-plus, .icon-minus, .icon-pencil {
+    color:#444;
+    margin-left:3px;
+}
+.icon-star-empty {
+    color:#d0d0d0;
+}
+.icon-star {
+    color:#505050;
+}
 .op,
 .more {
     font-weight:normal;
@@ -174,6 +205,13 @@ p {
 .op-target {
     color:#803;
     word-wrap:break-word;
+}
+.op-icon {
+    font-size:20px;
+    line-height:1;
+    color:#888;
+    cursor:pointer;
+    margin-right:3px;
 }
 .big-more-btn {
     padding:.5em 0;
@@ -205,7 +243,6 @@ input.btn-disabled:hover {/*for input*/
 .modalCloseImg,
 .add,
 .repo-op .op-btn,
-.repo-top-op-btn,
 #star {
     background:transparent url('../img/bg.png') no-repeat scroll 0 0;
 }
@@ -1178,6 +1215,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .file-star {
     cursor:pointer;
+    line-height:19px;
+    margin-left:5px;
 }
 .repo-file-list .repo-file-op {
     position:relative;
@@ -1231,16 +1270,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-top-op-btn {
     font-size:14px;
-    padding-left:21px;
 }
-#repo-download-btn {
-    background-position:3px -79px;
-}
-#recycle-btn {
-    background-position:3px -29px;
-}
-#repo-setting-btn {
-    background-position:3px -53px;
+.repo-top-op-btn [class^="icon-"] {
+    color:#444;
+    margin-right:2px;
 }
 #repo-latest-commit {
     word-wrap:break-word;
@@ -2135,8 +2168,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 .search-form .search-submit {
     width:30px;
-    padding:0;
-    background:#fff url('../img/search.png') no-repeat scroll 50% 50%;
+    background:#fff;
+}
+.search-form .icon-search {
+    font-size:16px;
+    color:#aaa;
 }
 #search-form {
     width:426px;

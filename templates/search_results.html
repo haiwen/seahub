@@ -7,7 +7,7 @@
 <div id="search-form-container">
     <form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
         <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
-        <input type="submit" value="" class="search-submit" />
+        <button type="submit" class="search-submit"><span class="icon-search"></span></button>
     </form>
 </div>
 

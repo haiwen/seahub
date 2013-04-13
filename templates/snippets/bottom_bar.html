@@ -4,10 +4,6 @@ var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss"><span
 $('#wrapper').append(Bottom_bar);
 $('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
 $('#footer').addClass('hide');
-if ($.browser.msie && $.browser.version < 8) {
-    $('.icon-comment-alt').html('&#xf0e5;');
-    $('.icon-double-angle-right').html('&#xf101;');
-}
 
 {% if groups %}
 function getAndHandleDiscussions(data_html) {

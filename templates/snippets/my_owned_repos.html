@@ -30,9 +30,9 @@
         <td>--</td>
         {% endif %}
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.props.id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
-            <img src="{{ MEDIA_URL }}img/share-20.png" data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" alt="{% trans "Share" %}" />
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" alt="{% trans "Delete" %}" />
+            <span data="{{ repo.props.id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            <span data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            <span data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
         </td>
     </tr>
     {% endfor %}
@@ -77,9 +77,9 @@
         {% endif %}
         <td>{{ repo.user|email2nickname }}</td>
         <td>
-            <img src="{{ MEDIA_URL }}img/download-20.png" data="{{ repo.repo_id }}" class="download-btn op-icon vh" title="{% trans "Download" %}" alt="{% trans "Download" %}" />
+            <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
             {% if repo.share_type == 'personal' %}
-            <img src="{{ MEDIA_URL }}img/delete-20.png" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" alt="{% trans "Leave Share" %}" />
+            <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
             {% endif %}
         </td>
     </tr>
