@@ -103,9 +103,8 @@ msgid "There is already a group with that name."
 msgstr "已有同名群组"
 
 #: views.py:240 views.py:262
-#, fuzzy
 msgid "Only administrators can make the group public"
-msgstr "只有管理员才能删除群组。"
+msgstr "只有管理员才能将群组公开。"
 
 #: views.py:308
 msgid "The message doesn't exist"
@@ -180,14 +179,13 @@ msgid "Error: wrong group id"
 msgstr "推荐失败：群组id不正确"
 
 #: views.py:784
-#, fuzzy
 msgid "Error: the group does not exist."
-msgstr "创建失败：该群组不存在。"
+msgstr "错误：该群组不存在。"
 
 #: views.py:816
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully posted to %(groups)s."
-msgstr "添加成功。"
+msgstr "成功发送到 %(groups)s。"
 
 #: views.py:819
 #, python-format
@@ -195,13 +193,12 @@ msgid "Error: you are not in group %s."
 msgstr "推荐到 %s 失败：你不在该群组中。"
 
 #: views.py:831
-#, fuzzy
 msgid "Error: the library does not exist."
-msgstr "创建失败：该群组不存在。"
+msgstr "错误：该资料库不存在。"
 
 #: views.py:834
 msgid "Error: no path."
-msgstr ""
+msgstr "错误：路径不存在。"
 
 #: views.py:872
 msgid "Failed to create: the group does not exist."
@@ -236,9 +233,8 @@ msgid "Failed to send. You can try it again later."
 msgstr "发送失败, 请稍侯再试。"
 
 #: views.py:1136
-#, fuzzy
 msgid "File does not exist"
-msgstr "群组不存在。"
+msgstr "文件不存在。"
 
 #: views.py:1176 views.py:1295
 msgid "Failed to create wiki page. Please retry later."
@@ -246,12 +242,11 @@ msgstr "Wiki 页面创建失败。请稍后再试。"
 
 #: views.py:1210
 msgid "Internal Server Error"
-msgstr ""
+msgstr "服务器内部错误"
 
 #: views.py:1212
-#, fuzzy
 msgid "Wiki does not exists."
-msgstr "群组不存在。"
+msgstr "Wiki不存在。"
 
 #: views.py:1264
 msgid "Failed to create home page. Please retry later"
@@ -264,7 +259,7 @@ msgstr "没找到该 Wiki。"
 #: views.py:1292
 #, python-format
 msgid "Page \"%s\" already exists."
-msgstr ""
+msgstr "页面 \"%s\" 已经存在。"
 
 #: templates/group/add_member_email.html:2
 #, python-format
@@ -382,7 +377,7 @@ msgstr "添加一个讨论..."
 
 #: templates/group/group_discuss.html:68
 msgid "After login, you can post discussions and add replies."
-msgstr ""
+msgstr "登录之后，你就可以发起讨论和回复。"
 
 #: templates/group/group_discuss.html:80 templates/group/group_manage.html:65
 #: templates/group/group_manage.html:89
@@ -444,7 +439,7 @@ msgstr "基本信息"
 #: templates/group/group_info.html:30
 #: templates/group/group_info_for_pub.html:26
 msgid "This group is public."
-msgstr ""
+msgstr "当前群组为公开群组。"
 
 #: templates/group/group_info.html:34
 #: templates/group/group_info_for_pub.html:30
@@ -507,12 +502,11 @@ msgstr "目录图标"
 #: templates/group/group_info.html:88
 #: templates/group/group_info_for_pub.html:55
 msgid "Read-Only"
-msgstr ""
+msgstr "只读"
 
 #: templates/group/group_info.html:102
-#, fuzzy
 msgid "Download and Sync"
-msgstr "下载"
+msgstr "下载和同步"
 
 #: templates/group/group_info.html:104
 msgid "Unshare"
@@ -540,7 +534,7 @@ msgstr ""
 
 #: templates/group/group_info.html:124 templates/group/group_info.html:168
 msgid "Library"
-msgstr ""
+msgstr "资料库"
 
 #: templates/group/group_info.html:126
 msgid "Modified at"
@@ -548,11 +542,11 @@ msgstr "修改于"
 
 #: templates/group/group_info.html:127
 msgid "Modifier"
-msgstr ""
+msgstr "修改者"
 
 #: templates/group/group_info.html:147 templates/group/group_info.html:149
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 #: templates/group/group_info.html:156 templates/group/new_msg_reply.html:72
 msgid "None"
@@ -560,19 +554,19 @@ msgstr "暂无"
 
 #: templates/group/group_info.html:161
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 #: templates/group/group_info.html:168
 msgid "is encrypted"
-msgstr ""
+msgstr "已加密"
 
 #: templates/group/group_info.html:170
 msgid "Password："
-msgstr ""
+msgstr "密码："
 
 #: templates/group/group_info.html:172
 msgid "The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "密码只会在服务器保存1个小时。"
 
 #: templates/group/group_info.html:188
 msgid "Quit Group"
@@ -592,13 +586,12 @@ msgid "Are you sure you want to unshare %s ?"
 msgstr "确定要取消共享 %s 吗？"
 
 #: templates/group/group_info_for_pub.html:75
-#, fuzzy
 msgid "No public library is in this group"
-msgstr "还没有资料库共享到当前群组"
+msgstr "当前群组没有公开的资料库"
 
 #: templates/group/group_info_for_pub.html:76
 msgid "A library can be made public in its settings page.(Not implemented yet)"
-msgstr ""
+msgstr "一个资料库可以在设置页面设为公开。（未实现）"
 
 #: templates/group/group_join_email.html:2
 #, python-format
@@ -621,11 +614,11 @@ msgstr "解散"
 
 #: templates/group/group_manage.html:40
 msgid "Revoke Public"
-msgstr ""
+msgstr "取消公开"
 
 #: templates/group/group_manage.html:42
 msgid "Make Public"
-msgstr ""
+msgstr "设为公开"
 
 #: templates/group/group_manage.html:50
 msgid "Add Members"
@@ -663,15 +656,15 @@ msgstr "确定要删除 %s 吗？"
 
 #: templates/group/group_members.html:41
 msgid "Add to Contacts"
-msgstr ""
+msgstr "添加到通讯录"
 
 #: templates/group/group_members.html:52
 msgid "Name(optional)"
-msgstr ""
+msgstr "名称（可选）"
 
 #: templates/group/group_members.html:54
 msgid "Note(optional)"
-msgstr ""
+msgstr "备注（可选）"
 
 #: templates/group/group_pubinfo.html:9
 msgid "Join Group"
@@ -703,14 +696,13 @@ msgid "This group currently has no wiki"
 msgstr "该群组目前还没创建Wiki"
 
 #: templates/group/group_wiki.html:35
-#, fuzzy
 msgid ""
 "Seafile Wiki enables you to organize your knowledge in a simple way. The "
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
 msgstr ""
-"Seafile Wiki 能让群组成员以一种非常简单的方式创建网页。Wiki 的内容以预定义的"
+"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
 "文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
 "器。"
 
@@ -735,9 +727,8 @@ msgid "Pages"
 msgstr "页面列表"
 
 #: templates/group/group_wiki.html:56 templates/group/group_wiki_pages.html:32
-#, fuzzy
 msgid "Wiki History"
-msgstr "没找到该 Wiki。"
+msgstr "维基历史"
 
 #: templates/group/group_wiki.html:61 templates/group/group_wiki.html.py:75
 #: templates/group/group_wiki_pages.html:36
@@ -755,7 +746,7 @@ msgstr "编辑本页"
 
 #: templates/group/group_wiki.html:64
 msgid "Page History"
-msgstr ""
+msgstr "页面历史"
 
 #: templates/group/group_wiki.html:71
 #, python-format
@@ -767,9 +758,8 @@ msgid "Name and description can not be blank."
 msgstr "名称和描述不能为空"
 
 #: templates/group/groups.html:5
-#, fuzzy
 msgid "Groups"
-msgstr "我的群组"
+msgstr "群组"
 
 #: templates/group/groups_left_panel.html:3
 msgid "Tips"

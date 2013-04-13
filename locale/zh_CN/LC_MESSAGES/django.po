@@ -732,9 +732,8 @@ msgstr "我的页面"
 #: templates/wiki/personal_wiki.html:14
 #: templates/wiki/personal_wiki_pages.html:6
 #: templates/wiki/personal_wiki_pages.html:14
-#, fuzzy
 msgid "Personal Wiki"
-msgstr "个人页面"
+msgstr "个人维基"
 
 #: templates/myhome.html:23
 msgid "Account"
@@ -928,9 +927,8 @@ msgstr "只读"
 
 #: templates/pubrepo.html:44 templates/snippets/my_owned_repos.html:33
 #: templates/snippets/my_owned_repos.html:80
-#, fuzzy
 msgid "Download and Sync"
-msgstr "下载"
+msgstr "下载和同步"
 
 #: templates/pubrepo.html:51
 msgid "No public library"
@@ -945,9 +943,8 @@ msgstr ""
 "这个资料库。"
 
 #: templates/pubuser.html:29
-#, fuzzy
 msgid "Add to Contacts"
-msgstr "加为联系人"
+msgstr "加到通讯录"
 
 #: templates/pubuser.html:38 templates/repo_history.html:52
 #: templates/repo_view_snapshot.html:50 templates/search_results.html:46
@@ -1461,11 +1458,11 @@ msgstr "重置密码"
 
 #: templates/sys_useradmin.html:34
 msgid "Take Admin"
-msgstr ""
+msgstr "取消管理员"
 
 #: templates/sys_useradmin.html:36
 msgid "Give Admin"
-msgstr ""
+msgstr "设为管理员"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
@@ -2119,9 +2116,8 @@ msgid "Add to contacts"
 msgstr "加为联系人"
 
 #: templates/wiki/personal_wiki.html:24
-#, fuzzy
 msgid "You do not have personal wiki"
-msgstr "你没有权限进行该操作"
+msgstr "你还未创建个人维基"
 
 #: templates/wiki/personal_wiki.html:25
 msgid ""
@@ -2129,70 +2125,63 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr ""
+"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
+"文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
+"器。"
 
 #: templates/wiki/personal_wiki.html:26
-#, fuzzy
 msgid "Create Wiki Now"
-msgstr "生成时间"
+msgstr "现在创建Wiki"
 
 #: templates/wiki/personal_wiki.html:29
-#, fuzzy
 msgid "Create Wiki"
-msgstr "生成时间"
+msgstr "创建Wiki"
 
 #: templates/wiki/personal_wiki.html:33
 msgid "Personal Wiki Pages"
-msgstr ""
+msgstr "个人维基页面"
 
 #: templates/wiki/personal_wiki.html:41
 #: templates/wiki/personal_wiki_pages.html:24
-#, fuzzy
 msgid "Home"
-msgstr "我的页面"
+msgstr "首页"
 
 #: templates/wiki/personal_wiki.html:42
 #: templates/wiki/personal_wiki_pages.html:25
 msgid "Pages"
-msgstr ""
+msgstr "页面"
 
 #: templates/wiki/personal_wiki.html:44
 #: templates/wiki/personal_wiki_pages.html:26
-#, fuzzy
 msgid "Wiki History"
-msgstr "历史"
+msgstr "Wiki历史"
 
 #: templates/wiki/personal_wiki.html:48 templates/wiki/personal_wiki.html:61
 #: templates/wiki/personal_wiki_pages.html:28
 #: templates/wiki/personal_wiki_pages.html:38
-#, fuzzy
 msgid "New Page"
-msgstr "新建文件"
+msgstr "新建页面"
 
 #: templates/wiki/personal_wiki.html:49
-#, fuzzy
 msgid "Delete Page"
-msgstr "删除时间"
+msgstr "删除页面"
 
 #: templates/wiki/personal_wiki.html:50
-#, fuzzy
 msgid "Edit Page"
-msgstr "编辑"
+msgstr "编辑页面"
 
 #: templates/wiki/personal_wiki.html:51
-#, fuzzy
 msgid "Page History"
-msgstr "历史"
+msgstr "页面历史"
 
 #: templates/wiki/personal_wiki.html:57
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
-msgstr ""
+msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
 #: templates/wiki/personal_wiki.html:114
-#, fuzzy
 msgid "Name and description can not be blank."
-msgstr "邮箱不能为空"
+msgstr "名称和描述不能为空"
 
 #: utils/__init__.py:84
 msgid "permission error"
@@ -2307,9 +2296,9 @@ msgid ""
 msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权删除资料库。"
 
 #: views/__init__.py:711
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully deleted library \"%s\"."
-msgstr "成功添加用户 %s。"
+msgstr "成功删除资料库 \"%s\"。"
 
 #: views/__init__.py:928 views/__init__.py:1793
 msgid "Failed to create library"
@@ -2544,36 +2533,32 @@ msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
 #: views/wiki.py:55 views/wiki.py:156
-#, fuzzy
 msgid "Failed to create wiki page. Please retry later."
-msgstr "本地文件尚未与服务器同步，请稍后再试"
+msgstr "创建维基页面失败，请稍后再试"
 
 #: views/wiki.py:89
-#, fuzzy
 msgid "Wiki does not exists."
-msgstr "文件不存在"
+msgstr "Wiki不存在"
 
 #: views/wiki.py:122
-#, fuzzy
 msgid "Failed to create"
-msgstr "创建资料库失败"
+msgstr "创建失败"
 
 #: views/wiki.py:129
-#, fuzzy
 msgid "Failed to create home page. Please retry later"
-msgstr "本地文件尚未与服务器同步，请稍后再试"
+msgstr "创建首页失败，请稍后再试"
 
 #: views/wiki.py:146 views/wiki.py:169 views/wiki.py:184
 msgid "Wiki is not found."
-msgstr ""
+msgstr "Wiki未找到。"
 
 #: views/wiki.py:153
 #, python-format
 msgid "Page \"%s\" already exists."
-msgstr ""
+msgstr "页面 \"%s\" 已存在。"
 
 #: wiki/forms.py:27
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" is not a valid name"
 msgstr "名称 %s 含有无效字符"
 

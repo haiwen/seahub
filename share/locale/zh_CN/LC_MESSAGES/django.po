@@ -34,7 +34,8 @@ msgstr "只有资料库拥有者才有共享权限。"
 msgid ""
 "Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
 "\">Upgrade account.</a>"
-msgstr ""
+msgstr "共享\"%s\"失败，空间不足。<a href=\"http://seafile.com/"
+"\">升级帐号。</a>"
 
 #: views.py:113
 msgid "Failed to share to all members"
@@ -47,9 +48,9 @@ msgid ""
 msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享</a> 查看。"
 
 #: views.py:127
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to share %(repo)s to %(group)s, please try again later."
-msgstr "获取分享链接失败，请稍后重试。"
+msgstr "共享 %(repo)s 到 %(group)s失败，请稍后重试。"
 
 #: views.py:131
 #, python-format
@@ -166,9 +167,8 @@ msgid "Successfully sent."
 msgstr "发送成功"
 
 #: templates/repo/share_admin.html:5
-#, fuzzy
 msgid "Share"
-msgstr "共享给"
+msgstr "共享"
 
 #: templates/repo/share_admin.html:16
 msgid "Tips"
