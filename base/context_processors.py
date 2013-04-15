@@ -7,7 +7,7 @@ These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
 from settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
-    ENABLE_SIGNUP, MAX_FILE_NAME
+    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_URL
 try:
     from settings import BUSINESS_MODE
 except ImportError:
@@ -35,6 +35,9 @@ def base(request):
     return {
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
+	'branding_css': BRANDING_CSS,
+	'logo_path': LOGO_PATH,
+	'logo_url': LOGO_URL,
         'business_mode': BUSINESS_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
