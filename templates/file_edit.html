@@ -113,7 +113,7 @@
                 {% if filetype == 'Markdown' %}
                 <div id="md-edit">
                     <div id="wmd-button-bar"></div>
-                    <textarea class="wmd-input" id="wmd-input">{{ file_content|escape }}</textarea>
+                    <textarea class="wmd-input hide" id="wmd-input">{{ file_content|escape }}</textarea>
                     <div id="wmd-preview" class="article hide"></div>
                 </div>
 
@@ -347,7 +347,7 @@ editor.run();
 var file_edit = $('#file-edit'); 
 var file_edit_styles = {'min-height':0, 'padding-bottom':50, 'height':$(window).height() - $('#path-op').outerHeight() - parseInt(file_edit.css('padding-top')) - 51};
 file_edit.css(file_edit_styles).removeClass('hide');
-$('#wmd-input').css({'height':file_edit.height() - $('#file-enc-conf').outerHeight(true) - $('#wmd-button-bar').outerHeight() - parseInt($('#wmd-input').css('padding-top'))*2});
+$('#wmd-input').css({'height':file_edit.height() - $('#file-enc-conf').outerHeight(true) - $('#wmd-button-bar').outerHeight() - parseInt($('#wmd-input').css('padding-top'))*2}).removeClass('hide');
 
 $('#preview-btn, #source-code-btn').click(function() {
     $('#wmd-button-bar, #wmd-input, #wmd-preview, #source-code-btn, #preview-btn').toggleClass('hide');
