@@ -340,7 +340,7 @@ converter.hooks.chain("preBlockGamut", function (text, rbg) {
         return "<blockquote>" + rbg(inner) + "</blockquote>\n";
     });
 });
-Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm"]});
+Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
 var editor = new Markdown.Editor(converter,'',{handler:mdEditHelp, title:'{% trans "Editing Help" %}'});
 editor.run();
 
