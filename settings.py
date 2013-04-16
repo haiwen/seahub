@@ -318,7 +318,7 @@ else:
 # Remove install_topdir from path
 sys.path.pop(0)
 
-SEAFILE_VERSION = '1.5'
+SEAFILE_VERSION = '1.6'
 
 # Put here after loading other settings files if `SITE_ROOT` is modified in
 # other settings files.
