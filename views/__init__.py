@@ -760,7 +760,8 @@ def myhome(request):
             r.repo_id = r.id
             r.repo_name = r.name
             r.repo_desc = r.desc
-            last_commit = get_commits(r_id, 0, 1)[0]
+            cmmts = get_commits(r_id, 0, 1)
+            last_commit = cmmts[0] if cmmts else None
             r.last_modified = last_commit.ctime if last_commit else 0
             r.share_type = 'group'
             r.user = get_repo_owner(r_id)

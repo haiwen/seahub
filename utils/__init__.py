@@ -158,10 +158,12 @@ def calculate_repo_last_modify(repo_list):
     
     """
     for repo in repo_list:
-        repo.latest_modify = get_commits(repo.id, 0, 1)[0].ctime
+        cmmts = get_commits(repo.id, 0, 1)
+        repo.latest_modify = cmmts[0].ctime if cmmts else 0
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
-    latest_commit = get_commits(repo_id, 0, 1)[0]
+    cmmts = get_commits(repo_id, 0, 1)
+    latest_commit = cmmts[0] if cmmts else None
     if not latest_commit:
         return ''
     # TODO: what if parrent_dir does not exist?
