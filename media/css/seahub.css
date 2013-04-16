@@ -812,7 +812,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .article code {
     font-size:12px;
-    white-space: nowrap;
+    white-space: pre-wrap;
     padding: 1px 5px 0;
     background-color: #F8F8F8;
     border: 1px solid #dadada;
@@ -847,8 +847,9 @@ textarea:-moz-placeholder {/* for FF */
     margin: 1.2em 0;
 }
 .article table {
-    margin:0.8em 0;
+    table-layout:auto;
     width:auto;
+    margin:0.8em 0;
 }
 .article tr:nth-child(2n) {
     background-color: #F8F8F8;
