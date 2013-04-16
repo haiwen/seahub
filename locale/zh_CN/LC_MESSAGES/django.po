@@ -2125,7 +2125,7 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
+msgstr "Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
 "文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
 "器。"
 
