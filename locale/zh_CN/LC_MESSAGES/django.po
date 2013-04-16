@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-16 13:23+0800\n"
+"POT-Creation-Date: 2013-04-16 14:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2140,6 +2140,10 @@ msgstr "现在创建Wiki"
 #: templates/wiki/personal_wiki.html:29
 msgid "Create Wiki"
 msgstr "创建Wiki"
+
+#: templates/wiki/personal_wiki.html:31
+msgid "personal-wiki"
+msgstr "个人维基"
 
 #: templates/wiki/personal_wiki.html:33
 msgid "Personal Wiki Pages"

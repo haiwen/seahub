@@ -28,7 +28,7 @@
     <form id="wiki-create-form" action="" method="post" class="hide">
         <h3>{% trans "Create Wiki" %}</h3>
         <label>{% trans "Name" %}</label><br/>
-        <input id="repo-name" type="text" name="repo_name" value="personal-wiki" maxlength="{{max_file_name}}"/><br />
+        <input id="repo-name" type="text" name="repo_name" value="{% trans "personal-wiki" %}" maxlength="{{max_file_name}}"/><br />
         <label>{% trans "Description" %}</label><br/>
         <textarea id="repo-desc" name="repo_desc">{% trans "Personal Wiki Pages" %}</textarea><br/>
         <p class="error hide"></p>
