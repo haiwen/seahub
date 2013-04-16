@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-13 19:17+0800\n"
+"POT-Creation-Date: 2013-04-16 13:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -453,6 +453,10 @@ msgstr "留出空行"
 #: templates/file_edit.html:177
 msgid "Extended Syntax for Wiki"
 msgstr "Wiki 扩展语法"
+
+#: templates/file_edit.html:179
+msgid "or"
+msgstr "或者"
 
 #: templates/file_edit.html:179
 msgid "internal link to another wiki page."
@@ -1471,7 +1475,7 @@ msgstr "删除用户"
 #: templates/sys_useradmin.html:81
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:7 views/__init__.py:1465
+#: templates/registration/password_reset_form.html:7 views/__init__.py:1466
 msgid "Password Reset"
 msgstr "密码重置"
 
@@ -2125,9 +2129,9 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr "Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的"
-"文件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务"
-"器。"
+msgstr ""
+"Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的文"
+"件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务器。"
 
 #: templates/wiki/personal_wiki.html:26
 msgid "Create Wiki Now"
@@ -2187,7 +2191,7 @@ msgstr "名称和描述不能为空"
 msgid "permission error"
 msgstr "权限错误"
 
-#: utils/__init__.py:99 views/__init__.py:2182 views/file.py:151
+#: utils/__init__.py:99 views/__init__.py:2183 views/file.py:151
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -2227,7 +2231,7 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views/__init__.py:355 views/__init__.py:1995 views/__init__.py:2123
+#: views/__init__.py:355 views/__init__.py:1996 views/__init__.py:2124
 #: views/file.py:277
 msgid "File does not exist"
 msgstr "文件不存在"
@@ -2264,13 +2268,13 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views/__init__.py:581 views/__init__.py:1872 views/__init__.py:1907
-#: views/__init__.py:2416 views/file.py:563
+#: views/__init__.py:581 views/__init__.py:1873 views/__init__.py:1908
+#: views/__init__.py:2417 views/file.py:563
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views/__init__.py:583 views/__init__.py:676 views/__init__.py:1819
-#: views/__init__.py:2431
+#: views/__init__.py:583 views/__init__.py:676 views/__init__.py:1820
+#: views/__init__.py:2432
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -2300,114 +2304,114 @@ msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权�
 msgid "Successfully deleted library \"%s\"."
 msgstr "成功删除资料库 \"%s\"。"
 
-#: views/__init__.py:928 views/__init__.py:1793
+#: views/__init__.py:929 views/__init__.py:1794
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: views/__init__.py:946
+#: views/__init__.py:947
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "取消共享失败，该资料库不存在"
 
-#: views/__init__.py:951
+#: views/__init__.py:952
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\" 取消共享成功"
 
-#: views/__init__.py:953
+#: views/__init__.py:954
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "\"%s\" 取消共享失败"
 
-#: views/__init__.py:983
+#: views/__init__.py:984
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: views/__init__.py:990
+#: views/__init__.py:991
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: views/__init__.py:992
+#: views/__init__.py:993
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: views/__init__.py:1007
+#: views/__init__.py:1008
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "文件超过10M，无法在线查看。"
 
-#: views/__init__.py:1012 views/file.py:106
+#: views/__init__.py:1013 views/file.py:106
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: views/__init__.py:1015 views/file.py:109
+#: views/__init__.py:1016 views/file.py:109
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: views/__init__.py:1022 views/file.py:116
+#: views/__init__.py:1023 views/file.py:116
 msgid "The encoding you chose is not proper."
 msgstr "文件编码不合适"
 
-#: views/__init__.py:1039 views/__init__.py:1042 views/file.py:133
+#: views/__init__.py:1040 views/__init__.py:1043 views/file.py:133
 #: views/file.py:136
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: views/__init__.py:1114
+#: views/__init__.py:1115
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: views/__init__.py:1141
+#: views/__init__.py:1142
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: views/__init__.py:1152
+#: views/__init__.py:1153
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: views/__init__.py:1195
+#: views/__init__.py:1196
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: views/__init__.py:1201
+#: views/__init__.py:1202
 msgid "You can not modify that library."
 msgstr "你无法修改该资料库。"
 
-#: views/__init__.py:1214
+#: views/__init__.py:1215
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s %(op)s到它的子目录 %(des)s中"
 
-#: views/__init__.py:1215
+#: views/__init__.py:1216
 msgid "copy"
 msgstr "复制"
 
-#: views/__init__.py:1215
+#: views/__init__.py:1216
 msgid "move"
 msgstr "移动"
 
-#: views/__init__.py:1230
+#: views/__init__.py:1231
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views/__init__.py:1236
+#: views/__init__.py:1237
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: views/__init__.py:1351
+#: views/__init__.py:1352
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views/__init__.py:1481
+#: views/__init__.py:1482
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views/__init__.py:1486
+#: views/__init__.py:1487
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -2416,12 +2420,12 @@ msgstr ""
 "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
 "件配置。"
 
-#: views/__init__.py:1490
+#: views/__init__.py:1491
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views/__init__.py:1493
+#: views/__init__.py:1494
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -2431,74 +2435,74 @@ msgstr ""
 "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
 "邮件无法发送。"
 
-#: views/__init__.py:1496
+#: views/__init__.py:1497
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views/__init__.py:1517
+#: views/__init__.py:1518
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views/__init__.py:1552
+#: views/__init__.py:1553
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views/__init__.py:1555
+#: views/__init__.py:1556
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views/__init__.py:1557
+#: views/__init__.py:1558
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views/__init__.py:1559
+#: views/__init__.py:1560
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views/__init__.py:1661 views/__init__.py:1692 views/__init__.py:1726
+#: views/__init__.py:1662 views/__init__.py:1693 views/__init__.py:1727
 #: views/file.py:548
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views/__init__.py:1738
+#: views/__init__.py:1739
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views/__init__.py:1893
+#: views/__init__.py:1894
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views/__init__.py:1897 views/__init__.py:1923
+#: views/__init__.py:1898 views/__init__.py:1924
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views/__init__.py:1919
+#: views/__init__.py:1920
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views/__init__.py:2467 views/file.py:542
+#: views/__init__.py:2468 views/file.py:542
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views/__init__.py:2470
+#: views/__init__.py:2471
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: views/__init__.py:2485
+#: views/__init__.py:2486
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -2561,42 +2565,3 @@ msgstr "页面 \"%s\" 已存在。"
 #, python-format
 msgid "\"%s\" is not a valid name"
 msgstr "名称 %s 含有无效字符"
-
-#~ msgid "New Organization"
-#~ msgstr "新建团体"
-
-#~ msgid "Admin"
-#~ msgstr "管理"
-
-#~ msgid "Add as contact"
-#~ msgstr "加为联系人"
-
-#~ msgid "To group"
-#~ msgstr "到群组"
-
-#~ msgid "Leave a message~"
-#~ msgstr "评论一下~"
-
-#~ msgid "Comment"
-#~ msgstr "评论"
-
-#~ msgid "Please input a message."
-#~ msgstr "请先输入评论。"
-
-#~ msgid "Space used"
-#~ msgstr "已用空间"
-
-#~ msgid "leave empty lines around"
-#~ msgstr "在周围留出空行"
-
-#~ msgid "Recommend"
-#~ msgstr "推荐"
-
-#~ msgid "Back to group"
-#~ msgstr "到所在群组"
-
-#~ msgid "Please input recommend message."
-#~ msgstr "请输入推荐语。"
-
-#~ msgid "Recommend Message"
-#~ msgstr "推荐语"
