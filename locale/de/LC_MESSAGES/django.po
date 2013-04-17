@@ -2633,10 +2633,13 @@ msgid "My Home"
 msgstr "Start"
 
 #: templates/myhome_base.html:14 templates/org_base.html:15
+msgid "Shares"
+msgstr "Freigaben"
+
 #: templates/repo.html:139 templates/repo.html.py:186 templates/repo.html:333
 #: templates/snippets/my_owned_repos.html:35
 msgid "Share"
-msgstr "Freigaben"
+msgstr "Freigeben"
 
 #: templates/myhome_base.html:21 templates/org_base.html:18
 msgid "Public Library"
