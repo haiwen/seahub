@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-16 14:25+0800\n"
+"POT-Creation-Date: 2013-04-17 17:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1863,7 +1863,7 @@ msgstr " 太大。不得超过 1MB。"
 msgid "Discuss"
 msgstr "讨论"
 
-#: templates/snippets/bottom_bar.html:3 templates/snippets/pubinfo.html:7
+#: templates/snippets/bottom_bar.html:3
 msgid "Group"
 msgstr "群组"
 
@@ -2056,7 +2056,12 @@ msgid "<span class=\"obj\">Library"
 msgid_plural "<span class=\"obj\">Libraries"
 msgstr[0] "<span class=\"obj\">资料库"
 
-#: templates/snippets/pubinfo.html:8
+#: templates/snippets/pubinfo.html:7
+msgid "<span class=\"obj\">Group"
+msgid_plural "<span class=\"obj\">Groups"
+msgstr[0] "<span class=\"obj\">群组"
+
+#: templates/snippets/pubinfo.html:9
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "成员"
