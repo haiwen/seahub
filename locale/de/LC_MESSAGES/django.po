@@ -1143,7 +1143,7 @@ msgstr ""
 #: templates/user_reset_email.html:6
 #: templates/registration/password_reset_email.html:10
 msgid "Thanks for using our site!"
-msgstr "Danke, das Sie unsere Seite benutzen!"
+msgstr "Danke, dass Sie unsere Seite benutzen! "
 
 #: group/templates/group/add_member_email.html:7
 #: group/templates/group/group_join_email.html:8
@@ -1156,7 +1156,7 @@ msgstr "Das %(site_name)s team"
 
 #: group/templates/group/group_info.html:14 templates/org_admin_base.html:8
 msgid "Basic Info"
-msgstr "Basisinformationen"
+msgstr "Info"
 
 #: group/templates/group/group_info.html:16
 #: group/templates/group/group_manage.html:15
@@ -1434,7 +1434,7 @@ msgstr "Mitglied löschen"
 
 #: group/templates/group/group_manage.html:91
 msgid "Really want to delete Member"
-msgstr "Sind Sie sicher das Sie das Mitglied löschen möchten"
+msgstr "Sind Sie sicher dass Sie das Mitglied löschen möchten"
 
 #: group/templates/group/group_pubinfo.html:9
 msgid "Join Group"
@@ -2089,7 +2089,7 @@ msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
-"Wenn Sie nicht wollen, das andere den Inhalt Ihrer freigegebenen Bibliothek "
+"Wenn Sie nicht wollen, dass andere den Inhalt Ihrer freigegebenen Bibliothek "
 "ändern können, setzen Sie die Freigabeberechtigung auf \"Nur Lesen\" wenn "
 "Sie sie freigeben."
 
@@ -3157,7 +3157,7 @@ msgstr "Ausloggen"
 
 #: templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke für Ihre Teilnahme! "
+msgstr "Vielen Dank für die Nutzung von Seafile."
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
@@ -3688,3 +3688,4 @@ msgstr "Registrierungsprofile"
 
 #~ msgid "Library not exists"
 #~ msgstr "Bibliothek nicht gefunden"
+

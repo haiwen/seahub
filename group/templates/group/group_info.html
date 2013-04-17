@@ -33,7 +33,7 @@
         <div class="txt">
             <p>{{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</p>
             {% if not is_staff %}
-            <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}">{% trans "Quit" %}</a>
+            <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}">{% trans "Quit Group" %}</a>
             {% endif %}
         </div>
     </div>
