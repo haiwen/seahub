@@ -587,27 +587,121 @@ msgstr "密码："
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存一小时。"
 
-#: templates/file_edit.html:344
+#: templates/file_edit.html:346
+msgid "Strong <strong> Ctrl+B"
+msgstr "加强 <strong> Ctrl+B"
+
+#: templates/file_edit.html:347
+msgid "strong text"
+msgstr "加强文本"
+
+#: templates/file_edit.html:349
+msgid "Emphasis <em> Ctrl+I"
+msgstr "强调 <em> Ctrl+I"
+
+#: templates/file_edit.html:350
+msgid "emphasized text"
+msgstr "强调文本"
+
+#: templates/file_edit.html:352
+msgid "Hyperlink <a> Ctrl+L"
+msgstr "超链接 <a> Ctrl+L"
+
+#: templates/file_edit.html:353
+msgid "enter link description here"
+msgstr "在这里输入链接描述"
+
+#: templates/file_edit.html:354
+msgid ""
+"<h3>Insert Hyperlink</h3><p>http://example.com/ \\\"optional title\\\"</p>"
+msgstr "<h3>插入超链接</h3><p>http://example.com/ \\\"可选的提示文本\\\"</p>"
+
+#: templates/file_edit.html:356
+msgid "Blockquote <blockquote> Ctrl+Q"
+msgstr "块引用 <blockquote> Ctrl+Q"
+
+#: templates/file_edit.html:357
+msgid "Blockquote"
+msgstr "块引用"
+
+#: templates/file_edit.html:359
+msgid "Code Sample <pre><code> Ctrl+K"
+msgstr "代码样例 <pre><code> Ctrl+K"
+
+#: templates/file_edit.html:360
+msgid "enter code here"
+msgstr "在此输入代码"
+
+#: templates/file_edit.html:362
+msgid "Image <img> Ctrl+G"
+msgstr "图片 <img> Ctrl+G"
+
+#: templates/file_edit.html:363
+msgid "enter image description here"
+msgstr "在此输入图片描述"
+
+#: templates/file_edit.html:364
+msgid ""
+"<h3>Insert Image</h3><p>http://example.com/images/diagram.jpg \\\"optional title\\\"</p>"
+msgstr "<h3>插入图片</h3><p>http://example.com/images/diagram.jpg \\\"可选的提示文字\\\"</p>"
+
+#: templates/file_edit.html:366
+msgid "Numbered List <ol> Ctrl+O"
+msgstr "有序列表 <ol> Ctrl+O"
+
+#: templates/file_edit.html:367
+msgid "Bulleted List <ul> Ctrl+U"
+msgstr "无序列表 <ul> Ctrl+U"
+
+#: templates/file_edit.html:368
+msgid "List item"
+msgstr "列表项"
+
+#: templates/file_edit.html:370
+msgid "Heading <h1>/<h2> Ctrl+H"
+msgstr "标题 <h1>/<h2> Ctrl+H"
+
+#: templates/file_edit.html:371
+msgid "Heading"
+msgstr "标题"
+
+#: templates/file_edit.html:373
+msgid "Horizontal Rule <hr> Ctrl+R"
+msgstr "水平线 <hr> Ctrl+R"
+
+#: templates/file_edit.html:374
+msgid "Undo - Ctrl+Z"
+msgstr "撤销 - Ctrl+Z"
+
+#: templates/file_edit.html:375
+msgid "Redo - Ctrl+Y"
+msgstr "重做 - Ctrl+Y"
+
+#: templates/file_edit.html:376
+msgid "Redo - Ctrl+Shift+Z"
+msgstr "重做 - Ctrl+Shift+Z"
+
+#: templates/file_edit.html:378
 msgid "Editing Help"
 msgstr "编辑帮助"
 
-#: templates/file_edit.html:431
+#: templates/file_edit.html:468
 msgid "Submit failed. Please check the network."
 msgstr "提交失败。请检查网络是否已连接。"
 
-#: templates/file_edit.html:433
+#: templates/file_edit.html:470
 msgid "Submit failed."
 msgstr "提交失败。"
 
-#: templates/file_edit.html:451 templates/snippets/repo_decrypt_js.html:11
+#: templates/file_edit.html:488 templates/snippets/repo_decrypt_js.html:11
 msgid "Password is required."
 msgstr "密码为必填项"
 
-#: templates/file_edit.html:453
+#: templates/file_edit.html:490
 msgid "Password should be 3 to 30 characters."
 msgstr "密码为3到30个字符"
 
-#: templates/file_edit.html:482 templates/repo.html:423
+#: templates/file_edit.html:519 templates/repo.html:423
 #: templates/repo.html.py:661 templates/repo.html:698
 #: templates/repo.html.py:841 templates/view_file_base.html:166
 #: templates/view_file_document.html:66 templates/view_file_pdf.html:117

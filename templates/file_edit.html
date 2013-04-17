@@ -341,7 +341,44 @@ converter.hooks.chain("preBlockGamut", function (text, rbg) {
     });
 });
 Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
-var editor = new Markdown.Editor(converter,'',{handler:mdEditHelp, title:'{% trans "Editing Help" %}'});
+
+var local_toolbar_strs = {
+    bold: "{% trans "Strong <strong> Ctrl+B" %}",
+    boldexample: "{% trans "strong text" %}",
+
+    italic: "{% trans "Emphasis <em> Ctrl+I" %}",
+    italicexample: "{% trans "emphasized text" %}",
+
+    link: "{% trans "Hyperlink <a> Ctrl+L" %}",
+    linkdescription: "{% trans "enter link description here" %}",
+    linkdialog: "{% blocktrans %}<h3>Insert Hyperlink</h3><p>http://example.com/ \"optional title\"</p>{% endblocktrans %}",
+
+    quote: "{% trans "Blockquote <blockquote> Ctrl+Q" %}",
+    quoteexample: "{% trans "Blockquote" %}",
+
+    code: "{% trans "Code Sample <pre><code> Ctrl+K" %}",
+    codeexample: "{% trans "enter code here" %}",
+
+    image: "{% trans "Image <img> Ctrl+G" %}",
+    imagedescription: "{% trans "enter image description here" %}",
+    imagedialog: "{% blocktrans %}<h3>Insert Image</h3><p>http://example.com/images/diagram.jpg \"optional title\"</p>{% endblocktrans %}",
+
+    olist: "{% trans "Numbered List <ol> Ctrl+O" %}",
+    ulist: "{% trans "Bulleted List <ul> Ctrl+U" %}",
+    litem: "{% trans "List item" %}",
+
+    heading: "{% trans "Heading <h1>/<h2> Ctrl+H" %}",
+    headingexample: "{% trans "Heading" %}",
+
+    hr: "{% trans "Horizontal Rule <hr> Ctrl+R" %}",
+    undo: "{% trans "Undo - Ctrl+Z" %}",
+    redo: "{% trans "Redo - Ctrl+Y" %}",
+    redomac: "{% trans "Redo - Ctrl+Shift+Z" %}",
+
+    help: "{% trans "Editing Help" %}"
+};
+
+var editor = new Markdown.Editor(converter, null, { helpButton: { handler: mdEditHelp }, strings: local_toolbar_strs });
 editor.run();
 
 var file_edit = $('#file-edit'); 
