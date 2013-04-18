@@ -62,7 +62,7 @@
         <td>{{ member.user_name }}</td>
         <td>
           {% if member.user_name != request.user.username %}
-            <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
           {% endif %}
         </td>
     </tr>
@@ -86,7 +86,7 @@
         <td>{{ member.user_name }}</td>
         <td>
             {% if member.user_name != request.user.username %}
-            <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name }}" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
+            <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
             {% endif %}
         </td>
     </tr>
