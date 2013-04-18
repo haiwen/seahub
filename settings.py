@@ -3,6 +3,9 @@
 import sys
 import os
 import re
+import random
+import string
+
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -196,7 +199,10 @@ REGISTRATION_SEND_MAIL = False
 CCNET_APPLET_ROOT = "http://localhost:13420"
 
 # Account initial password, for password resetting.
-INIT_PASSWD = '123456'
+def genpassword():
+    return ''.join([random.choice(string.digits + string.letters) for i in range(0, 10)])
+
+INIT_PASSWD = genpassword
 
 # browser tab title
 SITE_TITLE = 'Private Seafile'
