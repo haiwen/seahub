@@ -116,7 +116,6 @@ def group_check(func):
 
     return _decorated
 
-
 @login_required
 def group_list(request):
     username = request.user.username
@@ -128,6 +127,15 @@ def group_list(request):
         result = {}
         content_type = 'application/json; charset=utf-8'
 
+        # check plan
+        num_of_groups = getattr(request.user, 'num_of_groups', -1)
+        if num_of_groups > 0:
+            current_groups = len(get_personal_groups_by_user(username))
+            if current_groups > num_of_groups:
+                result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+        
         form = GroupAddForm(request.POST)
         if form.is_valid():
             group_name = form.cleaned_data['group_name']
@@ -506,7 +514,7 @@ def group_manage(request, group_id):
     group = get_group(group_id_int)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
-    user = request.user.username
+    username = request.user.username
     
     if request.method == 'POST':
         """
@@ -520,7 +528,7 @@ def group_manage(request, group_id):
 
         # Add users to contacts.        
         for email in member_list:
-            mail_sended.send(sender=None, user=user, email=email)
+            mail_sended.send(sender=None, user=username, email=email)
 
         mail_sended_list = []
         if request.cloud_mode:
@@ -536,12 +544,21 @@ def group_manage(request, group_id):
                     else:
                         try:
                             ccnet_threaded_rpc.group_add_member(group.id,
-                                                                user, email)
+                                                                username, email)
                         except SearpcError, e:
                             result['error'] = _(e.msg)
                             return HttpResponse(json.dumps(result), status=500,
                                                 content_type=content_type)
             else:
+                # check plan
+                group_members = getattr(request.user, 'group_members', -1)
+                if group_members > 0:
+                    current_group_members = len(get_group_members(group.id))
+                    if current_group_members > group_members:
+                        result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
+                        return HttpResponse(json.dumps(result), status=500,
+                                            content_type=content_type)
+                        
                 # Can invite unregistered user to group.
                 for email in member_list:
                     if not is_registered_user(email):
@@ -550,7 +567,7 @@ def group_manage(request, group_id):
 
                         t = loader.get_template('group/add_member_email.html')
                         c = {
-                            'email': user,
+                            'email': username,
                             'to_email': email,
                             'group': group,
                             'domain': domain,
@@ -572,7 +589,7 @@ def group_manage(request, group_id):
                     # when he logs in.
                     try:
                         ccnet_threaded_rpc.group_add_member(group.id,
-                                                            user, email)
+                                                            username, email)
                     except SearpcError, e:
                         result['error'] = _(e.msg)
                         return HttpResponse(json.dumps(result), status=500,
@@ -588,7 +605,7 @@ def group_manage(request, group_id):
                 # Add user to group.
                 try:
                     ccnet_threaded_rpc.group_add_member(group.id,
-                                               user, email)
+                                               username, email)
                 except SearpcError, e:
                     result['error'] = _(e.msg)
                     return HttpResponse(json.dumps(result), status=500,
@@ -611,7 +628,7 @@ def group_manage(request, group_id):
     members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [ m for m in members_all if m.is_staff ]    
 
-    contacts = Contact.objects.filter(user_email=user)
+    contacts = Contact.objects.filter(user_email=username)
 
     if PublicGroup.objects.filter(group_id=group.id):
         is_pub = True
@@ -639,7 +656,7 @@ def group_add_admin(request, group_id):
 
     result = {}
     content_type = 'application/json; charset=utf-8'
-
+        
     member_name_str = request.POST.get('user_name', '')
     member_list = string2list(member_name_str)
 
@@ -653,7 +670,7 @@ def group_add_admin(request, group_id):
             result['error'] = err_msg
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
-        
+
         # Check whether user is in the group
         if is_group_user(group_id, member_name):
             try:
@@ -663,6 +680,15 @@ def group_add_admin(request, group_id):
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
         else:
+            # check plan
+            group_members = getattr(request.user, 'group_members', -1)
+            if group_members > 0:
+                current_group_members = len(get_group_members(group_id))
+                if current_group_members > group_members:
+                    result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
+                    return HttpResponse(json.dumps(result), status=500,
+                                        content_type=content_type)
+            
             try:
                 ccnet_threaded_rpc.group_add_member(group_id,
                                                     request.user.username,
