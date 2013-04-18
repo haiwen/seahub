@@ -1550,6 +1550,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .msg {
     word-wrap: break-word;
+    padding:1px 0; /* to fix 'top border missing' when only 1 discussion & no scrollbar in chrome */
     margin:15px 0 20px;
 }
 .msg .txt {
