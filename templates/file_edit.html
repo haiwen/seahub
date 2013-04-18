@@ -187,7 +187,7 @@
                 <div class="btn-toolbar" data-role="editor-toolbar" data-target="#sf">
                     <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Font" %}"><i class="icon-font"></i><span class="caret"></span></a>
-                        <ul class="dropdown-menu"></ul>
+                        <ul class="dropdown-menu" id="font-list"></ul>
                     </div>
                     <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Font Size" %}"><i class="icon-text-height"></i><span class="caret"></span></a>
@@ -408,7 +408,7 @@ $(function() {
       var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 
             'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
             'Times New Roman', 'Verdana'],
-            fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+            fontTarget = $('#font-list');
       $.each(fonts, function (idx, fontName) {
           fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
       });
@@ -424,7 +424,6 @@ $(function() {
     };
     initToolbarBootstrapBindings();  
     $('#sf').wysiwyg();
-    window.prettyPrint && prettyPrint();
 });
 {% endif %}
 
