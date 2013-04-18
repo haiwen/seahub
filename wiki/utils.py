@@ -116,15 +116,14 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
         if matchobj.group(2):   # return origin string in backquotes
             return matchobj.group(2)
 
-        page_name = matchobj.group(1).strip()
+        page_alias = page_name = matchobj.group(1).strip()
+        if len(page_name.split('|')) > 1:
+            page_alias = page_name.split('|')[0]
+            page_name = page_name.split('|')[1]
+        
         filetype, fileext = get_file_type_and_ext(page_name)
         if fileext == '':
             # convert page_name that extension is missing to a markdown page
-            page_alias = page_name
-            if len(page_name.split('|')) > 1:
-                page_alias = page_name.split('|')[0]
-                page_name = page_name.split('|')[1]
-
             try:
                 dirent = get_wiki_dirent(repo_id, page_name)
                 a_tag = "<a href='%s'>%s</a>"

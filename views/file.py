@@ -218,26 +218,30 @@ def convert_md_link(file_content, repo_id, username):
         if matchobj.group(2):   # return origin string in backquotes
             return matchobj.group(2)
 
-        linkname = matchobj.group(1).strip()
-        filetype, fileext = get_file_type_and_ext(linkname)
+        link_alias = link_name = matchobj.group(1).strip()
+        if len(link_name.split('|')) > 1:
+            link_alias = link_name.split('|')[0]
+            link_name = link_name.split('|')[1]
+
+        filetype, fileext = get_file_type_and_ext(link_name)
         if fileext == '':
-            # convert linkname that extension is missing to a markdown page
+            # convert link_name that extension is missing to a markdown page
             try:
-                dirent = get_wiki_dirent(repo_id, linkname)
+                dirent = get_wiki_dirent(repo_id, link_name)
                 path = "/" + dirent.obj_name
                 href = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
                 a_tag = '''<a href="%s">%s</a>'''
-                return a_tag % (href, linkname)
+                return a_tag % (href, link_alias)
             except (WikiDoesNotExist, WikiPageMissing):
                 a_tag = '''<p class="wiki-page-missing">%s</p>'''
-                return a_tag % (linkname)  
+                return a_tag % (link_alias)  
         elif filetype == IMAGE:
             # load image to current page
-            path = "/" + linkname
+            path = "/" + link_name
             filename = os.path.basename(path)
             obj_id = get_file_id_by_path(repo_id, path)
             if not obj_id:
-                return '''<p class="wiki-page-missing">%s</p>''' %  linkname
+                return '''<p class="wiki-page-missing">%s</p>''' %  link_name
 
             token = web_get_access_token(repo_id, obj_id, 'view', username)
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
@@ -245,11 +249,11 @@ def convert_md_link(file_content, repo_id, username):
             from base.templatetags.seahub_tags import file_icon_filter
             
             # convert other types of filelinks to clickable links
-            path = "/" + linkname
-            icon = file_icon_filter(linkname)
+            path = "/" + link_name
+            icon = file_icon_filter(link_name)
             s = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href="%s" target="_blank" class="vam">%s</a>'''
-            return a_tag % (MEDIA_URL, icon, icon, s, linkname)
+            return a_tag % (MEDIA_URL, icon, icon, s, link_name)
 
     return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, file_content)
     
