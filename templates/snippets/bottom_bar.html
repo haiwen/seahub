@@ -7,7 +7,7 @@ $('#footer').addClass('hide');
 
 {% if groups %}
 function getAndHandleDiscussions(data_html) {
-    $('#discussions-to-grp').html(data_html).css({'max-height':$(window).height() * 0.9 - $('#bottom-bar').height() - $('#discuss-to-group-caret').height() - $('#discuss-to-group-form').outerHeight()}).removeClass('hide');
+    $('#discussions-to-grp').html(data_html).css({'max-height': parseInt($(window).height() * 0.9 - $('#bottom-bar').height() - $('#discuss-to-group-caret').height() - $('#discuss-to-group-form').outerHeight())}).removeClass('hide'); // 'parseInt' to fix '.msg-main top border missing when the ul's max-height is xxx.5px'
     {% include 'group/msg_js.html' %}
 }
 $('#discuss').click(function() {
