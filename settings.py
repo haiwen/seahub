@@ -199,6 +199,7 @@ REGISTRATION_SEND_MAIL = False
 CCNET_APPLET_ROOT = "http://localhost:13420"
 
 # Account initial password, for password resetting.
+# INIT_PASSWD can either be a string, or a function (function has to be set without the brackets)
 def genpassword():
     return ''.join([random.choice(string.digits + string.letters) for i in range(0, 10)])
 
