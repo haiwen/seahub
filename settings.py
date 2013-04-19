@@ -205,6 +205,14 @@ SITE_TITLE = 'Private Seafile'
 SITE_BASE = 'http://seafile.com'
 SITE_NAME = 'Seafile'
 
+# Path to the Logo Imagefile (relative to the media path)
+LOGO_PATH = 'img/logo.png'
+# URL to which the logo links
+LOGO_URL = SITE_BASE
+
+# css to modify the seafile css
+BRANDING_CSS = ''
+
 # Using Django to server static file. Set to `False` if deployed behide a web
 # server.
 SERVE_STATIC = True
