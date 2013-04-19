@@ -35,9 +35,9 @@ def base(request):
     return {
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
-	'branding_css': BRANDING_CSS,
-	'logo_path': LOGO_PATH,
-	'logo_url': LOGO_URL,
+        'branding_css': BRANDING_CSS,
+        'logo_path': LOGO_PATH,
+        'logo_url': LOGO_URL,
         'business_mode': BUSINESS_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,

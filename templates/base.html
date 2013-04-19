@@ -13,11 +13,8 @@
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1362454620"/>
 <![endif]-->
-{% block extra_style %}
-{% if branding_css != '' %}
-<style>{{branding_css}}</style>
-{% endif %}
-{% endblock %}
+{% block extra_style %}{% endblock %}
+{% if branding_css != '' %}<style>{{branding_css}}</style>{% endif %}
 </head>
 
 <body>
