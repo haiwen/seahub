@@ -1,0 +1,28 @@
+{% extends 'view_file_base.html' %}
+
+
+{% block extra_script %}{{ block.super }}
+<script src="{{MEDIA_URL}}js/thingiview/Three.js"></script>
+<script src="{{MEDIA_URL}}js/thingiview/plane.js"></script>
+<script src="{{MEDIA_URL}}js/thingiview/thingiview.js"></script>
+<script type="text/javascript">
+function showModel() {
+	$('#displaylink').hide();
+	thingiurlbase = "{{MEDIA_URL}}js/thingiview";
+	thingiview = new Thingiview("viewer");
+	thingiview.initScene();
+	{% with raw_path|slice:"-3:" as fileext %}
+	{% if fileext == "stl" %}
+		thingiview.loadSTL("{{raw_path}}");
+	{% else %}
+		thingiview.loadOBJ("{{raw_path}}");
+	{% endif %}
+	{% endwith %}
+}
+</script>
+{% endblock %}
+
+{% block file_view %}
+<div id="displaylink" style="text-align:center"><a onClick="showModel();" class="op-btn">Preview 3D-Model in browser</a></div>
+<div id="viewer" style="margin:auto;width:600px;height:500px;"></div>
+{% endblock %}
