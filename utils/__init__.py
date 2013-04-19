@@ -60,6 +60,7 @@ PREVIEW_FILEEXT = {
     SF: ('seaf',),
     VIDEO: ('mp4', 'ogv', 'webm', 'flv'),
     AUDIO: ('mp3',),
+    '3D': ('stl', 'obj'),
 }
 
 def gen_fileext_type_map():
