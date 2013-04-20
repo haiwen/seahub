@@ -204,6 +204,7 @@ p {
 }
 .op {
     font-size:13px;
+    margin-right:6px;
 }
 .op-target {
     color:#803;

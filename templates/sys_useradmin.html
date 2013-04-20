@@ -1,31 +1,31 @@
 {% extends "admin_base.html" %}
-{% load i18n %}
+{% load seahub_tags i18n %}
 {% load url from future %}
 {% block nav_useradmin_class %}class="cur"{% endblock %}
-{% block left_panel %}
-<h3>{% trans "Operations" %}</h3>
-<ul class="op-list">
-    <li><a href="{{ SITE_ROOT }}useradmin/add/">{% trans "Add new user" %}</a></li>
-</ul>
-{% endblock %}
 
-{% block right_panel %}
+{% block main_panel %}
+
 <h3>{% trans "All Members" %}</h3>
+
+>> <a href="{{ SITE_ROOT }}useradmin/add/">{% trans "Add new user" %}</a>
+
 <table>
     <tr>
-        <th width="45%">{% trans "Email" %}</th>
-        <th width="20%">{% trans "Status" %}</th>
-        <th width="35%">{% trans "Operations" %}</th>
+        <th width="40%">{% trans "Email" %}</th>
+        <th width="12%">{% trans "Status" %}</th>
+        <th width="18%">{% trans "Create At" %}</th>
+        <th width="30%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.props.email }}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
         {% if user.props.is_active %}
         <td>{% trans "Activated" %}</td>
         {% else %}
         <td><a href="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
         {% endif %}
+        <td>{{ user.ctime|tsstr_sec }}</td>
         <td>
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
