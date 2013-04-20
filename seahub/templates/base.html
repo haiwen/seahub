@@ -72,13 +72,18 @@
                 {% if enable_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
-                    <button type="submit" class="search-submit"><span class="icon-search"></span></button>
+                    <input type="hidden" name="scale" value="all" />
+                    <span class="icon-caret-down" title="{% trans "choose search scale" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+                    <ul class="search-scales hide">
+                        <li class="item" data-value="all"><span class="icon-ok"></span>{% trans "In all libraries" %}</li>
+                        <li class="item" data-value="current"><span class="icon-"></span>{% trans "In this library" %}</li>
+                    </ul>
                 </form>
                 {% endif %}
             </div>
         </div>
 
-        <div id="main">
+        <div id="main" class="clear">
             <div id="title-panel" class="w100 ovhd">
                 {% block title_panel %}{% endblock %}
             </div>
@@ -187,6 +192,45 @@ $(document).ready(function(){
     return false;
 });
 
+{% if enable_file_search %}
+$('#top-search-form .icon-caret-down').click(function() {
+    var form = $(this).parent();
+    form.find('.search-scales').css({'right':form.find('.search-submit').outerWidth(true), 'top':form.outerHeight()}).toggleClass('hide');
+});
+$('.search-scales li').hover(
+    function() {
+        $(this).addClass('item-hover');
+    },
+    function() {
+        $(this).removeClass('item-hover');
+    }
+).click(function() {
+    $(this).parent().find('span').attr('class', 'icon-');
+    $(this).children('span').attr('class', 'icon-ok');
+    if (!pseudo_support) {
+        $(this).parent().find('span').html('');
+        setCon($(this).children('span'), 'icon-', fa_icons);
+    }
+    $('#top-search-form [name="scale"]').val($(this).data('value'));
+    $(this).parent().addClass('hide');
+    var search_input = $('#top-search-form .search-input');
+    if ($.trim(search_input.val())) {
+        $('#top-search-form').submit();
+    } else {
+        search_input.attr('placeholder', $(this).text().replace(/^&#x\w+;$/,'')); // replace(...) to rm icon text for some browsers
+        if (!('placeholder' in document.createElement('input'))) { // for browsers which don't natively support 'placeholder' attr
+            search_input.attr('value', search_input.attr('placeholder'));
+        }
+    }
+});
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    if (!$('.search-scales, #top-search-form .icon-caret-down').is(target) && !($('.search-scales').find('*').is(target))) {
+        $('.search-scales').addClass('hide');
+    }    
+});
+{% endif %}
+
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
@@ -225,7 +269,9 @@ $(document).ready(function(){
         {'name':'undo', 'con':'f0e2'},
         {'name':'repeat', 'con':'f01e'},
         {'name':'star', 'con':'f005'},
-        {'name':'star-empty', 'con':'f006'}
+        {'name':'star-empty', 'con':'f006'},
+        {'name':'caret-down', 'con':'f0d7'},
+        {'name':'ok', 'con':'f00c'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {
@@ -235,8 +281,10 @@ $(document).ready(function(){
                 }
             }
     }
+    var pseudo_support = true;
     var pseudo_test = $('body').append('<span class="sf-icon-share pseudo-test" style="color:#fff;position:fixed;left:0;bottom:0;"></span>').children('.pseudo-test');
     if (pseudo_test.width() == 0) {
+        pseudo_support = false;
         $('[class^="sf-icon-"]').each(function() {
             setCon($(this), 'sf-icon-', sf_icons);
         }); 

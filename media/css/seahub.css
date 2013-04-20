@@ -21,7 +21,7 @@ body,
 h1,h2,h3,h4,h5,h6,
 ul,ol,li,dl,dt,dd,
 p,pre,blockquote,
-form,input,textarea,button,img {
+form,input,textarea,select,button,img {
     padding:0;
     margin:0;
 }
@@ -455,9 +455,10 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:25px;
 }
 #header-inner {
+    height:40px;
     width:950px;
     margin:0 auto;
-    overflow:hidden;
+    /*overflow:hidden;*/
 }
 #main {
     min-height: 400px;
@@ -2227,11 +2228,10 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #ddd;
     border-radius:3px;
     background:#fff;
-    overflow:hidden;/*for some chromium*/
+    /*overflow:hidden;for some chromium*/
+    position:relative;
 }
 #top-search-form {
-    width:214px;
-    *width:218px;
     margin-top:4px;
 }
 .search-input,
@@ -2239,11 +2239,36 @@ textarea:-moz-placeholder {/* for FF */
     height:24px;
     border:0;
     margin:0;
-    vertical-align:middle;
+    vertical-align:top;
 }
 .search-input {
-    width:180px;
+    width:172px;
     outline:0;
+}
+.search-form .icon-caret-down {
+    color:#bbb;
+    cursor:pointer;
+    line-height:24px;
+}
+.search-scales {
+    position:absolute;
+    padding:2px 0;
+    font-weight:normal;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:3px;
+    box-shadow:0 0 10px #ddd;
+}
+.search-scales .item {
+    padding:2px 6px;
+}
+.search-scales .item-hover {
+    color:#fff;
+    background:#666;
+    cursor:pointer;
+}
+.search-scales [class^="icon-"] {
+    margin-right:5px;
 }
 .search-form .search-submit {
     width:30px;
