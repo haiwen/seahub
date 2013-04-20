@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import sys
 from hashlib import md5, sha1
 from base64 import urlsafe_b64encode as b64encode
 import random
@@ -25,4 +26,10 @@ def generate_key(max_length, data, encoder=b64encode, digester=md5):
     return key[:max_length]
 
 if __name__ == "__main__":
-    print generate_key(40, (random_string(),))
+    key = generate_key(40, (random_string(),))
+    if len(sys.argv) == 2:
+        fp = open(sys.argv[1], 'w')
+        fp.write("SECRET_KEY = \"%s\"\n" % key)
+        fp.close()
+    else:
+        print key
