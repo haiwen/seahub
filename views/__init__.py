@@ -2148,27 +2148,31 @@ def user_reset(request, user_id):
     """Reset password for user."""
     try:
         user = User.objects.get(id=int(user_id))
-        user.set_password(INIT_PASSWD)
+        if isinstance(INIT_PASSWD, FunctionType):
+            new_password = INIT_PASSWD()
+        else:
+            new_password = INIT_PASSWD
+        user.set_password(new_password)
         user.save()
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
                 try:
-                    send_user_reset_email(request, user.email, INIT_PASSWD)
+                    send_user_reset_email(request, user.email, new_password)
                     msg = _('Successfully resetted password to %(passwd)s, an email has been sent to %(user)s.') % \
-                        {'passwd': INIT_PASSWD, 'user': user.email}
+                        {'passwd': new_password, 'user': user.email}
                     messages.success(request, msg)
                 except Exception, e:
                     logger.error(str(e))
                     msg = _('Successfully resetted password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
-                        {'passwd':INIT_PASSWD, 'user': user.email}
+                        {'passwd':new_password, 'user': user.email}
                     messages.success(request, msg)
             else:
                 messages.success(request, _(u'Successfully resetted password to %(passwd)s for user %(user)s.') % \
-                                     {'passwd':INIT_PASSWD,'user': user.email})
+                                     {'passwd':new_password,'user': user.email})
         else:
             messages.success(request, _(u'Successfully resetted password to %(passwd)s for user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % \
-                                 {'passwd':INIT_PASSWD,'user': user.email})
+                                 {'passwd':new_password,'user': user.email})
     except User.DoesNotExist:
         msg = _(u'Failed to reset password: user does not exist')
         messages.error(request, msg)
