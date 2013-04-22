@@ -3,6 +3,9 @@
 import sys
 import os
 import re
+import random
+import string
+
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -204,7 +207,11 @@ REGISTRATION_SEND_MAIL = False
 CCNET_APPLET_ROOT = "http://127.0.0.1:13420"
 
 # Account initial password, for password resetting.
-INIT_PASSWD = '123456'
+# INIT_PASSWD can either be a string, or a function (function has to be set without the brackets)
+def genpassword():
+    return ''.join([random.choice(string.digits + string.letters) for i in range(0, 10)])
+
+INIT_PASSWD = genpassword
 
 # browser tab title
 SITE_TITLE = 'Private Seafile'
@@ -212,6 +219,14 @@ SITE_TITLE = 'Private Seafile'
 # Base url and name used in email sending
 SITE_BASE = 'http://seafile.com'
 SITE_NAME = 'Seafile'
+
+# Path to the Logo Imagefile (relative to the media path)
+LOGO_PATH = 'img/logo.png'
+# URL to which the logo links
+LOGO_URL = SITE_BASE
+
+# css to modify the seafile css
+BRANDING_CSS = ''
 
 # Using Django to server static file. Set to `False` if deployed behide a web
 # server.

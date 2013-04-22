@@ -15,6 +15,7 @@
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560"/>
 <![endif]-->
 {% block extra_style %}{% endblock %}
+{% if branding_css != '' %}<style>{{branding_css}}</style>{% endif %}
 </head>
 
 <body>
@@ -62,8 +63,8 @@
         <div id="header">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
-                <a href="http://seafile.com/" id="logo" class="fleft">
-                    <img src="{{ MEDIA_URL }}img/logo.png?t=1366090560" title="Seafile" alt="Seafile logo" />
+                <a href="{{logo_url}}" id="logo" class="fleft">
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="Seafile logo" />
                 </a>
                 {% block nav %}{% endblock %}
 
