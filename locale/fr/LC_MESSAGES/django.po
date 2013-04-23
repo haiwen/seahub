@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français <>\n"
-"PO-Revision-Date: 2013-04-23 15:18+0100\n"
+"PO-Revision-Date: 2013-04-23 15:23+0100\n"
 "POT-Creation-Date: \n"
 
 #: forms.py:26
@@ -923,10 +923,13 @@ msgid "Traffic this month:"
 msgstr "Trafic ce mois."
 
 #: templates/myhome_base.html:14 templates/org_base.html:18
+msgid "Shares"
+msgstr "Partages"
+
 #: templates/repo.html:138 templates/repo.html.py:183 templates/repo.html:343
 #: templates/snippets/my_owned_repos.html:34
 msgid "Share"
-msgstr "Partage"
+msgstr "Partager"
 
 #: templates/myhome_base.html:17 templates/snippets/repo_share_form.html:9
 msgid "Contacts"
