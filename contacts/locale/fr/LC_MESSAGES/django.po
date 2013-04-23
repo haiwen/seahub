@@ -1,0 +1,149 @@
+# This file is distributed under the same license as the PACKAGE package.
+# Pi3R1k <pierrick.brun@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
+"PO-Revision-Date: 2013-04-23 12:40+0100\n"
+"Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
+"Language: fr\n"
+"Language-Team: français <>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: models.py:27 templates/contacts/contact_list.html:134
+msgid "Email is required."
+msgstr "L\\'adresse mail est requise"
+
+#: models.py:32 templates/contacts/contact_list.html:138
+msgid "You can't add yourself."
+msgstr "Vous ne pouvez pas vous ajouter vous-même."
+
+#: models.py:35
+msgid "It is already your contact."
+msgstr "C'est déjà votre contact."
+
+#: views.py:68
+#, python-format
+msgid "Successfully added %s to contacts."
+msgstr "%s ajouté avec succès aux contacts."
+
+#: views.py:93
+#, python-format
+msgid "Successfully added %s."
+msgstr "%s ajouté avec succès."
+
+#: views.py:95
+msgid "Failed to add an contact."
+msgstr "Echec de l'ajout d'un contact."
+
+#: views.py:120
+#, python-format
+msgid "Successfully edited %s."
+msgstr "%s édité avec succès."
+
+#: views.py:133
+#, python-format
+msgid "Successfully Deleted %s"
+msgstr "%s supprimé avec succès."
+
+#: templates/contacts/contact_list.html:4
+#: templates/contacts/contact_list.html:16
+msgid "Contacts"
+msgstr "Contacts"
+
+#: templates/contacts/contact_list.html:9
+msgid "Tips"
+msgstr "Conseils"
+
+#: templates/contacts/contact_list.html:10
+msgid ""
+"When you share libraries or file links to a friend, his/her email will be "
+"added to contacts."
+msgstr ""
+"Quand vous partagez des bibliothèques ou des fichiers avec des amis, leurs "
+"mails seront ajoutés aux contacts."
+
+#: templates/contacts/contact_list.html:17
+#: templates/contacts/contact_list.html:48
+msgid "Add Contacts"
+msgstr "Nouveau Contact"
+
+#: templates/contacts/contact_list.html:22
+msgid "Email "
+msgstr "Mail"
+
+#: templates/contacts/contact_list.html:23
+msgid "Name"
+msgstr "Nom"
+
+#: templates/contacts/contact_list.html:24
+msgid "Note"
+msgstr "Note"
+
+#: templates/contacts/contact_list.html:25
+msgid "Operations"
+msgstr "Opérations"
+
+#: templates/contacts/contact_list.html:34
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/contacts/contact_list.html:35
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/contacts/contact_list.html:42
+msgid "You don't have any contacts"
+msgstr "Vous n'avez pas de contacts"
+
+#: templates/contacts/contact_list.html:43
+msgid ""
+"Add your contacts so you can quickly share libraries and send file shared "
+"link."
+msgstr ""
+"En ajoutant vos contacts, vous pourrez rapidement partager des bibliothèques "
+"et envoyer le lien du fichier partagé."
+
+#: templates/contacts/contact_list.html:49
+#: templates/contacts/contact_list.html:58
+msgid "Email"
+msgstr "Mail"
+
+#: templates/contacts/contact_list.html:51
+#: templates/contacts/contact_list.html:60
+msgid "Name(optional)"
+msgstr "Nom (optionnel)"
+
+#: templates/contacts/contact_list.html:52
+#: templates/contacts/contact_list.html:61
+msgid "Note(optional)"
+msgstr "Note (optionnel)"
+
+#: templates/contacts/contact_list.html:54
+#: templates/contacts/contact_list.html:63
+msgid "Submit"
+msgstr "Envoyer"
+
+#: templates/contacts/contact_list.html:57
+msgid "Edit Contact"
+msgstr "Éditer Contact"
+
+#: templates/contacts/contact_list.html:108
+#: templates/contacts/contact_list.html:169
+msgid "Failed."
+msgstr "Echec."
+
+#: templates/contacts/contact_list.html:116
+msgid "Delete Contact"
+msgstr "Supprimer Contact"
+
+#: templates/contacts/contact_list.html:116
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "Êtes vous sûr de vouloir supprimer %s ?"
