@@ -1,0 +1,324 @@
+# This file is distributed under the same license as the PACKAGE package.
+# Pierrick BRUN, pierrick.brun@gmail.com 2013
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
+"PO-Revision-Date: 2013-04-23 14:57+0100\n"
+"Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
+"Language-Team: Français\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: forms.py:19
+msgid "Email is required"
+msgstr "L'adresse mail est obligatoire"
+
+#: forms.py:20
+msgid "Email is not longer than 512 characters"
+msgstr "Email ne peut pas dépasser 512 caractères"
+
+#: views.py:68
+msgid "Only the owner of the library has permission to share it."
+msgstr ""
+"Seul le propriétaire de la bibliothèque a l'autorisation de la partager."
+
+#: views.py:103
+#, python-format
+msgid ""
+"Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
+"\">Upgrade account.</a>"
+msgstr ""
+"Échec du partage de \"%s\", pas assez de quota. <a href=\"http://seafile.com/"
+"\">Mise à jour du compte.</a>"
+
+#: views.py:113
+msgid "Failed to share to all members"
+msgstr "Échec du partage à tous les membres"
+
+#: views.py:115
+#, python-format
+msgid ""
+"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
+msgstr ""
+"Partagé à tous les membres avec succès, aller vérifier sur <a href=\"%s"
+"\">Partage</a>."
+
+#: views.py:127
+#, python-format
+msgid "Failed to share %(repo)s to %(group)s, please try again later."
+msgstr ""
+"Échec du partage de %(repo)s avec %(group)s, veuillez essayer plus tard."
+
+#: views.py:131
+#, python-format
+msgid ""
+"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
+"\">Share</a>."
+msgstr ""
+"Partage avec %(group)s réussit，allez vérifier sur <a href=\"%(share)s"
+"\">Partage</a>."
+
+#: views.py:149
+#, python-format
+msgid "Failed to share to %s, as the email is not registered."
+msgstr ""
+"Impossible de partager avec %s, car le courrier électronique n'est pas "
+"enregistré."
+
+#: views.py:158
+#, python-format
+msgid "Failed to share to %s ."
+msgstr "Échec du partage avec %s."
+
+#: views.py:162
+#, python-format
+msgid ""
+"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
+"\">Share</a>."
+msgstr ""
+"Partage avec %(email)s réussit，allez vérifier sur <a href=\"%(share)s"
+"\">Partage</a>."
+
+#: views.py:185 views.py:195
+msgid "Failed to remove share"
+msgstr "Échec de suppression du partage"
+
+#: views.py:191
+msgid "group id is not valid"
+msgstr "l'id du groupe n'est pas valide"
+
+#: views.py:204
+msgid "Successfully removed share"
+msgstr "Partage supprimé avec succès"
+
+#: views.py:239
+msgid "all members"
+msgstr "tous les membres"
+
+#: views.py:245 templates/repo/share_admin.html:37
+#: templates/repo/share_admin.html.py:50
+msgid "Read-Write"
+msgstr "Lecture / Écriture"
+
+#: views.py:247 templates/repo/share_admin.html:48
+msgid "Read-Only"
+msgstr "Lecture seule"
+
+#: views.py:334
+#, python-format
+msgid ""
+"Failed to share to %s, as encrypted libraries cannot be shared to emails "
+"outside the site."
+msgstr ""
+"Impossible de partager à %s, car les bibliothèques chiffrés ne peuvent être "
+"partagées par mails en dehors du site."
+
+#: views.py:349 views.py:371
+#, python-format
+msgid "Failed to share to %s."
+msgstr "Impossible de partager à %s."
+
+#: views.py:367
+#, fuzzy
+msgid "You are shared with a library in Seafile"
+msgstr "Vous êtes partagés avec une bibliothèque dans Seafile"
+
+#: views.py:374
+#, python-format
+msgid ""
+"Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
+"\">Share</a>."
+msgstr ""
+"Partage avec %(email)s réussit，allez vérifier sur <a href=\"%(share)s"
+"\">Partage</a>."
+
+#: views.py:399
+msgid "Deleted successfully."
+msgstr "Supprimé avec succès."
+
+#: views.py:417
+msgid "Invalid arguments"
+msgstr "Arguments non valides"
+
+#: views.py:426
+msgid "You cannot share the library in this way."
+msgstr "Vous ne pouvez pas partager la bibliothèque de cette façon."
+
+#: views.py:451
+msgid "Failed to get the link, please retry later."
+msgstr "Impossible d'obtenir le lien, veuillez réessayer plus tard."
+
+#: views.py:473
+msgid "Removed successfully"
+msgstr "Supprimé avec succès"
+
+#: views.py:481
+msgid "Deleted successfully"
+msgstr "Supprimé avec succès"
+
+#: views.py:497
+msgid ""
+"Sending shared link failed. Email service is not properly configured, please "
+"contact administrator."
+msgstr ""
+"L'Envoi du lien partagé a échoué. Le service de courrier électronique n'est "
+"pas configuré correctement, veuillez contacter l'administrateur."
+
+#: views.py:522
+msgid "Your friend shared a file to you on Seafile"
+msgstr "Votre ami a partagé un fichier avec vous sur Seafile"
+
+#: views.py:527
+msgid "Internal server error. Send failed."
+msgstr "Erreur interne du serveur. Échec de l'envoi."
+
+#: views.py:530
+msgid "Successfully sent."
+msgstr "Envoyé avec succès."
+
+#: templates/repo/share_admin.html:5
+msgid "Share"
+msgstr "Partage"
+
+#: templates/repo/share_admin.html:16
+msgid "Tips"
+msgstr "Conseils"
+
+#: templates/repo/share_admin.html:18
+msgid ""
+"If you don't want others to change the contents of your shared libraries, "
+"you can set the share permission to \"read-only\" when sharing them."
+msgstr ""
+"Si vous ne voulez pas que les autres modifient le contenu de vos "
+"bibliothèques partagées, vous pouvez définir l'autorisation de partage en « "
+"lecture seule » lors du partage."
+
+#: templates/repo/share_admin.html:24
+msgid "Shared Libraries"
+msgstr "Bibliothèques partagées"
+
+#: templates/repo/share_admin.html:29
+msgid "Name"
+msgstr "Nom"
+
+#: templates/repo/share_admin.html:30
+msgid "Share To"
+msgstr "Partagée à"
+
+#: templates/repo/share_admin.html:31
+msgid "Permission"
+msgstr "Permission"
+
+#: templates/repo/share_admin.html:32
+msgid "Description"
+msgstr "Description"
+
+#: templates/repo/share_admin.html:33 templates/repo/share_admin.html.py:87
+msgid "Operations"
+msgstr "Opérations"
+
+#: templates/repo/share_admin.html:37
+msgid "directory icon"
+msgstr "icône du répertoire"
+
+#: templates/repo/share_admin.html:43
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/repo/share_admin.html:57 templates/repo/share_admin.html.py:60
+#: templates/repo/share_admin.html:64 templates/repo/share_admin.html.py:66
+msgid "Unshare"
+msgstr "Annuler le partage"
+
+#: templates/repo/share_admin.html:75
+msgid "You have not shared any library"
+msgstr "Vous n'avez partagé aucune bibliothèque"
+
+#: templates/repo/share_admin.html:76
+msgid ""
+"You can share libraries to your friends and colleagues by clicking the share "
+"icon of your own libraries in your home page or creating a new library in "
+"groups you are in."
+msgstr ""
+"Vous pouvez partager des bibliothèques avec vos amis et collègues en "
+"cliquant sur l'icône de partage de vos propres bibliothèques dans votre page "
+"d'accueil ou en créant une nouvelle bibliothèque dans les groupes où vous "
+"êtes."
+
+#: templates/repo/share_admin.html:80
+msgid "Shared Links"
+msgstr "Liens partagés"
+
+#: templates/repo/share_admin.html:84
+msgid "File or Folder"
+msgstr "Fichier ou dossier"
+
+#: templates/repo/share_admin.html:85
+msgid "Library"
+msgstr "Bibliothèque"
+
+#: templates/repo/share_admin.html:86
+msgid "Visits"
+msgstr "Visites"
+
+#: templates/repo/share_admin.html:99
+msgid "View"
+msgstr "Voir"
+
+#: templates/repo/share_admin.html:100
+msgid "Remove"
+msgstr "Supprimer"
+
+#: templates/repo/share_admin.html:108
+msgid "You don't have any shared link"
+msgstr "Vous n'avez aucun lien partagé"
+
+#: templates/repo/share_admin.html:109
+msgid ""
+"You can share a folder or a file when you view a library, or share a file "
+"when you view it."
+msgstr ""
+"Vous pouvez partager un dossier ou un fichier quand vous naviguer dans une "
+"librairie, ou partager un fichier quand vous le visualisez."
+
+#: templates/repo/share_admin.html:153
+msgid "Edit succeeded"
+msgstr "L\\'édition a réussi"
+
+#: templates/repo/share_admin.html:160
+msgid "Edit failed."
+msgstr "L\\'édition a échoué"
+
+#~ msgid "Failed to share to %s，as it does not exist."
+#~ msgstr "共享到 %s 失败，该小组不存在。"
+
+#~ msgid ""
+#~ "Share files to your friends and colleagues by clicking \"Share link\" "
+#~ "button on file viewing page. "
+#~ msgstr ""
+#~ "在文件浏览页面点击“获取共享链接”按钮可以把文件共享给你的朋友和同事。"
+
+#~ msgid "edit failed"
+#~ msgstr "权限修改失败"
+
+#~ msgid "Can not share root dir."
+#~ msgstr "无法共享根目录"
+
+#~ msgid "Send failed."
+#~ msgstr "发送失败"
+
+#~ msgid "Links"
+#~ msgstr "文件外链"
+
+#~ msgid "Failed to send mail"
+#~ msgstr "邮件发送失败"
+
+#~ msgid "File"
+#~ msgstr "文件"
