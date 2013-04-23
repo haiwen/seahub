@@ -1,0 +1,844 @@
+#
+# Pi3R1k <pierrick.brun@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"Project-Id-Version: django_group\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
+"Language-Team: français <>\n"
+"PO-Revision-Date: 2013-04-23 11:43+0100\n"
+"POT-Creation-Date: \n"
+
+#: error_msg.py:7
+msgid "The group has already created"
+msgstr "Ce groupe est déjà crée"
+
+#: error_msg.py:8
+msgid "Failed to create group"
+msgstr "Échec de la création du  groupe"
+
+#: error_msg.py:11
+msgid "The group has already created in this org."
+msgstr "Le groupe est déjà crée dans l'organisation."
+
+#: error_msg.py:12
+msgid "Failed to create org group."
+msgstr "Échec de la création du  groupe de l'organisation."
+
+#: error_msg.py:15
+msgid "Permission error: only group staff can add member"
+msgstr ""
+"Erreur de permissions. Seul les membres du staff peuvent ajouter un "
+"utilisateur "
+
+#: error_msg.py:16 error_msg.py:22
+msgid "Group does not exist"
+msgstr "Le groupe n'existe pas"
+
+#: error_msg.py:17
+msgid "Group is full"
+msgstr "Le groupe est complet"
+
+#: error_msg.py:18
+msgid "Failed to add member to group"
+msgstr "Echec de l'ajout de l'utilisateur au groupe"
+
+#: error_msg.py:21
+msgid "Only group staff can remove member"
+msgstr "Seul les membres du staff peuvent supprimer un utilisateur"
+
+#: error_msg.py:23
+msgid "Can not remove myself"
+msgstr "Impossible de se supprimer soi-même"
+
+#: forms.py:30
+msgid "Group name can't be empty"
+msgstr "Le nom du groupe ne peut pas être vide"
+
+#: forms.py:31
+msgid "Group name is too long (maximum is 255 characters)"
+msgstr "Le nom du groupe est trop long (maximum 255 caractères)"
+
+#: forms.py:36
+#, fuzzy
+msgid "Group name can only contain letters, numbers or underline"
+msgstr "Le nom du groupe peut contenir  seulement des lettres ou des nombres."
+
+#: forms.py:46
+msgid "Verification message can't be empty"
+msgstr "Le message de vérification ne peut pas être vide"
+
+#: forms.py:47
+msgid "Verification message is too long (maximun is 255 characters)"
+msgstr "Le message de vérification est trop long (maximum 255 caractères)"
+
+#: forms.py:56
+msgid "Name can't be empty"
+msgstr "Le nom ne peut pas être vide"
+
+#: forms.py:57
+msgid "Name is too long (maximum is 255 characters)"
+msgstr "Le nom est trop long (maximum 255 caractères)"
+
+#: forms.py:60
+msgid "Description can't be empty"
+msgstr "La description ne peut pas être vide"
+
+#: forms.py:61
+msgid "Description is too long (maximum is 100 characters)"
+msgstr "La description est trop longue (maximum est de 100 caractères)"
+
+#: forms.py:67
+msgid "\"%s\" is not a valid name"
+msgstr "\"%s\" n'est pas un nom valide"
+
+#: views.py:142
+msgid "There is already a group with that name."
+msgstr "Il existe déjà un groupe avec ce nom."
+
+#: views.py:240 views.py:262
+msgid "Only administrators can make the group public"
+msgstr "Seul un administrateur peut rendre ce groupe public."
+
+#: views.py:308
+msgid "The message doesn't exist"
+msgstr "Le message n'existe pas"
+
+#: views.py:318
+msgid "You don't have the permission."
+msgstr "Vous n'avez pas la permission."
+
+#: views.py:532
+msgid "Failed to add, %s is not in current organization."
+msgstr "Impossible d'ajouter, %s n'est pas dans l'organisation courante."
+
+#: views.py:562
+msgid "Your friend added you to a group at Seafile."
+msgstr "Votre amis vous a ajouté dans un groupe sur Seafile"
+
+#: views.py:567
+msgid "Failed to send mail."
+msgstr "Échec de l'envoi du mail."
+
+#: views.py:584
+msgid "Failed to add, %s is not registerd."
+msgstr "Impossible d'ajouter, %s n'est pas enregistré."
+
+#: views.py:598
+msgid "Successfully added. An email has been sent."
+msgid_plural "Successfully added. %(count)s emails have been sent."
+msgstr[0] "Ajouté avec succès. Un mail a été envoyé."
+msgstr[1] "Ajouté avec succès. %(count)s mails ont été envoyé."
+
+#: views.py:606
+msgid "Successfully added."
+msgstr "Ajouté avec succès."
+
+#: views.py:652
+msgid "Failed to add, %s is not registrated."
+msgstr "Échec de l'ajout, %s n'est pas enregistré."
+
+#: views.py:675 views.py:688 views.py:715
+msgid "Operation succeeded."
+msgstr "L'opération a réussi."
+
+#: views.py:717
+msgid "Failed：%s"
+msgstr "Échec : %s"
+
+#: views.py:729
+msgid "Failed to share: the group doesn't exist."
+msgstr "Échec du partage: le groupe n'existe pas."
+
+#: views.py:742
+msgid "Failed to unshare: the group doesn't exist."
+msgstr "Échec de l'annulation du partage: le groupe n'existe pas."
+
+#: views.py:747
+msgid ""
+"Operation failed: only administrators and the owner of the library can "
+"unshare it."
+msgstr ""
+"Échec de l'opération: seuls les administrateurs et les propriétaires de la "
+"bibliothèque peuvent annuler le partage."
+
+#: views.py:750
+msgid "Failed to unshare: internal error."
+msgstr "Échec de l'annulation du partage: Erreur interne."
+
+#: views.py:779
+msgid "Error: wrong group id"
+msgstr "Erreur: mauvais id de groupe"
+
+#: views.py:784
+msgid "Error: the group does not exist."
+msgstr "Erreur: le groupe n'existe pas."
+
+#: views.py:816
+msgid "Successfully posted to %(groups)s."
+msgstr "Posté avec succès au groupe %(groups)s."
+
+#: views.py:819
+msgid "Error: you are not in group %s."
+msgstr "Erreur : vous n'êtes pas dans le groupe %s."
+
+#: views.py:831
+msgid "Error: the library does not exist."
+msgstr "Erreur : la bibliothèque n'existe pas"
+
+#: views.py:834
+msgid "Error: no path."
+msgstr "Erreur : aucun chemin."
+
+#: views.py:872
+msgid "Failed to create: the group does not exist."
+msgstr "Échec de la création : le groupe n'existe pas."
+
+#: views.py:876
+msgid "Failed to create: you are not in the group."
+msgstr "Échec de la création : vous n'êtes pas dans le groupe."
+
+#: views.py:898 views.py:921 views.py:1248
+msgid "Failed to create"
+msgstr "Échec de la création"
+
+#: views.py:912 views.py:934 views.py:1257
+msgid "Failed to create: internal error."
+msgstr "Échec de la création : Erreur interne."
+
+#: views.py:961
+msgid "You are already in the group."
+msgstr "Vous êtes déjà dans le groupe."
+
+#: views.py:980
+msgid "apply to join the group"
+msgstr "Appliquez pour rejoindre le groupe"
+
+#: views.py:982
+msgid "Sent successfully, the group admin will handle it."
+msgstr "Envoyé avec succès, l'administrateur du groupe le traitera."
+
+#: views.py:986
+msgid "Failed to send. You can try it again later."
+msgstr "Échec de l'envoi. Vous pouvez réessayer plus tard. "
+
+#: views.py:1136
+msgid "File does not exist"
+msgstr "Le fichier n'existe pas"
+
+#: views.py:1176 views.py:1295
+msgid "Failed to create wiki page. Please retry later."
+msgstr "Impossible de créer la page du wiki. Veuillez essayer plus tard."
+
+#: views.py:1210
+msgid "Internal Server Error"
+msgstr "Erreur interne du serveur"
+
+#: views.py:1212
+msgid "Wiki does not exists."
+msgstr "Le Wiki n'existe pas."
+
+#: views.py:1264
+msgid "Failed to create home page. Please retry later"
+msgstr "Impossible de créer la page d'accueil. Veuillez essayer plus tard"
+
+#: views.py:1285 views.py:1311 views.py:1329
+msgid "Wiki is not found."
+msgstr "Wiki introuvable."
+
+#: views.py:1292
+msgid "Page \"%s\" already exists."
+msgstr "La page \"%s\" existe déjà."
+
+#: templates/group/add_member_email.html:2
+msgid ""
+"%(email)s invite you to join group %(group.group_name)s. Please go to the "
+"following page and sign up:"
+msgstr ""
+"%(email)s vous invite à rejoindre le groupe %(group.group_name)s. Veuillez "
+"suivre cette page et vous enregistrer :"
+
+#: templates/group/add_member_email.html:5
+#: templates/group/group_join_email.html:6
+msgid "Thanks for using our site!"
+msgstr "Merci d'utiliser notre site !"
+
+#: templates/group/add_member_email.html:7
+#: templates/group/group_join_email.html:8
+msgid "The %(site_name)s team"
+msgstr "L'équipe de %(site_name)s."
+
+#: templates/group/discussion_list.html:17
+#: templates/group/group_discuss.html:118
+#: templates/group/new_msg_reply.html:45
+msgid "%(amount)s replies"
+msgstr "%(amount)s réponses"
+
+#: templates/group/discussion_list.html:18
+#: templates/group/group_discuss.html:119
+#: templates/group/new_msg_reply.html:46
+msgid "Hide replies"
+msgstr "Cacher les réponses"
+
+#: templates/group/discussion_list.html:31
+#: templates/group/group_discuss.html:133
+#: templates/group/group_reply_list.html:11
+#: templates/group/new_msg_reply.html:56
+msgid "Reply"
+msgstr "Repondre"
+
+#: templates/group/discussion_list.html:39
+#: templates/group/group_discuss.html:142
+#: templates/group/new_msg_reply.html:62
+msgid "Add a reply..."
+msgstr "Ajouter une Réponse"
+
+#: templates/group/discussion_list.html:40
+#: templates/group/group_discuss.html:143
+#: templates/group/new_msg_reply.html:63
+msgid "It can not be blank and should be no more than 150 characters."
+msgstr "Il ne peut pas être vide et ne doit pas faire plus de 150 caractères."
+
+#: templates/group/discussion_list.html:41
+#: templates/group/group_discuss.html:63
+#: templates/group/group_discuss.html:144 templates/group/group_info.html:174
+#: templates/group/group_members.html:56 templates/group/group_pubinfo.html:24
+#: templates/group/group_wiki.html:47 templates/group/group_wiki.html.py:79
+#: templates/group/group_wiki_pages.html:51
+#: templates/group/groups_right_panel.html:30
+#: templates/group/grpmember_add_form.html:12
+#: templates/group/grpmember_add_form.html:19
+#: templates/group/new_msg_reply.html:64
+msgid "Submit"
+msgstr "Envoyer"
+
+#: templates/group/discussion_list.html:42
+#: templates/group/group_discuss.html:64
+#: templates/group/group_discuss.html:145 templates/group/group_info.html:175
+#: templates/group/new_msg_reply.html:65
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/group/group_discuss.html:15 templates/group/group_info.html:16
+#: templates/group/group_info.html.py:65
+#: templates/group/group_info_for_pub.html:16
+#: templates/group/group_manage.html:14 templates/group/group_members.html:16
+#: templates/group/group_wiki.html:16 templates/group/group_wiki_pages.html:15
+msgid "Libraries"
+msgstr "Bibliothèques"
+
+#: templates/group/group_discuss.html:16 templates/group/group_info.html:17
+#: templates/group/group_info_for_pub.html:17
+#: templates/group/group_manage.html:15 templates/group/group_members.html:17
+#: templates/group/group_wiki.html:17 templates/group/group_wiki_pages.html:16
+msgid "Discussion"
+msgstr "Discussion"
+
+#: templates/group/group_discuss.html:17 templates/group/group_info.html:18
+#: templates/group/group_info_for_pub.html:18
+#: templates/group/group_manage.html:16 templates/group/group_members.html:18
+#: templates/group/group_wiki.html:18 templates/group/group_wiki_pages.html:17
+msgid "Wiki"
+msgstr "Wiki"
+
+#: templates/group/group_discuss.html:19 templates/group/group_discuss.html:30
+#: templates/group/group_info.html:19 templates/group/group_info.html.py:43
+#: templates/group/group_manage.html:17 templates/group/group_manage.html:49
+#: templates/group/group_members.html:19 templates/group/group_wiki.html:20
+#: templates/group/group_wiki_pages.html:19
+msgid "Members"
+msgstr "Membres"
+
+#: templates/group/group_discuss.html:22 templates/group/group_info.html:21
+#: templates/group/group_manage.html:18 templates/group/group_members.html:21
+#: templates/group/group_wiki.html:23 templates/group/group_wiki_pages.html:22
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/group/group_discuss.html:45
+msgid "No members"
+msgstr "Pas de membres"
+
+#: templates/group/group_discuss.html:59
+msgid "Add a discussion..."
+msgstr "Ajouter une discussion..."
+
+#: templates/group/group_discuss.html:68
+msgid "After login, you can post discussions and add replies."
+msgstr ""
+"Après vous être connecté, vous pouvez poster des discussion et ajouter des "
+"réponses"
+
+#: templates/group/group_discuss.html:80 templates/group/group_manage.html:65
+#: templates/group/group_manage.html:89
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/group/group_discuss.html:92
+#: templates/group/group_discuss.html:108
+#: templates/group/new_msg_reply.html:26 templates/group/new_msg_reply.html:35
+msgid "File"
+msgstr "Fichier"
+
+#: templates/group/group_discuss.html:102
+#: templates/group/new_msg_reply.html:29
+msgid "Directory icon"
+msgstr "Icône du répertoire"
+
+#: templates/group/group_discuss.html:157
+msgid "Previous"
+msgstr "Précédent"
+
+#: templates/group/group_discuss.html:167
+msgid "Next"
+msgstr "Suivant"
+
+#: templates/group/group_discuss.html:173
+msgid "↑Top"
+msgstr "↑Haut"
+
+#: templates/group/group_discuss.html:226
+msgid "Really want to delete this discussion?"
+msgstr "Vous voulez vraiment supprimer cette discussion ?"
+
+#: templates/group/group_discuss.html:226
+msgid "Yes"
+msgstr "Oui"
+
+#: templates/group/group_discuss.html:226
+msgid "No"
+msgstr "Non"
+
+#: templates/group/group_discuss.html:241
+msgid "Successfully deleted"
+msgstr "A été correctement supprimé"
+
+#: templates/group/group_discuss.html:243
+msgid "Failed to delete: "
+msgstr "Impossible de supprimer : "
+
+#: templates/group/group_discuss.html:247 templates/group/msg_js.html:149
+msgid "Failed."
+msgstr "Echec."
+
+#: templates/group/group_info.html:30
+#: templates/group/group_info_for_pub.html:26
+msgid "Basic Info"
+msgstr "Informations de base"
+
+#: templates/group/group_info.html:30
+#: templates/group/group_info_for_pub.html:26
+msgid "This group is public."
+msgstr "Ce groupe est public."
+
+#: templates/group/group_info.html:34
+#: templates/group/group_info_for_pub.html:30
+msgid "created at"
+msgstr "créé le"
+
+#: templates/group/group_info.html:36
+msgid "Quit"
+msgstr "Quitter"
+
+#: templates/group/group_info.html:66
+msgid "Recent Changes"
+msgstr "Changements récents"
+
+#: templates/group/group_info.html:68
+msgid "New Library"
+msgstr "Nouvelle bibliothèque"
+
+#: templates/group/group_info.html:75
+#: templates/group/group_info_for_pub.html:42
+#: templates/group/group_wiki.html:42 templates/group/group_wiki.html.py:76
+#: templates/group/group_wiki_pages.html:48
+msgid "Name"
+msgstr "Nom"
+
+#: templates/group/group_info.html:76 templates/group/group_info.html:125
+#: templates/group/group_info_for_pub.html:43
+#: templates/group/group_wiki.html:44
+msgid "Description"
+msgstr "Description"
+
+#: templates/group/group_info.html:77
+#: templates/group/group_info_for_pub.html:44
+msgid "Last Update"
+msgstr "Mise à jour"
+
+#: templates/group/group_info.html:78
+#: templates/group/group_info_for_pub.html:45
+msgid "Shared By"
+msgstr "Partagé par"
+
+#: templates/group/group_info.html:79
+#: templates/group/group_info_for_pub.html:46
+#: templates/group/group_manage.html:36 templates/group/group_manage.html:56
+#: templates/group/group_manage.html:80
+msgid "Operations"
+msgstr "Opérations"
+
+#: templates/group/group_info.html:86
+#: templates/group/group_info_for_pub.html:53
+msgid "Read-Write"
+msgstr "Lecture / Écriture"
+
+#: templates/group/group_info.html:86 templates/group/group_info.html.py:88
+#: templates/group/group_info_for_pub.html:53
+#: templates/group/group_info_for_pub.html:55
+msgid "directory icon"
+msgstr "icône du répertoire"
+
+#: templates/group/group_info.html:88
+#: templates/group/group_info_for_pub.html:55
+msgid "Read-Only"
+msgstr "Lecture seule"
+
+#: templates/group/group_info.html:102
+msgid "Download and Sync"
+msgstr "Télécharger et synchroniser"
+
+#: templates/group/group_info.html:104
+msgid "Unshare"
+msgstr "Annuler le partage"
+
+#: templates/group/group_info.html:112
+msgid "No library is sharing to this group"
+msgstr "Aucune bibliothèque partagé avec ce groupe"
+
+#: templates/group/group_info.html:113
+msgid ""
+"You can share libraries by clicking the \"New Library\" button above or the "
+"\"Share\" icon on your libraries list."
+msgstr ""
+"Vous pouvez partager des bibliothèques en cliquant sur le boutton \"Nouvelle "
+"bibliotèque\" ci-dessus ou en partageant une existante depuis votre dossier "
+"personnel."
+
+#: templates/group/group_info.html:114
+msgid ""
+"Libraries shared as writable can be downloaded and synced by other group "
+"members. Read only libraries can only be downloaded, updates by others will "
+"not be uploaded."
+msgstr ""
+"Les bibliothèques partagées en écriture peuvent être téléchargées et "
+"synchronisées par d'autres membres de groupe. Les bibliothèques en lecture-"
+"seule peuvent seulement être téléchargées, les mises à jour par d'autres ne "
+"seront pas envoyées."
+
+#: templates/group/group_info.html:124 templates/group/group_info.html:168
+msgid "Library"
+msgstr "Bibliothèque"
+
+#: templates/group/group_info.html:126
+msgid "Modified at"
+msgstr "Modifié à"
+
+#: templates/group/group_info.html:127
+msgid "Modifier"
+msgstr "Modificateur"
+
+#: templates/group/group_info.html:147 templates/group/group_info.html:149
+msgid "Details"
+msgstr "Détails"
+
+#: templates/group/group_info.html:156 templates/group/new_msg_reply.html:72
+msgid "None"
+msgstr "Aucun"
+
+#: templates/group/group_info.html:161
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: templates/group/group_info.html:168
+msgid "is encrypted"
+msgstr "est crypté"
+
+#: templates/group/group_info.html:170
+msgid "Password："
+msgstr "Mot de passe："
+
+#: templates/group/group_info.html:172
+msgid "The password will be kept in the server for only 1 hour."
+msgstr "Le mot de passe est conservé sur le serveur pendant 1 heure."
+
+#: templates/group/group_info.html:188
+msgid "Quit Group"
+msgstr "Quitter le groupe"
+
+#: templates/group/group_info.html:189
+msgid "Are you sure you want to quit this group?"
+msgstr "Êtes-vous sûr de vouloir quitter ce groupe"
+
+#: templates/group/group_info.html:192
+msgid "Unshare Library"
+msgstr "Annuler le partage de la bibliothèque"
+
+#: templates/group/group_info.html:193
+msgid "Are you sure you want to unshare %s ?"
+msgstr "Êtes vous sûr de vouloir départager %s ?"
+
+#: templates/group/group_info_for_pub.html:75
+msgid "No public library is in this group"
+msgstr "Aucune bibliothèque publique dans ce groupe"
+
+#: templates/group/group_info_for_pub.html:76
+msgid "A library can be made public in its settings page.(Not implemented yet)"
+msgstr ""
+"Une bibliothèque peut être rendue publique sur sa page de paramètres. (Non "
+"implémenté)"
+
+#: templates/group/group_join_email.html:2
+msgid ""
+"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
+"message: "
+msgstr ""
+"%(user)s veut se joindre au groupe \"%(group_name)s\", voici le message de "
+"vérification : "
+
+#: templates/group/group_manage.html:25
+msgid "Group Avatar"
+msgstr "Avatar du groupe "
+
+#: templates/group/group_manage.html:29
+msgid "Change"
+msgstr "Changer"
+
+#: templates/group/group_manage.html:38
+msgid "Dismiss"
+msgstr "Rejeter"
+
+#: templates/group/group_manage.html:40
+msgid "Revoke Public"
+msgstr "Rendre Privé"
+
+#: templates/group/group_manage.html:42
+msgid "Make Public"
+msgstr "Rendre Public"
+
+#: templates/group/group_manage.html:50
+msgid "Add Members"
+msgstr "Ajouter des membres"
+
+#: templates/group/group_manage.html:55 templates/group/group_manage.html:79
+#: templates/group/group_members.html:50
+msgid "Email"
+msgstr "Mail"
+
+#: templates/group/group_manage.html:73
+msgid "Administrators"
+msgstr "Administrateurs"
+
+#: templates/group/group_manage.html:74
+msgid "Add Administrators"
+msgstr "Ajouter des administrateurs"
+
+#: templates/group/group_manage.html:106
+msgid "Dismiss Group"
+msgstr "Rejeter le groupe"
+
+#: templates/group/group_manage.html:107
+msgid "Really want to dismiss this group?"
+msgstr "Voulez vous réelement rejeter ce groupe?"
+
+#: templates/group/group_manage.html:110
+msgid "Delete Member"
+msgstr "Supprimer des membres"
+
+#: templates/group/group_manage.html:111
+msgid "Really want to delete %s ?"
+msgstr "Voulez vous vraiment rejeter %s ?"
+
+#: templates/group/group_members.html:41
+msgid "Add to Contacts"
+msgstr "Ajouter aux contacts"
+
+#: templates/group/group_members.html:52
+msgid "Name(optional)"
+msgstr "Nom (optionnel)"
+
+#: templates/group/group_members.html:54
+msgid "Note(optional)"
+msgstr "Note (optionnel)"
+
+#: templates/group/group_pubinfo.html:9
+msgid "Join Group"
+msgstr "Joindre le groupe"
+
+#: templates/group/group_pubinfo.html:13
+msgid "Name: "
+msgstr "Nom : "
+
+#: templates/group/group_pubinfo.html:14
+#: templates/group/groups_right_panel.html:13
+msgid "Creator: "
+msgstr "Créateur : "
+
+#: templates/group/group_pubinfo.html:15
+msgid "Create at: "
+msgstr "Créez : "
+
+#: templates/group/group_pubinfo.html:16
+msgid "Members: "
+msgstr "Membres : "
+
+#: templates/group/group_pubinfo.html:21
+msgid "Verification Message"
+msgstr "Message de vérification"
+
+#: templates/group/group_wiki.html:34
+msgid "This group currently has no wiki"
+msgstr "Ce groupe n'a as de wiki actuellement"
+
+#: templates/group/group_wiki.html:35
+msgid ""
+"Seafile Wiki enables you to organize your knowledge in a simple way. The "
+"contents of wiki is stored in a normal library with pre-defined file/folder "
+"structure. This enables you to edit your wiki in your desktop and then sync "
+"back to the server."
+msgstr ""
+"Seafile Wiki vous permet d'organiser vos connaissances d'une manière simple. "
+"Le contenu du wiki est stocké dans une bibliothèque normale avec une "
+"structure de fichier/dossier prédéfinie. Cela vous permet d'éditer votre "
+"wiki sur votre ordinateur, puis de le synchroniser avec le serveur."
+
+#: templates/group/group_wiki.html:37
+msgid "Create Wiki Now"
+msgstr "Créer un Wiki maintenant"
+
+#: templates/group/group_wiki.html:41
+msgid "Create Wiki"
+msgstr "Créer un Wiki"
+
+#: templates/group/group_wiki.html:45
+msgid "Wiki Pages"
+msgstr "Pages du wiki"
+
+#: templates/group/group_wiki.html:53 templates/group/group_wiki_pages.html:29
+msgid "Home"
+msgstr "Home"
+
+#: templates/group/group_wiki.html:54 templates/group/group_wiki_pages.html:30
+msgid "Pages"
+msgstr "Pages"
+
+#: templates/group/group_wiki.html:56 templates/group/group_wiki_pages.html:32
+msgid "Wiki History"
+msgstr "historique du Wiki"
+
+#: templates/group/group_wiki.html:61 templates/group/group_wiki.html.py:75
+#: templates/group/group_wiki_pages.html:36
+#: templates/group/group_wiki_pages.html:47
+msgid "New Page"
+msgstr "Nouvelle Page"
+
+#: templates/group/group_wiki.html:62
+msgid "Delete Page"
+msgstr "Supprimer une Page"
+
+#: templates/group/group_wiki.html:63
+msgid "Edit Page"
+msgstr "Éditer la Page"
+
+#: templates/group/group_wiki.html:64
+msgid "Page History"
+msgstr "Historique de la page"
+
+#: templates/group/group_wiki.html:71
+msgid "Last modified by %(modifier)s, %(modify_time)s"
+msgstr "Dernièrement modifié par %(modifier)s, %(modify_time)s"
+
+#: templates/group/group_wiki.html:128
+msgid "Name and description can not be blank."
+msgstr "Le nom et la description ne peuvent pas être vides."
+
+#: templates/group/groups.html:5
+msgid "Groups"
+msgstr "Groupes"
+
+#: templates/group/groups_left_panel.html:3
+msgid "Tips"
+msgstr "Conseils"
+
+#: templates/group/groups_left_panel.html:5
+msgid ""
+"After creating a group, you can add members and share libraries into it."
+msgstr ""
+"Après avoir créé un groupe, vous pouvez ajouter des membres et partager des "
+"bibliothèques dedans."
+
+#: templates/group/groups_left_panel.html:7
+msgid "You can also share libraries into groups that you're not in."
+msgstr ""
+"Vous pouvez également partager les bibliothèques des groupes dont vous ne "
+"faites pas partie."
+
+#: templates/group/groups_right_panel.html:4
+msgid "My Groups"
+msgstr "Mes groupes"
+
+#: templates/group/groups_right_panel.html:5
+#: templates/group/groups_right_panel.html:26
+msgid "New Group"
+msgstr "Nouveau groupe"
+
+#: templates/group/groups_right_panel.html:14
+msgid "Time: "
+msgstr "Date :"
+
+#: templates/group/groups_right_panel.html:21
+msgid "You are not in any groups"
+msgstr "Vous n'êtes dans aucun groupes"
+
+#: templates/group/groups_right_panel.html:22
+msgid ""
+"You can create a group by clicking \"New Group\" button. Group is a place "
+"for you and your friends leaving messages and collaborating on libraries."
+msgstr ""
+"Vous pouvez créer un groupe en cliquant sur le bouton « Nouveau groupe ». Le "
+"groupe est un lieu pour vous et vos amis, vous pouvez laisser des messages "
+"et collaborer sur les bibliothèques."
+
+#: templates/group/groups_right_panel.html:27
+msgid "Group Name"
+msgstr "Nom du groupe"
+
+#: templates/group/grpadmin_add_js.html:19
+#: templates/group/grpmember_add_js.html:19
+msgid "It can not be blank."
+msgstr "Il ne peut pas être vide."
+
+#: templates/group/grpmember_add_form.html:3
+msgid "Add members"
+msgstr "Ajouter des membres"
+
+#: templates/group/grpmember_add_form.html:4
+msgid "emails, separated by ','"
+msgstr "emails, séparés par ','"
+
+#: templates/group/grpmember_add_form.html:7
+msgid "Tip: an invitation will be sent if the email is not registered."
+msgstr ""
+"Astuce : une invitation sera envoyée si le courriel n'est pas enregistré."
+
+#: templates/group/grpmember_add_form.html:9
+msgid "Tip: the emails should be already registered."
+msgstr "Astuce : les emails devraient être déjà inscrit."
+
+#: templates/group/grpmember_add_form.html:15
+msgid "Add administrators"
+msgstr "Ajouter des administrateurs"
+
+#: templates/group/grpmember_add_form.html:16
+msgid "emails, separated by ',' "
+msgstr "emails, séparés par ','"
+
+#: templates/group/new_msg_reply.html:18
+msgid "Group: "
+msgstr "Groupe :"
