@@ -40,14 +40,6 @@ class AddUserForm(forms.Form):
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 
-class FileCommentForm(forms.Form):
-    """
-    Form for leave comments on file.
-    """
-    repo_id = forms.CharField(max_length=36)
-    file_path = forms.CharField()
-    message = forms.CharField()
-        
 class RepoCreateForm(forms.Form):
     """
     Form for creating repo and org repo.

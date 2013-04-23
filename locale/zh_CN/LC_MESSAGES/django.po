@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-17 17:49+0800\n"
+"POT-Creation-Date: 2013-04-22 19:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,126 +25,127 @@ msgstr "该邮箱已被注册"
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
-#: forms.py:57 templates/snippets/repo_create_js.html:28 wiki/forms.py:16
+#: forms.py:49 templates/snippets/repo_create_js.html:28 wiki/forms.py:16
 msgid "Name can't be empty"
 msgstr "名称不能为空"
 
-#: forms.py:58 wiki/forms.py:17
+#: forms.py:50 wiki/forms.py:17
 msgid "Name is too long (maximum is 255 characters)"
 msgstr "名称太长（不超过255个汉字）"
 
-#: forms.py:61 templates/snippets/repo_create_js.html:32 wiki/forms.py:20
+#: forms.py:53 templates/snippets/repo_create_js.html:32 wiki/forms.py:20
 msgid "Description can't be empty"
 msgstr "描述不能为空"
 
-#: forms.py:62 wiki/forms.py:21
+#: forms.py:54 wiki/forms.py:21
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "描述太长（不超过100个汉字）"
 
-#: forms.py:67 forms.py:72 templates/snippets/repo_create_js.html:41
+#: forms.py:59 forms.py:64 templates/snippets/repo_create_js.html:41
 msgid "Password is too short (minimum is 3 characters)"
 msgstr "密码太短（不少于3个字符）"
 
-#: forms.py:68 forms.py:73 templates/snippets/repo_create_js.html:45
+#: forms.py:60 forms.py:65 templates/snippets/repo_create_js.html:45
 msgid "Password is too long (maximum is 30 characters)"
 msgstr "密码太长（不超过30个字符）"
 
-#: forms.py:79
+#: forms.py:71
 #, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
-#: forms.py:101 templates/snippets/repo_create_js.html:53
+#: forms.py:93 templates/sys_useradmin.html:124
+#: templates/snippets/repo_create_js.html:53
 msgid "Passwords don't match"
 msgstr "两次输入的密码不一致"
 
-#: forms.py:114 forms.py:137 forms.py:161 forms.py:184 forms.py:221
+#: forms.py:106 forms.py:129 forms.py:153 forms.py:176 forms.py:213
 msgid "Repo id is required"
 msgstr "repo id 为必填项"
 
-#: forms.py:115 forms.py:138 forms.py:162
+#: forms.py:107 forms.py:130 forms.py:154
 msgid "Parent dir is required"
 msgstr "parent dir 为必填项"
 
-#: forms.py:118 forms.py:142
+#: forms.py:110 forms.py:134
 msgid "File name is too long"
 msgstr "文件名过长"
 
-#: forms.py:119 forms.py:143
+#: forms.py:111 forms.py:135
 msgid "File name can't be empty"
 msgstr "文件名不能为空"
 
-#: forms.py:126 forms.py:150
+#: forms.py:118 forms.py:142
 #, python-format
 msgid "File name \"%s\" is not valid"
 msgstr "文件名 %s 含有无效字符"
 
-#: forms.py:139
+#: forms.py:131
 msgid "Oldname is required"
 msgstr "需要 oldname"
 
-#: forms.py:165
+#: forms.py:157
 msgid "Directory name is too long"
 msgstr "目录名过长"
 
-#: forms.py:166
+#: forms.py:158
 msgid "Directory name can't be empty"
 msgstr "目录名不能为空"
 
-#: forms.py:173
+#: forms.py:165
 #, python-format
 msgid "Directory name \"%s\" is not valid"
 msgstr "目录名 %s 含有无效字符"
 
-#: forms.py:185
+#: forms.py:177
 msgid "Username is required"
 msgstr "用户名为必填项"
 
-#: forms.py:186
+#: forms.py:178
 msgid "Password can't be empty"
 msgstr "密码不能为空"
 
-#: forms.py:197
+#: forms.py:189
 msgid "Bad url format"
 msgstr "错误的 url 格式"
 
-#: forms.py:202
+#: forms.py:194
 msgid "Wrong password"
 msgstr "密码错误"
 
-#: forms.py:204
+#: forms.py:196
 msgid "Inernal server error"
 msgstr "服务器内部错误"
 
-#: forms.py:206
+#: forms.py:198
 msgid "Decrypt library error"
 msgstr "解密资料库出错"
 
-#: forms.py:212
+#: forms.py:204
 msgid "Email is required"
 msgstr "请输入邮箱"
 
-#: forms.py:214
+#: forms.py:206
 msgid "Quota can't be empty"
 msgstr "容量不能为空"
 
-#: forms.py:215
+#: forms.py:207
 msgid "Quota is too low (minimum value is 0)"
 msgstr "容量太小（最小为0）"
 
-#: forms.py:222
+#: forms.py:214
 msgid "Library name is required"
 msgstr "资料库名称为必填项"
 
-#: forms.py:223
+#: forms.py:215
 msgid "Library description is required"
 msgstr "资料库描述为必填项"
 
-#: forms.py:224
+#: forms.py:216
 msgid "Days can't be empty"
 msgstr "天数不能为空"
 
-#: forms.py:225
+#: forms.py:217
 msgid "Please enter a number"
 msgstr "请输入数字"
 
@@ -189,19 +190,21 @@ msgid "Add User"
 msgstr "添加新用户"
 
 #: templates/add_user_form.html:9 templates/pubuser.html:54
-#: templates/sys_useradmin.html:16 templates/registration/login.html:8
+#: templates/sys_useradmin.html:12 templates/sys_useradmin.html.py:24
+#: templates/registration/login.html:8
 #: templates/registration/registration_form.html:11
 #: templates/snippets/user_profile_html.html:28
 msgid "Email"
 msgstr "邮箱"
 
-#: templates/add_user_form.html:11 templates/registration/login.html:10
+#: templates/add_user_form.html:11 templates/sys_useradmin.html:14
+#: templates/registration/login.html:10
 #: templates/registration/registration_form.html:13
 #: templates/snippets/repo_create_form.html:20
 msgid "Password"
 msgstr "密码"
 
-#: templates/add_user_form.html:13
+#: templates/add_user_form.html:13 templates/sys_useradmin.html:16
 #: templates/registration/registration_form.html:15
 msgid "Confirm Password"
 msgstr "确认密码"
@@ -211,8 +214,9 @@ msgstr "确认密码"
 #: templates/pubuser.html:60 templates/repo.html:267
 #: templates/repo.html.py:279 templates/repo.html:305
 #: templates/repo.html.py:326 templates/repo.html:338
-#: templates/repo.html.py:350 templates/userinfo.html:91
-#: templates/view_file_base.html:98 templates/registration/login.html:18
+#: templates/repo.html.py:350 templates/sys_useradmin.html:19
+#: templates/userinfo.html:91 templates/view_file_base.html:98
+#: templates/registration/login.html:18
 #: templates/registration/password_change_form.html:18
 #: templates/registration/password_reset_confirm.html:19
 #: templates/registration/password_reset_form.html:13
@@ -227,12 +231,14 @@ msgstr "确认密码"
 msgid "Submit"
 msgstr "提交"
 
-#: templates/add_user_form.html:26 templates/registration/login.html:28
+#: templates/add_user_form.html:26 templates/sys_useradmin.html:112
+#: templates/registration/login.html:28
 #: templates/registration/registration_form.html:28
 msgid "Email cannot be blank"
 msgstr "邮箱不能为空"
 
-#: templates/add_user_form.html:30 templates/registration/login.html:32
+#: templates/add_user_form.html:30 templates/sys_useradmin.html:116
+#: templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
 msgid "Password cannot be blank"
 msgstr "密码不能为空"
@@ -267,11 +273,7 @@ msgstr "成员"
 msgid "Groups"
 msgstr "群组"
 
-#: templates/admin_base.html:18
-msgid "Organizations"
-msgstr "团体"
-
-#: templates/admin_base.html:22
+#: templates/admin_base.html:17
 msgid "Notifications"
 msgstr "通知"
 
@@ -642,8 +644,11 @@ msgstr "在此输入图片描述"
 
 #: templates/file_edit.html:364
 msgid ""
-"<h3>Insert Image</h3><p>http://example.com/images/diagram.jpg \\\"optional title\\\"</p>"
-msgstr "<h3>插入图片</h3><p>http://example.com/images/diagram.jpg \\\"可选的提示文字\\\"</p>"
+"<h3>Insert Image</h3><p>http://example.com/images/diagram.jpg \\\"optional "
+"title\\\"</p>"
+msgstr ""
+"<h3>插入图片</h3><p>http://example.com/images/diagram.jpg \\\"可选的提示文字"
+"\\\"</p>"
 
 #: templates/file_edit.html:366
 msgid "Numbered List <ol> Ctrl+O"
@@ -685,27 +690,27 @@ msgstr "重做 - Ctrl+Shift+Z"
 msgid "Editing Help"
 msgstr "编辑帮助"
 
-#: templates/file_edit.html:468
+#: templates/file_edit.html:467
 msgid "Submit failed. Please check the network."
 msgstr "提交失败。请检查网络是否已连接。"
 
-#: templates/file_edit.html:470
+#: templates/file_edit.html:469
 msgid "Submit failed."
 msgstr "提交失败。"
 
-#: templates/file_edit.html:488 templates/snippets/repo_decrypt_js.html:11
+#: templates/file_edit.html:487 templates/snippets/repo_decrypt_js.html:11
 msgid "Password is required."
 msgstr "密码为必填项"
 
-#: templates/file_edit.html:490
+#: templates/file_edit.html:489
 msgid "Password should be 3 to 30 characters."
 msgstr "密码为3到30个字符"
 
-#: templates/file_edit.html:519 templates/repo.html:423
+#: templates/file_edit.html:518 templates/repo.html:423
 #: templates/repo.html.py:661 templates/repo.html:698
-#: templates/repo.html.py:841 templates/view_file_base.html:166
-#: templates/view_file_document.html:66 templates/view_file_pdf.html:117
-#: templates/snippets/bottom_bar.html:101
+#: templates/repo.html.py:841 templates/sys_useradmin.html:149
+#: templates/view_file_base.html:166 templates/view_file_document.html:66
+#: templates/view_file_pdf.html:117 templates/snippets/bottom_bar.html:101
 #: templates/snippets/file_content_js.html:109
 #: templates/snippets/repo_decrypt_js.html:35
 #: templates/snippets/shared_link_js.html:41
@@ -753,9 +758,8 @@ msgstr "大小"
 #: templates/repo.html:114 templates/repo_recycle_view.html:56
 #: templates/repo_view_snapshot.html:18 templates/sys_group_admin.html:15
 #: templates/sys_org_admin.html:15 templates/sys_seafadmin.html:14
-#: templates/sys_useradmin.html:6 templates/sys_useradmin.html.py:18
-#: templates/userinfo.html:44 templates/view_shared_dir.html:34
-#: templates/snippets/my_owned_repos.html:20
+#: templates/sys_useradmin.html:27 templates/userinfo.html:44
+#: templates/view_shared_dir.html:34 templates/snippets/my_owned_repos.html:20
 #: templates/snippets/my_owned_repos.html:59
 msgid "Operations"
 msgstr "操作"
@@ -971,7 +975,7 @@ msgstr "新建资料库"
 #: templates/pubrepo.html:24 templates/repo.html:111
 #: templates/repo.html.py:256 templates/repo_history_view.html:52
 #: templates/repo_recycle_view.html:53 templates/sys_group_admin.html:12
-#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:11
+#: templates/sys_org_admin.html:11 templates/sys_seafadmin.html:10
 #: templates/userinfo.html:42 templates/userinfo.html.py:67
 #: templates/view_shared_dir.html:32 templates/snippets/my_owned_repos.html:17
 #: templates/snippets/my_owned_repos.html:55
@@ -1002,9 +1006,8 @@ msgstr "更新时间"
 msgid "Share From"
 msgstr "共享来源"
 
-#: templates/pubrepo.html:34 templates/sys_seafadmin.html:18
-#: templates/userinfo.html:49 templates/userinfo.html.py:74
-#: templates/snippets/my_owned_repos.html:24
+#: templates/pubrepo.html:34 templates/userinfo.html:49
+#: templates/userinfo.html.py:74 templates/snippets/my_owned_repos.html:24
 #: templates/snippets/my_owned_repos.html:66
 #: templates/snippets/repo_create_form.html:11
 #: templates/snippets/repo_share_form.html:47
@@ -1047,7 +1050,7 @@ msgstr "加到通讯录"
 #: templates/pubuser.html:38 templates/repo_history.html:52
 #: templates/repo_view_snapshot.html:50 templates/search_results.html:46
 #: templates/sys_group_admin.html:29 templates/sys_seafadmin.html:29
-#: templates/sys_useradmin.html:46 templates/view_file_pdf.html:11
+#: templates/sys_useradmin.html:56 templates/view_file_pdf.html:11
 #: templates/snippets/file_content_js.html:122
 msgid "Previous"
 msgstr "前一页"
@@ -1055,7 +1058,7 @@ msgstr "前一页"
 #: templates/pubuser.html:48 templates/repo_history.html:55
 #: templates/repo_view_snapshot.html:53 templates/search_results.html:49
 #: templates/sys_group_admin.html:32 templates/sys_seafadmin.html:32
-#: templates/sys_useradmin.html:49 templates/view_file_pdf.html:11
+#: templates/sys_useradmin.html:59 templates/view_file_pdf.html:11
 #: templates/snippets/file_content_js.html:122
 msgid "Next"
 msgstr "下一页"
@@ -1100,7 +1103,7 @@ msgstr "发送"
 
 #: templates/repo.html:36 templates/repo.html.py:143 templates/repo.html:189
 #: templates/sys_group_admin.html:22 templates/sys_org_admin.html:23
-#: templates/sys_seafadmin.html:22 templates/sys_useradmin.html:31
+#: templates/sys_seafadmin.html:22 templates/sys_useradmin.html:41
 #: templates/userinfo.html:53 templates/view_file_base.html:35
 #: templates/snippets/my_owned_repos.html:35
 msgid "Delete"
@@ -1358,7 +1361,7 @@ msgstr "修改者"
 
 #: templates/repo_history.html:60 templates/repo_view_snapshot.html:55
 #: templates/search_results.html:54 templates/sys_group_admin.html:37
-#: templates/sys_seafadmin.html:37 templates/sys_useradmin.html:54
+#: templates/sys_seafadmin.html:37 templates/sys_useradmin.html:64
 msgid "Per page: "
 msgstr "每页："
 
@@ -1478,6 +1481,7 @@ msgid "Creator"
 msgstr "创建者"
 
 #: templates/sys_group_admin.html:14 templates/sys_org_admin.html:14
+#: templates/sys_useradmin.html:26
 msgid "Create At"
 msgstr "创建时间"
 
@@ -1492,7 +1496,7 @@ msgid "Delete Group"
 msgstr "删除群组"
 
 #: templates/sys_group_admin.html:63 templates/sys_org_admin.html:63
-#: templates/sys_seafadmin.html:63 templates/sys_useradmin.html:78
+#: templates/sys_seafadmin.html:63 templates/sys_useradmin.html:88
 #: templates/userinfo.html:139 templates/snippets/myhome_extra_script.html:52
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1518,65 +1522,72 @@ msgstr "所有资料库"
 msgid "Owner"
 msgstr "拥有者"
 
-#: templates/sys_seafadmin.html:18 templates/userinfo.html:49
-#: templates/snippets/my_owned_repos.html:24
-#: templates/snippets/my_owned_repos.html:66
-#: templates/snippets/my_owned_repos.html:68
-msgid "directory icon"
-msgstr "目录图标"
-
 #: templates/sys_seafadmin.html:62 templates/userinfo.html:138
 #: templates/snippets/myhome_extra_script.html:51
 msgid "Delete Library"
 msgstr "删除资料库"
 
 #: templates/sys_useradmin.html:8
-msgid "Add new user"
-msgstr "添加新用户"
-
-#: templates/sys_useradmin.html:13
 msgid "All Members"
 msgstr "所有用户"
 
-#: templates/sys_useradmin.html:17
+#: templates/sys_useradmin.html:9 templates/sys_useradmin.html.py:11
+msgid "Add new user"
+msgstr "添加新用户"
+
+#: templates/sys_useradmin.html:25
 msgid "Status"
 msgstr "状态"
 
-#: templates/sys_useradmin.html:25
+#: templates/sys_useradmin.html:34
 msgid "Activated"
 msgstr "已激活"
 
-#: templates/sys_useradmin.html:27
+#: templates/sys_useradmin.html:36
 msgid "Active"
 msgstr "激活"
 
-#: templates/sys_useradmin.html:32
+#: templates/sys_useradmin.html:42
 msgid "ResetPwd"
 msgstr "重置密码"
 
-#: templates/sys_useradmin.html:34
-msgid "Take Admin"
+#: templates/sys_useradmin.html:44 templates/sys_useradmin.html.py:95
+msgid "Revoke Admin"
 msgstr "取消管理员"
 
-#: templates/sys_useradmin.html:36
-msgid "Give Admin"
+#: templates/sys_useradmin.html:46 templates/sys_useradmin.html.py:99
+msgid "Set Admin"
 msgstr "设为管理员"
 
-#: templates/sys_useradmin.html:77
+#: templates/sys_useradmin.html:87
 msgid "Delete User"
 msgstr "删除用户"
 
-#: templates/sys_useradmin.html:81
+#: templates/sys_useradmin.html:91
 #: templates/registration/password_reset_confirm.html:4
 #: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:7 views/__init__.py:1466
+#: templates/registration/password_reset_form.html:7 views/__init__.py:1469
 msgid "Password Reset"
 msgstr "密码重置"
 
-#: templates/sys_useradmin.html:82
+#: templates/sys_useradmin.html:92
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
 msgstr "确定要重置 %s 的密码吗？"
+
+#: templates/sys_useradmin.html:96
+#, python-format
+msgid "Are you sure you want to revoke the admin permission of %s ?"
+msgstr "确定要取消 %s 的管理权限吗？"
+
+#: templates/sys_useradmin.html:100
+#, python-format
+msgid "Are you sure you want to set %s as admin?"
+msgstr "确定要设置 %s 为管理员吗？"
+
+#: templates/sys_useradmin.html:120 templates/snippets/repo_create_js.html:49
+msgid "Please enter the password again"
+msgstr "请再次输入密码"
 
 #: templates/text_diff.html:6
 msgid "modification details"
@@ -1676,6 +1687,12 @@ msgstr "我使用的"
 #: templates/userinfo.html:37
 msgid "Owned"
 msgstr "我拥有的"
+
+#: templates/userinfo.html:49 templates/snippets/my_owned_repos.html:24
+#: templates/snippets/my_owned_repos.html:66
+#: templates/snippets/my_owned_repos.html:68
+msgid "directory icon"
+msgstr "目录图标"
 
 #: templates/userinfo.html:62 templates/snippets/my_owned_repos.html:7
 msgid "Shared"
@@ -2180,10 +2197,6 @@ msgstr "请再次输入密码"
 msgid "Please enter password"
 msgstr "请输入密码"
 
-#: templates/snippets/repo_create_js.html:49
-msgid "Please enter the password again"
-msgstr "请再次输入密码"
-
 #: templates/snippets/repo_share_form.html:3
 msgid "Share Library"
 msgstr "共享资料库"
@@ -2294,7 +2307,7 @@ msgstr "名称和描述不能为空"
 msgid "permission error"
 msgstr "权限错误"
 
-#: utils/__init__.py:99 views/__init__.py:2183 views/file.py:151
+#: utils/__init__.py:99 views/__init__.py:2181 views/file.py:151
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -2334,8 +2347,8 @@ msgstr "上传的文件名包含非法字符"
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: views/__init__.py:355 views/__init__.py:1996 views/__init__.py:2124
-#: views/file.py:277
+#: views/__init__.py:355 views/__init__.py:1994 views/__init__.py:2122
+#: views/file.py:281
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -2371,13 +2384,13 @@ msgstr "你没有权限进行还原操作"
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: views/__init__.py:581 views/__init__.py:1873 views/__init__.py:1908
-#: views/__init__.py:2417 views/file.py:563
+#: views/__init__.py:581 views/__init__.py:1871 views/__init__.py:1906
+#: views/__init__.py:2415 views/file.py:567
 msgid "Invalid arguments"
 msgstr "非法参数"
 
-#: views/__init__.py:583 views/__init__.py:676 views/__init__.py:1820
-#: views/__init__.py:2432
+#: views/__init__.py:583 views/__init__.py:676 views/__init__.py:1818
+#: views/__init__.py:2430
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -2407,7 +2420,7 @@ msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权�
 msgid "Successfully deleted library \"%s\"."
 msgstr "成功删除资料库 \"%s\"。"
 
-#: views/__init__.py:929 views/__init__.py:1794
+#: views/__init__.py:929 views/__init__.py:1792
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
@@ -2507,14 +2520,41 @@ msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 msgid "Failed to set quota: internal error"
 msgstr "内部错误，设置失败"
 
-#: views/__init__.py:1482
+#: views/__init__.py:1410
+#, python-format
+msgid "Successfully deleted %s"
+msgstr "%s 删除成功。"
+
+#: views/__init__.py:1412
+msgid "Failed to delete: the user does not exist"
+msgstr "删除失败：该用户不存在"
+
+#: views/__init__.py:1424
+#, python-format
+msgid "Successfully set %s as admin"
+msgstr "成功设置 %s 为管理员"
+
+#: views/__init__.py:1426
+msgid "Failed to set admin: the user does not exist"
+msgstr "设置管理员失败：该用户不存在"
+
+#: views/__init__.py:1438
+#, python-format
+msgid "Successfully revoke the admin permission of %s"
+msgstr "成功取消 %s 的管理权限"
+
+#: views/__init__.py:1440
+msgid "Failed to revoke admin: the user does not exist"
+msgstr "取消管理员权限失败：该用户不存在"
+
+#: views/__init__.py:1485
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
-#: views/__init__.py:1487
+#: views/__init__.py:1490
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s, but failed to send email to "
@@ -2523,12 +2563,12 @@ msgstr ""
 "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮"
 "件配置。"
 
-#: views/__init__.py:1491
+#: views/__init__.py:1494
 #, python-format
 msgid "Successfully resetted password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: views/__init__.py:1494
+#: views/__init__.py:1497
 #, python-format
 msgid ""
 "Successfully resetted password to %(passwd)s for user %(user)s. But email "
@@ -2538,104 +2578,104 @@ msgstr ""
 "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知"
 "邮件无法发送。"
 
-#: views/__init__.py:1497
+#: views/__init__.py:1500
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: views/__init__.py:1518
+#: views/__init__.py:1521
 msgid "Seafile Registration Information"
 msgstr "Seafile注册信息"
 
-#: views/__init__.py:1553
+#: views/__init__.py:1557
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。一封通知邮件已发送。"
 
-#: views/__init__.py:1556
+#: views/__init__.py:1560
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: views/__init__.py:1558
+#: views/__init__.py:1562
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: views/__init__.py:1560
+#: views/__init__.py:1564
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: views/__init__.py:1662 views/__init__.py:1693 views/__init__.py:1727
-#: views/file.py:548
+#: views/__init__.py:1660 views/__init__.py:1691 views/__init__.py:1725
+#: views/file.py:552
 msgid "Permission denied"
 msgstr "共享权限"
 
-#: views/__init__.py:1739
+#: views/__init__.py:1737
 #, python-format
 msgid "Successfully renamed %(old)s to %(new)s"
 msgstr "%(old)s 已重命名为 %(new)s"
 
-#: views/__init__.py:1894
+#: views/__init__.py:1892
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: views/__init__.py:1898 views/__init__.py:1924
+#: views/__init__.py:1896 views/__init__.py:1922
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: views/__init__.py:1920
+#: views/__init__.py:1918
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: views/__init__.py:2468 views/file.py:542
+#: views/__init__.py:2466 views/file.py:546
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: views/__init__.py:2471
+#: views/__init__.py:2469
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: views/__init__.py:2486
+#: views/__init__.py:2484
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
 
-#: views/file.py:289 views/file.py:493 views/file.py:508 views/file.py:530
+#: views/file.py:293 views/file.py:497 views/file.py:512 views/file.py:534
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: views/file.py:304 views/file.py:462
+#: views/file.py:308 views/file.py:466
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
-#: views/file.py:552
+#: views/file.py:556
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: views/file.py:556
+#: views/file.py:560
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: views/file.py:630
+#: views/file.py:634
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: views/file.py:642
+#: views/file.py:646
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: views/file.py:670
+#: views/file.py:674
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
@@ -2668,3 +2708,9 @@ msgstr "页面 \"%s\" 已存在。"
 #, python-format
 msgid "\"%s\" is not a valid name"
 msgstr "名称 %s 含有无效字符"
+
+#~ msgid "Organizations"
+#~ msgstr "团体"
+
+#~ msgid "Give Admin"
+#~ msgstr "设为管理员"

@@ -6,8 +6,18 @@
 {% block main_panel %}
 
 <h3>{% trans "All Members" %}</h3>
-
->> <a href="{{ SITE_ROOT }}useradmin/add/">{% trans "Add new user" %}</a>
+<button class="add" id="add-user-btn">{% trans "Add new user" %}</button>
+<form id="add-user-form" action="" method="post" class="hide">
+    <h3>{% trans "Add new user" %}</h3>
+    <label for="id_email">{% trans "Email" %}</label><br />
+    <input type="text" name="email" id="id_email" class="input" /><br />    
+    <label for="id_password1">{% trans "Password" %}</label><br />
+    <input type="password" name="password1" id="id_password1" class="input" /><br />    
+    <label for="id_password2">{% trans "Confirm Password" %}</label><br />
+    <input type="password" name="password2" id="id_password2" class="input" /><br />    
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
 
 <table>
     <tr>
@@ -31,9 +41,9 @@
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
           {% if user.is_staff %}
-          <a href="{% url 'user_remove_admin' user.id %}" class="take-admin-btn op">{% trans "Take Admin" %}</a>
+          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op">{% trans "Revoke Admin" %}</a>
           {% else %}
-          <a href="{% url 'user_make_admin' user.id %}" class="give-admin-btn op">{% trans "Give Admin" %}</a>
+          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op">{% trans "Set Admin" %}</a>
           {% endif %}
           {% endif %}
         </td>
@@ -80,6 +90,67 @@ addConfirmTo($('.remove-user-btn'), {
 addConfirmTo($('.reset-user-btn'), {
         'title':'{% trans "Password Reset" %}',
         'con':'{% trans "Are you sure you want to reset the password of %s ?" %}'
+});
+addConfirmTo($('.revoke-admin-btn'), {
+        'title':'{% trans "Revoke Admin" %}',
+        'con':'{% trans "Are you sure you want to revoke the admin permission of %s ?" %}'
+});
+addConfirmTo($('.set-admin-btn'), {
+        'title':'{% trans "Set Admin" %}',
+        'con':'{% trans "Are you sure you want to set %s as admin?" %}'
+});
+
+$('#add-user-btn').click(function() {$('#add-user-form').modal();});
+$('#add-user-form').submit(function() {
+    var form = $(this),
+        form_id = $(this).attr('id'),
+        email = $.trim(form.children('[name="email"]').val()),
+        pwd1 = $.trim(form.children('[name="password1"]').val()),
+        pwd2 = $.trim(form.children('[name="password2"]').val());
+
+    if (!email) {
+        apply_form_error(form_id, '{% trans "Email cannot be blank" %}');
+        return false;
+    }
+    if (!pwd1) {
+        apply_form_error(form_id, '{% trans "Password cannot be blank" %}');
+        return false;
+    } 
+    if (!pwd2) {
+        apply_form_error(form_id, '{% trans "Please enter the password again" %}');
+        return false;
+    } 
+    if (pwd1 != pwd2) {
+        apply_form_error(form_id, "{% trans "Passwords don't match" %}");
+        return false;
+    } 
+
+    $.ajax({
+        url: '{% url 'user_add' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'email': email,
+            'password1': pwd1,
+            'password2': pwd2
+        },  
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            }   
+        },  
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).err);
+            } else {
+                apply_form_error(form_id, '{% trans "Failed. Please check the network." %}');
+            }
+        }
+    });
+    return false;
 });
 </script>
 {% endblock %}
