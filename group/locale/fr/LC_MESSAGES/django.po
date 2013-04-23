@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français <>\n"
-"PO-Revision-Date: 2013-04-23 11:43+0100\n"
+"PO-Revision-Date: 2013-04-23 15:39+0100\n"
 "POT-Creation-Date: \n"
 
 #: error_msg.py:7
@@ -66,9 +66,9 @@ msgid "Group name is too long (maximum is 255 characters)"
 msgstr "Le nom du groupe est trop long (maximum 255 caractères)"
 
 #: forms.py:36
-#, fuzzy
 msgid "Group name can only contain letters, numbers or underline"
-msgstr "Le nom du groupe peut contenir  seulement des lettres ou des nombres."
+msgstr ""
+"Le nom du groupe peut uniquement contenir des lettres, nombres ou souligné"
 
 #: forms.py:46
 msgid "Verification message can't be empty"
@@ -440,7 +440,7 @@ msgstr "Ce groupe est public."
 #: templates/group/group_info.html:34
 #: templates/group/group_info_for_pub.html:30
 msgid "created at"
-msgstr "créé le"
+msgstr "l'a créé le"
 
 #: templates/group/group_info.html:36
 msgid "Quit"
@@ -694,7 +694,7 @@ msgstr "Message de vérification"
 
 #: templates/group/group_wiki.html:34
 msgid "This group currently has no wiki"
-msgstr "Ce groupe n'a as de wiki actuellement"
+msgstr "Ce groupe n'a pas de wiki actuellement"
 
 #: templates/group/group_wiki.html:35
 msgid ""

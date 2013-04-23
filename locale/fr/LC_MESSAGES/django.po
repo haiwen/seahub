@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français <>\n"
-"PO-Revision-Date: 2013-04-23 15:23+0100\n"
+"PO-Revision-Date: 2013-04-23 15:40+0100\n"
 "POT-Creation-Date: \n"
 
 #: forms.py:26
@@ -1889,7 +1889,7 @@ msgstr "Merci pour votre participation ! "
 
 #: templates/registration/logout.html:8
 msgid "Log in again"
-msgstr "Vous connecter à nouveau"
+msgstr "Vous reconnecter"
 
 #: templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
