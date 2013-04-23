@@ -51,7 +51,7 @@ def personal_wiki(request, page_name="home"):
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
         filename = clean_page_name(page_name) + '.md'
-        if not post_empty_file(repo.id, "/", filename, username):
+        if not seaserv.post_empty_file(repo.id, "/", filename, username):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('personal_wiki', args=[page_name]))
     else:

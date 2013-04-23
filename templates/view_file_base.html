@@ -29,10 +29,12 @@
         </p>
 
         <div class="file-op fright">
+            {% if not repo.encrypted %}
             <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
             <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
             <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
             <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+            {% endif %}
             {% if is_starred %}
             <button id="star" data-status="starred">{% trans "Unstar"%}</button>
             {% else %}
