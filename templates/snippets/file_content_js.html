@@ -38,7 +38,7 @@ window.onload = function () {
 
 {% if filetype == 'SVG' %}
     if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-        $('#file-view').html('<div id="file-view-tip"><p>{% trans "To view it online, you can use firefox, chrome or IE 9." %}</p></div>');
+        $('#file-view').html('<div id="file-view-tip"><p>' + "{% trans "To view it online, you can use firefox, chrome or IE 9." %}" + '</p></div>');
     } else {
         $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe>');
     }
@@ -104,9 +104,9 @@ window.onload = function () {
             error: function(xhr, textStatus, errorThrown) {
                 var str;
                 if (xhr.responseText) {
-                    str = '{% trans "Document convertion failed." %}';
+                    str = "{% trans "Document convertion failed." %}";
                 } else {
-                    str = '{% trans "Failed. Please check the network." %}';
+                    str = "{% trans "Failed. Please check the network." %}";
                 }
                 $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
           }

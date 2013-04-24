@@ -54,12 +54,12 @@ $('#discuss-submit').click(function() {
         form_id = form.attr('id');
     
     if (form.find('.checkbox-checked').length == 0) {
-        apply_form_error(form_id, '{% trans "Please select at least 1 group." %}');
+        apply_form_error(form_id, "{% trans "Please select at least 1 group." %}");
         return false;   
     }
 
     if (!$.trim($('#discuss-to-group-form .input').val())) {
-        apply_form_error(form_id, '{% trans "Please input a discussion." %}');
+        apply_form_error(form_id, "{% trans "Please input a discussion." %}");
         return false;   
     }
     form.find('.error').addClass('hide');    
@@ -98,7 +98,7 @@ $('#discuss-submit').click(function() {
             if (jqXHR.responseText) {
                 err_str = $.parseJSON(jqXHR.responseText).err;
             } else {
-                err_str = '{% trans "Failed. Please check the network." %}';
+                err_str = "{% trans "Failed. Please check the network." %}";
             }   
             apply_form_error(form_id, err_str); 
         }   

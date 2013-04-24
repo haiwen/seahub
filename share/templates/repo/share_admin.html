@@ -150,14 +150,14 @@ $('.share-permission-select').change(function() {
         },
         success: function(data) {
             if (data['success']) {
-                feedback('{% trans "Edit succeeded" %}', 'success');
+                feedback("{% trans "Edit succeeded" %}", 'success');
                 select.prev().children('.share-permission-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
             }
             select.addClass('hide');
             select.prev().removeClass('hide');
         },
         error: function() {
-            feedback('{% trans "Edit failed." %}', 'error');
+            feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             select.prev().removeClass('hide');
         }   

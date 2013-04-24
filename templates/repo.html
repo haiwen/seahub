@@ -426,7 +426,7 @@ $('#repo-setting-form').submit(function() {
             if (jqXHR.responseText) {
                 apply_form_error('repo-setting-form', $.parseJSON(jqXHR.responseText).error);
             } else {
-                apply_form_error('repo-setting-form', '{% trans "Failed. Please check the network." %}');
+                apply_form_error('repo-setting-form', "{% trans "Failed. Please check the network." %}");
             }
             enable(submit_btn);
         }
@@ -445,7 +445,7 @@ $('#upload-file').click(function () {
         list: '#upload-file-list',
         STRING: {
             file: '<span title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</span>',
-            duplicate: '{% trans "This file has already been selected:\n$file!" %}'
+            duplicate: "{% trans "This file has already been selected:\n$file!" %}"
         },
         afterFileAppend:function() {
             $('#upload-file-form .files-add input').css({'right':$('#upload-add-tip').width()});
@@ -605,23 +605,23 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
         file_type = '';
     if ($(this).hasClass('file-cp') || $(this).hasClass('dir-cp')) {
         $('#mv-type').val('cp');
-        mv_type = '{% trans "Copy " %}';
+        mv_type = "{% trans "Copy " %}";
     } else {
         $('#mv-type').val('mv');
-        mv_type = '{% trans "Move " %}';
+        mv_type = "{% trans "Move " %}";
     }
 
     if ($(this).hasClass('file-cp') || $(this).hasClass('file-mv')) {
-        file_type = '{% trans "File" %}';
+        file_type = "{% trans "File" %}";
         $('input[name="obj_type"]').val('file');
     } else {
-        file_type = '{% trans "Directory" %}';
+        file_type = "{% trans "Directory" %}";
         $('input[name="obj_type"]').val('dir');
     }
 
     $('input[name="obj_name"]').val(obj_name);
     $('#mv-hd').html(mv_type + file_type);
-    $('#mv-detail').html(mv_type + ' <span class="op-target">' + obj_name + '</span> {% trans "to:" %}');
+    $('#mv-detail').html(mv_type + ' <span class="op-target">' + obj_name + "</span> {% trans "to:" %}");
     $('#mv-form').modal({appendTo:'#main', autoResize:true, focus:false});
     renderDirTree($('#current-repo-dirs'), current_repo);
     return false;
@@ -654,9 +654,9 @@ $('.file-star').click(function() {
         success:function(data) {
             if (data['success']) {
                 if (state == 'starred') {
-                    it.attr('class', 'file-star icon-star-empty').attr('title','{% trans 'unstarred' %}').data('status','unstarred');
+                    it.attr('class', 'file-star icon-star-empty').attr('title', "{% trans 'unstarred' %}").data('status','unstarred');
                 } else {
-                    it.attr('class', 'file-star icon-star').attr('title','{% trans 'starred' %}').data('status','starred');
+                    it.attr('class', 'file-star icon-star').attr('title', "{% trans 'starred' %}").data('status','starred');
                 }
             }
         },
@@ -664,7 +664,7 @@ $('.file-star').click(function() {
             if (xhr.responseText) {
                 feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
             } else {
-                feedback('{% trans "Failed. Please check the network." %}', 'error');
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
             }
         }
    });
@@ -701,7 +701,7 @@ $('.file-share').click(function() {
                 if (xhr.responseText) {
                     feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
                 } else {
-                    feedback('{% trans "Failed. Please check the network." %}', 'error');
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
                 }   
             }
         });
@@ -844,7 +844,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form').submit(function() {
             if (xhr.responseText) {
                 err = $.parseJSON(xhr.responseText).error;
             } else {
-                err = '{% trans "Failed. Please check the network." %}';
+                err = "{% trans "Failed. Please check the network." %}";
             }
             apply_form_error(form_id, err);
             enable(submit_btn);

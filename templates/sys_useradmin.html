@@ -84,23 +84,26 @@
 {% block extra_script %}
 <script type="text/javascript">
 addConfirmTo($('.remove-user-btn'), {
-        'title':'{% trans "Delete User" %}',
-        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+        'title':"{% trans "Delete User" %}",
+        'con':"{% trans "Are you sure you want to delete %s ?" %}"
 });
 addConfirmTo($('.reset-user-btn'), {
-        'title':'{% trans "Password Reset" %}',
-        'con':'{% trans "Are you sure you want to reset the password of %s ?" %}'
+        'title':"{% trans "Password Reset" %}",
+        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
 });
 addConfirmTo($('.revoke-admin-btn'), {
-        'title':'{% trans "Revoke Admin" %}',
-        'con':'{% trans "Are you sure you want to revoke the admin permission of %s ?" %}'
+        'title':"{% trans "Revoke Admin" %}",
+        'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}"
 });
 addConfirmTo($('.set-admin-btn'), {
-        'title':'{% trans "Set Admin" %}',
-        'con':'{% trans "Are you sure you want to set %s as admin?" %}'
+        'title':"{% trans "Set Admin" %}",
+        'con':"{% trans "Are you sure you want to set %s as admin?" %}"
 });
 
-$('#add-user-btn').click(function() {$('#add-user-form').modal();});
+$('#add-user-btn').click(function() {
+        $('#add-user-form').modal();
+        $('#simplemodal-container').css({'width':'auto'});
+});
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
@@ -109,15 +112,15 @@ $('#add-user-form').submit(function() {
         pwd2 = $.trim(form.children('[name="password2"]').val());
 
     if (!email) {
-        apply_form_error(form_id, '{% trans "Email cannot be blank" %}');
+        apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
         return false;
     }
     if (!pwd1) {
-        apply_form_error(form_id, '{% trans "Password cannot be blank" %}');
+        apply_form_error(form_id, "{% trans "Password cannot be blank" %}");
         return false;
     } 
     if (!pwd2) {
-        apply_form_error(form_id, '{% trans "Please enter the password again" %}');
+        apply_form_error(form_id, "{% trans "Please enter the password again" %}");
         return false;
     } 
     if (pwd1 != pwd2) {
@@ -146,7 +149,7 @@ $('#add-user-form').submit(function() {
             if (jqXHR.responseText) {
                 apply_form_error(form_id, $.parseJSON(jqXHR.responseText).err);
             } else {
-                apply_form_error(form_id, '{% trans "Failed. Please check the network." %}');
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
         }
     });
