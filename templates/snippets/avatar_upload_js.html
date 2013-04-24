@@ -37,19 +37,19 @@ function changeAvatar(chg_btn, input, form) {
                 }
             }
         } else {
-            feedback(filename + '{% trans " is not supported. Please choose an image file." %}', 'error');
+            feedback(filename + "{% trans " is not supported. Please choose an image file." %}", 'error');
             return false;
         }
 
         if (!allow) {
-            var err_msg = filename + '{% trans " is not supported. File extensions can only be " %}' + allowed_ext.join(', ');
+            var err_msg = filename + "{% trans " is not supported. File extensions can only be " %}" + allowed_ext.join(', ');
             feedback(err_msg, 'error');
             return false;        
         }
 
         // check if file size is less than 1MB
         if (file && file.size > 1024*1024) {
-            feedback(filename + '{% trans " is too large. Allowed maximum size is 1MB." %}', 'error');
+            feedback(filename + "{% trans " is too large. Allowed maximum size is 1MB." %}", 'error');
             return false;        
         }
 

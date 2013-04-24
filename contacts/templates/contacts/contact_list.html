@@ -77,7 +77,8 @@ $('.contact-edit').click(function() {
     return false;
 });
 $('#contact-edit-form').submit(function() {
-    var form = $(this);
+    var form = $(this),
+        form_id = $(this).attr('id');
     $.ajax({
         url: '{% url contact_edit %}',
         type: 'POST',
@@ -103,9 +104,9 @@ $('#contact-edit-form').submit(function() {
                 for (var i in errors) {
                     str += errors[i].join();
                 }
-                apply_form_error('contact-edit-form', str);
+                apply_form_error(form_id, str);
             } else {
-                apply_form_error('contact-edit-form', '{% trans "Failed." %}');
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
         }
     });
@@ -113,29 +114,21 @@ $('#contact-edit-form').submit(function() {
     return false;
 });
 
-addConfirmTo($('.contact-delete'), {'title':'{% trans "Delete Contact" %}', 'con':'{% trans "Are you sure you want to delete %s ?" %}'});
+addConfirmTo($('.contact-delete'), {'title':"{% trans "Delete Contact" %}", 'con':"{% trans "Are you sure you want to delete %s ?" %}"});
 
-$('#contact-add')
-.click(function() {
+$('#contact-add').click(function() {
     $('#contact-add-form').modal({appendTo: '#main'});
 })
-.hover(
-    function() {
-        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
-    },  
-    function() {
-        $(this).css('background-color', '#f5f5f5');
-    }   
-);
 $('#contact-add-form').submit(function() {
-    var form = $(this);
-    var email = $.trim(form.find('input[name="contact_email"]').val());
+    var form = $(this),
+        form_id = $(this).attr('id'),
+        email = $.trim(form.find('input[name="contact_email"]').val());
     if(!email) {
-        apply_form_error('contact-add-form', '{% trans "Email is required." %}');
+        apply_form_error(form_id, "{% trans "Email is required." %}");
         return false;
     }
     if (email == '{{request.user.username}}') {
-        apply_form_error('contact-add-form', "{% trans "You can't add yourself." %}");
+        apply_form_error(form_id, "{% trans "You can't add yourself." %}");
         return false;
     }
 
@@ -164,9 +157,9 @@ $('#contact-add-form').submit(function() {
                 for (var i in errors) {
                     str += errors[i].join();
                 }
-                apply_form_error('contact-add-form', str);
+                apply_form_error(form_id, str);
             } else {
-                apply_form_error('contact-add-form', '{% trans "Failed." %}');
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
         }
     });

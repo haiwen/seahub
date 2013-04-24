@@ -698,7 +698,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
-    width:4em;
+    width:auto; /*for fr,de etc*/
     margin:8px 0 0;
 }
 .narrow-panel .note {

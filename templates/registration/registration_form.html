@@ -23,21 +23,25 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('input[type="submit"]').click(function(){
-        if (!$.trim($('input[name="email"]').attr('value'))) {
-            $('.error').removeClass('hide').html('{% trans "Email cannot be blank" %}');
+$('form').submit(function(){
+    var email = $.trim($('input[name="email"]').val()),
+        pwd1 = $.trim($('input[name="password1"]').val()),
+        pwd2 = $.trim($('input[name="password2"]').val());
+
+        if (!email) {
+            $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
             return false;
         }
-        if (!$.trim($('input[name="password1"]').attr('value'))) {
-            $('.error').removeClass('hide').html('{% trans "Password cannot be blank" %}');
+        if (!pwd1) {
+            $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
             return false;
         }
-        if (!$.trim($('input[name="password2"]').attr('value'))) {
-            $('.error').removeClass('hide').html('{% trans "Confirm password cannot be blank" %}');
+        if (!pwd2) {
+            $('.error').removeClass('hide').html("{% trans "Please enter the password again" %}");
             return false;
         }
-        if ($.trim($('input[name="password1"]').attr('value')) != $.trim($('input[name="password2"]').attr('value'))) {
-            $('.error').removeClass('hide').html('{% trans "The two password fields not match" %}');
+        if (pwd1 != pwd2) {
+            $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
             return false;
         }
    });

@@ -351,7 +351,7 @@ var local_toolbar_strs = {
 
     link: "{% trans "Hyperlink <a> Ctrl+L" %}",
     linkdescription: "{% trans "enter link description here" %}",
-    linkdialog: "{% blocktrans %}<h3>Insert Hyperlink</h3><p>http://example.com/ \"optional title\"</p>{% endblocktrans %}",
+    linkdialog: "<h3>{% trans "Insert Hyperlink" %}</h3><p>http://example.com/ \"{% trans "optional title" %}\"</p>",
 
     quote: "{% trans "Blockquote <blockquote> Ctrl+Q" %}",
     quoteexample: "{% trans "Blockquote" %}",
@@ -361,7 +361,7 @@ var local_toolbar_strs = {
 
     image: "{% trans "Image <img> Ctrl+G" %}",
     imagedescription: "{% trans "enter image description here" %}",
-    imagedialog: "{% blocktrans %}<h3>Insert Image</h3><p>http://example.com/images/diagram.jpg \"optional title\"</p>{% endblocktrans %}",
+    imagedialog: "<h3>{% trans "Insert Image" %}</h3><p>http://example.com/images/diagram.jpg \"{% trans "optional title" %}\"</p>",
 
     olist: "{% trans "Numbered List <ol> Ctrl+O" %}",
     ulist: "{% trans "Bulleted List <ul> Ctrl+U" %}",
@@ -463,10 +463,8 @@ function editSubmit() {
                     $('#repo-decrypt-form').modal();
                     $('#simplemodal-container').css({'height':'auto'});
                 }
-            } else if (xhr.readyState == 0) {
-                feedback("{% trans "Submit failed. Please check the network." %}", 'error');
             } else {
-                feedback("{% trans "Submit failed." %}", 'error');
+                feedback("{% trans "Submit failed. Please check the network." %}", 'error');
             }
             enable($('#file-edit-submit'));
         }
@@ -484,9 +482,9 @@ $('#repo-decrypt-form').submit(function() {
     var pwd = $.trim(pwd_input.val());
     var err = $(this).find('.error');
     if (!pwd) {
-        err.html('{% trans "Password is required." %}');
+        err.html("{% trans "Password is required." %}");
     } else if (pwd.length < 3 || pwd.length > 30) {
-        err.html('{% trans "Password should be 3 to 30 characters." %}');
+        err.html("{% trans "Password should be 3 to 30 characters." %}");
     } else {
         $.ajax({
             url: '{% url 'repo_set_password' %}',
@@ -515,7 +513,7 @@ $('#repo-decrypt-form').submit(function() {
                 if (jqXHR.responseText) {
                     err_str = $.parseJSON(jqXHR.responseText).error;
                 } else {
-                    err_str = '{% trans "Failed. Please check the network." %}';
+                    err_str = "{% trans "Failed. Please check the network." %}";
                 }   
                 err.html(err_str); 
                 pwd_input.val('');
