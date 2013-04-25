@@ -47,8 +47,8 @@ function submitAndShowProgress(form, upload_progress_con) {
 };
 
 $('#upload-file-form .submit').click(function () {
-    if (!$.trim($('#upload-file-form input[type=file]').val())) {
-        $('#upload-file-form .error').html('{% trans "Please choose a file at first." %}').removeClass('hide');
+    if (!$.trim($('#upload-file-list').html())) { // when choose a file repeatedly, $('#upload-file-form input[type="file"]').val() is empty, so don't use that to check
+        $('#upload-file-form .error').html("{% trans "Please choose a file at first." %}").removeClass('hide');
         return false;
     }
 
