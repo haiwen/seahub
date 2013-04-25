@@ -1093,6 +1093,20 @@ textarea:-moz-placeholder {/* for FF */
     width:5.5em;
     margin-right:1em;
 }
+.ru #user-basic-info label {
+    width:9em;
+}
+.es #user-basic-info label,
+.hu #user-basic-info label {
+    width:7em;
+}
+.it #user-basic-info label {
+    width:6em;
+}
+.fr #user-basic-info label {
+    width:8em;
+}
+#user-basic-info .avatar,
 #user-basic-info .avatar,
 #user-basic-info textarea {
     vertical-align:text-top;
@@ -1112,6 +1126,19 @@ textarea:-moz-placeholder {/* for FF */
 #user-basic-info .submit {
     margin-left:6.5em;
 }
+.ru #user-basic-info .submit {
+    margin-left:10em;
+}
+.es #user-basic-info .submit ,
+.hu #user-basic-info .submit {
+    margin-left:8em;
+}
+.it #user-basic-info .submit {
+    margin-left:7em;
+}
+.fr #user-basic-info .submit {
+    margin-left:9em;
+}
 #user-avatar-change {
     position:relative;
 }
@@ -1119,6 +1146,19 @@ textarea:-moz-placeholder {/* for FF */
     position:absolute;
     left:150px;
     top:5px;
+}
+.ru #user-avatar-form {
+    left:200px;
+}
+.es #user-avatar-form ,
+.hu #user-avatar-form {
+    left:170px;
+}
+.it #user-avatar-form {
+    left:160px;
+}
+.fr #user-avatar-form {
+    left:185px;
 }
 #grp-avatar-form {
     position:relative;
