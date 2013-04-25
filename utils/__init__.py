@@ -7,6 +7,8 @@ import urllib2
 import uuid
 import logging
 import json
+import tempfile
+import locale
 
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -854,6 +856,16 @@ def redirect_to_login(request):
     path = urlquote(request.get_full_path())
     tup = login_url, redirect_field_name, path
     return HttpResponseRedirect('%s?%s=%s' % tup)
+
+def mkstemp():
+    '''Returns (fd, filepath), the same as tempfile.mkstemp, except the
+    filepath is encoded in UTF-8
+
+    '''
+    fd, path = tempfile.mkstemp()
+    system_encoding = locale.getdefaultlocale()[1]
+    path_utf8 = path.decode(system_encoding).encode('UTF-8')
+    return fd, path_utf8
 
 # Move to here to avoid circular import.
 from base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo

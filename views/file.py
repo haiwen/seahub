@@ -7,7 +7,6 @@ view_trash_file, view_snapshot_file
 import os
 import simplejson as json
 import stat
-import tempfile
 import urllib
 import urllib2
 import chardet
@@ -38,7 +37,7 @@ from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
-    is_textual_file, show_delete_days
+    is_textual_file, show_delete_days, mkstemp
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
@@ -570,7 +569,7 @@ def file_edit_submit(request, repo_id):
     content = content.encode(encoding)
 
     # first dump the file content to a tmp file, then update the file
-    fd, tmpfile = tempfile.mkstemp()
+    fd, tmpfile = mkstemp()
     def remove_tmp_file():
         try:
             os.remove(tmpfile)
