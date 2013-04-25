@@ -1,0 +1,133 @@
+# This file is distributed under the same license as the PACKAGE package.
+# Pierrick BRUN, pierrick.brun@gmail.com 2013
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: django\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-13 19:17+0800\n"
+"PO-Revision-Date: 2013-04-23 15:06+0100\n"
+"Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
+"Language-Team: Français\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: admin.py:29
+msgid "Personal info"
+msgstr "Infos personnelles"
+
+#: admin.py:30
+msgid "Permissions"
+msgstr "Autorisations"
+
+#: admin.py:31
+msgid "Important dates"
+msgstr "Dates importantes"
+
+#: admin.py:32
+msgid "Groups"
+msgstr "Groupes"
+
+#: admin.py:114
+msgid "Password changed successfully."
+msgstr "Mot de passe modifié avec succès."
+
+#: admin.py:124
+#, python-format
+msgid "Change password: %s"
+msgstr "Changer mot de passe : %s"
+
+#: forms.py:18
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: forms.py:19 forms.py:155
+msgid "Password"
+msgstr "Mot de passe"
+
+#: forms.py:39
+msgid ""
+"Please enter a correct username and password. Note that both fields are case-"
+"sensitive."
+msgstr ""
+"Veuillez entrer un nom d'utilisateur correct et le mot de passe. Notez que "
+"les deux champs sont sensibles à la casse."
+
+#: forms.py:41
+msgid "This account is inactive."
+msgstr "Ce compte est inactif."
+
+#: forms.py:46
+msgid ""
+"Your Web browser doesn't appear to have cookies enabled. Cookies are "
+"required for logging in."
+msgstr ""
+"Votre navigateur ne semble pas avoir les cookies activés. Les cookies sont "
+"requis pour se connecter."
+
+#: forms.py:59
+msgid "E-mail"
+msgstr "Adresse mail"
+
+#: forms.py:66
+msgid ""
+"Failed to send email, email service is not properly configured, please "
+"contact administrator."
+msgstr ""
+"Echec de l'envoi du mail, le service de courrier électronique n'est pas "
+"correctement configuré, veuillez contacter l'administrateur."
+
+#: forms.py:74
+msgid ""
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr ""
+"Cette adresse mail n'a pas de compte d'utilisateur associé. Êtes-vous sûr "
+"que vous êtes enregistré ?"
+
+#: forms.py:104
+#, python-format
+msgid "Password reset on %s"
+msgstr "Mot de passe réinitialisé sur %s"
+
+#: forms.py:112
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+#: forms.py:113
+msgid "New password confirmation"
+msgstr "Confirmation du nouveau mot de passe"
+
+#: forms.py:125 forms.py:167
+msgid "The two password fields didn't match."
+msgstr "Les deux champs de mot de passe ne correspondent pas."
+
+#: forms.py:139
+msgid "Old password"
+msgstr "Ancien mot de passe"
+
+#: forms.py:147
+msgid "Your old password was entered incorrectly. Please enter it again."
+msgstr ""
+"Votre ancien mot de passe a été entré incorrectement. Veuillez le rentrer à "
+"nouveau."
+
+#: forms.py:156
+msgid "Password (again)"
+msgstr "Mot de passe (encore)"
+
+#: views.py:90
+msgid "Logged out"
+msgstr "Déconnecté"
+
+#: views.py:138
+msgid "Failed to send email, please contact administrator."
+msgstr "Echec de l'envoi du mail, veuillez contacter l'administrateur."
+
+#: management/commands/createsuperuser.py:24
+msgid "Enter a valid e-mail address."
+msgstr "Entrez une adresse mail valide."
