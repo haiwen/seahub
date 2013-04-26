@@ -204,6 +204,7 @@ p {
 }
 .op {
     font-size:13px;
+    padding-right:2px;
 }
 .op-target {
     color:#803;
@@ -950,6 +951,10 @@ textarea:-moz-placeholder {/* for FF */
 #id_contact_email,
 #id_contact_name,
 #id_note {
+    width:260px;
+    margin-bottom:5px;
+}
+.input {
     width:260px;
     margin-bottom:5px;
 }
@@ -1911,30 +1916,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #md-edit-help {
     width:550px;
-}
-/*overwrite aloha.css*/
-#file-edit .aloha-editable-active, .aloha-editable-active[contenteditable="true"]:focus {
-    outline: none!important;
-}
-#aloha-attribute-field-imageSource, /* img src input*/
-#aloha-attribute-field-imageTitle {
-    width:300px; 
-}
-.aloha-color-picker-overlay {
-    border:1px solid #ddd;
-    width:400px;
-    margin:0;
-    background:#fff;
-    z-index:10111;
-}
-.aloha-color-picker-overlay td {
-    padding:2px;
-    border:0;
-}
-.aloha-color-picker-overlay div {
-    width:22px;
-    height:22px;
-    cursor:pointer;
 }
 /* shareadmin */
 .view-link-alert p {

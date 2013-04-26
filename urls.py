@@ -88,7 +88,7 @@ urlpatterns = patterns('',
     (r'^seafile_access_check/$', seafile_access_check),                       
     url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
 
-    (r'^useradmin/add/$', user_add),
+    url(r'^useradmin/add/$', user_add, name="user_add"),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
     url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),

@@ -59,7 +59,7 @@ from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare
 from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
-    FileCommentForm, RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
+    RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
@@ -1407,10 +1407,11 @@ def user_remove(request, user_id):
     try:
         user = User.objects.get(id=int(user_id))
         user.delete()
+        messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
-        pass
+        messages.error(request, _(u'Failed to delete: the user does not exist'))
     
-    return HttpResponseRedirect(reverse('sys_useradmin'))
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 @login_required
 @sys_staff_required
@@ -1420,10 +1421,11 @@ def user_make_admin(request, user_id):
         user = User.objects.get(id=int(user_id))
         user.is_staff = True
         user.save()
+        messages.success(request, _(u'Successfully set %s as admin') % user.username)
     except User.DoesNotExist:
-        pass
-    
-    return HttpResponseRedirect(reverse('sys_useradmin'))
+        messages.error(request, _(u'Failed to set admin: the user does not exist'))
+
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 @login_required
 @sys_staff_required
@@ -1433,10 +1435,11 @@ def user_remove_admin(request, user_id):
         user = User.objects.get(id=int(user_id))
         user.is_staff = False
         user.save()
+        messages.success(request, _(u'Successfully revoke the admin permission of %s') % user.username)
     except User.DoesNotExist:
-        pass
+        messages.error(request, _(u'Failed to revoke admin: the user does not exist'))
     
-    return HttpResponseRedirect(reverse('sys_useradmin'))
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 @login_required
 @sys_staff_required
@@ -1531,6 +1534,7 @@ def user_add(request):
 
     base_template = 'org_admin_base.html' if request.user.org else 'admin_base.html'
     
+    content_type = 'application/json; charset=utf-8'
     if request.method == 'POST':
         form = AddUserForm(request.POST)
         if form.is_valid():
@@ -1563,15 +1567,9 @@ def user_add(request):
                 else:
                     messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.') % email)
 
-                return HttpResponseRedirect(reverse('sys_useradmin', args=[]))
-    else:
-        form = AddUserForm()
-    
-    return render_to_response("add_user_form.html",  {
-            'form': form,
-            'base_template': base_template,
-            }, context_instance=RequestContext(request))
-
+                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+        else:
+            return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required

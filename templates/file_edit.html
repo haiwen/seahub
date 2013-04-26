@@ -464,9 +464,9 @@ function editSubmit() {
                     $('#simplemodal-container').css({'height':'auto'});
                 }
             } else if (xhr.readyState == 0) {
-                feedback('{% trans "Submit failed. Please check the network." %}', 'error');
+                feedback("{% trans "Submit failed. Please check the network." %}", 'error');
             } else {
-                feedback('{% trans "Submit failed." %}', 'error');
+                feedback("{% trans "Submit failed." %}", 'error');
             }
             enable($('#file-edit-submit'));
         }

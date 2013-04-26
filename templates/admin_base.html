@@ -13,11 +13,6 @@
     <li>
         <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>{% trans "Groups" %}</a>
     </li>
-    {% if request.cloud_mode %}
-    <li>
-        <a href="{{ SITE_ROOT }}sys/orgadmin/" {% block nav_orgadmin_class %}{% endblock %}>{% trans "Organizations" %}</a>
-    </li>
-    {% endif %}
     <li>
         <a href="{{ SITE_ROOT }}sys/notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>{% trans "Notifications" %}</a>
     </li>
