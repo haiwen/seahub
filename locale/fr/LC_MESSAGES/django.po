@@ -682,7 +682,7 @@ msgstr "Lecture seule"
 
 #: contacts/models.py:25 contacts/templates/contacts/contact_list.html:133
 msgid "Email is required."
-msgstr "L'adresse mail est requise."
+msgstr "L\\'adresse mail est requise."
 
 #: contacts/models.py:30 contacts/templates/contacts/contact_list.html:137
 msgid "You can't add yourself."
@@ -2085,7 +2085,7 @@ msgstr ""
 
 #: share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
-msgstr "L'édition a réussi"
+msgstr "L\\'édition a réussi"
 
 #: share/templates/repo/share_admin.html:159
 msgid "Edit failed."
@@ -2107,7 +2107,7 @@ msgstr "Confirmer mot de passe"
 #: templates/add_user_form.html:26 templates/registration/login.html:28
 #: templates/registration/registration_form.html:28
 msgid "Email cannot be blank"
-msgstr "L'adresse mail ne peut pas être vide"
+msgstr "L\\'adresse mail ne peut pas être vide"
 
 #: templates/add_user_form.html:30 templates/registration/login.html:32
 #: templates/registration/registration_form.html:32
@@ -2942,7 +2942,7 @@ msgstr "Raz Mdp"
 
 #: templates/sys_useradmin.html:77
 msgid "Delete User"
-msgstr "Supprimer l'utilisateur"
+msgstr "Supprimer l\\'utilisateur"
 
 #: templates/sys_useradmin.html:78
 msgid "Are you sure you want to reset password of"
@@ -3158,12 +3158,12 @@ msgstr "Bienvenue, vous êtes déjà connecté."
 
 #: templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr " n'est pas pris en charge. Veuillez choisir un fichier image."
+msgstr " n\\'est pas pris en charge. Veuillez choisir un fichier image."
 
 #: templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
 msgstr ""
-" n'est pas pris en charge. Les extensions de fichier ne peuvent être "
+" n\\'est pas pris en charge. Les extensions de fichier ne peuvent être "
 
 #: templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
@@ -3180,7 +3180,7 @@ msgstr "Retour au groupe"
 
 #: templates/snippets/bottom_bar.html:30
 msgid "Please input recommend message."
-msgstr "S'il vous plait, saisissez le message de recommandation."
+msgstr "S\\'il vous plait, saisissez le message de recommandation."
 
 #: templates/snippets/events.html:2
 msgid "Recent Events"
