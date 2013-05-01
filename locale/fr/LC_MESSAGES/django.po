@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français <>\n"
-"PO-Revision-Date: 2013-04-23 16:29+0100\n"
+"PO-Revision-Date: 2013-04-29 16:09+0100\n"
 "POT-Creation-Date: \n"
 
 #: forms.py:26
@@ -1369,7 +1369,7 @@ msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
 "library state before this modification."
 msgstr ""
-"Astuce : Une capture instantanée est générée après la modification, qui "
+"Astuce : Une capture instantanée est générée après la modification. Elle "
 "enregistre l'état de la bibliothèque avant cette modification."
 
 #: templates/repo_history.html:14
@@ -1858,7 +1858,7 @@ msgstr "chargement..."
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
-"Pour la consultation en ligne, vous pouvez utiliser IE 10 ou d'autres "
+"Pour la consultation en ligne, vous pouvez utiliser IE 10 ou d\\'autres "
 "navigateurs, comme firefox."
 
 #: templates/view_file_svg.html:7 templates/snippets/file_content_js.html:41
