@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'seahub.wiki',
     'seahub.group',
     'seahub.notifications',
-    # 'seahub.organizations',
     'seahub.profile',
     'seahub.share',
     'api2',
