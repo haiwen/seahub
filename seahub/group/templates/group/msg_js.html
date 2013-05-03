@@ -115,7 +115,6 @@ $('.reply-submit').click(function() {
         url: url,
         dataType: 'json',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: "message=" + r,
         success: function(data) {

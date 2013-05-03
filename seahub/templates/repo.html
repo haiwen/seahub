@@ -643,7 +643,6 @@ $('.file-star').click(function() {
         url: '{{ SITE_ROOT }}repo/star_file/{{ repo.props.id }}/',
         type: 'POST',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         dataType: 'json',
         data: {
@@ -693,7 +692,6 @@ $('.file-share').click(function() {
             url: aj_url,
             dataType: 'json',
             cache: false,
-            contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 showPopup(data['shared_link']);
             },

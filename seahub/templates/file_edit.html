@@ -449,7 +449,6 @@ function editSubmit() {
         url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}',
         dataType: 'json',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {content: content, encoding: $('#file-enc').val()},
         success: function(data) {

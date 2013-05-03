@@ -43,7 +43,7 @@ def msgreply_save_handler(sender, instance, **kwargs):
     group_msg =  instance.reply_to
     to_user = ''
 
-    from base.templatetags.seahub_tags import at_pattern
+    from seahub.base.templatetags.seahub_tags import at_pattern
     m = re.match(at_pattern, reply_msg)
     if m:
         nickname_or_emailprefix = m.group()[1:]

@@ -1055,7 +1055,7 @@ def attention(request):
         else:
             member_names.append(m.user_name)
 
-        from base.templatetags.seahub_tags import email2nickname, char2pinyin
+        from seahub.base.templatetags.seahub_tags import email2nickname, char2pinyin
         nickname = email2nickname(m.user_name)
         pinyin = char2pinyin(nickname)
         if nickname.startswith(name_str) or pinyin.startswith(name_str):

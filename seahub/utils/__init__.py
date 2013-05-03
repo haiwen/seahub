@@ -864,8 +864,11 @@ def mkstemp():
     '''
     fd, path = tempfile.mkstemp()
     system_encoding = locale.getdefaultlocale()[1]
-    path_utf8 = path.decode(system_encoding).encode('UTF-8')
-    return fd, path_utf8
+    if system_encoding is not None:
+        path_utf8 = path.decode(system_encoding).encode('UTF-8')
+        return fd, path_utf8
+    else:
+        return fd, path
 
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
