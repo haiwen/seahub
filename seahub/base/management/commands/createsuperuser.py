@@ -11,7 +11,7 @@ from django.core import exceptions
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation import ugettext as _
 
-from base.accounts import User
+from seahub.base.accounts import User
 
 RE_VALID_USERNAME = re.compile('[\w.@+-]+$')
 

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from base.accounts import User
+from seahub.base.accounts import User
 import getpass
 
 class Command(BaseCommand):

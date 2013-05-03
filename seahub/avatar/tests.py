@@ -6,9 +6,9 @@ from django.conf import settings
 
 from seahub.base.accounts import User
 
-from avatar.settings import AVATAR_DEFAULT_URL, AVATAR_MAX_AVATARS_PER_USER
-from avatar.util import get_primary_avatar
-from avatar.models import Avatar
+from seahub.avatar.settings import AVATAR_DEFAULT_URL, AVATAR_MAX_AVATARS_PER_USER
+from seahub.avatar.util import get_primary_avatar
+from seahub.avatar.models import Avatar
 
 try:
     from PIL import Image

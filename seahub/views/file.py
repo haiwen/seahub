@@ -245,7 +245,7 @@ def convert_md_link(file_content, repo_id, username):
             token = web_get_access_token(repo_id, obj_id, 'view', username)
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
-            from base.templatetags.seahub_tags import file_icon_filter
+            from seahub.base.templatetags.seahub_tags import file_icon_filter
             
             # convert other types of filelinks to clickable links
             path = "/" + link_name

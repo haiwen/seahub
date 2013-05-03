@@ -18,6 +18,7 @@ from seahub.utils import render_error, render_permission_error, string2list, \
 from seahub.utils.file_types import IMAGE
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
+
 __all__ = ["get_wiki_dirent", "clean_page_name"]
 
 
@@ -146,7 +147,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             ret = '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
             return smart_str(ret)
         else:
-            from base.templatetags.seahub_tags import file_icon_filter
+            from seahub.base.templatetags.seahub_tags import file_icon_filter
             from django.conf import settings
             
             # convert other types of filelinks to clickable links

@@ -5,7 +5,7 @@ from datetime import datetime
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand, CommandError
 
-from notifications.models import UserNotification
+from seahub.notifications.models import UserNotification
 import settings
 
 # Get an instance of a logger
