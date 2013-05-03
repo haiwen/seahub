@@ -23,7 +23,7 @@
     {% endcomment %}
     
     <h3 class="upload-new-avatar-hd">上传新头像：</h3>
-    <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">
+    <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">{% csrf_token %}
         {{ upload_avatar_form.avatar }}<br />
         <p class="error hide">您还没有上传新头像。</p>
         <input type="submit" value="{% trans "Upload New Image" %}" />

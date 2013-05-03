@@ -198,7 +198,7 @@ def repo_remove_share(request):
             org_id = get_org_id_by_group(group_id_int)
             del_org_group_repo(repo_id, org_id, group_id_int)
         else:
-            from group.views import group_unshare_repo
+            from seahub.group.views import group_unshare_repo
             group_unshare_repo(request, repo_id, group_id_int, from_email)
 
     messages.success(request, _('Successfully removed share'))

@@ -18,7 +18,7 @@
 </div>
 
 <div id="reply">
-<form action="" method="post">
+<form action="" method="post">{% csrf_token %}
   <textarea name="message" id="message">{{ form.data.message }}</textarea><br />
   <input type="submit" value="回复" class="submit" />  
   {% for error in form.message.errors %}

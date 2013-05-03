@@ -37,7 +37,7 @@
         <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
         {% endif %}
     </div>
-    <form id="wiki-create-form" action="" method="post" class="hide">
+    <form id="wiki-create-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "Create Wiki"%}</h3>
         <label>{% trans "Name"%}</label><br/>
         <input id="repo-name" type="text" name="repo_name" value="{{group.group_name}}-wiki" maxlength="{{max_file_name}}"/><br />
@@ -71,7 +71,7 @@
         <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}</p>
     </div>
 
-    <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="simple-input-popup hide">
+    <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans "New Page"%}</h3>
         <label>{% trans "Name"%}</label><br/>
         <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="long-input" /><br />

@@ -6,7 +6,7 @@
     <h2>欢迎回来，您已登录。</h2>
 {% else %}
     <h2>注册企业帐号</h2>
-    <form action="" method="post">
+    <form action="" method="post">{% csrf_token %}
         <label for="id_email">邮箱：</label>
         {{ form.email }}
         <label for="id_password1">密码：</label>

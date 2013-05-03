@@ -5,7 +5,7 @@
 {% block main_panel %}
 <div class="narrow-panel">
 <h3>{% trans "Add new notification" %}</h3>
-<form action="" method="post">
+<form action="" method="post">{% csrf_token %}
   <label for="id_message">{% trans "Notification" %}</label>
   {{ form.message }}
   <input type="submit" value="{% trans "Submit" %}" class="submit" />

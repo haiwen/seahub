@@ -1,5 +1,5 @@
 {% load i18n %}
-<form id="repo-create-form" action="" method="post" class="hide">
+<form id="repo-create-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "New Library"%}</h3>
     <label>{% trans "Name"%}</label><br/>
     <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}"/><br />

@@ -8,13 +8,13 @@
     <h2>{% trans "Profile Setting" %}</h2>
     <div id="user-avatar-change">
         <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
-        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">
+        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">{% csrf_token %}
             <button type="button" id="user-avatar-chg-btn">{% trans "Change" %}</button>
             <input type="file" name="avatar" id="user-avatar-input" />
         </form>
     </div>
 
-    <form action="" method="post">
+    <form action="" method="post">{% csrf_token %}
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
         <label>{% trans "Nickname:" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
         {% for error in form.nickname.errors %}

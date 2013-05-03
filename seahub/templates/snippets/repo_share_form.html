@@ -1,5 +1,5 @@
 {% load i18n avatar_tags group_avatar_tags %}
-<form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">
+<form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">{% csrf_token %}
     <h3>{% trans "Share Library"%}</h3>
     <p>{% trans 'Share <span class="op-target"></span> to' %}</p>
     <div id="repo-share-tabs">

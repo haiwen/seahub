@@ -214,7 +214,7 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}
-        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">
+        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">{% csrf_token %}
             <input type="hidden" name="parent_dir" id="parent_dir" value="{{ parent_dir }}" />
             <div class="files-add">
                 <span class="op add">{% trans "Add files" %}</span>
@@ -239,7 +239,7 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}      
-        <form id="update-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}?head={{ head_id }}">
+        <form id="update-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}?head={{ head_id }}">{% csrf_token %}
             <input type="hidden" name="target_file" />
             <input type="file" name="file" id="file-update-input" />
             <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
@@ -312,7 +312,7 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">
+    <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">{% csrf_token %}
         <h3 id="mv-hd"></h3>
         <h4 id="mv-detail"></h4>
         <div id="mv-dir-list">
@@ -333,7 +333,7 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="simple-input-popup hide">
+    <form id="rename-form" action="{{ SITE_ROOT}}repo/file_rename/" method="post" class="simple-input-popup hide">{% csrf_token %}
         <h3>{% trans 'Rename <span id="rename-type"></span>' %}</h3>
         <p>{% trans 'Rename <span id="rename-obj" class="op-target"></span> as: ' %}</p>
         <input type="hidden" name="repo_id" value="{{ repo.id }}" />
@@ -349,7 +349,7 @@
         <h3>{% trans 'Share' %} <span class="op-target"></span></h3>
         <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link-text" /></p>
         <button id="send-link">{% trans 'Send' %}</button>
-        <form id="link-send-form" action="" method="post" class="hide">
+        <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
             <label>{% trans "Send to:"%}</label><br />
             <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
             <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />

@@ -49,7 +49,7 @@
     {% endif %}
 </div>
 
-<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">
+<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">{% csrf_token %}
     <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
     <label>{% trans "Email" %}</label><br />
     <input id="contact_email" type="text" name="contact_email" maxlength="255" value="" /><br />

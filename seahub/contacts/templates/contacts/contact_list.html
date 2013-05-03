@@ -44,7 +44,7 @@
 </div>
 {% endif %}
 
-<form action="" method="post" id="contact-add-form" class="hide">
+<form action="" method="post" id="contact-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "Add Contacts"%}</h3>
     <label>{% trans "Email"%}</label><br />
     {{ form.contact_email }}<br />
@@ -53,7 +53,7 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
-<form action="" method="post" id="contact-edit-form" class="hide">
+<form action="" method="post" id="contact-edit-form" class="hide">{% csrf_token %}
     <h3>{% trans "Edit Contact"%}</h3>
     <label>{% trans "Email"%}</label><br />
     {{ edit_form.contact_email }}<br />

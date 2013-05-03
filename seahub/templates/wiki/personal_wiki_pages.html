@@ -34,7 +34,7 @@
     {% endfor %}
 </ul>
 
-<form id="page-create-form" action="{% url 'personal_wiki_page_new' %}" method="post" class="hide">
+<form id="page-create-form" action="{% url 'personal_wiki_page_new' %}" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "New Page"%}</h3>
     <label>{% trans "Name"%}</label><br/>
     <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}"/><br />

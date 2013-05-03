@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <form id="link-send-form" action="" method="post" class="hide">
+    <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "Send Link" %}</h3>
         <label>{% trans "Send to:"%}</label><br />
         <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />

@@ -7,7 +7,7 @@
 
 <h3>{% trans "All Members" %}</h3>
 <button class="add" id="add-user-btn">{% trans "Add new user" %}</button>
-<form id="add-user-form" action="" method="post" class="hide">
+<form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Add new user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />    

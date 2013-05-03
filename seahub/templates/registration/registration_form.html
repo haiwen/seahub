@@ -7,7 +7,7 @@
     <h2>{% trans "Welcome back, you are already signed in." %}</h2>
 {% else %}
     <h2>{% trans "Signup" %}</h2>
-    <form action="" method="post">
+    <form action="" method="post">{% csrf_token %}
         <label for="id_email">{% trans "Email" %}</label>
         {{ form.email }}            {{ form.email.errors }}
         <label for="id_password1">{% trans "Password" %}</label>

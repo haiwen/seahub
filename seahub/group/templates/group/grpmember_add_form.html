@@ -1,5 +1,5 @@
 {% load i18n %}
-<form id="member-add-form"  method="post" name="member-add-form" class="hide">
+<form id="member-add-form"  method="post" name="member-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "Add members"%}</h3>
     <textarea id="added-member-name" name="user_name" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
@@ -11,7 +11,7 @@
     <p class="error hide" id="member-add-error"></p>
     <input type="submit" value="{% trans "Submit"%}" id="member-add-submit" />
 </form>
-<form id="admin-add-form" method="post" name="admin-add-form" class="hide">
+<form id="admin-add-form" method="post" name="admin-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "Add administrators"%}</h3>
     <textarea id="added-admin-name" name="user_name" placeholder="{% trans "emails, separated by ',' " %}"></textarea><br />
     <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />

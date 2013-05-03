@@ -25,7 +25,7 @@
     <h3 class="info-item-top">{% trans "Group Avatar" %}</h3>
     <div class="info-item-bottom ovhd">
         <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
-        <form id="grp-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_group_add' group.id %}" class="fleft">
+        <form id="grp-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_group_add' group.id %}" class="fleft">{% csrf_token %}
             <button type="button" id="grp-avatar-chg-btn">{% trans "Change" %}</button>
             <input type="file" name="avatar" id="grp-avatar-input" />
         </form>

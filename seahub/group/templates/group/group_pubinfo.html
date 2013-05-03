@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<form id="group-join-form" class="hide" action="" method="post">
+<form id="group-join-form" class="hide" action="" method="post">{% csrf_token %}
   <label>{% trans "Verification Message" %}</label><br />
   <textarea id="id_group_join_msg" name="group_join_msg"></textarea><br />
   <p class="error hide"></p>

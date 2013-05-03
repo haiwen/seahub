@@ -10,7 +10,7 @@
     {% grp_avatar group.id %}
 
     <h3 class="upload-new-avatar-hd">{% trans "Upload New Avatar: " %}</h3>
-    <form enctype="multipart/form-data" method="post" action="">
+    <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
         {{ form.avatar }}<br />
         {{ form.avatar.errors }}
         <input type="submit" value="{% trans "Submit" %}" class="submit" />

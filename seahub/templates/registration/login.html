@@ -4,7 +4,7 @@
 {% block main_panel %}
 <div class="narrow-panel">
 <h2>{% trans "Log In" %}</h2>
-<form action="" method="post" class="login-form">
+<form action="" method="post" class="login-form">{% csrf_token %}
     <label for="username">{% trans "Email" %}</label>
 	<input type="text" id="id_email" name="username" value="" />
 	<label for="password">{% trans "Password" %}</label>
