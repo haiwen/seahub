@@ -21,7 +21,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '%s/../seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
+        'NAME': '%s/seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -101,6 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',    
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',    
     'auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',    
@@ -110,8 +111,6 @@ MIDDLEWARE_CLASSES = (
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'djblets.util.rooturl'
 SITE_ROOT = '/'
-
-ROOT_URLCONF = 'seahub.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
