@@ -671,7 +671,7 @@ class FileView(APIView):
                                  "Failed to rename file: %s" % e)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                reloaddir(request, repo_id, parent_dir)
+                return reloaddir(request, repo_id, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
@@ -720,15 +720,39 @@ class FileView(APIView):
                                  "SearpcError:" + e.msg)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                reloaddir(request, dst_repo_id, dst_dir)
+                return reloaddir(request, dst_repo_id, dst_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
+        elif operation.lower() == 'create':
+            parent_dir = os.path.dirname(path)
+            parent_dir_utf8 = parent_dir.encode('utf-8')
+            new_file_name = os.path.basename(path)
+            new_file_name = check_filename_with_rename(repo_id, parent_dir,
+                                                       new_file_name)
+            new_file_name_utf8 = new_file_name.encode('utf-8')
+            
+            try:
+                seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir,
+                                                      new_file_name,
+                                                      request.user.username)
+            except SearpcError, e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 'Failed to make directory.')
+
+            if request.GET.get('reloaddir', '').lower() == 'true':
+                return reloaddir(request, repo_id, parent_dir)
+            else:
+                resp = Response('success', status=status.HTTP_201_CREATED)
+                uri = reverse('FileView', args=[repo_id], request=request)
+                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
+                    quote(new_file_name_utf8)
+                return resp
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
-                             "Operation can only be rename or move.")
+                             "Operation can only be rename, create or move.")
 
     def put(self, request, repo_id, format=None):
         # update file
