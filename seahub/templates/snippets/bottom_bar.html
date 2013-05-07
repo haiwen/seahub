@@ -20,7 +20,6 @@ $('#discuss').click(function() {
         $.ajax({
             url:$('#discuss-to-group-form').attr('action'),
             dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
             data: {
                 'repo_id': '{{ repo.id }}',
                 'path': '{{ path }}'
@@ -73,7 +72,6 @@ $('#discuss-submit').click(function() {
         url: form.attr('action'),
         type: 'POST',
         dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         traditional: true,
         data: {

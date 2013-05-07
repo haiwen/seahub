@@ -84,7 +84,6 @@ $('#contact-edit-form').submit(function() {
         type: 'POST',
         dataType: 'json',
         cache: 'false',
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {
             'user_email': '{{request.user.username}}',

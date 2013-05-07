@@ -27,7 +27,6 @@ $('#get-shared-link').click(function() {
         url: url,
         dataType: 'json',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         success: function(data) {
             $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + data['token']);
             $('#shared-link, input[name="file_shared_link"]').val(data['shared_link']);
@@ -50,7 +49,6 @@ $('#rm-shared-link').click(function() {
         url: url,
         dataType: 'json',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         success: function(data) {
             hideLink();
             feedback(data['msg'], 'success');
@@ -99,7 +97,6 @@ $("#link-send-form").submit(function(event) {
         url: "{% url 'send_shared_link' %}",
         dataType: 'json',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         data: {file_shared_link: file_shared_link, email: email},
         success: function(data) {

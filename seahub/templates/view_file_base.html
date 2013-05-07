@@ -141,7 +141,6 @@ $('#star').click(function() {
         url: '{% url 'repo_star_file' repo.id %}',
         type: 'POST',
         cache: false,
-        contentType: 'application/json; charset=utf-8',
         beforeSend: prepareCSRFToken,
         dataType: 'json',
         data: {
