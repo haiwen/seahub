@@ -25,7 +25,7 @@ consult a specific backend's documentation for details.
 
 from django.conf.urls.defaults import *
 
-from auth import views as auth_views
+from seahub.auth import views as auth_views
 
 urlpatterns = patterns('',
                        url(r'^login/$',

@@ -13,12 +13,12 @@ from django.utils.http import urlquote, base36_to_int
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 
-from auth import REDIRECT_FIELD_NAME
-from auth import login as auth_login
-from auth.decorators import login_required
-from auth.forms import AuthenticationForm
-from auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
-from auth.tokens import default_token_generator
+from seahub.auth import REDIRECT_FIELD_NAME
+from seahub.auth import login as auth_login
+from seahub.auth.decorators import login_required
+from seahub.auth.forms import AuthenticationForm
+from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from seahub.auth.tokens import default_token_generator
 
 from seahub.base.accounts import User
 
@@ -79,7 +79,7 @@ def login(request, template_name='registration/login.html',
 
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
-    from auth import logout
+    from seahub.auth import logout
     logout(request)
     if next_page is None:
         redirect_to = request.REQUEST.get(redirect_field_name, '')
@@ -118,7 +118,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         password_reset_form=PasswordResetForm, token_generator=default_token_generator,
         post_reset_redirect=None):
     if post_reset_redirect is None:
-        post_reset_redirect = reverse('auth.views.password_reset_done')
+        post_reset_redirect = reverse('auth_password_reset_done')
     if request.method == "POST":
         form = password_reset_form(request.POST)
         if form.is_valid():
@@ -160,7 +160,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     """
     assert uidb36 is not None and token is not None # checked by URLconf
     if post_reset_redirect is None:
-        post_reset_redirect = reverse('auth.views.password_reset_complete')
+        post_reset_redirect = reverse('auth_password_reset_complete')
     try:
         uid_int = base36_to_int(uidb36)
         user = User.objects.get(id=uid_int)
@@ -193,7 +193,7 @@ def password_reset_complete(request, template_name='registration/password_reset_
 def password_change(request, template_name='registration/password_change_form.html',
                     post_change_redirect=None, password_change_form=PasswordChangeForm):
     if post_change_redirect is None:
-        post_change_redirect = reverse('auth.views.password_change_done')
+        post_change_redirect = reverse('auth_password_change_done')
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():

@@ -1,6 +1,3 @@
-from auth import authenticate
-from auth.tokens import default_token_generator
-
 from django.contrib.sites.models import Site
 from django.template import Context, loader
 from django import forms
@@ -8,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
 
 from seahub.base.accounts import User
+from seahub.auth import authenticate
+from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED
 
 class AuthenticationForm(forms.Form):

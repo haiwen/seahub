@@ -1,8 +1,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from auth.decorators import login_required
-
+from seahub.auth.decorators import login_required
 from seahub.utils.search import search_file_by_name
 
 @login_required

@@ -27,7 +27,7 @@ from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
-from auth.decorators import login_required
+from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact

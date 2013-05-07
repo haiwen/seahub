@@ -17,7 +17,7 @@ from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
 from seahub.utils import render_error, render_permission_error, \
     check_and_get_org_by_group
 
-from auth.decorators import login_required
+from seahub.auth.decorators import login_required
 from seaserv import ccnet_threaded_rpc, check_group_staff
 
 def _get_next(request):

@@ -4,8 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from auth.decorators import login_required
-
+from seahub.auth.decorators import login_required
 from seahub.notifications.models import Notification, NotificationForm
 from seahub.notifications.utils import refresh_cache
 

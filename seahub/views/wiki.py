@@ -24,12 +24,10 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
-from auth.decorators import login_required
-
 import seaserv
 from pysearpc import SearpcError
 
-
+from seahub.auth.decorators import login_required
 from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages

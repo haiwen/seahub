@@ -7,8 +7,8 @@ from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 
-from auth.models import get_hexdigest, check_password
-from auth import authenticate, login
+from seahub.auth.models import get_hexdigest, check_password
+from seahub.auth import login
 from registration import signals
 #from registration.forms import RegistrationForm
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
@@ -183,6 +183,22 @@ class User(object):
         for r in passwd_setted_repos:
             unset_repo_passwd(r.id, self.email)
 
+class AuthBackend(object):
+    def get_user(self, username):
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        return user
+
+    def authenticate(self, username=None, password=None):
+        try:
+            user = User.objects.get(email=username)
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
+            
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:
@@ -261,7 +277,8 @@ class RegistrationBackend(object):
                                                                         password, site,
                                                                         send_email=False)
             # login the user
-            new_user.backend='auth.backends.ModelBackend' 
+            new_user.backend=settings.AUTHENTICATION_BACKENDS[0]
+            
             login(request, new_user)
         else:
             # create inactive user, user can be activated by admin, or through activated email
@@ -296,7 +313,7 @@ class RegistrationBackend(object):
                                         user=activated,
                                         request=request)
             # login the user
-            activated.backend='auth.backends.ModelBackend' 
+            activated.backend=settings.AUTHENTICATION_BACKENDS[0]
             login(request, activated)
 
         return activated

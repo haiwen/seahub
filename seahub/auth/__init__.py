@@ -4,7 +4,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
 SESSION_KEY = '_auth_user_name'
-BACKEND_SESSION_KEY = '_auth_user_backend'
+BACKEND_SESSION_KEY = '_auth_user_backend_2'
 REDIRECT_FIELD_NAME = 'next'
 
 def load_backend(path):
@@ -93,11 +93,11 @@ def logout(request):
         from seahub.base.accounts import User 
         if isinstance(request.user, User):
             request.user.remove_repo_passwds()
-        from auth.models import AnonymousUser
+        from seahub.auth.models import AnonymousUser
         request.user = AnonymousUser()
 
 def get_user(request):
-    from auth.models import AnonymousUser
+    from seahub.auth.models import AnonymousUser
     try:
         username = request.session[SESSION_KEY]
         backend_path = request.session[BACKEND_SESSION_KEY]

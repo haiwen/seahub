@@ -11,7 +11,6 @@ from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.utils.translation import ugettext as _
 
-from auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
@@ -26,6 +25,7 @@ from forms import RepoShareForm, FileLinkShareForm
 from models import AnonymousShare
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
+from seahub.auth.decorators import login_required
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user

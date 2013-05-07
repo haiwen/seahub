@@ -5,13 +5,13 @@ from django.http import HttpResponse, HttpResponseBadRequest, \
 from django.shortcuts import render_to_response, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
 from models import Contact, ContactAddForm, ContactEditForm
+from seahub.auth.decorators import login_required
 from seahub.utils import render_error
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
 from seahub.views import is_registered_user

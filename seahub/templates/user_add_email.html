@@ -9,7 +9,7 @@
 {% blocktrans %}Password:  {{ password }}{% endblocktrans %}
 
 {% trans "Please go to the following page and log in:" %}
-{{ protocol }}://{{ domain }}{% url auth_login %}
+{{ protocol }}://{{ domain }}{% url 'auth_login' %}
 
 {% trans "Thanks for using our site!" %}
 

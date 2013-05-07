@@ -1,5 +1,5 @@
 from django.utils.decorators import method_decorator
-from auth.decorators import login_required
+from seahub.auth.decorators import login_required
 
 # from base.decorators import ctx_switch_required
 

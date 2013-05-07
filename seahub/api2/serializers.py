@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from auth import authenticate
+from seahub.auth import authenticate
 
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()

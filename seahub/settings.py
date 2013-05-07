@@ -103,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',    
-    'auth.middleware.AuthenticationMiddleware',
+    'seahub.auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',    
     'seahub.base.middleware.InfobarMiddleware',
 )
@@ -137,7 +137,7 @@ LANGUAGES = (
 )
 LOCALE_PATHS = (
     os.path.join(os.path.dirname(__file__), 'locale'),
-    os.path.join(os.path.dirname(__file__), 'thirdpart/auth/locale'),
+    # os.path.join(os.path.dirname(__file__), 'thirdpart/auth/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -170,7 +170,7 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'auth.backends.ModelBackend',
+    'seahub.base.accounts.AuthBackend',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

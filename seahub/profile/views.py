@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import Context, RequestContext
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids
@@ -14,6 +13,7 @@ from pysearpc import SearpcError
 from forms import ProfileForm
 from models import Profile
 from utils import refresh_cache
+from seahub.auth.decorators import login_required
 from seahub.utils import render_error
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact

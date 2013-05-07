@@ -20,7 +20,7 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
-from auth.decorators import login_required
+from seahub.auth.decorators import login_required
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
     web_get_access_token, \

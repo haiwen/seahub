@@ -25,9 +25,9 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 
-from auth.decorators import login_required
-from auth import login as auth_login
-from auth import authenticate
+from seahub.auth.decorators import login_required
+from seahub.auth import login as auth_login
+from seahub.auth import authenticate
 import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
@@ -73,7 +73,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_dir_files_last_modified, show_delete_days, HtmlDiff, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
-import seahub.settings
+import seahub.settings as settings
 try:
     from seahub.settings import DOCUMENT_CONVERTOR_ROOT
     if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
