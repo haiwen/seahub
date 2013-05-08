@@ -789,32 +789,20 @@ def myhome(request):
     profiles = Profile.objects.filter(user=request.user.username)
     nickname = profiles[0].nickname if profiles else ''
 
-    my_contacts = []
+    autocomp_groups = joined_groups
+    contacts = [ c for c in Contact.objects.filter(user_email=email) \
+                     if is_registered_user(c.contact_email) ]
+
+    
     if request.cloud_mode:
         allow_public_share = False
-        # In cloud mode, list joined groups and registered contacts for
-        # autocompletion.
-        autocomp_groups = joined_groups
-        contacts = [ c for c in Contact.objects.filter(user_email=email) \
-                         if is_registered_user(c.contact_email) ]
-        my_contacts = contacts
     else:
         allow_public_share = True
 
         # Clear org messages just in case. Should never happen in production
         # environment.
         orgmsg_list = []        
-        
-        # List all personal groups and all registered users for autocompletion.
-        autocomp_groups = get_personal_groups(-1, -1)
-        contacts = []
-        for u in get_emailusers(-1, -1):
-            if u.email == request.user.username:
-                continue
-            u.contact_email = u.email
-            contacts.append(u)
-        my_contacts = [ c for c in Contact.objects.filter(user_email=email) \
-                         if is_registered_user(c.contact_email) ]
+
     # events
     if EVENTS_ENABLED:
         events = True
@@ -840,7 +828,6 @@ def myhome(request):
             "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
-            "my_contacts": my_contacts,
             "joined_groups": joined_groups,
             "autocomp_groups": autocomp_groups,
             "notes": notes,
