@@ -9,7 +9,7 @@ import string
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -99,7 +99,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',    
+    'django.middleware.csrf.CsrfResponseMiddleware',    
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',    
@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'seahub.contacts',
     'seahub.wiki',
     'seahub.group',
+    'seahub.message',
     'seahub.notifications',
     'seahub.profile',
     'seahub.share',
