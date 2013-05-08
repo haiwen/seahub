@@ -95,38 +95,41 @@ function replyAt() {
     r_input.focus();
 }
 $('.reply-at').click(replyAt);
-$('.reply-submit').click(function() {
-    var p = $(this).parent();
-    var r_input = p.find('.reply-input');
-    var r = $.trim(r_input.val()); 
-    var err = p.find('.error');
+$('.reply-form').submit(function() {
+    var form = $(this),
+        r_input = form.find('.reply-input'),
+        r = $.trim(r_input.val()), 
+        err = form.find('.error');
+
     if (!r || r.length > 150) {
         err.removeClass('hide');
         return false;
     }
-
     err.addClass('hide');
-    var sm = $(this);
-    var url = sm.data('url');
-    var r_list = p.find('.reply-list');
+
+    var sm = $(this).find('.reply-submit');
     disable(sm);
+
     $.ajax({
         type: "POST",
-        url: url,
+        url: form.attr('action'),
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: "message=" + r,
+        data: { "message": r },
         success: function(data) {
+            var msg_op = form.parent(),
+                r_list = msg_op.find('.reply-list'),
+                r_cnt = msg_op.find('.unfold-replies');
+
             r_list.html(data['html']).removeClass('hide');
             if (data['r_num'] > 3) {
-                var r_cnt = p.find('.unfold-replies');
                 r_cnt.html(r_cnt.html().replace(/\d+/, data['r_num']));
-                p.find('.replies-op').removeClass('hide');
+                msg_op.find('.replies-op').removeClass('hide');
             }
             enable(sm);
             r_input.val('').height(20);
-            p.find('.reply-submit, .reply-cancel').addClass('hide');
+            form.find('.reply-submit, .reply-cancel').addClass('hide');
             r_list.children().hover(
                 function(){
                     $(this).find('.op').removeClass('vh');
@@ -144,10 +147,13 @@ $('.reply-submit').click(function() {
                 }
             ).click(replyAt);
         },
-        error:function() {
-           err.html('{% trans "Failed." %}').removeClass('hide'); 
-           enable(sm);
+        error:function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                err.html("{% trans "Failed. Please check the network." %}").removeClass('hide'); 
+            }
+            enable(sm);
         }
     }); 
+    return false;
 });
 {% endif %}
