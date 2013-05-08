@@ -1,0 +1,147 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags  i18n %}
+{% load url from future %}
+
+{% block sub_title %}message - {% endblock %}
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab "><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'message_list' %}">{% trans "Messages" %}</a></li>
+    </ul>
+</div>
+
+{% endblock %}
+{% block left_panel %}
+<div class="info-item">
+    <h3 class="info-item-top">{% trans "Send to" %}</h3>
+    <div class="info-item-bottom home-profile ovhd">
+        <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Edit" %}">{% avatar to_email 48 %}</a>
+        <div class="txt fright">
+            <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
+            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Edit" %}</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block right_panel %}
+
+<a href="{% url 'message_list' %}" style="font-size:20px;"> << {% trans 'Return' %}</a>
+
+<div id="personal-reply">
+
+    {% if request.user.is_authenticated %}
+    {% if to_email %}
+    <form id="personal-message-form" action="/message/message_send/" method="post" onsubmit="return check(this)">
+       {% avatar request.user.username 48 %}
+        <textarea name="message" id="message" placeholder="{% trans "Send a message..." %}">{{ form.data.message }}</textarea><br />
+        <input type = "hidden" value = "{{ to_email }}" name= "to_email"/>
+        {% for error in form.message.errors %}
+        <p class="error">{{ error|escape }}</p>
+        {% endfor %}
+        <button type="submit" class="submit hide">{% trans "Submit" %}</button>
+        <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
+        <span class="say"></span>
+    </form>
+    {% endif %}
+
+    {% if person_msgs %}
+    <ul class="msg-list">
+    {% for msg in person_msgs.object_list %}
+        <li class="msg w100 ovhd">
+        {% if msg.to_email == request.user.email %}
+        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
+        
+        <div class="txt">
+            <div class="msg-main" style="text-align:right;">
+                <div class="msg-hd w100 ovhd">                    
+                    <a href="{% url 'user_profile' msg.from_email|email2id %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
+                </div>
+                <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>
+                <span class="say"></span>
+            </div>
+        </div>
+
+        {% else %}        
+        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
+        <div class="txt">
+            <div class="msg-main">
+                
+                <div class="msg-hd w100 ovhd">
+                    <a href="{% url 'user_profile' msg.from_email|email2id %}" class="author">{% trans 'I' %}</a>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
+                </div>
+                <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>
+                <span class="say"></span>
+                
+            </div>
+        </div>      
+
+        {% endif %}
+
+
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% if person_msgs.has_other_pages %}
+    <div id="paginator">
+        {% if person_msgs.has_previous %}
+        <a href="?page={{ person_msgs.previous_page_number }}" class="prev">{% trans "Previous" %}</a>
+        {% endif %}
+        {% for pr in person_msgs.page_range %}
+          {% if pr == person_msgs.number %}
+          <span class="cur">{{ pr }}</span>
+          {% else %}
+          <a href="?page={{ pr }}&to_email={{ to_email }}" class="pg">{{ pr }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if person_msgs.has_next %}
+        <a href="?page={{ person_msgs.next_page_number }}&to_email={{ to_email }}" class="next">{% trans "Next"%}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if person_msgs.object_list|length > 5 %}
+    <a href="#personal-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
+    {% endif %}
+
+    {% else %}
+    <p>{% trans "After login, you can post discussions and add replies." %}</p>
+    {% endif %}
+    
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+
+$('#message').focus(function() {
+    $(this).height(75);
+    $('#personal-message-form').find('.submit, .cancel').removeClass('hide');
+});
+$('#personal-message-form .cancel').click(function() {
+    $(this).addClass('hide');
+    $('#personal-message-form .submit').addClass('hide');
+    $('#message').val('').height(25);
+});
+
+function check(it){
+    if(!it.message.value)
+        return false;
+}
+</script>
+{% endblock %}
+
+
