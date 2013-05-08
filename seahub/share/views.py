@@ -49,6 +49,11 @@ def share_repo(request):
     if request.method != 'POST':
         raise Http404
     
+    sender = request.user.username.split('@')[0]
+    http_or_https = request.is_secure() and 'https' or 'http'
+    domain = request.get_host()
+    head_of_repo_url = '%s://%s/' % (http_or_https, domain)
+
     form = RepoShareForm(request.POST)
     if not form.is_valid():
         # TODO: may display error msg on form 
@@ -128,6 +133,15 @@ def share_repo(request):
                 {'repo': repo.name, 'group': group.group_name}
             messages.error(request, msg)
         else:
+            members = get_group_members(group.id)
+            
+            for email in members:
+                message = UserMessage()
+                message.to_email = email
+                message.from_email = request.user.username
+                message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)  
+                message.ifread = 0
+                message.save()
             msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
             {'group':group.group_name, 'share':reverse('share_admin')}
             messages.success(request, msg)
@@ -136,6 +150,13 @@ def share_repo(request):
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
+        #send message when share repo
+        message = UserMessage()
+        message.to_email = email
+        message.from_email = request.user.username
+        message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
+        message.ifread = 0
+        message.save()
 
         if not is_registered_user(email):
             # Generate shared link and send mail if user has not registered.

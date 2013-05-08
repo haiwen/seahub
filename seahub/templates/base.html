@@ -42,6 +42,7 @@
                     <div class="account fright">
                         {% if request.user.is_authenticated %}
                         <a href="{% url 'edit_profile' %}" class="avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
+                        <a href="{% url 'message_list' %}" id="msg_count"><img src="{{ MEDIA_URL }}/img/mail.png" width="25" height="20" /></b></a>
                         <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
@@ -164,6 +165,28 @@ $('#info-bar .close').click(function() {
     }
 });
 {% endif %}
+
+$(document).ready(function(){
+
+    $.ajax({
+        url: '{% url 'msg_count' %}',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_email': 'user',
+        },  
+        success: function(data) {
+            if (data['count']!=-1) {
+                var count="<b><img src='{{ MEDIA_URL }}/img/mail.png' width='25' height='20' />("+data['count']+")</b>";
+                $("#msg_count").html(count);
+            }
+        },
+    });
+    return false;
+});
+
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
