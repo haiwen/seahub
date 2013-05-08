@@ -159,6 +159,6 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             ret = a_tag % (settings.MEDIA_URL, icon, icon, smart_str(s), page_name)
             return smart_str(ret)
 
-    return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, content)
+    return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, content)
 
 

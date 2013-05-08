@@ -254,7 +254,7 @@ def convert_md_link(file_content, repo_id, username):
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href="%s" target="_blank" class="vam">%s</a>'''
             return a_tag % (MEDIA_URL, icon, icon, s, link_name)
 
-    return re.sub(r'\[\[(.+)\]\]|(`.+`)', repl, file_content)
+    return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, file_content)
     
 @repo_passwd_set_required
 def view_file(request, repo_id):
