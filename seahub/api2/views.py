@@ -1037,7 +1037,7 @@ class SharedRepo(APIView):
                     'Permission error.')
                     
         if share_type == 'personal':
-            if not is_registered_user(email) :
+            if not is_registered_user(user) :
                 return api_error(status.HTTP_400_BAD_REQUEST,\
                     'user not exist')
             try :
