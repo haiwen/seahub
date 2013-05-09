@@ -35,8 +35,8 @@ except ImportError:
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
-    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
-    list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
+    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set, is_repo_owner,\
+    list_personal_repos_by_owner, list_personal_shared_repos, check_quota, get_repo_owner,\
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE
@@ -963,34 +963,22 @@ class BeShared(APIView):
     throttle_classes = (UserRateThrottle, )    
 
     def get(self, request, format=None):
-        username = request.user.username
+        username = request.GET.get('user')
+        shared_type = request.GET.get('type')
         shared_repos = []
-        joined_groups = get_personal_groups_by_user(username)
-        shared_repos += list_share_repos(username, 'to_email', -1, -1)
-        for grp in joined_groups:
-        # Get group repos, and for each group repos...
-            for r_id in get_group_repoids(grp.id):
-                # No need to list my own repo
-                if is_repo_owner(email, r_id):
-                    continue
-                 # Convert repo properties due to the different collumns in Repo
-                 # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                cmmts = get_commits(r_id, 0, 1)
-                last_commit = cmmts[0] if cmmts else None
-                r.last_modified = last_commit.ctime if last_commit else 0
-                r.share_type = 'group'
-                r.user = get_repo_owner(r_id)
-                r.user_perm = check_permission(r_id, email)
-                shared_repos += r
-
-        if not CLOUD_MODE:
-            shared_repos += list_inner_pub_repos(username)
+        if shared_type == "group" :
+            joined_groups = get_personal_groups_by_user(username)
+            for grp in joined_groups:
+            # Get group repos, and for each group repos...
+                for r_id in get_group_repoids(grp.id):
+                    if is_repo_owner(username, r_id):
+                        continue
+                    r = get_repo(r_id)
+                    shared_repos.append(r)
+        if username and not shared_type :
+            shared_repos += list_share_repos(username, 'to_email', -1, -1)
+            if not CLOUD_MODE:
+                shared_repos += list_inner_pub_repos(username)
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
