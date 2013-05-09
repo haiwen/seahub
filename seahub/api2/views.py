@@ -22,7 +22,7 @@ from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from seahub.base.accounts import User
 from seahub.share.models import FileShare
-from seahub.views import access_to_repo, validate_owner
+from seahub.views import access_to_repo, validate_owner ,is_registered_user
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
     get_dir_files_last_modified, \
@@ -35,10 +35,10 @@ except ImportError:
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
-    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
-    list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
-    list_share_repos, get_group_repos_by_owner, list_inner_pub_repos_by_owner,\
-    remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
+    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set, is_repo_owner,\
+    list_personal_repos_by_owner, list_personal_shared_repos, check_quota, get_repo_owner,\
+    list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
+    list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE
 
 json_content_type = 'application/json; charset=utf-8'
@@ -954,6 +954,36 @@ class SharedRepos(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class BeShared(APIView):
+    """
+    List repos that a repo others/groups/public share to user.  
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )    
+
+    def get(self, request, format=None):
+        username = request.GET.get('user')
+        shared_type = request.GET.get('type')
+        shared_repos = []
+        if shared_type == "group" :
+            joined_groups = get_personal_groups_by_user(username)
+            for grp in joined_groups:
+            # Get group repos, and for each group repos...
+                for r_id in get_group_repoids(grp.id):
+                    if is_repo_owner(username, r_id):
+                        continue
+                    r = get_repo(r_id)
+                    shared_repos.append(r)
+        if username and not shared_type :
+            shared_repos += list_share_repos(username, 'to_email', -1, -1)
+            if not CLOUD_MODE:
+                shared_repos += list_inner_pub_repos(username)
+
+        return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
+                            status=200, content_type=json_content_type)
+
+
 class SharedRepo(APIView):
     """
     Support uniform interface for shared libraries.
@@ -982,6 +1012,54 @@ class SharedRepo(APIView):
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'share_type can only be personal or group or public.')
+
+        return Response('success', status=status.HTTP_200_OK)
+
+    def put(self, request, repo_id, format=None):
+        share_type = request.GET.get('share_type')
+        user = request.GET.get('user')
+        group_id = request.GET.get('group_id')
+        permission = request.GET.get('permission')
+        if permission !='rw' or permission != "r"
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Permission error.')
+                    
+        if share_type == 'personal':
+            if not is_registered_user(user) :
+                return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'user not exist')
+            try :
+                from_email = get_repo_owner(repo_id)
+                seafserv_threaded_rpc.add_share(repo_id, from_email, user,
+                                                permission)
+            except SearpcError, e:
+                return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Failed to share to user.')
+
+        elif share_type == 'group':
+            try:
+                print "group"
+                from_email = get_repo_owner(repo_id)
+                group = get_group(int(group_id))
+                if not group:
+                    return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Group not exist .') 
+                seafserv_threaded_rpc.group_share_repo(repo_id, int(group_id), from_email,
+                                           permission)
+            except:
+                return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'user is not member of the group .')  
+
+        elif share_type == 'public':
+            if not CLOUD_MODE:
+                try:
+                    seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+                except:
+                    return api_error(status.HTTP_400_BAD_REQUEST,\
+                        'Failed to share to all members.')
+        else :
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'share_type can only be personal or group or public.')
 
         return Response('success', status=status.HTTP_200_OK)
 
