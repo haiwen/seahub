@@ -44,6 +44,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
     count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
     get_user_share_usage, send_message
+from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -843,6 +844,48 @@ def myhome(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+def client_mgmt(request):
+    username = request.user.username
+
+    clients = []
+    try:
+        clients = seafile_api.list_repo_tokens_by_email(username)
+    except:
+        pass
+
+    if clients:
+        clients.sort(key=lambda client: client.repo_name)
+
+    return render_to_response('client_mgmt.html', {
+            'clients': clients,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def client_unsync(request):
+    repo_id = request.GET.get('repo_id', '')
+    token = request.GET.get('token', '')
+    username = request.user.username
+    client_name = request.GET.get('name', '');
+
+    if repo_id and token:
+        try:
+            seafile_api.delete_repo_token(repo_id, token, username)
+            if client_name:
+                messages.success(request, _(u'Successfully unsync client %s') % client_name)
+            else:
+                messages.success(request, _(u'Successfully unsync client'))
+        except:
+            if client_name:
+                messages.error(request, _(u'Failed to unsync client %s') % client_name)
+            else:
+                messages.error(request, _(u'Failed to unsync client'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)
+
+@login_required
 def innerpub_msg_reply(request, msg_id):
     """Show inner pub message replies, and process message reply in ajax"""
     
@@ -1129,7 +1172,7 @@ def get_repo_download_url(request, repo_id):
         return '', _(u"Failed to download library, unable to find server")
 
     try:
-        token = seafserv_threaded_rpc.get_repo_token_nonnull \
+        token = seafserv_threaded_rpc.generate_repo_token \
                 (repo_id, request.user.username)
     except Exception, e:
         return '', str(e)

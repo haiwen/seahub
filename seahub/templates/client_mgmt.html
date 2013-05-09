@@ -1,0 +1,76 @@
+{% extends "myhome_base.html" %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Clients" %} - {% endblock %}
+{% block nav_myhome_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Clients" %}</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block main_panel %}
+
+{% if clients %}
+<table>
+    <tr>
+        <th width="20%">{% trans "Library" %}</th>
+	<th width="20%">{% trans "Client Name" %}</th>
+	<th width="20%">{% trans "IP" %}</th>
+	<th width="20%">{% trans "Last Sync" %}</th>
+	<th width="20%">{% trans "Operations" %}</th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}repo/{{ client.repo_id }}/">{{ client.repo_name }}</a></td>
+	<td>
+	{% if client.peer_name %}
+	{{ client.peer_name }}
+	{% else %}
+	{% trans "Unknown" %}
+	{% endif %}
+	</td>
+	<td>
+	{% if client.peer_ip %}
+	{{ client.peer_ip }}
+	{% else %}
+	{% trans "Unknown" %}
+	{% endif %}
+	</td>
+	<td>
+	{% if client.sync_time > 0 %}
+	{{ client.sync_time|translate_seahub_time }}
+	{% else %}
+	{% trans "Unknown" %}
+	{% endif %}
+	</td>
+	<td><a data-url="{{ SITE_ROOT }}home/clients/unsync/?repo_id={{client.repo_id}}&&token={{client.token}}{% if client.peer_name %}&&name={{client.peer_name}}{% endif %}" data-target={% if client.peer_name %}"{{client.peer_name}}"{% else %}"{% trans "Unknown" %}"{% endif %} href="#" class="unsync-client op">{% trans "Unsync" %}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+    <h2 class="center-contents">{% trans "You do not have connected clients" %}</h2>
+    <p>{% trans "The libraries synced to desktop clients are listed in this page. You can see the client's name and its IP address. You may unsync a client from a library if you no longer want to sync it." %}</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($('.unsync-client'), {
+    'title':'{% trans "Unsync Client" %}',
+    'con':'{% trans "Are you sure to unsync client %s ?" %}'
+});
+</script>
+{% endblock %}
