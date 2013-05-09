@@ -1032,7 +1032,10 @@ class SharedRepo(APIView):
         user = request.GET.get('user')
         group_id = request.GET.get('group_id')
         permission = request.GET.get('permission')
-        print 'method'
+        if permission !='rw' or permission != "r"
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Permission error.')
+                    
         if share_type == 'personal':
             if not is_registered_user(email) :
                 return api_error(status.HTTP_400_BAD_REQUEST,\
