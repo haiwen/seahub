@@ -39,7 +39,7 @@
 
     {% if request.user.is_authenticated %}
     {% if to_email %}
-    <form id="personal-message-form" action="/message/message_send/" method="post" onsubmit="return check(this)">
+    <form id="personal-message-form" action="/message/message_send/" method="post" onsubmit="return check(this)">{% csrf_token %}
        {% avatar request.user.username 48 %}
         <textarea name="message" id="message" placeholder="{% trans "Send a message..." %}">{{ form.data.message }}</textarea><br />
         <input type = "hidden" value = "{{ to_email }}" name= "to_email"/>

@@ -106,7 +106,7 @@ def message_send(request):
     if request.method == 'POST':
         one_email = MessageForm(request.POST)
 
-        if one_email.is_valid() and is_registered_user(email):
+        if one_email.is_valid() and is_registered_user(one_email.cleaned_data['to_email']):
             message = UserMessage()
             msg = one_email.cleaned_data['message']
             message.to_email = one_email.cleaned_data['to_email']

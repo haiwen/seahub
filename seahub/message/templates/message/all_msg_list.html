@@ -57,7 +57,7 @@
 </div>
 {% endif %}
 
-<form id="send-msg-form" action="message_send/" method="post" name="send-msg-form" class="hide">
+<form id="send-msg-form" action="message_send/" method="post" name="send-msg-form" class="hide">{% csrf_token %}
     <h3>{% trans "Send message to"%}</h3>
     
     <div id="send-msg-tabs">
