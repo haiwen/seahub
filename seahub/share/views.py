@@ -150,14 +150,6 @@ def share_repo(request):
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        #send message when share repo
-        message = UserMessage()
-        message.to_email = email
-        message.from_email = request.user.username
-        message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
-        message.ifread = 0
-        message.save()
-
         if not is_registered_user(email):
             # Generate shared link and send mail if user has not registered.
             # is_encrypted = True if repo.encrypted else False
@@ -179,7 +171,13 @@ def share_repo(request):
                 msg = _(u'Failed to share to %s .') % email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
-
+            #send message when share repo
+            message = UserMessage()
+            message.to_email = email
+            message.from_email = request.user.username
+            message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
+            message.ifread = 0
+            message.save()
             msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
                 {'email':email, 'share':reverse('share_admin')}
             messages.add_message(request, messages.INFO, msg)
