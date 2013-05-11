@@ -225,6 +225,8 @@ class RepoView(LoginRequiredMixin, RepoMixin, TemplateResponseMixin,
             self.repo_id, self.request.user.username, self.path)
         kwargs['dir_shared_link'] = self.get_shared_link(kwargs['fileshare'])
         kwargs['history_limit'] = get_repo_history_limit(self.repo.id)
+        if not self.repo.encrypted:
+            kwargs['search_repo_id'] = self.repo.id
 
         return kwargs
 
@@ -258,4 +260,6 @@ class RepoHistoryView(LoginRequiredMixin, RepoMixin, TemplateView):
         kwargs['file_list'] = self.file_list
         kwargs['path'] = self.path
         kwargs['zipped'] = self.zipped
+        if not self.repo.encrypted:
+            kwargs['search_repo_id'] = self.repo.id
         return kwargs

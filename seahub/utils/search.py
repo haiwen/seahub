@@ -57,6 +57,23 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
             files_found = filter(lambda f: f['exists'], files_found)
 
         return files_found, total
+
+
+    def search_repo_file_by_name(request, repo, keyword, start, size):
+        global es_conn
+        if es_conn is None:
+            es_conn = es_get_conn()
+
+        files_found, total = es_search(es_conn, [repo.id], keyword, start, size)
+
+        for f in files_found:
+            f['repo'] = repo
+
+        return files_found, total
+
 else:
     def search_file_by_name(*args):
+        pass
+
+    def search_repo_file_by_name(*args):
         pass

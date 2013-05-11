@@ -13,9 +13,17 @@
 
 <div id="search-results">
 {% if not results %}
-    <p>{% trans 'No result found' %}</p>
+    <p>{% trans 'No result found' %}
+      {% if repo %}
+      {% trans 'in repo' %} <a href="{% url 'repo' repo_id=repo.id %}">{{ repo.name }}</a>
+      {% endif %}
+    </p>
 {% else %}
-    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
+    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}
+      {% if repo %}
+      {% trans 'found in repo' %} <a href="{% url 'repo' repo_id=repo.id %}">{{ repo.name }}</a>
+      {% endif %}
+    </p>
     <ul id="search-results-list">
     {% for file in results %}
         <li class="search-results-item ovhd">

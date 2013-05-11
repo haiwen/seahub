@@ -71,6 +71,8 @@ def personal_wiki(request, page_name="home"):
                 "latest_contributor": latest_contributor,
                 "path": path,
                 "repo_id": repo.id,
+                "search_repo_id": repo.id,
+                "search_wiki": True,
                 }, context_instance=RequestContext(request))
 
 @login_required
@@ -88,7 +90,9 @@ def personal_wiki_pages(request):
 
     return render_to_response("wiki/personal_wiki_pages.html", {
             "pages": pages,
-            "repo_id": repo.id
+            "repo_id": repo.id,
+            "search_repo_id": repo.id,
+            "search_wiki": True,
             }, context_instance=RequestContext(request))
 
 

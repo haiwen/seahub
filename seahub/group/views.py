@@ -1196,6 +1196,8 @@ def group_wiki(request, group, page_name="home"):
                 "latest_contributor": latest_contributor,
                 "path": path,
                 "repo_id": repo.id,
+                "search_repo_id": repo.id,
+                "search_wiki": True,
                 }, context_instance=RequestContext(request))
 
 @group_check
@@ -1214,7 +1216,9 @@ def group_wiki_pages(request, group):
             "group": group,
             "pages": pages,
             "is_staff": group.is_staff,
-            "repo_id": repo.id
+            "repo_id": repo.id,
+            "search_repo_id": repo.id,
+            "search_wiki": True,
             }, context_instance=RequestContext(request))
 
 @group_check

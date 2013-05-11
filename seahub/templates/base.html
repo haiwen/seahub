@@ -73,10 +73,21 @@
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     <input type="hidden" name="scale" value="all" />
+                    {% if search_repo_id %}
+                    <input type="hidden" name="search_repo_id" value="{{ search_repo_id }}" />
+                    {% endif %}
                     <span class="icon-caret-down" title="{% trans "choose search scale" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
                     <ul class="search-scales hide">
                         <li class="item" data-value="all"><span class="icon-ok"></span>{% trans "In all libraries" %}</li>
-                        <li class="item" data-value="current"><span class="icon-"></span>{% trans "In this library" %}</li>
+                        {% if search_repo_id %}
+                        <li class="item" data-value="current"><span class="icon-"></span>
+                          {% if search_wiki %}
+                            {% trans "In this wiki" %}
+                          {% else %}
+                            {% trans "In this library" %}
+                          {% endif %}
+                        </li>
+                        {% endif %}
                     </ul>
                 </form>
                 {% endif %}
