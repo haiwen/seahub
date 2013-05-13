@@ -6,7 +6,7 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
     from seafes import es_get_conn, es_search
 
     es_conn = None
-    def search_file_by_name(request, keyword, start, size):
+    def search_file_by_name(request, keyword, suffixes, start, size):
         owned_repos, shared_repos, groups_repos, pub_repo_list = get_user_repos(request.user)
 
         # unify the repo.owner property
@@ -35,7 +35,7 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
         global es_conn
         if es_conn is None:
             es_conn = es_get_conn()
-        files_found, total = es_search(es_conn, nonpub_repo_ids, keyword, start, size)
+        files_found, total = es_search(es_conn, nonpub_repo_ids, keyword, suffixes, start, size)
 
         if len(files_found) > 0:
             # construt a (id, repo) hash table for fast lookup
@@ -59,12 +59,12 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
         return files_found, total
 
 
-    def search_repo_file_by_name(request, repo, keyword, start, size):
+    def search_repo_file_by_name(request, repo, keyword, suffixes, start, size):
         global es_conn
         if es_conn is None:
             es_conn = es_get_conn()
 
-        files_found, total = es_search(es_conn, [repo.id], keyword, start, size)
+        files_found, total = es_search(es_conn, [repo.id], keyword, suffixes, start, size)
 
         for f in files_found:
             f['repo'] = repo
