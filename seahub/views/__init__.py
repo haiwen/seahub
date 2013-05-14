@@ -820,6 +820,8 @@ def myhome(request):
         if stat:
             traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
+    plan =  getattr(request.user, 'plan', None)
+
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -842,6 +844,7 @@ def myhome(request):
             "starred_files": starred_files,
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
+            "plan": plan,
             }, context_instance=RequestContext(request))
 
 @login_required
