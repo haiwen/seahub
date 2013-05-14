@@ -27,6 +27,9 @@
         <div class="txt fright">
             <p>{% if nickname %}{{ nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
             <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Edit" %}</a>
+            {% if plan %}
+            <p>Type: {{ plan }}</p><a href="http://seafile.com/">Upgrade account</a>
+            {% endif %}
         </div>
     </div>
 </div>
