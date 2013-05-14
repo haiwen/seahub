@@ -8,6 +8,7 @@ import urllib
 import urllib2
 import logging
 import chardet
+from types import FunctionType
 from math import ceil
 from urllib import quote
 from django.core.cache import cache
