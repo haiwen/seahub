@@ -1,0 +1,39 @@
+{% load seahub_tags avatar_tags i18n %}
+
+{% for e_group in event_groups %}
+<h4 class="event-group-hd">{{ e_group.date }}</h4>
+<ol class="event-group-bd">
+    {% for e in e_group.events %}
+    <li class="event-item">
+        {% avatar e.author 36 %}
+        <div class="txt">
+            {% if e.etype == "repo-update" %}
+            {% with repo=e.repo commit=e.commit %} 
+            <p class="w100 ovhd">
+            <a href="{% url 'repo' repo.id %}" class="updated-repo fright">{{ repo.name }}</a>
+            <span class="cmt-desc">
+            {{ commit.desc|translate_commit_desc }}
+            {% if repo.encrypted %}
+            <a class="lsch-encrypted"{% if repo.password_set %} data-passwordset="true"{% endif %} href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-repoid="{{repo.id}}" data-reponame="{{repo.name}}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+            {% else %}
+            <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
+            {% endif %}
+            </span>
+            </p>
+            {% endwith %}
+            {% endif %}
+
+            {% if e.etype == "repo-create" %}
+            <p>{% trans "Created library" %} <a href="{% url 'repo' e.repo_id %}">{{ e.repo_name }}</a></p>
+            {% endif %}
+
+            {% if e.etype == "repo-delete" %}
+            <p>{% blocktrans with library_name=e.repo_name %}Deleted library {{ library_name }}{% endblocktrans %}</p>
+            {% endif %}
+
+            <p><a href="{% url 'user_profile' e.author|email2id %}">{{ e.author|email2nickname }}</a> <span class="time">{{ e.time|translate_seahub_time }}</span></p>
+        </div>
+    </li>
+    {% endfor %}
+</ol>
+{% endfor %}
