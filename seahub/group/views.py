@@ -532,68 +532,46 @@ def group_manage(request, group_id):
 
         mail_sended_list = []
         if request.cloud_mode:
-            if request.user.org:
-                # Can only invite org users to group.
-                org_id = request.user.org['org_id']
-                for email in member_list:
-                    if not ccnet_threaded_rpc.org_user_exists(org_id, email):
-                        err_msg = _(u'Failed to add, %s is not in current organization.') % email
-                        result['error'] = err_msg
-                        return HttpResponse(json.dumps(result), status=400,
-                                            content_type=content_type)
-                    else:
-                        try:
-                            ccnet_threaded_rpc.group_add_member(group.id,
-                                                                username, email)
-                        except SearpcError, e:
-                            result['error'] = _(e.msg)
-                            return HttpResponse(json.dumps(result), status=500,
-                                                content_type=content_type)
-            else:
-                # check plan
-                group_members = getattr(request.user, 'group_members', -1)
-                if group_members > 0:
-                    current_group_members = len(get_group_members(group.id))
-                    if current_group_members > group_members:
-                        result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
-                        return HttpResponse(json.dumps(result), status=500,
-                                            content_type=content_type)
+            # check plan
+            group_members = getattr(request.user, 'group_members', -1)
+            if group_members > 0:
+                current_group_members = len(get_group_members(group.id))
+                if current_group_members > group_members:
+                    result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
+                    return HttpResponse(json.dumps(result), status=500,
+                                        content_type=content_type)
                         
-                # Can invite unregistered user to group.
-                for email in member_list:
-                    if not is_registered_user(email):
-                        use_https = request.is_secure()
-                        domain = RequestSite(request).domain
-
-                        t = loader.get_template('group/add_member_email.html')
-                        c = {
-                            'email': username,
-                            'to_email': email,
-                            'group': group,
-                            'domain': domain,
-                            'protocol': use_https and 'https' or 'http',
-                            'site_name': SITE_NAME,
-                            }
-                    
-                        try:
-                            send_mail(_(u'Your friend added you to a group at Seafile.'),
-                                      t.render(Context(c)), None, [email],
-                                      fail_silently=False)
-                            mail_sended_list.append(email)
-                        except:
-                            data = json.dumps({'error': _(u'Failed to send mail.')})
-                            return HttpResponse(data, status=500,
-                                                content_type=content_type)
-
-                    # Add user to group, unregistered user will see the group
-                    # when he logs in.
+            # Can invite unregistered user to group.
+            for email in member_list:
+                if not is_registered_user(email):
+                    use_https = request.is_secure()
+                    domain = RequestSite(request).domain
+                    t = loader.get_template('group/add_member_email.html')
+                    c = {
+                        'email': username,
+                        'to_email': email,
+                        'group': group,
+                        'domain': domain,
+                        'protocol': use_https and 'https' or 'http',
+                        'site_name': SITE_NAME,
+                        }
                     try:
-                        ccnet_threaded_rpc.group_add_member(group.id,
-                                                            username, email)
-                    except SearpcError, e:
-                        result['error'] = _(e.msg)
-                        return HttpResponse(json.dumps(result), status=500,
-                                            content_type=content_type)
+                        send_mail(_(u'Your friend added you to a group at Seafile.'),
+                                  t.render(Context(c)), None, [email],
+                                  fail_silently=False)
+                        mail_sended_list.append(email)
+                    except Exception, e:
+                        logger.warn(e)
+
+                # Add user to group, unregistered user will see the group
+                # when he logs in.
+                try:
+                    ccnet_threaded_rpc.group_add_member(group.id,
+                                                        username, email)
+                except SearpcError, e:
+                    result['error'] = _(e.msg)
+                    return HttpResponse(json.dumps(result), status=500,
+                                        content_type=content_type)
         else:
             # Can only invite registered user to group if not in cloud mode.
             for email in member_list:
