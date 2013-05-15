@@ -23,12 +23,12 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Account" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
-        <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Edit" %}">{% avatar request.user 48 %}</a>
+        <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Profile" %}">{% avatar request.user 48 %}</a>
         <div class="txt fright">
             <p>{% if nickname %}{{ nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
-            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Edit" %}</a>
-            {% if plan %}
-            <p>Type: {{ plan }}</p><a href="http://seafile.com/">Upgrade account</a>
+            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Profile" %}</a>
+            {% if ENABLE_PAYMENT %}
+            <a href="{% url 'plan' %}" class="edit">{% trans "Payment" %}</a>
             {% endif %}
         </div>
     </div>

@@ -138,6 +138,7 @@ table {
     table-layout:fixed;
     margin:8px 0 40px;
 }
+caption {font-size:1.1em; font-weight:bold; margin-bottom:.6em;}
 th {
     text-align:left;
     font-weight:bold;
@@ -2234,4 +2235,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .search-results-item .time {
     color:#666;
+}
+#plan-form {
+    width:260px;
 }
