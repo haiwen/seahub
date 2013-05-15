@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Seahub 1.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-14 16:36+0200\n"
-"PO-Revision-Date: 2013-05-14 17:50+0100\n"
+"PO-Revision-Date: 2013-05-14 18:18+0100\n"
 "Last-Translator: Henri Wahl <h.wahl@ifw-dresden.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1061,10 +1061,9 @@ msgid "Wiki does not exists."
 msgstr "Das Wiki existiert nicht."
 
 #: seahub/group/views.py:1268 seahub/views/wiki.py:127
-#, fuzzy
 msgid "Failed to create home page. Please retry later"
 msgstr ""
-"Abrufen des Links fehlgeschlagen, bitte versuchen Sie es später nochmals."
+"Anlegen der Seite fehlgeschlagen, bitte versuchen Sie es später nochmals."
 
 #: seahub/group/views.py:1289 seahub/group/views.py:1315
 #: seahub/group/views.py:1333 seahub/views/wiki.py:144
@@ -1116,7 +1115,7 @@ msgstr ""
 #: seahub/group/templates/group/group_discuss.html:119
 #: seahub/group/templates/group/new_msg_reply.html:46
 msgid "Hide replies"
-msgstr ""
+msgstr "Beiträge verbergen"
 
 #: seahub/group/templates/group/discussion_list.html:31
 #: seahub/group/templates/group/group_discuss.html:133
@@ -1185,7 +1184,7 @@ msgstr "Diskussionen"
 #: seahub/group/templates/group/group_wiki.html:18
 #: seahub/group/templates/group/group_wiki_pages.html:17
 msgid "Wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: seahub/group/templates/group/group_discuss.html:19
 #: seahub/group/templates/group/group_discuss.html:30
@@ -1596,6 +1595,10 @@ msgid ""
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
 msgstr ""
+"Ein Seafile Wiki ermöglicht auf einfache Weise die Organisation von Wissen. "
+"Der Inhalt eines Wikis wird als Bibliothek mit vordefinierter Ordnerstruktur "
+"gespeichert. Somit können Sie Ihr Wiki lokal auf Ihren Client-Computer "
+"bearbeiten und es wird automatisch auf den Seafile-Server synchronisiert."
 
 #: seahub/group/templates/group/group_wiki.html:37
 #: seahub/templates/wiki/personal_wiki.html:27
@@ -1622,17 +1625,15 @@ msgstr "Start"
 #: seahub/group/templates/group/group_wiki_pages.html:30
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki_pages.html:25
-#, fuzzy
 msgid "Pages"
-msgstr "Nachrichten"
+msgstr "Seiten"
 
 #: seahub/group/templates/group/group_wiki.html:56
 #: seahub/group/templates/group/group_wiki_pages.html:32
 #: seahub/templates/wiki/personal_wiki.html:45
 #: seahub/templates/wiki/personal_wiki_pages.html:26
-#, fuzzy
 msgid "Wiki History"
-msgstr "Verlauf"
+msgstr "Wiki Änderungsverlauf"
 
 #: seahub/group/templates/group/group_wiki.html:61
 #: seahub/group/templates/group/group_wiki.html:75
@@ -1642,27 +1643,23 @@ msgstr "Verlauf"
 #: seahub/templates/wiki/personal_wiki.html:62
 #: seahub/templates/wiki/personal_wiki_pages.html:28
 #: seahub/templates/wiki/personal_wiki_pages.html:38
-#, fuzzy
 msgid "New Page"
-msgstr "Neue Datei"
+msgstr "Neue Seite"
 
 #: seahub/group/templates/group/group_wiki.html:62
 #: seahub/templates/wiki/personal_wiki.html:50
-#, fuzzy
 msgid "Delete Page"
-msgstr "Zeit löschen"
+msgstr "Löschen"
 
 #: seahub/group/templates/group/group_wiki.html:63
 #: seahub/templates/wiki/personal_wiki.html:51
-#, fuzzy
 msgid "Edit Page"
-msgstr "Bearbeiten fehlgeschlagen."
+msgstr "Bearbeiten"
 
 #: seahub/group/templates/group/group_wiki.html:64
 #: seahub/templates/wiki/personal_wiki.html:52
-#, fuzzy
 msgid "Page History"
-msgstr "Verlauf"
+msgstr "Änderungsverlauf"
 
 #: seahub/group/templates/group/group_wiki.html:71
 #: seahub/templates/wiki/personal_wiki.html:58
@@ -1672,9 +1669,8 @@ msgstr ""
 
 #: seahub/group/templates/group/group_wiki.html:128
 #: seahub/templates/wiki/personal_wiki.html:115
-#, fuzzy
 msgid "Name and description can not be blank."
-msgstr "Darf nicht leer sein."
+msgstr "Name und Beschreibung dürfen nicht leer sein."
 
 #: seahub/group/templates/group/groups_left_panel.html:5
 msgid ""
@@ -1881,9 +1877,11 @@ msgstr ""
 "href=\"%s\">Freigaben</a> prüfen."
 
 #: seahub/share/views.py:127
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to share %(repo)s to %(group)s, please try again later."
-msgstr "Versenden fehlgeschlagen: Sie können es später erneut versuchen."
+msgstr ""
+"Freigeben von %(repo)s an %(group)s fehlgeschlagen, bitte versuchen Sie es "
+"später wieder."
 
 #: seahub/share/views.py:131
 #, python-format
@@ -2129,9 +2127,8 @@ msgid "Signup"
 msgstr "Registrieren"
 
 #: seahub/templates/base.html:73 seahub/templates/search_results.html:9
-#, fuzzy
 msgid "Search Files"
-msgstr "Neue Datei"
+msgstr "Dateien suchen"
 
 #: seahub/templates/base.html:115
 msgid "Introduction"
