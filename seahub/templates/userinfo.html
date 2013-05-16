@@ -9,16 +9,17 @@
     <h3 class="info-item-top">{% trans "Profile" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
         {% avatar email 48 %}
+        <p class="txt fright">
         {% if nickname %}
-        <p class="fleft">{{ nickname }}</p>
+        {{ nickname }}
         {% endif %}
+        </p>
     </div>
 </div>
 
 <div class="info-item">
 <div class="info-item-top">
     <h3 class="inbl">{% trans "Space Used" %}</h3>
-    <a href="#" class="set-quota op">{% trans "Set Quota" %}</a>
 </div>
 <div class="info-item-bottom">
     {% if CALC_SHARE_USAGE %}
@@ -28,6 +29,7 @@
     {% else %}
     <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
     {% endif %}
+    <a href="#" class="set-quota">{% trans "Set Quota" %}</a>
 </div>
 </div>
 
@@ -71,7 +73,7 @@
 
     {% for repo in in_repos %}
     <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="目录icon" /></td>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="library icon" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.user }}</td>
         <td>{{ repo.props.repo_desc }}</td>

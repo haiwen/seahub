@@ -1355,6 +1355,14 @@ def sys_useradmin(request):
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
+        try:
+            user.self_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.quota = seafile_api.get_user_quota(user.email)
+        except:
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
             
     return render_to_response(
         'sys_useradmin.html', {

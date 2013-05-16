@@ -21,10 +21,11 @@
 
 <table>
     <tr>
-        <th width="40%">{% trans "Email" %}</th>
-        <th width="12%">{% trans "Status" %}</th>
-        <th width="18%">{% trans "Create At" %}</th>
-        <th width="30%">{% trans "Operations" %}</th>
+        <th width="30%">{% trans "Email" %}</th>
+        <th width="10%">{% trans "Status" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="15%">{% trans "Create At" %}</th>
+        <th width="25%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -35,6 +36,13 @@
         {% else %}
         <td><a href="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
         {% endif %}
+        <td>
+            {% if CALC_SHARE_USAGE %}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} / {{ user.quota|filesizeformat }}
+            {% else %}
+            {{ user.self_usage|filesizeformat }} / {{ user.quota|filesizeformat }}
+            {% endif %}
+        </td>
         <td>{{ user.ctime|tsstr_sec }}</td>
         <td>
           {% if not user.is_self %}
