@@ -197,7 +197,7 @@ AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48)
 
 LOG_DIR = "/tmp"
 CACHE_DIR = "/tmp"
-install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..'))
+install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 if 'win32' in sys.platform:
     try:
