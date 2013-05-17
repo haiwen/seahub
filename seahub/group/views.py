@@ -84,9 +84,13 @@ def group_check(func):
         if not group:
             return HttpResponseRedirect(reverse('group_list', args=[]))
         group.is_staff = False
+        if PublicGroup.objects.filter(group_id=group.id):
+            group.is_pub = True
+        else:
+            group.is_pub = False
 
         if not request.user.is_authenticated():
-            if not PublicGroup.objects.filter(group_id=group_id_int):
+            if not group.is_pub:
                 return render_to_response('group/group_pubinfo.html', {
                         'group': group,
                         }, context_instance=RequestContext(request))
@@ -104,8 +108,7 @@ def group_check(func):
             group.view_perm = "sys_admin"
             return func(request, group, *args, **kwargs)
 
-        pub = PublicGroup.objects.filter(group_id=group_id_int)
-        if pub:
+        if group.is_pub:
             group.view_perm = "pub"
             return func(request, group, *args, **kwargs)
             
@@ -465,12 +468,6 @@ def group_info(request, group):
                                               request.user.username)
         cmt.tp = cmt.props.desc.split(' ')[0]
 
-    if PublicGroup.objects.filter(group_id=group.id):
-        group.is_pub = True
-    else:
-        group.is_pub = False
-
-
     return render_to_response("group/group_info.html", {
             "members": members,
             "repos": repos,
@@ -609,16 +606,15 @@ def group_manage(request, group_id):
     contacts = Contact.objects.filter(user_email=username)
 
     if PublicGroup.objects.filter(group_id=group.id):
-        is_pub = True
+        group.is_pub = True
     else:
-        is_pub = False
+        group.is_pub = False
 
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members_all,
             'admins': admins,
             'contacts': contacts,
-            'is_pub': is_pub,
             }, context_instance=RequestContext(request))
 
 @login_required

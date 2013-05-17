@@ -407,8 +407,15 @@ def update_file_error(request, repo_id):
                 'err_msg': err_msg,
                 }, context_instance=RequestContext(request))
     
-def get_subdir(request):
-    repo_id = request.GET.get('repo_id', '')
+@login_required
+def get_subdir(request, repo_id):
+    '''
+        Get only subdirs in a dir for file tree
+    '''
+    user_perm = get_user_permission(request, repo_id)
+    if not user_perm:
+        return render_error(request)
+
     path = request.GET.get('path', '')
 
     if not (repo_id and path):
@@ -426,7 +433,7 @@ def get_subdir(request):
             continue
 
         dirent.has_subdir = False
-        path_ = os.path.join (path, dirent.obj_name)
+        path_ = os.path.join(path, dirent.obj_name)
         try:
             dirs_ = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
         except SearpcError, e:
@@ -449,6 +456,42 @@ def get_subdir(request):
 
     content_type = 'application/json; charset=utf-8'
     return HttpResponse(json.dumps(subdirs),
+                            content_type=content_type)
+
+@login_required
+def get_dirents(request, repo_id):
+    '''
+        Get dirents in a dir for file tree
+    '''
+    user_perm = get_user_permission(request, repo_id)
+    if not user_perm:
+        return render_error(request)
+
+    path = request.GET.get('path', '')
+
+    if not (repo_id and path):
+        return render_error(request)
+
+    latest_commit = get_commits(repo_id, 0, 1)[0]
+    try:
+        dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+    except SearpcError, e:
+        return render_error(request, e.msg)
+
+    dirent_list = []
+    for dirent in dirents:
+        if stat.S_ISDIR(dirent.props.mode):
+            subdir = {
+                'data': dirent.obj_name,
+                'attr': {'repo_id': repo_id },
+                'state': 'closed'
+            }
+            dirent_list.append(subdir)
+        else:
+            dirent_list.append(dirent.obj_name)
+
+    content_type = 'application/json; charset=utf-8'
+    return HttpResponse(json.dumps(dirent_list),
                             content_type=content_type)
 
 @login_required
