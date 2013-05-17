@@ -38,9 +38,9 @@
         {% endif %}
         <td>
             {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} / {{ user.quota|filesizeformat }}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
             {% else %}
-            {{ user.self_usage|filesizeformat }} / {{ user.quota|filesizeformat }}
+            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
             {% endif %}
         </td>
         <td>{{ user.ctime|tsstr_sec }}</td>
@@ -139,14 +139,14 @@ $('#add-user-form').submit(function() {
     $.ajax({
         url: '{% url 'user_add' %}',
         type: 'POST',
-        dataType: 'json',
+        datatype: 'json',
         cache: 'false',
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,
             'password1': pwd1,
             'password2': pwd2
-        },  
+        },
         success: function(data) {
             if (data['success']) {
                 location.reload(true);

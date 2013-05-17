@@ -108,7 +108,7 @@ $('#set-quota-form .submit').click(function() {
     var self = $(this);
     self.attr('disabled', 'disabled');
     $.ajax({
-        url: '{% url 'views.user_info' email %}',
+        url: '{% url 'user_info' email %}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',

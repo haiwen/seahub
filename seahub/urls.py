@@ -12,6 +12,9 @@ from group.views import group_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete
+from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, sys_group_admin, \
+    user_info, user_add, user_remove, user_make_admin, \
+    user_remove_admin, user_reset, user_activate
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -88,16 +91,8 @@ urlpatterns = patterns('',
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/get_subdir/$', get_subdir),                       
     (r'^file/move/$', file_move),
-    (r'^seafile_access_check/$', seafile_access_check),                       
-    url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
+    (r'^seafile_access_check/$', seafile_access_check),
 
-    url(r'^useradmin/add/$', user_add, name="user_add"),
-    (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
-    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
-    url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
-    (r'^useradmin/info/(?P<email>[^/]+)/$', user_info),
-    (r'^useradmin/activate/(?P<user_id>[^/]+)/$', activate_user),
-    url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
@@ -110,11 +105,18 @@ urlpatterns = patterns('',
     (r'^share/', include('seahub.share.urls')),
 
     ### system admin ###                       
-    (r'^sys/seafadmin/$', sys_seafadmin),
-    url(r'^sys/useradmin/$', sys_useradmin, name='sys_useradmin'),
-    url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
-    url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
+    (r'^sys/seafadmin/$', sys_repo_admin),
+    url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+    url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
+    url(r'^useradmin/add/$', user_add, name="user_add"),
+    (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
+    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
+    url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
+    url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
+    (r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate),
+    url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
+
 
 )
 
