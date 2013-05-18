@@ -29,7 +29,7 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
     list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
     list_inner_pub_repos, list_org_inner_pub_repos
-from seahub import settings
+import seahub.settings
 try:
     from seahub.settings import DOCUMENT_CONVERTOR_ROOT
 except ImportError:
@@ -121,10 +121,11 @@ def get_httpserver_root():
 
     """
     try:
-        from settings import HTTP_SERVER_ROOT # First load from settings
+        from seahub.settings import HTTP_SERVER_ROOT # First load from settings
     except ImportError:
         # If load settings failed, then use default config
         from seaserv import HTTP_SERVER_ROOT
+
     return HTTP_SERVER_ROOT if HTTP_SERVER_ROOT else ''
 
 def get_ccnetapplet_root():
@@ -133,11 +134,7 @@ def get_ccnetapplet_root():
     and cut out last '/'.
 
     """
-    if settings.CCNET_APPLET_ROOT[-1] == '/':
-        ccnet_applet_root = settings.CCNET_APPLET_ROOT[:-1]
-    else:
-        ccnet_applet_root = settings.CCNET_APPLET_ROOT
-    return ccnet_applet_root
+    return seahub.settings.CCNET_APPLET_ROOT.strip('/')
 
 def gen_token(max_length=5):
     """
@@ -544,12 +541,11 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
     return contributors, last_modified, last_commit_id 
 
-
-if hasattr(settings, 'EVENTS_CONFIG_FILE'):
+if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
     import seafevents
 
     EVENTS_ENABLED = True
-    SeafEventsSession = seafevents.init_db_session_class(settings.EVENTS_CONFIG_FILE)
+    SeafEventsSession = seafevents.init_db_session_class(seahub.settings.EVENTS_CONFIG_FILE)
 
     def _get_events(username, start, org_id=None):
         ev_session = SeafEventsSession()
@@ -802,11 +798,12 @@ def calc_file_path_hash(path, bits=12):
 def gen_shared_link(request, token, s_type):
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
+    site_root = seahub.settings.SITE_ROOT
 
     if s_type == 'f':
-        return '%s://%s%sf/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
+        return '%s://%s%sf/%s/' % (http_or_https, domain, site_root, token)
     else:
-        return '%s://%s%sd/%s/' % (http_or_https, domain, settings.SITE_ROOT, token)
+        return '%s://%s%sd/%s/' % (http_or_https, domain, site_root, token)
 
 def show_delete_days(request):
     if request.method == 'GET':
@@ -833,11 +830,11 @@ def is_textual_file(file_type):
         return False
 
 TRAFFIC_STATS_ENABLED = False
-if hasattr(settings, 'TRAFFIC_STATS_CONFIG_FILE'):
+if hasattr(seahub.settings, 'TRAFFIC_STATS_CONFIG_FILE'):
     import seafstats
 
     TRAFFIC_STATS_ENABLED = True
-    SeafStatsSession = seafstats.init_db_session_class(settings.TRAFFIC_STATS_CONFIG_FILE)
+    SeafStatsSession = seafstats.init_db_session_class(seahub.settings.TRAFFIC_STATS_CONFIG_FILE)
     def get_user_traffic_stat(username):
         session = SeafStatsSession()
         try:

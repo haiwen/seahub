@@ -1499,8 +1499,10 @@ def render_file_revisions (request, repo_id):
         can_compare = False
 
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path, 0)
+        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
     except SearpcError, e:
+        logger.error(e.msg)
         return render_error(request, e.msg)
 
     if not commits:
