@@ -17,3 +17,12 @@ run-seahub.sh
 setenv.sh
 .DS_Store
 *.mo
+media/avatars/*
+!media/avatars/default-non-register.jpg
+!media/default.jpg
+!media/groups/default.jpg
+logs/
+mysite.pid
+notification_email.sh
+send_user_notifications.sh
+shutdown.sh
