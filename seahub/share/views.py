@@ -28,6 +28,7 @@ from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
+from seahub.message.models import UserMessage
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, IS_EMAIL_CONFIGURED
@@ -49,6 +50,11 @@ def share_repo(request):
     if request.method != 'POST':
         raise Http404
     
+    sender = request.user.username.split('@')[0]
+    http_or_https = request.is_secure() and 'https' or 'http'
+    domain = request.get_host()
+    head_of_repo_url = '%s://%s/' % (http_or_https, domain)
+
     form = RepoShareForm(request.POST)
     if not form.is_valid():
         # TODO: may display error msg on form 
@@ -128,6 +134,15 @@ def share_repo(request):
                 {'repo': repo.name, 'group': group.group_name}
             messages.error(request, msg)
         else:
+            members = get_group_members(group.id)
+            
+            for email in members:
+                message = UserMessage()
+                message.to_email = email
+                message.from_email = request.user.username
+                message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)  
+                message.ifread = 0
+                message.save()
             msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
             {'group':group.group_name, 'share':reverse('share_admin')}
             messages.success(request, msg)
@@ -136,7 +151,6 @@ def share_repo(request):
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-
         if not is_registered_user(email):
             # Generate shared link and send mail if user has not registered.
             # is_encrypted = True if repo.encrypted else False
@@ -158,7 +172,13 @@ def share_repo(request):
                 msg = _(u'Failed to share to %s .') % email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
-
+            #send message when share repo
+            message = UserMessage()
+            message.to_email = email
+            message.from_email = request.user.username
+            message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
+            message.ifread = 0
+            message.save()
             msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
                 {'email':email, 'share':reverse('share_admin')}
             messages.add_message(request, messages.INFO, msg)

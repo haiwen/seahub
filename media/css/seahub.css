@@ -2236,6 +2236,134 @@ textarea:-moz-placeholder {/* for FF */
 .search-results-item .time {
     color:#666;
 }
+
 #plan-form {
     width:260px;
+}
+
+/*send-msg-form*/
+#link-send-input,
+#mass_email,
+#mass_msg,
+#share-link,
+#added-member-name,
+#added-admin-name {
+    width:260px;
+    height:80px;
+    padding:2px;
+}
+#member-add-form {
+    width:266px;
+}
+#send-msg-form {
+    width:320px;
+}
+#mass_email {
+    width:314px;
+}
+#mass_msg {
+    width:314px;
+}
+#send-msg-form .share-permission-select {
+    width:100%;
+}
+
+/*tabs */
+#tabs,
+#send-msg-tabs {
+    font-size:1em;
+    padding:0;
+    border:0;
+    min-height:150px;
+    margin-bottom:75px;
+}
+#send-msg-tabs {
+    margin-bottom:0;
+}
+#tabs-nav,
+#send-msg-tabs-nav {
+    padding:0;
+}
+#send-msg-tabs-nav {
+    height:30px;
+    border-bottom:1px solid #ddd;
+    border-radius:0;
+    margin-bottom:10px;
+}
+#tabs-nav li {
+    float:left;
+    border:0;
+    background:none;
+}
+#send-msg-tabs-nav li {
+    display:inline-block;
+    border:1px solid transparent;
+    border-bottom:0;
+    background:none;
+}
+#send-msg-tabs-nav li a {
+    color:#666;
+    line-height:16px;
+    padding:6px 13px;
+}
+#tabs-nav .long-item {
+    margin-left:.4em;
+}
+#tabs-nav li a {
+    color:#8A948F;
+    font-weight:normal;
+    padding:.3em 0;
+    margin-right:0.6em;
+}
+#tabs-nav .ui-state-active a {
+    color:#DD4B39;
+    border-bottom:2px solid #DD4B39;
+}
+#send-msg-tabs-nav .ui-state-active {
+    border-color:#ddd;
+    border-radius:3px 3px 0 0;
+    background:#fff;
+    margin-bottom:-1px;
+}
+#send-msg-tabs-nav .ui-state-active a {
+    font-weight:bold;
+}
+#tabs-nav li a:hover {
+    color:#DD4B39;
+}
+#send-msg-tabs-nav li a:hover {
+    color:#333;
+}
+#tabs .ui-tabs-panel,
+#send-msg-tabs .ui-tabs-panel {
+    padding:0;
+}
+#send-msg-tabs .option-list {
+    max-height:200px;
+    overflow:auto;
+    margin-bottom:5px;
+    position:relative;/* to fix ie7 'scroll position' problem */
+}
+
+#personal-message-form {
+    padding:6px;
+    width:562px;
+    background:#f9f9f9;
+    border:1px solid #c4c4c4;
+    border-radius:5px;
+    margin-left:64px;
+    position:relative;
+}
+#personal-message-form .avatar {
+    position:absolute;
+    left:-64px;
+    top:-1px;
+}
+
+#personal-message-form .submit,
+#personal-message-form .cancel,
+.reply-submit,
+.reply-cancel {
+    margin-top:6px;
+    margin-right:2px;
 }

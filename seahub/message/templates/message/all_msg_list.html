@@ -1,0 +1,138 @@
+{% extends "myhome_base.html" %}
+{% load avatar_tags i18n seahub_tags %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Contacts" %} - {% endblock %}
+{% block nav_myhome_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab "><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Messages" %}</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block left_panel %}
+<div class="info-item">
+<h3 class="info-item-top">{% trans "Tips"%}</h3>
+<p class="info-item-bottom">{% trans "You can only send message to registered member."%}</p>
+</div>
+
+{% endblock %}
+
+{% block right_panel %}
+<h3>{% trans "Message"%}</h3>
+<button id="message-send" class="add">{% trans "Add Message"%}</button>
+{% if msgs %}
+<table>
+    <tr>
+        <th width="5%"></th>
+        <th width="20%">{% trans " Email "%}</th>
+        <th width="45%">{% trans "Message"%}</th>
+        <th width="15%">{% trans "time"%}</th>
+        <th width="15%">{% trans "Not read"%}</th>
+    </tr>
+    {% for key,value in msgs.items %}
+
+    <tr>
+        <td>{% avatar key 20 %}</td>       
+        <td><a href="{% url 'user_profile' key|email2id %}">{{ key }}</a></td>   
+        <td>
+             {% if  value.not_read %}
+             <a href="msg_list?to_email={{key}}&page=1">{{ value.last_msg|slice:"40" }}</a>
+             {% else %}
+            <a href="msg_list?to_email={{key}}&page=1"><b>{{value.last_msg|slice:"40" }}</b></a>
+            {% endif %}
+        </td>
+        <td>{{  value.last_time|translate_seahub_time }}</td>
+        <td>{{  value.not_read }}</td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<form id="send-msg-form" action="message_send/" method="post" name="send-msg-form" class="hide">{% csrf_token %}
+    <h3>{% trans "Send message to"%}</h3>
+    
+    <div id="send-msg-tabs">
+        <ul id="send-msg-tabs-nav">
+            <li><a href="#share-enter">{% trans 'Enter' %}</a></li>
+            <li><a href="#share-contact-options">{% trans 'Contacts' %}</a></li>
+        </ul>
+        <div id="share-enter">
+            <textarea id="mass_email" name="mass_email" placeholder="{% trans "Emails or Groups, Seperated by ','"%}"></textarea>
+            <p class="tip">{% trans 'Tip: You can write message under here.' %}</p>
+        </div>
+        <div id="share-contact-options" class="hide">
+            <ul class="option-list">
+            {% for contact in contacts %}
+            <li>
+            <label class="checkbox-label">
+                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
+                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
+            </label>
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+
+    <div><textarea id="mass_msg" name="mass_msg" placeholder="{% trans "the message you want to send !"%}"></textarea></div>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />
+</form>
+
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ MEDIA_URL }}/js/dojo.js">
+</script>
+<script type="text/javascript">
+
+
+    var share_list = [], contact_email;
+    {% for contact in contacts %}
+    contact_email = '{{ contact.contact_email }}';
+    share_list.push({value:contact_email, label:contact_email});
+    {% endfor %}
+
+    $(".add").click(function() {
+        $("#send-msg-form").modal({appendTo: "#main", focus:false});
+        $('#send-msg-tabs').tabs();
+        $('#simplemodal-container').css('height', 'auto');
+        addAutocomplete('#mass_email', '#send-msg-form', share_list);
+    });
+
+    //check before post
+    $('#share-submit-btn').click(function() {
+        var cur_tab_id = $('#send-msg-tabs-nav .ui-tabs-selected a').attr('href');
+        var post_data = '';
+        switch(cur_tab_id) {
+            case '#share-enter':
+                post_data = $('#mass_email').val();
+                break;
+            case '#share-contact-options':
+                $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
+                    post_data += $(this).val() + ',';
+                });
+                $('#mass_email').val(post_data);
+        }
+        if (!post_data) {
+            apply_form_error('send-msg-form', '{% trans "Please enter emails or groups or select some at first." %}');
+            return false;
+        }
+        $("#send-msg-form").submit();
+        disable($(this));
+    });
+
+    $('.unshare-btn').click(function() {
+        location.href = $(this).data('url');
+    });
+</script>
+{% endblock %}

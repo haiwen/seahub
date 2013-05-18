@@ -101,6 +101,7 @@ urlpatterns = patterns('',
     (r'^contacts/', include('seahub.contacts.urls')),                       
     (r'^group/', include('seahub.group.urls')),
     url(r'^groups/', group_list, name='group_list'),
+    (r'^message/', include('seahub.message.urls')),     
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),
 
