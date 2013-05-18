@@ -126,14 +126,10 @@ if settings.SERVE_STATIC:
         (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     )
 
-try:
-    from settings import CLOUD_MODE
-except ImportError:
-    CLOUD_MODE = False
-if CLOUD_MODE:
+if getattr(settings, 'CLOUD_MODE', False):
     urlpatterns += patterns('',
-        # (r'^organizations/', include('seahub.organizations.urls')),
         (r'^demo/', demo),
+        (r'^pay/', include('seahub_extra.pay.urls')),
     )
 else:
     urlpatterns += patterns('',
@@ -147,3 +143,4 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
     urlpatterns += patterns('',
         url(r'^search/$', search, name='search'),
     )
+

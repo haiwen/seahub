@@ -849,7 +849,6 @@ else:
     def get_user_traffic_stat(username):
         pass
 
-
 def redirect_to_login(request):
     from django.conf import settings
     login_url = settings.LOGIN_URL
