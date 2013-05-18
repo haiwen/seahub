@@ -39,7 +39,9 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
-    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE
+    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group
+from seaserv import seafile_api
+
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -158,7 +160,7 @@ class Repos(APIView):
                 }
             repos_json.append(repo)
         
-        shared_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
+        shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
         for r in shared_repos:
             commit = get_commits(r.repo_id, 0, 1)[0]
             if not commit:
@@ -956,7 +958,7 @@ class SharedRepos(APIView):
 
 class BeShared(APIView):
     """
-    List repos that a repo others/groups/public share to user.  
+    List repos that others/groups share to user.  
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
@@ -965,13 +967,14 @@ class BeShared(APIView):
     def get(self, request, format=None):
         username = request.user.username
         shared_repos = []
+        shared_repos += seafile_api.get_share_in_repo_list(username, -1, -1)
+
         joined_groups = get_personal_groups_by_user(username)
-        shared_repos += list_share_repos(username, 'to_email', -1, -1)
         for grp in joined_groups:
         # Get group repos, and for each group repos...
             for r_id in get_group_repoids(grp.id):
                 # No need to list my own repo
-                if is_repo_owner(email, r_id):
+                if seafile_api.is_repo_owner(username, r_id):
                     continue
                  # Convert repo properties due to the different collumns in Repo
                  # and SharedRepo
@@ -985,9 +988,9 @@ class BeShared(APIView):
                 last_commit = cmmts[0] if cmmts else None
                 r.last_modified = last_commit.ctime if last_commit else 0
                 r.share_type = 'group'
-                r.user = get_repo_owner(r_id)
-                r.user_perm = check_permission(r_id, email)
-                shared_repos += r
+                r.user = seafile_api.get_repo_owner(r_id)
+                r.user_perm = check_permission(r_id, username)
+                shared_repos.append(r)
 
         if not CLOUD_MODE:
             shared_repos += list_inner_pub_repos(username)
@@ -1028,49 +1031,58 @@ class SharedRepo(APIView):
         return Response('success', status=status.HTTP_200_OK)
 
     def put(self, request, repo_id, format=None):
+        """
+        Share a repo to users/groups/public.
+        """
         share_type = request.GET.get('share_type')
         user = request.GET.get('user')
         group_id = request.GET.get('group_id')
         permission = request.GET.get('permission')
-        if permission !='rw' or permission != "r":
-            return api_error(status.HTTP_400_BAD_REQUEST,\
-                    'Permission error.')
-                    
+
+        if permission !='rw' and permission != "r":
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Permission need to be rw or r.')
+
         if share_type == 'personal':
             if not is_registered_user(user) :
-                return api_error(status.HTTP_400_BAD_REQUEST,\
-                    'user not exist')
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'User does not exist')
             try :
-                from_email = get_repo_owner(repo_id)
+                from_email = seafile_api.get_repo_owner(repo_id)
                 seafserv_threaded_rpc.add_share(repo_id, from_email, user,
                                                 permission)
             except SearpcError, e:
-                return api_error(status.HTTP_400_BAD_REQUEST,\
-                    'Failed to share to user.')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "Searpc Error: " + e.msg)
 
         elif share_type == 'group':
             try:
-                print "group"
-                from_email = get_repo_owner(repo_id)
-                group = get_group(int(group_id))
-                if not group:
-                    return api_error(status.HTTP_400_BAD_REQUEST,\
-                    'Group not exist .') 
-                seafserv_threaded_rpc.group_share_repo(repo_id, int(group_id), from_email,
-                                           permission)
-            except:
-                return api_error(status.HTTP_400_BAD_REQUEST,\
-                    'user is not member of the group .')  
+                group_id = int(group_id)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'Group id must be integer.')
+
+            from_email = seafile_api.get_repo_owner(repo_id)
+            group = get_group(group_id)
+            if not group:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'Group does not exist .')
+            try:
+                seafile_api.group_share_repo(repo_id, int(group_id),
+                                             from_email, permission)
+            except SearpcError, e:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "Searpc Error: " + e.msg)
 
         elif share_type == 'public':
             if not CLOUD_MODE:
                 try:
                     seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-                except:
-                    return api_error(status.HTTP_400_BAD_REQUEST,\
-                        'Failed to share to all members.')
+                except SearpcError, e:
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                     "Searpc Error: " + e.msg)
         else :
-            return api_error(status.HTTP_400_BAD_REQUEST,\
+            return api_error(status.HTTP_400_BAD_REQUEST,
                     'share_type can only be personal or group or public.')
 
         return Response('success', status=status.HTTP_200_OK)

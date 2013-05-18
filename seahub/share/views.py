@@ -28,6 +28,7 @@ from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
+from seahub.message.models import UserMessage
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, IS_EMAIL_CONFIGURED
