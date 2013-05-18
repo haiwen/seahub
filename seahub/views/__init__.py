@@ -9,6 +9,7 @@ import urllib2
 import logging
 import chardet
 from types import FunctionType
+from datetime import datetime
 from math import ceil
 from urllib import quote
 from django.core.cache import cache
@@ -807,9 +808,12 @@ def myhome(request):
 
     # events
     if EVENTS_ENABLED:
-        events = True
+        events = get_user_events(email, 0)
+        events_more, event_groups = handle_events_data(events)
     else:
         events = None
+        events_more = False
+        event_groups = None
 
     starred_files = get_starred_files(request.user.username)
 
@@ -839,6 +843,8 @@ def myhome(request):
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "events": events,
+            "events_more": events_more,
+            "event_groups": event_groups,
             "starred_files": starred_files,
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
@@ -2156,6 +2162,9 @@ def repo_download_dir(request, repo_id):
     return redirect(url)
 
 def events(request):
+    if not request.is_ajax():
+        raise Http404
+
     username = request.user.username
     start = int(request.GET.get('start', 0))
     if request.cloud_mode:
@@ -2164,17 +2173,43 @@ def events(request):
     else:
         events = get_user_events(username, start)
    
+    events_more, event_groups = handle_events_data(events)
+    ctx = {'event_groups': event_groups}
+    html = render_to_string("snippets/events_body.html", ctx)
+
+    return HttpResponse(json.dumps({'html':html, 'events_more':events_more}),
+                            content_type='application/json; charset=utf-8')
+
+def handle_events_data(events):
     events_more = False
     if len(events) == 11:
         events_more = True
         events = events[:10]
 
-    ctx = {}
-    ctx['events'] = events
-    html = render_to_string("snippets/events_.html", ctx)
+    # group events according to the date
+    event_groups = []
+    for e in events:
+        if e.etype == 'repo-update':
+            e.time = datetime.fromtimestamp(int(e.commit.ctime)) # e.commit.ctime is a timestamp
+            e.author = e.commit.creator_name
+        else:
+            e.time = e.timestamp # e.timestamp actually is '%Y-%m-%d h:m:s'
+            if e.etype == 'repo-create':
+                e.author = e.creator
+            else:
+                e.author = e.repo_owner
+        e.date = (e.time).strftime("%Y-%m-%d")
+        
+        if len(event_groups) == 0 or \
+            len(event_groups) > 0 and e.date != event_groups[-1]['date']:
+            event_group = {}
+            event_group['date'] = e.date
+            event_group['events'] = [e]
+            event_groups.append(event_group)
+        else:
+            event_groups[-1]['events'].append(e)
 
-    return HttpResponse(json.dumps({'html':html, 'more':events_more}),
-                            content_type='application/json; charset=utf-8')
+    return events_more, event_groups
 
 def pdf_full_view(request):
     '''For pdf view with pdf.js.'''
