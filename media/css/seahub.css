@@ -2401,3 +2401,11 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:6px;
     margin-right:2px;
 }
+
+/* payments */
+#current-plan p {
+    font-size:15px;
+}
+#plan-form input[type=radio] {
+    margin-right: 10px;
+}
