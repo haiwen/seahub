@@ -460,21 +460,21 @@ def get_subdir(request, repo_id):
 
 @login_required
 def get_dirents(request, repo_id):
-    '''
-        Get dirents in a dir for file tree
-    '''
+    """
+    Get dirents in a dir for file tree
+    """
     user_perm = get_user_permission(request, repo_id)
     if not user_perm:
         return render_error(request)
 
     path = request.GET.get('path', '')
+    dir_only = request.GET.get('dir_only', '')
 
     if not (repo_id and path):
         return render_error(request)
 
-    latest_commit = get_commits(repo_id, 0, 1)[0]
     try:
-        dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
+        dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
     except SearpcError, e:
         return render_error(request, e.msg)
 
@@ -482,13 +482,21 @@ def get_dirents(request, repo_id):
     for dirent in dirents:
         if stat.S_ISDIR(dirent.props.mode):
             subdir = {
-                'data': dirent.obj_name,
-                'attr': {'repo_id': repo_id },
-                'state': 'closed'
+                'repo_id': repo_id, # return the repo_id back to help the client to remember state
+                'id': dirent.obj_id,
+                'name': dirent.obj_name,
+                'type': 'dir',
             }
             dirent_list.append(subdir)
         else:
-            dirent_list.append(dirent.obj_name)
+            if not dir_only:
+                f = {
+                    'repo_id': repo_id,
+                    'id': dirent.obj_id,
+                    'name': dirent.obj_name,
+                    'type': 'file',
+                    }
+                dirent_list.append(f)
 
     content_type = 'application/json; charset=utf-8'
     return HttpResponse(json.dumps(dirent_list),

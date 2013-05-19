@@ -1306,11 +1306,11 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #eee;
     margin:5px 0 10px;
 }
-.file-tree-cont .jstree-leaf a ins.jstree-icon {
+.file-tree-cont .jstree-leaf[type=file] a ins.jstree-icon {
     background: transparent url('../img/file-icon-16.png') no-repeat left center;
     vertical-align:top;
 }
-.file-tree-cont .jstree-leaf[repo_id] a ins.jstree-icon {
+.file-tree-cont .jstree-leaf[type=dir] a ins.jstree-icon {
     background:transparent url('../jstree_pre1.0_stable/themes/classic/d.png') no-repeat scroll -56px -36px;
 }
 #mv-dir-list .tri-bg {
