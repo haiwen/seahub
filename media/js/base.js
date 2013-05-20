@@ -362,3 +362,15 @@ function disable(btn) {
 function enable(btn) {
     btn.removeAttr('disabled').removeClass('btn-disabled');
 }
+
+// for browsers don't support array.indexOf
+if (!Array.indexOf) {
+    Array.prototype.indexOf = function(obj){
+        for(var i = 0; i < this.length; i++){
+            if(this[i] == obj){
+                return i;
+            }
+        }
+        return -1;
+    }
+}

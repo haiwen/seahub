@@ -90,6 +90,7 @@ button {
 }
 input[type=radio] {
     height:auto;
+    border:0;/*for ie*/
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {/*for input type="number" in chrome: to hide up/download arrow*/
@@ -2222,13 +2223,13 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* search */
-.search-form {
+.search-form,
+#search-form .input_and_submit {
     padding-left:5px;
     height:24px;
     border:1px solid #ddd;
     border-radius:3px;
     background:#fff;
-    /*overflow:hidden;for some chromium*/
     position:relative;
 }
 #top-search-form {
@@ -2250,25 +2251,46 @@ textarea:-moz-placeholder {/* for FF */
     cursor:pointer;
     line-height:24px;
 }
-.search-scales {
+#advanced-search-form {
     position:absolute;
-    padding:2px 0;
+    width:500px;
+    padding:18px;
+    height:auto;
     font-weight:normal;
-    background:#fff;
+    box-shadow:0 0 10px #ddd;
+    z-index:100;/* for pages with jquery tabs*/
+}
+#advanced-search-form .search-input {
+    width:98%;
+    padding:0 3px;
     border:1px solid #ddd;
     border-radius:3px;
-    box-shadow:0 0 10px #ddd;
+}
+#advanced-search-form .submit {
+    margin-bottom:0;
+}
+.search-scales {
+    margin-top:8px;
 }
 .search-scales .item {
-    padding:2px 6px;
+    width:48%;
 }
-.search-scales .item-hover {
-    color:#fff;
-    background:#666;
-    cursor:pointer;
+.search-repos {
+    border-bottom:1px dotted #ddd;
+    margin-bottom:3px;
 }
-.search-scales [class^="icon-"] {
-    margin-right:5px;
+.custom-ftype-options {
+    font-size:13px;
+    padding:2px 0;
+    background:#fafafa;
+}
+.custom-ftype-options .checkbox-label {
+    display:inline-block;
+    margin:0 10px 0 0;
+}
+.custom-ftype-options .fileext-input {
+    padding:0 3px;
+    width:70%;
 }
 .search-form .search-submit {
     width:30px;
@@ -2279,16 +2301,25 @@ textarea:-moz-placeholder {/* for FF */
     color:#aaa;
 }
 #search-form {
+    padding:7px 5px;
+    height:auto;
+    background:#f7f7f8;
+    border:0;
+    border-radius:2px;
+}
+#search-form .input_and_submit {
+    display:inline-block;
     width:426px;
     *width:430px;
 }
+#search-form .advanced-search {
+    color:#666;
+    font-size:16px;
+    cursor:pointer;
+    margin-left:4px;
+}
 #search-form .search-input {
     width:392px;
-}
-#search-form-container {
-    padding:7px 5px;
-    background:#f7f7f8;
-    border-radius:2px;
 }
 #search-results {
     padding-top:15px;

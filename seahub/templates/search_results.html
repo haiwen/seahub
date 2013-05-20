@@ -4,26 +4,20 @@
 {% load url from future %}
 
 {% block right_panel %}
-<div id="search-form-container">
-    <form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
+<form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
+    <div class="input_and_submit">
         <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
         <button type="submit" class="search-submit"><span class="icon-search"></span></button>
-    </form>
-</div>
+    </div>
+    <span class="advanced-search vam icon-double-angle-{% if not search_repo and not search_ftypes %}down{% else %}up{% endif %}" title="{% trans "advanced" %}"></span>
+</form>
 
 <div id="search-results">
+    {% if not error %}
 {% if not results %}
-    <p>{% trans 'No result found' %}
-      {% if repo %}
-      {% trans 'in repo' %} <a href="{% url 'repo' repo_id=repo.id %}">{{ repo.name }}</a>
-      {% endif %}
-    </p>
+    <p>{% trans 'No result found' %}</p>
 {% else %}
-    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}
-      {% if repo %}
-      {% trans 'found in repo' %} <a href="{% url 'repo' repo_id=repo.id %}">{{ repo.name }}</a>
-      {% endif %}
-    </p>
+    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
     <ul id="search-results-list">
     {% for file in results %}
         <li class="search-results-item ovhd">
@@ -78,5 +72,44 @@
     </div>
     {% endif %}
 {% endif %}
+{% endif %}
 </div>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript">
+(function() {
+    var form = $('#search-form');
+    {% if search_repo or search_ftypes %}
+    form.append($('#advanced-search-form .search-scales').clone(true));
+    {% endif %}
+    form.find('.advanced-search').click(function() {
+        if (form.find('.search-scales').length == 0) {
+            form.append($('#advanced-search-form .search-scales').clone(true));
+        } else {
+            form.find('.search-scales').toggleClass('hide');
+        }
+        var it = $(this),
+            str = 'icon-double-angle-';
+        if (it.hasClass(str + 'down')) {
+            it.removeClass(str + 'down').addClass(str + 'up');
+        } else {
+            it.removeClass(str + 'up').addClass(str + 'down');
+        }
+        return false;
+    });
+    {% if custom_ftypes %}
+    var custom_ftypes = [];
+    {% for f in custom_ftypes %}
+    custom_ftypes.push("{{f}}");
+    {% endfor %}
+    var ftype_options = form.find('[name="ftype"]'); 
+    ftype_options.each(function() {
+        if (custom_ftypes.indexOf($(this).val()) != -1) {
+            $(this).attr('checked', true);
+            $(this).parent().addClass('checkbox-checked');
+        }
+    });
+    {% endif %}
+})();
+</script>
 {% endblock %}

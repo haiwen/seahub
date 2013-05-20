@@ -71,24 +71,61 @@
 
                 {% if enable_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
-                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
-                    <input type="hidden" name="scale" value="all" />
                     {% if search_repo_id %}
-                    <input type="hidden" name="search_repo_id" value="{{ search_repo_id }}" />
+                    <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
+                    <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />
+                    {% else %}
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     {% endif %}
-                    <span class="icon-caret-down" title="{% trans "choose search scale" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
-                    <ul class="search-scales hide">
-                        <li class="item" data-value="all"><span class="icon-ok"></span>{% trans "In all libraries" %}</li>
-                        {% if search_repo_id %}
-                        <li class="item" data-value="current"><span class="icon-"></span>
-                          {% if search_wiki %}
-                            {% trans "In this wiki" %}
-                          {% else %}
-                            {% trans "In this library" %}
-                          {% endif %}
-                        </li>
+                    <span class="icon-caret-down" title="{% trans "advanced" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+                </form>
+
+                <form id="advanced-search-form" method="get" action="{% url 'search' %}" class="search-form hide">
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <div class="search-scales">
+                        <div class="search-repos">
+                            {% if search_repo_id %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" checked="checked" value="{{ search_repo_id }}" class="vam" /> <span class="vam">{% if search_wiki %}{% trans "In this wiki" %}{% else %}{% trans "In this library" %}{% endif %}</span></label>
+                            {% else %}
+                                    {% if search_repo and repo %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="{{repo.id}}" checked="checked" class="vam" /> <span class="vam">{% blocktrans with name=repo.name %}in {{name }}{% endblocktrans %}</span></label>
+                                    {% else %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                                    {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="search-filetypes">
+                            {% if search_ftypes != 'custom' %}
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            {% else %}
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" checked="checked" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            {% endif %}
+                        </div>
+                        {% if search_ftypes != 'custom' %}
+                        <div class="custom-ftype-options hide">
+                        {% else %}
+                        <div class="custom-ftype-options">
                         {% endif %}
-                    </ul>
+                            {# ftype value should be the same with utils/file_types.py #}
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Text" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Text files" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Document" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Documents" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Image" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Images" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Video" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Video" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Audio" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Audio" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="SVG" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "svg" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="PDF" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "pdf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Sf" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "seaf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Markdown" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "markdown" %}</span></label>
+                            <br/>
+                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" class="fileext-input" />
+                            <p class="error hide">{% trans "Please select at least 1 file type or input at least 1 file extension" %}</p>
+                        </div>
+                    </div>
+                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
                 </form>
                 {% endif %}
             </div>
@@ -204,40 +241,41 @@ $(document).ready(function(){
 });
 
 {% if enable_file_search %}
-$('#top-search-form .icon-caret-down').click(function() {
-    var form = $(this).parent();
-    form.find('.search-scales').css({'right':form.find('.search-submit').outerWidth(true), 'top':form.outerHeight()}).toggleClass('hide');
+// search-form: top-search-form, advanced-search-form, search-form in search result page
+$('.search-form').submit(function() {
+    if (!$.trim($(this).find('.search-input').val())) {
+        return false;
+    }
 });
-$('.search-scales li').hover(
-    function() {
-        $(this).addClass('item-hover');
-    },
-    function() {
-        $(this).removeClass('item-hover');
+$('#top-search-form .icon-caret-down').click(function() {
+    var form = $(this).parent(),
+        q = form.find('[name="q"]').val(),
+        advanced_form = $('#advanced-search-form');
+    $('#header-inner').css({'position':'relative'});
+    advanced_form.css({'right': 0, 'top':form.outerHeight(true)}).toggleClass('hide');
+    if (!advanced_form.hasClass('hide') && q) {
+        advanced_form.find('.search-input').val(q);
     }
-).click(function() {
-    $(this).parent().find('span').attr('class', 'icon-');
-    $(this).children('span').attr('class', 'icon-ok');
-    if (!pseudo_support) {
-        $(this).parent().find('span').html('');
-        setCon($(this).children('span'), 'icon-', fa_icons);
-    }
-    $('#top-search-form [name="scale"]').val($(this).data('value'));
-    $(this).parent().addClass('hide');
-    var search_input = $('#top-search-form .search-input');
-    if ($.trim(search_input.val())) {
-        $('#top-search-form').submit();
-    } else {
-        search_input.attr('placeholder', $(this).text().replace(/^&#x\w+;$/,'')); // replace(...) to rm icon text for some browsers
-        if (!('placeholder' in document.createElement('input'))) { // for browsers which don't natively support 'placeholder' attr
-            search_input.attr('value', search_input.attr('placeholder'));
-        }
+});
+$('.search-filetypes .item:first-child').click(function() {
+    $(this).parents('.search-form').find('.custom-ftype-options').addClass('hide');
+});
+$('.search-filetypes .item:last-child').click(function() {
+    $(this).parents('.search-form').find('.custom-ftype-options').removeClass('hide');
+});
+$('#advanced-search-form').submit(function() {
+    if ($('#custom-search-ftypes').attr('checked') &&
+        $('.custom-ftype-options .checkbox-checked').length == 0 &&
+        !$.trim($('.custom-ftype-options .fileext-input').val())) {
+        $(this).find('.error').removeClass('hide');
+        return false;
     }
 });
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
-    if (!$('.search-scales, #top-search-form .icon-caret-down').is(target) && !($('.search-scales').find('*').is(target))) {
-        $('.search-scales').addClass('hide');
+    var popup = $('#advanced-search-form');
+    if (!popup.is(target) && !popup.find('*').is(target) && !$('#top-search-form .icon-caret-down').is(target)) {
+        popup.addClass('hide');
     }    
 });
 {% endif %}
@@ -282,7 +320,9 @@ $(document).click(function(e) {
         {'name':'star', 'con':'f005'},
         {'name':'star-empty', 'con':'f006'},
         {'name':'caret-down', 'con':'f0d7'},
-        {'name':'ok', 'con':'f00c'}
+        {'name':'ok', 'con':'f00c'},
+        {'name':'double-angle-up', 'con':'f102'},
+        {'name':'double-angle-down', 'con':'f103'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {
