@@ -966,34 +966,21 @@ class BeShared(APIView):
 
     def get(self, request, format=None):
         username = request.user.username
+        shared_type = request.GET.get('type')
         shared_repos = []
-        shared_repos += seafile_api.get_share_in_repo_list(username, -1, -1)
-
-        joined_groups = get_personal_groups_by_user(username)
-        for grp in joined_groups:
-        # Get group repos, and for each group repos...
-            for r_id in get_group_repoids(grp.id):
-                # No need to list my own repo
-                if seafile_api.is_repo_owner(username, r_id):
-                    continue
-                 # Convert repo properties due to the different collumns in Repo
-                 # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                cmmts = get_commits(r_id, 0, 1)
-                last_commit = cmmts[0] if cmmts else None
-                r.last_modified = last_commit.ctime if last_commit else 0
-                r.share_type = 'group'
-                r.user = seafile_api.get_repo_owner(r_id)
-                r.user_perm = check_permission(r_id, username)
-                shared_repos.append(r)
-
-        if not CLOUD_MODE:
-            shared_repos += list_inner_pub_repos(username)
+        if shared_type == "group" :
+            joined_groups = get_personal_groups_by_user(username)
+            for grp in joined_groups:
+            # Get group repos, and for each group repos...
+                for r_id in get_group_repoids(grp.id):
+                    if seafile_api.is_repo_owner(username, r_id):
+                        continue
+                    r = get_repo(r_id)
+                    shared_repos.append(r)
+        if username and not shared_type :
+            shared_repos += list_share_repos(username, 'to_email', -1, -1)
+            if not CLOUD_MODE:
+                shared_repos += list_inner_pub_repos(username)
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
@@ -1087,3 +1074,64 @@ class SharedRepo(APIView):
 
         return Response('success', status=status.HTTP_200_OK)
 
+
+class CreateRepo(APIView):
+    """
+    Support uniform interface for create libraries.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+    
+    def put(self, request, format=None):
+        repo_name = None
+        username = request.user.username
+        repo_desc = request.GET.get("desc",'new repo')
+        passwd = request.GET.get("passwd")
+        permission = request.GET.get("perm","rw")
+        repo_name = request.GET.get("name")
+        if not repo_name:
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Please write repo name.')
+        if permission != "rw" and permission != "r" :
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Perm can only to be r or rw .')
+        # create a repo 
+        try : 
+            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
+                                                        username, passwd)
+        except:
+            repo_id = None
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Failed to create library.')
+        else:
+            return Response('success', status=status.HTTP_200_OK)
+
+
+class RepoOperation(APIView):
+    """
+    Support uniform interface for operation like change the name and desc of repo or delete repo.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,IsRepoOwner)
+    throttle_classes = (UserRateThrottle, )
+    def delete(self, request,repo_id,format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Library does not exist.')
+        remove_repo(repo_id)
+        return Response('success', status=status.HTTP_200_OK)
+
+    def post(self, request,repo_id,format=None):
+        repo_desc = request.GET.get("desc",None)
+        repo_name = request.POST.get("name",None)
+        username = request.user.username
+        if not repo_desc or not  repo_name :
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Desc and Name is needed')
+        if not edit_repo(repo_id, repo_name, repo_desc, username):
+            return api_error(status.HTTP_400_BAD_REQUEST,\
+                    'Failed to edit library information.')
+        return Response('success', status=status.HTTP_200_OK)
