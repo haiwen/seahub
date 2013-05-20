@@ -92,7 +92,7 @@ urlpatterns = patterns('',
     (r'^file/move/get_subdir/$', get_subdir),                       
     (r'^file/move/$', file_move),
     (r'^seafile_access_check/$', seafile_access_check),
-
+    url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

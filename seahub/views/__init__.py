@@ -2225,3 +2225,48 @@ def pdf_full_view(request):
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,
            }, context_instance=RequestContext(request))
+
+@login_required
+def convert_cmmt_desc_link(request):
+    """Return user to file/directory page based on the changes in commit.
+    """
+    repo_id = request.GET.get('repo_id')
+    cmmt_id = request.GET.get('cmmt_id')
+    name = request.GET.get('nm')
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if get_user_permission(request, repo_id) is None:
+        raise Http404
+    
+    diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)
+    if not diff_result:
+        raise Http404
+
+    for d in diff_result:
+        if name not in d.name:
+            # skip to next diff_result if file/folder user clicked does not
+            # match the diff_result
+            continue            
+
+        if d.status == 'add' or d.status == 'mod': # Add or modify file
+            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
+                                            '?p=/%s' % d.name)
+        elif d.status == 'mov': # Move or Rename file
+            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
+                                            '?p=/%s' % d.new_name)
+        elif d.status == 'newdir':
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]) + \
+                                            '?p=/%s' % d.name)
+        else:
+            continue
+
+    # Shoud never reach here.
+    logger.warn('OUT OF CONTROL!')
+    for d in diff_result:
+        logger.warn('repo_id: %s, cmmt_id: %s, diff_result: %s' % (
+                repo_id, cmmt_id, d.__dict__))
+    raise Http404

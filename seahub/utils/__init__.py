@@ -10,6 +10,7 @@ import json
 import tempfile
 import locale
 
+from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.shortcuts import render_to_response
@@ -559,7 +560,12 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
         finally:
             ev_session.close()
 
-        return valid_events[:11]
+        rv =  valid_events[:11]
+        for e in rv:
+            if hasattr(e, 'commit'):
+                e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
+                e.commit.more_files = more_files_in_commit(e.commit)
+        return rv
 
     def _get_events_inner(ev_session, username, start, org_id=None):
         '''Read 11 events from seafevents database, and remove events that are
@@ -594,7 +600,6 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
         
     def get_org_user_events(org_id, username, start):
         return _get_events(username, start, org_id=org_id)
-        
 
 else:
     EVENTS_ENABLED = False
@@ -866,5 +871,40 @@ def mkstemp():
     else:
         return fd, path
 
+# File or directory operations
+FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
+           'Added directory', 'Renamed directory', 'Moved directory')
+
+OPS = '|'.join(FILE_OP)
+CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
+
+def convert_cmmt_desc_link(commit):
+    """Wrap file/folder with ``<a></a>`` in commit description.
+    """
+    repo_id = commit.repo_id
+    cmmt_id = commit.id
+
+    def link_repl(matchobj):
+        op = matchobj.group(1)
+        file_or_dir = matchobj.group(2)
+        remaining = matchobj.group(3)
+
+        url = reverse('convert_cmmt_desc_link')
+        tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s">%s</a>"'
+        if remaining:
+            return (tmp_str + ' %s') % (op, url, repo_id, cmmt_id, file_or_dir,
+                                        file_or_dir, remaining)
+        else:
+            return tmp_str % (op, url, repo_id, cmmt_id, file_or_dir, file_or_dir)
+
+    return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
+
+MORE_PATT = r'and \d+ more (?:files|directories)'
+def more_files_in_commit(commit):
+    """Check whether added/deleted/modified more files in commit description.
+    """
+    return True if re.search(MORE_PATT, commit.desc) else False
+    
+    
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
