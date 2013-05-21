@@ -808,10 +808,12 @@ def myhome(request):
 
     # events
     if EVENTS_ENABLED:
-        events = get_user_events(email, 0)
-        events_more, event_groups = handle_events_data(events)
+        events_count = 15
+        events, events_more_offset = get_user_events(email, 0, events_count)
+        events_more = True if len(events) == events_count else False
+        event_groups = group_events_data(events)
     else:
-        events = None
+        events, events_more_offset = None, None
         events_more = False
         event_groups = None
 
@@ -843,8 +845,10 @@ def myhome(request):
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "events": events,
+            "events_more_offset": events_more_offset,
             "events_more": events_more,
             "event_groups": event_groups,
+            "events_count": events_count,
             "starred_files": starred_files,
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
@@ -2163,32 +2167,34 @@ def repo_download_dir(request, repo_id):
     url = gen_file_get_url(token, dirname)
     return redirect(url)
 
+@login_required
 def events(request):
     if not request.is_ajax():
         raise Http404
 
+    events_count = 15
     username = request.user.username
     start = int(request.GET.get('start', 0))
+
     if request.cloud_mode:
         org_id = request.GET.get('org_id')
-        events = get_org_user_events(org_id, username, start)
+        events, start = get_org_user_events(org_id, username, start, events_count)
     else:
-        events = get_user_events(username, start)
-   
-    events_more, event_groups = handle_events_data(events)
+        events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
     ctx = {'event_groups': event_groups}
     html = render_to_string("snippets/events_body.html", ctx)
 
-    return HttpResponse(json.dumps({'html':html, 'events_more':events_more}),
+    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
+                                    'new_start': start}),
                             content_type='application/json; charset=utf-8')
 
-def handle_events_data(events):
-    events_more = False
-    if len(events) == 21:
-        events_more = True
-        events = events[:20]
-
-    # group events according to the date
+def group_events_data(events):
+    """
+    Group events according to the date.
+    """
     event_groups = []
     for e in events:
         if e.etype == 'repo-update':
@@ -2211,7 +2217,7 @@ def handle_events_data(events):
         else:
             event_groups[-1]['events'].append(e)
 
-    return events_more, event_groups
+    return event_groups
 
 def pdf_full_view(request):
     '''For pdf view with pdf.js.'''

@@ -29,7 +29,8 @@ function reqEvents(start) {
             });
 
             if (data['events_more']) {
-                $('#events-more').data('start', start + events_more_offset).removeClass('hide');
+                var new_start = data['new_start'];
+                $('#events-more').data('start', new_start).removeClass('hide');
             } else {
                 $('#events-more').addClass('hide');
             }
@@ -70,7 +71,7 @@ function showDetailForEncrypRepo(obj) {
     }
 }
 
-var events_more_offset = 10;
+var events_more_offset = {{events_more_offset}};
 
 $('.lsch-encrypted').click(function() {
     showDetailForEncrypRepo($(this));

@@ -561,43 +561,83 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
                     return True
             return False
 
-    def _get_events(username, start, org_id=None):
+    def _populate_valid_events(valid_events, events):
+        """
+        Populate ``valid_events`` list with non-duplicated event from
+        ``events`` list.
+        """
+        for e1 in events:
+            duplicate = False
+            for e2 in valid_events:
+                if _same_events(e1, e2): duplicate = True; break
+            if duplicate:
+                continue
+            else:
+                valid_events.append(e1)
+        
+    def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
-        total = 21
         valid_events = []
+        # total = count
+        # try:
+        #     while total == count and len(valid_events) < count:
+        #         print total, start
+        #         total, events = _get_events_inner(ev_session, username,
+        #                                           start, start+count, org_id)
+        #         print total, start
+        #         for e1 in events:
+        #             duplicate = False
+        #             for e2 in valid_events:
+        #                 if _same_events(e1, e2): duplicate = True; break
+        #             if not duplicate:
+        #                 valid_events.append(e1)
+        #         start += len(events)
+        # finally:
+        #     ev_session.close()
+
         try:
-            while total == 21 and len(valid_events) < 21:
-                total, events = _get_events_inner(ev_session, username, start, org_id)
-                for e1 in events:
-                    duplicate = False
-                    for e2 in valid_events:
-                        if _same_events(e1, e2): duplicate = True; break
-                    if not duplicate:
-                        valid_events.append(e1)
-                        start += 1
-                    else:
-                        continue
+            # start loop when the size of return list does not match expected
+            while len(valid_events) < count:
+                # get ``count`` events from db
+                eof, events  = _get_events_inner(ev_session, username,
+                                                  start, start+count, org_id)
+                # if there is no more records in db
+                if eof:
+                    # populate return list with non-duplicated events, and
+                    # get out of the loop
+
+                    _populate_valid_events(valid_events, events)
+                    start += len(events)
+                    break
+
+                # else populate return list with non-duplicated events, and
+                # continue the loop
+                else:
+                    _populate_valid_events(valid_events, events)
+                    start += len(events)
         finally:
             ev_session.close()
+        
+        rv =  valid_events[:count]                  # abandon events not needed
+        start = start - (len(valid_events) - count) # fall back db cursor
 
-        rv =  valid_events[:21]
-        for e in rv:
+        for e in rv:            # parse commit description
             if hasattr(e, 'commit'):
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
                 e.commit.more_files = more_files_in_commit(e.commit)
-        return rv
+        return rv, start
 
-    def _get_events_inner(ev_session, username, start, org_id=None):
-        '''Read 21 events from seafevents database, and remove events that are
+    def _get_events_inner(ev_session, username, start, limit, org_id=None):
+        '''Read events from seafevents database, and remove events that are
         no longer valid
 
         '''
         if org_id == None:
-            events = seafevents.get_user_events(ev_session, username, start, start + 21)
+            events = seafevents.get_user_events(ev_session, username,
+                                                start, limit)
         else:
-            events = seafevents.get_org_user_events(ev_session, \
-                                    org_id, username, start, start + 21)
-        total = len(events)
+            events = seafevents.get_org_user_events(ev_session, org_id,
+                                                    username, start, limit)
         valid_events = []
         for ev in events:
             if ev.etype == 'repo-update':
@@ -613,13 +653,24 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
 
             valid_events.append(ev)
 
-        return total, valid_events
+        count = limit - start
+        total = len(events)
+        eof = True if total < count else False
+        return eof, valid_events
 
-    def get_user_events(username, start):
-        return _get_events(username, start)
+    def get_user_events(username, start, count):
+        """Return user events list and a new start.
         
-    def get_org_user_events(org_id, username, start):
-        return _get_events(username, start, org_id=org_id)
+        For example:
+        ``get_user_events('foo@example.com', 0, 10)`` returns the first 10
+        events.
+        ``get_user_events('foo@example.com', 5, 10)`` returns the 6th through
+        15th events.
+        """
+        return _get_events(username, start, count)
+        
+    def get_org_user_events(org_id, username, start, count):
+        return _get_events(username, start, count, org_id=org_id)
 
 else:
     EVENTS_ENABLED = False
