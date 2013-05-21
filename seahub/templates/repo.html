@@ -896,7 +896,28 @@ function renderDirTree(container, repo_data) {
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
-                        return '{{ SITE_ROOT }}ajax/repo/' + repo_id + '/dir/?path=' + e(path);
+                        return '{{ SITE_ROOT }}ajax/repo/' + repo_id + '/dirents/?dir_only=true&path=' + e(path);
+                    },
+                    'success': function(data) {
+                        var items = [];
+                        var o, item;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            o = data[i];
+                            if (o.has_subdir) {
+                                item = { 
+                                    'data': o.name, 
+                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'state': 'closed',
+                                };
+                            } else {
+                                item = {
+                                    'data': o.name, 
+                                    'attr': {'type': o.type },
+                                };
+                            }
+                            items.push(item);
+                        }
+                        return items;
                     }
                 }
             },

@@ -86,7 +86,6 @@ urlpatterns = patterns('',
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^i18n/$', i18n, name='i18n'),
     (r'^download/repo/$', repo_download),                       
-    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/$', get_dirents),                       
     (r'^file/move/$', file_move),
     (r'^seafile_access_check/$', seafile_access_check),                       
     url(r'^org/remove/(?P<org_id>[\d]+)/$', org_remove, name="org_remove"),
@@ -100,7 +99,8 @@ urlpatterns = patterns('',
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     ### Ajax ###
-    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', get_dirents),
+    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents),
+    url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_group_repos, name='get_group_repos'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

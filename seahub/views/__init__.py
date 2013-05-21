@@ -408,84 +408,57 @@ def update_file_error(request, repo_id):
                 }, context_instance=RequestContext(request))
     
 @login_required
-def get_subdir(request, repo_id):
-    '''
-        Get only subdirs in a dir for file tree
-    '''
-    user_perm = get_user_permission(request, repo_id)
-    if not user_perm:
-        return render_error(request)
-
-    path = request.GET.get('path', '')
-
-    if not (repo_id and path):
-        return render_error(request)
-
-    latest_commit = get_commits(repo_id, 0, 1)[0]
-    try:
-        dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path.encode('utf-8'))
-    except SearpcError, e:
-        return render_error(request, e.msg)
-
-    subdirs = []
-    for dirent in dirents:
-        if not stat.S_ISDIR(dirent.props.mode):
-            continue
-
-        dirent.has_subdir = False
-        path_ = os.path.join(path, dirent.obj_name)
-        try:
-            dirs_ = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, path_.encode('utf-8'))
-        except SearpcError, e:
-            return render_error(request, e.msg)
-
-        for dirent_ in dirs_:
-            if stat.S_ISDIR(dirent_.props.mode):
-                dirent.has_subdir = True
-                break
-
-        if dirent.has_subdir:
-            subdir = {
-                'data': dirent.obj_name,
-                'attr': {'repo_id': repo_id },
-                'state': 'closed'
-                    }
-            subdirs.append(subdir)
-        else:
-            subdirs.append(dirent.obj_name)
-
-    content_type = 'application/json; charset=utf-8'
-    return HttpResponse(json.dumps(subdirs),
-                            content_type=content_type)
-
-@login_required
 def get_dirents(request, repo_id):
     """
     Get dirents in a dir for file tree
     """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
     user_perm = get_user_permission(request, repo_id)
     if not user_perm:
-        return render_error(request)
+        err_msg = _(u"You don't have permission to access the library.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
+                            content_type=content_type)
 
     path = request.GET.get('path', '')
     dir_only = request.GET.get('dir_only', '')
 
-    if not (repo_id and path):
-        return render_error(request)
+    if not path:
+        err_msg = _(u"No path.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
+                            content_type=content_type)
 
     try:
         dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
     except SearpcError, e:
-        return render_error(request, e.msg)
+        return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
+                            content_type=content_type)
 
     dirent_list = []
     for dirent in dirents:
         if stat.S_ISDIR(dirent.props.mode):
+            dirent.has_subdir = False
+
+            if dir_only:
+                dirent_path = os.path.join(path, dirent.obj_name)
+                try:
+                    dirent_dirents = seafile_api.list_dir_by_path(repo_id, dirent_path.encode('utf-8'))
+                except SearpcError, e:
+                    dirent_dirents = []
+                for dirent_dirent in dirent_dirents:
+                    if stat.S_ISDIR(dirent_dirent.props.mode):
+                        dirent.has_subdir = True
+                        break
+
             subdir = {
-                'repo_id': repo_id, # return the repo_id back to help the client to remember state
-                'id': dirent.obj_id,
                 'name': dirent.obj_name,
+                'id': dirent.obj_id,
                 'type': 'dir',
+                'has_subdir': dirent.has_subdir, # to decide node 'state' ('closed' or not) in jstree
+                'repo_id': repo_id,
             }
             dirent_list.append(subdir)
         else:
@@ -498,9 +471,7 @@ def get_dirents(request, repo_id):
                     }
                 dirent_list.append(f)
 
-    content_type = 'application/json; charset=utf-8'
-    return HttpResponse(json.dumps(dirent_list),
-                            content_type=content_type)
+    return HttpResponse(json.dumps(dirent_list), content_type=content_type)
 
 @login_required
 def repo_history(request, repo_id):
@@ -2617,3 +2588,29 @@ def pdf_full_view(request):
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,
            }, context_instance=RequestContext(request))
+
+@login_required
+def get_group_repos(request, group_id):
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+
+    group_id_int = int(group_id) 
+
+    group = get_group(group_id_int)    
+    if not group:
+        err_msg = _(u"The group doesn't exist") 
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
+
+    joined = is_group_user(group_id_int, request.user.username)
+    if not joined and not request.user.is_staff:
+        err_msg = _(u"Permission denied")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
+
+    repos = seafile_api.get_group_repo_list(group_id_int)    
+    repo_list = []
+    for repo in repos:
+        repo_list.append({"name": repo.props.name, "id": repo.props.id})
+    
+    return HttpResponse(json.dumps(repo_list), content_type=content_type)

@@ -121,7 +121,7 @@ def get_httpserver_root():
 
     """
     try:
-        from settings import HTTP_SERVER_ROOT # First load from settings
+        from seahub.settings import HTTP_SERVER_ROOT # First load from settings
     except ImportError:
         # If load settings failed, then use default config
         from seaserv import HTTP_SERVER_ROOT

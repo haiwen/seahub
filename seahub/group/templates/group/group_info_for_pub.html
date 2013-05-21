@@ -16,7 +16,9 @@
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
         <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+        {% if enable_pubfile %}
         <li class="tabnav-tab"><a href="{% url 'group_pubfiles' group.id %}">{% trans "Files" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 
@@ -24,7 +26,7 @@
 
 {% block left_panel %}
 <div class="info-item group-basic-info">
-    <h3 class="info-item-top">{% trans "Basic Info" %}<span class="icon-eye-open" title="{% trans "This group is public." %}"></span></h3>
+    <h3 class="info-item-top">{% trans "Basic Info" %}<span class="icon-globe" title="{% trans "This group is public." %}"></span></h3>
     <div class="info-item-bottom ovhd">
         {% grp_avatar group.props.id 48 %}
         <div class="txt">
