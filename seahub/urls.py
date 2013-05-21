@@ -6,7 +6,6 @@ from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit
 from seahub.views.repo import RepoView, RepoHistoryView
-from seahub.views.search import search
 from notifications.views import notification_list
 from group.views import group_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
@@ -144,6 +143,7 @@ else:
     )
 
 if getattr(settings, 'ENABLE_FILE_SEARCH', False):
+    from seahub_extra.search.views import search
     urlpatterns += patterns('',
         url(r'^search/$', search, name='search'),
     )
