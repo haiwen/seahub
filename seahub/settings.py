@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'seahub.share',
 )
 
+
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
 )
@@ -331,6 +332,12 @@ LOGGING = {
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
+##########################
+# Settings for Extra App #
+##########################
+
+ENABLE_PUBFILE = False
+
 #####################
 # External settings #
 #####################
@@ -393,3 +400,4 @@ SEAFILE_VERSION = '1.7'
 # Put here after loading other settings files if `SITE_ROOT` is modified in
 # other settings files.
 LOGIN_URL = SITE_ROOT + 'accounts/login'
+

@@ -18,6 +18,11 @@ try:
 except ImportError:
     ENABLE_FILE_SEARCH = False
 
+try:
+    from seahub.settings import ENABLE_PUBFILE
+except ImportError:
+    ENABLE_PUBFILE = False
+
 def base(request):
     """
     Add seahub base configure to the context.
@@ -46,5 +51,6 @@ def base(request):
         'enable_signup': ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
         'enable_file_search': ENABLE_FILE_SEARCH,
+        'enable_pubfile': ENABLE_PUBFILE,
         }
 

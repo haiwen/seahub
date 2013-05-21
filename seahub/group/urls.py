@@ -36,3 +36,17 @@ urlpatterns = patterns('',
     url(r'^attention/$', attention, name='group_attention'),
     url(r'^joinrequest/(?P<group_id>[\d]+)/$', group_joinrequest, name='group_joinrequest'),
 )
+
+import seahub.settings as settings
+
+if settings.ENABLE_PUBFILE:
+    from seahub_extra.pubfile.views import group_pubfiles, group_pubfile_add, group_pubfile_delete, group_pubfile_edit, group_pubfile_download
+
+    urlpatterns += patterns('',
+        url(r'^(?P<group_id>\d+)/files/$', group_pubfiles, name='group_pubfiles'),
+        url(r'^(?P<group_id>\d+)/file/add/$', group_pubfile_add, name='group_pubfile_add'),
+        url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/delete/$', group_pubfile_delete, name='group_pubfile_delete'),
+        url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/edit/$', group_pubfile_edit, name='group_pubfile_edit'),
+        url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/$', group_pubfile_download, name='group_pubfile_download'),
+    )
+

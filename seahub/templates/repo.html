@@ -312,10 +312,10 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="hide">{% csrf_token %}
+    <form id="mv-form" action="{{ SITE_ROOT }}file/move/" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3 id="mv-hd"></h3>
         <h4 id="mv-detail"></h4>
-        <div id="mv-dir-list">
+        <div id="mv-dir-list" class="dir-tree-cont">
             <h5><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h5>
             <div id="current-repo-dirs"></div>
             <h5><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h5>
@@ -871,17 +871,17 @@ function renderDirTree(container, repo_data) {
             }
         })
         .bind('select_node.jstree', function(e, data) {
+            var path;
             var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
-            $('input[name="dst_repo"]').attr('value', repo_id);
-            var path = data.inst.get_path(data.rslt.obj);
-            var mv_dst_path = '';
-            if (path.length == 1) {
-                mv_dst_path = '/';
+            var path_array = data.inst.get_path(data.rslt.obj);
+            if (path_array.length == 1) {
+                path = '/';
             } else {
-                path.shift();
-                mv_dst_path = '/' + path.join('/') + '/';
+                path_array.shift();
+                path = '/' + path_array.join('/') + '/';
             }
-            $('input[name="dst_path"]').attr('value', mv_dst_path);
+            $('input[name="dst_repo"]').val(repo_id);
+            $('input[name="dst_path"]').val(path);
         })
         .jstree({
             'json_data': {
@@ -896,7 +896,28 @@ function renderDirTree(container, repo_data) {
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
-                        return '{{ SITE_ROOT }}file/move/get_subdir/?repo_id=' + e(repo_id) + '&path=' + e(path);
+                        return '{{ SITE_ROOT }}ajax/repo/' + repo_id + '/dirents/?dir_only=true&path=' + e(path);
+                    },
+                    'success': function(data) {
+                        var items = [];
+                        var o, item;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            o = data[i];
+                            if (o.has_subdir) {
+                                item = { 
+                                    'data': o.name, 
+                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'state': 'closed',
+                                };
+                            } else {
+                                item = {
+                                    'data': o.name, 
+                                    'attr': {'type': o.type },
+                                };
+                            }
+                            items.push(item);
+                        }
+                        return items;
                     }
                 }
             },
