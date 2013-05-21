@@ -2184,9 +2184,9 @@ def events(request):
 
 def handle_events_data(events):
     events_more = False
-    if len(events) == 11:
+    if len(events) == 21:
         events_more = True
-        events = events[:10]
+        events = events[:20]
 
     # group events according to the date
     event_groups = []

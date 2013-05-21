@@ -550,17 +550,17 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
 
     def _get_events(username, start, org_id=None):
         ev_session = SeafEventsSession()
-        total = 11
+        total = 21
         valid_events = []
         try:
-            while total == 11 and len(valid_events) < 11:
+            while total == 21 and len(valid_events) < 21:
                 total, events = _get_events_inner(ev_session, username, start, org_id)
                 start += len(events)
                 valid_events.extend(events)
         finally:
             ev_session.close()
 
-        rv =  valid_events[:11]
+        rv =  valid_events[:21]
         for e in rv:
             if hasattr(e, 'commit'):
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
@@ -568,15 +568,15 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
         return rv
 
     def _get_events_inner(ev_session, username, start, org_id=None):
-        '''Read 11 events from seafevents database, and remove events that are
+        '''Read 21 events from seafevents database, and remove events that are
         no longer valid
 
         '''
         if org_id == None:
-            events = seafevents.get_user_events(ev_session, username, start, start + 11)
+            events = seafevents.get_user_events(ev_session, username, start, start + 21)
         else:
             events = seafevents.get_org_user_events(ev_session, \
-                                    org_id, username, start, start + 11)
+                                    org_id, username, start, start + 21)
         total = len(events)
         valid_events = []
         for ev in events:
