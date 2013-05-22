@@ -561,20 +561,6 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
                     return True
             return False
 
-    def _populate_valid_events(valid_events, events):
-        """
-        Populate ``valid_events`` list with non-duplicated event from
-        ``events`` list.
-        """
-        for e1 in events:
-            duplicate = False
-            for e2 in valid_events:
-                if _same_events(e1, e2): duplicate = True; break
-            if duplicate:
-                continue
-            else:
-                valid_events.append(e1)
-        
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
 
@@ -591,9 +577,7 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
                     duplicate = False
                     for e2 in valid_events:
                         if _same_events(e1, e2): duplicate = True; break
-                    if duplicate:
-                        continue
-                    else:
+                    if not duplicate:
                         valid_events.append(e1)
                     total_used = total_used + 1
                     if len(valid_events) == count:
@@ -605,11 +589,11 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
         finally:
             ev_session.close()
 
-        for e in rv:            # parse commit description
+        for e in valid_events:            # parse commit description
             if hasattr(e, 'commit'):
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
                 e.commit.more_files = more_files_in_commit(e.commit)
-        return rv, start + total_used
+        return valid_events, start + total_used
 
     def _get_events_inner(ev_session, username, start, limit):
         '''Read events from seafevents database, and remove events that are
