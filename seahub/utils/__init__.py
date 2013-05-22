@@ -577,86 +577,75 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
         
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
+
         valid_events = []
-        # total = count
-        # try:
-        #     while total == count and len(valid_events) < count:
-        #         print total, start
-        #         total, events = _get_events_inner(ev_session, username,
-        #                                           start, start+count, org_id)
-        #         print total, start
-        #         for e1 in events:
-        #             duplicate = False
-        #             for e2 in valid_events:
-        #                 if _same_events(e1, e2): duplicate = True; break
-        #             if not duplicate:
-        #                 valid_events.append(e1)
-        #         start += len(events)
-        # finally:
-        #     ev_session.close()
-
+        total_used = 0
         try:
-            # start loop when the size of return list does not match expected
-            while len(valid_events) < count:
-                # get ``count`` events from db
-                eof, events  = _get_events_inner(ev_session, username,
-                                                  start, start+count, org_id)
-                # if there is no more records in db
-                if eof:
-                    # populate return list with non-duplicated events, and
-                    # get out of the loop
-
-                    _populate_valid_events(valid_events, events)
-                    start += len(events)
+            next_start = start
+            while True:
+                events = _get_events_inner(ev_session, username, next_start, count)
+                if not events:
                     break
-
-                # else populate return list with non-duplicated events, and
-                # continue the loop
-                else:
-                    _populate_valid_events(valid_events, events)
-                    start += len(events)
+                
+                for e1 in events:
+                    duplicate = False
+                    for e2 in valid_events:
+                        if _same_events(e1, e2): duplicate = True; break
+                    if duplicate:
+                        continue
+                    else:
+                        valid_events.append(e1)
+                    total_used = total_used + 1
+                    if len(valid_events) == count:
+                        break
+                
+                if len(valid_events) == count:
+                    break
+                next_start = next_start + len(events)
         finally:
             ev_session.close()
-        
-        rv =  valid_events[:count]                  # abandon events not needed
-        start = start - (len(valid_events) - count) # fall back db cursor
 
         for e in rv:            # parse commit description
             if hasattr(e, 'commit'):
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
                 e.commit.more_files = more_files_in_commit(e.commit)
-        return rv, start
+        return rv, start + total_used
 
-    def _get_events_inner(ev_session, username, start, limit, org_id=None):
+    def _get_events_inner(ev_session, username, start, limit):
         '''Read events from seafevents database, and remove events that are
         no longer valid
 
+        Return 'limit' events or less than 'limit' events if no more events remain
         '''
-        if org_id == None:
-            events = seafevents.get_user_events(ev_session, username,
-                                                start, limit)
-        else:
-            events = seafevents.get_org_user_events(ev_session, org_id,
-                                                    username, start, limit)
         valid_events = []
-        for ev in events:
-            if ev.etype == 'repo-update':
-                repo = get_repo(ev.repo_id)
-                if not repo:
-                    # delete the update event for repo which has been deleted
-                    seafevents.delete_event(ev_session, ev.uuid)
-                    continue
-                if repo.encrypted:
-                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
-                ev.repo = repo
-                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+        next_start = start
+        while True:
+            events = seafevents.get_user_events(ev_session, username,
+                                                next_start, limit)
+            if not events:
+                break
 
-            valid_events.append(ev)
+            for ev in events:
+                if ev.etype == 'repo-update':
+                    repo = get_repo(ev.repo_id)
+                    if not repo:
+                        # delete the update event for repo which has been deleted
+                        seafevents.delete_event(ev_session, ev.uuid)
+                        continue
+                    if repo.encrypted:
+                        repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                    ev.repo = repo
+                    ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
 
-        count = limit - start
-        total = len(events)
-        eof = True if total < count else False
-        return eof, valid_events
+                valid_events.append(ev)
+                if len(valid_events) == limit:
+                    break
+
+            if len(valid_events) == limit:
+                break            
+            next_start = next_start + len(valid_events)
+
+        return valid_events
 
     def get_user_events(username, start, count):
         """Return user events list and a new start.
