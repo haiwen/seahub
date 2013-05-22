@@ -90,7 +90,7 @@ urlpatterns = patterns('',
     (r'^download/repo/$', repo_download),                       
     (r'^file/move/$', file_move),
     (r'^seafile_access_check/$', seafile_access_check),
-
+    url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
 
     ### Ajax ###
     (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents),

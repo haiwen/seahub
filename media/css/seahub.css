@@ -51,6 +51,7 @@ dl { margin:1.5em 0; }
 dt { font-weight:bold; }
 dd { margin: 0 0 .5em 2em; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
+a.normal {font-weight: normal;}
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
 textarea {

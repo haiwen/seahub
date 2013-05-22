@@ -851,10 +851,12 @@ def myhome(request):
 
     # events
     if EVENTS_ENABLED:
-        events = get_user_events(email, 0)
-        events_more, event_groups = handle_events_data(events)
+        events_count = 15
+        events, events_more_offset = get_user_events(email, 0, events_count)
+        events_more = True if len(events) == events_count else False
+        event_groups = group_events_data(events)
     else:
-        events = None
+        events, events_more_offset = None, None
         events_more = False
         event_groups = None
 
@@ -886,8 +888,10 @@ def myhome(request):
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "events": events,
+            "events_more_offset": events_more_offset,
             "events_more": events_more,
             "event_groups": event_groups,
+            "events_count": events_count,
             "starred_files": starred_files,
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
@@ -2216,32 +2220,34 @@ def repo_download_dir(request, repo_id):
     url = gen_file_get_url(token, dirname)
     return redirect(url)
 
+@login_required
 def events(request):
     if not request.is_ajax():
         raise Http404
 
+    events_count = 15
     username = request.user.username
     start = int(request.GET.get('start', 0))
+
     if request.cloud_mode:
         org_id = request.GET.get('org_id')
-        events = get_org_user_events(org_id, username, start)
+        events, start = get_org_user_events(org_id, username, start, events_count)
     else:
-        events = get_user_events(username, start)
-   
-    events_more, event_groups = handle_events_data(events)
+        events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
     ctx = {'event_groups': event_groups}
     html = render_to_string("snippets/events_body.html", ctx)
 
-    return HttpResponse(json.dumps({'html':html, 'events_more':events_more}),
+    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
+                                    'new_start': start}),
                             content_type='application/json; charset=utf-8')
 
-def handle_events_data(events):
-    events_more = False
-    if len(events) == 11:
-        events_more = True
-        events = events[:10]
-
-    # group events according to the date
+def group_events_data(events):
+    """
+    Group events according to the date.
+    """
     event_groups = []
     for e in events:
         if e.etype == 'repo-update':
@@ -2264,7 +2270,7 @@ def handle_events_data(events):
         else:
             event_groups[-1]['events'].append(e)
 
-    return events_more, event_groups
+    return event_groups
 
 def pdf_full_view(request):
     '''For pdf view with pdf.js.'''
@@ -2304,3 +2310,49 @@ def get_group_repos(request, group_id):
         repo_list.append({"name": repo.props.name, "id": repo.props.id})
     
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
+
+@login_required
+def convert_cmmt_desc_link(request):
+    """Return user to file/directory page based on the changes in commit.
+    """
+    repo_id = request.GET.get('repo_id')
+    cmmt_id = request.GET.get('cmmt_id')
+    name = request.GET.get('nm')
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if get_user_permission(request, repo_id) is None:
+        raise Http404
+    
+    diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)
+    if not diff_result:
+        raise Http404
+
+    for d in diff_result:
+        if name not in d.name:
+            # skip to next diff_result if file/folder user clicked does not
+            # match the diff_result
+            continue            
+
+        if d.status == 'add' or d.status == 'mod': # Add or modify file
+            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
+                                            '?p=/%s' % d.name)
+        elif d.status == 'mov': # Move or Rename file
+            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
+                                            '?p=/%s' % d.new_name)
+        elif d.status == 'newdir':
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]) + \
+                                            '?p=/%s' % d.name)
+        else:
+            continue
+
+    # Shoud never reach here.
+    logger.warn('OUT OF CONTROL!')
+    for d in diff_result:
+        logger.warn('repo_id: %s, cmmt_id: %s, diff_result: %s' % (
+                repo_id, cmmt_id, d.__dict__))
+    raise Http404
+

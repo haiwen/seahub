@@ -10,6 +10,7 @@ import json
 import tempfile
 import locale
 
+from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.shortcuts import render_to_response
@@ -547,54 +548,102 @@ if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(seahub.settings.EVENTS_CONFIG_FILE)
 
-    def _get_events(username, start, org_id=None):
+    def _same_events(e1, e2):
+        """Two events are equal should follow two rules:
+        1. event1.username = event2.username
+        2. event1.commit.desc = event2.commit.desc
+        """
+        if e1.username != e2.username:
+            return False
+        else:
+            if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
+                if e1.commit.desc == e2.commit.desc:
+                    return True
+            return False
+
+    def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
-        total = 11
+
         valid_events = []
+        total_used = 0
         try:
-            while total == 11 and len(valid_events) < 11:
-                total, events = _get_events_inner(ev_session, username, start, org_id)
-                start += len(events)
-                valid_events.extend(events)
+            next_start = start
+            while True:
+                events = _get_events_inner(ev_session, username, next_start, count)
+                if not events:
+                    break
+                
+                for e1 in events:
+                    duplicate = False
+                    for e2 in valid_events:
+                        if _same_events(e1, e2): duplicate = True; break
+                    if not duplicate:
+                        valid_events.append(e1)
+                    total_used = total_used + 1
+                    if len(valid_events) == count:
+                        break
+                
+                if len(valid_events) == count:
+                    break
+                next_start = next_start + len(events)
         finally:
             ev_session.close()
 
-        return valid_events[:11]
+        for e in valid_events:            # parse commit description
+            if hasattr(e, 'commit'):
+                e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
+                e.commit.more_files = more_files_in_commit(e.commit)
+        return valid_events, start + total_used
 
-    def _get_events_inner(ev_session, username, start, org_id=None):
-        '''Read 11 events from seafevents database, and remove events that are
+    def _get_events_inner(ev_session, username, start, limit):
+        '''Read events from seafevents database, and remove events that are
         no longer valid
 
+        Return 'limit' events or less than 'limit' events if no more events remain
         '''
-        if org_id == None:
-            events = seafevents.get_user_events(ev_session, username, start, start + 11)
-        else:
-            events = seafevents.get_org_user_events(ev_session, \
-                                    org_id, username, start, start + 11)
-        total = len(events)
         valid_events = []
-        for ev in events:
-            if ev.etype == 'repo-update':
-                repo = get_repo(ev.repo_id)
-                if not repo:
-                    # delete the update event for repo which has been deleted
-                    seafevents.delete_event(ev_session, ev.uuid)
-                    continue
-                if repo.encrypted:
-                    repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
-                ev.repo = repo
-                ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+        next_start = start
+        while True:
+            events = seafevents.get_user_events(ev_session, username,
+                                                next_start, limit)
+            if not events:
+                break
 
-            valid_events.append(ev)
+            for ev in events:
+                if ev.etype == 'repo-update':
+                    repo = get_repo(ev.repo_id)
+                    if not repo:
+                        # delete the update event for repo which has been deleted
+                        seafevents.delete_event(ev_session, ev.uuid)
+                        continue
+                    if repo.encrypted:
+                        repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                    ev.repo = repo
+                    ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
 
-        return total, valid_events
+                valid_events.append(ev)
+                if len(valid_events) == limit:
+                    break
 
-    def get_user_events(username, start):
-        return _get_events(username, start)
+            if len(valid_events) == limit:
+                break            
+            next_start = next_start + len(valid_events)
+
+        return valid_events
+
+    def get_user_events(username, start, count):
+        """Return user events list and a new start.
         
-    def get_org_user_events(org_id, username, start):
-        return _get_events(username, start, org_id=org_id)
+        For example:
+        ``get_user_events('foo@example.com', 0, 10)`` returns the first 10
+        events.
+        ``get_user_events('foo@example.com', 5, 10)`` returns the 6th through
+        15th events.
+        """
+        return _get_events(username, start, count)
         
+    def get_org_user_events(org_id, username, start, count):
+        return _get_events(username, start, count, org_id=org_id)
 
 else:
     EVENTS_ENABLED = False
@@ -866,5 +915,40 @@ def mkstemp():
     else:
         return fd, path
 
+# File or directory operations
+FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
+           'Added directory', 'Renamed directory', 'Moved directory')
+
+OPS = '|'.join(FILE_OP)
+CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
+
+def convert_cmmt_desc_link(commit):
+    """Wrap file/folder with ``<a></a>`` in commit description.
+    """
+    repo_id = commit.repo_id
+    cmmt_id = commit.id
+
+    def link_repl(matchobj):
+        op = matchobj.group(1)
+        file_or_dir = matchobj.group(2)
+        remaining = matchobj.group(3)
+
+        url = reverse('convert_cmmt_desc_link')
+        tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s">%s</a>"'
+        if remaining:
+            return (tmp_str + ' %s') % (op, url, repo_id, cmmt_id, file_or_dir,
+                                        file_or_dir, remaining)
+        else:
+            return tmp_str % (op, url, repo_id, cmmt_id, file_or_dir, file_or_dir)
+
+    return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
+
+MORE_PATT = r'and \d+ more (?:files|directories)'
+def more_files_in_commit(commit):
+    """Check whether added/deleted/modified more files in commit description.
+    """
+    return True if re.search(MORE_PATT, commit.desc) else False
+    
+    
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
