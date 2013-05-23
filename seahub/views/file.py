@@ -139,7 +139,7 @@ def repo_file_get(raw_path, file_enc):
 
     return err, file_content, encoding
 
-def flash_prepare(raw_path, obj_id, doctype):
+def prepare_converted_html(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
     data = {'doctype': doctype,
             'file_id': obj_id,
@@ -189,10 +189,10 @@ def handle_textual_file(request, filetype, raw_path, ret_dict):
 
 def handle_document(raw_path, obj_id, fileext, ret_dict):
     if DOCUMENT_CONVERTOR_ROOT:
-        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         # populate return value dict
         ret_dict['err'] = err
-        ret_dict['swf_exists'] = swf_exists
+        ret_dict['html_exists'] = html_exists
     else:
         ret_dict['filetype'] = 'Unknown'
 
@@ -202,10 +202,10 @@ def handle_pdf(raw_path, obj_id, fileext, ret_dict):
         pass
     elif DOCUMENT_CONVERTOR_ROOT:
         # use flash to prefiew PDF
-        err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         # populate return value dict
         ret_dict['err'] = err
-        ret_dict['swf_exists'] = swf_exists
+        ret_dict['html_exists'] = html_exists
     else:
         # can't preview PDF
         ret_dict['filetype'] = 'Unknown'
@@ -297,7 +297,7 @@ def view_file(request, repo_id):
     img_prev = None
     img_next = None
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'swf_exists': False,
+                'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
     
     # Check file size
@@ -410,7 +410,7 @@ def view_file(request, repo_id):
             'file_enc': ret_dict['file_enc'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'swf_exists': ret_dict['swf_exists'],
+            'html_exists': ret_dict['html_exists'],
             'filetype': ret_dict['filetype'],
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,

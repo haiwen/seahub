@@ -1135,14 +1135,14 @@ def repo_file_get(raw_path, file_enc):
 def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
     err = ''
     file_content = ''
-    swf_exists = False
+    html_exists = False
     encoding = None
 
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path, file_enc)
     elif filetype == 'Document':
         if DOCUMENT_CONVERTOR_ROOT:
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         else:
             filetype = 'Unknown'
     elif filetype == 'PDF':
@@ -1151,12 +1151,12 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
             pass
         elif DOCUMENT_CONVERTOR_ROOT:
             # use flash to prefiew PDF
-            err, swf_exists = flash_prepare(raw_path, obj_id, fileext)
+            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         else:
             # can't preview PDF
             filetype = 'Unknown'
     
-    return err, file_content, swf_exists, filetype, encoding
+    return err, file_content, html_exists, filetype, encoding
 
 def repo_access_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
@@ -1737,7 +1737,7 @@ def view_shared_file(request, token):
     file_enc = request.GET.get('file_enc', 'auto')
     if not file_enc in FILE_ENCODING_LIST:
         file_enc = 'auto'
-    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
     file_encoding_list = FILE_ENCODING_LIST
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
@@ -1772,7 +1772,7 @@ def view_shared_file(request, token):
             'file_content': file_content,
             'encoding': encoding,
             'file_encoding_list':file_encoding_list,
-            'swf_exists': swf_exists,
+            'html_exists': html_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             }, context_instance=RequestContext(request))
@@ -1858,7 +1858,7 @@ def view_file_via_shared_dir(request, token):
     file_enc = request.GET.get('file_enc', 'auto')
     if not file_enc in FILE_ENCODING_LIST:
         file_enc = 'auto'
-    err, file_content, swf_exists, filetype, encoding = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
+    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
     file_encoding_list = FILE_ENCODING_LIST
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
@@ -1891,14 +1891,14 @@ def view_file_via_shared_dir(request, token):
             'file_content': file_content,
             'encoding': encoding,
             'file_encoding_list':file_encoding_list,
-            'swf_exists': swf_exists,
+            'html_exists': html_exists,
             'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
             'token': token,
             }, context_instance=RequestContext(request))
     
-def flash_prepare(raw_path, obj_id, doctype):
+def prepare_converted_html(raw_path, obj_id, doctype):
     curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
     data = {'doctype': doctype,
             'file_id': obj_id,

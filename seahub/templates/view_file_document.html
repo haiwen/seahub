@@ -3,40 +3,16 @@
 
 {% block extra_script %}{{ block.super }}
 {% if not err%}
-<script type="text/javascript" src="{{MEDIA_URL}}flexpaper/js/flexpaper_flash.js"></script>
 <script type="text/javascript">
     $('#file-view').html('<div id="flash"></div>');
-    function load_flexpaper() {
-        var swf_url = '{{ DOCUMENT_CONVERTOR_ROOT }}swf/{{ obj_id }}';
-        var fp = new FlexPaperViewer(
-          '{{MEDIA_URL}}flexpaper/FlexPaperViewer',
-          'flash', { config : {
-              SwfFile : escape(swf_url),
-              Scale : 1.0, 
-              ZoomTransition : 'easeOut',
-              ZoomTime : 0.5,
-              ZoomInterval : 0.2,
-              FitPageOnLoad : false,
-              FitWidthOnLoad : true,
-              FullScreenAsMaxWindow : false,
-              ProgressiveLoading : false,
-              MinZoomSize : 0.2,
-              MaxZoomSize : 5,
-              SearchMatchAll : false,
-              InitViewMode : 'Portrait',
-              PrintPaperAsBitmap : false,
-              
-              ViewModeToolsVisible : true,
-              ZoomToolsVisible : true,
-              NavToolsVisible : true,
-              CursorToolsVisible : true,
-              SearchToolsVisible : true,
-              
-              localeChain: 'en_US'
-          }});
+    function load_iframe() {
+        iframe = document.createElement('iframe');
+        iframe.src = "{{ DOCUMENT_CONVERTOR_ROOT }}html/{{ obj_id }}.html";
+        iframe.style.height = '500px';
+        document.getElementById('flash').appendChild(iframe);
     }
-    {% if swf_exists %}
-    load_flexpaper();
+    {% if html_exists %}
+    load_iframe();
     {% else %}
     function check_status () {
         $.ajax({
@@ -54,7 +30,7 @@
                     if (status == 'QUEUED' || status == 'PROCESSING') {
                         setTimeout(check_status, 2000);
                     } else {
-                        load_flexpaper();
+                        load_iframe();
                     }
                 }
             },
