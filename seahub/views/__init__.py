@@ -859,6 +859,7 @@ def myhome(request):
         events, events_more_offset = None, None
         events_more = False
         event_groups = None
+        events_count = 0
 
     starred_files = get_starred_files(request.user.username)
 
