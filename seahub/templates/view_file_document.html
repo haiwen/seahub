@@ -4,12 +4,10 @@
 {% block extra_script %}{{ block.super }}
 {% if not err%}
 <script type="text/javascript">
-    $('#file-view').html('<div id="flash"></div>');
+    var msg = '{% trans "The file is being processed, please wait..." %}';
+    $('#file-view').html('<div id="converted-html"><div class="convert-loading"><img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="loading..." /><span class="loading-text">' + msg + '</span></div></div>');
     function load_iframe() {
-        iframe = document.createElement('iframe');
-        iframe.src = "{{ DOCUMENT_CONVERTOR_ROOT }}html/{{ obj_id }}.html";
-        iframe.style.height = '500px';
-        document.getElementById('flash').appendChild(iframe);
+        $('#converted-html').html('<iframe src="{{ DOCUMENT_CONVERTOR_ROOT }}html/{{ obj_id }}/index.html" style="height:500px" />');
     }
     {% if html_exists %}
     load_iframe();
