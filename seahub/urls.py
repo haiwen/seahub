@@ -132,7 +132,6 @@ if settings.SERVE_STATIC:
 if getattr(settings, 'CLOUD_MODE', False):
     urlpatterns += patterns('',
         (r'^demo/', demo),
-        (r'^pay/', include('seahub_extra.pay.urls')),
     )
 else:
     urlpatterns += patterns('',
@@ -148,3 +147,8 @@ if getattr(settings, 'ENABLE_FILE_SEARCH', False):
         url(r'^search/$', search, name='search'),
     )
 
+if getattr(settings, 'ENABLE_PAYMENT', False):
+    urlpatterns += patterns('',
+        (r'^pay/', include('seahub_extra.pay.urls')),
+    )
+    
