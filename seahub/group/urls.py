@@ -47,6 +47,6 @@ if settings.ENABLE_PUBFILE:
         url(r'^(?P<group_id>\d+)/file/add/$', group_pubfile_add, name='group_pubfile_add'),
         url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/delete/$', group_pubfile_delete, name='group_pubfile_delete'),
         url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/edit/$', group_pubfile_edit, name='group_pubfile_edit'),
-        url(r'^(?P<group_id>\d+)/file/(?P<file_id>\d+)/$', group_pubfile_download, name='group_pubfile_download'),
+        url(r'^(?P<group_id>\d+)/file/d/(?P<file_name>.+)$', group_pubfile_download, name='group_pubfile_download'),
     )
 
