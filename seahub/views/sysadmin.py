@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import os
 from types import FunctionType
 import logging
 import simplejson as json
@@ -30,6 +31,7 @@ from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.profile.models import Profile
+from seahub.share.models import FileShare, AnonymousShare
 
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, \
@@ -381,3 +383,33 @@ def sys_group_admin(request):
             'page_next': page_next,
             }, context_instance=RequestContext(request))
 
+
+@login_required
+@sys_staff_required
+def sys_publink_admin(request):
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    publinks = FileShare.objects.all()[per_page * (current_page -1):
+                                          per_page + 1]
+    for l in publinks:
+        if l.s_type == 'f':
+            l.name = os.path.basename(l.path)
+        else:
+            l.name = os.path.dirname(l.path)
+
+    return render_to_response(
+        'sysadmin/sys_publink_admin.html', {
+            'publinks': publinks,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': True,
+        },
+        context_instance=RequestContext(request))

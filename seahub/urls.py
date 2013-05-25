@@ -15,7 +15,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_page_delete
 from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, sys_group_admin, \
     user_info, user_add, user_remove, user_make_admin, \
-    user_remove_admin, user_reset, user_activate
+    user_remove_admin, user_reset, user_activate, sys_publink_admin
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -115,6 +115,7 @@ urlpatterns = patterns('',
     (r'^sys/seafadmin/$', sys_repo_admin),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+    url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
