@@ -34,7 +34,7 @@ except ImportError:
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
-    get_personal_groups_by_user, get_session_info, get_repo_token_nonnull, \
+    get_personal_groups_by_user, get_session_info, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
@@ -317,7 +317,8 @@ class DownloadRepo(APIView):
         relay_id = get_session_info().id
         addr, port = get_ccnet_server_addr_port ()
         email = request.user.username
-        token = get_repo_token_nonnull(repo_id, request.user.username)
+        token = seafserv_threaded_rpc.generate_repo_token(repo_id,
+                                                          request.user.username)
         repo_name = repo.name
         enc = 1 if repo.encrypted else ''
         magic = repo.magic if repo.encrypted else ''
