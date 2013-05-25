@@ -111,6 +111,7 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
         },
         context_instance=RequestContext(request))
 
