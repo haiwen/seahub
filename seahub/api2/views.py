@@ -22,15 +22,29 @@ from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from seahub.base.accounts import User
 from seahub.share.models import FileShare
-from seahub.views import access_to_repo, validate_owner ,is_registered_user
+from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
-    get_dir_files_last_modified, \
+    get_dir_files_last_modified, get_user_events, \
     get_ccnet_server_addr_port, star_file, unstar_file, string2list
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+
+from seahub.group.forms import MessageForm
+from seahub.notifications.models import UserNotification
+from seahub.utils.paginator import Paginator
+from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
+from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
+from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from django.template import Context, loader, RequestContext
+from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
+from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED
+from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
+from seahub.profile.models import Profile
+from seahub.contacts.models import Contact
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
@@ -1150,4 +1164,198 @@ class SharedRepo(APIView):
                     'share_type can only be personal or group or public.')
 
         return Response('success', status=status.HTTP_200_OK)
+
+
+def activity(request):
+    email = request.user.username
+
+    # events
+    if EVENTS_ENABLED:
+        events_count = 15
+        events, events_more_offset = get_user_events(email, 0, events_count)
+        events_more = True if len(events) == events_count else False
+        event_groups = group_events_data(events)
+    else:
+        events, events_more_offset = None, None
+        events_more = False
+        event_groups = None
+        events_count = 0
+
+    return render_to_response('api2_activity.html', {
+            "events": events,
+            "events_more_offset": events_more_offset,
+            "events_more": events_more,
+            "event_groups": event_groups,
+            "events_count": events_count,
+            }, context_instance=RequestContext(request))
+
+from seahub.group.views import group_check
+
+@group_check
+def group_discuss(request, group):
+    username = request.user.username
+    if request.method == 'POST':
+        # only login user can post to public group
+        if group.view_perm == "pub" and not request.user.is_authenticated():
+            raise Http404
+
+        form = MessageForm(request.POST)
+
+        if form.is_valid():
+            msg = form.cleaned_data['message']
+            message = GroupMessage()
+            message.group_id = group.id
+            message.from_email = request.user.username
+            message.message = msg
+            message.save()
+
+            # send signal
+            grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                              from_email=username)
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data.
+            return HttpResponseRedirect(reverse('api_discussion', args=[group.id]))
+    else:
+        form = MessageForm()
+        
+    # remove user notifications
+    UserNotification.objects.filter(to_user=username, msg_type='group_msg',
+                                    detail=str(group.id)).delete()
+    
+    # Get all group members.
+    members = []
+        
+    """group messages"""
+    # Show 15 group messages per page.
+    paginator = Paginator(GroupMessage.objects.filter(
+            group_id=group.id).order_by('-timestamp'), 15)
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    # If page request (9999) is out of range, deliver last page of results.
+    try:
+        group_msgs = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        group_msgs = paginator.page(paginator.num_pages)
+
+    group_msgs.page_range = paginator.get_page_range(group_msgs.number)
+
+    # Force evaluate queryset to fix some database error for mysql.        
+    group_msgs.object_list = list(group_msgs.object_list) 
+
+    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
+
+    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs.object_list)
+    reply_to_list = [ r.reply_to_id for r in msg_replies ]
+    
+    for msg in group_msgs.object_list:
+        msg.reply_cnt = reply_to_list.count(msg.id)
+        msg.replies = []
+        for r in msg_replies:
+            if msg.id == r.reply_to_id:
+                msg.replies.append(r)
+        msg.replies = msg.replies[-3:]
+            
+        for att in attachments:
+            if att.group_message_id != msg.id:
+                continue
+
+            # Attachment name is file name or directory name.
+            # If is top directory, use repo name instead.
+            path = att.path
+            if path == '/':
+                repo = get_repo(att.repo_id)
+                if not repo:
+                    # TODO: what should we do here, tell user the repo
+                    # is no longer exists?
+                    continue
+                att.name = repo.name
+            else:
+                path = path.rstrip('/') # cut out last '/' if possible
+                att.name = os.path.basename(path)
+
+            # Load to discuss page if attachment is a image and from recommend.
+            if att.attach_type == 'file' and att.src == 'recommend':
+                att.filetype, att.fileext = get_file_type_and_ext(att.name)
+                if att.filetype == IMAGE:
+                    att.obj_id = get_file_id_by_path(att.repo_id, path)
+                    if not att.obj_id:
+                        att.err = _(u'File does not exist')
+                    else:
+                        att.token = web_get_access_token(att.repo_id, att.obj_id,
+                                                         'view', username)
+                        att.img_url = gen_file_get_url(att.token, att.name)
+
+            msg.attachment = att
+
+    return render_to_response("group/api2_group_discuss.html", {
+            "members": members,
+            "group" : group,
+            "is_staff": group.is_staff,
+            "group_msgs": group_msgs,
+            "form": form,
+            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            }, context_instance=RequestContext(request))
+
+
+class Groups(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        email = request.user.username
+        group_json = []
+
+        joined_groups = get_personal_groups_by_user(email)
+        for g in joined_groups:
+            group = {
+                "id":g.id, 
+                "name":g.group_name,
+                "creator":g.creator_name,                    
+                "ctime":g.timestamp,                    
+                }
+            group_json.append(group)
+        return Response(group_json)
+
+class Events(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        return events(request)
+
+class Activity(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        return activity(request)
+
+
+class Discussion(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        return group_discuss(request, group_id)
+
+    def post(self, request, group_id, format=None):
+        return group_discuss(request, group_id)
+
+from auth.decorators import login_required
+@login_required
+def activity2(request):
+    return activity(request)
+
+@login_required
+def discussion2(request, group_id):
+    return group_discuss(request, group_id)
 

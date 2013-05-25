@@ -1,0 +1,70 @@
+{% load i18n %}
+{% include 'snippets/list_commit_detail.html' %}
+var g_token
+function reqEvents(start) {
+    $('#events-loading').removeClass('hide');
+    $.ajax({
+        url:'{{SITE_ROOT}}api2/events/?start=' + start{% if org %} + '&org_id={{ org.org_id }}'{% endif %},
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            $('#events').append(data['html']);
+            $('.event-item').each(function(index) {
+                if (index > 0 && $(this).children('.pic').data('author') == $(this).prev().children('.pic').data('author')) {
+                    $(this).children('.pic').addClass('hide');
+                }
+            });
+            if (start == 0) {
+                $('#events').removeClass('hide');
+            }
+            $('#events-loading').addClass('hide');
+            if (data['more']) {
+                $('#events-more').data('start', start + 10).removeClass('hide');
+            } else {
+                $('#events-more').addClass('hide');
+            }
+            if ($.browser.mozilla || $.browser.msie) {
+                $('#events a').focus(function() {
+                    $(this).blur();
+                });
+            }
+            $('.lsch').click(function() {
+                listCommitDetails($(this).data('url'), $(this).data('time'));
+                return false;
+            });
+            $('.lsch-encrypted').click(function() {
+                if ($(this).data('passwordset')) {
+                    listCommitDetails($(this).data('url'), $(this).data('time'));
+                } else {
+                    var form = $('#repo-decrypt-form');
+                    form.find('input[name="repo_id"]').val($(this).data('repoid'));
+                    form.find('.op-target').html($(this).data('reponame'));
+                    form.data({'url':$(this).data('url'), 'time':$(this).data('time')}).modal({appendTo:'#main'});
+                    $('#simplemodal-container').css({'width':'auto'});
+                    $(window).resize();
+                }
+                return false;
+            });
+        },
+        error: function() {
+            var str = '{% trans "Unknown error." %} '; 
+            if ($('#events-more').hasClass('hide')) {
+                str += '{% trans "Please refresh the page later." %}';
+            } else {
+                str += '{% trans "Please try again later." %}';
+            }
+            $('#events-loading').addClass('hide');
+            $('#events-error').html(str).removeClass('hide');  
+        }
+    });
+}
+
+function startLoadEvents(token) {
+    g_token = token
+    reqEvents(0);
+}
+$('#events-more').click(function() {
+    $(this).addClass('hide');
+    reqEvents($(this).data('start'));
+});
+{% include 'snippets/repo_decrypt_js.html' %}

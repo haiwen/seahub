@@ -23,6 +23,13 @@ urlpatterns = patterns('',
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
 
+    url(r'^groups/$', Groups.as_view()),
+    url(r'^events/$', Events.as_view()),
+    url(r'^activity/$', Activity.as_view()),
+    url(r'^discussion/(?P<group_id>\d+)/$', Discussion.as_view()),
+    url(r'^activity2/$', activity2, name="api_activity"),
+    url(r'^discussion2/(?P<group_id>\d+)/$', discussion2, name="api_discussion"),
+
     # Deprecated                       
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
 )

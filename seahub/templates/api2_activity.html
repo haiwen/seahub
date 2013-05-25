@@ -1,0 +1,71 @@
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1366090560" />
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560" />
+<!--[if IE]>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560"/>
+<![endif]-->
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+
+  <div id="main-panel">
+    {% block right_panel %}
+    {% if events %}
+    {% include "snippets/events.html" %}
+    {% endif %}
+    {% endblock %}
+  </div>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1366090560"></script>
+<script type="text/javascript" src="{{ MEDIA_URL}}js/base.js?t=1366090560"></script>
+<script type="text/javascript">
+ function getContent() {
+    return $('html').html()
+ }
+{% if request.user.is_authenticated %}
+{% if request.cur_note %}
+$('#info-bar .close').click(function() {
+    $('#info-bar').addClass('hide');
+    if (navigator.cookieEnabled) {
+        var date = new Date(),
+            cookies = document.cookie.split('; '),
+            info_id_exist = false,
+            new_info_id = $(this).attr('data') + '_';
+        date.setTime(date.getTime() + 14*24*60*60*1000);
+        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}';
+        for (var i = 0, len = cookies.length; i < len; i++) {
+            if (cookies[i].split('=')[0] == 'info_id') {
+                info_id_exist = true;
+                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
+                break;
+            }
+        }
+        if (!info_id_exist) {
+            document.cookie = 'info_id=' + new_info_id;
+        }
+    }
+});
+{% endif %}
+{% endif %}
+</script>
+{% block extra_script %}
+<script type="text/javascript">
+
+
+{% if events %}
+{% include "snippets/events_js.html" %}
+{% endif %}
+</script>
+{% endblock %}
+
+</body>
+</html>

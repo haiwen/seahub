@@ -1,0 +1,209 @@
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1369028460" />
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1369028460" />
+<!--[if IE]>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1369028460"/>
+<![endif]-->
+{% block extra_style %}{% endblock %}
+{% if branding_css != '' %}<style>{{branding_css}}</style>{% endif %}
+</head>
+
+<body>
+    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+        {% block info_bar_message %}
+        {% if request.user.is_authenticated and request.cur_note %}
+        <div id="info-bar">
+            <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
+            <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
+        </div>
+        {% endif %}
+        {% endblock info_bar_message %}
+
+        <div id="main" class="clear">
+            <div id="title-panel" class="w100 ovhd">
+                {% block title_panel %}{% endblock %}
+            </div>
+            <div id="left-panel">
+                {% block left_panel %}{% endblock %}
+            </div>
+            <div id="right-panel">
+
+            </div>
+            <div id="main-panel" class="clear w100 ovhd">
+                {% block right_panel %}{% endblock %}
+            </div>
+            <div id="confirm-popup" class="hide">
+                <div id="confirm-con"></div>
+                <button id="confirm-yes">{% trans "Yes"%}</button>
+                <button class="simplemodal-close">{% trans "No"%}</button>
+            </div>
+        </div>
+</div><!-- wrapper -->
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1369028460"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1369028460"></script>
+<script type="text/javascript">
+{% if request.user.is_authenticated %}
+{% if request.cur_note %}
+$('#info-bar .close').click(function() {
+    $('#info-bar').addClass('hide');
+    if (navigator.cookieEnabled) {
+        var date = new Date(),
+            cookies = document.cookie.split('; '),
+            info_id_exist = false,
+            new_info_id = $(this).attr('data') + '_';
+        date.setTime(date.getTime() + 14*24*60*60*1000);
+        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}';
+        for (var i = 0, len = cookies.length; i < len; i++) {
+            if (cookies[i].split('=')[0] == 'info_id') {
+                info_id_exist = true;
+                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
+                break;
+            }
+        }
+        if (!info_id_exist) {
+            document.cookie = 'info_id=' + new_info_id;
+        }
+    }
+});
+{% endif %}
+
+/*
+$(document).ready(function(){
+
+    $.ajax({
+        url: '{% url 'msg_count' %}',
+        dataType: 'json',
+        cache: 'false',
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_email': 'user',
+        },  
+        success: function(data) {
+            if (data['count']!=-1) {
+                var count="<b><img src='{{ MEDIA_URL }}/img/mail.png' width='25' height='20' />("+data['count']+")</b>";
+                $("#msg_count").html(count);
+            }
+        },
+    });
+    return false;
+});
+*/
+
+{% if enable_file_search %}
+// search-form: top-search-form, advanced-search-form, search-form in search result page
+$('.search-form').submit(function() {
+    if (!$.trim($(this).find('.search-input').val())) {
+        return false;
+    }
+});
+$('#top-search-form .icon-caret-down').click(function() {
+    var form = $(this).parent(),
+        q = form.find('[name="q"]').val(),
+        advanced_form = $('#advanced-search-form');
+    $('#header-inner').css({'position':'relative'});
+    advanced_form.css({'right': 0, 'top':form.outerHeight(true)}).toggleClass('hide');
+    if (!advanced_form.hasClass('hide') && q) {
+        advanced_form.find('.search-input').val(q);
+    }
+});
+$('.search-filetypes .item:first-child').click(function() {
+    $(this).parents('.search-form').find('.custom-ftype-options').addClass('hide');
+});
+$('.search-filetypes .item:last-child').click(function() {
+    $(this).parents('.search-form').find('.custom-ftype-options').removeClass('hide');
+});
+$('#advanced-search-form').submit(function() {
+    if ($('#custom-search-ftypes').attr('checked') &&
+        $('.custom-ftype-options .checkbox-checked').length == 0 &&
+        !$.trim($('.custom-ftype-options .fileext-input').val())) {
+        $(this).find('.error').removeClass('hide');
+        return false;
+    }
+});
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    var popup = $('#advanced-search-form');
+    if (!popup.is(target) && !popup.find('*').is(target) && !$('#top-search-form .icon-caret-down').is(target)) {
+        popup.addClass('hide');
+    }    
+});
+{% endif %}
+
+{% endif %}
+</script>
+{% block extra_script %}{% endblock %}
+<script type="text/javascript">
+//font icons: for browsers that don't support ':before'
+    var sf_icons = [{'name':'share', 'con':'e001'}];
+    var fa_icons = [ 
+        {'name':'trash', 'con':'f014'},
+        {'name':'cog', 'con':'f013'},
+        {'name':'cloud-download', 'con':'f0ed'},
+        {'name':'search', 'con':'f002'},
+        {'name':'minus', 'con':'f068'},
+        {'name':'plus', 'con':'f067'},
+        {'name':'pencil', 'con':'f040'},
+        {'name':'globe', 'con':'f0ac'},
+        {'name':'comment-alt', 'con':'f0e5'},
+        {'name':'double-angle-right', 'con':'f101'},
+        {'name':'font', 'con':'f031'},
+        {'name':'text-height', 'con':'f034'},
+        {'name':'tint', 'con':'f043'},
+        {'name':'bold', 'con':'f032'},
+        {'name':'italic', 'con':'f033'},
+        {'name':'strikethrough', 'con':'f0cc'},
+        {'name':'underline', 'con':'f0cd'},
+        {'name':'list-ul', 'con':'f0ca'},
+        {'name':'list-ol', 'con':'f0cb'},
+        {'name':'indent-left', 'con':'f03b'},
+        {'name':'indent-right', 'con':'f03c'},
+        {'name':'align-left', 'con':'f036'},
+        {'name':'align-center', 'con':'f037'},
+        {'name':'align-right', 'con':'f038'},
+        {'name':'align-justify', 'con':'f039'},
+        {'name':'link', 'con':'f0c1'},
+        {'name':'cut', 'con':'f0c4'},
+        {'name':'picture', 'con':'f03e'},
+        {'name':'undo', 'con':'f0e2'},
+        {'name':'repeat', 'con':'f01e'},
+        {'name':'star', 'con':'f005'},
+        {'name':'star-empty', 'con':'f006'},
+        {'name':'caret-down', 'con':'f0d7'},
+        {'name':'ok', 'con':'f00c'},
+        {'name':'double-angle-up', 'con':'f102'},
+        {'name':'double-angle-down', 'con':'f103'}
+    ];  
+    function setCon(icon, icon_class_prefix, icon_list) {
+            for (var i = 0, len = icon_list.length; i < len; i++) {
+                if (icon.hasClass(icon_class_prefix + icon_list[i].name)) {
+                    icon.html('&#x' + icon_list[i].con + ';');
+                    break;
+                }
+            }
+    }
+    var pseudo_support = true;
+    var pseudo_test = $('body').append('<span class="sf-icon-share pseudo-test" style="color:#fff;position:fixed;left:0;bottom:0;"></span>').children('.pseudo-test');
+    if (pseudo_test.width() == 0) {
+        pseudo_support = false;
+        $('[class^="sf-icon-"]').each(function() {
+            setCon($(this), 'sf-icon-', sf_icons);
+        }); 
+        $('[class^="icon-"], [class$=" icon-"]').each(function() {
+            setCon($(this), 'icon-', fa_icons);
+        }); 
+    }
+    pseudo_test.remove();
+</script>
+</body>
+</html>
