@@ -1,32 +1,10 @@
 {% extends "myhome_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
-{% load url from future %}
 
-{% block sub_title %}{% trans "Contacts" %} - {% endblock %}
-{% block nav_myhome_class %}class="cur"{% endblock %}
+{% block sub_title %}{% trans "Messages" %} - {% endblock %}
 
-{% block title_panel %}
-
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab "><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Messages" %}</li>
-    </ul>
-</div>
-
-{% endblock %}
-
-{% block left_panel %}
-<div class="info-item">
-<h3 class="info-item-top">{% trans "Tips"%}</h3>
-<p class="info-item-bottom">{% trans "You can only send message to registered member."%}</p>
-</div>
-
-{% endblock %}
-
-{% block right_panel %}
-<h3>{% trans "Message"%}</h3>
+{% block main_panel %}
+<h3>{% trans "Messages"%}</h3>
 <button id="message-send" class="add">{% trans "Add Message"%}</button>
 {% if msgs %}
 <table>
@@ -34,30 +12,24 @@
         <th width="5%"></th>
         <th width="20%">{% trans " Email "%}</th>
         <th width="45%">{% trans "Message"%}</th>
-        <th width="15%">{% trans "time"%}</th>
+        <th width="15%">{% trans "Time"%}</th>
         <th width="15%">{% trans "Not read"%}</th>
     </tr>
-    {% for key,value in msgs.items %}
-
+    {% for key,value in msgs %}
     <tr>
         <td>{% avatar key 20 %}</td>       
-        <td><a href="{% url 'user_profile' key|email2id %}">{{ key }}</a></td>   
+        <td><a href="{% url 'user_profile' key|email2id %}">{{ key }}</a></td>
         <td>
-             {% if  value.not_read %}
-             <a href="msg_list?to_email={{key}}&page=1">{{ value.last_msg|slice:"40" }}</a>
-             {% else %}
-            <a href="msg_list?to_email={{key}}&page=1"><b>{{value.last_msg|slice:"40" }}</b></a>
-            {% endif %}
+            <a href="{% url 'user_msg_list' key %}?page=1">{{ value.last_msg|truncatechars:80 }}</a>
         </td>
         <td>{{  value.last_time|translate_seahub_time }}</td>
         <td>{{  value.not_read }}</td>
     </tr>
 {% endfor %}
 </table>
-</div>
 {% endif %}
 
-<form id="send-msg-form" action="message_send/" method="post" name="send-msg-form" class="hide">{% csrf_token %}
+<form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
     <h3>{% trans "Send message to"%}</h3>
     
     <div id="send-msg-tabs">
@@ -66,7 +38,7 @@
             <li><a href="#share-contact-options">{% trans 'Contacts' %}</a></li>
         </ul>
         <div id="share-enter">
-            <textarea id="mass_email" name="mass_email" placeholder="{% trans "Emails or Groups, Seperated by ','"%}"></textarea>
+            <textarea id="mass_email" name="mass_email" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
             <p class="tip">{% trans 'Tip: You can write message under here.' %}</p>
         </div>
         <div id="share-contact-options" class="hide">
@@ -79,7 +51,7 @@
             </label>
             </li>
             {% endfor %}
-        </ul>
+            </ul>
         </div>
     </div>
 
@@ -91,8 +63,8 @@
 {% endblock %}
 
 {% block extra_script %}
-<script src="{{ MEDIA_URL }}/js/dojo.js">
-</script>
+<!-- <script src="{{ MEDIA_URL }}/js/dojo.js"> -->
+<!-- </script> -->
 <script type="text/javascript">
 
 
@@ -124,15 +96,16 @@
                 $('#mass_email').val(post_data);
         }
         if (!post_data) {
-            apply_form_error('send-msg-form', '{% trans "Please enter emails or groups or select some at first." %}');
+            apply_form_error('send-msg-form', "{% trans "Please enter emails or select some at first." %}");
+            return false;
+        }
+        if (!$('#mass_msg').val()) {
+            apply_form_error('send-msg-form', "{% trans "Message can not be empty." %}");
             return false;
         }
         $("#send-msg-form").submit();
         disable($(this));
     });
 
-    $('.unshare-btn').click(function() {
-        location.href = $(this).data('url');
-    });
 </script>
 {% endblock %}

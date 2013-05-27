@@ -42,7 +42,7 @@
                     <div class="account fright">
                         {% if request.user.is_authenticated %}
                         <a href="{% url 'edit_profile' %}" class="avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
-                        <!-- <a href="{% url 'message_list' %}" id="msg_count"><img src="{{ MEDIA_URL }}/img/mail.png" width="25" height="20" /></b></a> -->
+                        <a href="{% url 'message_list' %}" id="msg_count"><img src="{{ MEDIA_URL }}/img/mail.png" width="25" height="20" /></b></a>
                         <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
@@ -219,9 +219,8 @@ $('#info-bar .close').click(function() {
 });
 {% endif %}
 
-/*
-$(document).ready(function(){
 
+$(document).ready(function(){
     $.ajax({
         url: '{% url 'msg_count' %}',
         dataType: 'json',
@@ -240,7 +239,6 @@ $(document).ready(function(){
     });
     return false;
 });
-*/
 
 {% if enable_file_search %}
 // search-form: top-search-form, advanced-search-form, search-form in search result page

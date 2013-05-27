@@ -1,30 +1,15 @@
 {% extends base_template %}
-
 {% load seahub_tags avatar_tags  i18n %}
-{% load url from future %}
 
-{% block sub_title %}message - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
+{% block sub_title %}{% trans "Messages" %} - {% endblock %}
 
-{% block title_panel %}
-
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab "><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'message_list' %}">{% trans "Messages" %}</a></li>
-    </ul>
-</div>
-
-{% endblock %}
 {% block left_panel %}
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Send to" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
-        <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Edit" %}">{% avatar to_email 48 %}</a>
+        {% avatar to_email 48 %}
         <div class="txt fright">
             <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
-            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Edit" %}</a>
         </div>
     </div>
 </div>
@@ -41,8 +26,8 @@
     {% if to_email %}
     <form id="personal-message-form" action="/message/message_send/" method="post" onsubmit="return check(this)">{% csrf_token %}
        {% avatar request.user.username 48 %}
-        <textarea name="message" id="message" placeholder="{% trans "Send a message..." %}">{{ form.data.message }}</textarea><br />
-        <input type = "hidden" value = "{{ to_email }}" name= "to_email"/>
+        <textarea name="mass_msg" id="message" placeholder="{% trans "Send a message..." %}"></textarea><br />
+        <input type = "hidden" value = "{{ to_email }}" name= "mass_email"/>
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}

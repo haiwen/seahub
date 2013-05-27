@@ -6,6 +6,20 @@ from django.utils.translation import ugettext as _
 
 from settings import CONTACT_EMAIL_LENGTH
 
+class ContactManager(models.Manager):
+    def get_contacts_by_user(self, user_email):
+        """Get a user's contacts.
+        """
+        return super(ContactManager, self).filter(user_email=user_email)
+        
+    def get_registered_contacts_by_user(self, user_email):
+        """Get a user's registered contacts.
+        """
+        from seahub.views import is_registered_user
+
+        return [ c for c in super(ContactManager, self).filter(
+                user_email=user_email) if is_registered_user(c.contact_email) ]
+        
 class Contact(models.Model):
     """Record user's contacts."""
 
@@ -15,6 +29,11 @@ class Contact(models.Model):
                                         default='')
     note = models.CharField(max_length=255, blank=True, null=True, default='')
 
+    objects = ContactManager()
+
+    def __unicode__(self):
+        return self.contact_email
+        
     # class Meta:
     #     unique_together = ("user_email", "contact_email")
 

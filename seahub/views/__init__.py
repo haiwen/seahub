@@ -836,8 +836,7 @@ def myhome(request):
     nickname = profiles[0].nickname if profiles else ''
 
     autocomp_groups = joined_groups
-    contacts = [ c for c in Contact.objects.filter(user_email=email) \
-                     if is_registered_user(c.contact_email) ]
+    contacts = Contact.objects.get_registered_contacts_by_user(email)
 
     
     if request.cloud_mode:
@@ -1998,7 +1997,7 @@ def pubuser(request):
 
         users = users_plus_one[:per_page]
         username = request.user.username
-        contacts = Contact.objects.filter(user_email=username)
+        contacts = Contact.objects.get_contacts_by_user(username)
         contact_emails = [] 
         for c in contacts:
             contact_emails.append(c.contact_email)
