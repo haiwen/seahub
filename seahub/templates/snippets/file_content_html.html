@@ -41,6 +41,19 @@ For details please refer to 'snippets/file_content_js.html'.
             {% endif %}
             <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
         {% endif %}
+        
+        {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
+        <div id="convert-loading">
+            <img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="" class="vam" />
+            <span class="loading-text vam">{% trans "The file is being processed, please wait..." %}</span>
+        </div>
+        <div id="converted-html">
+            <div id="sidebar" class="hide">
+                <div id="outline"></div>
+            </div>
+            <div id="page-container"></div>
+        </div>
+        {% endif %}
     {% else %}
     <div id="file-view-tip">
         <p class="error">{{ err }}</p>

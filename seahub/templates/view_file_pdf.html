@@ -1,9 +1,132 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 
-{% block extra_script %}{{ block.super }}
 {% if not err %}
-{% if use_pdfjs %}
+{% if not use_pdfjs %}
+
+{% block extra_style %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/doc_and_pdf.css" />
+{% endblock %}
+
+{% block file_view %}
+    <div id="convert-loading">
+        <img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="" class="vam" />
+        <span class="loading-text vam">{% trans "The file is being processed, please wait..." %}</span>
+    </div>
+    <div id="converted-html">
+        <div id="sidebar" class="hide">
+            <div id="outline"></div>
+        </div>
+        <div id="page-container"></div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf2html.js"></script>
+<script type="text/javascript">
+    function load_iframe() {
+        $('#convert-loading').remove();
+        var css_href = '{{MEDIA_URL}}test2/test.css',
+            base_page_url = '{{MEDIA_URL}}test2/test',
+            page_urls = []; 
+        var page_num = 13;
+        for (var i = 1; i < page_num + 1; i++) {
+            page_urls.push(base_page_url + i + '.page');
+        }
+
+        var outline;
+        $.ajax({
+            url: '{{MEDIA_URL}}test2/test.outline',
+            dataType: 'text'
+            }).done(function(data) {
+                outline = data;
+                $('head').append('<link rel="stylesheet" type="text/css" href="' + css_href + '" />');
+                $('#outline').html(outline);   
+                if (outline) {
+                    var sidebar = $('#sidebar'),
+                        page_container = $('#page-container'),
+                        hide_outline, show_outline;
+
+                    $('#outline').prepend('<span class="icon-double-angle-left outline-op-icon" title="{% trans "hide outline" %}"></span>');
+                    page_container.append('<span class="icon-double-angle-right outline-op-icon hide" title="{% trans "show outline" %}"></span>');
+                    $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
+                    sidebar.removeClass('hide');
+
+                    hide_outline = $('#outline .outline-op-icon');
+                    show_outline = $('#page-container .outline-op-icon');
+
+                    hide_outline.click(function() {
+                        sidebar.addClass('hide').removeClass('opened');
+                        show_outline.removeClass('hide');    
+                    });
+                    show_outline.click(function() {
+                        $(this).addClass('hide');
+                        sidebar.removeClass('hide').addClass('opened');
+                    });    
+                    $(window).scroll(function() {
+                        if ($(window).scrollTop() > page_container.offset().top) {
+                            show_outline.css({'position':'fixed'});    
+                        } else {
+                            show_outline.removeAttr('style');    
+                        }
+                    });
+                }
+                new pdf2htmlEX.Viewer({
+                    container_id : 'page-container', 
+                    sidebar_id : 'sidebar',
+                    outline_id : 'outline',
+                    page_urls : page_urls
+                });
+            });
+    }
+
+    $(window).scroll(function() {
+        var outline = $('#outline');
+        if (!$.trim(outline.html())) {
+            return;
+        }
+        if ($(window).scrollTop() > $('#page-container').offset().top) {
+            outline.addClass('fixed-outline');
+        } else {
+            outline.removeClass('fixed-outline');
+        }
+    });
+
+    {% if html_exists %}
+    load_iframe();
+    {% else %}
+    function check_status () {
+        $.ajax({
+            url: '{{ DOCUMENT_CONVERTOR_ROOT }}status?file_id={{ obj_id }}',
+            cache: false,
+            dataType: 'jsonp',
+            jsonpCallback: 'xx',
+            crossDomain: true,
+            success: function(data) {
+                var status = data['status'];
+                if (status == 'QUEUED' || status == 'PROCESSING') {
+                    setTimeout(check_status, 2000);
+                } else {
+                    load_iframe();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = "{% trans "Document convertion failed." %}";
+                } else {
+                    str = "{% trans "Failed. Please check the network." %}";
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
+</script>
+{% endblock %}
+
+{% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
 if (!($.browser.msie && parseInt($.browser.version) < 10)) {
@@ -55,48 +178,10 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
         });
     });
 } else {
-    $('#file-view').html('<div id="file-view-tip"><p>{% trans "You can use IE 10 or other browsers, for example, firefox, to view it online." %}</p></div>');
+    var tip = "{% trans "You can use IE 10 or other browsers, for example, firefox, to view it online." %}";
+    $('#file-view').html('<div id="file-view-tip"><p>' + tip + '</p></div>');
 }
 </script>
-{% else %}
-<script type="text/javascript">
-    var msg = '{% trans "The file is being processed, please wait..." %}';
-    $('#file-view').html('<div id="converted-html"><div class="convert-loading"><img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="loading..." /><span class="loading-text">' + msg + '</span></div></div>');
-    function load_iframe() {
-        $('#converted-html').html('<iframe src="{{ DOCUMENT_CONVERTOR_ROOT }}html/{{ obj_id }}/index.html" style="height:500px" />');
-    }
-    {% if html_exists %}
-    load_iframe();
-    {% else %}
-    function check_status () {
-        $.ajax({
-            url: '{{ DOCUMENT_CONVERTOR_ROOT }}status?file_id={{ obj_id }}',
-            cache: false,
-            dataType: 'jsonp',
-            jsonpCallback: 'xx',
-            crossDomain: true,
-            success: function(data) {
-                var status = data['status'];
-                if (status == 'QUEUED' || status == 'PROCESSING') {
-                    setTimeout(check_status, 2000);
-                } else {
-                    load_iframe();
-                }
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                var str;
-                if (xhr.responseText) {
-                    str = '{% trans "Document convertion failed." %}';
-                } else {
-                    str = '{% trans "Failed. Please check the network." %}';
-                }
-                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-          }
-      });
-  }
-  check_status();
-  {% endif %}
-</script>
-{% endif %}
-{% endif %}
-{% endblock %}
+
+{% endif %} {# not use_pdf ends#}
+{% endif %} {# not err ends #}

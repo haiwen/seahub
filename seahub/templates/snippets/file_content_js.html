@@ -53,11 +53,76 @@ window.onload = function () {
 {% endif %}
 
 {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
-    var msg = '{% trans "The file is being processed, please wait..." %}';
-    $('#file-view').html('<div id="converted-html"><div class="convert-loading"><img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="loading..." /><span class="loading-text">' + msg + '</span></div></div>');
     function load_iframe() {
-        $('#converted-html').html('<iframe src="{{ DOCUMENT_CONVERTOR_ROOT }}html/{{ obj_id }}/index.html" style="height:500px" />');
+        $('#convert-loading').remove();
+        var css_href = '{{MEDIA_URL}}test/test.css',
+            base_page_url = '{{MEDIA_URL}}test/596daeecc9c3ccee644ed85d11ee8416fb6d36f2',
+            page_urls = []; 
+        var page_num = 3;
+        for (var i = 1; i < page_num + 1; i++) {
+            page_urls.push(base_page_url + i + '.page');
+        }
+
+        var outline;
+        $.ajax({
+            url: '{{MEDIA_URL}}test/test.outline',
+            dataType: 'text'
+            }).done(function(data) {
+                outline = data;
+                // add doc_and_pdf.css
+                $('head').append('<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/doc_and_pdf.css" />');
+                $('head').append('<link rel="stylesheet" type="text/css" href="' + css_href + '" />');
+                $('#outline').html(outline);   
+                if (outline) {
+                    var sidebar = $('#sidebar'),
+                        page_container = $('#page-container'),
+                        hide_outline, show_outline;
+
+                    $('#outline').prepend('<span class="icon-double-angle-left outline-op-icon" title="{% trans "hide outline" %}"></span>');
+                    page_container.append('<span class="icon-double-angle-right outline-op-icon hide" title="{% trans "show outline" %}"></span>');
+                    $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
+                    sidebar.removeClass('hide');
+
+                    hide_outline = $('#outline .outline-op-icon');
+                    show_outline = $('#page-container .outline-op-icon');
+
+                    hide_outline.click(function() {
+                        sidebar.addClass('hide').removeClass('opened');
+                        show_outline.removeClass('hide');    
+                    });
+                    show_outline.click(function() {
+                        $(this).addClass('hide');
+                        sidebar.removeClass('hide').addClass('opened');
+                    });    
+                    $(window).scroll(function() {
+                        if ($(window).scrollTop() > page_container.offset().top) {
+                            show_outline.css({'position':'fixed'});    
+                        } else {
+                            show_outline.removeAttr('style');    
+                        }
+                    });
+                }
+                new pdf2htmlEX.Viewer({
+                    container_id : 'page-container', 
+                    sidebar_id : 'sidebar',
+                    outline_id : 'outline',
+                    page_urls : page_urls
+                });
+            });
     }
+
+    $(window).scroll(function() {
+        var outline = $('#outline');
+        if (!$.trim(outline.html())) {
+            return;
+        }
+        if ($(window).scrollTop() > $('#page-container').offset().top) {
+            outline.addClass('fixed-outline');
+        } else {
+            outline.removeClass('fixed-outline');
+        }
+    });
+
     {% if html_exists %}
     load_iframe();
     {% else %}
@@ -84,11 +149,12 @@ window.onload = function () {
                     str = "{% trans "Failed. Please check the network." %}";
                 }
                 $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-          }
+            }
       });
   }
   check_status();
   {% endif %}
+
 {% endif %}
 
 {% if filetype == 'PDF' and use_pdfjs %}

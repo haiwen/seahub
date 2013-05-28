@@ -1941,13 +1941,9 @@ textarea:-moz-placeholder {/* for FF */
     min-height:500px;/*for ff*/
 }
 #svg-view,
-#converted-html,
 #pdf {
     width:950px;
     margin:0 auto;
-}
-#converted-html {
-    height:500px;
 }
 #doc-view {
     min-height:700px;
@@ -2478,19 +2474,4 @@ textarea:-moz-placeholder {/* for FF */
 }
 #plan-form input[type=radio] {
     margin-right: 10px;
-}
-
-.convert-loading {
-    text-align: center;
-    font-size: 1.2em;
-    color: #333;
-}
-
-.convert-loading img {
-    vertical-align: middle;
-    padding-right: 5px;
-}
-
-.convert-loading .loading-text {
-    vertical-align: middle;
 }
