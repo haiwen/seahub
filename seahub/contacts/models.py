@@ -11,7 +11,17 @@ class ContactManager(models.Manager):
         """Get a user's contacts.
         """
         return super(ContactManager, self).filter(user_email=user_email)
-        
+
+    def get_contact_by_user(self, user_email, contact_email):
+        """Return a certern contact of ``user_email``.
+        """
+        try:
+            c = super(ContactManager, self).get(user_email=user_email,
+                                                contact_email=contact_email)
+        except Contact.DoesNotExist:
+            c = None
+        return c
+
     def get_registered_contacts_by_user(self, user_email):
         """Get a user's registered contacts.
         """
@@ -19,7 +29,7 @@ class ContactManager(models.Manager):
 
         return [ c for c in super(ContactManager, self).filter(
                 user_email=user_email) if is_registered_user(c.contact_email) ]
-        
+
 class Contact(models.Model):
     """Record user's contacts."""
 

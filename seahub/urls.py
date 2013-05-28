@@ -8,6 +8,8 @@ from seahub.views.file import view_file, view_history_file, view_trash_file,\
 from seahub.views.repo import RepoView, RepoHistoryView
 from notifications.views import notification_list
 from group.views import group_list
+from message.views import user_msg_list
+from share.views import user_share_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete
@@ -120,7 +122,9 @@ urlpatterns = patterns('',
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate),
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
-
+    url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
+    url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
+                       
 )
 
 if settings.SERVE_STATIC:

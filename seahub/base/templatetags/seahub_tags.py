@@ -224,7 +224,9 @@ def email2nickname(value):
 @register.filter(name='email2id')
 def email2id(value):
     """
-    Return the user id of an email or -1.
+    Return the user id of an email. User id can be 0(ldap user),
+    positive(registered user) or negtive(unregistered user).
+    
     """
     if not value:
         return -1
@@ -239,6 +241,12 @@ def email2id(value):
         cache.set(EMAIL_ID_CACHE_PREFIX+value, user_id, EMAIL_ID_CACHE_TIMEOUT)
     return user_id
 
+@register.filter(name='id_or_email')
+def id_or_email(value):
+    """A wrapper to ``email2id``. Returns origin email if user id is 0(ldap user).
+    """
+    uid = email2id(value)
+    return value if uid == 0 else uid
     
 @register.filter(name='url_target_blank')
 def url_target_blank(text):

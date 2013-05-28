@@ -1,6 +1,6 @@
 {% extends "myhome_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
-{% load url from future %}
+
 {% block sub_title %}{% trans "Contacts" %} - {% endblock %}
 {% block nav_contacts_class %}class="cur"{% endblock %}
 
@@ -27,7 +27,7 @@
     {% for contact in contacts %}
     <tr>
         <td>{% avatar contact.contact_email 20 %}</td>
-        <td>{{ contact.contact_email }}</td>
+        <td><a href="{% url 'user_msg_list' contact.contact_email|id_or_email%}">{{ contact.contact_email }}</a></td>
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">

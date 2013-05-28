@@ -5,20 +5,29 @@
 
 {% block left_panel %}
 <div class="info-item">
-    <h3 class="info-item-top">{% trans "Send to" %}</h3>
+    <h3 class="info-item-top">{% trans "User Info" %}</h3>
     <div class="info-item-bottom home-profile ovhd">
         {% avatar to_email 48 %}
         <div class="txt fright">
             <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
+            {% if add_to_contacts %}
+            <button id="add">{% trans "Add to contacts" %}</button>
+            {% endif %}
         </div>
     </div>
+    
 </div>
 
 {% endblock %}
 
 {% block right_panel %}
 
-<a href="{% url 'message_list' %}" style="font-size:20px;"> << {% trans 'Return' %}</a>
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_msg_list' to_email|id_or_email %}">{% trans "Messages" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'user_share_list' to_email|id_or_email %}">{% trans "Shares" %}</a></li>
+    </ul>
+</div>
 
 <div id="personal-reply">
 
@@ -88,11 +97,11 @@
           {% if pr == person_msgs.number %}
           <span class="cur">{{ pr }}</span>
           {% else %}
-          <a href="?page={{ pr }}&to_email={{ to_email }}" class="pg">{{ pr }}</a>
+          <a href="?page={{ pr }}" class="pg">{{ pr }}</a>
           {% endif %}
         {% endfor %}
         {% if person_msgs.has_next %}
-        <a href="?page={{ person_msgs.next_page_number }}&to_email={{ to_email }}" class="next">{% trans "Next"%}</a>
+        <a href="?page={{ person_msgs.next_page_number }}" class="next">{% trans "Next"%}</a>
         {% endif %}
     </div>
     {% endif %}

@@ -15,6 +15,7 @@ from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
 import seaserv
+from seaserv import seafile_api
 from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
     ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
     is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
@@ -26,6 +27,8 @@ from models import AnonymousShare
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
+from seahub.base.accounts import User
+from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 # from seahub.message.models import UserMessage
@@ -553,3 +556,36 @@ def send_shared_link(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
+@login_required    
+def user_share_list(request, id_or_email):
+    """List sharing repos with ``to_email``.
+    """
+    try:
+        uid = int(id_or_email)
+        try:
+            user = User.objects.get(id=uid)
+        except User.DoesNotExist:
+            user = None
+        if not user:
+            # raise Http404
+            assert False, 'todo'
+        to_email = user.email
+    except ValueError:
+        to_email = id_or_email
+
+    share_list = []
+    username = request.user.username
+    share_in = seafile_api.get_share_in_repo_list(username, -1, -1)
+    for e in share_in:
+        if e.share_type == 'personal' and e.user == to_email:
+            share_list.append(e)
+
+    c = Contact.objects.get_contact_by_user(username, to_email)
+    add_to_contacts = True if c is None else False
+            
+    return render_to_response('repo/user_share_list.html', {
+            'to_email': to_email,
+            'share_list': share_list,
+            'add_to_contacts': add_to_contacts,
+            }, context_instance=RequestContext(request))
+    

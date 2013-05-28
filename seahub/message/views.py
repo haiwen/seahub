@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 from models import UserMessage
 from message import msg_info_list
 from seahub.auth.decorators import login_required
+from seahub.base.accounts import User
 from seahub.views import is_registered_user
 from seahub.contacts.models import Contact
 from seahub.utils.paginator import Paginator
@@ -38,11 +39,26 @@ def message_list(request):
         }, context_instance=RequestContext(request))
 
 @login_required
-def user_msg_list(request, to_email):
+def user_msg_list(request, id_or_email):
     """List messages related to a certain person.
     """
+    try:
+        uid = int(id_or_email)
+        try:
+            user = User.objects.get(id=uid)
+        except User.DoesNotExist:
+            user = None
+        if not user:
+            return render_to_response("user_404.html",{},
+                                      context_instance=RequestContext(request))
+        to_email = user.email
+    except ValueError:
+        to_email = id_or_email
+
     username = request.user.username
-    
+    if username == to_email:
+        return HttpResponseRedirect(reverse('edit_profile'))
+
     msgs = UserMessage.objects.get_messages_between_users(username, to_email)
     if msgs:
         # update ``ifread`` field of messages
@@ -64,9 +80,13 @@ def user_msg_list(request, to_email):
     person_msgs.page_range = paginator.get_page_range(person_msgs.number)
     person_msgs.object_list = list(person_msgs.object_list)
 
+    c = Contact.objects.get_contact_by_user(username, to_email)
+    add_to_contacts = True if c is None else False
+
     return render_to_response("message/user_msg_list.html", {
             "person_msgs": person_msgs,
             "to_email": to_email,
+            "add_to_contacts": add_to_contacts,
             }, context_instance=RequestContext(request))
 
 @login_required

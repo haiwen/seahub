@@ -14,4 +14,6 @@ urlpatterns = patterns('',
                        
     url('^(?P<token>[^/]{24})/$', anonymous_share_confirm, name='anonymous_share_confirm'),
     url(r'^permission_admin/$', share_permission_admin, name='share_permission_admin'),
+
+    url(r'^u/(?P<to_email>[^/]+)/$', user_share_list, name='user_share_list'),
 )

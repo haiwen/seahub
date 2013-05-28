@@ -1,0 +1,74 @@
+{% extends base_template %}
+{% load seahub_tags avatar_tags  i18n %}
+
+{% block sub_title %}{% trans "Shares" %} - {% endblock %}
+
+{% block left_panel %}
+<div class="info-item">
+    <h3 class="info-item-top">{% trans "User Info" %}</h3>
+    <div class="info-item-bottom home-profile ovhd">
+        {% avatar to_email 48 %}
+        <div class="txt fright">
+            <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
+            {% if add_to_contacts %}
+            <button id="add">{% trans "Add to contacts" %}</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'user_msg_list' to_email|email2id %}">{% trans "Messages" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_share_list' to_email|email2id %}">{% trans "Shares" %}</a></li>
+    </ul>
+</div>
+
+{% if share_list %}
+<table>
+    <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="20%">{% trans "Name" %}</th>
+        <th width="48%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="13%">{% trans "Operations" %}</th>
+    </tr>
+    {% for repo in share_list %}
+    <tr>
+        <td>
+            {% if repo.permission == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            {% endif %}
+        </td>
+        <td><a href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a></td>
+        <td>{{ repo.repo_desc }}</td>
+        {% if repo.last_modified %}
+        <td>{{ repo.last_modified|translate_seahub_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+        <td>
+            <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% blocktrans %}You have no library sharing with {{to_email}}.{% endblocktrans %}</h2>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}
+
+

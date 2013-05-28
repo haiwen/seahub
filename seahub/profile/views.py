@@ -78,22 +78,22 @@ def user_profile(request, username_or_id):
             pass
         
     if user:
-        profile = Profile.objects.filter(user=user)
-        if profile:
-            profile = profile[0]
-            user_nickname = profile.nickname
-            user_intro = profile.intro
-        else:
-            username = user.username
-            idx = username.find('@')
-            user_nickname = username if idx <= 0 else username[:idx]
-            user_intro = ''
+        # profile = Profile.objects.filter(user=user)
+        # if profile:
+        #     profile = profile[0]
+        #     user_nickname = profile.nickname
+        #     user_intro = profile.intro
+        # else:
+        #     username = user.username
+        #     idx = username.find('@')
+        #     user_nickname = username if idx <= 0 else username[:idx]
+        #     user_intro = ''
+        return HttpResponseRedirect(reverse('user_msg_list', args=[user.email]))
     else:
         user_nickname = ""
         user_intro = _(u'Has not accepted invitation yet')
 
     return render_to_response('profile/user_profile.html', {
-            # 'email': user.username,
             'user': user,
             'nickname': user_nickname,
             'intro': user_intro,
