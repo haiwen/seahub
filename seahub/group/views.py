@@ -342,6 +342,7 @@ def msg_reply(request, msg_id):
 
         if request.method == 'POST':
             form = MessageReplyForm(request.POST)
+            r_status = request.GET.get('r_status')
             # TODO: invalid form
             if form.is_valid():
                 msg = form.cleaned_data['message']
@@ -359,7 +360,7 @@ def msg_reply(request, msg_id):
                                             from_email=request.user.username)
                 replies = MessageReply.objects.filter(reply_to=group_msg)
                 r_num = len(replies)
-                if r_num < 4:
+                if r_num < 4 or r_status == 'show':
                     ctx['replies'] = replies
                 else:
                     ctx['replies'] = replies[r_num - 3:]

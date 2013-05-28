@@ -33,7 +33,7 @@ $('.replies-op').hover(
     var loading = op.children('.replies-loading-icon');
     loading.css({'left': uf_r.outerWidth() - 7});
 
-    if (op.data('rstatus') == 'hide') {
+    if (op.attr('data-rstatus') == 'hide') {
         uf_r.addClass('unfold-replies-nobg');
         loading.removeClass('hide');
         $.ajax({
@@ -46,7 +46,7 @@ $('.replies-op').hover(
                 r_list.html(data['html']);
                 uf_r.addClass('hide');
                 f_r.removeClass('hide')
-                op.data('rstatus', 'show').data('r_num', data['r_num']);
+                op.attr('data-rstatus', 'show');
                 {% if request.user.is_authenticated %}
                 r_list.children().hover(
                     function() {
@@ -70,10 +70,10 @@ $('.replies-op').hover(
     } else {
         f_r.addClass('hide'); 
         uf_r.removeClass('hide');
-        r_list.children(':lt(' + parseInt(op.data('r_num')-1) + ')').each(function(index) {
-                $(this).remove();
+        r_list.children(':lt(' + (parseInt(uf_r.html()) -3) + ')').each(function() {
+            $(this).remove();
         });
-        op.data('rstatus', 'hide');
+        op.attr('data-rstatus', 'hide');
     }
 });
 {% if request.user.is_authenticated %}
@@ -110,22 +110,25 @@ $('.reply-form').submit(function() {
     var sm = $(this).find('.reply-submit');
     disable(sm);
 
+    var msg_op = form.parent(),
+        r_op = msg_op.find('.replies-op'),
+        r_status = r_op.attr('data-rstatus');
+
     $.ajax({
         type: "POST",
-        url: form.attr('action'),
+        url: form.attr('action') + '?r_status=' + e(r_status),
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
         data: { "message": r },
         success: function(data) {
-            var msg_op = form.parent(),
-                r_list = msg_op.find('.reply-list'),
+            var r_list = msg_op.find('.reply-list'),
                 r_cnt = msg_op.find('.unfold-replies');
 
             r_list.html(data['html']).removeClass('hide');
             if (data['r_num'] > 3) {
                 r_cnt.html(r_cnt.html().replace(/\d+/, data['r_num']));
-                msg_op.find('.replies-op').removeClass('hide');
+                r_op.removeClass('hide');
             }
             enable(sm);
             r_input.val('').height(20);
