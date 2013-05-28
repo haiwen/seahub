@@ -76,13 +76,10 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_dir_files_last_modified, show_delete_days, HtmlDiff, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
+
+from seahub.utils import HAS_OFFICE_CONVERTER, add_office_convert_task
+
 import seahub.settings as settings
-try:
-    from seahub.settings import DOCUMENT_CONVERTOR_ROOT
-    if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
-        DOCUMENT_CONVERTOR_ROOT += '/'
-except ImportError:
-    DOCUMENT_CONVERTOR_ROOT = None
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 
@@ -1141,7 +1138,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
     if filetype == 'Text' or filetype == 'Markdown' or filetype == 'Sf':
         err, file_content, encoding = repo_file_get(raw_path, file_enc)
     elif filetype == 'Document':
-        if DOCUMENT_CONVERTOR_ROOT:
+        if HAS_OFFICE_CONVERTER:
             err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         else:
             filetype = 'Unknown'
@@ -1149,7 +1146,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
         if USE_PDFJS:
             # use pdfjs to preview PDF
             pass
-        elif DOCUMENT_CONVERTOR_ROOT:
+        elif HAS_OFFICE_CONVERTER:
             # use flash to prefiew PDF
             err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         else:
@@ -1773,7 +1770,6 @@ def view_shared_file(request, token):
             'encoding': encoding,
             'file_encoding_list':file_encoding_list,
             'html_exists': html_exists,
-            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             }, context_instance=RequestContext(request))
 
@@ -1892,28 +1888,18 @@ def view_file_via_shared_dir(request, token):
             'encoding': encoding,
             'file_encoding_list':file_encoding_list,
             'html_exists': html_exists,
-            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
             'token': token,
             }, context_instance=RequestContext(request))
     
 def prepare_converted_html(raw_path, obj_id, doctype):
-    curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
-    data = {'doctype': doctype,
-            'file_id': obj_id,
-            'url': raw_path}
     try:
-        f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
-    except urllib2.URLError, e:
+        ret = add_office_convert_task(obj_id, doctype, raw_path)
+    except:
         return _(u'Internal error'), False
     else:
-        ret = f.read()
-        ret_dict = json.loads(ret)
-        if ret_dict.has_key('error'):
-            return ret_dict['error'], False
-        else:
-            return None, ret_dict['exists']
+        return None, ret.exists
 
 def demo(request):
     """
@@ -2355,4 +2341,3 @@ def convert_cmmt_desc_link(request):
         logger.warn('repo_id: %s, cmmt_id: %s, diff_result: %s' % (
                 repo_id, cmmt_id, d.__dict__))
     raise Http404
-

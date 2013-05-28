@@ -9,6 +9,9 @@ import logging
 import json
 import tempfile
 import locale
+import ConfigParser
+
+import ccnet
 
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
@@ -29,12 +32,12 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_org_id_by_group, list_share_repos, get_org_group_repos, \
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
     list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
-    list_inner_pub_repos, list_org_inner_pub_repos
+    list_inner_pub_repos, list_org_inner_pub_repos, CCNET_CONF_PATH
 import seahub.settings
 try:
-    from seahub.settings import DOCUMENT_CONVERTOR_ROOT
+    from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
-    DOCUMENT_CONVERTOR_ROOT = None
+    EVENTS_CONFIG_FILE = None
 try:
     from seahub.settings import EMAIL_HOST
     IS_EMAIL_CONFIGURED = True
@@ -542,11 +545,11 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
     return contributors, last_modified, last_commit_id 
 
-if hasattr(seahub.settings, 'EVENTS_CONFIG_FILE'):
+if EVENTS_CONFIG_FILE:
     import seafevents
 
     EVENTS_ENABLED = True
-    SeafEventsSession = seafevents.init_db_session_class(seahub.settings.EVENTS_CONFIG_FILE)
+    SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
 
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
@@ -948,7 +951,54 @@ def more_files_in_commit(commit):
     """Check whether added/deleted/modified more files in commit description.
     """
     return True if re.search(MORE_PATT, commit.desc) else False
-    
-    
+
+if EVENTS_CONFIG_FILE:
+    def check_office_converter_enabled():
+        config = ConfigParser.ConfigParser()
+        config.read(EVENTS_CONFIG_FILE)
+        return seafevents.is_office_converter_enabled(config)
+
+    def get_office_converter_html_dir():
+        config = ConfigParser.ConfigParser()
+        config.read(EVENTS_CONFIG_FILE)
+        return seafevents.get_office_converter_html_dir(config)
+
+    HAS_OFFICE_CONVERTER = check_office_converter_enabled()
+    if HAS_OFFICE_CONVERTER:
+
+        OFFICE_HTML_DIR = get_office_converter_html_dir()
+
+        from seafevents.office_converter import OfficeConverterRpcClient
+
+        office_converter_rpc = None
+        def get_office_converter_rpc():
+            global office_converter_rpc
+            if office_converter_rpc is None:
+                pool = ccnet.ClientPool(CCNET_CONF_PATH)
+                office_converter_rpc = OfficeConverterRpcClient(pool)
+
+            return office_converter_rpc
+
+        def add_office_convert_task(file_id, doctype, url):
+            rpc = get_office_converter_rpc()
+            return rpc.add_task(file_id, doctype, url)
+
+        def query_office_convert_status(file_id):
+            rpc = get_office_converter_rpc()
+            return rpc.query_convert_status(file_id)
+
+        def query_office_file_pages(file_id):
+            rpc = get_office_converter_rpc()
+            return rpc.query_file_pages(file_id)
+    else:
+        def add_office_convert_task(file_id, doctype, url):
+            pass
+
+        def query_office_convert_status(file_id):
+            pass
+
+        def query_office_file_pages(file_id):
+            pass
+
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo

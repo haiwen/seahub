@@ -15,6 +15,8 @@ from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, sys_group_admi
     user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate
 
+from seahub.views.file import office_convert_query_status, office_convert_query_pages
+
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
 #admin.autodiscover()
@@ -151,4 +153,18 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
     urlpatterns += patterns('',
         (r'^pay/', include('seahub_extra.pay.urls')),
     )
-    
+
+# serve office converter static files
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import OFFICE_HTML_DIR
+    media_url = settings.MEDIA_URL.strip('/')
+    # my.seafile.com/media/office-html/<file_id>/<css, outline, page>
+    urlpatterns += patterns('',
+        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='office_convert_static'),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_status'),
+        url(r'^office-convert/pages/$', office_convert_query_pages, name='office_convert_pages'),
+    )
+

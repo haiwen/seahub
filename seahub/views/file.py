@@ -10,6 +10,7 @@ import stat
 import urllib
 import urllib2
 import chardet
+import logging
 
 from django.contrib.sites.models import Site, RequestSite
 from django.core.urlresolvers import reverse
@@ -40,15 +41,12 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     is_textual_file, show_delete_days, mkstemp
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
+
+from seahub.utils import HAS_OFFICE_CONVERTER, add_office_convert_task, \
+    query_office_convert_status, query_office_file_pages
+
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
-try:
-    from seahub.settings import DOCUMENT_CONVERTOR_ROOT
-    if DOCUMENT_CONVERTOR_ROOT[-1:] != '/':
-        DOCUMENT_CONVERTOR_ROOT += '/'
-except ImportError:
-    DOCUMENT_CONVERTOR_ROOT = None
-
 
 def get_user_permission(request, repo_id):
     if request.user.is_authenticated():
@@ -140,21 +138,12 @@ def repo_file_get(raw_path, file_enc):
     return err, file_content, encoding
 
 def prepare_converted_html(raw_path, obj_id, doctype):
-    curl = DOCUMENT_CONVERTOR_ROOT + 'convert'
-    data = {'doctype': doctype,
-            'file_id': obj_id,
-            'url': raw_path}
     try:
-        f = urllib2.urlopen(url=curl, data=urllib.urlencode(data))
-    except urllib2.URLError, e:
+        ret = add_office_convert_task(obj_id, doctype, raw_path)
+    except:
         return _(u'Internal error'), False
     else:
-        ret = f.read()
-        ret_dict = json.loads(ret)
-        if ret_dict.has_key('error'):
-            return ret_dict['error'], False
-        else:
-            return None, ret_dict['exists']
+        return None, ret.exists
 
 def get_file_view_path_and_perm(request, repo_id, obj_id, filename):
     """
@@ -188,7 +177,7 @@ def handle_textual_file(request, filetype, raw_path, ret_dict):
     ret_dict['file_encoding_list'] = file_encoding_list
 
 def handle_document(raw_path, obj_id, fileext, ret_dict):
-    if DOCUMENT_CONVERTOR_ROOT:
+    if HAS_OFFICE_CONVERTER:
         err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         # populate return value dict
         ret_dict['err'] = err
@@ -200,7 +189,7 @@ def handle_pdf(raw_path, obj_id, fileext, ret_dict):
     if USE_PDFJS:
         # use pdfjs to preview PDF
         pass
-    elif DOCUMENT_CONVERTOR_ROOT:
+    elif HAS_OFFICE_CONVERTER:
         # use flash to prefiew PDF
         err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
         # populate return value dict
@@ -414,7 +403,6 @@ def view_file(request, repo_id):
             'filetype': ret_dict['filetype'],
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,
-            'DOCUMENT_CONVERTOR_ROOT': DOCUMENT_CONVERTOR_ROOT,
             'use_pdfjs':USE_PDFJS,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
@@ -489,7 +477,6 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['raw_path'] = raw_path
     if not ret_dict.has_key('filetype'):    
         ret_dict['filetype'] = filetype 
-    ret_dict['DOCUMENT_CONVERTOR_ROOT'] = DOCUMENT_CONVERTOR_ROOT
     ret_dict['use_pdfjs'] = USE_PDFJS
 
     if not repo.encrypted:
@@ -714,3 +701,52 @@ def file_edit(request, repo_id):
         'search_repo_id': search_repo_id,
     }, context_instance=RequestContext(request))
 
+def office_convert_query_status(request):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    ret = {'success': False}
+
+    file_id = request.GET.get('file_id', '')
+    if len(file_id) != 40:
+        ret['error'] = 'invalid param'
+    else:
+        try:
+            d = query_office_convert_status(file_id)
+            if d.error:
+                ret['error'] = d.error
+            else:
+                ret['success'] = True
+                ret['status'] = d.status
+        except Exception, e:
+            logging.exception('failed to call query_office_convert_status');
+            ret['error'] = str(e)
+            
+    return HttpResponse(json.dumps(ret), content_type=content_type)
+
+def office_convert_query_pages(request):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    ret = {'success': False}
+
+    file_id = request.GET.get('file_id', '')
+    if len(file_id) != 40:
+        ret['error'] = 'invalid param'
+    else:
+        try:
+            d = query_office_file_pages(file_id)
+            if d.error:
+                ret['error'] = d.error
+            else:
+                ret['success'] = True
+                ret['count'] = d.count
+        except Exception, e:
+            logging.exception('failed to call query_office_file_pages');
+            ret['error'] = str(e)
+            
+    return HttpResponse(json.dumps(ret), content_type=content_type)
