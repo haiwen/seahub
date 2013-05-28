@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.core.management.base import BaseCommand, CommandError
 
 from seahub.notifications.models import UserNotification
-import settings
+import seahub.settings as settings
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)

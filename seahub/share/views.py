@@ -118,7 +118,7 @@ def share_repo(request):
             except:
                 messages.error(request, _(u'Failed to share to all members'))
             else:
-                msg = _(u'Shared to all members successfully, go check it at <a href="%s">Share</a>.') % \
+                msg = _(u'Shared to all members successfully, go check it at <a href="%s">Shares</a>.') % \
                     (reverse('share_admin'))
                 messages.success(request, msg)
 
@@ -179,7 +179,7 @@ def share_repo(request):
             # message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
             # message.ifread = 0
             # message.save()
-            msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
+            msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
                 {'email':email, 'share':reverse('share_admin')}
             messages.add_message(request, messages.INFO, msg)
     return HttpResponseRedirect(reverse('myhome'))
