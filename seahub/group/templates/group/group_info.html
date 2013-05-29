@@ -48,7 +48,7 @@
         <ul>
             {% for member in members %}
               {% if forloop.counter0 < group_members_default_display %}
-                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{% url 'user_msg_list' member.user_name|email2id %}">{{ member.user_name|email2nickname }}</a></li>
+                <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{% url 'user_msg_list' member.user_name|id_or_email %}">{{ member.user_name|email2nickname }}</a></li>
               {% else %}
                 {% if forloop.last %}
                   <li>...</li>

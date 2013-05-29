@@ -2,11 +2,11 @@
 {% load url from future %}
 
 {% for r in replies %}
-{% with id=r.from_email|email2id name=r.from_email|email2nickname %}
+{% with id=r.from_email|id_or_email name=r.from_email|email2nickname %}
 <li class="reply w100 ovhd">
-<a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
+<a href="{% url 'user_msg_list' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
 <div class="txt">
-    <a href="{% url 'user_profile' id %}">{{ name }}</a>
+    <a href="{% url 'user_msg_list' id %}">{{ name }}</a>
     <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
     <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>
     <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>

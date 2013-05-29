@@ -21,8 +21,8 @@
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'user_msg_list' to_email|email2id %}">{% trans "Messages" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_share_list' to_email|email2id %}">{% trans "Shares" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'user_msg_list' to_email|id_or_email %}">{% trans "Messages" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_share_list' to_email|id_or_email %}">{% trans "Shares" %}</a></li>
     </ul>
 </div>
 

@@ -51,12 +51,12 @@
     {% for msg in person_msgs.object_list %}
         <li class="msg w100 ovhd">
         {% if msg.to_email == request.user.email %}
-        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
+        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         
         <div class="txt">
             <div class="msg-main" style="text-align:right;">
                 <div class="msg-hd w100 ovhd">                    
-                    <a href="{% url 'user_profile' msg.from_email|email2id %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
                 </div>
                 <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>
@@ -65,12 +65,12 @@
         </div>
 
         {% else %}        
-        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
+        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         <div class="txt">
             <div class="msg-main">
                 
                 <div class="msg-hd w100 ovhd">
-                    <a href="{% url 'user_profile' msg.from_email|email2id %}" class="author">{% trans 'I' %}</a>
+                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{% trans 'I' %}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
                 </div>
                 <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>

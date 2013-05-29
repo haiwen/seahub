@@ -18,7 +18,7 @@
     {% for key,value in msgs %}
     <tr>
         <td>{% avatar key 20 %}</td>       
-        <td><a href="{% url 'user_profile' key|email2id %}">{{ key }}</a></td>
+        <td><a href="{% url 'user_msg_list' key|id_or_email %}">{{ key }}</a></td>
         <td>
             <a href="{% url 'user_msg_list' key %}?page=1">{{ value.last_msg|truncatechars:80 }}</a>
         </td>
