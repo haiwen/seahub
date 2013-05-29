@@ -23,3 +23,7 @@
 {% if filetype == 'Video'  or filetype == 'Audio' %}
 <link rel="stylesheet" href="{{MEDIA_URL}}css/mediaelementplayer.css" />
 {% endif %}
+
+{% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/doc_and_pdf.css" />
+{% endif %}

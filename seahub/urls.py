@@ -15,7 +15,7 @@ from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, sys_group_admi
     user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate
 
-from seahub.views.file import office_convert_query_status, office_convert_query_pages
+from seahub.views.file import office_convert_query_status, office_convert_query_page_num
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -164,7 +164,7 @@ if HAS_OFFICE_CONVERTER:
         url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='office_convert_static'),
     )
     urlpatterns += patterns('',
-        url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_status'),
-        url(r'^office-convert/pages/$', office_convert_query_pages, name='office_convert_pages'),
+        url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
+        url(r'^office-convert/page-num/$', office_convert_query_page_num, name='office_convert_query_page_num'),
     )
 

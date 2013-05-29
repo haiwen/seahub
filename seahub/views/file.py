@@ -726,7 +726,7 @@ def office_convert_query_status(request):
             
     return HttpResponse(json.dumps(ret), content_type=content_type)
 
-def office_convert_query_pages(request):
+def office_convert_query_page_num(request):
     if not request.is_ajax():
         raise Http404
 

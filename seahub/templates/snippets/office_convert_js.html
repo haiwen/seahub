@@ -1,0 +1,122 @@
+{% load i18n %}
+    function query_page_num() {
+        $.ajax({
+            url: "{% url 'office_convert_query_page_num' %}?file_id={{ obj_id }}",
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                if (data['success']) {
+                    load_document(data['count']);
+                } else {
+                    str = "{% trans "Document convertion failed." %}";
+                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = "{% trans "Document convertion failed." %}";
+                } else {
+                    str = "{% trans "Failed. Please check the network." %}";
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+        });
+    }
+
+    function load_document(page_num) {
+        $('#convert-loading').remove();
+        var css_href = "{% url 'office_convert_static' obj_id %}/file.css",
+            base_page_url = "{% url 'office_convert_static' obj_id %}/",
+            page_urls = [];
+
+        for (var i = 1; i < page_num + 1; i++) {
+            page_urls.push(base_page_url + i + '.page');
+        }
+
+        var outline;
+        $.ajax({
+            url: "{% url 'office_convert_static' obj_id %}/file.outline",
+            dataType: 'text'
+            }).done(function(data) {
+                outline = data;
+                $('head').append('<link rel="stylesheet" type="text/css" href="' + css_href + '" />');
+                $('#outline').html(outline);
+                if (outline) {
+                    var sidebar = $('#sidebar'),
+                        page_container = $('#page-container'),
+                        hide_outline, show_outline;
+
+                    $('#outline').prepend('<span class="icon-double-angle-left outline-op-icon" title="{% trans "hide outline" %}"></span>');
+                    page_container.append('<span class="icon-double-angle-right outline-op-icon hide" title="{% trans "show outline" %}"></span>');
+                    $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
+                    sidebar.removeClass('hide');
+
+                    hide_outline = $('#outline .outline-op-icon');
+                    show_outline = $('#page-container .outline-op-icon');
+
+                    hide_outline.click(function() {
+                        sidebar.addClass('hide').removeClass('opened');
+                        show_outline.removeClass('hide');
+                    });
+                    show_outline.click(function() {
+                        $(this).addClass('hide');
+                        sidebar.removeClass('hide').addClass('opened');
+                    });
+                    $(window).scroll(function() {
+                        if ($(window).scrollTop() > page_container.offset().top) {
+                            show_outline.css({'position':'fixed'});
+                        } else {
+                            show_outline.removeAttr('style');
+                        }
+                    });
+                }
+                new pdf2htmlEX.Viewer({
+                    container_id : 'page-container',
+                    sidebar_id : 'sidebar',
+                    outline_id : 'outline',
+                    page_urls : page_urls
+                });
+            });
+    }
+
+    $(window).scroll(function() {
+        var outline = $('#outline');
+        if (!$.trim(outline.html())) {
+            return;
+        }
+        if ($(window).scrollTop() > $('#page-container').offset().top) {
+            outline.addClass('fixed-outline');
+        } else {
+            outline.removeClass('fixed-outline');
+        }
+    });
+    {% if html_exists %}
+    query_page_num();
+    {% else %}
+    function check_status () {
+        $.ajax({
+            url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                var status = data['status'];
+                if (status == 'QUEUED' || status == 'PROCESSING') {
+                    setTimeout(check_status, 2000);
+                } else {
+                    query_page_num();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = "{% trans "Document convertion failed." %}";
+                } else {
+                    str = "{% trans "Failed. Please check the network." %}";
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+      });
+  }
+  check_status();
+  {% endif %}
