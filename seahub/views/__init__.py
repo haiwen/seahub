@@ -77,7 +77,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 
-from seahub.utils import HAS_OFFICE_CONVERTER, add_office_convert_task
+from seahub.utils import HAS_OFFICE_CONVERTER, prepare_converted_html
 
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
@@ -1139,7 +1139,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
         err, file_content, encoding = repo_file_get(raw_path, file_enc)
     elif filetype == 'Document':
         if HAS_OFFICE_CONVERTER:
-            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
+            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         else:
             filetype = 'Unknown'
     elif filetype == 'PDF':
@@ -1148,7 +1148,7 @@ def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
             pass
         elif HAS_OFFICE_CONVERTER:
             # use flash to prefiew PDF
-            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
+            err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         else:
             # can't preview PDF
             filetype = 'Unknown'
@@ -1893,14 +1893,6 @@ def view_file_via_shared_dir(request, token):
             'token': token,
             }, context_instance=RequestContext(request))
     
-def prepare_converted_html(raw_path, obj_id, doctype):
-    try:
-        ret = add_office_convert_task(obj_id, doctype, raw_path)
-    except:
-        return _(u'Internal error'), False
-    else:
-        return None, ret.exists
-
 def demo(request):
     """
     Login as demo account.

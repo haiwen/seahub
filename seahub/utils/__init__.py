@@ -955,6 +955,7 @@ def more_files_in_commit(commit):
 
 # office convert related
 HAS_OFFICE_CONVERTER = False
+OFFICE_HTML_DIR = None
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
         config = ConfigParser.ConfigParser()
@@ -980,7 +981,7 @@ if HAS_OFFICE_CONVERTER:
     from seafevents.office_converter import OfficeConverterRpcClient
 
     office_converter_rpc = None
-    def get_office_converter_rpc():
+    def _get_office_converter_rpc():
         global office_converter_rpc
         if office_converter_rpc is None:
             pool = ccnet.ClientPool(CCNET_CONF_PATH)
@@ -989,24 +990,57 @@ if HAS_OFFICE_CONVERTER:
         return office_converter_rpc
 
     def add_office_convert_task(file_id, doctype, url):
-        rpc = get_office_converter_rpc()
+        rpc = _get_office_converter_rpc()
         return rpc.add_task(file_id, doctype, url)
 
     def query_office_convert_status(file_id):
-        rpc = get_office_converter_rpc()
+        rpc = _get_office_converter_rpc()
         return rpc.query_convert_status(file_id)
 
     def query_office_file_pages(file_id):
-        rpc = get_office_converter_rpc()
+        rpc = _get_office_converter_rpc()
         return rpc.query_file_pages(file_id)
+
+    def get_converted_html_detail(file_id):    
+        d = {}
+        outline_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.outline')
+        css_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.css')
+
+        with open(outline_file, 'r') as fp:
+            outline = fp.read()
+
+        with open(css_file, 'r') as fp:
+            css = fp.read()
+
+        page_num = query_office_file_pages(file_id).count
+
+        d['outline'] = outline
+        d['page_num'] = page_num
+        d['css'] = css
+
+        return d
+
+    def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
+        try:
+            ret = add_office_convert_task(obj_id, doctype, raw_path)
+        except:
+            return _(u'Internal error'), False
+        else:
+            if ret.exists:
+                try:
+                    ret_dict['html_detail'] = get_converted_html_detail(obj_id)
+                except:
+                    pass
+            return None, ret.exists
+
 else:
-    def add_office_convert_task(file_id, doctype, url):
+    def prepare_converted_html(*args, **kwargs):
         pass
 
-    def query_office_convert_status(file_id):
+    def query_office_convert_status(*args, **kwargs):
         pass
 
-    def query_office_file_pages(file_id):
+    def query_office_file_pages(*args, **kwargs):
         pass
 
 # search realted

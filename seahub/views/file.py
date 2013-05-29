@@ -42,8 +42,8 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 
-from seahub.utils import HAS_OFFICE_CONVERTER, add_office_convert_task, \
-    query_office_convert_status, query_office_file_pages
+from seahub.utils import HAS_OFFICE_CONVERTER, query_office_convert_status, \
+    query_office_file_pages, prepare_converted_html
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
@@ -137,14 +137,6 @@ def repo_file_get(raw_path, file_enc):
 
     return err, file_content, encoding
 
-def prepare_converted_html(raw_path, obj_id, doctype):
-    try:
-        ret = add_office_convert_task(obj_id, doctype, raw_path)
-    except:
-        return _(u'Internal error'), False
-    else:
-        return None, ret.exists
-
 def get_file_view_path_and_perm(request, repo_id, obj_id, filename):
     """
     Return raw path of a file and the permission to view file.
@@ -178,7 +170,7 @@ def handle_textual_file(request, filetype, raw_path, ret_dict):
 
 def handle_document(raw_path, obj_id, fileext, ret_dict):
     if HAS_OFFICE_CONVERTER:
-        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
+        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         # populate return value dict
         ret_dict['err'] = err
         ret_dict['html_exists'] = html_exists
@@ -191,7 +183,7 @@ def handle_pdf(raw_path, obj_id, fileext, ret_dict):
         pass
     elif HAS_OFFICE_CONVERTER:
         # use flash to prefiew PDF
-        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext)
+        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         # populate return value dict
         ret_dict['err'] = err
         ret_dict['html_exists'] = html_exists
@@ -400,6 +392,7 @@ def view_file(request, repo_id):
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
             'html_exists': ret_dict['html_exists'],
+            'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
             "applet_root": get_ccnetapplet_root(),
             'groups': groups,

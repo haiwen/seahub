@@ -5,20 +5,11 @@
 {% if not use_pdfjs %}
 
 {% block extra_style %}{{ block.super }}
-<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/doc_and_pdf.css" />
+    {% include 'snippets/office_convert_style.html' %}
 {% endblock %}
 
 {% block file_view %}
-    <div id="convert-loading">
-        <img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="" class="vam" />
-        <span class="loading-text vam">{% trans "The file is being processed, please wait..." %}</span>
-    </div>
-    <div id="converted-html">
-        <div id="sidebar" class="hide">
-            <div id="outline"></div>
-        </div>
-        <div id="page-container"></div>
-    </div>
+    {% include 'snippets/office_convert_html.html' %}
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
