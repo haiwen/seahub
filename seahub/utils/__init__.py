@@ -545,6 +545,7 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
     return contributors, last_modified, last_commit_id 
 
+# events related    
 if EVENTS_CONFIG_FILE:
     import seafevents
 
@@ -952,11 +953,18 @@ def more_files_in_commit(commit):
     """
     return True if re.search(MORE_PATT, commit.desc) else False
 
+# office convert related
+HAS_OFFICE_CONVERTER = False
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
         config = ConfigParser.ConfigParser()
         config.read(EVENTS_CONFIG_FILE)
-        return seafevents.is_office_converter_enabled(config)
+        enabled = seafevents.is_office_converter_enabled(config)
+        if enabled:
+            logging.info('office converter: enabled')
+        else:
+            logging.info('office converter: not enabled')
+        return enabled
 
     def get_office_converter_html_dir():
         config = ConfigParser.ConfigParser()
@@ -964,41 +972,57 @@ if EVENTS_CONFIG_FILE:
         return seafevents.get_office_converter_html_dir(config)
 
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
-    if HAS_OFFICE_CONVERTER:
+    
+if HAS_OFFICE_CONVERTER:
 
-        OFFICE_HTML_DIR = get_office_converter_html_dir()
+    OFFICE_HTML_DIR = get_office_converter_html_dir()
 
-        from seafevents.office_converter import OfficeConverterRpcClient
+    from seafevents.office_converter import OfficeConverterRpcClient
 
-        office_converter_rpc = None
-        def get_office_converter_rpc():
-            global office_converter_rpc
-            if office_converter_rpc is None:
-                pool = ccnet.ClientPool(CCNET_CONF_PATH)
-                office_converter_rpc = OfficeConverterRpcClient(pool)
+    office_converter_rpc = None
+    def get_office_converter_rpc():
+        global office_converter_rpc
+        if office_converter_rpc is None:
+            pool = ccnet.ClientPool(CCNET_CONF_PATH)
+            office_converter_rpc = OfficeConverterRpcClient(pool)
 
-            return office_converter_rpc
+        return office_converter_rpc
 
-        def add_office_convert_task(file_id, doctype, url):
-            rpc = get_office_converter_rpc()
-            return rpc.add_task(file_id, doctype, url)
+    def add_office_convert_task(file_id, doctype, url):
+        rpc = get_office_converter_rpc()
+        return rpc.add_task(file_id, doctype, url)
 
-        def query_office_convert_status(file_id):
-            rpc = get_office_converter_rpc()
-            return rpc.query_convert_status(file_id)
+    def query_office_convert_status(file_id):
+        rpc = get_office_converter_rpc()
+        return rpc.query_convert_status(file_id)
 
-        def query_office_file_pages(file_id):
-            rpc = get_office_converter_rpc()
-            return rpc.query_file_pages(file_id)
-    else:
-        def add_office_convert_task(file_id, doctype, url):
-            pass
+    def query_office_file_pages(file_id):
+        rpc = get_office_converter_rpc()
+        return rpc.query_file_pages(file_id)
+else:
+    def add_office_convert_task(file_id, doctype, url):
+        pass
 
-        def query_office_convert_status(file_id):
-            pass
+    def query_office_convert_status(file_id):
+        pass
 
-        def query_office_file_pages(file_id):
-            pass
+    def query_office_file_pages(file_id):
+        pass
+
+# search realted
+HAS_FILE_SEARCH = False
+if EVENTS_CONFIG_FILE:
+    def check_search_enabled():
+        config = ConfigParser.ConfigParser()
+        config.read(EVENTS_CONFIG_FILE)
+        enabled = seafevents.is_search_enabled(config)
+        if enabled:
+            logging.info('search: enabled')
+        else:
+            logging.info('search: not enabled')
+        return enabled
+
+    HAS_FILE_SEARCH = check_search_enabled()
 
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo

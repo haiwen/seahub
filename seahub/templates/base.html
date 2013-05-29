@@ -69,7 +69,7 @@
                 </a>
                 {% block nav %}{% endblock %}
 
-                {% if enable_file_search and request.user.is_authenticated %}
+                {% if has_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     {% if search_repo_id %}
                     <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
@@ -240,7 +240,7 @@ $(document).ready(function(){
     return false;
 });
 
-{% if enable_file_search %}
+{% if has_file_search %}
 // search-form: top-search-form, advanced-search-form, search-form in search result page
 $('.search-form').submit(function() {
     if (!$.trim($(this).find('.search-input').val())) {

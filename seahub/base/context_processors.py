@@ -13,10 +13,7 @@ try:
 except ImportError:
     BUSINESS_MODE = False
 
-try:
-    from seahub.settings import ENABLE_FILE_SEARCH
-except ImportError:
-    ENABLE_FILE_SEARCH = False
+from seahub.utils import HAS_FILE_SEARCH
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -50,7 +47,7 @@ def base(request):
         'site_name': SITE_NAME,
         'enable_signup': ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
-        'enable_file_search': ENABLE_FILE_SEARCH,
+        'has_file_search': HAS_FILE_SEARCH,
         'enable_pubfile': ENABLE_PUBFILE,
         }
 
