@@ -359,21 +359,24 @@ def load_local_settings(module):
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
 
-# Load local_settngs.py
+            
+# Load seahub_extra_settings.py
 try:
-    import local_settings
+    from seahub_extra import seahub_extra_settings
 except ImportError:
     pass
 else:
-    load_local_settings(local_settings)
-    del local_settings
+    load_local_settings(seahub_extra_settings)
+    del seahub_extra_settings
 
-
-if 'win32' in sys.platform:
-    INSTALLED_APPS += ('django_wsgiserver', )
-    fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
-    fp.write("%d\n" % os.getpid())
-    fp.close()
+# Load local_settings.py
+try:
+    import seahub.local_settings
+except ImportError:
+    pass
+else:
+    load_local_settings(seahub.local_settings)
+    del seahub.local_settings
 
 # Load seahub_settings.py in server release
 try:
@@ -391,9 +394,14 @@ else:
     load_local_settings(seahub_settings)
     del seahub_settings
 
-
 # Remove install_topdir from path
 sys.path.pop(0)
+
+if 'win32' in sys.platform:
+    INSTALLED_APPS += ('django_wsgiserver', )
+    fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
+    fp.write("%d\n" % os.getpid())
+    fp.close()
 
 SEAFILE_VERSION = '1.7'
 
