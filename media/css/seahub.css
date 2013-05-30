@@ -154,6 +154,9 @@ td { color: #333; }
 table img {
     vertical-align:middle;
 }
+tr.bold {
+    font-weight:bold;
+}
 p {
     margin:0.5em 0;
 }
@@ -249,6 +252,10 @@ input.btn-disabled:hover {/*for input*/
 .no-bold {
     font-weight:normal;
 }
+*[data-href] {
+    cursor: pointer;
+}
+
 .op-list li,
 .modalCloseImg,
 .add,
@@ -2475,3 +2482,5 @@ textarea:-moz-placeholder {/* for FF */
 #plan-form input[type=radio] {
     margin-right: 10px;
 }
+
+

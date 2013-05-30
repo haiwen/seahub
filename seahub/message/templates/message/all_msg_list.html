@@ -1,7 +1,7 @@
 {% extends "myhome_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
-{% block sub_title %}{% trans "Messages" %} - {% endblock %}
+{% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
 
 {% block main_panel %}
 <h3>{% trans "Messages"%}</h3>
@@ -11,21 +11,19 @@
     <tr>
         <th width="5%"></th>
         <th width="20%">{% trans " Email "%}</th>
-        <th width="45%">{% trans "Message"%}</th>
+        <th width="60%">{% trans "Message"%}</th>
         <th width="15%">{% trans "Time"%}</th>
-        <th width="15%">{% trans "Not read"%}</th>
     </tr>
     {% for key,value in msgs %}
-    <tr>
+    {% with not_read=value.not_read %}
+    <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
         <td>{% avatar key 20 %}</td>       
-        <td><a href="{% url 'user_msg_list' key|id_or_email %}">{{ key }}</a></td>
-        <td>
-            <a href="{% url 'user_msg_list' key %}?page=1">{{ value.last_msg|truncatechars:80 }}</a>
-        </td>
+        <td>{{ key }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
+        <td> {{ value.last_msg|truncatechars:60 }} </td>
         <td>{{  value.last_time|translate_seahub_time }}</td>
-        <td>{{  value.not_read }}</td>
     </tr>
-{% endfor %}
+    {% endwith %}
+    {% endfor %}
 </table>
 {% endif %}
 
@@ -67,6 +65,12 @@
 <!-- </script> -->
 <script type="text/javascript">
 
+$(function(){       
+    $('*[data-href]').click(function(){
+        window.location = $(this).data('href');
+        return false;
+    });
+});
 
     var share_list = [], contact_email;
     {% for contact in contacts %}

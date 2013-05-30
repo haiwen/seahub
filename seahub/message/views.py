@@ -30,12 +30,17 @@ def message_list(request):
 
     messages = UserMessage.objects.get_messages_related_to_user(username)
     msgs = msg_info_list(messages, username)
-    
+
+    total_unread = 0
+    for msg in msgs:
+        total_unread += msg[1]['not_read']
+
     contacts = Contact.objects.get_registered_contacts_by_user(username)
 
     return render_to_response('message/all_msg_list.html', {
             'msgs': msgs,
-            'contacts': contacts
+            'contacts': contacts,
+            'total_unread': total_unread,
         }, context_instance=RequestContext(request))
 
 @login_required
