@@ -22,6 +22,8 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.template.defaultfilters import filesizeformat
+
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
@@ -46,7 +48,7 @@ from seahub.utils import HAS_OFFICE_CONVERTER, query_office_convert_status, \
     query_office_file_pages, prepare_converted_html
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+    OFFICE_PREVIEW_MAX_SIZE, FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 
 def get_user_permission(request, repo_id):
     if request.user.is_authenticated():
@@ -283,11 +285,17 @@ def view_file(request, repo_id):
     
     # Check file size
     fsize = get_file_size(obj_id)
+
     if fsize > FILE_PREVIEW_MAX_SIZE:
-        from django.template.defaultfilters import filesizeformat
         err = _(u'File size surpasses %s, can not be opened online.') % \
-                    filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            filesizeformat(FILE_PREVIEW_MAX_SIZE)
         ret_dict['err'] = err
+
+    elif filetype in (DOCUMENT, PDF) and fsize > OFFICE_PREVIEW_MAX_SIZE:
+        err = _(u'File size surpasses %s, can not be opened online.') % \
+            filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+        ret_dict['err'] = err
+
     else:
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
@@ -446,9 +454,13 @@ def view_history_file_common(request, repo_id, ret_dict):
         # Check file size
         fsize = get_file_size(obj_id)
         if fsize > FILE_PREVIEW_MAX_SIZE:
-            from django.template.defaultfilters import filesizeformat
             err = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            ret_dict['err'] = err
+
+        elif filetype in (DOCUMENT, PDF) and fsize > OFFICE_PREVIEW_MAX_SIZE:
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             ret_dict['err'] = err
         else:
             """Choose different approach when dealing with different type of file."""
