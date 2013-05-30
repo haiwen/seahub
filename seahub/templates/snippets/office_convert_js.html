@@ -14,7 +14,6 @@
         });
     }
     function query_page_num() {
-        get_file_css();
         $.ajax({
             url: "{% url 'office_convert_query_page_num' %}?file_id={{ obj_id }}",
             cache: false,
@@ -22,6 +21,7 @@
             success: function(data) {
                 if (data['success']) {
                     m_page_num = data['count'];
+                    get_file_css();
                     get_outline();
                 } else {
                     str = "{% trans "Document convertion failed." %}";

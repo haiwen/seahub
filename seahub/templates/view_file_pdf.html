@@ -1,23 +1,26 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 
-{% if not err %}
-{% if not use_pdfjs %}
-
 {% block extra_style %}{{ block.super }}
+{% if not err and not use_pdfjs %}
     {% include 'snippets/office_convert_style.html' %}
+{% endif %}
 {% endblock %}
 
 {% block file_view %}
+{% if not err and not use_pdfjs %}
     {% include 'snippets/office_convert_html.html' %}
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
+{% if not err %}
+
+{% if not use_pdfjs %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf2html.js"></script>
 <script type="text/javascript">
     {% include 'snippets/office_convert_js.html' %}
 </script>
-{% endblock %}
 
 {% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
@@ -75,6 +78,7 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
     $('#file-view').html('<div id="file-view-tip"><p>' + tip + '</p></div>');
 }
 </script>
+{% endif %}
+{% endif %}
 
-{% endif %} {# not use_pdf ends#}
-{% endif %} {# not err ends #}
+{% endblock %}
