@@ -24,6 +24,7 @@ from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
 
 from forms import RepoShareForm, FileLinkShareForm
 from models import AnonymousShare
+from signals import share_repo_to_user_successful
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
@@ -53,11 +54,6 @@ def share_repo(request):
     if request.method != 'POST':
         raise Http404
     
-    sender = request.user.username.split('@')[0]
-    http_or_https = request.is_secure() and 'https' or 'http'
-    domain = request.get_host()
-    head_of_repo_url = '%s://%s/' % (http_or_https, domain)
-
     form = RepoShareForm(request.POST)
     if not form.is_valid():
         # TODO: may display error msg on form 
@@ -137,15 +133,6 @@ def share_repo(request):
                 {'repo': repo.name, 'group': group.group_name}
             messages.error(request, msg)
         else:
-            # members = get_group_members(group.id)
-            
-            # for email in members:
-            #     message = UserMessage()
-            #     message.to_email = email
-            #     message.from_email = request.user.username
-            #     message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)  
-            #     message.ifread = 0
-            #     message.save()
             msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
             {'group':group.group_name, 'share':reverse('share_admin')}
             messages.success(request, msg)
@@ -172,16 +159,14 @@ def share_repo(request):
                 seafserv_threaded_rpc.add_share(repo_id, from_email, email,
                                                 permission)
             except SearpcError, e:
+                logger.error(e)
                 msg = _(u'Failed to share to %s .') % email
                 messages.add_message(request, messages.ERROR, msg)
                 continue
-            # #send message when share repo
-            # message = UserMessage()
-            # message.to_email = email
-            # message.from_email = request.user.username
-            # message.message = "(by system) %s have shared repo <a href='%s%s'>%s</a> to you." %(sender, head_of_repo_url +'repo/',repo.id,repo.name)           
-            # message.ifread = 0
-            # message.save()
+            # send a signal when sharing repo successful
+            share_repo_to_user_successful.send(sender=None,
+                                               from_user=from_email,
+                                               to_user=email, repo=repo)
             msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
                 {'email':email, 'share':reverse('share_admin')}
             messages.add_message(request, messages.INFO, msg)
@@ -567,8 +552,8 @@ def user_share_list(request, id_or_email):
         except User.DoesNotExist:
             user = None
         if not user:
-            # raise Http404
-            assert False, 'todo'
+            return render_to_response("user_404.html",{},
+                                      context_instance=RequestContext(request))
         to_email = user.email
     except ValueError:
         to_email = id_or_email

@@ -57,18 +57,22 @@ class UserMessage(models.Model):
     def __unicode__(self):
         return "%s|%s|%s" % (self.from_email, self.to_email, self.message)
 
-# class MessageAddForm(ModelForm):
-#     from_email = forms.EmailField()
-#     to_email   = forms.EmailField()
+### handle signals
+from django.core.urlresolvers import reverse
+from django.dispatch import receiver
+from seahub.share.signals import share_repo_to_user_successful
+from seahub.base.templatetags.seahub_tags import email2nickname
 
-#     def clean(self):
-#         if not 'to_email' in self.cleaned_data:
-#             raise forms.ValidationError(_('Email is required.'))
-            
-#         from_email = self.cleaned_data['from_email']
-#         to_email = self.cleaned_data['to_email']
+@receiver(share_repo_to_user_successful)
+def add_share_repo_msg(sender, **kwargs):
+    from_user = kwargs.get('from_user', '')
+    to_user = kwargs.get('to_user', '')
+    repo = kwargs.get('repo', None)
+    
+    if from_user and to_user and repo:
+        msg = _(u"(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> to you.") % \
+            {'user': email2nickname(from_user),
+             'href': reverse('repo', args=[repo.id]),
+             'repo_name': repo.name}
+        UserMessage.objects.add_unread_message(from_user, to_user, msg)
 
-#         if to_email == from_email:
-#             raise forms.ValidationError(_("You can't send to yourself."))
-#         else:
-#             return self.cleaned_data

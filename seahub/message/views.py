@@ -107,7 +107,7 @@ def message_send(request):
     
     form = MessageForm(request.POST)
     if not form.is_valid():
-        messages.error('Failed to send message, please try again later.')
+        messages.error(request, 'Failed to send message, please try again later.')
         return HttpResponseRedirect(next)
 
     mass_email = form.cleaned_data['mass_email']
