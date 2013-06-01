@@ -55,11 +55,11 @@
 
 {% block right_panel %}
 
-<div id="group-reply">
+<div id="group-reply" class="msg-panel">
     {% if request.user.is_authenticated %}
-    <form id="group-message-form" action="" method="post">{% csrf_token %}
+    <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
         {% avatar request.user.username 48 %}
-        <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
+        <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input">{{ form.data.message }}</textarea><br />
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}

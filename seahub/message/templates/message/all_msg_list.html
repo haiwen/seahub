@@ -3,113 +3,46 @@
 
 {% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
 
+{% block title_panel %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Messages" %}</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+
 {% block main_panel %}
-<h3>{% trans "Messages"%}</h3>
-<button id="message-send" class="add">{% trans "Add Message"%}</button>
 {% if msgs %}
 <table>
     <tr>
         <th width="5%"></th>
-        <th width="20%">{% trans " Email "%}</th>
-        <th width="60%">{% trans "Message"%}</th>
-        <th width="15%">{% trans "Time"%}</th>
+        <th width="25%">{% trans "Email"%}</th>
+        <th width="50%">{% trans "Message"%}</th>
+        <th width="20%">{% trans "Time"%}</th>
     </tr>
     {% for key,value in msgs %}
     {% with not_read=value.not_read %}
     <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
-        <td>{% avatar key 20 %}</td>       
+        <td class="icon-container">{% avatar key 20 %}</td>
         <td>{{ key }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
-        <td> {{ value.last_msg|truncatechars:60 }} </td>
-        <td>{{  value.last_time|translate_seahub_time }}</td>
+        <td>{{ value.last_msg|truncatechars:60 }}</td>
+        <td>{{ value.last_time|translate_seahub_time }}</td>
     </tr>
     {% endwith %}
     {% endfor %}
 </table>
 {% endif %}
-
-<form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
-    <h3>{% trans "Send message to"%}</h3>
-    
-    <div id="send-msg-tabs">
-        <ul id="send-msg-tabs-nav">
-            <li><a href="#share-enter">{% trans 'Enter' %}</a></li>
-            <li><a href="#share-contact-options">{% trans 'Contacts' %}</a></li>
-        </ul>
-        <div id="share-enter">
-            <textarea id="mass_email" name="mass_email" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
-            <p class="tip">{% trans 'Tip: You can write message under here.' %}</p>
-        </div>
-        <div id="share-contact-options" class="hide">
-            <ul class="option-list">
-            {% for contact in contacts %}
-            <li>
-            <label class="checkbox-label">
-                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
-                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
-            </label>
-            </li>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
-
-    <div><textarea id="mass_msg" name="mass_msg" placeholder="{% trans "the message you want to send !"%}"></textarea></div>
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />
-</form>
-
 {% endblock %}
 
 {% block extra_script %}
-<!-- <script src="{{ MEDIA_URL }}/js/dojo.js"> -->
-<!-- </script> -->
 <script type="text/javascript">
-
 $(function(){       
-    $('*[data-href]').click(function(){
-        window.location = $(this).data('href');
-        return false;
+    $('tr[data-href]').click(function() {
+        location.href = $(this).data('href');
     });
 });
-
-    var share_list = [], contact_email;
-    {% for contact in contacts %}
-    contact_email = '{{ contact.contact_email }}';
-    share_list.push({value:contact_email, label:contact_email});
-    {% endfor %}
-
-    $(".add").click(function() {
-        $("#send-msg-form").modal({appendTo: "#main", focus:false});
-        $('#send-msg-tabs').tabs();
-        $('#simplemodal-container').css('height', 'auto');
-        addAutocomplete('#mass_email', '#send-msg-form', share_list);
-    });
-
-    //check before post
-    $('#share-submit-btn').click(function() {
-        var cur_tab_id = $('#send-msg-tabs-nav .ui-tabs-selected a').attr('href');
-        var post_data = '';
-        switch(cur_tab_id) {
-            case '#share-enter':
-                post_data = $('#mass_email').val();
-                break;
-            case '#share-contact-options':
-                $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
-                    post_data += $(this).val() + ',';
-                });
-                $('#mass_email').val(post_data);
-        }
-        if (!post_data) {
-            apply_form_error('send-msg-form', "{% trans "Please enter emails or select some at first." %}");
-            return false;
-        }
-        if (!$('#mass_msg').val()) {
-            apply_form_error('send-msg-form', "{% trans "Message can not be empty." %}");
-            return false;
-        }
-        $("#send-msg-form").submit();
-        disable($(this));
-    });
-
 </script>
 {% endblock %}

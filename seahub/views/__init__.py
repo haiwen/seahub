@@ -2280,6 +2280,21 @@ def get_group_repos(request, group_id):
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
+def get_contacts(request):
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+
+    username = request.user.username
+    contacts = Contact.objects.get_contacts_by_user(username)
+    contact_emails = [] 
+    for c in contacts:
+        contact_emails.append(c.contact_email)
+
+    return HttpResponse(json.dumps({"contacts":contact_emails}), content_type=content_type)
+
+@login_required
 def convert_cmmt_desc_link(request):
     """Return user to file/directory page based on the changes in commit.
     """

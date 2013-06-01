@@ -40,7 +40,7 @@
     <ul class="info-item-bottom">
         {% if grpmsg_list %}
         <li>
-        {% for grp in grpmsg_list %}<a href="{% url 'group_discuss' grp.id %}" class="no-bold">{{ grp.group_name }} </a>{% endfor %}
+        {% for grp in grpmsg_list %}<a href="{% url 'group_discuss' grp.id %}" class="no-bold">{{ grp.group_name }}</a> {% endfor %}
         {% blocktrans count counter=grpmsg_list|length %}
         has new discussion
         {% plural %}

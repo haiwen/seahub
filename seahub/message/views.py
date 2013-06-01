@@ -19,7 +19,6 @@ from seahub.views import is_registered_user
 from seahub.contacts.models import Contact
 from seahub.utils.paginator import Paginator
 from seahub.settings import SITE_ROOT
-from forms import MessageForm
 
 @login_required
 def message_list(request):
@@ -35,11 +34,8 @@ def message_list(request):
     for msg in msgs:
         total_unread += msg[1]['not_read']
 
-    contacts = Contact.objects.get_registered_contacts_by_user(username)
-
     return render_to_response('message/all_msg_list.html', {
             'msgs': msgs,
-            'contacts': contacts,
             'total_unread': total_unread,
         }, context_instance=RequestContext(request))
 
@@ -105,43 +101,47 @@ def message_send(request):
     if next is None:
         next = SITE_ROOT
     
-    form = MessageForm(request.POST)
-    if not form.is_valid():
-        messages.error(request, 'Failed to send message, please try again later.')
+    mass_msg = request.POST.get('mass_msg')
+    mass_emails = request.POST.getlist('mass_email') # e.g: [u'1@1.com, u'2@1.com']
+    if not mass_msg:
+        messages.error(request, _(u'message is required'))
+        return HttpResponseRedirect(next)
+    if not mass_emails:
+        messages.error(request, _(u'contact is required'))
         return HttpResponseRedirect(next)
 
-    mass_email = form.cleaned_data['mass_email']
-    mass_msg = form.cleaned_data['mass_msg']
-
     email_sended = []
-    for to_email in mass_email.split(','):
+    for to_email in mass_emails:
         to_email = to_email.strip()
         if not to_email:
             continue
 
         if to_email == username:
-            messages.error(request, 'You can not send message to yourself.')
+            messages.error(request, _(u'You can not send message to yourself.'))
             continue
 
         if not is_registered_user(to_email):
-            messages.error(request, 'Failed to send message to %s, user not found.' % to_email)
+            messages.error(request, _(u'Failed to send message to %s, user not found.') % to_email)
             continue
 
         UserMessage.objects.add_unread_message(username, to_email, mass_msg)
         email_sended.append(to_email)
 
     if email_sended:
-        messages.success(request, 'Message sent successfully.')
+        messages.success(request, _(u'Message sent successfully.'))
     return HttpResponseRedirect(next)
 
 @login_required
 def msg_count(request):
     """Count user's unread message.
     """
-    result = {}
+    if not request.is_ajax():
+        raise Http404
+
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
     
     count = UserMessage.objects.count_unread_messages_by_user(username)
+    result = {}
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)

@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1369028460" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1369028460" />
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1369028460" />
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1369028460"/>
@@ -34,29 +35,42 @@
                 <div class="top-bar-con">
                     <div class="manage fleft">
                         {% if request.user.is_staff %}
-                        <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}{% endblock %}>{% trans "System Admin" %}</a>
-                        <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}{% endblock %}>{% trans "Workspace" %}</a>
+                        <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}class="top-link"{% endblock %}>{% trans "System Admin" %}</a>
+                        <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}class="top-link"{% endblock %}>{% trans "Workspace" %}</a>
                         {% endif %}
                     </div>
 
                     <div class="account fright">
                         {% if request.user.is_authenticated %}
-                        <a href="{% url 'edit_profile' %}" class="avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span>{{ request.user }}</span>
-                        <a href="{% url 'message_list' %}" id="msg_count"><img src="{{ MEDIA_URL }}/img/mail.png" width="25" height="20" /></b></a>
-                        <a href="{{ SITE_ROOT }}accounts/logout/">{% trans "Log out" %}</a>
+                        <span class="my-info"><a href="{% url 'edit_profile' %}" class="top-link avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span class="bold">{{ request.user }}</span></span>
+                        <button class="icon-envelope" id="add-msg" title="{% trans "send a message" %}"></button>
+                        <button data-url="{% url 'message_list' %}" id="msg-count" title="{% trans "unread messages" %}">0</button>
+                        <a href="{{ SITE_ROOT }}accounts/logout/" class="top-link">{% trans "Log out" %}</a>
                         {% else %}
-                        <a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log In" %}</a>
+                        <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>
                             {% if enable_signup %}
-                        <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
+                        <a href="{{ SITE_ROOT }}accounts/register/" class="top-link">{% trans "Signup" %}</a>
                             {% endif %}
                         {% endif %}
-                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="tri-bg tri-down-bg"></span></a>
+                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="tri-bg tri-down-bg"></span></a>
                         <ul class="hide" id="lang-context-selector">
                             {% for LANG in LANGUAGES %}
                             <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
+
+                    <div id="send-msg-popup" class="hide">
+                        <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
+                        <form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
+                            <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
+                            <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
+                            <p class="error hide"></p>
+                            <input type="submit" value="{% trans "Submit"%}" />
+                            <input type="button" value="{% trans "Cancel"%}" />
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -191,8 +205,10 @@
             </div>
         </div>
 </div><!-- wrapper -->
+
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1369028460"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1369028460"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1369028460"></script>
 <script type="text/javascript">
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
@@ -219,25 +235,87 @@ $('#info-bar .close').click(function() {
 });
 {% endif %}
 
-
 $(document).ready(function(){
     $.ajax({
         url: '{% url 'msg_count' %}',
         dataType: 'json',
-        cache: 'false',
-        contentType: 'application/json; charset=utf-8',
-        beforeSend: prepareCSRFToken,
-        data: {
-            'user_email': 'user',
-        },  
+        cache: false,
         success: function(data) {
-            if (data['count']!=-1) {
-                var count="<b><img src='{{ MEDIA_URL }}/img/mail.png' width='25' height='20' />("+data['count']+")</b>";
-                $("#msg_count").html(count);
+            if (data['count'] != -1) {
+                $("#msg-count").html(data['count']);
+            }
+        }
+    });
+});
+
+$('#add-msg').click(function() {
+    var add_msg_btn = $('#add-msg'),
+        popup = $('#send-msg-popup');
+
+    if (!popup.hasClass('hide')) {
+        popup.addClass('hide');
+        add_msg_btn.removeClass('add-msg-hl');
+        return;
+    }
+
+    popup.removeClass('hide');
+    add_msg_btn.addClass('add-msg-hl');
+    $.ajax({
+        url:'{% url 'get_contacts' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var contacts = data['contacts'],
+                opts = '';
+            if (contacts.length > 0) {
+                popup.find('.loading-tip').remove();
+                $('#send-msg-form').removeClass('hide');
+
+                for(var i = 0, len = contacts.length; i < len; i++) {
+                   opts += '<option value="' + contacts[i] + '">' + contacts[i] + '</option>';
+                }
+                $('#mass-email').html(opts).select2({
+                    placeholder: "{% trans "send to: click to select contacts" %}"
+                });
+            } else {
+                popup.html('<p>' + "{% trans "please add contacts at first" %}" + '</p>');
             }
         },
+        error: function() {
+            popup.html('<p class="error">' + "{% trans "Failed to get your contacts for sending a message." %}" + '</p>');
+        }
     });
-    return false;
+});
+/*
+$(document).click(function(e) {
+    var target = e.target || event.srcElement,
+        popup = $('#send-msg-popup'),
+        popup_switch = $('#add-msg');
+    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
+        popup.addClass('hide');
+        $('#add-msg').removeClass('add-msg-hl');
+    }    
+});
+*/
+$('#send-msg-form [type="button"]').click(function() {
+        $('#send-msg-popup').addClass('hide');
+        $('#add-msg').removeClass('add-msg-hl');
+});
+
+$('#send-msg-form').submit(function() {
+    var form_id = $(this).attr('id');
+    if (!$('#mass-msg').val()) {
+        apply_form_error(form_id, "{% trans "message is required" %}");
+        return false;
+    }
+    if (!$('#mass-email').val()) { // val is null or ['xx',...]
+        apply_form_error(form_id, "{% trans "contact is required" %}");
+        return false;
+    }
+});
+
+$('#msg-count').click(function() {
+    location.href = $(this).data('url');
 });
 
 {% if has_file_search %}
@@ -272,9 +350,10 @@ $('#advanced-search-form').submit(function() {
     }
 });
 $(document).click(function(e) {
-    var target = e.target || event.srcElement;
-    var popup = $('#advanced-search-form');
-    if (!popup.is(target) && !popup.find('*').is(target) && !$('#top-search-form .icon-caret-down').is(target)) {
+    var target = e.target || event.srcElement,
+        popup = $('#advanced-search-form'),
+        popup_switch = $('#top-search-form .icon-caret-down');
+    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
         popup.addClass('hide');
     }    
 });
@@ -321,6 +400,8 @@ $(document).click(function(e) {
         {'name':'star-empty', 'con':'f006'},
         {'name':'caret-down', 'con':'f0d7'},
         {'name':'ok', 'con':'f00c'},
+        {'name':'double-angle-left', 'con':'f100'},
+        {'name':'double-angle-right', 'con':'f101'},
         {'name':'double-angle-up', 'con':'f102'},
         {'name':'double-angle-down', 'con':'f103'}
     ];  

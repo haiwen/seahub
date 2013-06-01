@@ -29,13 +29,13 @@
     </ul>
 </div>
 
-<div id="personal-reply">
+<div id="personal-msg-panel" class="msg-panel personal-msg-panel">
 
     {% if request.user.is_authenticated %}
     {% if to_email %}
-    <form id="personal-message-form" action="{% url 'message_send' %}" method="post" onsubmit="return check(this)">{% csrf_token %}
+    <form id="personal-message-form" class="msg-form" action="{% url 'message_send' %}" method="post" onsubmit="return check(this)">{% csrf_token %}
        {% avatar request.user.username 48 %}
-        <textarea name="mass_msg" id="message" placeholder="{% trans "Send a message..." %}"></textarea><br />
+        <textarea name="mass_msg" id="message" placeholder="{% trans "Send a message..." %}" class="msg-input"></textarea><br />
         <input type = "hidden" value = "{{ to_email }}" name= "mass_email"/>
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
@@ -49,40 +49,36 @@
     {% if person_msgs %}
     <ul class="msg-list">
     {% for msg in person_msgs.object_list %}
-        <li class="msg w100 ovhd">
         {% if msg.to_email == request.user.email %}
-        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
-        
+        <li class="msg msg-received w100 ovhd">
+        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
         <div class="txt">
-            <div class="msg-main" style="text-align:right;">
+            <div class="msg-main">
                 <div class="msg-hd w100 ovhd">                    
-                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
-                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
+                    <a class="author" href="{% url 'user_msg_list' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>
                 <span class="say"></span>
             </div>
         </div>
-
+        </li>
         {% else %}        
+
+        <li class="msg w100 ovhd">
         <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         <div class="txt">
             <div class="msg-main">
-                
                 <div class="msg-hd w100 ovhd">
-                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{% trans 'I' %}</a>
-                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>&nbsp;&nbsp;{% trans 'Say' %}:
+                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|safe|seahub_urlize|find_at|linebreaksbr }}</p>
                 <span class="say"></span>
-                
             </div>
         </div>      
-
-        {% endif %}
-
-
         </li>
+        {% endif %}
     {% endfor %}
     </ul>
     {% endif %}
@@ -107,7 +103,7 @@
     {% endif %}
 
     {% if person_msgs.object_list|length > 5 %}
-    <a href="#personal-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
+    <a href="#personal-msg-panel" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
     {% endif %}
 
     {% else %}
