@@ -286,8 +286,10 @@ $('#add-msg').click(function() {
         }
     });
 });
-/*
 $(document).click(function(e) {
+    if (e.eventPhase == 2) { // for ff
+        return;
+    }
     var target = e.target || event.srcElement,
         popup = $('#send-msg-popup'),
         popup_switch = $('#add-msg');
@@ -296,7 +298,6 @@ $(document).click(function(e) {
         $('#add-msg').removeClass('add-msg-hl');
     }    
 });
-*/
 $('#send-msg-form [type="button"]').click(function() {
         $('#send-msg-popup').addClass('hide');
         $('#add-msg').removeClass('add-msg-hl');
