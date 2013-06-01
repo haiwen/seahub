@@ -499,7 +499,6 @@
 
         // Removes the last state and restores it.
         this.undo = function () {
-
             if (undoObj.canUndo()) {
                 if (lastState) {
                     // What about setting state -1 to null or checking for undefined?
@@ -650,12 +649,18 @@
             });
 
             var handlePaste = function () {
-                if (uaSniffed.isIE || (inputStateObj && inputStateObj.text != panels.input.value)) {
+                /*if (uaSniffed.isIE || (inputStateObj && inputStateObj.text != panels.input.value)) {
                     if (timer == undefined) {
                         mode = "paste";
                         saveState();
                         refreshState();
                     }
+                }*/
+                // modified by plt: always save state before paste
+                if (timer == undefined) {
+                    mode = "paste";
+                    saveState();
+                    refreshState();
                 }
             };
 
@@ -1255,15 +1260,15 @@
                         doClick(buttons.hr);
                         break;
                     case "y":
-                        doClick(buttons.redo);
+                        //doClick(buttons.redo);
                         break;
                     case "z":
-                        if (key.shiftKey) {
-                            doClick(buttons.redo);
-                        }
-                        else {
-                            doClick(buttons.undo);
-                        }
+                        //if (key.shiftKey) {
+                        //    doClick(buttons.redo);
+                        //}
+                        //else {
+                        //    doClick(buttons.undo);
+                        //}
                         break;
                     default:
                         return;
