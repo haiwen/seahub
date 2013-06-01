@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
 from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_POST
 
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
@@ -32,7 +33,6 @@ from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
-# from seahub.message.models import UserMessage
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, IS_EMAIL_CONFIGURED
@@ -46,14 +46,107 @@ from seahub.settings import SITE_ROOT
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def share_to_public(request, repo, permission):
+    """Share repo to public with given permission.
+    """
+    repo_id = repo.id
+    try:
+        seafile_api.add_inner_pub_repo(repo_id, permission)
+    except Exception, e:
+        logger.error(e)
+        messages.error(request, _(u'Failed to share to all members, please try again later.'))
+    else:
+        msg = _(u'Shared to all members successfully, go check it at <a href="%s">Shares</a>.') % \
+            (reverse('share_admin'))
+        messages.success(request, msg)
+
+def share_to_group(request, repo, from_user, group, permission):
+    """Share repo to group with given permission.
+    """
+    repo_id = repo.id
+    group_id = group.id
+    group_name = group.group_name
+    
+    if repo.id in seafile_api.get_group_repoids(group.id):
+        msg = _(u'"%(repo)s" is already in group %(group)s. <a href="%(href)s">View</a>') % {
+            'repo': repo.name, 'group': group.group_name,
+            'href': reverse('group_info', args=[group.id])}
+        messages.error(request, msg)
+        return
+
+    try:
+        seafile_api.group_share_repo(repo_id, group_id, from_user, permission)
+    except Exception, e:
+        logger.error(e)
+        msg = _(u'Failed to share %(repo)s to %(group)s, please try again later.') % \
+            {'repo': repo.name, 'group': group_name}
+        messages.error(request, msg)
+    else:
+        msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
+            {'group':group_name, 'share':reverse('share_admin')}
+        messages.success(request, msg)
+        
+def share_to_user(request, repo, from_user, to_user, permission):
+    """Share repo to a user with given permission.
+    """
+    repo_id = repo.id
+
+    if is_registered_user(to_user):
+        try:
+            seafile_api.share_repo(repo_id, from_user, to_user, permission)
+        except Exception, e:
+            logger.error(e)
+            msg = _(u'Failed to share to %s, please try again later.') % to_user
+            messages.error(request, msg)
+        else:
+            # send a signal when sharing repo successful
+            share_repo_to_user_successful.send(sender=None,
+                                               from_user=from_user,
+                                               to_user=to_user, repo=repo)
+            msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
+                {'email':to_user, 'share':reverse('share_admin')}
+            messages.success(request, msg)
+    else:
+        msg = _(u'Failed to share to %s, as the email is not registered.') % to_user
+        messages.error(request, msg)
+
+def check_user_share_quota(username, repo, users=[], groups=[]):
+    """Check whether user has enough quota when share repo to users/groups.
+    """
+    if not users and not groups:
+        return True
+
+    if not seaserv.CALC_SHARE_USAGE:
+        return True
+    
+    check_pass = False
+    quota = seafile_api.get_user_quota(username)
+    self_usage = seafile_api.get_user_self_usage(username)
+    current_share_usage = seafile_api.get_user_share_usage(username)
+
+    share_usage = 0
+    if users:
+        share_usage += seafile_api.get_repo_size(repo.id) * (len(users))
+        
+    if groups:
+        grp_members = []
+        for group in groups:
+            grp_members += [ e.user_name for e in seaserv.get_group_members(group.id)]
+        grp_members = set(grp_members)
+        share_usage += seafile_api.get_repo_size(repo.id) * (len(grp_members) -1)
+    if share_usage + self_usage + current_share_usage < quota:
+        check_pass = True
+
+    return check_pass
+
 @login_required
+@require_POST
 def share_repo(request):
     """
-    Handle repo share request
+    Handle POST method to share a repo to public/groups/users based on form
+    data. Return to ``myhome`` page and notify user whether success or failure. 
     """
-    if request.method != 'POST':
-        raise Http404
-    
+
     form = RepoShareForm(request.POST)
     if not form.is_valid():
         # TODO: may display error msg on form 
@@ -70,8 +163,12 @@ def share_repo(request):
 
     # Test whether user is the repo owner.
     if not validate_owner(request, repo_id):
-        return render_permission_error(request, _(u'Only the owner of the library has permission to share it.'))
+        msg = _(u'Only the owner of the library has permission to share it.')
+        messages.error(request, msg)
+        return HttpResponseRedirect(reverse('myhome'))
+    
 
+    # Parsing input values.
     share_to_list = string2list(email_or_group)
     share_to_all, share_to_group_names, share_to_users = False, [], []
     for share_to in share_to_list:
@@ -90,86 +187,23 @@ def share_repo(request):
         if group.group_name in share_to_group_names:
             share_to_groups.append(group)
 
-    # Check whether this user has enough quota when cal_share_usage is enabled.
-    # share_usage = repo_size * union(share_to_users + members_of(share_to_groups))
-    if seaserv.CALC_SHARE_USAGE:
-        clone = list(share_to_users)
-        for group in share_to_groups:
-            clone += [ e.user_name for e in seaserv.get_group_members(group.id)]
-        clone = set(clone)
-        # Since that user is also in share_to_users when called
-        # ``get_group_members``, so need to minus one when counting.
-        share_usage = seaserv.server_repo_size(repo.id) * (len(clone) - 1)
-        # check quota usage
-        quota = seaserv.get_user_quota(from_email)
-        quota_usage = seaserv.get_user_quota_usage(from_email)
-        current_share_usage = seaserv.get_user_share_usage(from_email)
-        if share_usage + quota_usage + current_share_usage > quota:
-            messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
-            return HttpResponseRedirect(reverse('myhome'))
 
-    ''' Share to public '''
-    if share_to_all:
-        # ignore 'all' if we're running in cloud mode
-        if not CLOUD_MODE:
-            try:
-                seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-            except:
-                messages.error(request, _(u'Failed to share to all members'))
-            else:
-                msg = _(u'Shared to all members successfully, go check it at <a href="%s">Shares</a>.') % \
-                    (reverse('share_admin'))
-                messages.success(request, msg)
+    if share_to_all and not CLOUD_MODE:
+        share_to_public(request, repo, permission)
 
-    ''' Share to groups '''
+    if not check_user_share_quota(from_email, repo, users=share_to_users,
+                                  groups=share_to_groups):
+        messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
+        return HttpResponseRedirect(reverse('myhome'))
+        
     for group in share_to_groups:
-        from seahub.group.views import add_group_repo
-        try:
-            add_group_repo(request, repo_id, int(group.id), from_email,
-                           permission)
-        except Exception, e:
-            logger.error(e)
-            msg = _(u'Failed to share %(repo)s to %(group)s, please try again later.') % \
-                {'repo': repo.name, 'group': group.group_name}
-            messages.error(request, msg)
-        else:
-            msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Share</a>.') % \
-            {'group':group.group_name, 'share':reverse('share_admin')}
-            messages.success(request, msg)
-    
-    ''' Share to users '''
+        share_to_group(request, repo, from_email, group, permission)
+
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        if not is_registered_user(email):
-            # Generate shared link and send mail if user has not registered.
-            # is_encrypted = True if repo.encrypted else False
-            # kwargs = {'repo_id': repo_id,
-            #           'repo_owner': from_email,
-            #           'anon_email': email,
-            #           'is_encrypted': is_encrypted,
-            #           }
-            # anonymous_share(request, **kwargs)
-            msg = _(u'Failed to share to %s, as the email is not registered.') % email
-            messages.add_message(request, messages.ERROR, msg)
-            continue
-        else:
-            # Record share info to db.
-            try:
-                seafserv_threaded_rpc.add_share(repo_id, from_email, email,
-                                                permission)
-            except SearpcError, e:
-                logger.error(e)
-                msg = _(u'Failed to share to %s .') % email
-                messages.add_message(request, messages.ERROR, msg)
-                continue
-            # send a signal when sharing repo successful
-            share_repo_to_user_successful.send(sender=None,
-                                               from_user=from_email,
-                                               to_user=email, repo=repo)
-            msg = _(u'Shared to %(email)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
-                {'email':email, 'share':reverse('share_admin')}
-            messages.add_message(request, messages.INFO, msg)
+        share_to_user(request, repo, from_email, email, permission)
+
     return HttpResponseRedirect(reverse('myhome'))
 
 @login_required
@@ -331,82 +365,82 @@ def share_permission_admin(request):
 # - anonymous_share_confirm checks the link use clicked and
 #   adds token to client COOKIE, then redirect client to repo page
 
-def anonymous_share(request, email_template_name='repo/anonymous_share_email.html', **kwargs):
-    repo_id = kwargs['repo_id']
-    repo_owner = kwargs['repo_owner']
-    anon_email = kwargs['anon_email']
-    is_encrypted = kwargs['is_encrypted']
+# def anonymous_share(request, email_template_name='repo/anonymous_share_email.html', **kwargs):
+#     repo_id = kwargs['repo_id']
+#     repo_owner = kwargs['repo_owner']
+#     anon_email = kwargs['anon_email']
+#     is_encrypted = kwargs['is_encrypted']
 
-    # Encrypt repo can not be shared to unregistered user.
-    if is_encrypted:
-        msg = _(u'Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site.') % anon_email
-        messages.error(request, msg)
-        return
+#     # Encrypt repo can not be shared to unregistered user.
+#     if is_encrypted:
+#         msg = _(u'Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site.') % anon_email
+#         messages.error(request, msg)
+#         return
     
-    token = anon_share_token_generator.make_token()
+#     token = anon_share_token_generator.make_token()
 
-    anon_share = AnonymousShare()
-    anon_share.repo_owner = repo_owner
-    anon_share.repo_id = repo_id
-    anon_share.anonymous_email = anon_email
-    anon_share.token = token
+#     anon_share = AnonymousShare()
+#     anon_share.repo_owner = repo_owner
+#     anon_share.repo_id = repo_id
+#     anon_share.anonymous_email = anon_email
+#     anon_share.token = token
 
-    try:
-        anon_share.save()
-    except:
-        msg = _(u'Failed to share to %s.') % anon_email
-        messages.add_message(request, messages.ERROR, msg)
-    else:
-        # send mail
-        use_https = request.is_secure()
-        site_name = domain = RequestSite(request).domain
+#     try:
+#         anon_share.save()
+#     except:
+#         msg = _(u'Failed to share to %s.') % anon_email
+#         messages.add_message(request, messages.ERROR, msg)
+#     else:
+#         # send mail
+#         use_https = request.is_secure()
+#         site_name = domain = RequestSite(request).domain
 
-        t = loader.get_template(email_template_name)
-        c = {
-            'email': repo_owner,
-            'anon_email': anon_email,
-            'domain': domain,
-            'site_name': site_name,
-            'token': token,
-            'protocol': use_https and 'https' or 'http',
-            }
+#         t = loader.get_template(email_template_name)
+#         c = {
+#             'email': repo_owner,
+#             'anon_email': anon_email,
+#             'domain': domain,
+#             'site_name': site_name,
+#             'token': token,
+#             'protocol': use_https and 'https' or 'http',
+#             }
 
-        try:
-            send_mail(_(u'You are shared with a library in Seafile'), t.render(Context(c)), None,
-                      [anon_email], fail_silently=False)
-        except:
-            AnonymousShare.objects.filter(token=token).delete()
-            msg = _(u'Failed to share to %s.') % anon_email
-            messages.add_message(request, messages.ERROR, msg)
-        else:
-            msg = _(u'Shared to %(email)s successfully, go check it at <a href="%(share)s">Share</a>.') % \
-                    {'email':anon_email, 'share':reverse('share_admin')}
-            messages.add_message(request, messages.INFO, msg)
+#         try:
+#             send_mail(_(u'You are shared with a library in Seafile'), t.render(Context(c)), None,
+#                       [anon_email], fail_silently=False)
+#         except:
+#             AnonymousShare.objects.filter(token=token).delete()
+#             msg = _(u'Failed to share to %s.') % anon_email
+#             messages.add_message(request, messages.ERROR, msg)
+#         else:
+#             msg = _(u'Shared to %(email)s successfully, go check it at <a href="%(share)s">Share</a>.') % \
+#                     {'email':anon_email, 'share':reverse('share_admin')}
+#             messages.add_message(request, messages.INFO, msg)
 
-def anonymous_share_confirm(request, token=None):
-    assert token is not None # checked by URLconf
+# def anonymous_share_confirm(request, token=None):
+#     assert token is not None # checked by URLconf
 
-    # Check whether token in db
-    try:
-        anon_share = AnonymousShare.objects.get(token=token)
-    except AnonymousShare.DoesNotExist:
-        raise Http404
-    else:
-        res = HttpResponseRedirect(reverse('repo', args=[anon_share.repo_id]))
-        res.set_cookie("anontoken", token,
-                       max_age=ANONYMOUS_SHARE_COOKIE_TIMEOUT)
-        return res
+#     # Check whether token in db
+#     try:
+#         anon_share = AnonymousShare.objects.get(token=token)
+#     except AnonymousShare.DoesNotExist:
+#         raise Http404
+#     else:
+#         res = HttpResponseRedirect(reverse('repo', args=[anon_share.repo_id]))
+#         res.set_cookie("anontoken", token,
+#                        max_age=ANONYMOUS_SHARE_COOKIE_TIMEOUT)
+#         return res
 
-def remove_anonymous_share(request, token):
-    AnonymousShare.objects.filter(token=token).delete() 
+# def remove_anonymous_share(request, token):
+#     AnonymousShare.objects.filter(token=token).delete() 
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('share_admin')
+#     next = request.META.get('HTTP_REFERER', None)
+#     if not next:
+#         next = reverse('share_admin')
 
-    messages.add_message(request, messages.INFO, _(u'Deleted successfully.'))
+#     messages.add_message(request, messages.INFO, _(u'Deleted successfully.'))
     
-    return HttpResponseRedirect(next)
+#     return HttpResponseRedirect(next)
 
 @login_required
 def get_shared_link(request):
