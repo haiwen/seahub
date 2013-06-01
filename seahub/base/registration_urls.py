@@ -36,7 +36,7 @@ except ImportError:
     CLOUD_MODE = False
 from seahub.settings import ENABLE_SIGNUP
 
-if CLOUD_MODE or ENABLE_SIGNUP:
+if ENABLE_SIGNUP:
     urlpatterns += patterns('',
         url(r'^register/$',
             register,

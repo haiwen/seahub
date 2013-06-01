@@ -20,12 +20,13 @@ class BaseMiddleware(object):
             request.cloud_mode = True
             
             # Get all orgs user created.
-            orgs = get_orgs_by_user(request.user.username)
-            request.user.orgs = orgs
+            # orgs = get_orgs_by_user(request.user.username)
+            # request.user.orgs = orgs
         else:
             request.cloud_mode = False
-            request.user.org = None
-            request.user.orgs = None
+
+        request.user.org = None
+        request.user.orgs = None
             
         return None
 
