@@ -34,7 +34,7 @@
     </div>
 </div>
 
-{% if grpmsg_list or grpmsg_reply_list or orgmsg_list %}
+{% if grpmsg_list or grpmsg_reply_list %}
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Reminding..." %}</h3>
     <ul class="info-item-bottom">
@@ -57,14 +57,6 @@
         {% endblocktrans %}</a></li>
         {% endif %}
 
-        {% if orgmsg_list %}
-        <li><a href="{% url 'org_msg' %}" class="no-bold">
-          {% blocktrans count counter=orgmsg_list|length %}
-          one org message
-          {% plural %}
-          {{ counter }} org messages
-          {% endblocktrans %}</a></li>
-        {% endif %}
     </ul>
 </div>
 {% endif %}

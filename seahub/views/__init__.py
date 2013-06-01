@@ -816,18 +816,16 @@ def myhome(request):
     # user notifications
     grpmsg_list = []
     grpmsg_reply_list = []
-    orgmsg_list = []
+    joined_group_ids = [x.id for x in joined_groups]
     notes = UserNotification.objects.filter(to_user=request.user.username)
     for n in notes:
         if n.msg_type == 'group_msg':
-            grp = get_group(n.detail)
-            if not grp:
+            if int(n.detail) not in joined_group_ids:
                 continue
+            grp = get_group(int(n.detail))
             grpmsg_list.append(grp)
         elif n.msg_type == 'grpmsg_reply':
             grpmsg_reply_list.append(n.detail)
-        elif n.msg_type == 'org_join_msg':
-            orgmsg_list.append(n.detail)
 
     # get nickname
     profiles = Profile.objects.filter(user=request.user.username)
@@ -836,15 +834,7 @@ def myhome(request):
     autocomp_groups = joined_groups
     contacts = Contact.objects.get_registered_contacts_by_user(email)
 
-    
-    if request.cloud_mode:
-        allow_public_share = False
-    else:
-        allow_public_share = True
-
-        # Clear org messages just in case. Should never happen in production
-        # environment.
-        orgmsg_list = []        
+    allow_public_share = False if request.cloud_mode else True
 
     # events
     if EVENTS_ENABLED:
@@ -882,7 +872,6 @@ def myhome(request):
             "notes": notes,
             "grpmsg_list": grpmsg_list,
             "grpmsg_reply_list": grpmsg_reply_list,
-            "orgmsg_list": orgmsg_list,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "events": events,
