@@ -1119,7 +1119,7 @@ def repo_file_get(raw_path, file_enc):
 
     return err, file_content, encoding
 
-def get_file_content(filetype, raw_path, obj_id, fileext, file_enc):
+def get_file_content(filetype, raw_path, obj_id, fileext, file_enc, ret_dict):
     err = ''
     file_content = ''
     html_exists = False
@@ -1712,6 +1712,7 @@ def view_shared_file(request, token):
     if not repo:
         raise Http404
 
+    ret_dict = {}
     access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
                                                      'view', '')
     
@@ -1724,7 +1725,7 @@ def view_shared_file(request, token):
     file_enc = request.GET.get('file_enc', 'auto')
     if not file_enc in FILE_ENCODING_LIST:
         file_enc = 'auto'
-    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc)
+    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc, ret_dict)
     file_encoding_list = FILE_ENCODING_LIST
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
@@ -1761,6 +1762,7 @@ def view_shared_file(request, token):
             'file_encoding_list':file_encoding_list,
             'html_exists': html_exists,
             'use_pdfjs':USE_PDFJS,
+            'html_detail': ret_dict.get('html_detail', {}),
             }, context_instance=RequestContext(request))
 
 def view_shared_dir(request, token):
@@ -1835,6 +1837,7 @@ def view_file_via_shared_dir(request, token):
     if not file_id:
         return render_error(request, _(u'File does not exist'))
 
+    ret_dict = {}
     access_token = seafserv_rpc.web_get_access_token(repo.id, file_id,
                                                      'view', '')
     filetype, fileext = get_file_type_and_ext(file_name)
@@ -1844,7 +1847,7 @@ def view_file_via_shared_dir(request, token):
     file_enc = request.GET.get('file_enc', 'auto')
     if not file_enc in FILE_ENCODING_LIST:
         file_enc = 'auto'
-    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, file_id, fileext, file_enc)
+    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, file_id, fileext, file_enc, ret_dict)
     file_encoding_list = FILE_ENCODING_LIST
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
@@ -1881,6 +1884,7 @@ def view_file_via_shared_dir(request, token):
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
             'token': token,
+            'html_detail': ret_dict.get('html_detail', {}),
             }, context_instance=RequestContext(request))
     
 def demo(request):
