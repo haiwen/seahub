@@ -1004,19 +1004,14 @@ if HAS_OFFICE_CONVERTER:
     def get_converted_html_detail(file_id):    
         d = {}
         outline_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.outline')
-        css_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.css')
 
         with open(outline_file, 'r') as fp:
             outline = fp.read()
-
-        with open(css_file, 'r') as fp:
-            css = fp.read()
 
         page_num = query_office_file_pages(file_id).count
 
         d['outline'] = outline
         d['page_num'] = page_num
-        d['css'] = css
 
         return d
 
