@@ -89,9 +89,9 @@ def contact_add(request):
         contact.note = form.cleaned_data['note']
         contact.save()
             
-        messages.success(request, _(u"Successfully added %s.") % contact_email)
+        messages.success(request, _(u"Successfully added %s to contacts.") % contact_email)
     else:
-        messages.error(request, _('Failed to add an contact.'))
+        messages.error(request, _('Failed to add %s to contacts.'))
     
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:

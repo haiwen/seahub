@@ -91,6 +91,11 @@ def share_to_user(request, repo, from_user, to_user, permission):
     """
     repo_id = repo.id
 
+    if from_user == to_user:
+        msg = _(u'You can not share libray to yourself.')
+        messages.error(request, msg)
+        return
+
     if is_registered_user(to_user):
         try:
             seafile_api.share_repo(repo_id, from_user, to_user, permission)

@@ -11,7 +11,7 @@
         <div class="txt fright">
             <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
             {% if add_to_contacts %}
-            <button id="add">{% trans "Add to contacts" %}</button>
+            <button class="add-to-contacts" data-email="{{to_email}}">{% trans "Add to contacts" %}</button>
             {% endif %}
         </div>
     </div>
@@ -63,12 +63,15 @@
   <h2 class="center-contents">{% blocktrans %}You have no library sharing with {{to_email}}.{% endblocktrans %}</h2>
 </div>
 {% endif %}
+
+{% include 'snippets/add_to_contacts_form.html' %}
+
 {% endblock %}
 
 
 {% block extra_script %}
-<script type="text/javascript">
-</script>
+{% include 'snippets/add_to_contacts_js.html' %}
+
 {% endblock %}
 
 

@@ -1,0 +1,10 @@
+{% load i18n %}<form id="add-to-contacts-form" class="hide" action="{% url 'contact_add' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <label>{% trans "Email" %}</label><br />
+    <input id="contact_email" type="text" name="contact_email" maxlength="255" value="" /><br />
+    <label>{% trans "Name(optional)" %}</label><br />
+    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <label>{% trans "Note(optional)" %}</label><br />
+    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
+</form>

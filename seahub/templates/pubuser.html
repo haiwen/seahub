@@ -26,7 +26,7 @@
         <a class="name" href="{% url 'user_msg_list' id %}">{{ e|email2nickname }}</a>
         <p>{{ e }}</p>
         {% if u.can_be_contact %}
-        <button class="add-as-contact" data-email="{{e}}">{% trans "Add to Contacts" %}</button>
+        <button class="add-to-contacts" data-email="{{e}}">{% trans "Add to Contacts" %}</button>
         {% endif %}
     </div>
     </li>
@@ -49,27 +49,15 @@
     {% endif %}
 </div>
 
-<form id="add-as-contact-form" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">{% csrf_token %}
-    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
-    <label>{% trans "Email" %}</label><br />
-    <input id="contact_email" type="text" name="contact_email" maxlength="255" value="" /><br />
-    <label>{% trans "Name(optional)" %}</label><br />
-    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
-    <label>{% trans "Note(optional)" %}</label><br />
-    <input id="id_note" type="text" name="note" maxlength="255" /><br />
-    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
-</form>
 {% else %}
 <p>{% trans "None"%}</p>
 {% endif %}
 
+{% include 'snippets/add_to_contacts_form.html' %}
+
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript">
-$('.add-as-contact').click(function() {
-    $('#contact_email').val($(this).data('email'));
-    $('#add-as-contact-form').submit();
-});
-</script>
+{% include 'snippets/add_to_contacts_js.html' %}
+
 {% endblock %}
