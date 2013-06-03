@@ -206,8 +206,6 @@ $(window).scroll(function() {
 {% endif %}
 
 {% if request.user.is_authenticated %}
-addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'550px', 'height': '75px', 'padding':'3px 5px', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
-
 $('#message').focus(function() {
     $(this).height(75);
     $('#group-message-form').find('.submit, .cancel').removeClass('hide');
