@@ -57,11 +57,14 @@ class UserMessage(models.Model):
     def __unicode__(self):
         return "%s|%s|%s" % (self.from_email, self.to_email, self.message)
 
+class UserMsgLastCheck(models.Model):
+    check_time = models.DateTimeField()
+
+
 ### handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from seahub.share.signals import share_repo_to_user_successful
-from seahub.base.templatetags.seahub_tags import email2nickname
 
 @receiver(share_repo_to_user_successful)
 def add_share_repo_msg(sender, **kwargs):
@@ -70,6 +73,8 @@ def add_share_repo_msg(sender, **kwargs):
     repo = kwargs.get('repo', None)
     
     if from_user and to_user and repo:
+        from seahub.base.templatetags.seahub_tags import email2nickname
+        
         msg = _(u"(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> to you.") % \
             {'user': email2nickname(from_user),
              'href': reverse('repo', args=[repo.id]),
