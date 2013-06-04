@@ -7,7 +7,7 @@ import re
 import random
 import string
 
-PROJECT_ROOT = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -21,7 +21,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '%s/seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
+        'NAME': '%s/seahub/seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -55,7 +55,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '%s/../media/' % PROJECT_ROOT
+MEDIA_ROOT = '%s/media/' % PROJECT_ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -97,11 +97,12 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+# Order is important
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',    
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',    
     'django.contrib.messages.middleware.MessageMiddleware',    
     'seahub.auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',    
@@ -119,7 +120,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, 'seahub/templates'),
 )
 
 # This is defined here as a do-nothing function because we can't import
@@ -136,8 +137,7 @@ LANGUAGES = (
     ('hu', gettext_noop('Magyar')),
 )
 LOCALE_PATHS = (
-    os.path.join(os.path.dirname(__file__), 'locale'),
-    # os.path.join(os.path.dirname(__file__), 'thirdpart/auth/locale'),
+    os.path.join(PROJECT_ROOT, 'locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
