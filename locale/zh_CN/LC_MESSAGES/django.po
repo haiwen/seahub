@@ -795,7 +795,7 @@ msgstr "删除联系人"
 #: seahub/templates/sysadmin/userinfo.html:141
 #, fuzzy, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr "确定要删除 %%s 吗？"
+msgstr "确定要删除 %s 吗？"
 
 #: seahub/group/error_msg.py:7
 msgid "The group has already created"
@@ -1457,7 +1457,7 @@ msgstr "取消共享资料库"
 #: seahub/group/templates/group/group_info.html:196
 #, fuzzy, python-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr "确定要取消共享 %%s 吗？"
+msgstr "确定要取消共享 %s 吗？"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
 msgid "No public library is in this group"
@@ -1522,7 +1522,7 @@ msgstr "删除成员"
 #: seahub/group/templates/group/group_manage.html:114
 #, fuzzy, python-format
 msgid "Really want to delete %s ?"
-msgstr "确定要删除 %%s 吗？"
+msgstr "确定要删除 %s 吗？"
 
 #: seahub/group/templates/group/group_members.html:44
 #: seahub/templates/pubuser.html:29
@@ -2308,7 +2308,7 @@ msgid ""
 "The libraries synced to desktop clients are listed in this page. You can see "
 "the client's name and its IP address. You may unsync a client from a library "
 "if you no longer want to sync it."
-msgstr ""
+msgstr "这里会列出所有通过桌面客户端同步的资料库。你可以查看客户端的名称和IP地址。你也可以断开一个资料库所连接的客户端。"
 
 #: seahub/templates/client_mgmt.html:72
 msgid "Unsync Client"
@@ -2317,7 +2317,7 @@ msgstr "取消同步"
 #: seahub/templates/client_mgmt.html:73
 #, fuzzy, python-format
 msgid "Are you sure to unsync client %s ?"
-msgstr "确定要取消同步 %%s 吗？"
+msgstr "确定要取消同步 %s 吗？"
 
 #: seahub/templates/decrypt_repo_form.html:9
 msgid ""
@@ -3890,17 +3890,17 @@ msgstr "删除用户"
 #: seahub/templates/sysadmin/sys_useradmin.html:100
 #, fuzzy, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr "确定要重置 %%s 的密码吗？"
+msgstr "确定要重置 %s 的密码吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
 #, fuzzy, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr "确定要取消 %%s 的管理权限吗？"
+msgstr "确定要取消 %s 的管理权限吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
 #, fuzzy, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr "确定要设置 %%s 为管理员吗？"
+msgstr "确定要设置 %s 为管理员吗？"
 
 #: seahub/templates/sysadmin/user_add_email.html:3
 #, python-format
@@ -4372,30 +4372,3 @@ msgid ""
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#, fuzzy
-#~ msgid "This field is required."
-#~ msgstr "邮箱为必填项。"
-
-#, fuzzy
-#~ msgid "Invalid value."
-#~ msgstr "无效user id"
-
-#, fuzzy
-#~ msgid "Enter a whole number."
-#~ msgstr "请输入数字"
-
-#, fuzzy
-#~ msgid "Activate users"
-#~ msgstr "已激活"
-
-#, fuzzy
-#~ msgid "A user with this email alread"
-#~ msgstr "该邮箱已被注册"
-
-#, fuzzy
-#~ msgid "You must agree to the terms to register"
-#~ msgstr "共享给 %s 失败，该用户尚未注册。"
-
-#, fuzzy
-#~ msgid "activation key"
-#~ msgstr "已激活"
