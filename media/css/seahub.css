@@ -2071,7 +2071,8 @@ textarea:-moz-placeholder {/* for FF */
 #bottom-bar button {
     color:#fff;
     font-size:15px;
-    background:#646464;
+    background:#000;
+    opacity:0.75;
     margin-left:5px;
 }
 #bottom-bar [class^='icon-'] {
