@@ -795,7 +795,7 @@ msgstr "删除联系人"
 #: seahub/templates/sysadmin/userinfo.html:141
 #, python-format
 msgid "Are you sure you want to delete %%s ?"
-msgstr "确定要删除 %s 吗？"
+msgstr "确定要删除 %%s 吗？"
 
 #: seahub/group/error_msg.py:7
 msgid "The group has already created"
@@ -971,9 +971,8 @@ msgid "Failed to create: the group does not exist."
 msgstr "创建失败：该群组不存在。"
 
 #: seahub/group/views.py:877
-#, fuzzy
 msgid "Failed to create: you are not in the group."
-msgstr "内部错误，设置失败"
+msgstr "创建失败：你不在该群组中。"
 
 #: seahub/group/views.py:899 seahub/group/views.py:922
 #: seahub/group/views.py:1253 seahub/views/wiki.py:124
@@ -982,26 +981,24 @@ msgstr "创建失败"
 
 #: seahub/group/views.py:913 seahub/group/views.py:935
 #: seahub/group/views.py:1262
-#, fuzzy
 msgid "Failed to create: internal error."
-msgstr "内部错误，设置失败"
+msgstr "创建团体群组失败。"
 
 #: seahub/group/views.py:962
 msgid "You are already in the group."
-msgstr ""
+msgstr "你已在该群组中。"
 
 #: seahub/group/views.py:981
 msgid "apply to join the group"
-msgstr ""
+msgstr "申请加入群组"
 
 #: seahub/group/views.py:983
 msgid "Sent successfully, the group admin will handle it."
-msgstr ""
+msgstr "发送成功，请等候管理员处理。"
 
 #: seahub/group/views.py:987
-#, fuzzy
 msgid "Failed to send. You can try it again later."
-msgstr "请稍后再试。"
+msgstr "发送失败, 请稍侯再试。"
 
 #: seahub/group/views.py:1137 seahub/views/__init__.py:366
 #: seahub/views/__init__.py:1709 seahub/views/__init__.py:1838
@@ -1043,7 +1040,7 @@ msgstr "页面 \"%s\" 已存在。"
 msgid ""
 "%(email)s invite you to join group %(group.group_name)s. Please go to the "
 "following page and sign up:"
-msgstr ""
+msgstr "%(email)s 邀请你加入到群组 %(group.group_name)s。请点击以下链接注册："
 
 #: seahub/group/templates/group/add_member_email.html:5
 #: seahub/group/templates/group/group_join_email.html:6
@@ -1069,33 +1066,32 @@ msgstr "%(site_name)s 团队"
 #: seahub/group/templates/group/new_msg_reply.html:45
 #, python-format
 msgid "%(amount)s replies"
-msgstr ""
+msgstr "%(amount)s 个回复"
 
 #: seahub/group/templates/group/discussion_list.html:18
 #: seahub/group/templates/group/group_discuss.html:122
 #: seahub/group/templates/group/new_msg_reply.html:46
 msgid "Hide replies"
-msgstr ""
+msgstr "收起回复"
 
 #: seahub/group/templates/group/discussion_list.html:31
 #: seahub/group/templates/group/group_discuss.html:136
 #: seahub/group/templates/group/group_reply_list.html:11
 #: seahub/group/templates/group/new_msg_reply.html:56
 msgid "Reply"
-msgstr ""
+msgstr "回复"
 
 #: seahub/group/templates/group/discussion_list.html:39
 #: seahub/group/templates/group/group_discuss.html:146
 #: seahub/group/templates/group/new_msg_reply.html:63
 msgid "Add a reply..."
-msgstr ""
+msgstr "添加回复..."
 
 #: seahub/group/templates/group/discussion_list.html:40
 #: seahub/group/templates/group/group_discuss.html:147
 #: seahub/group/templates/group/new_msg_reply.html:64
-#, fuzzy
 msgid "It can not be blank and should be no more than 150 characters."
-msgstr "密码为3到30个字符"
+msgstr "输入不能为空且应少于150个字符。"
 
 #: seahub/group/templates/group/discussion_list.html:42
 #: seahub/group/templates/group/group_discuss.html:67
@@ -1136,7 +1132,6 @@ msgstr "资料库"
 #: seahub/group/templates/group/group_members.html:17
 #: seahub/group/templates/group/group_wiki.html:17
 #: seahub/group/templates/group/group_wiki_pages.html:16
-#, fuzzy
 msgid "Discussion"
 msgstr "讨论"
 
@@ -1148,7 +1143,7 @@ msgstr "讨论"
 #: seahub/group/templates/group/group_wiki.html:18
 #: seahub/group/templates/group/group_wiki_pages.html:17
 msgid "Wiki"
-msgstr ""
+msgstr "维基"
 
 #: seahub/group/templates/group/group_discuss.html:19
 #: seahub/group/templates/group/group_info.html:20
@@ -1157,7 +1152,6 @@ msgstr ""
 #: seahub/group/templates/group/group_members.html:20
 #: seahub/group/templates/group/group_wiki.html:20
 #: seahub/group/templates/group/group_wiki_pages.html:19
-#, fuzzy
 msgid "Files"
 msgstr "文件"
 
@@ -1170,9 +1164,8 @@ msgstr "文件"
 #: seahub/group/templates/group/group_members.html:22
 #: seahub/group/templates/group/group_wiki.html:23
 #: seahub/group/templates/group/group_wiki_pages.html:22
-#, fuzzy
 msgid "Members"
-msgstr "所有用户"
+msgstr "成员"
 
 #: seahub/group/templates/group/group_discuss.html:25
 #: seahub/group/templates/group/group_info.html:24
@@ -1180,24 +1173,21 @@ msgstr "所有用户"
 #: seahub/group/templates/group/group_members.html:24
 #: seahub/group/templates/group/group_wiki.html:26
 #: seahub/group/templates/group/group_wiki_pages.html:25
-#, fuzzy
 msgid "Admin"
-msgstr "设为管理员"
+msgstr "管理"
 
 #: seahub/group/templates/group/group_discuss.html:48
-#, fuzzy
 msgid "No members"
-msgstr "所有用户"
+msgstr "暂无成员"
 
 #: seahub/group/templates/group/group_discuss.html:62
-#, fuzzy
 msgid "Add a discussion..."
-msgstr "讨论"
+msgstr "添加一个讨论..."
 
 #: seahub/group/templates/group/group_discuss.html:71
 #: seahub/message/templates/message/user_msg_list.html:110
 msgid "After login, you can post discussions and add replies."
-msgstr ""
+msgstr "登录之后，你就可以发起讨论和回复。"
 
 #: seahub/group/templates/group/group_discuss.html:95
 #: seahub/group/templates/group/group_discuss.html:111
@@ -1250,7 +1240,7 @@ msgstr ""
 
 #: seahub/group/templates/group/group_discuss.html:229
 msgid "Really want to delete this discussion?"
-msgstr ""
+msgstr "确定要删除这条讨论？"
 
 #: seahub/group/templates/group/group_discuss.html:229
 #: seahub/templates/base.html:173
@@ -1263,19 +1253,16 @@ msgid "No"
 msgstr "取消"
 
 #: seahub/group/templates/group/group_discuss.html:244
-#, fuzzy
 msgid "Successfully deleted"
-msgstr "%s 删除成功。"
+msgstr "删除成功。"
 
 #: seahub/group/templates/group/group_discuss.html:246
-#, fuzzy
 msgid "Failed to delete: "
-msgstr "删除文件出错。"
+msgstr "删除失败："
 
 #: seahub/group/templates/group/group_discuss.html:250
-#, fuzzy
 msgid "Failed."
-msgstr "获取失败"
+msgstr "操作失败"
 
 #: seahub/group/templates/group/group_info.html:33
 #: seahub/group/templates/group/group_info_for_pub.html:29
@@ -1288,24 +1275,21 @@ msgstr "基本信息"
 #: seahub/group/templates/group/group_info.html:33
 #: seahub/group/templates/group/group_info_for_pub.html:29
 msgid "This group is public."
-msgstr ""
+msgstr "当前群组为公开群组。"
 
 #: seahub/group/templates/group/group_info.html:37
 #: seahub/group/templates/group/group_info_for_pub.html:33
-#, fuzzy
 msgid "created at"
-msgstr "创建时间"
+msgstr "创建于"
 
 #: seahub/group/templates/group/group_info.html:39
 #: seahub/group/templates/group/group_info.html:191
-#, fuzzy
 msgid "Quit Group"
-msgstr "群组"
+msgstr "退出群组"
 
 #: seahub/group/templates/group/group_info.html:69
-#, fuzzy
 msgid "Recent Changes"
-msgstr "最近事件"
+msgstr "最近修改"
 
 #: seahub/group/templates/group/group_info.html:71
 #: seahub/templates/pubrepo.html:13
@@ -1375,34 +1359,28 @@ msgstr "下载和同步"
 #: seahub/share/templates/repo/share_admin.html:60
 #: seahub/share/templates/repo/share_admin.html:64
 #: seahub/share/templates/repo/share_admin.html:66
-#, fuzzy
 msgid "Unshare"
-msgstr "共享"
+msgstr "取消共享"
 
 #: seahub/group/templates/group/group_info.html:115
-#, fuzzy
 msgid "No library is sharing to this group"
-msgstr "还没有资料库共享给你"
+msgstr "还没有资料库共享到当前群组"
 
 #: seahub/group/templates/group/group_info.html:116
-#, fuzzy
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
 msgstr ""
-"你可以点击“新建资料库”按钮创建一个公开的资料库，网站内的其他人都可以查看下载"
-"这个资料库。"
+"你可以通过点击上方的“新建资料库”按钮或资料库列表里的“共享”图标来共享资料库。"
 
 #: seahub/group/templates/group/group_info.html:117
-#, fuzzy
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
 "not be uploaded."
 msgstr ""
-"这里会显示共享给你的资料库。你可以下载和同步以可读写方式共享给你的资料库。而"
-"对于以只读方式共享给你的资料库，你只能下载，对本地文件所做的修改将不会被上"
-"传。"
+"以可读写方式共享的资料库可以被其他群组成员下载和同步，而以只读方式共享的资料"
+"库只能被下载，其他人的修改将不会被上传。"
 
 #: seahub/group/templates/group/group_info.html:127
 #: seahub/group/templates/group/group_info.html:171
@@ -1414,9 +1392,8 @@ msgid "Library"
 msgstr "资料库"
 
 #: seahub/group/templates/group/group_info.html:129
-#, fuzzy
 msgid "Modified at"
-msgstr "修改者"
+msgstr "修改于"
 
 #: seahub/group/templates/group/group_info.html:130
 #: seahub/templates/repo_history.html:22
@@ -1470,88 +1447,82 @@ msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存一小时。"
 
 #: seahub/group/templates/group/group_info.html:192
-#, fuzzy
 msgid "Are you sure you want to quit this group?"
-msgstr "确定要还原该资料库？"
+msgstr "确定要退出该群组吗？"
 
 #: seahub/group/templates/group/group_info.html:195
-#, fuzzy
 msgid "Unshare Library"
-msgstr "共享资料库"
+msgstr "取消共享资料库"
 
 #: seahub/group/templates/group/group_info.html:196
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to unshare %%s ?"
-msgstr "确定要删除 %s 吗？"
+msgstr "确定要取消共享 %%s 吗？"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
-#, fuzzy
 msgid "No public library is in this group"
-msgstr "当前没有公共资料"
+msgstr "当前群组没有公开的资料库"
 
 #: seahub/group/templates/group/group_info_for_pub.html:79
 msgid "A library can be made public in its settings page.(Not implemented yet)"
-msgstr ""
+msgstr "一个资料库可以在设置页面设为公开。（未实现）"
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr ""
+msgstr "%(user)s 申请加入到群组 “%(group_name)s”, 验证信息如下："
 
 #: seahub/group/templates/group/group_manage.html:28
 msgid "Group Avatar"
-msgstr ""
+msgstr "群组头像"
 
 #: seahub/group/templates/group/group_manage.html:32
 #: seahub/profile/templates/profile/set_profile.html:12
 msgid "Change"
-msgstr ""
+msgstr "修改"
 
 #: seahub/group/templates/group/group_manage.html:41
 msgid "Dismiss"
-msgstr ""
+msgstr "解散"
 
 #: seahub/group/templates/group/group_manage.html:43
-#, fuzzy
 msgid "Revoke Public"
-msgstr "取消管理员"
+msgstr "取消公开"
 
 #: seahub/group/templates/group/group_manage.html:45
 msgid "Make Public"
-msgstr ""
+msgstr "设为公开"
 
 #: seahub/group/templates/group/group_manage.html:53
-#, fuzzy
 msgid "Add Members"
-msgstr "所有用户"
+msgstr "添加成员"
 
 #: seahub/group/templates/group/group_manage.html:76
 msgid "Administrators"
-msgstr ""
+msgstr "管理员"
 
 #: seahub/group/templates/group/group_manage.html:77
 msgid "Add Administrators"
-msgstr ""
+msgstr "添加管理员"
 
 #: seahub/group/templates/group/group_manage.html:109
 msgid "Dismiss Group"
-msgstr ""
+msgstr "解散群组"
 
 #: seahub/group/templates/group/group_manage.html:110
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "确定要解散该群组吗？"
 
 #: seahub/group/templates/group/group_manage.html:113
-#, fuzzy
 msgid "Delete Member"
-msgstr "删除时间"
+msgstr "删除成员"
 
 #: seahub/group/templates/group/group_manage.html:114
-#, fuzzy, python-format
+#, python-format
 msgid "Really want to delete %%s ?"
-msgstr "确定要删除 %s 吗？"
+msgstr "确定要删除 %%s 吗？"
 
 #: seahub/group/templates/group/group_members.html:44
 #: seahub/templates/pubuser.html:29
@@ -1559,14 +1530,12 @@ msgid "Add to Contacts"
 msgstr "加到通讯录"
 
 #: seahub/group/templates/group/group_pubinfo.html:9
-#, fuzzy
 msgid "Join Group"
-msgstr "群组"
+msgstr "申请加入"
 
 #: seahub/group/templates/group/group_pubinfo.html:13
-#, fuzzy
 msgid "Name: "
-msgstr "名称"
+msgstr "名字："
 
 #: seahub/group/templates/group/group_pubinfo.html:14
 #: seahub/group/templates/group/groups_right_panel.html:13
@@ -1575,23 +1544,20 @@ msgid "Creator: "
 msgstr "创建者："
 
 #: seahub/group/templates/group/group_pubinfo.html:15
-#, fuzzy
 msgid "Create at: "
-msgstr "创建时间"
+msgstr "创建于："
 
 #: seahub/group/templates/group/group_pubinfo.html:16
-#, fuzzy
 msgid "Members: "
-msgstr "所有用户"
+msgstr "成员数："
 
 #: seahub/group/templates/group/group_pubinfo.html:21
-#, fuzzy
 msgid "Verification Message"
-msgstr "通知"
+msgstr "验证消息"
 
 #: seahub/group/templates/group/group_wiki.html:37
 msgid "This group currently has no wiki"
-msgstr ""
+msgstr "该群组目前还没创建Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:38
 #: seahub/templates/wiki/personal_wiki.html:26
@@ -1615,9 +1581,8 @@ msgid "Create Wiki"
 msgstr "创建Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:48
-#, fuzzy
 msgid "Wiki Pages"
-msgstr "个人维基页面"
+msgstr "Wiki 页面"
 
 #: seahub/group/templates/group/group_wiki.html:56
 #: seahub/group/templates/group/group_wiki_pages.html:32
@@ -1680,11 +1645,11 @@ msgstr "名称和描述不能为空"
 #: seahub/group/templates/group/groups_left_panel.html:5
 msgid ""
 "After creating a group, you can add members and share libraries into it."
-msgstr ""
+msgstr "群组创建后，就可以添加成员，共享资料。"
 
 #: seahub/group/templates/group/groups_left_panel.html:7
 msgid "You can also share libraries into groups that you're not in."
-msgstr ""
+msgstr "你也可以将资料库共享到你没有参加的群组。"
 
 #: seahub/group/templates/group/groups_right_panel.html:4
 #: seahub/templates/snippets/my_groups.html:4
@@ -1693,9 +1658,8 @@ msgstr "我的群组"
 
 #: seahub/group/templates/group/groups_right_panel.html:5
 #: seahub/group/templates/group/groups_right_panel.html:26
-#, fuzzy
 msgid "New Group"
-msgstr "群组"
+msgstr "新建群组"
 
 #: seahub/group/templates/group/groups_right_panel.html:14
 #: seahub/templates/pubgrp.html:27
@@ -1703,102 +1667,93 @@ msgid "Time: "
 msgstr "时间："
 
 #: seahub/group/templates/group/groups_right_panel.html:21
-#, fuzzy
 msgid "You are not in any groups"
-msgstr "你还未创建资料库"
+msgstr "你还没有创建或参加群组"
 
 #: seahub/group/templates/group/groups_right_panel.html:22
 msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
 msgstr ""
+"你可以点击“新建群组”按钮来创建群组。在群组里，你可以和你的朋友交流，协同维护"
+"资料库。"
 
 #: seahub/group/templates/group/groups_right_panel.html:27
-#, fuzzy
 msgid "Group Name"
-msgstr "群组"
+msgstr "群组名称"
 
 #: seahub/group/templates/group/grpadmin_add_js.html:19
 #: seahub/group/templates/group/grpmember_add_js.html:19
-#, fuzzy
 msgid "It can not be blank."
 msgstr "输入不能为空。"
 
 #: seahub/group/templates/group/grpmember_add_form.html:3
-#, fuzzy
 msgid "Add members"
-msgstr "所有用户"
+msgstr "添加成员"
 
 #: seahub/group/templates/group/grpmember_add_form.html:4
-#, fuzzy
 msgid "emails, separated by ','"
 msgstr "输入邮箱，多个以,分隔"
 
 #: seahub/group/templates/group/grpmember_add_form.html:7
 msgid "Tip: an invitation will be sent if the email is not registered."
-msgstr ""
+msgstr "提示：如果该邮箱未注册，我们将向其发送邀请。"
 
 #: seahub/group/templates/group/grpmember_add_form.html:9
 msgid "Tip: the emails should be already registered."
-msgstr ""
+msgstr "提示：必须是已注册的邮箱。"
 
 #: seahub/group/templates/group/grpmember_add_form.html:15
 msgid "Add administrators"
-msgstr ""
+msgstr "添加管理员"
 
 #: seahub/group/templates/group/grpmember_add_form.html:16
-#, fuzzy
 msgid "emails, separated by ',' "
 msgstr "输入邮箱，多个以,分隔"
 
 #: seahub/group/templates/group/new_msg_reply.html:18
-#, fuzzy
 msgid "Group: "
-msgstr "群组"
+msgstr "所在群组："
 
 #: seahub/message/models.py:73
 #, python-format
 msgid ""
 "(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> "
 "to you."
-msgstr ""
+msgstr "（系统）%(user)s 共享了资料库<a href='%(href)s'>%(repo_name)s</a>给你"
 
 #: seahub/message/views.py:107 seahub/templates/base.html:309
-#, fuzzy
 msgid "message is required"
-msgstr "请输入邮箱"
+msgstr "消息是必填项"
 
 #: seahub/message/views.py:110 seahub/templates/base.html:313
-#, fuzzy
 msgid "contact is required"
-msgstr "需要 oldname"
+msgstr "联系人是必填项"
 
 #: seahub/message/views.py:120
 msgid "You can not send message to yourself."
-msgstr ""
+msgstr "你不能发消息给自己。"
 
 #: seahub/message/views.py:124
 #, python-format
 msgid "Failed to send message to %s, user not found."
-msgstr ""
+msgstr "发送消息失败，%s 未找到。"
 
 #: seahub/message/views.py:131
-#, fuzzy
 msgid "Message sent successfully."
-msgstr "\"%s\" 取消共享成功"
+msgstr "消息发送成功。"
 
 #: seahub/message/templates/message/all_msg_list.html:4
 #: seahub/message/templates/message/all_msg_list.html:10
 #: seahub/message/templates/message/user_msg_list.html:4
 #: seahub/message/templates/message/user_msg_list.html:27
 #: seahub/share/templates/repo/user_share_list.html:24
-#, fuzzy
 msgid "Messages"
-msgstr "页面"
+msgstr "消息"
 
 #: seahub/message/templates/message/all_msg_list.html:23
 msgid "Message"
-msgstr ""
+msgstr "消息"
 
 #: seahub/message/templates/message/all_msg_list.html:24
 #: seahub/templates/file_revisions.html:25
@@ -1828,39 +1783,33 @@ msgstr "共享"
 
 #: seahub/message/templates/message/user_msg_list.html:38
 msgid "Send a message..."
-msgstr ""
+msgstr "发送消息..."
 
 #: seahub/notifications/templates/notifications/add_notification_form.html:3
 #: seahub/notifications/templates/notifications/add_notification_form.html:7
 #: seahub/notifications/templates/notifications/notification_list.html:9
-#, fuzzy
 msgid "Add new notification"
-msgstr "通知"
+msgstr "添加新通知"
 
 #: seahub/notifications/templates/notifications/add_notification_form.html:9
-#, fuzzy
 msgid "Notification"
 msgstr "通知"
 
 #: seahub/notifications/templates/notifications/notification_list.html:15
-#, fuzzy
 msgid "All Notifications"
-msgstr "通知"
+msgstr "所有通知"
 
 #: seahub/notifications/templates/notifications/notification_list.html:19
-#, fuzzy
 msgid "Notification Detail"
-msgstr "修改详情"
+msgstr "通知内容"
 
 #: seahub/notifications/templates/notifications/notification_list.html:26
-#, fuzzy
 msgid "(current notification)"
-msgstr "(当前版本)"
+msgstr "（当前通知）"
 
 #: seahub/notifications/templates/notifications/notification_list.html:30
-#, fuzzy
 msgid "Set to current"
-msgstr "创建失败"
+msgstr "设为当前通知"
 
 #: seahub/notifications/templates/notifications/notification_list.html:64
 #: seahub/templates/sysadmin/sys_group_admin.html:55
@@ -1872,23 +1821,20 @@ msgid "Empty"
 msgstr "暂无"
 
 #: seahub/notifications/templates/notifications/notification_list.html:71
-#, fuzzy
 msgid "Delete Notification"
-msgstr "通知"
+msgstr "删除通知"
 
 #: seahub/profile/views.py:41
-#, fuzzy
 msgid "Successfully edited profile."
-msgstr "%s 删除成功。"
+msgstr "修改成功"
 
 #: seahub/profile/views.py:47
-#, fuzzy
 msgid "Failed to edit profile"
-msgstr "无法编辑该文件"
+msgstr "修改失败"
 
 #: seahub/profile/views.py:94 seahub/profile/views.py:125
 msgid "Has not accepted invitation yet"
-msgstr ""
+msgstr "还未接受邀请"
 
 #: seahub/profile/templates/profile/profile_base.html:4
 #: seahub/profile/templates/profile/set_profile.html:5
@@ -1899,10 +1845,9 @@ msgstr "个人信息设置"
 
 #: seahub/profile/templates/profile/set_profile.html:10
 msgid "Avatar:"
-msgstr ""
+msgstr "头像："
 
 #: seahub/profile/templates/profile/set_profile.html:18
-#, fuzzy
 msgid "Password:"
 msgstr "密码："
 
@@ -1912,116 +1857,104 @@ msgid "Update"
 msgstr "更新"
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#, fuzzy
 msgid "Nickname:"
-msgstr "暂无昵称"
+msgstr "昵称："
 
 #: seahub/profile/templates/profile/set_profile.html:24
 msgid "About me:"
-msgstr ""
+msgstr "关于我："
 
 #: seahub/profile/templates/profile/user_profile.html:32
-#, fuzzy
 msgid "Email: "
-msgstr "邮箱"
+msgstr "邮箱："
 
 #: seahub/profile/templates/profile/user_profile.html:34
-#, fuzzy
 msgid "Name(optional): "
 msgstr "名字(可选)"
 
 #: seahub/profile/templates/profile/user_profile.html:36
-#, fuzzy
 msgid "Note(optional): "
 msgstr "备注(可选)"
 
 #: seahub/share/forms.py:20
-#, fuzzy
 msgid "Email is not longer than 512 characters"
-msgstr "名称太长（不超过255个汉字）"
+msgstr "邮箱不能超过512个字符"
 
 #: seahub/share/views.py:57
-#, fuzzy
 msgid "Failed to share to all members, please try again later."
-msgstr "创建首页失败，请稍后再试"
+msgstr "共享到公共资料失败，请稍后再试"
 
 #: seahub/share/views.py:59
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
-msgstr ""
+msgstr "共享到公共资料成功，请前往 <a href=\"%s\">共享</a> 查看。"
 
 #: seahub/share/views.py:71
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\"%(repo)s\" is already in group %(group)s. <a href=\"%(href)s\">View</a>"
-msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
+msgstr "\"%(repo)s\"在群组 %(group)s 中已存在。<a href=\"%(href)s\">查看</a>"
 
 #: seahub/share/views.py:81
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to share %(repo)s to %(group)s, please try again later."
-msgstr "创建首页失败，请稍后再试"
+msgstr "共享 %(repo)s 到 %(group)s失败，请稍后重试。"
 
 #: seahub/share/views.py:85
 #, python-format
 msgid ""
 "Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
 "\">Shares</a>."
-msgstr ""
+msgstr "共享到 %(group)s 成功， 请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
 #: seahub/share/views.py:95
-#, fuzzy
 msgid "You can not share libray to yourself."
-msgstr "你无法修改该资料库。"
+msgstr "你无法共享资料库给你自己。"
 
 #: seahub/share/views.py:104
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to share to %s, please try again later."
-msgstr "创建维基页面失败，请稍后再试"
+msgstr "共享给 %s 失败，请稍后尝试。"
 
 #: seahub/share/views.py:111
 #, python-format
 msgid ""
 "Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
 "\">Shares</a>."
-msgstr ""
+msgstr "共享给 %(email)s 成功，请前往 <a href=\"%(share)s\">共享</a> 查看。"
 
 #: seahub/share/views.py:115
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to share to %s, as the email is not registered."
-msgstr "取消共享失败，该资料库不存在"
+msgstr "共享给 %s 失败，该用户尚未注册。"
 
 #: seahub/share/views.py:171
-#, fuzzy
 msgid "Only the owner of the library has permission to share it."
-msgstr "该资料库拥有者的空间已用完。"
+msgstr "只有资料库拥有者才有共享权限。"
 
 #: seahub/share/views.py:201
 #, python-format
 msgid ""
 "Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
 "\">Upgrade account.</a>"
-msgstr ""
+msgstr "共享\"%s\"失败，空间不足。<a href=\"http://seafile.com/\">升级帐号。</a>"
 
 #: seahub/share/views.py:232 seahub/share/views.py:242
-#, fuzzy
 msgid "Failed to remove share"
-msgstr "创建失败"
+msgstr "取消共享失败"
 
 #: seahub/share/views.py:238
-#, fuzzy
 msgid "group id is not valid"
-msgstr "名称 %s 含有无效字符"
+msgstr "无效的group id"
 
 #: seahub/share/views.py:251
-#, fuzzy
 msgid "Successfully removed share"
-msgstr "%s 删除成功。"
+msgstr "取消共享成功"
 
 #: seahub/share/views.py:286
-#, fuzzy
 msgid "all members"
-msgstr "所有用户"
+msgstr "所有成员"
 
 #: seahub/share/views.py:464 seahub/views/__init__.py:625
 #: seahub/views/__init__.py:1586 seahub/views/__init__.py:1621
@@ -2030,44 +1963,38 @@ msgid "Invalid arguments"
 msgstr "非法参数"
 
 #: seahub/share/views.py:473
-#, fuzzy
 msgid "You cannot share the library in this way."
-msgstr "无法在线查看该资料库。"
+msgstr "不能以这种方式共享一个资料库。"
 
 #: seahub/share/views.py:498
-#, fuzzy
 msgid "Failed to get the link, please retry later."
-msgstr "创建维基页面失败，请稍后再试"
+msgstr "获取分享链接失败，请稍后重试。"
 
 #: seahub/share/views.py:520
-#, fuzzy
 msgid "Removed successfully"
-msgstr "星标添加成功"
+msgstr "删除成功"
 
 #: seahub/share/views.py:528
-#, fuzzy
 msgid "Deleted successfully"
-msgstr "星标添加成功"
+msgstr "删除成功"
 
 #: seahub/share/views.py:544
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
-msgstr ""
+msgstr "由于邮箱服务未正确配置，发送共享链接失败，请联系管理员。"
 
 #: seahub/share/views.py:569
 msgid "Your friend shared a file to you on Seafile"
-msgstr ""
+msgstr "你的朋友在 Seafile 上共享了一个文件给你"
 
 #: seahub/share/views.py:574
-#, fuzzy
 msgid "Internal server error. Send failed."
-msgstr "服务器内部错误"
+msgstr "服务器内部错误，发送失败。"
 
 #: seahub/share/views.py:577
-#, fuzzy
 msgid "Successfully sent."
-msgstr "密码重置成功。"
+msgstr "发送成功"
 
 #: seahub/share/templates/repo/share_admin.html:5
 #: seahub/templates/org_base.html:18 seahub/templates/repo.html:141
@@ -2081,26 +2008,24 @@ msgid ""
 "If you don't want others to change the contents of your shared libraries, "
 "you can set the share permission to \"read-only\" when sharing them."
 msgstr ""
+"如果你不希望别人修改你共享给他们的资料库，你可以在共享的时候把权限设置成“只"
+"读”。"
 
 #: seahub/share/templates/repo/share_admin.html:24
-#, fuzzy
 msgid "Shared Libraries"
-msgstr "共享资料库"
+msgstr "我共享的资料库"
 
 #: seahub/share/templates/repo/share_admin.html:30
-#, fuzzy
 msgid "Share To"
-msgstr "共享来源"
+msgstr "共享给"
 
 #: seahub/share/templates/repo/share_admin.html:31
-#, fuzzy
 msgid "Permission"
-msgstr "共享权限"
+msgstr "读写权限"
 
 #: seahub/share/templates/repo/share_admin.html:75
-#, fuzzy
 msgid "You have not shared any library"
-msgstr "你还未创建资料库"
+msgstr "你还没有共享任何资料库"
 
 #: seahub/share/templates/repo/share_admin.html:76
 msgid ""
@@ -2108,19 +2033,20 @@ msgid ""
 "icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr ""
+"你可以通过在你的个人页面点击你自己的资料库的共享图标, 或是在你所在的小组里创"
+"建一个新的资料库来将你的资料库共享给你的朋友和同事。"
 
 #: seahub/share/templates/repo/share_admin.html:80
-#, fuzzy
 msgid "Shared Links"
-msgstr "获取共享链接"
+msgstr "我的共享外链"
 
 #: seahub/share/templates/repo/share_admin.html:84
 msgid "File or Folder"
-msgstr ""
+msgstr "文件或文件夹"
 
 #: seahub/share/templates/repo/share_admin.html:86
 msgid "Visits"
-msgstr ""
+msgstr "访问次数"
 
 #: seahub/share/templates/repo/share_admin.html:99
 #: seahub/templates/file_revisions.html:53
@@ -2129,29 +2055,27 @@ msgid "View"
 msgstr "查看"
 
 #: seahub/share/templates/repo/share_admin.html:100
-#, fuzzy
 msgid "Remove"
-msgstr "移动"
+msgstr "删除"
 
 #: seahub/share/templates/repo/share_admin.html:108
-#, fuzzy
 msgid "You don't have any shared link"
-msgstr "你还没有星标文件"
+msgstr "你还没有外链"
 
 #: seahub/share/templates/repo/share_admin.html:109
 msgid ""
 "You can share a folder or a file when you view a library, or share a file "
 "when you view it."
 msgstr ""
+"你可以在查看一个资料库时共享里面的文件和目录，或者查看文件时共享这个文件。"
 
 #: seahub/share/templates/repo/share_admin.html:152
 msgid "Edit succeeded"
-msgstr ""
+msgstr "权限修改成功"
 
 #: seahub/share/templates/repo/share_admin.html:159
-#, fuzzy
 msgid "Edit failed."
-msgstr "提交失败。"
+msgstr "权限修改失败"
 
 #: seahub/share/templates/repo/user_share_list.html:56
 #: seahub/templates/snippets/my_owned_repos.html:82
@@ -2161,7 +2085,7 @@ msgstr "退出共享"
 #: seahub/share/templates/repo/user_share_list.html:63
 #, python-format
 msgid "You have no library sharing with %(to_email)s."
-msgstr ""
+msgstr "你和 %(to_email)s 之间没有共享的资料库。"
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -2190,11 +2114,11 @@ msgstr "个人工作台"
 
 #: seahub/templates/base.html:46
 msgid "send a message"
-msgstr ""
+msgstr "发送消息"
 
 #: seahub/templates/base.html:47
 msgid "unread messages"
-msgstr ""
+msgstr "未读消息"
 
 #: seahub/templates/base.html:48
 msgid "Log out"
@@ -2213,16 +2137,15 @@ msgstr "注册"
 
 #: seahub/templates/base.html:66
 msgid "message..."
-msgstr ""
+msgstr "消息..."
 
 #: seahub/templates/base.html:89
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "在当前维基搜索文件"
 
 #: seahub/templates/base.html:89
-#, fuzzy
 msgid "Search files in this library"
-msgstr "无法在线查看该资料库。"
+msgstr "在当前资料库搜索文件"
 
 #: seahub/templates/base.html:92 seahub/templates/base.html.py:98
 msgid "Search Files"
@@ -2230,58 +2153,53 @@ msgstr "搜索文件"
 
 #: seahub/templates/base.html:94
 msgid "advanced"
-msgstr ""
+msgstr "高级"
 
 #: seahub/templates/base.html:102 seahub/templates/base.html.py:106
 #: seahub/templates/base.html:109
-#, fuzzy
 msgid "In all libraries"
-msgstr "所有资料库"
+msgstr "在所有资料库"
 
 #: seahub/templates/base.html:103
 msgid "In this wiki"
-msgstr ""
+msgstr "在当前维基"
 
 #: seahub/templates/base.html:103
-#, fuzzy
 msgid "In this library"
-msgstr "无法在线查看该资料库。"
+msgstr "在当前资料库"
 
 #: seahub/templates/base.html:107
 #, python-format
 msgid "in %(name)s"
-msgstr ""
+msgstr "在 %(name)s"
 
 #: seahub/templates/base.html:115 seahub/templates/base.html.py:118
-#, fuzzy
 msgid "All file types"
-msgstr "添加文件"
+msgstr "所有文件类型"
 
 #: seahub/templates/base.html:116 seahub/templates/base.html.py:119
 msgid "Custom file types"
-msgstr ""
+msgstr "自定义文件类型"
 
 #: seahub/templates/base.html:128
-#, fuzzy
 msgid "Text files"
-msgstr "新文件"
+msgstr "文本文件"
 
 #: seahub/templates/base.html:129 seahub/templates/base.html.py:195
 msgid "Documents"
 msgstr "文档"
 
 #: seahub/templates/base.html:130
-#, fuzzy
 msgid "Images"
-msgstr "页面"
+msgstr "图片"
 
 #: seahub/templates/base.html:131
 msgid "Video"
-msgstr ""
+msgstr "视频"
 
 #: seahub/templates/base.html:132
 msgid "Audio"
-msgstr ""
+msgstr "音频"
 
 #: seahub/templates/base.html:133
 msgid "svg"
@@ -2301,11 +2219,11 @@ msgstr ""
 
 #: seahub/templates/base.html:138
 msgid "Input file extensions here, separate with ','"
-msgstr ""
+msgstr "输入文件后缀，以','分隔"
 
 #: seahub/templates/base.html:139
 msgid "Please select at least 1 file type or input at least 1 file extension"
-msgstr ""
+msgstr "请至少选择一种文件类型或一种文件后缀"
 
 #: seahub/templates/base.html:183
 msgid "Introduction"
@@ -2341,20 +2259,18 @@ msgstr "联系我们"
 
 #: seahub/templates/base.html:278
 msgid "send to: click to select contacts"
-msgstr ""
+msgstr "发送给：点击选择联系人"
 
 #: seahub/templates/base.html:281
-#, fuzzy
 msgid "please add contacts at first"
-msgstr "请先选择一个文件。"
+msgstr "请先选择联系人"
 
 #: seahub/templates/base.html:285
 msgid "Failed to get your contacts for sending a message."
-msgstr ""
+msgstr "获取联系人失败，无法发送消息。"
 
 #: seahub/templates/client_mgmt.html:6 seahub/templates/client_mgmt.html:15
 #: seahub/templates/myhome.html:15 seahub/templates/wiki/personal_wiki.html:15
-#, fuzzy
 msgid "Clients"
 msgstr "客户端"
 
@@ -2367,9 +2283,8 @@ msgid "Personal Wiki"
 msgstr "个人维基"
 
 #: seahub/templates/client_mgmt.html:27
-#, fuzzy
 msgid "Client Name"
-msgstr "客户端"
+msgstr "客户端名称"
 
 #: seahub/templates/client_mgmt.html:28
 msgid "IP"
@@ -2377,16 +2292,15 @@ msgstr ""
 
 #: seahub/templates/client_mgmt.html:29
 msgid "Last Sync"
-msgstr ""
+msgstr "最后同步"
 
 #: seahub/templates/client_mgmt.html:56
 msgid "Unsync"
-msgstr ""
+msgstr "取消同步"
 
 #: seahub/templates/client_mgmt.html:62
-#, fuzzy
 msgid "You do not have connected clients"
-msgstr "你还未创建个人维基"
+msgstr "你还没有连接的客户端"
 
 #: seahub/templates/client_mgmt.html:63
 msgid ""
@@ -2396,14 +2310,13 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/client_mgmt.html:72
-#, fuzzy
 msgid "Unsync Client"
-msgstr "客户端"
+msgstr "取消同步"
 
 #: seahub/templates/client_mgmt.html:73
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure to unsync client %%s ?"
-msgstr "确定要删除 %s 吗？"
+msgstr "确定要取消同步 %%s 吗？"
 
 #: seahub/templates/decrypt_repo_form.html:9
 msgid ""
@@ -2635,13 +2548,12 @@ msgid "enter link description here"
 msgstr "在这里输入链接描述"
 
 #: seahub/templates/file_edit.html:354
-#, fuzzy
 msgid "Insert Hyperlink"
-msgstr "超链接"
+msgstr "插入超链接"
 
 #: seahub/templates/file_edit.html:354 seahub/templates/file_edit.html:364
 msgid "optional title"
-msgstr ""
+msgstr "可选的提示文本"
 
 #: seahub/templates/file_edit.html:356
 msgid "Blockquote <blockquote> Ctrl+Q"
@@ -2669,7 +2581,7 @@ msgstr "在此输入图片描述"
 
 #: seahub/templates/file_edit.html:364
 msgid "Insert Image"
-msgstr ""
+msgstr "插入图片"
 
 #: seahub/templates/file_edit.html:366
 msgid "Numbered List <ol> Ctrl+O"
@@ -2839,7 +2751,7 @@ msgstr "设置"
 
 #: seahub/templates/myhome.html:31
 msgid "Payment"
-msgstr ""
+msgstr "支付"
 
 #: seahub/templates/myhome.html:39
 msgid "Reminding..."
@@ -3330,7 +3242,7 @@ msgstr "到"
 
 #: seahub/templates/user_404.html:6
 msgid "Sorry, this user is not registered yet."
-msgstr ""
+msgstr "抱歉，该用户还未注册。"
 
 #: seahub/templates/view_file_base.html:39
 #: seahub/templates/view_file_base.html:158
@@ -3651,7 +3563,7 @@ msgstr "请输入一个讨论。"
 
 #: seahub/templates/snippets/events.html:3
 msgid "File Activities"
-msgstr ""
+msgstr "文件活动"
 
 #: seahub/templates/snippets/events.html:7
 #: seahub/templates/snippets/list_commit_detail.html:3
@@ -3667,9 +3579,9 @@ msgid "Created library"
 msgstr "创建了资料库"
 
 #: seahub/templates/snippets/events_body.html:33
-#, fuzzy, python-format
+#, python-format
 msgid "Deleted library %(library_name)s"
-msgstr "删除了资料库"
+msgstr "删除了资料库 %(library_name)s"
 
 #: seahub/templates/snippets/file_upload_progress_js.html:51
 #: seahub/templates/snippets/file_upload_progress_js.html:75
@@ -3805,17 +3717,16 @@ msgid "Delete Library"
 msgstr "删除资料库"
 
 #: seahub/templates/snippets/office_convert_html.html:4
-#, fuzzy
 msgid "The file is being processed, please wait..."
-msgstr "本地文件尚未与服务器同步，请稍后再试"
+msgstr "文件正在处理，请稍后..."
 
 #: seahub/templates/snippets/office_convert_js.html:34
 msgid "hide outline"
-msgstr ""
+msgstr "隐藏提纲"
 
 #: seahub/templates/snippets/office_convert_js.html:35
 msgid "show outline"
-msgstr ""
+msgstr "显示提纲"
 
 #: seahub/templates/snippets/office_convert_js.html:108
 #: seahub/templates/snippets/office_convert_js.html:115
@@ -3976,19 +3887,19 @@ msgid "Delete User"
 msgstr "删除用户"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to reset the password of %%s ?"
-msgstr "确定要重置 %s 的密码吗？"
+msgstr "确定要重置 %%s 的密码吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to revoke the admin permission of %%s ?"
-msgstr "确定要取消 %s 的管理权限吗？"
+msgstr "确定要取消 %%s 的管理权限吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to set %%s as admin?"
-msgstr "确定要设置 %s 为管理员吗？"
+msgstr "确定要设置 %%s 为管理员吗？"
 
 #: seahub/templates/sysadmin/user_add_email.html:3
 #, python-format
@@ -4126,13 +4037,12 @@ msgid "Invalid url"
 msgstr "非法链接"
 
 #: seahub/views/__init__.py:431
-#, fuzzy
 msgid "You don't have permission to access the library."
-msgstr "你没有权限进行还原操作"
+msgstr "你没有权限访问该资料库。"
 
 #: seahub/views/__init__.py:439
 msgid "No path."
-msgstr ""
+msgstr "路径不存在"
 
 #: seahub/views/__init__.py:492
 msgid "Unable to view library modification"
@@ -4178,24 +4088,22 @@ msgid "Successfully deleted library \"%s\"."
 msgstr "成功删除资料库 \"%s\"。"
 
 #: seahub/views/__init__.py:916
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully unsync client %s"
-msgstr "%s 删除成功。"
+msgstr "取消同步 %s 成功"
 
 #: seahub/views/__init__.py:918
-#, fuzzy
 msgid "Successfully unsync client"
-msgstr "%s 删除成功。"
+msgstr "成功取消同步"
 
 #: seahub/views/__init__.py:921
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to unsync client %s"
-msgstr "\"%s\" 取消共享失败"
+msgstr "取消同步 %s 失败"
 
 #: seahub/views/__init__.py:923
-#, fuzzy
 msgid "Failed to unsync client"
-msgstr "创建失败"
+msgstr "取消同步失败"
 
 #: seahub/views/__init__.py:1001 seahub/views/__init__.py:1500
 msgid "Failed to create library"
@@ -4335,9 +4243,8 @@ msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
 
 #: seahub/views/__init__.py:2271
-#, fuzzy
 msgid "The group doesn't exist"
-msgstr "该文件不存在"
+msgstr "该群组不存在"
 
 #: seahub/views/file.py:275 seahub/views/file.py:495 seahub/views/file.py:510
 #: seahub/views/file.py:532
@@ -4402,14 +4309,14 @@ msgid "Failed to revoke admin: the user does not exist"
 msgstr "取消管理员权限失败：该用户不存在"
 
 #: seahub/views/sysadmin.py:270
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功将重置密码为 %(passwd)s, 一封通知邮件已经发送给 %(user)s。"
 
 #: seahub/views/sysadmin.py:275
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
@@ -4418,12 +4325,12 @@ msgstr ""
 "件配置。"
 
 #: seahub/views/sysadmin.py:279
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
 #: seahub/views/sysadmin.py:282
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
@@ -4464,30 +4371,3 @@ msgid ""
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#, fuzzy
-#~ msgid "User Info"
-#~ msgstr "基本信息"
-
-#, fuzzy
-#~ msgid "Activate users"
-#~ msgstr "已激活"
-
-#, fuzzy
-#~ msgid "A user with this email alread"
-#~ msgstr "该邮箱已被注册"
-
-#, fuzzy
-#~ msgid "activation key"
-#~ msgstr "已激活"
-
-#, fuzzy
-#~ msgid "This field is required."
-#~ msgstr "repo id 为必填项"
-
-#, fuzzy
-#~ msgid "Invalid value."
-#~ msgstr "非法链接"
-
-#, fuzzy
-#~ msgid "Enter a whole number."
-#~ msgstr "请输入数字"
