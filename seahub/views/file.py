@@ -44,11 +44,14 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 
-from seahub.utils import HAS_OFFICE_CONVERTER, query_office_convert_status, \
-    query_office_file_pages, prepare_converted_html
+from seahub.utils import HAS_OFFICE_CONVERTER
+
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import query_office_convert_status, query_office_file_pages, \
+        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    OFFICE_PREVIEW_MAX_SIZE, FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 
 def get_user_permission(request, repo_id):
     if request.user.is_authenticated():
@@ -306,7 +309,11 @@ def view_file(request, repo_id):
         elif filetype == DOCUMENT:
             handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            try:
+                handle_pdf(raw_path, obj_id, fileext, ret_dict)
+                print ret_dict
+            except:
+                logging.exception('failed to handle_pdf:')
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
             dirs = list_dir_by_path(current_commit.id, parent_dir)
@@ -707,6 +714,9 @@ def file_edit(request, repo_id):
     }, context_instance=RequestContext(request))
 
 def office_convert_query_status(request):
+    if not HAS_OFFICE_CONVERTER:
+        raise Http404
+
     if not request.is_ajax():
         raise Http404
 
@@ -732,6 +742,9 @@ def office_convert_query_status(request):
     return HttpResponse(json.dumps(ret), content_type=content_type)
 
 def office_convert_query_page_num(request):
+    if not HAS_OFFICE_CONVERTER:
+        raise Http404
+
     if not request.is_ajax():
         raise Http404
 

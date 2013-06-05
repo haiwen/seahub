@@ -955,7 +955,6 @@ def more_files_in_commit(commit):
 
 # office convert related
 HAS_OFFICE_CONVERTER = False
-OFFICE_HTML_DIR = None
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
         config = ConfigParser.ConfigParser()
@@ -972,11 +971,17 @@ if EVENTS_CONFIG_FILE:
         config.read(EVENTS_CONFIG_FILE)
         return seafevents.get_office_converter_html_dir(config)
 
+    def get_office_converter_limit():
+        config = ConfigParser.ConfigParser()
+        config.read(EVENTS_CONFIG_FILE)
+        return seafevents.get_office_converter_limit(config)
+
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
     
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()
+    OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
     from seafevents.office_converter import OfficeConverterRpcClient
 
@@ -1019,6 +1024,7 @@ if HAS_OFFICE_CONVERTER:
         try:
             ret = add_office_convert_task(obj_id, doctype, raw_path)
         except:
+            logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error'), False
         else:
             if ret.exists:
@@ -1027,16 +1033,6 @@ if HAS_OFFICE_CONVERTER:
                 except:
                     pass
             return None, ret.exists
-
-else:
-    def prepare_converted_html(*args, **kwargs):
-        pass
-
-    def query_office_convert_status(*args, **kwargs):
-        pass
-
-    def query_office_file_pages(*args, **kwargs):
-        pass
 
 # search realted
 HAS_FILE_SEARCH = False
