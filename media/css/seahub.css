@@ -556,6 +556,9 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     line-height:22px;
 }
+.top-bar-con .msg-count {
+    color:red;
+}
 .top-bar-con .avatar-link {
     height:16px;
     vertical-align:middle;
@@ -2441,5 +2444,3 @@ textarea:-moz-placeholder {/* for FF */
 #plan-form input[type=radio] {
     margin-right: 10px;
 }
-
-

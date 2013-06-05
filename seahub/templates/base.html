@@ -241,8 +241,8 @@ $(document).ready(function(){
         dataType: 'json',
         cache: false,
         success: function(data) {
-            if (data['count'] != -1) {
-                $("#msg-count").html(data['count']);
+            if (data['count'] > 0) {
+                $("#msg-count").html(data['count']).addClass('msg-count');
             }
         }
     });
@@ -404,7 +404,9 @@ $(document).click(function(e) {
         {'name':'double-angle-left', 'con':'f100'},
         {'name':'double-angle-right', 'con':'f101'},
         {'name':'double-angle-up', 'con':'f102'},
-        {'name':'double-angle-down', 'con':'f103'}
+        {'name':'double-angle-down', 'con':'f103'},
+        {'name':'zoom-in', 'con':'f00e'},
+        {'name':'zoom-out', 'con':'f010'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {
