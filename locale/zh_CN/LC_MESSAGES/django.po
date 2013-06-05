@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-04 16:33+0800\n"
+"POT-Creation-Date: 2013-06-05 14:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,35 +156,35 @@ msgstr "天数不能为空"
 msgid "Please enter a number"
 msgstr "请输入数字"
 
-#: seahub/settings.py:129
+#: seahub/settings.py:130
 msgid "English"
 msgstr ""
 
-#: seahub/settings.py:130
+#: seahub/settings.py:131
 msgid "简体中文"
 msgstr ""
 
-#: seahub/settings.py:131
+#: seahub/settings.py:132
 msgid "Русский"
 msgstr ""
 
-#: seahub/settings.py:132
+#: seahub/settings.py:133
 msgid "Deutsch"
 msgstr ""
 
-#: seahub/settings.py:133
+#: seahub/settings.py:134
 msgid "Español"
 msgstr ""
 
-#: seahub/settings.py:134
+#: seahub/settings.py:135
 msgid "Italiano"
 msgstr ""
 
-#: seahub/settings.py:135
+#: seahub/settings.py:136
 msgid "Français"
 msgstr ""
 
-#: seahub/settings.py:136
+#: seahub/settings.py:137
 msgid "Magyar"
 msgstr ""
 
@@ -793,8 +793,8 @@ msgstr "删除联系人"
 #: seahub/templates/sysadmin/sys_repo_admin.html:63
 #: seahub/templates/sysadmin/sys_useradmin.html:96
 #: seahub/templates/sysadmin/userinfo.html:141
-#, python-format
-msgid "Are you sure you want to delete %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure you want to delete %s ?"
 msgstr "确定要删除 %%s 吗？"
 
 #: seahub/group/error_msg.py:7
@@ -1455,8 +1455,8 @@ msgid "Unshare Library"
 msgstr "取消共享资料库"
 
 #: seahub/group/templates/group/group_info.html:196
-#, python-format
-msgid "Are you sure you want to unshare %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure you want to unshare %s ?"
 msgstr "确定要取消共享 %%s 吗？"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
@@ -1520,8 +1520,8 @@ msgid "Delete Member"
 msgstr "删除成员"
 
 #: seahub/group/templates/group/group_manage.html:114
-#, python-format
-msgid "Really want to delete %%s ?"
+#, fuzzy, python-format
+msgid "Really want to delete %s ?"
 msgstr "确定要删除 %%s 吗？"
 
 #: seahub/group/templates/group/group_members.html:44
@@ -1938,7 +1938,8 @@ msgstr "只有资料库拥有者才有共享权限。"
 msgid ""
 "Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
 "\">Upgrade account.</a>"
-msgstr "共享\"%s\"失败，空间不足。<a href=\"http://seafile.com/\">升级帐号。</a>"
+msgstr ""
+"共享\"%s\"失败，空间不足。<a href=\"http://seafile.com/\">升级帐号。</a>"
 
 #: seahub/share/views.py:232 seahub/share/views.py:242
 msgid "Failed to remove share"
@@ -2314,8 +2315,8 @@ msgid "Unsync Client"
 msgstr "取消同步"
 
 #: seahub/templates/client_mgmt.html:73
-#, python-format
-msgid "Are you sure to unsync client %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure to unsync client %s ?"
 msgstr "确定要取消同步 %%s 吗？"
 
 #: seahub/templates/decrypt_repo_form.html:9
@@ -3887,18 +3888,18 @@ msgid "Delete User"
 msgstr "删除用户"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
-#, python-format
-msgid "Are you sure you want to reset the password of %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure you want to reset the password of %s ?"
 msgstr "确定要重置 %%s 的密码吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
-#, python-format
-msgid "Are you sure you want to revoke the admin permission of %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure you want to revoke the admin permission of %s ?"
 msgstr "确定要取消 %%s 的管理权限吗？"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
-#, python-format
-msgid "Are you sure you want to set %%s as admin?"
+#, fuzzy, python-format
+msgid "Are you sure you want to set %s as admin?"
 msgstr "确定要设置 %%s 为管理员吗？"
 
 #: seahub/templates/sysadmin/user_add_email.html:3
@@ -4371,3 +4372,30 @@ msgid ""
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
+#, fuzzy
+#~ msgid "This field is required."
+#~ msgstr "邮箱为必填项。"
+
+#, fuzzy
+#~ msgid "Invalid value."
+#~ msgstr "无效user id"
+
+#, fuzzy
+#~ msgid "Enter a whole number."
+#~ msgstr "请输入数字"
+
+#, fuzzy
+#~ msgid "Activate users"
+#~ msgstr "已激活"
+
+#, fuzzy
+#~ msgid "A user with this email alread"
+#~ msgstr "该邮箱已被注册"
+
+#, fuzzy
+#~ msgid "You must agree to the terms to register"
+#~ msgstr "共享给 %s 失败，该用户尚未注册。"
+
+#, fuzzy
+#~ msgid "activation key"
+#~ msgstr "已激活"

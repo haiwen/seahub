@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahub 1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-14 16:36+0200\n"
+"POT-Creation-Date: 2013-06-05 14:01+0800\n"
 "PO-Revision-Date: 2013-05-15 12:06+0100\n"
 "Last-Translator: Henri Wahl <h.wahl@ifw-dresden.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +25,7 @@ msgid "A user with this email already"
 msgstr "Es existiert bereits ein Nutzer mit dieser E-Mail-Adresse."
 
 #: seahub/forms.py:40 seahub/auth/forms.py:124 seahub/auth/forms.py:166
-#: seahub/base/accounts.py:407 thirdpart/registration/forms.py:58
+#: seahub/base/accounts.py:407
 msgid "The two password fields didn't match."
 msgstr "Die Passwortfelder stimmen nicht überein."
 
@@ -61,9 +62,9 @@ msgstr "Passwort ist zu lang (maximal 15 Zeichen)"
 msgid "Name %s is not valid"
 msgstr "Name %s ist ungültig"
 
-#: seahub/forms.py:93 seahub/templates/sys_useradmin.html:127
-#: seahub/templates/registration/registration_form.html:44
+#: seahub/forms.py:93 seahub/templates/registration/registration_form.html:44
 #: seahub/templates/snippets/repo_create_js.html:53
+#: seahub/templates/sysadmin/sys_useradmin.html:135
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
 
@@ -158,35 +159,35 @@ msgstr "Tage darf nicht leer sein"
 msgid "Please enter a number"
 msgstr "Bitte eine Nummer eingeben"
 
-#: seahub/settings.py:129
+#: seahub/settings.py:130
 msgid "English"
 msgstr "English"
 
-#: seahub/settings.py:130
+#: seahub/settings.py:131
 msgid "简体中文"
 msgstr "简体中文"
 
-#: seahub/settings.py:131
+#: seahub/settings.py:132
 msgid "Русский"
 msgstr "Русский"
 
-#: seahub/settings.py:132
+#: seahub/settings.py:133
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: seahub/settings.py:133
+#: seahub/settings.py:134
 msgid "Español"
 msgstr ""
 
-#: seahub/settings.py:134
+#: seahub/settings.py:135
 msgid "Italiano"
 msgstr ""
 
-#: seahub/settings.py:135
+#: seahub/settings.py:136
 msgid "Français"
 msgstr ""
 
-#: seahub/settings.py:136
+#: seahub/settings.py:137
 msgid "Magyar"
 msgstr ""
 
@@ -225,11 +226,10 @@ msgid "Username"
 msgstr "Benutzername"
 
 #: seahub/auth/forms.py:18 seahub/auth/forms.py:154
-#: seahub/base/accounts.py:380 seahub/templates/sys_useradmin.html:14
-#: seahub/templates/registration/login.html:10
+#: seahub/base/accounts.py:380 seahub/templates/registration/login.html:10
 #: seahub/templates/registration/registration_form.html:13
 #: seahub/templates/snippets/repo_create_form.html:20
-#: thirdpart/registration/forms.py:36
+#: seahub/templates/sysadmin/sys_useradmin.html:14
 msgid "Password"
 msgstr "Passwort"
 
@@ -297,7 +297,6 @@ msgstr ""
 "Sie es erneut ein."
 
 #: seahub/auth/forms.py:155 seahub/base/accounts.py:382
-#: thirdpart/registration/forms.py:38
 msgid "Password (again)"
 msgstr "Passwort erneut eingeben:"
 
@@ -311,7 +310,6 @@ msgstr "Failed to send email, please contact administrator."
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
-#: thirdpart/rest_framework/fields.py:790
 msgid "Enter a valid e-mail address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse an."
 
@@ -411,38 +409,41 @@ msgstr "Aktueller Avatar: "
 #: seahub/contacts/templates/contacts/contact_list.html:54
 #: seahub/contacts/templates/contacts/contact_list.html:63
 #: seahub/group/templates/group/discussion_list.html:41
-#: seahub/group/templates/group/group_discuss.html:63
-#: seahub/group/templates/group/group_discuss.html:145
-#: seahub/group/templates/group/group_info.html:174
-#: seahub/group/templates/group/group_members.html:56
+#: seahub/group/templates/group/group_discuss.html:66
+#: seahub/group/templates/group/group_discuss.html:148
+#: seahub/group/templates/group/group_info.html:177
 #: seahub/group/templates/group/group_pubinfo.html:24
-#: seahub/group/templates/group/group_wiki.html:47
-#: seahub/group/templates/group/group_wiki.html:79
-#: seahub/group/templates/group/group_wiki_pages.html:51
+#: seahub/group/templates/group/group_wiki.html:50
+#: seahub/group/templates/group/group_wiki.html:82
+#: seahub/group/templates/group/group_wiki_pages.html:54
 #: seahub/group/templates/group/groups_right_panel.html:30
 #: seahub/group/templates/group/grpmember_add_form.html:12
 #: seahub/group/templates/group/grpmember_add_form.html:19
 #: seahub/group/templates/group/new_msg_reply.html:65
+#: seahub/message/templates/message/user_msg_list.html:43
 #: seahub/notifications/templates/notifications/add_notification_form.html:11
 #: seahub/profile/templates/profile/set_profile.html:29
 #: seahub/profile/templates/profile/user_profile.html:38
+#: seahub/templates/base.html:69 seahub/templates/base.html.py:142
 #: seahub/templates/decrypt_repo_form.html:15
 #: seahub/templates/file_edit.html:97 seahub/templates/file_edit.html:263
-#: seahub/templates/pubuser.html:60 seahub/templates/repo.html:273
-#: seahub/templates/repo.html.py:285 seahub/templates/repo.html:311
-#: seahub/templates/repo.html.py:332 seahub/templates/repo.html:344
-#: seahub/templates/repo.html.py:356 seahub/templates/sys_useradmin.html:19
-#: seahub/templates/userinfo.html:91 seahub/templates/view_file_base.html:100
+#: seahub/templates/repo.html:273 seahub/templates/repo.html.py:285
+#: seahub/templates/repo.html:311 seahub/templates/repo.html.py:332
+#: seahub/templates/repo.html:344 seahub/templates/repo.html.py:356
+#: seahub/templates/view_file_base.html:100
 #: seahub/templates/registration/login.html:18
 #: seahub/templates/registration/password_change_form.html:18
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/registration/registration_form.html:18
-#: seahub/templates/snippets/events.html:14
+#: seahub/templates/snippets/add_to_contacts_form.html:9
+#: seahub/templates/snippets/events.html:19
 #: seahub/templates/snippets/group_recommend_form.html:19
 #: seahub/templates/snippets/repo_create_form.html:26
 #: seahub/templates/snippets/repo_share_form.html:52
 #: seahub/templates/snippets/user_profile_html.html:34
+#: seahub/templates/sysadmin/sys_useradmin.html:19
+#: seahub/templates/sysadmin/userinfo.html:93
 #: seahub/templates/wiki/personal_wiki.html:36
 #: seahub/templates/wiki/personal_wiki.html:66
 #: seahub/templates/wiki/personal_wiki_pages.html:42
@@ -469,7 +470,7 @@ msgstr ""
 msgid "Default Avatar"
 msgstr "Standard-Avatar"
 
-#: seahub/base/accounts.py:371 thirdpart/registration/forms.py:34
+#: seahub/base/accounts.py:371
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
@@ -534,7 +535,7 @@ msgstr ""
 msgid "Recovered deleted directory"
 msgstr "Gelöschter Ordner wieder hergestellt"
 
-#: seahub/base/templatetags/seahub_tags.py:115 seahub/views/__init__.py:656
+#: seahub/base/templatetags/seahub_tags.py:115 seahub/views/__init__.py:698
 msgid "Changed library name or description"
 msgstr ""
 
@@ -575,24 +576,27 @@ msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "vor einer Sekunde"
 msgstr[1] "vor %(seconds)d Sekunden"
 
-#: seahub/base/templatetags/seahub_tags.py:290
-#: seahub/group/templates/group/group_info.html:86
-#: seahub/group/templates/group/group_info_for_pub.html:53
-#: seahub/share/views.py:245 seahub/share/templates/repo/share_admin.html:37
+#: seahub/base/templatetags/seahub_tags.py:298
+#: seahub/group/templates/group/group_info.html:89
+#: seahub/group/templates/group/group_info_for_pub.html:56
+#: seahub/share/views.py:292 seahub/share/templates/repo/share_admin.html:37
 #: seahub/share/templates/repo/share_admin.html:50
-#: seahub/templates/pubrepo.html:34 seahub/templates/userinfo.html:49
-#: seahub/templates/userinfo.html.py:74
+#: seahub/share/templates/repo/user_share_list.html:42
+#: seahub/templates/pubrepo.html:34
 #: seahub/templates/snippets/my_owned_repos.html:24
 #: seahub/templates/snippets/my_owned_repos.html:66
 #: seahub/templates/snippets/repo_create_form.html:11
 #: seahub/templates/snippets/repo_share_form.html:47
+#: seahub/templates/sysadmin/userinfo.html:51
+#: seahub/templates/sysadmin/userinfo.html:76
 msgid "Read-Write"
 msgstr "Lesen und Schreiben"
 
-#: seahub/base/templatetags/seahub_tags.py:292
-#: seahub/group/templates/group/group_info.html:88
-#: seahub/group/templates/group/group_info_for_pub.html:55
-#: seahub/share/views.py:247 seahub/share/templates/repo/share_admin.html:48
+#: seahub/base/templatetags/seahub_tags.py:300
+#: seahub/group/templates/group/group_info.html:91
+#: seahub/group/templates/group/group_info_for_pub.html:58
+#: seahub/share/views.py:294 seahub/share/templates/repo/share_admin.html:48
+#: seahub/share/templates/repo/user_share_list.html:44
 #: seahub/templates/pubrepo.html:36
 #: seahub/templates/snippets/my_owned_repos.html:68
 #: seahub/templates/snippets/repo_create_form.html:12
@@ -600,32 +604,28 @@ msgstr "Lesen und Schreiben"
 msgid "Read-Only"
 msgstr "Nur Lesen"
 
-#: seahub/contacts/models.py:27
+#: seahub/contacts/models.py:56
 #: seahub/contacts/templates/contacts/contact_list.html:126
 msgid "Email is required."
 msgstr "E-Mail ist erforderlich."
 
-#: seahub/contacts/models.py:32
+#: seahub/contacts/models.py:61
 #: seahub/contacts/templates/contacts/contact_list.html:130
 msgid "You can't add yourself."
 msgstr "Sie können sich nicht selbst hinzufügen."
 
-#: seahub/contacts/models.py:35
+#: seahub/contacts/models.py:64
 msgid "It is already your contact."
 msgstr "Ist bereits in Ihren Kontakten."
 
-#: seahub/contacts/views.py:67
+#: seahub/contacts/views.py:67 seahub/contacts/views.py:92
 #, python-format
 msgid "Successfully added %s to contacts."
 msgstr "%s erfolgreich zu den Kontakten hinzugefügt."
 
-#: seahub/contacts/views.py:92
-#, python-format
-msgid "Successfully added %s."
-msgstr "%s erfolgreich hinzugefügt."
-
 #: seahub/contacts/views.py:94
-msgid "Failed to add an contact."
+#, fuzzy, python-format
+msgid "Failed to add %s to contacts."
 msgstr "Hinzufügen des Kontakts fehlgeschlagen."
 
 #: seahub/contacts/views.py:119
@@ -669,24 +669,26 @@ msgid "Email "
 msgstr "E-Mail "
 
 #: seahub/contacts/templates/contacts/contact_list.html:23
-#: seahub/group/templates/group/group_info.html:75
-#: seahub/group/templates/group/group_info_for_pub.html:42
-#: seahub/group/templates/group/group_wiki.html:42
-#: seahub/group/templates/group/group_wiki.html:76
-#: seahub/group/templates/group/group_wiki_pages.html:48
+#: seahub/group/templates/group/group_info.html:78
+#: seahub/group/templates/group/group_info_for_pub.html:45
+#: seahub/group/templates/group/group_wiki.html:45
+#: seahub/group/templates/group/group_wiki.html:79
+#: seahub/group/templates/group/group_wiki_pages.html:51
 #: seahub/share/templates/repo/share_admin.html:29
+#: seahub/share/templates/repo/user_share_list.html:33
 #: seahub/templates/pubrepo.html:24 seahub/templates/repo.html:113
 #: seahub/templates/repo.html.py:262
 #: seahub/templates/repo_history_view.html:52
 #: seahub/templates/repo_recycle_view.html:53
-#: seahub/templates/sys_group_admin.html:12
-#: seahub/templates/sys_org_admin.html:11
-#: seahub/templates/sys_seafadmin.html:10 seahub/templates/userinfo.html:42
-#: seahub/templates/userinfo.html.py:67
 #: seahub/templates/view_shared_dir.html:32
 #: seahub/templates/snippets/my_owned_repos.html:17
 #: seahub/templates/snippets/my_owned_repos.html:55
 #: seahub/templates/snippets/repo_create_form.html:4
+#: seahub/templates/sysadmin/sys_group_admin.html:12
+#: seahub/templates/sysadmin/sys_org_admin.html:11
+#: seahub/templates/sysadmin/sys_repo_admin.html:10
+#: seahub/templates/sysadmin/userinfo.html:44
+#: seahub/templates/sysadmin/userinfo.html:69
 #: seahub/templates/wiki/personal_wiki.html:31
 #: seahub/templates/wiki/personal_wiki.html:63
 #: seahub/templates/wiki/personal_wiki_pages.html:39
@@ -698,33 +700,34 @@ msgid "Note"
 msgstr "Anmerkung"
 
 #: seahub/contacts/templates/contacts/contact_list.html:25
-#: seahub/group/templates/group/group_info.html:79
-#: seahub/group/templates/group/group_info_for_pub.html:46
-#: seahub/group/templates/group/group_manage.html:36
-#: seahub/group/templates/group/group_manage.html:56
-#: seahub/group/templates/group/group_manage.html:80
+#: seahub/group/templates/group/group_info.html:82
+#: seahub/group/templates/group/group_info_for_pub.html:49
+#: seahub/group/templates/group/group_manage.html:39
+#: seahub/group/templates/group/group_manage.html:59
+#: seahub/group/templates/group/group_manage.html:83
 #: seahub/notifications/templates/notifications/notification_list.html:7
 #: seahub/notifications/templates/notifications/notification_list.html:20
 #: seahub/share/templates/repo/share_admin.html:33
 #: seahub/share/templates/repo/share_admin.html:87
+#: seahub/share/templates/repo/user_share_list.html:36
 #: seahub/templates/client_mgmt.html:30
 #: seahub/templates/file_revisions.html:28 seahub/templates/pubrepo.html:28
 #: seahub/templates/repo.html:116 seahub/templates/repo_recycle_view.html:56
 #: seahub/templates/repo_view_snapshot.html:18
-#: seahub/templates/sys_group_admin.html:15
-#: seahub/templates/sys_org_admin.html:15
-#: seahub/templates/sys_seafadmin.html:14
-#: seahub/templates/sys_useradmin.html:27 seahub/templates/userinfo.html:44
 #: seahub/templates/view_shared_dir.html:34
 #: seahub/templates/snippets/my_owned_repos.html:20
 #: seahub/templates/snippets/my_owned_repos.html:59
+#: seahub/templates/sysadmin/sys_group_admin.html:15
+#: seahub/templates/sysadmin/sys_org_admin.html:15
+#: seahub/templates/sysadmin/sys_repo_admin.html:14
+#: seahub/templates/sysadmin/sys_useradmin.html:28
+#: seahub/templates/sysadmin/userinfo.html:46
 msgid "Operations"
 msgstr "Aktionen"
 
 #: seahub/contacts/templates/contacts/contact_list.html:34
 #: seahub/share/templates/repo/share_admin.html:43
-#: seahub/templates/file_edit.html:80 seahub/templates/myhome.html:26
-#: seahub/templates/myhome.html.py:29
+#: seahub/templates/file_edit.html:80
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_sf.html:8
 #: seahub/templates/view_file_text.html:24
@@ -732,17 +735,18 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: seahub/contacts/templates/contacts/contact_list.html:35
-#: seahub/group/templates/group/group_discuss.html:80
-#: seahub/group/templates/group/group_manage.html:65
-#: seahub/group/templates/group/group_manage.html:89
+#: seahub/group/templates/group/group_discuss.html:83
+#: seahub/group/templates/group/group_manage.html:68
+#: seahub/group/templates/group/group_manage.html:92
 #: seahub/notifications/templates/notifications/notification_list.html:32
 #: seahub/templates/repo.html:37 seahub/templates/repo.html.py:147
-#: seahub/templates/repo.html:195 seahub/templates/sys_group_admin.html:22
-#: seahub/templates/sys_org_admin.html:23
-#: seahub/templates/sys_seafadmin.html:22
-#: seahub/templates/sys_useradmin.html:41 seahub/templates/userinfo.html:53
-#: seahub/templates/view_file_base.html:36
+#: seahub/templates/repo.html:195 seahub/templates/view_file_base.html:36
 #: seahub/templates/snippets/my_owned_repos.html:35
+#: seahub/templates/sysadmin/sys_group_admin.html:22
+#: seahub/templates/sysadmin/sys_org_admin.html:23
+#: seahub/templates/sysadmin/sys_repo_admin.html:22
+#: seahub/templates/sysadmin/sys_useradmin.html:49
+#: seahub/templates/sysadmin/userinfo.html:55
 msgid "Delete"
 msgstr "Löschen"
 
@@ -760,29 +764,28 @@ msgstr ""
 
 #: seahub/contacts/templates/contacts/contact_list.html:49
 #: seahub/contacts/templates/contacts/contact_list.html:58
-#: seahub/group/templates/group/group_manage.html:55
-#: seahub/group/templates/group/group_manage.html:79
-#: seahub/group/templates/group/group_members.html:50
-#: seahub/templates/pubuser.html:54 seahub/templates/sys_useradmin.html:12
-#: seahub/templates/sys_useradmin.html:24
+#: seahub/group/templates/group/group_manage.html:58
+#: seahub/group/templates/group/group_manage.html:82
+#: seahub/message/templates/message/all_msg_list.html:22
 #: seahub/templates/registration/login.html:8
 #: seahub/templates/registration/registration_form.html:11
+#: seahub/templates/snippets/add_to_contacts_form.html:3
 #: seahub/templates/snippets/user_profile_html.html:28
+#: seahub/templates/sysadmin/sys_useradmin.html:12
+#: seahub/templates/sysadmin/sys_useradmin.html:24
 msgid "Email"
 msgstr "E-Mail"
 
 #: seahub/contacts/templates/contacts/contact_list.html:51
 #: seahub/contacts/templates/contacts/contact_list.html:60
-#: seahub/group/templates/group/group_members.html:52
-#: seahub/templates/pubuser.html:56
+#: seahub/templates/snippets/add_to_contacts_form.html:5
 #: seahub/templates/snippets/user_profile_html.html:30
 msgid "Name(optional)"
 msgstr "Name (optional)"
 
 #: seahub/contacts/templates/contacts/contact_list.html:52
 #: seahub/contacts/templates/contacts/contact_list.html:61
-#: seahub/group/templates/group/group_members.html:54
-#: seahub/templates/pubuser.html:58
+#: seahub/templates/snippets/add_to_contacts_form.html:7
 #: seahub/templates/snippets/user_profile_html.html:32
 msgid "Note(optional)"
 msgstr "Notiz (optional)"
@@ -793,19 +796,19 @@ msgstr "Kontakt bearbeiten"
 
 #: seahub/contacts/templates/contacts/contact_list.html:108
 #: seahub/contacts/templates/contacts/contact_list.html:160
-#: seahub/group/templates/group/msg_js.html:152
+#: seahub/group/templates/group/msg_js.html:155
 #: seahub/templates/file_edit.html:515 seahub/templates/repo.html:429
 #: seahub/templates/repo.html.py:666 seahub/templates/repo.html:702
-#: seahub/templates/repo.html.py:845 seahub/templates/sys_useradmin.html:151
-#: seahub/templates/view_file_base.html:167
-#: seahub/templates/view_file_document.html:66
-#: seahub/templates/view_file_pdf.html:117
+#: seahub/templates/repo.html.py:845 seahub/templates/view_file_base.html:167
 #: seahub/templates/snippets/bottom_bar.html:99
-#: seahub/templates/snippets/file_content_js.html:109
+#: seahub/templates/snippets/events_js.html:55
+#: seahub/templates/snippets/office_convert_js.html:117
+#: seahub/templates/snippets/office_convert_js.html:142
 #: seahub/templates/snippets/repo_decrypt_js.html:35
 #: seahub/templates/snippets/shared_link_js.html:40
 #: seahub/templates/snippets/shared_link_js.html:58
 #: seahub/templates/snippets/shared_link_js.html:120
+#: seahub/templates/sysadmin/sys_useradmin.html:159
 msgid "Failed. Please check the network."
 msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
 
@@ -815,13 +818,14 @@ msgstr "Kontakt löschen"
 
 #: seahub/contacts/templates/contacts/contact_list.html:116
 #: seahub/notifications/templates/notifications/notification_list.html:72
-#: seahub/templates/sys_group_admin.html:63
-#: seahub/templates/sys_org_admin.html:63
-#: seahub/templates/sys_seafadmin.html:63
-#: seahub/templates/sys_useradmin.html:88 seahub/templates/userinfo.html:139
 #: seahub/templates/snippets/myhome_extra_script.html:52
-#, python-format
-msgid "Are you sure you want to delete %%s ?"
+#: seahub/templates/sysadmin/sys_group_admin.html:63
+#: seahub/templates/sysadmin/sys_org_admin.html:63
+#: seahub/templates/sysadmin/sys_repo_admin.html:63
+#: seahub/templates/sysadmin/sys_useradmin.html:96
+#: seahub/templates/sysadmin/userinfo.html:141
+#, fuzzy, python-format
+msgid "Are you sure you want to delete %s ?"
 msgstr "Sind Sie sicher, dass Sie %%s löschen möchten?"
 
 #: seahub/group/error_msg.py:7
@@ -890,82 +894,78 @@ msgstr "Bestätigungsnachricht ist zu lang (maximal 255 Zeichen)"
 msgid "\"%s\" is not a valid name"
 msgstr "Name \"%s\" ist ungültig"
 
-#: seahub/group/views.py:135
+#: seahub/group/views.py:138
 #, python-format
 msgid ""
 "You can only create %d groups.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr ""
 
-#: seahub/group/views.py:150
+#: seahub/group/views.py:153
 msgid "There is already a group with that name."
 msgstr "Es existiert bereits eine Gruppe mit diesem Namen."
 
-#: seahub/group/views.py:248 seahub/group/views.py:270
+#: seahub/group/views.py:251 seahub/group/views.py:273
 msgid "Only administrators can make the group public"
 msgstr ""
 "Nur Administratoren können diese Gruppe zu einer öffentlichen Gruppe machen."
 
-#: seahub/group/views.py:316
+#: seahub/group/views.py:319
 msgid "The message doesn't exist"
 msgstr "Diese Nachricht existiert nicht"
 
-#: seahub/group/views.py:326
+#: seahub/group/views.py:329
 msgid "You don't have the permission."
 msgstr "Sie haben nicht die benötigte Berechtigung."
 
-#: seahub/group/views.py:540 seahub/group/views.py:666
+#: seahub/group/views.py:538 seahub/group/views.py:663
 #, python-format
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr ""
 
-#: seahub/group/views.py:559
+#: seahub/group/views.py:557
 msgid "Your friend added you to a group at Seafile."
 msgstr "Jemand hat Sie einer Gruppe bei Seafile hinzugefügt"
 
-#: seahub/group/views.py:579
+#: seahub/group/views.py:577
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "Hinzufügen fehlgeschlagen, %s ist nicht registriert."
 
-#: seahub/group/views.py:593
+#: seahub/group/views.py:591
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "Erfolgreich hinzugefügt. Eine Email wurde verschickt."
 msgstr[1] "Erfolgreich hinzugefügt. %(count)s E-Mails wurde verschickt."
 
-#: seahub/group/views.py:601
+#: seahub/group/views.py:599
 msgid "Successfully added."
 msgstr "Erfolgreich hinzugefügt."
 
-#: seahub/group/views.py:647
+#: seahub/group/views.py:644
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "Hinzufügen fehlgeschlagen, %s ist nicht registriert."
 
-#: seahub/group/views.py:679 seahub/group/views.py:692
-#: seahub/group/views.py:719
+#: seahub/group/views.py:676 seahub/group/views.py:689
+#: seahub/group/views.py:716
 msgid "Operation succeeded."
 msgstr "Aktion erfolgreich."
 
-#: seahub/group/views.py:721
+#: seahub/group/views.py:718
 #, python-format
 msgid "Failed：%s"
 msgstr "Fehlgeschlagen: %s"
 
-#: seahub/group/views.py:733
-msgid "Failed to share: the group doesn't exist."
-msgstr "Freigeben fehlgeschlagen: Die Gruppe existiert nicht."
-
-#: seahub/group/views.py:746
+#: seahub/group/views.py:743
 msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
 "Freigeben konnte nicht rückgängig gemacht werden: Die Gruppe existiert nicht."
 
-#: seahub/group/views.py:751
+#: seahub/group/views.py:748
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
@@ -973,105 +973,105 @@ msgstr ""
 "Operation fehlgeschlagen: Nur Administratoren und der Besitzer können das "
 "Freigeben einer Bibliothek rückgängig machen"
 
-#: seahub/group/views.py:754
+#: seahub/group/views.py:751
 msgid "Failed to unshare: internal error."
 msgstr "Freigeben konnte nicht rückgängig gemacht werden: Interner Fehler"
 
-#: seahub/group/views.py:783
+#: seahub/group/views.py:780
 msgid "Error: wrong group id"
 msgstr "Fehler: falsche Gruppen-ID"
 
-#: seahub/group/views.py:788
+#: seahub/group/views.py:785
 msgid "Error: the group does not exist."
 msgstr "Fehler: Die Gruppe existiert nicht."
 
-#: seahub/group/views.py:820
+#: seahub/group/views.py:817
 #, python-format
 msgid "Successfully posted to %(groups)s."
 msgstr "%(groups)s erfolgreich bearbeitet."
 
-#: seahub/group/views.py:823
+#: seahub/group/views.py:820
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "Fehler: Sie sind nicht in Gruppe %s."
 
-#: seahub/group/views.py:835
+#: seahub/group/views.py:832
 msgid "Error: the library does not exist."
 msgstr "Fehler: Die Bibliothek existiert nicht."
 
-#: seahub/group/views.py:838
+#: seahub/group/views.py:835
 msgid "Error: no path."
 msgstr ""
 
-#: seahub/group/views.py:876
+#: seahub/group/views.py:873
 msgid "Failed to create: the group does not exist."
 msgstr "Erstellen fehlgeschlagen: Die Gruppe existiert nicht."
 
-#: seahub/group/views.py:880
+#: seahub/group/views.py:877
 msgid "Failed to create: you are not in the group."
 msgstr "Erstellen fehlgeschlagen: Sie sind nicht in der Gruppe."
 
-#: seahub/group/views.py:902 seahub/group/views.py:925
-#: seahub/group/views.py:1252 seahub/views/wiki.py:120
+#: seahub/group/views.py:899 seahub/group/views.py:922
+#: seahub/group/views.py:1253 seahub/views/wiki.py:124
 msgid "Failed to create"
 msgstr "Erstellen fehlgeschlagen"
 
-#: seahub/group/views.py:916 seahub/group/views.py:938
-#: seahub/group/views.py:1261
+#: seahub/group/views.py:913 seahub/group/views.py:935
+#: seahub/group/views.py:1262
 msgid "Failed to create: internal error."
 msgstr "Erstellen fehlgeschlagen: Interner Fehler."
 
-#: seahub/group/views.py:965
+#: seahub/group/views.py:962
 msgid "You are already in the group."
 msgstr "Sie sind bereits in der Gruppe."
 
-#: seahub/group/views.py:984
+#: seahub/group/views.py:981
 msgid "apply to join the group"
 msgstr "Anfragen, um der Gruppe beizutreten"
 
-#: seahub/group/views.py:986
+#: seahub/group/views.py:983
 msgid "Sent successfully, the group admin will handle it."
 msgstr ""
 "Erfolgreicht versandt, der Gruppenadministrator wird die Nachricht behandeln."
 
-#: seahub/group/views.py:990
+#: seahub/group/views.py:987
 msgid "Failed to send. You can try it again later."
 msgstr "Versenden fehlgeschlagen: Sie können es später erneut versuchen."
 
-#: seahub/group/views.py:1140 seahub/views/__init__.py:357
-#: seahub/views/__init__.py:2032 seahub/views/__init__.py:2160
-#: seahub/views/file.py:280
+#: seahub/group/views.py:1137 seahub/views/__init__.py:366
+#: seahub/views/__init__.py:1709 seahub/views/__init__.py:1838
+#: seahub/views/file.py:263
 msgid "File does not exist"
 msgstr "Die Datei existiert nicht"
 
-#: seahub/group/views.py:1180 seahub/group/views.py:1299
-#: seahub/views/wiki.py:53 seahub/views/wiki.py:154
+#: seahub/group/views.py:1177 seahub/group/views.py:1300
+#: seahub/views/wiki.py:53 seahub/views/wiki.py:158
 msgid "Failed to create wiki page. Please retry later."
 msgstr ""
 "Wikiseite konnte nicht erstellt werden, bitte versuchen Sie es später "
 "nochmals."
 
-#: seahub/group/views.py:1214 seahub/views/__init__.py:351
-#: seahub/views/wiki.py:85
+#: seahub/group/views.py:1213 seahub/views/__init__.py:360
+#: seahub/views/wiki.py:87
 msgid "Internal Server Error"
 msgstr "Interner Serverfehler"
 
-#: seahub/group/views.py:1216 seahub/views/wiki.py:87
+#: seahub/group/views.py:1215 seahub/views/wiki.py:89
 msgid "Wiki does not exists."
 msgstr "Das Wiki existiert nicht."
 
-#: seahub/group/views.py:1268 seahub/views/wiki.py:127
+#: seahub/group/views.py:1269 seahub/views/wiki.py:131
 msgid "Failed to create home page. Please retry later"
 msgstr ""
 "Anlegen der Seite fehlgeschlagen, bitte versuchen Sie es später nochmals."
 
-#: seahub/group/views.py:1289 seahub/group/views.py:1315
-#: seahub/group/views.py:1333 seahub/views/wiki.py:144
-#: seahub/views/wiki.py:167 seahub/views/wiki.py:182
+#: seahub/group/views.py:1290 seahub/group/views.py:1316
+#: seahub/group/views.py:1334 seahub/views/wiki.py:148
+#: seahub/views/wiki.py:171 seahub/views/wiki.py:186
 msgid "Wiki is not found."
 msgstr ""
 
-#: seahub/group/views.py:1296 seahub/views/wiki.py:151
+#: seahub/group/views.py:1297 seahub/views/wiki.py:155
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr ""
@@ -1088,70 +1088,72 @@ msgstr ""
 #: seahub/group/templates/group/add_member_email.html:5
 #: seahub/group/templates/group/group_join_email.html:6
 #: seahub/templates/shared_link_email.html:7
-#: seahub/templates/user_add_email.html:14
-#: seahub/templates/user_reset_email.html:6
 #: seahub/templates/registration/password_reset_email.html:10
+#: seahub/templates/sysadmin/user_add_email.html:14
+#: seahub/templates/sysadmin/user_reset_email.html:6
 msgid "Thanks for using our site!"
 msgstr "Danke, dass Sie unsere Seite benutzen! "
 
 #: seahub/group/templates/group/add_member_email.html:7
 #: seahub/group/templates/group/group_join_email.html:8
 #: seahub/templates/shared_link_email.html:9
-#: seahub/templates/user_add_email.html:16
-#: seahub/templates/user_reset_email.html:8
 #: seahub/templates/registration/password_reset_email.html:12
+#: seahub/templates/sysadmin/user_add_email.html:16
+#: seahub/templates/sysadmin/user_reset_email.html:8
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "Das %(site_name)s team"
 
 #: seahub/group/templates/group/discussion_list.html:17
-#: seahub/group/templates/group/group_discuss.html:118
+#: seahub/group/templates/group/group_discuss.html:121
 #: seahub/group/templates/group/new_msg_reply.html:45
 #, python-format
 msgid "%(amount)s replies"
 msgstr ""
 
 #: seahub/group/templates/group/discussion_list.html:18
-#: seahub/group/templates/group/group_discuss.html:119
+#: seahub/group/templates/group/group_discuss.html:122
 #: seahub/group/templates/group/new_msg_reply.html:46
 msgid "Hide replies"
 msgstr "Beiträge verbergen"
 
 #: seahub/group/templates/group/discussion_list.html:31
-#: seahub/group/templates/group/group_discuss.html:133
+#: seahub/group/templates/group/group_discuss.html:136
 #: seahub/group/templates/group/group_reply_list.html:11
 #: seahub/group/templates/group/new_msg_reply.html:56
 msgid "Reply"
 msgstr "Antworten"
 
 #: seahub/group/templates/group/discussion_list.html:39
-#: seahub/group/templates/group/group_discuss.html:143
+#: seahub/group/templates/group/group_discuss.html:146
 #: seahub/group/templates/group/new_msg_reply.html:63
 msgid "Add a reply..."
 msgstr "Antworten..."
 
 #: seahub/group/templates/group/discussion_list.html:40
-#: seahub/group/templates/group/group_discuss.html:144
+#: seahub/group/templates/group/group_discuss.html:147
 #: seahub/group/templates/group/new_msg_reply.html:64
 msgid "It can not be blank and should be no more than 150 characters."
 msgstr "Darf nicht leer sein und sollte nicht mehr als 150 Zeichen haben."
 
 #: seahub/group/templates/group/discussion_list.html:42
-#: seahub/group/templates/group/group_discuss.html:64
-#: seahub/group/templates/group/group_discuss.html:146
-#: seahub/group/templates/group/group_info.html:175
+#: seahub/group/templates/group/group_discuss.html:67
+#: seahub/group/templates/group/group_discuss.html:149
+#: seahub/group/templates/group/group_info.html:178
 #: seahub/group/templates/group/new_msg_reply.html:66
-#: seahub/templates/file_edit.html:98 seahub/templates/file_edit.html:264
-#: seahub/templates/repo.html:231 seahub/templates/repo.html.py:253
-#: seahub/templates/repo.html:274 seahub/templates/repo.html.py:286
-#: seahub/templates/repo.html:312 seahub/templates/repo.html.py:333
-#: seahub/templates/repo.html:345 seahub/templates/snippets/events.html:15
+#: seahub/message/templates/message/user_msg_list.html:44
+#: seahub/templates/base.html:70 seahub/templates/file_edit.html:98
+#: seahub/templates/file_edit.html:264 seahub/templates/repo.html:231
+#: seahub/templates/repo.html.py:253 seahub/templates/repo.html:274
+#: seahub/templates/repo.html.py:286 seahub/templates/repo.html:312
+#: seahub/templates/repo.html.py:333 seahub/templates/repo.html:345
+#: seahub/templates/snippets/events.html:20
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: seahub/group/templates/group/group_discuss.html:15
 #: seahub/group/templates/group/group_info.html:16
-#: seahub/group/templates/group/group_info.html:65
+#: seahub/group/templates/group/group_info.html:68
 #: seahub/group/templates/group/group_info_for_pub.html:16
 #: seahub/group/templates/group/group_manage.html:14
 #: seahub/group/templates/group/group_members.html:16
@@ -1187,52 +1189,63 @@ msgid "Wiki"
 msgstr "Wiki"
 
 #: seahub/group/templates/group/group_discuss.html:19
-#: seahub/group/templates/group/group_discuss.html:30
-#: seahub/group/templates/group/group_info.html:19
-#: seahub/group/templates/group/group_info.html:43
-#: seahub/group/templates/group/group_manage.html:17
-#: seahub/group/templates/group/group_manage.html:49
-#: seahub/group/templates/group/group_members.html:19
+#: seahub/group/templates/group/group_info.html:20
+#: seahub/group/templates/group/group_info_for_pub.html:20
+#: seahub/group/templates/group/group_manage.html:18
+#: seahub/group/templates/group/group_members.html:20
 #: seahub/group/templates/group/group_wiki.html:20
 #: seahub/group/templates/group/group_wiki_pages.html:19
+#, fuzzy
+msgid "Files"
+msgstr "Datei"
+
+#: seahub/group/templates/group/group_discuss.html:22
+#: seahub/group/templates/group/group_discuss.html:33
+#: seahub/group/templates/group/group_info.html:22
+#: seahub/group/templates/group/group_info.html:46
+#: seahub/group/templates/group/group_manage.html:20
+#: seahub/group/templates/group/group_manage.html:52
+#: seahub/group/templates/group/group_members.html:22
+#: seahub/group/templates/group/group_wiki.html:23
+#: seahub/group/templates/group/group_wiki_pages.html:22
 msgid "Members"
 msgstr "Mitglieder"
 
-#: seahub/group/templates/group/group_discuss.html:22
-#: seahub/group/templates/group/group_info.html:21
-#: seahub/group/templates/group/group_manage.html:18
-#: seahub/group/templates/group/group_members.html:21
-#: seahub/group/templates/group/group_wiki.html:23
-#: seahub/group/templates/group/group_wiki_pages.html:22
+#: seahub/group/templates/group/group_discuss.html:25
+#: seahub/group/templates/group/group_info.html:24
+#: seahub/group/templates/group/group_manage.html:21
+#: seahub/group/templates/group/group_members.html:24
+#: seahub/group/templates/group/group_wiki.html:26
+#: seahub/group/templates/group/group_wiki_pages.html:25
 msgid "Admin"
 msgstr "Administrator"
 
-#: seahub/group/templates/group/group_discuss.html:45
+#: seahub/group/templates/group/group_discuss.html:48
 msgid "No members"
 msgstr "Keine Mitglieder"
 
-#: seahub/group/templates/group/group_discuss.html:59
+#: seahub/group/templates/group/group_discuss.html:62
 msgid "Add a discussion..."
 msgstr "Beginne eine Diskussion..."
 
-#: seahub/group/templates/group/group_discuss.html:68
+#: seahub/group/templates/group/group_discuss.html:71
+#: seahub/message/templates/message/user_msg_list.html:110
 msgid "After login, you can post discussions and add replies."
 msgstr ""
 
-#: seahub/group/templates/group/group_discuss.html:92
-#: seahub/group/templates/group/group_discuss.html:108
+#: seahub/group/templates/group/group_discuss.html:95
+#: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/new_msg_reply.html:26
 #: seahub/group/templates/group/new_msg_reply.html:35
 #: seahub/templates/repo.html:168 seahub/templates/repo.html.py:591
 #: seahub/templates/repo.html:615 seahub/templates/repo_history_view.html:66
 #: seahub/templates/repo_recycle_view.html:78
-#: seahub/templates/search_results.html:22
 #: seahub/templates/view_shared_dir.html:57
 #: seahub/templates/snippets/group_recommend_form.html:28
 msgid "File"
 msgstr "Datei"
 
-#: seahub/group/templates/group/group_discuss.html:102
+#: seahub/group/templates/group/group_discuss.html:105
 #: seahub/group/templates/group/new_msg_reply.html:29
 #: seahub/templates/pubrepo.html:34 seahub/templates/pubrepo.html.py:36
 #: seahub/templates/repo.html:122 seahub/templates/view_shared_dir.html:39
@@ -1240,110 +1253,116 @@ msgstr "Datei"
 msgid "Directory icon"
 msgstr "Ordnersymbol"
 
-#: seahub/group/templates/group/group_discuss.html:159
+#: seahub/group/templates/group/group_discuss.html:162
+#: seahub/message/templates/message/user_msg_list.html:90
 #: seahub/templates/pubuser.html:38 seahub/templates/repo_history.html:52
 #: seahub/templates/repo_view_snapshot.html:50
-#: seahub/templates/search_results.html:46
-#: seahub/templates/sys_group_admin.html:29
-#: seahub/templates/sys_seafadmin.html:29
-#: seahub/templates/sys_useradmin.html:56
-#: seahub/templates/view_file_pdf.html:11
-#: seahub/templates/snippets/file_content_js.html:122
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+#: seahub/templates/sysadmin/sys_group_admin.html:29
+#: seahub/templates/sysadmin/sys_repo_admin.html:29
+#: seahub/templates/sysadmin/sys_useradmin.html:64
 msgid "Previous"
 msgstr "Vorherige"
 
-#: seahub/group/templates/group/group_discuss.html:169
+#: seahub/group/templates/group/group_discuss.html:172
+#: seahub/message/templates/message/user_msg_list.html:100
 #: seahub/templates/pubuser.html:48 seahub/templates/repo_history.html:55
 #: seahub/templates/repo_view_snapshot.html:53
-#: seahub/templates/search_results.html:49
-#: seahub/templates/sys_group_admin.html:32
-#: seahub/templates/sys_seafadmin.html:32
-#: seahub/templates/sys_useradmin.html:59
-#: seahub/templates/view_file_pdf.html:11
-#: seahub/templates/snippets/file_content_js.html:122
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+#: seahub/templates/sysadmin/sys_group_admin.html:32
+#: seahub/templates/sysadmin/sys_repo_admin.html:32
+#: seahub/templates/sysadmin/sys_useradmin.html:67
 msgid "Next"
 msgstr "Nächste"
 
-#: seahub/group/templates/group/group_discuss.html:175
+#: seahub/group/templates/group/group_discuss.html:178
+#: seahub/message/templates/message/user_msg_list.html:106
 msgid "↑Top"
 msgstr ""
 
-#: seahub/group/templates/group/group_discuss.html:228
+#: seahub/group/templates/group/group_discuss.html:229
 msgid "Really want to delete this discussion?"
 msgstr "Sind Sie sicher, dass Sie diese Diskussion löschen möchten?"
 
-#: seahub/group/templates/group/group_discuss.html:228
-#: seahub/templates/base.html:105
+#: seahub/group/templates/group/group_discuss.html:229
+#: seahub/templates/base.html:173
 msgid "Yes"
 msgstr "Ja"
 
-#: seahub/group/templates/group/group_discuss.html:228
-#: seahub/templates/base.html:106
+#: seahub/group/templates/group/group_discuss.html:229
+#: seahub/templates/base.html:174
 msgid "No"
 msgstr "Nein"
 
-#: seahub/group/templates/group/group_discuss.html:243
+#: seahub/group/templates/group/group_discuss.html:244
 msgid "Successfully deleted"
 msgstr "Erfolgreicht gelöscht"
 
-#: seahub/group/templates/group/group_discuss.html:245
+#: seahub/group/templates/group/group_discuss.html:246
 msgid "Failed to delete: "
 msgstr "Löschen fehlgeschlagen:"
 
-#: seahub/group/templates/group/group_discuss.html:249
+#: seahub/group/templates/group/group_discuss.html:250
 msgid "Failed."
 msgstr "Fehlgeschlagen."
 
-#: seahub/group/templates/group/group_info.html:30
-#: seahub/group/templates/group/group_info_for_pub.html:26
+#: seahub/group/templates/group/group_info.html:33
+#: seahub/group/templates/group/group_info_for_pub.html:29
+#: seahub/message/templates/message/user_msg_list.html:8
+#: seahub/share/templates/repo/user_share_list.html:8
 #: seahub/templates/org_admin_base.html:8
 msgid "Basic Info"
 msgstr "Info"
 
-#: seahub/group/templates/group/group_info.html:30
-#: seahub/group/templates/group/group_info_for_pub.html:26
+#: seahub/group/templates/group/group_info.html:33
+#: seahub/group/templates/group/group_info_for_pub.html:29
 msgid "This group is public."
 msgstr "Diese Gruppe ist öffentlich."
 
-#: seahub/group/templates/group/group_info.html:34
-#: seahub/group/templates/group/group_info_for_pub.html:30
+#: seahub/group/templates/group/group_info.html:37
+#: seahub/group/templates/group/group_info_for_pub.html:33
 msgid "created at"
 msgstr "erstellt am"
 
-#: seahub/group/templates/group/group_info.html:36
-#: seahub/group/templates/group/group_info.html:188
+#: seahub/group/templates/group/group_info.html:39
+#: seahub/group/templates/group/group_info.html:191
 msgid "Quit Group"
 msgstr "Gruppe verlassen"
 
-#: seahub/group/templates/group/group_info.html:66
+#: seahub/group/templates/group/group_info.html:69
 msgid "Recent Changes"
 msgstr "Letzte Änderungen"
 
-#: seahub/group/templates/group/group_info.html:68
+#: seahub/group/templates/group/group_info.html:71
 #: seahub/templates/pubrepo.html:13
 #: seahub/templates/snippets/my_owned_repos.html:10
 #: seahub/templates/snippets/repo_create_form.html:3
 msgid "New Library"
 msgstr "Neue Bibliothek"
 
-#: seahub/group/templates/group/group_info.html:76
-#: seahub/group/templates/group/group_info.html:125
-#: seahub/group/templates/group/group_info_for_pub.html:43
-#: seahub/group/templates/group/group_wiki.html:44
+#: seahub/group/templates/group/group_info.html:79
+#: seahub/group/templates/group/group_info.html:128
+#: seahub/group/templates/group/group_info_for_pub.html:46
+#: seahub/group/templates/group/group_wiki.html:47
 #: seahub/share/templates/repo/share_admin.html:32
+#: seahub/share/templates/repo/user_share_list.html:34
 #: seahub/templates/pubrepo.html:25 seahub/templates/repo.html:264
 #: seahub/templates/repo_history.html:23
-#: seahub/templates/sys_seafadmin.html:13 seahub/templates/userinfo.html:43
-#: seahub/templates/userinfo.html.py:69
 #: seahub/templates/snippets/my_owned_repos.html:18
 #: seahub/templates/snippets/my_owned_repos.html:56
 #: seahub/templates/snippets/repo_create_form.html:6
+#: seahub/templates/sysadmin/sys_repo_admin.html:13
+#: seahub/templates/sysadmin/userinfo.html:45
+#: seahub/templates/sysadmin/userinfo.html:71
 #: seahub/templates/wiki/personal_wiki.html:33
 msgid "Description"
 msgstr "Beschreibung"
 
-#: seahub/group/templates/group/group_info.html:77
-#: seahub/group/templates/group/group_info_for_pub.html:44
+#: seahub/group/templates/group/group_info.html:80
+#: seahub/group/templates/group/group_info_for_pub.html:47
+#: seahub/share/templates/repo/user_share_list.html:35
 #: seahub/templates/pubrepo.html:26 seahub/templates/repo.html:115
 #: seahub/templates/snippets/my_owned_repos.html:19
 #: seahub/templates/snippets/my_owned_repos.html:57
@@ -1351,32 +1370,35 @@ msgstr "Beschreibung"
 msgid "Last Update"
 msgstr "Letzte Aktualisierung"
 
-#: seahub/group/templates/group/group_info.html:78
-#: seahub/group/templates/group/group_info_for_pub.html:45
+#: seahub/group/templates/group/group_info.html:81
+#: seahub/group/templates/group/group_info_for_pub.html:48
 #: seahub/templates/snippets/my_owned_repos.html:58
 msgid "Shared By"
 msgstr "Freigegeben von"
 
-#: seahub/group/templates/group/group_info.html:86
-#: seahub/group/templates/group/group_info.html:88
-#: seahub/group/templates/group/group_info_for_pub.html:53
-#: seahub/group/templates/group/group_info_for_pub.html:55
+#: seahub/group/templates/group/group_info.html:89
+#: seahub/group/templates/group/group_info.html:91
+#: seahub/group/templates/group/group_info_for_pub.html:56
+#: seahub/group/templates/group/group_info_for_pub.html:58
 #: seahub/share/templates/repo/share_admin.html:37
-#: seahub/templates/userinfo.html:49
+#: seahub/share/templates/repo/user_share_list.html:42
+#: seahub/share/templates/repo/user_share_list.html:44
 #: seahub/templates/snippets/my_owned_repos.html:24
 #: seahub/templates/snippets/my_owned_repos.html:66
 #: seahub/templates/snippets/my_owned_repos.html:68
+#: seahub/templates/sysadmin/userinfo.html:51
 msgid "directory icon"
 msgstr "Ordnersymbol"
 
-#: seahub/group/templates/group/group_info.html:102
+#: seahub/group/templates/group/group_info.html:105
+#: seahub/share/templates/repo/user_share_list.html:55
 #: seahub/templates/pubrepo.html:44
 #: seahub/templates/snippets/my_owned_repos.html:33
 #: seahub/templates/snippets/my_owned_repos.html:80
 msgid "Download and Sync"
 msgstr "Zum Synchronisieren herunterladen"
 
-#: seahub/group/templates/group/group_info.html:104
+#: seahub/group/templates/group/group_info.html:107
 #: seahub/share/templates/repo/share_admin.html:57
 #: seahub/share/templates/repo/share_admin.html:60
 #: seahub/share/templates/repo/share_admin.html:64
@@ -1384,11 +1406,11 @@ msgstr "Zum Synchronisieren herunterladen"
 msgid "Unshare"
 msgstr "Freigeben rückgängig machen"
 
-#: seahub/group/templates/group/group_info.html:112
+#: seahub/group/templates/group/group_info.html:115
 msgid "No library is sharing to this group"
 msgstr "Es ist keine Bibliothek für diese Gruppe freigegeben"
 
-#: seahub/group/templates/group/group_info.html:113
+#: seahub/group/templates/group/group_info.html:116
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
@@ -1397,7 +1419,7 @@ msgstr ""
 "Bibliothek\" Button klicken. Andere können die Biblothek sehen und "
 "herunterladen."
 
-#: seahub/group/templates/group/group_info.html:114
+#: seahub/group/templates/group/group_info.html:117
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
@@ -1409,43 +1431,43 @@ msgstr ""
 "Dateien mit Lesezugriff werden nur heruntergeladen, lokale Änderungen aber "
 "nicht hochgeladen."
 
-#: seahub/group/templates/group/group_info.html:124
-#: seahub/group/templates/group/group_info.html:168
+#: seahub/group/templates/group/group_info.html:127
+#: seahub/group/templates/group/group_info.html:171
 #: seahub/share/templates/repo/share_admin.html:85
 #: seahub/templates/client_mgmt.html:26 seahub/templates/file_edit.html:258
-#: seahub/templates/snippets/events.html:8
+#: seahub/templates/snippets/events.html:13
 #: seahub/templates/snippets/my_owned_repos.html:101
 msgid "Library"
 msgstr "Bibliothek"
 
-#: seahub/group/templates/group/group_info.html:126
+#: seahub/group/templates/group/group_info.html:129
 msgid "Modified at"
 msgstr "Bearbeitet am"
 
-#: seahub/group/templates/group/group_info.html:127
+#: seahub/group/templates/group/group_info.html:130
 #: seahub/templates/repo_history.html:22
 msgid "Modifier"
 msgstr "Bearbeiter"
 
-#: seahub/group/templates/group/group_info.html:147
-#: seahub/group/templates/group/group_info.html:149
+#: seahub/group/templates/group/group_info.html:150
+#: seahub/group/templates/group/group_info.html:152
 #: seahub/templates/repo.html:56 seahub/templates/repo.html.py:295
 #: seahub/templates/repo.html:297 seahub/templates/repo.html.py:301
 #: seahub/templates/repo.html:303 seahub/templates/repo_history.html:44
 #: seahub/templates/repo_view_snapshot.html:38
-#: seahub/templates/snippets/events_.html:17
-#: seahub/templates/snippets/events_.html:19
+#: seahub/templates/snippets/events_body.html:18
+#: seahub/templates/snippets/events_body.html:20
 msgid "Details"
 msgstr "Details"
 
-#: seahub/group/templates/group/group_info.html:156
+#: seahub/group/templates/group/group_info.html:159
 #: seahub/group/templates/group/new_msg_reply.html:74
-#: seahub/templates/pubuser.html:63 seahub/templates/repo_history.html:35
+#: seahub/templates/pubuser.html:53 seahub/templates/repo_history.html:35
 #: seahub/templates/repo_view_snapshot.html:29
 msgid "None"
 msgstr "Keine"
 
-#: seahub/group/templates/group/group_info.html:161
+#: seahub/group/templates/group/group_info.html:164
 #: seahub/templates/client_mgmt.html:39 seahub/templates/client_mgmt.html:46
 #: seahub/templates/client_mgmt.html:53 seahub/templates/client_mgmt.html:56
 #: seahub/templates/file_revisions.html:45 seahub/templates/repo.html:72
@@ -1455,41 +1477,42 @@ msgstr "Keine"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: seahub/group/templates/group/group_info.html:168
-#: seahub/templates/file_edit.html:258 seahub/templates/snippets/events.html:8
+#: seahub/group/templates/group/group_info.html:171
+#: seahub/templates/file_edit.html:258
+#: seahub/templates/snippets/events.html:13
 msgid "is encrypted"
 msgstr "ist verschlüsselt"
 
-#: seahub/group/templates/group/group_info.html:170
+#: seahub/group/templates/group/group_info.html:173
 #: seahub/templates/file_edit.html:259
-#: seahub/templates/snippets/events.html:10
+#: seahub/templates/snippets/events.html:15
 msgid "Password："
 msgstr "Passwort: "
 
-#: seahub/group/templates/group/group_info.html:172
+#: seahub/group/templates/group/group_info.html:175
 #: seahub/templates/file_edit.html:261
-#: seahub/templates/snippets/events.html:12
+#: seahub/templates/snippets/events.html:17
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "Das Passwort wird nur für eine Stunde auf dem Server behalten."
 
-#: seahub/group/templates/group/group_info.html:189
+#: seahub/group/templates/group/group_info.html:192
 msgid "Are you sure you want to quit this group?"
 msgstr "Sind Sie sicher, dass Sie diese Gruppe verlassen möchten?"
 
-#: seahub/group/templates/group/group_info.html:192
+#: seahub/group/templates/group/group_info.html:195
 msgid "Unshare Library"
 msgstr "Freigeben der Bibliothek rückgängig machen"
 
-#: seahub/group/templates/group/group_info.html:193
-#, python-format
-msgid "Are you sure you want to unshare %%s ?"
+#: seahub/group/templates/group/group_info.html:196
+#, fuzzy, python-format
+msgid "Are you sure you want to unshare %s ?"
 msgstr "Sind Sie sicher, dass Sie die Freigabe rückgängig machen wollen?"
 
-#: seahub/group/templates/group/group_info_for_pub.html:75
+#: seahub/group/templates/group/group_info_for_pub.html:78
 msgid "No public library is in this group"
 msgstr "Keine öffentliche Bibliothek für diese Gruppe verfügbar."
 
-#: seahub/group/templates/group/group_info_for_pub.html:76
+#: seahub/group/templates/group/group_info_for_pub.html:79
 msgid "A library can be made public in its settings page.(Not implemented yet)"
 msgstr ""
 
@@ -1502,57 +1525,57 @@ msgstr ""
 "%(user)s wollen der Gruppe \"%(group_name)s\" beitreten. Hier ist die "
 "Bestätigungsnachricht: "
 
-#: seahub/group/templates/group/group_manage.html:25
+#: seahub/group/templates/group/group_manage.html:28
 msgid "Group Avatar"
 msgstr "Gruppenavatar"
 
-#: seahub/group/templates/group/group_manage.html:29
+#: seahub/group/templates/group/group_manage.html:32
 #: seahub/profile/templates/profile/set_profile.html:12
 msgid "Change"
 msgstr "Ändern"
 
-#: seahub/group/templates/group/group_manage.html:38
+#: seahub/group/templates/group/group_manage.html:41
 msgid "Dismiss"
 msgstr "Löschen"
 
-#: seahub/group/templates/group/group_manage.html:40
+#: seahub/group/templates/group/group_manage.html:43
 msgid "Revoke Public"
 msgstr "Veröffentlichung zurückziehen"
 
-#: seahub/group/templates/group/group_manage.html:42
+#: seahub/group/templates/group/group_manage.html:45
 msgid "Make Public"
 msgstr "Veröffentlichen"
 
-#: seahub/group/templates/group/group_manage.html:50
+#: seahub/group/templates/group/group_manage.html:53
 msgid "Add Members"
 msgstr "Mitglieder hinzufügen"
 
-#: seahub/group/templates/group/group_manage.html:73
+#: seahub/group/templates/group/group_manage.html:76
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: seahub/group/templates/group/group_manage.html:74
+#: seahub/group/templates/group/group_manage.html:77
 msgid "Add Administrators"
 msgstr "Administrator hinzufügen"
 
-#: seahub/group/templates/group/group_manage.html:106
+#: seahub/group/templates/group/group_manage.html:109
 msgid "Dismiss Group"
 msgstr "Gruppe löschen"
 
-#: seahub/group/templates/group/group_manage.html:107
+#: seahub/group/templates/group/group_manage.html:110
 msgid "Really want to dismiss this group?"
 msgstr "Sind Sie sicher dass Sie die Gruppe löschen möchten?"
 
-#: seahub/group/templates/group/group_manage.html:110
+#: seahub/group/templates/group/group_manage.html:113
 msgid "Delete Member"
 msgstr "Mitglied löschen"
 
-#: seahub/group/templates/group/group_manage.html:111
-#, python-format
-msgid "Really want to delete %%s ?"
+#: seahub/group/templates/group/group_manage.html:114
+#, fuzzy, python-format
+msgid "Really want to delete %s ?"
 msgstr "Sind Sie sicher, dass Sie %%s löschen möchten?"
 
-#: seahub/group/templates/group/group_members.html:41
+#: seahub/group/templates/group/group_members.html:44
 #: seahub/templates/pubuser.html:29
 msgid "Add to Contacts"
 msgstr "Zu Kontakten hinzufügen"
@@ -1583,11 +1606,11 @@ msgstr "Mitglieder: "
 msgid "Verification Message"
 msgstr "Bestätigungsnachricht"
 
-#: seahub/group/templates/group/group_wiki.html:34
+#: seahub/group/templates/group/group_wiki.html:37
 msgid "This group currently has no wiki"
 msgstr "Diese Gruppe hat derzeit kein Wiki."
 
-#: seahub/group/templates/group/group_wiki.html:35
+#: seahub/group/templates/group/group_wiki.html:38
 #: seahub/templates/wiki/personal_wiki.html:26
 msgid ""
 "Seafile Wiki enables you to organize your knowledge in a simple way. The "
@@ -1600,45 +1623,45 @@ msgstr ""
 "gespeichert. Somit können Sie Ihr Wiki lokal auf Ihren Client-Computer "
 "bearbeiten und es wird automatisch auf den Seafile-Server synchronisiert."
 
-#: seahub/group/templates/group/group_wiki.html:37
+#: seahub/group/templates/group/group_wiki.html:40
 #: seahub/templates/wiki/personal_wiki.html:27
 msgid "Create Wiki Now"
 msgstr "Wiki jetzt erstellen"
 
-#: seahub/group/templates/group/group_wiki.html:41
+#: seahub/group/templates/group/group_wiki.html:44
 #: seahub/templates/wiki/personal_wiki.html:30
 msgid "Create Wiki"
 msgstr "Wiki erstellen"
 
-#: seahub/group/templates/group/group_wiki.html:45
+#: seahub/group/templates/group/group_wiki.html:48
 msgid "Wiki Pages"
 msgstr ""
 
-#: seahub/group/templates/group/group_wiki.html:53
-#: seahub/group/templates/group/group_wiki_pages.html:29
+#: seahub/group/templates/group/group_wiki.html:56
+#: seahub/group/templates/group/group_wiki_pages.html:32
 #: seahub/templates/wiki/personal_wiki.html:42
 #: seahub/templates/wiki/personal_wiki_pages.html:24
 msgid "Home"
 msgstr "Start"
 
-#: seahub/group/templates/group/group_wiki.html:54
-#: seahub/group/templates/group/group_wiki_pages.html:30
+#: seahub/group/templates/group/group_wiki.html:57
+#: seahub/group/templates/group/group_wiki_pages.html:33
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki_pages.html:25
 msgid "Pages"
 msgstr "Seiten"
 
-#: seahub/group/templates/group/group_wiki.html:56
-#: seahub/group/templates/group/group_wiki_pages.html:32
+#: seahub/group/templates/group/group_wiki.html:59
+#: seahub/group/templates/group/group_wiki_pages.html:35
 #: seahub/templates/wiki/personal_wiki.html:45
 #: seahub/templates/wiki/personal_wiki_pages.html:26
 msgid "Wiki History"
 msgstr "Wiki Änderungsverlauf"
 
-#: seahub/group/templates/group/group_wiki.html:61
-#: seahub/group/templates/group/group_wiki.html:75
-#: seahub/group/templates/group/group_wiki_pages.html:36
-#: seahub/group/templates/group/group_wiki_pages.html:47
+#: seahub/group/templates/group/group_wiki.html:64
+#: seahub/group/templates/group/group_wiki.html:78
+#: seahub/group/templates/group/group_wiki_pages.html:39
+#: seahub/group/templates/group/group_wiki_pages.html:50
 #: seahub/templates/wiki/personal_wiki.html:49
 #: seahub/templates/wiki/personal_wiki.html:62
 #: seahub/templates/wiki/personal_wiki_pages.html:28
@@ -1646,28 +1669,28 @@ msgstr "Wiki Änderungsverlauf"
 msgid "New Page"
 msgstr "Neue Seite"
 
-#: seahub/group/templates/group/group_wiki.html:62
+#: seahub/group/templates/group/group_wiki.html:65
 #: seahub/templates/wiki/personal_wiki.html:50
 msgid "Delete Page"
 msgstr "Löschen"
 
-#: seahub/group/templates/group/group_wiki.html:63
+#: seahub/group/templates/group/group_wiki.html:66
 #: seahub/templates/wiki/personal_wiki.html:51
 msgid "Edit Page"
 msgstr "Bearbeiten"
 
-#: seahub/group/templates/group/group_wiki.html:64
+#: seahub/group/templates/group/group_wiki.html:67
 #: seahub/templates/wiki/personal_wiki.html:52
 msgid "Page History"
 msgstr "Änderungsverlauf"
 
-#: seahub/group/templates/group/group_wiki.html:71
+#: seahub/group/templates/group/group_wiki.html:74
 #: seahub/templates/wiki/personal_wiki.html:58
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
 msgstr ""
 
-#: seahub/group/templates/group/group_wiki.html:128
+#: seahub/group/templates/group/group_wiki.html:131
 #: seahub/templates/wiki/personal_wiki.html:115
 msgid "Name and description can not be blank."
 msgstr "Name und Beschreibung dürfen nicht leer sein."
@@ -1752,6 +1775,82 @@ msgstr "E-Mail-Adressen, getrennt durch ',' "
 msgid "Group: "
 msgstr "Gruppe: "
 
+#: seahub/message/models.py:73
+#, python-format
+msgid ""
+"(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> "
+"to you."
+msgstr ""
+
+#: seahub/message/views.py:107 seahub/templates/base.html:309
+#, fuzzy
+msgid "message is required"
+msgstr "E-Mail wird benötigt"
+
+#: seahub/message/views.py:110 seahub/templates/base.html:313
+#, fuzzy
+msgid "contact is required"
+msgstr "Alter Name wird benötigt"
+
+#: seahub/message/views.py:120
+#, fuzzy
+msgid "You can not send message to yourself."
+msgstr "Sie können sich nicht selbst hinzufügen."
+
+#: seahub/message/views.py:124
+#, fuzzy, python-format
+msgid "Failed to send message to %s, user not found."
+msgstr "Freigeben für %s fehlgeschlagen."
+
+#: seahub/message/views.py:131
+#, fuzzy
+msgid "Message sent successfully."
+msgstr "E-Mail erfolgreich verschickt"
+
+#: seahub/message/templates/message/all_msg_list.html:4
+#: seahub/message/templates/message/all_msg_list.html:10
+#: seahub/message/templates/message/user_msg_list.html:4
+#: seahub/message/templates/message/user_msg_list.html:27
+#: seahub/share/templates/repo/user_share_list.html:24
+#, fuzzy
+msgid "Messages"
+msgstr "Seiten"
+
+#: seahub/message/templates/message/all_msg_list.html:23
+msgid "Message"
+msgstr ""
+
+#: seahub/message/templates/message/all_msg_list.html:24
+#: seahub/templates/file_revisions.html:25
+#: seahub/templates/repo_history.html:21
+msgid "Time"
+msgstr "Zeit"
+
+#: seahub/message/templates/message/user_msg_list.html:12
+#: seahub/share/templates/repo/user_share_list.html:12
+#: seahub/templates/myhome.html:28
+msgid "No Nickname"
+msgstr "Ihr Spitzname"
+
+#: seahub/message/templates/message/user_msg_list.html:14
+#: seahub/profile/templates/profile/user_profile.html:14
+#: seahub/share/templates/repo/user_share_list.html:14
+#: seahub/templates/snippets/user_profile_html.html:21
+msgid "Add to contacts"
+msgstr "Zu Kontakten hinzufügen"
+
+#: seahub/message/templates/message/user_msg_list.html:28
+#: seahub/share/templates/repo/user_share_list.html:4
+#: seahub/share/templates/repo/user_share_list.html:25
+#: seahub/templates/myhome_base.html:14
+msgid "Shares"
+msgstr "Freigaben"
+
+#: seahub/message/templates/message/user_msg_list.html:38
+#, fuzzy
+msgid "Send a message..."
+msgstr "Eine Nachricht hinterlassen~"
+
 #: seahub/notifications/templates/notifications/add_notification_form.html:3
 #: seahub/notifications/templates/notifications/add_notification_form.html:7
 #: seahub/notifications/templates/notifications/notification_list.html:9
@@ -1779,10 +1878,11 @@ msgid "Set to current"
 msgstr "Als aktuell markieren"
 
 #: seahub/notifications/templates/notifications/notification_list.html:64
-#: seahub/templates/sys_group_admin.html:55
-#: seahub/templates/sys_org_admin.html:55
-#: seahub/templates/sys_seafadmin.html:55 seahub/templates/userinfo.html:59
-#: seahub/templates/userinfo.html.py:82
+#: seahub/templates/sysadmin/sys_group_admin.html:55
+#: seahub/templates/sysadmin/sys_org_admin.html:55
+#: seahub/templates/sysadmin/sys_repo_admin.html:55
+#: seahub/templates/sysadmin/userinfo.html:61
+#: seahub/templates/sysadmin/userinfo.html:84
 msgid "Empty"
 msgstr "Leer"
 
@@ -1798,14 +1898,14 @@ msgstr "Profil erfolgreich bearbeitet."
 msgid "Failed to edit profile"
 msgstr "Bearbeiten des Profils ist fehlgeschlagen"
 
-#: seahub/profile/views.py:93 seahub/profile/views.py:125
+#: seahub/profile/views.py:94 seahub/profile/views.py:125
 msgid "Has not accepted invitation yet"
 msgstr "Hat die Einladung noch nicht akzeptiert"
 
 #: seahub/profile/templates/profile/profile_base.html:4
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:8
-#: seahub/templates/base.html:44
+#: seahub/templates/base.html:45
 msgid "Profile Setting"
 msgstr "Profileinstellungen"
 
@@ -1830,11 +1930,6 @@ msgstr "Spitzname:"
 msgid "About me:"
 msgstr "Über mich:"
 
-#: seahub/profile/templates/profile/user_profile.html:14
-#: seahub/templates/snippets/user_profile_html.html:21
-msgid "Add to contacts"
-msgstr "Zu Kontakten hinzufügen"
-
 #: seahub/profile/templates/profile/user_profile.html:32
 msgid "Email: "
 msgstr "Email: "
@@ -1851,11 +1946,74 @@ msgstr "Notitz (optional): "
 msgid "Email is not longer than 512 characters"
 msgstr "Email darf nicht länger als 512 Zeichen sein"
 
-#: seahub/share/views.py:68
+#: seahub/share/views.py:57
+#, fuzzy
+msgid "Failed to share to all members, please try again later."
+msgstr ""
+"Freigeben von %(repo)s an %(group)s fehlgeschlagen, bitte versuchen Sie es "
+"später wieder."
+
+#: seahub/share/views.py:59
+#, fuzzy, python-format
+msgid ""
+"Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
+msgstr ""
+"Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
+"href=\"%s\">Freigaben</a> prüfen."
+
+#: seahub/share/views.py:71
+#, fuzzy, python-format
+msgid ""
+"\"%(repo)s\" is already in group %(group)s. <a href=\"%(href)s\">View</a>"
+msgstr "%(name)s erfolgreich verschoben: <a href=\"%(url)s\">anzeigen</a>"
+
+#: seahub/share/views.py:81
+#, python-format
+msgid "Failed to share %(repo)s to %(group)s, please try again later."
+msgstr ""
+"Freigeben von %(repo)s an %(group)s fehlgeschlagen, bitte versuchen Sie es "
+"später wieder."
+
+#: seahub/share/views.py:85
+#, fuzzy, python-format
+msgid ""
+"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
+"\">Shares</a>."
+msgstr ""
+"Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
+"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
+
+#: seahub/share/views.py:95
+#, fuzzy
+msgid "You can not share libray to yourself."
+msgstr "So können Sie die Bibliothek nicht freigeben."
+
+#: seahub/share/views.py:104
+#, fuzzy, python-format
+msgid "Failed to share to %s, please try again later."
+msgstr ""
+"Freigeben von %(repo)s an %(group)s fehlgeschlagen, bitte versuchen Sie es "
+"später wieder."
+
+#: seahub/share/views.py:111
+#, fuzzy, python-format
+msgid ""
+"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
+"\">Shares</a>."
+msgstr ""
+"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
+"\"%(share)s\">Freigaben</a> prüfen."
+
+#: seahub/share/views.py:115
+#, python-format
+msgid "Failed to share to %s, as the email is not registered."
+msgstr "Freigeben für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
+
+#: seahub/share/views.py:171
 msgid "Only the owner of the library has permission to share it."
 msgstr "Nur der Besitzer der Bibliothek hat die Berechtigung sie freizugeben."
 
-#: seahub/share/views.py:103
+#: seahub/share/views.py:201
 #, python-format
 msgid ""
 "Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
@@ -1864,124 +2022,46 @@ msgstr ""
 "\"%s\" kann aufgrund mangelnden Speicherplatz' nicht freigegeben werden. <a "
 "href=\"http://seafile.com/\">Upgrade Ihres Kontos.</a>"
 
-#: seahub/share/views.py:113
-msgid "Failed to share to all members"
-msgstr "Freigeben für alle Mitglieder ist fehlgeschlagen"
-
-#: seahub/share/views.py:115
-#, python-format
-msgid ""
-"Shared to all members successfully, go check it at <a href=\"%s\">Share</a>."
-msgstr ""
-"Erfolgreich für alle Mitglieder freigegeben. Sie können den Status unter <a "
-"href=\"%s\">Freigaben</a> prüfen."
-
-#: seahub/share/views.py:127
-#, python-format
-msgid "Failed to share %(repo)s to %(group)s, please try again later."
-msgstr ""
-"Freigeben von %(repo)s an %(group)s fehlgeschlagen, bitte versuchen Sie es "
-"später wieder."
-
-#: seahub/share/views.py:131
-#, python-format
-msgid ""
-"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
-msgstr ""
-"Erfolgreich für die Gruppe %(group)s freigegeben. Sie können den Status "
-"unter <a href=\"%(share)s\">Freigaben</a> prüfen."
-
-#: seahub/share/views.py:149
-#, python-format
-msgid "Failed to share to %s, as the email is not registered."
-msgstr "Freigeben für %s fehlgeschlagen. Die E-Mail ist nicht registriert."
-
-#: seahub/share/views.py:158
-#, python-format
-msgid "Failed to share to %s ."
-msgstr "Freigeben für %s fehlgeschlagen."
-
-#: seahub/share/views.py:162
-#, python-format
-msgid ""
-"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
-"\">Share</a>."
-msgstr ""
-"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigaben</a> prüfen."
-
-#: seahub/share/views.py:185 seahub/share/views.py:195
+#: seahub/share/views.py:232 seahub/share/views.py:242
 msgid "Failed to remove share"
 msgstr "Entfernen der Freigabe fehlgeschlagen"
 
-#: seahub/share/views.py:191
+#: seahub/share/views.py:238
 msgid "group id is not valid"
 msgstr "Gruppen-ID ist ungültig"
 
-#: seahub/share/views.py:204
+#: seahub/share/views.py:251
 msgid "Successfully removed share"
 msgstr "Freigabe erfolgreich entfernt"
 
-#: seahub/share/views.py:239
+#: seahub/share/views.py:286
 msgid "all members"
 msgstr "Alle Mitglieder"
 
-#: seahub/share/views.py:334
-#, python-format
-msgid ""
-"Failed to share to %s, as encrypted libraries cannot be shared to emails "
-"outside the site."
-msgstr ""
-"Freigeben für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht "
-"für E-Mails außerhalb der Seite freigegeben werden."
-
-#: seahub/share/views.py:349 seahub/share/views.py:371
-#, python-format
-msgid "Failed to share to %s."
-msgstr "Freigeben für %s ist fehlgeschlagen."
-
-#: seahub/share/views.py:367
-msgid "You are shared with a library in Seafile"
-msgstr "Es wurde eine Bibliothek in Seafile für Sie freigegeben."
-
-#: seahub/share/views.py:374
-#, python-format
-msgid ""
-"Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
-"\">Share</a>."
-msgstr ""
-"Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a href="
-"\"%(share)s\">Freigabe</a> prüfen."
-
-#: seahub/share/views.py:399
-msgid "Deleted successfully."
-msgstr "Erfolgreicht gelöscht"
-
-#: seahub/share/views.py:417 seahub/views/__init__.py:583
-#: seahub/views/__init__.py:1909 seahub/views/__init__.py:1944
-#: seahub/views/__init__.py:2453 seahub/views/file.py:566
+#: seahub/share/views.py:464 seahub/views/__init__.py:625
+#: seahub/views/__init__.py:1586 seahub/views/__init__.py:1621
+#: seahub/views/__init__.py:2120 seahub/views/file.py:565
 msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
-#: seahub/share/views.py:426
+#: seahub/share/views.py:473
 msgid "You cannot share the library in this way."
 msgstr "So können Sie die Bibliothek nicht freigeben."
 
-#: seahub/share/views.py:451
+#: seahub/share/views.py:498
 msgid "Failed to get the link, please retry later."
 msgstr ""
 "Abrufen des Links fehlgeschlagen, bitte versuchen Sie es später nochmals."
 
-#: seahub/share/views.py:473
+#: seahub/share/views.py:520
 msgid "Removed successfully"
 msgstr "Erfolgreich entfernt"
 
-#: seahub/share/views.py:481
+#: seahub/share/views.py:528
 msgid "Deleted successfully"
 msgstr "Erfolgreich gelöscht"
 
-#: seahub/share/views.py:497
+#: seahub/share/views.py:544
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
@@ -1989,15 +2069,15 @@ msgstr ""
 "Senden des freigegebenen Links fehlgeschlagen. Der E-Mail-Service istnicht "
 "korrekt konfiguriert. Bitte wenden Sie sich an den Administrator."
 
-#: seahub/share/views.py:522
+#: seahub/share/views.py:569
 msgid "Your friend shared a file to you on Seafile"
 msgstr "Jemand hat eine Datei für Sie auf Seafile freigegeben."
 
-#: seahub/share/views.py:527
+#: seahub/share/views.py:574
 msgid "Internal server error. Send failed."
 msgstr "Interner Serverfehler: Senden fehlgeschalgen."
 
-#: seahub/share/views.py:530
+#: seahub/share/views.py:577
 msgid "Successfully sent."
 msgstr "Erfolgreich versendet."
 
@@ -2086,6 +2166,16 @@ msgstr "Erfolgreich bearbeitet"
 msgid "Edit failed."
 msgstr "Bearbeiten fehlgeschlagen."
 
+#: seahub/share/templates/repo/user_share_list.html:56
+#: seahub/templates/snippets/my_owned_repos.html:82
+msgid "Leave Share"
+msgstr "Freigegebene Bibliothek verlassen"
+
+#: seahub/share/templates/repo/user_share_list.html:63
+#, python-format
+msgid "You have no library sharing with %(to_email)s."
+msgstr ""
+
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "Es tut uns leid, aber die angefragte Seite wurde nicht gefunden."
@@ -2103,68 +2193,179 @@ msgstr "Benachrichtigungen"
 msgid "File Collaboration Team Organization"
 msgstr "File Collaboration Team Organization"
 
-#: seahub/templates/base.html:37
+#: seahub/templates/base.html:38
 msgid "System Admin"
 msgstr "Systemadministration"
 
-#: seahub/templates/base.html:38
+#: seahub/templates/base.html:39
 msgid "Workspace"
 msgstr "Arbeitsplatz"
 
-#: seahub/templates/base.html:45
+#: seahub/templates/base.html:46
+#, fuzzy
+msgid "send a message"
+msgstr "Eine Nachricht hinterlassen~"
+
+#: seahub/templates/base.html:47
+#, fuzzy
+msgid "unread messages"
+msgstr "Eine Nachricht hinterlassen~"
+
+#: seahub/templates/base.html:48
 msgid "Log out"
 msgstr "Abmelden"
 
-#: seahub/templates/base.html:47 seahub/templates/registration/login.html:3
+#: seahub/templates/base.html:50 seahub/templates/registration/login.html:3
 #: seahub/templates/registration/login.html:6
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Log In"
 msgstr "Anmelden"
 
-#: seahub/templates/base.html:49
+#: seahub/templates/base.html:52
 #: seahub/templates/registration/registration_form.html:9
 msgid "Signup"
 msgstr "Registrieren"
 
-#: seahub/templates/base.html:73 seahub/templates/search_results.html:9
+#: seahub/templates/base.html:66
+msgid "message..."
+msgstr ""
+
+#: seahub/templates/base.html:89
+msgid "Search files in this wiki"
+msgstr ""
+
+#: seahub/templates/base.html:89
+#, fuzzy
+msgid "Search files in this library"
+msgstr "Kann die Bibliothek nicht anzeigen"
+
+#: seahub/templates/base.html:92 seahub/templates/base.html.py:98
 msgid "Search Files"
 msgstr "Dateien suchen"
 
-#: seahub/templates/base.html:115
-msgid "Introduction"
-msgstr "Einführung"
+#: seahub/templates/base.html:94
+msgid "advanced"
+msgstr ""
 
-#: seahub/templates/base.html:117
-msgid "Forum"
-msgstr "Forum"
+#: seahub/templates/base.html:102 seahub/templates/base.html.py:106
+#: seahub/templates/base.html:109
+#, fuzzy
+msgid "In all libraries"
+msgstr "Alle Bilbliotheken"
 
-#: seahub/templates/base.html:121
-msgid "Client"
-msgstr "Client"
+#: seahub/templates/base.html:103
+msgid "In this wiki"
+msgstr ""
 
-#: seahub/templates/base.html:123
-msgid "Seafile for Windows, Mac and Linux"
-msgstr "Seafile für Windows, Mac und Linux"
+#: seahub/templates/base.html:103
+#, fuzzy
+msgid "In this library"
+msgstr "Kann die Bibliothek nicht anzeigen"
 
-#: seahub/templates/base.html:127
+#: seahub/templates/base.html:107
+#, python-format
+msgid "in %(name)s"
+msgstr ""
+
+#: seahub/templates/base.html:115 seahub/templates/base.html.py:118
+#, fuzzy
+msgid "All file types"
+msgstr "Dateien hinzufügen"
+
+#: seahub/templates/base.html:116 seahub/templates/base.html.py:119
+msgid "Custom file types"
+msgstr ""
+
+#: seahub/templates/base.html:128
+#, fuzzy
+msgid "Text files"
+msgstr "Neue Dateien"
+
+#: seahub/templates/base.html:129 seahub/templates/base.html.py:195
 msgid "Documents"
 msgstr "Dokumente"
 
-#: seahub/templates/base.html:129
+#: seahub/templates/base.html:130
+#, fuzzy
+msgid "Images"
+msgstr "Seiten"
+
+#: seahub/templates/base.html:131
+msgid "Video"
+msgstr ""
+
+#: seahub/templates/base.html:132
+msgid "Audio"
+msgstr ""
+
+#: seahub/templates/base.html:133
+msgid "svg"
+msgstr ""
+
+#: seahub/templates/base.html:134
+msgid "pdf"
+msgstr ""
+
+#: seahub/templates/base.html:135
+msgid "seaf"
+msgstr ""
+
+#: seahub/templates/base.html:136
+msgid "markdown"
+msgstr ""
+
+#: seahub/templates/base.html:138
+msgid "Input file extensions here, separate with ','"
+msgstr ""
+
+#: seahub/templates/base.html:139
+msgid "Please select at least 1 file type or input at least 1 file extension"
+msgstr ""
+
+#: seahub/templates/base.html:183
+msgid "Introduction"
+msgstr "Einführung"
+
+#: seahub/templates/base.html:185
+msgid "Forum"
+msgstr "Forum"
+
+#: seahub/templates/base.html:189
+msgid "Client"
+msgstr "Client"
+
+#: seahub/templates/base.html:191
+msgid "Seafile for Windows, Mac and Linux"
+msgstr "Seafile für Windows, Mac und Linux"
+
+#: seahub/templates/base.html:197
 msgid "Help"
 msgstr "Hilfe"
 
-#: seahub/templates/base.html:134
+#: seahub/templates/base.html:202
 msgid "Server Version: "
 msgstr "Serverversion: "
 
-#: seahub/templates/base.html:135
+#: seahub/templates/base.html:203
 msgid "Seafile"
 msgstr "Seafile"
 
-#: seahub/templates/base.html:136
+#: seahub/templates/base.html:204
 msgid "Contact Us"
 msgstr "Kontaktiere uns"
+
+#: seahub/templates/base.html:278
+msgid "send to: click to select contacts"
+msgstr ""
+
+#: seahub/templates/base.html:281
+#, fuzzy
+msgid "please add contacts at first"
+msgstr "Bitte wählen Sie zuerst eine Datei."
+
+#: seahub/templates/base.html:285
+msgid "Failed to get your contacts for sending a message."
+msgstr ""
 
 #: seahub/templates/client_mgmt.html:6 seahub/templates/client_mgmt.html:15
 #: seahub/templates/myhome.html:15 seahub/templates/wiki/personal_wiki.html:15
@@ -2218,8 +2419,8 @@ msgid "Unsync Client"
 msgstr "Synchronisierung mit Client aufheben"
 
 #: seahub/templates/client_mgmt.html:73
-#, python-format
-msgid "Are you sure to unsync client %%s ?"
+#, fuzzy, python-format
+msgid "Are you sure to unsync client %s ?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Synchronisierung mit dem Client %%s aufheben "
 "möchten?"
@@ -2568,11 +2769,6 @@ msgstr ""
 msgid "Current Path:"
 msgstr "Aktueller Pfad:"
 
-#: seahub/templates/file_revisions.html:25
-#: seahub/templates/repo_history.html:21
-msgid "Time"
-msgstr "Zeit"
-
 #: seahub/templates/file_revisions.html:26
 #: seahub/templates/repo_view_snapshot.html:16
 msgid "Last Modifier"
@@ -2659,9 +2855,14 @@ msgstr "Start"
 msgid "Account"
 msgstr "Benutzerkonto"
 
-#: seahub/templates/myhome.html:28
-msgid "No Nickname"
-msgstr "Ihr Spitzname"
+#: seahub/templates/myhome.html:26 seahub/templates/myhome.html.py:29
+#: seahub/templates/sysadmin/userinfo.html:9
+msgid "Profile"
+msgstr "Profil"
+
+#: seahub/templates/myhome.html:31
+msgid "Payment"
+msgstr ""
 
 #: seahub/templates/myhome.html:39
 msgid "Reminding..."
@@ -2704,49 +2905,26 @@ msgstr[1] ""
 "        In %(counter)s Diskussionen gibt es neue Beiträge.\n"
 "        "
 
-#: seahub/templates/myhome.html:62
-#, python-format
-msgid ""
-"\n"
-"          one org message\n"
-"          "
-msgid_plural ""
-"\n"
-"          %(counter)s org messages\n"
-"          "
-msgstr[0] ""
-"\n"
-"          Eine Organisationsnachricht\n"
-"          "
-msgstr[1] ""
-"\n"
-"          %(counter)s Organisationsnachrichten\n"
-"          "
-
-#: seahub/templates/myhome.html:73
+#: seahub/templates/myhome.html:65
 msgid "Space/Traffic Usage"
 msgstr "Benutzter Speicherplatz"
 
-#: seahub/templates/myhome.html:76 seahub/templates/userinfo.html:25
+#: seahub/templates/myhome.html:68 seahub/templates/sysadmin/userinfo.html:26
 msgid "Total"
 msgstr ""
 
-#: seahub/templates/myhome.html:78 seahub/templates/myhome.html.py:80
+#: seahub/templates/myhome.html:70 seahub/templates/myhome.html.py:72
 msgid "Self"
 msgstr ""
 
-#: seahub/templates/myhome.html:78 seahub/templates/myhome.html.py:80
-#: seahub/templates/userinfo.html:27
+#: seahub/templates/myhome.html:70 seahub/templates/myhome.html.py:72
+#: seahub/templates/sysadmin/userinfo.html:28
 msgid "Sharing"
 msgstr "Link freigeben"
 
-#: seahub/templates/myhome.html:89
+#: seahub/templates/myhome.html:81
 msgid "Traffic this month:"
 msgstr ""
-
-#: seahub/templates/myhome_base.html:14
-msgid "Shares"
-msgstr "Freigaben"
 
 #: seahub/templates/myhome_base.html:21
 msgid "Organization"
@@ -2781,7 +2959,7 @@ msgstr ""
 "Sie können eine Gruppe erstellen, indem Sie auf \"Gruppe hinzufügen\" im "
 "Gruppenmenü klicken."
 
-#: seahub/templates/pubrepo.html:27 seahub/templates/userinfo.html:68
+#: seahub/templates/pubrepo.html:27 seahub/templates/sysadmin/userinfo.html:70
 msgid "Share From"
 msgstr "Freigegeben von"
 
@@ -3060,10 +3238,9 @@ msgstr "Schnappschuss ansehen"
 
 #: seahub/templates/repo_history.html:60
 #: seahub/templates/repo_view_snapshot.html:55
-#: seahub/templates/search_results.html:54
-#: seahub/templates/sys_group_admin.html:37
-#: seahub/templates/sys_seafadmin.html:37
-#: seahub/templates/sys_useradmin.html:64
+#: seahub/templates/sysadmin/sys_group_admin.html:37
+#: seahub/templates/sysadmin/sys_repo_admin.html:37
+#: seahub/templates/sysadmin/sys_useradmin.html:72
 msgid "Per page: "
 msgstr "Pro Seite: "
 
@@ -3142,17 +3319,6 @@ msgstr ""
 msgid "Click to download."
 msgstr "Klicken zum Herunterladen."
 
-#: seahub/templates/search_results.html:16
-msgid "No result found"
-msgstr ""
-
-#: seahub/templates/search_results.html:18
-#, python-format
-msgid "%(total)s result"
-msgid_plural "%(total)s results"
-msgstr[0] ""
-msgstr[1] ""
-
 #: seahub/templates/shared_file_view.html:27
 #: seahub/templates/view_shared_dir.html:9
 msgid "Shared by: "
@@ -3170,137 +3336,6 @@ msgstr ""
 #: seahub/templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
 msgstr "Bitte gehen Sie zur folgenden Seite um die Datei anzusehen:"
-
-#: seahub/templates/sys_group_admin.html:8
-msgid "All Groups"
-msgstr "Alle Gruppen"
-
-#: seahub/templates/sys_group_admin.html:13
-#: seahub/templates/sys_org_admin.html:13
-msgid "Creator"
-msgstr "Ersteller"
-
-#: seahub/templates/sys_group_admin.html:14
-#: seahub/templates/sys_org_admin.html:14
-#: seahub/templates/sys_useradmin.html:26
-msgid "Create At"
-msgstr "Erstellt am"
-
-#: seahub/templates/sys_group_admin.html:62
-msgid "Delete Group"
-msgstr "Gruppe löschen"
-
-#: seahub/templates/sys_org_admin.html:7
-msgid "All Organizations"
-msgstr "Alle Organisationen"
-
-#: seahub/templates/sys_org_admin.html:12
-msgid "Url Prefix"
-msgstr "URL-Präfix"
-
-#: seahub/templates/sys_org_admin.html:62
-msgid "Delete Organization"
-msgstr "Organisation löschen"
-
-#: seahub/templates/sys_seafadmin.html:6
-msgid "All Libraries"
-msgstr "Alle Bilbliotheken"
-
-#: seahub/templates/sys_seafadmin.html:12
-msgid "Owner"
-msgstr "Besitzer"
-
-#: seahub/templates/sys_seafadmin.html:62 seahub/templates/userinfo.html:138
-#: seahub/templates/snippets/myhome_extra_script.html:51
-msgid "Delete Library"
-msgstr "Bibliothek löschen"
-
-#: seahub/templates/sys_useradmin.html:8
-msgid "All Members"
-msgstr "Alle Mitglieder"
-
-#: seahub/templates/sys_useradmin.html:9
-#: seahub/templates/sys_useradmin.html:11
-msgid "Add new user"
-msgstr "Neuen Benutzer hinzufügen"
-
-#: seahub/templates/sys_useradmin.html:16
-#: seahub/templates/registration/registration_form.html:15
-msgid "Confirm Password"
-msgstr "Passwort bestätigen"
-
-#: seahub/templates/sys_useradmin.html:25
-msgid "Status"
-msgstr "Status"
-
-#: seahub/templates/sys_useradmin.html:34
-msgid "Activated"
-msgstr "Aktiviert"
-
-#: seahub/templates/sys_useradmin.html:36
-msgid "Active"
-msgstr "Aktiv"
-
-#: seahub/templates/sys_useradmin.html:42
-msgid "ResetPwd"
-msgstr "Passwort zurücksetzen"
-
-#: seahub/templates/sys_useradmin.html:44
-#: seahub/templates/sys_useradmin.html:95
-msgid "Revoke Admin"
-msgstr ""
-
-#: seahub/templates/sys_useradmin.html:46
-#: seahub/templates/sys_useradmin.html:99
-msgid "Set Admin"
-msgstr "Administration"
-
-#: seahub/templates/sys_useradmin.html:87
-msgid "Delete User"
-msgstr "Benutzer löschen"
-
-#: seahub/templates/sys_useradmin.html:91
-#: seahub/templates/registration/password_reset_confirm.html:4
-#: seahub/templates/registration/password_reset_form.html:4
-#: seahub/templates/registration/password_reset_form.html:7
-#: seahub/views/__init__.py:1503
-msgid "Password Reset"
-msgstr "Passwort zurücksetzen"
-
-#: seahub/templates/sys_useradmin.html:92
-#, python-format
-msgid "Are you sure you want to reset the password of %%s ?"
-msgstr ""
-"Sind Sie sicher, dass Sie das Passwort für das Konto zurücksetzen wollen?"
-
-#: seahub/templates/sys_useradmin.html:96
-#, python-format
-msgid "Are you sure you want to revoke the admin permission of %%s ?"
-msgstr ""
-"Sind Sie sicher, dass Sie %%s die Administratorenrechte entziehen wollen?"
-
-#: seahub/templates/sys_useradmin.html:100
-#, python-format
-msgid "Are you sure you want to set %%s as admin?"
-msgstr "Sind Sie sicher, dass Sie %%s Administratorenrechte verleihen wollen?"
-
-#: seahub/templates/sys_useradmin.html:115
-#: seahub/templates/registration/login.html:28
-#: seahub/templates/registration/registration_form.html:32
-msgid "Email cannot be blank"
-msgstr "Email darf nicht leer sein"
-
-#: seahub/templates/sys_useradmin.html:119
-#: seahub/templates/registration/login.html:32
-#: seahub/templates/registration/registration_form.html:36
-msgid "Password cannot be blank"
-msgstr "Passwort darf nicht leer sein"
-
-#: seahub/templates/sys_useradmin.html:123
-#: seahub/templates/registration/registration_form.html:40
-#: seahub/templates/snippets/repo_create_js.html:49
-msgid "Please enter the password again"
-msgstr "Bitte geben Sie das Passwort erneut ein"
 
 #: seahub/templates/text_diff.html:6
 msgid "modification details"
@@ -3335,89 +3370,9 @@ msgstr "Datei hochladen"
 msgid "to"
 msgstr "zu"
 
-#: seahub/templates/user_add_email.html:3
-#, python-format
-msgid ""
-"You're receiving this e-mail because %(user)s added you to organization "
-"\"%(org.org_name)s\" on %(site_name)s."
+#: seahub/templates/user_404.html:6
+msgid "Sorry, this user is not registered yet."
 msgstr ""
-"Sie erhalten diese E-Mail, weil %(user)s Sie zur Organisation  "
-"\"%(org.org_name)s\" auf %(site_name)s hinzugefügt hat."
-
-#: seahub/templates/user_add_email.html:5
-#, python-format
-msgid ""
-"You're receiving this e-mail because %(user)s added you to %(site_name)s."
-msgstr ""
-"Sie erhalten diese Email, weil %(user)s Sie zu %(site_name)s hinzugefügt hat."
-
-#: seahub/templates/user_add_email.html:7
-msgid "Following is your account information:"
-msgstr "Nachfolgend sind Ihre Benutzerkonteninformationen:"
-
-#: seahub/templates/user_add_email.html:8
-#, python-format
-msgid "Email: %(email)s"
-msgstr "Email: %(email)s"
-
-#: seahub/templates/user_add_email.html:9
-#, python-format
-msgid "Password:  %(password)s"
-msgstr "Passwort:  %(password)s"
-
-#: seahub/templates/user_add_email.html:11
-msgid "Please go to the following page and log in:"
-msgstr "Bitte besuchen Sie die folgende Seite um sich einzuloggen:"
-
-#: seahub/templates/user_reset_email.html:2
-#, python-format
-msgid ""
-"You're receiving this e-mail because staff has reset your password at "
-"%(site_name)s. "
-msgstr ""
-"Sie erhalten diese E-Mail, weil ein Gruppenverwalter Ihr Passwort auf "
-"%(site_name)s geändert hat."
-
-#: seahub/templates/user_reset_email.html:4
-#, python-format
-msgid ""
-"Your new password is %(password)s, please modify your password as soon as "
-"possible."
-msgstr ""
-"Ihr neues Passwort ist %(password)s. Bitte ändern Sie es so bald wie möglich."
-
-#: seahub/templates/userinfo.html:9
-msgid "Profile"
-msgstr "Profil"
-
-#: seahub/templates/userinfo.html:20
-msgid "Space Used"
-msgstr "Benutzter Speicherplatz"
-
-#: seahub/templates/userinfo.html:21
-msgid "Set Quota"
-msgstr "Quota setzen"
-
-#: seahub/templates/userinfo.html:26
-msgid "Used"
-msgstr ""
-
-#: seahub/templates/userinfo.html:37
-msgid "Owned"
-msgstr "Besitzer"
-
-#: seahub/templates/userinfo.html:62
-#: seahub/templates/snippets/my_owned_repos.html:7
-msgid "Shared"
-msgstr "Freigaben"
-
-#: seahub/templates/userinfo.html:86
-msgid "Set user storage limit"
-msgstr "Speicherplatz für Benutzer limitieren"
-
-#: seahub/templates/userinfo.html:89
-msgid "Tip: 0 means default limit"
-msgstr "Tipp: 0 heißt es wird das Standardlimit verwendet"
 
 #: seahub/templates/view_file_base.html:39
 #: seahub/templates/view_file_base.html:158
@@ -3511,13 +3466,6 @@ msgstr ""
 "Seafile Client läuft, klicken Sie bitte auf den folgenden Link um die lokale "
 "Datei zu öffnen:"
 
-#: seahub/templates/view_file_document.html:50
-#: seahub/templates/view_file_document.html:64
-#: seahub/templates/view_file_pdf.html:115
-#: seahub/templates/snippets/file_content_js.html:107
-msgid "Document convertion failed."
-msgstr "Dokumentenkonvertierung fehlgeschlagen."
-
 #: seahub/templates/view_file_image.html:15
 #: seahub/templates/snippets/file_content_html.html:31
 msgid "you can also press ← "
@@ -3552,8 +3500,8 @@ msgstr ""
 msgid "auto detect"
 msgstr ""
 
-#: seahub/templates/view_file_pdf.html:11
-#: seahub/templates/snippets/file_content_js.html:122
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
 msgid ""
 "<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
@@ -3563,18 +3511,18 @@ msgstr ""
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
 "\"page-nums\"></span></span>"
 
-#: seahub/templates/view_file_pdf.html:11
-#: seahub/templates/snippets/file_content_js.html:122
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
 msgid "Full Screen"
 msgstr "Vollbild"
 
-#: seahub/templates/view_file_pdf.html:11
-#: seahub/templates/snippets/file_content_js.html:122
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
 msgid "loading..."
 msgstr "Laden…"
 
-#: seahub/templates/view_file_pdf.html:58
-#: seahub/templates/snippets/file_content_js.html:169
+#: seahub/templates/view_file_pdf.html:77
+#: seahub/templates/snippets/file_content_js.html:109
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr ""
@@ -3588,7 +3536,7 @@ msgstr ""
 "Um es online zu betrachten, können Sie Firefox, Chrome oder IE 9 benutzen."
 
 #: seahub/templates/view_file_unknown.html:6
-#: seahub/templates/snippets/file_content_js.html:183
+#: seahub/templates/snippets/file_content_js.html:123
 msgid "This type of file cannot be viewed online."
 msgstr "Dieser Dateityp kann nicht online betrachtet werden."
 
@@ -3599,6 +3547,18 @@ msgstr "E-Mail-Adresse oder Passwort sind falsch"
 #: seahub/templates/registration/login.html:19
 msgid "Forgot password?"
 msgstr "Passwort vergessen?"
+
+#: seahub/templates/registration/login.html:28
+#: seahub/templates/registration/registration_form.html:32
+#: seahub/templates/sysadmin/sys_useradmin.html:123
+msgid "Email cannot be blank"
+msgstr "Email darf nicht leer sein"
+
+#: seahub/templates/registration/login.html:32
+#: seahub/templates/registration/registration_form.html:36
+#: seahub/templates/sysadmin/sys_useradmin.html:127
+msgid "Password cannot be blank"
+msgstr "Passwort darf nicht leer sein"
 
 #: seahub/templates/registration/logout.html:4
 msgid "Log Out"
@@ -3646,6 +3606,14 @@ msgstr "Passwort wurde erfolgreich zurückgesetzt"
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
 msgstr "Passwort wurde erfolgreich zurückgesetzt."
+
+#: seahub/templates/registration/password_reset_confirm.html:4
+#: seahub/templates/registration/password_reset_form.html:4
+#: seahub/templates/registration/password_reset_form.html:7
+#: seahub/templates/sysadmin/sys_useradmin.html:99
+#: seahub/views/sysadmin.py:250
+msgid "Password Reset"
+msgstr "Passwort zurücksetzen"
 
 #: seahub/templates/registration/password_reset_confirm.html:11
 msgid "Input new password"
@@ -3701,6 +3669,17 @@ msgstr "Registrieren"
 msgid "Welcome back, you are already signed in."
 msgstr "Willkommen zurück, Sie sind bereits eingeloggt."
 
+#: seahub/templates/registration/registration_form.html:15
+#: seahub/templates/sysadmin/sys_useradmin.html:16
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+#: seahub/templates/registration/registration_form.html:40
+#: seahub/templates/snippets/repo_create_js.html:49
+#: seahub/templates/sysadmin/sys_useradmin.html:131
+msgid "Please enter the password again"
+msgstr "Bitte geben Sie das Passwort erneut ein"
+
 #: seahub/templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
 msgstr " wird nicht unterstützt. Bitte wählen Sie eine Bilddatei."
@@ -3729,43 +3708,28 @@ msgstr "Bitte geben Sie mindestens eine Gruppe an."
 msgid "Please input a discussion."
 msgstr "Bitte geben Sie einen Beitrag ein."
 
-#: seahub/templates/snippets/events.html:2
-msgid "Recent Events"
-msgstr "Aktuelle Ereignisse"
+#: seahub/templates/snippets/events.html:3
+#, fuzzy
+msgid "File Activities"
+msgstr "Datei existiert nicht"
 
-#: seahub/templates/snippets/events.html:4
+#: seahub/templates/snippets/events.html:7
 #: seahub/templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
 msgstr "Laden..."
 
-#: seahub/templates/snippets/events.html:5
+#: seahub/templates/snippets/events.html:9
 msgid "More"
 msgstr "Mehr"
 
-#: seahub/templates/snippets/events_.html:14
-msgid "Updated library"
-msgstr "Bibliothek aktualisiert"
-
-#: seahub/templates/snippets/events_.html:34
+#: seahub/templates/snippets/events_body.html:29
 msgid "Created library"
 msgstr "Bibliothek erstellt"
 
-#: seahub/templates/snippets/events_.html:47
-msgid "Deleted library"
+#: seahub/templates/snippets/events_body.html:33
+#, fuzzy, python-format
+msgid "Deleted library %(library_name)s"
 msgstr "Bibiliothek gelöscht"
-
-#: seahub/templates/snippets/events_js.html:49
-#: seahub/templates/snippets/list_commit_detail.html:39
-msgid "Unknown error."
-msgstr "Unbekannter Fehler."
-
-#: seahub/templates/snippets/events_js.html:51
-msgid "Please refresh the page later."
-msgstr "Bitte aktualisieren Sie diese Seite später."
-
-#: seahub/templates/snippets/events_js.html:53
-msgid "Please try again later."
-msgstr "Bitte versuchen Sie es später erneut."
 
 #: seahub/templates/snippets/file_upload_progress_js.html:51
 #: seahub/templates/snippets/file_upload_progress_js.html:75
@@ -3813,6 +3777,10 @@ msgstr "Neue Ordner"
 msgid "Deleted directories"
 msgstr "Gelöschte Ordner"
 
+#: seahub/templates/snippets/list_commit_detail.html:39
+msgid "Unknown error."
+msgstr "Unbekannter Fehler."
+
 #: seahub/templates/snippets/my_groups.html:22
 msgid "Create a group now"
 msgstr "Jetzt eine neue Gruppe erstellen"
@@ -3820,6 +3788,11 @@ msgstr "Jetzt eine neue Gruppe erstellen"
 #: seahub/templates/snippets/my_owned_repos.html:6
 msgid "Mine"
 msgstr "Meine Bibliotheken"
+
+#: seahub/templates/snippets/my_owned_repos.html:7
+#: seahub/templates/sysadmin/userinfo.html:64
+msgid "Shared"
+msgstr "Freigaben"
 
 #: seahub/templates/snippets/my_owned_repos.html:8
 msgid "Starred"
@@ -3853,10 +3826,6 @@ msgid "2. Add files to the folder and they will be uploaded automatically."
 msgstr ""
 "2. Fügen Sie Dateien zum Ordner hinzu, damit sie automatisch hochgeladen "
 "werden."
-
-#: seahub/templates/snippets/my_owned_repos.html:82
-msgid "Leave Share"
-msgstr "Freigegebene Bibliothek verlassen"
 
 #: seahub/templates/snippets/my_owned_repos.html:90
 msgid "No library is shared to you"
@@ -3895,6 +3864,31 @@ msgstr ""
 #: seahub/templates/snippets/myhome_extra_script.html:40
 msgid "Please enter emails or groups or select some at first."
 msgstr "Bitte geben Sie E-Mail-Adressen oder Gruppen an."
+
+#: seahub/templates/snippets/myhome_extra_script.html:51
+#: seahub/templates/sysadmin/sys_repo_admin.html:62
+#: seahub/templates/sysadmin/userinfo.html:140
+msgid "Delete Library"
+msgstr "Bibliothek löschen"
+
+#: seahub/templates/snippets/office_convert_html.html:4
+#, fuzzy
+msgid "The file is being processed, please wait..."
+msgstr "Diese Datei ist nicht synchronisiert, bitte versuchen Sie es später."
+
+#: seahub/templates/snippets/office_convert_js.html:34
+msgid "hide outline"
+msgstr ""
+
+#: seahub/templates/snippets/office_convert_js.html:35
+msgid "show outline"
+msgstr ""
+
+#: seahub/templates/snippets/office_convert_js.html:108
+#: seahub/templates/snippets/office_convert_js.html:115
+#: seahub/templates/snippets/office_convert_js.html:140
+msgid "Document convertion failed."
+msgstr "Dokumentenkonvertierung fehlgeschlagen."
 
 #: seahub/templates/snippets/pubinfo.html:3
 msgid "Organization Info"
@@ -3970,6 +3964,177 @@ msgstr "Tipp: Geben Sie \"all\" ein, um die Bibliothek öffentlich freizugeben."
 msgid "Please input at least an email."
 msgstr "Bitte geben Sie mindestens eine E-Mail-Adresse an."
 
+#: seahub/templates/sysadmin/sys_group_admin.html:8
+msgid "All Groups"
+msgstr "Alle Gruppen"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:13
+#: seahub/templates/sysadmin/sys_org_admin.html:13
+msgid "Creator"
+msgstr "Ersteller"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:14
+#: seahub/templates/sysadmin/sys_org_admin.html:14
+#: seahub/templates/sysadmin/sys_useradmin.html:27
+msgid "Create At"
+msgstr "Erstellt am"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:62
+msgid "Delete Group"
+msgstr "Gruppe löschen"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:7
+msgid "All Organizations"
+msgstr "Alle Organisationen"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:12
+msgid "Url Prefix"
+msgstr "URL-Präfix"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:62
+msgid "Delete Organization"
+msgstr "Organisation löschen"
+
+#: seahub/templates/sysadmin/sys_repo_admin.html:6
+msgid "All Libraries"
+msgstr "Alle Bilbliotheken"
+
+#: seahub/templates/sysadmin/sys_repo_admin.html:12
+msgid "Owner"
+msgstr "Besitzer"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:8
+msgid "All Members"
+msgstr "Alle Mitglieder"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:9
+#: seahub/templates/sysadmin/sys_useradmin.html:11
+msgid "Add new user"
+msgstr "Neuen Benutzer hinzufügen"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:25
+msgid "Status"
+msgstr "Status"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:26
+#: seahub/templates/sysadmin/userinfo.html:22
+msgid "Space Used"
+msgstr "Benutzter Speicherplatz"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:35
+msgid "Activated"
+msgstr "Aktiviert"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:37
+msgid "Active"
+msgstr "Aktiv"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:50
+msgid "ResetPwd"
+msgstr "Passwort zurücksetzen"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:52
+#: seahub/templates/sysadmin/sys_useradmin.html:103
+msgid "Revoke Admin"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_useradmin.html:54
+#: seahub/templates/sysadmin/sys_useradmin.html:107
+msgid "Set Admin"
+msgstr "Administration"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:95
+msgid "Delete User"
+msgstr "Benutzer löschen"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:100
+#, fuzzy, python-format
+msgid "Are you sure you want to reset the password of %s ?"
+msgstr ""
+"Sind Sie sicher, dass Sie das Passwort für das Konto zurücksetzen wollen?"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:104
+#, fuzzy, python-format
+msgid "Are you sure you want to revoke the admin permission of %s ?"
+msgstr ""
+"Sind Sie sicher, dass Sie %%s die Administratorenrechte entziehen wollen?"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:108
+#, fuzzy, python-format
+msgid "Are you sure you want to set %s as admin?"
+msgstr "Sind Sie sicher, dass Sie %%s Administratorenrechte verleihen wollen?"
+
+#: seahub/templates/sysadmin/user_add_email.html:3
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to organization "
+"\"%(org.org_name)s\" on %(site_name)s."
+msgstr ""
+"Sie erhalten diese E-Mail, weil %(user)s Sie zur Organisation  "
+"\"%(org.org_name)s\" auf %(site_name)s hinzugefügt hat."
+
+#: seahub/templates/sysadmin/user_add_email.html:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to %(site_name)s."
+msgstr ""
+"Sie erhalten diese Email, weil %(user)s Sie zu %(site_name)s hinzugefügt hat."
+
+#: seahub/templates/sysadmin/user_add_email.html:7
+msgid "Following is your account information:"
+msgstr "Nachfolgend sind Ihre Benutzerkonteninformationen:"
+
+#: seahub/templates/sysadmin/user_add_email.html:8
+#, python-format
+msgid "Email: %(email)s"
+msgstr "Email: %(email)s"
+
+#: seahub/templates/sysadmin/user_add_email.html:9
+#, python-format
+msgid "Password:  %(password)s"
+msgstr "Passwort:  %(password)s"
+
+#: seahub/templates/sysadmin/user_add_email.html:11
+msgid "Please go to the following page and log in:"
+msgstr "Bitte besuchen Sie die folgende Seite um sich einzuloggen:"
+
+#: seahub/templates/sysadmin/user_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because staff has reset your password at "
+"%(site_name)s. "
+msgstr ""
+"Sie erhalten diese E-Mail, weil ein Gruppenverwalter Ihr Passwort auf "
+"%(site_name)s geändert hat."
+
+#: seahub/templates/sysadmin/user_reset_email.html:4
+#, python-format
+msgid ""
+"Your new password is %(password)s, please modify your password as soon as "
+"possible."
+msgstr ""
+"Ihr neues Passwort ist %(password)s. Bitte ändern Sie es so bald wie möglich."
+
+#: seahub/templates/sysadmin/userinfo.html:27
+msgid "Used"
+msgstr ""
+
+#: seahub/templates/sysadmin/userinfo.html:32
+msgid "Set Quota"
+msgstr "Quota setzen"
+
+#: seahub/templates/sysadmin/userinfo.html:39
+msgid "Owned"
+msgstr "Besitzer"
+
+#: seahub/templates/sysadmin/userinfo.html:88
+msgid "Set user storage limit"
+msgstr "Speicherplatz für Benutzer limitieren"
+
+#: seahub/templates/sysadmin/userinfo.html:91
+msgid "Tip: 0 means default limit"
+msgstr "Tipp: 0 heißt es wird das Standardlimit verwendet"
+
 #: seahub/templates/wiki/personal_wiki.html:25
 msgid "You do not have personal wiki"
 msgstr "Sie haben kein persönliches Wiki."
@@ -3982,286 +4147,375 @@ msgstr "Mein Wiki"
 msgid "Personal Wiki Pages"
 msgstr "Mein Wiki"
 
-#: seahub/utils/__init__.py:87
+#: seahub/utils/__init__.py:91
 msgid "permission error"
 msgstr "Berechtigungsfehler"
 
-#: seahub/utils/__init__.py:102 seahub/views/__init__.py:2219
-#: seahub/views/file.py:150
+#: seahub/utils/__init__.py:106 seahub/utils/__init__.py:1022
 msgid "Internal error"
 msgstr "Interner Fehler"
 
-#: seahub/views/__init__.py:290
+#: seahub/views/__init__.py:299
 msgid "Unable to view recycle page"
 msgstr "Mülleimer konnte nicht angezeigt weden"
 
-#: seahub/views/__init__.py:315
+#: seahub/views/__init__.py:324
 msgid "Library does not exist."
 msgstr "Die Bibliothek existiert nicht."
 
-#: seahub/views/__init__.py:326
+#: seahub/views/__init__.py:335
 msgid "You do not have permission to perform this action."
 msgstr "Sie haben nicht die benötigte Berechtigung."
 
-#: seahub/views/__init__.py:333
+#: seahub/views/__init__.py:342
 msgid "Failed to edit library information."
 msgstr "Kann Bibliotheksinformationen nicht ändern."
 
-#: seahub/views/__init__.py:340
+#: seahub/views/__init__.py:349
 msgid "Settings saved."
 msgstr "Einstellungen gespeichert."
 
-#: seahub/views/__init__.py:344
+#: seahub/views/__init__.py:353
 msgid "Failed to save settings on server"
 msgstr "Speichern der Einstellungen auf dem Server fehlgeschlagen"
 
-#: seahub/views/__init__.py:353
+#: seahub/views/__init__.py:362
 msgid "Filename contains invalid character"
 msgstr "Dateiname enthält unzulässiges Zeichen"
 
-#: seahub/views/__init__.py:355
+#: seahub/views/__init__.py:364
 msgid "Duplicated filename"
 msgstr "Doppelter Dateiname"
 
-#: seahub/views/__init__.py:359
+#: seahub/views/__init__.py:368
 msgid "File size surpasses the limit"
 msgstr "Dateigröße überschreitet das Limit"
 
-#: seahub/views/__init__.py:361
+#: seahub/views/__init__.py:370
 msgid "The space of owner is used up, upload failed"
 msgstr "Der Speicherplatz des Benutzers ist aufgebraucht. Upload schlug fehl"
 
-#: seahub/views/__init__.py:363
+#: seahub/views/__init__.py:372
 msgid "An error occurs during file transfer"
 msgstr "Es ist ein Fehler beim Dateitransfer aufgetreten"
 
-#: seahub/views/__init__.py:375 seahub/views/__init__.py:397
+#: seahub/views/__init__.py:384 seahub/views/__init__.py:406
 msgid "Invalid url"
 msgstr "Ungültige URL"
 
-#: seahub/views/__init__.py:461
+#: seahub/views/__init__.py:431
+#, fuzzy
+msgid "You don't have permission to access the library."
+msgstr "Sie haben keine Berechtigung die Bibliothek wiederherzustellen"
+
+#: seahub/views/__init__.py:439
+msgid "No path."
+msgstr ""
+
+#: seahub/views/__init__.py:492
 msgid "Unable to view library modification"
 msgstr "Konnte Bibliotheksänderungen nicht anzeigen"
 
-#: seahub/views/__init__.py:509
+#: seahub/views/__init__.py:546
 msgid "Unable to view library snapshots"
 msgstr "Konnte Bibliotheksschappschüsse nicht anzeigen"
 
-#: seahub/views/__init__.py:561
+#: seahub/views/__init__.py:603
 msgid "You have no permission to restore library"
 msgstr "Sie haben keine Berechtigung die Bibliothek wiederherzustellen"
 
-#: seahub/views/__init__.py:577
+#: seahub/views/__init__.py:619
 msgid "Please specify history ID"
 msgstr "Bitte geben Sie eine Verlaufs-ID an"
 
-#: seahub/views/__init__.py:585 seahub/views/__init__.py:678
-#: seahub/views/__init__.py:1856 seahub/views/__init__.py:2468
+#: seahub/views/__init__.py:627 seahub/views/__init__.py:720
+#: seahub/views/__init__.py:1526 seahub/views/__init__.py:2135
 msgid "Library does not exist"
 msgstr "Die Bibliothek existiert nicht"
 
-#: seahub/views/__init__.py:587
+#: seahub/views/__init__.py:629
 msgid "History you specified does not exist"
 msgstr "Der von Ihnen gewählte Verlauf existiert nicht"
 
-#: seahub/views/__init__.py:589
+#: seahub/views/__init__.py:631
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-#: seahub/views/__init__.py:659
+#: seahub/views/__init__.py:701
 msgid "No conflict in the merge."
 msgstr "Kein Konflikt bei der Zusammenführung."
 
-#: seahub/views/__init__.py:698 seahub/views/__init__.py:715
+#: seahub/views/__init__.py:740 seahub/views/__init__.py:757
 msgid ""
 "Failed to remove library. Only staff or owner can perform this operation."
 msgstr ""
 "Entfernen der Bibliothek fehlgeschlagen. Nur der Besitzer oder ein "
 "Administrator ist dazu berechtigt."
 
-#: seahub/views/__init__.py:713
+#: seahub/views/__init__.py:755
 #, python-format
 msgid "Successfully deleted library \"%s\"."
 msgstr "Bibliothek \"%s\" wurde gelöscht"
 
-#: seahub/views/__init__.py:878
+#: seahub/views/__init__.py:916
 #, python-format
 msgid "Successfully unsync client %s"
 msgstr "Synchronisierung mit Client %s ist aufgehoben."
 
-#: seahub/views/__init__.py:880
+#: seahub/views/__init__.py:918
 msgid "Successfully unsync client"
 msgstr "c"
 
-#: seahub/views/__init__.py:883
+#: seahub/views/__init__.py:921
 #, python-format
 msgid "Failed to unsync client %s"
 msgstr "Aufheben der Synchronisierung mit Client %s ist fehlgeschlagen"
 
-#: seahub/views/__init__.py:885
+#: seahub/views/__init__.py:923
 msgid "Failed to unsync client"
 msgstr "Aufheben der Synchronisierung mit Client ist fehlgeschlagen"
 
-#: seahub/views/__init__.py:963 seahub/views/__init__.py:1830
+#: seahub/views/__init__.py:1001 seahub/views/__init__.py:1500
 msgid "Failed to create library"
 msgstr "Bibliothek konnte nicht erstellt werden"
 
-#: seahub/views/__init__.py:981
+#: seahub/views/__init__.py:1019
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "Da sie nicht existiert, kann die Bibliothek nicht freigegeben werden."
 
-#: seahub/views/__init__.py:986
+#: seahub/views/__init__.py:1024
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\" ist nicht mehr freigegeben."
 
-#: seahub/views/__init__.py:988
+#: seahub/views/__init__.py:1026
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "Freigeben von %s ist fehlgeschlagen."
 
-#: seahub/views/__init__.py:1018
+#: seahub/views/__init__.py:1056
 msgid "Failed to delete file."
 msgstr "Fehler beim Löschen der Datei."
 
-#: seahub/views/__init__.py:1025
+#: seahub/views/__init__.py:1063
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s wurde erfolgreich gelöscht."
 
-#: seahub/views/__init__.py:1027
+#: seahub/views/__init__.py:1065
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Interner Fehler: Datei %s konnte nicht gelöscht werden."
 
-#: seahub/views/__init__.py:1042
+#: seahub/views/__init__.py:1080
 msgid "File size surpasses 10M, can not be previewed online."
 msgstr "Für Dateien größer als 10M ist keine Onlinevorschau möglich"
 
-#: seahub/views/__init__.py:1047 seahub/views/file.py:105
+#: seahub/views/__init__.py:1085 seahub/views/file.py:105
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP-Fehler: Datei konnte nicht online geöffnet werden"
 
-#: seahub/views/__init__.py:1050 seahub/views/file.py:108
+#: seahub/views/__init__.py:1088 seahub/views/file.py:108
 msgid "URLError: failed to open file online"
 msgstr "URL-Fehler: Datei konnte nicht online geöffnet werden"
 
-#: seahub/views/__init__.py:1057 seahub/views/file.py:115
+#: seahub/views/__init__.py:1095 seahub/views/file.py:115
 msgid "The encoding you chose is not proper."
 msgstr ""
 
-#: seahub/views/__init__.py:1074 seahub/views/__init__.py:1077
+#: seahub/views/__init__.py:1112 seahub/views/__init__.py:1115
 #: seahub/views/file.py:132 seahub/views/file.py:135
 msgid "Unknown file encoding"
 msgstr "Unbekannte Datenkodierung"
 
-#: seahub/views/__init__.py:1149
+#: seahub/views/__init__.py:1187
 msgid "Unable to access file"
 msgstr "Kein Zugriff auf Datei"
 
-#: seahub/views/__init__.py:1176
+#: seahub/views/__init__.py:1214
 msgid "Failed to download library, unable to find server"
 msgstr ""
 "Bibliothek konnte nicht heruntergeladen werden, konnte Server nicht finden"
 
-#: seahub/views/__init__.py:1187
+#: seahub/views/__init__.py:1225
 msgid "Invalid server setting"
 msgstr "Ungültige Serverkonfiguration"
 
-#: seahub/views/__init__.py:1230
+#: seahub/views/__init__.py:1268
 msgid "Destination path is too long."
 msgstr "Zielpfad ist zu lang."
 
-#: seahub/views/__init__.py:1236
+#: seahub/views/__init__.py:1274
 msgid "You can not modify that library."
 msgstr "Sie können diese Bibliothek nicht verändern."
 
-#: seahub/views/__init__.py:1249
+#: seahub/views/__init__.py:1287
 #, python-format
 msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
 msgstr ""
 "%(op)s des Verzeichnisses nicht möglich, %(src)s ist ein Unterverzeichnis "
 "von %(des)s"
 
-#: seahub/views/__init__.py:1250
+#: seahub/views/__init__.py:1288
 msgid "copy"
 msgstr "kopieren"
 
-#: seahub/views/__init__.py:1250
+#: seahub/views/__init__.py:1288
 msgid "move"
 msgstr "verschieben"
 
-#: seahub/views/__init__.py:1265
+#: seahub/views/__init__.py:1303
 #, python-format
 msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich kopiert: <a href=\"%(url)s\">anzeigen</a>"
 
-#: seahub/views/__init__.py:1271
+#: seahub/views/__init__.py:1309
 #, python-format
 msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich verschoben: <a href=\"%(url)s\">anzeigen</a>"
 
-#: seahub/views/__init__.py:1386
+#: seahub/views/__init__.py:1368 seahub/views/__init__.py:1399
+#: seahub/views/__init__.py:1433 seahub/views/__init__.py:2276
+#: seahub/views/file.py:550
+msgid "Permission denied"
+msgstr "Zugriff verweigert"
+
+#: seahub/views/__init__.py:1445
+#, python-format
+msgid "Successfully renamed %(old)s to %(new)s"
+msgstr "Erfolgreich %(old)s in %(new)s umbenannt."
+
+#: seahub/views/__init__.py:1607
+#, python-format
+msgid ""
+"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
+msgstr ""
+"%(path)s wurde erfolgreich zum <a href=\"%(root)s\">Hauptverzeichnis</a> "
+"zurückgesetzt."
+
+#: seahub/views/__init__.py:1611 seahub/views/__init__.py:1637
+#, python-format
+msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
+msgstr "<a href=\"%(url)s\">%(path)s</a> wurde erfolgreich zurükgesetzt."
+
+#: seahub/views/__init__.py:1633
+#, python-format
+msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
+msgstr ""
+"%(path)s wurde erfolgreich zum <a href=\"%(url)s\">Hauptverzeichnis</a> "
+"zurückgesetzt."
+
+#: seahub/views/__init__.py:2171 seahub/views/file.py:544
+msgid "Internal Error"
+msgstr "Interner Fehler"
+
+#: seahub/views/__init__.py:2174
+#, python-format
+msgid "Unable to download directory \"%s\": size is too large."
+msgstr "Konnte \"%s\" nicht herunterladen, da der Ordner zu groß ist."
+
+#: seahub/views/__init__.py:2189
+#, python-format
+msgid "Unable to download \"%s\""
+msgstr "Konnte \"%s\" nicht herunterladen"
+
+#: seahub/views/__init__.py:2271
+#, fuzzy
+msgid "The group doesn't exist"
+msgstr "Diese Nachricht existiert nicht"
+
+#: seahub/views/file.py:275 seahub/views/file.py:495 seahub/views/file.py:510
+#: seahub/views/file.py:532
+msgid "Unable to view file"
+msgstr "Kann die Datei nicht anzeigen"
+
+#: seahub/views/file.py:290 seahub/views/file.py:295 seahub/views/file.py:457
+#: seahub/views/file.py:462
+#, python-format
+msgid "File size surpasses %s, can not be opened online."
+msgstr "Für Dateien größer als %sM ist keine Onlinevorschau möglich."
+
+#: seahub/views/file.py:554
+msgid "The library does not exist."
+msgstr "Die Bibliothek existiert nicht."
+
+#: seahub/views/file.py:558
+msgid "The library is encrypted."
+msgstr "Diese Bibliothek ist verschlüsselt."
+
+#: seahub/views/file.py:632
+msgid "Unable to edit file"
+msgstr "Die Datei kann nicht bearbeitet werden"
+
+#: seahub/views/file.py:644
+msgid "The file does not exist."
+msgstr "Datei existiert nicht."
+
+#: seahub/views/file.py:672
+msgid "Edit online is not offered for this type of file."
+msgstr "Onlinebearbeitung ist für diesen Dateityp nicht verfügbar."
+
+#: seahub/views/sysadmin.py:134
 msgid "Failed to set quota: internal error"
 msgstr "Quota konnte nicht gesetzt werden: Interner Fehler"
 
-#: seahub/views/__init__.py:1444
+#: seahub/views/sysadmin.py:191
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s erfolgreich gelöscht"
 
-#: seahub/views/__init__.py:1446
+#: seahub/views/sysadmin.py:193
 msgid "Failed to delete: the user does not exist"
 msgstr "Löschen fehlgeschlagen: Die Gruppe existiert nicht."
 
-#: seahub/views/__init__.py:1458
+#: seahub/views/sysadmin.py:205
 #, python-format
 msgid "Successfully set %s as admin"
 msgstr "%s hat die Administratorenrechte erfolgreich verliehen bekommen."
 
-#: seahub/views/__init__.py:1460
+#: seahub/views/sysadmin.py:207
 msgid "Failed to set admin: the user does not exist"
 msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer existiert nicht."
 
-#: seahub/views/__init__.py:1472
+#: seahub/views/sysadmin.py:219
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Administratorenrechte für %s erfolgreich entzogen."
 
-#: seahub/views/__init__.py:1474
+#: seahub/views/sysadmin.py:221
 msgid "Failed to revoke admin: the user does not exist"
 msgstr ""
 "Administratorenrechte konnten nicht entzogen werden, da der Benutzer nicht "
 "existiert."
 
-#: seahub/views/__init__.py:1523
-#, python-format
+#: seahub/views/sysadmin.py:270
+#, fuzzy, python-format
 msgid ""
-"Successfully resetted password to %(passwd)s, an email has been sent to "
+"Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr ""
 "Passwort erfolgreich auf %(passwd)s gesetzt, eine E-Mail wurde an den Nutzer "
 "%(user)s versandt."
 
-#: seahub/views/__init__.py:1528
-#, python-format
+#: seahub/views/sysadmin.py:275
+#, fuzzy, python-format
 msgid ""
-"Successfully resetted password to %(passwd)s, but failed to send email to "
+"Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
 "Passwort erfolgreich auf %(passwd)s gesetzt, aber es konnte keine E-Mail an "
 "den Nutzer %(user)s gesendet werden. Bitte prüfen Sie die Konfiguration "
 "Ihres E-Mail-Services."
 
-#: seahub/views/__init__.py:1532
-#, python-format
-msgid "Successfully resetted password to %(passwd)s for user %(user)s."
+#: seahub/views/sysadmin.py:279
+#, fuzzy, python-format
+msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt."
 
-#: seahub/views/__init__.py:1535
-#, python-format
+#: seahub/views/sysadmin.py:282
+#, fuzzy, python-format
 msgid ""
-"Successfully resetted password to %(passwd)s for user %(user)s. But email "
+"Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
@@ -4269,22 +4523,22 @@ msgstr ""
 "jedoch keine E-Mail Benachrichtigung gesendet werden, da der E-Mail-Service "
 "nicht korrekt konfiguriert ist."
 
-#: seahub/views/__init__.py:1538
+#: seahub/views/sysadmin.py:285
 msgid "Failed to reset password: user does not exist"
 msgstr "Zurücksetzen des Passworts fehlgeschlagen: Benutzer existiert nicht"
 
-#: seahub/views/__init__.py:1559
+#: seahub/views/sysadmin.py:306
 msgid "Seafile Registration Information"
 msgstr "Seafile Registrierungsinformationen"
 
-#: seahub/views/__init__.py:1595
+#: seahub/views/sysadmin.py:341
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
 "Benutzer %s wurde erfolgreich hinzugefügt. Eine E-Mail Benachrichtigung "
 "wurde versandt."
 
-#: seahub/views/__init__.py:1598
+#: seahub/views/sysadmin.py:344
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
@@ -4294,12 +4548,12 @@ msgstr ""
 "Senden der Benachrichtigungs-E-Mail auf. Bitte überprüfen Sie Ihren E-Mail-"
 "Service.Konfiguration."
 
-#: seahub/views/__init__.py:1600
+#: seahub/views/sysadmin.py:346
 #, python-format
 msgid "Successfully added user %s."
 msgstr "User %s erfolgreich hinzugefügt."
 
-#: seahub/views/__init__.py:1602
+#: seahub/views/sysadmin.py:348
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
@@ -4309,219 +4563,118 @@ msgstr ""
 "Benachrichtigung gesendet werden, da der E-Mail-Service nicht korrekt "
 "konfiguriert ist."
 
-#: seahub/views/__init__.py:1698 seahub/views/__init__.py:1729
-#: seahub/views/__init__.py:1763 seahub/views/file.py:551
-msgid "Permission denied"
-msgstr "Zugriff verweigert"
+#~ msgid "Successfully added %s."
+#~ msgstr "%s erfolgreich hinzugefügt."
 
-#: seahub/views/__init__.py:1775
-#, python-format
-msgid "Successfully renamed %(old)s to %(new)s"
-msgstr "Erfolgreich %(old)s in %(new)s umbenannt."
+#~ msgid "Failed to share: the group doesn't exist."
+#~ msgstr "Freigeben fehlgeschlagen: Die Gruppe existiert nicht."
 
-#: seahub/views/__init__.py:1930
-#, python-format
-msgid ""
-"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-msgstr ""
-"%(path)s wurde erfolgreich zum <a href=\"%(root)s\">Hauptverzeichnis</a> "
-"zurückgesetzt."
+#~ msgid "Failed to share to all members"
+#~ msgstr "Freigeben für alle Mitglieder ist fehlgeschlagen"
 
-#: seahub/views/__init__.py:1934 seahub/views/__init__.py:1960
-#, python-format
-msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr "<a href=\"%(url)s\">%(path)s</a> wurde erfolgreich zurükgesetzt."
+#~ msgid ""
+#~ "Failed to share to %s, as encrypted libraries cannot be shared to emails "
+#~ "outside the site."
+#~ msgstr ""
+#~ "Freigeben für %s fehlgeschlagen. Verschlüsselte Bibliotheken können nicht "
+#~ "für E-Mails außerhalb der Seite freigegeben werden."
 
-#: seahub/views/__init__.py:1956
-#, python-format
-msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
-msgstr ""
-"%(path)s wurde erfolgreich zum <a href=\"%(url)s\">Hauptverzeichnis</a> "
-"zurückgesetzt."
+#~ msgid "Failed to share to %s."
+#~ msgstr "Freigeben für %s ist fehlgeschlagen."
 
-#: seahub/views/__init__.py:2504 seahub/views/file.py:545
-msgid "Internal Error"
-msgstr "Interner Fehler"
+#~ msgid "You are shared with a library in Seafile"
+#~ msgstr "Es wurde eine Bibliothek in Seafile für Sie freigegeben."
 
-#: seahub/views/__init__.py:2507
-#, python-format
-msgid "Unable to download directory \"%s\": size is too large."
-msgstr "Konnte \"%s\" nicht herunterladen, da der Ordner zu groß ist."
+#~ msgid ""
+#~ "Shared to %(email)s successfully, go check it at <a href=\"%(share)s"
+#~ "\">Share</a>."
+#~ msgstr ""
+#~ "Erfolgreich für %(email)s freigegeben. Sie können den Status unter <a "
+#~ "href=\"%(share)s\">Freigabe</a> prüfen."
 
-#: seahub/views/__init__.py:2522
-#, python-format
-msgid "Unable to download \"%s\""
-msgstr "Konnte \"%s\" nicht herunterladen"
+#~ msgid "Deleted successfully."
+#~ msgstr "Erfolgreicht gelöscht"
 
-#: seahub/views/file.py:292 seahub/views/file.py:496 seahub/views/file.py:511
-#: seahub/views/file.py:533
-msgid "Unable to view file"
-msgstr "Kann die Datei nicht anzeigen"
+#~ msgid ""
+#~ "\n"
+#~ "          one org message\n"
+#~ "          "
+#~ msgid_plural ""
+#~ "\n"
+#~ "          %(counter)s org messages\n"
+#~ "          "
+#~ msgstr[0] ""
+#~ "\n"
+#~ "          Eine Organisationsnachricht\n"
+#~ "          "
+#~ msgstr[1] ""
+#~ "\n"
+#~ "          %(counter)s Organisationsnachrichten\n"
+#~ "          "
 
-#: seahub/views/file.py:307 seahub/views/file.py:465
-#, python-format
-msgid "File size surpasses %s, can not be opened online."
-msgstr "Für Dateien größer als %sM ist keine Onlinevorschau möglich."
+#~ msgid "Recent Events"
+#~ msgstr "Aktuelle Ereignisse"
 
-#: seahub/views/file.py:555
-msgid "The library does not exist."
-msgstr "Die Bibliothek existiert nicht."
+#~ msgid "Updated library"
+#~ msgstr "Bibliothek aktualisiert"
 
-#: seahub/views/file.py:559
-msgid "The library is encrypted."
-msgstr "Diese Bibliothek ist verschlüsselt."
+#~ msgid "Please refresh the page later."
+#~ msgstr "Bitte aktualisieren Sie diese Seite später."
 
-#: seahub/views/file.py:633
-msgid "Unable to edit file"
-msgstr "Die Datei kann nicht bearbeitet werden"
+#~ msgid "Please try again later."
+#~ msgstr "Bitte versuchen Sie es später erneut."
 
-#: seahub/views/file.py:645
-msgid "The file does not exist."
-msgstr "Datei existiert nicht."
+#~ msgid "Activate users"
+#~ msgstr "Aktive Benutzer"
 
-#: seahub/views/file.py:673
-msgid "Edit online is not offered for this type of file."
-msgstr "Onlinebearbeitung ist für diesen Dateityp nicht verfügbar."
+#~ msgid "Re-send activation emails"
+#~ msgstr "Aktivierungsmails erneut senden"
 
-#: thirdpart/registration/admin.py:23
-msgid "Activate users"
-msgstr "Aktive Benutzer"
+#~ msgid "A user with this email alread"
+#~ msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits"
 
-#: thirdpart/registration/admin.py:43
-msgid "Re-send activation emails"
-msgstr "Aktivierungsmails erneut senden"
+#~ msgid "I have read and agree to the Terms of Service"
+#~ msgstr "Ich habe die Nutzungsbedingungen gelesen und verstanden"
 
-#: thirdpart/registration/forms.py:46
-msgid "A user with this email alread"
-msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits"
+#~ msgid "You must agree to the terms to register"
+#~ msgstr ""
+#~ "Sie müssen den Nutzungsbedingungen zustimmen, um sich registrieren zu "
+#~ "können"
 
-#: thirdpart/registration/forms.py:69
-msgid "I have read and agree to the Terms of Service"
-msgstr "Ich habe die Nutzungsbedingungen gelesen und verstanden"
+#~ msgid ""
+#~ "This email address is already in use. Please supply a different email "
+#~ "address."
+#~ msgstr ""
+#~ "Diese E-Mail-Adresse wird bereits benutzt. Bitte geben Sie eine andere E-"
+#~ "Mail Adresse an."
 
-#: thirdpart/registration/forms.py:70
-msgid "You must agree to the terms to register"
-msgstr ""
-"Sie müssen den Nutzungsbedingungen zustimmen, um sich registrieren zu können"
+#~ msgid ""
+#~ "Registration using free email addresses is prohibited. Please supply a "
+#~ "different email address."
+#~ msgstr ""
+#~ "Registrierung mit einer kostenlosen E-Mail-Adresse ist nicht erlaubt. "
+#~ "Bitte geben Sie eine andere E-Mail-Adresse an."
 
-#: thirdpart/registration/forms.py:86
-msgid ""
-"This email address is already in use. Please supply a different email "
-"address."
-msgstr ""
-"Diese E-Mail-Adresse wird bereits benutzt. Bitte geben Sie eine andere E-"
-"Mail Adresse an."
+#~ msgid "activation key"
+#~ msgstr "Aktivierungsschlüssel"
 
-#: thirdpart/registration/forms.py:113
-msgid ""
-"Registration using free email addresses is prohibited. Please supply a "
-"different email address."
-msgstr ""
-"Registrierung mit einer kostenlosen E-Mail-Adresse ist nicht erlaubt. Bitte "
-"geben Sie eine andere E-Mail-Adresse an."
+#~ msgid "registration profile"
+#~ msgstr "Registrierungsprofil"
 
-#: thirdpart/registration/models.py:191
-msgid "activation key"
-msgstr "Aktivierungsschlüssel"
+#~ msgid "registration profiles"
+#~ msgstr "Registrierungsprofile"
 
-#: thirdpart/registration/models.py:196
-msgid "registration profile"
-msgstr "Registrierungsprofil"
+#~ msgid "This field is required."
+#~ msgstr "E-Mail ist erforderlich."
 
-#: thirdpart/registration/models.py:197
-msgid "registration profiles"
-msgstr "Registrierungsprofile"
+#~ msgid "Invalid value."
+#~ msgstr "Ungültiger Wert."
 
-#: thirdpart/rest_framework/fields.py:118
-msgid "This field is required."
-msgstr "E-Mail ist erforderlich."
+#~ msgid "Enter a whole number."
+#~ msgstr "Bitte eine Nummer eingeben."
 
-#: thirdpart/rest_framework/fields.py:119
-msgid "Invalid value."
-msgstr "Ungültiger Wert."
-
-#: thirdpart/rest_framework/fields.py:679
-#, python-format
-msgid "'%s' value must be either True or False."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:744
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:841
-#, python-format
-msgid "'%s' value has an invalid date format. It must be in YYYY-MM-DD format."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:843
-#: thirdpart/rest_framework/fields.py:881
-#, python-format
-msgid ""
-"'%s' value has the correct format (YYYY-MM-DD) but it is an invalid date."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:879
-#, python-format
-msgid ""
-"'%s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:883
-#, python-format
-msgid ""
-"'%s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]) but "
-"it is an invalid date/time."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:933
-msgid "Enter a whole number."
-msgstr "Bitte eine Nummer eingeben."
-
-#: thirdpart/rest_framework/fields.py:934
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:935
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:962
-#, python-format
-msgid "'%s' value must be a float."
-msgstr "Der Wert '%s' muss ein Fließkommawert sein."
-
-#: thirdpart/rest_framework/fields.py:982
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:983
-msgid "No file was submitted."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:984
-msgid "The submitted file is empty."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:985
-#, python-format
-msgid ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:986
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-#: thirdpart/rest_framework/fields.py:1023
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
+#~ msgid "'%s' value must be a float."
+#~ msgstr "Der Wert '%s' muss ein Fließkommawert sein."
 
 #~ msgid "Failed to create repo"
 #~ msgstr "Repo konnte nicht erstellt werden"
@@ -4647,9 +4800,6 @@ msgstr ""
 
 #~ msgid "Seafile Login Information"
 #~ msgstr "Seafile Login Informationen"
-
-#~ msgid "Mail sent successfully"
-#~ msgstr "E-Mail erfolgreich verschickt"
 
 #~ msgid "Failed to send the email"
 #~ msgstr "Versenden der E-Mail fehlgeschlagen"
@@ -4801,9 +4951,6 @@ msgstr ""
 #~ msgid "Raw"
 #~ msgstr "Rohansicht"
 
-#~ msgid "Leave a message~"
-#~ msgstr "Eine Nachricht hinterlassen~"
-
 #~ msgid "Comment"
 #~ msgstr "Kommentar"
 
@@ -4824,9 +4971,6 @@ msgstr ""
 
 #~ msgid "Recommend Message"
 #~ msgstr "Empfehlungsnachricht"
-
-#~ msgid "File not exists"
-#~ msgstr "Datei existiert nicht"
 
 #~ msgid "Library not exists"
 #~ msgstr "Bibliothek nicht gefunden"
