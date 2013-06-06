@@ -53,7 +53,11 @@
         {% endif %}
         <td>
             <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% if repo.share_in %}
             <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+            {% else %}
+            <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Unshare"%}"></span>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
@@ -71,6 +75,25 @@
 
 {% block extra_script %}
 {% include 'snippets/add_to_contacts_js.html' %}
+
+<script type="text/javascript">
+    $(".download-btn").click(function() {
+        window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
+    });
+
+    $('.unshare-btn').click(function() {
+        location.href = $(this).data('url');
+    });
+
+    $("table tr:gt(0)").hover(
+        function() {
+            $(this).find('.op-icon').removeClass('vh');
+        },
+        function() {
+            $(this).find('.op-icon').addClass('vh');
+        }
+    );
+</script>
 
 {% endblock %}
 

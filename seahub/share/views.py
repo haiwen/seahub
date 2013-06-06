@@ -600,9 +600,14 @@ def user_share_list(request, id_or_email):
     share_list = []
     username = request.user.username
     share_in = seafile_api.get_share_in_repo_list(username, -1, -1)
-    share_out = seafile_api.get_share_out_repo_list(username, -1, -1)    
-    for e in (share_in+share_out):
+    for e in share_in:
         if e.share_type == 'personal' and e.user == to_email:
+            e.share_in = True
+            share_list.append(e)
+    share_out = seafile_api.get_share_out_repo_list(username, -1, -1)    
+    for e in share_out:
+        if e.share_type == 'personal' and e.user == to_email:
+            e.share_out = True
             share_list.append(e)
 
     c = Contact.objects.get_contact_by_user(username, to_email)
