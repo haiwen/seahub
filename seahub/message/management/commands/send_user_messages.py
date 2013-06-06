@@ -78,7 +78,7 @@ class Command(BaseCommand):
                           [to_email], fail_silently=False)
                 logger.info('Successfully sended email to %s' % to_email)
             except Exception, e:
-                logger.error('Failed to send email to %s, error detail: %s' % (user, e))
+                logger.error('Failed to send email to %s, error detail: %s' % (to_email, e))
 
 
         
