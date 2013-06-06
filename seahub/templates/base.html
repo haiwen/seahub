@@ -67,9 +67,14 @@
                         <form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
                             <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
                             <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
+                            <div id="msg-file-share">
+                                <button type="button" id="msg-file-share-btn"><span class="icon-plus-sign-alt"></span> {% trans "add file/directory" %}</button>
+                                <div id="msg-file-tree" class="hide"></div>
+                                <span class="icon-remove hide"></span>
+                            </div>
                             <p class="error hide"></p>
                             <input type="submit" value="{% trans "Submit"%}" />
-                            <input type="button" value="{% trans "Cancel"%}" />
+                            <input type="button" value="{% trans "Cancel"%}" class="cancel" />
                         </form>
                     </div>
 
@@ -209,6 +214,7 @@
 </div><!-- wrapper -->
 
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1369028460"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1369028460"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1369028460"></script>
 <script type="text/javascript">
@@ -300,7 +306,38 @@ $(document).click(function(e) {
         $('#add-msg').removeClass('add-msg-hl');
     }    
 });
-$('#send-msg-form [type="button"]').click(function() {
+$('#msg-file-share-btn').click(function() {
+    var msg_file_share = $('#msg-file-share'),
+        btn = $(this);
+    $.ajax({
+        'url': '{% url 'get_my_repos' %}',
+        'cache': false,
+        'dataType': 'json',
+        'success': function(data) {
+            btn.addClass('hide');
+            var file_tree = new FileTree();
+            var repos = file_tree.format_repo_data(data);
+            if (repos.length > 0) {
+                file_tree.renderFileTree($('#msg-file-tree').css({'max-height':$(window).height() - $('#top-bar').height() - $('#send-msg-popup').outerHeight(), 'overflow':'auto'}).data('site_root', '{{SITE_ROOT}}'), repos, {'two_state': true});
+                $('#msg-file-tree').fadeIn(600);
+                msg_file_share.find('.icon-remove').removeClass('hide');
+            } else {
+                msg_file_share.html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>'); 
+            }
+        },
+        'error': function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                msg_file_share.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>'); 
+            }
+        }
+    });
+});
+$('#msg-file-share .icon-remove').click(function() {
+        $(this).addClass('hide');
+        $('#msg-file-tree').fadeOut(200);
+        $('#msg-file-share-btn').removeClass('hide');
+});
+$('#send-msg-form .cancel').click(function() {
         $('#send-msg-popup').addClass('hide');
         $('#add-msg').removeClass('add-msg-hl');
 });
@@ -409,7 +446,8 @@ $(document).click(function(e) {
         {'name':'double-angle-down', 'con':'f103'},
         {'name':'zoom-in', 'con':'f00e'},
         {'name':'zoom-out', 'con':'f010'},
-        {'name':'signout', 'con':'f08b'}
+        {'name':'signout', 'con':'f08b'},
+        {'name':'plus-sign-alt', 'con':'f0fe'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {

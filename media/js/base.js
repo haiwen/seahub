@@ -374,3 +374,105 @@ if (!Array.indexOf) {
         return -1;
     }
 }
+
+// File Tree 'class'(constructor)
+function FileTree() {
+}
+// format repo data fetched via ajax
+FileTree.prototype.format_repo_data = function(data) {
+    var repos = [], repo;
+    for (var i = 0, len = data.length; i < len; i++) {
+        repo = {
+            'data': data[i].name,
+            'attr': {'repo_id': data[i].id },
+            'state': 'closed'
+        }
+        repos.push(repo);
+    }
+    return repos;
+};
+/**
+ * @container(required): container.data('site_root', '{{SITE_ROOT}}')
+ * @options (optional): {'two_state': true}
+ */
+FileTree.prototype.renderFileTree = function(container, repo_data, options) {
+    var opts = options || {};
+    container
+        .delegate('.jstree-closed', 'dblclick', function(e) {
+            container.jstree('open_node', $(this));
+            $(this).find('a').removeClass('jstree-clicked');
+        })
+        .jstree({
+            'json_data': {
+                'data': repo_data,
+                'ajax': {
+                    'url': function(data) {
+                        var path = this.get_path(data);
+                        var repo_id = data.attr('repo_id');
+                        if (path.length == 1) {
+                            path = '/';
+                        } else {
+                            path.shift();
+                            path = '/' + path.join('/') + '/';
+                        }
+                        return container.data('site_root') + 'ajax/repo/' + repo_id + '/dirents/?path=' + e(path);
+                    },
+                    'success': function(data) {
+                        var items = [];
+                        var o, item;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            o = data[i];
+                            if (o.type == 'dir') {
+                                item = { 
+                                    'data': o.name, 
+                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'state': 'closed',
+                                };
+                            } else {
+                                item = {
+                                    'data': o.name, 
+                                    'attr': {'type': o.type },
+                                };
+                            }
+                            items.push(item);
+                        }
+                        return items;
+                    }
+                }
+            },
+            'core': {
+                'animation': 100
+            },
+            'themes': {
+                'theme':'classic'
+            },
+            'checkbox':{
+                'two_state': opts.two_state, // default: false. when 'true', dir can be checked separately with file
+                'override_ui':true, // nodes can be checked, or selected to be checked
+                'real_checkboxes': true,
+                'real_checkboxes_names': function(node) {
+                    // get the path array consisting of nodes starting from the root node
+                    var path_array = this.get_path(node);
+                    var repo_id, path;
+                    if (path_array.length == 1) {
+                        // root node
+                        path = '/';
+                        repo_id = node.attr('repo_id');
+                    } else {
+                        path_array.shift();
+                        if (node.attr('type') == 'dir') {
+                            // node is a subdir
+                            repo_id = node.attr('repo_id');
+                            path = '/' + path_array.join('/') + '/'; // dir path is ended with '/'
+                        } else {
+                            // node is a file
+                            repo_id = this._get_parent(node).attr('repo_id');
+                            path = '/' + path_array.join('/');
+                        }
+                    }
+                    return ['selected', repo_id + path];
+                }
+            },
+            'plugins': ['themes', 'json_data', 'ui', 'checkbox']
+        });
+};

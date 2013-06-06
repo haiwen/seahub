@@ -344,6 +344,9 @@ input.btn-disabled:hover {/*for input*/
     top:-15px;
     left:-14px;
 }
+.jstree a {
+    font-weight:normal;
+}
 .placeholder { /*for ie */
     color: #aaa;
     line-height:1.5;
@@ -524,17 +527,6 @@ textarea:-moz-placeholder {/* for FF */
 .top-bar-con .account {
     text-align:right;
 }
-#send-msg-popup {
-    width:320px;
-    padding:15px;
-    background:#fff;
-    border:1px solid #ddd;
-    box-shadow:0 0 5px #ccc;
-    position:absolute;
-    right:0;
-    top:24px;
-    z-index:100;/* for pages with jquery tabs*/
-}
 .top-bar-con .top-link {
     display:inline-block;
     height:24px;
@@ -632,6 +624,38 @@ textarea:-moz-placeholder {/* for FF */
 }
 .top-bar-con .icon-signout {
     font-size:15px;
+}
+#send-msg-popup {
+    width:430px;
+    padding:18px;
+    background:#fff;
+    border:1px solid #ddd;
+    box-shadow:0 0 5px #ccc;
+    position:absolute;
+    right:0;
+    top:24px;
+    z-index:100;/* for pages with jquery tabs*/
+}
+#msg-file-share {
+    margin-top:8px;
+    position:relative;
+}
+#msg-file-share-btn {
+    color:#999;
+    background:#fff;
+    border-radius:0;
+}
+#msg-file-share .icon-remove {
+    position:absolute;
+    right:20px;
+    top:0;
+    cursor:pointer;
+    font-size:1.2em;
+    color:#888;
+}
+#msg-file-tree {
+    padding:4px 0;
+    border:1px solid #ddd;
 }
 /* header */
 #notice {
@@ -1377,11 +1401,11 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #eee;
     margin:5px 0 10px;
 }
-.file-tree-cont .jstree-leaf[type=file] a ins.jstree-icon {
+.jstree .jstree-leaf[type=file] a ins.jstree-icon {
     background: transparent url('../img/file-icon-16.png') no-repeat left center;
     vertical-align:top;
 }
-.file-tree-cont .jstree-leaf[type=dir] a ins.jstree-icon {
+.jstree-classic .jstree-leaf[type=dir] a ins.jstree-icon {
     background:transparent url('../jstree_pre1.0_stable/themes/classic/d.png') no-repeat scroll -56px -36px;
 }
 #mv-dir-list .tri-bg {
@@ -2421,11 +2445,12 @@ textarea:-moz-placeholder {/* for FF */
     width:266px;
 }
 #mass-msg {
-    width:314px;
+    width:424px;
+    height:100px;
     margin-bottom:3px;
 }
 #mass-email {
-    width:322px;
+    width:432px;
 }
 /*tabs */
 #tabs {

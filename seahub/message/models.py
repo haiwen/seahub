@@ -60,6 +60,11 @@ class UserMessage(models.Model):
 class UserMsgLastCheck(models.Model):
     check_time = models.DateTimeField()
 
+class UserMessageAttachment(models.Model):
+    userMessage = models.ForeignKey('UserMessage')
+    repo_id = models.CharField(max_length=36)
+    path = models.CharField(max_length=4096) 
+
 
 ### handle signals
 from django.core.urlresolvers import reverse

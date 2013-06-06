@@ -2073,6 +2073,20 @@ def get_group_repos(request, group_id):
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
+def get_my_repos(request):
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+
+    repos = seafserv_threaded_rpc.list_owned_repos(request.user.username)
+    repo_list = []
+    for repo in repos:
+        repo_list.append({"name": repo.props.name, "id": repo.props.id})
+    
+    return HttpResponse(json.dumps(repo_list), content_type=content_type)
+
+@login_required
 def get_contacts(request):
     if not request.is_ajax():
         raise Http404

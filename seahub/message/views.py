@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import simplejson as json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect , Http404
@@ -11,8 +12,9 @@ from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from models import UserMessage
+from models import UserMessage, UserMessageAttachment
 from message import msg_info_list
+from seaserv import get_repo
 from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
 from seahub.views import is_registered_user
@@ -65,6 +67,25 @@ def user_msg_list(request, id_or_email):
         # update ``ifread`` field of messages
         UserMessage.objects.update_unread_messages(to_email, username)
 
+        attachments = UserMessageAttachment.objects.filter(userMessage__in=msgs)
+        for msg in msgs:
+            msg.attachments = []
+            for att in attachments:
+                if att.userMessage != msg:
+                    continue
+                
+                path = att.path
+                if path == '/':
+                    repo = get_repo(att.repo_id)
+                    if not repo:
+                        continue
+                    att.name = repo.name
+                else:
+                    path = path.rstrip('/')
+                    att.name = os.path.basename(path)
+
+                msg.attachments.append(att) 
+
     '''paginate'''
     paginator = Paginator(msgs, 15)
     # Make sure page request is an int. If not, deliver first page.
@@ -110,6 +131,16 @@ def message_send(request):
         messages.error(request, _(u'contact is required'))
         return HttpResponseRedirect(next)
 
+    # attachment
+    selected = request.POST.getlist('selected') # selected files & dirs: [u'<repo_id><path>', ...] 
+    attached_items = []
+    if len(selected) > 0:
+        for item in selected:
+            att = {}
+            att['repo_id'] = item[0:36]
+            att['path'] = item[36:]
+            attached_items.append(att)
+
     email_sended = []
     for to_email in mass_emails:
         to_email = to_email.strip()
@@ -124,7 +155,15 @@ def message_send(request):
             messages.error(request, _(u'Failed to send message to %s, user not found.') % to_email)
             continue
 
-        UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        if len(attached_items) > 0:
+            for att_item in attached_items:
+                attachment = UserMessageAttachment()
+                attachment.userMessage = usermsg
+                attachment.repo_id = att_item['repo_id']
+                attachment.path = att_item['path']
+                attachment.save()
+
         email_sended.append(to_email)
 
     if email_sended:
