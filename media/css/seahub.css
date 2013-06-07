@@ -657,6 +657,11 @@ textarea:-moz-placeholder {/* for FF */
     padding:4px 0;
     border:1px solid #ddd;
 }
+.select2-container .avatar,
+.select2-results .select2-result-label .avatar {
+    vertical-align:middle;
+    margin-right:3px;
+}
 /* header */
 #notice {
     text-align:center;

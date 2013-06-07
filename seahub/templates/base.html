@@ -274,16 +274,24 @@ $('#add-msg').click(function() {
         dataType: 'json',
         success: function(data) {
             var contacts = data['contacts'],
-                opts = '';
+                opts = '',
+                email;
             if (contacts.length > 0) {
                 popup.find('.loading-tip').remove();
                 $('#send-msg-form').removeClass('hide');
 
                 for(var i = 0, len = contacts.length; i < len; i++) {
-                   opts += '<option value="' + contacts[i] + '">' + contacts[i] + '</option>';
+                    email = contacts[i].email;
+                    opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
+                }
+                var format = function(item) {
+                    return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
                 }
                 $('#mass-email').html(opts).select2({
-                    placeholder: "{% trans "send to: click to select contacts" %}"
+                    placeholder: "{% trans "send to: click to select contacts" %}",
+                    formatResult: format,
+                    formatSelection: format,
+                    escapeMarkup: function(m) { return m; }
                 });
             } else {
                 popup.html('<p>' + "{% trans "please add contacts at first" %}" + '</p>');
