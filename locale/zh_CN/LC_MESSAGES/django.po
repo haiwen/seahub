@@ -2264,7 +2264,7 @@ msgstr "发送给：点击选择联系人"
 
 #: seahub/templates/base.html:281
 msgid "please add contacts at first"
-msgstr "请先选择联系人"
+msgstr "请先添加联系人"
 
 #: seahub/templates/base.html:285
 msgid "Failed to get your contacts for sending a message."
