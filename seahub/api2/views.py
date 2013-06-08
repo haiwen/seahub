@@ -43,7 +43,8 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec
+from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
+from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
@@ -56,7 +57,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit
+    get_commit, get_file_id_by_path
 from seaserv import seafile_api
 
 
@@ -1324,7 +1325,7 @@ def group_discuss(request, group):
                     if not att.obj_id:
                         att.err = _(u'File does not exist')
                     else:
-                        att.token = web_get_access_token(att.repo_id, att.obj_id,
+                        att.token = seafserv_rpc.web_get_access_token(att.repo_id, att.obj_id,
                                                          'view', username)
                         att.img_url = gen_file_get_url(att.token, att.name)
 
