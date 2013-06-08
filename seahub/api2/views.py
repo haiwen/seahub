@@ -1453,7 +1453,7 @@ class MsgReply(APIView):
         return msg_reply (request, msg_id)
 
 
-from auth.decorators import login_required
+from seahub.auth.decorators import login_required
 @login_required
 def activity2(request):
     return activity(request)
