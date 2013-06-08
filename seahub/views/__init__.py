@@ -708,7 +708,7 @@ def repo_history_changes(request, repo_id):
     else:
         # A commit is a merge only if it has two parents.
         changes['cmt_desc'] = _('No conflict in the merge.')
-    
+
     return HttpResponse(json.dumps(changes), content_type=content_type)
 
 @login_required

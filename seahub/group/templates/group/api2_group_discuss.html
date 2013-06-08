@@ -11,12 +11,10 @@
 
 <div id="group-reply">
     {% if request.user.is_authenticated %}
-    <form id="group-message-form" action="" method="post">
+    <form id="group-message-form" action="" method="post">{% csrf_token %}
         {% avatar request.user.username 48 %}
         <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}">{{ form.data.message }}</textarea><br />
-        {% for error in form.message.errors %}
-        <p class="error">{{ error|escape }}</p>
-        {% endfor %}
+       <p class="error hide">{% trans "This field is required." %}</p>
         <button type="submit" class="submit hide">{% trans "Submit" %}</button>
         <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
         <span class="say"></span>
@@ -29,14 +27,11 @@
     <ul class="msg-list">
     {% for msg in group_msgs.object_list %}
         <li class="msg w100 ovhd">
-        <a href="{% url 'user_profile' msg.from_email|email2id %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
+        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
-                    {% if is_staff or msg.from_email == request.user.username %}
-                    <span class="msg-del op fright vh" data-url="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</span>
-                    {% endif %}
-                    <a href="{% url 'user_profile' msg.from_email|email2id %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
@@ -81,13 +76,13 @@
                 {% else %}
                 <ul class="reply-list">
                     {% for r in msg.replies %}
-                    <li class="reply w100 ovhd">
-                    {% with id=r.from_email|email2id name=r.from_email|email2nickname %}
-                    <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
+                    {% with id=r.from_email|id_or_email name=r.from_email|email2nickname %}
+                    <li class="reply w100 ovhd reply-at" data="{{ name }}">
+                    <a href="{% url 'user_msg_list' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
                     <div class="txt">
-                        <a href="{% url 'user_profile' id %}">{{ name }}</a>
+                        <a href="{% url 'user_msg_list' id %}">{{ name }}</a>
                         <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
-                        <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>
+                        <span style="font-size:11px;color:#999">{% trans 'Reply' %}</span>
                         <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
                     </div>
                     {% endwith %}
@@ -96,10 +91,12 @@
                 </ul>
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
-                <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
-                <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>
-                <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+                <form action="{% url 'api_msg_reply' msg.id %}" method="post" class="reply-form">
+                    <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
+                    <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
+                    <button type="submit" class="reply-submit hide">{% trans "Submit" %}</button>
+                    <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+                </form>
                 {% endif %}
             </div>
         </div>
@@ -160,54 +157,69 @@ $(window).scroll(function() {
 {% if request.user.is_authenticated %}
 addAtAutocomplete('#message', '#group-message-form', {{ group.id }}, "{% url 'group_attention' %}", {'border':'1px solid #ddd', 'width':'550px', 'height': '75px', 'padding':'3px 5px', 'overflow-y':'auto', 'line-height': '1.5em'}); // remember to add unit (px or em) to line-height, as js in ie will take 1.5 as 1.5, not 1.5em
 
+var g_token
+function setToken(token) {
+    g_token = token;
+}
+
 $('#message').focus(function() {
-    $(this).height(75);
+    $('#message').height(75);
     $('#group-message-form').find('.submit, .cancel').removeClass('hide');
 });
 $('#group-message-form .cancel').click(function() {
-    $(this).addClass('hide');
+    $('#group-message-form .error').addClass('hide');
+    $('#group-message-form .cancel').addClass('hide');
     $('#group-message-form .submit').addClass('hide');
     $('#message').val('').height(25);
 });
+
+$('#group-message-form').submit(function() {
+ var form = $(this),
+        r_input = form.find('#message');
+        r = $.trim(r_input.val());
+        err = form.find('.error');
+    if (!r || r.length > 150) {
+        err.removeClass('hide');
+        return false;
+    }
+    err.addClass('hide');
+
+    var sm = form.find('.submit');
+    disable(sm);
+    var msg_list = form.parent().find('.msg-list');
+
+    $.ajax({
+        type: "POST",
+        url: location.pathname,
+        dataType: 'json',
+        cache: false,
+        headers:{Authorization:'Token '+g_token},
+        beforeSend: prepareCSRFToken,
+        data: { "message": r },
+        success: function(data) {
+            msg_list.prepend(data['html'])
+            msg_list.children().eq(0).find('.reply-input').focus(reply_focus_fn);
+            msg_list.children().eq(0).find('.reply-cancel').click(reply_cancel_fn);
+            msg_list.children().eq(0).find('.reply-at').click(replyAt);
+            msg_list.children().eq(0).find('.reply-form').submit(reply_submit_fn);
+
+            enable(sm);
+            $('#group-message-form .cancel').addClass('hide');
+            $('#group-message-form .submit').addClass('hide');
+            $('#message').val('').height(25);
+        },
+        error:function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                err.html("{% trans "Failed. Please check the network." %}").removeClass('hide'); 
+            }
+            enable(sm);
+        }
+    }); 
+    return false;
+});
 {% endif %}
 
-{% include 'group/msg_js.html' %}
+{% include 'group/api2_msg_js.html' %}
 
-$('.msg-del').click(function() {
-    var url = $(this).data('url');
-    var msg = $(this).parents('.msg');
-    var cfm;
-    if (msg.find('.msg-del-confirm').length > 0) {
-        cfm = msg.find('.msg-del-confirm');
-    } else {
-        cfm = '<div class="msg-del-confirm hide"><p>{% trans "Really want to delete this discussion?" %}</p><button class="yes">{% trans "Yes" %}</button><button class="no">{% trans "No" %}</button></div>';
-        var msg_main = msg.find('.msg-main');
-        var msg_hd = msg.find('.msg-hd');
-        cfm = msg_main.append(cfm).children(':last');
-        cfm.css({'right':msg_main.css('padding-right'), 'top':msg_hd.position().top + msg_hd.height()});
-    }
-    cfm.removeClass('hide');
-    cfm.children('.yes').click(function() {
-        cfm.addClass('hide');
-        $.ajax({
-            url: url,
-            dataType:'json',
-            success: function(data) {
-                if (data['success']) {
-                    msg.remove();
-                    feedback('{% trans "Successfully deleted" %}', 'success');
-                } else {
-                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
-                }
-            },
-            error: function() {
-                feedback('{% trans "Failed." %}', 'error');
-            }
-        });
-    });
-    cfm.children('.no').click(function() {
-        cfm.addClass('hide');
-    });
-});
 </script>
 {% endblock %}

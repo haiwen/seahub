@@ -1,0 +1,169 @@
+{% load i18n %}
+{% if request.user.is_authenticated %}{# 'reply' is enabled only after login#}
+$('.msg-main, .reply').hover(
+    function(){
+        $(this).find('.op').removeClass('vh');
+    },
+    function(){
+        $(this).find('.op').addClass('vh');
+    }
+);
+$('.msg .op').hover(
+    function() {
+        $(this).css({'text-decoration':'underline'});
+    },
+    function() {
+        $(this).css({'text-decoration':'none'});
+    }
+);
+{% endif %}
+
+$('.replies-op').hover(
+    function() {
+        $(this).children().css({'text-decoration':'underline'});
+    },
+    function() {
+        $(this).children().css({'text-decoration':'none'});
+    }
+).click(function() {
+    var op = $(this); 
+    var uf_r = op.children('.unfold-replies'); 
+    var f_r = op.children('.fold-replies'); 
+    var r_list = op.parent().find('.reply-list');
+    var loading = op.children('.replies-loading-icon');
+    loading.css({'left': uf_r.outerWidth() - 7});
+
+    if (op.attr('data-rstatus') == 'hide') {
+        uf_r.addClass('unfold-replies-nobg');
+        loading.removeClass('hide');
+        $.ajax({
+            url: uf_r.data('url'),
+            dataType: 'json',
+            cache: true,
+            success: function(data) {
+                loading.addClass('hide');
+                uf_r.removeClass('unfold-replies-nobg');
+                r_list.html(data['html']);
+                uf_r.addClass('hide');
+                f_r.removeClass('hide')
+                op.attr('data-rstatus', 'show');
+                {% if request.user.is_authenticated %}
+                r_list.children().hover(
+                    function() {
+                        $(this).find('.op').removeClass('vh');
+                    },
+                    function(){
+                        $(this).find('.op').addClass('vh');
+                    }
+                );
+                r_list.find('.reply-at').hover(
+                    function() {
+                        $(this).css({'text-decoration':'underline'});
+                    },
+                    function() {
+                        $(this).css({'text-decoration':'none'});
+                    }
+                ).click(replyAt);
+                {% endif %}
+            }
+        });
+    } else {
+        f_r.addClass('hide'); 
+        uf_r.removeClass('hide');
+        r_list.children(':lt(' + (parseInt(uf_r.html()) -3) + ')').each(function() {
+            $(this).remove();
+        });
+        op.attr('data-rstatus', 'hide');
+    }
+});
+{% if request.user.is_authenticated %}
+function reply_focus_fn() {
+    $(this).height(50);
+    $(this).parent().find('.reply-submit, .reply-cancel').removeClass('hide');
+}
+
+function reply_cancel_fn() {
+    var p = $(this).parent();
+    p.find('.reply-submit, .reply-cancel, .error').addClass('hide');
+    p.find('.reply-input').val('').height(20);
+}
+
+function replyAt() {
+    var r = $(this).parents('.msg-op'); 
+    var r_input = r.find('.reply-input'); 
+    r_input.height(50).val('@' + $(this).attr('data') + ' ');
+    r.find('.reply-submit, .reply-cancel').removeClass('hide');
+    setCaretPos(r_input[0], r_input.val().length);
+    r_input.focus();
+}
+$('.reply-input').focus(reply_focus_fn);
+$('.reply-cancel').click(reply_cancel_fn);
+$('.reply-at').click(replyAt);
+$('.reply-form').submit(reply_submit_fn);
+
+function reply_submit_fn() {
+    var form = $(this),
+        r_input = form.find('.reply-input'),
+        r = $.trim(r_input.val()), 
+        err = form.find('.error');
+
+    if (!r || r.length > 150) {
+        err.removeClass('hide');
+        return false;
+    }
+    err.addClass('hide');
+
+    var sm = $(this).find('.reply-submit');
+    disable(sm);
+
+    var msg_op = form.parent(),
+        r_op = msg_op.find('.replies-op'),
+        r_status = r_op.attr('data-rstatus');
+
+    $.ajax({
+        type: "POST",
+        url: form.attr('action') + '?r_status=' + e(r_status),
+        dataType: 'json',
+        cache: false,
+        headers:{Authorization:'Token '+g_token},
+        beforeSend: prepareCSRFToken,
+        data: { "message": r },
+        success: function(data) {
+            var r_list = msg_op.find('.reply-list'),
+                r_cnt = msg_op.find('.unfold-replies');
+
+            r_list.html(data['html']).removeClass('hide');
+            if (data['r_num'] > 3) {
+                r_cnt.html(r_cnt.html().replace(/\d+/, data['r_num']));
+                r_op.removeClass('hide');
+            }
+            enable(sm);
+            r_input.val('').height(20);
+            form.find('.reply-submit, .reply-cancel').addClass('hide');
+            r_list.children().hover(
+                function(){
+                    $(this).find('.op').removeClass('vh');
+                },
+                function(){
+                    $(this).find('.op').addClass('vh');
+                }
+            );
+            r_list.find('.reply-at').hover(
+                function() {
+                    $(this).css({'text-decoration':'underline'});
+                },
+                function() {
+                    $(this).css({'text-decoration':'none'});
+                }
+            ).click(replyAt);
+        },
+        error:function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                err.html("{% trans "Failed. Please check the network." %}").removeClass('hide'); 
+            }
+            enable(sm);
+        }
+    }); 
+    return false;
+}
+{% endif %}

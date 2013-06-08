@@ -9,6 +9,7 @@ import json
 import tempfile
 import locale
 import ConfigParser
+from datetime import datetime
 
 import ccnet
 
@@ -854,6 +855,8 @@ FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
 
 OPS = '|'.join(FILE_OP)
 CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
+API_OPS = '|'.join((OPS, 'Deleted'))
+API_CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % API_OPS
 
 def convert_cmmt_desc_link(commit):
     """Wrap file/folder with ``<a></a>`` in commit description.
@@ -875,6 +878,50 @@ def convert_cmmt_desc_link(commit):
             return tmp_str % (op, url, repo_id, cmmt_id, urlquote(file_or_dir), file_or_dir)
 
     return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
+
+def api_tsstr_sec(value):
+    """Turn a timestamp to string"""
+    try:
+        return datetime.fromtimestamp(value).strftime("%Y-%m-%d %H:%M:%S")
+    except:
+        return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def api_convert_desc_link(e):
+    """Wrap file/folder with ``<a></a>`` in commit description.
+    """
+    commit = e.commit
+    repo_id = commit.repo_id
+    cmmt_id = commit.id
+
+    def link_repl(matchobj):
+        op = matchobj.group(1)
+        file_or_dir = matchobj.group(2)
+        remaining = matchobj.group(3)
+
+        tmp_str = '%s "<span class="a">%s</span>"'
+        if remaining:
+            url = reverse('api_repo_history_changes', args=[repo_id])
+            e.link = "%s?commit_id=%s" % (url, cmmt_id)
+            e.dtime = api_tsstr_sec(commit.props.ctime)
+            return (tmp_str + ' %s') % (op, file_or_dir, remaining)
+        else:
+            diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)
+            if diff_result:
+                for d in diff_result:
+                    if file_or_dir not in d.name:
+                        # skip to next diff_result if file/folder user clicked does not
+                        # match the diff_result
+                        continue            
+
+                    if d.status == 'add' or d.status == 'mod' or d.status == 'mov':
+                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
+                    elif d.status == 'newdir':
+                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
+                    else:
+                        continue
+            return tmp_str % (op, file_or_dir)
+    e.desc = re.sub(API_CMMT_DESC_PATT, link_repl, commit.desc)
 
 MORE_PATT = r'and \d+ more (?:files|directories)'
 def more_files_in_commit(commit):

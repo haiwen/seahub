@@ -11,6 +11,11 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1366090560" />
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560" />
+    <style type="text/css">
+      .a {
+      color: #ff9933;
+      }
+    </style>
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560"/>
 <![endif]-->
@@ -21,7 +26,29 @@
   <div id="main-panel">
     {% block right_panel %}
     {% if events %}
-    {% include "snippets/events.html" %}
+
+    <div id="events">
+      <h3>{% trans 'File Activities' %}</h3>
+      <div id="events-body">
+        {% include "snippets/api2_events_body.html" %}
+      </div>
+      <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+      {% if events_more %}
+      <button id="events-more">{% trans 'More' %}</button>
+      {% endif %}
+      <p id="events-error" class="error hide"></p>
+      <form id="repo-decrypt-form" class="simple-input-popup hide">{% csrf_token %}
+        <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
+        <input type="hidden" name="repo_id" value="" />
+        <label>{% trans 'Password：' %}</label><br />
+        <input type="password" name="password" maxlength="30" class="long-input" />
+        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+        <p class="error"></p>
+        <input type="submit" class="submit" value="{% trans 'Submit' %}" />
+        <button class="simplemodal-close">{% trans 'Cancel' %}</button>
+      </form>
+</div>
+
     {% endif %}
     {% endblock %}
   </div>
@@ -60,10 +87,27 @@ $('#info-bar .close').click(function() {
 {% block extra_script %}
 <script type="text/javascript">
 
-
 {% if events %}
-{% include "snippets/events_js.html" %}
+{% include "snippets/api2_events_js.html" %}
 {% endif %}
+
+function txtclick(url,dtime) {
+  console.log(url)
+  console.log(dtime)
+  if (dtime != 0) {
+    //listCommitDetails(url, dtime);
+    window.location.href=url
+    return false;
+  }
+
+  window.location.href=url
+}
+
+function txtclick2(url) {
+  console.log(url)
+  window.location.href=url
+}
+
 </script>
 {% endblock %}
 

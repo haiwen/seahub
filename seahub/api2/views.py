@@ -22,7 +22,7 @@ from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from seahub.base.accounts import User
 from seahub.share.models import FileShare
-from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data
+from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
     get_dir_files_last_modified, get_user_events, \
@@ -38,10 +38,12 @@ from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.group.views import group_check, msg_reply
 from django.template import Context, loader, RequestContext
+from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED
+from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
@@ -53,7 +55,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
-    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group
+    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
+    get_commit
 from seaserv import seafile_api
 
 
@@ -1165,6 +1168,14 @@ class SharedRepo(APIView):
 
         return Response('success', status=status.HTTP_200_OK)
 
+def api_pre_events(event_groups):
+    for g in event_groups:
+        for e in g["events"]:
+            e.link = "api://repos/%s" % e.repo_id
+            e.dtime = 0
+            if e.etype == "repo-update":
+                api_convert_desc_link(e)
+
 
 def activity(request):
     email = request.user.username
@@ -1175,6 +1186,7 @@ def activity(request):
         events, events_more_offset = get_user_events(email, 0, events_count)
         events_more = True if len(events) == events_count else False
         event_groups = group_events_data(events)
+        api_pre_events(event_groups)
     else:
         events, events_more_offset = None, None
         events_more = False
@@ -1189,11 +1201,34 @@ def activity(request):
             "events_count": events_count,
             }, context_instance=RequestContext(request))
 
-from seahub.group.views import group_check
+
+def events(request):
+    events_count = 15
+    username = request.user.username
+    start = int(request.GET.get('start', 0))
+
+    if request.cloud_mode:
+        org_id = request.GET.get('org_id')
+        events, start = get_org_user_events(org_id, username, start, events_count)
+    else:
+        events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
+
+    api_pre_events(event_groups)
+    ctx = {'event_groups': event_groups}
+    html = render_to_string("snippets/api2_events_body.html", ctx)
+
+    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
+                                    'new_start': start}),
+                            content_type='application/json; charset=utf-8')
+
 
 @group_check
 def group_discuss(request, group):
     username = request.user.username
+    content_type = 'application/json; charset=utf-8'
     if request.method == 'POST':
         # only login user can post to public group
         if group.view_perm == "pub" and not request.user.is_authenticated():
@@ -1212,9 +1247,12 @@ def group_discuss(request, group):
             # send signal
             grpmsg_added.send(sender=GroupMessage, group_id=group.id,
                               from_email=username)
-            # Always return an HttpResponseRedirect after successfully dealing
-            # with POST data.
-            return HttpResponseRedirect(reverse('api_discussion', args=[group.id]))
+
+            ctx = {}
+            ctx['msg'] = message
+            html = render_to_string("group/api2_discuss.html", ctx)
+            serialized_data = json.dumps({"html": html})
+            return HttpResponse(serialized_data, content_type=content_type)
     else:
         form = MessageForm()
         
@@ -1302,6 +1340,54 @@ def group_discuss(request, group):
             }, context_instance=RequestContext(request))
 
 
+def repo_changes_resp(request, changes, t):
+    return render_to_response("api2_commit_changes.html", {
+            "changes_new": changes["new"],
+            "changes_removed": changes["removed"],
+            "changes_renamed": changes["renamed"],
+            "changes_modified": changes["modified"],
+            "changes_newdir": changes["newdir"],
+            "changed_deldir": changes["deldir"],
+            "changes": changes,
+            "t": t,
+            }, context_instance=RequestContext(request))
+
+def repo_history_changes(request, repo_id):
+    changes = {}
+
+    if not access_to_repo(request, repo_id, ''):
+        return repo_changes_resp(request, changes, 0)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        return repo_changes_resp(request, changes, 0)
+
+    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+        return repo_changes_resp(request, changes)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return repo_changes_resp(request, changes, 0)
+
+    changes = get_diff(repo_id, '', commit_id)
+
+    c = get_commit(commit_id)
+    if c.parent_id is None:
+        # A commit is a first commit only if it's parent id is None.
+        changes['cmt_desc'] = repo.desc
+    elif c.second_parent_id is None:
+        # Normal commit only has one parent.
+        if c.desc.startswith('Changed library'):
+            changes['cmt_desc'] = _('Changed library name or description')
+    else:
+        # A commit is a merge only if it has two parents.
+        changes['cmt_desc'] = _('No conflict in the merge.')
+    for k in changes:
+        changes[k] = [f.replace ('a href="/', 'a href="api://') for f in changes[k] ]
+    t = api_tsstr_sec(c.props.ctime)
+    return repo_changes_resp(request, changes, t)
+
+
 class Groups(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1350,6 +1436,23 @@ class Discussion(APIView):
     def post(self, request, group_id, format=None):
         return group_discuss(request, group_id)
 
+class RepoHistoryChange(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        return api_repo_history_changes (request, repo_id)
+
+class MsgReply(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, msg_id, format=None):
+        return msg_reply (request, msg_id)
+
+
 from auth.decorators import login_required
 @login_required
 def activity2(request):
@@ -1359,3 +1462,14 @@ def activity2(request):
 def discussion2(request, group_id):
     return group_discuss(request, group_id)
 
+@login_required
+def events2(request):
+    return events(request)
+
+@login_required
+def api_repo_history_changes(request, repo_id):
+    return repo_history_changes(request, repo_id)
+
+@login_required
+def api_msg_reply(request, msg_id):
+    return msg_reply(request, msg_id)

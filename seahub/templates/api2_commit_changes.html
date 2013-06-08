@@ -1,0 +1,104 @@
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1366090560" />
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560" />
+    <style type="text/css">
+      .a {
+      color: #ff9933;
+      }
+    </style>
+<!--[if IE]>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560"/>
+<![endif]-->
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+
+  <div id="main-panel">
+    {% block right_panel %}
+
+    <div id="ls-ch">
+
+    <h3>{% trans "Modification Details" %}</h3>
+    <p class="commit-time"> {{ t }}  </p>
+
+    {% if changes_new %}
+    <h4>{% trans "New files" %}</h4><ul>
+    {% for f in changes_new %}
+    <li> <div> {{ f|safe }} </div></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes_removed %}
+    <h4>{% trans "Deleted files" %}</h4><ul>
+    {% for f in changes_removed %}
+    <li> {{ f|safe }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes_renamed %}
+    <h4>{% trans "Renamed or Moved files" %}</h4><ul>
+    {% for f in changes_renamed %}
+    <li> {{ f|safe }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes_modified %}
+    <h4>{% trans "Modified files" %}</h4><ul>
+    {% for f in changes_modified %}
+    <li> {{ f|safe }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes_newdir %}
+    <h4>{% trans "New directories" %}</h4><ul>
+    {% for f in changes_newdir %}
+    <li> {{ f|safe }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes_deldir %}
+    <h4>{% trans "Deleted directories" %}</h4><ul>
+    {% for f in changes_deldir %}
+    <li> {{ f|safe }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    </div>
+
+    {% endblock %}
+  </div>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1366090560"></script>
+<script type="text/javascript" src="{{ MEDIA_URL}}js/base.js?t=1366090560"></script>
+{% block extra_script %}
+<script type="text/javascript">
+ function getContent() {
+    return $('html').html()
+ }
+
+function txtclick(url) {
+  console.log(url)
+  window.location.href=url
+}
+
+</script>
+{% endblock %}
+
+</body>
+</html>

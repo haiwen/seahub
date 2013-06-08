@@ -151,7 +151,7 @@ def translate_commit_desc(value):
             ret_list.append(ret)
 
         return '\n'.join(ret_list)
-    
+
 @register.filter(name='translate_seahub_time')
 def translate_seahub_time(value):
     """Translate seahub time to human friendly format instead of timestamp"""
