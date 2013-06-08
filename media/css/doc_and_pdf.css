@@ -8,18 +8,9 @@
   left:0;
   bottom:0;
   width:250px;
-  padding:0;
-  margin:0;
   overflow:auto;
 }
 #page-container { /* PDF container */
-    /*
-  position:absolute;
-  top:0;
-  left:0px;
-  */
-  margin:0; 
-  padding:0;
   border:0; /* required for lazy page loading in pdf2htmlEX.js (page visibility test) */
 }
 @media screen {
@@ -137,7 +128,7 @@
   -webkit-transform-origin:0% 100%;
   -o-transform-origin:0% 100%;
 }
-span { /* text blocks within a line */
+.pd span { /* text blocks within a line */
   position:relative;
   vertical-align: baseline;
   /* _<id> for spaces may need display:inline, which will override this */ 

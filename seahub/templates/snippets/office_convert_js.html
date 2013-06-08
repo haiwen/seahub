@@ -62,7 +62,8 @@
         });
 
         // zoom in, zoom out
-        var scale_ratio = 1;
+        var scale_ratio = 1,
+            scale_ratio_offset = 0.1;
         var scale = function(ele, ratio) {
             ele.css({
                 'transform':'scale(' + ratio + ')',
@@ -73,15 +74,45 @@
                 '-ms-transform-origin':'center 0%'
             });
         };
+
         $('#pdf2html-toolbar').append('<span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span>').css({'left': $(window).width()/2 - $('#pdf2html-toolbar').outerWidth(true)/2});
-        $('#zoom-in').click(function() {
-            scale_ratio += 0.1;
+
+        var file_cont = $('#file-view'), //file container
+            orig_pg_total_h; 
+        $('#zoom-in, #zoom-out').click(function() {
+            // get orig data before zoom in/out
+            var op = $(this).attr('id'),
+                pg_num = $('.pd').length,
+                orig_win_scrollTop = $(window).scrollTop(),
+                orig_pg_h, cur_pg, pg_h_offset;
+            
+            if (!orig_pg_total_h && scale_ratio == 1) {
+                orig_pg_total_h = file_cont.height();
+            }
+
+            orig_pg_h = orig_pg_total_h*scale_ratio/pg_num;
+            cur_pg = (orig_win_scrollTop - $('#page-container').offset().top)/orig_pg_h;
+
+            // zoom in/out
+            if (op == 'zoom-in') {
+                scale_ratio += scale_ratio_offset;
+            } else {
+                scale_ratio -= scale_ratio_offset;
+            }
+            if (scale_ratio <= 0) {
+                return ;
+            }
             scale($('#page-container'), scale_ratio);
-        });
-        $('#zoom-out').click(function() {
-            scale_ratio -= 0.1;
-            if(scale_ratio > 0) {
-                scale($('#page-container'), scale_ratio);
+            
+            // modify file container's height
+            file_cont.height(orig_pg_total_h*scale_ratio); 
+
+            // scroll to the right cur page 
+            pg_h_offset = (orig_pg_total_h * scale_ratio_offset)/pg_num;
+            if (op == 'zoom-in') {
+                $(window).scrollTop(orig_win_scrollTop + cur_pg*pg_h_offset);
+            } else {
+                $(window).scrollTop(orig_win_scrollTop - cur_pg*pg_h_offset);
             }
         });
     }
