@@ -26,6 +26,7 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 
 from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
@@ -2228,7 +2229,15 @@ def group_events_data(events):
             e.time = datetime.fromtimestamp(int(e.commit.ctime)) # e.commit.ctime is a timestamp
             e.author = e.commit.creator_name
         else:
-            e.time = e.timestamp # e.timestamp actually is '%Y-%m-%d h:m:s'
+            # e.timestamp is a datetime.datetime in UTC
+            # change from UTC timezone to current seahub timezone
+            def utc_to_local(dt):
+                tz = timezone.get_default_timezone()
+                utc = dt.replace(tzinfo=timezone.utc)
+                local = timezone.make_naive(utc, tz)
+                return local
+
+            e.time = utc_to_local(e.timestamp)
             if e.etype == 'repo-create':
                 e.author = e.creator
             else:
