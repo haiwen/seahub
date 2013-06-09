@@ -1194,7 +1194,7 @@ def activity(request):
         event_groups = None
         events_count = 0
 
-    return render_to_response('api2_activity.html', {
+    return render_to_response('api2/api2_activity.html', {
             "events": events,
             "events_more_offset": events_more_offset,
             "events_more": events_more,
@@ -1219,7 +1219,7 @@ def events(request):
 
     api_pre_events(event_groups)
     ctx = {'event_groups': event_groups}
-    html = render_to_string("snippets/api2_events_body.html", ctx)
+    html = render_to_string("api2/api2_events_body.html", ctx)
 
     return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
                                     'new_start': start}),
@@ -1251,7 +1251,7 @@ def group_discuss(request, group):
 
             ctx = {}
             ctx['msg'] = message
-            html = render_to_string("group/api2_discuss.html", ctx)
+            html = render_to_string("api2/api2_discuss.html", ctx)
             serialized_data = json.dumps({"html": html})
             return HttpResponse(serialized_data, content_type=content_type)
     else:
@@ -1331,7 +1331,7 @@ def group_discuss(request, group):
 
             msg.attachment = att
 
-    return render_to_response("group/api2_group_discuss.html", {
+    return render_to_response("api2/api2_group_discuss.html", {
             "members": members,
             "group" : group,
             "is_staff": group.is_staff,
@@ -1342,7 +1342,7 @@ def group_discuss(request, group):
 
 
 def repo_changes_resp(request, changes, t):
-    return render_to_response("api2_commit_changes.html", {
+    return render_to_response("api2/api2_commit_changes.html", {
             "changes_new": changes["new"],
             "changes_removed": changes["removed"],
             "changes_renamed": changes["renamed"],
@@ -1409,7 +1409,7 @@ class Groups(APIView):
             group_json.append(group)
         return Response(group_json)
 
-class Events(APIView):
+class EventsHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1417,7 +1417,7 @@ class Events(APIView):
     def get(self, request, format=None):
         return events(request)
 
-class Activity(APIView):
+class ActivityHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1426,7 +1426,7 @@ class Activity(APIView):
         return activity(request)
 
 
-class Discussion(APIView):
+class DiscussionHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1437,7 +1437,7 @@ class Discussion(APIView):
     def post(self, request, group_id, format=None):
         return group_discuss(request, group_id)
 
-class RepoHistoryChange(APIView):
+class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1445,7 +1445,7 @@ class RepoHistoryChange(APIView):
     def get(self, request, repo_id, format=None):
         return api_repo_history_changes (request, repo_id)
 
-class MsgReply(APIView):
+class MsgReplyHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1454,6 +1454,7 @@ class MsgReply(APIView):
         return msg_reply (request, msg_id)
 
 
+#Following is only for debug
 from seahub.auth.decorators import login_required
 @login_required
 def activity2(request):

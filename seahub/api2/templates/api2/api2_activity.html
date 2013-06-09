@@ -30,7 +30,7 @@
     <div id="events">
       <h3>{% trans 'File Activities' %}</h3>
       <div id="events-body">
-        {% include "snippets/api2_events_body.html" %}
+        {% include "api2/api2_events_body.html" %}
       </div>
       <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
       {% if events_more %}
@@ -88,7 +88,7 @@ $('#info-bar .close').click(function() {
 <script type="text/javascript">
 
 {% if events %}
-{% include "snippets/api2_events_js.html" %}
+{% include "api2/api2_events_js.html" %}
 {% endif %}
 
 function txtclick(url,dtime) {

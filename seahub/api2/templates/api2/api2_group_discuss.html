@@ -1,4 +1,4 @@
-{% extends "api2_base.html" %}
+{% extends "api2/api2_base.html" %}
 
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
@@ -219,7 +219,7 @@ $('#group-message-form').submit(function() {
 });
 {% endif %}
 
-{% include 'group/api2_msg_js.html' %}
+{% include 'api2/api2_msg_js.html' %}
 
 </script>
 {% endblock %}

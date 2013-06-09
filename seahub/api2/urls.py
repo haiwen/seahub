@@ -24,17 +24,18 @@ urlpatterns = patterns('',
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
 
     url(r'^groups/$', Groups.as_view()),
-    url(r'^activity/$', Activity.as_view()),
-    url(r'^discussion/(?P<group_id>\d+)/$', Discussion.as_view(), name="api_discussion"),
-    url(r'^repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChange.as_view(), name='api_repo_history_changes'),
-    url(r'^events/$', Events.as_view()),
-    url(r'^group_reply/(?P<msg_id>[\d]+)/$', MsgReply.as_view(), name='api_msg_reply'),
+    url(r'^html/activity/$', ActivityHtml.as_view()),
+    url(r'^html/discussion/(?P<group_id>\d+)/$', DiscussionHtml.as_view(), name="api_discussion"),
+    url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
+    url(r'^html/events/$', EventsHtml.as_view()),
+    url(r'^html/group_reply/(?P<msg_id>[\d]+)/$', MsgReplyHtml.as_view(), name='api_msg_reply'),
 
-    #url(r'^events/$', events2),
-    #url(r'^repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', api_repo_history_changes, name='api_repo_history_changes'),
-    #url(r'^group_reply/(?P<msg_id>[\d]+)/$', api_msg_reply, name='api_msg_reply'),
-    #url(r'^activity2/$', activity2, name="api_activity"),
-    url(r'^discussion2/(?P<group_id>\d+)/$', discussion2, name="api_discussion2"),
+    # Folowing is only for debug, will be removed 
+    #url(r'^html/events/$', events2),
+    #url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', api_repo_history_changes, name='api_repo_history_changes'),
+    #url(r'^html/group_reply/(?P<msg_id>[\d]+)/$', api_msg_reply, name='api_msg_reply'),
+    url(r'^html/activity2/$', activity2),
+    url(r'^html/discussion2/(?P<group_id>\d+)/$', discussion2, name="api_discussion2"),
 
     # Deprecated                       
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
