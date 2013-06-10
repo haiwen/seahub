@@ -294,7 +294,7 @@ def view_file(request, repo_id):
             filesizeformat(FILE_PREVIEW_MAX_SIZE)
         ret_dict['err'] = err
 
-    elif filetype in (DOCUMENT, PDF) and fsize > OFFICE_PREVIEW_MAX_SIZE:
+    elif filetype in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER and fsize > OFFICE_PREVIEW_MAX_SIZE:
         err = _(u'File size surpasses %s, can not be opened online.') % \
             filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
         ret_dict['err'] = err
@@ -465,7 +465,7 @@ def view_history_file_common(request, repo_id, ret_dict):
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             ret_dict['err'] = err
 
-        elif filetype in (DOCUMENT, PDF) and fsize > OFFICE_PREVIEW_MAX_SIZE:
+        elif filetype in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER and fsize > OFFICE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             ret_dict['err'] = err
