@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: 1.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-05 14:01+0800\n"
-"PO-Revision-Date: 2013-06-11 15:10+0100\n"
+"PO-Revision-Date: 2013-06-13 11:37+0100\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -445,7 +446,7 @@ msgstr "Avatar actuel : "
 #: seahub/templates/wiki/personal_wiki.html:66
 #: seahub/templates/wiki/personal_wiki_pages.html:42
 msgid "Submit"
-msgstr "Soumettre"
+msgstr "Ok"
 
 #: seahub/avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
@@ -480,11 +481,11 @@ msgstr "Id d'utilisateur non valide."
 
 #: seahub/base/templatetags/seahub_tags.py:82
 msgid "Added"
-msgstr "Ajouté"
+msgstr "Ajout de"
 
 #: seahub/base/templatetags/seahub_tags.py:83
 msgid "Deleted"
-msgstr "Supprimé."
+msgstr "Suppression de"
 
 #: seahub/base/templatetags/seahub_tags.py:84
 msgid "Removed"
@@ -492,7 +493,7 @@ msgstr "Supprimé"
 
 #: seahub/base/templatetags/seahub_tags.py:85
 msgid "Modified"
-msgstr "Modifié"
+msgstr "Modification de"
 
 #: seahub/base/templatetags/seahub_tags.py:86
 msgid "Renamed"
@@ -1438,7 +1439,7 @@ msgstr "Bibliothèque"
 
 #: seahub/group/templates/group/group_info.html:129
 msgid "Modified at"
-msgstr "Modifié à"
+msgstr "Modifié"
 
 #: seahub/group/templates/group/group_info.html:130
 #: seahub/templates/repo_history.html:22
@@ -1868,7 +1869,7 @@ msgstr "(Notification en cours)"
 
 #: seahub/notifications/templates/notifications/notification_list.html:30
 msgid "Set to current"
-msgstr "Définir à la valeur actuelle"
+msgstr "Activer"
 
 #: seahub/notifications/templates/notifications/notification_list.html:64
 #: seahub/templates/sysadmin/sys_group_admin.html:55
@@ -2076,7 +2077,7 @@ msgstr "Envoyé avec succès."
 #: seahub/templates/repo.html.py:188 seahub/templates/repo.html:349
 #: seahub/templates/snippets/my_owned_repos.html:34
 msgid "Share"
-msgstr "Partage"
+msgstr "Partager"
 
 #: seahub/share/templates/repo/share_admin.html:18
 msgid ""
@@ -2093,7 +2094,7 @@ msgstr "Bibliothèques partagées"
 
 #: seahub/share/templates/repo/share_admin.html:30
 msgid "Share To"
-msgstr "Partagée à"
+msgstr "Partagée avec"
 
 #: seahub/share/templates/repo/share_admin.html:31
 msgid "Permission"
@@ -2373,11 +2374,11 @@ msgstr "IP"
 
 #: seahub/templates/client_mgmt.html:29
 msgid "Last Sync"
-msgstr "Synchronisation"
+msgstr "Dernière Synchro"
 
 #: seahub/templates/client_mgmt.html:56
 msgid "Unsync"
-msgstr "Annuler sync"
+msgstr "Annuler Synchro"
 
 #: seahub/templates/client_mgmt.html:62
 msgid "You do not have connected clients"
@@ -2940,7 +2941,7 @@ msgstr ""
 
 #: seahub/templates/pubrepo.html:27 seahub/templates/sysadmin/userinfo.html:70
 msgid "Share From"
-msgstr "Partager de"
+msgstr "Partagé par"
 
 #: seahub/templates/pubrepo.html:51
 msgid "No public library"
@@ -3180,11 +3181,11 @@ msgstr "Répertoire"
 
 #: seahub/templates/repo.html:608
 msgid "Copy "
-msgstr "Copier "
+msgstr "Copier"
 
 #: seahub/templates/repo.html:611
 msgid "Move "
-msgstr "Déplacer "
+msgstr "Déplacer"
 
 #: seahub/templates/repo.html:624
 msgid "to:"
@@ -4011,17 +4012,17 @@ msgstr "Active"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 msgid "ResetPwd"
-msgstr "Raz Mdp"
+msgstr "RazMdp"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:52
 #: seahub/templates/sysadmin/sys_useradmin.html:103
 msgid "Revoke Admin"
-msgstr "Suppr droits admin"
+msgstr "Admin"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:54
 #: seahub/templates/sysadmin/sys_useradmin.html:107
 msgid "Set Admin"
-msgstr "Rendre admin"
+msgstr "Utilisateur"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:95
 msgid "Delete User"
@@ -4103,7 +4104,7 @@ msgstr "Définir Quota"
 
 #: seahub/templates/sysadmin/userinfo.html:39
 msgid "Owned"
-msgstr "Possédé"
+msgstr "Possédées"
 
 #: seahub/templates/sysadmin/userinfo.html:88
 msgid "Set user storage limit"
