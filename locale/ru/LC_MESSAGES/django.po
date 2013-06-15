@@ -140,19 +140,19 @@ msgid "Quota is too low (minimum value is 0)"
 msgstr "Квота слишком мала (минимальное значение 0)"
 
 #: seahub/forms.py:214
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Library name is required"
+msgid "Library name is required"
 msgstr "Требуется имя пользователя"
 
 #: seahub/forms.py:215
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Library description is required"
+msgid "Library description is required"
 msgstr "Требуется родительский каталог"
 
 #: seahub/forms.py:216
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Days can't be empty"
+msgid "Days can't be empty"
 msgstr "Имя не может быть пустым"
 
 #: seahub/forms.py:217
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Please enter a number"
+msgid "Please enter a number"
 msgstr "Пожалуйста введите пароль"
 
 #: seahub/settings.py:130
@@ -192,7 +192,7 @@ msgid "Personal info"
 msgstr "Персональная информация"
 
 #: seahub/auth/admin.py:30
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Permissions"
+msgid "Permissions"
 msgstr "Разрешения"
 
 #: seahub/auth/admin.py:31
@@ -209,7 +209,7 @@ msgid "Groups"
 msgstr "Группы"
 
 #: seahub/auth/admin.py:114
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Password changed successfully."
+msgid "Password changed successfully."
 msgstr "Пароль успешно изменен"
 
 #: seahub/auth/admin.py:124
@@ -218,7 +218,7 @@ msgid "Change password: %s"
 msgstr "Неверный пароль"
 
 #: seahub/auth/forms.py:17 seahub/base/accounts.py:376
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Username"
+msgid "Username"
 msgstr "Имя пользователя"
 
 #: seahub/auth/forms.py:18 seahub/auth/forms.py:154
@@ -246,7 +246,7 @@ msgid ""
 msgstr ""
 
 #: seahub/auth/forms.py:58
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "E-mail"
+msgid "E-mail"
 msgstr "Письма"
 
 #: seahub/auth/forms.py:65
@@ -267,15 +267,15 @@ msgid "Password reset on %s"
 msgstr "Пароль для %s сброшен"
 
 #: seahub/auth/forms.py:111
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "New password"
+msgid "New password"
 msgstr "Новый пароль"
 
 #: seahub/auth/forms.py:112
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "New password confirmation"
+msgid "New password confirmation"
 msgstr "Подтверждение нового пароля"
 
 #: seahub/auth/forms.py:138
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Old password"
+msgid "Old password"
 msgstr "Старый пароль"
 
 #: seahub/auth/forms.py:146
@@ -287,7 +287,7 @@ msgid "Password (again)"
 msgstr "Пароль (еще раз)"
 
 #: seahub/auth/views.py:90
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Logged out"
+msgid "Logged out"
 msgstr "Выйти"
 
 #: seahub/auth/views.py:138
@@ -296,7 +296,7 @@ msgstr "Ошибка при отправке email, пожалуйста свя�
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Enter a valid e-mail address."
+msgid "Enter a valid e-mail address."
 msgstr "Введите корректный email"
 
 #: seahub/avatar/forms.py:34 seahub/avatar/forms.py:57
@@ -461,39 +461,39 @@ msgid "Added"
 msgstr "Добавленный"
 
 #: seahub/base/templatetags/seahub_tags.py:83
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Deleted"
+msgid "Deleted"
 msgstr "Удалить"
 
 #: seahub/base/templatetags/seahub_tags.py:84
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Removed"
+msgid "Removed"
 msgstr "переместить"
 
 #: seahub/base/templatetags/seahub_tags.py:85
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Modified"
+msgid "Modified"
 msgstr "Модификатор"
 
 #: seahub/base/templatetags/seahub_tags.py:86
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Renamed"
+msgid "Renamed"
 msgstr "Переименовать"
 
 #: seahub/base/templatetags/seahub_tags.py:87
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Moved"
+msgid "Moved"
 msgstr "Переместить"
 
 #: seahub/base/templatetags/seahub_tags.py:88
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Added directory"
+msgid "Added directory"
 msgstr "Новый каталог"
 
 #: seahub/base/templatetags/seahub_tags.py:89
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Removed directory"
+msgid "Removed directory"
 msgstr "Новый каталог"
 
 #: seahub/base/templatetags/seahub_tags.py:90
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Renamed directory"
+msgid "Renamed directory"
 msgstr "Переименовать каталог"
 
 #: seahub/base/templatetags/seahub_tags.py:91
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Moved directory"
+msgid "Moved directory"
 msgstr "Переместить каталог"
 
 #: seahub/base/templatetags/seahub_tags.py:106
@@ -580,7 +580,7 @@ msgstr "Только для чтения"
 
 #: seahub/contacts/models.py:56
 #: seahub/contacts/templates/contacts/contact_list.html:126
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Email is required."
+msgid "Email is required."
 msgstr "Требуется Email"
 
 #: seahub/contacts/models.py:61
@@ -947,7 +947,7 @@ msgid "Error: wrong group id"
 msgstr "Ошибка: неверный идентификатор группы"
 
 #: seahub/group/views.py:785
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Error: the group does not exist."
+msgid "Error: the group does not exist."
 msgstr "Ошибка: группа не существует"
 
 #: seahub/group/views.py:817
@@ -961,7 +961,7 @@ msgid "Error: you are not in group %s."
 msgstr "Ошибка: вы не состоите в группе %s."
 
 #: seahub/group/views.py:832
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Error: the library does not exist."
+msgid "Error: the library does not exist."
 msgstr "Ошибка: библиотека не существует"
 
 #: seahub/group/views.py:835
@@ -1019,7 +1019,7 @@ msgid "Internal Server Error"
 msgstr "Внутренняя ошибка сервера"
 
 #: seahub/group/views.py:1215 seahub/views/wiki.py:89
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Wiki does not exists."
+msgid "Wiki does not exists."
 msgstr "Wiki не существует"
 
 #: seahub/group/views.py:1269 seahub/views/wiki.py:131
@@ -1134,7 +1134,7 @@ msgstr "Библиотеки"
 #: seahub/group/templates/group/group_members.html:17
 #: seahub/group/templates/group/group_wiki.html:17
 #: seahub/group/templates/group/group_wiki_pages.html:16
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Discussion"
+msgid "Discussion"
 msgstr "Обсуждения"
 
 #: seahub/group/templates/group/group_discuss.html:17
@@ -1154,7 +1154,7 @@ msgstr ""
 #: seahub/group/templates/group/group_members.html:20
 #: seahub/group/templates/group/group_wiki.html:20
 #: seahub/group/templates/group/group_wiki_pages.html:19
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Files"
+msgid "Files"
 msgstr "Файл"
 
 #: seahub/group/templates/group/group_discuss.html:22
@@ -1179,7 +1179,7 @@ msgid "Admin"
 msgstr "Админитратор"
 
 #: seahub/group/templates/group/group_discuss.html:48
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "No members"
+msgid "No members"
 msgstr "Нет участников"
 
 #: seahub/group/templates/group/group_discuss.html:62
@@ -1241,7 +1241,7 @@ msgid "↑Top"
 msgstr "↑Вверх"
 
 #: seahub/group/templates/group/group_discuss.html:229
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Really want to delete this discussion?"
+msgid "Really want to delete this discussion?"
 msgstr "Вы действительно хотите удалить это обсуждение?"
 
 #: seahub/group/templates/group/group_discuss.html:229
@@ -1263,7 +1263,7 @@ msgid "Failed to delete: "
 msgstr "Не удалось удалить:"
 
 #: seahub/group/templates/group/group_discuss.html:250
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed."
+msgid "Failed."
 msgstr "Ошибка:"
 
 #: seahub/group/templates/group/group_info.html:33
@@ -1290,7 +1290,7 @@ msgid "Quit Group"
 msgstr "Выйти из группы"
 
 #: seahub/group/templates/group/group_info.html:69
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Recent Changes"
+msgid "Recent Changes"
 msgstr "Последние изменения"
 
 #: seahub/group/templates/group/group_info.html:71
@@ -1353,7 +1353,7 @@ msgstr "Изображение каталога"
 #: seahub/templates/pubrepo.html:44
 #: seahub/templates/snippets/my_owned_repos.html:33
 #: seahub/templates/snippets/my_owned_repos.html:80
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Download and Sync"
+msgid "Download and Sync"
 msgstr "Скачать и синхронизировать"
 
 #: seahub/group/templates/group/group_info.html:107
@@ -1391,7 +1391,7 @@ msgid "Library"
 msgstr "Библиотека"
 
 #: seahub/group/templates/group/group_info.html:129
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Modified at"
+msgid "Modified at"
 msgstr "Модификатор"
 
 #: seahub/group/templates/group/group_info.html:130
@@ -1446,7 +1446,7 @@ msgid "The password will be kept in the server for only 1 hour."
 msgstr "Пароль будет храниться на сервере только 1 час."
 
 #: seahub/group/templates/group/group_info.html:192
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Are you sure you want to quit this group?"
+msgid "Are you sure you want to quit this group?"
 msgstr "Вы уверенны что хотите выйти из группы"
 
 #: seahub/group/templates/group/group_info.html:195
@@ -1459,7 +1459,7 @@ msgid "Are you sure you want to unshare %s ?"
 msgstr "Вы уверены, что хотите закрыть достут до %s ?"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "No public library is in this group"
+msgid "No public library is in this group"
 msgstr "В этой группе нет общедоступных библиотек."
 
 #: seahub/group/templates/group/group_info_for_pub.html:79
@@ -1511,7 +1511,7 @@ msgid "Dismiss Group"
 msgstr "Исключить группу"
 
 #: seahub/group/templates/group/group_manage.html:110
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Really want to dismiss this group?"
+msgid "Really want to dismiss this group?"
 msgstr "Вы действительно хотите удалить это сообщение?"
 
 #: seahub/group/templates/group/group_manage.html:113
@@ -1525,7 +1525,7 @@ msgstr "Вы действительно хотите удалить %s ?"
 
 #: seahub/group/templates/group/group_members.html:44
 #: seahub/templates/pubuser.html:29
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Add to Contacts"
+msgid "Add to Contacts"
 msgstr "Добавить в контакты"
 
 #: seahub/group/templates/group/group_pubinfo.html:9
@@ -1569,12 +1569,12 @@ msgstr "Seafile wiki позволяет вам легко упорядочива
 
 #: seahub/group/templates/group/group_wiki.html:40
 #: seahub/templates/wiki/personal_wiki.html:27
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Create Wiki Now"
+msgid "Create Wiki Now"
 msgstr "Создайте wiki сейчас"
 
 #: seahub/group/templates/group/group_wiki.html:44
 #: seahub/templates/wiki/personal_wiki.html:30
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Create Wiki"
+msgid "Create Wiki"
 msgstr "Создать wiki"
 
 #: seahub/group/templates/group/group_wiki.html:48
@@ -1585,21 +1585,21 @@ msgstr "Wiki страницы"
 #: seahub/group/templates/group/group_wiki_pages.html:32
 #: seahub/templates/wiki/personal_wiki.html:42
 #: seahub/templates/wiki/personal_wiki_pages.html:24
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Home"
+msgid "Home"
 msgstr "Мои библиотеки"
 
 #: seahub/group/templates/group/group_wiki.html:57
 #: seahub/group/templates/group/group_wiki_pages.html:33
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki_pages.html:25
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Pages"
+msgid "Pages"
 msgstr "Страницы"
 
 #: seahub/group/templates/group/group_wiki.html:59
 #: seahub/group/templates/group/group_wiki_pages.html:35
 #: seahub/templates/wiki/personal_wiki.html:45
 #: seahub/templates/wiki/personal_wiki_pages.html:26
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Wiki History"
+msgid "Wiki History"
 msgstr "История wiki"
 
 #: seahub/group/templates/group/group_wiki.html:64
@@ -1610,22 +1610,22 @@ msgstr "История wiki"
 #: seahub/templates/wiki/personal_wiki.html:62
 #: seahub/templates/wiki/personal_wiki_pages.html:28
 #: seahub/templates/wiki/personal_wiki_pages.html:38
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "New Page"
+msgid "New Page"
 msgstr "Новая страница"
 
 #: seahub/group/templates/group/group_wiki.html:65
 #: seahub/templates/wiki/personal_wiki.html:50
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Delete Page"
+msgid "Delete Page"
 msgstr "Удалить страницу"
 
 #: seahub/group/templates/group/group_wiki.html:66
 #: seahub/templates/wiki/personal_wiki.html:51
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Edit Page"
+msgid "Edit Page"
 msgstr "Редактировать страницу"
 
 #: seahub/group/templates/group/group_wiki.html:67
 #: seahub/templates/wiki/personal_wiki.html:52
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Page History"
+msgid "Page History"
 msgstr "История страницы"
 
 #: seahub/group/templates/group/group_wiki.html:74
@@ -1702,7 +1702,7 @@ msgid "Tip: the emails should be already registered."
 msgstr "Подсказка: email должен быть зарегистрирован."
 
 #: seahub/group/templates/group/grpmember_add_form.html:15
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Add administrators"
+msgid "Add administrators"
 msgstr "Добавить админостратора"
 
 #: seahub/group/templates/group/grpmember_add_form.html:16
@@ -1721,11 +1721,11 @@ msgid ""
 msgstr "(System) %(user)s поделился с вами библиотекой <a href='%(href)s'>%(repo_name)s</a>"
 
 #: seahub/message/views.py:107 seahub/templates/base.html:309
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "message is required"
+msgid "message is required"
 msgstr "Требуется сообщение"
 
 #: seahub/message/views.py:110 seahub/templates/base.html:313
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "contact is required"
+msgid "contact is required"
 msgstr "Требуестся контакт"
 
 #: seahub/message/views.py:120
@@ -1738,7 +1738,7 @@ msgid "Failed to send message to %s, user not found."
 msgstr "Ошибка отправки сообщения для %s, пользователь не найден."
 
 #: seahub/message/views.py:131
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Message sent successfully."
+msgid "Message sent successfully."
 msgstr "Сообщение успешно отправено."
 
 #: seahub/message/templates/message/all_msg_list.html:4
@@ -1750,7 +1750,7 @@ msgid "Messages"
 msgstr "Сообщения"
 
 #: seahub/message/templates/message/all_msg_list.html:23
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Message"
+msgid "Message"
 msgstr "Сообщение"
 
 #: seahub/message/templates/message/all_msg_list.html:24
@@ -1776,7 +1776,7 @@ msgstr "Добавить в контакты"
 #: seahub/share/templates/repo/user_share_list.html:4
 #: seahub/share/templates/repo/user_share_list.html:25
 #: seahub/templates/myhome_base.html:14
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Shares"
+msgid "Shares"
 msgstr "Общедоступно"
 
 #: seahub/message/templates/message/user_msg_list.html:38
@@ -1907,7 +1907,7 @@ msgid ""
 msgstr "Успешно поделено с %(group)s. Проверьте это в <a href=\"%(share)s\">Общедоступно</a>."
 
 #: seahub/share/views.py:95
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You can not share libray to yourself."
+msgid "You can not share libray to yourself."
 msgstr "Вы не поделились ни одной библиотекой."
 
 #: seahub/share/views.py:104
@@ -1961,7 +1961,7 @@ msgid "Invalid arguments"
 msgstr "Недопустимые аргументы"
 
 #: seahub/share/views.py:473
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You cannot share the library in this way."
+msgid "You cannot share the library in this way."
 msgstr "Вы не можете поделиться библиотекой данным способом."
 
 #: seahub/share/views.py:498
@@ -1973,7 +1973,7 @@ msgid "Removed successfully"
 msgstr "Успешно удалено"
 
 #: seahub/share/views.py:528
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Deleted successfully"
+msgid "Deleted successfully"
 msgstr "Успешно удалено"
 
 #: seahub/share/views.py:544
@@ -1987,11 +1987,11 @@ msgid "Your friend shared a file to you on Seafile"
 msgstr "Ваши друзья поделились с вами файлом."
 
 #: seahub/share/views.py:574
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Internal server error. Send failed."
+msgid "Internal server error. Send failed."
 msgstr "Внутренняя ошибка сервера. Не отправлено."
 
 #: seahub/share/views.py:577
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Successfully sent."
+msgid "Successfully sent."
 msgstr "Успешно отправлено."
 
 #: seahub/share/templates/repo/share_admin.html:5
@@ -2020,7 +2020,7 @@ msgid "Permission"
 msgstr "Разрешения"
 
 #: seahub/share/templates/repo/share_admin.html:75
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You have not shared any library"
+msgid "You have not shared any library"
 msgstr "Вы не поделились не одной библиотекой"
 
 #: seahub/share/templates/repo/share_admin.html:76
@@ -2031,7 +2031,7 @@ msgid ""
 msgstr "Вы можете делиться библиотеками с друзьями и коллегами, нажав на значек \"поделиться\" на рядом со своей библиотекой на вашей главной странице или создав новую библиотеку в группе, в которой вы состоите."
 
 #: seahub/share/templates/repo/share_admin.html:80
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Shared Links"
+msgid "Shared Links"
 msgstr "Общедоступные ссылки"
 
 #: seahub/share/templates/repo/share_admin.html:84
@@ -2053,7 +2053,7 @@ msgid "Remove"
 msgstr "Удалить"
 
 #: seahub/share/templates/repo/share_admin.html:108
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You don't have any shared link"
+msgid "You don't have any shared link"
 msgstr "У вас нет ни одной общедоступной ссылки"
 
 #: seahub/share/templates/repo/share_admin.html:109
@@ -2067,7 +2067,7 @@ msgid "Edit succeeded"
 msgstr "Редактирование удалось"
 
 #: seahub/share/templates/repo/share_admin.html:159
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Edit failed."
+msgid "Edit failed."
 msgstr "Ошибка Редактирования"
 
 #: seahub/share/templates/repo/user_share_list.html:56
@@ -2106,11 +2106,11 @@ msgid "Workspace"
 msgstr "Рабочее пространство"
 
 #: seahub/templates/base.html:46
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "send a message"
+msgid "send a message"
 msgstr "Отправить сообщение"
 
 #: seahub/templates/base.html:47
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "unread messages"
+msgid "unread messages"
 msgstr "непрочитанные сообщения"
 
 #: seahub/templates/base.html:48
@@ -2129,7 +2129,7 @@ msgid "Signup"
 msgstr "Регистрация"
 
 #: seahub/templates/base.html:66
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "message..."
+msgid "message..."
 msgstr "Сообщение..."
 
 #: seahub/templates/base.html:89
@@ -2141,7 +2141,7 @@ msgid "Search files in this library"
 msgstr "Искать файлы в этой библиотеке"
 
 #: seahub/templates/base.html:92 seahub/templates/base.html.py:98
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Search Files"
+msgid "Search Files"
 msgstr "Поиск файлов"
 
 #: seahub/templates/base.html:94
@@ -2150,7 +2150,7 @@ msgstr "расширеное"
 
 #: seahub/templates/base.html:102 seahub/templates/base.html.py:106
 #: seahub/templates/base.html:109
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "In all libraries"
+msgid "In all libraries"
 msgstr "Во всех библиотеках"
 
 #: seahub/templates/base.html:103
@@ -2158,7 +2158,7 @@ msgid "In this wiki"
 msgstr "В этой wiki"
 
 #: seahub/templates/base.html:103
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "In this library"
+msgid "In this library"
 msgstr "В данной библиотеке"
 
 #: seahub/templates/base.html:107
@@ -2167,7 +2167,7 @@ msgid "in %(name)s"
 msgstr "в %(name)s"
 
 #: seahub/templates/base.html:115 seahub/templates/base.html.py:118
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "All file types"
+msgid "All file types"
 msgstr "Все типы файлов"
 
 #: seahub/templates/base.html:116 seahub/templates/base.html.py:119
@@ -2175,7 +2175,7 @@ msgid "Custom file types"
 msgstr "Заданные типы файлов"
 
 #: seahub/templates/base.html:128
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Text files"
+msgid "Text files"
 msgstr "Текстовые файлы"
 
 #: seahub/templates/base.html:129 seahub/templates/base.html.py:195
@@ -2264,7 +2264,7 @@ msgstr "Ошибка получения ваших контактов для о�
 
 #: seahub/templates/client_mgmt.html:6 seahub/templates/client_mgmt.html:15
 #: seahub/templates/myhome.html:15 seahub/templates/wiki/personal_wiki.html:15
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Clients"
+msgid "Clients"
 msgstr "Клиент"
 
 #: seahub/templates/client_mgmt.html:14 seahub/templates/myhome.html:14
@@ -2276,7 +2276,7 @@ msgid "Personal Wiki"
 msgstr "Личная Wiki"
 
 #: seahub/templates/client_mgmt.html:27
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Client Name"
+msgid "Client Name"
 msgstr "Имя клиента"
 
 #: seahub/templates/client_mgmt.html:28
@@ -2292,7 +2292,7 @@ msgid "Unsync"
 msgstr "Не синхронизировать"
 
 #: seahub/templates/client_mgmt.html:62
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You do not have connected clients"
+msgid "You do not have connected clients"
 msgstr "У вас нет ни одного контакта"
 
 #: seahub/templates/client_mgmt.html:63
@@ -2303,7 +2303,7 @@ msgid ""
 msgstr "Синхронизируемые библиотеки отображены на этой странице. Вы можете видеть имя клиента и его IP адрес. Вы можете перестать синхронизировать библиотеку у клиента, если вы больше не хотите делать это."
 
 #: seahub/templates/client_mgmt.html:72
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Unsync Client"
+msgid "Unsync Client"
 msgstr "Не синхронизировать клиент"
 
 #: seahub/templates/client_mgmt.html:73
@@ -2367,7 +2367,7 @@ msgid "Header"
 msgstr "Заголовок"
 
 #: seahub/templates/file_edit.html:144 seahub/templates/file_edit.html:146
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Smaller header"
+msgid "Smaller header"
 msgstr "Маленький заголовок"
 
 #: seahub/templates/file_edit.html:149 seahub/templates/file_edit.html:150
@@ -2399,7 +2399,7 @@ msgid "Extended Syntax for Wiki"
 msgstr "Расширенный синтаксис для wiki"
 
 #: seahub/templates/file_edit.html:179
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "or"
+msgid "or"
 msgstr "или"
 
 #: seahub/templates/file_edit.html:179
@@ -2419,7 +2419,7 @@ msgid "Font"
 msgstr "Шрифт"
 
 #: seahub/templates/file_edit.html:193
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Font Size"
+msgid "Font Size"
 msgstr "Размер шрифта"
 
 #: seahub/templates/file_edit.html:195
@@ -2543,7 +2543,7 @@ msgid "Insert Hyperlink"
 msgstr "Вставить гиперссылку"
 
 #: seahub/templates/file_edit.html:354 seahub/templates/file_edit.html:364
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "optional title"
+msgid "optional title"
 msgstr "Дополнительное описание"
 
 #: seahub/templates/file_edit.html:356
@@ -2611,7 +2611,7 @@ msgid "Redo - Ctrl+Shift+Z"
 msgstr "Повторить Ctrl+Shift+Z"
 
 #: seahub/templates/file_edit.html:378
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Editing Help"
+msgid "Editing Help"
 msgstr "Редактировать Help."
 
 #: seahub/templates/file_edit.html:466
@@ -2620,11 +2620,11 @@ msgstr "Ошибка применения изменений. Проверьте
 
 #: seahub/templates/file_edit.html:484
 #: seahub/templates/snippets/repo_decrypt_js.html:11
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Password is required."
+msgid "Password is required."
 msgstr "Требуется пароль"
 
 #: seahub/templates/file_edit.html:486
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Password should be 3 to 30 characters."
+msgid "Password should be 3 to 30 characters."
 msgstr "Пароль должет иметь длину от 3 до 30 символов"
 
 #: seahub/templates/file_revisions.html:5 seahub/templates/repo.html:59
@@ -2779,7 +2779,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: seahub/templates/myhome.html:65
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Space/Traffic Usage"
+msgid "Space/Traffic Usage"
 msgstr "Использованно места/трафика"
 
 #: seahub/templates/myhome.html:68 seahub/templates/sysadmin/userinfo.html:26
@@ -2792,7 +2792,7 @@ msgstr "Свой"
 
 #: seahub/templates/myhome.html:70 seahub/templates/myhome.html.py:72
 #: seahub/templates/sysadmin/userinfo.html:28
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Sharing"
+msgid "Sharing"
 msgstr "Общедоступно"
 
 #: seahub/templates/myhome.html:81
@@ -2800,7 +2800,7 @@ msgid "Traffic this month:"
 msgstr "Трафик в этом месяце:"
 
 #: seahub/templates/myhome_base.html:21
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Organization"
+msgid "Organization"
 msgstr "Имя огранизации"
 
 #: seahub/templates/org_base.html:7
@@ -2852,7 +2852,7 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/repo.html:27
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Settings"
+msgid "Settings"
 msgstr "Настройки"
 
 #: seahub/templates/repo.html:30
@@ -2869,7 +2869,7 @@ msgid "Send"
 msgstr "Отправить"
 
 #: seahub/templates/repo.html:43
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid ""
+msgid ""
 "This library is read-only, you can not modify the contents of this library."
 msgstr ""
 "Эта библиотека предназначена только для чтения, вы можете только "
@@ -2904,7 +2904,7 @@ msgid "New File"
 msgstr "Новый файл"
 
 #: seahub/templates/repo.html:132 seahub/templates/repo.html.py:178
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Fetch failed"
+msgid "Fetch failed"
 msgstr "Ошибка получения"
 
 #: seahub/templates/repo.html:145
@@ -2960,7 +2960,7 @@ msgid "Fetching ..."
 msgstr "Получение ..."
 
 #: seahub/templates/repo.html:238
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Update File"
+msgid "Update File"
 msgstr "Обновить файл"
 
 #: seahub/templates/repo.html:245
@@ -2972,7 +2972,7 @@ msgid "Fetching..."
 msgstr "Получение..."
 
 #: seahub/templates/repo.html:261
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Library Settings"
+msgid "Library Settings"
 msgstr "Настройки Библиотеки"
 
 #: seahub/templates/repo.html:268
@@ -3037,11 +3037,11 @@ msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
 msgstr "Переименовать <span id=\"rename-obj\" class=\"op-target\"></span> как: "
 
 #: seahub/templates/repo.html:350
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Link: "
+msgid "Link: "
 msgstr "Ссылки: "
 
 #: seahub/templates/repo.html:353 seahub/templates/view_file_base.html:97
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Send to:"
+msgid "Send to:"
 msgstr "Отправить: "
 
 #: seahub/templates/repo.html:354 seahub/templates/view_file_base.html:98
@@ -3159,7 +3159,7 @@ msgid "Restore Library"
 msgstr "Восстановить библиотеку"
 
 #: seahub/templates/repo_view_snapshot.html:84
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Are you sure you want to restore this library?"
+msgid "Are you sure you want to restore this library?"
 msgstr "Вы уверены, что хотите восстановить эту библиотеку"
 
 #: seahub/templates/seafile_access_check.html:6
@@ -3261,7 +3261,7 @@ msgid "Open local file"
 msgstr "Открыть файл на компьютере"
 
 #: seahub/templates/view_file_base.html:96
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Send Link"
+msgid "Send Link"
 msgstr "Отправить ссылку..."
 
 #: seahub/templates/view_file_base.html:106
@@ -3542,7 +3542,7 @@ msgid "Discuss"
 msgstr "Обсуждения"
 
 #: seahub/templates/snippets/bottom_bar.html:3
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Group"
+msgid "Group"
 msgstr "Группы"
 
 #: seahub/templates/snippets/bottom_bar.html:56
@@ -3550,7 +3550,7 @@ msgid "Please select at least 1 group."
 msgstr "Пожалуйста выберите хотя бы 1 группу."
 
 #: seahub/templates/snippets/bottom_bar.html:61
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Please input a discussion."
+msgid "Please input a discussion."
 msgstr "Подалуйста введите обсуждение."
 
 #: seahub/templates/snippets/events.html:3
@@ -3590,7 +3590,7 @@ msgid "Post a discussion to group"
 msgstr "Создать обсуждение в группе"
 
 #: seahub/templates/snippets/group_recommend_form.html:14
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "discussion"
+msgid "discussion"
 msgstr "обсуждение"
 
 #: seahub/templates/snippets/list_commit_detail.html:11
@@ -3622,7 +3622,7 @@ msgid "Deleted directories"
 msgstr "Удаленные папки"
 
 #: seahub/templates/snippets/list_commit_detail.html:39
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Unknown error."
+msgid "Unknown error."
 msgstr "Неизвестная ошибка."
 
 #: seahub/templates/snippets/my_groups.html:22
@@ -3723,11 +3723,11 @@ msgstr "показать контур"
 #: seahub/templates/snippets/office_convert_js.html:108
 #: seahub/templates/snippets/office_convert_js.html:115
 #: seahub/templates/snippets/office_convert_js.html:140
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Document convertion failed."
+msgid "Document convertion failed."
 msgstr "Не удалось конвертировать документ."
 
 #: seahub/templates/snippets/pubinfo.html:3
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Organization Info"
+msgid "Organization Info"
 msgstr "Информация об организации"
 
 #: seahub/templates/snippets/pubinfo.html:5
@@ -3743,7 +3743,7 @@ msgstr[0] "<span class=\"obj\">Группа"
 msgstr[1] "<span class=\"obj\">Группы"
 
 #: seahub/templates/snippets/pubinfo.html:9
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "User"
+msgid "User"
 msgid_plural "Users"
 msgstr[0] "Пользователь"
 msgstr[1] "Пользователи"
@@ -3757,7 +3757,7 @@ msgid "Encrypt"
 msgstr "Шифрование"
 
 #: seahub/templates/snippets/repo_create_form.html:20
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "(at least 3 characters)"
+msgid "(at least 3 characters)"
 msgstr "(не менее 3 символов)"
 
 #: seahub/templates/snippets/repo_create_form.html:22
@@ -3769,7 +3769,7 @@ msgid "Please enter password"
 msgstr "Пожалуйста введите пароль"
 
 #: seahub/templates/snippets/repo_share_form.html:3
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Share Library"
+msgid "Share Library"
 msgstr "Поделиться библиотекой"
 
 #: seahub/templates/snippets/repo_share_form.html:4
@@ -3795,7 +3795,7 @@ msgid "Tip: enter \"all\" to share to public library."
 msgstr "Подсказка: введите \"все\" для того чтобы поделиться с публичной библиотекой"
 
 #: seahub/templates/snippets/shared_link_js.html:87
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Please input at least an email."
+msgid "Please input at least an email."
 msgstr "Пожалуйста введите email"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:8
@@ -3874,7 +3874,7 @@ msgstr "Больше не администратор"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:54
 #: seahub/templates/sysadmin/sys_useradmin.html:107
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Set Admin"
+msgid "Set Admin"
 msgstr "Сделать админитратором"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:95
@@ -3962,7 +3962,7 @@ msgid "Tip: 0 means default limit"
 msgstr "Подсказка: 0 значит ограничение по умолчанию"
 
 #: seahub/templates/wiki/personal_wiki.html:25
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You do not have personal wiki"
+msgid "You do not have personal wiki"
 msgstr "У вас нет личной wiki"
 
 #: seahub/templates/wiki/personal_wiki.html:32
@@ -3974,7 +3974,7 @@ msgid "Personal Wiki Pages"
 msgstr "Личнаые wiki страницы"
 
 #: seahub/utils/__init__.py:91
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "permission error"
+msgid "permission error"
 msgstr "ошибка доступа"
 
 #: seahub/utils/__init__.py:106 seahub/utils/__init__.py:1022
@@ -3986,15 +3986,15 @@ msgid "Unable to view recycle page"
 msgstr "Не удается просмотреть страницу"
 
 #: seahub/views/__init__.py:324
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Library does not exist."
+msgid "Library does not exist."
 msgstr "Библиотека не существует"
 
 #: seahub/views/__init__.py:335
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You do not have permission to perform this action."
+msgid "You do not have permission to perform this action."
 msgstr "у вас нет разрешения на выполнение этого действия."
 
 #: seahub/views/__init__.py:342
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed to edit library information."
+msgid "Failed to edit library information."
 msgstr "Не удается изменить информацию о библиотеке."
 
 #: seahub/views/__init__.py:349
@@ -4030,7 +4030,7 @@ msgid "Invalid url"
 msgstr "Некорректный URL"
 
 #: seahub/views/__init__.py:431
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You don't have permission to access the library."
+msgid "You don't have permission to access the library."
 msgstr "у вас нет разрешения на доступ к библиотеке."
 
 #: seahub/views/__init__.py:439
@@ -4088,7 +4088,7 @@ msgid "Successfully unsync client %s"
 msgstr "Успешно удалено"
 
 #: seahub/views/__init__.py:918
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Successfully unsync client"
+msgid "Successfully unsync client"
 msgstr "Успешно удалено"
 
 #: seahub/views/__init__.py:921
@@ -4097,7 +4097,7 @@ msgid "Failed to unsync client %s"
 msgstr "Не удалось удалить:"
 
 #: seahub/views/__init__.py:923
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed to unsync client"
+msgid "Failed to unsync client"
 msgstr "Ошибка удаления клиента."
 
 #: seahub/views/__init__.py:1001 seahub/views/__init__.py:1500
@@ -4158,7 +4158,7 @@ msgid "Unable to access file"
 msgstr "Невозможно получить доступ к файлу"
 
 #: seahub/views/__init__.py:1214
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed to download library, unable to find server"
+msgid "Failed to download library, unable to find server"
 msgstr "Не удалось загрузить библиотеку, невозможно найти сервер"
 
 #: seahub/views/__init__.py:1225
@@ -4166,11 +4166,11 @@ msgid "Invalid server setting"
 msgstr "Неправильные настройки сервера"
 
 #: seahub/views/__init__.py:1268
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Destination path is too long."
+msgid "Destination path is too long."
 msgstr "Слишком длинное имя каталога"
 
 #: seahub/views/__init__.py:1274
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "You can not modify that library."
+msgid "You can not modify that library."
 msgstr "Вы не можете изменять эту библиотеку."
 
 #: seahub/views/__init__.py:1287
@@ -4199,7 +4199,7 @@ msgstr "%(name)s успешно перемещено: <a href=\"%(url)s\">пос
 #: seahub/views/__init__.py:1368 seahub/views/__init__.py:1399
 #: seahub/views/__init__.py:1433 seahub/views/__init__.py:2276
 #: seahub/views/file.py:550
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Permission denied"
+msgid "Permission denied"
 msgstr "Недостаточно прав"
 
 #: seahub/views/__init__.py:1445
@@ -4238,7 +4238,7 @@ msgid "Unable to download \"%s\""
 msgstr "Не удалось загрузть \"%s\""
 
 #: seahub/views/__init__.py:2271
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "The group doesn't exist"
+msgid "The group doesn't exist"
 msgstr "Группа не существует"
 
 #: seahub/views/file.py:275 seahub/views/file.py:495 seahub/views/file.py:510
@@ -4253,7 +4253,7 @@ msgid "File size surpasses %s, can not be opened online."
 msgstr "Размер файла превышает 10M, файл не может быть просмотрен online."
 
 #: seahub/views/file.py:554
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "The library does not exist."
+msgid "The library does not exist."
 msgstr "Библиотека не существует"
 
 #: seahub/views/file.py:558
@@ -4265,7 +4265,7 @@ msgid "Unable to edit file"
 msgstr "Невожможно отредактировать файл"
 
 #: seahub/views/file.py:644
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "The file does not exist."
+msgid "The file does not exist."
 msgstr "Файл не существует"
 
 #: seahub/views/file.py:672
@@ -4282,7 +4282,7 @@ msgid "Successfully deleted %s"
 msgstr "%s успешно удалено"
 
 #: seahub/views/sysadmin.py:193
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed to delete: the user does not exist"
+msgid "Failed to delete: the user does not exist"
 msgstr "Ошибка удаления: файл не существует"
 
 #: seahub/views/sysadmin.py:205
@@ -4291,7 +4291,7 @@ msgid "Successfully set %s as admin"
 msgstr "%s успешно сделан администратором"
 
 #: seahub/views/sysadmin.py:207
-<div class='word' style='top:10px;left:500px;'>{{kim}}</div>msgid "Failed to set admin: the user does not exist"
+msgid "Failed to set admin: the user does not exist"
 msgstr "Ошибка установки прав администратора: пользователь не существует"
 
 #: seahub/views/sysadmin.py:219
