@@ -26,6 +26,7 @@ from django.utils.http import urlquote
 from htmldiff import HtmlDiff
 
 from pysearpc import SearpcError
+from seaserv import seafile_api
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
     CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
@@ -199,15 +200,15 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
             else:
                 i += 1
 
-def get_user_repos(user):
+def get_user_repos(username):
     """
     Get all repos that user can access, including owns, shared, public, and
     repo in groups.
     NOTE: collumn names in shared_repo struct are not same as owned or group
     repos.
     """
-    email = user.username
-    shared_repos = list_share_repos(email, 'to_email', -1, -1)
+    email = username
+    shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
     
     if CLOUD_MODE:
         if user.org:
@@ -239,6 +240,7 @@ def get_accessible_repos(request, repo):
     within the same repo. Otherwise, files can be copied/moved between
     owned/shared/group/public repos of the current user.
 
+    NOTE: this function is deprecated dute to the bad name and function argument.
     """
     def check_has_subdir(repo):
         latest_commit = get_commits(repo.id, 0, 1)[0]
@@ -259,7 +261,7 @@ def get_accessible_repos(request, repo):
         accessible_repos = [repo]
         return accessible_repos
 
-    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(request.user)
+    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(request.user.username)
 
     def has_repo(repos, repo):
         for r in repos:
@@ -292,7 +294,6 @@ def get_accessible_repos(request, repo):
                 accessible_repos.append(r)
 
     return accessible_repos
-
 
 def valid_previewed_file(filename):
     """

@@ -68,7 +68,7 @@ from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
     calculate_repo_last_modify, get_file_type_and_ext, \
-    check_filename_with_rename, get_accessible_repos, EMPTY_SHA1, \
+    check_filename_with_rename, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
@@ -545,6 +545,8 @@ def repo_history(request, repo_id):
 
 @login_required
 def repo_view_snapshot(request, repo_id):
+    """List repo snapshots.
+    """
     if not access_to_repo(request, repo_id, ''):
         return render_permission_error(request, _(u'Unable to view library snapshots'))
 

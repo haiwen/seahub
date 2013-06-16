@@ -156,7 +156,7 @@ class User(object):
         Remove all repo decryption passwords stored on server.
         """
         from seahub.utils import get_user_repos
-        owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(self)
+        owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(self.email)
 
         def has_repo(repos, repo):
             for r in repos:

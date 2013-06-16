@@ -5,7 +5,7 @@ from django.conf import settings
 from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit
-from seahub.views.repo import RepoView, RepoHistoryView
+from seahub.views.repo import repo, repo_history_view
 from notifications.views import notification_list
 from group.views import group_list
 from message.views import user_msg_list
@@ -66,10 +66,10 @@ urlpatterns = patterns('',
     (r'^repo/update_error/(?P<repo_id>[-0-9a-f]{36})/$', update_file_error),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
     url(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='repo'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/$', repo, name='repo'),
     url(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     (r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_revert),
-    url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryView.as_view(), name='repo_history_view'),
+    url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^repo/snapshot/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_view_snapshot, name='repo_view_snapshot'),
     url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),

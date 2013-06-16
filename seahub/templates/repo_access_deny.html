@@ -1,0 +1,12 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block main_panel %}
+    <div class="repo-file-list-outer-container">
+        <div class="repo-file-list-inner-container">
+            <div class="repo-file-list-not-show">
+                <p class="access-notice">{% trans "You can't access this library."%}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
