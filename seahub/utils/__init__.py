@@ -2,7 +2,6 @@
 # encoding: utf-8
 import os
 import re
-import stat
 import urllib2
 import uuid
 import logging
@@ -234,80 +233,6 @@ def get_user_repos(username):
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
                 
-def get_accessible_repos(request, repo):
-    """Get all repos the current user can access when coping/moving files
-    online. If the repo is encrypted, then files can only be copied/moved
-    within the same repo. Otherwise, files can be copied/moved between
-    owned/shared/group/public repos of the current user.
-
-    NOTE: this function is deprecated dute to the bad name and function argument.
-    """
-    def check_has_subdir(repo):
-        latest_commit = get_commits(repo.id, 0, 1)[0]
-        if not latest_commit:
-            return False
-        if latest_commit.root_id == EMPTY_SHA1:
-            return False
-
-        dirs = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id, '/')
-
-        for dirent in dirs:
-            if stat.S_ISDIR(dirent.props.mode):
-                return True
-        return False
-
-    if repo and repo.encrypted:
-        repo.has_subdir = check_has_subdir(repo)
-        accessible_repos = [repo]
-        return accessible_repos
-
-    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(request.user.username)
-
-    def has_repo(repos, repo):
-        for r in repos:
-            if repo.id == r.id:
-                return True
-        return False
-
-    accessible_repos = []
-    for r in owned_repos:
-        if not has_repo(accessible_repos, r) and not r.encrypted:
-            r.has_subdir = check_has_subdir(r)
-            accessible_repos.append(r)
-
-    for r in shared_repos + public_repos:
-        # For compatibility with diffrent fields names in Repo and
-        # SharedRepo objects.
-        r.id = r.repo_id
-        r.name = r.repo_name
-        r.desc = r.repo_desc
-
-        if not has_repo(accessible_repos, r) and not r.encrypted:
-            if check_permission(r.id, request.user.username) == 'rw':
-                r.has_subdir = check_has_subdir(r)
-                accessible_repos.append(r)
-
-    for r in groups_repos:
-        if not has_repo(accessible_repos, r) and not r.encrypted :
-            if check_permission(r.id, request.user.username) == 'rw':
-                r.has_subdir = check_has_subdir(r)
-                accessible_repos.append(r)
-
-    return accessible_repos
-
-def valid_previewed_file(filename):
-    """
-    Check whether file can preview on web
-    ``NOTE``: This function is deprecated due to the bad name.    
-    
-    """
-    fileExt = os.path.splitext(filename)[1][1:].lower()
-    filetype = FILEEXT_TYPE_MAP.get(fileExt)
-    if filetype:
-        return (filetype, fileExt)
-    else:
-        return ('Unknown', fileExt)
-
 def get_file_type_and_ext(filename):
     """
     Return file type and extension if the file can be previewd online,
