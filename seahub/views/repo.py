@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import stat
 
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
