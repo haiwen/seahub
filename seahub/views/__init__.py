@@ -2351,7 +2351,7 @@ def convert_cmmt_desc_link(request):
 
     # Shoud never reach here.
     logger.warn('OUT OF CONTROL!')
+    logger.warn('repo_id: %s, cmmt_id: %s, name: %s' % (repo_id, cmmt_id, name))
     for d in diff_result:
-        logger.warn('repo_id: %s, cmmt_id: %s, diff_result: %s' % (
-                repo_id, cmmt_id, d.__dict__))
+        logger.warn('diff_result: %s' % (d.__dict__))
     raise Http404
