@@ -345,6 +345,8 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 
 ENABLE_PUBFILE = False
 
+ENABLE_SUB_LIBRARY = False
+
 #####################
 # External settings #
 #####################

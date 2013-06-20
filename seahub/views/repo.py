@@ -20,6 +20,7 @@ from seahub.views import gen_path_link, get_user_permission, get_repo_dirents
 from seahub.utils import get_ccnetapplet_root, is_file_starred, \
     gen_file_upload_url, get_httpserver_root, gen_shared_link, \
     EMPTY_SHA1, get_user_repos
+from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -84,6 +85,7 @@ def get_unencry_rw_repos_by_user(username):
     owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(username)
 
     accessible_repos = []
+
     for r in owned_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
             r.has_subdir = check_has_subdir(r)
@@ -165,7 +167,6 @@ def render_repo(request, repo):
         Show repo direntries based on requested path
     If user does not have permission to view repo
       return permission deny page
-
     """
     username = request.user.username
     user_perm = check_repo_access_permission(repo.id, username)
@@ -242,6 +243,7 @@ def render_repo(request, repo):
             'dir_shared_link': dir_shared_link,
             'history_limit': history_limit,
             'search_repo_id': search_repo_id,
+            'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             }, context_instance=RequestContext(request))
     
 @login_required    

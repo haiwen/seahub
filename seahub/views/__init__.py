@@ -85,7 +85,8 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
-    FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+    FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
+    ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -347,14 +348,15 @@ def repo_save_settings(request):
                                     status=500, content_type=content_type)
 
         # set library history
-        res = set_repo_history_limit(repo_id, days)
-        if res == 0:
-            messages.success(request, _(u'Settings saved.'))
-            return HttpResponse(json.dumps({'success': True}),
-                                content_type=content_type)
-        else:
-            return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
-                                status=400, content_type=content_type)
+        if days != None:
+            res = set_repo_history_limit(repo_id, days)
+            if res != 0:
+                return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
+                                    status=400, content_type=content_type)
+
+        messages.success(request, _(u'Settings saved.'))
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
     else:
         return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
                             status=400, content_type=content_type)
@@ -787,6 +789,23 @@ def myhome(request):
     # Get all personal groups I joined.
     joined_groups = get_personal_groups_by_user(request.user.username)
 
+    def get_abbrev_origin_path(repo_name, path):
+        if len(path) > 20:
+            abbrev_path = path[-20:]
+            return repo_name + '/...' + abbrev_path
+        else:
+            return repo_name + path
+
+    # compose abbrev origin path for display
+    sub_repos = []
+    if ENABLE_SUB_LIBRARY:
+        sub_repos = seafile_api.get_virtual_repos_by_owner(email)
+        for repo in sub_repos:
+            repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
+                                                             repo.origin_path)
+        calculate_repo_last_modify(sub_repos)
+        sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+
     # Personal repos that I owned.
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     calculate_repo_last_modify(owned_repos)
@@ -888,6 +907,8 @@ def myhome(request):
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
             "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
+            "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
+            "sub_repos": sub_repos,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1514,6 +1535,39 @@ def repo_create(request):
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
+
+@login_required
+def create_sub_repo(request):
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    orig_repo_id = request.POST.get('orig_repo_id', '')
+    orig_path = request.POST.get('orig_path', '')
+    repo_name = request.POST.get('repo_name', '')
+    repo_desc = request.POST.get('repo_desc', '')
+    owner = request.user.username
+
+    if not orig_repo_id or not orig_path or not repo_name or not repo_desc:
+        return HttpResponseBadRequest("Invalid arguments", content_type=content_type)
+
+    try:
+        repo_id = seafile_api.create_virtual_repo(orig_repo_id, orig_path,
+                                                  repo_name, repo_desc, owner)
+    except SearpcError, e:
+        result['error'] = e.msg
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    result['success'] = True
+    result['repo_id'] = repo_id
+    repo_created.send(sender=None,
+                      org_id=-1,
+                      creator=owner,
+                      repo_id=repo_id,
+                      repo_name=repo_name)
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""
