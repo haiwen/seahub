@@ -1,0 +1,4373 @@
+﻿# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-05 14:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: seahub/forms.py:26 seahub/base/accounts.py:390
+msgid "A user with this email already"
+msgstr "該郵箱已被註冊"
+
+#: seahub/forms.py:40 seahub/auth/forms.py:124 seahub/auth/forms.py:166
+#: seahub/base/accounts.py:407
+msgid "The two password fields didn't match."
+msgstr "兩次輸入的密碼不一致"
+
+#: seahub/forms.py:49 seahub/group/forms.py:56
+#: seahub/templates/snippets/repo_create_js.html:28 seahub/wiki/forms.py:16
+msgid "Name can't be empty"
+msgstr "名稱不能為空"
+
+#: seahub/forms.py:50 seahub/group/forms.py:57 seahub/wiki/forms.py:17
+msgid "Name is too long (maximum is 255 characters)"
+msgstr "名稱太長（不超過255個漢字）"
+
+#: seahub/forms.py:53 seahub/group/forms.py:60
+#: seahub/templates/snippets/repo_create_js.html:32 seahub/wiki/forms.py:20
+msgid "Description can't be empty"
+msgstr "描述不能為空"
+
+#: seahub/forms.py:54 seahub/group/forms.py:61 seahub/wiki/forms.py:21
+msgid "Description is too long (maximum is 100 characters)"
+msgstr "描述太長（不超過100個漢字）"
+
+#: seahub/forms.py:59 seahub/forms.py:64
+#: seahub/templates/snippets/repo_create_js.html:41
+msgid "Password is too short (minimum is 3 characters)"
+msgstr "密碼太短（不少於3個字符）"
+
+#: seahub/forms.py:60 seahub/forms.py:65
+#: seahub/templates/snippets/repo_create_js.html:45
+msgid "Password is too long (maximum is 30 characters)"
+msgstr "密碼太長（不超過30個字符）"
+
+#: seahub/forms.py:71
+#, python-format
+msgid "Name %s is not valid"
+msgstr "名稱 %s 含有無效字符"
+
+#: seahub/forms.py:93 seahub/templates/registration/registration_form.html:44
+#: seahub/templates/snippets/repo_create_js.html:53
+#: seahub/templates/sysadmin/sys_useradmin.html:135
+msgid "Passwords don't match"
+msgstr "兩次輸入的密碼不一致"
+
+#: seahub/forms.py:106 seahub/forms.py:129 seahub/forms.py:153
+#: seahub/forms.py:176 seahub/forms.py:213
+msgid "Repo id is required"
+msgstr "repo id 為必填項"
+
+#: seahub/forms.py:107 seahub/forms.py:130 seahub/forms.py:154
+msgid "Parent dir is required"
+msgstr "parent dir 為必填項"
+
+#: seahub/forms.py:110 seahub/forms.py:134
+msgid "File name is too long"
+msgstr "文件名過長"
+
+#: seahub/forms.py:111 seahub/forms.py:135
+msgid "File name can't be empty"
+msgstr "文件名不能為空"
+
+#: seahub/forms.py:118 seahub/forms.py:142
+#, python-format
+msgid "File name \"%s\" is not valid"
+msgstr "文件名 %s 含有無效字符"
+
+#: seahub/forms.py:131
+msgid "Oldname is required"
+msgstr "需要 oldname"
+
+#: seahub/forms.py:157
+msgid "Directory name is too long"
+msgstr "目錄名過長"
+
+#: seahub/forms.py:158
+msgid "Directory name can't be empty"
+msgstr "目錄名不能為空"
+
+#: seahub/forms.py:165
+#, python-format
+msgid "Directory name \"%s\" is not valid"
+msgstr "目錄名 %s 含有無效字符"
+
+#: seahub/forms.py:177
+msgid "Username is required"
+msgstr "用戶名為必填項"
+
+#: seahub/forms.py:178
+msgid "Password can't be empty"
+msgstr "密碼不能為空"
+
+#: seahub/forms.py:189
+msgid "Bad url format"
+msgstr "錯誤的 url 格式"
+
+#: seahub/forms.py:194
+msgid "Wrong password"
+msgstr "密碼錯誤"
+
+#: seahub/forms.py:196
+msgid "Inernal server error"
+msgstr "服務器內部錯誤"
+
+#: seahub/forms.py:198
+msgid "Decrypt library error"
+msgstr "解密資料庫出錯"
+
+#: seahub/forms.py:204 seahub/share/forms.py:19
+msgid "Email is required"
+msgstr "請輸入郵箱"
+
+#: seahub/forms.py:206
+msgid "Quota can't be empty"
+msgstr "容量不能為空"
+
+#: seahub/forms.py:207
+msgid "Quota is too low (minimum value is 0)"
+msgstr "容量太小（最小為0）"
+
+#: seahub/forms.py:214
+msgid "Library name is required"
+msgstr "資料庫名稱為必填項"
+
+#: seahub/forms.py:215
+msgid "Library description is required"
+msgstr "資料庫描述為必填項"
+
+#: seahub/forms.py:216
+msgid "Days can't be empty"
+msgstr "天數不能為空"
+
+#: seahub/forms.py:217
+msgid "Please enter a number"
+msgstr "請輸入數字"
+
+#: seahub/settings.py:130
+msgid "English"
+msgstr ""
+
+#: seahub/settings.py:131
+msgid "簡體中文"
+msgstr ""
+
+#: seahub/settings.py:132
+msgid "Русский"
+msgstr ""
+
+#: seahub/settings.py:133
+msgid "Deutsch"
+msgstr ""
+
+#: seahub/settings.py:134
+msgid "Español"
+msgstr ""
+
+#: seahub/settings.py:135
+msgid "Italiano"
+msgstr ""
+
+#: seahub/settings.py:136
+msgid "Français"
+msgstr ""
+
+#: seahub/settings.py:137
+msgid "Magyar"
+msgstr ""
+
+#: seahub/auth/admin.py:29
+msgid "Personal info"
+msgstr "個人信息"
+
+#: seahub/auth/admin.py:30
+msgid "Permissions"
+msgstr "權限"
+
+#: seahub/auth/admin.py:31
+msgid "Important dates"
+msgstr "重要日期"
+
+#: seahub/auth/admin.py:32 seahub/group/templates/group/groups.html:5
+#: seahub/templates/admin_base.html:14 seahub/templates/myhome_base.html:11
+#: seahub/templates/org_admin_base.html:14 seahub/templates/org_base.html:15
+#: seahub/templates/pubgrp.html:15 seahub/templates/pubrepo.html:16
+#: seahub/templates/pubuser.html:15
+#: seahub/templates/snippets/repo_share_form.html:8
+msgid "Groups"
+msgstr "群組"
+
+#: seahub/auth/admin.py:114
+msgid "Password changed successfully."
+msgstr "密碼修改成功"
+
+#: seahub/auth/admin.py:124
+#, python-format
+msgid "Change password: %s"
+msgstr "修改密碼：%s"
+
+#: seahub/auth/forms.py:17 seahub/base/accounts.py:376
+msgid "Username"
+msgstr "用戶名"
+
+#: seahub/auth/forms.py:18 seahub/auth/forms.py:154
+#: seahub/base/accounts.py:380 seahub/templates/registration/login.html:10
+#: seahub/templates/registration/registration_form.html:13
+#: seahub/templates/snippets/repo_create_form.html:20
+#: seahub/templates/sysadmin/sys_useradmin.html:14
+msgid "Password"
+msgstr "密碼"
+
+#: seahub/auth/forms.py:38
+msgid ""
+"Please enter a correct username and password. Note that both fields are case-"
+"sensitive."
+msgstr ""
+
+#: seahub/auth/forms.py:40
+msgid "This account is inactive."
+msgstr ""
+
+#: seahub/auth/forms.py:45
+msgid ""
+"Your Web browser doesn't appear to have cookies enabled. Cookies are "
+"required for logging in."
+msgstr ""
+
+#: seahub/auth/forms.py:58
+msgid "E-mail"
+msgstr "郵箱"
+
+#: seahub/auth/forms.py:65
+msgid ""
+"Failed to send email, email service is not properly configured, please "
+"contact administrator."
+msgstr ""
+
+#: seahub/auth/forms.py:73
+msgid ""
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr ""
+
+#: seahub/auth/forms.py:103
+#, python-format
+msgid "Password reset on %s"
+msgstr "密碼重置：%s"
+
+#: seahub/auth/forms.py:111
+msgid "New password"
+msgstr "新密碼"
+
+#: seahub/auth/forms.py:112
+msgid "New password confirmation"
+msgstr "新密碼確認"
+
+#: seahub/auth/forms.py:138
+msgid "Old password"
+msgstr "舊密碼"
+
+#: seahub/auth/forms.py:146
+msgid "Your old password was entered incorrectly. Please enter it again."
+msgstr ""
+
+#: seahub/auth/forms.py:155 seahub/base/accounts.py:382
+msgid "Password (again)"
+msgstr "請再次輸入密碼"
+
+#: seahub/auth/views.py:90
+msgid "Logged out"
+msgstr "退出"
+
+#: seahub/auth/views.py:138
+msgid "Failed to send email, please contact administrator."
+msgstr ""
+
+#: seahub/auth/management/commands/createsuperuser.py:24
+#: seahub/base/management/commands/createsuperuser.py:25
+msgid "Enter a valid e-mail address."
+msgstr ""
+
+#: seahub/avatar/forms.py:34 seahub/avatar/forms.py:57
+#, python-format
+msgid ""
+"%(ext)s is an invalid file extension. Authorized extensions are : "
+"%(valid_exts_list)s"
+msgstr ""
+
+#: seahub/avatar/forms.py:38 seahub/avatar/forms.py:61
+#, python-format
+msgid ""
+"Your file is too big (%(size)s), the maximum allowed size is "
+"%(max_valid_size)s"
+msgstr ""
+
+#: seahub/avatar/forms.py:44
+#, python-format
+msgid ""
+"You already have %(nb_avatars)d avatars, and the maximum allowed is "
+"%(nb_max_avatars)d."
+msgstr ""
+
+#: seahub/avatar/models.py:136 seahub/avatar/models.py:161
+#, python-format
+msgid "Avatar for %s"
+msgstr ""
+
+#: seahub/avatar/views.py:78
+msgid "Successfully uploaded a new avatar."
+msgstr "修改成功。"
+
+#: seahub/avatar/views.py:128
+msgid "Successfully uploaded a new group avatar."
+msgstr "修改成功。"
+
+#: seahub/avatar/views.py:166
+msgid "Successfully updated your avatar."
+msgstr "更新成功。"
+
+#: seahub/avatar/views.py:208
+msgid "Successfully deleted the requested avatars."
+msgstr "刪除成功。"
+
+#: seahub/avatar/templates/avatar/add.html:6
+msgid "Upload Avatar"
+msgstr "上傳頭像"
+
+#: seahub/avatar/templates/avatar/add.html:7
+#: seahub/avatar/templates/avatar/change.html:8
+msgid "Your current avatar: "
+msgstr "當前頭像："
+
+#: seahub/avatar/templates/avatar/add.html:9
+#: seahub/avatar/templates/avatar/set_avatar.html:12
+msgid "Upload New Avatar: "
+msgstr "上傳新頭像："
+
+#: seahub/avatar/templates/avatar/add.html:13
+#: seahub/avatar/templates/avatar/change.html:30
+msgid "Upload New Image"
+msgstr "提交"
+
+#: seahub/avatar/templates/avatar/confirm_delete.html:6
+msgid "Please select the avatars that you would like to delete."
+msgstr "請選擇要刪除的頭像。"
+
+#: seahub/avatar/templates/avatar/confirm_delete.html:11
+#, python-format
+msgid ""
+"You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
+"\">upload one</a> now."
+msgstr ""
+"你還沒有上傳自己的頭像。現在 <a href=\"%(avatar_change_url)s\">上傳一個</a>。"
+
+#: seahub/avatar/templates/avatar/confirm_delete.html:18
+msgid "Delete These"
+msgstr "刪除"
+
+#: seahub/avatar/templates/avatar/set_avatar.html:8
+msgid "Avatar Change"
+msgstr "頭像修改"
+
+#: seahub/avatar/templates/avatar/set_avatar.html:9
+msgid "Current avatar: "
+msgstr "當前頭像："
+
+#: seahub/avatar/templates/avatar/set_avatar.html:16
+#: seahub/contacts/templates/contacts/contact_list.html:54
+#: seahub/contacts/templates/contacts/contact_list.html:63
+#: seahub/group/templates/group/discussion_list.html:41
+#: seahub/group/templates/group/group_discuss.html:66
+#: seahub/group/templates/group/group_discuss.html:148
+#: seahub/group/templates/group/group_info.html:177
+#: seahub/group/templates/group/group_pubinfo.html:24
+#: seahub/group/templates/group/group_wiki.html:50
+#: seahub/group/templates/group/group_wiki.html:82
+#: seahub/group/templates/group/group_wiki_pages.html:54
+#: seahub/group/templates/group/groups_right_panel.html:30
+#: seahub/group/templates/group/grpmember_add_form.html:12
+#: seahub/group/templates/group/grpmember_add_form.html:19
+#: seahub/group/templates/group/new_msg_reply.html:65
+#: seahub/message/templates/message/user_msg_list.html:43
+#: seahub/notifications/templates/notifications/add_notification_form.html:11
+#: seahub/profile/templates/profile/set_profile.html:29
+#: seahub/profile/templates/profile/user_profile.html:38
+#: seahub/templates/base.html:69 seahub/templates/base.html.py:142
+#: seahub/templates/decrypt_repo_form.html:15
+#: seahub/templates/file_edit.html:97 seahub/templates/file_edit.html:263
+#: seahub/templates/repo.html:273 seahub/templates/repo.html.py:285
+#: seahub/templates/repo.html:311 seahub/templates/repo.html.py:332
+#: seahub/templates/repo.html:344 seahub/templates/repo.html.py:356
+#: seahub/templates/view_file_base.html:100
+#: seahub/templates/registration/login.html:18
+#: seahub/templates/registration/password_change_form.html:18
+#: seahub/templates/registration/password_reset_confirm.html:19
+#: seahub/templates/registration/password_reset_form.html:13
+#: seahub/templates/registration/registration_form.html:18
+#: seahub/templates/snippets/add_to_contacts_form.html:9
+#: seahub/templates/snippets/events.html:19
+#: seahub/templates/snippets/group_recommend_form.html:19
+#: seahub/templates/snippets/repo_create_form.html:26
+#: seahub/templates/snippets/repo_share_form.html:52
+#: seahub/templates/snippets/user_profile_html.html:34
+#: seahub/templates/sysadmin/sys_useradmin.html:19
+#: seahub/templates/sysadmin/userinfo.html:93
+#: seahub/templates/wiki/personal_wiki.html:36
+#: seahub/templates/wiki/personal_wiki.html:66
+#: seahub/templates/wiki/personal_wiki_pages.html:42
+msgid "Submit"
+msgstr "提交"
+
+#: seahub/avatar/templates/notification/avatar_friend_updated/notice.html:2
+#, python-format
+msgid ""
+"<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
+"href=\"%(avatar_url)s\">%(avatar)s</a>."
+msgstr ""
+
+#: seahub/avatar/templates/notification/avatar_updated/notice.html:2
+#, python-format
+msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
+msgstr ""
+
+#: seahub/avatar/templatetags/avatar_tags.py:46
+msgid "Default Avatar"
+msgstr ""
+
+#: seahub/base/accounts.py:371
+msgid "Email address"
+msgstr "郵箱地址"
+
+#: seahub/base/accounts.py:377
+msgid "This value must be of length 40"
+msgstr ""
+
+#: seahub/base/accounts.py:394
+msgid "Invalid user id."
+msgstr "無效user id"
+
+#: seahub/base/templatetags/seahub_tags.py:82
+msgid "Added"
+msgstr "添加了"
+
+#: seahub/base/templatetags/seahub_tags.py:83
+msgid "Deleted"
+msgstr "刪除了"
+
+#: seahub/base/templatetags/seahub_tags.py:84
+msgid "Removed"
+msgstr "刪除了"
+
+#: seahub/base/templatetags/seahub_tags.py:85
+msgid "Modified"
+msgstr "修改了"
+
+#: seahub/base/templatetags/seahub_tags.py:86
+msgid "Renamed"
+msgstr "重命名或移動了"
+
+#: seahub/base/templatetags/seahub_tags.py:87
+msgid "Moved"
+msgstr "移動了"
+
+#: seahub/base/templatetags/seahub_tags.py:88
+msgid "Added directory"
+msgstr "新建了目錄"
+
+#: seahub/base/templatetags/seahub_tags.py:89
+msgid "Removed directory"
+msgstr "刪除了目錄"
+
+#: seahub/base/templatetags/seahub_tags.py:90
+msgid "Renamed directory"
+msgstr "重命名了目錄"
+
+#: seahub/base/templatetags/seahub_tags.py:91
+msgid "Moved directory"
+msgstr "移動了目錄"
+
+#: seahub/base/templatetags/seahub_tags.py:106
+msgid "Reverted library to status at"
+msgstr "資料庫內容還原到"
+
+#: seahub/base/templatetags/seahub_tags.py:109
+#, python-format
+msgid "Reverted file \"%(file)s\" to status at %(time)s."
+msgstr "文件\"%(file)s\"還原到%(time)s."
+
+#: seahub/base/templatetags/seahub_tags.py:113
+msgid "Recovered deleted directory"
+msgstr "還原已刪除的目錄"
+
+#: seahub/base/templatetags/seahub_tags.py:115 seahub/views/__init__.py:698
+msgid "Changed library name or description"
+msgstr "修改了資料庫名稱或描述"
+
+#: seahub/base/templatetags/seahub_tags.py:117
+msgid "Auto merge by seafile system"
+msgstr "系統自動合並修改"
+
+#: seahub/base/templatetags/seahub_tags.py:173
+#: seahub/base/templatetags/seahub_tags.py:207
+msgid "Just now"
+msgstr "剛才"
+
+#: seahub/base/templatetags/seahub_tags.py:182
+#, python-format
+msgid "%(days)d day ago"
+msgid_plural "%(days)d days ago"
+msgstr[0] "%(days)d 天前"
+
+#: seahub/base/templatetags/seahub_tags.py:189
+#, python-format
+msgid "%(hours)d hour ago"
+msgid_plural "%(hours)d hours ago"
+msgstr[0] "%(hours)d 小時前"
+
+#: seahub/base/templatetags/seahub_tags.py:196
+#, python-format
+msgid "%(minutes)d minute ago"
+msgid_plural "%(minutes)d minutes ago"
+msgstr[0] "%(minutes)d 分鐘前"
+
+#: seahub/base/templatetags/seahub_tags.py:202
+#, python-format
+msgid "%(seconds)d second ago"
+msgid_plural "%(seconds)d seconds ago"
+msgstr[0] "%(seconds)d 秒前"
+
+#: seahub/base/templatetags/seahub_tags.py:298
+#: seahub/group/templates/group/group_info.html:89
+#: seahub/group/templates/group/group_info_for_pub.html:56
+#: seahub/share/views.py:292 seahub/share/templates/repo/share_admin.html:37
+#: seahub/share/templates/repo/share_admin.html:50
+#: seahub/share/templates/repo/user_share_list.html:42
+#: seahub/templates/pubrepo.html:34
+#: seahub/templates/snippets/my_owned_repos.html:24
+#: seahub/templates/snippets/my_owned_repos.html:66
+#: seahub/templates/snippets/repo_create_form.html:11
+#: seahub/templates/snippets/repo_share_form.html:47
+#: seahub/templates/sysadmin/userinfo.html:51
+#: seahub/templates/sysadmin/userinfo.html:76
+msgid "Read-Write"
+msgstr "可讀寫"
+
+#: seahub/base/templatetags/seahub_tags.py:300
+#: seahub/group/templates/group/group_info.html:91
+#: seahub/group/templates/group/group_info_for_pub.html:58
+#: seahub/share/views.py:294 seahub/share/templates/repo/share_admin.html:48
+#: seahub/share/templates/repo/user_share_list.html:44
+#: seahub/templates/pubrepo.html:36
+#: seahub/templates/snippets/my_owned_repos.html:68
+#: seahub/templates/snippets/repo_create_form.html:12
+#: seahub/templates/snippets/repo_share_form.html:48
+msgid "Read-Only"
+msgstr "只讀"
+
+#: seahub/contacts/models.py:56
+#: seahub/contacts/templates/contacts/contact_list.html:126
+msgid "Email is required."
+msgstr "郵箱為必填項。"
+
+#: seahub/contacts/models.py:61
+#: seahub/contacts/templates/contacts/contact_list.html:130
+msgid "You can't add yourself."
+msgstr "不能添加自己。"
+
+#: seahub/contacts/models.py:64
+msgid "It is already your contact."
+msgstr "該郵箱已在列表中。"
+
+#: seahub/contacts/views.py:67 seahub/contacts/views.py:92
+#, python-format
+msgid "Successfully added %s to contacts."
+msgstr "你已成功添加 %s 為聯系人。"
+
+#: seahub/contacts/views.py:94
+#, python-format
+msgid "Failed to add %s to contacts."
+msgstr "添加 %s 失敗。"
+
+#: seahub/contacts/views.py:119
+#, python-format
+msgid "Successfully edited %s."
+msgstr "編輯 %s 成功。"
+
+#: seahub/contacts/views.py:132
+#, python-format
+msgid "Successfully Deleted %s"
+msgstr "成功刪除 %s "
+
+#: seahub/contacts/templates/contacts/contact_list.html:4
+#: seahub/contacts/templates/contacts/contact_list.html:16
+#: seahub/templates/myhome_base.html:17
+#: seahub/templates/snippets/repo_share_form.html:9
+msgid "Contacts"
+msgstr "通訊錄"
+
+#: seahub/contacts/templates/contacts/contact_list.html:9
+#: seahub/group/templates/group/groups_left_panel.html:3
+#: seahub/share/templates/repo/share_admin.html:16
+msgid "Tips"
+msgstr "小提示"
+
+#: seahub/contacts/templates/contacts/contact_list.html:10
+msgid ""
+"When you share libraries or file links to a friend, his/her email will be "
+"added to contacts."
+msgstr ""
+"在共享和發送外鏈的時候，系統會自動記錄下你用過的通訊地址，以方便下次使用。"
+
+#: seahub/contacts/templates/contacts/contact_list.html:17
+#: seahub/contacts/templates/contacts/contact_list.html:48
+msgid "Add Contacts"
+msgstr "添加聯系人"
+
+#: seahub/contacts/templates/contacts/contact_list.html:22
+msgid "Email "
+msgstr "郵箱"
+
+#: seahub/contacts/templates/contacts/contact_list.html:23
+#: seahub/group/templates/group/group_info.html:78
+#: seahub/group/templates/group/group_info_for_pub.html:45
+#: seahub/group/templates/group/group_wiki.html:45
+#: seahub/group/templates/group/group_wiki.html:79
+#: seahub/group/templates/group/group_wiki_pages.html:51
+#: seahub/share/templates/repo/share_admin.html:29
+#: seahub/share/templates/repo/user_share_list.html:33
+#: seahub/templates/pubrepo.html:24 seahub/templates/repo.html:113
+#: seahub/templates/repo.html.py:262
+#: seahub/templates/repo_history_view.html:52
+#: seahub/templates/repo_recycle_view.html:53
+#: seahub/templates/view_shared_dir.html:32
+#: seahub/templates/snippets/my_owned_repos.html:17
+#: seahub/templates/snippets/my_owned_repos.html:55
+#: seahub/templates/snippets/repo_create_form.html:4
+#: seahub/templates/sysadmin/sys_group_admin.html:12
+#: seahub/templates/sysadmin/sys_org_admin.html:11
+#: seahub/templates/sysadmin/sys_repo_admin.html:10
+#: seahub/templates/sysadmin/userinfo.html:44
+#: seahub/templates/sysadmin/userinfo.html:69
+#: seahub/templates/wiki/personal_wiki.html:31
+#: seahub/templates/wiki/personal_wiki.html:63
+#: seahub/templates/wiki/personal_wiki_pages.html:39
+msgid "Name"
+msgstr "名稱"
+
+#: seahub/contacts/templates/contacts/contact_list.html:24
+msgid "Note"
+msgstr "備註"
+
+#: seahub/contacts/templates/contacts/contact_list.html:25
+#: seahub/group/templates/group/group_info.html:82
+#: seahub/group/templates/group/group_info_for_pub.html:49
+#: seahub/group/templates/group/group_manage.html:39
+#: seahub/group/templates/group/group_manage.html:59
+#: seahub/group/templates/group/group_manage.html:83
+#: seahub/notifications/templates/notifications/notification_list.html:7
+#: seahub/notifications/templates/notifications/notification_list.html:20
+#: seahub/share/templates/repo/share_admin.html:33
+#: seahub/share/templates/repo/share_admin.html:87
+#: seahub/share/templates/repo/user_share_list.html:36
+#: seahub/templates/client_mgmt.html:30
+#: seahub/templates/file_revisions.html:28 seahub/templates/pubrepo.html:28
+#: seahub/templates/repo.html:116 seahub/templates/repo_recycle_view.html:56
+#: seahub/templates/repo_view_snapshot.html:18
+#: seahub/templates/view_shared_dir.html:34
+#: seahub/templates/snippets/my_owned_repos.html:20
+#: seahub/templates/snippets/my_owned_repos.html:59
+#: seahub/templates/sysadmin/sys_group_admin.html:15
+#: seahub/templates/sysadmin/sys_org_admin.html:15
+#: seahub/templates/sysadmin/sys_repo_admin.html:14
+#: seahub/templates/sysadmin/sys_useradmin.html:28
+#: seahub/templates/sysadmin/userinfo.html:46
+msgid "Operations"
+msgstr "操作"
+
+#: seahub/contacts/templates/contacts/contact_list.html:34
+#: seahub/share/templates/repo/share_admin.html:43
+#: seahub/templates/file_edit.html:80
+#: seahub/templates/view_file_markdown.html:13
+#: seahub/templates/view_file_sf.html:8
+#: seahub/templates/view_file_text.html:24
+msgid "Edit"
+msgstr "編輯"
+
+#: seahub/contacts/templates/contacts/contact_list.html:35
+#: seahub/group/templates/group/group_discuss.html:83
+#: seahub/group/templates/group/group_manage.html:68
+#: seahub/group/templates/group/group_manage.html:92
+#: seahub/notifications/templates/notifications/notification_list.html:32
+#: seahub/templates/repo.html:37 seahub/templates/repo.html.py:147
+#: seahub/templates/repo.html:195 seahub/templates/view_file_base.html:36
+#: seahub/templates/snippets/my_owned_repos.html:35
+#: seahub/templates/sysadmin/sys_group_admin.html:22
+#: seahub/templates/sysadmin/sys_org_admin.html:23
+#: seahub/templates/sysadmin/sys_repo_admin.html:22
+#: seahub/templates/sysadmin/sys_useradmin.html:49
+#: seahub/templates/sysadmin/userinfo.html:55
+msgid "Delete"
+msgstr "刪除"
+
+#: seahub/contacts/templates/contacts/contact_list.html:42
+msgid "You don't have any contacts"
+msgstr "你還沒有聯系人"
+
+#: seahub/contacts/templates/contacts/contact_list.html:43
+msgid ""
+"Add your contacts so you can quickly share libraries and send file shared "
+"link."
+msgstr "聯系人用來在共享資料庫和發送文件外鏈時的快速補全。"
+
+#: seahub/contacts/templates/contacts/contact_list.html:49
+#: seahub/contacts/templates/contacts/contact_list.html:58
+#: seahub/group/templates/group/group_manage.html:58
+#: seahub/group/templates/group/group_manage.html:82
+#: seahub/message/templates/message/all_msg_list.html:22
+#: seahub/templates/registration/login.html:8
+#: seahub/templates/registration/registration_form.html:11
+#: seahub/templates/snippets/add_to_contacts_form.html:3
+#: seahub/templates/snippets/user_profile_html.html:28
+#: seahub/templates/sysadmin/sys_useradmin.html:12
+#: seahub/templates/sysadmin/sys_useradmin.html:24
+msgid "Email"
+msgstr "郵箱"
+
+#: seahub/contacts/templates/contacts/contact_list.html:51
+#: seahub/contacts/templates/contacts/contact_list.html:60
+#: seahub/templates/snippets/add_to_contacts_form.html:5
+#: seahub/templates/snippets/user_profile_html.html:30
+msgid "Name(optional)"
+msgstr "名字(可選)"
+
+#: seahub/contacts/templates/contacts/contact_list.html:52
+#: seahub/contacts/templates/contacts/contact_list.html:61
+#: seahub/templates/snippets/add_to_contacts_form.html:7
+#: seahub/templates/snippets/user_profile_html.html:32
+msgid "Note(optional)"
+msgstr "備註(可選)"
+
+#: seahub/contacts/templates/contacts/contact_list.html:57
+msgid "Edit Contact"
+msgstr "編輯聯系人"
+
+#: seahub/contacts/templates/contacts/contact_list.html:108
+#: seahub/contacts/templates/contacts/contact_list.html:160
+#: seahub/group/templates/group/msg_js.html:155
+#: seahub/templates/file_edit.html:515 seahub/templates/repo.html:429
+#: seahub/templates/repo.html.py:666 seahub/templates/repo.html:702
+#: seahub/templates/repo.html.py:845 seahub/templates/view_file_base.html:167
+#: seahub/templates/snippets/bottom_bar.html:99
+#: seahub/templates/snippets/events_js.html:55
+#: seahub/templates/snippets/office_convert_js.html:117
+#: seahub/templates/snippets/office_convert_js.html:142
+#: seahub/templates/snippets/repo_decrypt_js.html:35
+#: seahub/templates/snippets/shared_link_js.html:40
+#: seahub/templates/snippets/shared_link_js.html:58
+#: seahub/templates/snippets/shared_link_js.html:120
+#: seahub/templates/sysadmin/sys_useradmin.html:159
+msgid "Failed. Please check the network."
+msgstr "操作失敗。請檢查網絡是否已連接。"
+
+#: seahub/contacts/templates/contacts/contact_list.html:116
+msgid "Delete Contact"
+msgstr "刪除聯系人"
+
+#: seahub/contacts/templates/contacts/contact_list.html:116
+#: seahub/notifications/templates/notifications/notification_list.html:72
+#: seahub/templates/snippets/myhome_extra_script.html:52
+#: seahub/templates/sysadmin/sys_group_admin.html:63
+#: seahub/templates/sysadmin/sys_org_admin.html:63
+#: seahub/templates/sysadmin/sys_repo_admin.html:63
+#: seahub/templates/sysadmin/sys_useradmin.html:96
+#: seahub/templates/sysadmin/userinfo.html:141
+#, python-format
+msgid "Are you sure you want to delete %s ?"
+msgstr "確定要刪除 %s 嗎？"
+
+#: seahub/group/error_msg.py:7
+msgid "The group has already created"
+msgstr "名稱重復，請重新輸入。"
+
+#: seahub/group/error_msg.py:8
+msgid "Failed to create group"
+msgstr "創建失敗"
+
+#: seahub/group/error_msg.py:11
+msgid "The group has already created in this org."
+msgstr "群組在該團體內已經存在。"
+
+#: seahub/group/error_msg.py:12
+msgid "Failed to create org group."
+msgstr "創建團體群組失敗。"
+
+#: seahub/group/error_msg.py:15
+msgid "Permission error: only group staff can add member"
+msgstr "只有群組管理員可以添加成員。"
+
+#: seahub/group/error_msg.py:16 seahub/group/error_msg.py:22
+msgid "Group does not exist"
+msgstr "群組不存在。"
+
+#: seahub/group/error_msg.py:17
+msgid "Group is full"
+msgstr "群組已滿，無法再添加成員。"
+
+#: seahub/group/error_msg.py:18
+msgid "Failed to add member to group"
+msgstr "添加成員失敗。"
+
+#: seahub/group/error_msg.py:21
+msgid "Only group staff can remove member"
+msgstr "只有群組管理員可以刪除成員。"
+
+#: seahub/group/error_msg.py:23
+msgid "Can not remove myself"
+msgstr "無法刪除自己"
+
+#: seahub/group/forms.py:30 seahub/templates/snippets/group_add_js.html:8
+msgid "Group name can't be empty"
+msgstr "群組名稱不能為空"
+
+#: seahub/group/forms.py:31
+msgid "Group name is too long (maximum is 255 characters)"
+msgstr "名稱太長（不超過255個漢字）"
+
+#: seahub/group/forms.py:36
+msgid "Group name can only contain letters, numbers or underline"
+msgstr "群組名稱只能包含中英文字符，數字及下劃線。"
+
+#: seahub/group/forms.py:46
+msgid "Verification message can't be empty"
+msgstr "驗證信息不能為空"
+
+#: seahub/group/forms.py:47
+msgid "Verification message is too long (maximun is 255 characters)"
+msgstr "驗證信息太長，不超過255個字符"
+
+#: seahub/group/forms.py:67 seahub/wiki/forms.py:27
+#, python-format
+msgid "\"%s\" is not a valid name"
+msgstr "名稱 %s 含有無效字符"
+
+#: seahub/group/views.py:138
+#, python-format
+msgid ""
+"You can only create %d groups.<a href=\"http://seafile.com/\">Upgrade "
+"account.</a>"
+msgstr "你只能創建%d個群組。<a href=\"http://seafile.com/\">升級帳號。</a>"
+
+#: seahub/group/views.py:153
+msgid "There is already a group with that name."
+msgstr "已有同名群組"
+
+#: seahub/group/views.py:251 seahub/group/views.py:273
+msgid "Only administrators can make the group public"
+msgstr "只有管理員才能將群組公開。"
+
+#: seahub/group/views.py:319
+msgid "The message doesn't exist"
+msgstr "該留言不存在"
+
+#: seahub/group/views.py:329
+msgid "You don't have the permission."
+msgstr "你的權限不夠。"
+
+#: seahub/group/views.py:538 seahub/group/views.py:663
+#, python-format
+msgid ""
+"You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
+"account.</a>"
+msgstr "你只能邀請%d個成員。<a href=\"http://seafile.com/\">升級帳號。</a>"
+
+#: seahub/group/views.py:557
+msgid "Your friend added you to a group at Seafile."
+msgstr "你的朋友在 Seafile 上把你加入到了一個群組中。"
+
+#: seahub/group/views.py:577
+#, python-format
+msgid "Failed to add, %s is not registerd."
+msgstr "添加失敗，%s 未註冊。"
+
+#: seahub/group/views.py:591
+#, python-format
+msgid "Successfully added. An email has been sent."
+msgid_plural "Successfully added. %(count)s emails have been sent."
+msgstr[0] "添加群組成員成功，%(count)s 封邀請郵件已發送。"
+
+#: seahub/group/views.py:599
+msgid "Successfully added."
+msgstr "添加成功。"
+
+#: seahub/group/views.py:644
+#, python-format
+msgid "Failed to add, %s is not registrated."
+msgstr "添加失敗，%s 還沒註冊。"
+
+#: seahub/group/views.py:676 seahub/group/views.py:689
+#: seahub/group/views.py:716
+msgid "Operation succeeded."
+msgstr "操作成功"
+
+#: seahub/group/views.py:718
+#, python-format
+msgid "Failed：%s"
+msgstr "刪除失敗：%s"
+
+#: seahub/group/views.py:743
+msgid "Failed to unshare: the group doesn't exist."
+msgstr "取消共享失敗，該群組不存在"
+
+#: seahub/group/views.py:748
+msgid ""
+"Operation failed: only administrators and the owner of the library can "
+"unshare it."
+msgstr "操作失敗：只有管理員和資料庫擁有者才能取消共享。"
+
+#: seahub/group/views.py:751
+msgid "Failed to unshare: internal error."
+msgstr "取消共享失敗：內部錯誤。"
+
+#: seahub/group/views.py:780
+msgid "Error: wrong group id"
+msgstr "推薦失敗：群組id不正確"
+
+#: seahub/group/views.py:785
+msgid "Error: the group does not exist."
+msgstr "錯誤：該群組不存在。"
+
+#: seahub/group/views.py:817
+#, python-format
+msgid "Successfully posted to %(groups)s."
+msgstr "成功發送到 %(groups)s。"
+
+#: seahub/group/views.py:820
+#, python-format
+msgid "Error: you are not in group %s."
+msgstr "推薦到 %s 失敗：你不在該群組中。"
+
+#: seahub/group/views.py:832
+msgid "Error: the library does not exist."
+msgstr "錯誤：該資料庫不存在。"
+
+#: seahub/group/views.py:835
+msgid "Error: no path."
+msgstr "錯誤：路徑不存在。"
+
+#: seahub/group/views.py:873
+msgid "Failed to create: the group does not exist."
+msgstr "創建失敗：該群組不存在。"
+
+#: seahub/group/views.py:877
+msgid "Failed to create: you are not in the group."
+msgstr "創建失敗：你不在該群組中。"
+
+#: seahub/group/views.py:899 seahub/group/views.py:922
+#: seahub/group/views.py:1253 seahub/views/wiki.py:124
+msgid "Failed to create"
+msgstr "創建失敗"
+
+#: seahub/group/views.py:913 seahub/group/views.py:935
+#: seahub/group/views.py:1262
+msgid "Failed to create: internal error."
+msgstr "創建團體群組失敗。"
+
+#: seahub/group/views.py:962
+msgid "You are already in the group."
+msgstr "你已在該群組中。"
+
+#: seahub/group/views.py:981
+msgid "apply to join the group"
+msgstr "申請加入群組"
+
+#: seahub/group/views.py:983
+msgid "Sent successfully, the group admin will handle it."
+msgstr "發送成功，請等候管理員處理。"
+
+#: seahub/group/views.py:987
+msgid "Failed to send. You can try it again later."
+msgstr "發送失敗, 請稍侯再試。"
+
+#: seahub/group/views.py:1137 seahub/views/__init__.py:366
+#: seahub/views/__init__.py:1709 seahub/views/__init__.py:1838
+#: seahub/views/file.py:263
+msgid "File does not exist"
+msgstr "文件不存在"
+
+#: seahub/group/views.py:1177 seahub/group/views.py:1300
+#: seahub/views/wiki.py:53 seahub/views/wiki.py:158
+msgid "Failed to create wiki page. Please retry later."
+msgstr "創建維基頁面失敗，請稍後再試"
+
+#: seahub/group/views.py:1213 seahub/views/__init__.py:360
+#: seahub/views/wiki.py:87
+msgid "Internal Server Error"
+msgstr "服務器內部錯誤"
+
+#: seahub/group/views.py:1215 seahub/views/wiki.py:89
+msgid "Wiki does not exists."
+msgstr "Wiki不存在"
+
+#: seahub/group/views.py:1269 seahub/views/wiki.py:131
+msgid "Failed to create home page. Please retry later"
+msgstr "創建首頁失敗，請稍後再試"
+
+#: seahub/group/views.py:1290 seahub/group/views.py:1316
+#: seahub/group/views.py:1334 seahub/views/wiki.py:148
+#: seahub/views/wiki.py:171 seahub/views/wiki.py:186
+msgid "Wiki is not found."
+msgstr "Wiki未找到。"
+
+#: seahub/group/views.py:1297 seahub/views/wiki.py:155
+#, python-format
+msgid "Page \"%s\" already exists."
+msgstr "頁面 \"%s\" 已存在。"
+
+#: seahub/group/templates/group/add_member_email.html:2
+#, python-format
+msgid ""
+"%(email)s invite you to join group %(group.group_name)s. Please go to the "
+"following page and sign up:"
+msgstr "%(email)s 邀請你加入到群組 %(group.group_name)s。請點擊以下鏈接註冊："
+
+#: seahub/group/templates/group/add_member_email.html:5
+#: seahub/group/templates/group/group_join_email.html:6
+#: seahub/templates/shared_link_email.html:7
+#: seahub/templates/registration/password_reset_email.html:10
+#: seahub/templates/sysadmin/user_add_email.html:14
+#: seahub/templates/sysadmin/user_reset_email.html:6
+msgid "Thanks for using our site!"
+msgstr "感謝使用！"
+
+#: seahub/group/templates/group/add_member_email.html:7
+#: seahub/group/templates/group/group_join_email.html:8
+#: seahub/templates/shared_link_email.html:9
+#: seahub/templates/registration/password_reset_email.html:12
+#: seahub/templates/sysadmin/user_add_email.html:16
+#: seahub/templates/sysadmin/user_reset_email.html:8
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "%(site_name)s 團隊"
+
+#: seahub/group/templates/group/discussion_list.html:17
+#: seahub/group/templates/group/group_discuss.html:121
+#: seahub/group/templates/group/new_msg_reply.html:45
+#, python-format
+msgid "%(amount)s replies"
+msgstr "%(amount)s 個回復"
+
+#: seahub/group/templates/group/discussion_list.html:18
+#: seahub/group/templates/group/group_discuss.html:122
+#: seahub/group/templates/group/new_msg_reply.html:46
+msgid "Hide replies"
+msgstr "收起回復"
+
+#: seahub/group/templates/group/discussion_list.html:31
+#: seahub/group/templates/group/group_discuss.html:136
+#: seahub/group/templates/group/group_reply_list.html:11
+#: seahub/group/templates/group/new_msg_reply.html:56
+msgid "Reply"
+msgstr "回復"
+
+#: seahub/group/templates/group/discussion_list.html:39
+#: seahub/group/templates/group/group_discuss.html:146
+#: seahub/group/templates/group/new_msg_reply.html:63
+msgid "Add a reply..."
+msgstr "添加回復..."
+
+#: seahub/group/templates/group/discussion_list.html:40
+#: seahub/group/templates/group/group_discuss.html:147
+#: seahub/group/templates/group/new_msg_reply.html:64
+msgid "It can not be blank and should be no more than 150 characters."
+msgstr "輸入不能為空且應少於150個字符。"
+
+#: seahub/group/templates/group/discussion_list.html:42
+#: seahub/group/templates/group/group_discuss.html:67
+#: seahub/group/templates/group/group_discuss.html:149
+#: seahub/group/templates/group/group_info.html:178
+#: seahub/group/templates/group/new_msg_reply.html:66
+#: seahub/message/templates/message/user_msg_list.html:44
+#: seahub/templates/base.html:70 seahub/templates/file_edit.html:98
+#: seahub/templates/file_edit.html:264 seahub/templates/repo.html:231
+#: seahub/templates/repo.html.py:253 seahub/templates/repo.html:274
+#: seahub/templates/repo.html.py:286 seahub/templates/repo.html:312
+#: seahub/templates/repo.html.py:333 seahub/templates/repo.html:345
+#: seahub/templates/snippets/events.html:20
+msgid "Cancel"
+msgstr "取消"
+
+#: seahub/group/templates/group/group_discuss.html:15
+#: seahub/group/templates/group/group_info.html:16
+#: seahub/group/templates/group/group_info.html:68
+#: seahub/group/templates/group/group_info_for_pub.html:16
+#: seahub/group/templates/group/group_manage.html:14
+#: seahub/group/templates/group/group_members.html:16
+#: seahub/group/templates/group/group_wiki.html:16
+#: seahub/group/templates/group/group_wiki_pages.html:15
+#: seahub/templates/admin_base.html:8 seahub/templates/client_mgmt.html:13
+#: seahub/templates/myhome.html:13 seahub/templates/org_admin_base.html:11
+#: seahub/templates/pubgrp.html:14 seahub/templates/pubrepo.html:15
+#: seahub/templates/pubuser.html:14
+#: seahub/templates/wiki/personal_wiki.html:13
+#: seahub/templates/wiki/personal_wiki_pages.html:13
+msgid "Libraries"
+msgstr "資料庫"
+
+#: seahub/group/templates/group/group_discuss.html:16
+#: seahub/group/templates/group/group_info.html:17
+#: seahub/group/templates/group/group_info_for_pub.html:17
+#: seahub/group/templates/group/group_manage.html:15
+#: seahub/group/templates/group/group_members.html:17
+#: seahub/group/templates/group/group_wiki.html:17
+#: seahub/group/templates/group/group_wiki_pages.html:16
+msgid "Discussion"
+msgstr "討論"
+
+#: seahub/group/templates/group/group_discuss.html:17
+#: seahub/group/templates/group/group_info.html:18
+#: seahub/group/templates/group/group_info_for_pub.html:18
+#: seahub/group/templates/group/group_manage.html:16
+#: seahub/group/templates/group/group_members.html:18
+#: seahub/group/templates/group/group_wiki.html:18
+#: seahub/group/templates/group/group_wiki_pages.html:17
+msgid "Wiki"
+msgstr "維基"
+
+#: seahub/group/templates/group/group_discuss.html:19
+#: seahub/group/templates/group/group_info.html:20
+#: seahub/group/templates/group/group_info_for_pub.html:20
+#: seahub/group/templates/group/group_manage.html:18
+#: seahub/group/templates/group/group_members.html:20
+#: seahub/group/templates/group/group_wiki.html:20
+#: seahub/group/templates/group/group_wiki_pages.html:19
+msgid "Files"
+msgstr "文件"
+
+#: seahub/group/templates/group/group_discuss.html:22
+#: seahub/group/templates/group/group_discuss.html:33
+#: seahub/group/templates/group/group_info.html:22
+#: seahub/group/templates/group/group_info.html:46
+#: seahub/group/templates/group/group_manage.html:20
+#: seahub/group/templates/group/group_manage.html:52
+#: seahub/group/templates/group/group_members.html:22
+#: seahub/group/templates/group/group_wiki.html:23
+#: seahub/group/templates/group/group_wiki_pages.html:22
+msgid "Members"
+msgstr "成員"
+
+#: seahub/group/templates/group/group_discuss.html:25
+#: seahub/group/templates/group/group_info.html:24
+#: seahub/group/templates/group/group_manage.html:21
+#: seahub/group/templates/group/group_members.html:24
+#: seahub/group/templates/group/group_wiki.html:26
+#: seahub/group/templates/group/group_wiki_pages.html:25
+msgid "Admin"
+msgstr "管理"
+
+#: seahub/group/templates/group/group_discuss.html:48
+msgid "No members"
+msgstr "暫無成員"
+
+#: seahub/group/templates/group/group_discuss.html:62
+msgid "Add a discussion..."
+msgstr "添加一個討論..."
+
+#: seahub/group/templates/group/group_discuss.html:71
+#: seahub/message/templates/message/user_msg_list.html:110
+msgid "After login, you can post discussions and add replies."
+msgstr "登錄之後，你就可以發起討論和回復。"
+
+#: seahub/group/templates/group/group_discuss.html:95
+#: seahub/group/templates/group/group_discuss.html:111
+#: seahub/group/templates/group/new_msg_reply.html:26
+#: seahub/group/templates/group/new_msg_reply.html:35
+#: seahub/templates/repo.html:168 seahub/templates/repo.html.py:591
+#: seahub/templates/repo.html:615 seahub/templates/repo_history_view.html:66
+#: seahub/templates/repo_recycle_view.html:78
+#: seahub/templates/view_shared_dir.html:57
+#: seahub/templates/snippets/group_recommend_form.html:28
+msgid "File"
+msgstr "文件"
+
+#: seahub/group/templates/group/group_discuss.html:105
+#: seahub/group/templates/group/new_msg_reply.html:29
+#: seahub/templates/pubrepo.html:34 seahub/templates/pubrepo.html.py:36
+#: seahub/templates/repo.html:122 seahub/templates/view_shared_dir.html:39
+#: seahub/templates/snippets/group_recommend_form.html:22
+msgid "Directory icon"
+msgstr "目錄圖標"
+
+#: seahub/group/templates/group/group_discuss.html:162
+#: seahub/message/templates/message/user_msg_list.html:90
+#: seahub/templates/pubuser.html:38 seahub/templates/repo_history.html:52
+#: seahub/templates/repo_view_snapshot.html:50
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+#: seahub/templates/sysadmin/sys_group_admin.html:29
+#: seahub/templates/sysadmin/sys_repo_admin.html:29
+#: seahub/templates/sysadmin/sys_useradmin.html:64
+msgid "Previous"
+msgstr "前一頁"
+
+#: seahub/group/templates/group/group_discuss.html:172
+#: seahub/message/templates/message/user_msg_list.html:100
+#: seahub/templates/pubuser.html:48 seahub/templates/repo_history.html:55
+#: seahub/templates/repo_view_snapshot.html:53
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+#: seahub/templates/sysadmin/sys_group_admin.html:32
+#: seahub/templates/sysadmin/sys_repo_admin.html:32
+#: seahub/templates/sysadmin/sys_useradmin.html:67
+msgid "Next"
+msgstr "下一頁"
+
+#: seahub/group/templates/group/group_discuss.html:178
+#: seahub/message/templates/message/user_msg_list.html:106
+msgid "↑Top"
+msgstr ""
+
+#: seahub/group/templates/group/group_discuss.html:229
+msgid "Really want to delete this discussion?"
+msgstr "確定要刪除這條討論？"
+
+#: seahub/group/templates/group/group_discuss.html:229
+#: seahub/templates/base.html:173
+msgid "Yes"
+msgstr "確定"
+
+#: seahub/group/templates/group/group_discuss.html:229
+#: seahub/templates/base.html:174
+msgid "No"
+msgstr "取消"
+
+#: seahub/group/templates/group/group_discuss.html:244
+msgid "Successfully deleted"
+msgstr "刪除成功。"
+
+#: seahub/group/templates/group/group_discuss.html:246
+msgid "Failed to delete: "
+msgstr "刪除失敗："
+
+#: seahub/group/templates/group/group_discuss.html:250
+msgid "Failed."
+msgstr "操作失敗"
+
+#: seahub/group/templates/group/group_info.html:33
+#: seahub/group/templates/group/group_info_for_pub.html:29
+#: seahub/message/templates/message/user_msg_list.html:8
+#: seahub/share/templates/repo/user_share_list.html:8
+#: seahub/templates/org_admin_base.html:8
+msgid "Basic Info"
+msgstr "基本信息"
+
+#: seahub/group/templates/group/group_info.html:33
+#: seahub/group/templates/group/group_info_for_pub.html:29
+msgid "This group is public."
+msgstr "當前群組為公開群組。"
+
+#: seahub/group/templates/group/group_info.html:37
+#: seahub/group/templates/group/group_info_for_pub.html:33
+msgid "created at"
+msgstr "創建於"
+
+#: seahub/group/templates/group/group_info.html:39
+#: seahub/group/templates/group/group_info.html:191
+msgid "Quit Group"
+msgstr "退出群組"
+
+#: seahub/group/templates/group/group_info.html:69
+msgid "Recent Changes"
+msgstr "最近修改"
+
+#: seahub/group/templates/group/group_info.html:71
+#: seahub/templates/pubrepo.html:13
+#: seahub/templates/snippets/my_owned_repos.html:10
+#: seahub/templates/snippets/repo_create_form.html:3
+msgid "New Library"
+msgstr "新建資料庫"
+
+#: seahub/group/templates/group/group_info.html:79
+#: seahub/group/templates/group/group_info.html:128
+#: seahub/group/templates/group/group_info_for_pub.html:46
+#: seahub/group/templates/group/group_wiki.html:47
+#: seahub/share/templates/repo/share_admin.html:32
+#: seahub/share/templates/repo/user_share_list.html:34
+#: seahub/templates/pubrepo.html:25 seahub/templates/repo.html:264
+#: seahub/templates/repo_history.html:23
+#: seahub/templates/snippets/my_owned_repos.html:18
+#: seahub/templates/snippets/my_owned_repos.html:56
+#: seahub/templates/snippets/repo_create_form.html:6
+#: seahub/templates/sysadmin/sys_repo_admin.html:13
+#: seahub/templates/sysadmin/userinfo.html:45
+#: seahub/templates/sysadmin/userinfo.html:71
+#: seahub/templates/wiki/personal_wiki.html:33
+msgid "Description"
+msgstr "描述"
+
+#: seahub/group/templates/group/group_info.html:80
+#: seahub/group/templates/group/group_info_for_pub.html:47
+#: seahub/share/templates/repo/user_share_list.html:35
+#: seahub/templates/pubrepo.html:26 seahub/templates/repo.html:115
+#: seahub/templates/snippets/my_owned_repos.html:19
+#: seahub/templates/snippets/my_owned_repos.html:57
+#: seahub/templates/snippets/my_owned_repos.html:102
+msgid "Last Update"
+msgstr "更新時間"
+
+#: seahub/group/templates/group/group_info.html:81
+#: seahub/group/templates/group/group_info_for_pub.html:48
+#: seahub/templates/snippets/my_owned_repos.html:58
+msgid "Shared By"
+msgstr "共享來源"
+
+#: seahub/group/templates/group/group_info.html:89
+#: seahub/group/templates/group/group_info.html:91
+#: seahub/group/templates/group/group_info_for_pub.html:56
+#: seahub/group/templates/group/group_info_for_pub.html:58
+#: seahub/share/templates/repo/share_admin.html:37
+#: seahub/share/templates/repo/user_share_list.html:42
+#: seahub/share/templates/repo/user_share_list.html:44
+#: seahub/templates/snippets/my_owned_repos.html:24
+#: seahub/templates/snippets/my_owned_repos.html:66
+#: seahub/templates/snippets/my_owned_repos.html:68
+#: seahub/templates/sysadmin/userinfo.html:51
+msgid "directory icon"
+msgstr "目錄圖標"
+
+#: seahub/group/templates/group/group_info.html:105
+#: seahub/share/templates/repo/user_share_list.html:55
+#: seahub/templates/pubrepo.html:44
+#: seahub/templates/snippets/my_owned_repos.html:33
+#: seahub/templates/snippets/my_owned_repos.html:80
+msgid "Download and Sync"
+msgstr "下載和同步"
+
+#: seahub/group/templates/group/group_info.html:107
+#: seahub/share/templates/repo/share_admin.html:57
+#: seahub/share/templates/repo/share_admin.html:60
+#: seahub/share/templates/repo/share_admin.html:64
+#: seahub/share/templates/repo/share_admin.html:66
+msgid "Unshare"
+msgstr "取消共享"
+
+#: seahub/group/templates/group/group_info.html:115
+msgid "No library is sharing to this group"
+msgstr "還沒有資料庫共享到當前群組"
+
+#: seahub/group/templates/group/group_info.html:116
+msgid ""
+"You can share libraries by clicking the \"New Library\" button above or the "
+"\"Share\" icon on your libraries list."
+msgstr ""
+"你可以通過點擊上方的“新建資料庫”按鈕或資料庫列表裏的“共享”圖標來共享資料庫。"
+
+#: seahub/group/templates/group/group_info.html:117
+msgid ""
+"Libraries shared as writable can be downloaded and synced by other group "
+"members. Read only libraries can only be downloaded, updates by others will "
+"not be uploaded."
+msgstr ""
+"以可讀寫方式共享的資料庫可以被其他群組成員下載和同步，而以只讀方式共享的資料"
+"庫只能被下載，其他人的修改將不會被上傳。"
+
+#: seahub/group/templates/group/group_info.html:127
+#: seahub/group/templates/group/group_info.html:171
+#: seahub/share/templates/repo/share_admin.html:85
+#: seahub/templates/client_mgmt.html:26 seahub/templates/file_edit.html:258
+#: seahub/templates/snippets/events.html:13
+#: seahub/templates/snippets/my_owned_repos.html:101
+msgid "Library"
+msgstr "資料庫"
+
+#: seahub/group/templates/group/group_info.html:129
+msgid "Modified at"
+msgstr "修改於"
+
+#: seahub/group/templates/group/group_info.html:130
+#: seahub/templates/repo_history.html:22
+msgid "Modifier"
+msgstr "修改者"
+
+#: seahub/group/templates/group/group_info.html:150
+#: seahub/group/templates/group/group_info.html:152
+#: seahub/templates/repo.html:56 seahub/templates/repo.html.py:295
+#: seahub/templates/repo.html:297 seahub/templates/repo.html.py:301
+#: seahub/templates/repo.html:303 seahub/templates/repo_history.html:44
+#: seahub/templates/repo_view_snapshot.html:38
+#: seahub/templates/snippets/events_body.html:18
+#: seahub/templates/snippets/events_body.html:20
+msgid "Details"
+msgstr "詳情"
+
+#: seahub/group/templates/group/group_info.html:159
+#: seahub/group/templates/group/new_msg_reply.html:74
+#: seahub/templates/pubuser.html:53 seahub/templates/repo_history.html:35
+#: seahub/templates/repo_view_snapshot.html:29
+msgid "None"
+msgstr "無"
+
+#: seahub/group/templates/group/group_info.html:164
+#: seahub/templates/client_mgmt.html:39 seahub/templates/client_mgmt.html:46
+#: seahub/templates/client_mgmt.html:53 seahub/templates/client_mgmt.html:56
+#: seahub/templates/file_revisions.html:45 seahub/templates/repo.html:72
+#: seahub/templates/repo_history.html:38
+#: seahub/templates/repo_history_view.html:21
+#: seahub/templates/repo_view_snapshot.html:32
+msgid "Unknown"
+msgstr "未知"
+
+#: seahub/group/templates/group/group_info.html:171
+#: seahub/templates/file_edit.html:258
+#: seahub/templates/snippets/events.html:13
+msgid "is encrypted"
+msgstr "已加密"
+
+#: seahub/group/templates/group/group_info.html:173
+#: seahub/templates/file_edit.html:259
+#: seahub/templates/snippets/events.html:15
+msgid "Password："
+msgstr "密碼："
+
+#: seahub/group/templates/group/group_info.html:175
+#: seahub/templates/file_edit.html:261
+#: seahub/templates/snippets/events.html:17
+msgid "The password will be kept in the server for only 1 hour."
+msgstr "密碼將在服務器上保存一小時。"
+
+#: seahub/group/templates/group/group_info.html:192
+msgid "Are you sure you want to quit this group?"
+msgstr "確定要退出該群組嗎？"
+
+#: seahub/group/templates/group/group_info.html:195
+msgid "Unshare Library"
+msgstr "取消共享資料庫"
+
+#: seahub/group/templates/group/group_info.html:196
+#, python-format
+msgid "Are you sure you want to unshare %s ?"
+msgstr "確定要取消共享 %s 嗎？"
+
+#: seahub/group/templates/group/group_info_for_pub.html:78
+msgid "No public library is in this group"
+msgstr "當前群組沒有公開的資料庫"
+
+#: seahub/group/templates/group/group_info_for_pub.html:79
+msgid "A library can be made public in its settings page.(Not implemented yet)"
+msgstr "一個資料庫可以在設置頁面設為公開。（未實現）"
+
+#: seahub/group/templates/group/group_join_email.html:2
+#, python-format
+msgid ""
+"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
+"message: "
+msgstr "%(user)s 申請加入到群組 “%(group_name)s”, 驗證信息如下："
+
+#: seahub/group/templates/group/group_manage.html:28
+msgid "Group Avatar"
+msgstr "群組頭像"
+
+#: seahub/group/templates/group/group_manage.html:32
+#: seahub/profile/templates/profile/set_profile.html:12
+msgid "Change"
+msgstr "修改"
+
+#: seahub/group/templates/group/group_manage.html:41
+msgid "Dismiss"
+msgstr "解散"
+
+#: seahub/group/templates/group/group_manage.html:43
+msgid "Revoke Public"
+msgstr "取消公開"
+
+#: seahub/group/templates/group/group_manage.html:45
+msgid "Make Public"
+msgstr "設為公開"
+
+#: seahub/group/templates/group/group_manage.html:53
+msgid "Add Members"
+msgstr "添加成員"
+
+#: seahub/group/templates/group/group_manage.html:76
+msgid "Administrators"
+msgstr "管理員"
+
+#: seahub/group/templates/group/group_manage.html:77
+msgid "Add Administrators"
+msgstr "添加管理員"
+
+#: seahub/group/templates/group/group_manage.html:109
+msgid "Dismiss Group"
+msgstr "解散群組"
+
+#: seahub/group/templates/group/group_manage.html:110
+msgid "Really want to dismiss this group?"
+msgstr "確定要解散該群組嗎？"
+
+#: seahub/group/templates/group/group_manage.html:113
+msgid "Delete Member"
+msgstr "刪除成員"
+
+#: seahub/group/templates/group/group_manage.html:114
+#, python-format
+msgid "Really want to delete %s ?"
+msgstr "確定要刪除 %s 嗎？"
+
+#: seahub/group/templates/group/group_members.html:44
+#: seahub/templates/pubuser.html:29
+msgid "Add to Contacts"
+msgstr "加到通訊錄"
+
+#: seahub/group/templates/group/group_pubinfo.html:9
+msgid "Join Group"
+msgstr "申請加入"
+
+#: seahub/group/templates/group/group_pubinfo.html:13
+msgid "Name: "
+msgstr "名字："
+
+#: seahub/group/templates/group/group_pubinfo.html:14
+#: seahub/group/templates/group/groups_right_panel.html:13
+#: seahub/templates/pubgrp.html:26
+msgid "Creator: "
+msgstr "創建者："
+
+#: seahub/group/templates/group/group_pubinfo.html:15
+msgid "Create at: "
+msgstr "創建於："
+
+#: seahub/group/templates/group/group_pubinfo.html:16
+msgid "Members: "
+msgstr "成員數："
+
+#: seahub/group/templates/group/group_pubinfo.html:21
+msgid "Verification Message"
+msgstr "驗證消息"
+
+#: seahub/group/templates/group/group_wiki.html:37
+msgid "This group currently has no wiki"
+msgstr "該群組目前還沒創建Wiki"
+
+#: seahub/group/templates/group/group_wiki.html:38
+#: seahub/templates/wiki/personal_wiki.html:26
+msgid ""
+"Seafile Wiki enables you to organize your knowledge in a simple way. The "
+"contents of wiki is stored in a normal library with pre-defined file/folder "
+"structure. This enables you to edit your wiki in your desktop and then sync "
+"back to the server."
+msgstr ""
+"Seafile Wiki 能讓你以一種非常簡單的方式管理你的知識。Wiki 的內容以預定義的文"
+"件/目錄結構存儲在一個普通的資料庫中，這樣便可以在本地編輯，然後同步回服務器。"
+
+#: seahub/group/templates/group/group_wiki.html:40
+#: seahub/templates/wiki/personal_wiki.html:27
+msgid "Create Wiki Now"
+msgstr "現在創建Wiki"
+
+#: seahub/group/templates/group/group_wiki.html:44
+#: seahub/templates/wiki/personal_wiki.html:30
+msgid "Create Wiki"
+msgstr "創建Wiki"
+
+#: seahub/group/templates/group/group_wiki.html:48
+msgid "Wiki Pages"
+msgstr "Wiki 頁面"
+
+#: seahub/group/templates/group/group_wiki.html:56
+#: seahub/group/templates/group/group_wiki_pages.html:32
+#: seahub/templates/wiki/personal_wiki.html:42
+#: seahub/templates/wiki/personal_wiki_pages.html:24
+msgid "Home"
+msgstr "首頁"
+
+#: seahub/group/templates/group/group_wiki.html:57
+#: seahub/group/templates/group/group_wiki_pages.html:33
+#: seahub/templates/wiki/personal_wiki.html:43
+#: seahub/templates/wiki/personal_wiki_pages.html:25
+msgid "Pages"
+msgstr "頁面"
+
+#: seahub/group/templates/group/group_wiki.html:59
+#: seahub/group/templates/group/group_wiki_pages.html:35
+#: seahub/templates/wiki/personal_wiki.html:45
+#: seahub/templates/wiki/personal_wiki_pages.html:26
+msgid "Wiki History"
+msgstr "Wiki歷史"
+
+#: seahub/group/templates/group/group_wiki.html:64
+#: seahub/group/templates/group/group_wiki.html:78
+#: seahub/group/templates/group/group_wiki_pages.html:39
+#: seahub/group/templates/group/group_wiki_pages.html:50
+#: seahub/templates/wiki/personal_wiki.html:49
+#: seahub/templates/wiki/personal_wiki.html:62
+#: seahub/templates/wiki/personal_wiki_pages.html:28
+#: seahub/templates/wiki/personal_wiki_pages.html:38
+msgid "New Page"
+msgstr "新建頁面"
+
+#: seahub/group/templates/group/group_wiki.html:65
+#: seahub/templates/wiki/personal_wiki.html:50
+msgid "Delete Page"
+msgstr "刪除頁面"
+
+#: seahub/group/templates/group/group_wiki.html:66
+#: seahub/templates/wiki/personal_wiki.html:51
+msgid "Edit Page"
+msgstr "編輯頁面"
+
+#: seahub/group/templates/group/group_wiki.html:67
+#: seahub/templates/wiki/personal_wiki.html:52
+msgid "Page History"
+msgstr "頁面歷史"
+
+#: seahub/group/templates/group/group_wiki.html:74
+#: seahub/templates/wiki/personal_wiki.html:58
+#, python-format
+msgid "Last modified by %(modifier)s, %(modify_time)s"
+msgstr "最近修改：%(modifier)s, %(modify_time)s"
+
+#: seahub/group/templates/group/group_wiki.html:131
+#: seahub/templates/wiki/personal_wiki.html:115
+msgid "Name and description can not be blank."
+msgstr "名稱和描述不能為空"
+
+#: seahub/group/templates/group/groups_left_panel.html:5
+msgid ""
+"After creating a group, you can add members and share libraries into it."
+msgstr "群組創建後，就可以添加成員，共享資料。"
+
+#: seahub/group/templates/group/groups_left_panel.html:7
+msgid "You can also share libraries into groups that you're not in."
+msgstr "你也可以將資料庫共享到你沒有參加的群組。"
+
+#: seahub/group/templates/group/groups_right_panel.html:4
+#: seahub/templates/snippets/my_groups.html:4
+msgid "My Groups"
+msgstr "我的群組"
+
+#: seahub/group/templates/group/groups_right_panel.html:5
+#: seahub/group/templates/group/groups_right_panel.html:26
+msgid "New Group"
+msgstr "新建群組"
+
+#: seahub/group/templates/group/groups_right_panel.html:14
+#: seahub/templates/pubgrp.html:27
+msgid "Time: "
+msgstr "時間："
+
+#: seahub/group/templates/group/groups_right_panel.html:21
+msgid "You are not in any groups"
+msgstr "你還沒有創建或參加群組"
+
+#: seahub/group/templates/group/groups_right_panel.html:22
+msgid ""
+"You can create a group by clicking \"New Group\" button. Group is a place "
+"for you and your friends leaving messages and collaborating on libraries."
+msgstr ""
+"你可以點擊“新建群組”按鈕來創建群組。在群組裏，你可以和你的朋友交流，協同維護"
+"資料庫。"
+
+#: seahub/group/templates/group/groups_right_panel.html:27
+msgid "Group Name"
+msgstr "群組名稱"
+
+#: seahub/group/templates/group/grpadmin_add_js.html:19
+#: seahub/group/templates/group/grpmember_add_js.html:19
+msgid "It can not be blank."
+msgstr "輸入不能為空。"
+
+#: seahub/group/templates/group/grpmember_add_form.html:3
+msgid "Add members"
+msgstr "添加成員"
+
+#: seahub/group/templates/group/grpmember_add_form.html:4
+msgid "emails, separated by ','"
+msgstr "輸入郵箱，多個以,分隔"
+
+#: seahub/group/templates/group/grpmember_add_form.html:7
+msgid "Tip: an invitation will be sent if the email is not registered."
+msgstr "提示：如果該郵箱未註冊，我們將向其發送邀請。"
+
+#: seahub/group/templates/group/grpmember_add_form.html:9
+msgid "Tip: the emails should be already registered."
+msgstr "提示：必須是已註冊的郵箱。"
+
+#: seahub/group/templates/group/grpmember_add_form.html:15
+msgid "Add administrators"
+msgstr "添加管理員"
+
+#: seahub/group/templates/group/grpmember_add_form.html:16
+msgid "emails, separated by ',' "
+msgstr "輸入郵箱，多個以,分隔"
+
+#: seahub/group/templates/group/new_msg_reply.html:18
+msgid "Group: "
+msgstr "所在群組："
+
+#: seahub/message/models.py:73
+#, python-format
+msgid ""
+"(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> "
+"to you."
+msgstr "（系統）%(user)s 共享了資料庫<a href='%(href)s'>%(repo_name)s</a>給你"
+
+#: seahub/message/views.py:107 seahub/templates/base.html:309
+msgid "message is required"
+msgstr "消息是必填項"
+
+#: seahub/message/views.py:110 seahub/templates/base.html:313
+msgid "contact is required"
+msgstr "聯系人是必填項"
+
+#: seahub/message/views.py:120
+msgid "You can not send message to yourself."
+msgstr "你不能發消息給自己。"
+
+#: seahub/message/views.py:124
+#, python-format
+msgid "Failed to send message to %s, user not found."
+msgstr "發送消息失敗，%s 未找到。"
+
+#: seahub/message/views.py:131
+msgid "Message sent successfully."
+msgstr "消息發送成功。"
+
+#: seahub/message/templates/message/all_msg_list.html:4
+#: seahub/message/templates/message/all_msg_list.html:10
+#: seahub/message/templates/message/user_msg_list.html:4
+#: seahub/message/templates/message/user_msg_list.html:27
+#: seahub/share/templates/repo/user_share_list.html:24
+msgid "Messages"
+msgstr "消息"
+
+#: seahub/message/templates/message/all_msg_list.html:23
+msgid "Message"
+msgstr "消息"
+
+#: seahub/message/templates/message/all_msg_list.html:24
+#: seahub/templates/file_revisions.html:25
+#: seahub/templates/repo_history.html:21
+msgid "Time"
+msgstr "時間"
+
+#: seahub/message/templates/message/user_msg_list.html:12
+#: seahub/share/templates/repo/user_share_list.html:12
+#: seahub/templates/myhome.html:28
+msgid "No Nickname"
+msgstr "暫無昵稱"
+
+#: seahub/message/templates/message/user_msg_list.html:14
+#: seahub/profile/templates/profile/user_profile.html:14
+#: seahub/share/templates/repo/user_share_list.html:14
+#: seahub/templates/snippets/user_profile_html.html:21
+msgid "Add to contacts"
+msgstr "加為聯系人"
+
+#: seahub/message/templates/message/user_msg_list.html:28
+#: seahub/share/templates/repo/user_share_list.html:4
+#: seahub/share/templates/repo/user_share_list.html:25
+#: seahub/templates/myhome_base.html:14
+msgid "Shares"
+msgstr "共享"
+
+#: seahub/message/templates/message/user_msg_list.html:38
+msgid "Send a message..."
+msgstr "發送消息..."
+
+#: seahub/notifications/templates/notifications/add_notification_form.html:3
+#: seahub/notifications/templates/notifications/add_notification_form.html:7
+#: seahub/notifications/templates/notifications/notification_list.html:9
+msgid "Add new notification"
+msgstr "添加新通知"
+
+#: seahub/notifications/templates/notifications/add_notification_form.html:9
+msgid "Notification"
+msgstr "通知"
+
+#: seahub/notifications/templates/notifications/notification_list.html:15
+msgid "All Notifications"
+msgstr "所有通知"
+
+#: seahub/notifications/templates/notifications/notification_list.html:19
+msgid "Notification Detail"
+msgstr "通知內容"
+
+#: seahub/notifications/templates/notifications/notification_list.html:26
+msgid "(current notification)"
+msgstr "（當前通知）"
+
+#: seahub/notifications/templates/notifications/notification_list.html:30
+msgid "Set to current"
+msgstr "設為當前通知"
+
+#: seahub/notifications/templates/notifications/notification_list.html:64
+#: seahub/templates/sysadmin/sys_group_admin.html:55
+#: seahub/templates/sysadmin/sys_org_admin.html:55
+#: seahub/templates/sysadmin/sys_repo_admin.html:55
+#: seahub/templates/sysadmin/userinfo.html:61
+#: seahub/templates/sysadmin/userinfo.html:84
+msgid "Empty"
+msgstr "暫無"
+
+#: seahub/notifications/templates/notifications/notification_list.html:71
+msgid "Delete Notification"
+msgstr "刪除通知"
+
+#: seahub/profile/views.py:41
+msgid "Successfully edited profile."
+msgstr "修改成功"
+
+#: seahub/profile/views.py:47
+msgid "Failed to edit profile"
+msgstr "修改失敗"
+
+#: seahub/profile/views.py:94 seahub/profile/views.py:125
+msgid "Has not accepted invitation yet"
+msgstr "還未接受邀請"
+
+#: seahub/profile/templates/profile/profile_base.html:4
+#: seahub/profile/templates/profile/set_profile.html:5
+#: seahub/profile/templates/profile/set_profile.html:8
+#: seahub/templates/base.html:45
+msgid "Profile Setting"
+msgstr "個人信息設置"
+
+#: seahub/profile/templates/profile/set_profile.html:10
+msgid "Avatar:"
+msgstr "頭像："
+
+#: seahub/profile/templates/profile/set_profile.html:18
+msgid "Password:"
+msgstr "密碼："
+
+#: seahub/profile/templates/profile/set_profile.html:18
+#: seahub/templates/repo.html:186 seahub/templates/repo.html.py:247
+msgid "Update"
+msgstr "更新"
+
+#: seahub/profile/templates/profile/set_profile.html:19
+msgid "Nickname:"
+msgstr "昵稱："
+
+#: seahub/profile/templates/profile/set_profile.html:24
+msgid "About me:"
+msgstr "關於我："
+
+#: seahub/profile/templates/profile/user_profile.html:32
+msgid "Email: "
+msgstr "郵箱："
+
+#: seahub/profile/templates/profile/user_profile.html:34
+msgid "Name(optional): "
+msgstr "名字(可選)"
+
+#: seahub/profile/templates/profile/user_profile.html:36
+msgid "Note(optional): "
+msgstr "備註(可選)"
+
+#: seahub/share/forms.py:20
+msgid "Email is not longer than 512 characters"
+msgstr "郵箱不能超過512個字符"
+
+#: seahub/share/views.py:57
+msgid "Failed to share to all members, please try again later."
+msgstr "共享到公共資料失敗，請稍後再試"
+
+#: seahub/share/views.py:59
+#, python-format
+msgid ""
+"Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
+msgstr "共享到公共資料成功，請前往 <a href=\"%s\">共享</a> 查看。"
+
+#: seahub/share/views.py:71
+#, python-format
+msgid ""
+"\"%(repo)s\" is already in group %(group)s. <a href=\"%(href)s\">View</a>"
+msgstr "\"%(repo)s\"在群組 %(group)s 中已存在。<a href=\"%(href)s\">查看</a>"
+
+#: seahub/share/views.py:81
+#, python-format
+msgid "Failed to share %(repo)s to %(group)s, please try again later."
+msgstr "共享 %(repo)s 到 %(group)s失敗，請稍後重試。"
+
+#: seahub/share/views.py:85
+#, python-format
+msgid ""
+"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
+"\">Shares</a>."
+msgstr "共享到 %(group)s 成功， 請前往 <a href=\"%(share)s\">共享</a> 查看。"
+
+#: seahub/share/views.py:95
+msgid "You can not share libray to yourself."
+msgstr "你無法共享資料庫給你自己。"
+
+#: seahub/share/views.py:104
+#, python-format
+msgid "Failed to share to %s, please try again later."
+msgstr "共享給 %s 失敗，請稍後嘗試。"
+
+#: seahub/share/views.py:111
+#, python-format
+msgid ""
+"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
+"\">Shares</a>."
+msgstr "共享給 %(email)s 成功，請前往 <a href=\"%(share)s\">共享</a> 查看。"
+
+#: seahub/share/views.py:115
+#, python-format
+msgid "Failed to share to %s, as the email is not registered."
+msgstr "共享給 %s 失敗，該用戶尚未註冊。"
+
+#: seahub/share/views.py:171
+msgid "Only the owner of the library has permission to share it."
+msgstr "只有資料庫擁有者才有共享權限。"
+
+#: seahub/share/views.py:201
+#, python-format
+msgid ""
+"Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
+"\">Upgrade account.</a>"
+msgstr ""
+"共享\"%s\"失敗，空間不足。<a href=\"http://seafile.com/\">升級帳號。</a>"
+
+#: seahub/share/views.py:232 seahub/share/views.py:242
+msgid "Failed to remove share"
+msgstr "取消共享失敗"
+
+#: seahub/share/views.py:238
+msgid "group id is not valid"
+msgstr "無效的group id"
+
+#: seahub/share/views.py:251
+msgid "Successfully removed share"
+msgstr "取消共享成功"
+
+#: seahub/share/views.py:286
+msgid "all members"
+msgstr "所有成員"
+
+#: seahub/share/views.py:464 seahub/views/__init__.py:625
+#: seahub/views/__init__.py:1586 seahub/views/__init__.py:1621
+#: seahub/views/__init__.py:2120 seahub/views/file.py:565
+msgid "Invalid arguments"
+msgstr "非法參數"
+
+#: seahub/share/views.py:473
+msgid "You cannot share the library in this way."
+msgstr "不能以這種方式共享一個資料庫。"
+
+#: seahub/share/views.py:498
+msgid "Failed to get the link, please retry later."
+msgstr "獲取分享鏈接失敗，請稍後重試。"
+
+#: seahub/share/views.py:520
+msgid "Removed successfully"
+msgstr "刪除成功"
+
+#: seahub/share/views.py:528
+msgid "Deleted successfully"
+msgstr "刪除成功"
+
+#: seahub/share/views.py:544
+msgid ""
+"Sending shared link failed. Email service is not properly configured, please "
+"contact administrator."
+msgstr "由於郵箱服務未正確配置，發送共享鏈接失敗，請聯系管理員。"
+
+#: seahub/share/views.py:569
+msgid "Your friend shared a file to you on Seafile"
+msgstr "你的朋友在 Seafile 上共享了一個文件給你"
+
+#: seahub/share/views.py:574
+msgid "Internal server error. Send failed."
+msgstr "服務器內部錯誤，發送失敗。"
+
+#: seahub/share/views.py:577
+msgid "Successfully sent."
+msgstr "發送成功"
+
+#: seahub/share/templates/repo/share_admin.html:5
+#: seahub/templates/org_base.html:18 seahub/templates/repo.html:141
+#: seahub/templates/repo.html.py:188 seahub/templates/repo.html:349
+#: seahub/templates/snippets/my_owned_repos.html:34
+msgid "Share"
+msgstr "共享"
+
+#: seahub/share/templates/repo/share_admin.html:18
+msgid ""
+"If you don't want others to change the contents of your shared libraries, "
+"you can set the share permission to \"read-only\" when sharing them."
+msgstr ""
+"如果你不希望別人修改你共享給他們的資料庫，你可以在共享的時候把權限設置成“只"
+"讀”。"
+
+#: seahub/share/templates/repo/share_admin.html:24
+msgid "Shared Libraries"
+msgstr "我共享的資料庫"
+
+#: seahub/share/templates/repo/share_admin.html:30
+msgid "Share To"
+msgstr "共享給"
+
+#: seahub/share/templates/repo/share_admin.html:31
+msgid "Permission"
+msgstr "讀寫權限"
+
+#: seahub/share/templates/repo/share_admin.html:75
+msgid "You have not shared any library"
+msgstr "你還沒有共享任何資料庫"
+
+#: seahub/share/templates/repo/share_admin.html:76
+msgid ""
+"You can share libraries to your friends and colleagues by clicking the share "
+"icon of your own libraries in your home page or creating a new library in "
+"groups you are in."
+msgstr ""
+"你可以通過在你的個人頁面點擊你自己的資料庫的共享圖標, 或是在你所在的小組裏創"
+"建一個新的資料庫來將你的資料庫共享給你的朋友和同事。"
+
+#: seahub/share/templates/repo/share_admin.html:80
+msgid "Shared Links"
+msgstr "我的共享外鏈"
+
+#: seahub/share/templates/repo/share_admin.html:84
+msgid "File or Folder"
+msgstr "文件或文件夾"
+
+#: seahub/share/templates/repo/share_admin.html:86
+msgid "Visits"
+msgstr "訪問次數"
+
+#: seahub/share/templates/repo/share_admin.html:99
+#: seahub/templates/file_revisions.html:53
+#: seahub/templates/repo_view_snapshot.html:42
+msgid "View"
+msgstr "查看"
+
+#: seahub/share/templates/repo/share_admin.html:100
+msgid "Remove"
+msgstr "刪除"
+
+#: seahub/share/templates/repo/share_admin.html:108
+msgid "You don't have any shared link"
+msgstr "你還沒有外鏈"
+
+#: seahub/share/templates/repo/share_admin.html:109
+msgid ""
+"You can share a folder or a file when you view a library, or share a file "
+"when you view it."
+msgstr ""
+"你可以在查看一個資料庫時共享裏面的文件和目錄，或者查看文件時共享這個文件。"
+
+#: seahub/share/templates/repo/share_admin.html:152
+msgid "Edit succeeded"
+msgstr "權限修改成功"
+
+#: seahub/share/templates/repo/share_admin.html:159
+msgid "Edit failed."
+msgstr "權限修改失敗"
+
+#: seahub/share/templates/repo/user_share_list.html:56
+#: seahub/templates/snippets/my_owned_repos.html:82
+msgid "Leave Share"
+msgstr "退出共享"
+
+#: seahub/share/templates/repo/user_share_list.html:63
+#, python-format
+msgid "You have no library sharing with %(to_email)s."
+msgstr "你和 %(to_email)s 之間沒有共享的資料庫。"
+
+#: seahub/templates/404.html:6
+msgid "Sorry, but the requested page could not be found."
+msgstr "對不起，你訪問的頁面不存在。"
+
+#: seahub/templates/admin_base.html:11 seahub/templates/pubgrp.html:16
+#: seahub/templates/pubrepo.html:17 seahub/templates/pubuser.html:16
+msgid "Users"
+msgstr "成員"
+
+#: seahub/templates/admin_base.html:17
+msgid "Notifications"
+msgstr "通知"
+
+#: seahub/templates/base.html:9
+msgid "File Collaboration Team Organization"
+msgstr "文件 合作 團隊 團體"
+
+#: seahub/templates/base.html:38
+msgid "System Admin"
+msgstr "系統管理"
+
+#: seahub/templates/base.html:39
+msgid "Workspace"
+msgstr "個人工作臺"
+
+#: seahub/templates/base.html:46
+msgid "send a message"
+msgstr "發送消息"
+
+#: seahub/templates/base.html:47
+msgid "unread messages"
+msgstr "未讀消息"
+
+#: seahub/templates/base.html:48
+msgid "Log out"
+msgstr "退出"
+
+#: seahub/templates/base.html:50 seahub/templates/registration/login.html:3
+#: seahub/templates/registration/login.html:6
+#: seahub/templates/registration/password_reset_complete.html:8
+msgid "Log In"
+msgstr "登錄"
+
+#: seahub/templates/base.html:52
+#: seahub/templates/registration/registration_form.html:9
+msgid "Signup"
+msgstr "註冊"
+
+#: seahub/templates/base.html:66
+msgid "message..."
+msgstr "消息..."
+
+#: seahub/templates/base.html:89
+msgid "Search files in this wiki"
+msgstr "在當前維基搜索文件"
+
+#: seahub/templates/base.html:89
+msgid "Search files in this library"
+msgstr "在當前資料庫搜索文件"
+
+#: seahub/templates/base.html:92 seahub/templates/base.html.py:98
+msgid "Search Files"
+msgstr "搜索文件"
+
+#: seahub/templates/base.html:94
+msgid "advanced"
+msgstr "高級"
+
+#: seahub/templates/base.html:102 seahub/templates/base.html.py:106
+#: seahub/templates/base.html:109
+msgid "In all libraries"
+msgstr "在所有資料庫"
+
+#: seahub/templates/base.html:103
+msgid "In this wiki"
+msgstr "在當前維基"
+
+#: seahub/templates/base.html:103
+msgid "In this library"
+msgstr "在當前資料庫"
+
+#: seahub/templates/base.html:107
+#, python-format
+msgid "in %(name)s"
+msgstr "在 %(name)s"
+
+#: seahub/templates/base.html:115 seahub/templates/base.html.py:118
+msgid "All file types"
+msgstr "所有文件類型"
+
+#: seahub/templates/base.html:116 seahub/templates/base.html.py:119
+msgid "Custom file types"
+msgstr "自定義文件類型"
+
+#: seahub/templates/base.html:128
+msgid "Text files"
+msgstr "文本文件"
+
+#: seahub/templates/base.html:129 seahub/templates/base.html.py:195
+msgid "Documents"
+msgstr "文檔"
+
+#: seahub/templates/base.html:130
+msgid "Images"
+msgstr "圖片"
+
+#: seahub/templates/base.html:131
+msgid "Video"
+msgstr "視頻"
+
+#: seahub/templates/base.html:132
+msgid "Audio"
+msgstr "音頻"
+
+#: seahub/templates/base.html:133
+msgid "svg"
+msgstr ""
+
+#: seahub/templates/base.html:134
+msgid "pdf"
+msgstr ""
+
+#: seahub/templates/base.html:135
+msgid "seaf"
+msgstr ""
+
+#: seahub/templates/base.html:136
+msgid "markdown"
+msgstr ""
+
+#: seahub/templates/base.html:138
+msgid "Input file extensions here, separate with ','"
+msgstr "輸入文件後綴，以','分隔"
+
+#: seahub/templates/base.html:139
+msgid "Please select at least 1 file type or input at least 1 file extension"
+msgstr "請至少選擇一種文件類型或一種文件後綴"
+
+#: seahub/templates/base.html:183
+msgid "Introduction"
+msgstr "介紹"
+
+#: seahub/templates/base.html:185
+msgid "Forum"
+msgstr "論壇"
+
+#: seahub/templates/base.html:189
+msgid "Client"
+msgstr "客戶端"
+
+#: seahub/templates/base.html:191
+msgid "Seafile for Windows, Mac and Linux"
+msgstr "Windows, Mac and Linux"
+
+#: seahub/templates/base.html:197
+msgid "Help"
+msgstr "使用幫助"
+
+#: seahub/templates/base.html:202
+msgid "Server Version: "
+msgstr "服務器版本："
+
+#: seahub/templates/base.html:203
+msgid "Seafile"
+msgstr "海文互知"
+
+#: seahub/templates/base.html:204
+msgid "Contact Us"
+msgstr "聯系我們"
+
+#: seahub/templates/base.html:278
+msgid "send to: click to select contacts"
+msgstr "發送給：點擊選擇聯系人"
+
+#: seahub/templates/base.html:281
+msgid "please add contacts at first"
+msgstr "請先添加聯系人"
+
+#: seahub/templates/base.html:285
+msgid "Failed to get your contacts for sending a message."
+msgstr "獲取聯系人失敗，無法發送消息。"
+
+#: seahub/templates/client_mgmt.html:6 seahub/templates/client_mgmt.html:15
+#: seahub/templates/myhome.html:15 seahub/templates/wiki/personal_wiki.html:15
+msgid "Clients"
+msgstr "客戶端"
+
+#: seahub/templates/client_mgmt.html:14 seahub/templates/myhome.html:14
+#: seahub/templates/wiki/personal_wiki.html:6
+#: seahub/templates/wiki/personal_wiki.html:14
+#: seahub/templates/wiki/personal_wiki_pages.html:6
+#: seahub/templates/wiki/personal_wiki_pages.html:14
+msgid "Personal Wiki"
+msgstr "個人維基"
+
+#: seahub/templates/client_mgmt.html:27
+msgid "Client Name"
+msgstr "客戶端名稱"
+
+#: seahub/templates/client_mgmt.html:28
+msgid "IP"
+msgstr ""
+
+#: seahub/templates/client_mgmt.html:29
+msgid "Last Sync"
+msgstr "最後同步"
+
+#: seahub/templates/client_mgmt.html:56
+msgid "Unsync"
+msgstr "取消同步"
+
+#: seahub/templates/client_mgmt.html:62
+msgid "You do not have connected clients"
+msgstr "你還沒有連接的客戶端"
+
+#: seahub/templates/client_mgmt.html:63
+msgid ""
+"The libraries synced to desktop clients are listed in this page. You can see "
+"the client's name and its IP address. You may unsync a client from a library "
+"if you no longer want to sync it."
+msgstr "這裏會列出所有通過桌面客戶端同步的資料庫。你可以查看客戶端的名稱和IP地址。你也可以斷開一個資料庫所連接的客戶端。"
+
+#: seahub/templates/client_mgmt.html:72
+msgid "Unsync Client"
+msgstr "取消同步"
+
+#: seahub/templates/client_mgmt.html:73
+#, python-format
+msgid "Are you sure to unsync client %s ?"
+msgstr "確定要取消同步 %s 嗎？"
+
+#: seahub/templates/decrypt_repo_form.html:9
+msgid ""
+"This library is encrypted. Please input the password if you want to browse "
+"it online. And the password will be kept on the server for only 1 hour."
+msgstr ""
+"該資料庫已加密。如需在線查看裏面的內容，請輸入解密密碼。密碼只會在服務器上暫"
+"存1小時。"
+
+#: seahub/templates/decrypt_repo_form.html:11
+msgid "Password: "
+msgstr "密碼："
+
+#: seahub/templates/file_edit.html:83 seahub/templates/repo.html:89
+#: seahub/templates/repo_history_view.html:38
+#: seahub/templates/repo_recycle_view.html:16
+#: seahub/templates/shared_file_view.html:18
+#: seahub/templates/view_shared_dir.html:16
+msgid "Current path: "
+msgstr "當前路徑："
+
+#: seahub/templates/file_edit.html:94
+msgid "Continue editing"
+msgstr "繼續修改"
+
+#: seahub/templates/file_edit.html:95
+msgid "Preview"
+msgstr "預覽"
+
+#: seahub/templates/file_edit.html:121
+msgid "Standard Syntax"
+msgstr "標準語法"
+
+#: seahub/templates/file_edit.html:125
+msgid "Enter this"
+msgstr "輸入"
+
+#: seahub/templates/file_edit.html:126
+msgid "To see this"
+msgstr "所見"
+
+#: seahub/templates/file_edit.html:129 seahub/templates/file_edit.html:130
+msgid "bold"
+msgstr "加粗"
+
+#: seahub/templates/file_edit.html:129 seahub/templates/file_edit.html:130
+#: seahub/templates/file_edit.html:133 seahub/templates/file_edit.html:134
+msgid "text"
+msgstr "文本"
+
+#: seahub/templates/file_edit.html:133 seahub/templates/file_edit.html:134
+msgid "italics"
+msgstr "斜體"
+
+#: seahub/templates/file_edit.html:137 seahub/templates/file_edit.html:140
+msgid "Header"
+msgstr "標題"
+
+#: seahub/templates/file_edit.html:144 seahub/templates/file_edit.html:146
+msgid "Smaller header"
+msgstr "次級標題"
+
+#: seahub/templates/file_edit.html:149 seahub/templates/file_edit.html:150
+msgid "Link something"
+msgstr "鏈接"
+
+#: seahub/templates/file_edit.html:153
+msgid "alt text"
+msgstr "替換文本"
+
+#: seahub/templates/file_edit.html:157 seahub/templates/file_edit.html:161
+msgid "unordered list"
+msgstr "無序列表"
+
+#: seahub/templates/file_edit.html:158 seahub/templates/file_edit.html:162
+msgid "leave empty lines around the list"
+msgstr "在列表周圍留出空行"
+
+#: seahub/templates/file_edit.html:167 seahub/templates/file_edit.html:171
+msgid "ordered list"
+msgstr "有序列表"
+
+#: seahub/templates/file_edit.html:168 seahub/templates/file_edit.html:172
+msgid "leave empty lines"
+msgstr "留出空行"
+
+#: seahub/templates/file_edit.html:177
+msgid "Extended Syntax for Wiki"
+msgstr "Wiki 擴展語法"
+
+#: seahub/templates/file_edit.html:179
+msgid "or"
+msgstr "或者"
+
+#: seahub/templates/file_edit.html:179
+msgid "internal link to another wiki page."
+msgstr "鏈接到該資料庫內部的另一個 wiki 頁面"
+
+#: seahub/templates/file_edit.html:180
+msgid "internal link to a picture at this-library/images/pic.jpg."
+msgstr "鏈接到該資料庫內部的 images/pic.jpg"
+
+#: seahub/templates/file_edit.html:181
+msgid "internal link to a file at this-library/folder/file.doc."
+msgstr "鏈接到該資料庫內部的 folder/file.doc"
+
+#: seahub/templates/file_edit.html:189
+msgid "Font"
+msgstr "字體"
+
+#: seahub/templates/file_edit.html:193
+msgid "Font Size"
+msgstr "字號"
+
+#: seahub/templates/file_edit.html:195
+msgid "Huge"
+msgstr "大"
+
+#: seahub/templates/file_edit.html:196
+msgid "Normal"
+msgstr "一般"
+
+#: seahub/templates/file_edit.html:197
+msgid "Small"
+msgstr "小"
+
+#: seahub/templates/file_edit.html:201
+msgid "Font Color"
+msgstr "文字顏色"
+
+#: seahub/templates/file_edit.html:203
+msgid "defaut color"
+msgstr "默認顏色"
+
+#: seahub/templates/file_edit.html:215
+msgid "Bold (Ctrl/Cmd+B)"
+msgstr "加粗 (Ctrl/Cmd+B)"
+
+#: seahub/templates/file_edit.html:216
+msgid "Italic (Ctrl/Cmd+I)"
+msgstr "斜體 (Ctrl/Cmd+I)"
+
+#: seahub/templates/file_edit.html:217
+msgid "Strikethrough"
+msgstr "刪除線"
+
+#: seahub/templates/file_edit.html:218
+msgid "Underline (Ctrl/Cmd+U)"
+msgstr "下劃線 (Ctrl/Cmd+U)"
+
+#: seahub/templates/file_edit.html:221
+msgid "Bullet list"
+msgstr "無序列表"
+
+#: seahub/templates/file_edit.html:222
+msgid "Number list"
+msgstr "有序列表"
+
+#: seahub/templates/file_edit.html:223
+msgid "Reduce indent (Shift+Tab)"
+msgstr "減少縮進 (Shift+Tab)"
+
+#: seahub/templates/file_edit.html:224
+msgid "Indent (Tab)"
+msgstr "增加縮進 (Tab)"
+
+#: seahub/templates/file_edit.html:227
+msgid "Align Left (Ctrl/Cmd+L)"
+msgstr "左對齊 (Ctrl/Cmd+L)"
+
+#: seahub/templates/file_edit.html:228
+msgid "Center (Ctrl/Cmd+E)"
+msgstr "居中對齊 (Ctrl/Cmd+E)"
+
+#: seahub/templates/file_edit.html:229
+msgid "Align Right (Ctrl/Cmd+R)"
+msgstr "右對齊 (Ctrl/Cmd+R)"
+
+#: seahub/templates/file_edit.html:230
+msgid "Justify (Ctrl/Cmd+J)"
+msgstr "兩邊對齊 (Ctrl/Cmd+J)"
+
+#: seahub/templates/file_edit.html:233
+msgid "Hyperlink"
+msgstr "超鏈接"
+
+#: seahub/templates/file_edit.html:236
+msgid "Add"
+msgstr "添加"
+
+#: seahub/templates/file_edit.html:238
+msgid "Remove Hyperlink"
+msgstr "刪除超鏈接"
+
+#: seahub/templates/file_edit.html:242
+msgid "Insert picture (or just drag & drop)"
+msgstr "插入圖片（或者直接拖放）"
+
+#: seahub/templates/file_edit.html:245
+msgid "Undo (Ctrl/Cmd+Z)"
+msgstr "撤銷 (Ctrl/Cmd+Z)"
+
+#: seahub/templates/file_edit.html:246
+msgid "Redo (Ctrl/Cmd+Y)"
+msgstr "重做 (Ctrl/Cmd+Y)"
+
+#: seahub/templates/file_edit.html:346
+msgid "Strong <strong> Ctrl+B"
+msgstr "加強 <strong> Ctrl+B"
+
+#: seahub/templates/file_edit.html:347
+msgid "strong text"
+msgstr "加強文本"
+
+#: seahub/templates/file_edit.html:349
+msgid "Emphasis <em> Ctrl+I"
+msgstr "強調 <em> Ctrl+I"
+
+#: seahub/templates/file_edit.html:350
+msgid "emphasized text"
+msgstr "強調文本"
+
+#: seahub/templates/file_edit.html:352
+msgid "Hyperlink <a> Ctrl+L"
+msgstr "超鏈接 <a> Ctrl+L"
+
+#: seahub/templates/file_edit.html:353
+msgid "enter link description here"
+msgstr "在這裏輸入鏈接描述"
+
+#: seahub/templates/file_edit.html:354
+msgid "Insert Hyperlink"
+msgstr "插入超鏈接"
+
+#: seahub/templates/file_edit.html:354 seahub/templates/file_edit.html:364
+msgid "optional title"
+msgstr "可選的提示文本"
+
+#: seahub/templates/file_edit.html:356
+msgid "Blockquote <blockquote> Ctrl+Q"
+msgstr "塊引用 <blockquote> Ctrl+Q"
+
+#: seahub/templates/file_edit.html:357
+msgid "Blockquote"
+msgstr "塊引用"
+
+#: seahub/templates/file_edit.html:359
+msgid "Code Sample <pre><code> Ctrl+K"
+msgstr "代碼樣例 <pre><code> Ctrl+K"
+
+#: seahub/templates/file_edit.html:360
+msgid "enter code here"
+msgstr "在此輸入代碼"
+
+#: seahub/templates/file_edit.html:362
+msgid "Image <img> Ctrl+G"
+msgstr "圖片 <img> Ctrl+G"
+
+#: seahub/templates/file_edit.html:363
+msgid "enter image description here"
+msgstr "在此輸入圖片描述"
+
+#: seahub/templates/file_edit.html:364
+msgid "Insert Image"
+msgstr "插入圖片"
+
+#: seahub/templates/file_edit.html:366
+msgid "Numbered List <ol> Ctrl+O"
+msgstr "有序列表 <ol> Ctrl+O"
+
+#: seahub/templates/file_edit.html:367
+msgid "Bulleted List <ul> Ctrl+U"
+msgstr "無序列表 <ul> Ctrl+U"
+
+#: seahub/templates/file_edit.html:368
+msgid "List item"
+msgstr "列表項"
+
+#: seahub/templates/file_edit.html:370
+msgid "Heading <h1>/<h2> Ctrl+H"
+msgstr "標題 <h1>/<h2> Ctrl+H"
+
+#: seahub/templates/file_edit.html:371
+msgid "Heading"
+msgstr "標題"
+
+#: seahub/templates/file_edit.html:373
+msgid "Horizontal Rule <hr> Ctrl+R"
+msgstr "水平線 <hr> Ctrl+R"
+
+#: seahub/templates/file_edit.html:374
+msgid "Undo - Ctrl+Z"
+msgstr "撤銷 - Ctrl+Z"
+
+#: seahub/templates/file_edit.html:375
+msgid "Redo - Ctrl+Y"
+msgstr "重做 - Ctrl+Y"
+
+#: seahub/templates/file_edit.html:376
+msgid "Redo - Ctrl+Shift+Z"
+msgstr "重做 - Ctrl+Shift+Z"
+
+#: seahub/templates/file_edit.html:378
+msgid "Editing Help"
+msgstr "編輯幫助"
+
+#: seahub/templates/file_edit.html:466
+msgid "Submit failed. Please check the network."
+msgstr "提交失敗。請檢查網絡是否已連接。"
+
+#: seahub/templates/file_edit.html:484
+#: seahub/templates/snippets/repo_decrypt_js.html:11
+msgid "Password is required."
+msgstr "密碼為必填項"
+
+#: seahub/templates/file_edit.html:486
+msgid "Password should be 3 to 30 characters."
+msgstr "密碼為3到30個字符"
+
+#: seahub/templates/file_revisions.html:5 seahub/templates/repo.html:59
+#: seahub/templates/repo.html.py:199 seahub/templates/repo.html:266
+#: seahub/templates/repo_history.html:5
+#: seahub/templates/view_file_base.html:69
+msgid "History"
+msgstr "歷史"
+
+#: seahub/templates/file_revisions.html:8
+msgid "'s Version History"
+msgstr " 版本歷史"
+
+#: seahub/templates/file_revisions.html:9
+msgid ""
+"Tip:a new version will be generated after each modification, and you can "
+"restore the file to a previous version."
+msgstr ""
+"Tip：每次修改後都會生成一個新的版本, 你可以將當前文件恢復到之前的某個版本。"
+
+#: seahub/templates/file_revisions.html:12 seahub/templates/text_diff.html:10
+msgid "Current Path:"
+msgstr "當前路徑："
+
+#: seahub/templates/file_revisions.html:26
+#: seahub/templates/repo_view_snapshot.html:16
+msgid "Last Modifier"
+msgstr "最後修改者"
+
+#: seahub/templates/file_revisions.html:27 seahub/templates/repo.html:114
+#: seahub/templates/repo_history_view.html:53
+#: seahub/templates/repo_recycle_view.html:55
+#: seahub/templates/view_shared_dir.html:33
+msgid "Size"
+msgstr "大小"
+
+#: seahub/templates/file_revisions.html:35
+msgid "(current version)"
+msgstr "(當前版本)"
+
+#: seahub/templates/file_revisions.html:50
+#: seahub/templates/repo_recycle_view.html:66
+#: seahub/templates/repo_recycle_view.html:83
+#: seahub/templates/repo_view_snapshot.html:43
+msgid "Restore"
+msgstr "還原"
+
+#: seahub/templates/file_revisions.html:52
+#: seahub/templates/history_file_view.html:63 seahub/templates/repo.html:24
+#: seahub/templates/repo.html.py:139 seahub/templates/repo.html:184
+#: seahub/templates/shared_file_view.html:31
+#: seahub/templates/view_file_base.html:81
+#: seahub/templates/view_history_file.html:34
+#: seahub/templates/view_shared_dir.html:48
+#: seahub/templates/view_shared_dir.html:66
+msgid "Download"
+msgstr "下載"
+
+#: seahub/templates/file_revisions.html:55
+msgid "Diff"
+msgstr ""
+
+#: seahub/templates/history_file_view.html:16
+#: seahub/templates/repo_view_snapshot.html:7
+#: seahub/templates/view_snapshot_file.html:7
+msgid "snapshots"
+msgstr "鏡像"
+
+#: seahub/templates/history_file_view.html:23
+#: seahub/templates/view_history_file.html:16
+msgid "history"
+msgstr "歷史"
+
+#: seahub/templates/history_file_view.html:26
+#: seahub/templates/text_diff.html:7
+#: seahub/templates/view_history_file.html:19
+msgid "Back to file versions"
+msgstr "返回文件版本列表"
+
+#: seahub/templates/history_file_view.html:30
+#: seahub/templates/history_file_view.html:41
+#: seahub/templates/repo_recycle_view.html:8
+#: seahub/templates/repo_recycle_view.html:17
+#: seahub/templates/view_trash_file.html:6
+msgid "'s trash"
+msgstr "文件回收站"
+
+#: seahub/templates/history_file_view.html:31
+#: seahub/templates/repo_history.html:10
+#: seahub/templates/repo_recycle_view.html:9
+#: seahub/templates/view_trash_file.html:7
+msgid "Back to Library"
+msgstr "返回資料庫"
+
+#: seahub/templates/history_file_view.html:38
+#: seahub/templates/view_file_base.html:21
+#: seahub/templates/view_history_file.html:27
+#: seahub/templates/view_snapshot_file.html:13
+#: seahub/templates/view_trash_file.html:11
+msgid "Current Path: "
+msgstr "當前路徑："
+
+#: seahub/templates/myhome.html:5 seahub/templates/myhome_base.html:8
+msgid "My Home"
+msgstr "我的頁面"
+
+#: seahub/templates/myhome.html:24
+msgid "Account"
+msgstr "個人基本信息"
+
+#: seahub/templates/myhome.html:26 seahub/templates/myhome.html.py:29
+#: seahub/templates/sysadmin/userinfo.html:9
+msgid "Profile"
+msgstr "設置"
+
+#: seahub/templates/myhome.html:31
+msgid "Payment"
+msgstr "支付"
+
+#: seahub/templates/myhome.html:39
+msgid "Reminding..."
+msgstr "提醒..."
+
+#: seahub/templates/myhome.html:44
+msgid ""
+"\n"
+"        has new discussion\n"
+"        "
+msgid_plural ""
+"\n"
+"        have new discussions\n"
+"        "
+msgstr[0] ""
+"\n"
+"        有新討論\n"
+"        "
+
+#: seahub/templates/myhome.html:53
+#, python-format
+msgid ""
+"\n"
+"        one group discussion has new reply\n"
+"        "
+msgid_plural ""
+"\n"
+"        %(counter)s group discussions have new replies\n"
+"        "
+msgstr[0] ""
+"\n"
+"        %(counter)s 條群組討論有新回復\n"
+"        "
+
+#: seahub/templates/myhome.html:65
+msgid "Space/Traffic Usage"
+msgstr "空間/流量使用"
+
+#: seahub/templates/myhome.html:68 seahub/templates/sysadmin/userinfo.html:26
+msgid "Total"
+msgstr "總空間"
+
+#: seahub/templates/myhome.html:70 seahub/templates/myhome.html.py:72
+msgid "Self"
+msgstr "個人"
+
+#: seahub/templates/myhome.html:70 seahub/templates/myhome.html.py:72
+#: seahub/templates/sysadmin/userinfo.html:28
+msgid "Sharing"
+msgstr "共享"
+
+#: seahub/templates/myhome.html:81
+msgid "Traffic this month:"
+msgstr "本月已用流量："
+
+#: seahub/templates/myhome_base.html:21
+msgid "Organization"
+msgstr "機構"
+
+#: seahub/templates/org_base.html:7
+msgid ""
+"Organization will be removed in next version, data will be merged into your "
+"current account."
+msgstr "團體將在下個版本移除，相關數據會遷移到你當前的帳號下。"
+
+#: seahub/templates/org_base.html:12
+msgid "Personal"
+msgstr "個人頁面"
+
+#: seahub/templates/org_base.html:21
+msgid "Public Library"
+msgstr "公共資料"
+
+#: seahub/templates/org_base.html:24
+msgid "Public Info"
+msgstr "公共信息"
+
+#: seahub/templates/pubgrp.html:34
+msgid "No one has created any groups yet"
+msgstr "還沒有群組被創建"
+
+#: seahub/templates/pubgrp.html:35
+msgid ""
+"You can click \"Add Group\" button under \"Group\" label to create a group. "
+msgstr "你可以到“群組”頁面點擊“新建群組”按鈕創建一個群組。"
+
+#: seahub/templates/pubrepo.html:27 seahub/templates/sysadmin/userinfo.html:70
+msgid "Share From"
+msgstr "共享來源"
+
+#: seahub/templates/pubrepo.html:51
+msgid "No public library"
+msgstr "當前沒有公共資料"
+
+#: seahub/templates/pubrepo.html:52
+msgid ""
+"You can create a public library by clicking \"New Library\" button, others "
+"can view and download this library."
+msgstr ""
+"你可以點擊“新建資料庫”按鈕創建一個公開的資料庫，網站內的其他人都可以查看下載"
+"這個資料庫。"
+
+#: seahub/templates/repo.html:13
+msgid ""
+"This page will be invalid shortly, you can join <a href=\"http://seafile.com/"
+"\" target=\"_blank\">Seafile</a> to experience more."
+msgstr ""
+"當前鏈接會在短期內失效，歡迎你 <a href=\"http://seafile.com/\" target="
+"\"_blank\">加入Seafile </a>體驗更多功能。"
+
+#: seahub/templates/repo.html:27
+msgid "Settings"
+msgstr "設置"
+
+#: seahub/templates/repo.html:30
+msgid "Trash"
+msgstr "回收站"
+
+#: seahub/templates/repo.html:35 seahub/templates/view_file_base.html:34
+msgid "Share link"
+msgstr "獲取共享鏈接"
+
+#: seahub/templates/repo.html:36 seahub/templates/repo.html.py:351
+#: seahub/templates/view_file_base.html:35
+msgid "Send"
+msgstr "發送"
+
+#: seahub/templates/repo.html:43
+msgid ""
+"This library is read-only, you can not modify the contents of this library."
+msgstr "這個資料庫設置了只讀共享，你無法修改此資料庫的內容。"
+
+#: seahub/templates/repo.html:49
+msgid "Size: "
+msgstr "大小："
+
+#: seahub/templates/repo.html:69
+msgid "Generated by system"
+msgstr "系統自動生成"
+
+#: seahub/templates/repo.html:84
+msgid "You can't access this library."
+msgstr "無法在線查看該資料庫。"
+
+#: seahub/templates/repo.html:100 seahub/templates/view_shared_dir.html:26
+msgid "ZIP"
+msgstr ""
+
+#: seahub/templates/repo.html:103 seahub/templates/repo.html.py:226
+msgid "Upload"
+msgstr "上傳"
+
+#: seahub/templates/repo.html:104 seahub/templates/repo.html.py:279
+msgid "New Directory"
+msgstr "新建目錄"
+
+#: seahub/templates/repo.html:105 seahub/templates/repo.html.py:290
+msgid "New File"
+msgstr "新建文件"
+
+#: seahub/templates/repo.html:132 seahub/templates/repo.html.py:178
+msgid "Fetch failed"
+msgstr "獲取失敗"
+
+#: seahub/templates/repo.html:145
+msgid "More operations"
+msgstr "更多操作"
+
+#: seahub/templates/repo.html:148 seahub/templates/repo.html.py:196
+msgid "Rename"
+msgstr "重命名"
+
+#: seahub/templates/repo.html:149 seahub/templates/repo.html.py:197
+msgid "Move"
+msgstr "移動"
+
+#: seahub/templates/repo.html:150 seahub/templates/repo.html.py:198
+msgid "Copy"
+msgstr "復制"
+
+#: seahub/templates/repo.html:163 seahub/templates/repo.html.py:658
+msgid "starred"
+msgstr "已加星標"
+
+#: seahub/templates/repo.html:165 seahub/templates/repo.html.py:656
+msgid "unstarred"
+msgstr "未加星標"
+
+#: seahub/templates/repo.html:193
+msgid "More Operations"
+msgstr "更多操作"
+
+#: seahub/templates/repo.html:213
+msgid "Upload Files"
+msgstr "上傳文件"
+
+#: seahub/templates/repo.html:215 seahub/templates/repo.html.py:240
+msgid "The owner of this library has ran out of space."
+msgstr "該資料庫擁有者的空間已用完。"
+
+#: seahub/templates/repo.html:220
+msgid "Add files"
+msgstr "添加文件"
+
+#: seahub/templates/repo.html:221
+msgid "smaller than"
+msgstr "文件總大小小於"
+
+#: seahub/templates/repo.html:229 seahub/templates/repo.html.py:251
+msgid "Uploaded:"
+msgstr "上傳進度："
+
+#: seahub/templates/repo.html:229
+msgid "Fetching ..."
+msgstr "獲取中...請稍侯"
+
+#: seahub/templates/repo.html:238
+msgid "Update File"
+msgstr "更新文件 "
+
+#: seahub/templates/repo.html:245
+msgid "Smaller than"
+msgstr "文件總大小小於"
+
+#: seahub/templates/repo.html:251
+msgid "Fetching..."
+msgstr "獲取中...請稍侯"
+
+#: seahub/templates/repo.html:261
+msgid "Library Settings"
+msgstr "資料庫設置"
+
+#: seahub/templates/repo.html:268
+msgid "Keep full history"
+msgstr "保留所有歷史"
+
+#: seahub/templates/repo.html:269
+msgid "Don't keep history"
+msgstr "不保留歷史"
+
+#: seahub/templates/repo.html:270
+msgid "Only keep a period of history:"
+msgstr "僅保留一段時間的歷史:"
+
+#: seahub/templates/repo.html:271
+msgid "days"
+msgstr "天"
+
+#: seahub/templates/repo.html:280
+msgid "Directory Name"
+msgstr "目錄名"
+
+#: seahub/templates/repo.html:292
+msgid "Featured File Type"
+msgstr "特色文件類型"
+
+#: seahub/templates/repo.html:293 seahub/templates/repo.html.py:299
+msgid "Click to choose"
+msgstr "點擊選擇"
+
+#: seahub/templates/repo.html:293
+msgid "online Rich Text format."
+msgstr "在線富文本格式"
+
+#: seahub/templates/repo.html:299
+msgid "simple markup format."
+msgstr "簡單的標記格式"
+
+#: seahub/templates/repo.html:306
+#: seahub/templates/snippets/my_owned_repos.html:100
+msgid "File Name"
+msgstr "文件名稱"
+
+#: seahub/templates/repo.html:319
+msgid "Current Library"
+msgstr "當前資料庫"
+
+#: seahub/templates/repo.html:321
+msgid "Other Libraries"
+msgstr "其他資料庫"
+
+#: seahub/templates/repo.html:331
+msgid "Please click and choose a directory."
+msgstr "請點擊選擇目標目錄。"
+
+#: seahub/templates/repo.html:337
+msgid "Rename <span id=\"rename-type\"></span>"
+msgstr "重命名<span id=\"rename-type\"></span>"
+
+#: seahub/templates/repo.html:338
+msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
+msgstr "將 <span id=\"rename-obj\" class=\"op-target\"></span> 重命名為："
+
+#: seahub/templates/repo.html:350
+msgid "Link: "
+msgstr "鏈接："
+
+#: seahub/templates/repo.html:353 seahub/templates/view_file_base.html:97
+msgid "Send to:"
+msgstr "發送到："
+
+#: seahub/templates/repo.html:354 seahub/templates/view_file_base.html:98
+msgid "Emails, Seperated by ','"
+msgstr "輸入郵箱，多個以,分隔"
+
+#: seahub/templates/repo.html:358 seahub/templates/view_file_base.html:102
+msgid "Sending..."
+msgstr "發送中..."
+
+#: seahub/templates/repo.html:447
+msgid "Click to remove"
+msgstr "點擊刪除"
+
+#: seahub/templates/repo.html:448
+msgid "This file has already been selected:\\n$file!"
+msgstr "這個文件已經被添加：\\n$file!"
+
+#: seahub/templates/repo.html:591 seahub/templates/repo.html.py:618
+#: seahub/templates/repo_history_view.html:58
+#: seahub/templates/repo_recycle_view.html:61
+msgid "Directory"
+msgstr "目錄"
+
+#: seahub/templates/repo.html:608
+msgid "Copy "
+msgstr "復制"
+
+#: seahub/templates/repo.html:611
+msgid "Move "
+msgstr "移動"
+
+#: seahub/templates/repo.html:624
+msgid "to:"
+msgstr "到："
+
+#: seahub/templates/repo.html:799 seahub/templates/repo.html.py:811
+#: seahub/templates/repo.html:819
+msgid "It can't be blank."
+msgstr "輸入不能為空。"
+
+#: seahub/templates/repo.html:803
+msgid "Only an extension there, please input a name."
+msgstr "請輸入完整的文件名。"
+
+#: seahub/templates/repo_history.html:9
+msgid "modification history"
+msgstr "修改歷史"
+
+#: seahub/templates/repo_history.html:14
+msgid ""
+"Tip: A snapshot will be generated after modification, which records the "
+"library state before this modification."
+msgstr "Tip：在每次修改後會生成一個鏡像，記錄修改之前的目錄狀態。"
+
+#: seahub/templates/repo_history.html:14
+msgid "View Snapshot"
+msgstr "查看鏡像"
+
+#: seahub/templates/repo_history.html:60
+#: seahub/templates/repo_view_snapshot.html:55
+#: seahub/templates/sysadmin/sys_group_admin.html:37
+#: seahub/templates/sysadmin/sys_repo_admin.html:37
+#: seahub/templates/sysadmin/sys_useradmin.html:72
+msgid "Per page: "
+msgstr "每頁："
+
+#: seahub/templates/repo_history_view.html:8
+msgid "snapshot"
+msgstr "鏡像"
+
+#: seahub/templates/repo_history_view.html:9
+msgid "Back to snapshots"
+msgstr "返回鏡像列表"
+
+#: seahub/templates/repo_history_view.html:33
+msgid "Can't view this library"
+msgstr "無法在線查看該資料庫。"
+
+#: seahub/templates/repo_recycle_view.html:32
+#: seahub/templates/repo_recycle_view.html:34
+msgid "a week"
+msgstr "一周內"
+
+#: seahub/templates/repo_recycle_view.html:37
+#: seahub/templates/repo_recycle_view.html:39
+msgid "a month"
+msgstr "一個月內"
+
+#: seahub/templates/repo_recycle_view.html:42
+#: seahub/templates/repo_recycle_view.html:44
+msgid "all"
+msgstr "全部"
+
+#: seahub/templates/repo_recycle_view.html:54
+msgid "Delete Time"
+msgstr "刪除時間"
+
+#: seahub/templates/repo_view_snapshot.html:8
+msgid "Back to modification history"
+msgstr "返回修改歷史"
+
+#: seahub/templates/repo_view_snapshot.html:15
+msgid "Create Time"
+msgstr "生成時間"
+
+#: seahub/templates/repo_view_snapshot.html:17
+#: seahub/templates/view_file_markdown.html:7
+#: seahub/templates/view_file_text.html:18
+msgid "Detail"
+msgstr "修改內容"
+
+#: seahub/templates/repo_view_snapshot.html:83
+msgid "Restore Library"
+msgstr "還原資料庫"
+
+#: seahub/templates/repo_view_snapshot.html:84
+msgid "Are you sure you want to restore this library?"
+msgstr "確定要還原該資料庫？"
+
+#: seahub/templates/seafile_access_check.html:6
+msgid "Preparing, please wait..."
+msgstr "處理中，請稍候..."
+
+#: seahub/templates/seafile_access_check.html:7
+msgid ""
+"No running Seafile client is detected. If you're sure Seafile client is "
+"running, click the following link to continue downloading:"
+msgstr ""
+"沒有檢測到運行中的 Seafile 客戶端。如果您確定它在運行，請點擊下面的鏈接以完成"
+"下載："
+
+#: seahub/templates/seafile_access_check.html:8
+msgid "Your Seafile client is out of date, please upgrade to latest version."
+msgstr "你的 Seafile 客戶端版本太舊，請升級到最新版本。"
+
+#: seahub/templates/seafile_access_check.html:8
+msgid "Click to download."
+msgstr "點此下載"
+
+#: seahub/templates/shared_file_view.html:27
+#: seahub/templates/view_shared_dir.html:9
+msgid "Shared by: "
+msgstr "共享來源："
+
+#: seahub/templates/shared_link_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(email)s is sharing a file to you on "
+"%(site_name)s."
+msgstr "你收到這封郵件是因為 %(email)s 在 %(site_name)s 上共享了一個文件給你。"
+
+#: seahub/templates/shared_link_email.html:4
+msgid "Please go to the following page and view the file:"
+msgstr "請點擊以下鏈接查看："
+
+#: seahub/templates/text_diff.html:6
+msgid "modification details"
+msgstr "修改詳情"
+
+#: seahub/templates/text_diff.html:22
+msgid "It's a newly-created blank file."
+msgstr "該文件為新建空白文件。"
+
+#: seahub/templates/text_diff.html:29
+msgid "before modification"
+msgstr "修改前"
+
+#: seahub/templates/text_diff.html:31
+msgid "after modification"
+msgstr "修改後"
+
+#: seahub/templates/update_file_error.html:6
+msgid "Update file "
+msgstr "更新文件 "
+
+#: seahub/templates/update_file_error.html:14
+#: seahub/templates/upload_file_error.html:10
+msgid "error: "
+msgstr "失敗："
+
+#: seahub/templates/upload_file_error.html:6
+msgid "Upload file"
+msgstr "上傳文件"
+
+#: seahub/templates/upload_file_error.html:6
+msgid "to"
+msgstr "到"
+
+#: seahub/templates/user_404.html:6
+msgid "Sorry, this user is not registered yet."
+msgstr "抱歉，該用戶還未註冊。"
+
+#: seahub/templates/view_file_base.html:39
+#: seahub/templates/view_file_base.html:158
+msgid "Unstar"
+msgstr "取消星標"
+
+#: seahub/templates/view_file_base.html:41
+#: seahub/templates/view_file_base.html:155
+msgid "Star"
+msgstr "添加星標"
+
+#: seahub/templates/view_file_base.html:58
+#: seahub/templates/view_file_markdown.html:7
+#: seahub/templates/view_file_text.html:18
+msgid "updated this file"
+msgstr "更新了該文件"
+
+#: seahub/templates/view_file_base.html:62
+#, python-format
+msgid "one contributor"
+msgid_plural " %(counter)s contributors "
+msgstr[0] " %(counter)s 個貢獻者 "
+
+#: seahub/templates/view_file_base.html:74
+msgid "Open local file"
+msgstr "打開本地文件"
+
+#: seahub/templates/view_file_base.html:96
+msgid "Send Link"
+msgstr "發送鏈接"
+
+#: seahub/templates/view_file_base.html:106
+msgid "Processing..."
+msgstr "處理中..."
+
+#: seahub/templates/view_file_base.html:109
+msgid "You have not downloaded "
+msgstr "你還未下載"
+
+#: seahub/templates/view_file_base.html:109
+msgid "."
+msgstr "。"
+
+#: seahub/templates/view_file_base.html:110
+msgid "Click to download"
+msgstr "點此下載"
+
+#: seahub/templates/view_file_base.html:154
+msgid "Unstarred successfully"
+msgstr "星標取消成功"
+
+#: seahub/templates/view_file_base.html:157
+msgid "Starred successfully"
+msgstr "星標添加成功"
+
+#: seahub/templates/view_file_base.html:197
+msgid ""
+"Failed to find an application to open the file. Seafile will open the folder."
+msgstr "找不到打開該類型文件的程序。Seafile 將為你打開該文件所在目錄"
+
+#: seahub/templates/view_file_base.html:201
+msgid "The file is not synchronized, you can synchronize it manually."
+msgstr "本地文件尚未與服務器同步。請打開本地目錄的自動同步，或者手動進行同步"
+
+#: seahub/templates/view_file_base.html:203
+msgid "The file is not synchronized, please retry later."
+msgstr "本地文件尚未與服務器同步，請稍後再試"
+
+#: seahub/templates/view_file_base.html:207
+msgid "An error occurred when open the local file."
+msgstr "打開本地文件時出錯"
+
+#: seahub/templates/view_file_base.html:235
+msgid ""
+"You are running an old version of Seafile client, please <a target=\"_blank"
+"\">upgrade</a> it."
+msgstr "您的 Seafile 客戶端版本太低， 請先 <a target=\"_blank\">升級</a>。"
+
+#: seahub/templates/view_file_base.html:249
+msgid ""
+"No running Seafile client is detected. If you are sure Seafile client is "
+"running, click the following link to open the local file:"
+msgstr ""
+"沒有檢測到運行中的 Seafile 客戶端。如果您確定它在運行，請點擊下面的鏈接來打開"
+"本地文件："
+
+#: seahub/templates/view_file_image.html:15
+#: seahub/templates/snippets/file_content_html.html:31
+msgid "you can also press ← "
+msgstr "可用方向鍵 ← "
+
+#: seahub/templates/view_file_image.html:15
+#: seahub/templates/snippets/file_content_html.html:31
+msgid "prev"
+msgstr "上一張"
+
+#: seahub/templates/view_file_image.html:21
+#: seahub/templates/snippets/file_content_html.html:37
+msgid "you can also press → "
+msgstr "可用方向鍵 → "
+
+#: seahub/templates/view_file_image.html:21
+#: seahub/templates/snippets/file_content_html.html:37
+msgid "next"
+msgstr "下一張"
+
+#: seahub/templates/view_file_markdown.html:20
+#: seahub/templates/view_file_sf.html:15
+#: seahub/templates/view_file_text.html:31
+#: seahub/templates/snippets/file_encoding.html:5
+msgid "Encoding:"
+msgstr "文件編碼："
+
+#: seahub/templates/view_file_markdown.html:23
+#: seahub/templates/view_file_sf.html:18
+#: seahub/templates/view_file_text.html:34
+#: seahub/templates/snippets/file_encoding.html:8
+msgid "auto detect"
+msgstr "自動檢測"
+
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+msgid ""
+"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span></span>"
+msgstr ""
+"<span id=\"pdf-page\"><label for=\"page-number\">第</label> <input type="
+"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
+"\"page-nums\"></span> 頁</span>"
+
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+msgid "Full Screen"
+msgstr "全屏"
+
+#: seahub/templates/view_file_pdf.html:30
+#: seahub/templates/snippets/file_content_js.html:62
+msgid "loading..."
+msgstr "加載中..."
+
+#: seahub/templates/view_file_pdf.html:77
+#: seahub/templates/snippets/file_content_js.html:109
+msgid ""
+"You can use IE 10 or other browsers, for example, firefox, to view it online."
+msgstr "如果您想在線查看該文件，您可以使用 IE 10 或其他瀏覽器比如 firefox 。"
+
+#: seahub/templates/view_file_svg.html:7
+#: seahub/templates/snippets/file_content_js.html:41
+msgid "To view it online, you can use firefox, chrome or IE 9."
+msgstr "在線查看：請使用 firefox, chrome 或 IE 9。"
+
+#: seahub/templates/view_file_unknown.html:6
+#: seahub/templates/snippets/file_content_js.html:123
+msgid "This type of file cannot be viewed online."
+msgstr "該類型文件無法在線查看。"
+
+#: seahub/templates/registration/login.html:14
+msgid "Incorrect email or password"
+msgstr "你輸入的郵箱或密碼不正確"
+
+#: seahub/templates/registration/login.html:19
+msgid "Forgot password?"
+msgstr "忘記密碼？"
+
+#: seahub/templates/registration/login.html:28
+#: seahub/templates/registration/registration_form.html:32
+#: seahub/templates/sysadmin/sys_useradmin.html:123
+msgid "Email cannot be blank"
+msgstr "郵箱不能為空"
+
+#: seahub/templates/registration/login.html:32
+#: seahub/templates/registration/registration_form.html:36
+#: seahub/templates/sysadmin/sys_useradmin.html:127
+msgid "Password cannot be blank"
+msgstr "密碼不能為空"
+
+#: seahub/templates/registration/logout.html:4
+msgid "Log Out"
+msgstr "退出"
+
+#: seahub/templates/registration/logout.html:8
+msgid "Thanks for your participation! "
+msgstr "感謝參與！"
+
+#: seahub/templates/registration/logout.html:8
+msgid "Log in again"
+msgstr "重新登錄"
+
+#: seahub/templates/registration/password_change_done.html:4
+msgid "Password Change Successfully"
+msgstr "密碼修改成功"
+
+#: seahub/templates/registration/password_change_done.html:9
+msgid "Your password has been changed successfully."
+msgstr "密碼修改成功"
+
+#: seahub/templates/registration/password_change_form.html:3
+#: seahub/templates/registration/password_change_form.html:7
+msgid "Password Modification"
+msgstr "密碼修改"
+
+#: seahub/templates/registration/password_change_form.html:9
+msgid "Current Password: "
+msgstr "當前密碼："
+
+#: seahub/templates/registration/password_change_form.html:11
+#: seahub/templates/registration/password_reset_confirm.html:13
+msgid "New Password: "
+msgstr "新密碼："
+
+#: seahub/templates/registration/password_change_form.html:13
+#: seahub/templates/registration/password_reset_confirm.html:16
+msgid "Confirm Password: "
+msgstr "確認密碼"
+
+#: seahub/templates/registration/password_reset_complete.html:4
+msgid "Successfully reset password"
+msgstr "密碼重置成功"
+
+#: seahub/templates/registration/password_reset_complete.html:8
+msgid "Successfully reset password."
+msgstr "密碼重置成功。"
+
+#: seahub/templates/registration/password_reset_confirm.html:4
+#: seahub/templates/registration/password_reset_form.html:4
+#: seahub/templates/registration/password_reset_form.html:7
+#: seahub/templates/sysadmin/sys_useradmin.html:99
+#: seahub/views/sysadmin.py:250
+msgid "Password Reset"
+msgstr "密碼重置"
+
+#: seahub/templates/registration/password_reset_confirm.html:11
+msgid "Input new password"
+msgstr "輸入新密碼"
+
+#: seahub/templates/registration/password_reset_confirm.html:26
+msgid "Failed to reset password: this link is no longer available."
+msgstr "密碼重置失敗：重置鏈接失效。請重新重置。"
+
+#: seahub/templates/registration/password_reset_done.html:4
+msgid "Password Reset Successfully"
+msgstr "密碼重置成功"
+
+#: seahub/templates/registration/password_reset_done.html:8
+msgid "We've send a password reset email to your email."
+msgstr "我們已經把密碼重置說明發往你提交的郵箱裏，請查收。"
+
+#: seahub/templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset for your "
+"user account at %(site_name)s. "
+msgstr "你收到這封郵件是因為你請求給你在 %(site_name)s 的賬號重置密碼。"
+
+#: seahub/templates/registration/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "請點擊以下鏈接更新密碼："
+
+#: seahub/templates/registration/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "你的用戶名:"
+
+#: seahub/templates/registration/password_reset_form.html:9
+msgid "Your email used in login: "
+msgstr "你註冊的郵箱賬號："
+
+#: seahub/templates/registration/password_reset_form.html:12
+msgid "We will send you an email to set new password"
+msgstr "我們會把新密碼設置說明通過郵件發送給你"
+
+#: seahub/templates/registration/registration_form.html:3
+msgid "Register"
+msgstr "註冊"
+
+#: seahub/templates/registration/registration_form.html:7
+msgid "Welcome back, you are already signed in."
+msgstr "歡迎回來，你已登錄。"
+
+#: seahub/templates/registration/registration_form.html:15
+#: seahub/templates/sysadmin/sys_useradmin.html:16
+msgid "Confirm Password"
+msgstr "確認密碼"
+
+#: seahub/templates/registration/registration_form.html:40
+#: seahub/templates/snippets/repo_create_js.html:49
+#: seahub/templates/sysadmin/sys_useradmin.html:131
+msgid "Please enter the password again"
+msgstr "請再次輸入密碼"
+
+#: seahub/templates/snippets/avatar_upload_js.html:40
+msgid " is not supported. Please choose an image file."
+msgstr " 不是被支持的文件格式。請選擇圖片文件。"
+
+#: seahub/templates/snippets/avatar_upload_js.html:45
+msgid " is not supported. File extensions can only be "
+msgstr " 不是被支持的文件格式。文件擴展名只能是 "
+
+#: seahub/templates/snippets/avatar_upload_js.html:52
+msgid " is too large. Allowed maximum size is 1MB."
+msgstr " 太大。不得超過 1MB。"
+
+#: seahub/templates/snippets/bottom_bar.html:3
+msgid "Discuss"
+msgstr "討論"
+
+#: seahub/templates/snippets/bottom_bar.html:3
+msgid "Group"
+msgstr "群組"
+
+#: seahub/templates/snippets/bottom_bar.html:56
+msgid "Please select at least 1 group."
+msgstr "請至少選擇一個群組。"
+
+#: seahub/templates/snippets/bottom_bar.html:61
+msgid "Please input a discussion."
+msgstr "請輸入一個討論。"
+
+#: seahub/templates/snippets/events.html:3
+msgid "File Activities"
+msgstr "文件活動"
+
+#: seahub/templates/snippets/events.html:7
+#: seahub/templates/snippets/list_commit_detail.html:3
+msgid "Loading..."
+msgstr "加載中..."
+
+#: seahub/templates/snippets/events.html:9
+msgid "More"
+msgstr "更多"
+
+#: seahub/templates/snippets/events_body.html:29
+msgid "Created library"
+msgstr "創建了資料庫"
+
+#: seahub/templates/snippets/events_body.html:33
+#, python-format
+msgid "Deleted library %(library_name)s"
+msgstr "刪除了資料庫 %(library_name)s"
+
+#: seahub/templates/snippets/file_upload_progress_js.html:51
+#: seahub/templates/snippets/file_upload_progress_js.html:75
+msgid "Please choose a file at first."
+msgstr "請先選擇一個文件。"
+
+#: seahub/templates/snippets/file_upload_progress_js.html:62
+#: seahub/templates/snippets/file_upload_progress_js.html:85
+msgid "File size surpasses the limit."
+msgstr "文件大小超過限制, 無法上傳。"
+
+#: seahub/templates/snippets/group_recommend_form.html:5
+msgid "Post a discussion to group"
+msgstr "發起一個討論到小組"
+
+#: seahub/templates/snippets/group_recommend_form.html:14
+msgid "discussion"
+msgstr "討論"
+
+#: seahub/templates/snippets/list_commit_detail.html:11
+msgid "Modification Details"
+msgstr "修改詳情"
+
+#: seahub/templates/snippets/list_commit_detail.html:24
+msgid "New files"
+msgstr "新文件"
+
+#: seahub/templates/snippets/list_commit_detail.html:25
+msgid "Deleted files"
+msgstr "刪除的文件"
+
+#: seahub/templates/snippets/list_commit_detail.html:26
+msgid "Renamed or Moved files"
+msgstr "重命名或移動的文件"
+
+#: seahub/templates/snippets/list_commit_detail.html:27
+msgid "Modified files"
+msgstr "修改了的文件"
+
+#: seahub/templates/snippets/list_commit_detail.html:28
+msgid "New directories"
+msgstr "新目錄"
+
+#: seahub/templates/snippets/list_commit_detail.html:29
+msgid "Deleted directories"
+msgstr "刪除的目錄"
+
+#: seahub/templates/snippets/list_commit_detail.html:39
+msgid "Unknown error."
+msgstr "未知錯誤"
+
+#: seahub/templates/snippets/my_groups.html:22
+msgid "Create a group now"
+msgstr "立即創建群組"
+
+#: seahub/templates/snippets/my_owned_repos.html:6
+msgid "Mine"
+msgstr "我擁有的"
+
+#: seahub/templates/snippets/my_owned_repos.html:7
+#: seahub/templates/sysadmin/userinfo.html:64
+msgid "Shared"
+msgstr "共享給我的"
+
+#: seahub/templates/snippets/my_owned_repos.html:8
+msgid "Starred"
+msgstr "星標文件"
+
+#: seahub/templates/snippets/my_owned_repos.html:42
+msgid "You have not created any libraries"
+msgstr "你還未創建資料庫"
+
+#: seahub/templates/snippets/my_owned_repos.html:43
+msgid ""
+"You can create a library to organize your files. For example, you can create "
+"one for each of your projects. Each library can be synchronized and shared "
+"separately."
+msgstr ""
+"你可以新建一個資料庫來組織你的文件資料，比如為每個項目創建一個資料庫，每個資"
+"料庫可以單獨地同步和共享。"
+
+#: seahub/templates/snippets/my_owned_repos.html:44
+msgid "Synchronize libraries with PC client"
+msgstr "與Seafile客戶端同步"
+
+#: seahub/templates/snippets/my_owned_repos.html:45
+msgid "1. Download the library (make sure PC client is running)."
+msgstr "1. 下載這個資料庫（請確認Seafile客戶端已啟動）。"
+
+#: seahub/templates/snippets/my_owned_repos.html:46
+msgid "2. Add files to the folder and they will be uploaded automatically."
+msgstr "2. 把文件拷貝到下載下來的目錄中，它們會自動同步到服務器上。"
+
+#: seahub/templates/snippets/my_owned_repos.html:90
+msgid "No library is shared to you"
+msgstr "還沒有資料庫共享給你"
+
+#: seahub/templates/snippets/my_owned_repos.html:91
+msgid ""
+"Libraries shared to you or shared to groups you joined will be listed here. "
+"Libraries shared as writable can be downloaded and synced. Read only "
+"libraries can only be downloaded, updates on local files will not be "
+"uploaded."
+msgstr ""
+"這裏會顯示共享給你的資料庫。你可以下載和同步以可讀寫方式共享給你的資料庫。而"
+"對於以只讀方式共享給你的資料庫，你只能下載，對本地文件所做的修改將不會被上"
+"傳。"
+
+#: seahub/templates/snippets/my_owned_repos.html:106
+msgid "icon"
+msgstr "圖標"
+
+#: seahub/templates/snippets/my_owned_repos.html:117
+msgid "You don't have any starred files yet"
+msgstr "你還沒有星標文件"
+
+#: seahub/templates/snippets/my_owned_repos.html:118
+msgid ""
+"You can star important files by clicking the \"Star\" button on file viewing "
+"page, and they will be listed here."
+msgstr ""
+"你可以在文件瀏覽頁面點擊“添加星標”按鈕給重要的文件加上星標，這些文件會顯示在"
+"這裏。"
+
+#: seahub/templates/snippets/myhome_extra_script.html:40
+msgid "Please enter emails or groups or select some at first."
+msgstr "請輸入郵箱或群組或選擇一些。"
+
+#: seahub/templates/snippets/myhome_extra_script.html:51
+#: seahub/templates/sysadmin/sys_repo_admin.html:62
+#: seahub/templates/sysadmin/userinfo.html:140
+msgid "Delete Library"
+msgstr "刪除資料庫"
+
+#: seahub/templates/snippets/office_convert_html.html:4
+msgid "The file is being processed, please wait..."
+msgstr "文件正在處理，請稍後..."
+
+#: seahub/templates/snippets/office_convert_js.html:34
+msgid "hide outline"
+msgstr "隱藏提綱"
+
+#: seahub/templates/snippets/office_convert_js.html:35
+msgid "show outline"
+msgstr "顯示提綱"
+
+#: seahub/templates/snippets/office_convert_js.html:108
+#: seahub/templates/snippets/office_convert_js.html:115
+#: seahub/templates/snippets/office_convert_js.html:140
+msgid "Document convertion failed."
+msgstr "文檔轉換失敗。"
+
+#: seahub/templates/snippets/pubinfo.html:3
+msgid "Organization Info"
+msgstr "機構信息"
+
+#: seahub/templates/snippets/pubinfo.html:5
+msgid "<span class=\"obj\">Library"
+msgid_plural "<span class=\"obj\">Libraries"
+msgstr[0] "<span class=\"obj\">資料庫"
+
+#: seahub/templates/snippets/pubinfo.html:7
+msgid "<span class=\"obj\">Group"
+msgid_plural "<span class=\"obj\">Groups"
+msgstr[0] "<span class=\"obj\">群組"
+
+#: seahub/templates/snippets/pubinfo.html:9
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "成員"
+
+#: seahub/templates/snippets/repo_create_form.html:9
+msgid "Share Permission"
+msgstr "共享權限"
+
+#: seahub/templates/snippets/repo_create_form.html:18
+msgid "Encrypt"
+msgstr "加密"
+
+#: seahub/templates/snippets/repo_create_form.html:20
+msgid "(at least 3 characters)"
+msgstr "(至少3個字符)"
+
+#: seahub/templates/snippets/repo_create_form.html:22
+msgid "Password again"
+msgstr "請再次輸入密碼"
+
+#: seahub/templates/snippets/repo_create_js.html:37
+msgid "Please enter password"
+msgstr "請輸入密碼"
+
+#: seahub/templates/snippets/repo_share_form.html:3
+msgid "Share Library"
+msgstr "共享資料庫"
+
+#: seahub/templates/snippets/repo_share_form.html:4
+msgid "Share <span class=\"op-target\"></span> to"
+msgstr "將 <span id=\"rename-obj\" class=\"op-target\"></span> 共享給："
+
+#: seahub/templates/snippets/repo_share_form.html:7
+msgid "Enter"
+msgstr "直接輸入"
+
+#: seahub/templates/snippets/repo_share_form.html:12
+msgid "Emails or Groups, Seperated by ','"
+msgstr "輸入郵箱或群組，多個以,分隔"
+
+#: seahub/templates/snippets/repo_share_form.html:15
+msgid ""
+"Tip: must be organization members or organization groups, enter \"all\" to "
+"share to public library."
+msgstr "Tip：必須是團體內成員或群組，輸入 all 共享到公共資料。"
+
+#: seahub/templates/snippets/repo_share_form.html:18
+msgid "Tip: enter \"all\" to share to public library."
+msgstr "Tip：輸入 all 共享到公共資料"
+
+#: seahub/templates/snippets/shared_link_js.html:87
+msgid "Please input at least an email."
+msgstr "請輸入至少一個郵箱。"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:8
+msgid "All Groups"
+msgstr "所有群組"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:13
+#: seahub/templates/sysadmin/sys_org_admin.html:13
+msgid "Creator"
+msgstr "創建者"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:14
+#: seahub/templates/sysadmin/sys_org_admin.html:14
+#: seahub/templates/sysadmin/sys_useradmin.html:27
+msgid "Create At"
+msgstr "創建時間"
+
+#: seahub/templates/sysadmin/sys_group_admin.html:62
+msgid "Delete Group"
+msgstr "刪除群組"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:7
+msgid "All Organizations"
+msgstr "所有團體"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:12
+msgid "Url Prefix"
+msgstr "個性域名"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:62
+msgid "Delete Organization"
+msgstr "刪除團體"
+
+#: seahub/templates/sysadmin/sys_repo_admin.html:6
+msgid "All Libraries"
+msgstr "所有資料庫"
+
+#: seahub/templates/sysadmin/sys_repo_admin.html:12
+msgid "Owner"
+msgstr "擁有者"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:8
+msgid "All Members"
+msgstr "所有用戶"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:9
+#: seahub/templates/sysadmin/sys_useradmin.html:11
+msgid "Add new user"
+msgstr "添加新用戶"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:25
+msgid "Status"
+msgstr "狀態"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:26
+#: seahub/templates/sysadmin/userinfo.html:22
+msgid "Space Used"
+msgstr "已用空間"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:35
+msgid "Activated"
+msgstr "已激活"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:37
+msgid "Active"
+msgstr "激活"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:50
+msgid "ResetPwd"
+msgstr "重置密碼"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:52
+#: seahub/templates/sysadmin/sys_useradmin.html:103
+msgid "Revoke Admin"
+msgstr "取消管理員"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:54
+#: seahub/templates/sysadmin/sys_useradmin.html:107
+msgid "Set Admin"
+msgstr "設為管理員"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:95
+msgid "Delete User"
+msgstr "刪除用戶"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:100
+#, python-format
+msgid "Are you sure you want to reset the password of %s ?"
+msgstr "確定要重置 %s 的密碼嗎？"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:104
+#, python-format
+msgid "Are you sure you want to revoke the admin permission of %s ?"
+msgstr "確定要取消 %s 的管理權限嗎？"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:108
+#, python-format
+msgid "Are you sure you want to set %s as admin?"
+msgstr "確定要設置 %s 為管理員嗎？"
+
+#: seahub/templates/sysadmin/user_add_email.html:3
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to organization "
+"\"%(org.org_name)s\" on %(site_name)s."
+msgstr ""
+"你收到這封郵件是因為 %(user)s 在 %(site_name)s 上將你加入"
+"到“%(org.org_name)s”團體。"
+
+#: seahub/templates/sysadmin/user_add_email.html:5
+#, python-format
+msgid ""
+"You're receiving this e-mail because %(user)s added you to %(site_name)s."
+msgstr "你收到這封郵件是因為 %(user)s 將你加入到 %(site_name)s。"
+
+#: seahub/templates/sysadmin/user_add_email.html:7
+msgid "Following is your account information:"
+msgstr "以下是您的登錄信息："
+
+#: seahub/templates/sysadmin/user_add_email.html:8
+#, python-format
+msgid "Email: %(email)s"
+msgstr "郵箱：%(email)s"
+
+#: seahub/templates/sysadmin/user_add_email.html:9
+#, python-format
+msgid "Password:  %(password)s"
+msgstr "密碼：%(password)s"
+
+#: seahub/templates/sysadmin/user_add_email.html:11
+msgid "Please go to the following page and log in:"
+msgstr "請點擊以下鏈接登錄："
+
+#: seahub/templates/sysadmin/user_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because staff has reset your password at "
+"%(site_name)s. "
+msgstr "你收到這封郵件是因為你在 %(site_name)s 的賬號密碼已經被管理員重置。"
+
+#: seahub/templates/sysadmin/user_reset_email.html:4
+#, python-format
+msgid ""
+"Your new password is %(password)s, please modify your password as soon as "
+"possible."
+msgstr "你的新密碼是 %(password)s, 請盡快修改。"
+
+#: seahub/templates/sysadmin/userinfo.html:27
+msgid "Used"
+msgstr "我使用的"
+
+#: seahub/templates/sysadmin/userinfo.html:32
+msgid "Set Quota"
+msgstr "設置容量"
+
+#: seahub/templates/sysadmin/userinfo.html:39
+msgid "Owned"
+msgstr "我擁有的"
+
+#: seahub/templates/sysadmin/userinfo.html:88
+msgid "Set user storage limit"
+msgstr "設置該用戶的存儲容量上限"
+
+#: seahub/templates/sysadmin/userinfo.html:91
+msgid "Tip: 0 means default limit"
+msgstr "Tip: 設置為0表示重置為默認上限"
+
+#: seahub/templates/wiki/personal_wiki.html:25
+msgid "You do not have personal wiki"
+msgstr "你還未創建個人維基"
+
+#: seahub/templates/wiki/personal_wiki.html:32
+msgid "personal-wiki"
+msgstr "個人維基"
+
+#: seahub/templates/wiki/personal_wiki.html:34
+msgid "Personal Wiki Pages"
+msgstr "個人維基頁面"
+
+#: seahub/utils/__init__.py:91
+msgid "permission error"
+msgstr "權限錯誤"
+
+#: seahub/utils/__init__.py:106 seahub/utils/__init__.py:1022
+msgid "Internal error"
+msgstr "內部錯誤"
+
+#: seahub/views/__init__.py:299
+msgid "Unable to view recycle page"
+msgstr "無法查看文件回收站"
+
+#: seahub/views/__init__.py:324
+msgid "Library does not exist."
+msgstr "資料庫不存在"
+
+#: seahub/views/__init__.py:335
+msgid "You do not have permission to perform this action."
+msgstr "你沒有權限進行該操作"
+
+#: seahub/views/__init__.py:342
+msgid "Failed to edit library information."
+msgstr "資料庫信息編輯失敗。"
+
+#: seahub/views/__init__.py:349
+msgid "Settings saved."
+msgstr "設置已保存。"
+
+#: seahub/views/__init__.py:353
+msgid "Failed to save settings on server"
+msgstr "設置失敗"
+
+#: seahub/views/__init__.py:362
+msgid "Filename contains invalid character"
+msgstr "上傳的文件名包含非法字符"
+
+#: seahub/views/__init__.py:364
+msgid "Duplicated filename"
+msgstr "已存在同名的文件"
+
+#: seahub/views/__init__.py:368
+msgid "File size surpasses the limit"
+msgstr "文件大小超過限制"
+
+#: seahub/views/__init__.py:370
+msgid "The space of owner is used up, upload failed"
+msgstr "該資料庫所有者的空間已用完，無法上傳"
+
+#: seahub/views/__init__.py:372
+msgid "An error occurs during file transfer"
+msgstr "文件傳輸出錯"
+
+#: seahub/views/__init__.py:384 seahub/views/__init__.py:406
+msgid "Invalid url"
+msgstr "非法鏈接"
+
+#: seahub/views/__init__.py:431
+msgid "You don't have permission to access the library."
+msgstr "你沒有權限訪問該資料庫。"
+
+#: seahub/views/__init__.py:439
+msgid "No path."
+msgstr "路徑不存在"
+
+#: seahub/views/__init__.py:492
+msgid "Unable to view library modification"
+msgstr "無法瀏覽該資料庫修改歷史"
+
+#: seahub/views/__init__.py:546
+msgid "Unable to view library snapshots"
+msgstr "無法查看該資料庫鏡像"
+
+#: seahub/views/__init__.py:603
+msgid "You have no permission to restore library"
+msgstr "你沒有權限進行還原操作"
+
+#: seahub/views/__init__.py:619
+msgid "Please specify history ID"
+msgstr "請指定歷史記錄ID"
+
+#: seahub/views/__init__.py:627 seahub/views/__init__.py:720
+#: seahub/views/__init__.py:1526 seahub/views/__init__.py:2135
+msgid "Library does not exist"
+msgstr "資料庫不存在"
+
+#: seahub/views/__init__.py:629
+msgid "History you specified does not exist"
+msgstr "指定的歷史記錄不存在"
+
+#: seahub/views/__init__.py:631
+msgid "Unknown error"
+msgstr "未知錯誤"
+
+#: seahub/views/__init__.py:701
+msgid "No conflict in the merge."
+msgstr "合並沒有沖突。"
+
+#: seahub/views/__init__.py:740 seahub/views/__init__.py:757
+msgid ""
+"Failed to remove library. Only staff or owner can perform this operation."
+msgstr "刪除資料庫失敗, 只有團體管理員或資料庫創建者有權刪除資料庫。"
+
+#: seahub/views/__init__.py:755
+#, python-format
+msgid "Successfully deleted library \"%s\"."
+msgstr "成功刪除資料庫 \"%s\"。"
+
+#: seahub/views/__init__.py:916
+#, python-format
+msgid "Successfully unsync client %s"
+msgstr "取消同步 %s 成功"
+
+#: seahub/views/__init__.py:918
+msgid "Successfully unsync client"
+msgstr "成功取消同步"
+
+#: seahub/views/__init__.py:921
+#, python-format
+msgid "Failed to unsync client %s"
+msgstr "取消同步 %s 失敗"
+
+#: seahub/views/__init__.py:923
+msgid "Failed to unsync client"
+msgstr "取消同步失敗"
+
+#: seahub/views/__init__.py:1001 seahub/views/__init__.py:1500
+msgid "Failed to create library"
+msgstr "創建資料庫失敗"
+
+#: seahub/views/__init__.py:1019
+msgid "Failed to unshare the library, as it does not exist."
+msgstr "取消共享失敗，該資料庫不存在"
+
+#: seahub/views/__init__.py:1024
+#, python-format
+msgid "Unshare \"%s\" successfully."
+msgstr "\"%s\" 取消共享成功"
+
+#: seahub/views/__init__.py:1026
+#, python-format
+msgid "Failed to unshare \"%s\"."
+msgstr "\"%s\" 取消共享失敗"
+
+#: seahub/views/__init__.py:1056
+msgid "Failed to delete file."
+msgstr "刪除文件出錯。"
+
+#: seahub/views/__init__.py:1063
+#, python-format
+msgid "%s successfully deleted."
+msgstr "%s 刪除成功。"
+
+#: seahub/views/__init__.py:1065
+#, python-format
+msgid "Internal error. Failed to delete %s."
+msgstr "內部錯誤。刪除 %s 失敗。"
+
+#: seahub/views/__init__.py:1080
+msgid "File size surpasses 10M, can not be previewed online."
+msgstr "文件超過10M，無法在線查看。"
+
+#: seahub/views/__init__.py:1085 seahub/views/file.py:105
+msgid "HTTPError: failed to open file online"
+msgstr "HTTPError: 無法在線打開該文件"
+
+#: seahub/views/__init__.py:1088 seahub/views/file.py:108
+msgid "URLError: failed to open file online"
+msgstr "URLError: 無法在線打開該文件"
+
+#: seahub/views/__init__.py:1095 seahub/views/file.py:115
+msgid "The encoding you chose is not proper."
+msgstr "文件編碼不合適"
+
+#: seahub/views/__init__.py:1112 seahub/views/__init__.py:1115
+#: seahub/views/file.py:132 seahub/views/file.py:135
+msgid "Unknown file encoding"
+msgstr "文件編碼無法識別"
+
+#: seahub/views/__init__.py:1187
+msgid "Unable to access file"
+msgstr "無法訪問文件"
+
+#: seahub/views/__init__.py:1214
+msgid "Failed to download library, unable to find server"
+msgstr "下載失敗：找不到服務器"
+
+#: seahub/views/__init__.py:1225
+msgid "Invalid server setting"
+msgstr "服務器設置錯誤"
+
+#: seahub/views/__init__.py:1268
+msgid "Destination path is too long."
+msgstr "目標路徑過長"
+
+#: seahub/views/__init__.py:1274
+msgid "You can not modify that library."
+msgstr "你無法修改該資料庫。"
+
+#: seahub/views/__init__.py:1287
+#, python-format
+msgid "Can not %(op)s directory %(src)s to its subdirectory %(des)s"
+msgstr "不能把目錄 %(src)s %(op)s到它的子目錄 %(des)s中"
+
+#: seahub/views/__init__.py:1288
+msgid "copy"
+msgstr "復制"
+
+#: seahub/views/__init__.py:1288
+msgid "move"
+msgstr "移動"
+
+#: seahub/views/__init__.py:1303
+#, python-format
+msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
+msgstr "復制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
+
+#: seahub/views/__init__.py:1309
+#, python-format
+msgid "Successfully moving %(name)s <a href=\"%(url)s\">view</a>"
+msgstr "移動 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
+
+#: seahub/views/__init__.py:1368 seahub/views/__init__.py:1399
+#: seahub/views/__init__.py:1433 seahub/views/__init__.py:2276
+#: seahub/views/file.py:550
+msgid "Permission denied"
+msgstr "共享權限"
+
+#: seahub/views/__init__.py:1445
+#, python-format
+msgid "Successfully renamed %(old)s to %(new)s"
+msgstr "%(old)s 已重命名為 %(new)s"
+
+#: seahub/views/__init__.py:1607
+#, python-format
+msgid ""
+"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
+msgstr "成功還原 %(path)s 到<a href=\"%(root)s\">根目錄。</a>"
+
+#: seahub/views/__init__.py:1611 seahub/views/__init__.py:1637
+#, python-format
+msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
+msgstr "成功還原 <a href=\"%(url)s\">%(path)s</a>"
+
+#: seahub/views/__init__.py:1633
+#, python-format
+msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
+msgstr "成功還原 %(path)s 到<a href=\"%(url)s\">根目錄。</a>"
+
+#: seahub/views/__init__.py:2171 seahub/views/file.py:544
+msgid "Internal Error"
+msgstr "內部錯誤"
+
+#: seahub/views/__init__.py:2174
+#, python-format
+msgid "Unable to download directory \"%s\": size is too large."
+msgstr "無法下載 \"%s\"：目錄大小超過限制。"
+
+#: seahub/views/__init__.py:2189
+#, python-format
+msgid "Unable to download \"%s\""
+msgstr "無法下載 \"%s\""
+
+#: seahub/views/__init__.py:2271
+msgid "The group doesn't exist"
+msgstr "該群組不存在"
+
+#: seahub/views/file.py:275 seahub/views/file.py:495 seahub/views/file.py:510
+#: seahub/views/file.py:532
+msgid "Unable to view file"
+msgstr "無法查看該文件"
+
+#: seahub/views/file.py:290 seahub/views/file.py:295 seahub/views/file.py:457
+#: seahub/views/file.py:462
+#, python-format
+msgid "File size surpasses %s, can not be opened online."
+msgstr "文件大小超過 %s，無法在線查看。"
+
+#: seahub/views/file.py:554
+msgid "The library does not exist."
+msgstr "資料庫不存在"
+
+#: seahub/views/file.py:558
+msgid "The library is encrypted."
+msgstr "該資料庫已加密"
+
+#: seahub/views/file.py:632
+msgid "Unable to edit file"
+msgstr "無法編輯該文件"
+
+#: seahub/views/file.py:644
+msgid "The file does not exist."
+msgstr "該文件不存在"
+
+#: seahub/views/file.py:672
+msgid "Edit online is not offered for this type of file."
+msgstr "該類型文件不能在線編輯。"
+
+#: seahub/views/sysadmin.py:134
+msgid "Failed to set quota: internal error"
+msgstr "內部錯誤，設置失敗"
+
+#: seahub/views/sysadmin.py:191
+#, python-format
+msgid "Successfully deleted %s"
+msgstr "%s 刪除成功。"
+
+#: seahub/views/sysadmin.py:193
+msgid "Failed to delete: the user does not exist"
+msgstr "刪除失敗：該用戶不存在"
+
+#: seahub/views/sysadmin.py:205
+#, python-format
+msgid "Successfully set %s as admin"
+msgstr "成功設置 %s 為管理員"
+
+#: seahub/views/sysadmin.py:207
+msgid "Failed to set admin: the user does not exist"
+msgstr "設置管理員失敗：該用戶不存在"
+
+#: seahub/views/sysadmin.py:219
+#, python-format
+msgid "Successfully revoke the admin permission of %s"
+msgstr "成功取消 %s 的管理權限"
+
+#: seahub/views/sysadmin.py:221
+msgid "Failed to revoke admin: the user does not exist"
+msgstr "取消管理員權限失敗：該用戶不存在"
+
+#: seahub/views/sysadmin.py:270
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "成功將重置密碼為 %(passwd)s, 一封通知郵件已經發送給 %(user)s。"
+
+#: seahub/views/sysadmin.py:275
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, but failed to send email to "
+"%(user)s, please check your email configuration."
+msgstr ""
+"成功將用戶密碼重置為 %(passwd)s, 但發送通知郵件到 %(user)s 失敗，請檢查你的郵"
+"件配置。"
+
+#: seahub/views/sysadmin.py:279
+#, python-format
+msgid "Successfully reset password to %(passwd)s for user %(user)s."
+msgstr "成功將用戶 %(user)s 的密碼重置為 %(passwd)s。"
+
+#: seahub/views/sysadmin.py:282
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s for user %(user)s. But email "
+"notification can not be sent, because Email service is not properly "
+"configured."
+msgstr ""
+"成功將用戶 %(user)s 的密碼重置為 %(passwd)s, 但是由於郵箱服務未正確配置，通知"
+"郵件無法發送。"
+
+#: seahub/views/sysadmin.py:285
+msgid "Failed to reset password: user does not exist"
+msgstr "密碼重置失敗：用戶不存在"
+
+#: seahub/views/sysadmin.py:306
+msgid "Seafile Registration Information"
+msgstr "Seafile註冊信息"
+
+#: seahub/views/sysadmin.py:341
+#, python-format
+msgid "Successfully added user %s. An email notification has been sent."
+msgstr "成功添加用戶 %s。一封通知郵件已發送。"
+
+#: seahub/views/sysadmin.py:344
+#, python-format
+msgid ""
+"Successfully added user %s. An error accurs when sending email notification, "
+"please check your email configuration."
+msgstr "成功添加用戶 %s。但發送通知郵件出錯，請檢查郵箱配置。"
+
+#: seahub/views/sysadmin.py:346
+#, python-format
+msgid "Successfully added user %s."
+msgstr "成功添加用戶 %s。"
+
+#: seahub/views/sysadmin.py:348
+#, python-format
+msgid ""
+"Successfully added user %s. But email notification can not be sent, because "
+"Email service is not properly configured."
+msgstr "成功添加用戶 %s。 但由於郵件服務未正確配置，通知郵件無法發送。"
