@@ -129,6 +129,7 @@ gettext_noop = lambda s: s
 LANGUAGES = (
     ('en', gettext_noop('English')),
     ('zh-cn', gettext_noop(u'简体中文')),
+    ('zh-HK', gettext_noop(u'正體中文')),
     ('ru', gettext_noop(u'Русский')),    
     ('de', gettext_noop(u'Deutsch')),
     ('es', gettext_noop('Español')),
