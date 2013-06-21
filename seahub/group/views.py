@@ -673,9 +673,9 @@ def group_add_admin(request, group_id):
                 result['error'] = _(e.msg)
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
-        messages.success(request, _(u'Operation succeeded.'))
-        return HttpResponse(json.dumps('success'), status=200,
-                            content_type=content_type)
+    messages.success(request, _(u'Operation succeeded.'))
+    return HttpResponse(json.dumps('success'), status=200,
+                        content_type=content_type)
 
 @login_required
 @group_staff_required
