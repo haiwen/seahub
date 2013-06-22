@@ -49,9 +49,10 @@
         </div>
     </div>
 
-    {% if msg.reply_cnt > 0 %}
+
         <div class="msg-op">
-            <ul class="reply-list">
+          <ul class="reply-list" id="reply-list">
+            {% if msg.reply_cnt > 0 %}
                 {% for r in msg.replies %}
                 <li class="reply ovhd reply-at">
                 {% avatar r.from_email 48 %}
@@ -62,14 +63,21 @@
                 </div>
                 </li>
                 {% endfor %}
+            {% endif %}
             </ul>
+
             <div class="outer-caret"><div class="inner-caret"></div></div>
         </div>
-    {% endif %}
+
 </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+function addMessage(html) {
+  var reply_list = $('#reply-list')
+  reply_list.append(html)
+  return 1;
+}
 </script>
 {% endblock %}

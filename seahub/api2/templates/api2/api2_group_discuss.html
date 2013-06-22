@@ -7,7 +7,7 @@
 
 {% block main_panel %}
 {% if group_msgs %}
-    <ul class="msg-list">
+    <ul class="msg-list" id="msg-list">
     {% include "api2/group_msgs.html" %}
     </ul>
     {% if group_msgs.has_next %}
@@ -53,5 +53,11 @@ $(document).scroll(function() {
     }
 });
 {% endif %}
+
+function addMessage(html) {
+  var msg_list = $('#msg-list')
+  msg_list.prepend(html)
+  msg_list.children().eq(0).click(msgClick);
+}
 </script>
 {% endblock %}

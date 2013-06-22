@@ -1,30 +1,64 @@
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
-        <li class="msg w100 ovhd">
-        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
+ <li class="msg ovhd" data-msgid="{{msg.id}}">
+        {% avatar msg.from_email 48 %}
         <div class="txt">
             <div class="msg-main">
-                <div class="msg-hd w100 ovhd">
-                    <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                <div class="msg-hd ovhd">
+                    <span class="author">{{ msg.from_email|email2nickname }}</span>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
-                <span class="say"></span>
-            </div>
-            <div class="msg-op">
-                <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
-                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
-                    <span class="fold-replies hide">{% trans "Hide replies" %}</span>
-                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                {% if msg.attachment %}
+                {% with ma=msg.attachment %}
+                <div class="msg-attachment">
+                    {% if ma.src == 'recommend' %}
+                    {% if ma.attach_type == 'file' %}
+                        {% if ma.filetype != 'Image'%}
+                        <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                        <span class="name vam">{{ ma.name }}</span>
+                        {% else %}
+                            {% if ma.err %}
+                            <p class="error">{{ma.err}}</p>
+                            {% else %}
+                            <img src="{{ma.img_url}}" alt="{{ma.name}}" class="img" />
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <span class="name vam">{{ ma.name }}</span>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <span class="name vam">{{ ma.name }}</span>
+                    {% endif %}
                 </div>
-                <ul class="reply-list hide"></ul>
-                <form action="{% url 'api_msg_reply' msg.id %}" method="post" class="reply-form">
-                    <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
-                    <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
-                    <button type="submit" class="reply-submit hide" >{% trans "Submit" %}</button>
-                    <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
-                </form>
+                {% endwith %}
+                {% endif %}
             </div>
+
+            {% if msg.reply_cnt > 0 %}
+            <div class="msg-op">
+                {% if msg.reply_cnt > 3 %}
+                <span class="replies-num">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                {% endif %}
+                <ul class="reply-list">
+                    {% for r in msg.replies %}
+                    <li class="reply w100 ovhd reply-at">
+                    {% avatar r.from_email 28 %}
+                    <div class="txt">
+                        <span class="author">{{ r.from_email|email2nickname  }}</span>
+                        <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
+                        <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
+                    </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="outer-caret"><div class="inner-caret"></div></div>
+            </div>
+            {% endif %}
         </div>
         </li>

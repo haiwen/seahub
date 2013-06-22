@@ -38,7 +38,7 @@ from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
-from seahub.group.views import group_check, msg_reply
+from seahub.group.views import group_check
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
@@ -1234,25 +1234,22 @@ def group_discuss(request, group):
         if group.view_perm == "pub" and not request.user.is_authenticated():
             raise Http404
 
-        form = MessageForm(request.POST)
+        msg = request.POST.get('message')
+        message = GroupMessage()
+        message.group_id = group.id
+        message.from_email = request.user.username
+        message.message = msg
+        message.save()
 
-        if form.is_valid():
-            msg = form.cleaned_data['message']
-            message = GroupMessage()
-            message.group_id = group.id
-            message.from_email = request.user.username
-            message.message = msg
-            message.save()
-
-            # send signal
-            grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+        # send signal
+        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
                               from_email=username)
 
-            ctx = {}
-            ctx['msg'] = message
-            html = render_to_string("api2/api2_discuss.html", ctx)
-            serialized_data = json.dumps({"html": html})
-            return HttpResponse(serialized_data, content_type=content_type)
+        ctx = {}
+        ctx['msg'] = message
+        html = render_to_string("api2/api2_discuss.html", ctx)
+        serialized_data = json.dumps({"html": html})
+        return HttpResponse(serialized_data, content_type=content_type)
 
     # remove user notifications
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
@@ -1391,6 +1388,36 @@ def discussion(request, msg_id):
             }, context_instance=RequestContext(request))
 
 
+def msg_reply(request, msg_id):
+    """Show group message replies, and process message reply in ajax"""
+    
+    content_type = 'application/json; charset=utf-8'
+    ctx = {}
+    try:
+        group_msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        raise Http404
+
+    msg = request.POST.get('message')
+    msg_reply = MessageReply()
+    msg_reply.reply_to = group_msg
+    msg_reply.from_email = request.user.username
+    msg_reply.message = msg
+    msg_reply.save()
+
+    # send signal if reply other's message
+    if group_msg.from_email != request.user.username:
+        grpmsg_reply_added.send(sender=MessageReply,
+                                msg_id=msg_id,
+                                from_email=request.user.username)
+    replies = MessageReply.objects.filter(reply_to=group_msg)
+    r_num = len(replies)
+    ctx['r'] = msg_reply
+    html = render_to_string("api2/api2_reply.html", ctx)
+    serialized_data = json.dumps({"html": html})
+    return HttpResponse(serialized_data, content_type=content_type)
+
+
 def repo_history_changes(request, repo_id):
     changes = {}
     content_type = 'application/json; charset=utf-8'
@@ -1449,13 +1476,21 @@ class Groups(APIView):
             group_json.append(group)
         return Response(group_json)
 
-class EventsHtml(APIView):
+class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         return events(request)
+
+class AjaxDiscussions(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        return ajax_discussions(request, group_id)
 
 class ActivityHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1466,7 +1501,7 @@ class ActivityHtml(APIView):
         return activity(request)
 
 
-class DiscussionHtml(APIView):
+class DiscussionsHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -1477,6 +1512,19 @@ class DiscussionHtml(APIView):
     def post(self, request, group_id, format=None):
         return group_discuss(request, group_id)
 
+
+class DiscussionHtml(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, msg_id, format=None):
+        return discussion(request, msg_id)
+
+    def post(self, request, msg_id, format=None):
+        return msg_reply (request, msg_id)
+
+
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1484,14 +1532,6 @@ class RepoHistoryChangeHtml(APIView):
 
     def get(self, request, repo_id, format=None):
         return api_repo_history_changes (request, repo_id)
-
-class MsgReplyHtml(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def post(self, request, msg_id, format=None):
-        return msg_reply (request, msg_id)
 
 
 #Following is only for debug
