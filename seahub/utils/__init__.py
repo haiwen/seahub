@@ -899,7 +899,7 @@ def api_convert_desc_link(e):
         file_or_dir = matchobj.group(2)
         remaining = matchobj.group(3)
 
-        tmp_str = '%s "<span class="a">%s</span>"'
+        tmp_str = '%s "<span class="file-name">%s</span>"'
         if remaining:
             url = reverse('api_repo_history_changes', args=[repo_id])
             e.link = "%s?commit_id=%s" % (url, cmmt_id)

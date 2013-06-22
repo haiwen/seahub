@@ -1172,27 +1172,26 @@ class SharedRepo(APIView):
 def api_pre_events(event_groups):
     for g in event_groups:
         for e in g["events"]:
-            e.link = "api://repos/%s" % e.repo_id
-            e.dtime = 0
+            if e.etype != "repo-delete":
+                e.link = "api://repos/%s" % e.repo_id
+
             if e.etype == "repo-update":
                 api_convert_desc_link(e)
 
 
 def activity(request):
+    if not EVENTS_ENABLED:
+        events = None
+        return render_to_response('api2/api2_activity.html', {
+            "events":events,
+            }, context_instance=RequestContext(request))
+    
     email = request.user.username
-
-    # events
-    if EVENTS_ENABLED:
-        events_count = 15
-        events, events_more_offset = get_user_events(email, 0, events_count)
-        events_more = True if len(events) == events_count else False
-        event_groups = group_events_data(events)
-        api_pre_events(event_groups)
-    else:
-        events, events_more_offset = None, None
-        events_more = False
-        event_groups = None
-        events_count = 0
+    events_count = 15
+    events, events_more_offset = get_user_events(email, 0, events_count)
+    events_more = True if len(events) == events_count else False
+    event_groups = group_events_data(events)
+    api_pre_events(event_groups)
 
     return render_to_response('api2/api2_activity.html', {
             "events": events,
@@ -1254,26 +1253,25 @@ def group_discuss(request, group):
             html = render_to_string("api2/api2_discuss.html", ctx)
             serialized_data = json.dumps({"html": html})
             return HttpResponse(serialized_data, content_type=content_type)
-    else:
-        form = MessageForm()
-        
+
     # remove user notifications
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
-    
-    # Get all group members.
-    members = []
-        
+
+    group_msgs = get_group_msgs(group, page=1) 
+
+    return render_to_response("api2/api2_group_discuss.html", {
+            "group" : group,
+            "group_msgs": group_msgs,
+            }, context_instance=RequestContext(request))
+
+
+def get_group_msgs(group, page):
+
     """group messages"""
     # Show 15 group messages per page.
     paginator = Paginator(GroupMessage.objects.filter(
             group_id=group.id).order_by('-timestamp'), 15)
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
 
     # If page request (9999) is out of range, deliver last page of results.
     try:
@@ -1331,50 +1329,89 @@ def group_discuss(request, group):
 
             msg.attachment = att
 
-    return render_to_response("api2/api2_group_discuss.html", {
-            "members": members,
-            "group" : group,
-            "is_staff": group.is_staff,
-            "group_msgs": group_msgs,
-            "form": form,
-            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+    return group_msgs
+
+@group_check
+def ajax_discussions(request, group):
+    content_type = 'application/json; charset=utf-8'
+    try:
+        page = int(request.GET.get('page'))
+    except ValueError:
+        page = 2
+    
+    group_msgs = get_group_msgs(group, page) 
+
+    html = render_to_string('group_msgs.html', {"group_msgs": group_msgs})
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+
+def discussion(request, msg_id):
+    try:
+        msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        raise Http404
+    
+    try:
+        att = MessageAttachment.objects.get(group_message_id=msg_id)
+    except MessageAttachment.DoesNotExist:
+        att = None
+
+    if att:
+        path = att.path
+        if path == '/':
+            repo = get_repo(att.repo_id)
+            if repo:
+                att.name = repo.name
+            else:
+                att.err = _(u'the libray does not exist')
+        else:
+            path = path.rstrip('/') # cut out last '/' if possible
+            att.name = os.path.basename(path)
+
+        # Load to discuss page if attachment is a image and from recommend.
+        if att.attach_type == 'file' and att.src == 'recommend':
+            att.filetype, att.fileext = get_file_type_and_ext(att.name)
+            if att.filetype == IMAGE:
+                att.obj_id = get_file_id_by_path(att.repo_id, path)
+                if not att.obj_id:
+                    att.err = _(u'File does not exist')
+                else:
+                    att.token = seafserv_rpc.web_get_access_token(att.repo_id, att.obj_id,
+                                                     'view', username)
+                    att.img_url = gen_file_get_url(att.token, att.name)
+
+        msg.attachment = att
+
+    msg.replies = MessageReply.objects.filter(reply_to=msg)
+    msg.reply_cnt = len(msg.replies)
+
+    return render_to_response("api2/discussion.html", {
+            "msg": msg,
             }, context_instance=RequestContext(request))
 
-
-def repo_changes_resp(request, changes, t):
-    return render_to_response("api2/api2_commit_changes.html", {
-            "changes_new": changes["new"],
-            "changes_removed": changes["removed"],
-            "changes_renamed": changes["renamed"],
-            "changes_modified": changes["modified"],
-            "changes_newdir": changes["newdir"],
-            "changed_deldir": changes["deldir"],
-            "changes": changes,
-            "t": t,
-            }, context_instance=RequestContext(request))
 
 def repo_history_changes(request, repo_id):
     changes = {}
+    content_type = 'application/json; charset=utf-8'
 
     if not access_to_repo(request, repo_id, ''):
-        return repo_changes_resp(request, changes, 0)
+        return HttpResponse(json.dumps({"err": _(u'Permission denied')}), status=400, content_type=content_type)
 
     repo = get_repo(repo_id)
     if not repo:
-        return repo_changes_resp(request, changes, 0)
+        return HttpResponse(json.dumps({"err": _(u'Library does not exist')}), status=400, content_type=content_type)
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return repo_changes_resp(request, changes)
+        return HttpResponse(json.dumps({"err": _(u'Library is encrypted')}), status=400, content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return repo_changes_resp(request, changes, 0)
+        return HttpResponse(json.dumps({"err": _(u'Invalid argument')}), status=400, content_type=content_type)
 
     changes = get_diff(repo_id, '', commit_id)
 
     c = get_commit(commit_id)
     if c.parent_id is None:
-        # A commit is a first commit only if it's parent id is None.
+        # A commit is a first commit only if its parent id is None.
         changes['cmt_desc'] = repo.desc
     elif c.second_parent_id is None:
         # Normal commit only has one parent.
@@ -1384,9 +1421,10 @@ def repo_history_changes(request, repo_id):
         # A commit is a merge only if it has two parents.
         changes['cmt_desc'] = _('No conflict in the merge.')
     for k in changes:
-        changes[k] = [f.replace ('a href="/', 'a href="api://') for f in changes[k] ]
-    t = api_tsstr_sec(c.props.ctime)
-    return repo_changes_resp(request, changes, t)
+        changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
+    
+    html = render_to_string('api2/commit_changes.html', {'changes': changes})
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 
 class Groups(APIView):
@@ -1461,8 +1499,16 @@ def activity2(request):
     return activity(request)
 
 @login_required
-def discussion2(request, group_id):
+def discussions2(request, group_id):
     return group_discuss(request, group_id)
+
+@login_required
+def ajax_discussions2(request, group_id):
+    return ajax_discussions(request, group_id)
+
+@login_required
+def discussion2(request, msg_id):
+    return discussion(request, msg_id)
 
 @login_required
 def events2(request):

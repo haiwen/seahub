@@ -1,115 +1,30 @@
+{% extends "api2/api2_base.html" %}
+
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1366090560" />
-<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560" />
-    <style type="text/css">
-      .a {
-      color: #ff9933;
-      }
-    </style>
-<!--[if IE]>
-<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1366090560"/>
-<![endif]-->
-{% block extra_style %}{% endblock %}
-</head>
-<body>
+{% block main_panel %}
+{% if events %}
 
-  <div id="main-panel">
-    {% block right_panel %}
-    {% if events %}
-
-    <div id="events">
-      <h3>{% trans 'File Activities' %}</h3>
-      <div id="events-body">
+<div id="events">
+    <div id="events-body">
         {% include "api2/api2_events_body.html" %}
-      </div>
-      <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-      {% if events_more %}
-      <button id="events-more">{% trans 'More' %}</button>
-      {% endif %}
-      <p id="events-error" class="error hide"></p>
-      <form id="repo-decrypt-form" class="simple-input-popup hide">{% csrf_token %}
-        <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
-        <input type="hidden" name="repo_id" value="" />
-        <label>{% trans 'Password：' %}</label><br />
-        <input type="password" name="password" maxlength="30" class="long-input" />
-        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
-        <p class="error"></p>
-        <input type="submit" class="submit" value="{% trans 'Submit' %}" />
-        <button class="simplemodal-close">{% trans 'Cancel' %}</button>
-      </form>
+    </div>
+    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" id="events-loading" style="display:none;" />
+    <p id="events-error" class="error hide"></p>
 </div>
 
-    {% endif %}
-    {% endblock %}
-  </div>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1366090560"></script>
-<script type="text/javascript" src="{{ MEDIA_URL}}js/base.js?t=1366090560"></script>
-<script type="text/javascript">
- function getContent() {
-    return $('html').html()
- }
-{% if request.user.is_authenticated %}
-{% if request.cur_note %}
-$('#info-bar .close').click(function() {
-    $('#info-bar').addClass('hide');
-    if (navigator.cookieEnabled) {
-        var date = new Date(),
-            cookies = document.cookie.split('; '),
-            info_id_exist = false,
-            new_info_id = $(this).attr('data') + '_';
-        date.setTime(date.getTime() + 14*24*60*60*1000);
-        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}';
-        for (var i = 0, len = cookies.length; i < len; i++) {
-            if (cookies[i].split('=')[0] == 'info_id') {
-                info_id_exist = true;
-                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
-                break;
-            }
-        }
-        if (!info_id_exist) {
-            document.cookie = 'info_id=' + new_info_id;
-        }
-    }
-});
+{% else %}
+<p class="error">{% trans "No activity now or the function is not supported." %}</p>
+
 {% endif %}
-{% endif %}
-</script>
+
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
-
 {% if events %}
 {% include "api2/api2_events_js.html" %}
 {% endif %}
-
-function txtclick(url,dtime) {
-  console.log(url)
-  console.log(dtime)
-  if (dtime != 0) {
-    //listCommitDetails(url, dtime);
-    window.location.href=url
-    return false;
-  }
-
-  window.location.href=url
-}
-
-function txtclick2(url) {
-  console.log(url)
-  window.location.href=url
-}
-
 </script>
 {% endblock %}
-
-</body>
-</html>

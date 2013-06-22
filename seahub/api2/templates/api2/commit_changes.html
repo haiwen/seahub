@@ -1,0 +1,54 @@
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+<div class="event-details">
+
+    {% if changes.new %}
+    <ul>
+    {% for f in changes.new %}
+    <li>{% blocktrans with file=f|safe %}Added {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes.removed %}
+    <ul>
+    {% for f in changes.removed %}
+    <li>{% blocktrans with file=f|safe %}Deleted {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes.renamed %}
+    <ul>
+    {% for f in changes.renamed %}
+    <li>{% blocktrans with file=f|safe %}Renamed or Moved {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes.modified %}
+    <ul>
+    {% for f in changes.modified %}
+    <li>{% blocktrans with file=f|safe %}Modified {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes.newdir %}
+    <ul>
+    {% for f in changes.newdir %}
+    <li>{% blocktrans with file=f|safe %}Added {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if changes.deldir %}
+    <ul>
+    {% for f in changes.deldir %}
+    <li>{% blocktrans with file=f|safe %}Deleted {{ file }}{% endblocktrans %}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="outer-caret"><div class="inner-caret"></div></div>
+</div>
