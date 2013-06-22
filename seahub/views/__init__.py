@@ -27,6 +27,7 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from django.utils import timezone
+from django.utils.http import urlquote
 
 from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
@@ -2393,13 +2394,13 @@ def convert_cmmt_desc_link(request):
 
         if d.status == 'add' or d.status == 'mod': # Add or modify file
             return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
-                                            '?p=/%s' % d.name)
+                                            '?p=/%s' % urlquote(d.name))
         elif d.status == 'mov': # Move or Rename file
             return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
-                                            '?p=/%s' % d.new_name)
+                                            '?p=/%s' % urlquote(d.new_name))
         elif d.status == 'newdir':
             return HttpResponseRedirect(reverse('repo', args=[repo_id]) + \
-                                            '?p=/%s' % d.name)
+                                            '?p=/%s' % urlquote(d.name))
         else:
             continue
 

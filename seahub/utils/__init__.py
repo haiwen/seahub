@@ -866,10 +866,10 @@ def convert_cmmt_desc_link(commit):
         url = reverse('convert_cmmt_desc_link')
         tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s">%s</a>"'
         if remaining:
-            return (tmp_str + ' %s') % (op, url, repo_id, cmmt_id, file_or_dir,
+            return (tmp_str + ' %s') % (op, url, repo_id, cmmt_id, urlquote(file_or_dir),
                                         file_or_dir, remaining)
         else:
-            return tmp_str % (op, url, repo_id, cmmt_id, file_or_dir, file_or_dir)
+            return tmp_str % (op, url, repo_id, cmmt_id, urlquote(file_or_dir), file_or_dir)
 
     return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
