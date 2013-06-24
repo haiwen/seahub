@@ -109,6 +109,41 @@
   <p>{% trans "You can share a folder or a file when you view a library, or share a file when you view it." %}</p>
 </div>
 {% endif %}
+
+<h3>{% trans "Private shares" %}</h3>
+{% if priv_shares %}
+<table>
+  <tr>
+    <th width="45%">{% trans "File or Folder"%}</th>
+    <th width="25%">{% trans "Library"%}</th>
+    <th width="15%">{% trans "User"%}</th>
+    <th width="15%">{% trans "Operations"%}</th>
+  </tr>
+  {% for e in priv_shares %}
+  <tr>
+    {% if e.s_type == 'f' %}
+    <td><a href="{% url 'repo_view_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+    {% else %}
+    <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+    {% endif %}
+    <td><a href="{% url 'repo' e.repo_id %}">{{e.repo.name}}</a></td>
+    {% if e.out_or_in == 'out' %}
+    <td>{{e.to_user|email2nickname}}</td>
+    {% else %}
+    <td>{{e.from_user|email2nickname}}</td>
+    {% endif %}
+    <td><a href="{% url 'rm_private_file_share' e.repo_id %}?from={{e.from_user|urlencode}}&to={{e.to_user|urlencode}}&p={{e.path|urlencode}}" class="op">Unshare</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% else%}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any private shared files/folders" %}</h2>
+  <p>{% trans "You can share a single folder or file to a registered user if you don't want to share hole library to he/she." %}</p>
+</div>
+{% endif %}
+
+
 {% endblock %}
 
 {% block extra_script %}

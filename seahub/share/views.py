@@ -24,7 +24,7 @@ from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
     list_inner_pub_repos_by_owner, remove_share
 
 from forms import RepoShareForm, FileLinkShareForm
-from models import AnonymousShare
+from models import AnonymousShare, FileShare, PrivateFileDirShare
 from signals import share_repo_to_user_successful
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
@@ -32,7 +32,6 @@ from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
-from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_dir_share_link, gen_file_share_link, \
@@ -324,12 +323,27 @@ def share_admin(request):
                 continue
             fs.repo = r
             p_fileshares.append(fs)
-        
+
+    # Private share out/in files/directories
+    priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
+    for e in priv_share_out:
+        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+        e.out_or_in = 'out'
+        e.repo = seafile_api.get_repo(e.repo_id)
+
+    priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
+    for e in priv_share_in:
+        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+        e.out_or_in = 'in'
+        e.repo = seafile_api.get_repo(e.repo_id)
+    priv_shares = list(priv_share_out) + list(priv_share_in)
+    
     return render_to_response('repo/share_admin.html', {
             "org": None,
             "shared_repos": shared_repos,
             # "out_links": out_links,
             "fileshares": p_fileshares,
+            "priv_shares": priv_shares,
             }, context_instance=RequestContext(request))
     
 @login_required

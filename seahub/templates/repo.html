@@ -117,7 +117,7 @@
                             <div class="displayed-op">
                                 <a class="op" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
 				{% if not repo.encrypted %}
-                                <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-type="d">{% trans "Share" %}</a>
+                                <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-type="d" data-path="{{path}}{{dirent.obj_name}}">{% trans "Share" %}</a>
                                 {% endif %}
 				{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
 				<a class="op create-sub-repo" href="#" data-name="{{ dirent.obj_name }}">{% trans "Sub-library" %}</a>
@@ -166,7 +166,7 @@
                                 {% if user_perm == 'rw' %}
                                   <a class="op update-file" data-target="{{ path }}{{dirent.obj_name}}" href="#">{% trans "Update"%}</a>
                                   {% if not repo.encrypted %}
-                                  <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                                  <a class="op file-share" href="#" data-name="{{ dirent.obj_name }}" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-type="f" data-path="{{path}}{{dirent.obj_name}}" >{% trans "Share" %}</a>
                                   {% endif %}
                                 {% endif %}
                             </div>
@@ -328,17 +328,42 @@
 
     <div id="file-share" class="hide">
         <h3>{% trans 'Share' %} <span class="op-target"></span></h3>
-        <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link-text" /></p>
-        <button id="send-link">{% trans 'Send' %}</button>
-        <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
+
+        <div id="repo-share-tabs">
+          <ul id="repo-share-tabs-nav">
+            <li><a href="#private-share">{% trans "Private share" %}</a></li>
+            <li><a href="#shared-link">{% trans "Shared link" %}</a></li>
+          </ul>
+
+          <div id="private-share">
+            <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
+              <textarea id="emails" name="emails" class="w100" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
+              <select name="perm" class="share-permission-select w100">
+                <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                <option value="r">{% trans "Read-Only"%}</option>
+              </select>
+              
+              <input type="hidden" name="repo_id" value="" />
+              <input type="hidden" name="s_type" value="" />
+              <input type="hidden" name="path" value="" />
+              <p class="tip">{% trans 'Tip: must be a registered user.' %}</p>
+              <input type="submit" value="{% trans "Submit"%}" />
+            </form>
+          </div>                <!--/#private-share-->
+          <div id="shared-link">
+            <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link-text" /></p>
+            <button id="send-link">{% trans 'Send' %}</button>
+            <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
             <label>{% trans "Send to:"%}</label><br />
             <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
             <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
             <input type="submit" value="{% trans "Submit"%}" class="submit" />
             <p class="error hide"></p>
             <p id="sending" class="hide">{% trans "Sending..."%}</p>
-        </form>
-    </div>
+            </form>
+          </div>                <!--/#shared-link-->
+        </div> <!--/#repo-share-tabs-->
+    </div>   <!--/#file-share-->
 
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
@@ -656,6 +681,15 @@ $('.file-star').click(function() {
 
 //file share
 $('.file-share').click(function() {
+    $("#private-share-form input[name=s_type]").val($(this).data('type'));
+    $("#private-share-form input[name=path]").val($(this).data('path'));
+    var contacts = [];
+    {% for contact in contacts %}
+    contact_email = '{{ contact.contact_email }}';
+    contacts.push({value:contact_email, label:contact_email});
+    {% endfor %}
+    addAutocomplete('#emails', '#private-share-form', contacts);
+
     var filename = $(this).data('name');
     function showPopup(link) {
         $('#file-share .op-target').html(trimFilename(filename, 30));
@@ -663,6 +697,7 @@ $('.file-share').click(function() {
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
         $('#shared-link-text').css({'width':$('#linkwidth').width() + 2});
         $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
+        $("#repo-share-tabs").tabs();
         $('#linkwidth').remove();
         $('#simplemodal-container').css({'height':'auto'});
     }

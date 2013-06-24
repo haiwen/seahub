@@ -15,7 +15,7 @@ from seaserv import seafile_api, MAX_UPLOAD_FILE_SIZE
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents
 from seahub.utils import get_ccnetapplet_root, is_file_starred, \
     gen_file_upload_url, get_httpserver_root, gen_dir_share_link, \
@@ -40,6 +40,23 @@ def list_dir_by_commit_and_path(commit, path):
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
 
+def check_dir_access_permission(username, repo_id, path):
+    """Check user has permission to view the directory.
+    1. check whether this directory is private shared.
+    2. if failed, check whether the parent of this directory is private shared.
+    """
+     
+    pfs = PrivateFileDirShare.objects.get_private_share_in_dir(username,
+                                                               repo_id, path)
+    if pfs is None:
+        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
+        for e in dirs:
+            if path.startswith(e.path):
+                return e.permission
+        return None
+    else:
+        return pfs.permission
+    
 def check_repo_access_permission(repo_id, username):
     return seafile_api.check_repo_access_permission(repo_id, username)
 
@@ -169,7 +186,9 @@ def render_repo(request, repo):
       return permission deny page
     """
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, username)
+    path = get_path_from_request(request)
+    user_perm = check_dir_access_permission(username, repo.id, path) or \
+        check_repo_access_permission(repo.id, username)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
@@ -189,7 +208,6 @@ def render_repo(request, repo):
     
     protocol = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
-    path = get_path_from_request(request)
 
     contacts = Contact.objects.get_contacts_by_user(username)
     accessible_repos = [repo] if repo.encrypted else get_unencry_rw_repos_by_user(username)
@@ -278,7 +296,9 @@ def repo_history_view(request, repo_id):
         raise Http404
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, username)
+    path = get_path_from_request(request)
+    user_perm = check_dir_access_permission(username, repo.id, path) or \
+        check_repo_access_permission(repo.id, username)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
@@ -298,7 +318,6 @@ def repo_history_view(request, repo_id):
     if not current_commit:
         current_commit = get_commit(repo.head_cmmt_id)
 
-    path = get_path_from_request(request)
     file_list, dir_list = get_repo_dirents(request, repo.id, current_commit, path)
     zipped = get_nav_path(path, repo.name)
     search_repo_id = None if repo.encrypted else repo.id

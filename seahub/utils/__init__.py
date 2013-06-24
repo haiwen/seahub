@@ -166,6 +166,18 @@ def calculate_repo_last_modify(repo_list):
         cmmts = get_commits(repo.id, 0, 1)
         repo.latest_modify = cmmts[0].ctime if cmmts else 0
 
+def normalize_dir_path(path):
+    """Add '/' at the end of directory path if necessary.
+    """
+    if path[-1] != '/':
+        path = path + '/'
+    return path
+
+def normalize_file_path(path):
+    """Remove '/' at the end of file path if necessary.
+    """
+    return path.rstrip('/')
+    
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None

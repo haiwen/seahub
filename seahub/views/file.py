@@ -13,6 +13,7 @@ import chardet
 import logging
 
 from django.contrib.sites.models import Site, RequestSite
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
@@ -23,6 +24,7 @@ from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api
@@ -36,7 +38,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
@@ -45,8 +47,8 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
-
 from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.views import is_registered_user
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, query_office_file_pages, \
@@ -147,19 +149,41 @@ def repo_file_get(raw_path, file_enc):
 
     return err, file_content, encoding
 
-def get_file_view_path_and_perm(request, repo_id, obj_id, filename):
+def check_file_access_permission(username, repo_id, path):
+    """Check user has permission to view the file.
+    1. check whether this file is private shared.
+    2. if failed, check whether the parent of this directory is private shared.
+    """
+     
+    pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
+                                                               repo_id, path)
+    if pfs is None:
+        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
+        for e in dirs:
+            if path.startswith(e.path):
+                return e.permission
+        return None
+    else:
+        return pfs.permission
+    
+def check_repo_access_permission(repo_id, username):
+    return seafile_api.check_repo_access_permission(repo_id, username)
+
+def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """
     Return raw path of a file and the permission to view file.
     """
     username = request.user.username
-    # check permission
-    perm = get_user_permission(request, repo_id)
-    if perm:
+    filename = os.path.basename(path)
+
+    user_perm = check_file_access_permission(username, repo_id, path) or \
+        check_repo_access_permission(repo_id, username)
+    if user_perm is None:
+        return ('', user_perm)
+    else:
         # Get a token to visit file
         token = web_get_access_token(repo_id, obj_id, 'view', username)
-        return (gen_file_get_url(token, filename), perm)
-    else:
-        return ('', perm)
+        return (gen_file_get_url(token, filename), user_perm)
 
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
@@ -284,7 +308,7 @@ def view_file(request, repo_id):
     if not repo:
         raise Http404
 
-    path = request.GET.get('p', '/')
+    path = request.GET.get('p', '/').rstrip('/')
     obj_id = get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
@@ -296,7 +320,7 @@ def view_file(request, repo_id):
     # Check whether user has permission to view file and get file raw path,
     # render error page if permission is deny.
     raw_path, user_perm = get_file_view_path_and_perm(request, repo_id,
-                                                      obj_id, u_filename)
+                                                      obj_id, path)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
@@ -461,7 +485,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     # Check whether user has permission to view file and get file raw path,
     # render error page if permission is deny.
     raw_path, user_perm = get_file_view_path_and_perm(request, repo_id,
-                                                      obj_id, u_filename)
+                                                      obj_id, path)
     request.user_perm = user_perm
 
     # get file type and extension
@@ -1030,3 +1054,55 @@ def office_convert_query_page_num(request):
             ret['error'] = str(e)
             
     return HttpResponse(json.dumps(ret), content_type=content_type)
+
+###### private file/dir shares
+@require_POST
+def private_file_share(request, repo_id):
+    emails = request.POST.get('emails', '')
+    s_type = request.POST.get('s_type', '')
+    path = request.POST.get('path', '')
+    perm = request.POST.get('perm', 'r')
+    file_or_dir = os.path.basename(path.rstrip('/'))
+    username = request.user.username
+
+    for email in [e.strip() for e in emails.split(',') if e.strip()]:
+        if not is_registered_user(email):
+            messages.error(request, _('Failed to share to "%s", user not found.') % email)
+            continue
+        
+        if s_type == 'f':
+            PrivateFileDirShare.objects.add_private_file_share(
+                username, email, repo_id, path, perm)
+        elif s_type == 'd':
+            PrivateFileDirShare.objects.add_private_dir_share(
+                username, email, repo_id, path, perm)
+        else:
+            assert False        # todo
+        messages.success(request, _('Successfully shared %s.') % file_or_dir)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
+
+@login_required
+def rm_private_file_share(request, repo_id):
+    """Remove private file shares.
+    """
+    from_user = request.GET.get('from', '')
+    to_user = request.GET.get('to', '')
+    username = request.user.username
+    if username == from_user or username == to_user:
+        path = request.GET.get('p')
+        file_or_dir = os.path.basename(path.rstrip('/'))
+
+        PrivateFileDirShare.objects.delete_private_file_dir_share(
+            from_user, to_user, repo_id, path)
+        messages.success(request, _('Successfully unshared "%s".') % file_or_dir)
+    else:
+        messages.error(request, _("You don't have permission to unshared %s.") % file_or_dir)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
