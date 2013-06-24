@@ -2,7 +2,6 @@
 {% load url from future %}
 
     {% if group_msgs %}
-    <ul class="msg-list">
     {% for msg in group_msgs.object_list %}
         <li class="msg ovhd" data-msgid="{{msg.id}}">
         {% avatar msg.from_email 48 %}
@@ -66,5 +65,4 @@
         </div>
         </li>
     {% endfor %}
-    </ul>
     {% endif %}

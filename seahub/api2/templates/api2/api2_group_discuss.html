@@ -6,13 +6,52 @@
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
 {% block main_panel %}
+{% if group_msgs %}
+    <ul class="msg-list">
     {% include "api2/group_msgs.html" %}
+    </ul>
+    {% if group_msgs.has_next %}
+    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" id="loading-icon" data-next="{{ group_msgs.next_page_number }}" style="display:none;" />
+    <p id="loading-error" class="error hide"></p>
+    {% endif %}
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.msg').click(function() {
+function msgClick() {
     window.open('{{SITE_ROOT}}api2/html/discussion2/' + $(this).data('msgid')); 
+}
+$('.msg').click(msgClick);
+
+{% if group_msgs.has_next %}
+var g_token;
+function setToken(token) {
+    g_token = token;
+}
+$(document).scroll(function() {
+    var loading_icon = $('#loading-icon');
+    if (loading_icon.get(0).style.display == 'none' && loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
+        loading_icon.show();
+        $.ajax({
+            url:'{% url 'api_ajax_discussions2' group.id %}?page=' + e(loading_icon.data('next')),
+            dataType: 'json',
+            cache: false,
+            headers:{Authorization:'Token '+g_token},
+            success: function(data) {
+                loading_icon.hide().data('next', data['next_page']);
+                $('.msg-list').append(data['html']);
+                $('.msg').unbind().click(msgClick);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                loading_icon.hide();
+                if (!jqXHR.responseText) {
+                    $('#loading-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
+                }   
+            }
+        });
+    }
 });
+{% endif %}
 </script>
 {% endblock %}

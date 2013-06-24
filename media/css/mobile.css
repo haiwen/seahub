@@ -915,7 +915,7 @@ textarea:-moz-placeholder {/* for FF */
     float:left;
     border-radius:3px;
 }
-#events-loading {
+#loading-icon {
     display:block;
     margin:0 auto;
 }

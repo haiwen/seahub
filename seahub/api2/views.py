@@ -1273,13 +1273,11 @@ def get_group_msgs(group, page):
     paginator = Paginator(GroupMessage.objects.filter(
             group_id=group.id).order_by('-timestamp'), 15)
 
-    # If page request (9999) is out of range, deliver last page of results.
+    # If page request (9999) is out of range, return None
     try:
         group_msgs = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        group_msgs = paginator.page(paginator.num_pages)
-
-    group_msgs.page_range = paginator.get_page_range(group_msgs.number)
+        return None
 
     # Force evaluate queryset to fix some database error for mysql.        
     group_msgs.object_list = list(group_msgs.object_list) 
@@ -1340,9 +1338,13 @@ def ajax_discussions(request, group):
         page = 2
     
     group_msgs = get_group_msgs(group, page) 
+    if group_msgs.has_next():
+        next_page = group_msgs.next_page_number()
+    else:
+        next_page = None
 
-    html = render_to_string('group_msgs.html', {"group_msgs": group_msgs})
-    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+    html = render_to_string('api2/group_msgs.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=content_type)
 
 def discussion(request, msg_id):
     try:

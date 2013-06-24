@@ -1,17 +1,18 @@
 {% load i18n %}
-var g_token
+var g_token;
 function setToken(token) {
     g_token = token;
 }
 function reqEvents(start) {
-    $('#events-loading').show();
+    var loading_icon = $('#loading-icon');
+    loading_icon.show(); // also at the bottom
     $.ajax({
-        url:'{{SITE_ROOT}}api2/html/events/?start=' + start{% if org %} + '&org_id={{ org.org_id }}'{% endif %},
+        url:'{{SITE_ROOT}}api2/html/events/?start=' + start,
         dataType: 'json',
         cache: false,
         headers:{Authorization:'Token '+g_token},
         success: function(data) {
-            $('#events-loading').hide();
+            loading_icon.hide();
             $('#events-body').append(data['html']);
 
             setCmtWidth();
@@ -24,7 +25,7 @@ function reqEvents(start) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            $('#events-loading').addClass('hide');
+            loading_icon.hide();
             if (!jqXHR.responseText) {
                 $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
             }   
@@ -93,7 +94,7 @@ $('.event-item').click(itemClick);
 {% endif %}
 // get more events when scroll to the bottom
 $(document).scroll(function() {
-    if ($(window).height() + $(window).scrollTop() == $(document).height() && $('#events').data('more')) {
+    if ($('#events').data('more') && $('#loading-icon').get(0).style.display == 'none' && $(window).height() + $(window).scrollTop() == $(document).height()) {
         reqEvents($('#events').data('start'));
     }
 });
