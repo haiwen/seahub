@@ -1,8 +1,6 @@
 {% load i18n %}
-// In mobile app, we need to pass the auth token to javascript
-//   - "token" is passed from Android app
-//   - "setToken" is called by iOS app
-var g_token = window.token ? window.token.toString() : null;
+var g_token;
+// "setToken" is called in mobile app to pass in the auth token
 function setToken(token) {
     g_token = token;
 }
