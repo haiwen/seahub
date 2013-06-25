@@ -1,4 +1,4 @@
-{% extends "api2/api2_base.html" %}
+{% extends "api2/base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
@@ -8,7 +8,7 @@
 {% block main_panel %}
 {% if group_msgs %}
     <ul class="msg-list" id="msg-list">
-    {% include "api2/group_msgs.html" %}
+    {% include "api2/discussions_body.html" %}
     </ul>
     {% if group_msgs.has_next %}
     <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" id="loading-icon" data-next="{{ group_msgs.next_page_number }}" style="display:none;" />
@@ -20,7 +20,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 function msgClick() {
-    window.open('{{SITE_ROOT}}api2/html/discussion2/' + $(this).data('msgid')); 
+    window.open('{{SITE_ROOT}}api2/html/discussion/' + $(this).data('msgid')); 
 }
 $('.msg').click(msgClick);
 
@@ -34,7 +34,7 @@ $(document).scroll(function() {
     if (loading_icon.get(0).style.display == 'none' && loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
         loading_icon.show();
         $.ajax({
-            url:'{% url 'api_ajax_discussions2' group.id %}?page=' + e(loading_icon.data('next')),
+            url:'{% url 'more_discussions' group.id %}?page=' + e(loading_icon.data('next')),
             dataType: 'json',
             cache: false,
             headers:{Authorization:'Token '+g_token},

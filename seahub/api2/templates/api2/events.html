@@ -1,14 +1,13 @@
-{% extends "api2/api2_base.html" %}
+{% extends "api2/base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block main_panel %}
 {% if events %}
-
 <div id="events">
     <div id="events-body">
-        {% include "api2/api2_events_body.html" %}
+        {% include "api2/events_body.html" %}
     </div>
     <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" id="loading-icon" style="display:none;" />
     <p id="events-error" class="error hide"></p>
@@ -18,13 +17,12 @@
 <p class="error">{% trans "No activity now or the function is not supported." %}</p>
 
 {% endif %}
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
 {% if events %}
-{% include "api2/api2_events_js.html" %}
+{% include "api2/events_js.html" %}
 {% endif %}
 </script>
 {% endblock %}

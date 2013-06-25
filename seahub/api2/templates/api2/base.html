@@ -1,5 +1,4 @@
-{% load seahub_tags avatar_tags i18n %}
-{% load url from future %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,14 +7,13 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/mobile.css?t=1369028460" />
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.ico?t=1369028460" />
 </head>
 
 <body>
     <div id="wrapper" class="{{ LANGUAGE_CODE }}">
-        <div id="main" class="clear">
+        <div id="main">
             <div id="title-panel" class="w100 ovhd">
                 {% block title_panel %}{% endblock %}
             </div>

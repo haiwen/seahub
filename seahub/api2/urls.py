@@ -24,21 +24,21 @@ urlpatterns = patterns('',
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
 
     url(r'^groups/$', Groups.as_view()),
-    url(r'^html/activity/$', ActivityHtml.as_view()),
-    url(r'^html/discussions/(?P<group_id>\d+)/$', DiscussionsHtml.as_view(), name="api_discussions"),
+    url(r'^html/events/$', ActivityHtml.as_view()),
+    url(r'^html/more_events/$', AjaxEvents.as_view()),
     url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
+    url(r'^html/discussions/(?P<group_id>\d+)/$', DiscussionsHtml.as_view(), name="api_discussions"),
     url(r'^html/discussion/(?P<msg_id>\d+)/$', DiscussionHtml.as_view(), name="api_discussion"),
-    url(r'^html/events/$', AjaxEvents.as_view()),
-    url(r'^html/ajax/discussions/(?P<group_id>\d+)/$', AjaxDiscussions, name="api_ajax_discussions"),
+    url(r'^html/more_discussions/(?P<group_id>\d+)/$', AjaxDiscussions, name="more_discussions"),
 
     # Folowing is only for debug, will be removed 
-    #url(r'^html/events/$', events2),
+    url(r'^html/events2/$', activity2),
+    #url(r'^html/more_events/$', events2),
     #url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', api_repo_history_changes, name='api_repo_history_changes'),
 
-    url(r'^html/activity2/$', activity2),
     url(r'^html/discussions2/(?P<group_id>\d+)/$', discussions2, name="api_discussions2"),
-    url(r'^html/discussion2/(?P<msg_id>\d+)/$', discussion2, name="api_discussion2"),
-    url(r'^html/ajax/discussions2/(?P<group_id>\d+)/$', ajax_discussions2, name="api_ajax_discussions2"),
+    #url(r'^html/discussion/(?P<msg_id>\d+)/$', discussion2, name="api_discussion2"),
+    #url(r'^html/more_discussions/(?P<group_id>\d+)/$', more_discussions2, name="more_discussions"),
 
     # Deprecated                       
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),

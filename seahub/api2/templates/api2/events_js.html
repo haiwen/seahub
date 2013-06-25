@@ -8,7 +8,7 @@ function reqEvents(start) {
     var loading_icon = $('#loading-icon');
     loading_icon.show(); // also at the bottom
     $.ajax({
-        url:'{{SITE_ROOT}}api2/html/events/?start=' + start,
+        url:'{{SITE_ROOT}}api2/html/more_events/?start=' + start,
         dataType: 'json',
         cache: false,
         headers:{Authorization:'Token '+g_token},

@@ -1182,7 +1182,7 @@ def api_pre_events(event_groups):
 def activity(request):
     if not EVENTS_ENABLED:
         events = None
-        return render_to_response('api2/api2_activity.html', {
+        return render_to_response('api2/events.html', {
             "events":events,
             }, context_instance=RequestContext(request))
     
@@ -1193,7 +1193,7 @@ def activity(request):
     event_groups = group_events_data(events)
     api_pre_events(event_groups)
 
-    return render_to_response('api2/api2_activity.html', {
+    return render_to_response('api2/events.html', {
             "events": events,
             "events_more_offset": events_more_offset,
             "events_more": events_more,
@@ -1218,7 +1218,7 @@ def events(request):
 
     api_pre_events(event_groups)
     ctx = {'event_groups': event_groups}
-    html = render_to_string("api2/api2_events_body.html", ctx)
+    html = render_to_string("api2/events_body.html", ctx)
 
     return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
                                     'new_start': start}),
@@ -1228,7 +1228,6 @@ def events(request):
 @group_check
 def group_discuss(request, group):
     username = request.user.username
-    content_type = 'application/json; charset=utf-8'
     if request.method == 'POST':
         # only login user can post to public group
         if group.view_perm == "pub" and not request.user.is_authenticated():
@@ -1247,9 +1246,9 @@ def group_discuss(request, group):
 
         ctx = {}
         ctx['msg'] = message
-        html = render_to_string("api2/api2_discuss.html", ctx)
+        html = render_to_string("api2/discussion_posted.html", ctx)
         serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=content_type)
+        return HttpResponse(serialized_data, content_type="application/json; charset=utf-8")
 
     # remove user notifications
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
@@ -1257,7 +1256,7 @@ def group_discuss(request, group):
 
     group_msgs = get_group_msgs(group, page=1) 
 
-    return render_to_response("api2/api2_group_discuss.html", {
+    return render_to_response("api2/discussions.html", {
             "group" : group,
             "group_msgs": group_msgs,
             }, context_instance=RequestContext(request))
@@ -1265,7 +1264,6 @@ def group_discuss(request, group):
 
 def get_group_msgs(group, page):
 
-    """group messages"""
     # Show 15 group messages per page.
     paginator = Paginator(GroupMessage.objects.filter(
             group_id=group.id).order_by('-timestamp'), 15)
@@ -1327,7 +1325,7 @@ def get_group_msgs(group, page):
     return group_msgs
 
 @group_check
-def ajax_discussions(request, group):
+def more_discussions(request, group):
     content_type = 'application/json; charset=utf-8'
     try:
         page = int(request.GET.get('page'))
@@ -1340,7 +1338,7 @@ def ajax_discussions(request, group):
     else:
         next_page = None
 
-    html = render_to_string('api2/group_msgs.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
+    html = render_to_string('api2/discussions_body.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=content_type)
 
 def discussion(request, msg_id):
@@ -1413,7 +1411,7 @@ def msg_reply(request, msg_id):
     replies = MessageReply.objects.filter(reply_to=group_msg)
     r_num = len(replies)
     ctx['r'] = msg_reply
-    html = render_to_string("api2/api2_reply.html", ctx)
+    html = render_to_string("api2/reply.html", ctx)
     serialized_data = json.dumps({"html": html})
     return HttpResponse(serialized_data, content_type=content_type)
 
@@ -1452,7 +1450,7 @@ def repo_history_changes(request, repo_id):
     for k in changes:
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
     
-    html = render_to_string('api2/commit_changes.html', {'changes': changes})
+    html = render_to_string('api2/event_details.html', {'changes': changes})
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 
@@ -1490,7 +1488,7 @@ class AjaxDiscussions(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, group_id, format=None):
-        return ajax_discussions(request, group_id)
+        return more_discussions(request, group_id)
 
 class ActivityHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1545,8 +1543,8 @@ def discussions2(request, group_id):
     return group_discuss(request, group_id)
 
 @login_required
-def ajax_discussions2(request, group_id):
-    return ajax_discussions(request, group_id)
+def more_discussions2(request, group_id):
+    return more_discussions(request, group_id)
 
 @login_required
 def discussion2(request, msg_id):
