@@ -851,7 +851,7 @@ def mkstemp():
 
 # File or directory operations
 FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
-           'Added directory', 'Renamed directory', 'Moved directory')
+           'Added directory', 'Renamed directory', 'Moved directory', 'Removed')
 
 OPS = '|'.join(FILE_OP)
 CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
