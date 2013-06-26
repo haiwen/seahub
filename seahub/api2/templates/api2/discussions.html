@@ -24,7 +24,6 @@ function msgClick() {
 }
 $('.msg').click(msgClick);
 
-{% if group_msgs.has_next %}
 var g_token = "TOKEN";
 function setToken(token) {
     g_token = token;
@@ -32,6 +31,8 @@ function setToken(token) {
 function getToken() {
     return g_token;
 }
+
+{% if group_msgs.has_next %}
 $(document).scroll(function() {
     var loading_icon = $('#loading-icon');
     if (loading_icon.get(0).style.display == 'none' && loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
