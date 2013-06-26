@@ -1254,7 +1254,7 @@ def group_discuss(request, group):
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
 
-    group_msgs = get_group_msgs(group, page=1) 
+    group_msgs = get_group_msgs(group, page=1, request.user.username) 
 
     return render_to_response("api2/discussions.html", {
             "group" : group,
@@ -1262,7 +1262,7 @@ def group_discuss(request, group):
             }, context_instance=RequestContext(request))
 
 
-def get_group_msgs(group, page):
+def get_group_msgs(group, page, username):
 
     # Show 15 group messages per page.
     paginator = Paginator(GroupMessage.objects.filter(
@@ -1332,7 +1332,7 @@ def more_discussions(request, group):
     except ValueError:
         page = 2
     
-    group_msgs = get_group_msgs(group, page) 
+    group_msgs = get_group_msgs(group, page, request.user.username)
     if group_msgs.has_next():
         next_page = group_msgs.next_page_number()
     else:
