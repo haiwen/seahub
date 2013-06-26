@@ -45,7 +45,6 @@
                         <a href="{% url 'edit_profile' %}" class="top-link avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span class="my-info">{{ request.user }}</span>
                         <button class="icon-envelope btn" id="add-msg" title="{% trans "send a message" %}"></button>
                         <button class="btn" data-url="{% url 'message_list' %}" id="msg-count" title="{% trans "unread messages" %}">0</button>
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="top-link">{% trans "Log out" %}</a>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>
                             {% if enable_signup %}
@@ -58,6 +57,9 @@
                             <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
                             {% endfor %}
                         </ul>
+                        {% if request.user.is_authenticated %}
+                        <a href="{{ SITE_ROOT }}accounts/logout/" class="icon-signout top-link" title="{% trans "Log out" %}"></a>
+                        {% endif %}
                     </div>
 
                     <div id="send-msg-popup" class="hide">
@@ -406,7 +408,8 @@ $(document).click(function(e) {
         {'name':'double-angle-up', 'con':'f102'},
         {'name':'double-angle-down', 'con':'f103'},
         {'name':'zoom-in', 'con':'f00e'},
-        {'name':'zoom-out', 'con':'f010'}
+        {'name':'zoom-out', 'con':'f010'},
+        {'name':'signout', 'con':'f08b'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {

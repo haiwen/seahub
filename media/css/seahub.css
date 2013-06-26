@@ -538,7 +538,7 @@ textarea:-moz-placeholder {/* for FF */
 .top-bar-con .top-link {
     display:inline-block;
     height:24px;
-    padding:0 2px;
+    padding:0 3px;
     line-height:24px;
     color:#ddd;
     font-weight:normal;
@@ -613,7 +613,8 @@ textarea:-moz-placeholder {/* for FF */
     left:0;
 }
 #lang-context-selector {
-    right:0;
+    right:23px;
+    text-align:left;
 }
 #account-context-selector a,
 #lang-context-selector a,
@@ -629,7 +630,9 @@ textarea:-moz-placeholder {/* for FF */
     background:#eee;
     text-decoration:none;
 }
-
+.top-bar-con .icon-signout {
+    font-size:15px;
+}
 /* header */
 #notice {
     text-align:center;
