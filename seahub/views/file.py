@@ -38,6 +38,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
+from seahub.signals import share_file_to_user_successful
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
@@ -48,7 +49,6 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.utils import HAS_OFFICE_CONVERTER
-from seahub.views import is_registered_user
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, query_office_file_pages, \
@@ -56,6 +56,8 @@ if HAS_OFFICE_CONVERTER:
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+from seahub.views import is_registered_user, get_file_access_permission, \
+    get_repo_access_permission
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -149,25 +151,6 @@ def repo_file_get(raw_path, file_enc):
 
     return err, file_content, encoding
 
-def check_file_access_permission(username, repo_id, path):
-    """Check user has permission to view the file.
-    1. check whether this file is private shared.
-    2. if failed, check whether the parent of this directory is private shared.
-    """
-     
-    pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
-                                                               repo_id, path)
-    if pfs is None:
-        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
-        for e in dirs:
-            if path.startswith(e.path):
-                return e.permission
-        return None
-    else:
-        return pfs.permission
-    
-def check_repo_access_permission(repo_id, username):
-    return seafile_api.check_repo_access_permission(repo_id, username)
 
 def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """
@@ -176,8 +159,9 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     username = request.user.username
     filename = os.path.basename(path)
 
-    user_perm = check_file_access_permission(username, repo_id, path) or \
-        check_repo_access_permission(repo_id, username)
+    # user_perm = get_file_access_permission(repo_id, path, username) or \
+    #     get_repo_access_permission(repo_id, username)
+    user_perm = get_repo_access_permission(repo_id, username)
     if user_perm is None:
         return ('', user_perm)
     else:
@@ -1078,6 +1062,11 @@ def private_file_share(request, repo_id):
                 username, email, repo_id, path, perm)
         else:
             assert False        # todo
+            
+        # send a signal when sharing file successful
+        share_file_to_user_successful.send(sender=None, from_user=username,
+                                           to_user=email, repo_id=repo_id,
+                                           path=path)
         messages.success(request, _('Successfully shared %s.') % file_or_dir)
 
     next = request.META.get('HTTP_REFERER', None)
@@ -1106,3 +1095,6 @@ def rm_private_file_share(request, repo_id):
     if not next:
         next = SITE_ROOT
     return HttpResponseRedirect(next)
+
+    
+

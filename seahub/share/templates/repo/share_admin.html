@@ -122,7 +122,7 @@
   {% for e in priv_shares %}
   <tr>
     {% if e.s_type == 'f' %}
-    <td><a href="{% url 'repo_view_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+    <td><a href="{% url 'view_priv_shared_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
     {% else %}
     <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
     {% endif %}

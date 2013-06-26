@@ -61,7 +61,7 @@ from seahub.group.models import GroupMessage, MessageAttachment
 from seahub.group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFileForm,\
     RepoRenameFileForm, RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
@@ -70,7 +70,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_httpserver_root, get_ccnetapplet_root, \
     gen_dir_share_link, gen_file_share_link, \
     calculate_repo_last_modify, get_file_type_and_ext, \
-    check_filename_with_rename, EMPTY_SHA1, \
+    check_filename_with_rename, EMPTY_SHA1, normalize_file_path, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
@@ -138,7 +138,27 @@ def get_user_permission(request, repo_id):
     else:
         token = request.COOKIES.get('anontoken', None)
         return 'r' if token else ''
-        
+
+def get_file_access_permission(repo_id, path, username):
+    """Check user has permission to view the file.
+    1. check whether this file is private shared.
+    2. if failed, check whether the parent of this directory is private shared.
+    """
+     
+    pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
+                                                               repo_id, path)
+    if pfs is None:
+        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
+        for e in dirs:
+            if path.startswith(e.path):
+                return e.permission
+        return None
+    else:
+        return pfs.permission
+    
+def get_repo_access_permission(repo_id, username):
+    return seafile_api.check_repo_access_permission(repo_id, username)
+    
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
@@ -1181,10 +1201,12 @@ def repo_access_file(request, repo_id, obj_id):
     else:
         from_shared_link = False
 
-    if access_to_repo(request, repo_id, '') or from_shared_link:
+    username = request.user.username
+    path = request.GET.get('p', '')
+    if get_repo_access_permission(repo_id, username) or \
+            get_file_access_permission(repo_id, path, username) or from_shared_link:
         # Get a token to access file
-        token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
-                                                  op, request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id, op, username)
     else:
         return render_permission_error(request, _(u'Unable to access file'))
 
@@ -1715,6 +1737,64 @@ def file_revisions(request, repo_id):
         except Exception, e:
             return render_error(request, str(e))
 
+@login_required
+def view_priv_shared_file(request, repo_id):
+    """View private shared file.
+    """
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+    
+    username = request.user.username
+    path = normalize_file_path(request.GET.get('p', ''))
+
+    user_perm = get_file_access_permission(repo.id, path, username) or \
+        get_repo_access_permission(repo.id, username)
+    if user_perm is None:
+        raise Http404
+
+    obj_id = seafile_api.get_file_id_by_path(repo.id, path)
+    if not obj_id:
+        raise Http404
+
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+    
+    access_token = seafile_api.get_httpserver_access_token(repo.id, obj_id,
+                                                           'view', username)
+    quote_filename = urllib2.quote(filename.encode('utf-8'))
+    raw_path = gen_file_get_url(access_token, quote_filename)
+
+    # get file content
+    file_enc = request.GET.get('file_enc', 'auto')
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
+    ret_dict = {}
+    err, file_content, html_exists, filetype, encoding = get_file_content(filetype, raw_path, obj_id, fileext, file_enc, ret_dict)
+    file_encoding_list = FILE_ENCODING_LIST
+    if encoding and encoding not in FILE_ENCODING_LIST:
+        file_encoding_list.append(encoding)
+
+    return render_to_response('shared_file_view.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'path': path,
+            'file_name': filename,
+            # 'shared_token': token,
+            'access_token': access_token,
+            'filetype': filetype,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'username': username,
+            'err': err,
+            'file_content': file_content,
+            'encoding': encoding,
+            'file_encoding_list':file_encoding_list,
+            'html_exists': html_exists,
+            'use_pdfjs':USE_PDFJS,
+            'html_detail': ret_dict.get('html_detail', {}),
+            }, context_instance=RequestContext(request))
+
 def view_shared_dir(request, token):
     assert token is not None    # Checked by URLconf
 
@@ -2146,3 +2226,4 @@ def convert_cmmt_desc_link(request):
     for d in diff_result:
         logger.warn('diff_result: %s' % (d.__dict__))
     raise Http404
+

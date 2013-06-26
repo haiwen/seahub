@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
 import datetime
+
 from django import forms
 from django.db import models
 from django.db.models import Q
@@ -69,6 +71,7 @@ class UserMessageAttachment(models.Model):
 ### handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
+from seahub.signals import share_file_to_user_successful
 from seahub.share.signals import share_repo_to_user_successful
 
 @receiver(share_repo_to_user_successful)
@@ -86,3 +89,21 @@ def add_share_repo_msg(sender, **kwargs):
              'repo_name': repo.name}
         UserMessage.objects.add_unread_message(from_user, to_user, msg)
 
+@receiver(share_file_to_user_successful)
+def add_share_file_msg(sender, **kwargs):
+    from_user = kwargs.get('from_user', '')
+    to_user = kwargs.get('to_user', '')
+    repo_id = kwargs.get('repo_id', '')
+    path = kwargs.get('path', '')
+    file_name = os.path.basename(path)
+
+    if from_user and to_user and repo_id and path:
+        from seahub.base.templatetags.seahub_tags import email2nickname
+
+        msg = _(u"(System) %(user)s have shared a file <a href='%(href)s'>%(file_name)s</a> to you.") % \
+            {'user': email2nickname(from_user),
+             'href': reverse('view_priv_shared_file', args=[repo_id])+'?p='+path,
+             'file_name': file_name}
+        UserMessage.objects.add_unread_message(from_user, to_user, msg)
+        
+        
