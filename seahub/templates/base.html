@@ -40,11 +40,11 @@
                         {% endif %}
                     </div>
 
-                    <div class="account fright">
+                    <div class="account">
                         {% if request.user.is_authenticated %}
-                        <span class="my-info"><a href="{% url 'edit_profile' %}" class="top-link avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span class="bold">{{ request.user }}</span></span>
-                        <button class="icon-envelope" id="add-msg" title="{% trans "send a message" %}"></button>
-                        <button data-url="{% url 'message_list' %}" id="msg-count" title="{% trans "unread messages" %}">0</button>
+                        <a href="{% url 'edit_profile' %}" class="top-link avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span class="my-info">{{ request.user }}</span>
+                        <button class="icon-envelope btn" id="add-msg" title="{% trans "send a message" %}"></button>
+                        <button class="btn" data-url="{% url 'message_list' %}" id="msg-count" title="{% trans "unread messages" %}">0</button>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="top-link">{% trans "Log out" %}</a>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>

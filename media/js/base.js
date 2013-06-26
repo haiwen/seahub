@@ -1,4 +1,4 @@
-$('.top-bar-con .manage').css('width', $('.top-bar-con').width() - $('.top-bar-con .account').width() - 30);
+$('.top-bar-con .account').css('margin-left', $('.top-bar-con .manage').width() + 10);
 $('#title-panel, #left-panel, #right-panel').each(function() { // for ie 7
     if ($(this).children().length == 0) {
         $(this).addClass('hide');

@@ -521,6 +521,9 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 auto;
     position:relative;
 }
+.top-bar-con .account {
+    text-align:right;
+}
 #send-msg-popup {
     width:320px;
     padding:15px;
@@ -539,18 +542,25 @@ textarea:-moz-placeholder {/* for FF */
     line-height:24px;
     color:#ddd;
     font-weight:normal;
+    vertical-align:middle;
 }
 .top-bar-con .my-info {
     color:#fff;
+    font-weight:bold;
+    vertical-align:middle;
+    display:inline-block;
     padding-right:7px;
+    height:16px;
+    line-height:16px;
     border-right:1px solid #aaa;
     margin-right:3px;
 }
-.top-bar-con button {
+.top-bar-con .btn {
     padding:0 6px;
     border-radius:2px;
     line-height:16px;
     margin-right:2px;
+    vertical-align:middle;
 }
 #add-msg.add-msg-hl {
     background:#fff;
@@ -561,9 +571,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .top-bar-con .avatar-link {
     height:16px;
-    vertical-align:middle;
-    margin-bottom:2px;
-    *margin-bottom:0;/*for ie 7*/
+    line-height:16px;
 }
 .top-bar-con .avatar {
     border-radius: 2px;
