@@ -74,6 +74,13 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+var g_token = "TOKEN";
+function setToken(token) {
+    g_token = token;
+}
+function getToken() {
+    return g_token;
+}
 function addMessage(html) {
     $('#reply-list').append(html);
     $('.msg-op').removeClass('hide');

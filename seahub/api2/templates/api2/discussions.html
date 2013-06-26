@@ -25,9 +25,12 @@ function msgClick() {
 $('.msg').click(msgClick);
 
 {% if group_msgs.has_next %}
-var g_token;
+var g_token = "TOKEN";
 function setToken(token) {
     g_token = token;
+}
+function getToken() {
+    return g_token;
 }
 $(document).scroll(function() {
     var loading_icon = $('#loading-icon');
