@@ -1254,7 +1254,7 @@ def group_discuss(request, group):
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
 
-    group_msgs = get_group_msgs(group, page=1, request.user.username) 
+    group_msgs = get_group_msgs(group, page=1, username=request.user.username) 
 
     return render_to_response("api2/discussions.html", {
             "group" : group,
