@@ -863,11 +863,11 @@ def mkstemp():
 
 # File or directory operations
 FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
-           'Added directory', 'Renamed directory', 'Moved directory', 'Removed')
+           'Added directory', 'Renamed directory', 'Moved directory')
 
 OPS = '|'.join(FILE_OP)
 CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
-API_OPS = '|'.join((OPS, 'Deleted'))
+API_OPS = '|'.join((OPS, 'Deleted', 'Removed'))
 API_CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % API_OPS
 
 def convert_cmmt_desc_link(commit):
