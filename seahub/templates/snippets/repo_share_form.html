@@ -1,7 +1,6 @@
 {% load i18n avatar_tags group_avatar_tags %}
-<form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="hide">{% csrf_token %}
-    <h3>{% trans "Share Library"%}</h3>
-    <p>{% trans 'Share <span class="op-target"></span> to' %}</p>
+<form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="tab-popup hide">{% csrf_token %}
+    <h3 class="hd">{% trans 'Share <span class="op-target"></span> '%}</h3>
     <div id="repo-share-tabs">
         <ul id="repo-share-tabs-nav">
             <li><a href="#share-enter">{% trans 'Enter' %}</a></li>
@@ -43,11 +42,14 @@
         </ul>
         </div>
     </div>
-    <select name="permission" class="share-permission-select">
-        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-        <option value="r">{% trans "Read-Only"%}</option>
-    </select>
-    <input id="repo_id" type="hidden" name="repo_id" value="" />
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />
+
+    <div class="bot">
+        <select name="permission" class="share-permission-select w100">
+            <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+            <option value="r">{% trans "Read-Only"%}</option>
+        </select>
+        <input id="repo_id" type="hidden" name="repo_id" value="" />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" id="share-submit-btn" />
+    </div>
 </form>
