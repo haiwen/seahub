@@ -1,0 +1,75 @@
+{% extends base_template %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Share" %} - {% endblock %}
+{% block nav_share_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Links" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'list_priv_shared_files' %}">{% trans "Private Shares" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main_panel %}
+{% if fileshares %}
+<table class="sharelink-list">
+  <tr>
+    <th width="3%"><!--icon--></th>
+    <th width="45%">{% trans "Name"%}</th>
+    <th width="25%">{% trans "Library"%}</th>
+    <th width="12%">{% trans "Visits"%}</th>
+    <th width="15%">{% trans "Operations"%}</th>
+  </tr>
+  {% for fs in fileshares %}
+  <tr>
+    {% if fs.s_type == 'f' %}
+    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+    {% else %}
+    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+    {% endif %}
+    {% if fs.s_type == 'f' %}
+    <td><a href="{% url 'repo_view_file' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    {% else %}
+    <td><a href="{% url 'repo' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+    {% endif %}
+    <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
+    <td>{{ fs.view_cnt }}</td>
+    <td>
+        <a href="#" class="op view-link" data="{{ fs.shared_link }}">{% trans "View" %}</a>
+        <a class="op" href="{% url 'remove_shared_link' %}?t={{ fs.token }}">{% trans "Remove"%}</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<input type="text" readonly="readonly" value="" id="shared-link" class="hide" />
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any shared link"%}</h2>
+  <p>{% trans "You can share a folder or a file when you view a library, or share a file when you view it." %}</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% if fileshares %}
+$(".view-link").click(function() {
+    var link = $(this).attr('data');
+    $('#shared-link').before('<p class="hide">' + link + '</p>')
+    .val(link).css('width', $('#shared-link').prev().width() + 2)
+    .modal({focus:false});
+    $('#shared-link').prev().remove();
+    return false;
+});
+$('#shared-link').click(function() {
+    $(this).select();
+});
+{% endif %}
+</script>
+{% endblock %}

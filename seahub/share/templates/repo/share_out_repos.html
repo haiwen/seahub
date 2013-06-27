@@ -1,0 +1,142 @@
+{% extends base_template %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Share" %} - {% endblock %}
+{% block nav_share_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'list_priv_shared_files' %}">{% trans "Private Shares" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main_panel %}
+{% if shared_repos %}
+<table>
+    <tr>
+        <th width="3%"><!--icon--></th>
+        <th width="19%">{% trans "Name"%}</th>
+        <th width="21%">{% trans "Share To"%}</th>
+        <th width="15%">{% trans "Permission"%}</th>
+        <th width="29%">{% trans "Description"%}</th>
+        <th width="13%">{% trans "Operations"%}</th>
+    </tr>
+    {% for repo in shared_repos %}
+    <tr data="{{repo.props.share_type}}">
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+        <td data="{{ repo.props.repo_id }}"><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
+        <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
+        <td>
+            <div class="share-permission">
+                <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="share-permission-edit-icon vh" />
+            </div>
+            <select name="permission" class="share-permission-select hide">
+                <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
+                {% if repo.props.permission == 'rw' %}
+                <option value="r">{% trans "Read-Only"%}</option>
+                {% else %}
+                <option value="rw">{% trans "Read-Write"%}</option>
+                {% endif %} 
+            </select>
+        </td>
+        <td>{{ repo.props.repo_desc }}</td>
+        <td>
+          {% if repo.props.share_type == 'group' %}
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
+	  {% endif %}
+          {% if repo.props.share_type == 'personal' %}
+          <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op">{% trans "Unshare"%}</a>
+	  {% endif %}
+	  {% if repo.props.share_type == 'public' %}
+	      {% if not org %}
+	      <a href="#" data="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op">{% trans "Unshare"%}</a>
+	      {% else %}
+	      <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op">{% trans "Unshare"%}</a>
+	      {% endif %}
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You have not shared any library" %}</h2>
+  <p>{% trans "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% if shared_repos %}
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.share-permission-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.share-permission-edit-icon').addClass('vh');
+    }
+);
+$('.share-permission-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'share-permission-select'
+});
+$('.share-permission-select').change(function() {
+    var select = $(this),
+        select_cont = $(this).parent(),
+        user = select_cont.prev(),
+        share_type = select_cont.parent().attr('data');
+        {% if org %}
+        var url = '{% url 'org_share_permission_admin' org.url_prefix %}?org_id={{ org.org_id }}&share_type=' + share_type;
+        {% else %}
+        var url = '{% url 'share_permission_admin' %}?share_type=' + share_type;
+        {% endif %}
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            repo_id: user.prev().attr('data'),
+            email_or_group: user.attr('data'),
+            permission: select.val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+                select.prev().children('.share-permission-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+            }
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        }   
+    });
+});
+// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.share-permission-edit-icon, .share-permission-select').is(target)) {
+        $('.share-permission').removeClass('hide');
+        $('.share-permission-select').addClass('hide');
+    }
+});
+$('.cancel-share').click(function() {
+    location.href = $(this).attr('data');
+});
+{% endif %}                     // shared_repos
+
+</script>
+{% endblock %}

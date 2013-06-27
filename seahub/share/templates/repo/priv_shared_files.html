@@ -1,0 +1,61 @@
+{% extends base_template %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Share" %} - {% endblock %}
+{% block nav_share_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</a></li>
+        <li class="tabnav-tab  tabnav-tab-cur">{% trans "Private Shares" %}</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main_panel %}
+{% if priv_shares %}
+<table>
+  <tr>
+    <th width="18%">{% trans "From/To"%}</th>
+    <th width="45%">{% trans "Name"%}</th>
+    <th width="25%">{% trans "Library"%}</th>
+    <th width="12%">{% trans "Operations"%}</th>
+  </tr>
+  {% for e in priv_shares %}
+  <tr>
+    {% if e.out_or_in == 'out' %}
+    <td><img src="{{MEDIA_URL}}img/icon-share-out.png" title="{% trans "Share out"%}" alt="{% trans "share icon"%}"/> {{e.to_user|email2nickname}}</td>
+    {% else %}
+    <td><img src="{{MEDIA_URL}}img/icon-share-in.png" title="{% trans "Share in"%}" alt="{% trans "share icon"%}"/> {{e.from_user|email2nickname}}</td>
+    {% endif %}
+    {% if e.s_type == 'f' %}
+    <td><a href="{% url 'view_priv_shared_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+    {% else %}
+    <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+    {% endif %}
+    {% if e.out_or_in == 'out' %}
+    <td><a href="{% url 'repo' e.repo_id %}">{{e.repo.name}}</a></td>
+    {% else %}
+    <td>--</td>
+    {% endif %}
+    <td><a href="{% url 'rm_private_file_share' e.repo_id %}?from={{e.from_user|urlencode}}&to={{e.to_user|urlencode}}&p={{e.path|urlencode}}" class="op">Unshare</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% else%}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any private shared files/folders" %}</h2>
+  <p>{% trans "You can share a single folder or file to a registered user if you don't want to share hole library to he/she." %}</p>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}

@@ -345,6 +345,106 @@ def share_admin(request):
             "fileshares": p_fileshares,
             "priv_shares": priv_shares,
             }, context_instance=RequestContext(request))
+
+@login_required
+def list_share_out_repos(request):
+    """
+    List personal shared repos.
+    """
+    username = request.user.username
+
+    shared_repos = []
+
+    # personal repos shared from this user
+    shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+
+    # repos shared to groups
+    group_repos = get_group_repos_by_owner(username)
+    for repo in group_repos:
+        group = ccnet_threaded_rpc.get_group(int(repo.group_id))
+        if not group:
+            repo.props.user = ''
+            continue
+        repo.props.user = group.props.group_name
+        repo.props.user_info = repo.group_id
+    shared_repos += group_repos
+
+    if not CLOUD_MODE:
+        # public repos shared by this user
+        pub_repos = list_inner_pub_repos_by_owner(username)
+        for repo in pub_repos:
+            repo.props.user = _(u'all members')
+            repo.props.user_info = 'all'
+        shared_repos += pub_repos
+
+    for repo in shared_repos:
+        if repo.props.permission == 'rw':
+            repo.share_permission = _(u'Read-Write')
+        elif repo.props.permission == 'r':
+            repo.share_permission = _(u'Read-Only')
+        else:
+            repo.share_permission = ''
+
+        if repo.props.share_type == 'personal':
+            repo.props.user_info = repo.props.user
+
+    shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
+    
+    return render_to_response('repo/share_out_repos.html', {
+            "shared_repos": shared_repos,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def list_shared_links(request):
+    """List shared links.
+    """
+    username = request.user.username
+
+    # Shared links
+    fileshares = FileShare.objects.filter(username=username)
+    p_fileshares = []           # personal file share
+    for fs in fileshares:
+        if is_personal_repo(fs.repo_id):  # only list files in personal repos
+            if fs.s_type == 'f':
+                fs.filename = os.path.basename(fs.path)
+                fs.shared_link = gen_shared_link(request, fs.token, 'f') 
+            else:
+                fs.filename = os.path.basename(fs.path[:-1])
+                fs.shared_link = gen_shared_link(request, fs.token, 'd')
+            r = get_repo(fs.repo_id)
+            if not r:           # get_repo may returns None
+                continue
+            fs.repo = r
+            p_fileshares.append(fs)
+    
+    return render_to_response('repo/shared_links.html', {
+            "fileshares": p_fileshares,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def list_priv_shared_files(request):
+    """List shared links.
+    """
+    username = request.user.username
+
+    # Private share out/in files/directories
+    priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
+    for e in priv_share_out:
+        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+        e.out_or_in = 'out'
+        e.repo = seafile_api.get_repo(e.repo_id)
+
+    priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
+    for e in priv_share_in:
+        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+        e.out_or_in = 'in'
+        e.repo = seafile_api.get_repo(e.repo_id)
+    priv_shares = list(priv_share_out) + list(priv_share_in)
+    
+    return render_to_response('repo/priv_shared_files.html', {
+            "priv_shares": priv_shares,
+            }, context_instance=RequestContext(request))
+
     
 @login_required
 def share_permission_admin(request):
