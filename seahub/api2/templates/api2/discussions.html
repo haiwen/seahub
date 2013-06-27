@@ -11,7 +11,7 @@
     {% include "api2/discussions_body.html" %}
     </ul>
     {% if group_msgs.has_next %}
-    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" id="loading-icon" data-next="{{ group_msgs.next_page_number }}" style="display:none;" />
+    <div id="loading-icon" data-next="{{ group_msgs.next_page_number }}"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
     <p id="loading-error" class="error hide"></p>
     {% endif %}
 {% endif %}
@@ -35,7 +35,7 @@ function getToken() {
 {% if group_msgs.has_next %}
 $(document).scroll(function() {
     var loading_icon = $('#loading-icon');
-    if (loading_icon.get(0).style.display == 'none' && loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
+    if (loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
         loading_icon.show();
         $.ajax({
             url:'{% url 'more_discussions' group.id %}?page=' + e(loading_icon.data('next')),
@@ -43,9 +43,12 @@ $(document).scroll(function() {
             cache: false,
             headers:{Authorization:'Token '+g_token},
             success: function(data) {
-                loading_icon.hide().data('next', data['next_page']);
+                loading_icon.data('next', data['next_page']);
                 $('.msg-list').append(data['html']);
                 $('.msg').unbind().click(msgClick);
+                if (!data['next_page']) {
+                    loading_icon.hide();
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 loading_icon.hide();

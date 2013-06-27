@@ -6,14 +6,12 @@ function setToken(token) {
 }
 function reqEvents(start) {
     var loading_icon = $('#loading-icon');
-    loading_icon.show(); // also at the bottom
     $.ajax({
         url:'{{SITE_ROOT}}api2/html/more_events/?start=' + start,
         dataType: 'json',
         cache: false,
         headers:{Authorization:'Token '+g_token},
         success: function(data) {
-            loading_icon.hide();
             $('#events-body').append(data['html']);
 
             setCmtWidth();
@@ -23,6 +21,7 @@ function reqEvents(start) {
                 $('#events').data('more', true).data('start', data['new_start']);
             } else {
                 $('#events').data('more', false);
+                loading_icon.hide();
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -95,7 +94,7 @@ $('.event-item').click(itemClick);
 {% endif %}
 // get more events when scroll to the bottom
 $(document).scroll(function() {
-    if ($('#events').data('more') && $('#loading-icon').get(0).style.display == 'none' && $(window).height() + $(window).scrollTop() == $(document).height()) {
+    if ($('#events').data('more') && $(window).height() + $(window).scrollTop() == $(document).height()) {
         reqEvents($('#events').data('start'));
     }
 });

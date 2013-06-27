@@ -886,7 +886,8 @@ textarea:-moz-placeholder {/* for FF */
     padding:0;
 }
 .event-item,
-.msg {
+.msg,
+#loading-icon {
     padding:10px 8px;
     border-bottom:1px solid #ccc;
     border-top:1px solid #fff;
@@ -916,8 +917,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
 }
 #loading-icon {
-    display:block;
-    margin:0 auto;
+    text-align:center;
+    padding:20px;
+    border-bottom:none;
 }
 /* avatar */
 .avatar-op .avatar,

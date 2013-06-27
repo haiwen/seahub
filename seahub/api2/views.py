@@ -1373,7 +1373,7 @@ def discussion(request, msg_id):
                     att.err = _(u'File does not exist')
                 else:
                     att.token = seafserv_rpc.web_get_access_token(att.repo_id, att.obj_id,
-                                                     'view', username)
+                                                     'view', request.user.username)
                     att.img_url = gen_file_get_url(att.token, att.name)
 
         msg.attachment = att
