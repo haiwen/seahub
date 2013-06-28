@@ -207,28 +207,16 @@ def get_user_repos(username):
     repos.
     """
     email = username
+
     shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
+    owned_repos = list_personal_repos_by_owner(email)
+    groups_repos = []
+    for group in get_personal_groups_by_user(email):
+        groups_repos += get_group_repos(group.id, email)
     
     if CLOUD_MODE:
-        if user.org:
-            org_id = user.org['org_id']
-            owned_repos = list_org_repos_by_owner(org_id, email)
-            groups_repos = []
-            for group in get_org_groups_by_user(org_id, email):
-                groups_repos += get_org_group_repos(org_id, group.id, email)
-            
-            public_repos = list_org_inner_pub_repos(org_id, email, -1, -1)
-        else:
-            owned_repos = list_personal_repos_by_owner(email)
-            groups_repos = []
-            for group in get_personal_groups_by_user(email):
-                groups_repos += get_group_repos(group.id, email)
-            public_repos = []
+        public_repos = []
     else:
-        owned_repos = list_personal_repos_by_owner(email)
-        groups_repos = []
-        for group in get_personal_groups_by_user(email):
-            groups_repos += get_group_repos(group.id, email)
         public_repos = list_inner_pub_repos(email)
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
