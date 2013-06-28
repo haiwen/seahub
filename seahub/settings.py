@@ -127,15 +127,15 @@ TEMPLATE_DIRS = (
 # django.utils.translation -- that module depends on the settings.
 gettext_noop = lambda s: s
 LANGUAGES = (
+    ('de', gettext_noop(u'Deutsch')),
     ('en', gettext_noop('English')),
+    ('es', gettext_noop('Español')),
+    ('fr', gettext_noop('Français')),
+    ('it', gettext_noop('Italiano')),
+    ('hu', gettext_noop('Magyar')),
+    ('ru', gettext_noop(u'Русский')),    
     ('zh-cn', gettext_noop(u'简体中文')),
     ('zh-HK', gettext_noop(u'正體中文')),
-    ('ru', gettext_noop(u'Русский')),    
-    ('de', gettext_noop(u'Deutsch')),
-    ('es', gettext_noop('Español')),
-    ('it', gettext_noop('Italiano')),
-    ('fr', gettext_noop('Français')),
-    ('hu', gettext_noop('Magyar')),
 )
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
