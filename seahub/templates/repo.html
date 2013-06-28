@@ -177,7 +177,7 @@
                                 <li><a class="op file-rename" href="#" data="{{ dirent.obj_name }}">{% trans "Rename" %}</a></li>
                                 <li><a class="op file-mv" href="#" data="{{ dirent.obj_name }}">{% trans "Move" %}</a></li>
                                 <li><a class="op file-cp" href="#" data="{{ dirent.obj_name }}">{% trans "Copy" %}</a></li>
-                                <li><a class="op" href="{% url 'file_revisions' repo.props.id %}?p={{ path }}{{ dirent.obj_name }}">{% trans "History" %}</a></li>
+                                <li><a class="op" href="{% url 'file_revisions' repo.props.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans "History" %}</a></li>
                             </ul>
                             {% endif %}
                         </div>
