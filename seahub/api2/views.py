@@ -213,8 +213,8 @@ class Repos(APIView):
         passwd = request.POST.get("passwd")
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST, \
-                    'Please write repo name.')
-
+                    'Library name is required.')
+        
         # create a repo
         try:
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
@@ -223,12 +223,11 @@ class Repos(APIView):
             return api_error(status.HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         if not repo_id:
-            return api_error(status.HTTP_520_BAD_REQUEST, \
+            return api_error(status.HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         else:
             resp = Response('success', status=status.HTTP_201_CREATED)
-            uri = reverse('Repos')
-            resp['Location'] = uri + repo_id + '/'
+            resp['Location'] = reverse('api2-repo', args=[repo_id])
             return resp
 
 
@@ -330,14 +329,15 @@ class Repo(APIView):
 
     def delete(self, request, repo_id, format=None):
         username = request.user.username
-        repo = get_repo(repo_id)
+        repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_400_BAD_REQUEST, \
                     'Library does not exist.')
-        if not can_access_repo(request, repo_id):
-            return api_error(status.HTTP_400_BAD_REQUEST, \
-                    'You can not access this repo.')
-        print username, repo_id
+
+        if not seafile_api.is_repo_owner(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, \
+                    'Only library owner can perform this operation.')
+
         seafile_api.remove_repo(repo_id)
         return Response('success', status=status.HTTP_200_OK)
 

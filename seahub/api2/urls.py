@@ -10,8 +10,8 @@ urlpatterns = patterns('',
 
     # RESTful API
     url(r'^account/info/$', Account.as_view()),
-    url(r'^repos/$', Repos.as_view(), name="Repos"),
-    url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view()),
+    url(r'^repos/$', Repos.as_view(), name="api2-repos"),
+    url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-info/$', DownloadRepo.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', UploadLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-link/$', UpdateLinkView.as_view()),
