@@ -1061,7 +1061,7 @@ def private_file_share(request, repo_id):
             PrivateFileDirShare.objects.add_private_dir_share(
                 username, email, repo_id, path, perm)
         else:
-            assert False        # todo
+            continue
             
         # send a signal when sharing file successful
         share_file_to_user_successful.send(sender=None, from_user=username,

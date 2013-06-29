@@ -695,11 +695,11 @@ $('.file-share').click(function() {
         $('#file-share .op-target').html(trimFilename(filename, 30));
         $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
-        $('#shared-link-text').css({'width':$('#linkwidth').width() + 2});
+        $('#shared-link-text').css({'width':$('#linkwidth').width() + 20});
         $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
         $("#repo-share-tabs").tabs();
         $('#linkwidth').remove();
-        $('#simplemodal-container').css({'height':'auto'});
+        $('#simplemodal-container').css({'height':'auto', 'width': '400px'});
     }
     if ($(this).data('link')) {
         showPopup($(this).data('link'));

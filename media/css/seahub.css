@@ -1574,6 +1574,11 @@ textarea:-moz-placeholder {/* for FF */
 #email_or_group {
     width:98.5%;
 }
+#emails {
+    width:98.5%;
+    height:80px;
+    padding:2px;
+}
 /* group-join-form */
 #id_group_join_msg {
     width:260px;
