@@ -16,10 +16,12 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.share.models import FileShare, PrivateFileDirShare
-from seahub.views import gen_path_link, get_user_permission, get_repo_dirents
+from seahub.views import gen_path_link, get_user_permission, get_repo_dirents,\
+    get_unencry_rw_repos_by_user
+
 from seahub.utils import get_ccnetapplet_root, is_file_starred, \
     gen_file_upload_url, get_httpserver_root, gen_dir_share_link, \
-    EMPTY_SHA1, get_user_repos
+    EMPTY_SHA1
 from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
@@ -71,62 +73,6 @@ def get_next_url_from_request(request):
 
 def get_nav_path(path, repo_name):
     return gen_path_link(path, repo_name)
-
-def get_unencry_rw_repos_by_user(username):
-    """Get all unencrypted repos the user can read and write.
-    """
-    def check_has_subdir(repo):
-        latest_commit = seaserv.get_commits(repo.id, 0, 1)[0]
-        if not latest_commit:
-            return False
-        if latest_commit.root_id == EMPTY_SHA1:
-            return False
-
-        try:
-            dirs = seafile_api.list_dir_by_commit_and_path(latest_commit.id, '/')
-        except Exception, e:
-            logger.error(e)
-            return False
-        else:
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    return True
-            return False
-
-    def has_repo(repos, repo):
-        for r in repos:
-            if repo.id == r.id:
-                return True
-        return False
-    
-    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(username)
-
-    accessible_repos = []
-
-    for r in owned_repos:
-        if not has_repo(accessible_repos, r) and not r.encrypted:
-            r.has_subdir = check_has_subdir(r)
-            accessible_repos.append(r)
-
-    for r in shared_repos + public_repos:
-        # For compatibility with diffrent fields names in Repo and
-        # SharedRepo objects.
-        r.id = r.repo_id
-        r.name = r.repo_name
-        r.desc = r.repo_desc
-
-        if not has_repo(accessible_repos, r) and not r.encrypted:
-            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':
-                r.has_subdir = check_has_subdir(r)
-                accessible_repos.append(r)
-
-    for r in groups_repos:
-        if not has_repo(accessible_repos, r) and not r.encrypted :
-            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':            
-                r.has_subdir = check_has_subdir(r)
-                accessible_repos.append(r)
-
-    return accessible_repos
 
 def get_shared_groups_by_repo_and_user(repo_id, username):
     """Get all groups which this repo is shared.

@@ -45,7 +45,8 @@ from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
-    is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff
+    is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
+    check_filename_with_rename
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -1080,10 +1081,11 @@ def rm_private_file_share(request, repo_id):
     """
     from_user = request.GET.get('from', '')
     to_user = request.GET.get('to', '')
+    path = request.GET.get('p')
+    file_or_dir = os.path.basename(path.rstrip('/'))
     username = request.user.username
+
     if username == from_user or username == to_user:
-        path = request.GET.get('p')
-        file_or_dir = os.path.basename(path.rstrip('/'))
 
         PrivateFileDirShare.objects.delete_private_file_dir_share(
             from_user, to_user, repo_id, path)
@@ -1097,4 +1099,33 @@ def rm_private_file_share(request, repo_id):
     return HttpResponseRedirect(next)
 
     
+@login_required
+def save_private_file_share(request, repo_id):
+    """
+    Save private share file to someone's library.
+    """
+    
+    username = request.user.username
+    from_user = request.GET.get('from', '')
+    to_user = request.GET.get('to', '')
+    path= request.GET.get('p', '')
+    src_path = os.path.dirname(path)
+    obj_name = os.path.basename(path.rstrip('/'))
 
+    if username == from_user or username == to_user:
+        dst_repo_id = request.POST.get('dst_repo')
+        dst_path    = request.POST.get('dst_path')
+
+        new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+        seafile_api.copy_file(repo_id, src_path, obj_name,
+                              dst_repo_id, dst_path, new_obj_name, username)
+
+        messages.success(request, _(u'Successfully saved.'))
+        
+    else:
+        messages.error(request, _("You don't have permission to save %s.") % obj_name)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)

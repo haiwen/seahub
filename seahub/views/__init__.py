@@ -69,7 +69,7 @@ from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, \
     gen_dir_share_link, gen_file_share_link, \
-    calculate_repo_last_modify, get_file_type_and_ext, \
+    calculate_repo_last_modify, get_file_type_and_ext, get_user_repos, \
     check_filename_with_rename, EMPTY_SHA1, normalize_file_path, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
@@ -237,6 +237,62 @@ def get_repo_dirents(request, repo_id, commit, path):
         file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                          y.obj_name.lower()))
         return (file_list, dir_list)
+
+def get_unencry_rw_repos_by_user(username):
+    """Get all unencrypted repos the user can read and write.
+    """
+    def check_has_subdir(repo):
+        latest_commit = seaserv.get_commits(repo.id, 0, 1)[0]
+        if not latest_commit:
+            return False
+        if latest_commit.root_id == EMPTY_SHA1:
+            return False
+
+        try:
+            dirs = seafile_api.list_dir_by_commit_and_path(latest_commit.id, '/')
+        except Exception, e:
+            logger.error(e)
+            return False
+        else:
+            for dirent in dirs:
+                if stat.S_ISDIR(dirent.props.mode):
+                    return True
+            return False
+
+    def has_repo(repos, repo):
+        for r in repos:
+            if repo.id == r.id:
+                return True
+        return False
+    
+    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(username)
+
+    accessible_repos = []
+
+    for r in owned_repos:
+        if not has_repo(accessible_repos, r) and not r.encrypted:
+            r.has_subdir = check_has_subdir(r)
+            accessible_repos.append(r)
+
+    for r in shared_repos + public_repos:
+        # For compatibility with diffrent fields names in Repo and
+        # SharedRepo objects.
+        r.id = r.repo_id
+        r.name = r.repo_name
+        r.desc = r.repo_desc
+
+        if not has_repo(accessible_repos, r) and not r.encrypted:
+            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':
+                r.has_subdir = check_has_subdir(r)
+                accessible_repos.append(r)
+
+    for r in groups_repos:
+        if not has_repo(accessible_repos, r) and not r.encrypted :
+            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':            
+                r.has_subdir = check_has_subdir(r)
+                accessible_repos.append(r)
+
+    return accessible_repos
 
 
 def render_recycle_root(request, repo_id):
@@ -1748,10 +1804,20 @@ def view_priv_shared_file(request, repo_id):
     username = request.user.username
     path = normalize_file_path(request.GET.get('p', ''))
 
-    user_perm = get_file_access_permission(repo.id, path, username) or \
-        get_repo_access_permission(repo.id, username)
-    if user_perm is None:
-        raise Http404
+    pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
+                                                                repo.id, path)
+    if pfs is None:
+        user_perm = get_repo_access_permission(repo.id, username)
+        if user_perm is None:
+            raise Http404
+        else:
+            return HttpResponseRedirect(reverse('repo_view_file', args=[repo.id]) + '?p=' + path)
+    else:
+        user_perm = pfs.permission
+    # user_perm = get_file_access_permission(repo.id, path, username) or \
+        
+    # if user_perm is None:
+    #     raise Http404
 
     obj_id = seafile_api.get_file_id_by_path(repo.id, path)
     if not obj_id:
@@ -1775,17 +1841,20 @@ def view_priv_shared_file(request, repo_id):
     if encoding and encoding not in FILE_ENCODING_LIST:
         file_encoding_list.append(encoding)
 
+    accessible_repos = get_unencry_rw_repos_by_user(username)
+    save_to_link = reverse('save_private_file_share', args=[repo.id]) + \
+        '?from=' + pfs.from_user + '&to=' + pfs.to_user + '&p=' + pfs.path
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
-            # 'shared_token': token,
             'access_token': access_token,
             'filetype': filetype,
             'fileext': fileext,
             'raw_path': raw_path,
-            'username': username,
+            'shared_by': pfs.from_user,
             'err': err,
             'file_content': file_content,
             'encoding': encoding,
@@ -1793,6 +1862,8 @@ def view_priv_shared_file(request, repo_id):
             'html_exists': html_exists,
             'use_pdfjs':USE_PDFJS,
             'html_detail': ret_dict.get('html_detail', {}),
+            'accessible_repos': accessible_repos,
+            'save_to_link': save_to_link,
             }, context_instance=RequestContext(request))
 
 def view_shared_dir(request, token):

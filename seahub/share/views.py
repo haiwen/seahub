@@ -35,7 +35,7 @@ from seahub.contacts.signals import mail_sended
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_dir_share_link, gen_file_share_link, \
-    IS_EMAIL_CONFIGURED
+    IS_EMAIL_CONFIGURED, check_filename_with_rename
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -643,7 +643,7 @@ def remove_shared_link(request):
     msg = _('Deleted successfully')
     data = json.dumps({'msg': msg})
     return HttpResponse(data, status=200, content_type=content_type)
-    
+
 @login_required
 def send_shared_link(request):
     """
@@ -695,6 +695,37 @@ def send_shared_link(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
+@login_required
+def save_shared_link(request):
+    """Save public share link to one's library.
+    """
+
+    username = request.user.username
+    token = request.POST.get('s_token', '')
+    dst_repo_id = request.POST.get('dst_repo')
+    dst_path    = request.POST.get('dst_path')
+
+    try:
+        fs = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        assert False            # todo
+
+    src_repo_id = fs.repo_id
+    src_path = os.path.dirname(fs.path)
+    obj_name = os.path.basename(fs.path)
+
+    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+    
+    seafile_api.copy_file(src_repo_id, src_path, obj_name,
+                          dst_repo_id, dst_path, new_obj_name, username)
+
+    messages.success(request, _(u'Successfully saved.'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)
+    
 @login_required    
 def user_share_list(request, id_or_email):
     """List sharing repos with ``to_email``.

@@ -87,7 +87,7 @@ class PrivateFileDirShareManager(models.Manager):
         """List directories private shared to ``to_user`` base on ``repo_id``.
         """
         return super(PrivateFileDirShareManager, self).filter(
-            to_user=to_user, repo_id=repo_id)
+            to_user=to_user, repo_id=repo_id, s_type='d')
         
         
 class PrivateFileDirShare(models.Model):

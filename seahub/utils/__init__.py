@@ -233,7 +233,7 @@ def get_user_repos(username):
         public_repos = list_inner_pub_repos(email)
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
-                
+
 def get_file_type_and_ext(filename):
     """
     Return file type and extension if the file can be previewd online,
