@@ -326,42 +326,43 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <div id="file-share" class="hide">
-        <h3>{% trans 'Share' %} <span class="op-target"></span></h3>
+    <div id="file-share" class="tab-popup hide">
+        <h3 class="hd">{% trans 'Share' %} <span class="op-target"></span></h3>
 
         <div id="repo-share-tabs">
-          <ul id="repo-share-tabs-nav">
-            <li><a href="#private-share">{% trans "Private share" %}</a></li>
-            <li><a href="#shared-link">{% trans "Shared link" %}</a></li>
-          </ul>
+            <ul id="repo-share-tabs-nav">
+                <li><a href="#private-share">{% trans "Private share" %}</a></li>
+                <li><a href="#shared-link">{% trans "Shared link" %}</a></li>
+            </ul>
 
-          <div id="private-share">
-            <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
-              <textarea id="emails" name="emails" class="w100" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
-              <!-- <select name="perm" class="share-permission-select w100"> -->
-              <!--   <option value="rw" selected="selected">{% trans "Read-Write"%}</option> -->
-              <!--   <option value="r">{% trans "Read-Only"%}</option> -->
-              <!-- </select> -->
-              
-              <input type="hidden" name="repo_id" value="" />
-              <input type="hidden" name="s_type" value="" />
-              <input type="hidden" name="path" value="" />
-              <p class="tip">{% trans 'Tip: must be a registered user.' %}</p>
-              <input type="submit" value="{% trans "Submit"%}" />
-            </form>
-          </div>                <!--/#private-share-->
-          <div id="shared-link">
-            <p>{% trans 'Link: ' %}<input type="text" readonly="readonly" id="shared-link-text" /></p>
-            <button id="send-link">{% trans 'Send' %}</button>
-            <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
-            <label>{% trans "Send to:"%}</label><br />
-            <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
-            <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
-            <input type="submit" value="{% trans "Submit"%}" class="submit" />
-            <p class="error hide"></p>
-            <p id="sending" class="hide">{% trans "Sending..."%}</p>
-            </form>
-          </div>                <!--/#shared-link-->
+            <div id="private-share">
+                <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
+                    <textarea id="emails" name="emails" class="w100" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
+                    <!-- <select name="perm" class="share-permission-select w100"> -->
+                        <!--   <option value="rw" selected="selected">{% trans "Read-Write"%}</option> -->
+                        <!--   <option value="r">{% trans "Read-Only"%}</option> -->
+                        <!-- </select> -->
+
+                    <input type="hidden" name="repo_id" value="" />
+                    <input type="hidden" name="s_type" value="" />
+                    <input type="hidden" name="path" value="" />
+                    <p class="tip">{% trans 'Tip: must be a registered user.' %}</p>
+                    <input type="submit" value="{% trans "Submit"%}" />
+                </form>
+            </div>                <!--/#private-share-->
+
+            <div id="shared-link">
+                <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
+                <button id="send-link">{% trans 'Send' %}</button>
+                <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
+                    <label>{% trans "Send to:"%}</label><br />
+                    <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                    <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
+                    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+                    <p class="error hide"></p>
+                    <p id="sending" class="hide">{% trans "Sending..."%}</p>
+                </form>
+            </div>                <!--/#shared-link-->
         </div> <!--/#repo-share-tabs-->
     </div>   <!--/#file-share-->
 
@@ -695,11 +696,11 @@ $('.file-share').click(function() {
         $('#file-share .op-target').html(trimFilename(filename, 30));
         $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
-        $('#shared-link-text').css({'width':$('#linkwidth').width() + 20});
-        $('#file-share').modal({'focus':false}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
+        $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
+        $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding": "10px 0 0"}}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
         $("#repo-share-tabs").tabs();
         $('#linkwidth').remove();
-        $('#simplemodal-container').css({'height':'auto', 'width': '400px'});
+        $('#simplemodal-container').css({'height':'auto'});
     }
     if ($(this).data('link')) {
         showPopup($(this).data('link'));
@@ -927,12 +928,12 @@ function renderDirTree(container, repo_data) {
                                 item = { 
                                     'data': o.name, 
                                     'attr': { 'repo_id': o.repo_id, 'type': o.type },
-                                    'state': 'closed',
+                                    'state': 'closed'
                                 };
                             } else {
                                 item = {
                                     'data': o.name, 
-                                    'attr': {'type': o.type },
+                                    'attr': {'type': o.type }
                                 };
                             }
                             items.push(item);

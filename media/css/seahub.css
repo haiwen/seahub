@@ -1965,7 +1965,8 @@ textarea:-moz-placeholder {/* for FF */
     border:0;
 }
 #shared-link-text {
-    vertical-align:middle; /*for ie 7*/
+    /*vertical-align:middle; for ie 7*/
+    background:transparent;
 }
 .file-op {
     margin-top:0.8em;
