@@ -875,9 +875,9 @@ if EVENTS_CONFIG_FILE:
         config.read(EVENTS_CONFIG_FILE)
         enabled = seafevents.is_office_converter_enabled(config)
         if enabled:
-            logging.info('office converter: enabled')
+            logging.debug('office converter: enabled')
         else:
-            logging.info('office converter: not enabled')
+            logging.debug('office converter: not enabled')
         return enabled
 
     def get_office_converter_html_dir():
@@ -956,9 +956,9 @@ if EVENTS_CONFIG_FILE:
         config.read(EVENTS_CONFIG_FILE)
         enabled = seafevents.is_search_enabled(config)
         if enabled:
-            logging.info('search: enabled')
+            logging.debug('search: enabled')
         else:
-            logging.info('search: not enabled')
+            logging.debug('search: not enabled')
         return enabled
 
     HAS_FILE_SEARCH = check_search_enabled()
