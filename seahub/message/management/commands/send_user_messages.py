@@ -34,26 +34,26 @@ class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has a unread user message.'
 
     def handle(self, *args, **options):
-        logger.info('Start sending user message...')
+        logger.debug('Start sending user message...')
         self.do_action()
-        logger.info('Finish sending user message.\n')
+        logger.debug('Finish sending user message.\n')
 
     def do_action(self):
         now = datetime.now()
 
         if not UserMsgLastCheck.objects.all():
-            logger.info('No last check time found, get all unread msgs.')
+            logger.debug('No last check time found, get all unread msgs.')
             unread_msgs = UserMessage.objects.filter(ifread=0)
 
-            logger.info('Create new last check time: %s' % now)
+            logger.debug('Create new last check time: %s' % now)
             UserMsgLastCheck(check_time=now).save()            
         else:
             last_check = UserMsgLastCheck.objects.all()[0]
             last_check_time = last_check.check_time
-            logger.info('Last check time is %s' % last_check_time)
+            logger.debug('Last check time is %s' % last_check_time)
             unread_msgs = UserMessage.objects.filter(timestamp__gt=last_check_time).filter(ifread=0)
 
-            logger.info('Update last check time to %s' % now)
+            logger.debug('Update last check time to %s' % now)
             last_check.check_time = now
             last_check.save()
 
