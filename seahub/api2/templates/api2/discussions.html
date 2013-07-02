@@ -5,6 +5,16 @@
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
+{% block extra_style %}
+{% if not group_msgs.has_next %}
+<style type="text/css">
+.msg:last-child {
+    border-bottom:0;
+}
+</style>
+{% endif %}
+{% endblock %}
+
 {% block main_panel %}
 {% if group_msgs %}
     <ul class="msg-list" id="msg-list">
@@ -48,6 +58,7 @@ $(document).scroll(function() {
                 $('.msg').unbind().click(msgClick);
                 if (!data['next_page']) {
                     loading_icon.hide();
+                    $('.msg:last-child').css({'border-bottom':0});
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -1278,9 +1278,6 @@ textarea:-moz-placeholder {/* for FF */
 .msg {
     padding:10px;
 }
-.msg:last-child {
-    border-bottom:0;
-}
 .msg-page {
     padding:0;
     background:#fff;
