@@ -36,137 +36,49 @@
     </div>
 
 
-    <form id="mv-form" action="{{save_to_link}}" method="post" class="file-choose-form hide">{% csrf_token %}
-        <h3 id="mv-hd"></h3>
-        <h4 id="mv-detail"></h4>
-        <div id="mv-dir-list" class="dir-tree-cont">
-            <h5><span class="tri-bg tri-right-bg"></span>{% trans "All Libraries"%}</h5>
-            <div id="other-repos-dirs" class="hide"></div>
+    <form id="file-save-form" action="{{save_to_link}}" method="post" class="file-choose-form hide">{% csrf_token %}
+        <h3>{% trans "Save To:" %}</h3>
+        <div class="dir-tree-cont">
+            <div id="repos-dirs"></div>
         </div>
         <input type="hidden" name="s_token" value="{{shared_token}}" />
         <input type="hidden" name="dst_repo" value="" />
         <input type="hidden" name="dst_path" value="" />
         <p class="error hide">{% trans "Please click and choose a directory."%}</p>
-        <input type="submit" value="{% trans "Save"%}" class="submit" />
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
     
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
 $('#download').click(function() {
     window.open($(this).attr('data'));
 });
-function renderDirTree(container, repo_data) {
-    container
-        .delegate('.jstree-closed', 'dblclick', function(e) {
-            container.jstree('open_node', $(this));
-            $(this).find('a').removeClass('jstree-clicked');
-        })
-        .bind('before.jstree', function(e, data) {
-            if (data.func === 'select_node') { // ensure only one selected dir display in the popup
-                $('#mv-form .jstree-clicked').removeClass('jstree-clicked');
-            }
-        })
-        .bind('select_node.jstree', function(e, data) {
-            var path;
-            var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
-            var path_array = data.inst.get_path(data.rslt.obj);
-            if (path_array.length == 1) {
-                path = '/';
-            } else {
-                path_array.shift();
-                path = '/' + path_array.join('/') + '/';
-            }
-            $('input[name="dst_repo"]').val(repo_id);
-            $('input[name="dst_path"]').val(path);
-        })
-        .jstree({
-            'json_data': {
-                'data': repo_data,
-                'ajax': {
-                    'url': function(data) {
-                        var path = this.get_path(data);
-                        var repo_id = data.attr('repo_id');
-                        if (path.length == 1) {
-                            path = '/';
-                        } else {
-                            path.shift();
-                            path = '/' + path.join('/') + '/';
-                        }
-                        return '{{ SITE_ROOT }}ajax/repo/' + repo_id + '/dirents/?dir_only=true&path=' + e(path);
-                    },
-                    'success': function(data) {
-                        var items = [];
-                        var o, item;
-                        for (var i = 0, len = data.length; i < len; i++) {
-                            o = data[i];
-                            if (o.has_subdir) {
-                                item = { 
-                                    'data': o.name, 
-                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
-                                    'state': 'closed',
-                                };
-                            } else {
-                                item = {
-                                    'data': o.name, 
-                                    'attr': {'type': o.type },
-                                };
-                            }
-                            items.push(item);
-                        }
-                        return items;
-                    }
-                }
-            },
-            'core': {
-                'animation': 100
-            },
-            'plugins': ['themes', 'json_data', 'ui']
-        });
-}
-
-$('#mv-dir-list h5').click(function() {
-    var span = $(this).children('.tri-bg'),
-        next = $(this).next();
-    if (span.hasClass('tri-right-bg')) {
-        span.attr('class','tri-bg tri-down-bg');
-        if (next.attr('id') == 'current-repo-dirs') {
-            renderDirTree(next, current_repo);
-        } else {
-            renderDirTree(next, all_repos);
-        }
-        next.removeClass('hide');
-    } else {
-        span.attr('class','tri-bg tri-right-bg');
-        next.addClass('hide');
-    }
-});
 
 var all_repos = [];
 {% for a_repo in accessible_repos %}
-        {% if a_repo.props.has_subdir %} 
-            all_repos.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'},
-                'state': 'closed'
-            });  
-        {% else %}
-            all_repos.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'}
-            });
-        {% endif %}
+    {% if a_repo.props.has_subdir %} 
+    all_repos.push({
+        'data': '{{ a_repo.props.name }}',
+        'attr': {'repo_id': '{{ a_repo.props.id }}'},
+        'state': 'closed'
+    });  
+    {% else %}
+    all_repos.push({
+        'data': '{{ a_repo.props.name }}',
+        'attr': {'repo_id': '{{ a_repo.props.id }}'}
+    });
+    {% endif %}
 {% endfor %}
 
 $('#save').click(function() {
-    $('#mv-hd').html('Choose a library');
-    $('#mv-form').modal({appendTo:'#main', autoResize:true, focus:false});
-    renderDirTree($('#current-repo-dirs'));
-    return false;
+    var form = $('#file-save-form'),
+        file_tree = new FileTree();
+    form.modal({appendTo:'#main', autoResize:true, focus:false});
+    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
 });
 {% include "snippets/file_content_js.html" %}
 </script>

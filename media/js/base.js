@@ -426,12 +426,12 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
                                 item = { 
                                     'data': o.name, 
                                     'attr': { 'repo_id': o.repo_id, 'type': o.type },
-                                    'state': 'closed',
+                                    'state': 'closed'
                                 };
                             } else {
                                 item = {
                                     'data': o.name, 
-                                    'attr': {'type': o.type },
+                                    'attr': {'type': o.type }
                                 };
                             }
                             items.push(item);
@@ -476,3 +476,72 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
             'plugins': ['themes', 'json_data', 'ui', 'checkbox']
         });
 };
+// only list dirs
+FileTree.prototype.renderDirTree = function(container, form, repo_data) {
+    container
+        .delegate('.jstree-closed', 'dblclick', function(e) {
+            container.jstree('open_node', $(this));
+            $(this).find('a').removeClass('jstree-clicked');
+        })
+        .bind('before.jstree', function(e, data) {
+            if (data.func === 'select_node') { // ensure only one selected dir display in the popup
+                $('.jstree-clicked', form).removeClass('jstree-clicked');
+            }
+        })
+        .bind('select_node.jstree', function(e, data) {
+            var path;
+            var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
+            var path_array = data.inst.get_path(data.rslt.obj);
+            if (path_array.length == 1) {
+                path = '/';
+            } else {
+                path_array.shift();
+                path = '/' + path_array.join('/') + '/';
+            }
+            $('input[name="dst_repo"]', form).val(repo_id);
+            $('input[name="dst_path"]', form).val(path);
+        })
+        .jstree({
+            'json_data': {
+                'data': repo_data,
+                'ajax': {
+                    'url': function(data) {
+                        var path = this.get_path(data);
+                        var repo_id = data.attr('repo_id');
+                        if (path.length == 1) {
+                            path = '/';
+                        } else {
+                            path.shift();
+                            path = '/' + path.join('/') + '/';
+                        }
+                        return container.data('site_root') + 'ajax/repo/' + repo_id + '/dirents/?dir_only=true&path=' + e(path);
+                    },
+                    'success': function(data) {
+                        var items = [];
+                        var o, item;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            o = data[i];
+                            if (o.has_subdir) {
+                                item = { 
+                                    'data': o.name, 
+                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'state': 'closed'
+                                };
+                            } else {
+                                item = {
+                                    'data': o.name, 
+                                    'attr': {'type': o.type }
+                                };
+                            }
+                            items.push(item);
+                       }
+                        return items;
+                    }
+                }
+            },
+            'core': {
+                'animation': 100
+            },
+            'plugins': ['themes', 'json_data', 'ui']
+        });
+}
