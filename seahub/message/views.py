@@ -12,13 +12,14 @@ from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from models import UserMessage, UserMessageAttachment
+from models import UserMessage, UserMsgAttachment
 from message import msg_info_list
 from seaserv import get_repo
 from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
 from seahub.views import is_registered_user
 from seahub.contacts.models import Contact
+from seahub.share.models import PrivateFileDirShare
 from seahub.utils.paginator import Paginator
 from seahub.settings import SITE_ROOT
 
@@ -67,23 +68,20 @@ def user_msg_list(request, id_or_email):
         # update ``ifread`` field of messages
         UserMessage.objects.update_unread_messages(to_email, username)
 
-        attachments = UserMessageAttachment.objects.filter(userMessage__in=msgs)
+        attachments = UserMsgAttachment.objects.list_attachments_by_user_msgs(msgs)
         for msg in msgs:
             msg.attachments = []
             for att in attachments:
-                if att.userMessage != msg:
+                if att.user_msg != msg:
                     continue
-                
-                path = att.path
-                if path == '/':
-                    repo = get_repo(att.repo_id)
-                    if not repo:
-                        continue
-                    att.name = repo.name
-                else:
-                    path = path.rstrip('/')
-                    att.name = os.path.basename(path)
 
+                pfds = att.priv_file_dir_share
+                if pfds is None: # in case that this attachment is unshared.
+                    continue
+
+                att.repo_id = pfds.repo_id
+                att.path = pfds.path
+                att.name = os.path.basename(pfds.path.rstrip('/'))
                 msg.attachments.append(att) 
 
     '''paginate'''
@@ -158,11 +156,11 @@ def message_send(request):
         usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
         if len(attached_items) > 0:
             for att_item in attached_items:
-                attachment = UserMessageAttachment()
-                attachment.userMessage = usermsg
-                attachment.repo_id = att_item['repo_id']
-                attachment.path = att_item['path']
-                attachment.save()
+                repo_id = att_item['repo_id']
+                path = att_item['path']
+                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                    username, to_email, repo_id, path)
+                UserMsgAttachment.objects.add_user_msg_attachment(usermsg, pfds)
 
         email_sended.append(to_email)
 

@@ -62,11 +62,28 @@ class UserMessage(models.Model):
 class UserMsgLastCheck(models.Model):
     check_time = models.DateTimeField()
 
-class UserMessageAttachment(models.Model):
-    userMessage = models.ForeignKey('UserMessage')
-    repo_id = models.CharField(max_length=36)
-    path = models.CharField(max_length=4096) 
+class UserMsgAttachmentManager(models.Manager):
+    def add_user_msg_attachment(self, user_msg, priv_share):
+        """
+        """
+        uma = self.model(user_msg=user_msg, priv_file_dir_share=priv_share)
+        uma.save(using=self.db)
+        return uma
 
+    def list_attachments_by_user_msgs(self, user_msgs):
+        """List attachements of each user message.
+        """
+
+        return super(UserMsgAttachmentManager, self).filter(user_msg__in=user_msgs)
+        
+        
+class UserMsgAttachment(models.Model):
+    user_msg = models.ForeignKey('UserMessage')
+    # Set this field to NULL if file is unshared.
+    priv_file_dir_share = models.ForeignKey('share.PrivateFileDirShare',
+                                            blank=True, null=True,
+                                            on_delete=models.SET_NULL)
+    objects = UserMsgAttachmentManager()
 
 ### handle signals
 from django.core.urlresolvers import reverse

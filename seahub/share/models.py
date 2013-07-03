@@ -36,6 +36,12 @@ class PrivateFileDirShareManager(models.Manager):
         pfs.save(using=self._db)
         return pfs
 
+    def add_read_only_priv_file_share(self, from_user, to_user, repo_id, path):
+        """
+        """
+        return self.add_private_file_share(from_user, to_user, repo_id,
+                                           path, 'r')
+        
     def get_private_share_in_file(self, username, repo_id, path):
         """Get a file that private shared to ``username``.
         """

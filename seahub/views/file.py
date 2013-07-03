@@ -1056,8 +1056,8 @@ def private_file_share(request, repo_id):
             continue
         
         if s_type == 'f':
-            PrivateFileDirShare.objects.add_private_file_share(
-                username, email, repo_id, path, perm)
+            PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                username, email, repo_id, path)
         elif s_type == 'd':
             PrivateFileDirShare.objects.add_private_dir_share(
                 username, email, repo_id, path, perm)

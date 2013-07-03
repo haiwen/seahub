@@ -67,13 +67,8 @@
                 <ul class="msg-attachment">
                     {% for att in msg.attachments %}
                     <li>
-                        {% if att.path|last == '/' %}
-                        <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
-                        <a href="{% url 'repo' att.repo_id %}?p={{ att.path|urlencode }}" target="_blank" class="vam">{{ att.name }}</a>
-                        {% else %}
                         <img src="{{ MEDIA_URL }}img/file/{{ att.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                        <a href="{% url 'repo_view_file' att.repo_id %}?p={{ att.path|urlencode }}" target="_blank" class="vam">{{ att.name }}</a>
-                        {% endif %}
+                        <a href="{% url 'view_priv_shared_file' att.repo_id %}?p={{ att.path|urlencode }}" target="_blank" class="vam">{{ att.name }}</a>
                     </li>
                     {% endfor %}
                 </ul>
