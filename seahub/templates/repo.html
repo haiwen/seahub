@@ -332,17 +332,12 @@
         <div id="repo-share-tabs">
             <ul id="repo-share-tabs-nav">
                 <li><a href="#private-share">{% trans "Private share" %}</a></li>
-                <li><a href="#shared-link">{% trans "Shared link" %}</a></li>
+                <li><a href="#shared-link">{% trans "Link" %}</a></li>
             </ul>
 
             <div id="private-share">
                 <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
                     <textarea id="emails" name="emails" class="w100" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
-                    <!-- <select name="perm" class="share-permission-select w100"> -->
-                        <!--   <option value="rw" selected="selected">{% trans "Read-Write"%}</option> -->
-                        <!--   <option value="r">{% trans "Read-Only"%}</option> -->
-                        <!-- </select> -->
-
                     <input type="hidden" name="repo_id" value="" />
                     <input type="hidden" name="s_type" value="" />
                     <input type="hidden" name="path" value="" />
@@ -352,6 +347,9 @@
             </div>                <!--/#private-share-->
 
             <div id="shared-link">
+              <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
+
+              <div class="hide">
                 <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
                 <button id="send-link">{% trans 'Send' %}</button>
                 <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
@@ -362,6 +360,7 @@
                     <p class="error hide"></p>
                     <p id="sending" class="hide">{% trans "Sending..."%}</p>
                 </form>
+              </div>
             </div>                <!--/#shared-link-->
         </div> <!--/#repo-share-tabs-->
     </div>   <!--/#file-share-->
@@ -704,28 +703,17 @@ $('.file-share').click(function() {
         $('#linkwidth').remove();
         $('#simplemodal-container').css({'height':'auto'});
     }
+
     if ($(this).data('link')) {
+        $('#shared-link > button').addClass('hide');
+        $('#shared-link > div').removeClass('hide');
         showPopup($(this).data('link'));
     } else {
-        var aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename);
-        if ($(this).data('type') == 'd') {
-            aj_url += '&type=d';
-        }
-        $.ajax({
-            url: aj_url,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-                showPopup(data['shared_link']);
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                if (xhr.responseText) {
-                    feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-                } else {
-                    feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }   
-            }
-        });
+        $('#shared-link > button').removeClass('hide');
+        $('#shared-link > div').addClass('hide');
+        $('#gen-link-btn').data('fn', filename);
+        $('#gen-link-btn').data('obj', $(this));
+        showPopup('');
     }
     return false;
 });

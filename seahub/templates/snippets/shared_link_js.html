@@ -127,3 +127,36 @@ $("#link-send-form").submit(function(event) {
 $('#shared-link, #shared-link-text').click(function() {
     $(this).select();
 });
+$('#gen-link-btn').click(function() {
+    var filename = $('#gen-link-btn').data('fn');
+    var obj = $('#gen-link-btn').data('obj');
+
+    var aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}' + e(filename);
+    if (obj.data('type') == 'd') {
+        aj_url += '&type=d';
+    }
+    $.ajax({
+            url: aj_url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                var link = data['shared_link'];
+                // hide gen-link button, and show link
+                $('#shared-link > button').addClass('hide');
+                $('#shared-link > div').removeClass('hide');
+                $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
+                $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
+                $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
+                // store new link to the object
+                obj.data('link', link);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                if (xhr.responseText) {
+                    feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }   
+            }
+    });
+    return false;
+});
