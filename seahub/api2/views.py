@@ -1207,11 +1207,7 @@ def events(request):
     username = request.user.username
     start = int(request.GET.get('start', 0))
 
-    if request.cloud_mode:
-        org_id = request.GET.get('org_id')
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
+    events, start = get_user_events(username, start, events_count)
     events_more = True if len(events) == events_count else False
 
     event_groups = group_events_data(events)
