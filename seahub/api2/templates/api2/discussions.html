@@ -16,15 +16,15 @@
 {% endblock %}
 
 {% block main_panel %}
-{% if group_msgs %}
     <ul class="msg-list" id="msg-list">
+{% if group_msgs %}
     {% include "api2/discussions_body.html" %}
+{% endif %}
     </ul>
-    {% if group_msgs.has_next %}
+    {% if group_msgs and group_msgs.has_next %}
     <div id="loading-icon" data-next="{{ group_msgs.next_page_number }}"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
     <p id="loading-error" class="error hide"></p>
     {% endif %}
-{% endif %}
 {% endblock %}
 
 {% block extra_script %}
