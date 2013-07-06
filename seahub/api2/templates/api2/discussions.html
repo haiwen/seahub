@@ -30,7 +30,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 function msgClick() {
-    window.open('{{SITE_ROOT}}api2/html/discussion/' + $(this).data('msgid') + "/");
+    window.open($(this).data('url'));
 }
 $('.msg').click(msgClick);
 
@@ -43,10 +43,12 @@ function getToken() {
 }
 
 {% if group_msgs.has_next %}
+var g_loading = false;
 $(document).scroll(function() {
     var loading_icon = $('#loading-icon');
-    if (loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height()) {
+    if (loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height() && !g_loading) {
         loading_icon.show();
+        g_loading = true;
         $.ajax({
             url:'{% url 'more_discussions' group.id %}?page=' + e(loading_icon.data('next')),
             dataType: 'json',
@@ -60,9 +62,11 @@ $(document).scroll(function() {
                     loading_icon.hide();
                     $('.msg:last-child').css({'border-bottom':0});
                 }
+                g_loading = false;
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 loading_icon.hide();
+                g_loading = false;
                 if (!jqXHR.responseText) {
                     $('#loading-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
                 }   

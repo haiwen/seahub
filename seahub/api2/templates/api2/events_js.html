@@ -1,13 +1,16 @@
 {% load i18n %}
 var g_token;
+var g_loading = false;
 // "setToken" is called in mobile app to pass in the auth token
 function setToken(token) {
     g_token = token;
 }
 function reqEvents(start) {
     var loading_icon = $('#loading-icon');
+    if (g_loading) return;
+    g_loading = true;
     $.ajax({
-        url:'{{SITE_ROOT}}api2/html/more_events/?start=' + start,
+        url:'{% url 'more_events' %}?start=' + start,
         dataType: 'json',
         cache: false,
         headers:{Authorization:'Token '+g_token},
@@ -23,12 +26,14 @@ function reqEvents(start) {
                 $('#events').data('more', false);
                 loading_icon.hide();
             }
+            g_loading = false;
         },
         error: function(jqXHR, textStatus, errorThrown) {
             loading_icon.hide();
             if (!jqXHR.responseText) {
-                $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
-            }   
+                $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');
+            }
+            g_loading = false;
         }
     });
 }
@@ -63,7 +68,7 @@ function itemClick() {
             cache: false,
             headers:{Authorization:'Token '+g_token},
             success: function(data) {
-                $('.txt', item).append(data['html']); 
+                $('.txt', item).append(data['html']);
                 $('.event-details li').click(function(e) {
                     if ($('a', $(this)).length > 0) {
                         location.href = $('a', $(this)).attr('href');
@@ -73,12 +78,12 @@ function itemClick() {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 if (jqXHR.responseText) {
-                    $('.txt', item).append('<p class="error">' + $.parseJSON(jqXHR.responseText).err + '</p>'); 
+                    $('.txt', item).append('<p class="error">' + $.parseJSON(jqXHR.responseText).err + '</p>');
                 } else {
-                    $('.txt', item).append('<p class="error">' + "{% trans "Please check the network." %}" + '</p>'); 
+                    $('.txt', item).append('<p class="error">' + "{% trans "Please check the network." %}" + '</p>');
                 }
             }
-        });  
+        });
     } else {
         location.href = url;
     }
@@ -94,6 +99,7 @@ $('.event-item').click(itemClick);
 {% endif %}
 // get more events when scroll to the bottom
 $(document).scroll(function() {
+
     if ($('#events').data('more') && $(window).height() + $(window).scrollTop() == $(document).height()) {
         reqEvents($('#events').data('start'));
     }

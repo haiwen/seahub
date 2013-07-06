@@ -3,7 +3,7 @@
 
     {% if group_msgs %}
     {% for msg in group_msgs.object_list %}
-        <li class="msg ovhd" data-msgid="{{msg.id}}">
+        <li class="msg ovhd" data-url="{% url 'api_discussion' msg.id %}">
         {% avatar msg.from_email 48 %}
         <div class="txt">
             <div class="msg-main">
