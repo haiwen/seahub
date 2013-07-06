@@ -332,7 +332,7 @@
         <div id="repo-share-tabs">
             <ul id="repo-share-tabs-nav">
                 <li><a href="#private-share">{% trans "Private share" %}</a></li>
-                <li><a href="#shared-link">{% trans "Link" %}</a></li>
+                <li><a href="#shared-link">{% trans "Share Link" %}</a></li>
             </ul>
 
             <div id="private-share">
@@ -349,7 +349,7 @@
             <div id="shared-link">
               <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
 
-              <div class="hide">
+              <div id="share-link-body" class="hide">
                 <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
                 <button id="send-link">{% trans 'Send' %}</button>
                 <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
@@ -705,12 +705,12 @@ $('.file-share').click(function() {
     }
 
     if ($(this).data('link')) {
-        $('#shared-link > button').addClass('hide');
-        $('#shared-link > div').removeClass('hide');
+        $('#gen-link-btn').addClass('hide');
+        $('#share-link-body').removeClass('hide');
         showPopup($(this).data('link'));
     } else {
-        $('#shared-link > button').removeClass('hide');
-        $('#shared-link > div').addClass('hide');
+        $('#gen-link-btn').removeClass('hide');
+        $('#share-link-body').addClass('hide');
         $('#gen-link-btn').data('fn', filename);
         $('#gen-link-btn').data('obj', $(this));
         showPopup('');
