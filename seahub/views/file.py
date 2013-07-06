@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-File related views, including view_file, edit_file, view_history_file,
-view_trash_file, view_snapshot_file
+File related views, including view_file, view_history_file, view_trash_file,
+view_snapshot_file, view_shared_file, file_edit, etc.
 """
 
 import os
@@ -14,6 +14,7 @@ import logging
 
 from django.contrib.sites.models import Site, RequestSite
 from django.core.urlresolvers import reverse
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
@@ -24,6 +25,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import filesizeformat
 
+from seaserv import seafile_api
 from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
@@ -40,7 +42,7 @@ from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
-    is_textual_file, show_delete_days, mkstemp
+    is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 
@@ -52,6 +54,9 @@ if HAS_OFFICE_CONVERTER:
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 def get_user_permission(request, repo_id):
     if request.user.is_authenticated():
@@ -241,6 +246,25 @@ def convert_md_link(file_content, repo_id, username):
             return a_tag % (MEDIA_URL, icon, icon, s, link_name)
 
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, file_content)
+
+def file_size_exceeds_preview_limit(file_size, file_type):
+    """Check whether file size exceeds the preview limit base on different
+    type of file.
+    """
+    if file_type in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER:
+        if file_size > OFFICE_PREVIEW_MAX_SIZE:
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+            return True, err
+        else:
+            return False, ''
+    else:
+        if file_size > FILE_PREVIEW_MAX_SIZE:
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            return True, err
+        else:
+            return False, ''
     
 @repo_passwd_set_required
 def view_file(request, repo_id):
@@ -267,7 +291,6 @@ def view_file(request, repo_id):
 
     # construct some varibles
     u_filename = os.path.basename(path)
-    filename_utf8 = urllib2.quote(u_filename.encode('utf-8'))
     current_commit = get_commits(repo_id, 0, 1)[0]
 
     # Check whether user has permission to view file and get file raw path,
@@ -286,19 +309,11 @@ def view_file(request, repo_id):
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
     
-    # Check file size
     fsize = get_file_size(obj_id)
 
-    if fsize > FILE_PREVIEW_MAX_SIZE:
-        err = _(u'File size surpasses %s, can not be opened online.') % \
-            filesizeformat(FILE_PREVIEW_MAX_SIZE)
-        ret_dict['err'] = err
-
-    elif filetype in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER and fsize > OFFICE_PREVIEW_MAX_SIZE:
-        err = _(u'File size surpasses %s, can not be opened online.') % \
-            filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
-        ret_dict['err'] = err
-
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    if exceeds_limit:
+        ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
@@ -309,11 +324,7 @@ def view_file(request, repo_id):
         elif filetype == DOCUMENT:
             handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            try:
-                handle_pdf(raw_path, obj_id, fileext, ret_dict)
-                print ret_dict
-            except:
-                logging.exception('failed to handle_pdf:')
+            handle_pdf(raw_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
             dirs = list_dir_by_path(current_commit.id, parent_dir)
@@ -443,7 +454,6 @@ def view_history_file_common(request, repo_id, ret_dict):
     
     # construct some varibles
     u_filename = os.path.basename(path)
-    filename_utf8 = urllib2.quote(u_filename.encode('utf-8'))
     current_commit = get_commit(commit_id)
     if not current_commit:
         raise Http404
@@ -545,6 +555,164 @@ def view_snapshot_file(request, repo_id):
 
     return render_to_response('view_snapshot_file.html', ret_dict,
                               context_instance=RequestContext(request), )
+
+def view_shared_file(request, token):
+    """
+    Preview file via shared link.
+    """
+    assert token is not None    # Checked by URLconf
+
+    try:
+        fileshare = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        raise Http404
+
+    shared_by = fileshare.username
+    repo_id = fileshare.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    path = fileshare.path.rstrip('/') # Normalize file path 
+    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        return render_error(request, _(u'File does not exist'))
+
+    
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+    access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
+                                                     'view', '')
+    raw_path = gen_file_get_url(access_token, filename)
+
+    # get file content
+    ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
+                'file_encoding_list': [], 'html_exists': False,
+                'filetype': filetype}
+    fsize = get_file_size(obj_id)
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    if exceeds_limit:
+        err = err_msg
+    else:
+        """Choose different approach when dealing with different type of file."""
+
+        if is_textual_file(file_type=filetype):
+            handle_textual_file(request, filetype, raw_path, ret_dict)
+        elif filetype == DOCUMENT:
+            handle_document(raw_path, obj_id, fileext, ret_dict)
+        elif filetype == PDF:
+            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+
+        # Increase file shared link view_cnt, this operation should be atomic
+        fileshare.view_cnt = F('view_cnt') + 1
+        fileshare.save()
+
+        # send statistic messages
+        try:
+            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, obj_size))
+        except Exception, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
+    
+    return render_to_response('shared_file_view.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'path': path,
+            'file_name': filename,
+            'shared_token': token,
+            'access_token': access_token,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'shared_by': shared_by,
+            'err': ret_dict['err'],
+            'file_content': ret_dict['file_content'],
+            'encoding': ret_dict['encoding'],
+            'file_encoding_list':ret_dict['file_encoding_list'],
+            'html_exists': ret_dict['html_exists'],
+            'html_detail': ret_dict.get('html_detail', {}),
+            'filetype': ret_dict['filetype'],
+            'use_pdfjs':USE_PDFJS,
+            }, context_instance=RequestContext(request))
+
+def view_file_via_shared_dir(request, token):
+    assert token is not None    # Checked by URLconf
+
+    try:
+        fileshare = FileShare.objects.get(token=token)
+    except FileShare.DoesNotExist:
+        raise Http404
+
+    shared_by = fileshare.username
+    repo_id = fileshare.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+    
+    path = request.GET.get('p', '').rstrip('/')
+    if not path:
+        raise Http404
+    if not path.startswith(fileshare.path): # Can not view upper dir of shared dir
+        raise Http404
+    zipped = gen_path_link(path, '')
+
+    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        return render_error(request, _(u'File does not exist'))
+
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+    access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
+                                                     'view', '')
+    raw_path = gen_file_get_url(access_token, filename)
+
+    # get file content
+    ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
+                'file_encoding_list': [], 'html_exists': False,
+                'filetype': filetype}
+    fsize = get_file_size(obj_id)
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    if exceeds_limit:
+        err = err_msg
+    else:
+        """Choose different approach when dealing with different type of file."""
+
+        if is_textual_file(file_type=filetype):
+            handle_textual_file(request, filetype, raw_path, ret_dict)
+        elif filetype == DOCUMENT:
+            handle_document(raw_path, obj_id, fileext, ret_dict)
+        elif filetype == PDF:
+            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+
+        # send statistic messages
+        try:
+            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, obj_size))
+        except Exception, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
+        
+    return render_to_response('shared_file_view.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'path': path,
+            'file_name': filename,
+            'shared_token': token,
+            'access_token': access_token,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'shared_by': shared_by,
+            'token': token,
+            'err': ret_dict['err'],
+            'file_content': ret_dict['file_content'],
+            'encoding': ret_dict['encoding'],
+            'file_encoding_list':ret_dict['file_encoding_list'],
+            'html_exists': ret_dict['html_exists'],
+            'html_detail': ret_dict.get('html_detail', {}),
+            'filetype': ret_dict['filetype'],
+            'use_pdfjs':USE_PDFJS,
+            'zipped': zipped,
+            }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
@@ -713,6 +881,100 @@ def file_edit(request, repo_id):
         'search_repo_id': search_repo_id,
     }, context_instance=RequestContext(request))
 
+########## text diff
+def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
+    try:
+        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                                        commit_id, path)
+    except:
+        return None, 'bad path'
+
+    if not obj_id or obj_id == EMPTY_SHA1:
+        return '', None
+    else:
+        permission = get_user_permission(request, repo_id)
+        if permission:
+            # Get a token to visit file
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      obj_id,
+                                                      'view',
+                                                      request.user.username)
+        else:
+            return None, 'permission denied'
+
+        filename = os.path.basename(path)
+        raw_path = gen_file_get_url(token, urllib2.quote(filename))
+
+        try:
+            err, file_content, encoding = repo_file_get(raw_path, file_enc)
+        except Exception, e:
+            return None, 'error when read file from httpserver: %s' % e
+        return file_content, err
+
+@login_required    
+def text_diff(request, repo_id):
+    commit_id = request.GET.get('commit', '')
+    path = request.GET.get('p', '')
+    u_filename = os.path.basename(path)
+    file_enc = request.GET.get('file_enc', 'auto') 
+    if not file_enc in FILE_ENCODING_LIST:
+        file_enc = 'auto'
+
+    if not (commit_id and path):
+        return render_error(request, 'bad params')
+        
+    repo = get_repo(repo_id)
+    if not repo:
+        return render_error(request, 'bad repo')
+
+    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+    if not current_commit:
+        return render_error(request, 'bad commit id')
+
+    prev_commit = seafserv_threaded_rpc.get_commit(current_commit.parent_id)
+    if not prev_commit:
+        return render_error('bad commit id')
+
+    path = path.encode('utf-8')
+
+    current_content, err = get_file_content_by_commit_and_path(request, \
+                                    repo_id, current_commit.id, path, file_enc)
+    if err:
+        return render_error(request, err)
+        
+    prev_content, err = get_file_content_by_commit_and_path(request, \
+                                    repo_id, prev_commit.id, path, file_enc)
+    if err:
+        return render_error(request, err)
+
+    is_new_file = False
+    diff_result_table = ''
+    if prev_content == '' and current_content == '':
+        is_new_file = True
+    else:
+        diff = HtmlDiff()
+        diff_result_table = diff.make_table(prev_content.splitlines(),
+                                        current_content.splitlines(), True)
+
+    zipped = gen_path_link(path, repo.name)
+
+    search_repo_id = None
+    if not repo.encrypted:
+        search_repo_id = repo.id
+    
+    return render_to_response('text_diff.html', {
+        'u_filename':u_filename,
+        'repo': repo,
+        'path': path,
+        'zipped': zipped,
+        'current_commit': current_commit,
+        'prev_commit': prev_commit,
+        'diff_result_table': diff_result_table,
+        'is_new_file': is_new_file,
+        'search_repo_id': search_repo_id,
+    }, context_instance=RequestContext(request))
+
+########## office related
 def office_convert_query_status(request):
     if not HAS_OFFICE_CONVERTER:
         raise Http404

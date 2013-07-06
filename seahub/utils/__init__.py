@@ -762,6 +762,11 @@ def calc_file_path_hash(path, bits=12):
     
     return path_hash
 
+def get_service_url():
+    """Get service url from seaserv.
+    """
+    return ''
+    
 def gen_shared_link(request, token, s_type):
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain

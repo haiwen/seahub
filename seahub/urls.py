@@ -4,7 +4,8 @@ from django.conf import settings
 
 from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
-    view_snapshot_file, file_edit
+    view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
+    text_diff
 from seahub.views.repo import repo, repo_history_view
 from notifications.views import notification_list
 from group.views import group_list
