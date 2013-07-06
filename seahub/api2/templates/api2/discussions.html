@@ -30,7 +30,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 function msgClick() {
-    window.open('{{SITE_ROOT}}api2/html/discussion/' + $(this).data('msgid')); 
+    window.open('{{SITE_ROOT}}api2/html/discussion/' + $(this).data('msgid') + "/");
 }
 $('.msg').click(msgClick);
 
