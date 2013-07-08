@@ -78,7 +78,7 @@ class Ping(APIView):
 
     def head(self, request, format=None):
         return Response(headers={'foo': 'bar',})
-    
+
 class AuthPing(APIView):
     """
     Returns a simple `pong` message when client provided an auth token.
@@ -87,7 +87,7 @@ class AuthPing(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
-    
+
     def get(self, request, format=None):
         return Response('pong')
 
@@ -100,7 +100,7 @@ class ObtainAuthToken(APIView):
     throttle_classes = (AnonRateThrottle, )
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
-    renderer_classes = (renderers.JSONRenderer,) 
+    renderer_classes = (renderers.JSONRenderer,)
     model = Token
 
     def post(self, request):
@@ -128,7 +128,7 @@ class Account(APIView):
         email = request.user.username
         info['email'] = email
         info['total'] = get_user_quota(email)
-        
+
         if CALC_SHARE_USAGE:
             my_usage = get_user_quota_usage(email)
             share_usage = get_user_share_usage(email)
@@ -137,7 +137,7 @@ class Account(APIView):
             info['usage'] = get_user_quota_usage(email)
 
         return Response(info)
-    
+
 def calculate_repo_info(repo_list, username):
     """
     Get some info for repo.
@@ -150,7 +150,7 @@ def calculate_repo_info(repo_list, username):
         repo.latest_modify = commit.ctime
         repo.root = commit.root_id
         repo.size = server_repo_size(repo.id)
-    
+
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -177,7 +177,7 @@ class Repos(APIView):
                 "permission": 'rw', # Always have read-write permission to owned repo
                 }
             repos_json.append(repo)
-        
+
         shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
         for r in shared_repos:
             commit = get_commits(r.repo_id, 0, 1)[0]
@@ -232,7 +232,7 @@ class Repos(APIView):
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST, \
                     'Library name is required.')
-        
+
         # create a repo
         try:
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
@@ -335,7 +335,7 @@ class Repo(APIView):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -416,7 +416,7 @@ class UploadLinkView(APIView):
 class UpdateLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )    
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         if check_permission(repo_id, request.user.username) != 'rw':
@@ -432,7 +432,7 @@ class UpdateLinkView(APIView):
         url = gen_file_upload_url(token, 'update-api')
 
         return Response(url)
-    
+
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
     return size if size else 0
@@ -471,7 +471,7 @@ def get_dir_entrys_by_id(request, repo_id, path, dir_id):
     dir_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
     file_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
     dentrys = dir_list + file_list
-    
+
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
     response["oid"] = dir_id
@@ -503,7 +503,7 @@ def get_shared_link(request, repo_id, path):
     file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
                                            settings.SITE_ROOT, token)
     return Response(file_shared_link)
-    
+
 def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'download':
         token = seafserv_rpc.web_get_access_token(repo_id, file_id,
@@ -537,7 +537,7 @@ def reloaddir(request, repo_id, parent_dir):
         return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
     return get_dir_entrys_by_id(request, repo_id, parent_dir, dir_id)
-    
+
 def reloaddir_if_neccessary (request, repo_id, parent_dir):
 
     reload_dir = False
@@ -550,19 +550,19 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
 
     return reloaddir(request, repo_id, parent_dir)
 
-# deprecated    
+# deprecated
 class OpDeleteView(APIView):
     """
     Delete a file.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )    
+    permission_classes = (IsAuthenticated, IsRepoWritable, )
 
     def post(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -575,7 +575,7 @@ class OpDeleteView(APIView):
                              'File or directory not found.')
 
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))            
+            file_name = unquote(file_name.encode('utf-8'))
             try:
                 seafserv_threaded_rpc.del_file(repo_id, parent_dir,
                                                file_name, request.user.username)
@@ -584,7 +584,7 @@ class OpDeleteView(APIView):
                                  "Failed to delete file.")
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
-        
+
 def append_starred_files(array, files):
     for f in files:
         sfile = {'org' : f.org_id,
@@ -601,7 +601,7 @@ def api_starred_files(request):
     personal_files = get_starred_files(request.user.username, -1)
     append_starred_files (starred_files, personal_files)
     return Response(starred_files)
-    
+
 class StarredFileView(APIView):
     """
     Support uniform interface for starred file operation,
@@ -610,7 +610,7 @@ class StarredFileView(APIView):
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )    
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         # list starred files
@@ -645,10 +645,10 @@ class StarredFileView(APIView):
 
         if path[-1] == '/':     # Should not contain '/' at the end of path.
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid file path.')
-        
+
         unstar_file(request.user.username, repo_id, path)
         return Response('success', status=status.HTTP_200_OK)
-        
+
 class FileView(APIView):
     """
     Support uniform interface for file related operations,
@@ -657,14 +657,14 @@ class FileView(APIView):
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoWritable, )
-    throttle_classes = (UserRateThrottle, )    
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         # view file
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -711,7 +711,7 @@ class FileView(APIView):
             newname = unquote(newname.encode('utf-8'))
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
-            
+
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
@@ -746,7 +746,7 @@ class FileView(APIView):
             dst_dir = request.POST.get('dst_dir', '')
             dst_dir_utf8 = dst_dir.encode('utf-8')
             if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
-                dst_dir += '/'  
+                dst_dir += '/'
             # obj_names   = request.POST.get('obj_names', '')
 
             if not (dst_repo_id and dst_dir):
@@ -763,7 +763,7 @@ class FileView(APIView):
             #         if dst_dir.startswith('/'.join([src_dir, obj_name])):
             #             return api_error(status.HTTP_409_CONFLICT,
             #                              'Can not move a dirctory to its subdir')
-            
+
             filename = os.path.basename(path)
             filename_utf8 = filename.encode('utf-8')
             new_filename = check_filename_with_rename(dst_repo_id, dst_dir,
@@ -793,7 +793,7 @@ class FileView(APIView):
             new_file_name = check_filename_with_rename(repo_id, parent_dir,
                                                        new_file_name)
             new_file_name_utf8 = new_file_name.encode('utf-8')
-            
+
             try:
                 seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir,
                                                       new_file_name,
@@ -824,7 +824,7 @@ class FileView(APIView):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -853,8 +853,8 @@ class FileSharedLinkView(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )    
-    
+    throttle_classes = (UserRateThrottle, )
+
     def put(self, request, repo_id, format=None):
         # generate file shared link
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
@@ -898,13 +898,13 @@ class DirView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoWritable, )
     throttle_classes = (UserRateThrottle, )
-    
+
     def get(self, request, repo_id, format=None):
         # list dir
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -937,7 +937,7 @@ class DirView(APIView):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -959,7 +959,7 @@ class DirView(APIView):
             new_dir_name = check_filename_with_rename(repo_id, parent_dir,
                                                       new_dir_name)
             new_dir_name_utf8 = new_dir_name.encode('utf-8')
-            
+
             try:
                 seafserv_threaded_rpc.post_dir(repo_id, parent_dir,
                                                new_dir_name,
@@ -983,13 +983,13 @@ class DirView(APIView):
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              "Operation not supported.")
-        
+
     def delete(self, request, repo_id, format=None):
         # delete dir or file
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -1003,7 +1003,7 @@ class DirView(APIView):
 
         if path[-1] == '/':     # Cut out last '/' if possible.
             path = path[:-1]
-            
+
         parent_dir = os.path.dirname(path)
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')
@@ -1020,16 +1020,16 @@ class DirView(APIView):
 
 class SharedRepos(APIView):
     """
-    List repos that a user share to others/groups/public.    
+    List repos that a user share to others/groups/public.
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )    
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         username = request.user.username
         shared_repos = []
-        
+
         shared_repos += list_share_repos(username, 'from_email', -1, -1)
         shared_repos += get_group_repos_by_owner(username)
         if not CLOUD_MODE:
@@ -1040,11 +1040,11 @@ class SharedRepos(APIView):
 
 class BeShared(APIView):
     """
-    List repos that others/groups share to user.  
+    List repos that others/groups share to user.
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )    
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         username = request.user.username
@@ -1087,8 +1087,8 @@ class SharedRepo(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, IsRepoOwner)
-    throttle_classes = (UserRateThrottle, )    
-    
+    throttle_classes = (UserRateThrottle, )
+
     def delete(self, request, repo_id, format=None):
         """
         Unshare a library. Only repo owner can perform this operation.
@@ -1185,7 +1185,7 @@ def activity(request):
         return render_to_response('api2/events.html', {
             "events":events,
             }, context_instance=RequestContext(request))
-    
+
     email = request.user.username
     events_count = 15
     events, events_more_offset = get_user_events(email, 0, events_count)
@@ -1250,7 +1250,7 @@ def group_discuss(request, group):
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
 
-    group_msgs = get_group_msgs(group, page=1, username=request.user.username) 
+    group_msgs = get_group_msgs(group, page=1, username=request.user.username)
 
     return render_to_response("api2/discussions.html", {
             "group" : group,
@@ -1270,14 +1270,14 @@ def get_group_msgs(group, page, username):
     except (EmptyPage, InvalidPage):
         return None
 
-    # Force evaluate queryset to fix some database error for mysql.        
-    group_msgs.object_list = list(group_msgs.object_list) 
+    # Force evaluate queryset to fix some database error for mysql.
+    group_msgs.object_list = list(group_msgs.object_list)
 
     attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
 
     msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs.object_list)
     reply_to_list = [ r.reply_to_id for r in msg_replies ]
-    
+
     for msg in group_msgs.object_list:
         msg.reply_cnt = reply_to_list.count(msg.id)
         msg.replies = []
@@ -1285,7 +1285,7 @@ def get_group_msgs(group, page, username):
             if msg.id == r.reply_to_id:
                 msg.replies.append(r)
         msg.replies = msg.replies[-3:]
-            
+
         for att in attachments:
             if att.group_message_id != msg.id:
                 continue
@@ -1327,7 +1327,7 @@ def more_discussions(request, group):
         page = int(request.GET.get('page'))
     except ValueError:
         page = 2
-    
+
     group_msgs = get_group_msgs(group, page, request.user.username)
     if group_msgs.has_next():
         next_page = group_msgs.next_page_number()
@@ -1342,7 +1342,7 @@ def discussion(request, msg_id):
         msg = GroupMessage.objects.get(id=msg_id)
     except GroupMessage.DoesNotExist:
         raise Http404
-    
+
     try:
         att = MessageAttachment.objects.get(group_message_id=msg_id)
     except MessageAttachment.DoesNotExist:
@@ -1384,7 +1384,7 @@ def discussion(request, msg_id):
 
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
-    
+
     content_type = 'application/json; charset=utf-8'
     ctx = {}
     try:
@@ -1445,7 +1445,7 @@ def repo_history_changes(request, repo_id):
         changes['cmt_desc'] = _('No conflict in the merge.')
     for k in changes:
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
-    
+
     html = render_to_string('api2/event_details.html', {'changes': changes})
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
@@ -1460,12 +1460,27 @@ class Groups(APIView):
         group_json = []
 
         joined_groups = get_personal_groups_by_user(email)
+        grpmsgs = {}
         for g in joined_groups:
+            grpmsgs[g.id] = 0;
+
+        notes = UserNotification.objects.filter(to_user=request.user.username)
+        for n in notes:
+            gid = int(n.detail)
+            if n.msg_type == 'group_msg' and gid not in grpmsgs:
+                continue
+            grpmsgs[gid] = grpmsgs[gid] + 1;
+
+        for g in joined_groups:
+            grpmsg_list = []
+            grpmsg_reply_list = []
+
             group = {
-                "id":g.id, 
+                "id":g.id,
                 "name":g.group_name,
-                "creator":g.creator_name,                    
-                "ctime":g.timestamp,                    
+                "creator":g.creator_name,
+                "ctime":g.timestamp,
+                "msgnum":grpmsgs[g.id],
                 }
             group_json.append(group)
         return Response(group_json)
@@ -1557,3 +1572,4 @@ def api_repo_history_changes(request, repo_id):
 @login_required
 def api_msg_reply(request, msg_id):
     return msg_reply(request, msg_id)
+
