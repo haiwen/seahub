@@ -337,7 +337,7 @@
 
             <div id="private-share">
                 <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
-                    <textarea id="emails" name="emails" class="w100" placeholder="{% trans "Emails seperated by ','"%}"></textarea>
+                    <select id="emails" name="emails" class="w100" multiple="multiple"></select>
                     <input type="hidden" name="repo_id" value="" />
                     <input type="hidden" name="s_type" value="" />
                     <input type="hidden" name="path" value="" />
@@ -683,14 +683,27 @@ $('.file-star').click(function() {
 
 //file share
 $('.file-share').click(function() {
-    $("#private-share-form input[name=s_type]").val($(this).data('type'));
+    var s_type = $(this).data('type');
+    $("#private-share-form input[name=s_type]").val(s_type);
     $("#private-share-form input[name=path]").val($(this).data('path'));
+
     var contacts = [];
     {% for contact in contacts %}
     contact_email = '{{ contact.contact_email }}';
-    contacts.push({value:contact_email, label:contact_email});
+    contact_avatar = '{% avatar contact.contact_email 16 %}';
+    contacts.push({value:contact_email, avatar:contact_avatar});
     {% endfor %}
-
+    var opts = '', email, avatar;
+    for (var i = 0, len = contacts.length; i < len; i++) {
+        email = contacts[i].value;
+        avatar = contacts[i].avatar;
+        opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
+    }
+    var format = function(item) {
+        return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
+        
+    }
+    
     var filename = $(this).data('name');
     function showPopup(link) {
         $('#file-share .op-target').html(trimFilename(filename, 30));
@@ -698,8 +711,20 @@ $('.file-share').click(function() {
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
         $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
         $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding": "10px 0 0"}}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
+
+        if (s_type == 'd') {
+            $('#repo-share-tabs-nav li:first-child').remove();
+            $('#private-share').remove();
+        }
         $("#repo-share-tabs").tabs();
-        addAutocomplete('#emails', '#private-share-form', contacts);
+
+        $('#emails').html(opts).select2({
+            placeholder: "{% trans "Select contacts" %}",
+            formatResult: format,
+            formatSelection: format,
+            escapeMarkup: function(m) { return m; }
+        });
+
         $('#linkwidth').remove();
         $('#simplemodal-container').css({'height':'auto'});
     }

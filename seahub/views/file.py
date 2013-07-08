@@ -1043,14 +1043,14 @@ def office_convert_query_page_num(request):
 ###### private file/dir shares
 @require_POST
 def private_file_share(request, repo_id):
-    emails = request.POST.get('emails', '')
+    emails = request.POST.getlist('emails', '')
     s_type = request.POST.get('s_type', '')
     path = request.POST.get('path', '')
     perm = request.POST.get('perm', 'r')
     file_or_dir = os.path.basename(path.rstrip('/'))
     username = request.user.username
 
-    for email in [e.strip() for e in emails.split(',') if e.strip()]:
+    for email in [e.strip() for e in emails if e.strip()]:
         if not is_registered_user(email):
             messages.error(request, _('Failed to share to "%s", user not found.') % email)
             continue
