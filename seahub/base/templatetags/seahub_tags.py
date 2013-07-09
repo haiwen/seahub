@@ -160,7 +160,8 @@ def translate_seahub_time(value):
         val_ts = value
         val = datetime.fromtimestamp(val_ts) # convert timestamp to datetime
     elif isinstance(value, datetime):
-        val_ts = int(value.strftime("%s"))
+        # FIXME: convert datetime to timestamp may cause problem, need a better way.
+        val_ts = int(time.mktime(value.timetuple())) 
         val = value
     else:
         return value
