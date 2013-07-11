@@ -929,7 +929,7 @@ def api_convert_desc_link(e):
                     if d.status == 'add' or d.status == 'mod' or d.status == 'mov':
                         e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
                     elif d.status == 'newdir':
-                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
+                        e.link = "api://repo/%s/dir/?p=/%s" % (repo_id, d.name)
                     else:
                         continue
             return tmp_str % (op, file_or_dir)
