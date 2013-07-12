@@ -926,8 +926,10 @@ def api_convert_desc_link(e):
                         # match the diff_result
                         continue            
 
-                    if d.status == 'add' or d.status == 'mod' or d.status == 'mov':
+                    if d.status == 'add' or d.status == 'mod':
                         e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
+                    elif d.status == 'mov':
+                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.new_name)
                     elif d.status == 'newdir':
                         e.link = "api://repo/%s/dir/?p=/%s" % (repo_id, d.name)
                     else:
