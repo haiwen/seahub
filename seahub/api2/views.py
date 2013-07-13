@@ -1467,19 +1467,23 @@ class Groups(APIView):
         notes = UserNotification.objects.filter(to_user=request.user.username)
         for n in notes:
             gid = int(n.detail)
-            if n.msg_type == 'group_msg' and gid not in grpmsgs:
+            if gid not in grpmsgs:
                 continue
             grpmsgs[gid] = grpmsgs[gid] + 1;
 
         for g in joined_groups:
             grpmsg_list = []
             grpmsg_reply_list = []
-
+            msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
+            mtime = 0
+            if len(msg) >= 1:
+                mtime = msg[0].timestamp
             group = {
                 "id":g.id,
                 "name":g.group_name,
                 "creator":g.creator_name,
                 "ctime":g.timestamp,
+                "mtime":mtime,
                 "msgnum":grpmsgs[g.id],
                 }
             group_json.append(group)
@@ -1572,4 +1576,3 @@ def api_repo_history_changes(request, repo_id):
 @login_required
 def api_msg_reply(request, msg_id):
     return msg_reply(request, msg_id)
-
