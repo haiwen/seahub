@@ -1,6 +1,7 @@
 # encoding: utf-8
 import os
 import stat
+import time
 import simplejson as json
 from urllib2 import unquote, quote
 import seahub.settings as settings
@@ -1477,7 +1478,7 @@ class Groups(APIView):
             msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
             mtime = 0
             if len(msg) >= 1:
-                mtime = msg[0].timestamp
+                mtime = int(time.mktime(msg[0].timestamp.timetuple()))
             group = {
                 "id":g.id,
                 "name":g.group_name,
