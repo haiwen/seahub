@@ -30,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^html/discussions/(?P<group_id>\d+)/$', DiscussionsHtml.as_view(), name="api_discussions"),
     url(r'^html/discussion/(?P<msg_id>\d+)/$', DiscussionHtml.as_view(), name="api_discussion"),
     url(r'^html/more_discussions/(?P<group_id>\d+)/$', AjaxDiscussions.as_view(), name="more_discussions"),
+    url(r'^html/newreply/$', NewReplyHtml.as_view()),
+    url(r'^html/newreply2/$', api_new_replies),
 
     # Folowing is only for debug, will be removed 
     url(r'^html/events2/$', activity2),

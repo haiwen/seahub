@@ -49,6 +49,7 @@ from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
+from seahub.shortcuts import get_first_object_or_none
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
@@ -1251,7 +1252,7 @@ def group_discuss(request, group):
     UserNotification.objects.filter(to_user=username, msg_type='group_msg',
                                     detail=str(group.id)).delete()
 
-    group_msgs = get_group_msgs(group, page=1, username=request.user.username)
+    group_msgs = get_group_msgs(group.id, page=1, username=request.user.username)
 
     return render_to_response("api2/discussions.html", {
             "group" : group,
@@ -1259,11 +1260,11 @@ def group_discuss(request, group):
             }, context_instance=RequestContext(request))
 
 
-def get_group_msgs(group, page, username):
+def get_group_msgs(groupid, page, username):
 
     # Show 15 group messages per page.
     paginator = Paginator(GroupMessage.objects.filter(
-            group_id=group.id).order_by('-timestamp'), 15)
+            group_id=groupid).order_by('-timestamp'), 15)
 
     # If page request (9999) is out of range, return None
     try:
@@ -1329,7 +1330,7 @@ def more_discussions(request, group):
     except ValueError:
         page = 2
 
-    group_msgs = get_group_msgs(group, page, request.user.username)
+    group_msgs = get_group_msgs(group.id, page, request.user.username)
     if group_msgs.has_next():
         next_page = group_msgs.next_page_number()
     else:
@@ -1451,6 +1452,54 @@ def repo_history_changes(request, repo_id):
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 
+def msg_reply_new(request):
+    notes = UserNotification.objects.filter(to_user=request.user.username)
+    grpmsg_reply_list = [ n.detail for n in notes if n.msg_type == 'grpmsg_reply']
+    group_msgs = []
+    for msg_id in grpmsg_reply_list:
+        try:
+            m = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            continue
+        else:
+            # get group name
+            group = get_group(m.group_id)
+            if not group:
+                continue
+            m.group_name = group.group_name
+            
+            # get attachement
+            attachment = get_first_object_or_none(m.messageattachment_set.all())
+            if attachment:
+                path = attachment.path
+                if path == '/':
+                    repo = get_repo(attachment.repo_id)
+                    if not repo:
+                        continue
+                    attachment.name = repo.name
+                else:
+                    attachment.name = os.path.basename(path)
+                m.attachment = attachment
+
+            # get message replies
+            reply_list = MessageReply.objects.filter(reply_to=m)
+            m.reply_cnt = reply_list.count()
+            if m.reply_cnt > 3:
+                m.replies = reply_list[m.reply_cnt - 3:]
+            else:
+                m.replies = reply_list
+
+            group_msgs.append(m)
+
+    # remove new group msg reply notification
+    UserNotification.objects.filter(to_user=request.user.username,
+                                    msg_type='grpmsg_reply').delete()
+    
+    return render_to_response("api2/new_msg_reply.html", {
+            'group_msgs': group_msgs,
+            }, context_instance=RequestContext(request))
+
+
 class Groups(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1462,19 +1511,22 @@ class Groups(APIView):
 
         joined_groups = get_personal_groups_by_user(email)
         grpmsgs = {}
+        grpreplys = {}
         for g in joined_groups:
             grpmsgs[g.id] = 0;
+            grpreplys[g.id] = 0;
 
         notes = UserNotification.objects.filter(to_user=request.user.username)
         for n in notes:
             gid = int(n.detail)
             if gid not in grpmsgs:
                 continue
-            grpmsgs[gid] = grpmsgs[gid] + 1;
+            if n.msg_type == 'group_msg':
+                grpmsgs[gid] = grpmsgs[gid] + 1;
+            elif n.msg_type == 'grpmsg_reply':
+                grpreplys[gid] = grpreplys[gid] + 1;
 
         for g in joined_groups:
-            grpmsg_list = []
-            grpmsg_reply_list = []
             msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
             mtime = 0
             if len(msg) >= 1:
@@ -1486,6 +1538,7 @@ class Groups(APIView):
                 "ctime":g.timestamp,
                 "mtime":mtime,
                 "msgnum":grpmsgs[g.id],
+                "replynum":grpreplys[g.id],
                 }
             group_json.append(group)
         return Response(group_json)
@@ -1514,6 +1567,13 @@ class ActivityHtml(APIView):
     def get(self, request, format=None):
         return activity(request)
 
+class NewReplyHtml(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        return msg_reply_new(request)
 
 class DiscussionsHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1577,3 +1637,7 @@ def api_repo_history_changes(request, repo_id):
 @login_required
 def api_msg_reply(request, msg_id):
     return msg_reply(request, msg_id)
+
+@login_required
+def api_new_replies(request):
+    return msg_reply_new(request)
