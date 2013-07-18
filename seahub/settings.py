@@ -242,10 +242,11 @@ MAX_UPLOAD_FILE_NAME_LEN    = 255
 MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
 MAX_PATH 		    = 4096
 
-# Set to True when user will be activaed after registration,
-# and no email sending
+# Whether or not activate user when registration complete.
+# If set to ``False``, new user will be activated by admin or via activate link.
 ACTIVATE_AFTER_REGISTRATION = True
-# In order to use email sending, `ACTIVATE_AFTER_REGISTRATION` must set to False
+# Whether or not send activation Email to user when registration complete.
+# This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
 
 # Seafile-applet address and port, used in repo download

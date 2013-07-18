@@ -7,6 +7,7 @@ from registration.views import activate
 from registration.views import register
 
 from seahub.base.accounts import RegistrationForm
+from seahub.base.generic import DirectTemplateView
 
 reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
              'form_class': RegistrationForm,
@@ -42,12 +43,11 @@ if ENABLE_SIGNUP:
             register,
             reg_dict,
             name='registration_register'),
-        # Refer http://stackoverflow.com/questions/11005733/moving-from-direct-to-template-to-new-templateview-in-django to migrate direct_to_template with extra_context.
-        # url(r'^register/complete/$',
-        #     TemplateView.as_view(
-        #         template_name='registration/registration_complete.html',
-        #         extra_context={ 'send_mail': settings.REGISTRATION_SEND_MAIL } ),
-        #     name='registration_complete'),
+        url(r'^register/complete/$',
+            DirectTemplateView.as_view(
+                template_name='registration/registration_complete.html',
+                extra_context={ 'send_mail': settings.REGISTRATION_SEND_MAIL } ),
+            name='registration_complete'),
         url(r'^register/closed/$',
             TemplateView.as_view(template_name='registration/registration_closed.html'),
             name='registration_disallowed'),

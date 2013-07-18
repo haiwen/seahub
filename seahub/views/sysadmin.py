@@ -231,10 +231,15 @@ def user_activate(request, user_id):
         user = User.objects.get(id=int(user_id))
         user.is_active = True
         user.save()
+        messages.success(request, _(u'Successfully activated "%s".') % user.email)
     except User.DoesNotExist:
-        pass
+        messages.success(request, _(u'Failed to activate: user does not exist.'))
 
-    return HttpResponseRedirect(reverse('sys_useradmin'))
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_useradmin')
+        
+    return HttpResponseRedirect(next)
 
 def send_user_reset_email(request, email, password):
     """
