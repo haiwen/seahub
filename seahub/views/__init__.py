@@ -67,7 +67,8 @@ from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirForm, RepoNewFil
     SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, gen_shared_link, \
+    get_httpserver_root, get_ccnetapplet_root, \
+    gen_dir_share_link, gen_file_share_link, \
     calculate_repo_last_modify, get_file_type_and_ext, \
     check_filename_with_rename, EMPTY_SHA1, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
@@ -195,7 +196,7 @@ def get_repo_dirents(request, repo_id, commit, path):
                     dpath += '/'
                 for share in fileshares:
                     if dpath == share.path:
-                        dirent.sharelink = gen_shared_link(request, share.token, 'd')
+                        dirent.sharelink = gen_dir_share_link(share.token)
                         dirent.sharetoken = share.token
                         break
                 dir_list.append(dirent)
@@ -208,7 +209,7 @@ def get_repo_dirents(request, repo_id, commit, path):
                     dirent.starred = True
                 for share in fileshares:
                     if fpath == share.path:
-                        dirent.sharelink = gen_shared_link(request, share.token, 'f')
+                        dirent.sharelink = gen_file_share_link(share.token)
                         dirent.sharetoken = share.token
                         break
         dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),

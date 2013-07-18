@@ -40,7 +40,7 @@ from seahub.share.models import FileShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
-    get_file_type_and_ext, gen_file_get_url, gen_shared_link, is_file_starred, \
+    get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
@@ -358,7 +358,7 @@ def view_file(request, repo_id):
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
     if fileshare:
-        file_shared_link = gen_shared_link(request, fileshare.token, 'f')
+        file_shared_link = gen_file_share_link(fileshare.token)
     else:
         file_shared_link = ''
 

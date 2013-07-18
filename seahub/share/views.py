@@ -35,7 +35,8 @@ from seahub.contacts.signals import mail_sended
 from seahub.share.models import FileShare
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
-    gen_token, gen_shared_link, IS_EMAIL_CONFIGURED
+    gen_token, gen_shared_link, gen_dir_share_link, gen_file_share_link, \
+    IS_EMAIL_CONFIGURED
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -314,10 +315,10 @@ def share_admin(request):
         if is_personal_repo(fs.repo_id):  # only list files in personal repos
             if fs.s_type == 'f':
                 fs.filename = os.path.basename(fs.path)
-                fs.shared_link = gen_shared_link(request, fs.token, 'f') 
+                fs.shared_link = gen_file_share_link(fs.token)
             else:
                 fs.filename = os.path.basename(fs.path[:-1])
-                fs.shared_link = gen_shared_link(request, fs.token, 'd')
+                fs.shared_link = gen_dir_share_link(fs.token)
             r = get_repo(fs.repo_id)
             if not r:           # get_repo may returns None
                 continue
@@ -499,7 +500,7 @@ def get_shared_link(request):
             data = json.dumps({'error': err})
             return HttpResponse(data, status=500, content_type=content_type)
 
-    shared_link = gen_shared_link(request, token, fs.s_type)
+    shared_link = gen_shared_link(token, fs.s_type)
 
     data = json.dumps({'token': token, 'shared_link': shared_link})
     return HttpResponse(data, status=200, content_type=content_type)

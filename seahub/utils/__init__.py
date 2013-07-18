@@ -32,7 +32,7 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_org_id_by_group, list_share_repos, get_org_group_repos, \
     get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
     list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
-    list_inner_pub_repos, list_org_inner_pub_repos, CCNET_CONF_PATH
+    list_inner_pub_repos, list_org_inner_pub_repos, CCNET_CONF_PATH, SERVICE_URL
 import seahub.settings
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -765,17 +765,27 @@ def calc_file_path_hash(path, bits=12):
 def get_service_url():
     """Get service url from seaserv.
     """
-    return ''
-    
-def gen_shared_link(request, token, s_type):
-    http_or_https = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
-    site_root = seahub.settings.SITE_ROOT
+    return SERVICE_URL
 
+def gen_dir_share_link(token):
+    """Generate directory share link.
+    """
+    return gen_shared_link(token, 'd')
+
+def gen_file_share_link(token):
+    """Generate file share link.
+    """
+    return gen_shared_link(token, 'f')
+
+def gen_shared_link(token, s_type):
+    service_url = get_service_url()
+    assert service_url is not None
+
+    service_url = service_url.rstrip('/')
     if s_type == 'f':
-        return '%s://%s%sf/%s/' % (http_or_https, domain, site_root, token)
+        return '%s/f/%s/' % (service_url, token)
     else:
-        return '%s://%s%sd/%s/' % (http_or_https, domain, site_root, token)
+        return '%s/d/%s/' % (service_url, token)
 
 def show_delete_days(request):
     if request.method == 'GET':

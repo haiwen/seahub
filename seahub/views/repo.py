@@ -18,7 +18,7 @@ from seahub.forms import RepoPassowrdForm
 from seahub.share.models import FileShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents
 from seahub.utils import get_ccnetapplet_root, is_file_starred, \
-    gen_file_upload_url, get_httpserver_root, gen_shared_link, \
+    gen_file_upload_url, get_httpserver_root, gen_dir_share_link, \
     EMPTY_SHA1, get_user_repos
 from seahub.settings import ENABLE_SUB_LIBRARY
 
@@ -153,7 +153,7 @@ def get_fileshare(repo_id, username, path):
 def get_shared_link(request, fileshare):
     # dir shared link
     if fileshare:
-        dir_shared_link = gen_shared_link(request, fileshare.token, 'd')
+        dir_shared_link = gen_dir_share_link(fileshare.token)
     else:
         dir_shared_link = ''
     return dir_shared_link
