@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import stat
+import simplejson as json
 
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -209,12 +210,13 @@ def render_repo(request, repo):
             'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             }, context_instance=RequestContext(request))
-    
+   
 @login_required    
 def repo(request, repo_id):
     """Show repo page and handle POST request to decrypt repo.
     """
     repo = get_repo(repo_id)
+
     if not repo:
         raise Http404
     

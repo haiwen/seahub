@@ -1,0 +1,124 @@
+{% load seahub_tags i18n %}
+<div class="repo-file-list-topbar ovhd">
+    <p class="path fleft">
+    {% trans "Current path: "%}
+    {% for name, link in zipped %}
+    {% if not forloop.last %}
+    <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}" class="dir-link">{{ name }}</a> /    
+    {% else %}
+    <span id="cur-dir-name">{{ name }}</span>
+    {% endif %}
+    {% endfor %}
+    </p>
+    <div class="repo-op fright">
+        {% if user_perm == 'rw' %}
+        <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
+        <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
+        <button id="add-new-file" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New File"%}</button>
+        {% endif %}
+
+        {% if path != '/' %}
+        {% if not repo.encrypted %}
+        <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<table class="repo-file-list">
+    <tr>
+        <th class="star"></th>
+        <th class="dirent-icon"></th>
+        <th class="dirent-name"> {% trans "Name"%} <span id="name-up" class="tri-bg tri-up-order-bg"></span> <span id="name-down" class="tri-bg tri-down-order-bg"></span></th>
+        <th class="dirent-size">{% trans "Size"%}</th>
+        <th class="dirent-update">{% trans "Last Update" %} <span id="time-up" class="tri-bg tri-up-order-bg"></span> <span id="time-down" class="tri-bg tri-down-order-bg"></span></th>
+        <th class="dirent-op">{% trans "Operations"%}</th>
+    </tr>
+    {% for dirent in dir_list %}
+    <tr class="dir-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }}{%else %}0{% endif %}">
+        <td class="star"></td>
+        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+        <td class="dirent-name">
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" class="dir-link">{{ dirent.obj_name }}</a>
+        </td>
+
+        <td class="dirent-size"></td>
+        <td class="dirent-update">
+            {% if dirent.last_modified %}
+            {{ dirent.last_modified|translate_seahub_time }}
+            {% else %}
+            {% trans "Fetch failed" %}
+            {% endif %}
+        </td>
+        <td class="dirent-op">
+            <div class="repo-file-op vh">
+                <div class="displayed-op">
+                    <a class="op download" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
+                    {% if not repo.encrypted %}
+                    <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                    {% endif %}
+                    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+                    <a class="op create-sub-repo" href="#">{% trans "Sub-library" %}</a>
+                    {% endif %}
+                </div>
+                {% if user_perm == 'rw' %}
+                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon" data="no-popup" />
+                <ul class="hidden-op hide">
+                    <li><a class="op dir-del" href="#">{% trans "Delete"%}</a></li>
+                    <li><a class="op dir-rename" href="#">{% trans "Rename"%}</a></li>
+                    <li><a class="op dir-mv" href="#">{% trans "Move"%}</a></li>
+                    <li><a class="op dir-cp" href="#">{% trans "Copy"%}</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    {% for dirent in file_list %}
+    <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }} {%else %}0{% endif %}">
+        <td class="star alc">
+            {% if dirent.starred %}
+            <span title="{% trans 'starred' %}" class="icon-star file-star" data-status="starred"></span>
+            {% else %}
+            <span title="{% trans 'unstarred' %}" class="icon-star-empty file-star" data-status="unstarred"></span>
+            {% endif %}
+        </td>
+        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+        <td class="dirent-name">
+            <a class="op" href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+        </td>
+
+        <td class="dirent-size">{{ dirent.file_size|filesizeformat }}</td>
+        <td class="dirent-update">
+            {% if dirent.last_modified %}
+            {{ dirent.last_modified|translate_seahub_time }}
+            {% else %}
+            {% trans "Fetch failed" %}
+            {% endif %}
+        </td>
+        <td class="dirent-op">
+            <div class="repo-file-op vh">
+                <div class="displayed-op">
+                    <a class="op download" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name|urlencode }}&op=download">{% trans "Download"%}</a>
+                    {% if user_perm == 'rw' %}
+                    <a class="op update-file" href="#">{% trans "Update"%}</a>
+                    {% if not repo.encrypted %}
+                    <a class="op file-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% if user_perm == 'rw' %}
+                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon" data="no-popup" />
+                <ul class="hidden-op hide">
+                    <li><a class="op file-del" href="#">{% trans "Delete"%}</a></li>
+                    <li><a class="op file-rename" href="#">{% trans "Rename" %}</a></li>
+                    <li><a class="op file-mv" href="#">{% trans "Move" %}</a></li>
+                    <li><a class="op file-cp" href="#">{% trans "Copy" %}</a></li>
+                    <li><a class="op file-history" href="{% url 'file_revisions' repo.props.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans "History" %}</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

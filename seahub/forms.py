@@ -99,73 +99,46 @@ class SharedRepoCreateForm(RepoCreateForm):
     """
     permission = forms.ChoiceField(choices=(('rw', 'read-write'), ('r', 'read-only')))
 
-class RepoNewFileForm(forms.Form):
+class RepoRenameDirentForm(forms.Form):
     """
-    Form for create a new empty file.
+    Form for rename a file/dir.
     """
-    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
-    parent_dir = forms.CharField(error_messages={'required': _('Parent dir is required')})
-    new_file_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
-                                error_messages={
-                                    'max_length': _('File name is too long'),
-                                    'required': _('File name can\'t be empty'),
-                                })
-
-    def clean_new_file_name(self):
-        new_file_name = self.cleaned_data['new_file_name']
-        try:
-            if not is_valid_filename(new_file_name):
-                error_msg = _(u'File name "%s" is not valid') % new_file_name
-                raise forms.ValidationError(error_msg)
-            else:
-                return new_file_name
-        except SearpcError, e:
-            raise forms.ValidationError(str(e))
-
-class RepoRenameFileForm(forms.Form):
-    """
-    Form for rename a file.
-    """
-    repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
-    parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
     oldname = forms.CharField(error_messages={'required': _("Oldname is required")})
     newname = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
-                                    'max_length': _('File name is too long'),
-                                    'required': _('File name can\'t be empty'),
+                                    'max_length': _("It's too long."),
+                                    'required': _("It's required."),
                                 })
 
     def clean_newname(self):
         newname = self.cleaned_data['newname']
         try:
             if not is_valid_filename(newname):
-                error_msg = _(u'File name "%s" is not valid') % newname
+                error_msg = _(u'Name "%s" is not valid') % newname
                 raise forms.ValidationError(error_msg)
             else:
                 return newname
         except SearpcError, e:
             raise forms.ValidationError(str(e))
 
-class RepoNewDirForm(forms.Form):
+class RepoNewDirentForm(forms.Form):
     """
-    Form for create a new empty dir.
+    Form for create a new empty dir or a new empty file.
     """
-    repo_id = forms.CharField(error_messages={'required': _("Repo id is required")})
-    parent_dir = forms.CharField(error_messages={'required': _("Parent dir is required")})
-    new_dir_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
+    dirent_name = forms.CharField(max_length=settings.MAX_FILE_NAME,
                                 error_messages={
-                                    'max_length': _('Directory name is too long'),
-                                    'required': _('Directory name can\'t be empty'),
+                                    'max_length': _("It's too long."),
+                                    'required': _("It's required."),
                             })
 
-    def clean_new_dir_name(self):
-        new_dir_name = self.cleaned_data['new_dir_name']
+    def clean_new_dirent_name(self):
+        dirent_name = self.cleaned_data['dirent_name']
         try:
-            if not is_valid_filename(new_dir_name):
-                error_msg = _(u'Directory name "%s" is not valid') % new_dir_name
+            if not is_valid_filename(dirent_name):
+                error_msg = _(u'Name "%s" is not valid') % dirent_name
                 raise forms.ValidationError(error_msg)
             else:
-                return new_dir_name
+                return dirent_name
         except SearpcError, e:
             raise forms.ValidationError(str(e))
 

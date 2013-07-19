@@ -25,9 +25,9 @@
             {% for name,link in zipped %}
                 {% if forloop.last %}
                     {% if attach_type == 'file' %}
-                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans 'File' %}" height="18" class="vam" />
+                    <img src="{{ MEDIA_URL }}img/file/{{ name|file_icon_filter }}" alt="{% trans 'File' %}" height="18" class="vam" />
                     {% endif %}
-                <span class="vam">{{ name }}</span>
+                <span class="att-name vam">{{ name }}</span>
                 {% endif %}
             {% endfor %}
         </span>

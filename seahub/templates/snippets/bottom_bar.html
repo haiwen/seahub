@@ -3,7 +3,6 @@
 var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss"><span class="icon-comment-alt"></span>{% trans "Discuss" %}</button><button id="click-into-group"><span class="icon-double-angle-right"></span>{% trans "Group" %}</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
-$('#footer').addClass('hide');
 
 {% if groups %}
 function getAndHandleDiscussions(data_html) {
@@ -11,18 +10,29 @@ function getAndHandleDiscussions(data_html) {
     {% include 'group/msg_js.html' %}
 }
 $('#discuss').click(function() {
-    var popup = $('#discuss-to-group');
-    var caret = $('#discuss-to-group-caret');
+    var popup = $('#discuss-to-group'),
+        caret = $('#discuss-to-group-caret'),
+        form = $('#discuss-to-group-form'),
+        path = '{{ path }}';
+
+    // for repo.html: when get dir data with ajax
+    if (cur_path) {
+        path = cur_path;
+        $('[name="path"]', form).val(path);
+        // modify attachment dir name
+        $('#discuss-to-group-form .att-name').html($('#cur-dir-name').html());
+    }   
+
     if (popup.hasClass('hide')) {
         popup.removeClass('hide');
         caret.removeClass('hide');
         caret.css({'left': $(this).offset().left});
         $.ajax({
-            url:$('#discuss-to-group-form').attr('action'),
+            url: form.attr('action'),
             dataType: 'json',
             data: {
                 'repo_id': '{{ repo.id }}',
-                'path': '{{ path }}'
+                'path': path
             },
             success: function(data) {
                 getAndHandleDiscussions(data['html']);
@@ -76,10 +86,10 @@ $('#discuss-submit').click(function() {
         traditional: true,
         data: {
             'groups': groups,
-            'message': form.find('.input').val(),
+            'message': $('[name="message"]', form).val(),
             'repo_id': '{{ repo.id }}',
-            'path': '{{ path }}',
-            'attach_type': form.find('[name="attach_type"]').val()
+            'path': $('[name="path"]', form).val(),
+            'attach_type': $('[name="attach_type"]', form).val()
         },
         success: function(data) {
             if(data['success']) {

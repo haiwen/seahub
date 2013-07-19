@@ -35,8 +35,8 @@
                 <div class="top-bar-con">
                     <div class="manage fleft">
                         {% if request.user.is_staff %}
-                        <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %}class="top-link"{% endblock %}>{% trans "System Admin" %}</a>
-                        <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %}class="top-link"{% endblock %}>{% trans "Workspace" %}</a>
+                        <a href="{{ SITE_ROOT }}sys/useradmin/"{% block top_bar_sys_manager_class %} class="top-link"{% endblock %}>{% trans "System Admin" %}</a>
+                        <a href="{{ SITE_ROOT }}home/my/"{% block top_bar_myaccount_class %} class="top-link"{% endblock %}>{% trans "Workspace" %}</a>
                         {% endif %}
                     </div>
 
@@ -455,7 +455,8 @@ $(document).click(function(e) {
         {'name':'zoom-in', 'con':'f00e'},
         {'name':'zoom-out', 'con':'f010'},
         {'name':'signout', 'con':'f08b'},
-        {'name':'plus-sign-alt', 'con':'f0fe'}
+        {'name':'plus-sign-alt', 'con':'f0fe'},
+        {'name':'upload-alt', 'con':'f093'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {
             for (var i = 0, len = icon_list.length; i < len; i++) {
