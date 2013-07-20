@@ -1511,20 +1511,19 @@ class Groups(APIView):
 
         joined_groups = get_personal_groups_by_user(email)
         grpmsgs = {}
-        grpreplys = {}
         for g in joined_groups:
             grpmsgs[g.id] = 0;
-            grpreplys[g.id] = 0;
 
         notes = UserNotification.objects.filter(to_user=request.user.username)
+        replynum = 0;
         for n in notes:
-            gid = int(n.detail)
-            if gid not in grpmsgs:
-                continue
             if n.msg_type == 'group_msg':
+                gid = int(n.detail)
+                if gid not in grpmsgs:
+                    continue
                 grpmsgs[gid] = grpmsgs[gid] + 1;
             elif n.msg_type == 'grpmsg_reply':
-                grpreplys[gid] = grpreplys[gid] + 1;
+                replynum = replynum + 1
 
         for g in joined_groups:
             msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
@@ -1538,10 +1537,10 @@ class Groups(APIView):
                 "ctime":g.timestamp,
                 "mtime":mtime,
                 "msgnum":grpmsgs[g.id],
-                "replynum":grpreplys[g.id],
                 }
             group_json.append(group)
-        return Response(group_json)
+        res = {"groups": group_json, "replynum":replynum}
+        return Response(res)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
