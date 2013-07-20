@@ -752,6 +752,7 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index:15; /* for repo.html: to show on top of fixed-hd */
 }
 .messages .info,
 .messages .success {
@@ -2185,6 +2186,12 @@ textarea:-moz-placeholder {/* for FF */
 #discuss-to-group-caret {
     width:28px;
     position:fixed;
+}
+#to-group,
+#discuss-to-group,
+#to-group-caret,
+#discuss-to-group-caret {
+    z-index:12; /* to be on top of 'fixed-hd' in repo.html*/
 }
 /*to-group*/
 #to-group {

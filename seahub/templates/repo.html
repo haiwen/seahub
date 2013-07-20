@@ -198,11 +198,12 @@
 
             <div id="private-share">
                 <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
-                    <select id="emails" name="emails" class="w100" multiple="multiple"></select>
+                    <select name="emails" class="w100" multiple="multiple"></select>
                     <input type="hidden" name="repo_id" value="" />
                     <input type="hidden" name="s_type" value="" />
                     <input type="hidden" name="path" value="" />
                     <p class="tip">{% trans 'Tip: must be a registered user.' %}</p>
+                    <p class="error hide"></p>
                     <input type="submit" value="{% trans "Submit"%}" />
                 </form>
             </div>                <!--/#private-share-->
@@ -216,8 +217,8 @@
                         <label>{% trans "Send to:"%}</label><br />
                         <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
                         <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
-                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <p id="sending" class="hide">{% trans "Sending..."%}</p>
                     </form>
                 </div>
@@ -757,7 +758,7 @@ $('.file-share, .dir-share, #share-cur-dir').click(function() {
     }
     $("#repo-share-tabs").tabs();
 
-    $('#emails').html(opts).select2({
+    $('#private-share [name="emails"]').html(opts).select2({
         placeholder: "{% trans "Select contacts" %}",
         formatResult: format,
         formatSelection: format,
@@ -972,6 +973,12 @@ $('#mv-dir-list h5').click(function() {
     } else {
         span.attr('class','tri-bg tri-right-bg');
         dir_tree_container.addClass('hide');
+    }
+});
+$('#private-share-form').submit(function() {
+    if (!$('[name="emails"]', $(this)).val()) {
+        apply_form_error($(this).attr('id'), "{% trans "Contacts is required." %}");
+        return false;
     }
 });
 $(window).scroll(function() {

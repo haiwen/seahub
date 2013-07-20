@@ -1530,7 +1530,7 @@ def repo_dir_data(request, repo_id):
         fileshare = l[0] if len(l) > 0 else None
 
     if fileshare:
-        dir_shared_link = gen_shared_link(request, fileshare.token, 'd')
+        dir_shared_link = gen_dir_share_link(fileshare.token)
     else:
         dir_shared_link = ''
 
