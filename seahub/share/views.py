@@ -407,10 +407,10 @@ def list_shared_links(request):
         if is_personal_repo(fs.repo_id):  # only list files in personal repos
             if fs.s_type == 'f':
                 fs.filename = os.path.basename(fs.path)
-                fs.shared_link = gen_shared_link(request, fs.token, 'f') 
+                fs.shared_link = gen_file_share_link(fs.token) 
             else:
                 fs.filename = os.path.basename(fs.path[:-1])
-                fs.shared_link = gen_shared_link(request, fs.token, 'd')
+                fs.shared_link = gen_dir_share_link(fs.token)
             r = get_repo(fs.repo_id)
             if not r:           # get_repo may returns None
                 continue
