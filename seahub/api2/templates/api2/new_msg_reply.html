@@ -1,0 +1,88 @@
+{% extends "api2/base.html" %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "New Replies" %} - {% endblock %}
+
+{% block main_panel %}
+
+{% for msg in group_msgs %}
+
+<div class="msg ovhd">
+        {% avatar msg.from_email 48 %}
+        <div class="txt">
+            <div class="msg-main">
+                <div class="msg-hd ovhd">
+                    <span class="author">{{ msg.from_email|email2nickname }}</span>
+                    <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
+                </div>
+                <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
+                {% if msg.attachment %}
+                {% with ma=msg.attachment %}
+                <div class="msg-attachment">
+                    {% if ma.src == 'recommend' %}
+                    {% if ma.attach_type == 'file' %}
+                        {% if ma.filetype != 'Image'%}
+                        <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                        <span class="name vam">{{ ma.name }}</span>
+                        {% else %}
+                            {% if ma.err %}
+                            <p class="error">{{ma.err}}</p>
+                            {% else %}
+                            <img src="{{ma.img_url}}" alt="{{ma.name}}" class="img" />
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <span class="name vam">{{ ma.name }}</span>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
+                    <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                    <span class="name vam">{{ ma.name }}</span>
+                    {% endif %}
+                </div>
+                {% endwith %}
+                {% endif %}
+            </div>
+    {% if msg.reply_cnt > 0 %}
+    <div class="msg-op">
+    {% else %}
+    <div class="msg-op hide">
+    {% endif %}
+        <ul class="reply-list">
+            {% for r in msg.replies %}
+            <li class="reply w100 ovhd reply-at">
+            {% avatar r.from_email 28 %}
+            <div class="txt">
+                <span class="author">{{ r.from_email|email2nickname }}</span>
+                <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
+                <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
+            </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="outer-caret"><div class="inner-caret"></div></div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+var g_token = "TOKEN";
+function setToken(token) {
+    g_token = token;
+}
+function getToken() {
+    return g_token;
+}
+function addMessage(html) {
+    $('#reply-list').append(html);
+    $('.msg-op').removeClass('hide');
+}
+</script>
+{% endblock %}
