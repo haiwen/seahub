@@ -2056,6 +2056,13 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
+#wiki-content img {
+    padding: 5px; 
+    border: 1px solid #DDD;
+    box-shadow: 0 1px 1px #CCC;
+    border-radius: 2px; 
+    max-width:938px;
+}
 .wiki-image {
     display: block;
     margin-left: auto;
@@ -2458,67 +2465,15 @@ textarea:-moz-placeholder {/* for FF */
 #plan-form {
     width:260px;
 }
-#link-send-input,
-#mass-msg,
-#share-link,
-#added-member-name,
-#added-admin-name {
-    width:260px;
-    height:80px;
-    padding:2px;
-}
-#member-add-form {
-    width:266px;
-}
 #mass-msg {
     width:424px;
     height:100px;
+    padding:2px;
     margin-bottom:3px;
 }
 #mass-email {
     width:432px;
 }
-/*tabs */
-#tabs {
-    font-size:1em;
-    padding:0;
-    border:0;
-    min-height:150px;
-    margin-bottom:75px;
-}
-#tabs-nav {
-    padding:0;
-}
-#tabs-nav li {
-    float:left;
-    border:0;
-    background:none;
-}
-#tabs-nav .long-item {
-    margin-left:.4em;
-}
-#tabs-nav li a {
-    color:#8A948F;
-    font-weight:normal;
-    padding:.3em 0;
-    margin-right:0.6em;
-}
-#tabs-nav .ui-state-active a {
-    color:#DD4B39;
-    border-bottom:2px solid #DD4B39;
-}
-#tabs-nav li a:hover {
-    color:#DD4B39;
-}
-#tabs .ui-tabs-panel {
-    padding:0;
-}
-.reply-submit,
-.reply-cancel {
-    margin-top:6px;
-    margin-right:2px;
-}
-
 /* payments */
 #current-plan p {
     font-size:15px;

@@ -431,18 +431,16 @@ def list_priv_shared_files(request):
     priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
     for e in priv_share_out:
         e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-        e.out_or_in = 'out'
         e.repo = seafile_api.get_repo(e.repo_id)
 
     priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
     for e in priv_share_in:
         e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-        e.out_or_in = 'in'
         e.repo = seafile_api.get_repo(e.repo_id)
-    priv_shares = list(priv_share_out) + list(priv_share_in)
     
     return render_to_response('repo/priv_shared_files.html', {
-            "priv_shares": priv_shares,
+            "priv_share_out": priv_share_out,
+            "priv_share_in": priv_share_in,
             }, context_instance=RequestContext(request))
 
     
