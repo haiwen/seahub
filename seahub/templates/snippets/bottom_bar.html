@@ -16,7 +16,7 @@ $('#discuss').click(function() {
         path = '{{ path }}';
 
     // for repo.html: when get dir data with ajax
-    if (cur_path) {
+    if ($('#repo-file-list').length > 0) {
         path = cur_path;
         $('[name="path"]', form).val(path);
         // modify attachment dir name
