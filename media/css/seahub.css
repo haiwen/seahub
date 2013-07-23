@@ -263,9 +263,7 @@ input.btn-disabled:hover {/*for input*/
 
 .op-list li,
 .modalCloseImg,
-.add,
-/*.repo-op .op-btn,*/
-#star {
+.add {
     background:transparent url('../img/bg.png') no-repeat scroll 0 0;
 }
 .op-list li {
@@ -1988,6 +1986,12 @@ textarea:-moz-placeholder {/* for FF */
 .file-op button {
     color:#444;
 }
+.file-op [class^='icon-'],
+.file-op [class^='sf-icon-'] {
+    font-size:1em;
+    margin-right:3px;
+    color:#666;
+}
 #file,
 #text-diff-output {
     padding:3px;
@@ -2107,11 +2111,6 @@ textarea:-moz-placeholder {/* for FF */
 #op-after-edit button,
 #file-edit-cancel {
     vertical-align:middle; /* for ie 7 */
-}
-#star {
-    padding-left:18px;
-    background-color:#efefef;
-    background-position:3px -227px;
 }
 #sf {
     width:624px;

@@ -1,80 +1,79 @@
-{% load i18n %}
+{% load i18n avatar_tags %}
 {% load url from future %}
-function showLink() {
-    $('#get-shared-link').addClass('hide');
-    $('#shared-link, #send-shared-link, #rm-shared-link').removeClass('hide');
-}
-function hideLink() {
-    $('#shared-link, #send-shared-link, #rm-shared-link').addClass('hide');
-    $('#get-shared-link').removeClass('hide');
-}
-function setLinkWidth() {
-    var link = $('#shared-link');
-    $('#main').append('<p id="linkcp" class="hide">' + link.val() + '</p>');
-    link.css('width', $('#linkcp').width() + 2);
-    $('#linkcp').remove();
-}
-{% if fileshare.token %}
-setLinkWidth();
-showLink();
-{% else %}
-hideLink();
-{% endif %}
-
-$('#get-shared-link').click(function() {
-    var url = $(this).attr('data');
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            $('#rm-shared-link').attr('data', '{% url 'remove_shared_link' %}?t=' + data['token']);
-            $('#shared-link, input[name="file_shared_link"]').val(data['shared_link']);
-            setLinkWidth();
-            showLink();
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback('{% trans "Failed. Please check the network." %}', 'error');
-            }
-        }
-    });
-});
-
-$('#rm-shared-link').click(function() {
-    var url = $(this).attr('data');
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            hideLink();
-            feedback(data['msg'], 'success');
-            $('#shared-link').val('');
-        },
-        error: function() {
-            feedback('{% trans "Failed. Please check the network." %}', 'error');
-        }
-    });
-});
 
 var share_list = [];    
 {% for contact in contacts %}
 share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
 {% endfor %}
-$('#send-shared-link').click(function() { // for file_view.html and subdir page
-    $("#link-send-form").modal({appendTo: "#main", focus: false});
-    $('#simplemodal-container').css('height', 'auto');
-    addAutocomplete('#link-send-input', '#link-send-form', share_list);
-});
-$('#send-link').click(function() { // for 'file-share' in repo.html
+
+function showSharePopup(op, name, aj_url, type, cur_path) {
+    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding": "10px 0 0"}}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
+
+    $("#private-share-form input[name=s_type]").val(type);
+    $("#private-share-form input[name=path]").val(cur_path + name);
+    var contacts = [];
+    {% for contact in contacts %}
+    contact_email = '{{ contact.contact_email }}';
+    contact_avatar = '{% avatar contact.contact_email 16 %}';
+    contacts.push({value:contact_email, avatar:contact_avatar});
+    {% endfor %}
+
+    var opts = '', email, avatar;
+    for (var i = 0, len = contacts.length; i < len; i++) {
+        email = contacts[i].value;
+        avatar = contacts[i].avatar;
+        opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
+    }
+    var format = function(item) {
+        return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
+    }
+
+   if (op.data('link')) {
+        $('#gen-link-btn').addClass('hide');
+        $('#share-link-body').removeClass('hide');
+        var link = op.data('link');
+        $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
+        $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
+        $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
+        $('#linkwidth').remove();
+        $('#rm-shared-link').data('token', op.data('token')).data('obj', op);
+    } else {
+        $('#gen-link-btn').removeClass('hide');
+        $('#share-link-body').addClass('hide');
+    }
+    $('#gen-link-btn').data('url', aj_url).data('obj', op);
+
+    var hd = $('#file-share .hd');
+    hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
+
+    if (type == 'd') {
+        $('#repo-share-tabs-nav li:first-child').remove();
+        $('#private-share').remove();
+    }
+    $("#repo-share-tabs").tabs();
+
+    $('#private-share [name="emails"]').html(opts).select2({
+        placeholder: "{% trans "Select contacts" %}",
+        formatResult: format,
+        formatSelection: format,
+        escapeMarkup: function(m) { return m; }
+    });
+
+    $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
+    $(window).resize();
+}
+
+$('#send-link').click(function() {
     $(this).addClass('hide');
+    $('#rm-shared-link').addClass('hide');
     var input = $('#link-send-input');
     input.css({'width': $('#link-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
     $('#link-send-form').removeClass('hide');
     addAutocomplete('#link-send-input', '#link-send-form', share_list);
+});
+
+$("#link-send-form .cancel").click(function() {
+    $('#link-send-form, #send-link, #rm-shared-link').toggleClass('hide');
 });
 
 $("#link-send-form").submit(function(event) {
@@ -124,12 +123,14 @@ $("#link-send-form").submit(function(event) {
     });
    return false;
 });
-$('#shared-link, #shared-link-text').click(function() {
+
+$('#shared-link-text').click(function() {
     $(this).select();
 });
+
 $('#gen-link-btn').click(function() {
-    var gen_link_btn = $(this);
-    var obj = $(this).data('obj');
+    var gen_link_btn = $(this),
+        obj = gen_link_btn.data('obj');
 
     $.ajax({
             url: gen_link_btn.data('url'),
@@ -146,6 +147,8 @@ $('#gen-link-btn').click(function() {
                 $('#share-link-body').removeClass('hide');
                 // store new link to the object
                 obj.data('link', link);
+
+                $('#rm-shared-link').data('token', data['token']);
             },
             error: function(xhr, textStatus, errorThrown) {
                 if (xhr.responseText) {
@@ -156,4 +159,24 @@ $('#gen-link-btn').click(function() {
             }
     });
     return false;
+});
+
+$('#rm-shared-link').click(function() {
+    var token = $(this).data('token'),
+        obj = $(this).data('obj');
+
+    $.ajax({
+    url: '{% url 'remove_shared_link' %}?t=' + token,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            feedback(data['msg'], 'success');
+            $('#share-link-body').addClass('hide');
+            $('#gen-link-btn').removeClass('hide');
+            obj.data('link', '').data('token', '');
+        },
+        error: function() {
+            feedback('{% trans "Failed. Please check the network." %}', 'error');
+        }
+    });
 });

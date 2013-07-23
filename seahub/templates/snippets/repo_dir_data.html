@@ -19,7 +19,7 @@
 
         {% if path != '/' %}
         {% if not repo.encrypted %}
-        <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
+        <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" data-token="{{fileshare.token}}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
         {% endif %}
         {% endif %}
     </div>

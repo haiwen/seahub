@@ -1,0 +1,41 @@
+{% load i18n %}
+    <div id="file-share" class="tab-popup hide">
+        <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
+        <div id="repo-share-tabs">
+            <ul id="repo-share-tabs-nav">
+                <li><a href="#private-share">{% trans "Private Share" %}</a></li>
+                <li><a href="#link-share">{% trans "Share Link" %}</a></li>
+            </ul>
+
+            <div id="private-share">
+                <form id="private-share-form" method="post" action="{% url 'private_file_share' repo.id %}">{% csrf_token %}
+                    <select name="emails" class="w100" multiple="multiple"></select>
+                    <input type="hidden" name="repo_id" value="" />
+                    <input type="hidden" name="s_type" value="" />
+                    <input type="hidden" name="path" value="" />
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans "Submit"%}" />
+                </form>
+            </div>
+            <div id="link-share">
+                <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
+                <div id="share-link-body" class="hide">
+                    <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
+                    <button id="send-link">{% trans 'Send' %}</button>
+                    <button id="rm-shared-link">{% trans 'Delete' %}</button>
+
+                    <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
+                        <label>{% trans "Send to:"%}</label><br />
+                        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" />
+                        <p id="sending" class="hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+

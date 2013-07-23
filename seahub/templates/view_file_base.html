@@ -30,15 +30,12 @@
 
         <div class="file-op fright">
             {% if not repo.encrypted %}
-            <input id="shared-link" class="hide" type="text" readonly="readonly" value="{{ file_shared_link }}" />
-            <button data="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}" id="get-shared-link" class="hide">{% trans "Share link"%}</button>
-            <button id="send-shared-link" class="hide">{% trans "Send"%}</button>
-            <button data="{% url 'remove_shared_link' %}?t={{ fileshare.token }}" id="rm-shared-link" class="hide">{% trans "Delete"%}</button>
+            <button data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" id="share"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
             {% endif %}
             {% if is_starred %}
-            <button id="star" data-status="starred">{% trans "Unstar"%}</button>
+            <button id="star" data-status="starred"><span class="icon-star"></span><span class="text">{% trans "Unstar"%}</span></button>
             {% else %}
-            <button id="star" data-status="unstarred">{% trans "Star"%}</button>
+            <button id="star" data-status="unstarred"><span class="icon-star"></span><span class="text">{% trans "Star"%}</span></button>
             {% endif %}
         </div>
     </div>
@@ -92,16 +89,6 @@
         </div>
     </div>
 
-    <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "Send Link" %}</h3>
-        <label>{% trans "Send to:"%}</label><br />
-        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
-        <input type="hidden" name="file_shared_link" value="{{ file_shared_link }}" />
-        <input type="submit" value="{% trans "Submit"%}" class="submit" />
-        <p class="error hide"></p>
-        <p id="sending" class="hide">{% trans "Sending..."%}</p>        
-    </form>
-
     <div id="open-local-feedback" class="hide">
         <p id="open-local-handling-tip">{% trans "Processing..."%}</p>
         <p id="open-local-error" class="error"></p>
@@ -113,6 +100,8 @@
 
     <iframe class="hide" id="open-local-iframe"></iframe>
     
+    {% include "snippets/file_share_popup.html" %} 
+
     {% with attach_type='file' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
@@ -121,6 +110,13 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('#share').click(function() {
+    var op = $(this), name = '{{ filename }}',
+        aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}{{filename|urlencode}}',
+        type = 'f', cur_path = '{{path}}';
+    showSharePopup(op, name, aj_url, type, cur_path);
+    return false;
+});
 $('#view-original, #download').click(function() {
     window.open($(this).attr('data'));
 });
@@ -136,26 +132,28 @@ $('#edit').click(function() {
 $('#star').click(function() {
     var star_btn = $(this);
     disable(star_btn);
-    var state = star_btn.data('status');
+
+    var status = star_btn.data('status');
     $.ajax({
-        url: '{% url 'repo_star_file' repo.id %}',
+        url: '{% url 'repo_star_file' repo.id %}?file={{path|urlencode}}{{filename|urlencode}}',
         type: 'POST',
         cache: false,
         beforeSend: prepareCSRFToken,
         dataType: 'json',
         data: {
-            path: '{{ path|urlencode }}',
-            state: state,
+            status: status,
             org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
         },
         success:function(data) {
             if (data['success']) {
-                if (state == 'starred') {
+                if (status == 'starred') {
                     feedback('{% trans "Unstarred successfully" %}', 'success');
-                    star_btn.data('status', 'unstarred').text('{% trans "Star" %}');
+                    star_btn.data('status', 'unstarred');
+                    star_btn.children('.text').html("{% trans "Star" %}");
                 } else {
                     feedback('{% trans "Starred successfully" %}', 'success');
-                    star_btn.data('status', 'starred').text('{% trans "Unstar" %}');
+                    star_btn.data('status', 'starred');
+                    star_btn.children('.text').html("{% trans "Unstar" %}");
                 }
                 enable(star_btn);
             }

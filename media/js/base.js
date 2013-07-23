@@ -545,3 +545,20 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
             'plugins': ['themes', 'json_data', 'ui']
         });
 }
+
+function trimFilename(name, n) {
+    var len = name.length;
+    var ext = '';
+    var str = '';
+    if (len > n) {
+        if (name.lastIndexOf('.') != -1) { // with extension
+            ext = name.split('.').reverse()[0];
+            str = name.substr(0, n - ext.length - 3) + '...' + name.substr(name.lastIndexOf('.') - 2);
+        } else {
+            str = name.substr(0, n) + '...';
+        }
+    } else {
+        str = name;
+    }
+    return str;
+}

@@ -1539,6 +1539,7 @@ def repo_dir_data(request, repo_id):
         'zipped': zipped,
         'user_perm': user_perm,
         'path': path,
+        'fileshare': fileshare,
         'dir_shared_link': dir_shared_link,
         'dir_list': dir_list,
         'file_list': file_list,
