@@ -36,12 +36,12 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
         $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
         $('#linkwidth').remove();
-        $('#rm-shared-link').data('token', op.data('token')).data('obj', op);
     } else {
         $('#gen-link-btn').removeClass('hide');
         $('#share-link-body').addClass('hide');
     }
     $('#gen-link-btn').data('url', aj_url).data('obj', op);
+    $('#rm-shared-link').data('obj', op);
 
     var hd = $('#file-share .hd');
     hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
@@ -145,10 +145,7 @@ $('#gen-link-btn').click(function() {
                 $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
                 $('#linkwidth').remove();
                 $('#share-link-body').removeClass('hide');
-                // store new link to the object
-                obj.data('link', link);
-
-                $('#rm-shared-link').data('token', data['token']);
+                obj.data('link', link).data('token', data['token']);
             },
             error: function(xhr, textStatus, errorThrown) {
                 if (xhr.responseText) {
@@ -162,21 +159,24 @@ $('#gen-link-btn').click(function() {
 });
 
 $('#rm-shared-link').click(function() {
-    var token = $(this).data('token'),
-        obj = $(this).data('obj');
+    var obj = $(this).data('obj'),
+        token = obj.data('token');
 
     $.ajax({
-    url: '{% url 'remove_shared_link' %}?t=' + token,
+        url: '{% url 'remove_shared_link' %}?t=' + token,
         dataType: 'json',
         cache: false,
         success: function(data) {
-            feedback(data['msg'], 'success');
             $('#share-link-body').addClass('hide');
             $('#gen-link-btn').removeClass('hide');
             obj.data('link', '').data('token', '');
         },
-        error: function() {
-            feedback('{% trans "Failed. Please check the network." %}', 'error');
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
+            }   
         }
     });
 });

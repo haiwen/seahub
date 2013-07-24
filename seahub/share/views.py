@@ -622,7 +622,7 @@ def remove_shared_link(request):
     """
     Handle request to remove file shared link.
     """
-    token = request.GET.get('t', '')
+    token = request.GET.get('t')
     
     if not request.is_ajax():
         FileShare.objects.filter(token=token).delete()
@@ -635,12 +635,20 @@ def remove_shared_link(request):
         return HttpResponseRedirect(next)
 
     content_type = 'application/json; charset=utf-8'
-    
-    FileShare.objects.filter(token=token).delete()
+    result = {}
 
-    msg = _('Deleted successfully')
-    data = json.dumps({'msg': msg})
-    return HttpResponse(data, status=200, content_type=content_type)
+    if not token: 
+        result = {'error': _(u"Argument missing")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    try:
+        link = FileShare.objects.get(token=token)
+        link.delete()
+        result = {'success': True}
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    except:
+        result = {'error': _(u"The link doesn't exist")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
 @login_required
 def send_shared_link(request):
