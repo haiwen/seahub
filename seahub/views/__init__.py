@@ -1506,7 +1506,7 @@ def repo_dir_data(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                                 status=400, content_type=content_type)
 
-    if repo.encrypted and not is_password_set(repo.id, username):
+    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                                 status=400, content_type=content_type)
