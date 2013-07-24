@@ -655,7 +655,7 @@ def repo_view_snapshot(request, repo_id):
 
     # don't show the current commit
     commits_all = get_commits(repo_id, per_page * (current_page -1) + 1,
-                              per_page + 2)
+                              per_page + 1)
     commits = commits_all[:per_page]
 
     if len(commits_all) == per_page + 1:

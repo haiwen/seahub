@@ -54,9 +54,9 @@
             {% if page_next %}
             <a href="?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
             {% endif %}
-	    {% if current_page != 1 or page_next %}
-	    |
-	    {% endif %}
+            {% if current_page != 1 or page_next %}
+            |
+            {% endif %}
             <span>{% trans "Per page: "%}</span>
             {% if per_page == 25 %}
             <span> 25 </span>
