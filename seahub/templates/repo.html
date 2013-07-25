@@ -1,14 +1,25 @@
 {% extends "myhome_base.html" %}
 
-{% load seahub_tags avatar_tags i18n %}
+{% load seahub_tags avatar_tags i18n upload_tags %}
 
-{% block sub_title %}{{repo.name}} - {% endblock %}
 {% block extra_style %}
+<!-- Bootstrap Progress CSS  -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/bootstrap-progress-bar.css">
+<!-- Bootstrap Button CSS  -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/bootstrap-button.css">
+
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.fileupload-ui.css">
+<!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
+<!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
 <style type="text/css">
     #main { width:auto; }
     #footer { display:none; }
-</style>
+</style>    
+
 {% endblock %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block main_panel %}
 <div id="repo-top"><div class="block-inner">
@@ -66,24 +77,42 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}
-        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ upload_url }}">{% csrf_token %}
-            <input type="hidden" name="parent_dir" value="{{ path }}" />
-            <div class="files-add">
-                <span class="op add">{% trans "Add files" %}</span>
-                <span id="upload-add-tip">({% trans "smaller than" %} {{ max_upload_file_size|filesizeformat }})</span>
-                <input type="file" name="file" id="file-upload-input" />
-            </div>
-            <div id="upload-file-list"></div>
-            <p class="error">{{ error_msg }}</p>
-            <input type="submit" value="{% trans "Upload" %}" class="submit" />
+        <form id="fileupload" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
+          <input type="hidden" name="parent_dir" id="parent_dir" value="{{ path }}" />
+
+          <div class="row fileupload-buttonbar">
+            <div class="span7">
+              <span class="btn btn-primary fileinput-button">
+                <i class="icon-plus icon-white"></i>
+                <span>Add files...</span>
+                <input type="file" name="file" multiple>
+                </span>
+                <button type="submit" class="btn btn-success start">
+                  <i class="icon-upload icon-white"></i>
+                  <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                  <i class="icon-ban-circle icon-white"></i>
+                  <span>Cancel upload</span>
+                </button>
+              </div>
+              <div class="span5 fileupload-progress fade">
+                <div class="progress progress-success progres-striped active">
+                  <div class="bar" style="width:0%"></div>
+                </div>
+                <div class="progress-extended">&nbsp;</div>
+              </div>
+          </div>
+
+          <div class="fileupload-loading"></div>
+          <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </form>
-        <div id="upload-progress-con" class="upload-progress-con hide">
-            <p>{% trans "Uploaded:" %} <span class="upload-progress-text">{% trans "Fetching ..." %}</span></p>
-            <div class="upload-progress-bar"></div>
-            <button class="upload-cancel">{% trans "Cancel" %}</button>
-            <iframe class="hide"><!--for chrome--></iframe>
+
+        <div class="fileupload-content">
+          <table class="files"></table>
+          <div class="fileupload-progressbar"></div>
         </div>
-        {% endif %}
+      {% endif %}
     </div>
 
     <div id="update-file-dialog" class="hide">
@@ -192,11 +221,26 @@
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
+
+    
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.MultiFile.pack.js"></script>
+{% upload_js %}
+<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
+
+<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
+<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
+<script src="{{ MEDIA_URL}}js/load-image.min.js"></script>
+<script src="{{ MEDIA_URL}}js/canvas-to-blob.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
+<script src="{{ MEDIA_URL }}js/locale.js"></script>
+
 <script type="text/javascript">
+
 //download, trash
 $('#repo-download-btn').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}');
@@ -281,20 +325,36 @@ $('.path .dir-link').click(dirlinkClick);
 $('#download-dir').click(function() {
     location.href = $(this).data('url');
 });
+
 $('#upload-file').click(function () {
-    $('#upload-file-dialog').modal({focus:false});
     $('#upload-file-form input[name="parent_dir"]').val(cur_path);
-    $('#file-upload-input').MultiFile({
-        list: '#upload-file-list',
-        STRING: {
-            file: '<span title="{% trans "Click to remove" %}" onclick="$(this).parent().prev().click()">$file</span>',
-            duplicate: "{% trans "This file has already been selected:\n$file!" %}"
+    $('#upload-file-dialog').modal({
+        containerCss: {
+            width: 650,
         },
-        afterFileAppend:function() {
-            $('#upload-file-form .files-add input').css({'right':$('#upload-add-tip').width()});
+        maxHeight: 400,
+        onShow: function (dlg) {
+            // Initialize the jQuery File Upload widget:
+            $('#fileupload').fileupload({
+                sequentialUploads: true,
+            });
+
+            // Enable iframe cross-domain access via redirect option:
+            $('#fileupload').fileupload(
+                'option',
+                'redirect',
+                window.location.href.replace(
+                    /\/repo\/[-a-z0-9]{36}\/.*/,
+                    '/media/cors/result.html?%s'
+                )
+            );
+            
+            
+            $(dlg.container).css('height', 'auto');
+            $(dlg.wrap).css('overflow', 'auto'); // or try jQuery.modal.update();
         }
     });
-    $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
+    
     $('#upload-file-form .files-add').css({'width':$('#upload-file-form .files-add').width() + 1}); // '+ 1' for ie
     $('#file-upload-input').css({'right':$('#upload-add-tip').width()});
 });
@@ -925,5 +985,5 @@ window.onload = function() {
 {% include "snippets/shared_link_js.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>
-{% include 'snippets/file_upload_progress_js.html' %}
+
 {% endblock %}
