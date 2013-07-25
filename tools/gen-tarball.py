@@ -121,7 +121,8 @@ def main():
     if not exist_in_path('django-admin') and not exist_in_path('django-admin.py'):
         error('django-admin scripts not found in PATH')
 
-    latest_commit_info = commands.getoutput('git log %s -1' % branch)
+    # Note: we double % to escape it in a format string
+    latest_commit_info = commands.getoutput('git log --format="%%H" %s -1' % branch)
 
     # begin
     tmpdir = tempfile.mkdtemp()
