@@ -13,8 +13,8 @@ from seahub.utils import EMPTY_SHA1
 from seahub.utils.repo import list_dir_by_path
 from seahub.utils.slugify import slugify
 from seahub.utils import render_error, render_permission_error, string2list, \
-    gen_file_get_url, get_file_type_and_ext, \
-    get_file_contributors
+    gen_file_get_url, get_file_type_and_ext, get_file_contributors, \
+    gen_inner_file_get_url
 from seahub.utils.file_types import IMAGE
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
@@ -56,6 +56,13 @@ def get_file_url(repo, obj_id, file_name):
     url = gen_file_get_url(access_token, file_name)
     return url
 
+def get_inner_file_url(repo, obj_id, file_name):
+    repo_id = repo.id
+    access_token = seaserv.seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                     'view', '')
+    url = gen_inner_file_get_url(access_token, file_name)
+    return url
+
 def get_personal_wiki_repo(username):
     try:
         wiki = PersonalWiki.objects.get(username=username)
@@ -81,7 +88,7 @@ def get_group_wiki_repo(group, username):
 def get_personal_wiki_page(username, page_name):
     repo = get_personal_wiki_repo(username)
     dirent = get_wiki_dirent(repo.id, page_name)
-    url = get_file_url(repo, dirent.obj_id, dirent.obj_name)
+    url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
     file_response = urllib2.urlopen(url)
     content = file_response.read()
     return content, repo, dirent
@@ -89,7 +96,7 @@ def get_personal_wiki_page(username, page_name):
 def get_group_wiki_page(username, group, page_name):
     repo = get_group_wiki_repo(group, username)
     dirent = get_wiki_dirent(repo.id, page_name)
-    url = get_file_url(repo, dirent.obj_id, dirent.obj_name)
+    url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
     file_response = urllib2.urlopen(url)
     content = file_response.read()
     return content, repo, dirent
