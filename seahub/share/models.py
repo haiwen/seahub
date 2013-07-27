@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 
-from seahub.utils import normalize_file_path, normalize_dir_path
+from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
 
 class AnonymousShare(models.Model):
     """
@@ -30,9 +30,10 @@ class PrivateFileDirShareManager(models.Manager):
         """
         """
         path = normalize_file_path(path)
+        token = gen_token(max_length=10)
 
         pfs = self.model(from_user=from_user, to_user=to_user, repo_id=repo_id,
-                         path=path, s_type='f', permission=perm)
+                         path=path, s_type='f', token=token, permission=perm)
         pfs.save(using=self._db)
         return pfs
 
@@ -55,9 +56,10 @@ class PrivateFileDirShareManager(models.Manager):
         """
         """
         path = normalize_dir_path(path)
+        token = gen_token(max_length=10)
         
         pfs = self.model(from_user=from_user, to_user=to_user, repo_id=repo_id,
-                         path=path, s_type='d', permission=perm)
+                         path=path, s_type='d', token=token, permission=perm)
         pfs.save(using=self._db)
         return pfs
 
@@ -69,7 +71,10 @@ class PrivateFileDirShareManager(models.Manager):
         ret = super(PrivateFileDirShareManager, self).filter(
             to_user=username, repo_id=repo_id, path=path, s_type='d')
         return ret[0] if len(ret) > 0 else None
-    
+
+    def get_priv_file_dir_share_by_token(self, token):
+        return super(PrivateFileDirShareManager, self).get(token=token)
+        
     def delete_private_file_dir_share(self, from_user, to_user, repo_id, path):
         """
         """
@@ -101,8 +106,9 @@ class PrivateFileDirShare(models.Model):
     to_user = models.CharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
-    permission = models.CharField(max_length=2)           # `r` or `rw`
-    s_type = models.CharField(max_length=2, default='f') # `f` or `d`
+    token = models.CharField(max_length=10, unique=True)
+    permission = models.CharField(max_length=5)           # `r` or `rw`
+    s_type = models.CharField(max_length=5, default='f') # `f` or `d`
     objects = PrivateFileDirShareManager()    
 
 

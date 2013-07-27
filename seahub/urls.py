@@ -5,7 +5,8 @@ from django.conf import settings
 from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
-    text_diff, private_file_share, rm_private_file_share, save_private_file_share
+    text_diff, private_file_share, rm_private_file_share, \
+    save_private_file_share, view_priv_shared_file
 from seahub.views.repo import repo, repo_history_view
 from notifications.views import notification_list
 from group.views import group_list
@@ -72,7 +73,7 @@ urlpatterns = patterns('',
     url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),
     (r'^repo/remove/(?P<repo_id>[-0-9a-f]{36})/$', repo_remove),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/s/files/$', view_priv_shared_file, name="view_priv_shared_file"),
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
