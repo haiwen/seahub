@@ -73,7 +73,6 @@ urlpatterns = patterns('',
     url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),
     (r'^repo/remove/(?P<repo_id>[-0-9a-f]{36})/$', repo_remove),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
-    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
@@ -85,9 +84,13 @@ urlpatterns = patterns('',
     (r'^repo/save_settings$', repo_save_settings),
     url(r'^repo/create_sub_repo/$', create_sub_repo, name='create_sub_repo'),
 
+    ### share file/dir ###
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
     url(r'^f/(?P<token>[a-f0-9]{10})/$', view_shared_file, name='view_shared_file'),
     url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]{10})/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
+
+    ### Misc ###
     (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^events/$', events),
     (r'^pdf_full_view/$', pdf_full_view),
@@ -95,6 +98,8 @@ urlpatterns = patterns('',
     (r'^download/repo/$', repo_download),                       
     (r'^seafile_access_check/$', seafile_access_check),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
+    url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
+    url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
 
     ### Ajax ###
     (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents),
@@ -134,9 +139,6 @@ urlpatterns = patterns('',
     (r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate),
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
-    url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
-    url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
-                       
 )
 
 if settings.SERVE_STATIC:

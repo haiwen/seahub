@@ -1165,6 +1165,7 @@ def view_priv_shared_file(request, token):
     access_token = seafile_api.get_httpserver_access_token(repo.id, obj_id,
                                                            'view', username)
     raw_path = gen_file_get_url(access_token, filename)
+    inner_path = gen_inner_file_get_url(access_token, filename)
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
@@ -1178,11 +1179,11 @@ def view_priv_shared_file(request, token):
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, raw_path, ret_dict)
+            handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
-            handle_document(raw_path, obj_id, fileext, ret_dict)
+            handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
     accessible_repos = get_unencry_rw_repos_by_user(username)
     save_to_link = reverse('save_private_file_share', args=[repo.id]) + \
