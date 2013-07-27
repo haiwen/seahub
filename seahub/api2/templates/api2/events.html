@@ -4,7 +4,7 @@
 {% load url from future %}
 
 {% block main_panel %}
-{% if events %}
+{% if events and events|length > 0 %}
 <div id="events">
     <div id="events-body">
         {% include "api2/events_body.html" %}

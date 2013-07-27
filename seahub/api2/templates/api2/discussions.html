@@ -19,6 +19,10 @@
     <ul class="msg-list" id="msg-list">
 {% if group_msgs %}
     {% include "api2/discussions_body.html" %}
+{% else %}
+    <div id="placeholder" style="margin-top:20%;">
+      <p style="text-align:center">{% trans "No discussions." %}</p>
+    </div>
 {% endif %}
     </ul>
     {% if group_msgs and group_msgs.has_next %}
@@ -77,6 +81,9 @@ $(document).scroll(function() {
 {% endif %}
 
 function addMessage(html) {
+  if (!$('#placeholder').hasClass('hide')) {
+    $('#placeholder').addClass('hide');
+  }
   var msg_list = $('#msg-list')
   msg_list.prepend(html)
   msg_list.children().eq(0).click(msgClick);
