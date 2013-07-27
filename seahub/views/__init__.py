@@ -62,15 +62,15 @@ from seahub.group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare
-from seahub.forms import AddUserForm, RepoCreateForm, RepoNewDirentForm, \
-    RepoRenameDirentForm, RepoPassowrdForm, SharedRepoCreateForm,\
+from seahub.forms import AddUserForm, RepoCreateForm, \
+    RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, \
     gen_dir_share_link, gen_file_share_link, \
     calculate_repo_last_modify, get_file_type_and_ext, get_user_repos, \
-    check_filename_with_rename, EMPTY_SHA1, normalize_file_path, \
+    EMPTY_SHA1, normalize_file_path, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
@@ -499,72 +499,6 @@ def update_file_error(request, repo_id):
                 'err_msg': err_msg,
                 }, context_instance=RequestContext(request))
     
-@login_required
-def get_dirents(request, repo_id):
-    """
-    Get dirents in a dir for file tree
-    """
-    if not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    user_perm = get_user_permission(request, repo_id)
-    if not user_perm:
-        err_msg = _(u"You don't have permission to access the library.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
-                            content_type=content_type)
-
-    path = request.GET.get('path', '')
-    dir_only = request.GET.get('dir_only', '')
-
-    if not path:
-        err_msg = _(u"No path.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
-                            content_type=content_type)
-
-    try:
-        dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
-    except SearpcError, e:
-        return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
-                            content_type=content_type)
-
-    dirent_list = []
-    for dirent in dirents:
-        if stat.S_ISDIR(dirent.props.mode):
-            dirent.has_subdir = False
-
-            if dir_only:
-                dirent_path = os.path.join(path, dirent.obj_name)
-                try:
-                    dirent_dirents = seafile_api.list_dir_by_path(repo_id, dirent_path.encode('utf-8'))
-                except SearpcError, e:
-                    dirent_dirents = []
-                for dirent_dirent in dirent_dirents:
-                    if stat.S_ISDIR(dirent_dirent.props.mode):
-                        dirent.has_subdir = True
-                        break
-
-            subdir = {
-                'name': dirent.obj_name,
-                'id': dirent.obj_id,
-                'type': 'dir',
-                'has_subdir': dirent.has_subdir, # to decide node 'state' ('closed' or not) in jstree
-                'repo_id': repo_id,
-            }
-            dirent_list.append(subdir)
-        else:
-            if not dir_only:
-                f = {
-                    'repo_id': repo_id,
-                    'id': dirent.obj_id,
-                    'name': dirent.obj_name,
-                    'type': 'file',
-                    }
-                dirent_list.append(f)
-
-    return HttpResponse(json.dumps(dirent_list), content_type=content_type)
-
 @login_required
 def repo_history(request, repo_id):
     """
@@ -1171,42 +1105,6 @@ def repo_del_file(request, repo_id):
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
    
-@login_required    
-def repo_delete_dirent(request, repo_id):
-    '''
-    Delete a file/dir with ajax.
-    '''
-    if not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=400, content_type=content_type)
-
-    if get_user_permission(request, repo_id) != 'rw':
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=400, content_type=content_type)
-
-    parent_dir = request.GET.get("parent_dir")
-    dirent_name = request.GET.get("name")
-    if not (parent_dir and dirent_name):
-        err_msg = _(u'Argument missing.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=400, content_type=content_type)
-
-    try:
-        seafserv_threaded_rpc.del_file(repo_id, parent_dir, dirent_name, request.user.username)
-        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-    except:
-        err_msg = _(u'Internal error. Failed to delete %s.') % dirent_name
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=500, content_type=content_type)
-
 def repo_access_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -1313,90 +1211,6 @@ def repo_download(request):
 
     return HttpResponseRedirect(download_url)
 
-@login_required    
-def repo_mvcp_dirent(request, repo_id):
-    '''
-    Move/copy a file/dir in a repo, with ajax
-    '''
-    if request.method != 'POST' or not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    repo = get_repo(repo_id)
-    if not repo:
-        result['error'] = _(u'Library does not exist.')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-
-    path = request.GET.get('path')
-    obj_name = request.GET.get('obj_name')
-    obj_type = request.GET.get('obj_type') # dir or file
-
-    dst_repo_id = request.POST.get('dst_repo')
-    dst_path    = request.POST.get('dst_path')
-    op          = request.POST.get('op')
-
-    if not (path and obj_name and obj_type and dst_repo_id \
-            and dst_path and op):
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    # check file path
-    if len(dst_path+obj_name) > settings.MAX_PATH:
-        result['error'] =  _('Destination path is too long.')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    
-    # check whether user has write permission to dest repo
-    if check_permission(dst_repo_id, request.user.username) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-        
-    # when dst is the same as src
-    if repo_id == dst_repo_id and (path == dst_path or obj_type == 'dir' and dst_path == os.path.join(path, obj_name) + '/'):
-        result['error'] = _('Invalid destination path')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    # Error when move/copy a dir to its subdir
-    if obj_type == 'dir':
-        src_dir = os.path.join(path, obj_name)
-        if dst_path.startswith(src_dir):
-            error_msg = _(u'Can not %(op)s directory %(src)s to its subdirectory %(des)s') \
-                        % {'op': _(u"copy") if op == 'cp' else _(u"move"),
-                           'src': src_dir,
-                           'des': dst_path}
-            result['error'] = error_msg
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-
-    try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + u'?p=' + urllib2.quote(dst_path.encode('utf-8'))
-        if op == 'cp':
-            seafserv_threaded_rpc.copy_file(repo_id, path, obj_name,
-                                             dst_repo_id, dst_path, new_obj_name,
-                                             request.user.username)
-            msg = _(u'Successfully copied %(name)s：<a href="%(url)s">view</a>') % \
-                                 {"name":obj_name, "url":msg_url}
-        elif op == 'mv':
-            seafserv_threaded_rpc.move_file(repo_id, path, obj_name,
-                                             dst_repo_id, dst_path, new_obj_name,
-                                             request.user.username)
-            msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-                                 {"name":obj_name, "url":msg_url}
-        result['msg'] = msg
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
-
-    except Exception, e:
-        result['error'] = str(e)
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
 @login_required
 def seafile_access_check(request):
     repo_id = request.GET.get('repo_id', '')
@@ -1430,164 +1244,6 @@ def file_upload_progress_page(request):
             'httpserver_root': httpserver_root,
             'upload_progress_con_id': upload_progress_con_id,
             }, context_instance=RequestContext(request))
-
-@login_required        
-def repo_dir_data(request, repo_id):        
-    '''
-    Use ajax to get data of a dir
-    '''
-    if not request.is_ajax():
-        raise Http404
-
-    content_type='application/json; charset=utf-8'
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                                status=400, content_type=content_type)
-
-    username = request.user.username
-    user_perm = seafile_api.check_repo_access_permission(repo.id, username)
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                                status=400, content_type=content_type)
-
-    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
-        err_msg = _(u'Library is encrypted.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                                status=400, content_type=content_type)
-
-    head_commit = get_commit(repo.head_cmmt_id)
-    if not head_commit:
-        err_msg = _(u'Error.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                                status=400, content_type=content_type)
-
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/' 
-
-    file_list, dir_list = get_repo_dirents(request, repo.id, head_commit, path)
-    zipped = gen_path_link(path, repo.name)
-    if path == '/':    # no shared link for root dir
-        fileshare = None
-    else:
-        l = FileShare.objects.filter(repo_id=repo.id).filter(username=username).filter(path=path)
-        fileshare = l[0] if len(l) > 0 else None
-
-    if fileshare:
-        dir_shared_link = gen_dir_share_link(fileshare.token)
-    else:
-        dir_shared_link = ''
-
-    ctx = { 
-        'repo': repo,
-        'zipped': zipped,
-        'user_perm': user_perm,
-        'path': path,
-        'fileshare': fileshare,
-        'dir_shared_link': dir_shared_link,
-        'dir_list': dir_list,
-        'file_list': file_list,
-        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
-    }   
-    html = render_to_string('snippets/repo_dir_data.html', ctx, context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({'html': html, 'path': path}), content_type=content_type)
-
-@login_required        
-def repo_new_dirent(request, repo_id):        
-    '''
-    Create a new file or dir with ajax.
-    '''
-    if request.method != 'POST' or not request.is_ajax():
-        raise Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    repo = get_repo(repo_id)
-    if not repo:
-        result['error'] = _(u'Library does not exist.')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    
-    form = RepoNewDirentForm(request.POST)
-    if form.is_valid():
-        dirent_name = form.cleaned_data["dirent_name"]
-    else:
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    parent_dir = request.GET.get('parent_dir')
-    dirent_type = request.GET.get('type') # 'file' or 'dir'
-    if not (parent_dir and dirent_type):
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    dirent_name = check_filename_with_rename(repo_id, parent_dir, dirent_name)
-    user = request.user.username
-
-    try:
-        if dirent_type == 'file':
-            seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir, dirent_name, user)
-        else:
-            seafserv_threaded_rpc.post_dir(repo_id, parent_dir, dirent_name, user)
-    except Exception, e:
-        result['error'] = str(e)
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-       
-    return HttpResponse(json.dumps({'success': True, 'name': dirent_name}), content_type=content_type)
-
-@login_required    
-def repo_rename_dirent(request, repo_id):
-    '''
-    Rename a file/dir in a repo, with ajax
-    '''
-    if request.method != 'POST' or not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    repo = get_repo(repo_id)
-    if not repo:
-        result['error'] = _(u'Library does not exist.')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    if get_user_permission(request, repo_id) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    form = RepoRenameDirentForm(request.POST)
-    if form.is_valid():
-        oldname = form.cleaned_data["oldname"]
-        newname = form.cleaned_data["newname"]
-    else:
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    if newname == oldname:
-        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-
-    parent_dir = request.GET.get('parent_dir')
-    if not parent_dir:
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    newname = check_filename_with_rename(repo_id, parent_dir, newname)
-
-    try:
-        seafserv_threaded_rpc.rename_file(repo_id, parent_dir, oldname, newname, request.user.username)
-    except Exception, e:
-        result['error'] = str(e)
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required    
 def validate_filename(request):
@@ -2025,29 +1681,6 @@ def i18n(request):
 
     return res
 
-@login_required    
-def repo_star_file(request, repo_id):
-    if not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    path = request.GET.get('file')
-    status = request.POST.get('status')
-
-    if not (path and status):
-        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
-                            status=400, content_type=content_type)
-
-    org_id = int(request.POST.get('org_id'))
-    path = urllib2.unquote(path.encode('utf-8'))
-    is_dir = False
-    if status == 'unstarred':
-        star_file(request.user.username, repo_id, path, is_dir, org_id=org_id)
-    else:
-        unstar_file(request.user.username, repo_id, path)
-    return HttpResponse(json.dumps({'success':True}), content_type=content_type)
-
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -2183,62 +1816,6 @@ def pdf_full_view(request):
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,
            }, context_instance=RequestContext(request))
-
-@login_required
-def get_group_repos(request, group_id):
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-
-    group_id_int = int(group_id) 
-
-    group = get_group(group_id_int)    
-    if not group:
-        err_msg = _(u"The group doesn't exist") 
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
-
-    joined = is_group_user(group_id_int, request.user.username)
-    if not joined and not request.user.is_staff:
-        err_msg = _(u"Permission denied")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
-
-    repos = seafile_api.get_group_repo_list(group_id_int)    
-    repo_list = []
-    for repo in repos:
-        repo_list.append({"name": repo.props.name, "id": repo.props.id})
-    
-    return HttpResponse(json.dumps(repo_list), content_type=content_type)
-
-@login_required
-def get_my_repos(request):
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-
-    repos = seafserv_threaded_rpc.list_owned_repos(request.user.username)
-    repo_list = []
-    for repo in repos:
-        repo_list.append({"name": repo.props.name, "id": repo.props.id})
-    
-    return HttpResponse(json.dumps(repo_list), content_type=content_type)
-
-@login_required
-def get_contacts(request):
-    if not request.is_ajax():
-        raise Http404
-    
-    content_type = 'application/json; charset=utf-8'
-
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-    contact_list = [] 
-    from seahub.avatar.templatetags.avatar_tags import avatar
-    for c in contacts:
-        contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
-    
-    return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
 
 @login_required
 def convert_cmmt_desc_link(request):

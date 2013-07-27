@@ -114,7 +114,7 @@ def get_fileshare(repo_id, username, path):
         username=username).filter(path=path)
     return l[0] if len(l) > 0 else None
 
-def get_shared_link(request, fileshare):
+def get_dir_share_link(fileshare):
     # dir shared link
     if fileshare:
         dir_shared_link = gen_dir_share_link(fileshare.token)
@@ -179,7 +179,7 @@ def render_repo(request, repo):
     upload_url = get_upload_url(request, repo.id)
     update_url = get_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
-    dir_shared_link = get_shared_link(request, fileshare)
+    dir_shared_link = get_dir_share_link(fileshare)
 
     return render_to_response('repo.html', {
             'repo': repo,

@@ -15,9 +15,10 @@ from share.views import user_share_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete
-from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, sys_group_admin, \
-    user_info, user_add, user_remove, user_make_admin, \
+from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, \
+    sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate, sys_publink_admin
+from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -107,12 +108,19 @@ urlpatterns = patterns('',
     url(r'^ajax/repos/$', get_my_repos, name='get_my_repos'),
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
 
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir_data/$', repo_dir_data, name='repo_dir_data'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/new_dirent/$', repo_new_dirent, name='repo_new_dirent'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/rename_dirent/$', repo_rename_dirent, name='repo_rename_dirent'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/delete_dirent/$', repo_delete_dirent, name='repo_delete_dirent'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/mvcp_dirent/$', repo_mvcp_dirent, name='repo_mvcp_dirent'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_dir, name='repo_dir_data'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/new/$', new_dir, name='new_dir'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/rename/$', rename_dirent, name='repo_rename_dirent'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='repo_delete_dirent'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/new/$', new_file, name='new_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='repo_rename_dirent'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='repo_delete_dirent'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/mv/$', mv_file, name='mv_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/star_file/$', repo_star_file, name='repo_star_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/unstar_file/$', repo_unstar_file, name='repo_unstar_file'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

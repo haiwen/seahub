@@ -632,16 +632,18 @@ $('.file-star').click(function() {
         status = op.data('status'),
         file_name = op.parents('.file-item').data('name');
 
+    if (status == 'unstarred') {
+        var post_url = '{% url 'repo_star_file' repo.id %}?file=' + e(cur_path + file_name)
+    } else {
+        var post_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(cur_path + file_name)
+    }
+    
     $.ajax({
-        url: '{% url 'repo_star_file' repo.id %}?file=' + e(cur_path + file_name),
+        url: post_url,
         type: 'POST',
         cache: false,
         beforeSend: prepareCSRFToken,
         dataType: 'json',
-        data: {
-            status: status,
-            org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
-        },
         success:function(data) {
             if (data['success']) {
                 if (status == 'starred') {
@@ -733,7 +735,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             dirent_type;
 
         if (!dirent_name) {
-            apply_form_error(form_id, "{% trans "It's required." %}");
+            apply_form_error(form_id, "{% trans "Its required." %}");
             return false;
         }
         if (form_id == 'add-new-file-form') {
@@ -753,14 +755,19 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(path) + e(data['name']), changeLocation);
             };
         }
-        post_url = '{% url 'repo_new_dirent' repo.id %}?parent_dir=' + e(path) + '&type=' + dirent_type;
+        if (dirent_type == 'file') {
+            post_url = '{% url 'new_file' repo.id %}?parent_dir=' + e(path);
+        } else {
+            post_url = '{% url 'new_dir' repo.id %}?parent_dir=' + e(path);
+        }
+
         post_data['dirent_name'] = dirent_name;
     } else if (form_id == 'rename-form') {
         var old_name = form.find('input[name="oldname"]').val(), 
             new_name = $.trim(form.find('input[name="newname"]').val()),
             op_obj = form.data('op_obj');
         if (!new_name) {
-            apply_form_error(form_id, "{% trans "It can't be blank." %}");
+            apply_form_error(form_id, "{% trans "It cannot be blank." %}");
             return false;
         }
         if (new_name == old_name) {
@@ -808,11 +815,22 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             $('.error', form).html("{% trans "Invalid destination path" %}").removeClass('hide');
             return false;
         }
-        post_url = '{% url 'repo_mvcp_dirent' repo.id %}?path=' + e(path) + '&obj_name=' + e(obj_name) + '&obj_type=' + obj_type;
+        if (op == 'mv') {
+            if (obj_type == 'dir') { // move dir
+                post_url = '{% url 'mv_dir' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
+            } else {                 // move file
+                post_url = '{% url 'mv_file' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
+            }
+        } else {
+            if (obj_type == 'dir') { // copy dir
+                post_url = '{% url 'cp_dir' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
+            } else {                 // copy file
+                post_url = '{% url 'cp_file' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
+            }
+        }
         post_data = {
             'dst_repo': dst_repo,
             'dst_path': dst_path,
-            'op': op
         };
         after_op_success = function(data) {
             $.modal.close();

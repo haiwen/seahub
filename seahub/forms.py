@@ -131,7 +131,7 @@ class RepoNewDirentForm(forms.Form):
                                     'required': _("It's required."),
                             })
 
-    def clean_new_dirent_name(self):
+    def clean_dirent_name(self):
         dirent_name = self.cleaned_data['dirent_name']
         try:
             if not is_valid_filename(dirent_name):
