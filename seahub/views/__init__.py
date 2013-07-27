@@ -1541,7 +1541,7 @@ def repo_new_dirent(request, repo_id):
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
        
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+    return HttpResponse(json.dumps({'success': True, 'name': dirent_name}), content_type=content_type)
 
 @login_required    
 def repo_rename_dirent(request, repo_id):

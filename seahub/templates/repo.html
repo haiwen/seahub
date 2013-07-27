@@ -744,13 +744,13 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 return false;
             }
             after_op_success = function(data) {
-                location.href = '{% url 'repo_view_file' repo.id %}?p=' + e(path + dirent_name);
+                location.href = '{% url 'repo_view_file' repo.id %}?p=' + e(path) + e(data['name']);
             };
         } else {
             dirent_type = 'dir';
             after_op_success = function(data) {
                 $.modal.close();
-                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(path + dirent_name), changeLocation);
+                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(path) + e(data['name']), changeLocation);
             };
         }
         post_url = '{% url 'repo_new_dirent' repo.id %}?parent_dir=' + e(path) + '&type=' + dirent_type;
