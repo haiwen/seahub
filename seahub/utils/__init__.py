@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # encoding: utf-8
 import os
 import re
@@ -48,6 +47,10 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+try:
+    from seahub.settings import ENABLE_INNER_HTTPSERVER
+except ImportError:
+    ENABLE_INNER_HTTPSERVER = True
     
 from file_types import *
 
@@ -121,17 +124,30 @@ def list_to_string(l):
     return ','.join(l)
 
 def get_httpserver_root():
-    """
-    Get seafile http server address and port from seaserv.
+    """ Construct seafile httpserver address and port.
 
+    Returns:
+    	Constructed httpserver root.
     """
-    try:
-        from seahub.settings import HTTP_SERVER_ROOT # First load from settings
-    except ImportError:
-        # If load settings failed, then use default config
-        from seaserv import HTTP_SERVER_ROOT
 
-    return HTTP_SERVER_ROOT if HTTP_SERVER_ROOT else ''
+    from seahub.settings import HTTP_SERVER_ROOT
+
+    assert HTTP_SERVER_ROOT is not None, "SERVICE_URL is not set in ccnet.conf."
+
+    return HTTP_SERVER_ROOT
+
+def get_inner_httpserver_root():
+    """Construct inner seafile httpserver address and port.
+
+    Inner httpserver root allows Seahub access httpserver through local
+    address, thus avoiding the overhead of DNS queries, as well as other
+    related issues, for example, the server can not ping itself, etc.
+
+    Returns:
+    	http://127.0.0.1:<port>
+    """
+
+    return seahub.settings.INNER_HTTP_SERVER_ROOT
 
 def get_ccnetapplet_root():
     """
@@ -262,6 +278,25 @@ def get_file_revision_id_size (commit_id, path):
 
     return None, None
 
+def gen_inner_file_get_url(token, filename):
+    """Generate inner httpserver file url.
+
+    If ``ENABLE_INNER_HTTPSERVER`` set to False(defaults to True), will
+    returns outer httpserver file url.
+
+    Arguments:
+    - `token`:
+    - `filename`:
+
+    Returns:
+    	e.g., http://127.0.0.1:<port>/files/<token>/<filename>
+    """
+    if ENABLE_INNER_HTTPSERVER:
+        return '%s/files/%s/%s' % (get_inner_httpserver_root(), token,
+                                   urlquote(filename))
+    else:
+        return gen_file_get_url(token, filename)
+    
 def gen_file_get_url(token, filename):
     """
     Generate httpserver file url.

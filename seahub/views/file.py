@@ -46,7 +46,7 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
-    check_filename_with_rename
+    check_filename_with_rename, gen_inner_file_get_url
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -154,8 +154,10 @@ def repo_file_get(raw_path, file_enc):
 
 
 def get_file_view_path_and_perm(request, repo_id, obj_id, path):
-    """
-    Return raw path of a file and the permission to view file.
+    """ Get path and the permission to view file.
+
+    Returns:
+    	outer httpserver file url, inner httpserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -164,11 +166,13 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     #     get_repo_access_permission(repo_id, username)
     user_perm = get_repo_access_permission(repo_id, username)
     if user_perm is None:
-        return ('', user_perm)
+        return ('', '', user_perm)
     else:
         # Get a token to visit file
         token = web_get_access_token(repo_id, obj_id, 'view', username)
-        return (gen_file_get_url(token, filename), user_perm)
+        outer_url = gen_file_get_url(token, filename)
+        inner_url = gen_inner_file_get_url(token, filename)
+        return (outer_url, inner_url, user_perm)
 
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
@@ -303,9 +307,10 @@ def view_file(request, repo_id):
     current_commit = get_commits(repo_id, 0, 1)[0]
 
     # Check whether user has permission to view file and get file raw path,
-    # render error page if permission is deny.
-    raw_path, user_perm = get_file_view_path_and_perm(request, repo_id,
-                                                      obj_id, path)
+    # render error page if permission deny.
+    raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                  repo_id,
+                                                                  obj_id, path)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
@@ -326,14 +331,14 @@ def view_file(request, repo_id):
     else:
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, raw_path, ret_dict)
+            handle_textual_file(request, filetype, inner_path, ret_dict)
             if filetype == MARKDOWN:
                 c = ret_dict['file_content']
                 ret_dict['file_content'] = convert_md_link(c, repo_id, username)
         elif filetype == DOCUMENT:
-            handle_document(raw_path, obj_id, fileext, ret_dict)
+            handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
             dirs = list_dir_by_path(current_commit.id, parent_dir)
@@ -468,9 +473,10 @@ def view_history_file_common(request, repo_id, ret_dict):
         raise Http404
 
     # Check whether user has permission to view file and get file raw path,
-    # render error page if permission is deny.
-    raw_path, user_perm = get_file_view_path_and_perm(request, repo_id,
-                                                      obj_id, path)
+    # render error page if permission  deny.
+    raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                  repo_id,
+                                                                  obj_id, path)
     request.user_perm = user_perm
 
     # get file type and extension
@@ -491,11 +497,11 @@ def view_history_file_common(request, repo_id, ret_dict):
         else:
             """Choose different approach when dealing with different type of file."""
             if is_textual_file(file_type=filetype):
-                handle_textual_file(request, filetype, raw_path, ret_dict)
+                handle_textual_file(request, filetype, inner_path, ret_dict)
             elif filetype == DOCUMENT:
-                handle_document(raw_path, obj_id, fileext, ret_dict)
+                handle_document(inner_path, obj_id, fileext, ret_dict)
             elif filetype == PDF:
-                handle_pdf(raw_path, obj_id, fileext, ret_dict)
+                handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
                 pass
     # populate return value dict
@@ -593,6 +599,7 @@ def view_shared_file(request, token):
     access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
                                                      'view', '')
     raw_path = gen_file_get_url(access_token, filename)
+    inner_path = gen_inner_file_get_url(access_token, filename)
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
@@ -606,11 +613,11 @@ def view_shared_file(request, token):
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, raw_path, ret_dict)
+            handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
-            handle_document(raw_path, obj_id, fileext, ret_dict)
+            handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
         # Increase file shared link view_cnt, this operation should be atomic
         fileshare.view_cnt = F('view_cnt') + 1
@@ -674,6 +681,7 @@ def view_file_via_shared_dir(request, token):
     access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
                                                      'view', '')
     raw_path = gen_file_get_url(access_token, filename)
+    inner_path = gen_inner_file_get_url(access_token, filename)
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
@@ -687,11 +695,11 @@ def view_file_via_shared_dir(request, token):
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, raw_path, ret_dict)
+            handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
-            handle_document(raw_path, obj_id, fileext, ret_dict)
+            handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+            handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
         # send statistic messages
         try:
@@ -845,11 +853,11 @@ def file_edit(request, repo_id):
             if not repo.password_set:
                 op = 'decrypt'
         if not op:
-            raw_path = gen_file_get_url(token, filename)
+            inner_path = gen_inner_file_get_url(token, filename)
             file_enc = request.GET.get('file_enc', 'auto')
             if not file_enc in FILE_ENCODING_LIST:
                 file_enc = 'auto'
-            err, file_content, encoding = repo_file_get(raw_path, file_enc)
+            err, file_content, encoding = repo_file_get(inner_path, file_enc)
             if encoding and encoding not in FILE_ENCODING_LIST:
                 file_encoding_list.append(encoding)
     else:
@@ -912,10 +920,10 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
             return None, 'permission denied'
 
         filename = os.path.basename(path)
-        raw_path = gen_file_get_url(token, urllib2.quote(filename))
+        inner_path = gen_inner_file_get_url(token, filename)
 
         try:
-            err, file_content, encoding = repo_file_get(raw_path, file_enc)
+            err, file_content, encoding = repo_file_get(inner_path, file_enc)
         except Exception, e:
             return None, 'error when read file from httpserver: %s' % e
         return file_content, err

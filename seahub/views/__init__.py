@@ -1207,58 +1207,6 @@ def repo_delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
-def repo_file_get(raw_path, file_enc):
-    err = ''
-    file_content = ''
-    encoding = None
-    if file_enc != 'auto':
-        encoding = file_enc
-
-    try:
-        file_response = urllib2.urlopen(raw_path)
-        if long(file_response.headers['Content-Length']) > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses 10M, can not be previewed online.')
-            return err, '', None
-        else:
-            content = file_response.read()
-    except urllib2.HTTPError, e:
-        err = _(u'HTTPError: failed to open file online')
-        return err, '', None
-    except urllib2.URLError as e:
-        err = _(u'URLError: failed to open file online')
-        return err, '', None
-    else:
-        if encoding:
-            try:
-                u_content = content.decode(encoding)
-            except UnicodeDecodeError:
-                err = _(u'The encoding you chose is not proper.')
-                return err, '', encoding
-        else:
-            for enc in FILE_ENCODING_TRY_LIST:
-                try:
-                    u_content = content.decode(enc)
-                    encoding = enc
-                    break
-                except UnicodeDecodeError:
-                    if enc != FILE_ENCODING_TRY_LIST[-1]:
-                        continue
-                    else:
-                        encoding = chardet.detect(content)['encoding']
-                        if encoding:
-                            try:
-                                u_content = content.decode(encoding)
-                            except UnicodeDecodeError:
-                                err = _(u'Unknown file encoding')
-                                return err, '', ''
-                        else:
-                            err = _(u'Unknown file encoding')
-                            return err, '', ''
-
-        file_content = u_content
-
-    return err, file_content, encoding
-
 def repo_access_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
     if not repo:

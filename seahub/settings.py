@@ -7,6 +7,8 @@ import re
 import random
 import string
 
+from seaserv import HTTP_SERVER_ROOT, HTTP_SERVER_PORT, HTTP_SERVER_HTTPS
+
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
@@ -420,3 +422,8 @@ SEAFILE_VERSION = '1.7'
 # other settings files.
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
+if HTTP_SERVER_HTTPS:
+    INNER_HTTP_SERVER_ROOT = 'https://127.0.0.1:' + HTTP_SERVER_PORT
+else:
+    INNER_HTTP_SERVER_ROOT = 'http://127.0.0.1:' + HTTP_SERVER_PORT
+    
