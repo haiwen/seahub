@@ -68,7 +68,7 @@
                     {% for att in msg.attachments %}
                     <li>
                         <img src="{{ MEDIA_URL }}img/file/{{ att.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                        <a href="{% url 'view_priv_shared_file' att.repo_id %}?p={{ att.path|urlencode }}" target="_blank" class="vam">{{ att.name }}</a>
+                        <a href="{% url 'view_priv_shared_file' att.token %}" target="_blank" class="vam">{{ att.name }}</a>
                     </li>
                     {% endfor %}
                 </ul>

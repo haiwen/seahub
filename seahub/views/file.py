@@ -46,7 +46,7 @@ from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
-    check_filename_with_rename, gen_inner_file_get_url
+    check_filename_with_rename, gen_inner_file_get_url, normalize_file_path
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -58,7 +58,7 @@ if HAS_OFFICE_CONVERTER:
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 from seahub.views import is_registered_user, get_file_access_permission, \
-    get_repo_access_permission
+    get_repo_access_permission, get_unencry_rw_repos_by_user
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -1064,18 +1064,16 @@ def private_file_share(request, repo_id):
             continue
         
         if s_type == 'f':
-            PrivateFileDirShare.objects.add_read_only_priv_file_share(
+            pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
                 username, email, repo_id, path)
         elif s_type == 'd':
-            PrivateFileDirShare.objects.add_private_dir_share(
+            pfds = PrivateFileDirShare.objects.add_private_dir_share(
                 username, email, repo_id, path, perm)
         else:
             continue
-            
+
         # send a signal when sharing file successful
-        share_file_to_user_successful.send(sender=None, from_user=username,
-                                           to_user=email, repo_id=repo_id,
-                                           path=path)
+        share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
         messages.success(request, _('Successfully shared %s.') % file_or_dir)
 
     next = request.META.get('HTTP_REFERER', None)
@@ -1137,3 +1135,77 @@ def save_private_file_share(request, repo_id):
     if not next:
         next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
+
+@login_required
+def view_priv_shared_file(request, token):
+    """View private shared file.
+    """
+    try:
+        pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+    except PrivateFileDirShare.DoesNotExist:
+        raise Http404
+
+    repo_id = pfs.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+    
+    username = request.user.username
+    if username != pfs.from_user and username != pfs.to_user:
+        raise Http404           # permission check
+
+    path = normalize_file_path(pfs.path)
+    obj_id = seafile_api.get_file_id_by_path(repo.id, path)
+    if not obj_id:
+        raise Http404
+
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+    
+    access_token = seafile_api.get_httpserver_access_token(repo.id, obj_id,
+                                                           'view', username)
+    raw_path = gen_file_get_url(access_token, filename)
+
+    # get file content
+    ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
+                'file_encoding_list': [], 'html_exists': False,
+                'filetype': filetype}
+    fsize = get_file_size(obj_id)
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    if exceeds_limit:
+        err = err_msg
+    else:
+        """Choose different approach when dealing with different type of file."""
+
+        if is_textual_file(file_type=filetype):
+            handle_textual_file(request, filetype, raw_path, ret_dict)
+        elif filetype == DOCUMENT:
+            handle_document(raw_path, obj_id, fileext, ret_dict)
+        elif filetype == PDF:
+            handle_pdf(raw_path, obj_id, fileext, ret_dict)
+
+    accessible_repos = get_unencry_rw_repos_by_user(username)
+    save_to_link = reverse('save_private_file_share', args=[repo.id]) + \
+        '?from=' + pfs.from_user + '&to=' + pfs.to_user + '&p=' + pfs.path
+
+    return render_to_response('shared_file_view.html', {
+            'repo': repo,
+            'obj_id': obj_id,
+            'path': path,
+            'file_name': filename,
+            'access_token': access_token,
+            'filetype': filetype,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'shared_by': pfs.from_user,
+            'err': ret_dict['err'],
+            'file_content': ret_dict['file_content'],
+            'encoding': ret_dict['encoding'],
+            'file_encoding_list':ret_dict['file_encoding_list'],
+            'html_exists': ret_dict['html_exists'],
+            'html_detail': ret_dict.get('html_detail', {}),
+            'filetype': ret_dict['filetype'],
+            'use_pdfjs':USE_PDFJS,
+            'accessible_repos': accessible_repos,
+            'save_to_link': save_to_link,
+            }, context_instance=RequestContext(request))

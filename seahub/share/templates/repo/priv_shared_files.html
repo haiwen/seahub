@@ -36,7 +36,7 @@
         <tr>
             {% if e.s_type == 'f' %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ e.file_or_dir|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            <td><a href="{% url 'view_priv_shared_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+            <td><a href="{% url 'view_priv_shared_file' e.token %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
             {% else %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
             <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
@@ -64,7 +64,7 @@
         <tr>
             {% if e.s_type == 'f' %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ e.file_or_dir|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            <td><a href="{% url 'view_priv_shared_file' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
+            <td><a href="{% url 'view_priv_shared_file' e.token %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
             {% else %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
             <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>

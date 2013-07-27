@@ -82,6 +82,7 @@ def user_msg_list(request, id_or_email):
                 att.repo_id = pfds.repo_id
                 att.path = pfds.path
                 att.name = os.path.basename(pfds.path.rstrip('/'))
+                att.token = pfds.token
                 msg.attachments.append(att) 
 
     '''paginate'''
