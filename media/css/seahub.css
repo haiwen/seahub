@@ -1372,6 +1372,7 @@ textarea:-moz-placeholder {/* for FF */
     width:32px;
 }
 .repo-file-list .dirent-name {
+    display:inline-block;
     width:405px;
 }
 .repo-file-list .dirent-size {
