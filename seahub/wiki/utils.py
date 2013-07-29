@@ -8,9 +8,9 @@ from django.utils.http import urlquote
 from django.utils.encoding import smart_str
 
 import seaserv
+from seaserv import seafile_api
 from pysearpc import SearpcError
 from seahub.utils import EMPTY_SHA1
-from seahub.utils.repo import list_dir_by_path
 from seahub.utils.slugify import slugify
 from seahub.utils import render_error, render_permission_error, string2list, \
     gen_file_get_url, get_file_type_and_ext, get_file_contributors, \
@@ -40,7 +40,7 @@ def get_wiki_dirent(repo_id, page_name):
     cmmt = seaserv.get_commits(repo.id, 0, 1)[0]
     if cmmt is None:
         raise WikiPageMissing
-    dirs = list_dir_by_path(cmmt, "/")
+    dirs = seafile_api.list_dir_by_commit_and_path(cmmt, "/")
     if dirs:
         for e in dirs:
             if stat.S_ISDIR(e.mode):
@@ -106,7 +106,7 @@ def get_wiki_pages(repo):
     return pages in hashtable {normalized_name: page_name}
     """
     dir_id = seaserv.seafserv_threaded_rpc.get_dir_id_by_path(repo.id, '/')
-    dirs = seaserv.seafserv_threaded_rpc.list_dir(dir_id)
+    dirs = seafile_api.list_dir_by_dir_id(dir_id)
     pages = {}
     for e in dirs:
         if stat.S_ISDIR(e.mode):

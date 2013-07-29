@@ -441,7 +441,7 @@ def get_file_size (id):
 
 def get_dir_entrys_by_id(request, repo_id, path, dir_id):
     try:
-        dirs = seafserv_threaded_rpc.list_dir(dir_id)
+        dirs = seafile_api.list_dir_by_dir_id(dir_id)
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")

@@ -28,7 +28,7 @@ from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api
-from seaserv import list_dir_by_path, get_repo, web_get_access_token, \
+from seaserv import get_repo, web_get_access_token, \
     get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
@@ -341,7 +341,7 @@ def view_file(request, repo_id):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
-            dirs = list_dir_by_path(current_commit.id, parent_dir)
+            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.id, parent_dir)
             if not dirs:
                 raise Http404
 

@@ -200,8 +200,8 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
     if not latest_commit:
         return ''
     # TODO: what if parrent_dir does not exist?
-    dirents = seafserv_threaded_rpc.list_dir_by_path(latest_commit.id,
-                                         parent_dir.encode('utf-8'))
+    dirents = seafile_api.list_dir_by_commit_and_path(latest_commit.id,
+                                                      parent_dir.encode('utf-8'))
 
     def no_duplicate(name):
         for dirent in dirents:
@@ -270,7 +270,7 @@ def get_file_revision_id_size (commit_id, path):
     """
     dirname  = os.path.dirname(path)
     filename = os.path.basename(path)
-    seafdir = seafserv_threaded_rpc.list_dir_by_path (commit_id, dirname)
+    seafdir = seafile_api.list_dir_by_commit_and_path (commit_id, dirname)
     for dirent in seafdir:
         if dirent.obj_name == filename:
             file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
