@@ -5,7 +5,7 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
@@ -16,9 +16,9 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
+from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
-from seahub.share.models import FileShare
-from seahub.views import get_repo_dirents, gen_path_link
+from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
 from seahub.utils import check_filename_with_rename, star_file, unstar_file
@@ -36,6 +36,12 @@ def get_commit(commit_id):
 def check_repo_access_permission(repo_id, username):
     return seafile_api.check_repo_access_permission(repo_id, username)
 
+def get_group(gid):
+    return seaserv.get_group(gid)
+
+def is_group_user(gid, username):
+    return seaserv.is_group_user(gid, username)
+    
 ########## repo related
 @login_required
 def get_dirents(request, repo_id):
@@ -113,16 +119,17 @@ def get_group_repos(request, group_id):
     content_type = 'application/json; charset=utf-8'
 
     group_id_int = int(group_id) 
-
     group = get_group(group_id_int)    
     if not group:
         err_msg = _(u"The group doesn't exist") 
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
+                            content_type=content_type)
 
     joined = is_group_user(group_id_int, request.user.username)
     if not joined and not request.user.is_staff:
         err_msg = _(u"Permission denied")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
 
     repos = seafile_api.get_group_repo_list(group_id_int)    
     repo_list = []
@@ -138,7 +145,7 @@ def get_my_repos(request):
     
     content_type = 'application/json; charset=utf-8'
 
-    repos = seafserv_threaded_rpc.list_owned_repos(request.user.username)
+    repos = seafile_api.get_owned_repo_list(request.user.username)
     repo_list = []
     for repo in repos:
         repo_list.append({"name": repo.props.name, "id": repo.props.id})
@@ -153,7 +160,7 @@ def list_dir(request, repo_id):
     if not request.is_ajax():
         raise Http404
 
-    content_type='application/json; charset=utf-8'
+    content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
     if not repo:
@@ -447,8 +454,6 @@ def copy_move_common(func):
 @login_required
 @copy_move_common
 def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
-    """
-    """
     result = {}
     content_type = 'application/json; charset=utf-8'
     
@@ -471,8 +476,6 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 @login_required
 @copy_move_common
 def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
-    """
-    """
     result = {}
     content_type = 'application/json; charset=utf-8'
     
@@ -495,8 +498,9 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 @login_required
 @copy_move_common
 def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
-    """
-    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
@@ -504,8 +508,6 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    result = {}
-    content_type = 'application/json; charset=utf-8'
     
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
@@ -526,8 +528,9 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 @login_required
 @copy_move_common
 def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
-    """
-    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
@@ -535,9 +538,6 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-    
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:

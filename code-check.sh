@@ -36,7 +36,7 @@ PROJECT_DIR=$(dirname "${SCRIPT}")
 
 cd ${PROJECT_DIR}
 
-if which pylint 2>/dev/null 1>&2; then
+if ! which pylint 2>/dev/null 1>&2; then
     echo
     echo "Pylint not found. Please install it first by:"
     echo
