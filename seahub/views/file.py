@@ -7,19 +7,17 @@ view_snapshot_file, view_shared_file, file_edit, etc.
 import os
 import simplejson as json
 import stat
-import urllib
 import urllib2
 import chardet
 import logging
 
-from django.contrib.sites.models import Site, RequestSite
+from django.contrib.sites.models import RequestSite
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
-from django.template import Context, loader, RequestContext
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
@@ -28,21 +26,20 @@ from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api
-from seaserv import get_repo, web_get_access_token, \
-    get_commits, is_passwd_set, check_permission, get_shared_groups_by_repo,\
+from seaserv import get_repo, web_get_access_token, send_message, \
+    get_commits, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
-from seahub.base.models import UuidObjidMap
 from seahub.contacts.models import Contact
 from seahub.signals import share_file_to_user_successful
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
-from seahub.utils import get_httpserver_root, show_delete_days, render_error, \
+from seahub.utils import show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
@@ -53,12 +50,12 @@ from seahub.utils import HAS_OFFICE_CONVERTER
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, query_office_file_pages, \
-        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
+        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
-from seahub.views import is_registered_user, get_file_access_permission, \
-    get_repo_access_permission, get_unencry_rw_repos_by_user
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
+from seahub.views import is_registered_user, get_repo_access_permission, \
+    get_unencry_rw_repos_by_user
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -115,9 +112,11 @@ def repo_file_get(raw_path, file_enc):
         file_response = urllib2.urlopen(raw_path)
         content = file_response.read()
     except urllib2.HTTPError, e:
+        logger.error(e)
         err = _(u'HTTPError: failed to open file online')
         return err, '', None
     except urllib2.URLError as e:
+        logger.error(e)
         err = _(u'URLError: failed to open file online')
         return err, '', None
     else:
@@ -450,7 +449,6 @@ def view_file(request, repo_id):
             }, context_instance=RequestContext(request))
 
 def view_history_file_common(request, repo_id, ret_dict):
-    username = request.user.username
     # check arguments
     repo = get_repo(repo_id)
     if not repo:
@@ -628,7 +626,7 @@ def view_shared_file(request, token):
             obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
             send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
                          (repo.id, shared_by, obj_id, obj_size))
-        except Exception, e:
+        except SearpcError, e:
             logger.error('Error when sending file-view message: %s' % str(e))
     
     return render_to_response('shared_file_view.html', {
@@ -706,7 +704,7 @@ def view_file_via_shared_dir(request, token):
             obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
             send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
                          (repo.id, shared_by, obj_id, obj_size))
-        except Exception, e:
+        except SearpcError, e:
             logger.error('Error when sending file-view message: %s' % str(e))
         
     return render_to_response('shared_file_view.html', {
@@ -745,7 +743,7 @@ def file_edit_submit(request, repo_id):
     if not repo:
         return error_json(_(u'The library does not exist.'))
     if repo.encrypted:
-        repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+        repo.password_set = seafile_api.is_passwd_set(repo_id, request.user.username)
         if not repo.password_set:
             return error_json(_(u'The library is encrypted.'), 'decrypt')
 
@@ -849,7 +847,7 @@ def file_edit(request, repo_id):
     file_encoding_list = FILE_ENCODING_LIST
     if filetype == TEXT or filetype == MARKDOWN or filetype == SF: 
         if repo.encrypted:
-            repo.password_set = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            repo.password_set = seafile_api.is_passwd_set(repo_id, request.user.username)
             if not repo.password_set:
                 op = 'decrypt'
         if not op:
@@ -1015,7 +1013,7 @@ def office_convert_query_status(request):
                 ret['success'] = True
                 ret['status'] = d.status
         except Exception, e:
-            logging.exception('failed to call query_office_convert_status');
+            logging.exception('failed to call query_office_convert_status')
             ret['error'] = str(e)
             
     return HttpResponse(json.dumps(ret), content_type=content_type)
@@ -1043,7 +1041,7 @@ def office_convert_query_page_num(request):
                 ret['success'] = True
                 ret['count'] = d.count
         except Exception, e:
-            logging.exception('failed to call query_office_file_pages');
+            logging.exception('failed to call query_office_file_pages')
             ret['error'] = str(e)
             
     return HttpResponse(json.dumps(ret), content_type=content_type)
@@ -1114,7 +1112,7 @@ def save_private_file_share(request, repo_id):
     username = request.user.username
     from_user = request.GET.get('from', '')
     to_user = request.GET.get('to', '')
-    path= request.GET.get('p', '')
+    path = request.GET.get('p', '')
     src_path = os.path.dirname(path)
     obj_name = os.path.basename(path.rstrip('/'))
 
@@ -1133,7 +1131,7 @@ def save_private_file_share(request, repo_id):
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = settings.SITE_ROOT
+        next = SITE_ROOT
     return HttpResponseRedirect(next)
 
 @login_required
@@ -1195,7 +1193,6 @@ def view_priv_shared_file(request, token):
             'path': path,
             'file_name': filename,
             'access_token': access_token,
-            'filetype': filetype,
             'fileext': fileext,
             'raw_path': raw_path,
             'shared_by': pfs.from_user,

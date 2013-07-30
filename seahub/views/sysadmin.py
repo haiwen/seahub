@@ -8,20 +8,14 @@ import simplejson as json
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
-from django.contrib.sites.models import Site, RequestSite
-from django.core.mail import send_mail
-
+from django.contrib.sites.models import RequestSite
 
 import seaserv
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_emailusers, \
-    MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, \
-    send_message
+from seaserv import ccnet_threaded_rpc, get_emailusers, CALC_SHARE_USAGE
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -31,7 +25,7 @@ from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare, AnonymousShare
+from seahub.share.models import FileShare
 
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, \
@@ -45,7 +39,7 @@ def sys_repo_admin(request):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '25'))
     except ValueError:
         current_page = 1
         per_page = 25
@@ -82,7 +76,7 @@ def sys_user_admin(request):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '25'))
     except ValueError:
         current_page = 1
         per_page = 25
@@ -155,6 +149,7 @@ def user_info(request, email):
         try:
             share_usage = seafile_api.get_user_share_usage(email)
         except SearpcError, e:
+            logger.error(e)
             share_usage = 0
         quota_usage = my_usage + share_usage
     else:
@@ -245,8 +240,6 @@ def send_user_reset_email(request, email, password):
     """
     Send email when reset user password.
     """
-    use_https = request.is_secure()
-    domain = RequestSite(request).domain
     
     t = loader.get_template('sysadmin/user_reset_email.html')
     c = {
@@ -364,7 +357,7 @@ def sys_group_admin(request):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page= int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '25'))
     except ValueError:
         current_page = 1
         per_page = 25

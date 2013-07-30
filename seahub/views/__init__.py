@@ -171,7 +171,7 @@ def gen_path_link(path, repo_name):
     links = []
     if path and path != '/':
         paths = path[1:-1].split('/')
-        i=1
+        i = 1
         for name in paths:
             link = '/' + '/'.join(paths[:i])
             i = i + 1
@@ -204,8 +204,6 @@ def get_repo_dirents(request, repo_id, commit, path):
         last_modified_info = get_dir_files_last_modified(repo_id, path)
 
         fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
-        http_or_https = request.is_secure() and 'https' or 'http'
-        domain = RequestSite(request).domain
 
         for dirent in dirs:
             dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
@@ -945,7 +943,7 @@ def client_unsync(request):
     repo_id = request.GET.get('repo_id', '')
     token = request.GET.get('token', '')
     username = request.user.username
-    client_name = request.GET.get('name', '');
+    client_name = request.GET.get('name', '')
 
     if repo_id and token:
         try:
@@ -965,47 +963,47 @@ def client_unsync(request):
         next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
 
-@login_required
-def innerpub_msg_reply(request, msg_id):
-    """Show inner pub message replies, and process message reply in ajax"""
+# @login_required
+# def innerpub_msg_reply(request, msg_id):
+#     """Show inner pub message replies, and process message reply in ajax"""
     
-    content_type = 'application/json; charset=utf-8'
-    if request.is_ajax():
-        ctx = {}
-        if request.method == 'POST':
-            form = MessageReplyForm(request.POST)
+#     content_type = 'application/json; charset=utf-8'
+#     if request.is_ajax():
+#         ctx = {}
+#         if request.method == 'POST':
+#             form = MessageReplyForm(request.POST)
 
-            # TODO: invalid form
-            if form.is_valid():
-                msg = form.cleaned_data['message']
-                try:
-                    innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
-                except InnerPubMsg.DoesNotExist:
-                    return HttpResponseBadRequest(content_type=content_type)
+#             # TODO: invalid form
+#             if form.is_valid():
+#                 msg = form.cleaned_data['message']
+#                 try:
+#                     innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
+#                 except InnerPubMsg.DoesNotExist:
+#                     return HttpResponseBadRequest(content_type=content_type)
             
-                msg_reply = InnerPubMsgReply()
-                msg_reply.reply_to = innerpub_msg
-                msg_reply.from_email = request.user.username
-                msg_reply.message = msg
-                msg_reply.save()
+#                 msg_reply = InnerPubMsgReply()
+#                 msg_reply.reply_to = innerpub_msg
+#                 msg_reply.from_email = request.user.username
+#                 msg_reply.message = msg
+#                 msg_reply.save()
 
-                ctx['reply'] = msg_reply
-                html = render_to_string("group/group_reply_new.html", ctx)
+#                 ctx['reply'] = msg_reply
+#                 html = render_to_string("group/group_reply_new.html", ctx)
 
-        else:
-            try:
-                msg = InnerPubMsg.objects.get(id=msg_id)
-            except InnerPubMsg.DoesNotExist:
-                raise HttpResponse(status=400)
+#         else:
+#             try:
+#                 msg = InnerPubMsg.objects.get(id=msg_id)
+#             except InnerPubMsg.DoesNotExist:
+#                 raise HttpResponse(status=400)
 
-            replies = InnerPubMsgReply.objects.filter(reply_to=msg)
-            ctx['replies'] = replies
-            html = render_to_string("group/group_reply_list.html", ctx)
+#             replies = InnerPubMsgReply.objects.filter(reply_to=msg)
+#             ctx['replies'] = replies
+#             html = render_to_string("group/group_reply_list.html", ctx)
 
-        serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=content_type)
-    else:
-        return HttpResponseBadRequest(content_type=content_type)
+#         serialized_data = json.dumps({"html": html})
+#         return HttpResponse(serialized_data, content_type=content_type)
+#     else:
+#         return HttpResponseBadRequest(content_type=content_type)
 
 @login_required    
 def public_repo_create(request):
@@ -1064,22 +1062,22 @@ def unsetinnerpub(request, repo_id):
         messages.error(request, _('Failed to unshare "%s".') % repo.name)
     return HttpResponseRedirect(reverse('share_admin'))
 
-@login_required
-def ownerhome(request, owner_name):
-    owned_repos = []
-    quota_usage = 0
+# @login_required
+# def ownerhome(request, owner_name):
+#     owned_repos = []
+#     quota_usage = 0
 
-    owned_repos = seafserv_threaded_rpc.list_owned_repos(owner_name)
-    quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_name)
+#     owned_repos = seafserv_threaded_rpc.list_owned_repos(owner_name)
+#     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_name)
 
-    user_dict = user_info(request, owner_name)
+#     user_dict = user_info(request, owner_name)
     
-    return render_to_response('ownerhome.html', {
-            "owned_repos": owned_repos,
-            "quota_usage": quota_usage,
-            "owner": owner_name,
-            "user_dict": user_dict,
-            }, context_instance=RequestContext(request))
+#     return render_to_response('ownerhome.html', {
+#             "owned_repos": owned_repos,
+#             "quota_usage": quota_usage,
+#             "owner": owner_name,
+#             "user_dict": user_dict,
+#             }, context_instance=RequestContext(request))
 
 @login_required
 def repo_set_access_property(request, repo_id):
@@ -1158,7 +1156,6 @@ def repo_access_file(request, repo_id, obj_id):
                          (repo.id, shared_by, obj_id, file_size))
         except Exception, e:
             logger.error('Error when sending file-download message: %s' % str(e))
-            pass
 
     return HttpResponseRedirect(redirect_url)
 

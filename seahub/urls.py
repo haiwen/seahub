@@ -51,8 +51,8 @@ urlpatterns = patterns('',
     url(r'^home/clients/$', client_mgmt, name='client_mgmt'),
     url(r'^home/clients/unsync/$', client_unsync, name='client_unsync'),
 
-    url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
-    url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
+    # url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
+    # url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
     (r'^repo/create/$', repo_create),
     (r'^repo/upload_check/$', validate_filename),

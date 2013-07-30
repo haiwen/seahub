@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
-import stat
-import simplejson as json
 
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -17,12 +15,11 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.share.models import FileShare, PrivateFileDirShare
-from seahub.views import gen_path_link, get_user_permission, get_repo_dirents,\
+from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
-from seahub.utils import get_ccnetapplet_root, is_file_starred, \
-    gen_file_upload_url, get_httpserver_root, gen_dir_share_link, \
-    EMPTY_SHA1
+from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
+    get_httpserver_root, gen_dir_share_link
 from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
@@ -261,7 +258,7 @@ def repo_history_view(request, repo_id):
     
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
-            return HttpResponseRedirect(reverse('repo', args=[repo.id]))
+        return HttpResponseRedirect(reverse('repo', args=[repo.id]))
     current_commit = get_commit(commit_id)
     if not current_commit:
         current_commit = get_commit(repo.head_cmmt_id)
