@@ -526,10 +526,16 @@ $('.hidden-op li').hover(
 );
 $('.dir-del, .file-del').click(function() {
     var dirent = $(this).parents('tr'),
-        dirent_name = dirent.data('name');
+        dirent_name = dirent.data('name'),
+        url_main;
+    if ($(this).hasClass('dir-del')) {
+        url_main = '{% url 'delete_dir' repo.id %}';
+    } else {
+        url_main = '{% url 'delete_file' repo.id %}';
+    }
 
     $.ajax({
-        url: '{% url 'repo_delete_dirent' repo.id %}?parent_dir=' + e(cur_path) + '&name=' + e(dirent_name),
+        url: url_main + '?parent_dir=' + e(cur_path) + '&name=' + e(dirent_name),
         dataType: 'json',
         success: function(data) {
             if (data['success']) {
@@ -562,9 +568,9 @@ $('.file-rename, .dir-rename').click(function () {
     op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + orig_name + '</span>'));
     $('input[name*="name"]', form).val(orig_name);
     if (op.hasClass('file-rename')) {
-        form.prepend("<h3>{% trans "Rename File" %}</h3>");
+        form.prepend("<h3>{% trans "Rename File" %}</h3>").data('obj_type', 'file');
     } else {
-        form.prepend("<h3>{% trans "Rename Directory" %}</h3>");
+        form.prepend("<h3>{% trans "Rename Directory" %}</h3>").data('obj_type', 'dir');
     }
 
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -630,19 +636,18 @@ $('.update-file').click(function() {
 $('.file-star').click(function() {
     var op = $(this),
         status = op.data('status'),
-        file_name = op.parents('.file-item').data('name');
+        file_name = op.parents('.file-item').data('name'),
+        post_url;
 
     if (status == 'unstarred') {
-        var post_url = '{% url 'repo_star_file' repo.id %}?file=' + e(cur_path + file_name)
+        post_url = '{% url 'repo_star_file' repo.id %}?file=' + e(cur_path + file_name);
     } else {
-        var post_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(cur_path + file_name)
+        post_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(cur_path + file_name);
     }
     
     $.ajax({
         url: post_url,
-        type: 'POST',
         cache: false,
-        beforeSend: prepareCSRFToken,
         dataType: 'json',
         success:function(data) {
             if (data['success']) {
@@ -735,7 +740,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             dirent_type;
 
         if (!dirent_name) {
-            apply_form_error(form_id, "{% trans "Its required." %}");
+            apply_form_error(form_id, "{% trans "It is required." %}");
             return false;
         }
         if (form_id == 'add-new-file-form') {
@@ -767,14 +772,18 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             new_name = $.trim(form.find('input[name="newname"]').val()),
             op_obj = form.data('op_obj');
         if (!new_name) {
-            apply_form_error(form_id, "{% trans "It cannot be blank." %}");
+            apply_form_error(form_id, "{% trans "It is required." %}");
             return false;
         }
         if (new_name == old_name) {
             apply_form_error(form_id, "{% trans "You have not renamed it." %}");
             return false;
         }
-        post_url = '{% url 'repo_rename_dirent' repo.id %}?parent_dir=' + e(path);
+        if (form.data('obj_type') == 'dir') {
+            post_url = '{% url 'rename_dir' repo.id %}?parent_dir=' + e(path);
+        } else {
+            post_url = '{% url 'rename_file' repo.id %}?parent_dir=' + e(path);
+        }
         post_data['oldname'] = old_name;
         post_data['newname'] = new_name;
         after_op_success = function(data) {
@@ -830,7 +839,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         }
         post_data = {
             'dst_repo': dst_repo,
-            'dst_path': dst_path,
+            'dst_path': dst_path
         };
         after_op_success = function(data) {
             $.modal.close();
