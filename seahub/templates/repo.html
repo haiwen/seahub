@@ -9,7 +9,7 @@
 #footer { display:none; }
 </style>    
 <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
-<!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="{{ MEDIA_URL}}js/html5shiv.js"></script><![endif]-->
 {% endblock %}
 
 {% block main_panel %}
@@ -68,22 +68,22 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}
-        <form id="fileupload" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
+        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
             <input type="hidden" name="parent_dir" id="parent_dir" value="{{ path }}" />
             <div class="row fileupload-buttonbar">
                 <div>
                     <span class="fileinput-button vam">
                         <span class="icon-plus"></span>
-                        <span>{% trans "Add files..." %}</span>
-                        <input type="file" name="file" multiple>
+                        <span>{% trans "Add Files" %}</span>
+                        <input type="file" name="file" multiple />
                     </span>
                     <button type="submit" class="start vam">
                         <span class="icon-upload"></span>
-                        <span>{% trans "Start upload" %}</span>
+                        <span>{% trans "Start All" %}</span>
                     </button>
                     <button type="reset" class="cancel vam">
                         <span class="icon-ban-circle"></span>
-                        <span>{% trans "Cancel upload" %}</span>
+                        <span>{% trans "Cancel All" %}</span>
                     </button>
                 </div>
                 <div class="fileupload-progress fade">
@@ -93,32 +93,33 @@
                     <div class="progress-extended"></div>
                 </div>
             </div>
-
-            <div class="fileupload-loading"></div>
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </form>
         {% endif %}
     </div>
 
     <div id="update-file-dialog" class="hide">
-        <h3>{% trans "Update File" %}</h3>
+        <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}      
-        <form id="update-file-form" enctype="multipart/form-data" method="post" action="{{ update_url }}?head={{ repo.head_cmmt_id }}">{% csrf_token %}
+        <form id="update-file-form" enctype="multipart/form-data" method="post" action="{{ ajax_update_url }}?head={{ repo.head_cmmt_id }}">{% csrf_token %}
             <input type="hidden" name="target_file" />
-            <input type="file" name="file" id="file-update-input" />
-            <p>({% trans "Smaller than" %} {{ max_upload_file_size|filesizeformat }})</p>          
-            <p class="error">{{ error_msg }}</p>
-            <input type="submit" value="{% trans "Update" %}" class="submit" />
+            <div class="fileupload-buttonbar">
+                <span class="fileinput-button vam">
+                    <span>{% trans "Choose a file" %}</span>
+                    <input type="file" name="file" />
+                </span>
+                <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }} {% endblocktrans %})</span>
+                <div class="fileupload-progress fade">
+                    <div class="progress progress-success progres-striped active">
+                        <div class="bar" style="width:0%"></div>
+                    </div>
+                    <div class="progress-extended"></div>
+                </div>
+            </div>
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </form>
-
-        <div id="update-progress-con" class="upload-progress-con hide">
-            <p>{% trans "Uploaded:" %} <span class="upload-progress-text">{% trans "Fetching..." %}</span></p>
-            <div class="upload-progress-bar"></div>
-            <button class="upload-cancel">{% trans "Cancel" %}</button>
-            <iframe class="hide"><!--for chrome--></iframe>
-        </div>
         {% endif %}
     </div>
 
@@ -331,15 +332,17 @@ $('#upload-file').click(function () {
             reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
         }
     });
-    $('#upload-file-form input[name="parent_dir"]').val(cur_path);
+
+    var form = $('#upload-file-form');
+    $('input[name="parent_dir"]', form).val(cur_path);
 
     // Initialize the jQuery File Upload widget:
-    $('#fileupload').fileupload({
+    form.fileupload({
         sequentialUploads: true
     });
 
     // Enable iframe cross-domain access via redirect option:
-    $('#fileupload').fileupload(
+    form.fileupload(
         'option',
         'redirect',
         window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
@@ -672,11 +675,36 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     return false;
 });
 
-$('.update-file').click(function() {
+$('.file-update').click(function() {
     var file_name = $(this).parents('.file-item').data('name');
-    $('#update-file-form input[name="target_file"]').val(cur_path + file_name);
-    $('#update-file-dialog').modal({focus:false});
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    var form = $('#update-file-form');
+
+    $('#update-file-dialog').modal({
+        focus:false,
+        containerCss: {width:600, height:$(window).height()/2},
+        onClose: function() {
+            $.modal.close();
+            reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+        }
+    });
+
+    $('input[name="target_file"]', form).val(cur_path + file_name);
+    var hd = $('#update-file-dialog .hd');
+    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
+
+    // Initialize the jQuery File Upload widget:
+    form.fileupload({
+        maxFileSize: {{max_upload_file_size}}, // in bytes
+        maxNumberOfFiles: 1 // only 1 file can be uploaded
+    });
+
+    // Enable iframe cross-domain access via redirect option:
+    form.fileupload(
+        'option',
+        'redirect',
+        window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+    );
+
     return false;
 });
 
@@ -972,5 +1000,4 @@ window.onload = function() {
 {% include "snippets/shared_link_js.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>
-{% include 'snippets/file_upload_progress_js.html' %}
 {% endblock %}

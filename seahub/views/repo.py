@@ -111,15 +111,21 @@ def get_ajax_upload_url(request, repo_id):
     api_upload_url = get_api_upload_url(request, repo_id)
     return api_upload_url.replace('api', 'aj')
     
-def get_update_url(request, repo_id):
+def get_api_update_url(request, repo_id):
     username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'update', username)
-        return gen_file_upload_url(token, 'update')
+        return gen_file_upload_url(token, 'update-api')
     else:
         return ''
     
+def get_ajax_update_url(request, repo_id):
+    """Get file upload url for AJAX.
+    """
+    api_update_url = get_api_update_url(request, repo_id)
+    return api_update_url.replace('api', 'aj')
+
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
         return None
@@ -192,7 +198,7 @@ def render_repo(request, repo):
         repo_group_str = ''
     upload_url = get_upload_url(request, repo.id)
     ajax_upload_url = get_ajax_upload_url(request, repo.id)
-    update_url = get_update_url(request, repo.id)
+    ajax_update_url = get_ajax_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
 
@@ -215,7 +221,7 @@ def render_repo(request, repo):
             'max_upload_file_size': max_upload_file_size,
             'upload_url': upload_url,
             'ajax_upload_url': ajax_upload_url,
-            'update_url': update_url,
+            'ajax_update_url': ajax_update_url,
             'httpserver_root': httpserver_root,
             'protocol': protocol,
             'domain': domain,
