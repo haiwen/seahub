@@ -566,9 +566,7 @@ def repo_star_file(request, repo_id):
         return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
                             status=400, content_type=content_type)
 
-    path = urlquote(path)
     is_dir = False
-
     star_file(request.user.username, repo_id, path, is_dir)
 
     return HttpResponse(json.dumps({'success':True}), content_type=content_type)
@@ -584,8 +582,6 @@ def repo_unstar_file(request, repo_id):
     if not path:
         return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
                             status=400, content_type=content_type)
-
-    path = urlquote(path)
 
     unstar_file(request.user.username, repo_id, path)
 
