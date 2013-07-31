@@ -133,17 +133,18 @@ $('#star').click(function() {
     var star_btn = $(this);
     disable(star_btn);
 
-    var status = star_btn.data('status');
+    var path = '{{path}}';
+    var status = star_btn.data('status'), ajax_url;
+    if (status == 'unstarred') {
+        ajax_url = '{% url 'repo_star_file' repo.id %}?file=' + e(path);
+    } else {
+        ajax_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(path);
+    }
+    
     $.ajax({
-        url: '{% url 'repo_star_file' repo.id %}?file={{path|urlencode}}{{filename|urlencode}}',
-        type: 'POST',
+        url: ajax_url,
         cache: false,
-        beforeSend: prepareCSRFToken,
         dataType: 'json',
-        data: {
-            status: status,
-            org_id: {% if org %} {{ org.org_id }} {% else %} -1 {% endif %}
-        },
         success:function(data) {
             if (data['success']) {
                 if (status == 'starred') {
