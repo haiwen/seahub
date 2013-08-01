@@ -101,7 +101,7 @@ $('.reply-form').submit(function() {
         r = $.trim(r_input.val()), 
         err = form.find('.error');
 
-    if (!r || r.length > 150) {
+    if (!r || r.length > 2048) {
         err.removeClass('hide');
         return false;
     }

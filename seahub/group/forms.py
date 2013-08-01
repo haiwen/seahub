@@ -9,10 +9,10 @@ from seaserv import is_valid_filename
 from seahub.utils import validate_group_name
 
 class MessageForm(forms.Form):
-    message = forms.CharField(max_length=500)
+    message = forms.CharField(max_length=2048)
 
 class MessageReplyForm(forms.Form):
-    message = forms.CharField(max_length=150)
+    message = forms.CharField(max_length=2048)
 
 class GroupRecommendForm(MessageForm):
     """
