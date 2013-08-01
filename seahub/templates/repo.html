@@ -307,13 +307,16 @@ $('#download-dir').click(function() {
 });
 
 $('#upload-file').click(function () {
+    var upload_success = false;
     $('#upload-file-dialog').modal({
         focus:false,
         containerCss: {width:600, height:$(window).height()/1.5},
         onClose: function() {
             $.modal.close();
-            reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
-            updateCmt();
+            if (upload_success) {
+                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                updateCmt();
+            }
         }
     });
 
@@ -322,7 +325,13 @@ $('#upload-file').click(function () {
 
     // Initialize the jQuery File Upload widget:
     form.fileupload({
+        //singleFileUploads: false // using 1 request to upload all files of a selection
         sequentialUploads: true
+    })
+    .bind('fileuploaddone', function(e, data) {
+        if (data.textStatus == 'success') {
+            upload_success = true; 
+        }
     });
 
     // Enable iframe cross-domain access via redirect option:
@@ -663,13 +672,16 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
 $('.file-update').click(function() {
     var file_name = $(this).parents('.file-item').data('name');
     var form = $('#update-file-form');
+    var upload_success = false;
     $('#update-file-dialog').modal({
         focus:false,
         containerCss: {width:600, height:$(window).height()/2},
         onClose: function() {
             $.modal.close();
-            reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
-            updateCmt();        
+            if (upload_success) {
+                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                updateCmt();        
+            }
         }
     });
 
@@ -682,6 +694,11 @@ $('.file-update').click(function() {
         url: '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid'),
         maxFileSize: {{max_upload_file_size}}, // in bytes
         maxNumberOfFiles: 1 // only 1 file can be uploaded
+    })
+    .bind('fileuploaddone', function(e, data) {
+        if (data.textStatus == 'success') {
+            upload_success = true; 
+        }
     });
 
     // Enable iframe cross-domain access via redirect option:
