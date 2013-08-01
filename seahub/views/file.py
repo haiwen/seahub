@@ -35,7 +35,6 @@ from pysearpc import SearpcError
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.contacts.models import Contact
-from seahub.signals import share_file_to_user_successful
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
@@ -628,7 +627,10 @@ def view_shared_file(request, token):
                          (repo.id, shared_by, obj_id, obj_size))
         except SearpcError, e:
             logger.error('Error when sending file-view message: %s' % str(e))
-    
+
+    accessible_repos = get_unencry_rw_repos_by_user(request.user.username)
+    save_to_link = reverse('save_shared_link') + '?t=' + token
+            
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -647,6 +649,8 @@ def view_shared_file(request, token):
             'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
+            'accessible_repos': accessible_repos,
+            'save_to_link': save_to_link,
             }, context_instance=RequestContext(request))
 
 def view_file_via_shared_dir(request, token):
@@ -1042,93 +1046,6 @@ def office_convert_query_page_num(request):
     return HttpResponse(json.dumps(ret), content_type=content_type)
 
 ###### private file/dir shares
-@require_POST
-def private_file_share(request, repo_id):
-    emails = request.POST.getlist('emails', '')
-    s_type = request.POST.get('s_type', '')
-    path = request.POST.get('path', '')
-    perm = request.POST.get('perm', 'r')
-    file_or_dir = os.path.basename(path.rstrip('/'))
-    username = request.user.username
-
-    for email in [e.strip() for e in emails if e.strip()]:
-        if not is_registered_user(email):
-            messages.error(request, _('Failed to share to "%s", user not found.') % email)
-            continue
-        
-        if s_type == 'f':
-            pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
-                username, email, repo_id, path)
-        elif s_type == 'd':
-            pfds = PrivateFileDirShare.objects.add_private_dir_share(
-                username, email, repo_id, path, perm)
-        else:
-            continue
-
-        # send a signal when sharing file successful
-        share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
-        messages.success(request, _('Successfully shared %s.') % file_or_dir)
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-    return HttpResponseRedirect(next)
-
-@login_required
-def rm_private_file_share(request, repo_id):
-    """Remove private file shares.
-    """
-    from_user = request.GET.get('from', '')
-    to_user = request.GET.get('to', '')
-    path = request.GET.get('p')
-    file_or_dir = os.path.basename(path.rstrip('/'))
-    username = request.user.username
-
-    if username == from_user or username == to_user:
-
-        PrivateFileDirShare.objects.delete_private_file_dir_share(
-            from_user, to_user, repo_id, path)
-        messages.success(request, _('Successfully unshared "%s".') % file_or_dir)
-    else:
-        messages.error(request, _("You don't have permission to unshared %s.") % file_or_dir)
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-    return HttpResponseRedirect(next)
-
-    
-@login_required
-def save_private_file_share(request, repo_id):
-    """
-    Save private share file to someone's library.
-    """
-    
-    username = request.user.username
-    from_user = request.GET.get('from', '')
-    to_user = request.GET.get('to', '')
-    path = request.GET.get('p', '')
-    src_path = os.path.dirname(path)
-    obj_name = os.path.basename(path.rstrip('/'))
-
-    if username == from_user or username == to_user:
-        dst_repo_id = request.POST.get('dst_repo')
-        dst_path    = request.POST.get('dst_path')
-
-        new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-        seafile_api.copy_file(repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
-
-        messages.success(request, _(u'Successfully saved.'))
-        
-    else:
-        messages.error(request, _("You don't have permission to save %s.") % obj_name)
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-    return HttpResponseRedirect(next)
-
 @login_required
 def view_priv_shared_file(request, token):
     """View private shared file.
@@ -1179,8 +1096,7 @@ def view_priv_shared_file(request, token):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
     accessible_repos = get_unencry_rw_repos_by_user(username)
-    save_to_link = reverse('save_private_file_share', args=[repo.id]) + \
-        '?from=' + pfs.from_user + '&to=' + pfs.to_user + '&p=' + pfs.path
+    save_to_link = reverse('save_private_file_share', args=[pfs.token])
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,

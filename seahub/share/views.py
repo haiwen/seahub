@@ -32,6 +32,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
+from seahub.signals import share_file_to_user_successful
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_dir_share_link, gen_file_share_link, \
@@ -527,6 +528,7 @@ def share_permission_admin(request):
     
 #     return HttpResponseRedirect(next)
 
+########## share link    
 @login_required
 def get_shared_link(request):
     """
@@ -625,7 +627,6 @@ def send_shared_link(request):
     if not request.is_ajax() and not request.method == 'POST':
         raise Http404
 
-    result = {}
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
@@ -672,16 +673,15 @@ def send_shared_link(request):
 def save_shared_link(request):
     """Save public share link to one's library.
     """
-
     username = request.user.username
-    token = request.POST.get('s_token', '')
+    token = request.GET.get('t', '')
     dst_repo_id = request.POST.get('dst_repo')
-    dst_path    = request.POST.get('dst_path')
+    dst_path = request.POST.get('dst_path')
 
     try:
         fs = FileShare.objects.get(token=token)
     except FileShare.DoesNotExist:
-        assert False            # todo
+        raise Http404
 
     src_repo_id = fs.repo_id
     src_path = os.path.dirname(fs.path)
@@ -696,9 +696,106 @@ def save_shared_link(request):
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = settings.SITE_ROOT
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
+
+########## private share
+@require_POST
+def gen_private_file_share(request, repo_id):
+    emails = request.POST.getlist('emails', '')
+    s_type = request.POST.get('s_type', '')
+    path = request.POST.get('path', '')
+    perm = request.POST.get('perm', 'r')
+    file_or_dir = os.path.basename(path.rstrip('/'))
+    username = request.user.username
+
+    for email in [e.strip() for e in emails if e.strip()]:
+        if not is_registered_user(email):
+            messages.error(request, _('Failed to share to "%s", user not found.') % email)
+            continue
+        
+        if s_type == 'f':
+            pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                username, email, repo_id, path)
+        elif s_type == 'd':
+            pfds = PrivateFileDirShare.objects.add_private_dir_share(
+                username, email, repo_id, path, perm)
+        else:
+            continue
+
+        # send a signal when sharing file successful
+        share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
+        messages.success(request, _('Successfully shared %s.') % file_or_dir)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
+
+@login_required
+def rm_private_file_share(request, token):
+    """Remove private file shares.
+    """
+    try:
+        pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+    except PrivateFileDirShare.DoesNotExist:
+        raise Http404
+
+    
+    from_user = pfs.from_user
+    to_user = pfs.to_user
+    repo_id = pfs.repo_id
+    path = pfs.path
+    file_or_dir = os.path.basename(path.rstrip('/'))
+    username = request.user.username
+
+    if username == from_user or username == to_user:
+        pfs.delete()
+        messages.success(request, _('Successfully unshared "%s".') % file_or_dir)
+    else:
+        messages.error(request, _("You don't have permission to unshared %s.") % file_or_dir)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
     return HttpResponseRedirect(next)
     
+@login_required
+def save_private_file_share(request, token):
+    """
+    Save private share file to someone's library.
+    """
+    username = request.user.username
+    try:
+        pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+    except PrivateFileDirShare.DoesNotExist:
+        raise Http404
+    
+    from_user = pfs.from_user
+    to_user = pfs.to_user
+    repo_id = pfs.repo_id
+    path = pfs.path
+    src_path = os.path.dirname(path)
+    obj_name = os.path.basename(path.rstrip('/'))
+
+    if username == from_user or username == to_user:
+        dst_repo_id = request.POST.get('dst_repo')
+        dst_path    = request.POST.get('dst_path')
+
+        new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+        seafile_api.copy_file(repo_id, src_path, obj_name,
+                              dst_repo_id, dst_path, new_obj_name, username)
+
+        messages.success(request, _(u'Successfully saved.'))
+        
+    else:
+        messages.error(request, _("You don't have permission to save %s.") % obj_name)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
+
 @login_required    
 def user_share_list(request, id_or_email):
     """List sharing repos with ``to_email``.
