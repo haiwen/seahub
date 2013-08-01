@@ -119,8 +119,9 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/mv/$', mv_file, name='mv_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/star_file/$', repo_star_file, name='repo_star_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/unstar_file/$', repo_unstar_file, name='repo_unstar_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/star/$', repo_star_file, name='repo_star_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/unstar/$', repo_unstar_file, name='repo_unstar_file'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

@@ -604,3 +604,43 @@ def get_contacts(request):
     
     return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
 
+@login_required
+def get_current_commit(request, repo_id):
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u'Library does not exist.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=400, content_type=content_type)
+
+    username = request.user.username
+    user_perm = check_repo_access_permission(repo.id, username)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
+        err_msg = _(u'Library is encrypted.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    head_commit = get_commit(repo.head_cmmt_id)
+    if not head_commit:
+        err_msg = _(u'Error: no head commit id')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=500, content_type=content_type)
+
+    ctx = { 
+        'repo': repo,
+        'current_commit': head_commit
+    }   
+    html = render_to_string('snippets/current_commit.html', ctx,
+                            context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({'html': html}),
+                        content_type=content_type)
+
