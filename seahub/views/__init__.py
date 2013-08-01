@@ -1199,7 +1199,10 @@ def get_repo_download_url(request, repo_id):
 @login_required
 def repo_download(request):
     repo_id = request.GET.get('repo_id', '')
-
+    repo = get_repo(repo_id)
+    if repo is None:
+        raise Http404
+    
     download_url, err = get_repo_download_url(request, repo_id)
     if err:
         return render_to_response('error.html', {
@@ -1211,20 +1214,22 @@ def repo_download(request):
 @login_required
 def seafile_access_check(request):
     repo_id = request.GET.get('repo_id', '')
+    repo = get_repo(repo_id)
+    if repo is None:
+        raise Http404
+
     applet_root = get_ccnetapplet_root()
     download_url, err = get_repo_download_url (request, repo_id)
     if err:
         return render_to_response('error.html', {
-            "error_msg": err
-        }, context_instance=RequestContext(request))
+                "error_msg": err
+                }, context_instance=RequestContext(request))
     
-    return render_to_response(
-        'seafile_access_check.html', {
+    return render_to_response('seafile_access_check.html', {
             'repo_id': repo_id,
             'applet_root': applet_root,
             'download_url': download_url,
-        },
-        context_instance=RequestContext(request))
+            }, context_instance=RequestContext(request))
 
 
 @login_required
