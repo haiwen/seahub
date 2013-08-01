@@ -40,7 +40,7 @@ def get_wiki_dirent(repo_id, page_name):
     cmmt = seaserv.get_commits(repo.id, 0, 1)[0]
     if cmmt is None:
         raise WikiPageMissing
-    dirs = seafile_api.list_dir_by_commit_and_path(cmmt, "/")
+    dirs = seafile_api.list_dir_by_commit_and_path(cmmt.id, "/")
     if dirs:
         for e in dirs:
             if stat.S_ISDIR(e.mode):

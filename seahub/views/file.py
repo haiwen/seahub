@@ -736,14 +736,15 @@ def file_edit_submit(request, repo_id):
                             status=400,
                             content_type=content_type)
 
-    if get_user_permission(request, repo_id) != 'rw':
+    username = request.user.username
+    if get_repo_access_permission(repo_id, username) != 'rw':
         return error_json(_(u'Permission denied'))
         
     repo = get_repo(repo_id)
     if not repo:
         return error_json(_(u'The library does not exist.'))
     if repo.encrypted:
-        repo.password_set = seafile_api.is_passwd_set(repo_id, request.user.username)
+        repo.password_set = seafile_api.is_passwd_set(repo_id, username)
         if not repo.password_set:
             return error_json(_(u'The library is encrypted.'), 'decrypt')
 
@@ -776,24 +777,18 @@ def file_edit_submit(request, repo_id):
         remove_tmp_file()
         return error_json()
 
-    if request.GET.get('from', '') == 'wiki_page_edit':
+    req_from = request.GET.get('from', '')
+    if req_from == 'wiki_page_edit' or req_from == 'wiki_page_new':
         try:
             gid = int(request.GET.get('gid', 0))
         except ValueError:
             gid = 0
+        
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next = reverse('group_wiki', args=[gid, wiki_name])
-    elif request.GET.get('from', '') == 'wiki_page_new':
-        try:
-            gid = int(request.GET.get('gid', 0))
-        except ValueError:
-            gid = 0
-        next = reverse('group_wiki_pages', args=[gid])
-    elif request.GET.get('from', '') == 'personal_wiki_page_edit':
+    elif req_from == 'personal_wiki_page_edit' or req_from == 'personal_wiki_page_new':
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next = reverse('personal_wiki', args=[wiki_name])
-    elif request.GET.get('from', '') == 'personal_wiki_page_new':
-        next = reverse('personal_wiki_pages')
     else:
         next = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
 
@@ -801,7 +796,7 @@ def file_edit_submit(request, repo_id):
     filename = os.path.basename(path).encode('utf-8')
     try:
         seafserv_threaded_rpc.put_file(repo_id, tmpfile, parent_dir,
-                                 filename, request.user.username, head_id)
+                                 filename, username, head_id)
         remove_tmp_file()
         return HttpResponse(json.dumps({'href': next}),
                             content_type=content_type)

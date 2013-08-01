@@ -191,7 +191,7 @@ def get_repo_dirents(request, repo_id, commit, path):
         return ([], [])
     else:
         try:
-            dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path.encode('utf-8'))
+            dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path)
         except SearpcError, e:
             raise Http404
             # return render_error(self.request, e.msg)
@@ -1487,8 +1487,8 @@ def file_revisions(request, repo_id):
         def handle_download():
             parent_dir = os.path.dirname(path)
             file_name  = os.path.basename(path)
-            seafdir = seafile_api.list_dir_by_commit_and_path (commit_id, \
-                                                               parent_dir.encode('utf-8'))
+            seafdir = seafile_api.list_dir_by_commit_and_path (commit_id,
+                                                               parent_dir)
             if not seafdir:
                 return render_error(request)
 
