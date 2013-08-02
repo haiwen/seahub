@@ -344,10 +344,12 @@ $('#upload-file').click(function () {
 
 $('#add-new-dir').click(function () {
     $('#add-new-dir-form').modal({appendTo:'#main'});
+    $('#simplemodal-container').css({'height':'auto'});
 });
   
 $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main', focus:false, containerCss:{'padding':'20px 25px'}});
+    $('#simplemodal-container').css({'height':'auto'});
 });
 
 $("tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
@@ -439,11 +441,11 @@ function reqDirData(url, func) {
         cache: false,
         dataType: 'json',
         success: function(data) {
+            $('#repo-file-list').html(data['html']);
+            cur_path = data['path']; // update cur_path
             if (func) {
                 func(data);
             }
-            $('#repo-file-list').html(data['html']);
-            cur_path = data['path']; // update cur_path
             dirOP();
             // in case the 'discuss' popup is open before this request
             $('#discuss-to-group, #discuss-to-group-caret').addClass('hide');
@@ -827,18 +829,29 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 return false;
             }
             post_url = '{% url 'new_file' repo.id %}?parent_dir=' + e(path);
-            after_op_success = function(data) {
-                location.href = '{% url 'repo_view_file' repo.id %}?p=' + e(path) + e(data['name']);
-            };
         } else {
             post_url = '{% url 'new_dir' repo.id %}?parent_dir=' + e(path);
-            after_op_success = function(data) {
-                $.modal.close();
-                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(path) + e(data['name']), changeLocation);
-                updateCmt();
-            };
         }
         post_data['dirent_name'] = dirent_name;
+        after_op_success = function(data) {
+            form.append('<p style="color:red;">' + "{% trans "Creating..." %}" + '</p>');
+            reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path), function() {
+                $.modal.close();
+                var new_dirent = $('#repo-file-list tr[data-name="' + data['name'] + '"]'),
+                    new_dirent_pos = new_dirent.offset().top,
+                    window_height = $(window).height();
+                var new_dirent_bottom = $(document).height() - new_dirent_pos;
+                $('.dirent-name a', new_dirent).css({'color':'red'});
+                if (new_dirent_pos > $(window).scrollTop() + window_height/2) {
+                    if (new_dirent_bottom < window_height/2) {
+                        $(window).scrollTop($(document).height() - window_height);
+                    } else {
+                        $(window).scrollTop(new_dirent_pos - window_height/2);
+                    }
+                }
+            });
+            updateCmt();
+        };
     } else if (form_id == 'rename-form') {
         var old_name = form.find('input[name="oldname"]').val(), 
             new_name = $.trim(form.find('input[name="newname"]').val()),
