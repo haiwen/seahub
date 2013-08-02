@@ -1582,6 +1582,11 @@ textarea:-moz-placeholder {/* for FF */
     opacity:1;
     visibility:visible;/*for ie*/
 }
+#upload-file-form .tip {
+    padding-left:1.5em;
+    *padding-left:1.9em;
+    margin-top:5px;
+}
 /* repo-history */
 #back {
     margin-top:3px;

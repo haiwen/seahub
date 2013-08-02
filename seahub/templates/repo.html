@@ -69,6 +69,10 @@
                         <span>{% trans "Cancel All" %}</span>
                     </button>
                 </div>
+                <ol class="tip">
+                    <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, Internet Explorer 10.0+" %}</li>
+                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                </ol>
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">
                         <div class="bar" style="width:0%"></div>
@@ -93,7 +97,7 @@
                     <span>{% trans "Choose a file" %}</span>
                     <input type="file" name="file" />
                 </span>
-                <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }} {% endblocktrans %})</span>
+                <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }}{% endblocktrans %})</span>
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">
                         <div class="bar" style="width:0%"></div>
@@ -319,6 +323,7 @@ $('#upload-file').click(function () {
             }
         }
     });
+    $('.simplemodal-wrap').css({'overflow':'auto'}); // for ie
 
     var form = $('#upload-file-form');
     $('input[name="parent_dir"]', form).val(cur_path);
@@ -686,6 +691,7 @@ $('.file-update').click(function() {
             }
         }
     });
+    $('.simplemodal-wrap').css({'overflow':'auto'}); // for ie
 
     $('input[name="target_file"]', form).val(cur_path + file_name);
     var hd = $('#update-file-dialog .hd');
