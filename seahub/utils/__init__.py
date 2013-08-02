@@ -193,6 +193,12 @@ def normalize_file_path(path):
     """Remove '/' at the end of file path if necessary.
     """
     return path.rstrip('/')
+
+SIMPLE_EMAIL_RE = re.compile(r'^\S+@\S+\.\S+$')
+def is_valid_email(email):
+    """A simple e-mail format validation.
+    """
+    return True if SIMPLE_EMAIL_RE.match(email) is not None else False
     
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)

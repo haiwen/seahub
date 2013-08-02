@@ -50,7 +50,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    get_file_contributors
+    get_file_contributors, is_valid_email
 from seahub.utils.file_types import IMAGE
 from seahub.utils import calc_file_path_hash
 from seahub.utils.paginator import Paginator
@@ -526,6 +526,8 @@ def group_manage(request, group_id):
 
         # Add users to contacts.        
         for email in member_list:
+            if not is_valid_email(email):
+                continue
             mail_sended.send(sender=None, user=username, email=email)
 
         mail_sended_list = []
@@ -541,6 +543,9 @@ def group_manage(request, group_id):
                         
             # Can invite unregistered user to group.
             for email in member_list:
+                if not is_valid_email(email):
+                    continue
+
                 if not is_registered_user(email):
                     use_https = request.is_secure()
                     domain = RequestSite(request).domain
@@ -573,6 +578,9 @@ def group_manage(request, group_id):
         else:
             # Can only invite registered user to group if not in cloud mode.
             for email in member_list:
+                if not is_valid_email(email):
+                    continue
+                
                 if not is_registered_user(email):
                     err_msg = _(u'Failed to add, %s is not registerd.')
                     result['error'] = err_msg % email
