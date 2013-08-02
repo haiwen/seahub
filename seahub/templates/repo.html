@@ -13,33 +13,31 @@
 {% endblock %}
 
 {% block main_panel %}
-<div id="repo-top"><div class="block-inner">
-    <div class="w100 ovhd">
-        <h2 class="fleft">{{repo.props.name}}</h2>
-        <div class="fright">
-                <button id="repo-download-btn" class="repo-top-op-btn"><span class="icon-cloud-download"></span>{% trans "Download"%}</button>
-                {% if is_repo_owner %}
-                <button id="repo-setting-btn" class="repo-top-op-btn"><span class="icon-cog"></span>{% trans "Settings" %}</button>
-                {% endif %}
-                {% if user_perm == 'rw' %}
-                <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}" class="repo-top-op-btn"><span class="icon-trash"></span>{% trans "Trash"%}</button>
-                {% endif %}
+    <div id="repo-top">
+        <div class="block-inner">
+            <div class="w100 ovhd">
+                <h2 class="fleft">{{repo.props.name}}{% if user_perm == 'r' %} <span class="tip vam">({% trans "Read-Only" %})</span>{% endif %}</h2>
+                <div class="fright">
+                    <button id="repo-download-btn" class="repo-top-op-btn"><span class="icon-cloud-download"></span>{% trans "Download"%}</button>
+                    {% if is_repo_owner %}
+                    <button id="repo-setting-btn" class="repo-top-op-btn"><span class="icon-cog"></span>{% trans "Settings" %}</button>
+                    {% endif %}
+                    {% if user_perm == 'rw' %}
+                    <button id="recycle-btn" data="{% url 'repo_recycle_view' repo.id %}" class="repo-top-op-btn"><span class="icon-trash"></span>{% trans "Trash"%}</button>
+                    {% endif %}
+                </div>
+            </div>
 
+            <p id="repo-basic-info">
+            <span class="desc">{{repo.props.desc}}</span>
+            <span class="size split">{% trans 'Size: ' %}{{ repo_size|filesizeformat }}</span>
+            </p>
+
+            <div id="repo-latest-commit">
+                {% include 'snippets/current_commit.html' %}
+            </div>
         </div>
     </div>
-    {% if user_perm == 'r' %}
-    <p>{% trans "This library is read-only, you can not modify the contents of this library."%}</p>
-    {% endif %}
-
-    <p id="repo-basic-info">
-    <span class="desc">{{repo.props.desc}}</span>
-    <span class="size split">{% trans 'Size: ' %}{{ repo_size|filesizeformat }}</span>
-    </p>
-
-    <div id="repo-latest-commit">
-    {% include 'snippets/current_commit.html' %}
-    </div>
-</div></div>
 
     <div id="repo-file-list">
         {% include 'snippets/repo_dir_data.html' %}
