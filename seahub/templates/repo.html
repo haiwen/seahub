@@ -68,7 +68,7 @@
                     </button>
                 </div>
                 <ol class="tip">
-                    <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, Internet Explorer 10.0+" %}</li>
+                    <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
                     <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
                 </ol>
                 <div class="fileupload-progress fade">
@@ -885,7 +885,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
 
             var name_link = $('.dirent-name a', op_obj);
             name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
-            $('.dirent-update', op_obj).html("{% trans "just now" %}");
+            $('.dirent-update', op_obj).html("{% trans "Just now" %}");
             var dld_link = $('.download', op_obj), dld_href = dld_link.attr('href');
             if (op_obj.attr('class') == 'dir-item') {
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(path+new_name));
