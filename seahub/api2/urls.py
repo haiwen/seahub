@@ -31,14 +31,14 @@ urlpatterns = patterns('',
     url(r'^html/discussion/(?P<msg_id>\d+)/$', DiscussionHtml.as_view(), name="api_discussion"),
     url(r'^html/more_discussions/(?P<group_id>\d+)/$', AjaxDiscussions.as_view(), name="more_discussions"),
     url(r'^html/newreply/$', NewReplyHtml.as_view()),
-    url(r'^html/newreply2/$', api_new_replies),
 
     # Folowing is only for debug, will be removed 
-    url(r'^html/events2/$', activity2),
+    #url(r'^html/newreply2/$', api_new_replies),
+    #url(r'^html/events2/$', activity2),
     #url(r'^html/more_events/$', events2),
     #url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', api_repo_history_changes, name='api_repo_history_changes'),
 
-    url(r'^html/discussions2/(?P<group_id>\d+)/$', discussions2, name="api_discussions2"),
+    #url(r'^html/discussions2/(?P<group_id>\d+)/$', discussions2, name="api_discussions2"),
     #url(r'^html/discussion/(?P<msg_id>\d+)/$', discussion2, name="api_discussion2"),
     #url(r'^html/more_discussions/(?P<group_id>\d+)/$', more_discussions2, name="more_discussions"),
 

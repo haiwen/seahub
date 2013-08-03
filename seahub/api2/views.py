@@ -22,6 +22,7 @@ from authentication import TokenAuthentication
 from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from seahub.base.accounts import User
+from seahub.base.models import FileDiscuss
 from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -214,6 +215,7 @@ class Repos(APIView):
                     "type":"grepo",
                     "id":r.id,
                     "owner":group.group_name,
+                    "groupid":group.id,
                     "name":r.name,
                     "desc":r.desc,
                     "mtime":r.latest_modify,
@@ -1242,6 +1244,19 @@ def group_discuss(request, group):
         grpmsg_added.send(sender=GroupMessage, group_id=group.id,
                               from_email=username)
 
+        repo_id = request.POST.get('repo_id', None)
+        path = request.POST.get('path', None)
+        if repo_id and path:
+            # save attachment
+            ma = MessageAttachment(group_message=message, repo_id=repo_id,
+                                   attach_type='file', path=path,
+                                   src='recommend')
+            ma.save()
+
+            # save discussion
+            fd = FileDiscuss(group_message=message, repo_id=repo_id, path=path)
+            fd.save()
+        
         ctx = {}
         ctx['msg'] = message
         html = render_to_string("api2/discussion_posted.html", ctx)
