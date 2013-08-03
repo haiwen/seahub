@@ -328,17 +328,20 @@
         _formatBitrate: function (bits) {
             if (typeof bits !== 'number') {
                 return '';
+            } else {
+                var Bs = bits / 8;
             }
-            if (bits >= 1000000000) {
-                return (bits / 1000000000).toFixed(2) + ' Gbit/s';
+
+            if (Bs >= 1000000000) {
+                return (Bs / 1000000000).toFixed(2) + ' GB/s';
             }
-            if (bits >= 1000000) {
-                return (bits / 1000000).toFixed(2) + ' Mbit/s';
+            if (Bs >= 1000000) {
+                return (Bs / 1000000).toFixed(2) + ' MB/s';
             }
-            if (bits >= 1000) {
-                return (bits / 1000).toFixed(2) + ' kbit/s';
+            if (Bs >= 1000) {
+                return (Bs / 1000).toFixed(2) + ' KB/s';
             }
-            return bits + ' bit/s';
+            return Bs + ' B/s';
         },
 
         _formatTime: function (seconds) {
