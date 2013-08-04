@@ -303,6 +303,16 @@ def gen_inner_file_get_url(token, filename):
     else:
         return gen_file_get_url(token, filename)
     
+def gen_block_get_url(token, blkid):
+    """
+    Generate httpserver block url.
+    Format: http://<domain:port>/blks/<token>/<blkid>
+    """
+    if blkid:
+        return '%s/blks/%s/%s' % (get_httpserver_root(), token, blkid)
+    else:
+        return '%s/blks/%s/' % (get_httpserver_root(), token)
+
 def gen_file_get_url(token, filename):
     """
     Generate httpserver file url.

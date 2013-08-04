@@ -27,8 +27,9 @@ from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
-    get_dir_files_last_modified, get_user_events, \
-    get_ccnet_server_addr_port, star_file, unstar_file, string2list
+    get_dir_files_last_modified, get_user_events, EMPTY_SHA1, \
+    get_ccnet_server_addr_port, star_file, unstar_file, string2list, \
+    gen_block_get_url
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -177,6 +178,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
+                "encversion":r.encversion,
                 "permission": 'rw', # Always have read-write permission to owned repo
                 }
             repos_json.append(repo)
@@ -201,6 +203,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
+                "encversion":r.encversion,
                 "permission": r.permission,
                 }
             repos_json.append(repo)
@@ -222,6 +225,7 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
+                    "encversion":r.encversion,
                     "permission": check_permission(r.id, email),
                     }
                 repos_json.append(repo)
@@ -330,7 +334,9 @@ class Repo(APIView):
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
+            "encversion":r.encversion,
             "root":root_id,
+            "permission": check_permission(repo.id, request.user.username),
             }
 
         return Response(repo_json)
@@ -513,8 +519,37 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         token = seafserv_rpc.web_get_access_token(repo_id, file_id,
                                                   op, request.user.username)
         redirect_url = gen_file_get_url(token, file_name)
-        #return Response(redirect_url)
         response = HttpResponse(json.dumps(redirect_url), status=200,
+                                content_type=json_content_type)
+        response["oid"] = file_id
+        return response
+
+    if op == 'downloadblks':
+        blklist = []
+        encrypted = False
+        encversion = 0
+        if file_id != EMPTY_SHA1:
+            try:
+                blks = seafile_api.list_file_by_file_id(file_id)
+            except SearpcError, e:
+                return api_error(status.HTTP_520_OPERATION_FAILED,
+                                 'Failed to get file block list')
+        blklist = blks.split('\n')
+        blklist = [i for i in blklist if len(i) == 40]
+        if len(blklist) > 0:
+            repo = get_repo(repo_id)
+            encrypted = repo.encrypted
+            encversion = repo.encversion
+        token = seafserv_rpc.web_get_access_token(repo_id, file_id,
+                                                  op, request.user.username)
+        url = gen_block_get_url(token, None)
+        res = {
+            'blklist':blklist,
+            'url':url,
+            'encrypted':encrypted,
+            'encversion': encversion,
+            }
+        response = HttpResponse(json.dumps(res), status=200,
                                 content_type=json_content_type)
         response["oid"] = file_id
         return response
@@ -689,7 +724,8 @@ class FileView(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
-        return get_repo_file(request, repo_id, file_id, file_name, 'download')
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)
 
     def post(self, request, repo_id, format=None):
         # rename or move file
