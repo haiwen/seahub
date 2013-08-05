@@ -917,28 +917,30 @@ FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
            'Added directory', 'Renamed directory', 'Moved directory')
 
 OPS = '|'.join(FILE_OP)
-CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS
+CMMT_DESC_PATT = re.compile(r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % OPS)
+
 API_OPS = '|'.join((OPS, 'Deleted', 'Removed'))
 API_CMMT_DESC_PATT = r'(%s) "(.*)"\s?(and \d+ more (?:files|directories))?' % API_OPS
+
 
 def convert_cmmt_desc_link(commit):
     """Wrap file/folder with ``<a></a>`` in commit description.
     """
     repo_id = commit.repo_id
     cmmt_id = commit.id
+    conv_link_url = reverse('convert_cmmt_desc_link')    
 
     def link_repl(matchobj):
         op = matchobj.group(1)
         file_or_dir = matchobj.group(2)
         remaining = matchobj.group(3)
 
-        url = reverse('convert_cmmt_desc_link')
         tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s">%s</a>"'
         if remaining:
-            return (tmp_str + ' %s') % (op, url, repo_id, cmmt_id, urlquote(file_or_dir),
+            return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir),
                                         file_or_dir, remaining)
         else:
-            return tmp_str % (op, url, repo_id, cmmt_id, urlquote(file_or_dir), file_or_dir)
+            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), file_or_dir)
 
     return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
