@@ -137,7 +137,7 @@ LANGUAGES = (
     ('hu', gettext_noop('Magyar')),
     ('ru', gettext_noop(u'Русский')),    
     ('zh-cn', gettext_noop(u'简体中文')),
-    ('zh-HK', gettext_noop(u'正體中文')),
+    ('zh-tw', gettext_noop(u'正體中文')),
 )
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
