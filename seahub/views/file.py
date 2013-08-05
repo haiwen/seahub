@@ -748,7 +748,7 @@ def file_edit_submit(request, repo_id):
     if not repo:
         return error_json(_(u'The library does not exist.'))
     if repo.encrypted:
-        repo.password_set = seafile_api.is_passwd_set(repo_id, username)
+        repo.password_set = seafile_api.is_password_set(repo_id, username)
         if not repo.password_set:
             return error_json(_(u'The library is encrypted.'), 'decrypt')
 
@@ -846,7 +846,7 @@ def file_edit(request, repo_id):
     file_encoding_list = FILE_ENCODING_LIST
     if filetype == TEXT or filetype == MARKDOWN or filetype == SF: 
         if repo.encrypted:
-            repo.password_set = seafile_api.is_passwd_set(repo_id, request.user.username)
+            repo.password_set = seafile_api.is_password_set(repo_id, request.user.username)
             if not repo.password_set:
                 op = 'decrypt'
         if not op:
