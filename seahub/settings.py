@@ -201,7 +201,7 @@ GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
 AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48)
 
-LOG_DIR = "/tmp"
+LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', '/tmp')
 CACHE_DIR = "/tmp"
 install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
