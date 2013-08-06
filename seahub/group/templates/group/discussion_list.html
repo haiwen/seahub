@@ -36,10 +36,12 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
-        <p class="error hide">{% trans "It can not be blank and should be no more than 150 characters." %}</p>
-        <button type="button" class="reply-submit hide" data-url="{% url 'msg_reply' msg.id %}">{% trans "Submit" %}</button>
-        <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+        <form action="{% url 'msg_reply' msg.id %}" method="post" class="reply-form">
+            <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
+            <p class="error hide">{% trans "It can not be blank and should be no more than 2048 characters." %}</p>
+            <button type="submit" class="reply-submit hide">{% trans "Submit" %}</button>
+            <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+        </form>
     </div>
 </div>
 </li>
