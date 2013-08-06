@@ -13,5 +13,8 @@ class Profile(models.Model):
 
 @receiver(user_registered)
 def clean_email_id_cache(sender, **kwargs):
+    from seahub.utils import normalize_cache_key
+    
     user = kwargs['user']
-    cache.set(EMAIL_ID_CACHE_PREFIX+user.email, user.id, EMAIL_ID_CACHE_TIMEOUT)
+    key = normalize_cache_key(user.email, EMAIL_ID_CACHE_PREFIX)
+    cache.set(key, user.id, EMAIL_ID_CACHE_TIMEOUT)

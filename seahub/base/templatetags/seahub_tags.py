@@ -19,7 +19,7 @@ from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFI
 from seahub.cconvert import CConvert
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
-
+from seahub.utils import normalize_cache_key
 
 register = template.Library()
 
@@ -214,12 +214,13 @@ def email2nickname(value):
     """
     if not value:
         return ''
-    
-    nickname = cache.get(NICKNAME_CACHE_PREFIX+value)
+
+    key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
+    nickname = cache.get(key)
     if not nickname:
         profile = get_first_object_or_none(Profile.objects.filter(user=value))
         nickname = profile.nickname if profile else value.split('@')[0]
-        cache.set(NICKNAME_CACHE_PREFIX+value, nickname, NICKNAME_CACHE_TIMEOUT)
+        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
 
 @register.filter(name='email2id')
@@ -231,15 +232,16 @@ def email2id(value):
     """
     if not value:
         return -1
-    
-    user_id = cache.get(EMAIL_ID_CACHE_PREFIX+value)
+
+    key = normalize_cache_key(value, EMAIL_ID_CACHE_PREFIX)
+    user_id = cache.get(key)
     if not user_id:
         try:
             user = User.objects.get(email=value)
             user_id = user.id
         except User.DoesNotExist:
             user_id = -1
-        cache.set(EMAIL_ID_CACHE_PREFIX+value, user_id, EMAIL_ID_CACHE_TIMEOUT)
+        cache.set(key, user_id, EMAIL_ID_CACHE_TIMEOUT)
     return user_id
 
 @register.filter(name='id_or_email')
@@ -286,10 +288,11 @@ cc.spliter = ''
 def char2pinyin(value):
     """Convert Chinese character to pinyin."""
 
-    py = cache.get('CHAR2PINYIN_'+value)
+    key = normalize_cache_key(value, 'CHAR2PINYIN_')
+    py = cache.get(key)
     if not py:
         py = cc.convert(value)
-        cache.set('CHAR2PINYIN_'+value, py, 365 * 24 * 60 * 60)
+        cache.set(key, py, 365 * 24 * 60 * 60)
 
     return py
 

@@ -165,6 +165,13 @@ def gen_token(max_length=5):
     
     return uuid.uuid4().hex[:max_length]
 
+def normalize_cache_key(value, prefix=None):
+    """Returns a cache key consisten of ``value`` and ``prefix``. Cache key
+    must not include control characters or whitespace.
+    """
+    key = value if prefix is None else prefix + value
+    return urlquote(key)
+    
 def validate_group_name(group_name):
     """
     Check whether group name is valid.
