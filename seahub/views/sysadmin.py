@@ -394,7 +394,12 @@ def sys_publink_admin(request):
         per_page = 100
 
     publinks = FileShare.objects.all()[per_page * (current_page -1):
-                                          per_page + 1]
+                                           per_page + 1]
+    if len(publinks) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
     for l in publinks:
         if l.s_type == 'f':
             l.name = os.path.basename(l.path)
@@ -408,6 +413,6 @@ def sys_publink_admin(request):
             'prev_page': current_page-1,
             'next_page': current_page+1,
             'per_page': per_page,
-            'page_next': True,
+            'page_next': page_next,
         },
         context_instance=RequestContext(request))
