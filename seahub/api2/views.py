@@ -179,7 +179,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "encversion":r.encversion,
+                "enc_version":r.enc_version,
                 "permission": 'rw', # Always have read-write permission to owned repo
                 }
             repos_json.append(repo)
@@ -204,7 +204,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "encversion":r.encversion,
+                "enc_version":r.enc_version,
                 "permission": r.permission,
                 }
             repos_json.append(repo)
@@ -226,7 +226,7 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
-                    "encversion":r.encversion,
+                    "enc_version":r.enc_version,
                     "permission": check_permission(r.id, email),
                     }
                 repos_json.append(repo)
@@ -341,7 +341,7 @@ class Repo(APIView):
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
-            "encversion":r.encversion,
+            "enc_version":r.enc_version,
             "root":root_id,
             "permission": check_permission(repo.id, request.user.username),
             }
@@ -585,7 +585,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'downloadblks':
         blklist = []
         encrypted = False
-        encversion = 0
+        enc_version = 0
         if file_id != EMPTY_SHA1:
             try:
                 blks = seafile_api.list_file_by_file_id(file_id)
@@ -597,7 +597,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         if len(blklist) > 0:
             repo = get_repo(repo_id)
             encrypted = repo.encrypted
-            encversion = repo.encversion
+            enc_version = repo.enc_version
         token = seafserv_rpc.web_get_access_token(repo_id, file_id,
                                                   op, request.user.username)
         url = gen_block_get_url(token, None)
@@ -605,7 +605,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             'blklist':blklist,
             'url':url,
             'encrypted':encrypted,
-            'encversion': encversion,
+            'enc_version': enc_version,
             }
         response = HttpResponse(json.dumps(res), status=200,
                                 content_type=json_content_type)
