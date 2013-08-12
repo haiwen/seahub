@@ -52,12 +52,13 @@ function reqEvents(start) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $('#events-loading').addClass('hide');
-            if (!jqXHR.responseText) {
+            if (!jqXHR.responseText && textStatus != 'abort') {
                 $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
             }   
         }
     });
 }
+reqEvents(0);
 
 function showDetailForEncrypRepo(obj) {
     if (obj.data('passwordset')) {
@@ -72,21 +73,9 @@ function showDetailForEncrypRepo(obj) {
     }
 }
 
-$('.lsch-encrypted').click(function() {
-    showDetailForEncrypRepo($(this));
-    return false;
-});
-
 $('#events-more').click(function() {
     $(this).addClass('hide');
     reqEvents($(this).data('start'));
 });
-$('.updated-repo').each(function() {
-    $(this).next().css({'margin-right':$(this).width() + 10});
-});
+
 {% include 'snippets/repo_decrypt_js.html' %}
-
-$(function() {
-    reqEvents(0);
-});
-

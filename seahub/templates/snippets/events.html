@@ -1,9 +1,7 @@
 {% load i18n %}
 <div id="events">
 <h3>{% trans 'File Activities' %}</h3>
-<div id="events-body">
-    {% include "snippets/events_body.html" %}
-</div>
+<div id="events-body"></div>
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
 <button id="events-more" class="hide">{% trans 'More' %}</button>
 <p id="events-error" class="error hide"></p>
