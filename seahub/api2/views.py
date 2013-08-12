@@ -46,7 +46,7 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from seahub.utils import calculate_repo_last_modify, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile

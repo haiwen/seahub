@@ -180,14 +180,25 @@ def validate_group_name(group_name):
     """
     return re.match('^\w+$', group_name, re.U)
 
-def calculate_repo_last_modify(repo_list):
+def get_repo_last_modify(repo):
+    """ Get last modification time for a repo.
+
+    If head commit id of a repo is provided, we use that commit as last commit,
+    otherwise falls back to getting last commit of a repo which is time
+    consuming.
     """
-    Get last modify time for repo. 
-    
+    if repo.head_cmmt_id is not None:
+        last_cmmt = seafserv_threaded_rpc.get_commit(repo.head_cmmt_id)
+    else:
+        logger.info('[repo %s] head_cmmt_id is missing.' % repo.id)
+        last_cmmt = get_commits(repo.id, 0, 1)[0]
+    return last_cmmt.ctime if last_cmmt else 0
+
+def calculate_repos_last_modify(repo_list):
+    """ Get last modification time for repos.
     """
     for repo in repo_list:
-        cmmts = get_commits(repo.id, 0, 1)
-        repo.latest_modify = cmmts[0].ctime if cmmts else 0
+        repo.latest_modify = get_repo_last_modify(repo)
 
 def normalize_dir_path(path):
     """Add '/' at the end of directory path if necessary.

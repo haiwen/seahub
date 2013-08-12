@@ -68,8 +68,8 @@ from seahub.forms import AddUserForm, RepoCreateForm, \
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, \
-    gen_dir_share_link, gen_file_share_link, \
-    calculate_repo_last_modify, get_file_type_and_ext, get_user_repos, \
+    gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
+    calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
     EMPTY_SHA1, normalize_file_path, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
@@ -813,12 +813,12 @@ def myhome(request):
         for repo in sub_repos:
             repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
                                                              repo.origin_path)
-        calculate_repo_last_modify(sub_repos)
+        calculate_repos_last_modify(sub_repos)
         sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # Personal repos that I owned.
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
-    calculate_repo_last_modify(owned_repos)
+    calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Personal repos others shared to me
@@ -838,9 +838,7 @@ def myhome(request):
             r.repo_id = r.id
             r.repo_name = r.name
             r.repo_desc = r.desc
-            cmmts = get_commits(r_id, 0, 1)
-            last_commit = cmmts[0] if cmmts else None
-            r.last_modified = last_commit.ctime if last_commit else 0
+            r.last_modified = get_repo_last_modify(r)
             r.share_type = 'group'
             r.user = get_repo_owner(r_id)
             r.user_perm = check_permission(r_id, email)
