@@ -5,9 +5,7 @@
     {% include "snippets/events_body.html" %}
 </div>
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-{% if events_more %}
-<button id="events-more">{% trans 'More' %}</button>
-{% endif %}
+<button id="events-more" class="hide">{% trans 'More' %}</button>
 <p id="events-error" class="error hide"></p>
 <form id="repo-decrypt-form" class="simple-input-popup hide">{% csrf_token %}
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>

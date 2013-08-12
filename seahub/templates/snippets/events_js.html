@@ -1,5 +1,6 @@
 {% load i18n %}
 {% include 'snippets/list_commit_detail.html' %}
+
 function reqEvents(start) {
     $('#events-loading').removeClass('hide');
     $.ajax({
@@ -71,14 +72,12 @@ function showDetailForEncrypRepo(obj) {
     }
 }
 
-var events_more_offset = {{events_more_offset}};
-
 $('.lsch-encrypted').click(function() {
     showDetailForEncrypRepo($(this));
     return false;
 });
 
-$('#events-more').data('start', events_more_offset).click(function() {
+$('#events-more').click(function() {
     $(this).addClass('hide');
     reqEvents($(this).data('start'));
 });
@@ -86,3 +85,8 @@ $('.updated-repo').each(function() {
     $(this).next().css({'margin-right':$(this).width() + 10});
 });
 {% include 'snippets/repo_decrypt_js.html' %}
+
+$(function() {
+    reqEvents(0);
+});
+

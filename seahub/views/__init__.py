@@ -870,18 +870,6 @@ def myhome(request):
 
     allow_public_share = False if request.cloud_mode else True
 
-    # events
-    if EVENTS_ENABLED:
-        events_count = 15
-        events, events_more_offset = get_user_events(email, 0, events_count)
-        events_more = True if len(events) == events_count else False
-        event_groups = group_events_data(events)
-    else:
-        events, events_more_offset = None, None
-        events_more = False
-        event_groups = None
-        events_count = 0
-
     starred_files = get_starred_files(request.user.username)
 
     traffic_stat = 0
@@ -908,16 +896,12 @@ def myhome(request):
             "grpmsg_reply_list": grpmsg_reply_list,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
-            "events": events,
-            "events_more_offset": events_more_offset,
-            "events_more": events_more,
-            "event_groups": event_groups,
-            "events_count": events_count,
             "starred_files": starred_files,
             "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
             "traffic_stat": traffic_stat,
             "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
+            "ENABLE_EVENTS": EVENTS_ENABLED,
             "sub_repos": sub_repos,
             }, context_instance=RequestContext(request))
 

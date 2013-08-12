@@ -92,7 +92,7 @@
 <!--mine shared stared -->
 {% include "snippets/my_owned_repos.html" %}
 
-{% if events %}
+{% if ENABLE_EVENTS %}
 {% include "snippets/events.html" %}
 {% endif %}
 
@@ -124,7 +124,7 @@
 {% include "snippets/repo_create_js.html" %}
 {% endwith %}
 
-{% if events %}
+{% if ENABLE_EVENTS %}
 {% include "snippets/events_js.html" %}
 {% endif %}
 </script>
