@@ -58,7 +58,7 @@
                     <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
                     {% endif %}
                     {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-                    <a class="op create-sub-repo" href="#">{% trans "Sub-library" %}</a>
+                    <a class="op dir-sync" href="#">{% trans "Sync" %}</a>
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}

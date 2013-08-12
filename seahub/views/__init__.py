@@ -1305,39 +1305,6 @@ def repo_create(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
-@login_required
-def create_sub_repo(request):
-    if not request.is_ajax() or request.method != 'POST':
-        return Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    orig_repo_id = request.POST.get('orig_repo_id', '')
-    orig_path = request.POST.get('orig_path', '')
-    repo_name = request.POST.get('repo_name', '')
-    repo_desc = request.POST.get('repo_desc', '')
-    owner = request.user.username
-
-    if not orig_repo_id or not orig_path or not repo_name or not repo_desc:
-        return HttpResponseBadRequest("Invalid arguments", content_type=content_type)
-
-    try:
-        repo_id = seafile_api.create_virtual_repo(orig_repo_id, orig_path,
-                                                  repo_name, repo_desc, owner)
-    except SearpcError, e:
-        result['error'] = e.msg
-        return HttpResponse(json.dumps(result), content_type=content_type)
-
-    result['success'] = True
-    result['repo_id'] = repo_id
-    repo_created.send(sender=None,
-                      org_id=-1,
-                      creator=owner,
-                      repo_id=repo_id,
-                      repo_name=repo_name)
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""
     path = request.GET.get('p', '/')

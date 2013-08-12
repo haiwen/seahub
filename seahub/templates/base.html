@@ -218,6 +218,13 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1375754100"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1375754100"></script>
 <script type="text/javascript">
+function ajaxErrorHandler(xhr, textStatus, errorThrown) {
+    if (xhr.responseText) {
+        feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+    } else {
+        feedback("{% trans "Failed. Please check the network." %}", 'error');
+    }    
+}
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
 $('#info-bar .close').click(function() {

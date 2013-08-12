@@ -1061,20 +1061,23 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:10px;
 }
 #tabs,
-#repo-share-tabs {
+#repo-share-tabs,
+#file-share-tabs {
     font-size:1em;
     padding:0;
     border:0;
     min-height:150px;
     margin-bottom:75px;
 }
-#repo-share-tabs {
+#repo-share-tabs,
+#file-share-tabs {
     margin-bottom:0;
 }
 #tabs-nav {
     padding:0;
 }
-#repo-share-tabs-nav {
+#repo-share-tabs-nav,
+#file-share-tabs-nav {
     height:30px;
     padding:0 0 0 12px;
     border-bottom:1px solid #ddd;
@@ -1085,13 +1088,15 @@ textarea:-moz-placeholder {/* for FF */
     border:0;
     background:none;
 }
-#repo-share-tabs-nav li {
+#repo-share-tabs-nav li,
+#file-share-tabs-nav li {
     display:inline-block;
     border:1px solid transparent;
     border-bottom:0;
     background:none;
 }
-#repo-share-tabs-nav li a {
+#repo-share-tabs-nav li a,
+#file-share-tabs-nav li a {
     color:#666;
     line-height:16px;
     padding:6px 13px;
@@ -1113,7 +1118,8 @@ textarea:-moz-placeholder {/* for FF */
 #tabs-nav li a:hover {
     color:#DD4B39;
 }
-#repo-share-tabs-nav li a:hover {
+#repo-share-tabs-nav li a:hover,
+#file-share-tabs-nav li a:hover {
     color:#333;
 }
 #tabs .ui-tabs-panel {
@@ -1619,17 +1625,20 @@ textarea:-moz-placeholder {/* for FF */
 .tab-popup .hd {
     padding-left:12px;
 }
-#repo-share-tabs-nav .ui-state-active {
+#repo-share-tabs-nav .ui-state-active,
+#file-share-tabs-nav .ui-state-active {
     border-color:#ddd;
     margin-bottom:-1px;
 }
 #repo-share-tabs-nav .ui-state-active,
+#file-share-tabs-nav .ui-state-active,
 .tab-popup .ui-tabs ,
 .tab-popup .ui-state-active a,
 .tab-popup .bot {
     background:#fafafa;
 }
 #repo-share-tabs-nav .ui-state-active,
+#file-share-tabs-nav .ui-state-active,
 .tab-popup .ui-state-active a {
     border-radius:3px 3px 0 0;
 }

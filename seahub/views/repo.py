@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 import seaserv
-from seaserv import seafile_api, MAX_UPLOAD_FILE_SIZE
+from seaserv import seafile_api, MAX_UPLOAD_FILE_SIZE, get_personal_groups_by_user
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
@@ -206,6 +206,8 @@ def render_repo(request, repo):
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
 
+    joined_groups = get_personal_groups_by_user(request.user.username)
+
     return render_to_response('repo.html', {
             'repo': repo,
             'user_perm': user_perm,
@@ -220,6 +222,7 @@ def render_repo(request, repo):
             'accessible_repos': accessible_repos,
             'applet_root': applet_root,
             'groups': repo_groups,
+            'joined_groups': joined_groups,
             'repo_group_str': repo_group_str,
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,

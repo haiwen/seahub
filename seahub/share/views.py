@@ -152,6 +152,9 @@ def share_repo(request):
     Handle POST method to share a repo to public/groups/users based on form
     data. Return to ``myhome`` page and notify user whether success or failure. 
     """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
 
     form = RepoShareForm(request.POST)
     if not form.is_valid():
@@ -171,7 +174,7 @@ def share_repo(request):
     if not validate_owner(request, repo_id):
         msg = _(u'Only the owner of the library has permission to share it.')
         messages.error(request, msg)
-        return HttpResponseRedirect(reverse('myhome'))
+        return HttpResponseRedirect(next)
     
 
     # Parsing input values.
@@ -200,7 +203,7 @@ def share_repo(request):
     if not check_user_share_quota(from_email, repo, users=share_to_users,
                                   groups=share_to_groups):
         messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
-        return HttpResponseRedirect(reverse('myhome'))
+        return HttpResponseRedirect(next)
         
     for group in share_to_groups:
         share_to_group(request, repo, from_email, group, permission)
@@ -210,7 +213,7 @@ def share_repo(request):
         mail_sended.send(sender=None, user=request.user.username, email=email)
         share_to_user(request, repo, from_email, email, permission)
 
-    return HttpResponseRedirect(reverse('myhome'))
+    return HttpResponseRedirect(next)
 
 @login_required
 def repo_remove_share(request):

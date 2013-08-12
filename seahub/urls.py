@@ -81,7 +81,6 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/privshare/$', gen_private_file_share, name='gen_private_file_share'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/$', repo_access_file, name='repo_access_file'),
     (r'^repo/save_settings$', repo_save_settings),
-    url(r'^repo/create_sub_repo/$', create_sub_repo, name='create_sub_repo'),
 
     ### share file/dir ###
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
@@ -114,6 +113,9 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/check_sub_repo/$', check_sub_repo, name='check_sub_repo'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/create_sub_repo/$', create_sub_repo, name='create_sub_repo'),
+
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/new/$', new_file, name='new_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
@@ -121,6 +123,7 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/star/$', repo_star_file, name='repo_star_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/unstar/$', repo_unstar_file, name='repo_unstar_file'),
+
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
 
     ### Apps ###

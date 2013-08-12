@@ -21,6 +21,7 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
+from seahub.signals import repo_created
 from seahub.utils import check_filename_with_rename, star_file, unstar_file
 
 # Get an instance of a logger
@@ -643,4 +644,64 @@ def get_current_commit(request, repo_id):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html}),
                         content_type=content_type)
+
+@login_required
+def check_sub_repo(request, repo_id): 
+    '''
+    check if a dir has a corresponding sub_repo
+    '''
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    path = request.GET.get('p') 
+    if not path:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    try:
+        sub_repo = seafile_api.get_virtual_repo(repo_id, path, request.user.username)
+    except SearpcError, e:
+        result['error'] = e.msg
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    
+    if sub_repo:
+        result['exist'] = True
+        result['sub_repo_id'] = sub_repo.id
+    else:
+        result['exist'] = False
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+def create_sub_repo(request, repo_id):
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    orig_repo_id = repo_id
+    orig_path = request.POST.get('orig_path', '')
+    repo_name = request.POST.get('repo_name', '')
+    repo_desc = request.POST.get('repo_desc', '')
+    owner = request.user.username
+
+    if not orig_path or not repo_name or not repo_desc:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    try:
+        sub_repo_id = seafile_api.create_virtual_repo(orig_repo_id, orig_path,
+                                                  repo_name, repo_desc, owner)
+    except SearpcError, e:
+        result['error'] = e.msg
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+    result['success'] = True
+    result['sub_repo_id'] = sub_repo_id
+    repo_created.send(sender=None, org_id=-1, creator=owner, repo_id=sub_repo_id, repo_name=repo_name)
+    return HttpResponse(json.dumps(result), content_type=content_type)
 

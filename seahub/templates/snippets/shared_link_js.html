@@ -7,10 +7,16 @@ share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_
 {% endfor %}
 
 function showSharePopup(op, name, aj_url, type, cur_path) {
-    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding": "10px 0 0"}}); // in ff: if 'focus' is true, 'shared-link-text' gets the focus
+    var path;
+    if (op.attr('id') == 'share-cur-dir') {
+        path = cur_path.substr(0, cur_path.length - 1); // rm the last '/' as seafile_api treats '/xx' and '/xx/' as different
+    } else {
+        path = cur_path + name;
+    }
+    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding":"10px 0 0"}});
 
     $("#private-share-form input[name=s_type]").val(type);
-    $("#private-share-form input[name=path]").val(cur_path + name);
+    $("#private-share-form input[name=path]").val(path);
     var contacts = [];
     {% for contact in contacts %}
     contact_email = '{{ contact.contact_email }}';
@@ -47,10 +53,43 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
     hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
 
     if (type == 'd') {
-        $('#repo-share-tabs-nav li:first-child').remove();
-        $('#private-share').remove();
+        $('#private-share-tab, #private-share').remove();
+    } else {
+        $('#syncable-share-tab, #syncable-share').remove();
     }
-    $("#repo-share-tabs").tabs();
+    $("#file-share-tabs").tabs();
+
+    if ($('#syncable-share').length == 1) {
+        $.ajax({
+            url: '{% url 'check_sub_repo' repo.id %}?p=' + e(path),
+            dataType: 'json',
+            success: function(data) {
+                var context = $('#syncable-share');
+                if (data['exist']) {
+                    $('.sub-repo-exist-tip, #share-sub-repo', context).removeClass('hide');
+                    $('#share-sub-repo').data('sub_repo_id', data['sub_repo_id']);
+                } else {
+                    $('.sub-repo-create-tip, .create-sub-repo', context).removeClass('hide'); 
+                    $('.create-sub-repo', context).click(createSubRepo).data('dir_name', name).data('path', path).data('context', context);
+                }
+                $('#share-sub-repo').data('sub_repo_name', name).click(function() {
+                    // get id & name before popup close
+                    var sub_repo_id = $(this).data("sub_repo_id"),
+                        sub_repo_name = $(this).data("sub_repo_name");
+                    $.modal.close();
+                    setTimeout(function() {
+                        $("#repo-share-form").modal({appendTo: "#main", focus:false, containerCss:{"padding":"10px 0 0"}});
+                        $('#simplemodal-container').css({'height':'auto'});
+                        $("#repo_id").val(sub_repo_id);
+                        $("#repo-share-form .op-target").html(sub_repo_name);
+                        $('#share-enter-tab, #share-enter').remove();
+                        $("#repo-share-tabs").tabs();
+                    }, 10);
+                });
+            },
+            error: ajaxErrorHandler 
+        });
+    }
 
     $('#private-share [name="emails"]').html(opts).select2({
         placeholder: "{% trans "Select contacts" %}",

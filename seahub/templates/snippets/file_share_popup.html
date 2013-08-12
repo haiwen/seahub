@@ -1,10 +1,13 @@
 {% load i18n %}
     <div id="file-share" class="tab-popup hide">
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
-        <div id="repo-share-tabs">
-            <ul id="repo-share-tabs-nav">
-                <li><a href="#private-share">{% trans "Private Share" %}</a></li>
+        <div id="file-share-tabs">
+            <ul id="file-share-tabs-nav">
+                <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li>
                 <li><a href="#link-share">{% trans "Share Link" %}</a></li>
+                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+                <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Syncable Share" %}</a></li>
+                {% endif %}
             </ul>
 
             <div id="private-share">
@@ -35,6 +38,17 @@
                     </form>
                 </div>
             </div>
+
+            {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+            <div id="syncable-share">
+                <p class="sub-repo-create-tip hide">{% trans "You need to create a sub-library from this directory to let others sync it." %}</p>
+                <button class="create-sub-repo hide">{% trans "Create" %}</button>
+                <p class="sub-repo-creating-progress hide"></p>
+                <p class="sub-repo-exist-tip hide">{% trans "The sub-library used to share this directory already exists." %}</p>
+                <button id="share-sub-repo" class="hide">{% trans "Share" %}</button>
+                <p class="tip" style="margin-top:0.5em;">{% trans "A sub-library can be created from any folder. It can be independently synced and shared. Files in the sub-library will be automatically kept in sync with the directory of the origin library." %}</p>
+            </div>
+            {% endif %}
 
         </div>
     </div>
