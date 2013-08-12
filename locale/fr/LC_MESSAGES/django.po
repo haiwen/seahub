@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-12 15:52+0800\n"
-"PO-Revision-Date: 2013-08-09 10:21+0100\n"
+"PO-Revision-Date: 2013-08-12 15:22+0100\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français\n"
 "Language: fr\n"
@@ -169,7 +169,7 @@ msgstr "简体中文"
 
 #: seahub/settings.py:140
 msgid "繁體中文"
-msgstr ""
+msgstr "繁體中文"
 
 #: seahub/api2/views.py:1366 seahub/api2/views.py:1422
 #: seahub/group/views.py:1145 seahub/views/__init__.py:447
@@ -276,7 +276,7 @@ msgstr "%(amount)s réponses"
 
 #: seahub/api2/templates/api2/discussions.html:24
 msgid "No discussions."
-msgstr "PAs de discussions."
+msgstr "Pas de discussions."
 
 #: seahub/api2/templates/api2/discussions.html:29
 #: seahub/api2/templates/api2/events.html:13 seahub/templates/repo.html:432
@@ -1274,9 +1274,8 @@ msgstr "Ajouter une Réponse ..."
 #: seahub/group/templates/group/discussion_list.html:41
 #: seahub/group/templates/group/group_discuss.html:147
 #: seahub/group/templates/group/new_msg_reply.html:64
-#, fuzzy
 msgid "It can not be blank and should be no more than 2048 characters."
-msgstr "Il ne peut pas être vide et ne doit pas faire plus de 150 caractères."
+msgstr "Il ne peut pas être vide et ne doit pas faire plus de 2048 caractères."
 
 #: seahub/group/templates/group/discussion_list.html:43
 #: seahub/group/templates/group/group_discuss.html:67
@@ -1802,7 +1801,7 @@ msgstr "Nouvelle Page"
 #: seahub/group/templates/group/group_wiki.html:65
 #: seahub/templates/wiki/personal_wiki.html:50
 msgid "Delete Page"
-msgstr "Supprimer une Page"
+msgstr "Supprimer Page"
 
 #: seahub/group/templates/group/group_wiki.html:66
 #: seahub/templates/wiki/personal_wiki.html:51
@@ -1855,14 +1854,14 @@ msgstr "Date :"
 
 #: seahub/group/templates/group/groups_right_panel.html:21
 msgid "You are not in any groups"
-msgstr "Vous n'êtes dans aucun groupes"
+msgstr "Vous n'êtes dans aucun groupe"
 
 #: seahub/group/templates/group/groups_right_panel.html:22
 msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
 msgstr ""
-"Vous pouvez créer un groupe en cliquant sur le bouton « Nouveau groupe ». Le "
+"Vous pouvez créer un groupe en cliquant sur le bouton \"Nouveau groupe\". Le "
 "groupe est un lieu pour vous et vos amis, vous pouvez laisser des messages "
 "et collaborer sur les bibliothèques."
 
@@ -2023,7 +2022,7 @@ msgstr "Vide"
 
 #: seahub/notifications/templates/notifications/notification_list.html:71
 msgid "Delete Notification"
-msgstr "Supprimer la Notification"
+msgstr "Supprimer Notification"
 
 #: seahub/profile/views.py:41
 msgid "Successfully edited profile."
@@ -2768,7 +2767,7 @@ msgstr "Liste à puces"
 
 #: seahub/templates/file_edit.html:222
 msgid "Number list"
-msgstr "liste numérotée"
+msgstr "Liste numérotée"
 
 #: seahub/templates/file_edit.html:223
 msgid "Reduce indent (Shift+Tab)"
@@ -2804,7 +2803,7 @@ msgstr "Ajouter"
 
 #: seahub/templates/file_edit.html:238
 msgid "Remove Hyperlink"
-msgstr "Supprimer l'Hyperlien"
+msgstr "Supprimer Hyperlien"
 
 #: seahub/templates/file_edit.html:242
 msgid "Insert picture (or just drag & drop)"
@@ -2844,7 +2843,7 @@ msgstr "Entrer la description du lien ici"
 
 #: seahub/templates/file_edit.html:354
 msgid "Insert Hyperlink"
-msgstr "Supprimer l'Hyperlien"
+msgstr "Inserer Hyperlien"
 
 #: seahub/templates/file_edit.html:354 seahub/templates/file_edit.html:364
 msgid "optional title"
@@ -2876,7 +2875,7 @@ msgstr "Entrer une description de l'image ici"
 
 #: seahub/templates/file_edit.html:364
 msgid "Insert Image"
-msgstr "Inserer une image"
+msgstr "Inserer Image"
 
 #: seahub/templates/file_edit.html:366
 msgid "Numbered List <ol> Ctrl+O"
@@ -3146,8 +3145,8 @@ msgstr "Personne n'a encore créé de groupes"
 msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr ""
-"Vous pouvez cliquer sur le bouton « Ajouter un groupe » sous l'étiquette de "
-"« Groupe » pour créer un groupe. "
+"Vous pouvez cliquer sur le bouton \"Ajouter un groupe\" sous l'étiquette de "
+"\"Groupe\" pour créer un groupe. "
 
 #: seahub/templates/pubrepo.html:27 seahub/templates/sysadmin/userinfo.html:70
 msgid "Share From"
@@ -3162,8 +3161,8 @@ msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
-"Vous pouvez créer une bibliothèque publique en cliquant sur le bouton « "
-"Nouvelle bibliothèque », d'autres peuvent consulter et télécharger cette "
+"Vous pouvez créer une bibliothèque publique en cliquant sur le bouton  "
+"\"Nouvelle bibliothèque \", d'autres peuvent consulter et télécharger cette "
 "bibliothèque."
 
 #: seahub/templates/repo.html:23
@@ -3296,42 +3295,41 @@ msgid "Rename %%(name)s as:"
 msgstr "Renommage de %%(name)s en:"
 
 #: seahub/templates/repo.html:198
-#, fuzzy, python-format
+#, python-format
 msgid "Sync %%(dir_name)s"
-msgstr "dans %(name)s"
+msgstr "Synchroniser %%(dir_name)s"
 
 #: seahub/templates/repo.html:199
 msgid "You need to create a sub-library from this directory to sync it."
 msgstr ""
+"Vous devez créer une sous-bibliothèque avec ce dossier pour le synchroniser."
 
 #: seahub/templates/repo.html:200
 #: seahub/templates/snippets/file_share_popup.html:45
-#, fuzzy
 msgid "Create"
-msgstr "Crée le"
+msgstr "Créer"
 
 #: seahub/templates/repo.html:202
 msgid "The sub-library used to sync this directory already exists."
 msgstr ""
+"La sous-bibliothèque, utilisée pour synchroniser ce dossier, existe déjà"
 
 #: seahub/templates/repo.html:203
 #: seahub/templates/snippets/repo_dir_data.html:61
-#, fuzzy
 msgid "Sync"
-msgstr "Dernière Synchro"
+msgstr "Synchroniser"
 
 #: seahub/templates/repo.html:204
 #: seahub/templates/snippets/file_share_popup.html:49
-#, fuzzy
 msgid ""
 "A sub-library can be created from any folder. It can be independently synced "
 "and shared. Files in the sub-library will be automatically kept in sync with "
 "the directory of the origin library."
 msgstr ""
-"Vous pouvez créer une sous-bibliothèque depuis un répertoire dans une "
-"bibliothèque. Une sous-bibliothèque peut être indépendamment synchronisée et "
-"partagée. les fichiers dans la sous-bibliothèque seront automatiquement mis "
-"à jour depuis la bibliothèque d'origine."
+"Une sous-bibliothèque peut être créée depuis n'importe quel dossier. Elle "
+"peut être indépendamment synchronisée et partagée. Les fichiers dans la sous-"
+"bibliothèque seront automatiquement mis à jour depuis la bibliothèque "
+"d'origine."
 
 #: seahub/templates/repo.html:228
 msgid "File is too big"
@@ -3448,14 +3446,12 @@ msgid "Creating sub-library..."
 msgstr "Création de la sous-bibliothèque..."
 
 #: seahub/templates/repo.html:1072
-#, fuzzy
 msgid "Sub-library is created."
-msgstr "La bibliothèque est chiffrée."
+msgstr "La sous-bibliothèque est créée."
 
 #: seahub/templates/repo.html:1091
-#, fuzzy
 msgid "Please select at least 1 group or 1 contact."
-msgstr "Veuillez sélectionnez au moins 1 groupe."
+msgstr "Veuillez sélectionnez au moins un groupe ou un contact ."
 
 #: seahub/templates/repo_access_deny.html:8
 msgid "You can't access this library."
@@ -3554,8 +3550,8 @@ msgid ""
 "running, click the following link to continue downloading:"
 msgstr ""
 "Aucun client de Seafile en cours d'exécution n'est détecté. Si vous ne savez "
-"pas le client Seafile en cours d'exécution, cliquez sur le lien suivant pour "
-"continuer le téléchargement :"
+"pas si le client Seafile en cours d'exécution, cliquez sur le lien suivant "
+"pour continuer le téléchargement :"
 
 #: seahub/templates/seafile_access_check.html:8
 msgid "Your Seafile client is out of date, please upgrade to latest version."
@@ -4011,9 +4007,8 @@ msgid "Share Link"
 msgstr "Lien de partage"
 
 #: seahub/templates/snippets/file_share_popup.html:9
-#, fuzzy
 msgid "Syncable Share"
-msgstr "Quitter le partage"
+msgstr "Partage synchronisable"
 
 #: seahub/templates/snippets/file_share_popup.html:24
 msgid "Generate"
@@ -4043,10 +4038,12 @@ msgstr "Envoi..."
 msgid ""
 "You need to create a sub-library from this directory to let others sync it."
 msgstr ""
+"Vous devez créer une sous-bibliothèque avec ce dossier pour laisser les "
+"autres le synchroniser."
 
 #: seahub/templates/snippets/file_share_popup.html:47
 msgid "The sub-library used to share this directory already exists."
-msgstr ""
+msgstr "La sous-bibliothèque, utilisée pour partager ce dossier, existe déjà"
 
 #: seahub/templates/snippets/group_recommend_form.html:5
 msgid "Post a discussion to group"
@@ -4201,7 +4198,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_repo_admin.html:62
 #: seahub/templates/sysadmin/userinfo.html:140
 msgid "Delete Library"
-msgstr "Supprimez la bibliothèque"
+msgstr "Supprimez Bibliothèque"
 
 #: seahub/templates/snippets/office_convert_html.html:4
 msgid "The file is being processed, please wait..."
@@ -4357,7 +4354,7 @@ msgstr "Préfixe de l'URL"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:62
 msgid "Delete Organization"
-msgstr "Supprimer l'Organisation"
+msgstr "Supprimer Organisation"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:6
 msgid "All Public Links"
@@ -4404,7 +4401,7 @@ msgstr "Active"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 msgid "ResetPwd"
-msgstr "RazMdp"
+msgstr "Raz-Mdp"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:52
 #: seahub/templates/sysadmin/sys_useradmin.html:103
@@ -4418,7 +4415,7 @@ msgstr "Utilisateur"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:95
 msgid "Delete User"
-msgstr "Supprimer l\\'utilisateur"
+msgstr "Supprimer Utilisateur"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
 #, python-format
@@ -4628,7 +4625,7 @@ msgstr "Echec de l'annulation de la synchronisation du client %s."
 
 #: seahub/views/__init__.py:959
 msgid "Failed to unsync client"
-msgstr "EImpossible d'annuler la synchro du client"
+msgstr "Impossible d'annuler la synchro du client"
 
 #: seahub/views/__init__.py:1037 seahub/views/__init__.py:1295
 msgid "Failed to create library"
@@ -4798,7 +4795,7 @@ msgstr "La bibliothèque n'existe pas."
 
 #: seahub/views/file.py:753
 msgid "The library is encrypted."
-msgstr "La bibliothèque est chiffrée"
+msgstr "La bibliothèque est chiffrée."
 
 #: seahub/views/file.py:821
 msgid "Unable to edit file"
