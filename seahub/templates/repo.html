@@ -488,7 +488,14 @@ $('.set-file-type').click(function() {
 
 var current_repo = [],
     other_repos = [];
-{% for a_repo in accessible_repos %}
+{% if repo.encrypted %}
+    current_repo.push({
+        'data': '{{ repo.props.name }}',
+        'attr': {'repo_id': '{{ repo.props.id }}'},
+        'state': 'closed'
+    });  
+{% else %}
+    {% for a_repo in accessible_repos %}
     {% if a_repo.props.id == repo.props.id %}
         {% if a_repo.props.has_subdir %} 
             current_repo.push({
@@ -516,7 +523,8 @@ var current_repo = [],
             });
         {% endif %}
     {% endif %}
-{% endfor %}
+    {% endfor %}
+{% endif %}
 
 function opOnDirent() {
 

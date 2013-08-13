@@ -177,11 +177,7 @@ def render_repo(request, repo):
     domain = RequestSite(request).domain
 
     contacts = Contact.objects.get_contacts_by_user(username)
-    if repo.encrypted:
-        repo.props.has_subdir = True
-        accessible_repos = [repo]
-    else:
-        accessible_repos = get_unencry_rw_repos_by_user(username)
+    accessible_repos = [repo] if repo.encrypted else get_unencry_rw_repos_by_user(username)
 
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:
