@@ -393,8 +393,10 @@ def sys_publink_admin(request):
         current_page = 1
         per_page = 100
 
-    publinks = FileShare.objects.all()[per_page * (current_page -1):
-                                           per_page + 1]
+    offset = per_page * (current_page -1)
+    limit = per_page + 1
+    publinks = FileShare.objects.all()[offset:offset+limit]
+
     if len(publinks) == per_page + 1:
         page_next = True
     else:
