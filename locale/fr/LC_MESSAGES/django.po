@@ -978,9 +978,8 @@ msgstr "Supprimer Contact"
 #: seahub/templates/sysadmin/sys_repo_admin.html:63
 #: seahub/templates/sysadmin/sys_useradmin.html:96
 #: seahub/templates/sysadmin/userinfo.html:141
-#, fuzzy, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr "Êtes-vous sûr de vouloir supprimer %%s ?"
+msgstr "Êtes-vous sûr de vouloir supprimer %s ?"
 
 #: seahub/group/error_msg.py:7
 msgid "The group has already created"
@@ -1630,9 +1629,8 @@ msgid "Unshare Library"
 msgstr "Annuler le partage de bibliothèque"
 
 #: seahub/group/templates/group/group_info.html:196
-#, fuzzy, python-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr "Êtes vous sûr de vouloir départager %%s ?"
+msgstr "Êtes vous sûr de vouloir départager %s ?"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
 msgid "No public library is in this group"
@@ -1699,9 +1697,8 @@ msgid "Delete Member"
 msgstr "Supprimer des membres"
 
 #: seahub/group/templates/group/group_manage.html:114
-#, fuzzy, python-format
 msgid "Really want to delete %s ?"
-msgstr "Voulez vous vraiment supprimer %%s ?"
+msgstr "Voulez vous vraiment supprimer %s ?"
 
 #: seahub/group/templates/group/group_members.html:44
 #: seahub/templates/pubuser.html:29
@@ -2604,9 +2601,8 @@ msgid "Unsync Client"
 msgstr "Annuler la synchronisation du Client."
 
 #: seahub/templates/client_mgmt.html:73
-#, fuzzy, python-format
 msgid "Are you sure to unsync client %s ?"
-msgstr "Êtes vous sûr de désactiver la synchronisqtion du client %%s ?"
+msgstr "Êtes vous sûr de désactiver la synchronisqtion du client %s ?"
 
 #: seahub/templates/decrypt_repo_form.html:8
 msgid ""
@@ -3208,9 +3204,8 @@ msgid "Total size should be smaller than %(max_file_size)s"
 msgstr "La taille totale doit être plus petite que %(max_file_size)s"
 
 #: seahub/templates/repo.html:87
-#, fuzzy, python-format
 msgid "Update %(file_name)s"
-msgstr "Mettre à jour %%(file_name)s"
+msgstr "Mettre à jour %(file_name)s"
 
 #: seahub/templates/repo.html:95
 msgid "Choose a file"
@@ -3289,14 +3284,12 @@ msgid "Please click and choose a directory."
 msgstr "S'il vous plaît cliquez  puis choisissez un répertoire."
 
 #: seahub/templates/repo.html:182
-#, fuzzy, python-format
 msgid "Rename %(name)s as:"
-msgstr "Renommage de %%(name)s en:"
+msgstr "Renommage de %(name)s en:"
 
 #: seahub/templates/repo.html:198
-#, fuzzy, python-format
 msgid "Sync %(dir_name)s"
-msgstr "Synchroniser %%(dir_name)s"
+msgstr "Synchroniser %(dir_name)s"
 
 #: seahub/templates/repo.html:199
 msgid "You need to create a sub-library from this directory to sync it."
@@ -3364,9 +3357,8 @@ msgid "Start"
 msgstr "Démarrer"
 
 #: seahub/templates/repo.html:616
-#, fuzzy, python-format
 msgid "Successfully deleted %(name)s"
-msgstr "%%(name)s a été correctement supprimé."
+msgstr "%(name)s a été correctement supprimé."
 
 #: seahub/templates/repo.html:644
 msgid "Rename File"
@@ -3393,14 +3385,12 @@ msgid "Move Directory"
 msgstr "Déplacer le répertoire"
 
 #: seahub/templates/repo.html:675
-#, fuzzy, python-format
 msgid "Copy %(name)s to:"
-msgstr "Copie de %%(name)s vers:"
+msgstr "Copie de %(name)s vers:"
 
 #: seahub/templates/repo.html:678
-#, fuzzy, python-format
 msgid "Move %(name)s to:"
-msgstr "Déplacement de %%(name)s vers:"
+msgstr "Déplacement de %(name)s vers:"
 
 #: seahub/templates/repo.html:763 seahub/templates/repo.html.py:917
 #: seahub/templates/snippets/repo_dir_data.html:83
@@ -3429,9 +3419,8 @@ msgid "You have not renamed it."
 msgstr "Vous ne l'avez pas renommé."
 
 #: seahub/templates/repo.html:925
-#, fuzzy, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
-msgstr "Renommé avec succès de %%(old_name)s en %%(new_name)s"
+msgstr "Renommé avec succès de %(old_name)s en %(new_name)s"
 
 #: seahub/templates/repo.html:941
 msgid "Invalid destination path"
@@ -3994,9 +3983,8 @@ msgid "More"
 msgstr "Plus"
 
 #: seahub/templates/snippets/file_share_popup.html:3
-#, fuzzy, python-format
 msgid "Share %(name)s"
-msgstr "Partager %%(name)s"
+msgstr "Partager %(name)s"
 
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Private Share"
@@ -4420,19 +4408,16 @@ msgid "Delete User"
 msgstr "Supprimer Utilisateur"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
-#, fuzzy, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr "Êtes vous sûr de vouloir remettre à zéro le mot de passe de %%s ?"
+msgstr "Êtes vous sûr de vouloir remettre à zéro le mot de passe de %s ?"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
-#, fuzzy, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr "Êtes vous sûr de vouloir supprimer les droits administrateur à %%s ?"
+msgstr "Êtes vous sûr de vouloir supprimer les droits administrateur à %s ?"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
-#, fuzzy, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr "Êtes vous sûr de définir %%s comme administrateur ?"
+msgstr "Êtes vous sûr de définir %s comme administrateur ?"
 
 #: seahub/templates/sysadmin/user_add_email.html:3
 #, python-format
@@ -4926,133 +4911,3 @@ msgstr ""
 "ne peut être envoyée, le service de courrier électronique n'est pas "
 "configuré correctement."
 
-#~ msgid "正體中文"
-#~ msgstr "正體中文"
-
-#~ msgid "Created sub-library %%(name)s"
-#~ msgstr "Sous-bibliothèque %%(name)s créée"
-
-#~ msgid "Sub-library"
-#~ msgstr "Sous-bibliothèque"
-
-#, fuzzy
-#~ msgid "just now"
-#~ msgstr "À l'instant"
-
-#~ msgid "Parent dir is required"
-#~ msgstr "Le dossier parent est requis"
-
-#~ msgid "File name can't be empty"
-#~ msgstr "Le nom de fichier ne peut pas être vide"
-
-#~ msgid "File name \"%s\" is not valid"
-#~ msgstr "Le nom du fichier \"%s\" n'est pas valide"
-
-#~ msgid "Directory name is too long"
-#~ msgstr "Le nom du répertoire est trop long"
-
-#~ msgid "Directory name can't be empty"
-#~ msgstr "Le nom du répertoire ne peut pas être vide"
-
-#~ msgid "Directory name \"%s\" is not valid"
-#~ msgstr "Le nom du répertoire \"%s\" n'est pas valide"
-
-#~ msgid "Days can't be empty"
-#~ msgstr "Jours ne peut pas être vides"
-
-#~ msgid "Deleted successfully"
-#~ msgstr "Supprimé avec succès"
-
-#~ msgid ""
-#~ "If you don't want others to change the contents of your shared libraries, "
-#~ "you can set the share permission to \"read-only\" when sharing them."
-#~ msgstr ""
-#~ "Si vous ne voulez pas que les autres modifient le contenu de vos "
-#~ "bibliothèques partagées, vous pouvez définir l'autorisation de partage en "
-#~ "« lecture seule » lors du partage."
-
-#~ msgid "Shared Libraries"
-#~ msgstr "Bibliothèques partagées"
-
-#~ msgid "File or Folder"
-#~ msgstr "Fichier ou dossier"
-
-#~ msgid ""
-#~ "This page will be invalid shortly, you can join <a href=\"http://seafile."
-#~ "com/\" target=\"_blank\">Seafile</a> to experience more."
-#~ msgstr ""
-#~ "Cette page ne sera bientôt plus valide, vous pouvez rejoindre <a href="
-#~ "\"http://seafile.com/\" target=\"_blank\">Seafile</a> pour plus "
-#~ "d'expérience."
-
-#~ msgid "Share link"
-#~ msgstr "Lien de partage"
-
-#~ msgid ""
-#~ "This library is read-only, you can not modify the contents of this "
-#~ "library."
-#~ msgstr ""
-#~ "Cette bibliothèque est en lecture-seule, vous ne pouvez pas modifier le "
-#~ "contenu de cette bibliothèque."
-
-#~ msgid "smaller than"
-#~ msgstr "plus petit que"
-
-#~ msgid "Uploaded:"
-#~ msgstr "Importé :"
-
-#~ msgid "Fetching ..."
-#~ msgstr "Aller chercher..."
-
-#~ msgid "Update File"
-#~ msgstr "Mettre à jour le fichier"
-
-#~ msgid "Smaller than"
-#~ msgstr "Plus petit que"
-
-#~ msgid "Rename <span id=\"rename-type\"></span>"
-#~ msgstr "Renommer <span id=\"rename-type\"></span>"
-
-#~ msgid "Rename <span id=\"rename-obj\" class=\"op-target\"></span> as: "
-#~ msgstr "Renommer <span id=\"rename-obj\" class=\"op-target\"></span> en : "
-
-#~ msgid "Click to remove"
-#~ msgstr "Cliquez pour supprimer"
-
-#~ msgid "This file has already been selected:\\n$file!"
-#~ msgstr "Ce fichier a déjà été sélectionné :\\n$file!"
-
-#~ msgid "to:"
-#~ msgstr "À:"
-
-#~ msgid "It can't be blank."
-#~ msgstr "Il ne peut pas être vide."
-
-#~ msgid "Send Link"
-#~ msgstr "Envoyer le Lien"
-
-#~ msgid "Please choose a file at first."
-#~ msgstr "Veuillez choisir un fichier dans un premier temps."
-
-#~ msgid "File size surpasses the limit."
-#~ msgstr "Taille du fichier dépasse la limite."
-
-#~ msgid "Share Library"
-#~ msgstr "Bibliothèque partagé"
-
-#~ msgid "File size surpasses 10M, can not be previewed online."
-#~ msgstr ""
-#~ "La taille du fichier dépasse 10 M, il ne peut donc pas être visionnées en "
-#~ "ligne."
-
-#~ msgid "You can not modify that library."
-#~ msgstr "Vous ne pouvez pas modifier cette bibliothèque."
-
-#~ msgid "copy"
-#~ msgstr "copier"
-
-#~ msgid "move"
-#~ msgstr "déplacer"
-
-#~ msgid "Successfully copying %(name)s：<a href=\"%(url)s\">view</a>"
-#~ msgstr "Copie réussite %(name)s：<a href=\"%(url)s\">voir</a>"
