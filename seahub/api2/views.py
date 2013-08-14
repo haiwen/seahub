@@ -363,7 +363,7 @@ class Repo(APIView):
             if resp:
                 return resp
             try:
-                seafile_api.check_passwd(repo.id, request.user.username, magic)
+                seafile_api.check_passwd(repo.id, magic)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
