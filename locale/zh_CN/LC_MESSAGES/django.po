@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 15:52+0800\n"
+"POT-Creation-Date: 2013-08-13 20:04-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,15 +180,15 @@ msgstr "文件不存在"
 msgid "the libray does not exist"
 msgstr "资料库不存在"
 
-#: seahub/api2/views.py:1473 seahub/views/ajax.py:131 seahub/views/ajax.py:234
-#: seahub/views/ajax.py:320 seahub/views/ajax.py:420 seahub/views/ajax.py:444
+#: seahub/api2/views.py:1473 seahub/views/ajax.py:131 seahub/views/ajax.py:238
+#: seahub/views/ajax.py:324 seahub/views/ajax.py:424 seahub/views/ajax.py:448
 #: seahub/views/file.py:745
 msgid "Permission denied"
 msgstr "共享权限"
 
 #: seahub/api2/views.py:1477 seahub/views/__init__.py:644
-#: seahub/views/__init__.py:737 seahub/views/__init__.py:1321
-#: seahub/views/__init__.py:1656
+#: seahub/views/__init__.py:737 seahub/views/__init__.py:1303
+#: seahub/views/__init__.py:1638
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -279,7 +279,7 @@ msgstr "暂无讨论"
 
 #: seahub/api2/templates/api2/discussions.html:29
 #: seahub/api2/templates/api2/events.html:13 seahub/templates/repo.html:432
-#: seahub/templates/snippets/events.html:7
+#: seahub/templates/snippets/events.html:5
 #: seahub/templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
 msgstr "加载中..."
@@ -291,10 +291,10 @@ msgstr "加载中..."
 #: seahub/group/templates/group/msg_js.html:155 seahub/templates/base.html:225
 #: seahub/templates/base.html.py:345 seahub/templates/file_edit.html:515
 #: seahub/templates/repo.html:306 seahub/templates/repo.html.py:476
-#: seahub/templates/repo.html:618 seahub/templates/repo.html.py:765
-#: seahub/templates/repo.html:981 seahub/templates/view_file_base.html:166
+#: seahub/templates/repo.html:626 seahub/templates/repo.html.py:773
+#: seahub/templates/repo.html:989 seahub/templates/view_file_base.html:166
 #: seahub/templates/snippets/bottom_bar.html:109
-#: seahub/templates/snippets/events_js.html:55
+#: seahub/templates/snippets/events_js.html:56
 #: seahub/templates/snippets/office_convert_js.html:172
 #: seahub/templates/snippets/office_convert_js.html:197
 #: seahub/templates/snippets/repo_decrypt_js.html:35
@@ -578,7 +578,7 @@ msgstr "当前头像："
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/add_to_contacts_form.html:9
-#: seahub/templates/snippets/events.html:19
+#: seahub/templates/snippets/events.html:15
 #: seahub/templates/snippets/file_share_popup.html:20
 #: seahub/templates/snippets/file_share_popup.html:35
 #: seahub/templates/snippets/group_recommend_form.html:19
@@ -679,7 +679,7 @@ msgid "Auto merge by seafile system"
 msgstr "系统自动合并修改"
 
 #: seahub/base/templatetags/seahub_tags.py:174
-#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:903
+#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:911
 msgid "Just now"
 msgstr "刚才"
 
@@ -1248,7 +1248,7 @@ msgstr "输入不能为空且应少于2048个字符。"
 #: seahub/templates/repo.html.py:137 seahub/templates/repo.html:161
 #: seahub/templates/repo.html.py:178 seahub/templates/repo.html:187
 #: seahub/templates/repo.html.py:237 seahub/templates/shared_file_view.html:51
-#: seahub/templates/snippets/events.html:20
+#: seahub/templates/snippets/events.html:16
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Cancel"
 msgstr "取消"
@@ -1514,7 +1514,7 @@ msgstr ""
 #: seahub/share/templates/repo/priv_shared_files.html:58
 #: seahub/share/templates/repo/shared_links.html:24
 #: seahub/templates/client_mgmt.html:26 seahub/templates/file_edit.html:258
-#: seahub/templates/snippets/events.html:13
+#: seahub/templates/snippets/events.html:9
 #: seahub/templates/snippets/my_owned_repos.html:154
 msgid "Library"
 msgstr "资料库"
@@ -1559,20 +1559,19 @@ msgid "Unknown"
 msgstr "未知"
 
 #: seahub/group/templates/group/group_info.html:171
-#: seahub/templates/file_edit.html:258
-#: seahub/templates/snippets/events.html:13
+#: seahub/templates/file_edit.html:258 seahub/templates/snippets/events.html:9
 msgid "is encrypted"
 msgstr "已加密"
 
 #: seahub/group/templates/group/group_info.html:173
 #: seahub/templates/file_edit.html:259
-#: seahub/templates/snippets/events.html:15
+#: seahub/templates/snippets/events.html:11
 msgid "Password："
 msgstr "密码："
 
 #: seahub/group/templates/group/group_info.html:175
 #: seahub/templates/file_edit.html:261
-#: seahub/templates/snippets/events.html:17
+#: seahub/templates/snippets/events.html:13
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存一小时。"
 
@@ -2096,8 +2095,8 @@ msgid "all members"
 msgstr "所有成员"
 
 #: seahub/share/views.py:549 seahub/views/__init__.py:642
-#: seahub/views/__init__.py:1381 seahub/views/__init__.py:1416
-#: seahub/views/ajax.py:567 seahub/views/ajax.py:584 seahub/views/file.py:760
+#: seahub/views/__init__.py:1363 seahub/views/__init__.py:1398
+#: seahub/views/ajax.py:571 seahub/views/ajax.py:588 seahub/views/file.py:760
 msgid "Invalid arguments"
 msgstr "非法参数"
 
@@ -2113,8 +2112,8 @@ msgstr "获取分享链接失败，请稍后重试。"
 msgid "Removed successfully"
 msgstr "删除成功"
 
-#: seahub/share/views.py:613 seahub/views/ajax.py:250 seahub/views/ajax.py:341
-#: seahub/views/ajax.py:432 seahub/views/ajax.py:661 seahub/views/ajax.py:693
+#: seahub/share/views.py:613 seahub/views/ajax.py:254 seahub/views/ajax.py:345
+#: seahub/views/ajax.py:436 seahub/views/ajax.py:665 seahub/views/ajax.py:697
 msgid "Argument missing"
 msgstr "参数缺失"
 
@@ -3219,9 +3218,11 @@ msgstr "同步"
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid ""
 "A sub-library can be created from any folder. It can be independently synced "
-"and shared. Files in the sub-library will be automatically kept in sync with those in "
-"the directory of the origin library."
-msgstr "子资料库可从任何目录创建。它可被独立地同步和共享。子资料库中的文件将和源资料库相应目录中的文件自动保持同步。"
+"and shared. Files in the sub-library will be automatically kept in sync with "
+"those in the directory of the origin library."
+msgstr ""
+"子资料库可从任何目录创建。它可被独立地同步和共享。子资料库中的文件将和源资料"
+"库相应目录中的文件自动保持同步。"
 
 #: seahub/templates/repo.html:228
 msgid "File is too big"
@@ -3255,93 +3256,93 @@ msgstr "错误"
 msgid "Start"
 msgstr "上传"
 
-#: seahub/templates/repo.html:608
+#: seahub/templates/repo.html:616
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s 删除成功。"
 
-#: seahub/templates/repo.html:636
+#: seahub/templates/repo.html:644
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: seahub/templates/repo.html:638
+#: seahub/templates/repo.html:646
 msgid "Rename Directory"
 msgstr "重命名目录"
 
-#: seahub/templates/repo.html:656
+#: seahub/templates/repo.html:664
 msgid "Copy File"
 msgstr "复制文件"
 
-#: seahub/templates/repo.html:658
+#: seahub/templates/repo.html:666
 msgid "Move File"
 msgstr "移动文件"
 
-#: seahub/templates/repo.html:660
+#: seahub/templates/repo.html:668
 msgid "Copy Directory"
 msgstr "复制目录"
 
-#: seahub/templates/repo.html:662
+#: seahub/templates/repo.html:670
 msgid "Move Directory"
 msgstr "移动目录"
 
-#: seahub/templates/repo.html:667
+#: seahub/templates/repo.html:675
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "复制 %(name)s 到："
 
-#: seahub/templates/repo.html:670
+#: seahub/templates/repo.html:678
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "移动 %(name)s 到："
 
-#: seahub/templates/repo.html:755 seahub/templates/repo.html.py:909
+#: seahub/templates/repo.html:763 seahub/templates/repo.html.py:917
 #: seahub/templates/snippets/repo_dir_data.html:83
 msgid "unstarred"
 msgstr "未加星标"
 
-#: seahub/templates/repo.html:757
+#: seahub/templates/repo.html:765
 #: seahub/templates/snippets/repo_dir_data.html:81
 msgid "starred"
 msgstr "已加星标"
 
-#: seahub/templates/repo.html:841 seahub/templates/repo.html.py:882
+#: seahub/templates/repo.html:849 seahub/templates/repo.html.py:890
 msgid "It is required."
 msgstr "必填项。"
 
-#: seahub/templates/repo.html:847
+#: seahub/templates/repo.html:855
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
-#: seahub/templates/repo.html:857
+#: seahub/templates/repo.html:865
 msgid "Creating..."
 msgstr "创建中..."
 
-#: seahub/templates/repo.html:886
+#: seahub/templates/repo.html:894
 msgid "You have not renamed it."
 msgstr "你还没重命名。"
 
-#: seahub/templates/repo.html:917
+#: seahub/templates/repo.html:925
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "%(old_name)s 已重命名为 %(new_name)s"
 
-#: seahub/templates/repo.html:933
+#: seahub/templates/repo.html:941
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
-#: seahub/templates/repo.html:1010
+#: seahub/templates/repo.html:1018
 msgid "Contacts is required."
 msgstr "联系人为必填项"
 
-#: seahub/templates/repo.html:1058
+#: seahub/templates/repo.html:1066
 msgid "Creating sub-library..."
 msgstr "创建子资料库中..."
 
-#: seahub/templates/repo.html:1072
+#: seahub/templates/repo.html:1080
 msgid "Sub-library is created."
 msgstr "子资料库已创建。"
 
-#: seahub/templates/repo.html:1091
+#: seahub/templates/repo.html:1099
 msgid "Please select at least 1 group or 1 contact."
 msgstr "请至少选择一个群组或一个联系人。"
 
@@ -3852,7 +3853,7 @@ msgstr "系统自动生成"
 msgid "File Activities"
 msgstr "文件活动"
 
-#: seahub/templates/snippets/events.html:9
+#: seahub/templates/snippets/events.html:6
 msgid "More"
 msgstr "更多"
 
@@ -4004,8 +4005,11 @@ msgstr "你还未创建任何子资料库"
 msgid ""
 "You can create a sub-library from a directory inside a library. A sub-"
 "library can be independently synced and shared. Files in the sub-library "
-"will be automatically kept in sync with those in the directory of the origin library."
-msgstr "你可以从一个资料库中的一个目录创建一个子资料库。一个子资料库可被独立地同步和共享。子资料库中的文件将和源资料库相应目录中的文件自动保持同步。"
+"will be automatically kept in sync with those in the directory of the origin "
+"library."
+msgstr ""
+"你可以从一个资料库中的一个目录创建一个子资料库。一个子资料库可被独立地同步和"
+"共享。子资料库中的文件将和源资料库相应目录中的文件自动保持同步。"
 
 #: seahub/templates/snippets/my_owned_repos.html:142
 msgid "No library is shared to you"
@@ -4358,7 +4362,7 @@ msgstr "个人维基页面"
 msgid "permission error"
 msgstr "权限错误"
 
-#: seahub/utils/__init__.py:110 seahub/utils/__init__.py:1078
+#: seahub/utils/__init__.py:110 seahub/utils/__init__.py:1089
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -4366,9 +4370,9 @@ msgstr "内部错误"
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: seahub/views/__init__.py:404 seahub/views/ajax.py:168
-#: seahub/views/ajax.py:227 seahub/views/ajax.py:314 seahub/views/ajax.py:371
-#: seahub/views/ajax.py:413 seahub/views/ajax.py:617
+#: seahub/views/__init__.py:404 seahub/views/ajax.py:172
+#: seahub/views/ajax.py:231 seahub/views/ajax.py:318 seahub/views/ajax.py:375
+#: seahub/views/ajax.py:417 seahub/views/ajax.py:621
 msgid "Library does not exist."
 msgstr "资料库不存在"
 
@@ -4446,94 +4450,94 @@ msgstr "删除资料库失败, 只有团体管理员或资料库创建者有权�
 msgid "Successfully deleted library \"%s\"."
 msgstr "成功删除资料库 \"%s\"。"
 
-#: seahub/views/__init__.py:952
+#: seahub/views/__init__.py:934
 #, python-format
 msgid "Successfully unsync client %s"
 msgstr "取消同步 %s 成功"
 
-#: seahub/views/__init__.py:954
+#: seahub/views/__init__.py:936
 msgid "Successfully unsync client"
 msgstr "成功取消同步"
 
-#: seahub/views/__init__.py:957
+#: seahub/views/__init__.py:939
 #, python-format
 msgid "Failed to unsync client %s"
 msgstr "取消同步 %s 失败"
 
-#: seahub/views/__init__.py:959
+#: seahub/views/__init__.py:941
 msgid "Failed to unsync client"
 msgstr "取消同步失败"
 
-#: seahub/views/__init__.py:1037 seahub/views/__init__.py:1295
+#: seahub/views/__init__.py:1019 seahub/views/__init__.py:1277
 msgid "Failed to create library"
 msgstr "创建资料库失败"
 
-#: seahub/views/__init__.py:1055
+#: seahub/views/__init__.py:1037
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "取消共享失败，该资料库不存在"
 
-#: seahub/views/__init__.py:1060
+#: seahub/views/__init__.py:1042
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\" 取消共享成功"
 
-#: seahub/views/__init__.py:1062
+#: seahub/views/__init__.py:1044
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "\"%s\" 取消共享失败"
 
-#: seahub/views/__init__.py:1092
+#: seahub/views/__init__.py:1074
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: seahub/views/__init__.py:1099
+#: seahub/views/__init__.py:1081
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: seahub/views/__init__.py:1101 seahub/views/ajax.py:397
+#: seahub/views/__init__.py:1083 seahub/views/ajax.py:401
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: seahub/views/__init__.py:1147
+#: seahub/views/__init__.py:1129
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: seahub/views/__init__.py:1173
+#: seahub/views/__init__.py:1155
 msgid "Failed to download library, unable to find server"
 msgstr "下载失败：找不到服务器"
 
-#: seahub/views/__init__.py:1184
+#: seahub/views/__init__.py:1166
 msgid "Invalid server setting"
 msgstr "服务器设置错误"
 
-#: seahub/views/__init__.py:1402
+#: seahub/views/__init__.py:1384
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: seahub/views/__init__.py:1406 seahub/views/__init__.py:1432
+#: seahub/views/__init__.py:1388 seahub/views/__init__.py:1414
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: seahub/views/__init__.py:1428
+#: seahub/views/__init__.py:1410
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: seahub/views/__init__.py:1692 seahub/views/file.py:738
+#: seahub/views/__init__.py:1674 seahub/views/file.py:738
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: seahub/views/__init__.py:1695
+#: seahub/views/__init__.py:1677
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: seahub/views/__init__.py:1710
+#: seahub/views/__init__.py:1692
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -4550,42 +4554,42 @@ msgstr "路径不存在"
 msgid "The group doesn't exist"
 msgstr "该群组不存在"
 
-#: seahub/views/ajax.py:175 seahub/views/ajax.py:378 seahub/views/ajax.py:624
+#: seahub/views/ajax.py:179 seahub/views/ajax.py:382 seahub/views/ajax.py:628
 msgid "Permission denied."
 msgstr "没有权限"
 
-#: seahub/views/ajax.py:180 seahub/views/ajax.py:629
+#: seahub/views/ajax.py:184 seahub/views/ajax.py:633
 msgid "Library is encrypted."
 msgstr "该资料库已加密"
 
-#: seahub/views/ajax.py:186 seahub/views/ajax.py:635
+#: seahub/views/ajax.py:190 seahub/views/ajax.py:639
 msgid "Error: no head commit id"
 msgstr "错误：没有 head commit id。"
 
-#: seahub/views/ajax.py:386
+#: seahub/views/ajax.py:390
 msgid "Argument missing."
 msgstr "参数缺失"
 
-#: seahub/views/ajax.py:438
+#: seahub/views/ajax.py:442
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: seahub/views/ajax.py:467 seahub/views/ajax.py:519
+#: seahub/views/ajax.py:471 seahub/views/ajax.py:523
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: seahub/views/ajax.py:489 seahub/views/ajax.py:548
+#: seahub/views/ajax.py:493 seahub/views/ajax.py:552
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: seahub/views/ajax.py:507
+#: seahub/views/ajax.py:511
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
-#: seahub/views/ajax.py:537
+#: seahub/views/ajax.py:541
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 复制到它的子目录 %(des)s 中"

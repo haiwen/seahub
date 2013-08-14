@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 15:52+0800\n"
+"POT-Creation-Date: 2013-08-13 20:04-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,16 +188,16 @@ msgstr "Il file non esiste"
 msgid "the libray does not exist"
 msgstr "La libreria non esiste"
 
-#: seahub/api2/views.py:1473 seahub/views/ajax.py:131 seahub/views/ajax.py:234
-#: seahub/views/ajax.py:320 seahub/views/ajax.py:420 seahub/views/ajax.py:444
+#: seahub/api2/views.py:1473 seahub/views/ajax.py:131 seahub/views/ajax.py:238
+#: seahub/views/ajax.py:324 seahub/views/ajax.py:424 seahub/views/ajax.py:448
 #: seahub/views/file.py:745
 #, fuzzy
 msgid "Permission denied"
 msgstr "Permesso"
 
 #: seahub/api2/views.py:1477 seahub/views/__init__.py:644
-#: seahub/views/__init__.py:737 seahub/views/__init__.py:1321
-#: seahub/views/__init__.py:1656
+#: seahub/views/__init__.py:737 seahub/views/__init__.py:1303
+#: seahub/views/__init__.py:1638
 #, fuzzy
 msgid "Library does not exist"
 msgstr "La libreria non esiste"
@@ -293,7 +293,7 @@ msgstr "Permesso"
 
 #: seahub/api2/templates/api2/discussions.html:29
 #: seahub/api2/templates/api2/events.html:13 seahub/templates/repo.html:432
-#: seahub/templates/snippets/events.html:7
+#: seahub/templates/snippets/events.html:5
 #: seahub/templates/snippets/list_commit_detail.html:3
 msgid "Loading..."
 msgstr "Caricamento..."
@@ -305,10 +305,10 @@ msgstr "Caricamento..."
 #: seahub/group/templates/group/msg_js.html:155 seahub/templates/base.html:225
 #: seahub/templates/base.html.py:345 seahub/templates/file_edit.html:515
 #: seahub/templates/repo.html:306 seahub/templates/repo.html.py:476
-#: seahub/templates/repo.html:618 seahub/templates/repo.html.py:765
-#: seahub/templates/repo.html:981 seahub/templates/view_file_base.html:166
+#: seahub/templates/repo.html:626 seahub/templates/repo.html.py:773
+#: seahub/templates/repo.html:989 seahub/templates/view_file_base.html:166
 #: seahub/templates/snippets/bottom_bar.html:109
-#: seahub/templates/snippets/events_js.html:55
+#: seahub/templates/snippets/events_js.html:56
 #: seahub/templates/snippets/office_convert_js.html:172
 #: seahub/templates/snippets/office_convert_js.html:197
 #: seahub/templates/snippets/repo_decrypt_js.html:35
@@ -607,7 +607,7 @@ msgstr "Avatar attuale: "
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/add_to_contacts_form.html:9
-#: seahub/templates/snippets/events.html:19
+#: seahub/templates/snippets/events.html:15
 #: seahub/templates/snippets/file_share_popup.html:20
 #: seahub/templates/snippets/file_share_popup.html:35
 #: seahub/templates/snippets/group_recommend_form.html:19
@@ -720,7 +720,7 @@ msgid "Auto merge by seafile system"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:174
-#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:903
+#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:911
 msgid "Just now"
 msgstr "Subito"
 
@@ -999,7 +999,7 @@ msgstr "Cancella contatto"
 #: seahub/templates/sysadmin/sys_useradmin.html:96
 #: seahub/templates/sysadmin/userinfo.html:141
 #, fuzzy, python-format
-msgid "Are you sure you want to delete %%s ?"
+msgid "Are you sure you want to delete %s ?"
 msgstr "Sei sicuro di voler cancellare"
 
 #: seahub/group/error_msg.py:7
@@ -1312,7 +1312,7 @@ msgstr "Non può essere vuoto e non deve essere oltre 150 caratteri."
 #: seahub/templates/repo.html.py:137 seahub/templates/repo.html:161
 #: seahub/templates/repo.html.py:178 seahub/templates/repo.html:187
 #: seahub/templates/repo.html.py:237 seahub/templates/shared_file_view.html:51
-#: seahub/templates/snippets/events.html:20
+#: seahub/templates/snippets/events.html:16
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Cancel"
 msgstr "Annulla"
@@ -1581,7 +1581,7 @@ msgstr ""
 #: seahub/share/templates/repo/priv_shared_files.html:58
 #: seahub/share/templates/repo/shared_links.html:24
 #: seahub/templates/client_mgmt.html:26 seahub/templates/file_edit.html:258
-#: seahub/templates/snippets/events.html:13
+#: seahub/templates/snippets/events.html:9
 #: seahub/templates/snippets/my_owned_repos.html:154
 msgid "Library"
 msgstr "Libreria"
@@ -1627,20 +1627,19 @@ msgid "Unknown"
 msgstr ""
 
 #: seahub/group/templates/group/group_info.html:171
-#: seahub/templates/file_edit.html:258
-#: seahub/templates/snippets/events.html:13
+#: seahub/templates/file_edit.html:258 seahub/templates/snippets/events.html:9
 msgid "is encrypted"
 msgstr ""
 
 #: seahub/group/templates/group/group_info.html:173
 #: seahub/templates/file_edit.html:259
-#: seahub/templates/snippets/events.html:15
+#: seahub/templates/snippets/events.html:11
 msgid "Password："
 msgstr ""
 
 #: seahub/group/templates/group/group_info.html:175
 #: seahub/templates/file_edit.html:261
-#: seahub/templates/snippets/events.html:17
+#: seahub/templates/snippets/events.html:13
 msgid "The password will be kept in the server for only 1 hour."
 msgstr ""
 
@@ -1655,7 +1654,7 @@ msgstr "Togli condivisione alla libreria"
 
 #: seahub/group/templates/group/group_info.html:196
 #, fuzzy, python-format
-msgid "Are you sure you want to unshare %%s ?"
+msgid "Are you sure you want to unshare %s ?"
 msgstr "Sei sicuro di voler togliere la condivisione"
 
 #: seahub/group/templates/group/group_info_for_pub.html:78
@@ -1724,7 +1723,7 @@ msgstr "Cancella il membro"
 
 #: seahub/group/templates/group/group_manage.html:114
 #, fuzzy, python-format
-msgid "Really want to delete %%s ?"
+msgid "Really want to delete %s ?"
 msgstr "Vuoi cancellare veramente questo messaggio?"
 
 #: seahub/group/templates/group/group_members.html:44
@@ -2194,8 +2193,8 @@ msgid "all members"
 msgstr "tutti i membri"
 
 #: seahub/share/views.py:549 seahub/views/__init__.py:642
-#: seahub/views/__init__.py:1381 seahub/views/__init__.py:1416
-#: seahub/views/ajax.py:567 seahub/views/ajax.py:584 seahub/views/file.py:760
+#: seahub/views/__init__.py:1363 seahub/views/__init__.py:1398
+#: seahub/views/ajax.py:571 seahub/views/ajax.py:588 seahub/views/file.py:760
 msgid "Invalid arguments"
 msgstr "Argomento non valido"
 
@@ -2213,8 +2212,8 @@ msgstr "Errore di creazione: errore interno."
 msgid "Removed successfully"
 msgstr ""
 
-#: seahub/share/views.py:613 seahub/views/ajax.py:250 seahub/views/ajax.py:341
-#: seahub/views/ajax.py:432 seahub/views/ajax.py:661 seahub/views/ajax.py:693
+#: seahub/share/views.py:613 seahub/views/ajax.py:254 seahub/views/ajax.py:345
+#: seahub/views/ajax.py:436 seahub/views/ajax.py:665 seahub/views/ajax.py:697
 msgid "Argument missing"
 msgstr ""
 
@@ -2639,7 +2638,7 @@ msgstr "Client"
 
 #: seahub/templates/client_mgmt.html:73
 #, fuzzy, python-format
-msgid "Are you sure to unsync client %%s ?"
+msgid "Are you sure to unsync client %s ?"
 msgstr "Sei sicuro di voler cancellare"
 
 #: seahub/templates/decrypt_repo_form.html:8
@@ -3231,7 +3230,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:87
 #, fuzzy, python-format
-msgid "Update %%(file_name)s"
+msgid "Update %(file_name)s"
 msgstr "Aggiorna file"
 
 #: seahub/templates/repo.html:95
@@ -3312,13 +3311,13 @@ msgid "Please click and choose a directory."
 msgstr "Fai clic e scegli una cartella."
 
 #: seahub/templates/repo.html:182
-#, python-format
-msgid "Rename %%(name)s as:"
-msgstr ""
+#, fuzzy, python-format
+msgid "Rename %(name)s as:"
+msgstr "Il team di %(site_name)s"
 
 #: seahub/templates/repo.html:198
 #, fuzzy, python-format
-msgid "Sync %%(dir_name)s"
+msgid "Sync %(dir_name)s"
 msgstr "Aggiorna file"
 
 #: seahub/templates/repo.html:199
@@ -3345,7 +3344,7 @@ msgstr ""
 msgid ""
 "A sub-library can be created from any folder. It can be independently synced "
 "and shared. Files in the sub-library will be automatically kept in sync with "
-"the directory of the origin library."
+"those in the directory of the origin library."
 msgstr ""
 
 #: seahub/templates/repo.html:228
@@ -3384,107 +3383,107 @@ msgstr "errore: "
 msgid "Start"
 msgstr "Marca"
 
-#: seahub/templates/repo.html:608
+#: seahub/templates/repo.html:616
 #, fuzzy, python-format
-msgid "Successfully deleted %%(name)s"
+msgid "Successfully deleted %(name)s"
 msgstr "Cancellato con successo"
 
-#: seahub/templates/repo.html:636
+#: seahub/templates/repo.html:644
 #, fuzzy
 msgid "Rename File"
 msgstr "Rinomina"
 
-#: seahub/templates/repo.html:638
+#: seahub/templates/repo.html:646
 #, fuzzy
 msgid "Rename Directory"
 msgstr "Nuova Cartella"
 
-#: seahub/templates/repo.html:656
+#: seahub/templates/repo.html:664
 #, fuzzy
 msgid "Copy File"
 msgstr "Copia"
 
-#: seahub/templates/repo.html:658
+#: seahub/templates/repo.html:666
 #, fuzzy
 msgid "Move File"
 msgstr "Sposta "
 
-#: seahub/templates/repo.html:660
+#: seahub/templates/repo.html:668
 #, fuzzy
 msgid "Copy Directory"
 msgstr "Cartella"
 
-#: seahub/templates/repo.html:662
+#: seahub/templates/repo.html:670
 #, fuzzy
 msgid "Move Directory"
 msgstr "Nuova Cartella"
 
-#: seahub/templates/repo.html:667
-#, python-format
-msgid "Copy %%(name)s to:"
-msgstr ""
-
-#: seahub/templates/repo.html:670
+#: seahub/templates/repo.html:675
 #, fuzzy, python-format
-msgid "Move %%(name)s to:"
+msgid "Copy %(name)s to:"
 msgstr "Il team di %(site_name)s"
 
-#: seahub/templates/repo.html:755 seahub/templates/repo.html.py:909
+#: seahub/templates/repo.html:678
+#, fuzzy, python-format
+msgid "Move %(name)s to:"
+msgstr "Il team di %(site_name)s"
+
+#: seahub/templates/repo.html:763 seahub/templates/repo.html.py:917
 #: seahub/templates/snippets/repo_dir_data.html:83
 #, fuzzy
 msgid "unstarred"
 msgstr "Smarca"
 
-#: seahub/templates/repo.html:757
+#: seahub/templates/repo.html:765
 #: seahub/templates/snippets/repo_dir_data.html:81
 #, fuzzy
 msgid "starred"
 msgstr "Smarca"
 
-#: seahub/templates/repo.html:841 seahub/templates/repo.html.py:882
+#: seahub/templates/repo.html:849 seahub/templates/repo.html.py:890
 #, fuzzy
 msgid "It is required."
 msgstr "La e-mail è richiesta"
 
-#: seahub/templates/repo.html:847
+#: seahub/templates/repo.html:855
 msgid "Only an extension there, please input a name."
 msgstr ""
 
-#: seahub/templates/repo.html:857
+#: seahub/templates/repo.html:865
 #, fuzzy
 msgid "Creating..."
 msgstr "Invio..."
 
-#: seahub/templates/repo.html:886
+#: seahub/templates/repo.html:894
 #, fuzzy
 msgid "You have not renamed it."
 msgstr "Non stai condividendo alcuna libreria"
 
-#: seahub/templates/repo.html:917
+#: seahub/templates/repo.html:925
 #, fuzzy, python-format
-msgid "Successfully renamed %%(old_name)s to %%(new_name)s"
+msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Rinomina %(old)s in %(new)s completata"
 
-#: seahub/templates/repo.html:933
+#: seahub/templates/repo.html:941
 #, fuzzy
 msgid "Invalid destination path"
 msgstr "Impostazioni del server errate"
 
-#: seahub/templates/repo.html:1010
+#: seahub/templates/repo.html:1018
 #, fuzzy
 msgid "Contacts is required."
 msgstr "E' richiesto il vecchio nome"
 
-#: seahub/templates/repo.html:1058
+#: seahub/templates/repo.html:1066
 msgid "Creating sub-library..."
 msgstr ""
 
-#: seahub/templates/repo.html:1072
+#: seahub/templates/repo.html:1080
 #, fuzzy
 msgid "Sub-library is created."
 msgstr "E' richiesto il nome utente"
 
-#: seahub/templates/repo.html:1091
+#: seahub/templates/repo.html:1099
 msgid "Please select at least 1 group or 1 contact."
 msgstr ""
 
@@ -3995,14 +3994,14 @@ msgstr ""
 msgid "File Activities"
 msgstr "Il file non esiste"
 
-#: seahub/templates/snippets/events.html:9
+#: seahub/templates/snippets/events.html:6
 msgid "More"
 msgstr "Ancora"
 
 #: seahub/templates/snippets/file_share_popup.html:3
-#, python-format
-msgid "Share %%(name)s"
-msgstr ""
+#, fuzzy, python-format
+msgid "Share %(name)s"
+msgstr "Aggiorna file"
 
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Private Share"
@@ -4153,7 +4152,8 @@ msgstr "Non stai condividendo alcuna libreria"
 msgid ""
 "You can create a sub-library from a directory inside a library. A sub-"
 "library can be independently synced and shared. Files in the sub-library "
-"will be automatically kept in sync with the directory of the origin library."
+"will be automatically kept in sync with those in the directory of the origin "
+"library."
 msgstr ""
 
 #: seahub/templates/snippets/my_owned_repos.html:142
@@ -4420,17 +4420,17 @@ msgstr "Cancella Utente"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
 #, fuzzy, python-format
-msgid "Are you sure you want to reset the password of %%s ?"
+msgid "Are you sure you want to reset the password of %s ?"
 msgstr "Sicuro di volere ripristinare la password di"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
 #, fuzzy, python-format
-msgid "Are you sure you want to revoke the admin permission of %%s ?"
+msgid "Are you sure you want to revoke the admin permission of %s ?"
 msgstr "Sicuro di volere ripristinare la password di"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
 #, fuzzy, python-format
-msgid "Are you sure you want to set %%s as admin?"
+msgid "Are you sure you want to set %s as admin?"
 msgstr "Sicuro di volere ripristinare la password di"
 
 #: seahub/templates/sysadmin/user_add_email.html:3
@@ -4516,7 +4516,7 @@ msgstr ""
 msgid "permission error"
 msgstr "Permesso"
 
-#: seahub/utils/__init__.py:110 seahub/utils/__init__.py:1078
+#: seahub/utils/__init__.py:110 seahub/utils/__init__.py:1089
 msgid "Internal error"
 msgstr "Errore interno"
 
@@ -4524,9 +4524,9 @@ msgstr "Errore interno"
 msgid "Unable to view recycle page"
 msgstr "Impossiblie vedere il cestino"
 
-#: seahub/views/__init__.py:404 seahub/views/ajax.py:168
-#: seahub/views/ajax.py:227 seahub/views/ajax.py:314 seahub/views/ajax.py:371
-#: seahub/views/ajax.py:413 seahub/views/ajax.py:617
+#: seahub/views/__init__.py:404 seahub/views/ajax.py:172
+#: seahub/views/ajax.py:231 seahub/views/ajax.py:318 seahub/views/ajax.py:375
+#: seahub/views/ajax.py:417 seahub/views/ajax.py:621
 #, fuzzy
 msgid "Library does not exist."
 msgstr "La libreria non esiste"
@@ -4612,100 +4612,100 @@ msgstr ""
 msgid "Successfully deleted library \"%s\"."
 msgstr "Cancellato con successo."
 
-#: seahub/views/__init__.py:952
+#: seahub/views/__init__.py:934
 #, fuzzy, python-format
 msgid "Successfully unsync client %s"
 msgstr "Mail inviata con successo"
 
-#: seahub/views/__init__.py:954
+#: seahub/views/__init__.py:936
 #, fuzzy
 msgid "Successfully unsync client"
 msgstr "Cancellato con successo"
 
-#: seahub/views/__init__.py:957
+#: seahub/views/__init__.py:939
 #, fuzzy, python-format
 msgid "Failed to unsync client %s"
 msgstr "Errore di condivisione con %s."
 
-#: seahub/views/__init__.py:959
+#: seahub/views/__init__.py:941
 #, fuzzy
 msgid "Failed to unsync client"
 msgstr "Errore di invio mail"
 
-#: seahub/views/__init__.py:1037 seahub/views/__init__.py:1295
+#: seahub/views/__init__.py:1019 seahub/views/__init__.py:1277
 msgid "Failed to create library"
 msgstr "Errore di creazione libreria"
 
-#: seahub/views/__init__.py:1055
+#: seahub/views/__init__.py:1037
 #, fuzzy
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "Errore di de-condivisione: il gruppo non esiste."
 
-#: seahub/views/__init__.py:1060
+#: seahub/views/__init__.py:1042
 #, fuzzy, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "Smarcato con successo"
 
-#: seahub/views/__init__.py:1062
+#: seahub/views/__init__.py:1044
 #, fuzzy, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "Errore di condivisione con %s."
 
-#: seahub/views/__init__.py:1092
+#: seahub/views/__init__.py:1074
 msgid "Failed to delete file."
 msgstr "Cancellazione file fallita."
 
-#: seahub/views/__init__.py:1099
+#: seahub/views/__init__.py:1081
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s cancellato con successo."
 
-#: seahub/views/__init__.py:1101 seahub/views/ajax.py:397
+#: seahub/views/__init__.py:1083 seahub/views/ajax.py:401
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Errore interno. Impossibile cancellare %s."
 
-#: seahub/views/__init__.py:1147
+#: seahub/views/__init__.py:1129
 msgid "Unable to access file"
 msgstr "Impossibile accedere al file"
 
-#: seahub/views/__init__.py:1173
+#: seahub/views/__init__.py:1155
 #, fuzzy
 msgid "Failed to download library, unable to find server"
 msgstr "Impossibile scaricare la libreria, impossibile trovare il server"
 
-#: seahub/views/__init__.py:1184
+#: seahub/views/__init__.py:1166
 msgid "Invalid server setting"
 msgstr "Impostazioni del server errate"
 
-#: seahub/views/__init__.py:1402
+#: seahub/views/__init__.py:1384
 #, python-format
 msgid ""
 "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr ""
 "Conversione %(path)s in <a href=\"%(root)s\">directory root</a> completa."
 
-#: seahub/views/__init__.py:1406 seahub/views/__init__.py:1432
+#: seahub/views/__init__.py:1388 seahub/views/__init__.py:1414
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "Conversione <a href=\"%(url)s\">%(path)s</a> completata."
 
-#: seahub/views/__init__.py:1428
+#: seahub/views/__init__.py:1410
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr ""
 "Conversione %(path)s in <a href=\"%(url)s\">directory root</a> completa."
 
-#: seahub/views/__init__.py:1692 seahub/views/file.py:738
+#: seahub/views/__init__.py:1674 seahub/views/file.py:738
 msgid "Internal Error"
 msgstr "Errore interno"
 
-#: seahub/views/__init__.py:1695
+#: seahub/views/__init__.py:1677
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr ""
 
-#: seahub/views/__init__.py:1710
+#: seahub/views/__init__.py:1692
 #, fuzzy, python-format
 msgid "Unable to download \"%s\""
 msgstr "Click per trasferire"
@@ -4724,47 +4724,47 @@ msgstr ""
 msgid "The group doesn't exist"
 msgstr "Il messaggio non esiste"
 
-#: seahub/views/ajax.py:175 seahub/views/ajax.py:378 seahub/views/ajax.py:624
+#: seahub/views/ajax.py:179 seahub/views/ajax.py:382 seahub/views/ajax.py:628
 #, fuzzy
 msgid "Permission denied."
 msgstr "Permesso"
 
-#: seahub/views/ajax.py:180 seahub/views/ajax.py:629
+#: seahub/views/ajax.py:184 seahub/views/ajax.py:633
 #, fuzzy
 msgid "Library is encrypted."
 msgstr "E' richiesto il nome utente"
 
-#: seahub/views/ajax.py:186 seahub/views/ajax.py:635
+#: seahub/views/ajax.py:190 seahub/views/ajax.py:639
 msgid "Error: no head commit id"
 msgstr ""
 
-#: seahub/views/ajax.py:386
+#: seahub/views/ajax.py:390
 msgid "Argument missing."
 msgstr ""
 
-#: seahub/views/ajax.py:438
+#: seahub/views/ajax.py:442
 #, fuzzy
 msgid "Destination path is too long."
 msgstr "Il nome della directory è troppo lungo"
 
-#: seahub/views/ajax.py:467 seahub/views/ajax.py:519
+#: seahub/views/ajax.py:471 seahub/views/ajax.py:523
 #, fuzzy, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr ""
 "Conversione %(path)s in <a href=\"%(url)s\">directory root</a> completa."
 
-#: seahub/views/ajax.py:489 seahub/views/ajax.py:548
+#: seahub/views/ajax.py:493 seahub/views/ajax.py:552
 #, fuzzy, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr ""
 "Conversione %(path)s in <a href=\"%(url)s\">directory root</a> completa."
 
-#: seahub/views/ajax.py:507
+#: seahub/views/ajax.py:511
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr ""
 
-#: seahub/views/ajax.py:537
+#: seahub/views/ajax.py:541
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr ""
