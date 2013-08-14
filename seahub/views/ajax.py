@@ -140,7 +140,9 @@ def get_group_repos(request, group_id):
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
-def get_my_repos(request):
+def get_my_unenc_repos(request):
+    """Get my owned and unencrypted repos.
+    """
     if not request.is_ajax():
         raise Http404
     
@@ -149,7 +151,9 @@ def get_my_repos(request):
     repos = seafile_api.get_owned_repo_list(request.user.username)
     repo_list = []
     for repo in repos:
-        repo_list.append({"name": repo.props.name, "id": repo.props.id})
+        if repo.encrypted:
+            continue
+        repo_list.append({"name": repo.name, "id": repo.id})
     
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 

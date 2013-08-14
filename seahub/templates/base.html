@@ -325,7 +325,7 @@ $('#msg-file-share-btn').click(function() {
     var msg_file_share = $('#msg-file-share'),
         btn = $(this);
     $.ajax({
-        'url': '{% url 'get_my_repos' %}',
+        'url': '{% url 'get_my_unenc_repos' %}',
         'cache': false,
         'dataType': 'json',
         'success': function(data) {
