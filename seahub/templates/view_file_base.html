@@ -68,7 +68,7 @@
 
             {% if request.user.is_authenticated %}
                 {% block open_local %}            
-                <button id="open-local" data="{{path}}{{dirent.obj_name}}">{% trans "Open local file"%}</button>
+                <button id="open-local" data="{{path}}">{% trans "Open local file"%}</button>
                 {% endblock %}                
 
                 {% block edit_file %}
@@ -112,8 +112,8 @@
 <script type="text/javascript">
 $('#share').click(function() {
     var op = $(this), name = '{{ filename }}',
-        aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}{{filename|urlencode}}',
-        type = 'f', cur_path = '{{path}}';
+        aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}',
+        type = 'f', cur_path = '{{path}}'.substr(0, '{{path}}'.length - name.length);
     showSharePopup(op, name, aj_url, type, cur_path);
     return false;
 });
