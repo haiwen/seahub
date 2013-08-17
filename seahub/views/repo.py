@@ -40,22 +40,22 @@ def list_dir_by_commit_and_path(commit, path):
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
 
-def check_dir_access_permission(username, repo_id, path):
-    """Check user has permission to view the directory.
-    1. check whether this directory is private shared.
-    2. if failed, check whether the parent of this directory is private shared.
-    """
+# def check_dir_access_permission(username, repo_id, path):
+#     """Check user has permission to view the directory.
+#     1. check whether this directory is private shared.
+#     2. if failed, check whether the parent of this directory is private shared.
+#     """
      
-    pfs = PrivateFileDirShare.objects.get_private_share_in_dir(username,
-                                                               repo_id, path)
-    if pfs is None:
-        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
-        for e in dirs:
-            if path.startswith(e.path):
-                return e.permission
-        return None
-    else:
-        return pfs.permission
+#     pfs = PrivateFileDirShare.objects.get_private_share_in_dir(username,
+#                                                                repo_id, path)
+#     if pfs is None:
+#         dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
+#         for e in dirs:
+#             if path.startswith(e.path):
+#                 return e.permission
+#         return None
+#     else:
+#         return pfs.permission
     
 def check_repo_access_permission(repo_id, username):
     return seafile_api.check_repo_access_permission(repo_id, username)
@@ -154,8 +154,7 @@ def render_repo(request, repo):
     """
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_dir_access_permission(username, repo.id, path) or \
-        check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, username)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
@@ -270,8 +269,7 @@ def repo_history_view(request, repo_id):
 
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_dir_access_permission(username, repo.id, path) or \
-        check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, username)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
