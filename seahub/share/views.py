@@ -17,7 +17,7 @@ from django.contrib.sites.models import Site, RequestSite
 from pysearpc import SearpcError
 import seaserv
 from seaserv import seafile_api
-from seaserv import seafserv_threaded_rpc, get_repo, ccnet_rpc, \
+from seaserv import seafserv_threaded_rpc, ccnet_rpc, \
     ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
     is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
     del_org_group_repo, list_share_repos, get_group_repos_by_owner, \
@@ -166,7 +166,7 @@ def share_repo(request):
     permission = form.cleaned_data['permission']
     from_email = request.user.username
 
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     if not repo:
         raise Http404
 
@@ -367,24 +367,31 @@ def list_share_out_repos(request):
 
 @login_required
 def list_shared_links(request):
-    """List shared links.
+    """List share links, and remove invalid links(file/dir is deleted or moved).
     """
     username = request.user.username
 
-    # Shared links
     fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
     for fs in fileshares:
         if is_personal_repo(fs.repo_id):  # only list files in personal repos
+            r = seafile_api.get_repo(fs.repo_id)
+            if not r:
+                fs.delete()
+                continue
+
             if fs.s_type == 'f':
+                if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                    fs.delete()
+                    continue
                 fs.filename = os.path.basename(fs.path)
                 fs.shared_link = gen_file_share_link(fs.token) 
             else:
-                fs.filename = os.path.basename(fs.path[:-1])
+                if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                    fs.delete()
+                    continue
+                fs.filename = os.path.basename(fs.path.rstrip('/'))
                 fs.shared_link = gen_dir_share_link(fs.token)
-            r = get_repo(fs.repo_id)
-            if not r:           # get_repo may returns None
-                continue
             fs.repo = r
             p_fileshares.append(fs)
     
