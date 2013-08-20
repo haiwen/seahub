@@ -108,6 +108,7 @@ urlpatterns = patterns('',
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_dir, name='repo_dir_data'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/more/$', list_dir_more, name='list_dir_more'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/new/$', new_dir, name='new_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/rename/$', rename_dirent, name='rename_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),

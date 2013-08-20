@@ -320,10 +320,6 @@ function dirOP() {
 
 $('.path .dir-link').click(dirlinkClick);
 
-$('#download-dir').click(function() {
-    location.href = $(this).data('url');
-});
-
 $('#upload-file').click(function () {
     var upload_success = false;
     $('#upload-file-dialog').modal({
@@ -371,7 +367,19 @@ $('#add-new-file').click(function () {
     $('#simplemodal-container').css({'height':'auto'});
 });
 
-$("tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
+// share current dir
+$('#share-cur-dir').click(function() {
+   var op = $(this), name, aj_url, type;
+   name = $('#cur-dir-name').html();
+   aj_url = op.data('url');
+   type = 'd';
+   showSharePopup(op, name, aj_url, type, cur_path);
+});
+
+//sort
+$('#name-down, #name-up, #time-up, #time-down').click(sortDirent);
+
+$('.dir-item, .file-item').unbind().hover( // remove previously binded hover handler at first
     function() {
         if (no_file_op_popup) {
             $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
@@ -386,8 +394,11 @@ $("tr:gt(0)").unbind().hover( // remove previously binded hover handler at first
 
 opOnDirent();
 
-//sort
-$('#name-down, #name-up, #time-up, #time-down').click(function() {
+} // function dirOP ends here
+
+dirOP();
+
+function sortDirent() {
     var id= $(this).attr('id'), by,
         dir_list = [], file_list = [];
     
@@ -423,11 +434,7 @@ $('#name-down, #name-up, #time-up, #time-down').click(function() {
         case 'time-up': $('#time-down').removeAttr('style'); break;
         case 'time-down': $('#time-up').css({'display':'inline-block'}); break;
     }
-});
-
-} // function dirOP ends here
-
-dirOP();
+}
 
 var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="vam" />';
 // cur_path: will be updated after reqDirdata
@@ -526,17 +533,18 @@ var current_repo = [],
     {% endfor %}
 {% endif %}
 
-function opOnDirent() {
+function opOnDirent(context) { // added param 'context' for 'more' dirents requested with 'list_dir_more'
+var context = context || $('.dir-item, .file-item');
 
-$('.dir-item .dir-link').click(dirlinkClick);
+$('.dir-link', context).click(dirlinkClick);
 
 var popup_tr = ''; // the tr which the shown popup belongs to
 $('#main-panel').removeClass('ovhd');
 // to fix 'height becomes 0 after sort' for some versions of chrome/ff.
-$('.hidden-op').each(function() {
+$('.hidden-op', context).each(function() {
     $(this).height($(this).height());
 });
-$('.more-op-icon').click(function() {
+$('.more-op-icon', context).click(function() {
     var icon = $(this),
         hidden_op = icon.next();
     if (icon.attr('data')) { // no popup
@@ -588,7 +596,7 @@ $(document).click(function(e) {
     }
 });
 
-$('.hidden-op li').hover(
+$('.hidden-op li', context).hover(
     function() {
         $(this).css('background', '#eee');
     },
@@ -596,7 +604,7 @@ $('.hidden-op li').hover(
         $(this).css('background', '#fff');
     }
 );
-$('.dir-del, .file-del').click(function() {
+$('.dir-del, .file-del', context).click(function() {
     var dirent = $(this).parents('tr'),
         dirent_name = dirent.data('name'),
         url_main;
@@ -630,7 +638,7 @@ $('.dir-del, .file-del').click(function() {
     return false;
 });
 
-$('.file-rename, .dir-rename').click(function () {
+$('.file-rename, .dir-rename', context).click(function () {
     var op = $(this),
         dirent = op.parents('tr'),
         form = $('#rename-form'),
@@ -651,7 +659,7 @@ $('.file-rename, .dir-rename').click(function () {
     return false;
 });
 
-$('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
+$('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     var op = $(this), op_type, op_detail,
         dirent = op.parents('tr'),
         obj_name = dirent.data('name'), obj_type,
@@ -698,7 +706,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv').click(function () {
     return false;
 });
 
-$('.file-update').click(function() {
+$('.file-update', context).click(function() {
     var file_name = $(this).parents('.file-item').data('name');
     var form = $('#update-file-form');
     var upload_success = false;
@@ -741,7 +749,7 @@ $('.file-update').click(function() {
     return false;
 });
 
-$('.file-star').click(function() {
+$('.file-star', context).click(function() {
     var op = $(this),
         status = op.data('status'),
         file_name = op.parents('.file-item').data('name'),
@@ -777,20 +785,15 @@ $('.file-star').click(function() {
 });
 
 //share
-$('.file-share, .dir-share, #share-cur-dir').click(function() {
+$('.file-share, .dir-share', context).click(function() {
     var op = $(this), name, aj_url, type;
-    if (op.attr('id') == 'share-cur-dir') {
-        name = $('#cur-dir-name').html();
-        aj_url = op.data('url');
+    name = op.parents('tr').data('name');
+    aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name);
+    if (op.hasClass('dir-share')) {
+        aj_url += '&type=d';
         type = 'd';
     } else {
-        name = op.parents('tr').data('name');
-        aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name);
         type = 'f';
-        if (op.hasClass('dir-share')) {
-            aj_url += '&type=d';
-            type = 'd';
-        }
     }
 
     showSharePopup(op, name, aj_url, type, cur_path);
@@ -798,7 +801,7 @@ $('.file-share, .dir-share, #share-cur-dir').click(function() {
 });
 
 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-$('.dir-sync').click(function() {
+$('.dir-sync', context).click(function() {
     var dir_name = $(this).parents('.dir-item').data('name');
      
     // check if the sub-library exists
@@ -1026,6 +1029,46 @@ $(window).scroll(function() {
         list_hd.addClass('fixed-hd').css({'left':file_topbar.offset().left});  
     } else {
         list_hd.removeClass('fixed-hd');  
+    }
+
+    var ele_more = $('#repo-file-list .dirent-more');
+    if (ele_more.length == 1 && $(window).scrollTop() + $(window).height() >= $(document).height() - parseInt($('#repo-file-list').css('margin-bottom'))) {
+        $.ajax({
+            url:'{% url 'list_dir_more' repo.id %}?p=' + e(cur_path) + '&start=' + e(ele_more.data('start')),
+            dataType: 'json',
+            success: function(data) {
+                var more_dirents = $(data['html']);
+                more_dirents.appendTo($('.repo-file-list'));
+                more_dirents.unbind().hover( // remove previously binded hover handler at first
+                    function() {
+                        if (no_file_op_popup) {
+                            $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+                        }
+                    },
+                    function() {
+                        if (no_file_op_popup) {
+                            $(this).removeClass('hl').find('.repo-file-op').addClass('vh');
+                        }
+                    }
+                );
+                opOnDirent(more_dirents);
+                $('#name-down, #name-up, #time-up, #time-down').unbind().click(sortDirent);
+                if (data['dirent_more']) {
+                    ele_more.attr('data-start', data['more_start']); 
+                } else {
+                    ele_more.remove();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var error;
+                if (xhr.responseText) {
+                    error = $.parseJSON(xhr.responseText).error; 
+                } else {
+                    error = "{% trans "Failed. Please check the network." %}";
+                }
+                ele_more.replaceWith('<p class="error">' + error + '</p>');
+            }
+        });
     }
 });
  // webkit fires 'onpopstate' when page loads, use 'setTimeout' in 'window.onload' to avoid it.

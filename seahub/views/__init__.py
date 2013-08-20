@@ -184,14 +184,21 @@ def gen_path_link(path, repo_name):
     
     return zipped
 
-def get_repo_dirents(request, repo_id, commit, path):
+def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
     dir_list = []
     file_list = []
+    dirent_more = False
     if commit.root_id == EMPTY_SHA1:
         return ([], [])
     else:
         try:
-            dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path)
+            if limit == -1:
+                dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path, offset, limit)
+            else:
+                dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path, offset, limit + 1)
+                if len(dirs) == limit + 1:
+                    dirs = dirs[:limit]
+                    dirent_more = True
         except SearpcError, e:
             raise Http404
             # return render_error(self.request, e.msg)
@@ -234,7 +241,10 @@ def get_repo_dirents(request, repo_id, commit, path):
                                         y.obj_name.lower()))
         file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
                                          y.obj_name.lower()))
-        return (file_list, dir_list)
+        if limit == -1:
+            return (file_list, dir_list)
+        else:
+            return (file_list, dir_list, dirent_more)
 
 def get_unencry_rw_repos_by_user(username):
     """Get all unencrypted repos the user can read and write.

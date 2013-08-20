@@ -1310,6 +1310,9 @@ textarea:-moz-placeholder {/* for FF */
     padding-left:1em;
     margin-left:1em;
 }
+#repo-file-list {
+    margin-bottom:100px;
+}
 .path { margin: 1.4em 0 0; }
 .access-notice { margin: 0.8em 0 0.4em; }
 .repo-op {
@@ -1371,7 +1374,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list {
     table-layout:auto;
-    margin:0 0 100px;
+    margin:0;
 }
 .repo-file-list .star {
     width:30px;

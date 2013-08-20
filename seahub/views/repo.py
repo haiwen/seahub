@@ -187,7 +187,10 @@ def render_repo(request, repo):
     search_repo_id = None if repo.encrypted else repo.id
     
     is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
-    file_list, dir_list = get_repo_dirents(request, repo.id, head_commit, path)
+    more_start = None
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo.id, head_commit, path, offset=0, limit=100)
+    if dirent_more:
+        more_start = 100
     zipped = get_nav_path(path, repo.name)
     repo_groups = get_shared_groups_by_repo_and_user(repo.id, username)
     if len(repo_groups) > 1:
@@ -212,6 +215,8 @@ def render_repo(request, repo):
             'repo_size': repo_size,
             'dir_list': dir_list,
             'file_list': file_list,
+            'dirent_more': dirent_more,
+            'more_start': more_start,
             'path': path,
             'zipped': zipped,
             'accessible_repos': accessible_repos,
