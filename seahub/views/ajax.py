@@ -275,8 +275,6 @@ def list_dir_more(request, repo_id):
         'path': path,
         'dir_list': dir_list,
         'file_list': file_list,
-        'dirent_more': dirent_more,
-        'more_start': more_start,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
     }   
     html = render_to_string('snippets/repo_dirents.html', ctx,
