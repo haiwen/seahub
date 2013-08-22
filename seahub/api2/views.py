@@ -589,10 +589,10 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         if file_id != EMPTY_SHA1:
             try:
                 blks = seafile_api.list_file_by_file_id(file_id)
+                blklist = blks.split('\n')
             except SearpcError, e:
                 return api_error(status.HTTP_520_OPERATION_FAILED,
                                  'Failed to get file block list')
-        blklist = blks.split('\n')
         blklist = [i for i in blklist if len(i) == 40]
         if len(blklist) > 0:
             repo = get_repo(repo_id)
