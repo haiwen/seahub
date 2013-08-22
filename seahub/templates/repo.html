@@ -400,7 +400,8 @@ dirOP();
 
 function sortDirent() {
     var id= $(this).attr('id'), by,
-        dir_list = [], file_list = [];
+        dir_list = [], file_list = [],
+        table = $('.repo-file-list');
     
     switch (id) {
         case 'name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 };break;
@@ -410,23 +411,24 @@ function sortDirent() {
     }
 
     $('.dir-item').each(function() {
-        dir_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'item_html':$(this).html()});
+        dir_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'element':this});
     });
     $('.file-item').each(function() {
-        file_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'item_html':$(this).html()});
+        file_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'element':this});
     });
 
     dir_list.sort(by);
     file_list.sort(by);
 
-    $('.dir-item').each(function(index, item) {
-        $(this).data('name', dir_list[index].name).data('time', dir_list[index].time).html(dir_list[index].item_html);
-    });
-    $('.file-item').each(function(index, item) {
-        $(this).data('name', file_list[index].name).data('time', file_list[index].time).html(file_list[index].item_html);
-    });
-    opOnDirent();
+    $('.dir-item, .file-item').detach();
 
+    $(dir_list).each(function(index, item) {
+        table.append(item.element);
+    });
+    $(file_list).each(function(index, item) {
+        table.append(item.element);
+    });
+  
     $(this).hide();
     switch (id) {
         case 'name-down': $('#name-up').css({'display':'inline-block'}); break;
