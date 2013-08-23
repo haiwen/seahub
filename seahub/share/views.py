@@ -154,7 +154,7 @@ def share_repo(request):
     """
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = settings.SITE_ROOT
+        next = SITE_ROOT
 
     form = RepoShareForm(request.POST)
     if not form.is_valid():
