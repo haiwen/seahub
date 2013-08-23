@@ -82,25 +82,25 @@ class Command(BaseCommand):
             try:
             
                 # Get a username
-                while 1:
-                    if not username:
-                        input_msg = 'Username'
-                        if default_username:
-                            input_msg += ' (Leave blank to use %r)' % default_username
-                        username = raw_input(input_msg + ': ')
-                    if default_username and username == '':
-                        username = default_username
-                    if not RE_VALID_USERNAME.match(username):
-                        sys.stderr.write("Error: That username is invalid. Use only letters, digits and underscores.\n")
-                        username = None
-                        continue
-                    try:
-                        User.objects.get(email=username)
-                    except User.DoesNotExist:
-                        break
-                    else:
-                        sys.stderr.write("Error: That username is already taken.\n")
-                        username = None
+                # while 1:
+                #     if not username:
+                #         input_msg = 'Username'
+                #         if default_username:
+                #             input_msg += ' (Leave blank to use %r)' % default_username
+                #         username = raw_input(input_msg + ': ')
+                #     if default_username and username == '':
+                #         username = default_username
+                #     if not RE_VALID_USERNAME.match(username):
+                #         sys.stderr.write("Error: That username is invalid. Use only letters, digits and underscores.\n")
+                #         username = None
+                #         continue
+                #     try:
+                #         User.objects.get(email=username)
+                #     except User.DoesNotExist:
+                #         break
+                #     else:
+                #         sys.stderr.write("Error: That username is already taken.\n")
+                #         username = None
             
                 # Get an email
                 while 1:
