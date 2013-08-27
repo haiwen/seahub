@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Seahub 1.6\n"
+"Project-Id-Version: Seahub 1.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-13 20:04-0700\n"
-"PO-Revision-Date: 2013-08-27 11:20+0100\n"
+"PO-Revision-Date: 2013-08-27 11:34+0100\n"
 "Last-Translator: Henri Wahl <h.wahl@ifw-dresden.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
