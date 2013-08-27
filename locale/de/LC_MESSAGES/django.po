@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Seahub 1.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-13 20:04-0700\n"
-"PO-Revision-Date: 2013-08-27 11:34+0100\n"
+"PO-Revision-Date: 2013-08-27 16:09+0100\n"
 "Last-Translator: Henri Wahl <h.wahl@ifw-dresden.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2279,7 +2279,7 @@ msgstr "Links"
 #: seahub/share/templates/repo/share_out_repos.html:13
 #: seahub/share/templates/repo/shared_links.html:13
 msgid "Private Shares"
-msgstr "Direkte Freigaben"
+msgstr "Private Freigaben"
 
 #: seahub/share/templates/repo/priv_shared_files.html:22
 msgid "From Others"
