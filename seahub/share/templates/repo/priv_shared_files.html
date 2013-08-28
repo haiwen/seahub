@@ -43,7 +43,7 @@
             {% endif %}
             <td>--</td>
             <td>{{e.from_user|email2nickname}}</td>
-            <td><a href="{% url 'rm_private_file_share' e.token %}" class="op">Unshare</a></td>
+            <td><a href="{% url 'rm_private_file_share' e.token %}" class="op">{% trans "Unshare" %}</a></td>
         </tr>
         {% endfor %}
         {% endif %}
@@ -71,7 +71,7 @@
             {% endif %}
             <td><a href="{% url 'repo' e.repo_id %}">{{e.repo.name}}</a></td>
             <td>{{e.to_user|email2nickname}}</td>
-            <td><a href="{% url 'rm_private_file_share' e.token %}" class="op">Unshare</a></td>
+            <td><a href="{% url 'rm_private_file_share' e.token %}" class="op">{% trans "Unshare" %}</a></td>
         </tr>
         {% endfor %}
         {% endif %}
