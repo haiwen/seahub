@@ -4,7 +4,6 @@ import stat
 import time
 import simplejson as json
 from urllib2 import unquote, quote
-import seahub.settings as settings
 
 from rest_framework import parsers
 from rest_framework import status
@@ -14,8 +13,15 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
+
 from django.contrib.sites.models import RequestSite
-from django.http import HttpResponse
+from django.core.paginator import EmptyPage, InvalidPage
+from django.db import IntegrityError
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.template import Context, loader, RequestContext
+from django.template.loader import render_to_string
+from django.shortcuts import render_to_response
+from django.utils.translation import ugettext as _
 
 from models import Token
 from authentication import TokenAuthentication
@@ -31,11 +37,11 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_ccnet_server_addr_port, string2list, \
     gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
+import seahub.settings as settings
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-
 from seahub.group.forms import MessageForm
 from seahub.notifications.models import UserNotification
 from seahub.utils.paginator import Paginator
@@ -44,10 +50,6 @@ from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.signals import repo_created
 from seahub.group.views import group_check
-from django.template import Context, loader, RequestContext
-from django.template.loader import render_to_string
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
 from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
@@ -463,7 +465,7 @@ class Repo(APIView):
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
-            "encversion":r.encversion,
+            "encversion":repo.encversion,
             "root":root_id,
             "permission": check_permission(repo.id, username),
             }
@@ -614,7 +616,7 @@ def get_shared_link(request, repo_id, path):
         try:
             fs.save()
         except IntegrityError, e:
-            return api_err(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
     http_or_https = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
@@ -1051,7 +1053,7 @@ class FileSharedLinkView(APIView):
             try:
                 fs.save()
             except IntegrityError, e:
-                return api_err(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
         http_or_https = request.is_secure() and 'https' or 'http'
         domain = RequestSite(request).domain
