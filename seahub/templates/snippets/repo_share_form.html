@@ -31,11 +31,11 @@
         </div>
         <div id="share-contact-options" class="hide">
             <ul class="option-list">
-            {% for contact in contacts %}
+            {% for contact_email in contacts %}
             <li>
             <label class="checkbox-label">
-                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
-                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
+                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact_email }}" class="checkbox-orig" /></span>
+                {% avatar contact_email 20 %} <span class="checkbox-option">{{ contact_email }}</span>
             </label>
             </li>
             {% endfor %}

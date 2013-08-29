@@ -1,8 +1,8 @@
 {% load seahub_tags avatar_tags i18n %}
     //repo-share-form share-list autocomplete
     var share_list = [], contact_email, group_name, group_name_py;
-    {% for contact in contacts %}
-    contact_email = '{{ contact.contact_email }}';
+    {% for contact_email in contacts %}
+    contact_email = '{{ contact_email }}';
     share_list.push({value:contact_email, label:contact_email});
     {% endfor %}
     

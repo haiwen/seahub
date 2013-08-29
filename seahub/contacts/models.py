@@ -4,6 +4,8 @@ from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
+from seaserv import ccnet_threaded_rpc
+
 from seahub.base.fields import LowerCaseCharField
 from settings import CONTACT_EMAIL_LENGTH
 
@@ -25,11 +27,16 @@ class ContactManager(models.Manager):
 
     def get_registered_contacts_by_user(self, user_email):
         """Get a user's registered contacts.
-        """
-        from seahub.views import is_registered_user
 
-        return [ c for c in super(ContactManager, self).filter(
-                user_email=user_email) if is_registered_user(c.contact_email) ]
+        Returns:
+            A list contains contact emails.
+        """
+        contacts = [ c.contact_email for c in super(
+                ContactManager, self).filter(user_email=user_email) ]
+        emailusers = ccnet_threaded_rpc.filter_emailusers_by_emails(
+            ','.join(contacts))
+
+        return [ e.email for e in emailusers ]
 
 class Contact(models.Model):
     """Record user's contacts."""
