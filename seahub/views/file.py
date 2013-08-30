@@ -311,6 +311,9 @@ def view_file(request, repo_id):
                                                                   obj_id, path)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
+    
+    # check if the user is the owner or not, for 'private share'
+    is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
 
     # get file type and extension
     filetype, fileext = get_file_type_and_ext(u_filename)
@@ -412,6 +415,7 @@ def view_file(request, repo_id):
         search_repo_id = repo.id
     return render_to_response(template, {
             'repo': repo,
+            'is_repo_owner': is_repo_owner,
             'obj_id': obj_id,
             'filename': u_filename,
             'path': path,

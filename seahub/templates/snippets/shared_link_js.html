@@ -87,7 +87,15 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
                     }, 10);
                 });
             },
-            error: ajaxErrorHandler 
+            error: function(xhr, textStatus, errorThrown) {
+                var err;
+                if (xhr.responseText) {
+                    err = jQuery.parseJSON(xhr.responseText).error;
+                } else {
+                    err = "{% trans "Failed. Please check the network." %}";
+                } 
+                $('#syncable-share').append('<p class="error">' + err + '</p>');
+            }
         });
     }
 

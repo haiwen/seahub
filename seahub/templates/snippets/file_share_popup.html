@@ -3,13 +3,17 @@
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
         <div id="file-share-tabs">
             <ul id="file-share-tabs-nav">
+                {% if is_repo_owner %}
                 <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li>
+                {% endif %}
                 <li><a href="#link-share">{% trans "Share Link" %}</a></li>
-                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
                 <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Syncable Share" %}</a></li>
                 {% endif %}
             </ul>
 
+
+            {% if is_repo_owner %}
             <div id="private-share">
                 <form id="private-share-form" method="post" action="{% url 'gen_private_file_share' repo.id %}">{% csrf_token %}
                     <select name="emails" class="w100" multiple="multiple"></select>
@@ -20,6 +24,7 @@
                     <input type="submit" value="{% trans "Submit"%}" />
                 </form>
             </div>
+            {% endif %}
             <div id="link-share">
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-link-body" class="hide">
@@ -39,7 +44,7 @@
                 </div>
             </div>
 
-            {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+            {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">
                 <p class="sub-repo-create-tip hide">{% trans "You need to create a sub-library from this directory to let others sync it." %}</p>
                 <button class="create-sub-repo hide">{% trans "Create" %}</button>
