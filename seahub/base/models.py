@@ -1,16 +1,22 @@
 import datetime
+import logging
 import re
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from seaserv import get_emailusers
+from pysearpc import SearpcError
+from seaserv import seafile_api, get_emailusers
 
 from seahub.shortcuts import get_first_object_or_none
 from seahub.base.templatetags.seahub_tags import at_pattern
 from seahub.group.models import GroupMessage
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
+from seahub.utils import get_files_last_modified
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 class UuidObjidMap(models.Model):    
     """
@@ -49,118 +55,111 @@ class FileContributors(models.Model):
     # email addresses seperated by comma
     emails = models.TextField()
 
-class InnerPubMsg(models.Model):
-    """
-    Model used for leave message on inner pub page.
-    """
-    from_email = models.EmailField()
-    message = models.CharField(max_length=500)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-    class Meta:
-        ordering = ['-timestamp']
-    
-class InnerPubMsgReply(models.Model):
-    reply_to = models.ForeignKey(InnerPubMsg)
-    from_email = models.EmailField()
-    message = models.CharField(max_length=150)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
+class StarredFile(object):
+    def format_path(self):
+        if self.path == "/":
+            return self.path
 
-# @receiver(post_save, sender=InnerPubMsgReply)
-def msgreply_save_handler(sender, instance, **kwargs):
-    """
-    Handle sending notification to '@<user>' when reply messages.
-    """
-    from_email = instance.from_email
-    reply_msg = instance.message
-    innerpub_msg = instance.reply_to
-    to_user = ''
+        # strip leading slash
+        path = self.path[1:]
+        if path[-1:] == '/':
+            path = path[:-1]
+        return path.replace('/', ' / ')
 
+    def __init__(self, org_id, repo, file_id, path, is_dir, size):
+        # always 0 for non-org repo
+        self.org_id = org_id
+        self.repo = repo
+        self.file_id = file_id
+        self.path = path
+        self.formatted_path = self.format_path()
+        self.is_dir = is_dir
+        self.size = size
+        self.last_modified = None
+        if not is_dir:
+            self.name = path.split('/')[-1]
 
-    m = re.match(at_pattern, reply_msg)
-    if m:
-        nickname_or_emailprefix = m.group()[1:]
-        for member in get_emailusers(-1, -1):
-            # For every user, get his username and nickname if
-            # it exists, check whether match.
-            username = member.email
-            if username == from_email:
+class UserStarredFilesManager(models.Manager):
+    def get_starred_files_by_username(self, username):
+        """Get a user's starred files.
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        starred_files = super(UserStarredFilesManager, self).filter(
+            email=username, org_id=-1)
+
+        ret = []
+        repo_cache = {}
+        for sfile in starred_files:
+            # repo still exists?
+            if repo_cache.has_key(sfile.repo_id):
+                repo = repo_cache[sfile.repo_id]
+            else:
+                try:
+                    repo = seafile_api.get_repo(sfile.repo_id)
+                except SearpcError:
+                    continue
+                if repo is not None:
+                    repo_cache[sfile.repo_id] = repo
+                else:
+                    sfile.delete()
+                    continue
+
+            # file still exists?
+            file_id = ''
+            size = -1
+            if sfile.path != "/":
+                try:
+                    file_id = seafile_api.get_file_id_by_path(sfile.repo_id,
+                                                              sfile.path)
+                    # size = seafile_api.get_file_size(file_id)
+                except SearpcError:
+                    continue
+                if not file_id:
+                    sfile.delete()
+                    continue
+
+            f = StarredFile(sfile.org_id, repo, file_id, sfile.path,
+                            sfile.is_dir, 0) # TODO: remove ``size`` from StarredFile
+            ret.append(f)
+
+        '''Calculate files last modification time'''
+        files_list = []
+        for sfile in ret:
+            if sfile.is_dir:
                 continue
-            
-            p = get_first_object_or_none(
-                Profile.objects.filter(user=username))
-            nickname = p.nickname if p else ''
-            if nickname == nickname_or_emailprefix or \
-                    username.split('@')[0] == nickname_or_emailprefix:
-                to_user = username
-                break
+            ele = (sfile.repo.id, sfile.path, sfile.file_id)
+            files_list.append(ele)
 
-        if to_user:
-            # Send notification to the user if he replies someone else'
-            # message.
-            try:
-                UserNotification.objects.get(to_user=to_user,
-                                             msg_type='innerpubmsg_reply',
-                                             detail=innerpub_msg.id)
-            except UserNotification.DoesNotExist:
-                n = UserNotification(to_user=to_user,
-                                     msg_type='innerpubmsg_reply',
-                                     detail=innerpub_msg.id)
-                n.save()
-    
-# @receiver(post_save, sender=InnerPubMsg)
-def innerpub_msg_added_cb(sender, instance, **kwargs):
-    from_email = instance.from_email
+        files_dict_with_last_modified = get_files_last_modified(files_list)
 
-    users = get_emailusers(-1, -1)
-    for u in users:
-        if u.email == from_email:
-            continue
-        try:
-            UserNotification.objects.get(to_user=u.email,
-                                         msg_type='innerpub_msg')
-        except UserNotification.DoesNotExist:
-            n = UserNotification(to_user=u.email, msg_type='innerpub_msg',
-                                 detail='')
-            n.save()
+        for sfile in ret:
+            key = "%s|%s|%s" % (sfile.repo.id, sfile.path, sfile.file_id)
+            if files_dict_with_last_modified.has_key(key):
+                sfile.last_modified = files_dict_with_last_modified[key]
+            else:
+                # Should never reach here
+                pass
 
-# @receiver(post_save, sender=InnerPubMsgReply)
-def innerpubmsg_reply_added_cb(sender, instance, **kwargs):
-    innerpub_msg = instance.reply_to
-    from_email = instance.from_email
-    msg_id = innerpub_msg.id
-    
-    if from_email == innerpub_msg.from_email:
-        # No need to send notification when reply own message.
-        return
+        ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
-    try:
-        innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
-    except InnerPubMsg.DoesNotExist:
-        pass
-
-    try:
-        UserNotification.objects.get(to_user=innerpub_msg.from_email,
-                                     msg_type='innerpubmsg_reply',
-                                     detail=msg_id)
-    except UserNotification.DoesNotExist:
-        n = UserNotification(to_user=innerpub_msg.from_email,
-                             msg_type='innerpubmsg_reply',
-                             detail=msg_id)
-        n.save()
+        return ret
             
 class UserStarredFiles(models.Model):
     """Starred files are marked by users to get quick access to it on user
     home page.
 
     """
-
     email = models.EmailField()
     org_id = models.IntegerField()
     repo_id = models.CharField(max_length=36, db_index=True)
-    
     path = models.TextField()
     is_dir = models.BooleanField()
+
+    objects = UserStarredFilesManager()
 
 class DirFilesLastModifiedInfo(models.Model):
     '''Cache the results of the calculation of last modified time of all the
@@ -188,10 +187,111 @@ class FileLastModifiedInfo(models.Model):
     file_id = models.CharField(max_length=40)
     
     file_path = models.TextField()
-    file_path_hash = models.CharField(max_length=12)
+    file_path_hash = models.CharField(max_length=12, db_index=True)
 
     last_modified = models.BigIntegerField()
     email = models.EmailField()
 
     class Meta:
         unique_together = ('repo_id', 'file_path_hash')
+
+###### Deprecated
+class InnerPubMsg(models.Model):
+    """
+    Model used for leave message on inner pub page.
+    """
+    from_email = models.EmailField()
+    message = models.CharField(max_length=500)
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+        ordering = ['-timestamp']
+    
+class InnerPubMsgReply(models.Model):
+    reply_to = models.ForeignKey(InnerPubMsg)
+    from_email = models.EmailField()
+    message = models.CharField(max_length=150)
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
+
+# # @receiver(post_save, sender=InnerPubMsgReply)
+# def msgreply_save_handler(sender, instance, **kwargs):
+#     """
+#     Handle sending notification to '@<user>' when reply messages.
+#     """
+#     from_email = instance.from_email
+#     reply_msg = instance.message
+#     innerpub_msg = instance.reply_to
+#     to_user = ''
+
+
+#     m = re.match(at_pattern, reply_msg)
+#     if m:
+#         nickname_or_emailprefix = m.group()[1:]
+#         for member in get_emailusers(-1, -1):
+#             # For every user, get his username and nickname if
+#             # it exists, check whether match.
+#             username = member.email
+#             if username == from_email:
+#                 continue
+            
+#             p = get_first_object_or_none(
+#                 Profile.objects.filter(user=username))
+#             nickname = p.nickname if p else ''
+#             if nickname == nickname_or_emailprefix or \
+#                     username.split('@')[0] == nickname_or_emailprefix:
+#                 to_user = username
+#                 break
+
+#         if to_user:
+#             # Send notification to the user if he replies someone else'
+#             # message.
+#             try:
+#                 UserNotification.objects.get(to_user=to_user,
+#                                              msg_type='innerpubmsg_reply',
+#                                              detail=innerpub_msg.id)
+#             except UserNotification.DoesNotExist:
+#                 n = UserNotification(to_user=to_user,
+#                                      msg_type='innerpubmsg_reply',
+#                                      detail=innerpub_msg.id)
+#                 n.save()
+    
+# # @receiver(post_save, sender=InnerPubMsg)
+# def innerpub_msg_added_cb(sender, instance, **kwargs):
+#     from_email = instance.from_email
+
+#     users = get_emailusers(-1, -1)
+#     for u in users:
+#         if u.email == from_email:
+#             continue
+#         try:
+#             UserNotification.objects.get(to_user=u.email,
+#                                          msg_type='innerpub_msg')
+#         except UserNotification.DoesNotExist:
+#             n = UserNotification(to_user=u.email, msg_type='innerpub_msg',
+#                                  detail='')
+#             n.save()
+
+# # @receiver(post_save, sender=InnerPubMsgReply)
+# def innerpubmsg_reply_added_cb(sender, instance, **kwargs):
+#     innerpub_msg = instance.reply_to
+#     from_email = instance.from_email
+#     msg_id = innerpub_msg.id
+    
+#     if from_email == innerpub_msg.from_email:
+#         # No need to send notification when reply own message.
+#         return
+
+#     try:
+#         innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
+#     except InnerPubMsg.DoesNotExist:
+#         pass
+
+#     try:
+#         UserNotification.objects.get(to_user=innerpub_msg.from_email,
+#                                      msg_type='innerpubmsg_reply',
+#                                      detail=msg_id)
+#     except UserNotification.DoesNotExist:
+#         n = UserNotification(to_user=innerpub_msg.from_email,
+#                              msg_type='innerpubmsg_reply',
+#                              detail=msg_id)
+#         n.save()

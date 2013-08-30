@@ -150,9 +150,10 @@
 <table>
     <tr>
         <th width="5%"></th>
-        <th width="45%">{% trans "File Name" %}</th>
+        <th width="43%">{% trans "File Name" %}</th>
         <th width="30%">{% trans "Library" %}</th>
-        <th width="20%">{% trans "Last Update" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
     </tr>
     {% for sfile in starred_files %}
     <tr>
@@ -162,6 +163,9 @@
         </td>
         <td>{{ sfile.repo.name }}</td>
         <td>{{ sfile.last_modified|translate_seahub_time }}</td>
+        <td>
+          <span data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path|urlencode}}" class="icon-trash unstar-btn op-icon vh" title="{% trans "Unstar" %}"></span>
+        </td>
     </tr>
     {% endfor %}
 </table>

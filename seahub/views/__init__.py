@@ -53,7 +53,8 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
-from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply
+from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
+    UserStarredFiles
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
@@ -75,10 +76,10 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
-    get_starred_files, star_file, unstar_file, is_file_starred, get_dir_starred_files, \
     get_dir_files_last_modified, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
+from seahub.utils.star import get_dir_starred_files
 
 from seahub.utils import HAS_OFFICE_CONVERTER
 
@@ -878,7 +879,8 @@ def myhome(request):
 
     allow_public_share = False if request.cloud_mode else True
 
-    starred_files = get_starred_files(request.user.username)
+    starred_files = UserStarredFiles.objects.get_starred_files_by_username(
+        request.user.username)
 
     traffic_stat = 0
     if TRAFFIC_STATS_ENABLED:

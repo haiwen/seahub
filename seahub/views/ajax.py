@@ -22,7 +22,8 @@ from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
 from seahub.signals import repo_created
-from seahub.utils import check_filename_with_rename, star_file, unstar_file
+from seahub.utils import check_filename_with_rename
+from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)

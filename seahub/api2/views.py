@@ -22,14 +22,15 @@ from authentication import TokenAuthentication
 from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
 from seahub.base.accounts import User
-from seahub.base.models import FileDiscuss
+from seahub.base.models import FileDiscuss, UserStarredFiles
 from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
-    check_filename_with_rename, get_starred_files, get_ccnetapplet_root, \
+    check_filename_with_rename, get_ccnetapplet_root, \
     get_dir_files_last_modified, get_user_events, EMPTY_SHA1, \
-    get_ccnet_server_addr_port, star_file, unstar_file, string2list, \
+    get_ccnet_server_addr_port, string2list, \
     gen_block_get_url
+from seahub.utils.star import star_file, unstar_file
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -647,7 +648,8 @@ def append_starred_files(array, files):
 
 def api_starred_files(request):
     starred_files = []
-    personal_files = get_starred_files(request.user.username, -1)
+    personal_files = UserStarredFiles.objects.get_starred_files_by_username(
+        request.user.username)
     append_starred_files (starred_files, personal_files)
     return Response(starred_files)
 

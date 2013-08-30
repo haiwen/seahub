@@ -39,12 +39,13 @@ from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, \
-    get_file_type_and_ext, gen_file_get_url, gen_file_share_link, is_file_starred, \
+    get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     get_file_contributors, get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
+from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER
 
 if HAS_OFFICE_CONVERTER:

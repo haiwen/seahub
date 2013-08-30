@@ -407,6 +407,8 @@ def check_and_get_org_by_group(group_id, user):
     return org, base_template
 
 def calc_file_last_modified(repo_id, file_path, file_path_hash, file_id):
+    """Calculate file last modification time, and save to db.
+    """
     try:
         # get the lastest one file revision
         commits = seafserv_threaded_rpc.list_file_revisions(repo_id, file_path, 1, -1)
@@ -427,7 +429,9 @@ def calc_file_last_modified(repo_id, file_path, file_path_hash, file_id):
     try:
         info.save()
     except IntegrityError:
-        pass
+        # Remove corrupted data, waiting for next insertion.
+        FileLastModifiedInfo.objects.filter(
+            repo_id=repo_id, file_path_hash=file_path_hash).delete()
 
     return email, last_modified
 
@@ -541,6 +545,78 @@ def get_file_contributors(repo_id, file_path, file_path_hash, file_id):
 
     return contributors, last_modified, last_commit_id 
 
+def get_files_last_modified(files_list):
+    """Batch calculate file last modification file.
+
+    Arguments:
+    - `files_list`: A list contains repo id and file path and file id.
+
+    For example:
+    
+        [
+        (u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3', u'/Chrys (1).jpg', u'c5ee20b7ecf5c44bd184cf64c775aad769f50399'),
+        (u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3', u'/Chrys (2).jpg', u'd5ee20b7ecf5c44bd184cf64c775aad769f50399'),
+        (u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3', u'/foo.pdf', u'f78b579f757cec44a99d420331a06ad752b30153'),
+
+        ...
+    	]
+
+    Returns:
+        A dict mapping keys to the repo id and file path, seperated by "|",
+        and values to the last modification time. For example:
+
+        {
+        u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3|/Chrys (1).jpg|c5ee20b7ecf5c44bd184cf64c775aad769f50399': 1374549194,
+        u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3|/Chrys (2).jpg|d5ee20b7ecf5c44bd184cf64c775aad769f50399': 1374585247,
+        u'66a7aaaf-0b59-4c22-9f7a-52606e8fbee3|/foo.pdf|f78b579f757cec44a99d420331a06ad752b30153': 1362471870,
+
+        ...
+        }
+    
+    """
+    filepath_hash_set = set()
+    ret_dict = {}
+
+    for e in files_list:
+        repo_id, file_path, file_id = e
+        path_hash = calc_file_path_hash(file_path)
+        filepath_hash_set.add(path_hash)
+
+    m_infos = FileLastModifiedInfo.objects.filter(
+        file_path_hash__in=list(filepath_hash_set))
+    for f in files_list:
+        repo_id, file_path, file_id = f
+        for info in m_infos:
+            if repo_id == info.repo_id and file_path == info.file_path:
+                # Got the record in db
+                ret_key = '|'.join(f)
+                if file_id != info.file_id:
+                    # record is outdated, need re-calculate
+                    info.delete()
+                    email, last_modified = calc_file_last_modified(
+                        info.repo_id, info.file_path, info.file_path_hash,
+                        file_id)
+                    ret_dict[ret_key] = last_modified
+                    continue
+                else:
+                    # record is valid
+                    ret_dict[ret_key] = info.last_modified
+                    continue
+
+    # Process the remaining files.
+    for f in files_list:
+        ret_key = '|'.join(f)
+        if ret_dict.has_key(ret_key):
+            continue
+
+        repo_id, file_path, file_id = f
+        path_hash = calc_file_path_hash(file_path)
+        email, last_modified = calc_file_last_modified(
+            repo_id, file_path, path_hash, file_id)
+        ret_dict[ret_key] = last_modified
+        
+    return ret_dict
+    
 # events related    
 if EVENTS_CONFIG_FILE:
     import seafevents
@@ -651,129 +727,6 @@ else:
         pass
     def get_org_user_events():
         pass
-
-class StarredFile(object):
-    def format_path(self):
-        if self.path == "/":
-            return self.path
-
-        # strip leading slash
-        path = self.path[1:]
-        if path[-1:] == '/':
-            path = path[:-1]
-        return path.replace('/', ' / ')
-
-    def __init__(self, org_id, repo, path, is_dir, last_modified, size):
-        # always 0 for non-org repo
-        self.org_id = org_id
-        self.repo = repo
-        self.path = path
-        self.formatted_path = self.format_path()
-        self.is_dir = is_dir
-        # always 0 for dir
-        self.last_modified = last_modified
-        self.size = size
-        if not is_dir:
-            self.name = path.split('/')[-1]
-
-
-# org_id > 0: get starred files in org repos
-# org_id < 0: get starred files in personal repos
-def get_starred_files(email, org_id=-1):
-    """Return a list of starred files for some user, sorted descending by the
-    last modified time.
-
-    """
-    starred_files = UserStarredFiles.objects.filter(email=email, org_id=org_id)
-
-    ret = []
-    for sfile in starred_files:
-        # repo still exists?
-        try:
-            repo = get_repo(sfile.repo_id)
-        except SearpcError:
-            continue
-
-        if not repo:
-            sfile.delete()
-            continue
-
-        # file still exists?
-        file_id = ''
-        size = -1
-        if sfile.path != "/":
-            try:
-                file_id = seafserv_threaded_rpc.get_file_id_by_path(sfile.repo_id, sfile.path)
-                size = seafserv_threaded_rpc.get_file_size(file_id)
-            except SearpcError:
-                continue
-
-            if not file_id:
-                sfile.delete()
-                continue
-
-        last_modified = 0
-        if not sfile.is_dir:
-            # last modified
-            path_hash = md5_constructor(urllib2.quote(sfile.path.encode('utf-8'))).hexdigest()[:12]
-            last_modified = get_file_contributors(sfile.repo_id, sfile.path, path_hash, file_id)[1]
-
-        f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified, size)
-
-        ret.append(f)
-    ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
-
-    return ret
-
-def star_file(email, repo_id, path, is_dir, org_id=-1):
-    if is_file_starred(email, repo_id, path, org_id):
-        return
-
-    f = UserStarredFiles(email=email,
-                         org_id=org_id,
-                         repo_id=repo_id,
-                         path=path,
-                         is_dir=is_dir)
-    try:
-        f.save()
-    except IntegrityError, e:
-        logger.warn(e)
-
-def unstar_file(email, repo_id, path):
-    # Should use "get", but here we use "filter" to fix the bug caused by no
-    # unique constraint in the table
-    result = UserStarredFiles.objects.filter(email=email,
-                                             repo_id=repo_id,
-                                             path=path)
-    for r in result:
-        r.delete()
-            
-def is_file_starred(email, repo_id, path, org_id=-1):
-    # Should use "get", but here we use "filter" to fix the bug caused by no
-    # unique constraint in the table
-    result = UserStarredFiles.objects.filter(email=email,
-                                             repo_id=repo_id,
-                                             path=path,
-                                             org_id=org_id)
-    n = len(result)
-    if n == 0:
-        return False
-    else:
-        # Fix the bug caused by no unique constraint in the table
-        if n > 1:
-            for r in result[1:]:
-                r.delete()
-        return True
-
-def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1): 
-    '''Get starred files under parent_dir.
-
-    '''
-    starred_files = UserStarredFiles.objects.filter(email=email,
-                                         repo_id=repo_id,
-                                         path__startswith=parent_dir,
-                                         org_id=org_id)
-    return [ f.path for f in starred_files ]
 
 def calc_dir_files_last_modified(repo_id, parent_dir, parent_dir_hash, dir_id):
     try:
@@ -1111,4 +1064,4 @@ if EVENTS_CONFIG_FILE:
     HAS_FILE_SEARCH = check_search_enabled()
 
 # Move to here to avoid circular import.
-from seahub.base.models import FileContributors, UserStarredFiles, DirFilesLastModifiedInfo, FileLastModifiedInfo
+from seahub.base.models import FileContributors, DirFilesLastModifiedInfo, FileLastModifiedInfo
