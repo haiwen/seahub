@@ -469,6 +469,50 @@ def delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
+@login_required    
+def delete_dirents(request, repo_id):
+    """
+    Delete multi files/dirs with ajax.    
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u'Library does not exist.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=400, content_type=content_type)
+
+    # permission checking
+    username = request.user.username
+    if check_repo_access_permission(repo.id, username) != 'rw':
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=403, content_type=content_type)
+
+    # argument checking
+    parent_dir = request.GET.get("parent_dir")
+    dirents_names = request.POST.getlist('dirents_names')
+    if not (parent_dir and dirents_names):
+        err_msg = _(u'Argument missing.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=400, content_type=content_type)
+
+    deleted = []
+    undeleted = []
+    for dirent_name in dirents_names:
+        try:
+            seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
+            deleted.append(dirent_name)
+        except SearpcError, e:
+            logger.error(e)
+            undeleted.append(dirent_name)
+
+    return HttpResponse(json.dumps({'deleted': deleted,'undeleted': undeleted}),
+                            content_type=content_type)
+
 def copy_move_common(func):
     """Decorator for common logic in copying/moving dir/file.
     """
@@ -518,8 +562,8 @@ def copy_move_common(func):
 
         # do nothing when dst is the same as src
         if repo_id == dst_repo_id and path == dst_path:
-            url = reverse('repo', args=[repo_id]) + ('?p=%s' % urlquote(path))
-            return HttpResponseRedirect(url)
+            result['error'] = _('Invalid destination path')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
         return func(repo_id, path, dst_repo_id, dst_path, obj_name, username)
     return _decorated
 
@@ -625,6 +669,123 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
+
+
+def dirents_copy_move_common(func):
+    """
+    Decorator for common logic in copying/moving dirs/files.
+    """
+    def _decorated(request, repo_id, *args, **kwargs):
+
+        if request.method != 'POST' or not request.is_ajax():
+            raise Http404
+
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        repo = get_repo(repo_id)
+        if not repo:
+            result['error'] = _(u'Library does not exist.')
+            return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
+        # permission checking
+        username = request.user.username
+        if check_repo_access_permission(repo.id, username) != 'rw':
+            result['error'] = _('Permission denied')
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
+
+        # arguments validation
+        parent_dir = request.GET.get('parent_dir')
+        obj_file_names = request.POST.getlist('file_names')
+        obj_dir_names = request.POST.getlist('dir_names')
+        dst_repo_id = request.POST.get('dst_repo')
+        dst_path = request.POST.get('dst_path')
+
+        if not (parent_dir and dst_repo_id and dst_path) and not (obj_file_names or obj_dir_names):
+            result['error'] = _('Argument missing')
+            return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
+        # check file path
+        for obj_name in obj_file_names + obj_dir_names:
+            if len(dst_path+obj_name) > settings.MAX_PATH:
+                result['error'] =  _('Destination path is too long for %s.') % obj_name
+                return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+    
+        # check whether user has write permission to dest repo
+        if check_repo_access_permission(dst_repo_id, username) != 'rw':
+            result['error'] = _('Permission denied')
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
+
+        # when dst is the same as src
+        if repo_id == dst_repo_id and parent_dir == dst_path:
+            result['error'] = _('Invalid destination path')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        return func(repo_id, parent_dir, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username)
+    return _decorated
+
+@login_required
+@dirents_copy_move_common
+def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    content_type = 'application/json; charset=utf-8'
+
+    for obj_name in obj_dir_names:
+        src_dir = os.path.join(src_path, obj_name)
+        if dst_path.startswith(src_dir):
+            error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
+                % {'src': src_dir, 'des': dst_path}
+            result['error'] = error_msg
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    
+    success = []
+    failed = []
+    url = None
+    for obj_name in obj_file_names + obj_dir_names:
+        new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+        try:
+            seafile_api.move_file(src_repo_id, src_path, obj_name,
+                                  dst_repo_id, dst_path, new_obj_name, username)
+            success.append(obj_name)
+        except SearpcError, e:
+            failed.append(obj_name)
+
+    if len(success) > 0:   
+        url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    return HttpResponse(json.dumps({'success': success, 'failed': failed, 'url': url}), content_type=content_type)
+
+@login_required
+@dirents_copy_move_common
+def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    content_type = 'application/json; charset=utf-8'
+
+    for obj_name in obj_dir_names:
+        src_dir = os.path.join(src_path, obj_name)
+        if dst_path.startswith(src_dir):
+            error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
+                % {'src': src_dir, 'des': dst_path}
+            result['error'] = error_msg
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    
+    success = []
+    failed = []
+    url = None
+    for obj_name in obj_file_names + obj_dir_names:
+        new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+        try:
+            seafile_api.copy_file(src_repo_id, src_path, obj_name,
+                                  dst_repo_id, dst_path, new_obj_name, username)
+            success.append(obj_name)
+        except SearpcError, e:
+            failed.append(obj_name)
+
+    if len(success) > 0:   
+        url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    return HttpResponse(json.dumps({'success': success, 'failed': failed, 'url': url}), content_type=content_type)
 
 @login_required
 def repo_star_file(request, repo_id):

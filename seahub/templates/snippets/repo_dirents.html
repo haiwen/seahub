@@ -1,6 +1,9 @@
 {% load seahub_tags i18n %}
     {% for dirent in dir_list %}
     <tr class="dir-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }}{%else %}0{% endif %}">
+        <td class="select">
+            <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        </td>
         <td class="star"></td>
         <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
         <td>
@@ -41,6 +44,9 @@
     {% endfor %}
     {% for dirent in file_list %}
     <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }} {%else %}0{% endif %}">
+        <td class="select">
+            <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        </td>
         <td class="star alc">
             {% if dirent.starred %}
             <span title="{% trans 'starred' %}" class="icon-star file-star" data-status="starred"></span>

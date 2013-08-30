@@ -44,6 +44,13 @@
     </div>
 
     <!-- popups -->
+    {% if user_perm == 'rw' %}
+    <div id="dirents-op" class="hide">
+        <button id="del-dirents" title="{% trans "Delete"%}" class="op-icon-btn"><span class="icon-trash"></span></button>
+        <button id="mv-dirents" title="{% trans "Move"%}" class="op-icon-btn"><span class="icon-move"></span></button>
+        <button id="cp-dirents" title="{% trans "Copy"%}" class="op-icon-btn"><span class="icon-copy"></span></button>
+    </div>
+    {% endif %}
     <div id="upload-file-dialog" class="hide">
         <h3>{% trans "Upload Files" %}</h3>
         {% if no_quota %}
@@ -312,6 +319,211 @@ $('#repo-setting-form').submit(function() {
 });
 {% endif %}
 
+function setDirentsOpPos() {
+    var dirents_op = $('#dirents-op');
+    dirents_op.css({
+        'left': $('#repo-file-list').offset().left - dirents_op.outerWidth(true) - 20,
+        'top': $(window).height()/2
+    });
+}
+
+$('#del-dirents').click(function() {
+    $('#confirm-popup').modal({appendTo:'#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+    $('#confirm-con').html('<h3>' + "{% trans "Delete Items" %}" + '</h3><p>' + "{% trans "Are you sure you want to delete these selected items?" %}" + '</p>');
+    $('#confirm-yes').unbind().click(del_dirents);
+});
+var del_dirents = function() {
+    $('#confirm-popup').append('<p style="color:red;">' + "{% trans "Processing..." %}" + '</p>');
+    var dirents = $('.checkbox-checked').parents('.dir-item, .file-item'),
+        dirents_names = [];
+    dirents.each(function() {
+        dirents_names.push($(this).data('name'));
+    });
+    $.ajax({
+        url: '{% url 'delete_dirents' repo.id %}' + '?parent_dir=' + e(cur_path),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        traditional: true,
+        data: {
+            'dirents_names': dirents_names
+        },
+        success: function(data) {
+            var deleted_len = data['deleted'].length,
+                msg_s, msg_f;
+            
+            if (deleted_len > 0) {
+                if (deleted_len == dirents_names.length) {
+                    dirents.remove();
+                } else {
+                    dirents.each(function() {
+                        if ($(this).data('name') in data['deleted']) {
+                            $(this).remove();
+                        }
+                    }); 
+                }
+                if (data['deleted'].length > 1) {
+                    msg_s = "{% trans "Successfully deleted %(name)s and %(amount)s other items." %}";
+                } else {
+                    msg_s = "{% trans "Successfully deleted %(name)s." %}";
+                }
+                msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', data['deleted'].length - 1);
+                feedback(msg_s, 'success'); 
+                updateCmt();
+            }
+
+            if (data['undeleted'].length > 0) {
+                if (data['undeleted'].length > 1) {
+                    msg_f = "{% trans "Internal error. Failed to delete %(name)s and %(amount)s other items." %}"
+                } else {
+                    msg_f = "{% trans "Internal error. Failed to delete %(name)s." %}"
+                }
+                msg_f = msg_f.replace('%(name)s', data['undeleted'][0]).replace('%(amount)s', data['undeleted'].length - 1);
+                feedback(msg_f, 'error'); 
+            }
+            $.modal.close();
+            $('#dirents-op').addClass('hide');
+            $('th.select .checkbox').removeClass('checkbox-checked');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            $.modal.close();
+            ajaxErrorHandler(xhr, textStatus, errorThrown);
+        }
+    });
+};
+
+$('#mv-dirents, #cp-dirents').click(function() {
+    var form = $('#mv-form'), op;
+    form.modal({appendTo:'#main', autoResize:true, focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    if ($(this).attr('id') == 'mv-dirents') {
+        op = 'mv';
+        form.prepend("<h3>{% trans "Move selected directories/files to:" %}</h3>");
+    } else {
+        op = 'cp';
+        form.prepend("<h3>{% trans "Copy selected directories/files to:" %}</h3>");
+    }
+
+    var file_tree = new FileTree();
+    file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, current_repo);
+
+    var files = $('.checkbox-checked').parents('.file-item'),
+        dirs = $('.checkbox-checked').parents('.dir-item'),
+        dir_names = [], file_names = [];
+
+    files.each(function() {
+        file_names.push($(this).data('name'));
+    });
+    dirs.each(function() {
+        dir_names.push($(this).data('name'));
+    });
+
+    form.submit(function() {
+        var dst_repo = $('[name="dst_repo"]', form).val(),
+            dst_path = $('[name="dst_path"]', form).val(),
+            url_main;
+
+        if (!$.trim(dst_repo) || !$.trim(dst_path)) {
+            $('.error', form).removeClass('hide');
+            return false;
+        }
+        if (dst_repo == '{{repo.id }}' && dst_path == cur_path) {
+            $('.error', form).html("{% trans "Invalid destination path" %}").removeClass('hide');
+            return false;
+        }
+
+        if (op == 'mv') {
+            url_main = '{% url 'mv_dirents' repo.id %}';
+        } else {
+            url_main = '{% url 'cp_dirents' repo.id %}';
+        }
+
+        disable($('[type="submit"]', form));
+        form.append('<p style="color:red;">' + "{% trans "Processing..." %}" + '</p>');
+        $.ajax({
+            url: url_main + '?parent_dir=' + e(cur_path),
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: prepareCSRFToken,
+            traditional: true,
+            data: {
+                'file_names': file_names,
+                'dir_names': dir_names,
+                'dst_repo': dst_repo,
+                'dst_path': dst_path
+            },
+            success: function(data) {
+                var success_len = data['success'].length,
+                    msg_s, msg_f;
+
+                $.modal.close();
+                $('#dirents-op').addClass('hide');
+                $('th.select .checkbox').removeClass('checkbox-checked');
+
+                if (success_len > 0) {
+                    if (op == 'mv') {
+                        if (success_len == files.length + dirs.length) {
+                            files.remove();
+                            dirs.remove();
+                        } else {
+                            files.each(function() {
+                                if ($(this).data('name') in data['success']) {
+                                    $(this).remove();
+                                }
+                            }); 
+                            dirs.each(function() {
+                                if ($(this).data('name') in data['success']) {
+                                    $(this).remove();
+                                }
+                            }); 
+                        }
+                        if (data['success'].length > 1) {
+                            msg_s = "{% trans "Successfully moved %(name)s and %(amount)s other items." %}";
+                        } else {
+                            msg_s = "{% trans "Successfully moved %(name)s." %}";
+                        }
+                    } else {
+                        $('.checkbox').removeClass('checkbox-checked');
+                        if (data['success'].length > 1) {
+                            msg_s = "{% trans "Successfully copied %(name)s and %(amount)s other items." %}";
+                        } else {
+                            msg_s = "{% trans "Successfully copied %(name)s." %}";
+                        }
+                    }
+                    msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', data['success'].length - 1);
+                    msg_s += ' <a href="' + data['url'] + '">' + "{% trans "View" %}" + '</a>';
+                    feedback(msg_s, 'success'); 
+                    updateCmt();
+                }
+
+                if (data['failed'].length > 0) {
+                    if (op == 'mv') {
+                        if (data['failed'].length > 1) {
+                            msg_f = "{% trans "Internal error. Failed to move %(name)s and %(amount)s other items." %}";
+                        } else {
+                            msg_f = "{% trans "Internal error. Failed to move %(name)s." %}";
+                        }
+                    } else {
+                        if (data['failed'].length > 1) {
+                            msg_f = "{% trans "Internal error. Failed to copy %(name)s and %(amount)s other items." %}";
+                        } else {
+                            msg_f = "{% trans "Internal error. Failed to copy %(name)s." %}";
+                        }
+                    }
+                    msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
+                    feedback(msg_f, 'error'); 
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $.modal.close();
+                ajaxErrorHandler(xhr, textStatus, errorThrown);
+            }
+        });
+        return false;
+    });
+});
 
 // js on repo file list
 var no_file_op_popup = true;
@@ -376,6 +588,28 @@ $('#share-cur-dir').click(function() {
    showSharePopup(op, name, aj_url, type, cur_path);
 });
 
+//select all or not
+$('th .checkbox-orig').unbind().click(function() {
+    var dirents_op = $('#dirents-op');
+
+    // keep all checkbox in the same state: selected or not
+    // a case: select all, and then scroll to req 'more'...
+    $(this).parent().toggleClass('checkbox-checked');
+    if ($(this).parent().hasClass('checkbox-checked')) {
+        $('.checkbox').addClass('checkbox-checked');
+    } else {
+        $('.checkbox').removeClass('checkbox-checked');
+    }
+
+    // show buttons or not
+    if ($('.checkbox-checked', $('.dir-item, .file-item')).length > 0) {
+        dirents_op.removeClass('hide');
+        setDirentsOpPos();
+    } else {
+        dirents_op.addClass('hide');
+    }
+});
+
 //sort
 $('#name-down, #name-up, #time-up, #time-down').click(sortDirent);
 
@@ -410,11 +644,12 @@ function sortDirent() {
         case 'time-down': by = function(a, b) { return a.time < b.time ? 1 : -1 };break;
     }
 
+    // when 'name' is like '123', `data('name')` return number 123 
     $('.dir-item').each(function() {
-        dir_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'element':this});
+        dir_list.push({'name':$(this).attr('data-name'), 'time':$(this).data('time'), 'element':this});
     });
     $('.file-item').each(function() {
-        file_list.push({'name':$(this).data('name'), 'time':$(this).data('time'), 'element':this});
+        file_list.push({'name':$(this).attr('data-name'), 'time':$(this).data('time'), 'element':this});
     });
 
     dir_list.sort(by);
@@ -464,19 +699,28 @@ function changeLocation(data) {
     }
 }
 function reqDirData(url, func) {
+    var orig_wtop = $(window).scrollTop();
     $.ajax({
         url: url,
         cache: false,
         dataType: 'json',
         success: function(data) {
             $('#repo-file-list').html(data['html']);
+            
+            // both original dir list and new dir list are long
+            var repo_top = $('#repo-top'),
+                h = repo_top.offset().top + repo_top.outerHeight(true);
+            if (orig_wtop > h && $(window).scrollTop() == orig_wtop) {
+                $(window).scrollTop(h);
+            }
+
             cur_path = data['path']; // update cur_path
             if (func) {
                 func(data);
             }
             dirOP();
-            // in case the 'discuss' popup is open before this request
-            $('#discuss-to-group, #discuss-to-group-caret').addClass('hide');
+            // in case the 'discuss' & #dirents-op popup is open before this request
+            $('#discuss-to-group, #discuss-to-group-caret, #dirents-op').addClass('hide');
         },
         error:function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
@@ -536,7 +780,21 @@ var current_repo = [],
 {% endif %}
 
 function opOnDirent(context) { // added param 'context' for 'more' dirents requested with 'list_dir_more'
-var context = context || $('.dir-item, .file-item');
+    var context = context || $('.dir-item, .file-item');
+
+// select
+$('.checkbox-orig', context).unbind().click(function() {
+    var dirents_op = $('#dirents-op');
+
+    $(this).parent().toggleClass('checkbox-checked');
+    // show buttons or not
+    if ($('.checkbox-checked', context).length > 0) {
+        dirents_op.removeClass('hide');
+        setDirentsOpPos();
+    } else {
+        dirents_op.addClass('hide');
+    }
+});
 
 $('.dir-link', context).click(dirlinkClick);
 
@@ -629,13 +887,7 @@ $('.dir-del, .file-del', context).click(function() {
                 updateCmt();
             }
         },
-        error:function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-        }
+        error: ajaxErrorHandler
     });
     return false;
 });
@@ -938,6 +1190,11 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             obj_name = $('[name="obj_name"]', form).val(),
             obj_type = $('[name="obj_type"]', form).val(),
             op_obj = form.data('op_obj');
+
+        if (!op_obj) { // for mv-dirents, cp-dirents
+            return false;
+        }
+
         if (!$.trim(dst_repo) || !$.trim(dst_path)) {
             $('.error', form).removeClass('hide');
             return false;
@@ -1026,11 +1283,17 @@ $('#private-share-form').submit(function() {
 });
 var last_start = 0; // for 'list_dir_more'
 $(window).scroll(function() {
-    var file_topbar = $('.repo-file-list-topbar'),
-        list_hd = $('.repo-file-list tr:first-child');
-    if ($(window).scrollTop() > file_topbar.offset().top + file_topbar.outerHeight(true)) {
-        list_hd.addClass('fixed-hd').css({'left':file_topbar.offset().left});  
+    var repo_top = $('#repo-top'),
+        file_topbar = $('.repo-file-list-topbar'),
+        list_hd = $('.repo-file-list tr:first-child'),
+        repo_top_left = $('.block-inner', repo_top).offset().left,
+        file_topbar_h = file_topbar.outerHeight(true);
+
+    if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true)) {
+        file_topbar.addClass('fixed-hd').css({'left': repo_top_left});  
+        list_hd.addClass('fixed-hd').css({'left': repo_top_left, 'top':file_topbar_h});  
     } else {
+        file_topbar.removeClass('fixed-hd');  
         list_hd.removeClass('fixed-hd');  
     }
 
@@ -1057,7 +1320,6 @@ $(window).scroll(function() {
                     }
                 );
                 opOnDirent(more_dirents);
-                $('#name-down, #name-up, #time-up, #time-down').unbind().click(sortDirent);
                 if (data['dirent_more']) {
                     ele_more.data('start', data['more_start']); 
                 } else {
