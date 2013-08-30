@@ -189,7 +189,7 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
     file_list = []
     dirent_more = False
     if commit.root_id == EMPTY_SHA1:
-        return ([], [])
+        return ([], []) if limit == -1 else ([], [], False)
     else:
         try:
             if limit == -1:
