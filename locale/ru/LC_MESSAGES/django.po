@@ -416,7 +416,8 @@ msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr ""
-"Не удалось отправить email, пожалуйста свяжитесь с администратором сервера."
+"Не удалось отправить email - сервис не настроен. Пожалуйста, свяжитесь "
+"с администратором."
 
 #: seahub/auth/forms.py:73
 msgid ""
@@ -459,7 +460,7 @@ msgstr "Выйти"
 #: seahub/auth/views.py:138
 msgid "Failed to send email, please contact administrator."
 msgstr ""
-"Невозможно отправить сообщение, пожалуйста, обратитесь к администратору."
+"Невозможно отправить сообщение. Пожалуйста, обратитесь к администратору."
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
