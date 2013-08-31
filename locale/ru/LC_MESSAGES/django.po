@@ -3187,7 +3187,7 @@ msgstr "Выбрать файл"
 #: seahub/templates/repo.html:98
 #, python-format
 msgid "Smaller than %(max_file_size)s"
-msgstr "Меньше, чем"
+msgstr "Меньше, чем %(max_file_size)s"
 
 #: seahub/templates/repo.html:113
 msgid "Library Settings"
