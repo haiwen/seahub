@@ -41,6 +41,7 @@ from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.signals import repo_created
 from seahub.group.views import group_check
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
@@ -155,6 +156,36 @@ def calculate_repo_info(repo_list, username):
         repo.root = commit.root_id
         repo.size = server_repo_size(repo.id)
 
+def repo_download_info(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+    # generate download url for client
+    ccnet_applet_root = get_ccnetapplet_root()
+    relay_id = get_session_info().id
+    addr, port = get_ccnet_server_addr_port ()
+    email = request.user.username
+    token = seafserv_threaded_rpc.generate_repo_token(repo_id,
+                                                      request.user.username)
+    repo_name = repo.name
+    enc = 1 if repo.encrypted else ''
+    magic = repo.magic if repo.encrypted else ''
+
+    info_json = {
+        'relay_id': relay_id,
+        'relay_addr': addr,
+        'relay_port': port,
+        'email': email,
+        'token': token,
+        'repo_id': repo_id,
+        'repo_name': repo_name,
+        'encrypted': enc,
+        'magic': magic,
+        }
+    return Response(info_json)
+
+
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -252,7 +283,12 @@ class Repos(APIView):
             return api_error(status.HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         else:
-            resp = Response('success', status=status.HTTP_201_CREATED)
+            repo_created.send(sender=None,
+                              org_id=-1,
+                              creator=username,
+                              repo_id=repo_id,
+                              repo_name=repo_name)
+            resp = repo_download_info(request, repo_id)
             resp['Location'] = reverse('api2-repo', args=[repo_id])
             return resp
 
@@ -375,33 +411,7 @@ class DownloadRepo(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-
-        # generate download url for client
-        ccnet_applet_root = get_ccnetapplet_root()
-        relay_id = get_session_info().id
-        addr, port = get_ccnet_server_addr_port ()
-        email = request.user.username
-        token = seafserv_threaded_rpc.generate_repo_token(repo_id,
-                                                          request.user.username)
-        repo_name = repo.name
-        enc = 1 if repo.encrypted else ''
-        magic = repo.magic if repo.encrypted else ''
-
-        info_json = {
-            'relay_id': relay_id,
-            'relay_addr': addr,
-            'relay_port': port,
-            'email': email,
-            'token': token,
-            'repo_id': repo_id,
-            'repo_name': repo_name,
-            'encrypted': enc,
-            'magic': magic,
-            }
-        return Response(info_json)
+        return repo_download_info(request, repo_id)
 
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
