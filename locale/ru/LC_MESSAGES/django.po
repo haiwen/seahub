@@ -722,8 +722,8 @@ msgstr[1] "%(minutes)d минут назад"
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] "(seconds)d секунду назад"
-msgstr[1] "(seconds)d секунд назад"
+msgstr[0] "%(seconds)d секунду назад"
+msgstr[1] "%(seconds)d секунд назад"
 
 #: seahub/base/templatetags/seahub_tags.py:302
 #: seahub/group/templates/group/group_info.html:89
