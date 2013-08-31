@@ -78,7 +78,7 @@ msgid "It's required."
 msgstr "Требуется Email."
 
 #: seahub/forms.py:117 seahub/forms.py:138
-#, fuzzy, python-format
+
 msgid "Name \"%s\" is not valid"
 msgstr "Имя %s недействительно"
 
@@ -311,23 +311,19 @@ msgstr "Не удалось. Пожалуйста, проверьте сеть."
 
 #: seahub/api2/templates/api2/event_details.html:8
 #: seahub/api2/templates/api2/event_details.html:40
-#, fuzzy, python-format
 msgid "Added %(file)s"
 msgstr "Добавить файл"
 
 #: seahub/api2/templates/api2/event_details.html:16
 #: seahub/api2/templates/api2/event_details.html:48
-#, fuzzy, python-format
 msgid "Deleted %(file)s"
 msgstr "Удаленные файлы"
 
 #: seahub/api2/templates/api2/event_details.html:24
-#, fuzzy, python-format
 msgid "Renamed or Moved %(file)s"
 msgstr "переименованные или перемещённые файлы"
 
 #: seahub/api2/templates/api2/event_details.html:32
-#, fuzzy, python-format
 msgid "Modified %(file)s"
 msgstr "Измененные файлы"
 
@@ -981,7 +977,6 @@ msgstr "Удалить контакт"
 #: seahub/templates/sysadmin/sys_repo_admin.html:63
 #: seahub/templates/sysadmin/sys_useradmin.html:96
 #: seahub/templates/sysadmin/userinfo.html:141
-#, fuzzy, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Вы уверены, что хотите удалить %s ?"
 
@@ -1628,7 +1623,6 @@ msgid "Unshare Library"
 msgstr "Отменить общий доступ к библиотеке"
 
 #: seahub/group/templates/group/group_info.html:196
-#, fuzzy, python-format
 msgid "Are you sure you want to unshare %s ?"
 msgstr "Вы уверены, что хотите запретить достут к %s ?"
 
@@ -1697,7 +1691,6 @@ msgid "Delete Member"
 msgstr "Удалить участника"
 
 #: seahub/group/templates/group/group_manage.html:114
-#, fuzzy, python-format
 msgid "Really want to delete %s ?"
 msgstr "Действительно хотите удалить %s ?"
 
@@ -1910,7 +1903,6 @@ msgstr ""
 "href='%(href)s'>%(repo_name)s</a>. "
 
 #: seahub/message/models.py:117
-#, fuzzy, python-format
 msgid ""
 "(System) %(user)s have shared a file <a href='%(href)s'>%(file_name)s</a> to "
 "you."
@@ -2219,27 +2211,22 @@ msgid "Successfully saved."
 msgstr "Успешно добавлен."
 
 #: seahub/share/views.py:717
-#, fuzzy, python-format
 msgid "Failed to share to \"%s\", user not found."
 msgstr "Невозможно отправить сообщение для %s, пользователь не найден."
 
 #: seahub/share/views.py:731
-#, fuzzy, python-format
 msgid "Successfully shared %s."
 msgstr "Успешно открыт доступ к %s."
 
 #: seahub/share/views.py:757
-#, fuzzy, python-format
 msgid "Successfully unshared \"%s\"."
 msgstr "Успешно закрыт доступ к \"%s\"."
 
 #: seahub/share/views.py:759
-#, fuzzy, python-format
 msgid "You don't have permission to unshared %s."
 msgstr "У вас нет разрешения на доступ к %s."
 
 #: seahub/share/views.py:795
-#, fuzzy, python-format
 msgid "You don't have permission to save %s."
 msgstr "У вас нет разрешения на доступ к %s."
 
@@ -2604,7 +2591,6 @@ msgid "Unsync Client"
 msgstr "Рассинхронизировать клиента"
 
 #: seahub/templates/client_mgmt.html:73
-#, fuzzy, python-format
 msgid "Are you sure to unsync client %s ?"
 msgstr "Вы уверены, что хотите рассинхронизировать %s ?"
 
@@ -3207,7 +3193,6 @@ msgid "Total size should be smaller than %(max_file_size)s"
 msgstr "Общий размер должен быть меньше %(max_file_size)s"
 
 #: seahub/templates/repo.html:87
-#, fuzzy, python-format
 msgid "Update %(file_name)s"
 msgstr "Обновить файл"
 
@@ -3288,12 +3273,10 @@ msgid "Please click and choose a directory."
 msgstr "Кликните для выбора каталога"
 
 #: seahub/templates/repo.html:182
-#, fuzzy, python-format
 msgid "Rename %(name)s as:"
 msgstr "в %(name)s"
 
 #: seahub/templates/repo.html:198
-#, fuzzy, python-format
 msgid "Sync %(dir_name)s"
 msgstr "в %(name)s"
 
@@ -3365,7 +3348,6 @@ msgid "Start"
 msgstr "Отметить"
 
 #: seahub/templates/repo.html:616
-#, fuzzy, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "Успешно удалено %s"
 
@@ -3400,12 +3382,10 @@ msgid "Move Directory"
 msgstr "Перемещено каталогов"
 
 #: seahub/templates/repo.html:675
-#, fuzzy, python-format
 msgid "Copy %(name)s to:"
 msgstr "в %(name)s"
 
 #: seahub/templates/repo.html:678
-#, fuzzy, python-format
 msgid "Move %(name)s to:"
 msgstr "в %(name)s"
 
@@ -3439,7 +3419,6 @@ msgid "You have not renamed it."
 msgstr "Вы еще не загрузили "
 
 #: seahub/templates/repo.html:925
-#, fuzzy, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Успешное переименование %(old)s в %(new)s"
 
@@ -4000,7 +3979,6 @@ msgid "More"
 msgstr "Подробнее"
 
 #: seahub/templates/snippets/file_share_popup.html:3
-#, fuzzy, python-format
 msgid "Share %(name)s"
 msgstr "в %(name)s"
 
@@ -4429,17 +4407,14 @@ msgid "Delete User"
 msgstr "Удалить пользователя"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:100
-#, fuzzy, python-format
 msgid "Are you sure you want to reset the password of %s ?"
 msgstr "Вы уверены, что хотите изменить пароль %s ?"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:104
-#, fuzzy, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
 msgstr "Вы уверены, что хотите отозвать права администратора %s ?"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:108
-#, fuzzy, python-format
 msgid "Are you sure you want to set %s as admin?"
 msgstr "Вы уверены, что хотите назначить %s администратором?"
 
@@ -4754,22 +4729,18 @@ msgid "Destination path is too long."
 msgstr "Путь назначения слишком длинный."
 
 #: seahub/views/ajax.py:471 seahub/views/ajax.py:523
-#, fuzzy, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успешное перемещение %(name)s <a href=\"%(url)s\">Посмотреть</a>"
 
 #: seahub/views/ajax.py:493 seahub/views/ajax.py:552
-#, fuzzy, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успешное перемещение %(name)s <a href=\"%(url)s\">Посмотреть</a>"
 
 #: seahub/views/ajax.py:511
-#, fuzzy, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "не существует %(op)s каталога %(src)s для подкаталога %(des)s"
 
 #: seahub/views/ajax.py:541
-#, fuzzy, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "не существует %(op)s каталога %(src)s для подкаталога %(des)s"
 
@@ -4852,7 +4823,6 @@ msgid "Failed to revoke admin: the user does not exist"
 msgstr "Не удалось отозвать администратора: Пользователь не существует"
 
 #: seahub/views/sysadmin.py:229
-#, fuzzy, python-format
 msgid "Successfully activated \"%s\"."
 msgstr "Успешно изменено %s."
 
