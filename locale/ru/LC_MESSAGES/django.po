@@ -73,7 +73,6 @@ msgid "It's too long."
 msgstr "Слишком длинное"
 
 #: seahub/forms.py:110 seahub/forms.py:131
-#, fuzzy
 msgid "It's required."
 msgstr "Требуется Email."
 
@@ -177,7 +176,6 @@ msgid "File does not exist"
 msgstr "Файл не существует"
 
 #: seahub/api2/views.py:1411
-#, fuzzy
 msgid "the libray does not exist"
 msgstr "Библиотека не существует."
 
@@ -194,12 +192,10 @@ msgid "Library does not exist"
 msgstr "Библиотека не существует"
 
 #: seahub/api2/views.py:1480
-#, fuzzy
 msgid "Library is encrypted"
 msgstr "Библиотека зашифрована."
 
 #: seahub/api2/views.py:1484
-#, fuzzy
 msgid "Invalid argument"
 msgstr "Недопустимые аргументы"
 
@@ -277,7 +273,6 @@ msgid "%(amount)s replies"
 msgstr "%(amount)s ответов"
 
 #: seahub/api2/templates/api2/discussions.html:24
-#, fuzzy
 msgid "No discussions."
 msgstr "обсуждение"
 
@@ -343,12 +338,10 @@ msgid "Deleted library %(library_name)s"
 msgstr "Библиотека %(library_name)s удалена"
 
 #: seahub/api2/templates/api2/events_js.html:83
-#, fuzzy
 msgid "Please check the network."
 msgstr "Не удалось. Пожалуйста, проверьте сеть."
 
 #: seahub/api2/templates/api2/new_msg_reply.html:6
-#, fuzzy
 msgid "New Replies"
 msgstr "Новый файл"
 
@@ -1269,7 +1262,6 @@ msgstr "Добавить ответ ..."
 #: seahub/group/templates/group/discussion_list.html:41
 #: seahub/group/templates/group/group_discuss.html:147
 #: seahub/group/templates/group/new_msg_reply.html:64
-#, fuzzy
 msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Значение не может быть пустым и должно быть не более 150 символов."
 
@@ -2181,7 +2173,6 @@ msgid "Argument missing"
 msgstr "Пропущен аргумент"
 
 #: seahub/share/views.py:622
-#, fuzzy
 msgid "The link doesn't exist"
 msgstr "Группа не существует"
 
@@ -2206,7 +2197,6 @@ msgid "Successfully sent."
 msgstr "Успешно отправлено."
 
 #: seahub/share/views.py:698 seahub/share/views.py:792
-#, fuzzy
 msgid "Successfully saved."
 msgstr "Успешно добавлен."
 
@@ -2247,14 +2237,12 @@ msgstr "Доступ"
 #: seahub/share/templates/repo/share_out_repos.html:12
 #: seahub/share/templates/repo/shared_links.html:12
 #: seahub/templates/admin_base.html:20
-#, fuzzy
 msgid "Links"
 msgstr "Ссылки"
 
 #: seahub/share/templates/repo/priv_shared_files.html:13
 #: seahub/share/templates/repo/share_out_repos.html:13
 #: seahub/share/templates/repo/shared_links.html:13
-#, fuzzy
 msgid "Private Shares"
 msgstr "Личный общий доступ"
 
@@ -2275,7 +2263,6 @@ msgid "To"
 msgstr ""
 
 #: seahub/share/templates/repo/priv_shared_files.html:83
-#, fuzzy
 msgid "You don't have any private shared files"
 msgstr "Вы пока не отметили ни одного файла"
 
@@ -2539,7 +2526,6 @@ msgid "Failed to get your contacts for sending a message."
 msgstr "Невозможно получить ваши контакты для отправки сообщения."
 
 #: seahub/templates/base.html:340
-#, fuzzy
 msgid "You don't have any library at present"
 msgstr "Вы пока не отметили ни одного файла"
 
@@ -3167,17 +3153,14 @@ msgid "The owner of this library has ran out of space."
 msgstr "Владелец этой библиотеки превысил допустимый лимит."
 
 #: seahub/templates/repo.html:58
-#, fuzzy
 msgid "Add Files"
 msgstr "Добавить файл"
 
 #: seahub/templates/repo.html:63
-#, fuzzy
 msgid "Start All"
 msgstr "Отметить"
 
 #: seahub/templates/repo.html:67
-#, fuzzy
 msgid "Cancel All"
 msgstr "Выход"
 
@@ -3286,7 +3269,6 @@ msgstr "Вам необходимо создать вложенную библи
 
 #: seahub/templates/repo.html:200
 #: seahub/templates/snippets/file_share_popup.html:45
-#, fuzzy
 msgid "Create"
 msgstr "Создать как"
 
@@ -3296,7 +3278,6 @@ msgstr "Вложенная библиотека для синхронизаци�
 
 #: seahub/templates/repo.html:203
 #: seahub/templates/snippets/repo_dir_data.html:61
-#, fuzzy
 msgid "Sync"
 msgstr "Последняя синхронизация"
 
@@ -3312,12 +3293,10 @@ msgstr ""
 ""
 
 #: seahub/templates/repo.html:228
-#, fuzzy
 msgid "File is too big"
 msgstr "Имя файла слишком длинное"
 
 #: seahub/templates/repo.html:229
-#, fuzzy
 msgid "File is too small"
 msgstr "Имя файла слишком длинное"
 
@@ -3338,12 +3317,10 @@ msgid "Empty file upload result"
 msgstr "Результат загрузки пустого файла"
 
 #: seahub/templates/repo.html:235
-#, fuzzy
 msgid "Error"
 msgstr "Ошибка"
 
 #: seahub/templates/repo.html:236
-#, fuzzy
 msgid "Start"
 msgstr "Отметить"
 
@@ -3352,32 +3329,26 @@ msgid "Successfully deleted %(name)s"
 msgstr "Успешно удалено %s"
 
 #: seahub/templates/repo.html:644
-#, fuzzy
 msgid "Rename File"
 msgstr "Переименовать"
 
 #: seahub/templates/repo.html:646
-#, fuzzy
 msgid "Rename Directory"
 msgstr "Переименовано каталогов"
 
 #: seahub/templates/repo.html:664
-#, fuzzy
 msgid "Copy File"
 msgstr "Копировать "
 
 #: seahub/templates/repo.html:666
-#, fuzzy
 msgid "Move File"
 msgstr "Переместить "
 
 #: seahub/templates/repo.html:668
-#, fuzzy
 msgid "Copy Directory"
 msgstr "Каталог"
 
 #: seahub/templates/repo.html:670
-#, fuzzy
 msgid "Move Directory"
 msgstr "Перемещено каталогов"
 
@@ -3400,7 +3371,6 @@ msgid "starred"
 msgstr "Отметить"
 
 #: seahub/templates/repo.html:849 seahub/templates/repo.html.py:890
-#, fuzzy
 msgid "It is required."
 msgstr "Требуется Email."
 
@@ -3409,12 +3379,10 @@ msgid "Only an extension there, please input a name."
 msgstr "Здесь только расширение, пожалуйста, введите значение."
 
 #: seahub/templates/repo.html:865
-#, fuzzy
 msgid "Creating..."
 msgstr "Извлечение ..."
 
 #: seahub/templates/repo.html:894
-#, fuzzy
 msgid "You have not renamed it."
 msgstr "Вы еще не загрузили "
 
@@ -3423,27 +3391,22 @@ msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Успешное переименование %(old)s в %(new)s"
 
 #: seahub/templates/repo.html:941
-#, fuzzy
 msgid "Invalid destination path"
 msgstr "Неправельная настройка сервера."
 
 #: seahub/templates/repo.html:1018
-#, fuzzy
 msgid "Contacts is required."
 msgstr "требуестся контакт"
 
 #: seahub/templates/repo.html:1066
-#, fuzzy
 msgid "Creating sub-library..."
 msgstr "Библиотека создана"
 
 #: seahub/templates/repo.html:1080
-#, fuzzy
 msgid "Sub-library is created."
 msgstr "Библиотека зашифрована."
 
 #: seahub/templates/repo.html:1099
-#, fuzzy
 msgid "Please select at least 1 group or 1 contact."
 msgstr "Пожалуйста, выберите по крайней мере, одну группу."
 
@@ -3565,7 +3528,6 @@ msgid "Save to..."
 msgstr "Сохранить..."
 
 #: seahub/templates/shared_file_view.html:42
-#, fuzzy
 msgid "Save To:"
 msgstr "Доступно для"
 
@@ -3899,7 +3861,6 @@ msgid "We will send you an email to set new password"
 msgstr "Мы отправим Вам на E-mail новый пароль"
 
 #: seahub/templates/registration/registration_complete.html:4
-#, fuzzy
 msgid "Registration complete"
 msgstr "Регистрация завершена"
 
@@ -3983,17 +3944,14 @@ msgid "Share %(name)s"
 msgstr "в %(name)s"
 
 #: seahub/templates/snippets/file_share_popup.html:6
-#, fuzzy
 msgid "Private Share"
 msgstr "Оставить общий доступ"
 
 #: seahub/templates/snippets/file_share_popup.html:7
-#, fuzzy
 msgid "Share Link"
 msgstr "Общедоступные ссылки"
 
 #: seahub/templates/snippets/file_share_popup.html:9
-#, fuzzy
 msgid "Syncable Share"
 msgstr "Оставить общий доступ"
 
@@ -4080,7 +4038,6 @@ msgid "Mine"
 msgstr "Мои"
 
 #: seahub/templates/snippets/my_owned_repos.html:8
-#, fuzzy
 msgid "Sub-libraries"
 msgstr "Вложенные библиотеки"
 
@@ -4125,7 +4082,6 @@ msgid "Origin"
 msgstr "Оригинал"
 
 #: seahub/templates/snippets/my_owned_repos.html:95
-#, fuzzy
 msgid "You have not created any sub-libraries"
 msgstr "У вас еще нет ни одной библиотеки"
 
@@ -4278,7 +4234,6 @@ msgid "More Operations"
 msgstr "Больше операций"
 
 #: seahub/templates/snippets/repo_share_form.html:3
-#, fuzzy
 msgid "Share <span class=\"op-target\"></span> "
 msgstr "Общий доступ <span class=\"op-target\"></span> для"
 
@@ -4303,7 +4258,6 @@ msgid "Tip: enter \"all\" to share to public library."
 msgstr "Совет: введите \"все\", чтобы дать доступ к публичной библиотеке."
 
 #: seahub/templates/snippets/shared_link_js.html:95
-#, fuzzy
 msgid "Select contacts"
 msgstr "Удалить контакт"
 
@@ -4344,7 +4298,6 @@ msgid "Delete Organization"
 msgstr "Удалить сообщество"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:6
-#, fuzzy
 msgid "All Public Links"
 msgstr "Общие библиотеки"
 
@@ -4354,7 +4307,6 @@ msgid "Owner"
 msgstr "Владелец"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
-#, fuzzy
 msgid "Count"
 msgstr "Профиль"
 
@@ -4706,17 +4658,14 @@ msgid "The group doesn't exist"
 msgstr "Группа не существует"
 
 #: seahub/views/ajax.py:179 seahub/views/ajax.py:382 seahub/views/ajax.py:628
-#, fuzzy
 msgid "Permission denied."
 msgstr "Доступ запрещен"
 
 #: seahub/views/ajax.py:184 seahub/views/ajax.py:633
-#, fuzzy
 msgid "Library is encrypted."
 msgstr "Библиотека зашифрована."
 
 #: seahub/views/ajax.py:190 seahub/views/ajax.py:639
-#, fuzzy
 msgid "Error: no head commit id"
 msgstr "Ошибка: не верный путь."
 
@@ -4827,9 +4776,8 @@ msgid "Successfully activated \"%s\"."
 msgstr "Успешно изменено %s."
 
 #: seahub/views/sysadmin.py:231
-#, fuzzy
 msgid "Failed to activate: user does not exist."
-msgstr "Не возможно создать: группа не существует."
+msgstr "Невозможно создать: группа не существует."
 
 #: seahub/views/sysadmin.py:270
 #, python-format
@@ -4901,15 +4849,12 @@ msgstr ""
 "Успешно добавлен пользователь %s. Но сообщение не было отправлено, потому "
 "что не правильно сконфигурирована почтовая служба."
 
-#, fuzzy
 #~ msgid "Created sub-library %%(name)s"
 #~ msgstr "Библиотека %(library_name)s удалена"
 
-#, fuzzy
 #~ msgid "Sub-library"
 #~ msgstr "Общие библиотеки"
 
-#, fuzzy
 #~ msgid "just now"
 #~ msgstr "Прямо сейчас"
 
