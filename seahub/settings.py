@@ -213,7 +213,7 @@ if 'win32' in sys.platform:
     except KeyError:
         raise ImportError("Settings cannot be imported, because environment variable CCNET_CONF_DIR is undefined.")
     else:
-        LOG_DIR = os.path.join(CCNET_CONF_PATH, '..')
+        LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', os.path.join(CCNET_CONF_PATH, '..'))
         CACHE_DIR = os.path.join(CCNET_CONF_PATH, '..')
         install_topdir = os.path.join(CCNET_CONF_PATH, '..')
 
