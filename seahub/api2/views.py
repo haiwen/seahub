@@ -19,8 +19,8 @@ from django.http import HttpResponse
 
 from models import Token
 from authentication import TokenAuthentication
-from permissions import IsRepoWritable, IsRepoAccessible, IsRepoOwner
 from serializers import AuthTokenSerializer
+from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles
 from seahub.share.models import FileShare
@@ -340,13 +340,18 @@ def check_repo_access_permission(request, repo):
 
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoAccessible, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        username = request.user.username
+        if not is_repo_accessible(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to get repo.')
 
         # check whether user is repo owner
         if validate_owner(request, repo_id):
@@ -373,7 +378,7 @@ class Repo(APIView):
             "encrypted":repo.encrypted,
             "encversion":r.encversion,
             "root":root_id,
-            "permission": check_permission(repo.id, request.user.username),
+            "permission": check_permission(repo.id, username),
             }
 
         return Response(repo_json)
@@ -408,10 +413,15 @@ class Repo(APIView):
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoAccessible, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        username = request.user.username
+        if not is_repo_accessible(repo_id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to get repo.')
+            
         return repo_download_info(request, repo_id)
 
 class UploadLinkView(APIView):
@@ -606,12 +616,17 @@ class OpDeleteView(APIView):
     Delete a file.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
+    permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        username = request.user.username
+        if not is_repo_writable(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete file.')
 
         resp = check_repo_access_permission(request, repo)
         if resp:
@@ -628,7 +643,7 @@ class OpDeleteView(APIView):
             file_name = unquote(file_name.encode('utf-8'))
             try:
                 seafserv_threaded_rpc.del_file(repo_id, parent_dir,
-                                               file_name, request.user.username)
+                                               file_name, username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
@@ -707,7 +722,7 @@ class FileView(APIView):
     """
 
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
@@ -740,7 +755,7 @@ class FileView(APIView):
         return get_repo_file(request, repo_id, file_id, file_name, op)
 
     def post(self, request, repo_id, format=None):
-        # rename or move file
+        # rename, move or create file
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
@@ -754,8 +769,13 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Path is missing or invalid.')
 
+        username = request.user.username        
         operation = request.POST.get('operation', '')
         if operation.lower() == 'rename':
+            if not is_repo_writable(repo.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to rename file.')
+
             newname = request.POST.get('newname', '')
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
@@ -777,7 +797,7 @@ class FileView(APIView):
             try:
                 seafserv_threaded_rpc.rename_file (repo_id, parent_dir_utf8,
                                                    oldname_utf8, newname,
-                                                   request.user.username)
+                                                   username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
@@ -791,6 +811,10 @@ class FileView(APIView):
                 return resp
 
         elif operation.lower() == 'move':
+            if not is_repo_writable(repo.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to move file.')
+            
             src_dir = os.path.dirname(path)
             src_dir_utf8 = src_dir.encode('utf-8')
             src_repo_id = repo_id
@@ -826,7 +850,7 @@ class FileView(APIView):
                 seafserv_threaded_rpc.move_file(src_repo_id, src_dir_utf8,
                                                 filename_utf8, dst_repo_id,
                                                 dst_dir_utf8, new_filename_utf8,
-                                                request.user.username)
+                                                username)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
@@ -839,6 +863,10 @@ class FileView(APIView):
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
         elif operation.lower() == 'create':
+            if not is_repo_writable(repo.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to create file.')
+            
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
@@ -848,11 +876,10 @@ class FileView(APIView):
 
             try:
                 seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir,
-                                                      new_file_name,
-                                                      request.user.username)
+                                                      new_file_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
-                                 'Failed to make directory.')
+                                 'Failed to create file.')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo_id, parent_dir)
@@ -877,6 +904,11 @@ class FileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
+        username = request.user.username
+        if not is_repo_writable(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete file.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -948,7 +980,7 @@ class DirView(APIView):
     create/delete/rename/list, etc.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoWritable, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
@@ -993,18 +1025,22 @@ class DirView(APIView):
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
+
         path = request.GET.get('p', '')
         if not path or path[0] != '/':
             return api_error(status.HTTP_400_BAD_REQUEST, "Path is missing.")
-
         if path == '/':         # Can not make root dir.
             return api_error(status.HTTP_400_BAD_REQUEST, "Path is invalid.")
-
         if path[-1] == '/':     # Cut out last '/' if possible.
             path = path[:-1]
 
+        username = request.user.username            
         operation = request.POST.get('operation', '')
         if operation.lower() == 'mkdir':
+            if not is_repo_writable(repo.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to create folder.')
+            
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_dir_name = os.path.basename(path)
@@ -1014,8 +1050,7 @@ class DirView(APIView):
 
             try:
                 seafserv_threaded_rpc.post_dir(repo_id, parent_dir,
-                                               new_dir_name,
-                                               request.user.username)
+                                               new_dir_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to make directory.')
@@ -1042,6 +1077,11 @@ class DirView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
+        username = request.user.username
+        if not is_repo_writable(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete folder.')
+        
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -1062,8 +1102,7 @@ class DirView(APIView):
 
         try:
             seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
-                                           file_name_utf8,
-                                           request.user.username)
+                                           file_name_utf8, username)
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
@@ -1138,13 +1177,18 @@ class SharedRepo(APIView):
     Support uniform interface for shared libraries.
     """
     authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, IsRepoOwner)
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def delete(self, request, repo_id, format=None):
         """
         Unshare a library. Only repo owner can perform this operation.
         """
+        username = request.user.username
+        if not seafile_api.is_repo_owner(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to unshare library.')
+
         share_type = request.GET.get('share_type', '')
         user = request.GET.get('user', '')
         group_id = request.GET.get('group_id', '')
@@ -1153,7 +1197,7 @@ class SharedRepo(APIView):
                              'share_type and user and group_id is required.')
 
         if share_type == 'personal':
-            remove_share(repo_id, request.user.username, user)
+            remove_share(repo_id, username, user)
         elif share_type == 'group':
             unshare_group_repo(repo_id, group_id, user)
         elif share_type == 'public':
@@ -1168,6 +1212,11 @@ class SharedRepo(APIView):
         """
         Share a repo to users/groups/public.
         """
+        username = request.user.username
+        if not seafile_api.is_repo_owner(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to share library.')
+        
         share_type = request.GET.get('share_type')
         user = request.GET.get('user')
         group_id = request.GET.get('group_id')
