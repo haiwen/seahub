@@ -9,7 +9,7 @@ import seahub.settings as settings
 from rest_framework import parsers
 from rest_framework import status
 from rest_framework import renderers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -120,6 +120,26 @@ class ObtainAuthToken(APIView):
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
     return Response(err_resp, status=code)
+
+class Accounts(APIView):
+    """
+    List all registered accounts.
+    Administator permission is required.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+        accounts = get_emailusers(per_page * (page - 1), per_page)
+
+        accounts_json = []
+        for account in accounts:
+            accounts_json.append(account.email)
+
+        return Response(accounts_json)
 
 class Account(APIView):
     """

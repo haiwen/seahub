@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^auth-token/', ObtainAuthToken.as_view()),
 
     # RESTful API
+    url(r'^accounts/$', Accounts.as_view(), name="accounts"),
     url(r'^account/info/$', Account.as_view()),
     url(r'^repos/$', Repos.as_view(), name="api2-repos"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
