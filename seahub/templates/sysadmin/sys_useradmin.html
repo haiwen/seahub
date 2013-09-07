@@ -1,12 +1,13 @@
 {% extends "admin_base.html" %}
 {% load seahub_tags i18n %}
-{% load url from future %}
 {% block nav_useradmin_class %}class="cur"{% endblock %}
 
 {% block main_panel %}
 
 <h3>{% trans "All Members" %}</h3>
 <button class="add" id="add-user-btn">{% trans "Add new user" %}</button>
+<button class="icon-search fright" id="search-user-btn">{% trans "Search user" %}</button>
+
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Add new user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
@@ -112,6 +113,10 @@ $('#add-user-btn').click(function() {
         $('#add-user-form').modal();
         $('#simplemodal-container').css({'width':'auto'});
 });
+$('#search-user-btn').click(function() {
+    location.href = "{% url 'user_search' %}";
+});
+
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),

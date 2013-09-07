@@ -110,6 +110,7 @@ input.submit {
     margin-top:8px;
 }
 input[type=submit]:hover,
+input[type=reset]:hover,
 input[type=button]:hover,
 button:hover, 
 .fileinput-button:hover {
@@ -2536,7 +2537,8 @@ textarea:-moz-placeholder {/* for FF */
     font-size:16px;
     color:#aaa;
 }
-#search-form {
+#search-form,
+#search-user-form{
     padding:7px 5px;
     height:auto;
     background:#f7f7f8;

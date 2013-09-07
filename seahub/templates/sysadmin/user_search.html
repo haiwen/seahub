@@ -1,0 +1,105 @@
+{% extends "admin_base.html" %}
+{% load seahub_tags i18n %}
+
+{% block main_panel %}
+<h3>{% trans "Search User"%}</h3>
+
+<form id="search-user-form" method="get" action=".">
+  <label>{% trans "Email" %}</label>
+  <input type="text" name="email" id="id_email" class="input" value="{{email}}"/><br />
+  <p class="error hide"></p>
+
+  <p class="tip">{% trans "Tip: Use * to match any number of characters." %}</p>
+  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+  <input type="reset" value="{% trans "Reset" %}" class="submit" />
+</form>
+<h3>{% trans "User List"%}</h3>
+{% if users %}
+<table>
+    <tr>
+        <th width="30%">{% trans "Email" %}</th>
+        <th width="10%">{% trans "Status" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="15%">{% trans "Create At" %}</th>
+        <th width="25%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+        {% if user.props.is_active %}
+        <td>{% trans "Activated" %}</td>
+        {% else %}
+        <td><a href="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
+        {% endif %}
+        <td>
+            {% if CALC_SHARE_USAGE %}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% else %}
+            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% endif %}
+        </td>
+        <td>{{ user.ctime|tsstr_sec }}</td>
+        <td>
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          {% if user.is_staff %}
+          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op">{% trans "Revoke Admin" %}</a>
+          {% else %}
+          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op">{% trans "Set Admin" %}</a>
+          {% endif %}
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
+
+<div id="paginator">
+    {% if current_page != 1 %}
+    <a href="?email={{email}}&page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
+    {% endif %}
+    {% if page_next %}
+    <a href="?email={{email}}&page={{ next_page }}&per_page={{ per_page }}">{% trans "Next" %}</a>
+    {% endif %}
+    {% if current_page != 1 or page_next %}
+    |
+    {% endif %}
+    <span>{% trans "Per page: " %}</span> 
+    {% if per_page == 25 %}
+    <span> 25 </span> 
+    {% else %}
+    <a href="?email={{email}}&per_page=25" class="per-page">25</a>
+    {% endif %}
+    {% if per_page == 50 %}
+    <span> 50 </span> 
+    {% else %}
+    <a href="?email={{email}}&per_page=50" class="per-page">50</a>
+    {% endif %}
+    {% if per_page == 100 %}
+    <span> 100 </span> 
+    {% else %}
+    <a href="?email={{email}}&per_page=100" class="per-page">100</a>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#search-user-form').submit(function() {
+    var form = $(this),
+        form_id = $(this).attr('id'),
+        email = $.trim(form.children('[name="email"]').val());
+
+    if (!email) {
+        apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
+        return false;
+    }
+    form.submit();
+});
+</script>
+{% endblock %}
