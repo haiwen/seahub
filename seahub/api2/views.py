@@ -321,10 +321,10 @@ class Repos(APIView):
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
                                                         username, passwd)
         except:
-            return api_error(status.HTTP_520_OPERATION_FAILED, \
+            return api_error(HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         if not repo_id:
-            return api_error(status.HTTP_520_OPERATION_FAILED, \
+            return api_error(HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         else:
             repo_created.send(sender=None,
@@ -596,7 +596,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             try:
                 blks = seafile_api.list_file_by_file_id(file_id)
             except SearpcError, e:
-                return api_error(status.HTTP_520_OPERATION_FAILED,
+                return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to get file block list')
         blklist = blks.split('\n')
         blklist = [i for i in blklist if len(i) == 40]
