@@ -19,7 +19,7 @@ from django.http import HttpResponse
 
 from models import Token
 from authentication import TokenAuthentication
-from serializers import AuthTokenSerializer
+from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles
@@ -142,18 +142,15 @@ class Accounts(APIView):
         return Response(accounts_json)
 
     def post(self, request, format=None):
-        email = request.POST.get('email', None)
-        password = request.POST.get('password', None)
-        is_staff = request.POST.get('is_staff', False)
-        is_active = request.POST.get('is_active', True)
-
-        if not email:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Email is required.')
-        if not password:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Password is required.')
-
-        user = User.objects.create_user(email, password, is_staff, is_active)
-        return Response("success", status=status.HTTP_201_CREATED)
+        serializer = AccountSerializer(data=request.DATA)
+        if serializer.is_valid():
+            user = User.objects.create_user(serializer.object['email'], \
+                                            serializer.object['password'], \
+                                            serializer.object['is_staff'], \
+                                            serializer.object['is_active'])
+            return Response("success", status=status.HTTP_201_CREATED)
+        else:
+            return api_error(HTTP_520_OPERATION_FAILED, serializer.errors)
 
     def delete(self, request, email, format=None):
         try:
