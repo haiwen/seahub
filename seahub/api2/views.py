@@ -123,7 +123,7 @@ def api_error(code, msg):
 
 class Accounts(APIView):
     """
-    List all registered accounts.
+    Operations for manipulating accounts.
     Administator permission is required.
     """
     authentication_classes = (TokenAuthentication, )
@@ -140,6 +140,29 @@ class Accounts(APIView):
             accounts_json.append(account.email)
 
         return Response(accounts_json)
+
+    def post(self, request, format=None):
+        email = request.POST.get('email', None)
+        password = request.POST.get('password', None)
+        is_staff = request.POST.get('is_staff', False)
+        is_active = request.POST.get('is_active', True)
+
+        if not email:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email is required.')
+        if not password:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Password is required.')
+
+        user = User.objects.create_user(email, password, is_staff, is_active)
+        return Response("success", status=status.HTTP_201_CREATED)
+
+    def delete(self, request, email, format=None):
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+            return Response("success")
+        except User.DoesNotExist:
+            return api_error(HTTP_520_OPERATION_FAILED, \
+                    'Failed to delete: account does not exist.')
 
 class Account(APIView):
     """
