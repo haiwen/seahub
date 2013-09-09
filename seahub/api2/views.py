@@ -9,7 +9,7 @@ import seahub.settings as settings
 from rest_framework import parsers
 from rest_framework import status
 from rest_framework import renderers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -19,7 +19,7 @@ from django.http import HttpResponse
 
 from models import Token
 from authentication import TokenAuthentication
-from serializers import AuthTokenSerializer
+from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles
@@ -120,6 +120,46 @@ class ObtainAuthToken(APIView):
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
     return Response(err_resp, status=code)
+
+class Accounts(APIView):
+    """
+    Operations for manipulating accounts.
+    Administator permission is required.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        start = int(request.GET.get('start', '0'))
+        limit = int(request.GET.get('limit', '100'))
+        accounts = get_emailusers(start, limit)
+
+        accounts_json = []
+        for account in accounts:
+            accounts_json.append({'email': account.email})
+
+        return Response(accounts_json)
+
+    def post(self, request, format=None):
+        serializer = AccountSerializer(data=request.DATA)
+        if serializer.is_valid():
+            user = User.objects.create_user(serializer.object['email'], \
+                                            serializer.object['password'], \
+                                            serializer.object['is_staff'], \
+                                            serializer.object['is_active'])
+            return Response("success", status=status.HTTP_201_CREATED)
+        else:
+            return api_error(HTTP_520_OPERATION_FAILED, serializer.errors)
+
+    def delete(self, request, email, format=None):
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+            return Response("success")
+        except User.DoesNotExist:
+            return api_error(HTTP_520_OPERATION_FAILED, \
+                    'Failed to delete: account does not exist.')
 
 class Account(APIView):
     """
@@ -278,10 +318,10 @@ class Repos(APIView):
             repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
                                                         username, passwd)
         except:
-            return api_error(status.HTTP_520_OPERATION_FAILED, \
+            return api_error(HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         if not repo_id:
-            return api_error(status.HTTP_520_OPERATION_FAILED, \
+            return api_error(HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
         else:
             repo_created.send(sender=None,
@@ -553,7 +593,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             try:
                 blks = seafile_api.list_file_by_file_id(file_id)
             except SearpcError, e:
-                return api_error(status.HTTP_520_OPERATION_FAILED,
+                return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to get file block list')
         blklist = blks.split('\n')
         blklist = [i for i in blklist if len(i) == 40]
