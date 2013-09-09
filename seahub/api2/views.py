@@ -131,13 +131,13 @@ class Accounts(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-        accounts = get_emailusers(per_page * (page - 1), per_page)
+        start = int(request.GET.get('start', '0'))
+        limit = int(request.GET.get('limit', '100'))
+        accounts = get_emailusers(start, limit)
 
         accounts_json = []
         for account in accounts:
-            accounts_json.append(account.email)
+            accounts_json.append({'email': account.email})
 
         return Response(accounts_json)
 
