@@ -23,3 +23,19 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
+class AccountSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    is_staff = serializers.BooleanField()
+    is_active = serializers.BooleanField()
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        attrs['is_staff'] = attrs.get('is_staff', False)
+        attrs['is_active'] = attrs.get('is_active', True)
+
+        if not password:
+            raise serializers.ValidationError('Password is required')
+
+        return attrs
