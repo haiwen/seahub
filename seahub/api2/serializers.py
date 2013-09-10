@@ -2,8 +2,6 @@ from rest_framework import serializers
 
 from seahub.auth import authenticate
 
-from seaserv import ccnet_threaded_rpc
-
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -37,13 +35,7 @@ class AccountSerializer(serializers.Serializer):
         attrs['is_staff'] = attrs.get('is_staff', False)
         attrs['is_active'] = attrs.get('is_active', True)
 
-        if not email:
-            raise serializers.ValidationError('Email is required')
         if not password:
             raise serializers.ValidationError('Password is required')
-
-        user = ccnet_threaded_rpc.get_emailuser(email)
-        if user:
-            raise serializers.ValidationError('A user with this email already exists')
 
         return attrs

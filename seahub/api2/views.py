@@ -122,8 +122,7 @@ def api_error(code, msg):
     return Response(err_resp, status=code)
 
 class Accounts(APIView):
-    """
-    Operations for manipulating accounts.
+    """List all accounts.
     Administator permission is required.
     """
     authentication_classes = (TokenAuthentication, )
@@ -131,6 +130,7 @@ class Accounts(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+        # list accounts
         start = int(request.GET.get('start', '0'))
         limit = int(request.GET.get('limit', '100'))
         accounts = get_emailusers(start, limit)
@@ -141,29 +141,67 @@ class Accounts(APIView):
 
         return Response(accounts_json)
 
-    def post(self, request, format=None):
-        serializer = AccountSerializer(data=request.DATA)
-        if serializer.is_valid():
-            user = User.objects.create_user(serializer.object['email'], \
-                                            serializer.object['password'], \
-                                            serializer.object['is_staff'], \
-                                            serializer.object['is_active'])
-            return Response("success", status=status.HTTP_201_CREATED)
+class Account(APIView):
+    """Query/Add/Delete a specific account.
+    Administator permission is required.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, email, format=None):
+        # query account info
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+        
+        info = {}
+        info['email'] = user.email
+        info['id'] = user.id
+        info['is_staff'] = user.is_staff
+        info['is_active'] = user.is_active
+        info['create_time'] = user.ctime
+
+        info['total'] = get_user_quota(email)
+        if CALC_SHARE_USAGE:
+            my_usage = get_user_quota_usage(email)
+            share_usage = get_user_share_usage(email)
+            info['usage'] = my_usage + share_usage
         else:
-            return api_error(HTTP_520_OPERATION_FAILED, serializer.errors)
+            info['usage'] = get_user_quota_usage(email)
+
+        return Response(info)
+
+    def put(self, request, email, format=None):
+        # create or update account
+        copy = request.DATA.copy()
+        copy.update({'email': email})
+        serializer = AccountSerializer(data=copy)
+        if serializer.is_valid():
+            user = User.objects.create_user(serializer.object['email'],
+                                            serializer.object['password'],
+                                            serializer.object['is_staff'],
+                                            serializer.object['is_active'])
+
+            resp = Response('success', status=status.HTTP_201_CREATED)
+            resp['Location'] = reverse('api2-account', args=[email])
+            return resp
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
 
     def delete(self, request, email, format=None):
+        # delete account
         try:
             user = User.objects.get(email=email)
             user.delete()
             return Response("success")
         except User.DoesNotExist:
-            return api_error(HTTP_520_OPERATION_FAILED, \
-                    'Failed to delete: account does not exist.')
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Failed to delete: account does not exist.')
 
-class Account(APIView):
-    """
-    Show account info.
+class AccountInfo(APIView):
+    """ Show account info.
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
