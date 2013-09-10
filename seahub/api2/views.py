@@ -179,13 +179,22 @@ class Account(APIView):
         copy.update({'email': email})
         serializer = AccountSerializer(data=copy)
         if serializer.is_valid():
+            try:
+                User.objects.get(email=serializer.object['email'])
+                update = True
+            except User.DoesNotExist:
+                update = False
+
             user = User.objects.create_user(serializer.object['email'],
                                             serializer.object['password'],
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
 
-            resp = Response('success', status=status.HTTP_201_CREATED)
-            resp['Location'] = reverse('api2-account', args=[email])
+            if update:
+                resp = Response('success')
+            else:
+                resp = Response('success', status=status.HTTP_201_CREATED)
+                resp['Location'] = reverse('api2-account', args=[email])
             return resp
         else:
             return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
@@ -197,8 +206,8 @@ class Account(APIView):
             user.delete()
             return Response("success")
         except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'Failed to delete: account does not exist.')
+            resp = Response("success", status=status.HTTP_202_ACCEPTED)
+            return resp
 
 class AccountInfo(APIView):
     """ Show account info.
