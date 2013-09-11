@@ -387,6 +387,7 @@ def repo_save_settings(request):
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
         days = form.cleaned_data['days']
+        repo_owner = form.cleaned_data['repo_owner']
         
         repo = get_repo(repo_id)
         if not repo:
@@ -418,6 +419,10 @@ def repo_save_settings(request):
             if res != 0:
                 return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
                                     status=400, content_type=content_type)
+
+        # set library owner
+        if repo_owner is not None and repo_owner != username:
+            seafile_api.set_repo_owner(repo_id, repo_owner)
 
         messages.success(request, _(u'Settings saved.'))
         return HttpResponse(json.dumps({'success': True}),

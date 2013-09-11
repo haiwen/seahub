@@ -44,6 +44,7 @@
         {% else %}
         <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
         {% endif %}
+        <li><a id="group-transfer" href="#" >{% trans "Transfer" %}</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -97,6 +98,13 @@
 </table>
 {% endif %}
 
+<form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" name="group-transfer-form" class="hide">{% csrf_token %}
+    <h3>{% trans "Transfer Group To"%}</h3>
+    <input type="text" name="email" value="" placeholder="{% trans "email"%}" />
+    <p class="tip">{% trans "Tip: the email should be already registered."%}</p>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit"%}" id="group-transfer-submit" />
+</form>
 
 {% include 'group/grpmember_add_form.html' %}
 {% endblock %}
@@ -128,5 +136,21 @@ contact_list.push({value:contact_email, label:contact_email});
 {% with post_url=admin_add_url %}
 {% include 'group/grpadmin_add_js.html' %}
 {% endwith %}
+
+$('#group-transfer').click(function() {
+    $('#group-transfer-form').modal({appendTo: "#main", focus:false});
+    return false;
+});
+$('#group-transfer-submit').click(function() {
+    var email = $('#group-transfer-form input[name="email"]').val();
+
+    if (!email) {
+        apply_form_error('group-transfer-form', '{% trans "Email can not be blank."%}');
+        return false;
+    }
+
+    $('#group-transfer-form').submit();
+    return false;
+});
 </script>
 {% endblock %}

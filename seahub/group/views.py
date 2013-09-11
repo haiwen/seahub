@@ -234,6 +234,26 @@ def group_dismiss(request, group_id):
     return HttpResponseRedirect(reverse('group_list'))
 
 @login_required
+@group_staff_required
+def group_transfer(request, group_id):
+    """Change group creator.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    group_id = int(group_id)
+    username = request.user.username
+    email = request.POST.get('email', '')
+    if email != username:
+        if not is_group_user(group_id, email):
+            ccnet_threaded_rpc.group_add_member(group_id, username, email)
+            
+        ccnet_threaded_rpc.set_group_creator(group_id, email)
+
+    next = reverse('group_list', args=[])
+    return HttpResponseRedirect(next)
+
+@login_required
 def group_make_public(request, group_id):
     """
     Make a group public, only group staff can perform this operation.

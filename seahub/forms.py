@@ -188,3 +188,13 @@ class RepoSettingForm(forms.Form):
     repo_desc = forms.CharField(error_messages={'required': _('Library description is required')})
     days = forms.IntegerField(required=False,
                               error_messages={'invalid': _('Please enter a number')})
+    repo_owner = forms.CharField(required=False)
+
+    def clean_repo_owner(self):
+        repo_owner = self.cleaned_data['repo_owner']
+        try:
+            User.objects.get(email=repo_owner)
+            return repo_owner            
+        except User.DoesNotExist:
+            raise forms.ValidationError(_('User %s is not found.') % repo_owner)
+

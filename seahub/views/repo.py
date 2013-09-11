@@ -185,8 +185,9 @@ def render_repo(request, repo):
     no_quota = is_no_quota(repo.id)
     history_limit = seaserv.get_repo_history_limit(repo.id)
     search_repo_id = None if repo.encrypted else repo.id
+    repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if repo_owner == username else False
     
-    is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
     more_start = None
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo.id, head_commit, path, offset=0, limit=100)
     if dirent_more:
@@ -209,6 +210,7 @@ def render_repo(request, repo):
     return render_to_response('repo.html', {
             'repo': repo,
             'user_perm': user_perm,
+            'repo_owner': repo_owner,
             'is_repo_owner': is_repo_owner,
             'current_commit': head_commit,
             'password_set': True,
