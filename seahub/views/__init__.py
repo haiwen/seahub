@@ -250,24 +250,6 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
 def get_unencry_rw_repos_by_user(username):
     """Get all unencrypted repos the user can read and write.
     """
-    def check_has_subdir(repo):
-        latest_commit = seaserv.get_commits(repo.id, 0, 1)[0]
-        if not latest_commit:
-            return False
-        if latest_commit.root_id == EMPTY_SHA1:
-            return False
-
-        try:
-            dirs = seafile_api.list_dir_by_commit_and_path(latest_commit.id, '/')
-        except Exception, e:
-            logger.error(e)
-            return False
-        else:
-            for dirent in dirs:
-                if stat.S_ISDIR(dirent.props.mode):
-                    return True
-            return False
-
     def has_repo(repos, repo):
         for r in repos:
             if repo.id == r.id:
@@ -280,7 +262,6 @@ def get_unencry_rw_repos_by_user(username):
 
     for r in owned_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
-            r.has_subdir = check_has_subdir(r)
             accessible_repos.append(r)
 
     for r in shared_repos + public_repos:
@@ -292,13 +273,11 @@ def get_unencry_rw_repos_by_user(username):
 
         if not has_repo(accessible_repos, r) and not r.encrypted:
             if seafile_api.check_repo_access_permission(r.id, username) == 'rw':
-                r.has_subdir = check_has_subdir(r)
                 accessible_repos.append(r)
 
     for r in groups_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted :
             if seafile_api.check_repo_access_permission(r.id, username) == 'rw':            
-                r.has_subdir = check_has_subdir(r)
                 accessible_repos.append(r)
 
     return accessible_repos

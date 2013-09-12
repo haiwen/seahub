@@ -62,18 +62,11 @@ $('#download').click(function() {
 
 var all_repos = [];
 {% for a_repo in accessible_repos %}
-    {% if a_repo.props.has_subdir %} 
     all_repos.push({
         'data': '{{ a_repo.props.name }}',
         'attr': {'repo_id': '{{ a_repo.props.id }}'},
         'state': 'closed'
     });  
-    {% else %}
-    all_repos.push({
-        'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}'}
-    });
-    {% endif %}
 {% endfor %}
 
 $('#save').click(function() {

@@ -741,43 +741,20 @@ $('.set-file-type').click(function() {
 
 var current_repo = [],
     other_repos = [];
-{% if repo.encrypted %}
-    current_repo.push({
-        'data': '{{ repo.props.name }}',
-        'attr': {'repo_id': '{{ repo.props.id }}'},
+current_repo.push({
+    'data': '{{ repo.props.name }}',
+    'attr': {'repo_id': '{{ repo.props.id }}'},
+    'state': 'closed'
+});  
+{% for a_repo in accessible_repos %}
+{% if a_repo.props.id != repo.props.id %}
+    other_repos.push({
+        'data': '{{ a_repo.props.name }}',
+        'attr': {'repo_id': '{{ a_repo.props.id }}'},
         'state': 'closed'
     });  
-{% else %}
-    {% for a_repo in accessible_repos %}
-    {% if a_repo.props.id == repo.props.id %}
-        {% if a_repo.props.has_subdir %} 
-            current_repo.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'},
-                'state': 'closed'
-            });  
-        {% else %}
-            current_repo.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'}
-            });
-        {% endif %}
-    {% else %}
-        {% if a_repo.props.has_subdir %} 
-            other_repos.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'},
-                'state': 'closed'
-            });  
-        {% else %}
-            other_repos.push({
-                'data': '{{ a_repo.props.name }}',
-                'attr': {'repo_id': '{{ a_repo.props.id }}'}
-            });
-        {% endif %}
-    {% endif %}
-    {% endfor %}
 {% endif %}
+{% endfor %}
 
 function opOnDirent(context) { // added param 'context' for 'more' dirents requested with 'list_dir_more'
     var context = context || $('.dir-item, .file-item');
