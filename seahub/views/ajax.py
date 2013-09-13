@@ -882,6 +882,7 @@ def get_current_commit(request, repo_id):
 def check_sub_repo(request, repo_id): 
     '''
     check if a dir has a corresponding sub_repo
+    if it does not have, create one
     '''
     if not request.is_ajax():
         raise Http404
@@ -890,50 +891,30 @@ def check_sub_repo(request, repo_id):
     result = {}
 
     path = request.GET.get('p') 
-    if not path:
+    name = request.GET.get('name')
+    if not (path and name):
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
+    user = request.user.username
+
+    # check if the sub-lib exist
     try:
-        sub_repo = seafile_api.get_virtual_repo(repo_id, path, request.user.username)
-    except SearpcError, e:
-        result['error'] = e.msg
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    
-    if sub_repo:
-        result['exist'] = True
-        result['sub_repo_id'] = sub_repo.id
-    else:
-        result['exist'] = False
-
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-@login_required
-def create_sub_repo(request, repo_id):
-    if not request.is_ajax() or request.method != 'POST':
-        return Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    orig_repo_id = repo_id
-    orig_path = request.POST.get('orig_path', '')
-    repo_name = request.POST.get('repo_name', '')
-    repo_desc = request.POST.get('repo_desc', '')
-    owner = request.user.username
-
-    if not orig_path or not repo_name or not repo_desc:
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    try:
-        sub_repo_id = seafile_api.create_virtual_repo(orig_repo_id, orig_path,
-                                                  repo_name, repo_desc, owner)
+        sub_repo = seafile_api.get_virtual_repo(repo_id, path, user)
     except SearpcError, e:
         result['error'] = e.msg
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+    
+    if sub_repo:
+        result['sub_repo_id'] = sub_repo.id
+    else:
+        # create a sub-lib
+        try:
+            # use name as 'repo_name' & 'repo_desc' for sub_repo
+            sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, user)
+            result['sub_repo_id'] = sub_repo_id
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
-    result['success'] = True
-    result['sub_repo_id'] = sub_repo_id
     return HttpResponse(json.dumps(result), content_type=content_type)
-

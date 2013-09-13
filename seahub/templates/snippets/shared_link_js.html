@@ -1,9 +1,11 @@
 {% load i18n avatar_tags %}
 {% load url from future %}
 
-var share_list = [];    
+var share_list = [], contacts = [], contact_email;    
 {% for contact in contacts %}
-share_list.push({value:'{{ contact.contact_email }}', label:'{{ contact.contact_email }}'});
+contact_email = '{{ contact.contact_email }}';
+share_list.push({value: contact_email, label: contact_email});
+contacts.push({value:contact_email, avatar:'{% avatar contact.contact_email 16 %}'});
 {% endfor %}
 
 function showSharePopup(op, name, aj_url, type, cur_path) {
@@ -15,26 +17,18 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
     }
     $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding":"10px 0 0"}});
 
-    $("#private-share-form input[name=s_type]").val(type);
-    $("#private-share-form input[name=path]").val(path);
-    var contacts = [];
-    {% for contact in contacts %}
-    contact_email = '{{ contact.contact_email }}';
-    contact_avatar = '{% avatar contact.contact_email 16 %}';
-    contacts.push({value:contact_email, avatar:contact_avatar});
-    {% endfor %}
+    var hd = $('#file-share .hd');
+    hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
 
-    var opts = '', email, avatar;
-    for (var i = 0, len = contacts.length; i < len; i++) {
-        email = contacts[i].value;
-        avatar = contacts[i].avatar;
-        opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
+    if (type == 'd') {
+        $('#private-share-tab, #private-share').remove();
+    } else {
+        $('#syncable-share-tab, #syncable-share').remove();
     }
-    var format = function(item) {
-        return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
-    }
+    $("#file-share-tabs").tabs();
 
-   if (op.data('link')) {
+    // share link
+    if (op.data('link')) {
         $('#gen-link-btn').addClass('hide');
         $('#share-link-body').removeClass('hide');
         var link = op.data('link');
@@ -49,83 +43,67 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
     $('#gen-link-btn').data('url', aj_url).data('obj', op);
     $('#rm-shared-link').data('obj', op);
 
-    var hd = $('#file-share .hd');
-    hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
+    // 'private share' for file
+    if ($('#private-share').length == 1) {
+        $('#private-share-tab a').click(function() {
+            var form = $('#private-share-form');
+            $("input[name=s_type]", form).val(type);
+            $("input[name=path]", form).val(path);
 
-    if (type == 'd') {
-        $('#private-share-tab, #private-share').remove();
-    } else {
-        $('#syncable-share-tab, #syncable-share').remove();
+            var opts = '', email, avatar;
+            for (var i = 0, len = contacts.length; i < len; i++) {
+                email = contacts[i].value;
+                opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
+            }
+            var format = function(item) {
+                return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
+            }
+            $('[name="emails"]', form).html(opts).select2({
+                placeholder: "{% trans "Select contacts" %}",
+                formatResult: format,
+                formatSelection: format,
+                escapeMarkup: function(m) { return m; }
+            });
+        });
     }
-    $("#file-share-tabs").tabs();
 
+    // syncable share for dir
     if ($('#syncable-share').length == 1) {
         $('#syncable-share-tab a').click(function() {
-            $(window).resize(); // to reposition the popup, as this panel is 'taller'
-        });
-        var showAjaxError = function(xhr, textStatus, errorThrown) {
-            var err;
-            if (xhr.responseText) {
-                err = jQuery.parseJSON(xhr.responseText).error;
-            } else {
-                err = "{% trans "Failed. Please check the network." %}";
-            } 
-            $('#syncable-share').append('<p class="error">' + err + '</p>');
-        };
+            var loading_tip = $('#syncable-share .loading-tip');
 
-        $.ajax({
-            url: '{% url 'check_sub_repo' repo.id %}?p=' + e(path),
-            dataType: 'json',
-            success: function(data) {
-                var sub_repo_id;
-                if (data['exist']) {
-                    sub_repo_id = data['sub_repo_id'];
-                    showShareOptions();
-                } else {
-                    $.ajax({
-                        url: '{% url 'create_sub_repo' repo.id %}',
-                        type: 'POST',
-                        cache: false,
-                        beforeSend: prepareCSRFToken,
-                        dataType: 'json',
-                        data: {
-                            orig_path: path || (cur_path + name),
-                            repo_name: name,
-                            repo_desc: name
-                        },
-                        success: function(data) {
-                            sub_repo_id = data['sub_repo_id'];
-                            showShareOptions();
-                        },
-                        error: showAjaxError
-                   });
-                }
-
-                function showShareOptions() {
+            // check if a sub-lib exists, if not, create one
+            $.ajax({
+                url: '{% url 'check_sub_repo' repo.id %}?p=' + e(path) + '&name=' + e(name),
+                dataType: 'json',
+                success: function(data) {
+                    loading_tip.hide();
                     var form = $("#repo-share-form");
                     form.removeClass('hide').css({'width':'auto'});
-                    $("#repo_id").val(sub_repo_id);
+                    $("#repo_id").val(data['sub_repo_id']);
                     $("h3", form).remove();
                     $('#share-enter-tab, #share-enter').remove();
                     $("#repo-share-tabs-nav").attr('id', 'tabs-nav');
                     $('#tabs-nav').css({'background':'transparent', 'padding-left': '1.4em'});
                     $('.checkbox-label', form).css({'margin-right':'3px'}); // make it not show on top of the scrollbar when hover
                     $("#repo-share-tabs").tabs();
+                    $(window).resize(); // to reposition the popup, as this panel is 'taller'
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    loading_tip.hide();
+                    var err;
+                    if (xhr.responseText) {
+                        err = jQuery.parseJSON(xhr.responseText).error;
+                    } else {
+                        err = "{% trans "Failed. Please check the network." %}";
+                    } 
+                    $('#syncable-share').append('<p class="error">' + err + '</p>');
                 }
-            },
-            error:showAjaxError
+            });
         });
     }
 
-    $('#private-share [name="emails"]').html(opts).select2({
-        placeholder: "{% trans "Select contacts" %}",
-        formatResult: format,
-        formatSelection: format,
-        escapeMarkup: function(m) { return m; }
-    });
-
     $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
-    $(window).resize();
 }
 
 $('#send-link').click(function() {

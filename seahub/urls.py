@@ -118,7 +118,6 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/check_sub_repo/$', check_sub_repo, name='check_sub_repo'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/create_sub_repo/$', create_sub_repo, name='create_sub_repo'),
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/new/$', new_file, name='new_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
