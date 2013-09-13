@@ -1,7 +1,6 @@
 {% extends "myhome_base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
-{% load url from future %}
 
 {% block sub_title %}{% trans "Clients" %} - {% endblock %}
 {% block nav_myhome_class %}class="cur"{% endblock %}
@@ -11,8 +10,15 @@
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Clients" %}</li>
+
+        {% for mod in mods_enabled %}
+        {% if mod == 'personal wiki' %}
+        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% include "snippets/modules_toggle_tab.html" %}
     </ul>
 </div>
 
@@ -64,6 +70,8 @@
 </div>
 {% endif %}
 
+{% include "snippets/modules_toggle_form.html" %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -72,5 +80,7 @@ addConfirmTo($('.unsync-client'), {
     'title':'{% trans "Unsync Client" %}',
     'con':'{% trans "Are you sure to unsync client %s ?" %}'
 });
+
+{% include "snippets/modules_toggle_js.html" %}
 </script>
 {% endblock %}

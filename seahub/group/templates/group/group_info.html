@@ -1,31 +1,12 @@
 {% extends base_template %}
 
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
-{% load url from future %}
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-
-<div class="tabnav">
-    <div class="grp-profile fright">
-        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
-    </div>
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
-        {% if enable_pubfile and group.is_pub %}
-        <li class="tabnav-tab"><a href="{% url 'group_pubfiles' group.id %}">{% trans "Files" %}</a></li>
-        {% endif %}
-        <li class="tabnav-tab"><a href="{% url 'group_members' group.id %}">{% trans "Members" %}</a></li>
-        {% if is_staff %}
-        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
-        {% endif %}
-    </ul>
-</div>
-
+{% include "group/tabnav.html" with cur="library" %}
 {% endblock %}
 
 {% block left_panel %}
@@ -183,6 +164,8 @@
 
 
 {% include "snippets/repo_create_form.html" %}
+{% include "group/modules_toggle_form.html" %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -229,5 +212,8 @@ $('.lsch-encrypted').click(function() {
 }); 
 {% include 'snippets/repo_decrypt_js.html' %}
 {% endif %}
+
+{% include "group/modules_toggle_js.html" %}
+
 </script>
 {% endblock %}

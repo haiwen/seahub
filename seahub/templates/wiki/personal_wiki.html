@@ -11,8 +11,10 @@
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'client_mgmt' %}">{% trans "Clients" %}</a></li>        
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Personal Wiki" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'client_mgmt' %}">{% trans "Clients" %}</a></li>
+
+        {% include "snippets/modules_toggle_tab.html" %}
     </ul>
 </div>
 
@@ -66,6 +68,9 @@
         <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
     </form>
     {% endif %}
+
+{% include "snippets/modules_toggle_form.html" %}
+    
 {% endblock main_panel %}
 
 {% block extra_script %}
@@ -143,5 +148,8 @@ $('#wiki-create-submit').click(function () {
     return false;
 });
 {% endif %}                     // END wiki_exists
+
+{% include "snippets/modules_toggle_js.html" %}
+
 </script>
 {% endblock %}

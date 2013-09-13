@@ -1,0 +1,14 @@
+{% load i18n %}
+<form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
+    <h3>{% trans "Available Modules"%}</h3>
+    <div>
+    {% for mod in mods_available %}
+      {% if mod == 'personal wiki' %}
+      <span><input type="checkbox" name="personal_wiki" {%if mod in mods_enabled%}checked {% endif%}/></span>
+      <span>{% trans "Personal Wiki" %}</span>
+      {% endif %}
+    {% endfor %}    
+    </div>
+
+    <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit"/>
+</form>

@@ -8,8 +8,11 @@ def group_staff_required(func):
 
     """
     def _decorated(request, *args, **kwargs):
-        group_id = int(kwargs.get('group_id', '0')) # Checked by URL Conf
-
+        try:
+            group_id = int(kwargs.get('group_id', None))
+        except TypeError:
+            raise TypeError("No group_id in url arguments")
+        
         if check_group_staff(group_id, request.user.username):
             return func(request, *args, **kwargs)
         raise Http404

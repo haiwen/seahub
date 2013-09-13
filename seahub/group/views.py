@@ -56,6 +56,8 @@ from seahub.utils.file_types import IMAGE
 from seahub.utils import calc_file_path_hash
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
+from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI,\
+    enable_mod_for_group, disable_mod_for_group, get_available_mods_by_group
 from seahub.forms import SharedRepoCreateForm
 
 # Get an instance of a logger
@@ -490,6 +492,10 @@ def group_info(request, group):
                                               request.user.username)
         cmt.tp = cmt.props.desc.split(' ')[0]
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+
     return render_to_response("group/group_info.html", {
             "members": members,
             "repos": repos,
@@ -498,6 +504,8 @@ def group_info(request, group):
             "is_staff": group.is_staff,
             'create_shared_repo': True,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @group_check
@@ -520,10 +528,16 @@ def group_members(request, group):
         else:
             m.can_be_contact = True
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+            
     return render_to_response("group/group_members.html", {
             "members": members,
             "group" : group,
             "is_staff": group.is_staff,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -640,11 +654,18 @@ def group_manage(request, group_id):
     else:
         group.is_pub = False
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+        
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members_all,
             'admins': admins,
             'contacts': contacts,
+            'is_staff': True,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1171,6 +1192,10 @@ def group_discuss(request, group):
 
             msg.attachment = att
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+            
     return render_to_response("group/group_discuss.html", {
             "members": members,
             "group" : group,
@@ -1178,11 +1203,42 @@ def group_discuss(request, group):
             "group_msgs": group_msgs,
             "form": form,
             'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
+@group_staff_required
+@group_check
+def group_toggle_modules(request, group):
+    """Enable or disable modules.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    username = request.user.username
+    group_wiki = request.POST.get('group_wiki', 'off')
+    if group_wiki == 'on':
+        enable_mod_for_group(group.id, MOD_GROUP_WIKI)
+        messages.success(request, _('Successfully enable "Wiki".'))
+    else:
+        disable_mod_for_group(group.id, MOD_GROUP_WIKI)
+        messages.success(request, _('Successfully disable "Wiki".'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)
+
+    
+########## wiki
 @group_check
 def group_wiki(request, group, page_name="home"):
     username = request.user.username
+    
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+    
     wiki_exists = True
     try:
         content, repo, dirent = get_group_wiki_page(username, group, page_name)
@@ -1192,6 +1248,8 @@ def group_wiki(request, group, page_name="home"):
                 "group" : group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
+                "mods_enabled": mods_enabled,
+                "mods_available": mods_available,
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         '''create that page for user if he/she is a group member'''
@@ -1228,6 +1286,8 @@ def group_wiki(request, group, page_name="home"):
                 "repo_id": repo.id,
                 "search_repo_id": repo.id,
                 "search_wiki": True,
+                "mods_enabled": mods_enabled,
+                "mods_available": mods_available,
                 }, context_instance=RequestContext(request))
 
 @group_check

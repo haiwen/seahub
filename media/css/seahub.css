@@ -1651,7 +1651,8 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
-#member-add-form {
+#member-add-form,
+#mods-enable-form {
     width:266px;
 }
 .tab-popup {

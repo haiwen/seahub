@@ -34,6 +34,9 @@ from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
 from seahub.wiki.utils import clean_page_name
 from seahub.utils import get_file_contributors, render_error
+from seahub.views.modules import get_enabled_mods_by_user, \
+    get_available_mods_by_user
+
 
 @login_required
 def personal_wiki(request, page_name="home"):
@@ -63,6 +66,10 @@ def personal_wiki(request, page_name="home"):
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None
 
+        # get available modules(wiki, etc)
+        mods_available = get_available_mods_by_user(username)
+        mods_enabled = get_enabled_mods_by_user(username)
+        
         return render_to_response("wiki/personal_wiki.html", {
                 "wiki_exists": wiki_exists,
                 "content": content,
@@ -73,6 +80,8 @@ def personal_wiki(request, page_name="home"):
                 "repo_id": repo.id,
                 "search_repo_id": repo.id,
                 "search_wiki": True,
+                "mods_enabled": mods_enabled,
+                "mods_available": mods_available,
                 }, context_instance=RequestContext(request))
 
 @login_required

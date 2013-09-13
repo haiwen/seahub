@@ -7,27 +7,7 @@
 {% block nav_group_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-
-<div class="tabnav">
-    <div class="grp-profile fright">
-        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
-    </div>
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Wiki" %}</li>
-        {% if enable_pubfile and group.is_pub %}
-        <li class="tabnav-tab"><a href="{% url 'group_pubfiles' group.id %}">{% trans "Files" %}</a></li>
-        {% endif %}
-        {% if group.view_perm != 'pub' %}
-        <li class="tabnav-tab"><a href="{% url 'group_members' group.id %}">{% trans "Members" %}</a></li>
-        {% endif %}
-        {% if is_staff %}
-        <li class="tabnav-tab"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
-        {% endif %}
-    </ul>
-</div>
-
+{% include "group/tabnav.html" with cur="wiki"%}
 {% endblock %}
 
 {% block main_panel %}
@@ -82,6 +62,9 @@
         <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
     </form>
     {% endif %}
+
+{% include "group/modules_toggle_form.html" %}
+    
 {% endblock main_panel %}
 
 {% block extra_script %}
@@ -159,5 +142,8 @@ $('#wiki-create-submit').click(function () {
     return false;
 });
 {% endif %}                     // END wiki_exists
+
+{% include "group/modules_toggle_js.html" %}
+
 </script>
 {% endblock %}
