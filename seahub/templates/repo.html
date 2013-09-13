@@ -200,23 +200,6 @@
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
 
-    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-    <div id="dir-sync-popup" class="hide">
-        <h3 class="hd">{% trans "Sync %(dir_name)s" %}</h3>
-        <p class="sub-repo-create-tip hide">{% trans "You need to create a sub-library from this directory to sync it." %}</p>
-        <button class="create-sub-repo hide">{% trans "Create" %}</button>
-        <p class="sub-repo-creating-progress hide"></p>
-        <p class="sub-repo-exist-tip hide">{% trans "The sub-library used to sync this directory already exists." %}</p>
-        <button id="sync-sub-repo" class="hide">{% trans "Sync" %}</button>
-        <p class="tip" style="margin-bottom:0">{% trans "A sub-library can be created from any folder. It can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
-    </div>
-    {% endif %}
-
-    {% url 'share_repo' as repo_share_url %}
-    {% with post_url=repo_share_url groups=joined_groups %}
-    {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}
-    {% endwith %}    
-
 {% endblock %}
 
 {% block extra_script %}
@@ -1031,42 +1014,6 @@ $('.file-share, .dir-share', context).click(function() {
     return false;
 });
 
-{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-$('.dir-sync', context).click(function() {
-    var dir_name = $(this).parents('.dir-item').data('name');
-     
-    // check if the sub-library exists
-    $.ajax({
-        url: '{% url 'check_sub_repo' repo.id %}?p=' + e(cur_path + dir_name),
-        dataType: 'json',
-        success: function(data) {
-            var popup = $('#dir-sync-popup'),
-                hd = $('.hd', popup);
-            popup.modal({appendTo:'#main', minWidth:250, maxWidth:400});
-            $('#simplemodal-container').css({'height':'auto'});
-
-            hd.html(hd.html().replace('%(dir_name)s', '<span class="op-target">' + dir_name + '</span>'));
-
-            if (data['exist']) {
-                // sub-lib already exists
-                $('.sub-repo-exist-tip', popup).removeClass('hide');
-                $('#sync-sub-repo').data('sub_repo_id', data['sub_repo_id']).removeClass('hide');
-            } else {
-                // sub-lib doesn't exist
-                $('.sub-repo-create-tip, .create-sub-repo', popup).removeClass('hide');
-                $('.create-sub-repo', popup).click(createSubRepo).data('dir_name', dir_name).data('context', popup);
-            }
-            $('#sync-sub-repo').click(function() {
-                window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).data('sub_repo_id'));
-            });
-        },
-        error: ajaxErrorHandler
-    });
-    return false;
-});
-
-{% endif %}
-
 } //function 'opOnDirent' ends here
 
 $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(function() {
@@ -1343,38 +1290,12 @@ function updateCmt() {
 }
 
 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-function createSubRepo() {
-    var repo_name = $(this).data('dir_name'),
-        path = $(this).data('path'), // for '.create-sub-repo' in share panel
-        context = $(this).data('context'),
-        progress = $('.sub-repo-creating-progress', context);
-
-    $('.sub-repo-create-tip, .create-sub-repo', context).addClass('hide');
-    progress.html('{% trans "Creating sub-library..." %}').removeClass('hide').css({'color':'red'});
-
-    $.ajax({
-        url: '{% url 'create_sub_repo' repo.id %}',
-        type: 'POST',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        dataType: 'json',
-        data: {
-            orig_path: path || (cur_path + repo_name),
-            repo_name: repo_name,
-            repo_desc: repo_name
-        },
-        success: function(data) {
-            progress.html('{% trans "Sub-library is created." %}');
-            $('#sync-sub-repo, #share-sub-repo', context).removeClass('hide').data('sub_repo_id', data['sub_repo_id']);
-        },
-        error: ajaxErrorHandler 
-   });
-}
-
 // sub-repo-share submit
+// only share to 1 panel(e.g. groups or contacts)
    $('#share-submit-btn').click(function() {
-        var cur_tab_id = $('#repo-share-tabs-nav .ui-tabs-selected a').attr('href');
-        var post_data = ''; 
+        var form = $("#repo-share-form"),
+            cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
+            post_data = ''; 
         switch(cur_tab_id) {
             case '#share-grp-options':
             case '#share-contact-options':
@@ -1383,11 +1304,9 @@ function createSubRepo() {
                 }); 
         }   
         if (!post_data) {
-            apply_form_error('repo-share-form', '{% trans "Please select at least 1 group or 1 contact." %}');
+            apply_form_error(form.attr('id'), '{% trans "Please select at least 1 group or 1 contact." %}');
             return false;
         }
-
-        var form = $("#repo-share-form");
         //'email_or_group' is required. It was in 'share-enter' tab, but 'share-enter' was removed for sub-lib share.
         form.append('<input type="hidden" name="email_or_group" />');
         $('[name="email_or_group"]', form).val(post_data);

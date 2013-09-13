@@ -935,6 +935,5 @@ def create_sub_repo(request, repo_id):
 
     result['success'] = True
     result['sub_repo_id'] = sub_repo_id
-    repo_created.send(sender=None, org_id=-1, creator=owner, repo_id=sub_repo_id, repo_name=repo_name)
     return HttpResponse(json.dumps(result), content_type=content_type)
 

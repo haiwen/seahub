@@ -789,23 +789,6 @@ def myhome(request):
     # Get all personal groups I joined.
     joined_groups = get_personal_groups_by_user(request.user.username)
 
-    def get_abbrev_origin_path(repo_name, path):
-        if len(path) > 20:
-            abbrev_path = path[-20:]
-            return repo_name + '/...' + abbrev_path
-        else:
-            return repo_name + path
-
-    # compose abbrev origin path for display
-    sub_repos = []
-    if ENABLE_SUB_LIBRARY:
-        sub_repos = seafile_api.get_virtual_repos_by_owner(email)
-        for repo in sub_repos:
-            repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
-                                                             repo.origin_path)
-        calculate_repos_last_modify(sub_repos)
-        sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
     # Personal repos that I owned.
     owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
     calculate_repos_last_modify(owned_repos)
@@ -891,7 +874,6 @@ def myhome(request):
             "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
             "ENABLE_EVENTS": EVENTS_ENABLED,
-            "sub_repos": sub_repos,
             }, context_instance=RequestContext(request))
 
 @login_required

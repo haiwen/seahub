@@ -25,9 +25,6 @@
                     {% if not repo.encrypted %}
                     <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
                     {% endif %}
-                    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
-                    <a class="op dir-sync" href="#">{% trans "Sync" %}</a>
-                    {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
                 <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon" data="no-popup" />

@@ -7,8 +7,8 @@
                 <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li>
                 {% endif %}
                 <li><a href="#link-share">{% trans "Share Link" %}</a></li>
-                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-                <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Syncable Share" %}</a></li>
+                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %} {# dir share #}
+                <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Private Share" %}</a></li>
                 {% endif %}
             </ul>
 
@@ -46,12 +46,10 @@
 
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">
-                <p class="sub-repo-create-tip hide">{% trans "You need to create a sub-library from this directory to let others sync it." %}</p>
-                <button class="create-sub-repo hide">{% trans "Create" %}</button>
-                <p class="sub-repo-creating-progress hide"></p>
-                <p class="sub-repo-exist-tip hide">{% trans "The sub-library used to share this directory already exists." %}</p>
-                <button id="share-sub-repo" class="hide">{% trans "Share" %}</button>
-                <p class="tip" style="margin-top:0.5em;">{% trans "A sub-library can be created from any folder. It can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
+                {% url 'share_repo' as repo_share_url %}
+                {% with post_url=repo_share_url groups=joined_groups %}
+                {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}
+                {% endwith %} 
             </div>
             {% endif %}
 
