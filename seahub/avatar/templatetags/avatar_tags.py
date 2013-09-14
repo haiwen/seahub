@@ -1,8 +1,8 @@
 import urllib
+import hashlib
 
 from django import template
 from django.utils.translation import ugettext as _
-from django.utils.hashcompat import md5_constructor
 from django.core.urlresolvers import reverse
 
 from seahub.base.accounts import User
@@ -28,7 +28,7 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
             if AVATAR_GRAVATAR_DEFAULT:
                 params['d'] = AVATAR_GRAVATAR_DEFAULT
             return "http://www.gravatar.com/avatar/%s/?%s" % (
-                md5_constructor(user.email).hexdigest(),
+                hashlib.md5(user.email).hexdigest(),
                 urllib.urlencode(params))
         else:
             return get_default_avatar_url()

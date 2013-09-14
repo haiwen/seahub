@@ -24,7 +24,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
-from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote

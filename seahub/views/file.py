@@ -5,6 +5,7 @@ view_snapshot_file, view_shared_file, file_edit, etc.
 """
 
 import os
+import hashlib
 import simplejson as json
 import stat
 import urllib2
@@ -19,7 +20,6 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
@@ -397,7 +397,7 @@ def view_file(request, repo_id):
     else:
         repogrp_str = '' 
     
-    file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
 
     # fetch file contributors and latest contributor
     contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)

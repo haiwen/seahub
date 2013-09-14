@@ -4,6 +4,7 @@ import re
 import urllib2
 import uuid
 import logging
+import hashlib
 import json
 import tempfile
 import locale
@@ -17,7 +18,6 @@ from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.hashcompat import sha_constructor, md5_constructor
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
@@ -793,7 +793,7 @@ def calc_file_path_hash(path, bits=12):
     if isinstance(path, unicode):
         path = path.encode('UTF-8')
 
-    path_hash = md5_constructor(urllib2.quote(path)).hexdigest()[:bits]
+    path_hash = hashlib.md5(urllib2.quote(path)).hexdigest()[:bits]
     
     return path_hash
 

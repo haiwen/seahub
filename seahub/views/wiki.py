@@ -5,6 +5,7 @@ view_trash_file, view_snapshot_file
 """
 
 import os
+import hashlib
 import simplejson as json
 import stat
 import tempfile
@@ -20,7 +21,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
-from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
@@ -58,7 +58,7 @@ def personal_wiki(request, page_name="home"):
         
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
-        file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+        file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
         contributors, last_modified, last_commit_id = get_file_contributors(\
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None

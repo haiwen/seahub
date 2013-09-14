@@ -3,7 +3,6 @@ import logging
 import urllib2
 
 from django.db import IntegrityError
-from django.utils.hashcompat import md5_constructor
 
 from pysearpc import SearpcError
 from seaserv import seafile_api
@@ -77,7 +76,7 @@ logger = logging.getLogger(__name__)
 #         last_modified = 0
 #         if not sfile.is_dir:
 #             # last modified
-#             path_hash = md5_constructor(urllib2.quote(sfile.path.encode('utf-8'))).hexdigest()[:12]
+#             path_hash = hashlib.md5(urllib2.quote(sfile.path.encode('utf-8'))).hexdigest()[:12]
 #             last_modified = get_file_contributors(sfile.repo_id, sfile.path, path_hash, file_id)[1]
 
 #         f = StarredFile(sfile.org_id, repo, sfile.path, sfile.is_dir, last_modified, size)

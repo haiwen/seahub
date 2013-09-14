@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
+import hashlib
 import stat
 import simplejson as json
 import urllib2
+
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
@@ -16,7 +18,6 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
 from django.utils import datetime_safe
-from django.utils.hashcompat import md5_constructor
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
@@ -1190,7 +1191,7 @@ def group_wiki(request, group, page_name="home"):
         
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
-        file_path_hash = md5_constructor(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+        file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
         contributors, last_modified, last_commit_id = get_file_contributors(\
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None

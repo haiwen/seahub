@@ -1,11 +1,11 @@
 from abc import abstractmethod
 import datetime
+import hashlib
 import os
 
 from django.db import models
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext as _
-from django.utils.hashcompat import md5_constructor
 from django.utils.encoding import smart_str
 from django.db.models import signals
 
@@ -32,14 +32,14 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     if isinstance(instance, Avatar):
         tmppath = [AVATAR_STORAGE_DIR]
         if AVATAR_HASH_USERDIRNAMES:
-            tmp = md5_constructor(instance.user.username).hexdigest()
+            tmp = hashlib.md5(instance.user.username).hexdigest()
             tmppath.extend([tmp[0], tmp[1], instance.emailuser])
         else:
             tmppath.append(instance.emailuser)
     elif isinstance(instance, GroupAvatar):
         tmppath = [GROUP_AVATAR_STORAGE_DIR]
         if AVATAR_HASH_USERDIRNAMES:
-            tmp = md5_constructor(instance.group_id).hexdigest()
+            tmp = hashlib.md5(instance.group_id).hexdigest()
             tmppath.extend([tmp[0], tmp[1], instance.group_id])
         else:
             tmppath.append(instance.group_id)
@@ -60,7 +60,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
         # File doesn't exist yet
         if AVATAR_HASH_FILENAMES:
             (root, ext) = os.path.splitext(filename)
-            filename = md5_constructor(smart_str(filename)).hexdigest()
+            filename = hashlib.md5(smart_str(filename)).hexdigest()
             filename = filename + ext
     if size:
         tmppath.extend(['resized', str(size)])

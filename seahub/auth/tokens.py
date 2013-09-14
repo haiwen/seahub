@@ -50,10 +50,10 @@ class PasswordResetTokenGenerator(object):
         # last_login will also change), we produce a hash that will be
         # invalid as soon as it is used.
         # We limit the hash to 20 chars to keep URL short
-        from django.utils.hashcompat import sha_constructor
+        import hashlib
         import datetime
         ctime = datetime.datetime.fromtimestamp(user.ctime/1000000)
-        hash = sha_constructor(settings.SECRET_KEY + unicode(user.id) +
+        hash = hashlib.sha1(settings.SECRET_KEY + unicode(user.id) +
                                ctime.strftime('%Y-%m-%d %H:%M:%S') +
                                unicode(timestamp)).hexdigest()[::2]
         

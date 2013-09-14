@@ -1,7 +1,6 @@
 # encoding: utf-8
 from django import forms
 from django.utils.encoding import smart_str
-from django.utils.hashcompat import md5_constructor, sha_constructor
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.models import RequestSite

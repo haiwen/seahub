@@ -67,10 +67,10 @@ class AnonymousShareTokenGenerator(object):
         ts_b36 = int_to_base36(timestamp)
 
         # We limit the hash to 20 chars to keep URL short
-        from django.utils.hashcompat import sha_constructor
         import datetime
+        import hashlib
         now = datetime.datetime.now()
-        hash = sha_constructor(settings.SECRET_KEY +
+        hash = hashlib.sha1(settings.SECRET_KEY +
                                unicode(random.randint(0, 999999)) +
                                now.strftime('%Y-%m-%d %H:%M:%S') +
                                unicode(timestamp)).hexdigest()[::2]
