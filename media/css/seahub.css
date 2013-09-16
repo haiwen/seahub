@@ -16,6 +16,7 @@
     -webkit-font-smoothing: antialiased;
 }
 .sf-icon-share:before { content:"\e001"; }
+.sf-icon-removeformat:before { content:"\f1e7"; }
 html { background:#fff; }
 body,
 h1,h2,h3,h4,h5,h6,
@@ -2241,7 +2242,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #sf {
     width:624px;
-    font-size:15px;
+    /*font-size:15px;*/
+    font-size:medium;
     background:#fff;
 }
 #sf, #md-view {

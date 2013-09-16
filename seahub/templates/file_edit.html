@@ -216,6 +216,7 @@
                         <a class="btn" data-edit="italic" title="{% trans "Italic (Ctrl/Cmd+I)" %}"><i class="icon-italic"></i></a>
                         <a class="btn" data-edit="strikethrough" title="{% trans "Strikethrough" %}"><i class="icon-strikethrough"></i></a>
                         <a class="btn" data-edit="underline" title="{% trans "Underline (Ctrl/Cmd+U)" %}"><i class="icon-underline"></i></a>
+                        <a class="btn" data-edit="removeFormat" title="{% trans "Remove format" %}"><i class="sf-icon-removeformat"></i></a>
                     </div>
                     <div class="btn-group">
                         <a class="btn" data-edit="insertunorderedlist" title="{% trans "Bullet list" %}"><i class="icon-list-ul"></i></a>
@@ -424,6 +425,14 @@ $(function() {
     };
     initToolbarBootstrapBindings();  
     $('#sf').wysiwyg();
+    try {
+        document.execCommand('styleWithCss',0, true);
+    } catch(e) {
+        try {
+            document.execCommand('useCss',0, false);
+        } catch(e) {
+        }
+    }
 });
 {% endif %}
 
