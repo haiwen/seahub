@@ -879,7 +879,7 @@ def get_current_commit(request, repo_id):
                         content_type=content_type)
 
 @login_required
-def check_sub_repo(request, repo_id): 
+def sub_repo(request, repo_id): 
     '''
     check if a dir has a corresponding sub_repo
     if it does not have, create one
@@ -896,11 +896,11 @@ def check_sub_repo(request, repo_id):
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    user = request.user.username
+    username = request.user.username
 
     # check if the sub-lib exist
     try:
-        sub_repo = seafile_api.get_virtual_repo(repo_id, path, user)
+        sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
     except SearpcError, e:
         result['error'] = e.msg
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
@@ -911,7 +911,7 @@ def check_sub_repo(request, repo_id):
         # create a sub-lib
         try:
             # use name as 'repo_name' & 'repo_desc' for sub_repo
-            sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, user)
+            sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
             result['sub_repo_id'] = sub_repo_id
         except SearpcError, e:
             result['error'] = e.msg

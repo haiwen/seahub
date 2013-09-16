@@ -74,7 +74,7 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
 
             // check if a sub-lib exists, if not, create one
             $.ajax({
-                url: '{% url 'check_sub_repo' repo.id %}?p=' + e(path) + '&name=' + e(name),
+                url: '{% url 'sub_repo' repo.id %}?p=' + e(path) + '&name=' + e(name),
                 dataType: 'json',
                 success: function(data) {
                     loading_tip.hide();
