@@ -594,7 +594,7 @@ def view_shared_file(request, token):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
-
+    file_size = seafile_api.get_file_size(obj_id)
     
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
@@ -641,6 +641,7 @@ def view_shared_file(request, token):
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
+            'file_size': file_size,
             'shared_token': token,
             'access_token': access_token,
             'fileext': fileext,
@@ -682,6 +683,7 @@ def view_file_via_shared_dir(request, token):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
+    file_size = seafile_api.get_file_size(obj_id)
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
@@ -721,6 +723,7 @@ def view_file_via_shared_dir(request, token):
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
+            'file_size': file_size,
             'shared_token': token,
             'access_token': access_token,
             'fileext': fileext,

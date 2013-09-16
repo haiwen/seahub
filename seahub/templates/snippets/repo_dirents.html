@@ -70,9 +70,10 @@
                     <a class="op download" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name|urlencode }}&op=download">{% trans "Download"%}</a>
                     {% if user_perm == 'rw' %}
                     <a class="op file-update" href="#">{% trans "Update"%}</a>
+                    {% endif %}
+                    
                     {% if not repo.encrypted %}
                     <a class="op file-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
-                    {% endif %}
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
