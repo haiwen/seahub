@@ -273,7 +273,7 @@ LOGO_PATH = 'img/logo.png'
 # URL to which the logo links
 LOGO_URL = SITE_BASE
 
-# css to modify the seafile css
+# css to modify the seafile css (e.g. css/my_site.css)
 BRANDING_CSS = ''
 
 # Using Django to server static file. Set to `False` if deployed behide a web

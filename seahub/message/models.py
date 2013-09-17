@@ -100,7 +100,7 @@ def add_share_repo_msg(sender, **kwargs):
     if from_user and to_user and repo:
         from seahub.base.templatetags.seahub_tags import email2nickname
         
-        msg = _(u"(System) %(user)s have shared a library <a href='%(href)s'>%(repo_name)s</a> to you.") % \
+        msg = _(u"(System) %(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") % \
             {'user': email2nickname(from_user),
              'href': reverse('repo', args=[repo.id]),
              'repo_name': repo.name}
@@ -114,7 +114,7 @@ def add_share_file_msg(sender, **kwargs):
     if priv_share is not None:
         from seahub.base.templatetags.seahub_tags import email2nickname
 
-        msg = _(u"(System) %(user)s have shared a file <a href='%(href)s'>%(file_name)s</a> to you.") % \
+        msg = _(u"(System) %(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % \
             {'user': email2nickname(priv_share.from_user),
              'href': reverse('view_priv_shared_file', args=[priv_share.token]),
              'file_name': file_name}
