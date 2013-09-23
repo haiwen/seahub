@@ -2539,7 +2539,8 @@ textarea:-moz-placeholder {/* for FF */
     color:#aaa;
 }
 #search-form,
-#search-user-form{
+#search-user-form,
+#search-repo-form{
     padding:7px 5px;
     height:auto;
     background:#f7f7f8;

@@ -4,6 +4,8 @@
 
 {% block main_panel %}
 <h3>{% trans "All Libraries" %}</h3>
+<button class="icon-search fright" id="search-repo-btn">{% trans "Search Library" %}</button>
+
 {% if repos %}
 <table>
     <tr>
@@ -62,6 +64,11 @@ addConfirmTo($('.repo-delete-btn'), {
         'title':'{% trans "Delete Library" %}',
         'con':'{% trans "Are you sure you want to delete %s ?" %}'
 });
+
+$('#search-repo-btn').click(function() {
+    location.href = "{% url 'sys_repo_search' %}";
+});
+
 </script>
 {% endblock %}
  

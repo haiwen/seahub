@@ -1,0 +1,82 @@
+{% extends "admin_base.html" %}
+{% load seahub_tags i18n %}
+
+{% block main_panel %}
+<h3>{% trans "Search Library"%}</h3>
+
+<form id="search-repo-form" method="get" action=".">
+  <label>{% trans "Name" %}</label>
+  <input type="text" name="name" id="id_name" class="input" value="{{name}}"/><br />
+  <label>{% trans "Owner" %}</label>
+  <input type="text" name="owner" id="id_owner" class="input" value="{{owner}}"/><br />
+  <label>{% trans "Orphan" %}</label>
+  <input type="radio" name="orphan" id="orphan_yes" value="yes" {% if orphan == 'yes' %}checked{% endif %}>Yes
+  <input type="radio" name="orphan" id="orphan_no" value="no" {% if orphan != 'yes' %}checked{% endif%}>No<br />
+  
+  <p class="error hide"></p>
+
+  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+  <input type="reset" value="{% trans "Reset" %}" class="submit" />
+</form>
+<h3>{% trans "Library List"%}</h3>
+{% if repos %}
+<table>
+    <tr>
+        <th width="15%">{% trans "Name" %}</th>
+        <th width="25%">ID</th>
+        <th width="20%">{% trans "Owner" %}</th>
+        <th width="30%">{% trans "Description" %}</th>
+        <th width="10%">{% trans "Operations" %}</th>
+    </tr>
+    {% for repo in repos %}
+    <tr>
+        <td>{{ repo.props.name }}</td>
+        <td style="font-size:11px;">{{ repo.id }}</td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        <td><a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+function disable_owner() {
+    $('#id_owner').prop('disabled', true).addClass('input-disabled').val('');
+};
+
+function enable_owner() {
+    $('#id_owner').prop('disabled', false).removeClass('input-disabled');
+};
+
+$(document).ready(function() {
+    if($('#orphan_yes').is(':checked')) {
+        disable_owner();
+    }
+    if($('#orphan_no').is(':checked')) {
+        enable_owner();
+    }
+});
+
+$('#orphan_yes').click(function () {
+    disable_owner();
+});
+$('#orphan_no').click(function () {
+    enable_owner();
+});
+
+$('#search-repo-form').submit(function() {
+    var form = $(this),
+        form_id = $(this).attr('id'),
+        name = $.trim(form.children('[name="name"]').val()),
+        owner = $.trim(form.children('[name="owner"]').val()),
+        orphan = form.children('[name="orphan"]:checked').val();
+
+    form.submit();
+});
+</script>
+{% endblock %}

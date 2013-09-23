@@ -17,7 +17,8 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_page_delete
 from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
-    user_remove_admin, user_reset, user_activate, sys_publink_admin
+    user_remove_admin, user_reset, user_activate, sys_publink_admin, \
+    sys_repo_search
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -143,6 +144,7 @@ urlpatterns = patterns('',
 
     ### system admin ###                       
     (r'^sys/seafadmin/$', sys_repo_admin),
+    url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
