@@ -531,3 +531,26 @@ def user_search(request):
             'page_next': page_next,
             }, context_instance=RequestContext(request))
     
+@login_required
+@sys_staff_required
+def sys_repo_transfer(request):
+    """Transfer a repo to others.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    repo_id = request.POST.get('repo_id', None)
+    new_owner = request.POST.get('email', None)
+
+    if repo_id and new_owner:
+        try:
+            User.objects.get(email=new_owner)
+            seafile_api.set_repo_owner(repo_id, new_owner)
+            messages.success(request, _(u'Successfully transfered.'))    
+        except User.DoesNotExist:
+            messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
+    else:
+        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
+    return HttpResponseRedirect(reverse(sys_repo_admin))
+    
+    
