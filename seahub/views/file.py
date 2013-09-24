@@ -11,6 +11,7 @@ import stat
 import urllib2
 import chardet
 import logging
+import posixpath
 
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
@@ -358,9 +359,9 @@ def view_file(request, repo_id):
                 img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
                 cur_img_index = img_list.index(u_filename) 
                 if cur_img_index != 0:
-                    img_prev = os.path.join(parent_dir, img_list[cur_img_index - 1])
+                    img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
-                    img_next = os.path.join(parent_dir, img_list[cur_img_index + 1])
+                    img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
         else:
             pass
 
