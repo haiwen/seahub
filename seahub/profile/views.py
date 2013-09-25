@@ -1,4 +1,5 @@
 # encoding: utf-8
+from django.conf import settings
 import simplejson as json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -132,3 +133,12 @@ def get_user_profile(request, user):
         data['new_user'] = True
 
     return HttpResponse(json.dumps(data), content_type=content_type)
+
+@login_required
+def delete_user_account(request, user):
+    if request.user.username != user:
+        messages.error(request, _(u'Operation Failed. You can only delete account of your own'))
+    else:
+        user = User.objects.get(email=user)
+        user.delete()
+        return HttpResponseRedirect(settings.LOGIN_URL)
