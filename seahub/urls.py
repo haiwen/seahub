@@ -15,9 +15,10 @@ from share.views import user_share_list, gen_private_file_share, \
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete
-from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, \
+from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
-    user_remove_admin, user_reset, user_activate, sys_publink_admin
+    user_remove_admin, user_reset, user_activate, sys_publink_admin, \
+    sys_repo_search, sys_repo_transfer
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -100,6 +101,7 @@ urlpatterns = patterns('',
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
     url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
+    url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
 
     ### Ajax ###
     (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents),
@@ -142,12 +144,15 @@ urlpatterns = patterns('',
 
     ### system admin ###                       
     (r'^sys/seafadmin/$', sys_repo_admin),
+    url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
+    url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     (r'^useradmin/remove/(?P<user_id>[^/]+)/$', user_remove),
+    url(r'^useradmin/search/$', user_search, name="user_search"),
     url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),

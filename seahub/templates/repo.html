@@ -129,6 +129,9 @@
         <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Don't keep history" %}</span><br />
         <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} class="vam" /> <span calss="vam">{% trans "Only keep a period of history:" %} <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}</span><br />
 	{% endif %}
+        <label>{% trans "Owner" %}</label><br />
+        <input type="text" name="repo_owner" value="{{repo_owner}}" class="long-input"/><br />
+        
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -280,6 +283,7 @@ $('#repo-setting-form').submit(function() {
             'repo_id': $('#repo-setting-form input[name="repo_id"]').val(),
             'repo_name': $('#repo-setting-form input[name="repo_name"]').val(),
             'repo_desc': $('#repo-setting-form input[name="repo_desc"]').val(),
+            'repo_owner': $('#repo-setting-form input[name="repo_owner"]').val(),
             {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
             'days': days 
             {% endif %}

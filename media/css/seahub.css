@@ -110,6 +110,7 @@ input.submit {
     margin-top:8px;
 }
 input[type=submit]:hover,
+input[type=reset]:hover,
 input[type=button]:hover,
 button:hover, 
 .fileinput-button:hover {
@@ -1655,7 +1656,8 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
-#member-add-form {
+#member-add-form,
+#mods-enable-form {
     width:266px;
 }
 .tab-popup {
@@ -2541,7 +2543,9 @@ textarea:-moz-placeholder {/* for FF */
     font-size:16px;
     color:#aaa;
 }
-#search-form {
+#search-form,
+#search-user-form,
+#search-repo-form{
     padding:7px 5px;
     height:auto;
     background:#f7f7f8;

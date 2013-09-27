@@ -79,7 +79,8 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
-
+from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI,\
+    enable_mod_for_user, disable_mod_for_user, get_available_mods_by_user
 from seahub.utils import HAS_OFFICE_CONVERTER
 
 if HAS_OFFICE_CONVERTER:
@@ -394,6 +395,7 @@ def repo_save_settings(request):
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
         days = form.cleaned_data['days']
+        repo_owner = form.cleaned_data['repo_owner']
         
         repo = get_repo(repo_id)
         if not repo:
@@ -425,6 +427,10 @@ def repo_save_settings(request):
             if res != 0:
                 return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
                                     status=400, content_type=content_type)
+
+        # set library owner
+        if repo_owner is not None and repo_owner != username:
+            seafile_api.set_repo_owner(repo_id, repo_owner)
 
         messages.success(request, _(u'Settings saved.'))
         return HttpResponse(json.dumps({'success': True}),
@@ -774,40 +780,40 @@ def repo_remove(request, repo_id):
     if not next:
         next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
-    
+
 @login_required
 def myhome(request):
     owned_repos = []
 
-    email = request.user.username
+    username = request.user.username
 
-    quota = seafserv_threaded_rpc.get_user_quota(email)
+    quota = seafserv_threaded_rpc.get_user_quota(username)
 
     quota_usage = 0
     share_usage = 0
-    my_usage = get_user_quota_usage(email)
+    my_usage = get_user_quota_usage(username)
     if CALC_SHARE_USAGE:
-        share_usage = get_user_share_usage(email)
+        share_usage = get_user_share_usage(username)
         quota_usage = my_usage + share_usage
     else:
         quota_usage = my_usage
 
     # Get all personal groups I joined.
-    joined_groups = get_personal_groups_by_user(request.user.username)
+    joined_groups = get_personal_groups_by_user(username)
 
     # Personal repos that I owned.
-    owned_repos = seafserv_threaded_rpc.list_owned_repos(email)
+    owned_repos = seafserv_threaded_rpc.list_owned_repos(username)
     calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
     
     # Personal repos others shared to me
-    in_repos = list_personal_shared_repos(email, 'to_email', -1, -1)
+    in_repos = list_personal_shared_repos(username, 'to_email', -1, -1)
     # For each group I joined... 
     for grp in joined_groups:
         # Get group repos, and for each group repos...
         for r_id in get_group_repoids(grp.id):
             # No need to list my own repo
-            if is_repo_owner(email, r_id):
+            if is_repo_owner(username, r_id):
                 continue
             # Convert repo properties due to the different collumns in Repo
             # and SharedRepo
@@ -820,7 +826,7 @@ def myhome(request):
             r.last_modified = get_repo_last_modify(r)
             r.share_type = 'group'
             r.user = get_repo_owner(r_id)
-            r.user_perm = check_permission(r_id, email)
+            r.user_perm = check_permission(r_id, username)
             in_repos.append(r)
     in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
@@ -828,7 +834,7 @@ def myhome(request):
     grpmsg_list = []
     grpmsg_reply_list = []
     joined_group_ids = [x.id for x in joined_groups]
-    notes = UserNotification.objects.filter(to_user=request.user.username)
+    notes = UserNotification.objects.filter(to_user=username)
     for n in notes:
         if n.msg_type == 'group_msg':
             if int(n.detail) not in joined_group_ids:
@@ -839,24 +845,28 @@ def myhome(request):
             grpmsg_reply_list.append(n.detail)
 
     # get nickname
-    profiles = Profile.objects.filter(user=request.user.username)
+    profiles = Profile.objects.filter(user=username)
     nickname = profiles[0].nickname if profiles else ''
 
     autocomp_groups = joined_groups
-    contacts = Contact.objects.get_registered_contacts_by_user(email)
+    contacts = Contact.objects.get_registered_contacts_by_user(username)
 
     allow_public_share = False if request.cloud_mode else True
 
     starred_files = UserStarredFiles.objects.get_starred_files_by_username(
-        request.user.username)
+        username)
 
     traffic_stat = 0
     if TRAFFIC_STATS_ENABLED:
         # User's network traffic stat in this month 
-        stat = get_user_traffic_stat(request.user.username)
+        stat = get_user_traffic_stat(username)
         if stat:
             traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_user(username)
+    mods_enabled = get_enabled_mods_by_user(username)
+            
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -880,6 +890,8 @@ def myhome(request):
             "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
             "ENABLE_EVENTS": EVENTS_ENABLED,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -895,8 +907,14 @@ def client_mgmt(request):
     if clients:
         clients.sort(key=lambda client: client.repo_name)
 
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_user(username)
+    mods_enabled = get_enabled_mods_by_user(username)
+        
     return render_to_response('client_mgmt.html', {
             'clients': clients,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1791,3 +1809,25 @@ def convert_cmmt_desc_link(request):
     for d in diff_result:
         logger.warn('diff_result: %s' % (d.__dict__))
     raise Http404
+
+@login_required
+def toggle_modules(request):
+    """Enable or disable modules.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    username = request.user.username
+    personal_wiki = request.POST.get('personal_wiki', 'off')
+    if personal_wiki == 'on':
+        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        messages.success(request, _('Successfully enable "Personal Wiki".'))
+    else:
+        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        messages.success(request, _('Successfully disable "Personal Wiki".'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)
+

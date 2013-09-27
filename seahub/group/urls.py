@@ -6,7 +6,7 @@ from views import group_info, group_members, group_member_operations, group_add_
     group_remove_admin, group_discuss, group_wiki, group_wiki_create, \
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_remove, group_dismiss, group_quit, \
-    group_make_public, group_revoke_public
+    group_make_public, group_revoke_public, group_transfer, group_toggle_modules
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/manage/$', group_manage, name='group_manage'),
     url(r'^(?P<group_id>\d+)/remove/$', group_remove, name='group_remove'),
     url(r'^(?P<group_id>\d+)/dismiss/$', group_dismiss, name='group_dismiss'),
+    url(r'^(?P<group_id>\d+)/transfer/$', group_transfer, name='group_transfer'),
     url(r'^(?P<group_id>\d+)/make_pub/$', group_make_public, name='group_make_pub'),
     url(r'^(?P<group_id>\d+)/revoke_pub/$', group_revoke_public, name='group_revoke_pub'),
     url(r'^(?P<group_id>\d+)/quit/$', group_quit, name='group_quit'),
@@ -35,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^recommend/$', group_recommend, name='group_recommend'),
     url(r'^attention/$', attention, name='group_attention'),
     url(r'^joinrequest/(?P<group_id>[\d]+)/$', group_joinrequest, name='group_joinrequest'),
+    url(r'^(?P<group_id>\d+)/modules/toggle/$', group_toggle_modules, name='group_toggle_modules'),
 )
 
 import seahub.settings as settings

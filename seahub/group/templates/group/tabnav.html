@@ -1,0 +1,31 @@
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+
+<div class="tabnav">
+    <div class="grp-profile fright">
+        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
+    </div>
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab {% if cur == 'library'%}tabnav-tab-cur{% endif%}"><a href="{% url 'group_info' group.id %}">{% trans "Libraries" %}</a></li>
+        
+        <li class="tabnav-tab {% if cur == 'discuss'%}tabnav-tab-cur{% endif%}"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
+
+        {% for mod in mods_enabled %}
+        {% if mod == 'group wiki' %}
+        <li class="tabnav-tab {% if cur == 'wiki'%}tabnav-tab-cur{%endif%}"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
+        {% endif %}
+        {% endfor %}
+        
+        {% if enable_pubfile and group.is_pub %}
+        <li class="tabnav-tab {% if cur == 'pubfile'%}tabnav-tab-cur{%endif%}"><a href="{% url 'group_pubfiles' group.id %}">{% trans "Files" %}</a></li>
+        {% endif %}
+
+        <li class="tabnav-tab {% if cur == 'members'%}tabnav-tab-cur{%endif%}"><a href="{% url 'group_members' group.id %}">{% trans "Members" %}</a></li>
+        
+        {% if is_staff %}
+        <li class="tabnav-tab {% if cur == 'admin'%}tabnav-tab-cur{%endif%}"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
+
+        <li class="tabnav-tab"><a id="enable-mods" href="#"><img src="{{MEDIA_URL}}img/calcplus-16.png" title="{% trans "Available Modules" %}" alt="{% trans "Available Modules"%}" /></a></li>
+        {% endif %}
+
+    </ul>
+</div>

@@ -4,14 +4,16 @@
 
 {% block main_panel %}
 <h3>{% trans "All Libraries" %}</h3>
+<button class="icon-search fright" id="search-repo-btn">{% trans "Search Library" %}</button>
+
 {% if repos %}
 <table>
     <tr>
         <th width="15%">{% trans "Name" %}</th>
         <th width="25%">ID</th>
         <th width="20%">{% trans "Owner" %}</th>
-        <th width="30%">{% trans "Description" %}</th>
-        <th width="10%">{% trans "Operations" %}</th>
+        <th width="27%">{% trans "Description" %}</th>
+        <th width="13%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
@@ -19,7 +21,11 @@
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td><a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a></td>
+        <td>
+          <a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a>
+          <a href="#" data-id="{{repo.id}}" data-name="{{repo.name}}" class="repo-transfer-btn op">{% trans "Transfer" %}</a>        
+        </td>
+        
     </tr>
     {% endfor %}
 </table>
@@ -54,6 +60,18 @@
 {% else %}
 <p>{% trans "Empty" %}</p>
 {% endif %}
+
+<form id="repo-transfer-form" method="post" action="{% url 'sys_repo_transfer' %}" class="simple-input-popup hide">{% csrf_token %}
+  <h3>{% trans "Transfer Library"%}</h3>
+  <label>{% trans "Email" %}</label><br />
+  <input type="text" name="email" value="" class="long-input"/><br />
+  <input type="hidden" name="repo_id" value="" />
+
+  <p class="error hide"></p>
+  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+  <button class="simplemodal-close">{% trans "Cancel" %}</button>
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -61,6 +79,31 @@
 addConfirmTo($('.repo-delete-btn'), {
         'title':'{% trans "Delete Library" %}',
         'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
+
+$('#search-repo-btn').click(function() {
+    location.href = "{% url 'sys_repo_search' %}";
+});
+
+$('.repo-transfer-btn').click(function(){
+    var repo_id = $(this).data('id'),
+        repo_name = $(this).data('name'),
+        form = $('#repo-transfer-form');
+    
+    $('#repo-transfer-form input[name="repo_id"]').val(repo_id);
+    form.modal({appendTo:'#main'});
+    return false;
+});
+
+$('#repo-transfer-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        email = $.trim(form.children('[name="email"]').val());
+    if (!email) {
+        apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
+        return false;
+    }
+    form.submit();
 });
 </script>
 {% endblock %}

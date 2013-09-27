@@ -42,3 +42,14 @@ class GroupWiki(models.Model):
     repo_id = models.CharField(max_length=36)
     objects = GroupWikiManager()
 
+###### signal handlers
+from django.dispatch import receiver
+from seahub.signals import repo_deleted    
+
+@receiver(repo_deleted)
+def remove_personal_wiki(sender, **kwargs):
+    repo_owner = kwargs['repo_owner']
+    repo_id = kwargs['repo_id']
+
+    PersonalWiki.objects.filter(username=repo_owner, repo_id=repo_id).delete()
+

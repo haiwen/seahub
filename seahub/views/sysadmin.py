@@ -69,7 +69,85 @@ def sys_repo_admin(request):
         },
         context_instance=RequestContext(request))
 
+def list_orphan_repos_by_name(repo_name):
+    ret_list = []
+    try:
+        repos = seafile_api.get_orphan_repo_list()
+        for e in repos:
+            if e.name == repo_name:
+                e.owner = seafile_api.get_repo_owner(e.id)
+                ret_list.append(e)
+    except Exception as e:
+        logger.error(e)
+    return ret_list
 
+def list_orphan_repos():
+    try:
+        repos = seafile_api.get_orphan_repo_list()
+        for e in repos:
+            e.owner = seafile_api.get_repo_owner(e.id)
+        return repos
+    except Exception as e:
+        logger.error(e)
+        return []
+
+def list_repos_by_name_and_owner(repo_name, owner):
+    repos = []
+    owned_repos = seafile_api.get_owned_repo_list(owner)
+    for repo in owned_repos:
+        if repo.name == repo_name:
+            repo.owner = owner
+            repos.append(repo)
+    return repos
+
+def list_repos_by_name(repo_name):
+    repos = []
+    repos_all = seafile_api.get_repo_list(-1, -1)
+    for repo in repos_all:
+        if repo.name == repo_name:
+            try:
+                repo.owner = seafile_api.get_repo_owner(repo.id)
+            except SearpcError:
+                repo.owner = "failed to get"
+            repos.append(repo)
+    return repos
+
+def list_repos_by_owner(owner):
+    repos = seafile_api.get_owned_repo_list(owner)
+    for e in repos:
+        e.owner = owner
+    return repos
+    
+@login_required
+@sys_staff_required
+def sys_repo_search(request):
+    """Search a repo.
+    """
+    repo_name = request.GET.get('name', '')
+    owner = request.GET.get('owner', '')
+    orphan = request.GET.get('orphan', 'no')
+    repos = []    
+
+    if orphan == 'yes':
+        if repo_name:
+            repos = list_orphan_repos_by_name(repo_name)
+        else:
+            repos = list_orphan_repos()
+    else:
+        if repo_name and owner : # search by name and owner
+            repos = list_repos_by_name_and_owner(repo_name, owner)
+        elif repo_name:     # search by name
+            repos = list_repos_by_name(repo_name)
+        elif owner:     # search by owner
+            repos = list_repos_by_owner(owner)
+
+    return render_to_response('sysadmin/sys_repo_search.html', {
+            'repos': repos,
+            'name': repo_name,
+            'owner': owner,
+            'orphan': orphan,
+            }, context_instance=RequestContext(request))
+    
 @login_required
 @sys_staff_required
 def sys_user_admin(request):
@@ -418,3 +496,61 @@ def sys_publink_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def user_search(request):
+    """Search a user.
+    """
+    email = request.GET.get('email', '')
+    email_patt = email.replace('*', '%')
+    
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+    users_plus_one  = ccnet_threaded_rpc.search_emailusers(
+        email_patt, per_page * (current_page - 1), per_page + 1)        
+    if len(users_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    users = users_plus_one[:per_page]
+
+    return render_to_response('sysadmin/user_search.html', {
+            'users': users,
+            'email': email,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            }, context_instance=RequestContext(request))
+    
+@login_required
+@sys_staff_required
+def sys_repo_transfer(request):
+    """Transfer a repo to others.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    repo_id = request.POST.get('repo_id', None)
+    new_owner = request.POST.get('email', None)
+
+    if repo_id and new_owner:
+        try:
+            User.objects.get(email=new_owner)
+            seafile_api.set_repo_owner(repo_id, new_owner)
+            messages.success(request, _(u'Successfully transfered.'))    
+        except User.DoesNotExist:
+            messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
+    else:
+        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
+    return HttpResponseRedirect(reverse(sys_repo_admin))
+    
+    
