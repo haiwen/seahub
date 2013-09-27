@@ -265,6 +265,13 @@
         <button class="simplemodal-close">{% trans 'Cancel' %}</button>
     </form>
     {% endif %}
+
+    <div id="load-draft" class="hide">
+        <h3>{% trans "Draft Available" %}</h3>
+        <p>{% trans "There's a saved draft for this file, would you like to load it?" %}</p>
+        <button id="load-draft-btn">{% trans "Load" %}</button>
+        <button class="simplemoadl-close">{% trans "Discard" %}</button>
+    </div>
 {% endblock %}
 
 {% block extra_script %}
