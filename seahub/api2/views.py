@@ -73,6 +73,7 @@ json_content_type = 'application/json; charset=utf-8'
 
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
 HTTP_440_REPO_PASSWD_REQUIRED = 440
+HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
 HTTP_520_OPERATION_FAILED = 520
 
 class Ping(APIView):
@@ -299,7 +300,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "encversion":r.encversion,
+                "enc_version":r.enc_version,
                 "permission": 'rw', # Always have read-write permission to owned repo
                 }
             repos_json.append(repo)
@@ -324,7 +325,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "encversion":r.encversion,
+                "enc_version":r.enc_version,
                 "permission": r.permission,
                 }
             repos_json.append(repo)
@@ -346,7 +347,7 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
-                    "encversion":r.encversion,
+                    "enc_version":r.enc_version,
                     "permission": check_permission(r.id, email),
                     }
                 repos_json.append(repo)
@@ -405,7 +406,7 @@ def set_repo_password(request, repo, password):
         else:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
-def check_repo_access_permission(request, repo):
+def check_set_repo_password(request, repo):
     if not can_access_repo(request, repo.id):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
@@ -426,6 +427,12 @@ def check_repo_access_permission(request, repo):
                                  'Repo password is needed.')
 
             return set_repo_password(request, repo, password)
+
+
+def check_repo_access_permission(request, repo):
+    if not can_access_repo(request, repo.id):
+        return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
+
 
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -465,7 +472,7 @@ class Repo(APIView):
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
-            "encversion":repo.encversion,
+            "enc_version":repo.encversion,
             "root":root_id,
             "permission": check_permission(repo.id, username),
             }
@@ -477,11 +484,25 @@ class Repo(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
         op = request.GET.get('op', 'setpassword')
-        if op == 'setpassword':
+        if op == 'checkpassword':
+            magic = request.REQUEST.get('magic', default=None)
+            if not magic:
+                return api_error(HTTP_441_REPO_PASSWD_MAGIC_REQUIRED,
+                                 'Repo password magic is needed.')
+            resp = check_repo_access_permission(request, repo)
+            if resp:
+                return resp
+            try:
+                seafile_api.check_passwd(repo.id, magic)
+            except SearpcError, e:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "SearpcError:" + e.msg)
+            return Response("success")
+        elif op == 'setpassword':
+            resp = check_set_repo_password(request, repo)
+            if resp:
+                return resp
             return Response("success")
 
         return Response("unsupported operation")
@@ -530,7 +551,6 @@ class UploadLinkView(APIView):
                                                   'upload',
                                                   request.user.username)
         url = gen_file_upload_url(token, 'upload-api')
-
         return Response(url)
 
 class UpdateLinkView(APIView):
@@ -550,8 +570,46 @@ class UpdateLinkView(APIView):
                                                   'update',
                                                   request.user.username)
         url = gen_file_upload_url(token, 'update-api')
-
         return Response(url)
+
+class UploadBlksLinkView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        if check_permission(repo_id, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'upload-blks',
+                                                  request.user.username)
+        url = gen_file_upload_url(token, 'upload-blks-api')
+        return Response(url)
+
+class UpdateBlksLinkView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        if check_permission(repo_id, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, "Can not access repo")
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'update-blks',
+                                                  request.user.username)
+        url = gen_file_upload_url(token, 'update-blks-api')
+        return Response(url)
+
 
 def get_file_size (id):
     size = seafserv_threaded_rpc.get_file_size(id)
@@ -637,19 +695,19 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'downloadblks':
         blklist = []
         encrypted = False
-        encversion = 0
+        enc_version = 0
         if file_id != EMPTY_SHA1:
             try:
                 blks = seafile_api.list_file_by_file_id(file_id)
+                blklist = blks.split('\n')
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to get file block list')
-        blklist = blks.split('\n')
         blklist = [i for i in blklist if len(i) == 40]
         if len(blklist) > 0:
             repo = get_repo(repo_id)
             encrypted = repo.encrypted
-            encversion = repo.encversion
+            enc_version = repo.enc_version
         token = seafserv_rpc.web_get_access_token(repo_id, file_id,
                                                   op, request.user.username)
         url = gen_block_get_url(token, None)
@@ -657,7 +715,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             'blklist':blklist,
             'url':url,
             'encrypted':encrypted,
-            'encversion': encversion,
+            'enc_version': enc_version,
             }
         response = HttpResponse(json.dumps(res), status=200,
                                 content_type=json_content_type)
