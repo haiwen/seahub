@@ -270,7 +270,7 @@
         <h3>{% trans "Draft Available" %}</h3>
         <p>{% trans "There's a saved draft for this file, would you like to load it?" %}</p>
         <button id="load-draft-btn">{% trans "Load" %}</button>
-        <button class="simplemoadl-close">{% trans "Discard" %}</button>
+        <button class="simplemodal-close">{% trans "Discard" %}</button>
     </div>
 {% endblock %}
 
@@ -320,6 +320,108 @@ $(window).scroll(function() {
     {% endif %}
 });
 
+var browserStorage = {
+
+    current_url : location.hostname + location.pathname + location.search,
+
+    isAvailable : function() {
+        try {
+            return localStorage.getItem;
+        } catch (e) {
+            return false;
+        }
+    },
+
+    set : function(key, value) {
+        try {
+            localStorage.setItem(key, value + "");
+        } catch (e) {
+            feedback('{% trans "Failed to save draft, exceeded max quota" %}', 'error');
+        }
+    },
+
+    get : function(key) {
+        return localStorage.getItem(key);
+    },
+
+    remove : function(key) {
+        localStorage.removeItem(key);
+    }
+
+};
+
+if (browserStorage.isAvailable()) {
+
+    var key = browserStorage.current_url;
+    var md_key_event_on = true;
+
+    function saveDraftByTimeout() {
+        {% if filetype == 'Sf' %}
+        $('#sf').off('keydown');
+        {% endif %}
+        {% if filetype == 'Text' %}
+        md_key_event_on = false;
+        {% endif %}
+        {% if filetype == 'Markdown' %}
+        $('#wmd-input').off('keydown');
+        {% endif %}
+        setTimeout(function() {
+            var draft;
+            {% if filetype == 'Sf' %}
+            draft = $('#sf').html();
+            $('#sf').on('keydown', saveDraftByTimeout);
+            {% endif %}
+            {% if filetype == 'Text' %}
+            draft = editor.getValue();
+            md_key_event_on = true;
+            {% endif %}
+            {% if filetype == 'Markdown' %}
+            draft = $('#wmd-input').val();
+            $('#wmd-input').on('keydown', saveDraftByTimeout);
+            {% endif %}
+            browserStorage.set(key, draft);
+            feedback('{% trans "Draft successfully saved" %}', 'success', 1000);
+        }, 5000);
+    }
+
+    $('#file-edit-cancel').click(function() {
+        browserStorage.remove(key);
+    });
+
+    var saved_draft = browserStorage.get(key);
+    if (saved_draft !== null) {
+        $('#load-draft').modal({
+            onClose : function() {
+                $.modal.close();
+                browserStorage.remove(key);
+            }
+        });
+        $('#simplemodal-container').css({'height':'auto'});
+        $('#load-draft-btn').click(function() {
+            $.modal.close();
+            {% if filetype == 'Sf' %}
+            $('#sf').html(saved_draft);
+            {% endif %}
+            {% if filetype == 'Text' %}
+            editor.setValue(saved_draft);
+            {% endif %}
+            {% if filetype == 'Markdown' %}
+            $('#wmd-input').val(saved_draft);
+            {% endif %}
+            feedback('{% trans "Draft successfully loaded" %}', 'success', 1000);
+            browserStorage.set(key, saved_draft);
+        });
+    }
+
+    {% if filetype == 'Sf' %}
+    $('#sf').on('keydown', saveDraftByTimeout);
+    {% endif %}
+    {% if filetype == 'Markdown' %}
+    $('#wmd-input').on('keydown', saveDraftByTimeout);
+    {% endif %}
+
+}
+
 {% if filetype == 'Text' %}
 var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     {% include "snippets/editor_set_mode.html" %}
@@ -337,7 +439,12 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
             $(window).scrollTop(cursor.y - $('#path-op').outerHeight());
         }
     },
-    autofocus: true
+    autofocus: true,
+    onKeyEvent: function(instance, event) {
+        if (event.type === 'keydown' && md_key_event_on) {
+            saveDraftByTimeout();
+        }
+    }
 });
 {% endif %}
 
@@ -469,6 +576,8 @@ function editSubmit() {
         data: {content: content, encoding: $('#file-enc').val()},
         success: function(data) {
             location.href = data['href'];
+            var key = browserStorage.current_url;
+            browserStorage.remove(key);
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
@@ -537,5 +646,6 @@ $('#repo-decrypt-form').submit(function() {
     }
     return false;
 });
+
 </script>
 {% endblock %}
