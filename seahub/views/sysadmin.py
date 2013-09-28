@@ -69,33 +69,12 @@ def sys_repo_admin(request):
         },
         context_instance=RequestContext(request))
 
-def list_orphan_repos_by_name(repo_name):
-    ret_list = []
-    try:
-        repos = seafile_api.get_orphan_repo_list()
-        for e in repos:
-            if e.name == repo_name:
-                e.owner = seafile_api.get_repo_owner(e.id)
-                ret_list.append(e)
-    except Exception as e:
-        logger.error(e)
-    return ret_list
-
-def list_orphan_repos():
-    try:
-        repos = seafile_api.get_orphan_repo_list()
-        for e in repos:
-            e.owner = seafile_api.get_repo_owner(e.id)
-        return repos
-    except Exception as e:
-        logger.error(e)
-        return []
 
 def list_repos_by_name_and_owner(repo_name, owner):
     repos = []
     owned_repos = seafile_api.get_owned_repo_list(owner)
     for repo in owned_repos:
-        if repo.name == repo_name:
+        if repo_name in repo.name:
             repo.owner = owner
             repos.append(repo)
     return repos
@@ -104,7 +83,7 @@ def list_repos_by_name(repo_name):
     repos = []
     repos_all = seafile_api.get_repo_list(-1, -1)
     for repo in repos_all:
-        if repo.name == repo_name:
+        if repo_name in repo.name:
             try:
                 repo.owner = seafile_api.get_repo_owner(repo.id)
             except SearpcError:
@@ -125,27 +104,19 @@ def sys_repo_search(request):
     """
     repo_name = request.GET.get('name', '')
     owner = request.GET.get('owner', '')
-    orphan = request.GET.get('orphan', 'no')
     repos = []    
 
-    if orphan == 'yes':
-        if repo_name:
-            repos = list_orphan_repos_by_name(repo_name)
-        else:
-            repos = list_orphan_repos()
-    else:
-        if repo_name and owner : # search by name and owner
-            repos = list_repos_by_name_and_owner(repo_name, owner)
-        elif repo_name:     # search by name
-            repos = list_repos_by_name(repo_name)
-        elif owner:     # search by owner
-            repos = list_repos_by_owner(owner)
+    if repo_name and owner : # search by name and owner
+        repos = list_repos_by_name_and_owner(repo_name, owner)
+    elif repo_name:     # search by name
+        repos = list_repos_by_name(repo_name)
+    elif owner:     # search by owner
+        repos = list_repos_by_owner(owner)
 
     return render_to_response('sysadmin/sys_repo_search.html', {
             'repos': repos,
             'name': repo_name,
             'owner': owner,
-            'orphan': orphan,
             }, context_instance=RequestContext(request))
     
 @login_required
@@ -553,4 +524,16 @@ def sys_repo_transfer(request):
         messages.error(request, _(u'Failed to transfer, invalid arguments.'))
     return HttpResponseRedirect(reverse(sys_repo_admin))
     
+@login_required
+@sys_staff_required
+def sys_list_orphan(request):
+    try:
+        repos = seafile_api.get_orphan_repo_list()
+        return repos
+    except Exception as e:
+        logger.error(e)
+        repos = []
     
+    return render_to_response('sysadmin/sys_list_orphan.html', {
+            'repos': repos,
+            }, context_instance=RequestContext(request))

@@ -9,9 +9,6 @@
   <input type="text" name="name" id="id_name" class="input" value="{{name}}"/><br />
   <label>{% trans "Owner" %}</label>
   <input type="text" name="owner" id="id_owner" class="input" value="{{owner}}"/><br />
-  <label>{% trans "Orphan" %}</label>
-  <input type="radio" name="orphan" id="orphan_yes" value="yes" {% if orphan == 'yes' %}checked{% endif %}>Yes
-  <input type="radio" name="orphan" id="orphan_no" value="no" {% if orphan != 'yes' %}checked{% endif%}>No<br />
   
   <p class="error hide"></p>
 
