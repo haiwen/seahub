@@ -35,7 +35,7 @@
         <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
         {% endif %}
     </ul>
-    {% if group.view_perm != "pub" %}
+    {% if repo_perm == 'rw' %}
     <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
     {% endif %}
 </div>

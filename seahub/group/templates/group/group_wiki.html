@@ -40,7 +40,7 @@
             {% endif %}
         </ul>
         
-        {% if group.view_perm != "pub" %}
+        {% if repo_perm == 'rw' %}
         <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
         <button id="page-delete" class="op-btn" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
         <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-import hashlib
 import stat
 import simplejson as json
 import urllib2
@@ -24,7 +23,7 @@ from django.utils.translation import ungettext
 from seahub.auth.decorators import login_required
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
-    web_get_access_token, \
+    web_get_access_token, seafile_api, \
     get_repo, get_group_repos, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, create_repo, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
@@ -51,9 +50,8 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    get_file_contributors, is_valid_email
+    get_file_contributors, is_valid_email, calc_file_path_hash
 from seahub.utils.file_types import IMAGE
-from seahub.utils import calc_file_path_hash
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
 from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI,\
@@ -1269,11 +1267,12 @@ def group_wiki(request, group, page_name="home"):
         
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
-        file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-        contributors, last_modified, last_commit_id = get_file_contributors(\
+        file_path_hash = calc_file_path_hash(path)
+        contributors, last_modified, last_commit_id = get_file_contributors(
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None
 
+        repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
         return render_to_response("group/group_wiki.html", {
                 "group" : group,
                 "is_staff": group.is_staff,
@@ -1288,6 +1287,7 @@ def group_wiki(request, group, page_name="home"):
                 "search_wiki": True,
                 "mods_enabled": mods_enabled,
                 "mods_available": mods_available,
+                "repo_perm": repo_perm,
                 }, context_instance=RequestContext(request))
 
 @group_check
@@ -1295,13 +1295,17 @@ def group_wiki_pages(request, group):
     """
     List wiki pages in group.
     """
+    username = request.user.username
     try:
-        repo = get_group_wiki_repo(group, request.user.username)
+        repo = get_group_wiki_repo(group, username)
         pages = get_wiki_pages(repo)
     except SearpcError:
         return render_error(request, _('Internal Server Error'))
     except WikiDoesNotExist:
         return render_error(request, _('Wiki does not exists.'))
+
+    repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
+    
     return render_to_response("group/group_wiki_pages.html", {
             "group": group,
             "pages": pages,
@@ -1309,6 +1313,7 @@ def group_wiki_pages(request, group):
             "repo_id": repo.id,
             "search_repo_id": repo.id,
             "search_wiki": True,
+            "repo_perm": repo_perm,
             }, context_instance=RequestContext(request))
 
 @group_check
