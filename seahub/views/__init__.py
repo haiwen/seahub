@@ -439,6 +439,72 @@ def repo_save_settings(request):
         return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
                             status=400, content_type=content_type)
 
+@login_required
+def repo_settings(request, repo_id):
+    """List and change library settings.
+    """
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # no settings for virtual repo
+    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+        raise Http404
+
+    # check permission
+    is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
+    if not is_owner:
+        raise Http404
+    
+    if request.method == 'POST':
+        content_type = 'application/json; charset=utf-8'
+
+        form = RepoSettingForm(request.POST)
+        if not form.is_valid():
+            return HttpResponse(json.dumps({
+                        'error': str(form.errors.values()[0])
+                        }), status=400, content_type=content_type)
+            
+        repo_name = form.cleaned_data['repo_name']
+        repo_desc = form.cleaned_data['repo_desc']
+        days = form.cleaned_data['days']
+        repo_owner = form.cleaned_data['repo_owner']
+
+        # Edit library info (name, descryption).
+        if repo.name != repo_name or repo.desc != repo_desc:
+            if not edit_repo(repo_id, repo_name, repo_desc, username):
+                err_msg = _(u'Failed to edit library information.')
+                return HttpResponse(json.dumps({'error': err_msg}),
+                                    status=500, content_type=content_type)
+
+        # set library history
+        if days != None:
+            res = set_repo_history_limit(repo_id, days)
+            if res != 0:
+                return HttpResponse(json.dumps({
+                            'error': _(u'Failed to save settings on server')
+                            }), status=400, content_type=content_type)
+
+        # set library owner
+        if repo_owner is not None and repo_owner != username:
+            seafile_api.set_repo_owner(repo_id, repo_owner)
+
+        messages.success(request, _(u'Settings saved.'))
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+
+    ### handle get request
+    repo_owner = seafile_api.get_repo_owner(repo.id)
+    history_limit = seaserv.get_repo_history_limit(repo.id)
+
+    return render_to_response('repo_settings.html', {
+            'repo': repo,
+            'repo_owner': repo_owner,
+            'history_limit': history_limit,
+            }, context_instance=RequestContext(request))
+
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
     if (code == 0):

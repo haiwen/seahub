@@ -183,7 +183,6 @@ def render_repo(request, repo):
         raise Http404
     repo_size = get_repo_size(repo.id)
     no_quota = is_no_quota(repo.id)
-    history_limit = seaserv.get_repo_history_limit(repo.id)
     search_repo_id = None if repo.encrypted else repo.id
     repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
@@ -237,7 +236,6 @@ def render_repo(request, repo):
             'contacts': contacts,
             'fileshare': fileshare,
             'dir_shared_link': dir_shared_link,
-            'history_limit': history_limit,
             'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             }, context_instance=RequestContext(request))

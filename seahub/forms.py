@@ -183,7 +183,6 @@ class RepoSettingForm(forms.Form):
     """
     Form for saving repo settings.
     """
-    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
     repo_name = forms.CharField(error_messages={'required': _('Library name is required')})
     repo_desc = forms.CharField(error_messages={'required': _('Library description is required')})
     days = forms.IntegerField(required=False,
