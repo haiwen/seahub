@@ -241,7 +241,7 @@ var del_dirents = function() {
     var dirents = $('.checkbox-checked').parents('.dir-item, .file-item'),
         dirents_names = [];
     dirents.each(function() {
-        dirents_names.push($(this).data('name'));
+        dirents_names.push($(this).attr('data-name'));
     });
     $.ajax({
         url: '{% url 'delete_dirents' repo.id %}' + '?parent_dir=' + e(cur_path),
@@ -317,10 +317,10 @@ $('#mv-dirents, #cp-dirents').click(function() {
         dir_names = [], file_names = [];
 
     files.each(function() {
-        file_names.push($(this).data('name'));
+        file_names.push($(this).attr('data-name'));
     });
     dirs.each(function() {
-        dir_names.push($(this).data('name'));
+        dir_names.push($(this).attr('data-name'));
     });
 
     form.submit(function() {
@@ -746,7 +746,7 @@ $('.hidden-op li', context).hover(
 );
 $('.dir-del, .file-del', context).click(function() {
     var dirent = $(this).parents('tr'),
-        dirent_name = dirent.data('name'),
+        dirent_name = dirent.attr('data-name'),
         url_main;
     if ($(this).hasClass('dir-del')) {
         url_main = '{% url 'delete_dir' repo.id %}';
@@ -776,7 +776,7 @@ $('.file-rename, .dir-rename', context).click(function () {
     var op = $(this),
         dirent = op.parents('tr'),
         form = $('#rename-form'),
-        orig_name = dirent.data('name'),
+        orig_name = dirent.attr('data-name'), // use 'attr' instead of 'data' for cases that numbers are taken as file/dir name
         op_detail = $('.detail', form);
     form.data('op_obj', dirent).modal();
 
@@ -796,7 +796,7 @@ $('.file-rename, .dir-rename', context).click(function () {
 $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     var op = $(this), op_type, op_detail,
         dirent = op.parents('tr'),
-        obj_name = dirent.data('name'), obj_type,
+        obj_name = dirent.attr('data-name'), obj_type,
         form = $('#mv-form'), form_hd;
 
     form.modal({appendTo:'#main', autoResize:true, focus:false});
@@ -921,7 +921,7 @@ $('.file-star', context).click(function() {
 //share
 $('.file-share, .dir-share', context).click(function() {
     var op = $(this), name, aj_url, type;
-    name = op.parents('tr').data('name');
+    name = op.parents('tr').attr('data-name');
     aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name);
     if (op.hasClass('dir-share')) {
         aj_url += '&type=d';
