@@ -3,6 +3,8 @@ from warnings import warn
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
+from seahub.auth.signals import user_logged_in
+
 SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
 REDIRECT_FIELD_NAME = 'next'
@@ -80,6 +82,7 @@ def login(request, user):
     request.session[BACKEND_SESSION_KEY] = user.backend
     if hasattr(request, 'user'):
         request.user = user
+    user_logged_in.send(sender=user.__class__, request=request, user=user)
 
 def logout(request):
     """

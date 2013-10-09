@@ -4,10 +4,12 @@ import re
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 from pysearpc import SearpcError
 from seaserv import seafile_api, get_emailusers
 
+from seahub.auth.signals import user_logged_in
 from seahub.shortcuts import get_first_object_or_none
 from seahub.base.templatetags.seahub_tags import at_pattern
 from seahub.group.models import GroupMessage
@@ -202,6 +204,23 @@ class UserEnabledModule(models.Model):
 class GroupEnabledModule(models.Model):
     group_id = models.CharField(max_length=10, db_index=True)
     module_name = models.CharField(max_length=20)
+
+class UserLastLogin(models.Model):
+    username = models.CharField(max_length=255, db_index=True)
+    last_login = models.DateTimeField(default=timezone.now)
+
+def update_last_login(sender, user, **kwargs):
+    """
+    A signal receiver which updates the last_login date for
+    the user logging in.
+    """
+    try:
+        user_last_login = UserLastLogin.objects.get(username=user.username)
+    except UserLastLogin.DoesNotExist:
+        user_last_login = UserLastLogin(username=user.username)
+    user_last_login.last_login = timezone.now()
+    user_last_login.save()
+user_logged_in.connect(update_last_login)
     
 ###### Deprecated
 class InnerPubMsg(models.Model):
