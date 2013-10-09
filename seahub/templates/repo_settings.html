@@ -1,0 +1,98 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block left_panel %}
+{% endblock %}
+
+{% block right_panel %}
+<div class="inbl">
+  <h2 class="fleft">{% trans "Library Settings" %}</h2>
+  <button class="" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
+</div>
+
+<div>
+    <form id="repo-setting-form" action="" method="post" class="">{% csrf_token %}
+        <label>{% trans "Name" %}</label><br />
+        <input type="text" name="repo_name" value="{{ repo.name }}" class="long-input" /><br />
+        <label>{% trans "Description" %}</label></br />
+        <input type="text" name="repo_desc" value="{{ repo.desc }}" class="long-input" /><br />
+	{% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
+        <label>{% trans "History" %}</label><br />
+        <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Keep full history" %}</span><br />
+        <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Don't keep history" %}</span><br />
+        <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} class="vam" /> <span calss="vam">{% trans "Only keep a period of history:" %} <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}</span><br />
+	{% endif %}
+        <label>{% trans "Owner" %}</label><br />
+        <input type="text" name="repo_owner" value="{{repo_owner}}" class="long-input"/><br />
+        
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#repo-setting-form input[name="history"]').change(function() {
+    var value = $(this).attr('value'),
+        days_input = $('#repo-setting-form input[name="days"]');
+    if (value == 'full_history' || value == 'no_history') {
+        days_input.attr('disabled', true).addClass('input-disabled');
+    } else {
+        days_input.attr('disabled', false).removeClass('input-disabled');
+    }
+});
+
+$('#repo-setting-form').submit(function() {
+    var days;
+    var value = $(this).find('input[name="history"]:checked').val();
+
+    if (value == 'partial_history') {
+        days = $(this).find('input[name="days"]').val();
+    } else if (value == 'full_history') {
+        days = -1;
+    } else {
+        days = 0;
+    }
+
+    var submit_btn = $(this).children('input[type="submit"]');  
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'repo_settings' repo.id %}',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_name': $('#repo-setting-form input[name="repo_name"]').val(),
+            'repo_desc': $('#repo-setting-form input[name="repo_desc"]').val(),
+            'repo_owner': $('#repo-setting-form input[name="repo_owner"]').val(),
+            'days': days 
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error('repo-setting-form', $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error('repo-setting-form', "{% trans "Failed. Please check the network." %}");
+            }
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
+
+$('#back').click(function() {
+        location.href = $(this).attr('data');
+});
+</script>
+{% endblock %}
