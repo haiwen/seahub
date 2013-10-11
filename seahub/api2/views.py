@@ -290,6 +290,8 @@ class Repos(APIView):
         calculate_repo_info(owned_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
         for r in owned_repos:
+            if r.is_virtual:
+                continue        # No need to list virtual libraries
             repo = {
                 "type":"repo",
                 "id":r.id,
