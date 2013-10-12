@@ -4,19 +4,10 @@
 
 {% block sub_title %}{% trans "Profile Setting" %} - {% endblock %}
 
-{% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Delete Account" %}</h3>
-    <div class="info-item-bottom ovhd">
-	<p>{% trans "Notice: This operation cannot be reverted. Please think twice!" %}</p>
-        <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete Your Account" %}</button>
-    </div>
-</div>
-{% endblock %}
-
 {% block right_panel %}
+<h2>{% trans "Settings" %}</h2>
 <div id="user-basic-info">
-    <h2>{% trans "Profile Setting" %}</h2>
+    <h3>{% trans "Profile Setting" %}</h3>
     <div id="user-avatar-change">
         <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
         <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">{% csrf_token %}
@@ -40,6 +31,10 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
+
+<h3>{% trans "Delete Account" %}</h3>
+<p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
+<button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>
 {% endblock %}
 
 {% block extra_script %}

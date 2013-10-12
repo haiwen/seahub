@@ -1226,8 +1226,9 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:15px;
 }
 /*user-basic-info*/
-#user-basic-info h2 {
-    margin:12px 0 15px;
+#user-basic-info {
+    margin-top:15px;
+    margin-bottom:30px;
 }
 #user-basic-info label {
     text-align:right;
