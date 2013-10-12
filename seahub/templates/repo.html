@@ -1211,25 +1211,27 @@ function updateCmt() {
 
 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
 // sub-repo-share submit
-// only share to 1 panel(e.g. groups or contacts)
+// only share to 1 panel(e.g. enter, groups or contacts)
    $('#share-submit-btn').click(function() {
         var form = $("#repo-share-form"),
             cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
-            post_data = ''; 
+            post_data = '',
+            input = $('[name="email_or_group"]', form); 
         switch(cur_tab_id) {
+            case '#share-enter':
+                post_data = input.val();
+                break;
             case '#share-grp-options':
             case '#share-contact-options':
                 $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
                     post_data += $(this).val() + ',';
                 }); 
+                input.val(post_data);
         }   
         if (!post_data) {
-            apply_form_error(form.attr('id'), '{% trans "Please select at least 1 group or 1 contact." %}');
+            apply_form_error(form.attr('id'), '{% trans "Please enter emails or groups, or select some." %}');
             return false;
         }
-        //'email_or_group' is required. It was in 'share-enter' tab, but 'share-enter' was removed for sub-lib share.
-        form.append('<input type="hidden" name="email_or_group" />');
-        $('[name="email_or_group"]', form).val(post_data);
         form.submit();
         disable($(this));
     });

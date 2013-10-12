@@ -82,7 +82,6 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
                     form.removeClass('hide').css({'width':'auto'});
                     $("#repo_id").val(data['sub_repo_id']);
                     $("h3", form).remove();
-                    $('#share-enter-tab, #share-enter').remove();
                     $("#repo-share-tabs-nav").attr('id', 'tabs-nav');
                     $('#tabs-nav').css({'background':'transparent', 'padding-left': '1.4em'});
                     $('.checkbox-label', form).css({'margin-right':'3px'}); // make it not show on top of the scrollbar when hover
