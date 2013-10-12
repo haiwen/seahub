@@ -8,35 +8,33 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="inbl">
-  <h2 class="fleft">{% trans "Library Settings" %}</h2>
-  <button class="" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
-</div>
+<h2>{% trans "Library Settings" %}</h2>
 
-<div>
-    <form id="repo-setting-form" action="" method="post" class="">{% csrf_token %}
-        <label>{% trans "Name" %}</label><br />
-        <input type="text" name="repo_name" value="{{ repo.name }}" class="long-input" /><br />
-        <label>{% trans "Description" %}</label></br />
-        <input type="text" name="repo_desc" value="{{ repo.desc }}" class="long-input" /><br />
-	{% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
-        <label>{% trans "History" %}</label><br />
-        <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Keep full history" %}</span><br />
-        <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Don't keep history" %}</span><br />
-        <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} class="vam" /> <span calss="vam">{% trans "Only keep a period of history:" %} <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}</span><br />
-	{% endif %}
-        
-        <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
-    </form>
+<h3>{% trans "Basic Info" %}</h3>
+<form id="repo-setting-form" action="" method="post" style="margin-bottom:30px;">{% csrf_token %}
+    <label>{% trans "Name" %}</label><br />
+    <input type="text" name="repo_name" value="{{ repo.name }}" id="repo-name" /><br />
+    <label>{% trans "Description" %}</label></br />
+    <textarea name="repo_desc" id="repo-desc">{{ repo.desc }}</textarea><br />
 
-    <form id="repo-owner-form" action="" method="post">{% csrf_token %}
-        <label>{% trans "Owner" %}</label><br />
-        <input type="text" name="repo_owner" value="{{repo_owner}}" class="long-input"/>
-        <input type="submit" value="{% trans "Transfer" %}" class="submit" />
-        <p class="error hide"></p>
-    </form>
-</div>
+{% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
+    <label>{% trans "History" %}</label><br />
+    <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Keep full history" %}</span><br />
+    <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Don't keep history" %}</span><br />
+    <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} class="vam" /> <span calss="vam">{% trans "Only keep a period of history:" %} <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}</span><br />
+{% endif %}
+    
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+
+<h3>{% trans "Transfer Owner" %}</h3>
+<form id="repo-owner-form" action="" method="post">{% csrf_token %}
+    <p>{% trans "Transfer this library to another user:" %}</p>
+    <input type="text" name="repo_owner" value="" id="repo-owner" placeholder="{% trans "Email" %}" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
 {% endblock %}
 
 
@@ -53,6 +51,20 @@ $('#repo-setting-form input[name="history"]').change(function() {
 });
 
 $('#repo-setting-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id');        
+    var repo_name = $('[name="repo_name"]', form).val(),
+        repo_desc = $('[name="repo_desc"]', form).val();
+
+    if (!$.trim(repo_name)) {
+        apply_form_error(form_id, "{% trans "Name is required." %}");
+        return false;
+    }
+    if (!$.trim(repo_desc)) {
+        apply_form_error(form_id, "{% trans "Description is required." %}");
+        return false;
+    }
+
     var days;
     var value = $(this).find('input[name="history"]:checked').val();
 
@@ -72,9 +84,8 @@ $('#repo-setting-form').submit(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         data: {
-            'repo_name': $('#repo-setting-form input[name="repo_name"]').val(),
-            'repo_desc': $('#repo-setting-form input[name="repo_desc"]').val(),
-            'repo_owner': $('#repo-setting-form input[name="repo_owner"]').val(),
+            'repo_name': repo_name, 
+            'repo_desc': repo_desc,
             'days': days 
         },
         success: function(data) {
@@ -84,9 +95,9 @@ $('#repo-setting-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error('repo-setting-form', $.parseJSON(jqXHR.responseText).error);
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
             } else {
-                apply_form_error('repo-setting-form', "{% trans "Failed. Please check the network." %}");
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
             enable(submit_btn);
         }
@@ -95,7 +106,15 @@ $('#repo-setting-form').submit(function() {
 });
 
 $('#repo-owner-form').submit(function() {
-    var submit_btn = $(this).children('input[type="submit"]');  
+    var form = $(this),
+        form_id = form.attr('id'),
+        new_owner = $('[name="repo_owner"]', form).val(),
+        submit_btn = $('input[type="submit"]', form);  
+    
+    if (!$.trim(new_owner)) {
+        return false;
+    }
+
     disable(submit_btn);
     $.ajax({
         url: '{% url 'repo_owner' repo.id %}',
@@ -103,27 +122,23 @@ $('#repo-owner-form').submit(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         data: {
-            'repo_owner': $('#repo-owner-form input[name="repo_owner"]').val()
+            'repo_owner': new_owner
         },
         success: function(data) {
             if (data['success']) {
-                location.reload(true);
+                location.href = '{% url 'myhome' %}';
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error('repo-owner-form', $.parseJSON(jqXHR.responseText).error);
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
             } else {
-                apply_form_error('repo-owner-form', "{% trans "Failed. Please check the network." %}");
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
             enable(submit_btn);
         }
     });
     return false;
-});
-
-$('#back').click(function() {
-        location.href = $(this).attr('data');
 });
 </script>
 {% endblock %}

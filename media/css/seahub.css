@@ -1055,6 +1055,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #repo-name,
 #repo-desc,
+#repo-owner,
 .repo-create-encryption .passwd,
 #id_contact_email,
 #id_contact_name,

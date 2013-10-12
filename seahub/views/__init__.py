@@ -530,7 +530,7 @@ def repo_owner(request, repo_id):
     if repo_owner and repo_owner != username:
         seafile_api.set_repo_owner(repo_id, repo_owner)
 
-    messages.success(request, _(u'Ownership transfered.'))
+    messages.success(request, _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') % {'repo_name':repo.name, 'new_owner':repo_owner})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
         

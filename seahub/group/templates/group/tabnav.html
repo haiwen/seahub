@@ -24,7 +24,7 @@
         {% if is_staff %}
         <li class="tabnav-tab {% if cur == 'admin'%}tabnav-tab-cur{%endif%}"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
 
-        <li class="tabnav-tab"><a id="enable-mods" href="#" title="{% trans "Enable Modules" %}"><span class="icon-ellipsis-horizontal"></span></a></li>
+        <li class="tabnav-tab"><a id="enable-mods" href="#" title="{% trans "Enable Modules" %}"><span class="icon-th"></span></a></li>
         {% endif %}
 
     </ul>
