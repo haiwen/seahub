@@ -1,14 +1,15 @@
 {% load i18n %}
 <form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
-    <h3>{% trans "Available Modules"%}</h3>
-    <div>
+    <h3>{% trans "Enable Modules"%}</h3>
+    <ul>
     {% for mod in mods_available %}
       {% if mod == 'group wiki' %}
-      <span><input type="checkbox" name="group_wiki" {%if mod in mods_enabled%}checked {% endif%}/></span>
-      <span>{% trans "Wiki" %}</span>
+      <li>
+      <input class="vam" type="checkbox" name="group_wiki" {%if mod in mods_enabled%}checked {% endif%}/></span>
+      <span class="vam">{% trans "Wiki" %}</span>
+      </li>
       {% endif %}
     {% endfor %}    
-    </div>
-
+    </ul>
     <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit"/>
 </form>

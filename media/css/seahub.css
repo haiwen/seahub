@@ -2615,3 +2615,10 @@ textarea:-moz-placeholder {/* for FF */
 #search-repo-form input[type=text] {
     margin: 4px 4px;
 }
+#enable-mods {
+    color:#888;
+}
+#enable-mods:hover {
+    color:#666;
+    text-decoration:none;
+}

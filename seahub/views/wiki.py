@@ -46,8 +46,13 @@ def personal_wiki(request, page_name="home"):
         content, repo, dirent = get_personal_wiki_page(username, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
+        # get available modules(wiki, etc)
+        mods_available = get_available_mods_by_user(username)
+        mods_enabled = get_enabled_mods_by_user(username)
         return render_to_response("wiki/personal_wiki.html", {
                 "wiki_exists": wiki_exists,
+                "mods_enabled": mods_enabled,
+                "mods_available": mods_available,
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
