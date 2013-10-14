@@ -5,17 +5,13 @@
 <h3>{% trans "Search Library"%}</h3>
 
 <form id="search-repo-form" method="get" action=".">
-  <label>{% trans "Name" %}</label>
-  <input type="text" name="name" id="id_name" class="input" value="{{name}}"/><br />
-  <label>{% trans "Owner" %}</label>
-  <input type="text" name="owner" id="id_owner" class="input" value="{{owner}}"/><br />
-  
-  <p class="error hide"></p>
-
-  <input type="submit" value="{% trans "Submit" %}" class="submit" />
-  <input type="reset" value="{% trans "Reset" %}" class="submit" />
+    <p class="tip">{% trans "Tip: you can search by keyword in name or owner or both." %}</p>
+    <label>{% trans "Name" %}</label><input type="text" name="name" class="input" value="{{name}}"/><br />
+    <label>{% trans "Owner" %}</label><input type="text" name="owner" class="input" value="{{owner}}"/><br />
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
-<h3>{% trans "Library List"%}</h3>
+
+<h3>{% trans "Result"%}</h3>
 {% if repos %}
 <table>
     <tr>
@@ -36,44 +32,20 @@
     {% endfor %}
 </table>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "No result" %}</p>
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-function disable_owner() {
-    $('#id_owner').prop('disabled', true).addClass('input-disabled').val('');
-};
-
-function enable_owner() {
-    $('#id_owner').prop('disabled', false).removeClass('input-disabled');
-};
-
-$(document).ready(function() {
-    if($('#orphan_yes').is(':checked')) {
-        disable_owner();
-    }
-    if($('#orphan_no').is(':checked')) {
-        enable_owner();
-    }
-});
-
-$('#orphan_yes').click(function () {
-    disable_owner();
-});
-$('#orphan_no').click(function () {
-    enable_owner();
-});
-
 $('#search-repo-form').submit(function() {
     var form = $(this),
-        form_id = $(this).attr('id'),
-        name = $.trim(form.children('[name="name"]').val()),
-        owner = $.trim(form.children('[name="owner"]').val()),
-        orphan = form.children('[name="orphan"]:checked').val();
+        name = $.trim($('[name="name"]', form).val()),
+        owner = $.trim($('[name="owner"]', form).val());
 
-    form.submit();
+    if (!name && !owner) {
+        return false;
+    }
 });
 </script>
 {% endblock %}

@@ -480,30 +480,12 @@ def user_search(request):
     email = request.GET.get('email', '')
     email_patt = email.replace('*', '%')
     
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
-    except ValueError:
-        current_page = 1
-        per_page = 100
-    users_plus_one  = ccnet_threaded_rpc.search_emailusers(
-        email_patt, per_page * (current_page - 1), per_page + 1)        
-    if len(users_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    users = users_plus_one[:per_page]
+    users  = ccnet_threaded_rpc.search_emailusers(
+        email_patt, -1, -1)        
 
     return render_to_response('sysadmin/user_search.html', {
             'users': users,
             'email': email,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
             }, context_instance=RequestContext(request))
     
 @login_required

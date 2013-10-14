@@ -2607,15 +2607,13 @@ textarea:-moz-placeholder {/* for FF */
 #plan-form input[type=radio] {
     margin-right: 10px;
 }
-
-#search-repo-form label{
-    display:block;
-    text-align:right;
-    width:40px;
-    float:left;
+#search-repo-form label,
+#search-user-form label {
+    width:3.5em;
 }
-#search-repo-form input[type=text] {
-    margin: 4px 4px;
+#search-repo-form .submit,
+#search-user-form .submit {
+    margin-left:3.5em;
 }
 #enable-mods {
     color:#888;
