@@ -13,78 +13,124 @@ $('#repo-create')
     }
 );
 $('#encrypt-switch').click(function () {
+    var form = $('#repo-create-form'),
+        pwd_input = $('input[type="password"]', form);
+    
     if ($(this).attr('checked')) {
-        $('#repo-create-form input[type="password"]').attr('disabled', false).removeClass('input-disabled');
+        pwd_input.attr('disabled', false).removeClass('input-disabled');
     } else {
-        $('#repo-create-form input[type="password"]').attr('disabled', true).addClass('input-disabled');
+        pwd_input.attr('disabled', true).addClass('input-disabled');
     }
 });
 $('#repo-create-form').submit(function() {
-    var passwd = $(this).find('input[name="passwd"]'),
-        passwd_again = $(this).find('input[name="passwd_again"]');
+    var form = $(this), 
+        form_id = form.attr('id'),
+        name = $('#repo-name').val(),
+        desc = $('#repo-desc').val(),
+        encrypted = $('#encrypt-switch').attr('checked'),
+        passwd, passwd_again;
 
-    var form = 'repo-create-form';
-    if (!$.trim($('#repo-name').val())) {
-        apply_form_error(form, "{% trans "Name can't be empty" %}");
+    if (!$.trim(name)) {
+        apply_form_error(form_id, "{% trans "Name is required" %}");
         return false;
     }
-    if (!$.trim($('#repo-desc').val())) {
-        apply_form_error(form, "{% trans "Description can't be empty" %}");
+    if (!$.trim(desc)) {
+        apply_form_error(form_id, "{% trans "Description is required" %}");
         return false;
     }
-    if ($('#encrypt-switch').attr('checked')) {
-        if (!$.trim(passwd.val())) {
-            apply_form_error(form, "{% trans "Please enter password" %}");
+    if (encrypted) {
+        passwd = $('input[name="passwd"]', form).val();
+        passwd_again = $('input[name="passwd_again"]', form).val();
+
+        if (!$.trim(passwd)) {
+            apply_form_error(form_id, "{% trans "Please enter password" %}");
             return false;
         }
-        if ($.trim(passwd.val()).length < 3) {
-            apply_form_error(form, "{% trans "Password is too short (minimum is 3 characters)" %}");
+        if ($.trim(passwd).length < 3) {
+            apply_form_error(form_id, "{% trans "Password is too short (minimum is 3 characters)" %}");
             return false;
         }
-        if ($.trim(passwd.val()).length > 30) {
-            apply_form_error(form, "{% trans "Password is too long (maximum is 30 characters)" %}");
+        if ($.trim(passwd).length > 30) {
+            apply_form_error(form_id, "{% trans "Password is too long (maximum is 30 characters)" %}");
             return false;
         }
-        if (!$.trim(passwd_again.val())) {
-            apply_form_error(form, "{% trans "Please enter the password again" %}");
+        if (!$.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Please enter the password again" %}");
             return false;
         }
-        if ($.trim(passwd.val()) != $.trim(passwd_again.val())) {
-            apply_form_error(form, "{% trans "Passwords don't match" %}");
+        if ($.trim(passwd) != $.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Passwords don't match" %}");
             return false;
         }
+
+        {% if not keep_enc_repo_passwd %}
+        // don't send the password to the server
+        var salt = sjcl.codec.bytes.toBits([0xda, 0x90, 0x45, 0xc3, 0x06, 0xc7, 0xcc, 0x26]);
+        var uu_id = uuid.v4();
+        var magic_array = sjcl.misc.pbkdf2(uu_id + passwd, salt, 1000, 32*8, null); // 32 bytes
+        var magic_str = sjcl.codec.hex.fromBits(magic_array);
+
+        var secret_array;
+        if (window.crypto && window.crypto.getRandomValues) {
+            secret_array = new Uint32Array(8);
+            window.crypto.getRandomValues(secret_array);
+        } else {
+            secret_array = [];
+            for (var i = 0; i < 8; i++) {
+                secret_array.push(parseInt(Math.random() * Math.pow(2,32)));
+            }
+        }
+
+        var key_array = sjcl.misc.pbkdf2(passwd, salt, 1000, 32*8, null);
+        var iv_array = sjcl.misc.pbkdf2(key_array, salt, 10, 32*8, null);
+        var key =  sjcl.codec.hex.fromBits(key_array);
+        var iv = sjcl.codec.hex.fromBits(iv_array);
+        var random_key_obj = CryptoJS.AES.encrypt(CryptoJS.lib.WordArray.create(secret_array), CryptoJS.enc.Hex.parse(key), {iv: CryptoJS.enc.Hex.parse(iv)});
+        var random_key = random_key_obj.ciphertext.toString(CryptoJS.enc.Hex); // convert to hex
+        {% endif %}
     }
 
-    var submit_btn = $(this).find('input[type="submit"]');
+    var submit_btn = $('input[type="submit"]', form);
     disable(submit_btn);
+
+    var post_data = {
+        'repo_name': name,
+        'repo_desc': desc,
+        'encryption': encrypted ? 1 : 0
+    };
+    {% if create_shared_repo %}
+    $.extend(post_data, {
+        'permission': $('select[name="permission"]', form).val()
+    });
+    {% endif %}
+
+    if (encrypted) {
+        {% if keep_enc_repo_passwd %}
+        $.extend(post_data, {
+            'passwd': passwd,
+            'passwd_again': passwd_again
+        });
+        {% else %}
+        $.extend(post_data, {
+            'uuid': uu_id,
+            'magic_str': magic_str,
+            'random_key': random_key
+        });
+        {% endif %}
+    }
+
     $.ajax({
         url: '{{ post_url }}',
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: {
-            'repo_name': $('#repo-name').val(),
-            'repo_desc': $('#repo-desc').val(),
-            {% if create_shared_repo %}
-            'permission': $('#repo-create-form select[name="permission"]').val(),
-            {% endif %}
-            'encryption': $('#encrypt-switch').attr('checked') ? 1 : 0,
-            'passwd': passwd.val(),
-            'passwd_again': passwd_again.val()
-        },
+        data: post_data,
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            } else {
-                apply_form_error('repo-create-form', data['error']);
-                enable(submit_btn);
-            }
+            location.reload(true);
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('repo-create-form', value[0]);
-            });
+        error: function(xhr, textStatus, errorThrown) {
+            var error = $.parseJSON(xhr.responseText).error;
+            apply_form_error(form_id, error);
             enable(submit_btn);
         }
     });

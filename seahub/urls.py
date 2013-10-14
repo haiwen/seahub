@@ -133,6 +133,8 @@ urlpatterns = patterns('',
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
 
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
+
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
     (r'^avatar/', include('seahub.avatar.urls')),

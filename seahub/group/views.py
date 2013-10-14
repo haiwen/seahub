@@ -29,6 +29,7 @@ from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
     check_permission, is_passwd_set, remove_repo, \
     unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
+from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
@@ -46,7 +47,7 @@ from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_l
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name, get_wiki_dirent
-from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
+from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL, KEEP_ENC_REPO_PASSWD
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
@@ -914,7 +915,7 @@ def create_group_repo(request, group_id):
     content_type = 'application/json; charset=utf-8'
 
     def json_error(err_msg):
-        result = {'error': [err_msg]}
+        result = {'error': err_msg}
         return HttpResponseBadRequest(json.dumps(result),
                                       content_type=content_type)
     group_id = int(group_id)
@@ -928,13 +929,17 @@ def create_group_repo(request, group_id):
 
     form = SharedRepoCreateForm(request.POST)
     if not form.is_valid():
-        return json_error(form.errors)
+        return json_error(str(form.errors.values()[0]))
     else:
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
         permission = form.cleaned_data['permission']
-        encrypted = form.cleaned_data['encryption']
+        encryption = int(form.cleaned_data['encryption'])
+
         passwd = form.cleaned_data['passwd']
+        uuid = form.cleaned_data['uuid']
+        magic_str = form.cleaned_data['magic_str']
+        random_key = form.cleaned_data['random_key']
         user = request.user.username
 
         org, base_template = check_and_get_org_by_group(group.id, user)
@@ -967,7 +972,18 @@ def create_group_repo(request, group_id):
                                     content_type=content_type)
         else:
             # create group repo in user context
-            repo_id = create_repo(repo_name, repo_desc, user, passwd)
+            try: 
+                if not encryption:
+                    repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+                else:
+                    if KEEP_ENC_REPO_PASSWD:
+                        repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
+                    else:
+                        repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, random_key, enc_version=2)
+
+            except SearpcError, e:
+                repo_id = None 
+
             if not repo_id:
                 return json_error(_(u'Failed to create'))
 

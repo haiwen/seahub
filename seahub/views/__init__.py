@@ -89,7 +89,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY
+    ENABLE_SUB_LIBRARY, KEEP_ENC_REPO_PASSWD
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -609,7 +609,8 @@ def repo_history(request, repo_id):
         raise Http404
 
     password_set = False
-    if repo.props.encrypted:
+    if repo.props.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -617,8 +618,8 @@ def repo_history(request, repo_id):
         except SearpcError, e:
             return render_error(request, e.msg)
 
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+        if not password_set:
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -665,7 +666,8 @@ def repo_view_snapshot(request, repo_id):
         raise Http404
 
     password_set = False
-    if repo.props.encrypted:
+    if repo.props.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -673,8 +675,8 @@ def repo_view_snapshot(request, repo_id):
         except SearpcError, e:
             return render_error(request, e.msg)
 
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+        if not password_set:
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -718,7 +720,8 @@ def repo_history_revert(request, repo_id):
         return render_permission_error(request, _(u'You have no permission to restore library'))
 
     password_set = False
-    if repo.props.encrypted:
+    if repo.props.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -726,8 +729,8 @@ def repo_history_revert(request, repo_id):
         except SearpcError, e:
             return render_error(request, e.msg)
 
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+        if not password_set:
+            return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -784,6 +787,9 @@ def get_diff(repo_id, arg1, arg2):
 
 @login_required
 def repo_history_changes(request, repo_id):
+    if not request.is_ajax():
+        return Http404
+
     changes = {}
     content_type = 'application/json; charset=utf-8'
 
@@ -794,7 +800,9 @@ def repo_history_changes(request, repo_id):
     if not repo:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
-    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+    if repo.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
@@ -1093,35 +1101,49 @@ def public_repo_create(request):
     content_type = 'application/json; charset=utf-8'
     
     form = SharedRepoCreateForm(request.POST)
-    if form.is_valid():
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        permission = form.cleaned_data['permission']
-        passwd = form.cleaned_data['passwd']
-        user = request.user.username
-
-        try:
-            # create a repo 
-            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
-                                                        user, passwd)
-            # set this repo as inner pub
-            seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-        except:
-            repo_id = None
-        if not repo_id:
-            result['error'] = _(u'Failed to create library')
-        else:
-            result['success'] = True
-            repo_created.send(sender=None,
-                              org_id=-1,
-                              creator=user,
-                              repo_id=repo_id,
-                              repo_name=repo_name)
-
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
+    if not form.is_valid():
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponseBadRequest(json.dumps(result),
                                       content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    permission = form.cleaned_data['permission']
+    encryption = int(form.cleaned_data['encryption'])
+
+    passwd = form.cleaned_data['passwd']
+    uuid = form.cleaned_data['uuid']
+    magic_str = form.cleaned_data['magic_str']
+    random_key = form.cleaned_data['random_key']
+    user = request.user.username
+
+    try:
+        if not encryption:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+        else:
+            if KEEP_ENC_REPO_PASSWD:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
+            else:
+                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, random_key, enc_version=2)
+
+        # set this repo as inner pub
+        seafile_api.add_inner_pub_repo(repo_id, permission)
+        #seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+    except SearpcError, e:
+        repo_id = None
+
+    if not repo_id:
+        result['error'] = _(u'Internal Server Error')
+        return HttpResponse(json.dumps(result), status=500,
+                                      content_type=content_type)
+    else:
+        result['success'] = True
+        repo_created.send(sender=None,
+                          org_id=-1,
+                          creator=user,
+                          repo_id=repo_id,
+                          repo_name=repo_name)
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 def unsetinnerpub(request, repo_id):
@@ -1267,7 +1289,9 @@ def get_repo_download_url(request, repo_id):
     url += "&email=%s&token=%s" % (email, token)
     url += "&repo_id=%s&repo_name=%s" % (repo_id, quote_repo_name)
     if enc:
-        url += "&encrypted=1&magic=%s" % repo.magic
+        url += "&encrypted=1&magic=%s&enc_ver=%s" % (repo.magic, repo.enc_version)
+        if repo.enc_version == 2 and repo.random_key:
+            url += "&key=%s" % repo.random_key
 
     return url, ''
  
@@ -1355,30 +1379,42 @@ def repo_create(request):
     content_type = 'application/json; charset=utf-8'
     
     form = RepoCreateForm(request.POST)
-    if form.is_valid():
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        passwd = form.cleaned_data['passwd']
-        user = request.user.username
-        
-        try:
-            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
-                                                        user, passwd)
-        except:
-            repo_id = None
-        if not repo_id:
-            result['error'] = _(u"Failed to create library")
-        else:
-            result['success'] = True
-            repo_created.send(sender=None,
-                              org_id=-1,
-                              creator=user,
-                              repo_id=repo_id,
-                              repo_name=repo_name)
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
+    if not form.is_valid():
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponseBadRequest(json.dumps(result),
                                       content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    encryption = int(form.cleaned_data['encryption'])
+
+    passwd = form.cleaned_data['passwd']
+    uuid = form.cleaned_data['uuid']
+    magic_str = form.cleaned_data['magic_str']
+    random_key = form.cleaned_data['random_key']
+    user = request.user.username
+    try:
+        if not encryption:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+        else:
+            if KEEP_ENC_REPO_PASSWD:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
+            else:
+                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, random_key, enc_version=2)
+    except SearpcError, e:
+        repo_id = None
+
+    if not repo_id:
+        result['error'] = _(u"Internal Server Error")
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+    else:
+        result['success'] = True
+        repo_created.send(sender=None,
+                          org_id=-1,
+                          creator=user,
+                          repo_id=repo_id,
+                          repo_name=repo_name)
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""

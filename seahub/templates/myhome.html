@@ -115,6 +115,12 @@
 {% endblock %}
 
 {% block extra_script %}
+{% if not keep_enc_repo_passwd %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/uuid.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/codecBytes.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
+{% endif %}
 <script type="text/javascript">
 {% if quota > 0 %}
     {% if CALC_SHARE_USAGE %}  

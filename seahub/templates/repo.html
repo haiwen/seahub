@@ -7,6 +7,9 @@
 <style type="text/css">
 #main { width:auto; }
 #footer { display:none; }
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+#main { display:none; }
+{% endif %}
 </style>    
 <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
 <!--[if lt IE 9]><script src="{{ MEDIA_URL}}js/html5shiv.js"></script><![endif]-->
@@ -57,7 +60,12 @@
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
-            <input type="hidden" name="parent_dir" id="parent_dir" value="{{ path }}" />
+            {% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+            <input type="file" name="file" /><br />
+            <p class="error hide">{% trans "Please select a file at first." %}</p>
+            <input type="button" value="{% trans "Submit" %}" />
+            {% else %}
+            <input type="hidden" name="parent_dir" value="{{ path }}" />
             <div class="row fileupload-buttonbar">
                 <div>
                     <span class="fileinput-button vam">
@@ -86,6 +94,7 @@
                 </div>
             </div>
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+           {% endif %} 
         </form>
         {% endif %}
     </div>
@@ -97,6 +106,13 @@
         {% else %}      
         <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <input type="hidden" name="target_file" />
+
+            {% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+            <input type="file" name="file" /><br />
+            <p class="error hide">{% trans "Please select a file at first." %}</p>
+            <input type="button" value="{% trans "Submit" %}" />
+            {% else %}
+
             <div class="fileupload-buttonbar">
                 <span class="fileinput-button vam">
                     <span>{% trans "Choose a file" %}</span>
@@ -111,6 +127,7 @@
                 </div>
             </div>
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+            {% endif %}
         </form>
         {% endif %}
     </div>
@@ -183,6 +200,73 @@
 {% endblock %}
 
 {% block extra_script %}
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/codecBytes.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
+<script type="text/javascript">
+var valid_time_period = 60 * 60 * 1000; // passwd will be kept for 1 h
+var enc_key, enc_iv;
+if ('localStorage' in window && window['localStorage'] !== null) {
+    // 'localStorage' is supported
+    var last_decrypt_t = localStorage['{{repo.id}}_decrypt_t'];
+    // decrypt at the first time, or when last decryption is more than 1 hour ago
+    if (!last_decrypt_t || (new Date().getTime() - last_decrypt_t > valid_time_period)) {
+        decrypt_repo();
+    } else {
+        $('#main').show();
+        enc_key = localStorage['{{repo.id}}_enc_key'];
+        enc_iv = localStorage['{{repo.id}}_enc_iv'];
+    }
+} else {
+    // 'localStorage' is not supported, decrypt every time
+    decrypt_repo();
+}
+function decrypt_repo() {
+    var decrypt_form = $('<form id="repo-decrypt" style="width:928px;padding:10px 10px 15px;border:1px solid #ddd;border-radius:3px;margin:2em auto 0"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>    <input type="password" name="password" maxlength="64" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> </form>');
+    $('#header').after(decrypt_form);
+    $('[type="submit"]', decrypt_form).click(function() {
+        var passwd = $('[name="password"]', decrypt_form).val(),
+            err = $('.error', decrypt_form);
+        if (!$.trim(passwd)) {
+            err.html("{% trans "Please enter the password." %}").removeClass('hide');
+            return false;
+        }
+
+        var salt = sjcl.codec.bytes.toBits([0xda, 0x90, 0x45, 0xc3, 0x06, 0xc7, 0xcc, 0x26]);
+        var magic_array = sjcl.misc.pbkdf2('{{repo.id}}' + passwd, salt, 1000, 32*8, null),
+            magic_str = sjcl.codec.hex.fromBits(magic_array); //convert to hex
+        if (magic_str == '{{repo.magic}}') {
+            decrypt_form.remove();
+            $('#main').show();
+
+            var key_array = sjcl.misc.pbkdf2(passwd, salt, 1000, 32*8, null);
+            var iv_array = sjcl.misc.pbkdf2(key_array, salt, 10, 32*8, null);
+            var key =  sjcl.codec.hex.fromBits(key_array);
+            var iv = sjcl.codec.hex.fromBits(iv_array);
+
+            var secret_key_array = CryptoJS.AES.decrypt(CryptoJS.enc.Hex.parse('{{repo.random_key}}').toString(CryptoJS.enc.Base64), CryptoJS.enc.Hex.parse(key), {iv: CryptoJS.enc.Hex.parse(iv)});
+            var secret_key = secret_key_array.toString(CryptoJS.enc.Hex);
+
+            var enc_key_array = sjcl.misc.pbkdf2(sjcl.codec.hex.toBits(secret_key), salt, 1000, 32*8, null);
+            var enc_iv_array = sjcl.misc.pbkdf2(enc_key_array, salt, 10, 32*8, null);
+
+            enc_key = sjcl.codec.hex.fromBits(enc_key_array);
+            enc_iv = sjcl.codec.hex.fromBits(enc_iv_array);
+            if ('localStorage' in window && window['localStorage'] !== null) {
+                var repo_id = '{{repo.id}}';
+                localStorage[repo_id + '_decrypt_t'] = new Date().getTime();
+                localStorage[repo_id + '_enc_key'] = enc_key;
+                localStorage[repo_id + '_enc_iv'] = enc_iv;
+            } 
+        } else {
+            err.html("{% trans "Wrong password" %}").removeClass('hide');
+        }
+        return false;
+    });
+}
+</script>
+{% endif %}
 {% upload_js %}
 <script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
 <script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
@@ -428,6 +512,95 @@ $('#mv-dirents, #cp-dirents').click(function() {
     });
 });
 
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+function wordArray2ab(wordArray) {
+    // Shortcuts
+    var words = wordArray.words;
+    var sigBytes = wordArray.sigBytes;
+
+    // Convert
+    var u8 = new Uint8Array(sigBytes);
+    for (var i = 0; i < sigBytes; i++) {
+        var byte = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+        u8[i] = byte;
+    }
+
+    return u8;
+}
+
+function encAndSubmitFile(file, prepare_fd, submit_url) {
+    function sliceFile(file) {
+        file.slice = file.mozSlice || file.webkitSlice || file.slice; // compatibility
+        var pos = 0;
+        var slices = [];
+        if (file.size == 0) {
+            return [file]; // It is required to be encrypted.
+        }
+        while(pos < file.size){
+          slices.push(file.slice(pos, pos += 1024 * 1024));
+        }     
+        return slices;
+    }
+    var blocks = sliceFile(file), encrypted_blocks = [];
+    var workers = [], workersCount = 4, i, len;
+    for (i = 0; i < workersCount; i++) {
+        workers.push(new Worker('{{MEDIA_URL}}js/file_crypto.js'));
+    }
+    for (i = 0, len = workers.length; i < len ; i++) {
+        workers[i].addEventListener('message', onWorkerMessage, false);
+    } 
+    for (i = 0, len = blocks.length; i < len; i++) {
+        workers[i % workers.length].postMessage({
+            encrypt: true,
+            key: enc_key,
+            iv: enc_iv,
+            index: i,
+            block: blocks[i]
+        });
+    }
+
+    function onWorkerMessage(e) {
+        if (typeof e.data != 'object') {
+            // error
+            return;
+        }
+        encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id}); 
+        if (encrypted_blocks.length == blocks.length ) {
+            onFinish();
+        }
+    }
+
+    function onFinish() {
+        var ordered_enc_blocks = [], blk;
+        for (var i = 0, len = encrypted_blocks.length; i < len; i++) {
+             ordered_enc_blocks[encrypted_blocks[i].index] = {'id': encrypted_blocks[i].block_id, 'block': encrypted_blocks[i].block};
+        } 
+        var fd = prepare_fd();
+        for (var i = 0, len = ordered_enc_blocks.length; i < len; i++) {
+            blk = new Blob([wordArray2ab(ordered_enc_blocks[i].block)], {type:''});
+            fd.append('file', blk, ordered_enc_blocks[i].id);
+        }
+        $.ajax({
+            url: submit_url,
+            type: "POST",
+            dataType: 'json',
+            data: fd,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false, // tell jQuery not to set contentType
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+                $.modal.close();
+                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                updateCmt();
+            },
+            error: function () {
+                $.modal.close();
+                feedback('{% trans "Failed." %}', 'error');
+            }
+        });
+    }
+}
+{% endif %}
 // js on repo file list
 var no_file_op_popup = true;
 
@@ -435,6 +608,35 @@ function dirOP() {
 
 $('.path .dir-link').click(dirlinkClick);
 
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+$('#upload-file').click(function () {
+    $('#upload-file-dialog').modal();
+    $('#simplemodal-container').css({'height':'auto'});
+
+    $('#upload-file-form [type="button"]').click(function() {
+        var form = $('#upload-file-form');
+        var file_input = $('[type="file"]', form);
+        if (file_input[0].files.length == 0) {
+            $('.error', form).removeClass('hide');
+            return false;
+        }
+        var file = file_input[0].files[0];
+        
+        var prepare_fd = function() {
+            // the selected file will not be submitted
+            file_input.remove();
+            // get the fields in the form (e.g. csrf...token)
+            var fd = new FormData(form[0]);
+            fd.append('parent_dir', cur_path);
+            fd.append('file_name', file.name);
+            fd.append('file_size', file.size);
+            return fd;
+        };
+        var sb_url = form.attr('action');
+        encAndSubmitFile(file, prepare_fd, sb_url);
+    });
+});
+{% else %}
 $('#upload-file').click(function () {
     var upload_success = false;
     $('#upload-file-dialog').modal({
@@ -450,8 +652,10 @@ $('#upload-file').click(function () {
     });
     $('.simplemodal-wrap').css({'overflow':'auto'}); // for ie
 
-    var form = $('#upload-file-form');
-    $('input[name="parent_dir"]', form).val(cur_path);
+    var form = $('#upload-file-form'),
+        parent_dir = $('input[name="parent_dir"]', form);
+    
+    parent_dir.val(cur_path);
 
     // Initialize the jQuery File Upload widget:
     form.fileupload({
@@ -471,6 +675,7 @@ $('#upload-file').click(function () {
         window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
     );
 });
+{% endif %}
 
 $('#add-new-dir').click(function () {
     $('#add-new-dir-form').modal({appendTo:'#main'});
@@ -678,6 +883,133 @@ $('.checkbox-orig', context).unbind().click(function() {
 
 $('.dir-link', context).click(dirlinkClick);
 
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+
+$('.file-download').click(function() {
+    var file_name = $(this).parents('tr').attr('data-name'),
+        file_id = $(this).attr('data-fileid'); // data() will convert values, for example, '000000000...' is converted to 0
+
+    // if file size is 0, directly download it
+    if (file_id == '0000000000000000000000000000000000000000') {
+        var fileAsBlob = new Blob([], {type:''});
+        var URL = window.URL || window.webkitURL;
+        var url = URL.createObjectURL(fileAsBlob);
+        var link = $("<a>").attr("href", url).attr("download", file_name).html('Download').appendTo("body").hide();
+        link[0].click();
+        link.remove();
+        return false;
+    }
+    
+    function showMsg(con, type) {
+        if ($('.messages')[0]) {
+            $('.messages').html('<li class="' + type + '">' + con + '</li>');
+        } else {
+            var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+            $('#main').append(html);
+        }   
+        $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
+    }
+
+
+    showMsg("{% trans "Downloading..." %}", 'info');
+
+    $.ajax({
+        url: '{{SITE_ROOT}}ajax/repo/{{repo.id}}/encrypted_file/' + file_id + '/download/',
+        dataType: 'json',
+        success: function(data) {
+            var block_id_list = data['blklist'],
+                block_get_url_root = data['url']; 
+
+            var blocks = [], decrypted_blocks = [];
+
+            for (var i = 0, len = block_id_list.length; i < len; i++) {
+                reqBlock(i);
+            }
+
+            var str2ab = function(str) {
+                var buf = new ArrayBuffer(str.length);
+                var bufView = new Uint8Array(buf);
+                for (var i = 0, strLen = str.length; i < strLen; i++) {
+                    bufView[i] = str.charCodeAt(i);
+                }   
+                return buf;
+            }; 
+
+            function reqBlock(index) {
+                $.ajax({
+                    url: block_get_url_root + block_id_list[index],
+                    beforeSend:function(xhr) {
+                        // let JQuery not process the returned binary data: return binary str
+                        xhr.overrideMimeType("text/plain; charset=x-user-defined");
+                    },
+                    success: function(data, textStatus, xhr) {
+                        blocks.push({index: index, block: str2ab(data)});
+                        var msg = "{% trans "Downloading, %(num)s% complete." %}";
+                        showMsg(msg.replace('%(num)s', (blocks.length / block_id_list.length * 100).toFixed(0)), 'info');
+                        if (blocks.length == block_id_list.length) {
+                            // after receiving all blocks
+                            decrypt(blocks);
+                        }
+                    },
+                    error: function() {
+                        console.log('failed to get block ' + index);
+                    }
+                });
+            }
+
+            var workers = [], workersCount = 4, i;
+            for (i = 0; i < workersCount; i++) {
+                workers.push(new Worker('{{MEDIA_URL}}js/file_crypto.js'));
+            }
+            for (i = 0; i < workers.length; i++){
+                workers[i].addEventListener('message', onWorkerMessage, false);
+            } 
+            function decrypt(blocks) {
+                showMsg("{% trans "Decrypting..." %}", 'info');
+                for (i = 0; i < blocks.length; i++) {
+                    workers[i % workers.length].postMessage({
+                        decrypt: true,
+                        key: enc_key,
+                        iv: enc_iv,
+                        index: blocks[i].index,
+                        block: blocks[i].block
+                    });
+                }
+            }
+            function onWorkerMessage(e) {
+                if (typeof e.data != 'object') {
+                    // error
+                    return;
+                }
+                decrypted_blocks.push({index: e.data.index, block: e.data.block}); 
+                var msg = "{% trans "Decrypting, %(num)s% complete." %}";
+                showMsg(msg.replace('%(num)s', (decrypted_blocks.length / block_id_list.length * 100).toFixed(0)), 'info');
+                if (decrypted_blocks.length == block_id_list.length ) {
+                    onFinish();
+                }
+            }
+
+            function onFinish() {
+                var ordered_decrypted_blocks = [];
+                for (var i = 0, len = decrypted_blocks.length; i < len; i++) {
+                    ordered_decrypted_blocks[decrypted_blocks[i].index] = wordArray2ab(decrypted_blocks[i].block);
+                }
+
+                var fileAsBlob = new Blob(ordered_decrypted_blocks, {type:''});
+                var URL = window.URL || window.webkitURL;
+                var url = URL.createObjectURL(fileAsBlob);
+                var link = $("<a>").attr("href", url).attr("download", file_name).html('Download').appendTo("body").hide();
+                link[0].click();
+                showMsg("{% trans "Done!" %}", 'info');
+                setTimeout(function() { $('.messages').addClass('hide'); }, 1500);
+                link.remove();
+            } //onFinish ends
+        }
+    });
+    return false;
+});
+{% endif %}
+
 var popup_tr = ''; // the tr which the shown popup belongs to
 $('#main-panel').removeClass('ovhd');
 // to fix 'height becomes 0 after sort' for some versions of chrome/ff.
@@ -840,8 +1172,41 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     return false;
 });
 
+{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
 $('.file-update', context).click(function() {
-    var file_name = $(this).parents('.file-item').data('name');
+    $('#update-file-dialog').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    var file_name = $(this).parents('.file-item').attr('data-name');
+    var form = $('#update-file-form');
+    var hd = $('#update-file-dialog .hd');
+    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
+
+    $('input[name="target_file"]', form).val(cur_path + file_name);
+
+    $('[type="button"]', form).click(function() {
+        var file_input = $('[type="file"]', form);
+        if (file_input[0].files.length == 0) {
+            $('.error', form).removeClass('hide');
+            return false;
+        }
+        var file = file_input[0].files[0];
+        var prepare_fd = function() {
+            file_input.remove();
+            var fd = new FormData(form[0]);
+            fd.append('file_size', file.size);
+            return fd;
+        };
+        var sb_url = '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
+
+        encAndSubmitFile(file, prepare_fd, sb_url);
+    });
+
+    return false;
+});
+{% else %}
+$('.file-update', context).click(function() {
+    var file_name = $(this).parents('.file-item').attr('data-name');
     var form = $('#update-file-form');
     var upload_success = false;
     $('#update-file-dialog').modal({
@@ -882,6 +1247,7 @@ $('.file-update', context).click(function() {
 
     return false;
 });
+{% endif %}
 
 $('.file-star', context).click(function() {
     var op = $(this),
@@ -1010,12 +1376,14 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             var name_link = $('.dirent-name a', op_obj);
             name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
             $('.dirent-update', op_obj).html("{% trans "Just now" %}");
-            var dld_link = $('.download', op_obj), dld_href = dld_link.attr('href');
+            var dld_link; 
             if (op_obj.attr('class') == 'dir-item') {
+                dld_link = $('.dir-download', op_obj), dld_href = dld_link.attr('href'); 
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(path+new_name));
                 $('.dir-share', op_obj).data('link', '').data('token', '');
             } else {
                 $('.file-star', op_obj).attr('title', "{% trans "unstarred" %}").attr('class', 'icon-star-empty file-star').attr('data-status', 'unstarred');
+                dld_link = $('.file-download', op_obj), dld_href = dld_link.attr('href'); 
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?file_name=' + e(new_name) + '&op=download');
                 $('.file-share', op_obj).data('link', '').data('token', '');
 
@@ -1236,7 +1604,6 @@ function updateCmt() {
         disable($(this));
     });
 {% endif %}
-
 {% include "snippets/list_commit_detail.html" %}
 {% include "snippets/shared_link_js.html" %}
 {% include "snippets/bottom_bar.html" %}

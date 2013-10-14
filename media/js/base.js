@@ -54,6 +54,12 @@ $(document).click(function(e) {
     }
 });
 
+// clear repo enc info when log out
+$('#logout').click(function() {
+    if ('localStorage' in window && window['localStorage'] !== null) {
+        localStorage.clear();
+    }
+});
 if ($.browser.mozilla || $.browser.msie) {
     $('a').focus(function() {
         $(this).blur();

@@ -12,7 +12,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, seafserv_rpc
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
@@ -23,7 +23,9 @@ from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
 from seahub.signals import repo_created
 from seahub.utils import check_filename_with_rename
+from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
+from seahub.settings import KEEP_ENC_REPO_PASSWD
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -181,7 +183,9 @@ def list_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
-    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
+    if repo.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
@@ -245,7 +249,9 @@ def list_dir_more(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
-    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
+    if repo.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+           and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
@@ -858,7 +864,9 @@ def get_current_commit(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
-    if repo.encrypted and not seafile_api.is_password_set(repo.id, username):
+    if repo.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
@@ -917,4 +925,35 @@ def sub_repo(request, repo_id):
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+def download_enc_file(request, repo_id, file_id):
+    if not request.is_ajax(): 
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}  
+
+    op = 'downloadblks'
+    blklist = [] 
+
+    if file_id == EMPTY_SHA1:
+        result = { 'blklist':blklist, 'url':None, }    
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    try: 
+        blks = seafile_api.list_file_by_file_id(file_id)
+    except SearpcError, e:
+        result['error'] = _(u'Failed to get file block list')
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    blklist = blks.split('\n')
+    blklist = [i for i in blklist if len(i) == 40]
+    token = seafserv_rpc.web_get_access_token(repo_id, file_id,
+                                              op, request.user.username)
+    url = gen_block_get_url(token, None)
+    result = {
+        'blklist':blklist,
+        'url':url,
+        }    
     return HttpResponse(json.dumps(result), content_type=content_type)

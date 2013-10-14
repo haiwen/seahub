@@ -7,7 +7,7 @@ These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
-    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_URL
+    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_URL, KEEP_ENC_REPO_PASSWD
 try:
     from seahub.settings import BUSINESS_MODE
 except ImportError:
@@ -54,5 +54,6 @@ def base(request):
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'enable_pubfile': ENABLE_PUBFILE,
+        'keep_enc_repo_passwd': KEEP_ENC_REPO_PASSWD,
         }
 

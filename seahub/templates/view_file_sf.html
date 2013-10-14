@@ -1,8 +1,6 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 
-{% block open_local %}{% endblock %}
-
 {% block edit_file %}
 {% if user_perm == 'rw' and not err%}
 <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path|urlencode }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</button>

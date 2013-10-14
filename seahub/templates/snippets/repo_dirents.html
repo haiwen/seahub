@@ -21,7 +21,7 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op download" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
+                    <a class="op dir-download" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
                     {% if not repo.encrypted %}
                     <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
                     {% endif %}
@@ -67,7 +67,7 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op download" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name|urlencode }}&op=download">{% trans "Download"%}</a>
+                    <a class="op file-download" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name|urlencode }}&op=download" data-fileid="{{ dirent.props.obj_id }}">{% trans "Download"%}</a>
                     {% if user_perm == 'rw' %}
                     <a class="op file-update" href="#">{% trans "Update"%}</a>
                     {% endif %}

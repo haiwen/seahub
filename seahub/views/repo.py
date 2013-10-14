@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 import seaserv
-from seaserv import seafile_api, MAX_UPLOAD_FILE_SIZE, get_personal_groups_by_user
+from seaserv import seafserv_rpc, seafile_api, MAX_UPLOAD_FILE_SIZE, get_personal_groups_by_user
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
@@ -20,7 +20,7 @@ from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link
-from seahub.settings import ENABLE_SUB_LIBRARY
+from seahub.settings import ENABLE_SUB_LIBRARY, KEEP_ENC_REPO_PASSWD
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -110,7 +110,35 @@ def get_ajax_upload_url(request, repo_id):
     """
     api_upload_url = get_api_upload_url(request, repo_id)
     return api_upload_url.replace('api', 'aj')
-    
+
+def get_blks_upload_url(request, repo_id):
+    '''
+    Get upload url for encrypted file (uploaded in blocks)
+    '''
+    username = request.user.username
+    if get_user_permission(request, repo_id) == 'rw':
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'upload-blks',
+                                                  request.user.username)
+        return gen_file_upload_url(token, 'upload-blks-api').replace('api', 'aj')
+    else:
+        return ''
+
+def get_blks_update_url(request, repo_id):
+    '''
+    Get update url for encrypted file (uploaded in blocks)
+    '''
+    username = request.user.username
+    if get_user_permission(request, repo_id) == 'rw':
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  'dummy',
+                                                  'update-blks',
+                                                  request.user.username)
+        return gen_file_upload_url(token, 'update-blks-api').replace('api', 'aj')
+    else:
+        return ''
+
 def get_api_update_url(request, repo_id):
     username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
@@ -160,7 +188,9 @@ def render_repo(request, repo):
                 'repo': repo,
                 }, context_instance=RequestContext(request))
 
-    if repo.encrypted and not is_password_set(repo.id, username):
+    if repo.encrypted and \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+        and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or \
@@ -199,8 +229,13 @@ def render_repo(request, repo):
     else:
         repo_group_str = ''
     upload_url = get_upload_url(request, repo.id)
-    ajax_upload_url = get_ajax_upload_url(request, repo.id)
-    ajax_update_url = get_ajax_update_url(request, repo.id)
+
+    if repo.encrypted and repo.enc_version == 2 and not KEEP_ENC_REPO_PASSWD:
+        ajax_upload_url = get_blks_upload_url(request, repo.id)
+        ajax_update_url = get_blks_update_url(request, repo.id)
+    else:
+        ajax_upload_url = get_ajax_upload_url(request, repo.id)
+        ajax_update_url = get_ajax_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
 
@@ -280,7 +315,9 @@ def repo_history_view(request, repo_id):
                 'repo': repo,
                 }, context_instance=RequestContext(request))
 
-    if repo.encrypted and not is_password_set(repo.id, username):
+    if repo.encrypted and \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+        and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or \

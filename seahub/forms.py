@@ -64,7 +64,9 @@ class RepoCreateForm(forms.Form):
             'min_length': _(u'Password is too short (minimum is 3 characters)'),
             'max_length': _(u'Password is too long (maximum is 30 characters)'),
             })
-
+    uuid = forms.CharField(required=False)
+    magic_str = forms.CharField(required=False)
+    random_key = forms.CharField(required=False)
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_filename(repo_name):
@@ -74,23 +76,24 @@ class RepoCreateForm(forms.Form):
             return repo_name
         
     def clean(self):
-        """
-        Verifiy that the values entered into the two password fields
-        match. 
-        """
-        if 'passwd' in self.cleaned_data and 'passwd_again' in self.cleaned_data:
-            encryption = self.cleaned_data['encryption']
-            if int(encryption) == 0:
-                # This prevents the case that form has passwords but the
-                # encryption checkbox is not selected.
-                self.cleaned_data['passwd'] = None
-                self.cleaned_data['passwd_again'] = None
-                return self.cleaned_data
-            else:
-                passwd = self.cleaned_data['passwd']
-                passwd_again = self.cleaned_data['passwd_again']
-                if passwd != passwd_again:
-                    raise forms.ValidationError(_("Passwords don't match"))
+        encryption = self.cleaned_data['encryption']
+        if int(encryption) == 0:
+            return self.cleaned_data
+
+        if settings.KEEP_ENC_REPO_PASSWD:
+            passwd = self.cleaned_data['passwd']
+            passwd_again = self.cleaned_data['passwd_again']
+            if not (passwd and passwd_again):
+                raise forms.ValidationError(_("Password is required"))
+            if passwd != passwd_again:
+                raise forms.ValidationError(_("Passwords don't match"))
+        else:
+            uuid = self.cleaned_data['uuid']
+            magic_str = self.cleaned_data['magic_str']
+            random_key = self.cleaned_data['random_key']
+            if not (uuid and magic_str and random_key):
+                raise forms.ValidationError(_("Argument missing"))
+
         return self.cleaned_data
 
 class SharedRepoCreateForm(RepoCreateForm):
