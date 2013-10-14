@@ -7,19 +7,20 @@ from django.dispatch import receiver
 
 from seaserv import get_group_members
 
+from seahub.base.fields import LowerCaseCharField
 from seahub.shortcuts import get_first_object_or_none
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 
 class GroupMessage(models.Model):
     group_id = models.IntegerField(db_index=True)
-    from_email = models.EmailField()
+    from_email = LowerCaseCharField(max_length=255)
     message = models.CharField(max_length=2048)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
 class MessageReply(models.Model):
     reply_to = models.ForeignKey(GroupMessage)
-    from_email = models.EmailField()
+    from_email = LowerCaseCharField(max_length=255)
     message = models.CharField(max_length=2048)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 

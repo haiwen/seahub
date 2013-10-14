@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
+from seahub.base.fields import LowerCaseCharField
 
 class UserMessageManager(models.Manager):
     def get_messages_related_to_user(self, username):
@@ -50,8 +51,8 @@ class UserMessageManager(models.Manager):
 class UserMessage(models.Model):
     message_id = models.AutoField(primary_key=True)
     message    = models.CharField(max_length=512)
-    from_email = models.EmailField(db_index=True)
-    to_email   = models.EmailField(db_index=True)
+    from_email = LowerCaseCharField(max_length=255, db_index=True)
+    to_email   = LowerCaseCharField(max_length=255, db_index=True)
     timestamp  = models.DateTimeField(default=datetime.datetime.now)
     ifread     = models.BooleanField()
     objects = UserMessageManager()

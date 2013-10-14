@@ -186,7 +186,7 @@ def share_repo(request):
         elif share_to.find('@') == -1:
             share_to_group_names.append(share_to)
         else:
-            share_to_users.append(share_to)
+            share_to_users.append(share_to.lower())
 
     share_to_groups = []
     # get all personal groups

@@ -4,13 +4,14 @@ from hashlib import sha1
 from django.db import models
 
 from seahub.base.accounts import User
+from seahub.base.fields import LowerCaseCharField
 
 class Token(models.Model):
     """
     The default authorization token model.
     """
     key = models.CharField(max_length=40, primary_key=True)
-    user = models.CharField(max_length=255, unique=True)
+    user = LowerCaseCharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

@@ -519,7 +519,7 @@ def repo_owner(request, repo_id):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
-    repo_owner = request.POST.get('repo_owner', '')
+    repo_owner = request.POST.get('repo_owner', '').lower()
     try:
         User.objects.get(email=repo_owner)
     except User.DoesNotExist:

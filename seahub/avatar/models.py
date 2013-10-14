@@ -3,6 +3,8 @@ import datetime
 import hashlib
 import os
 
+from seahub.base.fields import LowerCaseCharField
+
 from django.db import models
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext as _
@@ -127,7 +129,7 @@ class AvatarBase(object):
         )
     
 class Avatar(models.Model, AvatarBase):
-    emailuser = models.CharField(max_length=255)
+    emailuser = LowerCaseCharField(max_length=255)
     primary = models.BooleanField(default=False)
     avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)

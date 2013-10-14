@@ -556,6 +556,7 @@ def group_manage(request, group_id):
 
         member_name_str = request.POST.get('user_name', '')
         member_list = string2list(member_name_str)
+        member_list = [x.lower() for x in member_list]
 
         # Add users to contacts.        
         for email in member_list:
@@ -682,6 +683,7 @@ def group_add_admin(request, group_id):
         
     member_name_str = request.POST.get('user_name', '')
     member_list = string2list(member_name_str)
+    member_list = [x.lower() for x in member_list]
 
     for member_name in member_list:
         # Add user to contacts.

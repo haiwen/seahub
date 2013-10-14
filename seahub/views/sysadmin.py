@@ -366,7 +366,11 @@ def user_add(request):
     
     content_type = 'application/json; charset=utf-8'
     if request.method == 'POST':
-        form = AddUserForm(request.POST)
+        post_values = request.POST.copy()
+        post_email = request.POST.get('email', '')
+        post_values.update({'email': post_email.lower()})
+
+        form = AddUserForm(post_values)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']

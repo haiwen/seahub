@@ -22,14 +22,8 @@ class UserManager(object):
         """
         Creates and saves a User with given username and password.
         """
-        # Normalize the address by lowercasing the domain part of the email
-        # address.
-        try:
-            email_name, domain_part = email.strip().split('@', 1)
-        except ValueError:
-            pass
-        else:
-            email = '@'.join([email_name, domain_part.lower()])
+        # Lowercasing email address to avoid confusion.
+        email = email.lower()
 
         user = User(email=email)
         user.is_staff = is_staff

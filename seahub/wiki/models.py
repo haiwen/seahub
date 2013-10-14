@@ -1,5 +1,7 @@
 from django.db import models
 
+from seahub.base.fields import LowerCaseCharField
+
 class WikiDoesNotExist(Exception):
     pass
 
@@ -20,7 +22,7 @@ class PersonalWikiManager(models.Manager):
         return wiki
 
 class PersonalWiki(models.Model):
-    username = models.CharField(max_length=255, unique=True)
+    username = LowerCaseCharField(max_length=255, unique=True)
     repo_id = models.CharField(max_length=36)
     objects = PersonalWikiManager()
 
