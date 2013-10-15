@@ -1112,6 +1112,7 @@ def view_priv_shared_file(request, token):
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
+            'file_size': fsize,
             'access_token': access_token,
             'fileext': fileext,
             'raw_path': raw_path,
