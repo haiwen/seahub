@@ -18,7 +18,8 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
 from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate, sys_publink_admin, \
-    sys_repo_search, sys_repo_transfer, sys_list_orphan
+    sys_repo_search, sys_repo_transfer, sys_list_orphan, user_deactivate, \
+    user_toggle_status
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -158,7 +159,10 @@ urlpatterns = patterns('',
     url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<user_id>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
-    (r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate),
+    url(r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate, name='user_activate'),
+    url(r'^useradmin/deactivate/(?P<user_id>[^/]+)/$', user_deactivate, name='user_deactivate'),
+    url(r'^useradmin/toggle_status/(?P<user_id>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
+                       
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
 )

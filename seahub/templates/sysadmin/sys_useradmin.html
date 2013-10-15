@@ -31,12 +31,24 @@
 
     {% for user in users %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
-        {% if user.props.is_active %}
-        <td>{% trans "Activated" %}</td>
-        {% else %}
-        <td><a href="{{ SITE_ROOT }}useradmin/activate/{{ user.props.id }}/" class="activate op">{% trans "Active" %}</a></td>
-        {% endif %}
+        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+
+        <td>
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon vh" />
+            </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+
+            </select>
+        </td>
+        
         <td>
             {% if CALC_SHARE_USAGE %}
             {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
@@ -115,6 +127,54 @@ $('#add-user-btn').click(function() {
 });
 $('#search-user-btn').click(function() {
     location.href = "{% url 'user_search' %}";
+});
+
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.user-status-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.user-status-edit-icon').addClass('vh');
+    }
+);
+$('.user-status-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'user-status-select'
+});
+$('.user-status-select').change(function() {
+    var select = $(this),
+        uid = $(this).parent().prev().attr('data'),
+        select_val = select.val(),
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            if (data['success']) {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+                select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+            }
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        }   
+    });
+});
+// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
 });
 
 $('#add-user-form').submit(function() {

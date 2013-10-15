@@ -285,6 +285,43 @@ def user_activate(request, user_id):
         
     return HttpResponseRedirect(next)
 
+@login_required
+@sys_staff_required
+def user_deactivate(request, user_id):
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_active = False
+        user.save()
+        messages.success(request, _(u'Successfully deactivated "%s".') % user.email)
+    except User.DoesNotExist:
+        messages.success(request, _(u'Failed to deactivate: user does not exist.'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_useradmin')
+        
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def user_toggle_status(request, user_id):
+    content_type = 'application/json; charset=utf-8'
+
+    try:
+        user_status = int(request.GET.get('s', 0))
+    except ValueError:
+        user_status = 0
+
+    try:
+        user = User.objects.get(id=int(user_id))
+        user.is_active = bool(user_status)
+        user.save()
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)        
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False}), status=500,
+                            content_type=content_type)
+
 def send_user_reset_email(request, email, password):
     """
     Send email when reset user password.

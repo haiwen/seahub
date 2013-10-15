@@ -2254,14 +2254,16 @@ textarea:-moz-placeholder {/* for FF */
 #md-edit-help {
     width:550px;
 }
-/* shareadmin */
+/* shareadmin & useradmin */
 .view-link-alert p {
     display: inline-block;
 }
-.share-permission-edit-icon {
+.share-permission-edit-icon,
+.user-status-edit-icon {
     cursor:pointer;
 }
-.share-permission-select {
+.share-permission-select,
+.user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     background:#fff;
     border:1px solid #ddd;
