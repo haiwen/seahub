@@ -262,6 +262,8 @@ def repo_download_info(request, repo_id):
     repo_name = repo.name
     enc = 1 if repo.encrypted else ''
     magic = repo.magic if repo.encrypted else ''
+    random_key = repo.random_key if repo.random_key else ''
+    enc_version = repo.enc_version
 
     info_json = {
         'relay_id': relay_id,
@@ -272,7 +274,9 @@ def repo_download_info(request, repo_id):
         'repo_id': repo_id,
         'repo_name': repo_name,
         'encrypted': enc,
+        'enc_version': enc_version,
         'magic': magic,
+        'random_key': random_key
         }
     return Response(info_json)
 
