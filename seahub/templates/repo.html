@@ -508,6 +508,16 @@ $('#mv-dirents, #cp-dirents').click(function() {
 });
 
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+function showMsg(con, type) {
+    if ($('.messages')[0]) {
+        $('.messages').html('<li class="' + type + '">' + con + '</li>');
+    } else {
+        var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+        $('#main').append(html);
+    }   
+    $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
+}
+
 function wordArray2ab(wordArray) {
     // Shortcuts
     var words = wordArray.words;
@@ -523,7 +533,7 @@ function wordArray2ab(wordArray) {
     return u8;
 }
 
-function encAndSubmitFile(file, prepare_fd, submit_url) {
+function encAndSubmitFile(file, fd, submit_url) {
     function sliceFile(file) {
         file.slice = file.mozSlice || file.webkitSlice || file.slice; // compatibility
         var pos = 0;
@@ -540,6 +550,8 @@ function encAndSubmitFile(file, prepare_fd, submit_url) {
         onFinish();
         return;
     }
+    
+    showMsg("{% trans "Encrypting the file..." %}", 'info');
 
     var workers = [], workersCount = 4, i, len;
     for (i = 0; i < workersCount; i++) {
@@ -563,6 +575,9 @@ function encAndSubmitFile(file, prepare_fd, submit_url) {
             // error
             return;
         }
+
+        var msg = "{% trans "Encrypting, %(num)s% complete." %}";
+        showMsg(msg.replace('%(num)s', (encrypted_blocks.length / blocks.length * 100).toFixed(0)), 'info');
         encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id}); 
         if (encrypted_blocks.length == blocks.length ) {
             onFinish();
@@ -574,11 +589,12 @@ function encAndSubmitFile(file, prepare_fd, submit_url) {
         for (var i = 0, len = encrypted_blocks.length; i < len; i++) {
              ordered_enc_blocks[encrypted_blocks[i].index] = {'id': encrypted_blocks[i].block_id, 'block': encrypted_blocks[i].block};
         } 
-        var fd = prepare_fd();
         for (var i = 0, len = ordered_enc_blocks.length; i < len; i++) {
             blk = new Blob([wordArray2ab(ordered_enc_blocks[i].block)], {type:''});
             fd.append('file', blk, ordered_enc_blocks[i].id);
         }
+
+        showMsg("{% trans "Start uploading ..." %}", 'info');
         $.ajax({
             url: submit_url,
             type: "POST",
@@ -591,6 +607,8 @@ function encAndSubmitFile(file, prepare_fd, submit_url) {
                 $.modal.close();
                 reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
                 updateCmt();
+                showMsg("{% trans "Done!" %}", 'info');
+                setTimeout(function() { $('.messages').addClass('hide'); }, 1500);
             },
             error: function () {
                 $.modal.close();
@@ -621,18 +639,16 @@ $('#upload-file').click(function () {
         }
         var file = file_input[0].files[0];
         
-        var prepare_fd = function() {
-            // the selected file will not be submitted
-            file_input.remove();
-            // get the fields in the form (e.g. csrf...token)
-            var fd = new FormData(form[0]);
-            fd.append('parent_dir', cur_path);
-            fd.append('file_name', file.name);
-            fd.append('file_size', file.size);
-            return fd;
-        };
+        // prepare fd
+        file_input.remove();// the selected file will not be submitted
+        var fd = new FormData(form[0]);// get the fields in the form (e.g. csrf...token)
+        fd.append('parent_dir', cur_path);
+        fd.append('file_name', file.name);
+        fd.append('file_size', file.size);
+
+        $.modal.close();
         var sb_url = form.attr('action');
-        encAndSubmitFile(file, prepare_fd, sb_url);
+        encAndSubmitFile(file, fd, sb_url);
     });
 });
 {% else %}
@@ -899,17 +915,6 @@ $('.file-download').click(function() {
         return false;
     }
     
-    function showMsg(con, type) {
-        if ($('.messages')[0]) {
-            $('.messages').html('<li class="' + type + '">' + con + '</li>');
-        } else {
-            var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
-            $('#main').append(html);
-        }   
-        $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
-    }
-
-
     showMsg("{% trans "Downloading..." %}", 'info');
 
     $.ajax({
@@ -1195,15 +1200,16 @@ $('.file-update', context).click(function() {
             return false;
         }
         var file = file_input[0].files[0];
-        var prepare_fd = function() {
-            file_input.remove();
-            var fd = new FormData(form[0]);
-            fd.append('file_size', file.size);
-            return fd;
-        };
-        var sb_url = '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
 
-        encAndSubmitFile(file, prepare_fd, sb_url);
+        // prepare_fd
+        file_input.remove();
+        var fd = new FormData(form[0]);
+        fd.append('file_size', file.size);
+
+        $.modal.close();
+
+        var sb_url = '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
+        encAndSubmitFile(file, fd, sb_url);
     });
 
     return false;
