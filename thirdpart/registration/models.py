@@ -289,3 +289,49 @@ class RegistrationProfile(models.Model):
         except User.DoesNotExist:
             pass
 
+
+########## signal handlers
+import logging
+
+from django.core.urlresolvers import reverse
+from django.dispatch import receiver
+from django.utils.http import urlquote
+
+from registration.signals import user_registered
+from seahub.utils import get_service_url
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+@receiver(user_registered)
+def email_admin_on_registration(sender, **kwargs):
+    """Send an email notification to admin when a newly registered user need
+    activate.
+
+    This email will be sent when both ``ACTIVATE_AFTER_REGISTRATION`` and
+    ``REGISTRATION_SEND_MAIL`` are set to False.
+    """
+    if settings.ACTIVATE_AFTER_REGISTRATION is False and \
+            settings.REGISTRATION_SEND_MAIL is False:
+        reg_email = kwargs['user'].email
+
+        ctx_dict = {
+            "site_name": settings.SITE_NAME,
+            "user_search_link": "%s%s?email=%s" % (
+                get_service_url().rstrip('/'), reverse("user_search"),
+                urlquote(reg_email)),
+            }
+        subject = render_to_string('registration/activate_request_email_subject.txt',
+                                   ctx_dict)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        
+        message = render_to_string('registration/activate_request_email.txt',
+                                   ctx_dict)
+
+        admins = User.objects.get_superusers()
+        for admin in admins:
+            try:
+                admin.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+            except Exception as e:
+                logger.error(e)

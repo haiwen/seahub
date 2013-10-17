@@ -36,7 +36,23 @@ class UserManager(object):
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)
         return u
-    
+
+    def get_superusers(self):
+        """Return a list of admins.
+        """
+        emailusers = ccnet_threaded_rpc.get_superusers()
+
+        user_list = []
+        for e in emailusers:
+            user = User(e.email)
+            user.id = e.id
+            user.is_staff = e.is_staff
+            user.is_active = e.is_active
+            user.ctime = e.ctime
+            user_list.append(user)
+
+        return user_list
+        
     def get(self, email=None, id=None):
         if not email and not id:
             raise User.DoesNotExist, 'User matching query does not exits.'

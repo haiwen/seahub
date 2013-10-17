@@ -1,0 +1,6 @@
+{% load i18n %} {% blocktrans %}You're receiving this e-mail because you are the admin of {{site_name }}, and a newly registered account need to be activated.{% endblocktrans%}
+
+{% trans "Please click the following link to active the new account:" %}
+{{ user_search_link }}
+
+
