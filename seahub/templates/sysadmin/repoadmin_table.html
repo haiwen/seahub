@@ -1,0 +1,23 @@
+{% load i18n %}
+<table>
+    <tr>
+        <th width="15%">{% trans "Name" %}</th>
+        <th width="25%">ID</th>
+        <th width="20%">{% trans "Owner" %}</th>
+        <th width="27%">{% trans "Description" %}</th>
+        <th width="13%">{% trans "Operations" %}</th>
+    </tr>
+    {% for repo in repos %}
+    <tr>
+        <td>{{ repo.props.name }}</td>
+        <td style="font-size:11px;">{{ repo.id }}</td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        <td>
+          <a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a>
+          <a href="#" data-id="{{repo.id}}" data-name="{{repo.name}}" class="repo-transfer-btn op">{% trans "Transfer" %}</a>        
+        </td>
+        
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,69 @@
+{% load i18n%}
+addConfirmTo($('.remove-user-btn'), {
+        'title':"{% trans "Delete User" %}",
+        'con':"{% trans "Are you sure you want to delete %s ?" %}"
+});
+addConfirmTo($('.reset-user-btn'), {
+        'title':"{% trans "Password Reset" %}",
+        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
+});
+addConfirmTo($('.revoke-admin-btn'), {
+        'title':"{% trans "Revoke Admin" %}",
+        'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}"
+});
+addConfirmTo($('.set-admin-btn'), {
+        'title':"{% trans "Set Admin" %}",
+        'con':"{% trans "Are you sure you want to set %s as admin?" %}"
+});
+
+$('#add-user-btn').click(function() {
+        $('#add-user-form').modal();
+        $('#simplemodal-container').css({'width':'auto'});
+});
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.user-status-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.user-status-edit-icon').addClass('vh');
+    }
+);
+$('.user-status-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'user-status-select'
+});
+$('.user-status-select').change(function() {
+    var select = $(this),
+        uid = $(this).parent().prev().attr('data'),
+        select_val = select.val(),
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            if (data['success']) {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+                select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+            }
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+        }   
+    });
+});
+// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
+});

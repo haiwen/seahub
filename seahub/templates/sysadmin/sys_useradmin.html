@@ -20,57 +20,7 @@
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
-<table>
-    <tr>
-        <th width="30%">{% trans "Email" %}</th>
-        <th width="10%">{% trans "Status" %}</th>
-        <th width="20%">{% trans "Space Used" %}</th>
-        <th width="15%">{% trans "Create At" %}</th>
-        <th width="25%">{% trans "Operations" %}</th>
-    </tr>
-
-    {% for user in users %}
-    <tr>
-        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
-
-        <td>
-            <div class="user-status">
-              {% if user.is_active %}
-                <span class="user-status-cur-value">{% trans "Active" %}</span>
-              {% else %}
-                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
-              {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon vh" />
-            </div>
-            <select name="permission" class="user-status-select hide">
-                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
-                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
-
-            </select>
-        </td>
-        
-        <td>
-            {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
-            {% else %}
-            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
-            {% endif %}
-        </td>
-        <td>{{ user.ctime|tsstr_sec }}</td>
-        <td>
-          {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
-          <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
-          {% if user.is_staff %}
-          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op">{% trans "Revoke Admin" %}</a>
-          {% else %}
-          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op">{% trans "Set Admin" %}</a>
-          {% endif %}
-          {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+{% include "sysadmin/useradmin_table.html"%}
 
 <div id="paginator">
     {% if current_page != 1 %}
@@ -104,77 +54,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.remove-user-btn'), {
-        'title':"{% trans "Delete User" %}",
-        'con':"{% trans "Are you sure you want to delete %s ?" %}"
-});
-addConfirmTo($('.reset-user-btn'), {
-        'title':"{% trans "Password Reset" %}",
-        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
-});
-addConfirmTo($('.revoke-admin-btn'), {
-        'title':"{% trans "Revoke Admin" %}",
-        'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}"
-});
-addConfirmTo($('.set-admin-btn'), {
-        'title':"{% trans "Set Admin" %}",
-        'con':"{% trans "Are you sure you want to set %s as admin?" %}"
-});
-
-$('#add-user-btn').click(function() {
-        $('#add-user-form').modal();
-        $('#simplemodal-container').css({'width':'auto'});
-});
 $('#search-user-btn').click(function() {
     location.href = "{% url 'user_search' %}";
-});
-
-$('tr:gt(0)').hover(
-    function() {
-        $(this).find('.user-status-edit-icon').removeClass('vh');
-    },
-    function() {
-        $(this).find('.user-status-edit-icon').addClass('vh');
-    }
-);
-$('.user-status-edit-icon').click(function() {
-    $(this).parent().addClass('hide');
-    $(this).parent().next().removeClass('hide'); // show 'user-status-select'
-});
-$('.user-status-select').change(function() {
-    var select = $(this),
-        uid = $(this).parent().prev().attr('data'),
-        select_val = select.val(),
-        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
-
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            if (data['success']) {
-                feedback("{% trans "Edit succeeded" %}", 'success');
-                select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
-            }
-            select.addClass('hide');
-            select.prev().removeClass('hide');
-        },
-        error: function() {
-            feedback("{% trans "Edit failed." %}", 'error');
-            select.addClass('hide');
-            select.prev().removeClass('hide');
-        }   
-    });
-});
-// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
-$(document).click(function(e) {
-    var target = e.target || event.srcElement;
-    // target can't be edit-icon
-    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
-        $('.user-status').removeClass('hide');
-        $('.user-status-select').addClass('hide');
-    }
 });
 
 $('#add-user-form').submit(function() {
@@ -197,10 +78,12 @@ $('#add-user-form').submit(function() {
         return false;
     } 
     if (pwd1 != pwd2) {
-        apply_form_error(form_id, "{% trans "Passwords don't match" %}");
+        apply_form_error(form_id, "{% trans "Passwords do not match" %}");
         return false;
     } 
 
+    var submit_btn = $(this).find('input[type="submit"]');
+    disable(submit_btn);
     $.ajax({
         url: '{% url 'user_add' %}',
         type: 'POST',
@@ -223,9 +106,12 @@ $('#add-user-form').submit(function() {
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
+            enable(submit_btn);
         }
     });
     return false;
 });
+
+{% include "sysadmin/useradmin_js.html" %}
 </script>
 {% endblock %}

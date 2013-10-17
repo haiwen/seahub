@@ -545,7 +545,11 @@ def sys_repo_transfer(request):
             messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
     else:
         messages.error(request, _(u'Failed to transfer, invalid arguments.'))
-    return HttpResponseRedirect(reverse(sys_repo_admin))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse(sys_repo_admin)
+    return HttpResponseRedirect(next)
     
 @login_required
 @sys_staff_required

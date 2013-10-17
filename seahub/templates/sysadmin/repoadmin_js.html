@@ -1,0 +1,26 @@
+{% load i18n%}
+addConfirmTo($('.repo-delete-btn'), {
+        'title':'{% trans "Delete Library" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+});
+
+$('.repo-transfer-btn').click(function(){
+    var repo_id = $(this).data('id'),
+        repo_name = $(this).data('name'),
+        form = $('#repo-transfer-form');
+    
+    $('#repo-transfer-form input[name="repo_id"]').val(repo_id);
+    form.modal({appendTo:'#main'});
+    return false;
+});
+
+$('#repo-transfer-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        email = $.trim(form.children('[name="email"]').val());
+    if (!email) {
+        apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
+        return false;
+    }
+    form.submit();
+});
