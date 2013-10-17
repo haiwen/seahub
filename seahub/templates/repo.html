@@ -169,8 +169,10 @@
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h5>
             <div id="current-repo-dirs"></div>
+            {% if not repo.encrypted %}
             <h5><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h5>
             <div id="other-repos-dirs" class="hide"></div>
+            {% endif %}
         </div>
         <input type="hidden" name="obj_name" value="" />
         <input type="hidden" name="obj_type" value="" />
@@ -1170,6 +1172,11 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
 });
 
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+$('.dir-download', context).click(function() {
+    var msg = "{% trans "Directory download is not supported in this library." %}";
+    $('<p class="error">' + msg + '</p>').modal();    
+    return false;
+});
 $('.file-update', context).click(function() {
     $('#update-file-dialog').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -1367,7 +1374,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         post_data['newname'] = new_name;
         after_op_success = function(data) {
             $.modal.close();
-            op_obj.data('name', new_name).data('time', new Date().getTime()/1000);
+            op_obj.attr('data-name', new_name).data('time', new Date().getTime()/1000);
             updateCmt();
 
             var name_link = $('.dirent-name a', op_obj);
