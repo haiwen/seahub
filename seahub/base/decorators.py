@@ -5,7 +5,7 @@ from seaserv import get_repo, is_passwd_set
 
 from seahub.utils import check_and_get_org_by_repo, check_and_get_org_by_group, render_error
 from django.utils.translation import ugettext as _
-from seahub.settings import KEEP_ENC_REPO_PASSWD
+from seahub.settings import SERVER_CRYPTO
 
 def sys_staff_required(func):
     """
@@ -65,7 +65,7 @@ def repo_passwd_set_required(func):
             raise Http404
         username = request.user.username
         if repo.encrypted:
-            if (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            if (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
                 and not is_passwd_set(repo_id, username):
                 # Redirect uesr to decrypt repo page.
                 return render_to_response('decrypt_repo_form.html', {
@@ -73,7 +73,7 @@ def repo_passwd_set_required(func):
                         'next': request.get_full_path(),
                         }, context_instance=RequestContext(request))
 
-            if repo.enc_version == 2 and not KEEP_ENC_REPO_PASSWD:
+            if repo.enc_version == 2 and not SERVER_CRYPTO:
                 return render_error(request, _(u'Files in this library can not be viewed online.'))
 
         return func(request, *args, **kwargs)

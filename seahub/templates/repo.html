@@ -7,7 +7,7 @@
 <style type="text/css">
 #main { width:auto; }
 #footer { display:none; }
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 #main { display:none; }
 {% endif %}
 </style>    
@@ -60,7 +60,7 @@
         <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
         {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
-            {% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+            {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
             <input type="file" name="file" /><br />
             <p class="error hide">{% trans "Please select a file at first." %}</p>
             <input type="button" value="{% trans "Submit" %}" />
@@ -107,7 +107,7 @@
         <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <input type="hidden" name="target_file" />
 
-            {% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+            {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
             <input type="file" name="file" /><br />
             <p class="error hide">{% trans "Please select a file at first." %}</p>
             <input type="button" value="{% trans "Submit" %}" />
@@ -200,12 +200,14 @@
 {% endblock %}
 
 {% block extra_script %}
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.min.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/codecBytes.js"></script>
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
 <script type="text/javascript">
-var valid_time_period = 60 * 60 * 1000; // passwd will be kept for 1 h
+// 'passwd' will be kept for 1 hour.
+var valid_time_period = 60 * 60 * 1000;
+// key, iv used in file encrypt/decrypt
 var enc_key, enc_iv;
 if ('localStorage' in window && window['localStorage'] !== null) {
     // 'localStorage' is supported
@@ -232,27 +234,18 @@ function decrypt_repo() {
             err.html("{% trans "Please enter the password." %}").removeClass('hide');
             return false;
         }
-
-        var salt = sjcl.codec.bytes.toBits([0xda, 0x90, 0x45, 0xc3, 0x06, 0xc7, 0xcc, 0x26]);
-        var magic_array = sjcl.misc.pbkdf2('{{repo.id}}' + passwd, salt, 1000, 32*8, null),
-            magic_str = sjcl.codec.hex.fromBits(magic_array); //convert to hex
+        
+        var magic_str = gen_magic_str('{{repo.id}}', passwd);
         if (magic_str == '{{repo.magic}}') {
             decrypt_form.remove();
             $('#main').show();
+            
+            var fileKey = new FileKey(passwd);
+            var file_key = fileKey.decrypt('{{repo.random_key}}');
 
-            var key_array = sjcl.misc.pbkdf2(passwd, salt, 1000, 32*8, null);
-            var iv_array = sjcl.misc.pbkdf2(key_array, salt, 10, 32*8, null);
-            var key =  sjcl.codec.hex.fromBits(key_array);
-            var iv = sjcl.codec.hex.fromBits(iv_array);
-
-            var secret_key_array = CryptoJS.AES.decrypt(CryptoJS.enc.Hex.parse('{{repo.random_key}}').toString(CryptoJS.enc.Base64), CryptoJS.enc.Hex.parse(key), {iv: CryptoJS.enc.Hex.parse(iv)});
-            var secret_key = secret_key_array.toString(CryptoJS.enc.Hex);
-
-            var enc_key_array = sjcl.misc.pbkdf2(sjcl.codec.hex.toBits(secret_key), salt, 1000, 32*8, null);
-            var enc_iv_array = sjcl.misc.pbkdf2(enc_key_array, salt, 10, 32*8, null);
-
-            enc_key = sjcl.codec.hex.fromBits(enc_key_array);
-            enc_iv = sjcl.codec.hex.fromBits(enc_iv_array);
+            var enc_obj = gen_enc_key_iv(file_key);
+            enc_key = enc_obj.key;
+            enc_iv = enc_obj.iv;
             if ('localStorage' in window && window['localStorage'] !== null) {
                 var repo_id = '{{repo.id}}';
                 localStorage[repo_id + '_decrypt_t'] = new Date().getTime();
@@ -512,7 +505,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
     });
 });
 
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 function wordArray2ab(wordArray) {
     // Shortcuts
     var words = wordArray.words;
@@ -533,15 +526,19 @@ function encAndSubmitFile(file, prepare_fd, submit_url) {
         file.slice = file.mozSlice || file.webkitSlice || file.slice; // compatibility
         var pos = 0;
         var slices = [];
-        if (file.size == 0) {
-            return [file]; // It is required to be encrypted.
-        }
         while(pos < file.size){
           slices.push(file.slice(pos, pos += 1024 * 1024));
         }     
         return slices;
     }
     var blocks = sliceFile(file), encrypted_blocks = [];
+
+    // file.size is 0, do not encrypt
+    if (blocks.length == 0) {
+        onFinish();
+        return;
+    }
+
     var workers = [], workersCount = 4, i, len;
     for (i = 0; i < workersCount; i++) {
         workers.push(new Worker('{{MEDIA_URL}}js/file_crypto.js'));
@@ -608,7 +605,7 @@ function dirOP() {
 
 $('.path .dir-link').click(dirlinkClick);
 
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
     $('#simplemodal-container').css({'height':'auto'});
@@ -883,7 +880,7 @@ $('.checkbox-orig', context).unbind().click(function() {
 
 $('.dir-link', context).click(dirlinkClick);
 
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 
 $('.file-download').click(function() {
     var file_name = $(this).parents('tr').attr('data-name'),
@@ -1172,7 +1169,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     return false;
 });
 
-{% if repo.enc_version == 2 and not keep_enc_repo_passwd and repo.encrypted %}
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('.file-update', context).click(function() {
     $('#update-file-dialog').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});

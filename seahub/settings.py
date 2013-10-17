@@ -180,8 +180,8 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# keep password of encrypted repo (on the server)
-KEEP_ENC_REPO_PASSWD = True
+# for v2 enc repo: encrypt/decrypt on the server
+SERVER_CRYPTO = True
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024

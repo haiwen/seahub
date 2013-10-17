@@ -25,7 +25,7 @@ from seahub.signals import repo_created
 from seahub.utils import check_filename_with_rename
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
-from seahub.settings import KEEP_ENC_REPO_PASSWD
+from seahub.settings import SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -184,7 +184,7 @@ def list_dir(request, repo_id):
                             status=403, content_type=content_type)
 
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -250,7 +250,7 @@ def list_dir_more(request, repo_id):
                             status=403, content_type=content_type)
 
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
            and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -865,7 +865,7 @@ def get_current_commit(request, repo_id):
                             status=403, content_type=content_type)
 
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),

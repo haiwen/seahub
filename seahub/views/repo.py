@@ -20,7 +20,7 @@ from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link
-from seahub.settings import ENABLE_SUB_LIBRARY, KEEP_ENC_REPO_PASSWD
+from seahub.settings import ENABLE_SUB_LIBRARY, SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -189,7 +189,7 @@ def render_repo(request, repo):
                 }, context_instance=RequestContext(request))
 
     if repo.encrypted and \
-        (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
@@ -230,7 +230,7 @@ def render_repo(request, repo):
         repo_group_str = ''
     upload_url = get_upload_url(request, repo.id)
 
-    if repo.encrypted and repo.enc_version == 2 and not KEEP_ENC_REPO_PASSWD:
+    if repo.encrypted and repo.enc_version == 2 and not SERVER_CRYPTO:
         ajax_upload_url = get_blks_upload_url(request, repo.id)
         ajax_update_url = get_blks_update_url(request, repo.id)
     else:
@@ -316,7 +316,7 @@ def repo_history_view(request, repo_id):
                 }, context_instance=RequestContext(request))
 
     if repo.encrypted and \
-        (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,

@@ -63,30 +63,14 @@ $('#repo-create-form').submit(function() {
             return false;
         }
 
-        {% if not keep_enc_repo_passwd %}
-        // don't send the password to the server
-        var salt = sjcl.codec.bytes.toBits([0xda, 0x90, 0x45, 0xc3, 0x06, 0xc7, 0xcc, 0x26]);
+        {% if not server_crypto %}
+        // gen uu_id as new repo_id
         var uu_id = uuid.v4();
-        var magic_array = sjcl.misc.pbkdf2(uu_id + passwd, salt, 1000, 32*8, null); // 32 bytes
-        var magic_str = sjcl.codec.hex.fromBits(magic_array);
 
-        var secret_array;
-        if (window.crypto && window.crypto.getRandomValues) {
-            secret_array = new Uint32Array(8);
-            window.crypto.getRandomValues(secret_array);
-        } else {
-            secret_array = [];
-            for (var i = 0; i < 8; i++) {
-                secret_array.push(parseInt(Math.random() * Math.pow(2,32)));
-            }
-        }
+        var magic_str = gen_magic_str(uu_id, passwd);
 
-        var key_array = sjcl.misc.pbkdf2(passwd, salt, 1000, 32*8, null);
-        var iv_array = sjcl.misc.pbkdf2(key_array, salt, 10, 32*8, null);
-        var key =  sjcl.codec.hex.fromBits(key_array);
-        var iv = sjcl.codec.hex.fromBits(iv_array);
-        var random_key_obj = CryptoJS.AES.encrypt(CryptoJS.lib.WordArray.create(secret_array), CryptoJS.enc.Hex.parse(key), {iv: CryptoJS.enc.Hex.parse(iv)});
-        var random_key = random_key_obj.ciphertext.toString(CryptoJS.enc.Hex); // convert to hex
+        var fileKey = new FileKey(passwd);
+        var encrypted_file_key = fileKey.gen_enc();
         {% endif %}
     }
 
@@ -105,7 +89,7 @@ $('#repo-create-form').submit(function() {
     {% endif %}
 
     if (encrypted) {
-        {% if keep_enc_repo_passwd %}
+        {% if server_crypto %}
         $.extend(post_data, {
             'passwd': passwd,
             'passwd_again': passwd_again
@@ -114,7 +98,7 @@ $('#repo-create-form').submit(function() {
         $.extend(post_data, {
             'uuid': uu_id,
             'magic_str': magic_str,
-            'random_key': random_key
+            'encrypted_file_key': encrypted_file_key
         });
         {% endif %}
     }

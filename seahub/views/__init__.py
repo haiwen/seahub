@@ -89,7 +89,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, KEEP_ENC_REPO_PASSWD
+    ENABLE_SUB_LIBRARY, SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -610,7 +610,7 @@ def repo_history(request, repo_id):
 
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -667,7 +667,7 @@ def repo_view_snapshot(request, repo_id):
 
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -721,7 +721,7 @@ def repo_history_revert(request, repo_id):
 
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -801,7 +801,7 @@ def repo_history_changes(request, repo_id):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and KEEP_ENC_REPO_PASSWD)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
             and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
@@ -1114,17 +1114,17 @@ def public_repo_create(request):
     passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
-    random_key = form.cleaned_data['random_key']
+    encrypted_file_key = form.cleaned_data['encrypted_file_key']
     user = request.user.username
 
     try:
         if not encryption:
             repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
         else:
-            if KEEP_ENC_REPO_PASSWD:
+            if SERVER_CRYPTO:
                 repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
             else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, random_key, enc_version=2)
+                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
 
         # set this repo as inner pub
         seafile_api.add_inner_pub_repo(repo_id, permission)
@@ -1391,16 +1391,16 @@ def repo_create(request):
     passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
-    random_key = form.cleaned_data['random_key']
+    encrypted_file_key = form.cleaned_data['encrypted_file_key']
     user = request.user.username
     try:
         if not encryption:
             repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
         else:
-            if KEEP_ENC_REPO_PASSWD:
+            if SERVER_CRYPTO:
                 repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
             else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, random_key, enc_version=2)
+                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
     except SearpcError, e:
         repo_id = None
 

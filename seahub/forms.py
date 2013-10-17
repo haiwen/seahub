@@ -66,7 +66,7 @@ class RepoCreateForm(forms.Form):
             })
     uuid = forms.CharField(required=False)
     magic_str = forms.CharField(required=False)
-    random_key = forms.CharField(required=False)
+    encrypted_file_key = forms.CharField(required=False)
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_filename(repo_name):
@@ -80,7 +80,7 @@ class RepoCreateForm(forms.Form):
         if int(encryption) == 0:
             return self.cleaned_data
 
-        if settings.KEEP_ENC_REPO_PASSWD:
+        if settings.SERVER_CRYPTO:
             passwd = self.cleaned_data['passwd']
             passwd_again = self.cleaned_data['passwd_again']
             if not (passwd and passwd_again):
@@ -90,8 +90,8 @@ class RepoCreateForm(forms.Form):
         else:
             uuid = self.cleaned_data['uuid']
             magic_str = self.cleaned_data['magic_str']
-            random_key = self.cleaned_data['random_key']
-            if not (uuid and magic_str and random_key):
+            encrypted_file_key = self.cleaned_data['encrypted_file_key']
+            if not (uuid and magic_str and encrypted_file_key):
                 raise forms.ValidationError(_("Argument missing"))
 
         return self.cleaned_data

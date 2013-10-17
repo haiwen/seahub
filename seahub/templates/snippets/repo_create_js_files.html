@@ -1,0 +1,6 @@
+{% if not server_crypto %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/uuid.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
+{% endif %}
