@@ -594,7 +594,7 @@ function encAndSubmitFile(file, fd, submit_url) {
             fd.append('file', blk, ordered_enc_blocks[i].id);
         }
 
-        showMsg("{% trans "Start uploading ..." %}", 'info');
+        showMsg("{% trans "Uploading ..." %}", 'info');
         $.ajax({
             url: submit_url,
             type: "POST",
