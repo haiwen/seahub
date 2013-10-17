@@ -1,0 +1,10 @@
+{% load i18n %}{% blocktrans %}You're receiving this e-mail because your account on {{site_name}} is activated by site admin.{% endblocktrans %}
+
+{% trans "Please click the following link to log in:" %}
+{{login_url}}
+
+{% trans "Your username, in case you've forgotten:" %} {{ username }}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}

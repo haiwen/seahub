@@ -298,7 +298,7 @@ from django.dispatch import receiver
 from django.utils.http import urlquote
 
 from registration.signals import user_registered
-from seahub.utils import get_service_url
+from seahub.utils import get_site_scheme_and_netloc
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -318,7 +318,7 @@ def email_admin_on_registration(sender, **kwargs):
         ctx_dict = {
             "site_name": settings.SITE_NAME,
             "user_search_link": "%s%s?email=%s" % (
-                get_service_url().rstrip('/'), reverse("user_search"),
+                get_site_scheme_and_netloc(), reverse("user_search"),
                 urlquote(reg_email)),
             }
         subject = render_to_string('registration/activate_request_email_subject.txt',

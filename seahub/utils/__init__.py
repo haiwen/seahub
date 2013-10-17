@@ -10,6 +10,7 @@ import tempfile
 import locale
 import ConfigParser
 from datetime import datetime
+from urlparse import urlparse
 
 import ccnet
 
@@ -802,6 +803,18 @@ def get_service_url():
     """
     return SERVICE_URL
 
+def get_site_scheme_and_netloc():
+    """Return a string contains site scheme and network location part from
+    service url.
+    
+    For example:
+    >>> get_site_scheme_and_netloc("https://example.com:8000/seafile/")
+    https://example.com:8000
+
+    """
+    parse_result = urlparse(get_service_url())
+    return "%s://%s" % (parse_result.scheme, parse_result.netloc)
+    
 def gen_dir_share_link(token):
     """Generate directory share link.
     """

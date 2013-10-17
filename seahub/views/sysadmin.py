@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import Context, loader, RequestContext
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import RequestSite
 
@@ -30,6 +31,7 @@ from seahub.share.models import FileShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+from seahub.utils import get_site_scheme_and_netloc
 
 logger = logging.getLogger(__name__)
 
@@ -302,6 +304,24 @@ def user_deactivate(request, user_id):
         
     return HttpResponseRedirect(next)
 
+def email_user_on_activation(user):
+    """Send an email to user when admin activate his/her account.
+    """
+    ctx_dict = {
+        "site_name": settings.SITE_NAME,
+        "login_url": "%s%s" % (get_site_scheme_and_netloc(),
+                               reverse('auth_login')),
+        "username": user.email,
+        }
+    subject = render_to_string('sysadmin/user_activation_email_subject.txt',
+                               ctx_dict)
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
+
+    message = render_to_string('sysadmin/user_activation_email.txt', ctx_dict)
+
+    user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+    
 @login_required
 @sys_staff_required
 def user_toggle_status(request, user_id):
@@ -316,8 +336,20 @@ def user_toggle_status(request, user_id):
         user = User.objects.get(id=int(user_id))
         user.is_active = bool(user_status)
         user.save()
+
+        if user.is_active is True:
+            try:
+                email_user_on_activation(user)
+                email_sent = True
+            except Exception as e:
+                logger.error(e)
+                email_sent = False
+
+            return HttpResponse(json.dumps({'success': True,
+                                            'email_sent': email_sent,
+                                            }), content_type=content_type)
         return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)        
+                            content_type=content_type)
     except User.DoesNotExist:
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)

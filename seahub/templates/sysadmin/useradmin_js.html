@@ -44,10 +44,18 @@ $('.user-status-select').change(function() {
         dataType: 'json',
         cache: false,
         success: function(data) {
-            if (data['success']) {
+            if (data['email_sent']) {
+                feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
+                select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+            
+            } else if (data['email_sent'] === false) {
+                feedback("{% trans "Edit succeeded, but failed to send email, please check your email configuration." %}", 'success');
+                select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+            } else {
                 feedback("{% trans "Edit succeeded" %}", 'success');
                 select.prev().children('.user-status-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
             }
+            
             select.addClass('hide');
             select.prev().removeClass('hide');
         },
