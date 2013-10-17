@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     # Folowing is only for debug, will be removed 
     #url(r'^html/newreply2/$', api_new_replies),
     #url(r'^html/events2/$', activity2),
-    #url(r'^html/more_events/$', events2),
+    #url(r'^html/more_events/$', events2, name="more_events"),
     #url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', api_repo_history_changes, name='api_repo_history_changes'),
 
     #url(r'^html/discussions2/(?P<group_id>\d+)/$', discussions2, name="api_discussions2"),

@@ -306,9 +306,12 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "enc_version":r.enc_version,
                 "permission": 'rw', # Always have read-write permission to owned repo
                 }
+            if r.encrypted:
+                repo["enc_version"] = r.enc_version
+                repo["magic"] = r.magic
+                repo["random_key"] = r.random_key
             repos_json.append(repo)
 
         shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
@@ -331,9 +334,12 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "enc_version":r.enc_version,
                 "permission": r.permission,
                 }
+            if r.encrypted:
+                repo["enc_version"] = r.enc_version
+                repo["magic"] = r.magic
+                repo["random_key"] = r.random_key
             repos_json.append(repo)
 
         groups = get_personal_groups_by_user(email)
@@ -353,11 +359,13 @@ class Repos(APIView):
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
-                    "enc_version":r.enc_version,
                     "permission": check_permission(r.id, email),
                     }
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
-
         return Response(repos_json)
 
     def post(self, request, format=None):
@@ -478,10 +486,13 @@ class Repo(APIView):
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
-            "enc_version":repo.encversion,
             "root":root_id,
             "permission": check_permission(repo.id, username),
             }
+        if repo.encrypted:
+            repo_json["enc_version"] = repo.enc_version
+            repo_json["magic"] = repo.magic
+            repo_json["random_key"] = repo.random_key
 
         return Response(repo_json)
 
