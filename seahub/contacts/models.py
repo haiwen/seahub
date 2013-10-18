@@ -29,14 +29,15 @@ class ContactManager(models.Manager):
         """Get a user's registered contacts.
 
         Returns:
-            A list contains contact emails.
+            A list contains the contacts.
         """
         contacts = [ c.contact_email for c in super(
                 ContactManager, self).filter(user_email=user_email) ]
         emailusers = ccnet_threaded_rpc.filter_emailusers_by_emails(
             ','.join(contacts))
 
-        return [ e.email for e in emailusers ]
+        return [ Contact(user_email=user_email, contact_email=e.email) \
+                     for e in emailusers ]
 
 class Contact(models.Model):
     """Record user's contacts."""
