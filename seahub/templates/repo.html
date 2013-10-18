@@ -42,9 +42,13 @@
         </div>
     </div>
 
+    {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+    <div id="repo-file-list"></div>
+    {% else %}
     <div id="repo-file-list">
         {% include 'snippets/repo_dir_data.html' %}
     </div>
+    {% endif %}
 
     <!-- popups -->
     {% if user_perm == 'rw' %}
@@ -206,7 +210,44 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
+{% endif %}
 <script type="text/javascript">
+// refresh #repo-file-list, and do things needed to do after that.
+function reqDirData(url, func) {
+    var orig_wtop = $(window).scrollTop();
+    $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            $('#repo-file-list').html(data['html']);
+            
+            // both original dir list and new dir list are long
+            var repo_top = $('#repo-top'),
+                h = repo_top.offset().top + repo_top.outerHeight(true);
+            if (orig_wtop > h && $(window).scrollTop() == orig_wtop) {
+                $(window).scrollTop(h);
+            }
+
+            cur_path = data['path']; // update cur_path
+            if (func) {
+                func(data);
+            }
+            dirOP();
+            // in case the 'discuss' & #dirents-op popup is open before this request
+            $('#discuss-to-group, #discuss-to-group-caret, #dirents-op').addClass('hide');
+        },
+        error:function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).err_msg, 'error');
+            } else {
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
+            }
+        }
+    });
+}
+
+{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 // 'passwd' will be kept for 1 hour.
 var valid_time_period = 60 * 60 * 1000;
 // key, iv used in file encrypt/decrypt
@@ -218,7 +259,9 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     if (!last_decrypt_t || (new Date().getTime() - last_decrypt_t > valid_time_period)) {
         decrypt_repo();
     } else {
-        $('#main').show();
+        reqDirData('{% url 'repo_dir_data' repo.id %}' + location.search, function() {
+            $('#main').show();
+        });
         enc_key = localStorage['{{repo.id}}_enc_key'];
         enc_iv = localStorage['{{repo.id}}_enc_iv'];
     }
@@ -240,7 +283,9 @@ function decrypt_repo() {
         var magic_str = gen_magic_str('{{repo.id}}', passwd);
         if (magic_str == '{{repo.magic}}') {
             decrypt_form.remove();
-            $('#main').show();
+            reqDirData('{% url 'repo_dir_data' repo.id %}' + location.search, function() {
+                $('#main').show();
+            });
             
             var fileKey = new FileKey(passwd);
             var file_key = fileKey.decrypt('{{repo.random_key}}');
@@ -260,8 +305,8 @@ function decrypt_repo() {
         return false;
     });
 }
-</script>
 {% endif %}
+</script>
 {% upload_js %}
 <script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
 <script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
@@ -288,7 +333,7 @@ window.locale = {
     }   
 };
 
-//download, trash
+//download, trash, repo setting
 $('#repo-download-btn').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}');
 });
@@ -309,6 +354,7 @@ function setDirentsOpPos() {
     });
 }
 
+// del multi dirents
 $('#del-dirents').click(function() {
     $('#confirm-popup').modal({appendTo:'#main'});
     $('#simplemodal-container').css({'height':'auto'});
@@ -375,6 +421,7 @@ var del_dirents = function() {
     });
 };
 
+// mv, cp multi dirents
 $('#mv-dirents, #cp-dirents').click(function() {
     var form = $('#mv-form'), op;
     form.modal({appendTo:'#main', autoResize:true, focus:false});
@@ -618,6 +665,7 @@ function encAndSubmitFile(file, fd, submit_url) {
     }
 }
 {% endif %}
+
 // js on repo file list
 var no_file_op_popup = true;
 
@@ -820,39 +868,6 @@ function changeLocation(data) {
     if (window.history.pushState) {
         window.history.pushState({'path': e(data['path'])},'','?p=' + e(data['path'])); // the 3rd argument is a relative url
     }
-}
-function reqDirData(url, func) {
-    var orig_wtop = $(window).scrollTop();
-    $.ajax({
-        url: url,
-        cache: false,
-        dataType: 'json',
-        success: function(data) {
-            $('#repo-file-list').html(data['html']);
-            
-            // both original dir list and new dir list are long
-            var repo_top = $('#repo-top'),
-                h = repo_top.offset().top + repo_top.outerHeight(true);
-            if (orig_wtop > h && $(window).scrollTop() == orig_wtop) {
-                $(window).scrollTop(h);
-            }
-
-            cur_path = data['path']; // update cur_path
-            if (func) {
-                func(data);
-            }
-            dirOP();
-            // in case the 'discuss' & #dirents-op popup is open before this request
-            $('#discuss-to-group, #discuss-to-group-caret, #dirents-op').addClass('hide');
-        },
-        error:function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).err_msg, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-        }
-    });
 }
 
 // choose featured filetype
