@@ -419,7 +419,7 @@ if 'win32' in sys.platform:
     fp.write("%d\n" % os.getpid())
     fp.close()
 
-SEAFILE_VERSION = '1.8'
+SEAFILE_VERSION = '2.0'
 
 # Put here after loading other settings files if `SITE_ROOT` is modified in
 # other settings files.
