@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
 
     'registration',
+    'captcha',
 
     'seahub.api2',
     'seahub.avatar',
@@ -338,6 +339,11 @@ LOGGING = {
         },
     }
 }
+
+#Login Attempt
+import datetime
+LOGIN_ATTEMPT_LIMIT = 3
+LOGIN_ATTEMPT_TIMEOUT = datetime.timedelta(minutes=15)
 
 #################
 # Email sending #

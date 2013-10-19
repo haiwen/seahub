@@ -9,6 +9,8 @@ from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED
 
+from captcha.fields import CaptchaField
+
 class AuthenticationForm(forms.Form):
     """
     Base class for authenticating users. Extend this to get a form that accepts
@@ -26,7 +28,10 @@ class AuthenticationForm(forms.Form):
         """
         self.request = request
         self.user_cache = None
+        use_captcha = kwargs.pop('use_captcha', False)
         super(AuthenticationForm, self).__init__(*args, **kwargs)
+        if use_captcha:
+            self.fields['captcha'] = CaptchaField()
 
     def clean(self):
         username = self.cleaned_data.get('username')
