@@ -90,6 +90,7 @@
          {% endfor %}
          </p>
          <div id="op-after-edit" class="fright vh">
+             <span id="saved-tip" class="tip hide">{% trans "Draft saved." %}</span>
              {% if filetype == 'Markdown' %}
              <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
              <button id="preview-btn">{% trans "Preview" %}</button>
@@ -153,26 +154,6 @@
                             <td><pre>![{% trans "alt text" %}](https://cloud.seafile.com/media/img/logo.png)</pre></td>
                             <td><img src="https://cloud.seafile.com/media/img/logo.png" alt="" /></td>
                         </tr>
-<!--                         <tr> -->
-<!--                             <td><pre>* {% trans "unordered list" %} -->
-<!-- * {% trans "leave empty lines around the list" %}</pre></td> -->
-<!--                             <td> -->
-<!--                                 <ul> -->
-<!--                                     <li>{% trans "unordered list" %}</li> -->
-<!--                                     <li>{% trans "leave empty lines around the list" %}</li> -->
-<!--                                 </ul> -->
-<!--                             </td> -->
-<!--                         </tr> -->
-<!--                         <tr> -->
-<!--                             <td><pre>1. {% trans "ordered list" %} -->
-<!-- 2. {% trans "leave empty lines" %}</pre></td> -->
-<!--                             <td> -->
-<!--                                 <ol> -->
-<!--                                     <li>{% trans "ordered list" %}</li> -->
-<!--                                     <li>{% trans "leave empty lines" %}</li> -->
-<!--                                 </ol> -->
-<!--                             </td> -->
-<!--                         </tr> -->
                   </tbody></table>
                   <h3>{% trans "Extended Syntax for Wiki"%}</h3>
                   <ul>
@@ -270,13 +251,38 @@
         <h3>{% trans "Draft Available" %}</h3>
         <p>{% trans "There's a saved draft for this file, would you like to load it?" %}</p>
         <button id="load-draft-btn">{% trans "Load" %}</button>
-        <button class="simplemodal-close">{% trans "Discard" %}</button>
+        <button class="simplemodal-close" id="discard-draft-btn">{% trans "Discard" %}</button>
     </div>
 {% endblock %}
 
 {% block extra_script %}
 {% if not err and file_content != None %}
+<script type="text/javascript">
+if ('localStorage' in window && window['localStorage'] !== null) {
+    var browserStorage = {
+        set : function(key, value) {
+            try {
+                localStorage.setItem(key, value + "");
+            } catch (e) {
+                feedback('{% trans "Failed to save draft, exceeded max quota" %}', 'error');
+            }
+        },
+        get : function(key) {
+            return localStorage.getItem(key);
+        },
+        remove : function(key) {
+            localStorage.removeItem(key);
+        }
+    };
 
+    var key = '{{repo.id}}_{{path}}_draft';
+
+    var saved_draft = browserStorage.get(key);
+    if (saved_draft) {
+        $('#load-draft').modal();
+    }
+}
+</script>
 {% if filetype == 'Sf' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
@@ -320,106 +326,49 @@ $(window).scroll(function() {
     {% endif %}
 });
 
-var browserStorage = {
+if ('localStorage' in window && window['localStorage'] !== null) {
 
-    current_url : location.hostname + location.pathname + location.search,
-
-    isAvailable : function() {
-        try {
-            return localStorage.getItem;
-        } catch (e) {
-            return false;
-        }
-    },
-
-    set : function(key, value) {
-        try {
-            localStorage.setItem(key, value + "");
-        } catch (e) {
-            feedback('{% trans "Failed to save draft, exceeded max quota" %}', 'error');
-        }
-    },
-
-    get : function(key) {
-        return localStorage.getItem(key);
-    },
-
-    remove : function(key) {
-        localStorage.removeItem(key);
-    }
-
-};
-
-if (browserStorage.isAvailable()) {
-
-    var key = browserStorage.current_url;
-    var md_key_event_on = true;
-
-    function saveDraftByTimeout() {
+    var saved_tip = $('#saved-tip');
+    function saveDraft() {
+        var draft;
         {% if filetype == 'Sf' %}
-        $('#sf').off('keydown');
+        draft = $('#sf').html();
         {% endif %}
         {% if filetype == 'Text' %}
-        md_key_event_on = false;
+        draft = editor.getValue();
         {% endif %}
         {% if filetype == 'Markdown' %}
-        $('#wmd-input').off('keydown');
+        draft = $('#wmd-input').val();
         {% endif %}
-        setTimeout(function() {
-            var draft;
-            {% if filetype == 'Sf' %}
-            draft = $('#sf').html();
-            $('#sf').on('keydown', saveDraftByTimeout);
-            {% endif %}
-            {% if filetype == 'Text' %}
-            draft = editor.getValue();
-            md_key_event_on = true;
-            {% endif %}
-            {% if filetype == 'Markdown' %}
-            draft = $('#wmd-input').val();
-            $('#wmd-input').on('keydown', saveDraftByTimeout);
-            {% endif %}
-            browserStorage.set(key, draft);
-            feedback('{% trans "Draft successfully saved" %}', 'success', 1000);
-        }, 5000);
+        browserStorage.set(key, draft);
+        saved_tip.removeClass('hide');
     }
 
-    $('#file-edit-cancel').click(function() {
-        browserStorage.remove(key);
-    });
-
-    var saved_draft = browserStorage.get(key);
-    if (saved_draft !== null) {
-        $('#load-draft').modal({
-            onClose : function() {
-                $.modal.close();
-                browserStorage.remove(key);
-            }
-        });
-        $('#simplemodal-container').css({'height':'auto'});
-        $('#load-draft-btn').click(function() {
-            $.modal.close();
-            {% if filetype == 'Sf' %}
-            $('#sf').html(saved_draft);
-            {% endif %}
-            {% if filetype == 'Text' %}
-            editor.setValue(saved_draft);
-            {% endif %}
-            {% if filetype == 'Markdown' %}
-            $('#wmd-input').val(saved_draft);
-            {% endif %}
-            feedback('{% trans "Draft successfully loaded" %}', 'success', 1000);
-            browserStorage.set(key, saved_draft);
-        });
-    }
 
     {% if filetype == 'Sf' %}
-    $('#sf').on('keydown', saveDraftByTimeout);
+    $('#sf').on('keyup', saveDraft);
     {% endif %}
     {% if filetype == 'Markdown' %}
-    $('#wmd-input').on('keydown', saveDraftByTimeout);
+    $('#wmd-input').on('keyup', saveDraft);
     {% endif %}
 
+    $('#load-draft-btn').click(function() {
+        $.modal.close();
+        {% if filetype == 'Sf' %}
+        $('#sf').html(saved_draft);
+        {% endif %}
+        {% if filetype == 'Text' %}
+        editor.setValue(saved_draft);
+        {% endif %}
+        {% if filetype == 'Markdown' %}
+        $('#wmd-input').val(saved_draft);
+        {% endif %}
+        feedback('{% trans "Draft successfully loaded" %}', 'success', 1000);
+    });
+
+    $('#discard-draft-btn, #file-edit-cancel').click(function() {
+        browserStorage.remove(key);
+    });
 }
 
 {% if filetype == 'Text' %}
@@ -441,8 +390,10 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
     },
     autofocus: true,
     onKeyEvent: function(instance, event) {
-        if (event.type === 'keydown' && md_key_event_on) {
-            saveDraftByTimeout();
+        if (event.type == 'keyup') {
+            if ('localStorage' in window && window['localStorage'] !== null) {
+                saveDraft();
+            }
         }
     }
 });
@@ -575,9 +526,10 @@ function editSubmit() {
         beforeSend: prepareCSRFToken,
         data: {content: content, encoding: $('#file-enc').val()},
         success: function(data) {
+            if ('localStorage' in window && window['localStorage'] !== null) {
+                browserStorage.remove(key);
+            }
             location.href = data['href'];
-            var key = browserStorage.current_url;
-            browserStorage.remove(key);
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {

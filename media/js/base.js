@@ -57,7 +57,15 @@ $(document).click(function(e) {
 // clear repo enc info when log out
 $('#logout').click(function() {
     if ('localStorage' in window && window['localStorage'] !== null) {
-        localStorage.clear();
+        if (localStorage.length > 0) {
+            for (var key in localStorage) {
+                if (key.lastIndexOf('_decrypt_t') == 36 ||
+                    key.lastIndexOf('_enc_key') == 36 ||
+                    key.lastIndexOf('_enc_iv') == 36) { // key: {{repo_id}}_xx
+                    localStorage.removeItem(key);
+                }
+            }
+        }
     }
 });
 if ($.browser.mozilla || $.browser.msie) {
