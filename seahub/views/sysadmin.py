@@ -588,11 +588,10 @@ def sys_repo_transfer(request):
 def sys_list_orphan(request):
     try:
         repos = seafile_api.get_orphan_repo_list()
-        return repos
     except Exception as e:
         logger.error(e)
         repos = []
-    
+
     return render_to_response('sysadmin/sys_list_orphan.html', {
             'repos': repos,
             }, context_instance=RequestContext(request))
