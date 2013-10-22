@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-22 00:50-0700\n"
+"POT-Creation-Date: 2013-10-22 05:19-0700\n"
 "PO-Revision-Date: 2013-08-12 15:22+0100\n"
 "Last-Translator: Pi3R1k <pierrick.brun@gmail.com>\n"
 "Language-Team: français\n"
@@ -296,8 +296,8 @@ msgstr "Chargement..."
 #: seahub/contacts/templates/contacts/contact_list.html:160
 #: seahub/group/templates/group/msg_js.html:155 seahub/templates/base.html:255
 #: seahub/templates/base.html.py:375 seahub/templates/file_edit.html:592
-#: seahub/templates/repo.html:244 seahub/templates/repo.html.py:1306
-#: seahub/templates/repo.html:1488 seahub/templates/repo.html.py:1571
+#: seahub/templates/repo.html:244 seahub/templates/repo.html.py:1304
+#: seahub/templates/repo.html:1486 seahub/templates/repo.html.py:1569
 #: seahub/templates/repo_settings.html:100
 #: seahub/templates/repo_settings.html:136
 #: seahub/templates/view_file_base.html:151
@@ -725,7 +725,7 @@ msgid "Auto merge by seafile system"
 msgstr "Fusion automatique par seafile"
 
 #: seahub/base/templatetags/seahub_tags.py:174
-#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:1403
+#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:1401
 msgid "Just now"
 msgstr "À l'instant"
 
@@ -1740,11 +1740,6 @@ msgstr "Supprimer des membres"
 msgid "Really want to delete %s ?"
 msgstr "Voulez vous vraiment supprimer %s ?"
 
-#: seahub/group/templates/group/group_manage.html:135
-#, fuzzy
-msgid "Email can not be blank."
-msgstr "L\\'adresse mail ne peut pas être vide"
-
 #: seahub/group/templates/group/group_members.html:25
 #: seahub/templates/pubuser.html:29
 msgid "Add to Contacts"
@@ -2591,7 +2586,7 @@ msgstr "Introduction"
 msgid "Forum"
 msgstr "Forum"
 
-#: seahub/templates/base.html:203
+#: seahub/templates/base.html:203 seahub/templates/base.html.py:225
 msgid "Client"
 msgstr "Client"
 
@@ -2602,11 +2597,6 @@ msgstr "Seafile pour Windows, Mac et Linux"
 #: seahub/templates/base.html:211 seahub/templates/base.html.py:233
 msgid "Help"
 msgstr "Aide"
-
-#: seahub/templates/base.html:225
-#, fuzzy
-msgid "Syncing Client"
-msgstr "Annuler la synchronisation du Client."
 
 #: seahub/templates/base.html:239
 msgid "Server Version: "
@@ -3477,7 +3467,7 @@ msgstr "Répertoires supprimés"
 msgid "Copy selected directories/files to:"
 msgstr "Répertoires supprimés"
 
-#: seahub/templates/repo.html:462 seahub/templates/repo.html.py:1440
+#: seahub/templates/repo.html:462 seahub/templates/repo.html.py:1438
 #: seahub/views/ajax.py:572 seahub/views/ajax.py:733
 msgid "Invalid destination path"
 msgstr "Chemin de destination invalide"
@@ -3535,107 +3525,107 @@ msgstr ""
 msgid "Uploading ..."
 msgstr "chargement..."
 
-#: seahub/templates/repo.html:657 seahub/templates/repo.html.py:1022
+#: seahub/templates/repo.html:657 seahub/templates/repo.html.py:929
 msgid "Done!"
 msgstr ""
 
-#: seahub/templates/repo.html:933
+#: seahub/templates/repo.html:939
 #, fuzzy
 msgid "Downloading..."
 msgstr "chargement..."
 
-#: seahub/templates/repo.html:966
+#: seahub/templates/repo.html:972
 msgid "Downloading, %(num)s% complete."
 msgstr ""
 
-#: seahub/templates/repo.html:987
+#: seahub/templates/repo.html:993
 #, fuzzy
 msgid "Decrypting..."
 msgstr "Création..."
 
-#: seahub/templates/repo.html:1004
+#: seahub/templates/repo.html:1010
 msgid "Decrypting, %(num)s% complete."
 msgstr ""
 
-#: seahub/templates/repo.html:1115
+#: seahub/templates/repo.html:1113
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s a été correctement supprimé."
 
-#: seahub/templates/repo.html:1137
+#: seahub/templates/repo.html:1135
 msgid "Rename File"
 msgstr "Renommer le fichier"
 
-#: seahub/templates/repo.html:1139
+#: seahub/templates/repo.html:1137
 msgid "Rename Directory"
 msgstr "Renommage du répertoire"
 
-#: seahub/templates/repo.html:1157
+#: seahub/templates/repo.html:1155
 msgid "Copy File"
 msgstr "Copier le fichier"
 
-#: seahub/templates/repo.html:1159
+#: seahub/templates/repo.html:1157
 msgid "Move File"
 msgstr "Déplacer le fichier"
 
-#: seahub/templates/repo.html:1161
+#: seahub/templates/repo.html:1159
 msgid "Copy Directory"
 msgstr "Copier le répertoire"
 
-#: seahub/templates/repo.html:1163
+#: seahub/templates/repo.html:1161
 msgid "Move Directory"
 msgstr "Déplacer le répertoire"
 
-#: seahub/templates/repo.html:1168
+#: seahub/templates/repo.html:1166
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "Copie de %(name)s vers:"
 
-#: seahub/templates/repo.html:1171
+#: seahub/templates/repo.html:1169
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "Déplacement de %(name)s vers:"
 
-#: seahub/templates/repo.html:1196
+#: seahub/templates/repo.html:1194
 msgid "Directory download is not supported in this library."
 msgstr ""
 
-#: seahub/templates/repo.html:1296 seahub/templates/repo.html.py:1410
+#: seahub/templates/repo.html:1294 seahub/templates/repo.html.py:1408
 #: seahub/templates/snippets/repo_dirents.html:51
 msgid "unstarred"
 msgstr "Retirer des favoris"
 
-#: seahub/templates/repo.html:1298
+#: seahub/templates/repo.html:1296
 #: seahub/templates/snippets/repo_dirents.html:49
 msgid "starred"
 msgstr "favoris"
 
-#: seahub/templates/repo.html:1341 seahub/templates/repo.html.py:1382
+#: seahub/templates/repo.html:1339 seahub/templates/repo.html.py:1380
 msgid "It is required."
 msgstr "C'est requis."
 
-#: seahub/templates/repo.html:1347
+#: seahub/templates/repo.html:1345
 msgid "Only an extension there, please input a name."
 msgstr "Seulement une extension ici, entrez un nom."
 
-#: seahub/templates/repo.html:1357
+#: seahub/templates/repo.html:1355
 msgid "Creating..."
 msgstr "Création..."
 
-#: seahub/templates/repo.html:1386
+#: seahub/templates/repo.html:1384
 msgid "You have not renamed it."
 msgstr "Vous ne l'avez pas renommé."
 
-#: seahub/templates/repo.html:1419
+#: seahub/templates/repo.html:1417
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Renommé avec succès de %(old_name)s en %(new_name)s"
 
-#: seahub/templates/repo.html:1517
+#: seahub/templates/repo.html:1515
 msgid "Contacts is required."
 msgstr "Le contact est requis."
 
-#: seahub/templates/repo.html:1625
+#: seahub/templates/repo.html:1623
 #: seahub/templates/snippets/myhome_extra_script.html:42
 #, fuzzy
 msgid "Please enter emails or groups, or select some."
@@ -3729,7 +3719,7 @@ msgid "days"
 msgstr "jours"
 
 #: seahub/templates/repo_settings.html:31
-msgid "Transfer Owner"
+msgid "Transfer Ownership"
 msgstr ""
 
 #: seahub/templates/repo_settings.html:33
@@ -5194,6 +5184,14 @@ msgstr "Impossible de partager avec \"%s\", utilisateur non trouvé."
 #, fuzzy
 msgid "Failed to transfer, invalid arguments."
 msgstr "Nom de fichier contient des caractères non valides"
+
+#, fuzzy
+#~ msgid "Email can not be blank."
+#~ msgstr "L\\'adresse mail ne peut pas être vide"
+
+#, fuzzy
+#~ msgid "Syncing Client"
+#~ msgstr "Annuler la synchronisation du Client."
 
 #~ msgid "unordered list"
 #~ msgstr "Liste non ordonnée"

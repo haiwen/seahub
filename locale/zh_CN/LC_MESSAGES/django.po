@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-22 00:50-0700\n"
+"POT-Creation-Date: 2013-10-22 05:19-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,8 +294,8 @@ msgstr "加载中..."
 #: seahub/contacts/templates/contacts/contact_list.html:160
 #: seahub/group/templates/group/msg_js.html:155 seahub/templates/base.html:255
 #: seahub/templates/base.html.py:375 seahub/templates/file_edit.html:592
-#: seahub/templates/repo.html:244 seahub/templates/repo.html.py:1306
-#: seahub/templates/repo.html:1488 seahub/templates/repo.html.py:1571
+#: seahub/templates/repo.html:244 seahub/templates/repo.html.py:1304
+#: seahub/templates/repo.html:1486 seahub/templates/repo.html.py:1569
 #: seahub/templates/repo_settings.html:100
 #: seahub/templates/repo_settings.html:136
 #: seahub/templates/view_file_base.html:151
@@ -702,7 +702,7 @@ msgid "Auto merge by seafile system"
 msgstr "系统自动合并修改"
 
 #: seahub/base/templatetags/seahub_tags.py:174
-#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:1403
+#: seahub/base/templatetags/seahub_tags.py:208 seahub/templates/repo.html:1401
 msgid "Just now"
 msgstr "刚才"
 
@@ -1684,11 +1684,6 @@ msgstr "删除成员"
 msgid "Really want to delete %s ?"
 msgstr "确定要删除 %s 吗？"
 
-#: seahub/group/templates/group/group_manage.html:135
-#, fuzzy
-msgid "Email can not be blank."
-msgstr "邮箱不能为空"
-
 #: seahub/group/templates/group/group_members.html:25
 #: seahub/templates/pubuser.html:29
 msgid "Add to Contacts"
@@ -2498,7 +2493,7 @@ msgstr "介绍"
 msgid "Forum"
 msgstr "论坛"
 
-#: seahub/templates/base.html:203
+#: seahub/templates/base.html:203 seahub/templates/base.html.py:225
 msgid "Client"
 msgstr "客户端"
 
@@ -2509,11 +2504,6 @@ msgstr "Windows, Mac and Linux"
 #: seahub/templates/base.html:211 seahub/templates/base.html.py:233
 msgid "Help"
 msgstr "使用帮助"
-
-#: seahub/templates/base.html:225
-#, fuzzy
-msgid "Syncing Client"
-msgstr "取消同步"
 
 #: seahub/templates/base.html:239
 msgid "Server Version: "
@@ -3281,8 +3271,7 @@ msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr ""
-"该资料库已加密。如需在线查看，请输入解密密码。密码将在浏览器中暂"
-"存1小时。"
+"该资料库已加密。如需在线查看，请输入解密密码。密码将在浏览器中暂存1小时。"
 
 #: seahub/templates/repo.html:322
 msgid "File is too big"
@@ -3356,7 +3345,7 @@ msgstr "移动选中的文件/目录到:"
 msgid "Copy selected directories/files to:"
 msgstr "复制选中的文件/目录到:"
 
-#: seahub/templates/repo.html:462 seahub/templates/repo.html.py:1440
+#: seahub/templates/repo.html:462 seahub/templates/repo.html.py:1438
 #: seahub/views/ajax.py:572 seahub/views/ajax.py:733
 msgid "Invalid destination path"
 msgstr "目标路径无效"
@@ -3413,105 +3402,105 @@ msgstr "加密中， %(num)s% 已完成。"
 msgid "Uploading ..."
 msgstr "上传中..."
 
-#: seahub/templates/repo.html:657 seahub/templates/repo.html.py:1022
+#: seahub/templates/repo.html:657 seahub/templates/repo.html.py:929
 msgid "Done!"
 msgstr "完成!"
 
-#: seahub/templates/repo.html:933
+#: seahub/templates/repo.html:939
 msgid "Downloading..."
 msgstr "下载中..."
 
-#: seahub/templates/repo.html:966
+#: seahub/templates/repo.html:972
 msgid "Downloading, %(num)s% complete."
 msgstr "下载中，%(num)s% 已完成。"
 
-#: seahub/templates/repo.html:987
+#: seahub/templates/repo.html:993
 msgid "Decrypting..."
 msgstr "解密中..."
 
-#: seahub/templates/repo.html:1004
+#: seahub/templates/repo.html:1010
 msgid "Decrypting, %(num)s% complete."
 msgstr "解密中, %(num)s% 已完成。"
 
-#: seahub/templates/repo.html:1115
+#: seahub/templates/repo.html:1113
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s 删除成功。"
 
-#: seahub/templates/repo.html:1137
+#: seahub/templates/repo.html:1135
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: seahub/templates/repo.html:1139
+#: seahub/templates/repo.html:1137
 msgid "Rename Directory"
 msgstr "重命名目录"
 
-#: seahub/templates/repo.html:1157
+#: seahub/templates/repo.html:1155
 msgid "Copy File"
 msgstr "复制文件"
 
-#: seahub/templates/repo.html:1159
+#: seahub/templates/repo.html:1157
 msgid "Move File"
 msgstr "移动文件"
 
-#: seahub/templates/repo.html:1161
+#: seahub/templates/repo.html:1159
 msgid "Copy Directory"
 msgstr "复制目录"
 
-#: seahub/templates/repo.html:1163
+#: seahub/templates/repo.html:1161
 msgid "Move Directory"
 msgstr "移动目录"
 
-#: seahub/templates/repo.html:1168
+#: seahub/templates/repo.html:1166
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "复制 %(name)s 到："
 
-#: seahub/templates/repo.html:1171
+#: seahub/templates/repo.html:1169
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "移动 %(name)s 到："
 
-#: seahub/templates/repo.html:1196
+#: seahub/templates/repo.html:1194
 msgid "Directory download is not supported in this library."
 msgstr "该资料库不支持目录下载。"
 
-#: seahub/templates/repo.html:1296 seahub/templates/repo.html.py:1410
+#: seahub/templates/repo.html:1294 seahub/templates/repo.html.py:1408
 #: seahub/templates/snippets/repo_dirents.html:51
 msgid "unstarred"
 msgstr "未加星标"
 
-#: seahub/templates/repo.html:1298
+#: seahub/templates/repo.html:1296
 #: seahub/templates/snippets/repo_dirents.html:49
 msgid "starred"
 msgstr "已加星标"
 
-#: seahub/templates/repo.html:1341 seahub/templates/repo.html.py:1382
+#: seahub/templates/repo.html:1339 seahub/templates/repo.html.py:1380
 msgid "It is required."
 msgstr "必填项。"
 
-#: seahub/templates/repo.html:1347
+#: seahub/templates/repo.html:1345
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
-#: seahub/templates/repo.html:1357
+#: seahub/templates/repo.html:1355
 msgid "Creating..."
 msgstr "创建中..."
 
-#: seahub/templates/repo.html:1386
+#: seahub/templates/repo.html:1384
 msgid "You have not renamed it."
 msgstr "你还没重命名。"
 
-#: seahub/templates/repo.html:1419
+#: seahub/templates/repo.html:1417
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "%(old_name)s 已重命名为 %(new_name)s"
 
-#: seahub/templates/repo.html:1517
+#: seahub/templates/repo.html:1515
 msgid "Contacts is required."
 msgstr "联系人为必填项"
 
-#: seahub/templates/repo.html:1625
+#: seahub/templates/repo.html:1623
 #: seahub/templates/snippets/myhome_extra_script.html:42
 msgid "Please enter emails or groups, or select some."
 msgstr "请输入邮箱或群组，或选择一些。"
@@ -3600,7 +3589,7 @@ msgid "days"
 msgstr "天"
 
 #: seahub/templates/repo_settings.html:31
-msgid "Transfer Owner"
+msgid "Transfer Ownership"
 msgstr "转让所有权"
 
 #: seahub/templates/repo_settings.html:33
@@ -3649,8 +3638,7 @@ msgstr "没有检测到运行中的 Seafile 1.x 版客户端"
 msgid ""
 "If you're sure Seafile client is running, click the following link to "
 "continue downloading:"
-msgstr ""
-"如果你确定它在运行，请点击下面的链接以完成下载："
+msgstr "如果你确定它在运行，请点击下面的链接以完成下载："
 
 #: seahub/templates/seafile_access_check.html:9
 msgid ""
@@ -4491,8 +4479,7 @@ msgstr "编辑成功，一封邮件已发送。"
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr ""
-"编辑成功, 但发送邮件失败，请检查你的邮件配置。"
+msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 
 #: seahub/templates/sysadmin/useradmin_table.html:5
 msgid "Status"
@@ -4974,12 +4961,21 @@ msgid "Successfully transfered."
 msgstr "转让。"
 
 #: seahub/views/sysadmin.py:577
+#, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "转让失败，未找到用户 \"%s\""
 
 #: seahub/views/sysadmin.py:579
 msgid "Failed to transfer, invalid arguments."
 msgstr "转让失败， 参数无效"
+
+#, fuzzy
+#~ msgid "Email can not be blank."
+#~ msgstr "邮箱不能为空"
+
+#, fuzzy
+#~ msgid "Syncing Client"
+#~ msgstr "取消同步"
 
 #~ msgid "unordered list"
 #~ msgstr "无序列表"
