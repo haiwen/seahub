@@ -4,6 +4,9 @@
 <div class="ovhd">
     <ul class="tab-tabs-nav fleft">
         <li class="tab"><a href="#my-own-repos" class="a">{% trans "Mine" %}</a></li>
+        {% if ENABLE_SUB_LIBRARY %}
+        <li class="tab"><a href="#my-sub-repos" class="a">{% trans "Sub-libraries" %}</a></li>
+        {% endif %}
         <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
         <li class="tab"><a href="#starred-files" class="a">{% trans "Starred" %}</a></li>
     </ul>
@@ -51,6 +54,52 @@
 </div>
 {% endif %}
 </div>
+
+{% if ENABLE_SUB_LIBRARY %}
+<div id="my-sub-repos" class="hide">
+{% if sub_repos %}
+<table>
+    <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="24%">{% trans "Name" %}</th>
+        <th width="43%">{% trans "Origin" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
+    </tr>
+    {% for repo in sub_repos %}
+    <tr>
+        <td>
+            {% if repo.virtual_perm == 'rw' %}
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            {% else %}
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            {% endif %}
+        </td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/">{{ repo.name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.origin_repo_id}}/?p={{ repo.origin_path }}">{{ repo.abbrev_origin_path }}</a></td>
+        {% if repo.latest_modify %}
+        <td>{{ repo.latest_modify|translate_seahub_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+        <td>
+            <span data="{{ repo.props.id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+      {% if repo.is_original_owner %}
+            <span data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+      {% endif %}
+            <span data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You have not created any sub-libraries" %}</h2>
+  <p>{% trans "You can create a sub-library from a directory inside a library. A sub-library can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
+</div>
+{% endif %}
+</div>
+{% endif %}
 
 <div id="repos-shared-to-me" class="hide">
 {% if in_repos %}

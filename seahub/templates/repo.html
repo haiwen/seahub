@@ -198,6 +198,18 @@
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
+    
+    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+    <div id="dir-sync-popup" class="hide">
+        <h3 class="hd">{% trans "Sync %(dir_name)s" %}</h3>
+        <p>{% trans "You need to create a sub-library from this directory to sync it." %}</p>
+        <button class="create-sub-repo">{% trans "Create" %}</button>
+        <button class="simplemodal-close hide">{% trans "Close" %}</button>
+        <p class="error hide"></p>
+        <p class="tip">{% trans "A sub-library can be created from any folder. It can be independently synced and shared. Files in it will be automatically kept in sync with those in the directory of the origin library." %}</p>
+        <p class="tip" style="margin-bottom:0">{% trans "After being created, it will be listed in your desktop client, and you can download it just like downloading a normal library." %}</p>
+    </div>
+    {% endif %}
 
     {% include "snippets/file_share_popup.html" %}
 
@@ -1404,6 +1416,39 @@ $('.file-share, .dir-share', context).click(function() {
     showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
+
+{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+$('.dir-sync', context).click(function() {
+    var name = $(this).parents('.dir-item').attr('data-name');
+    var popup = $('#dir-sync-popup'),
+        hd = $('.hd', popup),
+        create_btn = $('.create-sub-repo', popup);
+    popup.modal({appendTo:'#main', focus:false, minWidth:250, maxWidth:400});
+    $('#simplemodal-container').css({'height':'auto'});
+    hd.html(hd.html().replace('%(dir_name)s', '<span class="op-target">' + name + '</span>'));
+
+    create_btn.click(function () {
+        $.ajax({
+            url: '{% url 'sub_repo' repo.id %}?p=' + e(cur_path + name) + '&name=' + e(name),
+            dataType: 'json',
+            success: function(data) {
+                create_btn.replaceWith("<p>{% trans "Sub-library is created." %}</p>");
+                $('.simplemodal-close', popup).removeClass('hide');
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var err;
+                if (xhr.responseText) {
+                    err = jQuery.parseJSON(xhr.responseText).error;
+                } else {
+                    err = "{% trans "Failed. Please check the network." %}";
+                } 
+                $('.error', popup).html(err).removeClass('hide');
+            }
+        });
+    });
+    return false;
+});
+{% endif %}
 
 } //function 'opOnDirent' ends here
 
