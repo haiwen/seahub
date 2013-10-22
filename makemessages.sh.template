@@ -2,6 +2,7 @@
 
 #django-admin.py makemessages -l zh_CN -e py,html -i "thirdpart"
 django-admin.py makemessages -l zh_CN -e py,html -i "thirdpart*"
+django-admin.py makemessages -l zh_TW -e py,html -i "thirdpart*"
 django-admin.py makemessages -l ru -e py,html -i "thirdpart*"
 django-admin.py makemessages -l de -e py,html -i "thirdpart*"
 django-admin.py makemessages -l es -e py,html -i "thirdpart*"
