@@ -28,7 +28,7 @@
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
-<h3>{% trans "Transfer Owner" %}</h3>
+<h3>{% trans "Transfer Ownership" %}</h3>
 <form id="repo-owner-form" action="" method="post">{% csrf_token %}
     <p>{% trans "Transfer this library to another user:" %}</p>
     <input type="text" name="repo_owner" value="" id="repo-owner" placeholder="{% trans "Email" %}" /><br />

@@ -83,12 +83,12 @@
 </table>
 {% endif %}
 
-<form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" name="group-transfer-form" class="hide">{% csrf_token %}
+<form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Transfer Group To"%}</h3>
-    <input type="text" name="email" value="" placeholder="{% trans "email"%}" />
+    <input type="text" name="email" value="" placeholder="{% trans "email"%}" class="input" />
     <p class="tip">{% trans "Tip: the email should be already registered."%}</p>
     <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit"%}" id="group-transfer-submit" />
+    <input type="submit" value="{% trans "Submit"%}" />
 </form>
 
 {% include 'group/grpmember_add_form.html' %}
@@ -128,16 +128,10 @@ $('#group-transfer').click(function() {
     $('#group-transfer-form').modal({appendTo: "#main", focus:false});
     return false;
 });
-$('#group-transfer-submit').click(function() {
-    var email = $('#group-transfer-form input[name="email"]').val();
-
-    if (!email) {
-        apply_form_error('group-transfer-form', '{% trans "Email can not be blank."%}');
+$('#group-transfer-form').submit(function() {
+    if (!$.trim($('[name="email"]', $(this)).val())) {
         return false;
     }
-
-    $('#group-transfer-form').submit();
-    return false;
 });
 
 {% include "group/modules_toggle_js.html" %}

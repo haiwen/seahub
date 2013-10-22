@@ -919,14 +919,20 @@ $('.file-download').click(function() {
     var file_name = $(this).parents('tr').attr('data-name'),
         file_id = $(this).attr('data-fileid'); // data() will convert values, for example, '000000000...' is converted to 0
 
-    // if file size is 0, directly download it
-    if (file_id == '0000000000000000000000000000000000000000') {
-        var fileAsBlob = new Blob([], {type:''});
+    var download = function(blk_arr) {
+        var fileAsBlob = new Blob(blk_arr, {type:''});
         var URL = window.URL || window.webkitURL;
         var url = URL.createObjectURL(fileAsBlob);
         var link = $("<a>").attr("href", url).attr("download", file_name).html('Download').appendTo("body").hide();
         link[0].click();
         link.remove();
+        showMsg("{% trans "Done!" %}", 'info');
+        setTimeout(function() { $('.messages').addClass('hide'); }, 1500);
+    };
+
+    // if file size is 0, directly download it
+    if (file_id == '0000000000000000000000000000000000000000') {
+        download([]);
         return false;
     }
     
@@ -1013,16 +1019,8 @@ $('.file-download').click(function() {
                 for (var i = 0, len = decrypted_blocks.length; i < len; i++) {
                     ordered_decrypted_blocks[decrypted_blocks[i].index] = wordArray2ab(decrypted_blocks[i].block);
                 }
-
-                var fileAsBlob = new Blob(ordered_decrypted_blocks, {type:''});
-                var URL = window.URL || window.webkitURL;
-                var url = URL.createObjectURL(fileAsBlob);
-                var link = $("<a>").attr("href", url).attr("download", file_name).html('Download').appendTo("body").hide();
-                link[0].click();
-                showMsg("{% trans "Done!" %}", 'info');
-                setTimeout(function() { $('.messages').addClass('hide'); }, 1500);
-                link.remove();
-            } //onFinish ends
+                download(ordered_decrypted_blocks);
+            } // onFinish ends
         }
     });
     return false;
