@@ -1,9 +1,17 @@
 {% load i18n %}
-$("#group-member-add").click(function() {
-    $("#member-add-form").modal({appendTo: "#main", focus:false});
-    $('#simplemodal-container').css({'height':'auto'});
-    addAutocomplete('#added-member-name', '#member-add-form', contact_list);
-    return false;
+$("#group-member-add, #group-admin-add").click(function() {
+    var form = $("#member-add-form");
+    form.modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'height':'auto', 'padding':'10px 0 0'});
+    $('#member-add-tabs').tabs();
+    if ($(this).attr('id') == 'group-admin-add') {
+        $('.hd', form).html("{% trans "Add administrators"%}");
+        $('#enter .tip').addClass('hide');
+        form.data('post_url', '{% url 'group_add_admin' group.id %}');
+    } else {
+        form.data('post_url', '{% url 'group_manage' group.id %}');
+    }
+    addAutocomplete('#added-member-name', '#enter', contact_list);
 })
 .hover(
     function() {
@@ -14,22 +22,36 @@ $("#group-member-add").click(function() {
     }
 );
 
-$('#member-add-submit').click(function() {
-    if (!$.trim($('#added-member-name').attr('value'))) {
-        apply_form_error('member-add-form', '{% trans 'It can not be blank.' %}');
-        return false;
-    }
+$('#member-add-form').submit(function() {
+    var form = $(this),
+        cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
+        post_data = '',
+        input = $('[name="user_name"]', form); 
+        switch(cur_tab_id) {
+            case '#enter':
+                post_data = input.val();
+                break;
+            case '#contact-options':
+                $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
+                    post_data += $(this).val() + ','; 
+                });  
+                input.val(post_data);
+        }    
+        if (!post_data) {
+            apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
+            return false;
+        }    
 
-    var submit_btn = $(this);
+    var submit_btn = $('[type="submit"]', form);
     disable(submit_btn);
     $.ajax({
-        url: '{{ post_url }}',
+        url: form.data('post_url'),
         type: 'POST',
         dataType: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: {
-            'user_name': $('#added-member-name').val()
+            'user_name': post_data
         },
         success: function(data) {
             location.reload(true);
@@ -37,7 +59,7 @@ $('#member-add-submit').click(function() {
         error: function(data, textStatus, jqXHR) {
             var errors = $.parseJSON(data.responseText);
             $.each(errors, function(index, value) {
-                apply_form_error('member-add-form', value);
+                apply_form_error(form.attr('id'), value);
             });
             enable(submit_btn);
         }
@@ -45,4 +67,3 @@ $('#member-add-submit').click(function() {
 
     return false;
 });
-

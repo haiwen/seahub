@@ -1080,7 +1080,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #tabs,
 #repo-share-tabs,
-#file-share-tabs {
+#file-share-tabs,
+#member-add-tabs {
     font-size:1em;
     padding:0;
     border:0;
@@ -1088,14 +1089,16 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:75px;
 }
 #repo-share-tabs,
-#file-share-tabs {
+#file-share-tabs,
+#member-add-tabs {
     margin-bottom:0;
 }
 #tabs-nav {
     padding:0;
 }
 #repo-share-tabs-nav,
-#file-share-tabs-nav {
+#file-share-tabs-nav,
+#member-add-tabs-nav {
     height:30px;
     padding:0 0 0 12px;
     border-bottom:1px solid #ddd;
@@ -1107,14 +1110,16 @@ textarea:-moz-placeholder {/* for FF */
     background:none;
 }
 #repo-share-tabs-nav li,
-#file-share-tabs-nav li {
+#file-share-tabs-nav li,
+#member-add-tabs-nav li {
     display:inline-block;
     border:1px solid transparent;
     border-bottom:0;
     background:none;
 }
 #repo-share-tabs-nav li a,
-#file-share-tabs-nav li a {
+#file-share-tabs-nav li a,
+#member-add-tabs-nav li a {
     color:#666;
     line-height:16px;
     padding:6px 13px;
@@ -1137,13 +1142,15 @@ textarea:-moz-placeholder {/* for FF */
     color:#DD4B39;
 }
 #repo-share-tabs-nav li a:hover,
-#file-share-tabs-nav li a:hover {
+#file-share-tabs-nav li a:hover,
+#member-add-tabs-nav li a:hover {
     color:#333;
 }
 #tabs .ui-tabs-panel {
     padding:0;
 }
-#repo-share-tabs .option-list {
+#repo-share-tabs .option-list,
+#member-add-tabs .option-list {
     max-height:200px;
     overflow:auto;
     margin-bottom:5px;
@@ -1659,7 +1666,6 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
-#member-add-form,
 #mods-enable-form {
     width:266px;
 }
@@ -1670,18 +1676,21 @@ textarea:-moz-placeholder {/* for FF */
     padding-left:12px;
 }
 #repo-share-tabs-nav .ui-state-active,
+#member-add-tabs-nav .ui-state-active,
 #file-share-tabs-nav .ui-state-active {
     border-color:#ddd;
     margin-bottom:-1px;
 }
 #repo-share-tabs-nav .ui-state-active,
 #file-share-tabs-nav .ui-state-active,
+#member-add-tabs-nav .ui-state-active,
 .tab-popup .ui-tabs ,
 .tab-popup .ui-state-active a,
 .tab-popup .bot {
     background:#fafafa;
 }
 #repo-share-tabs-nav .ui-state-active,
+#member-add-tabs-nav .ui-state-active,
 #file-share-tabs-nav .ui-state-active,
 .tab-popup .ui-state-active a {
     border-radius:3px 3px 0 0;
@@ -1701,7 +1710,8 @@ textarea:-moz-placeholder {/* for FF */
 .tab-popup .tip {
     margin:0;
 }
-#email_or_group {
+#email_or_group,
+#added-member-name {
     width:98.5%;
 }
 #emails {

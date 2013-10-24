@@ -1,20 +1,34 @@
-{% load i18n %}
-<form id="member-add-form"  method="post" name="member-add-form" class="hide">{% csrf_token %}
-    <h3>{% trans "Add members"%}</h3>
-    <textarea id="added-member-name" name="user_name" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    {% if cloud_mode and not org %}
-    <p class="tip">{% trans "Tip: an invitation will be sent if the email is not registered."%}</p>
-    {% else %}
-    <p class="tip">{% trans "Tip: the emails should be already registered."%}</p>
-    {% endif %}
-    <p class="error hide" id="member-add-error"></p>
-    <input type="submit" value="{% trans "Submit"%}" id="member-add-submit" />
-</form>
-<form id="admin-add-form" method="post" name="admin-add-form" class="hide">{% csrf_token %}
-    <h3>{% trans "Add administrators"%}</h3>
-    <textarea id="added-admin-name" name="user_name" placeholder="{% trans "emails, separated by ',' " %}"></textarea><br />
-    <input type="hidden" id="group_id" name="group_id" value="{{ group.id }}" />
-    <p class="error hide" id="admin-add-error"></p>
-    <input type="submit" value="{% trans "Submit"%}" id="admin-add-submit" />
+{% load i18n avatar_tags %}
+<form id="member-add-form"  method="post" name="member-add-form" class="tab-popup hide">{% csrf_token %}
+    <h3 class="hd">{% trans "Add members"%}</h3>
+    <div id="member-add-tabs">
+        <ul id="member-add-tabs-nav">
+            <li><a href="#enter">{% trans 'Enter' %}</a></li>
+            <li><a href="#contact-options">{% trans 'Contacts' %}</a></li>
+        </ul>
+        <div id="enter">
+            <textarea id="added-member-name" name="user_name" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
+            {% if cloud_mode and not org %}
+            <p class="tip">{% trans "Tip: an invitation will be sent if the email is not registered."%}</p>
+            {% else %}
+            <p class="tip">{% trans "Tip: the emails should be already registered."%}</p>
+            {% endif %}
+        </div>
+        <div id="contact-options" class="hide">
+            <ul class="option-list">
+            {% for contact in contacts %}
+            <li>
+            <label class="checkbox-label">
+                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
+                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
+            </label>
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+    <div class="bot">
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" />
+    </div>
 </form>
