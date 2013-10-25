@@ -1,17 +1,16 @@
 {% load i18n %} {# for file/dir share #}
     <div id="file-share" class="tab-popup hide">
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
-        <div id="file-share-tabs">
-            <ul id="file-share-tabs-nav">
-                <li><a href="#link-share">{% trans "Share Link" %}</a></li>
+        <div id="file-share-tabs" class="tab-popup-tabs">
+            <ul class="tab-popup-tabs-nav">
+                <li class="tab"><a href="#link-share" class="a">{% trans "Share Link" %}</a></li>
                 {% if is_repo_owner %}
-                <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li> {# for file #}
+                <li class="tab" id="private-share-tab"><a href="#private-share" class="a">{% trans "Private Share" %}</a></li> {# for file #}
                 {% endif %}
                 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-                <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Private Share" %}</a></li> {# for dir #}
+                <li class="tab" id="syncable-share-tab"><a href="#syncable-share" class="a">{% trans "Private Share" %}</a></li> {# for dir #}
                 {% endif %}
             </ul>
-
 
             {% if is_repo_owner %}
             <div id="private-share">

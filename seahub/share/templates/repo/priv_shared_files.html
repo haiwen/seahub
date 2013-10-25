@@ -17,10 +17,10 @@
 
 {% block main_panel %}
 {% if priv_share_in or priv_share_out %}
-<div id="tabs">
-    <ul id="tabs-nav">
-        <li><a href="#priv-share-in">{% trans "From Others" %}</a></li>
-        <li class="long-item"><a href="#priv-share-out">{% trans "To Others" %}</a></li>
+<div id="tabs" class="tab-tabs">
+    <ul class="tab-tabs-nav">
+        <li class="tab"><a href="#priv-share-in" class="a">{% trans "From Others" %}</a></li>
+        <li class="tab long-tab"><a href="#priv-share-out" class="a">{% trans "To Others" %}</a></li>
     </ul>
     <div id="priv-share-in">
     <table>
@@ -50,7 +50,7 @@
     </table>
     </div>
 
-    <div id="priv-share-out">
+    <div id="priv-share-out" class="hide">
     <table>
         <tr>
             <th width="5%"><!--icon--></th>

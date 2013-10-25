@@ -13,9 +13,11 @@
     {% endfor %}
 
     $(".repo-share-btn").click(function() {
-        $("#repo_id").val($(this).data("id"));
-        $("#repo-share-form .op-target").html($(this).data("name"));
-        $("#repo-share-form").modal({appendTo: "#main", focus:false, containerCss:{"padding": "10px 0 0"}});
+        var form = $("#repo-share-form"),
+            hd = $('.hd', form);
+        form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
+        $('[name="repo_id"]', form).val($(this).data("id"));
+        hd.html(hd.html().replace('%(lib_name)s', '<span class="op-target">' + $(this).data("name") + '</span>'));
         $('#repo-share-tabs').tabs();
         $('#simplemodal-container').css('height', 'auto');
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);

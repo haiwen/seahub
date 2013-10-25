@@ -15,7 +15,7 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
     } else {
         path = cur_path + name;
     }
-    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding":"10px 0 0"}});
+    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding":0}});
 
     var hd = $('#file-share .hd');
     hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
@@ -79,13 +79,12 @@ function showSharePopup(op, name, aj_url, type, cur_path) {
                 success: function(data) {
                     loading_tip.hide();
                     var form = $("#repo-share-form");
-                    form.removeClass('hide').css({'width':'auto'});
-                    $("#repo_id").val(data['sub_repo_id']);
+                    form.removeClass('hide').css({'width':'auto', 'padding-top':0});
+                    $('[name="repo_id"]', form).val(data['sub_repo_id']);
                     $("h3", form).remove();
-                    $("#repo-share-tabs-nav").attr('id', 'tabs-nav');
-                    $('#tabs-nav').css({'background':'transparent', 'padding-left': '1.4em'});
                     $('.checkbox-label', form).css({'margin-right':'3px'}); // make it not show on top of the scrollbar when hover
                     $("#repo-share-tabs").tabs();
+                    $('#repo-share-tabs .ui-tabs-nav').removeClass('tab-popup-tabs-nav').addClass('tab-tabs-nav').css({'padding-left': '1.4em'});
                     $(window).resize(); // to reposition the popup, as this panel is 'taller'
                 },
                 error: function(xhr, textStatus, errorThrown) {
