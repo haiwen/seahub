@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab {% if cur == 'library' %} tabnav-tab-cur {% endif %}"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab {% if cur == 'links' %} tabnav-tab-cur {% endif %}"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</li>
+        <li class="tabnav-tab {% if cur == 'private' %} tabnav-tab-cur {% endif %}"><a href="{% url 'list_priv_shared_files' %}">{% trans "Private Shares" %}</a></li>
+    </ul>
+</div>
