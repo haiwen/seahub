@@ -5,7 +5,7 @@
 # TRASLATORS: Michael Polikashev <admin@scherkhan.net>, VoidVolker, ...
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-22 05:19-0700\n"
 "PO-Revision-Date: 2013-06-14 10:00+0400\n"
@@ -731,6 +731,7 @@ msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d день назад"
 msgstr[1] "%(days)d дней назад"
+msgstr[2] "%(days)d дней назад"
 
 #: seahub/base/templatetags/seahub_tags.py:190
 #, python-format
@@ -738,6 +739,7 @@ msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d час назад"
 msgstr[1] "%(hours)d часов назад"
+msgstr[2] "%(hours)d часов назад"
 
 #: seahub/base/templatetags/seahub_tags.py:197
 #, python-format
@@ -745,6 +747,7 @@ msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "%(minutes)d минуту назад"
 msgstr[1] "%(minutes)d минут назад"
+msgstr[2] "%(minutes)d минут назад"
 
 #: seahub/base/templatetags/seahub_tags.py:203
 #, python-format
@@ -752,6 +755,7 @@ msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d секунду назад"
 msgstr[1] "%(seconds)d секунд назад"
+msgstr[2] "%(seconds)d секунд назад"
 
 #: seahub/base/templatetags/seahub_tags.py:302
 #: seahub/group/templates/group/group_info.html:70
@@ -1118,8 +1122,9 @@ msgstr "Не удалось добавить, %s не зарегистриров
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
-msgstr[0] "Успешно добавлен. Сообщение было отправлено."
+msgstr[0] "Успешно добавлен. %(count)s Сообщение было отправлено."
 msgstr[1] "Успешно добавлены. %(count)s сообщений было отправлено."
+msgstr[2] "Успешно добавлены. %(count)s сообщений было отправлено."
 
 #: seahub/group/views.py:642
 msgid "Successfully added."
@@ -3148,6 +3153,10 @@ msgstr[1] ""
 "\n"
 "        появились новые обсуждения\n"
 "        "
+msgstr[2] ""
+"\n"
+"        появились новые обсуждения\n"
+"        "
 
 #: seahub/templates/myhome.html:60
 #, python-format
@@ -3161,9 +3170,13 @@ msgid_plural ""
 "        "
 msgstr[0] ""
 "\n"
-"        в одном групповом обсуждении появился новый ответ\n"
+"        %(counter)s групповом обсуждении появился новый ответ\n"
 "        "
 msgstr[1] ""
+"\n"
+"        %(counter)s групповых обсуждениях появились новые ответы\n"
+"        "
+msgstr[2] ""
 "\n"
 "        %(counter)s групповых обсуждениях появились новые ответы\n"
 "        "
@@ -3854,8 +3867,9 @@ msgstr "обновить этот файл"
 #, python-format
 msgid "one contributor"
 msgid_plural " %(counter)s contributors "
-msgstr[0] "один участник"
+msgstr[0] " %(counter)s участник"
 msgstr[1] " %(counter)s участника(ов) "
+msgstr[2] " %(counter)s участника(ов) "
 
 #: seahub/templates/view_file_base.html:136
 msgid "Unstarred successfully"
@@ -4329,18 +4343,21 @@ msgid "<span class=\"obj\">Library"
 msgid_plural "<span class=\"obj\">Libraries"
 msgstr[0] "<span class=\"obj\">Библиотека"
 msgstr[1] "<span class=\"obj\">Библиотек(и)"
+msgstr[2] "<span class=\"obj\">Библиотек(и)"
 
 #: seahub/templates/snippets/pubinfo.html:7
 msgid "<span class=\"obj\">Group"
 msgid_plural "<span class=\"obj\">Groups"
 msgstr[0] "<span class=\"obj\">Группа"
 msgstr[1] "<span class=\"obj\">Групп(ы)"
+msgstr[2] "<span class=\"obj\">Групп(ы)"
 
 #: seahub/templates/snippets/pubinfo.html:9
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Пользователь"
 msgstr[1] "Пользователя(ей)"
+msgstr[2] "Пользователя(ей)"
 
 #: seahub/templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
