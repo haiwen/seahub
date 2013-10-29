@@ -1512,7 +1512,7 @@ $('#mv-dir-list h5').click(function() {
 });
 $('#private-share-form').submit(function() {
     if (!$('[name="emails"]', $(this)).val()) {
-        apply_form_error($(this).attr('id'), "{% trans "Contacts is required." %}");
+        apply_form_error($(this).attr('id'), "{% trans "Contact is required." %}");
         return false;
     }
 });
