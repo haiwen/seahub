@@ -1323,6 +1323,8 @@ def group_wiki_pages(request, group):
         return render_error(request, _('Wiki does not exists.'))
 
     repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
     
     return render_to_response("group/group_wiki_pages.html", {
             "group": group,
@@ -1332,6 +1334,8 @@ def group_wiki_pages(request, group):
             "search_repo_id": repo.id,
             "search_wiki": True,
             "repo_perm": repo_perm,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @group_check
