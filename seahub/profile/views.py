@@ -136,8 +136,17 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request, user):
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+
+    if user == 'demo@seafile.com':
+        messages.error(request, _(u'Demo account can not be deleted.'))
+        return HttpResponseRedirect(next)
+        
     if request.user.username != user:
         messages.error(request, _(u'Operation Failed. You can only delete account of your own'))
+        return HttpResponseRedirect(next)
     else:
         user = User.objects.get(email=user)
         user.delete()
