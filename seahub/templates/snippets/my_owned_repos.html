@@ -43,7 +43,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You have not created any libraries" %}</h2>
+  <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
   <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
   <h3>{% trans "Synchronize libraries with PC client" %}</h3>
   <p>{% trans "1. Download the library (make sure PC client is running)." %}</p>
@@ -94,7 +94,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "No library is shared to you" %}</h2>
+  <h2 class="alc">{% trans "No library is shared to you" %}</h2>
   <p>{% trans "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
 </div>
 {% endif %}
@@ -112,7 +112,7 @@
     </tr>
     {% for sfile in starred_files %}
     <tr>
-        <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
         <td>
             <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.name }}</a>
         </td>
@@ -126,7 +126,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any starred files yet" %}</h2>
+  <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
   <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
 </div>
 {% endif %}

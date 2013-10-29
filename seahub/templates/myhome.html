@@ -5,9 +5,7 @@
 {% block sub_title %}{% trans "My Home" %} - {% endblock %}
 {% block nav_myhome_class %}class="cur"{% endblock %}
 
-
 {% block title_panel %}
-
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
@@ -22,9 +20,7 @@
 
     </ul>
 </div>
-
 {% endblock %}
-
 
 {% block left_panel %}
 <div class="info-item">
@@ -33,9 +29,9 @@
         <a href="{{ SITE_ROOT }}profile/" class="pic no-deco fleft" title="{% trans "Profile" %}">{% avatar request.user 48 %}</a>
         <div class="txt fright">
             <p>{% if nickname %}{{ nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
-            <a href="{{ SITE_ROOT }}profile/" class="edit">{% trans "Profile" %}</a>
+            <a href="{{ SITE_ROOT }}profile/" class="a">{% trans "Profile" %}</a>
             {% if ENABLE_PAYMENT %}
-            <a href="{% url 'plan' %}" class="edit">{% trans "Payment" %}</a>
+            <a href="{% url 'plan' %}" class="a">{% trans "Payment" %}</a>
             {% endif %}
         </div>
     </div>
@@ -74,13 +70,13 @@
       {% if CALC_SHARE_USAGE %}
         <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
-        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}"></span><span id="share-usage" title="{% trans "Sharing" %}"></span></a>
+        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}" class="usage"></span><span id="share-usage" title="{% trans "Sharing" %}" class="usage"></span></a>
         {% endif %}
         <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
       {% else %}
         <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
         {% if quota > 0 %}
-          <div id="quota-bar"><span id="quota-usage"></span></div>
+          <div id="quota-bar"><span id="quota-usage" class="usage"></span></div>
         {% endif %}
       {% endif %}
 

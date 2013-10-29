@@ -173,10 +173,10 @@
 
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <div id="mv-dir-list" class="dir-tree-cont">
-            <h5><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h5>
+            <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
-            <h5><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h5>
+            <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
             <div id="other-repos-dirs" class="hide"></div>
             {% endif %}
         </div>
@@ -837,13 +837,14 @@ function sortDirent() {
         table.append(item.element);
     });
   
-    $(this).hide();
-    switch (id) {
-        case 'name-down': $('#name-up').css({'display':'inline-block'}); break;
-        case 'name-up': $('#name-down').removeAttr('style'); break;
-        case 'time-up': $('#time-down').removeAttr('style'); break;
-        case 'time-down': $('#time-up').css({'display':'inline-block'}); break;
+    $(this).addClass('hide');
+    var other;
+    if (id.indexOf('up') != -1) {
+        other = $('#' + id.replace('up', 'down'));
+    } else {
+        other = $('#' + id.replace('down', 'up'));
     }
+    other.removeClass('hide');
 }
 
 var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="vam" />';
@@ -1494,13 +1495,13 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
     return false;
 });
 
-$('#mv-dir-list h5').click(function() {
-    var span = $(this).children('.tri-bg'),
+$('#mv-dir-list .hd').click(function() {
+    var span = $('span', $(this)),
         form = $('#mv-form'),
         dir_tree_container = $(this).next().data('site_root', '{{SITE_ROOT}}'),
         file_tree = new FileTree();
-    if (span.hasClass('tri-right-bg')) {
-        span.attr('class','tri-bg tri-down-bg');
+    if (span.hasClass('icon-caret-right')) {
+        span.attr('class','icon-caret-down');
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
             file_tree.renderDirTree(dir_tree_container, form, current_repo);
         } else {
@@ -1508,13 +1509,13 @@ $('#mv-dir-list h5').click(function() {
         }
         dir_tree_container.removeClass('hide');
     } else {
-        span.attr('class','tri-bg tri-right-bg');
+        span.attr('class','icon-caret-right');
         dir_tree_container.addClass('hide');
     }
 });
 $('#private-share-form').submit(function() {
     if (!$('[name="emails"]', $(this)).val()) {
-        apply_form_error($(this).attr('id'), "{% trans "Contact is required." %}");
+        apply_form_error($(this).attr('id'), "{% trans "Please select at least one contact." %}");
         return false;
     }
 });

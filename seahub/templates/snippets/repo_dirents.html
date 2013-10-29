@@ -27,7 +27,7 @@
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
-                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon" data="no-popup" />
+                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans 'More operations'%}" alt="{% trans 'More operations'%}" class="more-op-icon cspt" data="no-popup" />
                 <ul class="hidden-op hide">
                     <li><a class="op dir-del" href="#">{% trans "Delete"%}</a></li>
                     <li><a class="op dir-rename" href="#">{% trans "Rename"%}</a></li>
@@ -77,7 +77,7 @@
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
-                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon" data="no-popup" />
+                <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" data="no-popup" />
                 <ul class="hidden-op hide">
                     <li><a class="op file-del" href="#">{% trans "Delete"%}</a></li>
                     <li><a class="op file-rename" href="#">{% trans "Rename" %}</a></li>

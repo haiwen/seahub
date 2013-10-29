@@ -25,8 +25,8 @@ $('#encrypt-switch').click(function () {
 $('#repo-create-form').submit(function() {
     var form = $(this), 
         form_id = form.attr('id'),
-        name = $('#repo-name').val(),
-        desc = $('#repo-desc').val(),
+        name = $('[name="repo_name"]', form).val(),
+        desc = $('[name="repo_desc"]', form).val(),
         encrypted = $('#encrypt-switch').attr('checked'),
         passwd, passwd_again;
 
