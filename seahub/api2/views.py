@@ -394,7 +394,12 @@ class Repos(APIView):
                               repo_id=repo_id,
                               repo_name=repo_name)
             resp = repo_download_info(request, repo_id)
-            resp['Location'] = reverse('api2-repo', args=[repo_id])
+
+
+            # FIXME: according to the HTTP spec, need to return 201 code and
+            # with a corresponding location header 
+            # resp['Location'] = reverse('api2-repo', args=[repo_id])
+
             return resp
 
 
