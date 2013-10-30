@@ -106,7 +106,7 @@ urlpatterns = patterns('',
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
 
     ### Ajax ###
-    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/delete/$', delete_dirents, name='delete_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/move/$', mv_dirents, name='mv_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/copy/$', cp_dirents, name='cp_dirents'),

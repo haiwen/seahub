@@ -68,17 +68,35 @@ def get_dirents(request, repo_id):
 
     path = request.GET.get('path', '')
     dir_only = request.GET.get('dir_only', False)
+    all_dir = request.GET.get('all_dir', False)
     if not path:
         err_msg = _(u"No path.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
                             content_type=content_type)
 
+    # get dirents for every path element
+    if all_dir:
+        all_dirents = []
+        path_eles = path.split('/')[:-1]
+        for i, x in enumerate(path_eles):
+            ele_path = '/'.join(path_eles[:i+1]) + '/'
+            try:
+                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path.encode('utf-8'))
+            except SearpcError, e:
+                ele_path_dirents = []
+            ds = []
+            for d in ele_path_dirents:
+                if stat.S_ISDIR(d.mode):
+                    ds.append(d.obj_name)
+            all_dirents.append(ds)
+        return HttpResponse(json.dumps(all_dirents), content_type=content_type)
+
+    # get dirents in path
     try:
         dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
     except SearpcError, e:
         return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
                             content_type=content_type)
-
     dirent_list = []
     for dirent in dirents:
         if stat.S_ISDIR(dirent.mode):
