@@ -962,8 +962,13 @@ def myhome(request):
 
     traffic_stat = 0
     if TRAFFIC_STATS_ENABLED:
-        # User's network traffic stat in this month 
-        stat = get_user_traffic_stat(username)
+        # User's network traffic stat in this month
+        try:
+            stat = get_user_traffic_stat(username)
+        except Exception as e:
+            logger.error(e)
+            stat = None
+
         if stat:
             traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
