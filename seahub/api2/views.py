@@ -1138,6 +1138,11 @@ class FileSharedLinkView(APIView):
     def put(self, request, repo_id, format=None):
         # generate file shared link
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
+        type = unquote(request.DATA.get('type', 'f').encode('utf-8'))
+
+        if type not in ('d', 'f'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid type')
+
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
@@ -1148,6 +1153,7 @@ class FileSharedLinkView(APIView):
         if len(l) > 0:
             fileshare = l[0]
             token = fileshare.token
+            type = fileshare.s_type
         else:
             token = gen_token(max_length=10)
 
@@ -1156,6 +1162,7 @@ class FileSharedLinkView(APIView):
             fs.repo_id = repo_id
             fs.path = path
             fs.token = token
+            fs.s_type = type
 
             try:
                 fs.save()
@@ -1164,8 +1171,8 @@ class FileSharedLinkView(APIView):
 
         http_or_https = request.is_secure() and 'https' or 'http'
         domain = RequestSite(request).domain
-        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
-                                               settings.SITE_ROOT, token)
+        file_shared_link = '%s://%s%s%s/%s/' % (http_or_https, domain,
+                                               settings.SITE_ROOT, type, token)
         resp = Response(status=status.HTTP_201_CREATED)
         resp['Location'] = file_shared_link
         return resp
