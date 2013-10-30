@@ -135,6 +135,7 @@ LANGUAGES = (
     ('fr', gettext_noop('Français')),
     ('it', gettext_noop('Italiano')),
     ('hu', gettext_noop('Magyar')),
+    ('pt-br', gettext_noop('Portuguese, Brazil')),
     ('ru', gettext_noop(u'Русский')),    
     ('zh-cn', gettext_noop(u'简体中文')),
     ('zh-tw', gettext_noop(u'繁體中文')),
