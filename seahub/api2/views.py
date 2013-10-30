@@ -366,6 +366,33 @@ class Repos(APIView):
                     repo["magic"] = r.magic
                     repo["random_key"] = r.random_key
                 repos_json.append(repo)
+
+        if not CLOUD_MODE:
+            public_repos = list_inner_pub_repos(email)
+            for r in public_repos:
+                commit = get_commits(r.repo_id, 0, 1)[0]
+                if not commit:
+                    continue
+                r.root = commit.root_id
+                r.size = server_repo_size(r.repo_id)
+                repo = {
+                    "type": "grepo",
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "desc": r.repo_desc,
+                    "owner": "Organization",
+                    "mtime": r.last_modified,
+                    "root": r.root,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": r.permission,
+                    }
+                if r.encrypted:
+                    repo["enc_version"] = commit.enc_version
+                    repo["magic"] = commit.magic
+                    repo["random_key"] = commit.random_key
+                repos_json.append(repo)
+
         return Response(repos_json)
 
     def post(self, request, format=None):
