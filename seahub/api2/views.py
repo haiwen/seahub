@@ -1690,7 +1690,7 @@ def msg_reply(request, msg_id):
     return HttpResponse(serialized_data, content_type=content_type)
 
 
-def repo_history_changes(request, repo_id):
+def repo_history_changes(request, repo_id, return_json):
     changes = {}
     content_type = 'application/json; charset=utf-8'
 
@@ -1724,9 +1724,11 @@ def repo_history_changes(request, repo_id):
     for k in changes:
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
 
-    html = render_to_string('api2/event_details.html', {'changes': changes})
-    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
-
+    if return_json == true:
+        return Response(changes)
+    else:
+        html = render_to_string('api2/event_details.html', {'changes': changes})
+        return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 def msg_reply_new(request):
     notes = UserNotification.objects.filter(to_user=request.user.username)
@@ -1818,6 +1820,14 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
+class RepoHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        return api_repo_history_changes (request, repo_id, true)
+
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1873,14 +1883,13 @@ class DiscussionHtml(APIView):
     def post(self, request, msg_id, format=None):
         return msg_reply (request, msg_id)
 
-
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id)
+        return api_repo_history_changes (request, repo_id, false)
 
 
 #Following is only for debug
