@@ -1826,7 +1826,7 @@ class RepoHistory(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id, true)
+        return api_repo_history_changes (request, repo_id, True)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1889,7 +1889,7 @@ class RepoHistoryChangeHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id, false)
+        return api_repo_history_changes (request, repo_id, False)
 
 
 #Following is only for debug
