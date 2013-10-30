@@ -366,6 +366,33 @@ class Repos(APIView):
                     repo["magic"] = r.magic
                     repo["random_key"] = r.random_key
                 repos_json.append(repo)
+
+        if not CLOUD_MODE:
+            public_repos = list_inner_pub_repos(email)
+            for r in public_repos:
+                commit = get_commits(r.repo_id, 0, 1)[0]
+                if not commit:
+                    continue
+                r.root = commit.root_id
+                r.size = server_repo_size(r.repo_id)
+                repo = {
+                    "type": "grepo",
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "desc": r.repo_desc,
+                    "owner": "Organization",
+                    "mtime": r.last_modified,
+                    "root": r.root,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": r.permission,
+                    }
+                if r.encrypted:
+                    repo["enc_version"] = commit.enc_version
+                    repo["magic"] = commit.magic
+                    repo["random_key"] = commit.random_key
+                repos_json.append(repo)
+
         return Response(repos_json)
 
     def post(self, request, format=None):
@@ -394,7 +421,12 @@ class Repos(APIView):
                               repo_id=repo_id,
                               repo_name=repo_name)
             resp = repo_download_info(request, repo_id)
-            resp['Location'] = reverse('api2-repo', args=[repo_id])
+
+
+            # FIXME: according to the HTTP spec, need to return 201 code and
+            # with a corresponding location header 
+            # resp['Location'] = reverse('api2-repo', args=[repo_id])
+
             return resp
 
 
@@ -1106,6 +1138,11 @@ class FileSharedLinkView(APIView):
     def put(self, request, repo_id, format=None):
         # generate file shared link
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
+        type = unquote(request.DATA.get('type', 'f').encode('utf-8'))
+
+        if type not in ('d', 'f'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid type')
+
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
@@ -1116,6 +1153,7 @@ class FileSharedLinkView(APIView):
         if len(l) > 0:
             fileshare = l[0]
             token = fileshare.token
+            type = fileshare.s_type
         else:
             token = gen_token(max_length=10)
 
@@ -1124,6 +1162,7 @@ class FileSharedLinkView(APIView):
             fs.repo_id = repo_id
             fs.path = path
             fs.token = token
+            fs.s_type = type
 
             try:
                 fs.save()
@@ -1132,8 +1171,8 @@ class FileSharedLinkView(APIView):
 
         http_or_https = request.is_secure() and 'https' or 'http'
         domain = RequestSite(request).domain
-        file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
-                                               settings.SITE_ROOT, token)
+        file_shared_link = '%s://%s%s%s/%s/' % (http_or_https, domain,
+                                               settings.SITE_ROOT, type, token)
         resp = Response(status=status.HTTP_201_CREATED)
         resp['Location'] = file_shared_link
         return resp
