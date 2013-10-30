@@ -2101,10 +2101,13 @@ textarea:-moz-placeholder {/* for FF */
     text-align:right;
 }
 #shared-link,
-#shared-link-text {
+#shared-upload-link,
+#shared-link-text,
+#shared-upload-link-text {
     border:0;
 }
-#shared-link-text {
+#shared-link-text,
+#shared-upload-link-text {
     background:transparent;
     height:auto;
 }

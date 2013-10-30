@@ -1426,10 +1426,13 @@ textarea:-moz-placeholder {/* for FF */
     text-align:right;
 }
 #shared-link,
-#shared-link-text {
+#shared-upload-link,
+#shared-link-text,
+#shared-upload-link-text {
     border:0;
 }
-#shared-link-text {
+#shared-link-text,
+#shared-upload-link-text {
     vertical-align:middle; /*for ie 7*/
 }
 .file-op {
