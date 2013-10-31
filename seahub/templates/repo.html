@@ -884,14 +884,14 @@ var current_repo = [],
     other_repos = [];
 current_repo.push({
     'data': '{{ repo.props.name }}',
-    'attr': {'repo_id': '{{ repo.props.id }}'},
+    'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
     'state': 'closed'
 });  
 {% for a_repo in accessible_repos %}
 {% if a_repo.props.id != repo.props.id %}
     other_repos.push({
         'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}'},
+        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
         'state': 'closed'
     });  
 {% endif %}
@@ -1195,7 +1195,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
             var json_data = [];
             var repo_data = {
                 'data': '{{ repo.props.name }}',
-                'attr': {'repo_id': '{{ repo.props.id }}'},
+                'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
                 'state': 'open'
             };
 
@@ -1215,7 +1215,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
                     for (var j = 0, len_i = data[i].length; j < len_i; j++) {
                         children[i].push({
                             'data': data[i][j],
-                            'attr': {'repo_id': '{{ repo.props.id }}'},
+                            //'attr': {'repo_id': '{{ repo.props.id }}'},
                             'state': 'closed'
                         });
                     }
@@ -1224,14 +1224,14 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
                         if (data[i][j] == path_eles[i+1]) {
                             children[i].push({
                                 'data': data[i][j],
-                                'attr': {'repo_id': '{{ repo.props.id }}'},
+                                //'attr': {'repo_id': '{{ repo.props.id }}'},
                                 'state': 'open',
                                 'children': children[i+1] 
                             });
                         } else {
                             children[i].push({
                                 'data': data[i][j],
-                                'attr': {'repo_id': '{{ repo.props.id }}'},
+                                //'attr': {'repo_id': '{{ repo.props.id }}'},
                                 'state': 'closed'
                             });
                         }
