@@ -1205,51 +1205,40 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
              * path: '/xx/'
              * path_eles: ['', 'xx']
              * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
+             * when no dir in '/', data will be [[]];
              */
             var len = data.length;
             var children = [];
-            if (len == 1) {
-                if (data[0].length > 0) {
-                    children[0] = [];
-                    for (var i = 0, len_0 = data[0].length; i < len_0; i++) {
-                        children[0].push({
-                            'data': data[0][i],
+            for (var i = len - 1; i > -1; i--) {
+                children[i] = [];
+                if (i == len - 1) {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        children[i].push({
+                            'data': data[i][j],
                             'attr': {'repo_id': '{{ repo.props.id }}'},
                             'state': 'closed'
                         });
                     }
-                    $.extend(repo_data, {'children': children[0]});
-                }
-            } else {
-                for (var i = len - 1; i > -1; i-- ) {
-                    children[i] = [];
-                    if (i == len - 1) {
-                        for (var j = 0, j_len = data[i].length; j < j_len; j++) {
+                } else {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        if (data[i][j] == path_eles[i+1]) {
+                            children[i].push({
+                                'data': data[i][j],
+                                'attr': {'repo_id': '{{ repo.props.id }}'},
+                                'state': 'open',
+                                'children': children[i+1] 
+                            });
+                        } else {
                             children[i].push({
                                 'data': data[i][j],
                                 'attr': {'repo_id': '{{ repo.props.id }}'},
                                 'state': 'closed'
                             });
                         }
-                    } else {
-                        for (var j = 0, j_len = data[i].length; j < j_len; j++) {
-                            if (data[i][j] == path_eles[i+1]) {
-                                children[i].push({
-                                    'data': data[i][j],
-                                    'attr': {'repo_id': '{{ repo.props.id }}'},
-                                    'state': 'open',
-                                    'children': children[i+1] 
-                                });
-                            } else {
-                                children[i].push({
-                                    'data': data[i][j],
-                                    'attr': {'repo_id': '{{ repo.props.id }}'},
-                                    'state': 'closed'
-                                });
-                            }
-                        }
                     }
                 }
+            }
+            if (children[0].length > 0) {
                 $.extend(repo_data, {'children': children[0]});
             }
             json_data.push(repo_data); 
