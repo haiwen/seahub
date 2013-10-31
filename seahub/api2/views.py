@@ -1727,7 +1727,6 @@ def repo_history_changes(request, repo_id):
     html = render_to_string('api2/event_details.html', {'changes': changes})
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
-
 def msg_reply_new(request):
     notes = UserNotification.objects.filter(to_user=request.user.username)
     grpmsg_reply_list = [ n.detail for n in notes if n.msg_type == 'grpmsg_reply']
@@ -1818,6 +1817,29 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
+class RepoHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits = commits_all[:per_page]
+
+        if len(commits_all) == per_page + 1:
+            page_next = True
+        else:
+            page_next = False
+
+        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1872,7 +1894,6 @@ class DiscussionHtml(APIView):
 
     def post(self, request, msg_id, format=None):
         return msg_reply (request, msg_id)
-
 
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
