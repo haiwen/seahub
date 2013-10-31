@@ -423,6 +423,72 @@ var del_dirents = function() {
     });
 };
 
+// render jstree for current path
+function render_jstree_for_cur_path() {
+    var form = $('#mv-form'),
+        file_tree = new FileTree(),
+        container = $('#current-repo-dirs');
+    container.data('site_root', '{{SITE_ROOT}}');
+    $.ajax({
+        url: '{% url 'get_dirents' repo.id %}?path=' + e(cur_path) + '&dir_only=true&all_dir=true',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var json_data = [];
+            var repo_data = {
+                'data': '{{ repo.props.name }}',
+                'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
+                'state': 'open'
+            };
+
+            var path_eles = cur_path.split('/');
+            path_eles.pop();
+            /* e.g.
+             * path: '/xx/'
+             * path_eles: ['', 'xx']
+             * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
+             * when no dir in '/', data will be [[]];
+             */
+            var len = data.length;
+            var children = [];
+            for (var i = len - 1; i > -1; i--) {
+                children[i] = [];
+                if (i == len - 1) {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        children[i].push({
+                            'data': data[i][j],
+                            'state': 'closed'
+                        });
+                    }
+                } else {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        if (data[i][j] == path_eles[i+1]) {
+                            children[i].push({
+                                'data': data[i][j],
+                                'state': 'open',
+                                'children': children[i+1] 
+                            });
+                        } else {
+                            children[i].push({
+                                'data': data[i][j],
+                                'state': 'closed'
+                            });
+                        }
+                    }
+                }
+            }
+            if (children[0].length > 0) {
+                $.extend(repo_data, {'children': children[0]});
+            }
+            json_data.push(repo_data); 
+            file_tree.renderDirTree(container, form, json_data);
+        },
+        error: function() {
+            file_tree.renderDirTree(container, form, current_repo);
+        }
+    });
+
+}
 // mv, cp multi dirents
 $('#mv-dirents, #cp-dirents').click(function() {
     var form = $('#mv-form'), op;
@@ -437,8 +503,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
         form.prepend("<h3>{% trans "Copy selected directories/files to:" %}</h3>");
     }
 
-    var file_tree = new FileTree();
-    file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, current_repo);
+    render_jstree_for_cur_path();
 
     var files = $('.checkbox-checked').parents('.file-item'),
         dirs = $('.checkbox-checked').parents('.dir-item'),
@@ -1186,70 +1251,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     $('input[name="obj_name"]', form).val(obj_name);
     
     form.data('op_obj', dirent);
-
-    $.ajax({
-        url: '{% url 'get_dirents' repo.id %}?path=' + e(cur_path) + '&dir_only=true&all_dir=true',
-        cache: false,
-        dataType: 'json',
-        success: function(data) {
-            var json_data = [];
-            var repo_data = {
-                'data': '{{ repo.props.name }}',
-                'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
-                'state': 'open'
-            };
-
-            var path_eles = cur_path.split('/');
-            path_eles.pop();
-            /* e.g.
-             * path: '/xx/'
-             * path_eles: ['', 'xx']
-             * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
-             * when no dir in '/', data will be [[]];
-             */
-            var len = data.length;
-            var children = [];
-            for (var i = len - 1; i > -1; i--) {
-                children[i] = [];
-                if (i == len - 1) {
-                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                        children[i].push({
-                            'data': data[i][j],
-                            //'attr': {'repo_id': '{{ repo.props.id }}'},
-                            'state': 'closed'
-                        });
-                    }
-                } else {
-                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                        if (data[i][j] == path_eles[i+1]) {
-                            children[i].push({
-                                'data': data[i][j],
-                                //'attr': {'repo_id': '{{ repo.props.id }}'},
-                                'state': 'open',
-                                'children': children[i+1] 
-                            });
-                        } else {
-                            children[i].push({
-                                'data': data[i][j],
-                                //'attr': {'repo_id': '{{ repo.props.id }}'},
-                                'state': 'closed'
-                            });
-                        }
-                    }
-                }
-            }
-            if (children[0].length > 0) {
-                $.extend(repo_data, {'children': children[0]});
-            }
-            json_data.push(repo_data); 
-            var file_tree = new FileTree();
-            file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, json_data);
-        },
-        error: function() {
-            var file_tree = new FileTree();
-            file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, current_repo);
-        }
-    });
+    render_jstree_for_cur_path();
     return false;
 });
 
@@ -1564,7 +1566,7 @@ $('#mv-dir-list .hd').click(function() {
     if (span.hasClass('icon-caret-right')) {
         span.attr('class','icon-caret-down');
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
-            file_tree.renderDirTree(dir_tree_container, form, current_repo);
+            render_jstree_for_cur_path();
         } else {
             file_tree.renderDirTree(dir_tree_container, form, other_repos);
         }
