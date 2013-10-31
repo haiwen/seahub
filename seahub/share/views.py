@@ -24,7 +24,7 @@ from seaserv import seafserv_threaded_rpc, ccnet_rpc, \
     list_inner_pub_repos_by_owner, remove_share
 
 from forms import RepoShareForm, FileLinkShareForm
-from models import AnonymousShare, FileShare, PrivateFileDirShare
+from models import AnonymousShare, FileShare, PrivateFileDirShare, UploadLinkShare
 from signals import share_repo_to_user_successful
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 from tokens import anon_share_token_generator
@@ -35,8 +35,8 @@ from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
-    gen_token, gen_shared_link, gen_dir_share_link, gen_file_share_link, \
-    IS_EMAIL_CONFIGURED, check_filename_with_rename
+    gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
+    gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -400,6 +400,32 @@ def list_shared_links(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+def list_shared_upload_links(request):
+    """List upload links, and remove invalid links(dir is deleted or moved).
+    """
+    username = request.user.username
+
+    uploadlinks = UploadLinkShare.objects.filter(username=username)
+    p_uploadlinks = []
+    for link in uploadlinks:
+        if is_personal_repo(link.repo_id):
+            r = seafile_api.get_repo(link.repo_id)
+            if not r:
+                link.delete()
+                continue
+            if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
+                link.delete()
+                continue
+            link.filename = os.path.basename(link.path.rstrip('/'))
+            link.shared_link = gen_shared_upload_link(link.token)
+            link.repo = r
+            p_uploadlinks.append(link)
+
+    return render_to_response('repo/shared_upload_links.html', {
+            "uploadlinks": p_uploadlinks,
+            }, context_instance=RequestContext(request))
+
+@login_required
 def list_priv_shared_files(request):
     """List private shared files.
     """
@@ -630,6 +656,39 @@ def remove_shared_link(request):
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
 @login_required
+def remove_shared_upload_link(request):
+    """
+    Handle request to remove shared upload link.
+    """
+    token = request.GET.get('t')
+
+    if not request.is_ajax():
+        UploadLinkShare.objects.filter(token=token).delete()
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = reverse('share_admin')
+
+        messages.success(request, _(u'Removed successfully'))
+
+        return HttpResponseRedirect(next)
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    if not token:
+        result = {'error': _(u"Argument missing")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    try:
+        upload_link = UploadLinkShare.objects.get(token=token)
+        upload_link.delete()
+        result = {'success': True}
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    except:
+        result = {'error': _(u"The link doesn't exist")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+@login_required
 def send_shared_link(request):
     """
     Handle ajax post request to send file shared link.
@@ -845,3 +904,53 @@ def user_share_list(request, id_or_email):
             'add_to_contacts': add_to_contacts,
             }, context_instance=RequestContext(request))
     
+@login_required
+def get_shared_upload_link(request):
+    """
+    Handle ajax request to generate dir upload link.
+    """
+    if not request.is_ajax():
+        raise Http404
+    content_type = 'application/json; charset=utf-8'
+
+    repo_id = request.GET.get('repo_id', '')
+    path = request.GET.get('p', '')
+
+    if not (repo_id and  path):
+        err = _('Invalid arguments')
+        data = json.dumps({'error': err})
+        return HttpResponse(data, status=400, content_type=content_type)
+
+    if path == '/':         # can not share root dir
+        err = _('You cannot share the library in this way.')
+        data = json.dumps({'error': err})
+        return HttpResponse(data, status=400, content_type=content_type)
+    else:
+        if path[-1] != '/': # append '/' at end of path
+            path += '/'
+    l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
+        username=request.user.username).filter(path=path)
+    if len(l) > 0:
+        upload_link = l[0]
+        token = upload_link.token
+    else:
+        token = gen_token(max_length=10)
+
+        upload_link = UploadLinkShare()
+        upload_link.username = request.user.username
+        upload_link.repo_id = repo_id
+        upload_link.path = path
+        upload_link.token = token
+
+        try:
+            upload_link.save()
+        except IntegrityError, e:
+            err = _('Failed to get the link, please retry later.')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=500, content_type=content_type)
+
+    shared_upload_link = gen_shared_upload_link(token)
+
+    data = json.dumps({'token': token, 'shared_upload_link': shared_upload_link})
+    return HttpResponse(data, status=200, content_type=content_type)
+
