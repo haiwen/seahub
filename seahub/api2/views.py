@@ -1690,7 +1690,7 @@ def msg_reply(request, msg_id):
     return HttpResponse(serialized_data, content_type=content_type)
 
 
-def repo_history_changes(request, repo_id, return_json):
+def repo_history_changes(request, repo_id):
     changes = {}
     content_type = 'application/json; charset=utf-8'
 
@@ -1724,11 +1724,8 @@ def repo_history_changes(request, repo_id, return_json):
     for k in changes:
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
 
-    if return_json == true:
-        return Response(changes)
-    else:
-        html = render_to_string('api2/event_details.html', {'changes': changes})
-        return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+    html = render_to_string('api2/event_details.html', {'changes': changes})
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 def msg_reply_new(request):
     notes = UserNotification.objects.filter(to_user=request.user.username)
@@ -1826,7 +1823,22 @@ class RepoHistory(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id, True)
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits = commits_all[:per_page]
+
+        if len(commits_all) == per_page + 1:
+            page_next = True
+        else:
+            page_next = False
+
+        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1889,7 +1901,7 @@ class RepoHistoryChangeHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id, False)
+        return api_repo_history_changes (request, repo_id)
 
 
 #Following is only for debug
