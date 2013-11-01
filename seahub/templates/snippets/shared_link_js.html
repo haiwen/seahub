@@ -51,7 +51,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
             $('#gen-upload-link-btn').addClass('hide');
             $('#share-upload-link-body').removeClass('hide');
             var link = op.data('upload-link');
-            $('#shared-upload-link-text, #upload-link-send-form input[name="file_shared_upload_link"]').val(link);
+            $('#shared-upload-link-text, #upload-link-send-form input[name="shared_upload_link"]').val(link);
             $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
             $('#shared-upload-link-text').css({'width':$('#linkwidth').width() + 25});
             $('#linkwidth').remove();
@@ -256,6 +256,58 @@ $('#send-upload-link').click(function() {
     addAutocomplete('#upload-link-send-input', '#upload-link-send-form', share_list);
 });
 
+$("#upload-link-send-form .cancel").click(function() {
+    $('#upload-link-send-form, #send-upload-link, #rm-shared-upload-link').toggleClass('hide');
+});
+
+$("#upload-link-send-form").submit(function(event) {
+    var form = $(this),
+        shared_upload_link = form.children('input[name="shared_upload_link"]').val(),
+        email = $.trim(form.children('textarea[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]');
+
+    if (!email) {
+        apply_form_error('upload-link-send-form', '{% trans "Please input at least an email." %}');
+        return false;
+    }
+
+    disable(submit_btn);
+    $('#upload-link-send-form .error').addClass('hide');
+    $('#upload-sending').removeClass('hide');
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'send_shared_upload_link' %}",
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {shared_upload_link: shared_upload_link, email: email},
+        success: function(data) {
+            $.modal.close();
+            feedback(data['msg'], "success");
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            $('#upload-sending').addClass('hide');
+            enable(submit_btn);
+            var err_str = '';
+            if (xhr.responseText) {
+                var err = jQuery.parseJSON(xhr.responseText);
+                if (err.error) {
+                    err_str = err.error;
+                } else {
+                    for (var i in err) {
+                        err_str += err[i];
+                    }
+                }
+            } else {
+                err_str = '{% trans "Failed. Please check the network." %}';
+            }
+            apply_form_error('upload-link-send-form', err_str);
+        }
+    });
+   return false;
+});
+
 $('#gen-upload-link-btn').click(function() {
     var gen_upload_link_btn = $(this),
     obj = gen_upload_link_btn.data('obj');
@@ -267,7 +319,7 @@ $('#gen-upload-link-btn').click(function() {
         success: function(data) {
             var upload_link = data['shared_upload_link'];
             gen_upload_link_btn.addClass('hide');
-            $('#shared-upload-link-text, #upload-link-send-form input[name="file_shared_upload_link"]').val(upload_link);
+            $('#shared-upload-link-text, #upload-link-send-form input[name="shared_upload_link"]').val(upload_link);
             $('#main').append('<p id="linkwidth" class="hide">' + upload_link + '</p>');
             $('#shared-upload-link-text').css({'width':$('#linkwidth').width() + 25});
             $('#linkwidth').remove();

@@ -23,7 +23,7 @@ from seaserv import seafserv_threaded_rpc, ccnet_rpc, \
     del_org_group_repo, list_share_repos, get_group_repos_by_owner, \
     list_inner_pub_repos_by_owner, remove_share
 
-from forms import RepoShareForm, FileLinkShareForm
+from forms import RepoShareForm, FileLinkShareForm, UploadLinkShareForm
 from models import AnonymousShare, FileShare, PrivateFileDirShare, UploadLinkShare
 from signals import share_repo_to_user_successful
 from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
@@ -954,3 +954,52 @@ def get_shared_upload_link(request):
     data = json.dumps({'token': token, 'shared_upload_link': shared_upload_link})
     return HttpResponse(data, status=200, content_type=content_type)
 
+@login_required
+def send_shared_upload_link(request):
+    """
+    Handle ajax post request to send shared upload link.
+    """
+    if not request.is_ajax() and not request.method == 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    if not IS_EMAIL_CONFIGURED:
+        data = json.dumps({'error':_(u'Sending shared upload link failed. Email service is not properly configured, please contact administrator.')})
+        return HttpResponse(data, status=500, content_type=content_type)
+
+    from seahub.settings import SITE_NAME
+
+    form = UploadLinkShareForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        shared_upload_link = form.cleaned_data['shared_upload_link']
+
+        t = loader.get_template('shared_upload_link_email.html')
+        to_email_list = string2list(email)
+        for to_email in to_email_list:
+            # Add email to contacts.
+            mail_sended.send(sender=None, user=request.user.username,
+                             email=to_email)
+
+            c = {
+                'email': request.user.username,
+                'to_email': to_email,
+                'shared_upload_link': shared_upload_link,
+                'site_name': SITE_NAME,
+                }
+
+            try:
+                send_mail(_(u'Your friend shared a upload link to you on Seafile'),
+                          t.render(Context(c)), None, [to_email],
+                          fail_silently=False)
+            except Exception, e:
+                logger.error(str(e))
+                data = json.dumps({'error':_(u'Internal server error. Send failed.')})
+                return HttpResponse(data, status=500, content_type=content_type)
+
+        data = json.dumps({"msg": _(u'Successfully sent.')})
+        return HttpResponse(data, status=200, content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)

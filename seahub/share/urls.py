@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 
     url(r'^upload_link/get/$', get_shared_upload_link, name='get_shared_upload_link'),
     url(r'^upload_link/remove/$', remove_shared_upload_link, name='remove_shared_upload_link'),
+    url(r'^upload_link/send/$', send_shared_upload_link, name='send_shared_upload_link'),
 
     url(r'^permission_admin/$', share_permission_admin, name='share_permission_admin'),
 
