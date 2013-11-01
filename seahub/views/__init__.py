@@ -61,13 +61,13 @@ from seahub.group.models import GroupMessage, MessageAttachment
 from seahub.group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare, PrivateFileDirShare
+from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import AddUserForm, RepoCreateForm, \
     RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, \
+    get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
     EMPTY_SHA1, normalize_file_path, \
@@ -219,10 +219,12 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
         last_modified_info = get_dir_files_last_modified(repo_id, path)
 
         fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
+        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
 
         for dirent in dirs:
             dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
             dirent.sharelink = ''
+            dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
                 dpath = os.path.join(path, dirent.obj_name)
                 if dpath[-1] != '/':
@@ -231,6 +233,11 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
                     if dpath == share.path:
                         dirent.sharelink = gen_dir_share_link(share.token)
                         dirent.sharetoken = share.token
+                        break
+                for link in uploadlinks:
+                    if dpath == link.path:
+                        dirent.uploadlink = gen_shared_upload_link(link.token)
+                        dirent.uploadtoken = link.token
                         break
                 dir_list.append(dirent)
             else:
