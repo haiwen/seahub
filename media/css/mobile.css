@@ -1195,6 +1195,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /*repo-share-form*/
 #link-send-input,
+#upload-link-send-input,
 #email_or_group,
 #share-link,
 #added-member-name,
