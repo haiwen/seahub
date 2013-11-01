@@ -1931,7 +1931,7 @@ class DirDownloadView(APIView):
                                                   request.user.username)
 
         redirect_url = gen_file_get_url(token, dirname)
-        return HttpResponse(json.dumps({"dir": dirname, "url":redirect_url}), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
