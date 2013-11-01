@@ -65,7 +65,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
 from seaserv import seafile_api
 
 
@@ -1880,6 +1880,47 @@ class FileRevert(APIView):
 
         return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
 
+class DirDownloadView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        dirname = os.path.dirname(path)
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        if not current_commit:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         'Failed to get current commit of repo %s.' % repo_id)
+
+        try:
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                         path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                         "Failed to get dir id by path")
+
+        if not dir_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+
+        try:
+            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+        except Exception, e:
+            logger.error(str(e))
+            return render_error(request, _(u'Internal Error'))
+
+        if total_size > MAX_DOWNLOAD_DIR_SIZE:
+            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
+
+        redirect_url = gen_file_get_url(token, dirname)
+        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
