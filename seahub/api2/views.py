@@ -1840,6 +1840,26 @@ class RepoHistory(APIView):
 
         return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
+class FileHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        try:
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
+        except SearpcError, e:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
+
+        if not commits:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
