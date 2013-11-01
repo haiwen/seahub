@@ -1886,10 +1886,21 @@ class DirDownloadView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return render_error(request, _(u'Library does not exist'))
+
         path = request.GET.get('p', None)
         assert path, 'path must be passed in the url'
 
-        dirname = os.path.dirname(path)
+        if path[-1] != '/':         # Normalize dir path
+            path += '/'
+
+        if len(path) > 1:
+            dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
+        else:
+            dirname = repo.name
+
         current_commit = get_commits(repo_id, 0, 1)[0]
         if not current_commit:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -1920,7 +1931,7 @@ class DirDownloadView(APIView):
                                                   request.user.username)
 
         redirect_url = gen_file_get_url(token, dirname)
-        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps({"dir": dirname, "url":redirect_url}), status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
