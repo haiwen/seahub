@@ -1781,7 +1781,7 @@ textarea:-moz-placeholder {/* for FF */
     left:365px;
     top:50px;
     z-index:10;
-    padding:15px;;
+    padding:15px;
     min-height:130px;
     border:1px solid #ddd;
     background:#fff;
