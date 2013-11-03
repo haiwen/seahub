@@ -4,6 +4,7 @@
         <div id="file-share-tabs">
             <ul id="file-share-tabs-nav">
                 <li><a href="#link-share">{% trans "Share Link" %}</a></li>
+                <li id="upload-link-tab"><a href="#upload-link-share">{% trans "Share Upload Link" %}</a></li>
                 {% if is_repo_owner %}
                 <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li> {# for file #}
                 {% endif %}
@@ -41,6 +42,25 @@
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" />
                         <p id="sending" class="hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+
+            <div id="upload-link-share">
+                <button id="gen-upload-link-btn" class="hide">{% trans "Generate"%}</button>
+                <div id="share-upload-link-body" class="hide">
+                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><input type="text" readonly="readonly" id="shared-upload-link-text" class="vam" /></p>
+                    <button id="send-upload-link">{% trans 'Send' %}</button>
+                    <button id="rm-shared-upload-link">{% trans 'Delete' %}</button>
+
+                    <form id="upload-link-send-form" action="" method="post" class="hide">{% csrf_token %}
+                        <label>{% trans "Send to:"%}</label><br />
+                        <textarea id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="hidden" name="shared_upload_link" value="{{ dir_shared_upload_link }}" />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" />
+                        <p id="upload-sending" class="hide">{% trans "Sending..."%}</p>
                     </form>
                 </div>
             </div>

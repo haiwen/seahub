@@ -92,6 +92,7 @@ urlpatterns = patterns('',
     url(r'^f/(?P<token>[a-f0-9]{10})/$', view_shared_file, name='view_shared_file'),
     url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]{10})/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
+    url(r'^u/d/(?P<token>[a-f0-9]{10})/$', view_shared_upload_dir, name='view_shared_upload_dir'),
 
     ### Misc ###
     (r'^file_upload_progress_page/$', file_upload_progress_page),

@@ -1,0 +1,61 @@
+{% extends base_template %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Share" %} - {% endblock %}
+{% block nav_share_class %}class="cur"{% endblock %}
+
+{% block title_panel %}
+{% include "repo/tabnav.html" with cur="upload" %}
+{% endblock %}
+
+{% block main_panel %}
+{% if uploadlinks %}
+<table class="sharelink-list">
+  <tr>
+    <th width="4%"><!--icon--></th>
+    <th width="44%">{% trans "Name"%}</th>
+    <th width="25%">{% trans "Library"%}</th>
+    <th width="12%">{% trans "Visits"%}</th>
+    <th width="15%">{% trans "Operations"%}</th>
+  </tr>
+  {% for link in uploadlinks %}
+  <tr>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+    <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+    <td><a href="{{ SITE_ROOT }}repo/{{ link.repo.id }}/">{{ link.repo.name }}</a></td>
+    <td>{{ link.view_cnt }}</td>
+    <td>
+        <a href="#" class="op view-link" data="{{ link.shared_link }}">{% trans "View" %}</a>
+        <a class="op" href="{% url 'remove_shared_upload_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<input type="text" readonly="readonly" value="" id="shared-upload-link" class="hide" />
+{% else %}
+<div class="empty-tips">
+  <h2 class="center-contents">{% trans "You don't have any shared upload link"%}</h2>
+  <p>{% trans "You can share a folder with other users so that they can upload files to your folder." %}</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% if uploadlinks %}
+$(".view-link").click(function() {
+    var link = $(this).attr('data');
+    $('#shared-upload-link').before('<p class="hide">' + link + '</p>')
+    .val(link).css('width', $('#shared-upload-link').prev().width() + 2)
+    .modal({focus:false});
+    $('#shared-upload-link').prev().remove();
+    return false;
+});
+$('#shared-upload-link').click(function() {
+    $(this).select();
+});
+{% endif %}
+</script>
+{% endblock %}

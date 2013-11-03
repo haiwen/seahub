@@ -1,0 +1,138 @@
+{% extends base_template %}
+
+{% load seahub_tags i18n upload_tags %}
+{% load url from future %}
+
+{% block main_panel %}
+    <h2 id="view-hd">{{ dir_name }}</h2>
+    <div>
+      <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
+    </div>
+
+    <div class="repo-file-list-outer-container">
+        <div class="repo-file-list-inner-container">
+            <div class="repo-file-list-topbar ovhd">
+                <div class="repo-op fright">
+                    <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
+                </div>
+            </div>
+            <table class="repo-file-list" id="uploaded-files-list">
+                <tr>
+                    <th width="5%"></th>
+                    <th width="56%">{% trans "Name"%}</th>
+                    <th width="39%">{% trans "Size"%}</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="upload-file-dialog" class="hide">
+        <h3>{% trans "Upload Files" %}</h3>
+        {% if no_quota %}
+        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
+        {% else %}
+        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
+            {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+            <input type="file" name="file" /><br />
+            <p class="error hide">{% trans "Please select a file at first." %}</p>
+            <input type="button" value="{% trans "Submit" %}" />
+            {% else %}
+            <input type="hidden" name="parent_dir" value="{{ path }}" />
+            <div class="row fileupload-buttonbar">
+                <div>
+                    <span class="fileinput-button vam">
+                        <span class="icon-plus"></span>
+                        <span>{% trans "Add Files" %}</span>
+                        <input type="file" name="file" multiple />
+                    </span>
+                    <button type="submit" class="start vam">
+                        <span class="icon-upload"></span>
+                        <span>{% trans "Start All" %}</span>
+                    </button>
+                    <button type="reset" class="cancel vam">
+                        <span class="icon-ban-circle"></span>
+                        <span>{% trans "Cancel All" %}</span>
+                    </button>
+                </div>
+                <ol class="tip">
+                    <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
+                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                </ol>
+                <div class="fileupload-progress fade">
+                    <div class="progress progress-success progres-striped active">
+                        <div class="bar" style="width:0%"></div>
+                    </div>
+                    <div class="progress-extended"></div>
+                </div>
+            </div>
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+           {% endif %} 
+        </form>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+{% upload_js %}
+<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
+<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
+<script type="text/javascript">
+// for file upload
+window.locale = { 
+    "fileupload": {
+        "errors": {
+            "maxFileSize": "{% trans "File is too big" %}",
+            "minFileSize": "{% trans "File is too small" %}",
+            "acceptFileTypes": "{% trans "Filetype not allowed" %}",
+            "maxNumberOfFiles": "{% trans "Max number of files exceeded" %}",
+            "uploadedBytes": "{% trans "Uploaded bytes exceed file size" %}",
+            "emptyResult": "{% trans "Empty file upload result" %}"
+        },  
+        "error": "{% trans "Error" %}",
+        "start": "{% trans "Start" %}",
+        "cancel": "{% trans "Cancel" %}",
+        "destroy": "{% trans "Delete" %}"
+    }   
+};
+
+$('#upload-file').click(function () {
+    var form = $('#upload-file-form'),
+        parent_dir = $('input[name="parent_dir"]', form);
+
+    $('#upload-file-dialog').modal({
+        focus:false,
+        containerCss: {width:600, height:$(window).height()/1.5},
+        onClose: function() {
+            $.modal.close();
+        }
+    });
+    $('.simplemodal-wrap').css({'overflow':'auto'}); // for ie
+
+    // Initialize the jQuery File Upload widget:
+    form.fileupload({
+        //singleFileUploads: false // using 1 request to upload all files of a selection
+        sequentialUploads: true
+    })
+    .bind('fileuploaddone', function(e, data) {
+        if (data.textStatus == 'success') {
+            $.each(data.files, function(index, file) {
+                $('#uploaded-files-list').append(
+                    '<tr><td></td><td>' + file.name +'</td><td>' + filesizeformat(file.size) + '</td></tr>');
+            });
+        }
+    });
+
+    // Enable iframe cross-domain access via redirect option:
+    form.fileupload(
+        'option',
+        'redirect',
+        window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+    );
+});
+
+</script>
+{% endblock %}
