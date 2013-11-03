@@ -46,7 +46,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     set_repo_history_limit, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
     count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
-    get_user_share_usage, send_message
+    get_user_share_usage, send_message, \
+    MAX_UPLOAD_FILE_SIZE
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -1642,7 +1643,45 @@ def view_shared_dir(request, token):
             'dir_list': dir_list,
             'zipped': zipped,
             }, context_instance=RequestContext(request))
-    
+
+def view_shared_upload_dir(request, token):
+    assert token is not None    # Checked by URLconf
+
+    try:
+        uploadlink = UploadLinkShare.objects.get(token=token)
+    except UploadLinkShare.DoesNotExist:
+        raise Http404
+
+    username = uploadlink.username
+    repo_id = uploadlink.repo_id
+    path = uploadlink.path
+    dir_name = os.path.basename(path[:-1])
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    uploadlink.view_cnt = F('view_cnt') + 1
+    uploadlink.save()
+
+    max_upload_file_size = MAX_UPLOAD_FILE_SIZE
+    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
+
+    token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+                                                    'upload', request.user.username)
+    ajax_upload_url = gen_file_upload_url(token, 'upload-api').replace('api', 'aj')
+
+    return render_to_response('view_shared_upload_dir.html', {
+            'repo': repo,
+            'token': token,
+            'path': path,
+            'username': username,
+            'dir_name': dir_name,
+            'max_upload_file_size': max_upload_file_size,
+            'no_quota': no_quota,
+            'ajax_upload_url': ajax_upload_url
+            }, context_instance=RequestContext(request))
+
 def demo(request):
     """
     Login as demo account.
