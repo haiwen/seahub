@@ -22,14 +22,17 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 from models import Token
+from seahub.share.models import AnonymousShare, FileShare, PrivateFileDirShare
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles
 from seahub.share.models import FileShare
+from seahub.signals import share_file_to_user_successful
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_ccnetapplet_root, \
@@ -1952,6 +1955,39 @@ class DirDownloadView(APIView):
 
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
+
+class DirShareView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::gen_private_file_share
+    def post(self, request, repo_id, format=None):
+        emails = request.POST.getlist('emails', '')
+        s_type = request.POST.get('s_type', '')
+        path = request.POST.get('path', '')
+        perm = request.POST.get('perm', 'r')
+        file_or_dir = os.path.basename(path.rstrip('/'))
+        username = request.user.username
+
+        for email in [e.strip() for e in emails if e.strip()]:
+            if not is_registered_user(email):
+                messages.error(request, _('Failed to share to "%s", user not found.') % email)
+                continue
+        
+            if s_type == 'f':
+                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                    username, email, repo_id, path)
+            elif s_type == 'd':
+                pfds = PrivateFileDirShare.objects.add_private_dir_share(
+                    username, email, repo_id, path, perm)
+            else:
+                continue
+
+            # send a signal when sharing file successful
+            share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
+            messages.success(request, _('Successfully shared %s.') % file_or_dir)
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
