@@ -1116,20 +1116,17 @@ def public_repo_create(request):
     permission = form.cleaned_data['permission']
     encryption = int(form.cleaned_data['encryption'])
 
-    passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
     user = request.user.username
 
     try:
         if not encryption:
             repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
         else:
-            if SERVER_CRYPTO:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
-            else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
 
         # set this repo as inner pub
         seafile_api.add_inner_pub_repo(repo_id, permission)
@@ -1393,19 +1390,17 @@ def repo_create(request):
     repo_desc = form.cleaned_data['repo_desc']
     encryption = int(form.cleaned_data['encryption'])
 
-    passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
     user = request.user.username
+
     try:
         if not encryption:
             repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
         else:
-            if SERVER_CRYPTO:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
-            else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
     except SearpcError, e:
         repo_id = None
 

@@ -63,7 +63,6 @@ $('#repo-create-form').submit(function() {
             return false;
         }
 
-        {% if not server_crypto %}
         // gen uu_id as new repo_id
         var uu_id = uuid.v4();
 
@@ -71,7 +70,6 @@ $('#repo-create-form').submit(function() {
 
         var fileKey = new FileKey(passwd);
         var encrypted_file_key = fileKey.gen_enc();
-        {% endif %}
     }
 
     var submit_btn = $('input[type="submit"]', form);
@@ -89,18 +87,11 @@ $('#repo-create-form').submit(function() {
     {% endif %}
 
     if (encrypted) {
-        {% if server_crypto %}
-        $.extend(post_data, {
-            'passwd': passwd,
-            'passwd_again': passwd_again
-        });
-        {% else %}
         $.extend(post_data, {
             'uuid': uu_id,
             'magic_str': magic_str,
             'encrypted_file_key': encrypted_file_key
         });
-        {% endif %}
     }
 
     $.ajax({

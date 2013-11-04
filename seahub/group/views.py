@@ -936,10 +936,10 @@ def create_group_repo(request, group_id):
         permission = form.cleaned_data['permission']
         encryption = int(form.cleaned_data['encryption'])
 
-        passwd = form.cleaned_data['passwd']
         uuid = form.cleaned_data['uuid']
         magic_str = form.cleaned_data['magic_str']
         encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
         user = request.user.username
 
         org, base_template = check_and_get_org_by_group(group.id, user)
@@ -976,10 +976,7 @@ def create_group_repo(request, group_id):
                 if not encryption:
                     repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
                 else:
-                    if SERVER_CRYPTO:
-                        repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
-                    else:
-                        repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+                    repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
 
             except SearpcError, e:
                 repo_id = None 
