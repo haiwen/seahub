@@ -2038,6 +2038,11 @@ class SharedLinksView(APIView):
                 p_fileshares.append(fs)
         return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
 
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        FileShare.objects.filter(token=token).delete()
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
+
 class SharedFilesView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
