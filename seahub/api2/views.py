@@ -54,7 +54,7 @@ from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.signals import repo_created
 from seahub.group.views import group_check
 from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
-    gen_file_share_link
+    gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
