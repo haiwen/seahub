@@ -25,7 +25,7 @@ from django.utils.translation import ugettext as _
 from django.contrib import messages
 
 from models import Token
-from seahub.share.models import AnonymousShare, FileShare, PrivateFileDirShare
+from seahub.share.models import AnonymousShare, PrivateFileDirShare
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
@@ -53,7 +53,8 @@ from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.signals import repo_created
 from seahub.group.views import group_check
-from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
+    gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
@@ -68,7 +69,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, is_personal_repo
 from seaserv import seafile_api
 
 
@@ -1988,6 +1989,77 @@ class DirShareView(APIView):
             share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
             messages.success(request, _('Successfully shared %s.') % file_or_dir)
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+
+class FileShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, FileShare):
+            return None
+        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
+
+class PrivateFileDirShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, PrivateFileDirShare):
+            return None
+        return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'permission':obj.permission, 's_type':obj.s_type}
+
+class SharedLinksView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_shared_links
+    def get(self, request, format=None):
+        username = request.user.username
+
+        fileshares = FileShare.objects.filter(username=username)
+        p_fileshares = []           # personal file share
+        for fs in fileshares:
+            if is_personal_repo(fs.repo_id):  # only list files in personal repos
+                r = seafile_api.get_repo(fs.repo_id)
+                if not r:
+                    fs.delete()
+                    continue
+
+                if fs.s_type == 'f':
+                    if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path)
+                    fs.shared_link = gen_file_share_link(fs.token) 
+                else:
+                    if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+                    fs.shared_link = gen_dir_share_link(fs.token)
+                fs.repo = r
+                p_fileshares.append(fs)
+        return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
+
+class SharedFilesView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_priv_shared_files
+    def get(self, request, format=None):
+        username = request.user.username
+
+        # Private share out/in files.
+        priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
+        for e in priv_share_out:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+
+        priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
+        for e in priv_share_in:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+    
+        return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
+                status=200, content_type=json_content_type)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
