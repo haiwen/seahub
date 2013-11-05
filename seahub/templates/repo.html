@@ -21,7 +21,9 @@
             <div class="w100 ovhd">
                 <h2 class="fleft">{{repo.props.name}}{% if user_perm == 'r' %} <span class="tip vam">({% trans "Read-Only" %})</span>{% endif %}</h2>
                 <div class="fright">
+                    {% if show_repo_download_button %}
                     <button id="repo-download-btn" class="repo-top-op-btn"><span class="icon-cloud-download"></span>{% trans "Download"%}</button>
+                    {% endif %}
                     {% if is_repo_owner %}
                     <button id="repo-setting-btn" data="{% url 'repo_settings' repo.id %}" class="repo-top-op-btn"><span class="icon-cog"></span>{% trans "Settings" %}</button>
                     {% endif %}

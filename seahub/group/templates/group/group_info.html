@@ -83,10 +83,12 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td>
+            {% if show_repo_download_button %}
             <span class="icon-cloud-download download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" title="{% trans "Download and Sync" %}"></span>
-        {% if is_staff or repo.share_from_me  %}
-        <span class="icon-trash cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}"></span>
-        {% endif %}
+            {% endif %}
+            {% if is_staff or repo.share_from_me  %}
+            <span class="icon-trash cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}"></span>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

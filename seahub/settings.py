@@ -184,6 +184,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # for v2 enc repo: encrypt/decrypt on the server
 SERVER_CRYPTO = True
 
+# show library 'download' button
+SHOW_REPO_DOWNLOAD_BUTTON = True
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024

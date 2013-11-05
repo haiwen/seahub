@@ -41,7 +41,9 @@
         <td>{% if repo.props.last_modified %}{{ repo.props.last_modified|translate_seahub_time }}{% else %}--{% endif %}</td>
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
+            {% if show_repo_download_button %}
             <span data="{{ repo.props.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync"%}"></span>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
