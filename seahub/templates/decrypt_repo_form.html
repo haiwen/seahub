@@ -10,7 +10,7 @@
                     <label>{% trans "Password: " %}</label>
                     <input type="hidden" name="repo_id" value="{{ repo.id }}" />
                     <input type="hidden" name="username" value="{{ request.user.username }}" />
-                    <input type="password" name="password" maxlength="64" autofocus />
+                    <input type="password" name="password" autofocus />
                     <input type="submit" value="{% trans "Submit" %}" />
                     <p class="error hide"></p>
                     {% for error in form.errors.values %}

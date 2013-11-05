@@ -272,7 +272,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     decrypt_repo();
 }
 function decrypt_repo() {
-    var decrypt_form = $('<form id="repo-decrypt" style="width:928px;padding:10px 10px 15px;border:1px solid #ddd;border-radius:3px;margin:2em auto 0"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>    <input type="password" name="password" maxlength="64" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> </form>');
+    var decrypt_form = $('<form id="repo-decrypt" style="width:928px;padding:10px 10px 15px;border:1px solid #ddd;border-radius:3px;margin:2em auto 0"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>    <input type="password" name="password" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> </form>');
     $('#header').after(decrypt_form);
     $('[type="submit"]', decrypt_form).click(function() {
         var passwd = $('[name="password"]', decrypt_form).val(),

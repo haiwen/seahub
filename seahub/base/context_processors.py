@@ -8,7 +8,7 @@ RequestContext.
 """
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
     ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_URL, SERVER_CRYPTO, \
-    SHOW_REPO_DOWNLOAD_BUTTON
+    SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
 try:
     from seahub.settings import BUSINESS_MODE
 except ImportError:
@@ -57,5 +57,5 @@ def base(request):
         'enable_pubfile': ENABLE_PUBFILE,
         'server_crypto': SERVER_CRYPTO,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
+        'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
         }
-

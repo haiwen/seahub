@@ -187,6 +187,9 @@ SERVER_CRYPTO = True
 # show library 'download' button
 SHOW_REPO_DOWNLOAD_BUTTON = True
 
+# mininum length for password of encrypted library
+REPO_PASSWORD_MIN_LENGTH = 6
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
