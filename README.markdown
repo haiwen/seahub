@@ -1,7 +1,7 @@
 Introduction
 ==========
 
-Seahub is the web frontend for Seafle.
+Seahub is the web frontend for Seafile.
 
 Preparation
 ==========
