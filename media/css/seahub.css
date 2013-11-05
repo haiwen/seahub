@@ -1220,7 +1220,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:100px;
 }
 .path { margin: 1.4em 0 0; }
-.access-notice { margin: 0.8em 0 0.4em; }
+.access-notice { margin: 0.8em 0 0.4em; display: inline-block; }
 .repo-op {
     text-align:right;
 }
@@ -1293,7 +1293,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list .dirent-name {
     display:inline-block;
-    width:400px;
+    Width:400px;
 }
 .repo-file-list .dirent-size {
     width:89px;
@@ -2455,4 +2455,8 @@ textarea:-moz-placeholder {/* for FF */
 #enable-mods:hover {
     color:#666;
     text-decoration:none;
+}
+#option-settings-form input[type="radio"] {
+    margin: 0;
+    width: 22px;
 }

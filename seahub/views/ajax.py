@@ -18,6 +18,7 @@ from pysearpc import SearpcError
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
@@ -25,7 +26,6 @@ from seahub.signals import repo_created
 from seahub.utils import check_filename_with_rename
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
-from seahub.settings import SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -201,8 +201,14 @@ def list_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -267,8 +273,14 @@ def list_dir_more(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
            and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -882,8 +894,14 @@ def get_current_commit(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),

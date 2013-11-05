@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'seahub.group',
     'seahub.message',
     'seahub.notifications',
+    'seahub.options',
     'seahub.profile',
     'seahub.share',
 )
@@ -180,9 +181,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
-
-# for v2 enc repo: encrypt/decrypt on the server
-SERVER_CRYPTO = True
 
 # show library 'download' button
 SHOW_REPO_DOWNLOAD_BUTTON = True

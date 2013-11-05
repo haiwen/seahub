@@ -32,6 +32,14 @@
     </form>
 </div>
 
+<h3>{% trans "Library Encryption" %}</h3>
+  <form id="option-settings-form" method="post" action="{% url 'options_save' %}">{% csrf_token %}
+    <input type="radio" name="repo-enc" value="server-crypto" {% if server_crypto %}checked="checked"{% endif %} class="vam" /><span class="vam">{% trans "Server Crypto: Send password to server. When you download a file, server decrypts the file before sending it to you." %}</span><br />
+    <input type="radio" name="repo-enc" value="client-crypto" {% if not server_crypto %}checked="checked"{% endif %} class="vam" /><span class="vam">{% trans "Browser Crypto: Store password at your browser. When you download a file, your browser gets the encrypted file from server and decrypts it. More secure, but maybe not work well on some old browsers." %}</span><br />
+
+    <input type="submit" value="{% trans "Set" %}" class="submit" />
+  </form>
+
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
 <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>

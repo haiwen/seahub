@@ -14,13 +14,14 @@ from seaserv import seafserv_rpc, seafile_api, MAX_UPLOAD_FILE_SIZE, get_persona
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link
-from seahub.settings import ENABLE_SUB_LIBRARY, SERVER_CRYPTO
+from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -188,14 +189,21 @@ def render_repo(request, repo):
                 'repo': repo,
                 }, context_instance=RequestContext(request))
 
-    if repo.encrypted and \
-        (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
-        and not is_password_set(repo.id, username):
-        return render_to_response('decrypt_repo_form.html', {
-                'repo': repo,
-                'next': get_next_url_from_request(request) or \
-                    reverse('repo', args=[repo.id])
-                }, context_instance=RequestContext(request))
+    server_crypto = False
+    if repo.encrypted:
+        try:
+            server_crypto = UserOptions.objects.is_server_crypto(username)
+        except CryptoOptionNotSetError:
+            return render_to_response('options/set_user_options.html', {
+                    }, context_instance=RequestContext(request))
+            
+        if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
+                and not is_password_set(repo.id, username):
+            return render_to_response('decrypt_repo_form.html', {
+                    'repo': repo,
+                    'next': get_next_url_from_request(request) or \
+                        reverse('repo', args=[repo.id])
+                    }, context_instance=RequestContext(request))
 
     # query context args
     applet_root = get_ccnetapplet_root()
@@ -230,7 +238,7 @@ def render_repo(request, repo):
         repo_group_str = ''
     upload_url = get_upload_url(request, repo.id)
 
-    if repo.encrypted and repo.enc_version == 2 and not SERVER_CRYPTO:
+    if repo.encrypted and repo.enc_version == 2 and not server_crypto:
         ajax_upload_url = get_blks_upload_url(request, repo.id)
         ajax_update_url = get_blks_update_url(request, repo.id)
     else:
@@ -273,6 +281,7 @@ def render_repo(request, repo):
             'dir_shared_link': dir_shared_link,
             'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
+            'server_crypto': server_crypto,
             }, context_instance=RequestContext(request))
    
 @login_required    
@@ -315,8 +324,14 @@ def repo_history_view(request, repo_id):
                 'repo': repo,
                 }, context_instance=RequestContext(request))
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-        (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,

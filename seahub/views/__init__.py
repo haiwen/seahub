@@ -60,6 +60,7 @@ from seahub.group.forms import MessageForm, MessageReplyForm
 from seahub.group.models import GroupMessage, MessageAttachment
 from seahub.group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.forms import AddUserForm, RepoCreateForm, \
@@ -89,7 +90,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, SERVER_CRYPTO
+    ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -608,9 +609,15 @@ def repo_history(request, repo_id):
     if not repo:
         raise Http404
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -665,9 +672,15 @@ def repo_view_snapshot(request, repo_id):
     if not repo:
         raise Http404
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -719,9 +732,15 @@ def repo_history_revert(request, repo_id):
     if not access_to_repo(request, repo_id):
         return render_permission_error(request, _(u'You have no permission to restore library'))
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
             ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
             if ret == 1:
@@ -800,8 +819,14 @@ def repo_history_changes(request, repo_id):
     if not repo:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 

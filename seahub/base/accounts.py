@@ -80,7 +80,7 @@ class UserManager(object):
             from seahub.utils.time import dt
             login_dt = dt(user.ctime)
         user.last_login = login_dt
-        
+
         return user
 
 class User(object):

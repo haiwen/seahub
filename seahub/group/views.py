@@ -47,7 +47,7 @@ from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_l
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name, get_wiki_dirent
-from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL, SERVER_CRYPTO
+from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
