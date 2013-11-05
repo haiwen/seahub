@@ -1944,7 +1944,7 @@ class DirDownloadView(APIView):
             total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
         except Exception, e:
             logger.error(str(e))
-            return render_error(request, _(u'Internal Error'))
+            return api_error(status.HTTP_520_OPERATION_FAILED, "Internal error")
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
             return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
@@ -2065,6 +2065,25 @@ class SharedFilesView(APIView):
     
         return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
                 status=200, content_type=json_content_type)
+
+    # from seahub.share.view:rm_private_file_share
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        try:
+            pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token does not exist")
+    
+        from_user = pfs.from_user
+        to_user = pfs.to_user
+        username = request.user.username
+
+        if username == from_user or username == to_user:
+            pfs.delete()
+            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
+        else:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to get repo.')
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
