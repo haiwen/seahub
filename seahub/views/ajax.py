@@ -5,7 +5,7 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
@@ -22,8 +22,6 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
 import seahub.settings as settings
-from seahub.signals import repo_created
-from seahub.utils import check_filename_with_rename
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
 
@@ -549,8 +547,8 @@ def delete_dirents(request, repo_id):
             logger.error(e)
             undeleted.append(dirent_name)
 
-    return HttpResponse(json.dumps({'deleted': deleted,'undeleted': undeleted}),
-                            content_type=content_type)
+    return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
+                        content_type=content_type)
 
 def copy_move_common(func):
     """Decorator for common logic in copying/moving dir/file.
@@ -771,6 +769,7 @@ def dirents_copy_move_common(func):
 @login_required
 @dirents_copy_move_common
 def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    result = {}
     content_type = 'application/json; charset=utf-8'
 
     for obj_name in obj_dir_names:
@@ -800,6 +799,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
 @login_required
 @dirents_copy_move_common
 def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    result = {}
     content_type = 'application/json; charset=utf-8'
 
     for obj_name in obj_dir_names:

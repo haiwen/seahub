@@ -80,7 +80,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
-from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI,\
+from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI, \
     enable_mod_for_user, disable_mod_for_user, get_available_mods_by_user
 from seahub.utils import HAS_OFFICE_CONVERTER
 
@@ -609,6 +609,7 @@ def repo_history(request, repo_id):
     if not repo:
         raise Http404
 
+    username = request.user.username
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
@@ -619,7 +620,7 @@ def repo_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -672,6 +673,7 @@ def repo_view_snapshot(request, repo_id):
     if not repo:
         raise Http404
 
+    username = request.user.username
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
@@ -682,7 +684,7 @@ def repo_view_snapshot(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -732,6 +734,7 @@ def repo_history_revert(request, repo_id):
     if not access_to_repo(request, repo_id):
         return render_permission_error(request, _(u'You have no permission to restore library'))
 
+    username = request.user.username
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
@@ -742,7 +745,7 @@ def repo_history_revert(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -819,6 +822,7 @@ def repo_history_changes(request, repo_id):
     if not repo:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
+    username = request.user.username
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
@@ -827,7 +831,7 @@ def repo_history_changes(request, repo_id):
     
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-            and not is_passwd_set(repo_id, request.user.username):
+            and not is_passwd_set(repo_id, username):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
@@ -1156,8 +1160,9 @@ def public_repo_create(request):
         # set this repo as inner pub
         seafile_api.add_inner_pub_repo(repo_id, permission)
         #seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-    except SearpcError, e:
+    except SearpcError as e:
         repo_id = None
+        logger.error(e)
 
     if not repo_id:
         result['error'] = _(u'Internal Server Error')
@@ -1447,7 +1452,6 @@ def render_file_revisions (request, repo_id):
     if path[-1] == '/':
         path = path[:-1]
     u_filename = os.path.basename(path)
-    filename = urllib2.quote(u_filename.encode('utf-8'))
 
     if not path:
         return render_error(request)
@@ -1841,7 +1845,6 @@ def repo_download_dir(request, repo_id):
                              (repo_id, shared_by, dir_id, total_size))
             except Exception, e:
                 logger.error('Error when sending dir-download message: %s' % str(e))
-                pass
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )
 

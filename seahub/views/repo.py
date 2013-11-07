@@ -15,7 +15,7 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.share.models import FileShare, PrivateFileDirShare
+from seahub.share.models import FileShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
@@ -116,7 +116,6 @@ def get_blks_upload_url(request, repo_id):
     '''
     Get upload url for encrypted file (uploaded in blocks)
     '''
-    username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   'dummy',
@@ -130,7 +129,6 @@ def get_blks_update_url(request, repo_id):
     '''
     Get update url for encrypted file (uploaded in blocks)
     '''
-    username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   'dummy',
