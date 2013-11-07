@@ -7,7 +7,7 @@
 <style type="text/css">
 #main { width:auto; }
 #footer { display:none; }
-{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+{% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
 #main { display:none; }
 {% endif %}
 </style>    
@@ -272,7 +272,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     decrypt_repo();
 }
 function decrypt_repo() {
-    var decrypt_form = $('<form id="repo-decrypt" style="width:928px;padding:10px 10px 15px;border:1px solid #ddd;border-radius:3px;margin:2em auto 0"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>    <input type="password" name="password" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> </form>');
+    var decrypt_form = $('<form id="repo-decrypt" class="wide-panel"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p> <label>{% trans "Password: " %}</label> <input type="password" name="password" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> <p><a href="{% url 'edit_profile' %}#enc-lib-setting">{% trans "Change how to view encrypted libraries online" %}</a></p></form>');
     $('#header').after(decrypt_form);
     $('[type="submit"]', decrypt_form).click(function() {
         var passwd = $('[name="password"]', decrypt_form).val(),
@@ -1463,7 +1463,11 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             updateCmt();
 
             var name_link = $('.dirent-name a', op_obj);
-            name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
+            if (name_link.length == 1) {
+                name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
+            } else {
+                $('.dirent-name', op_obj).html(new_name); // no link for files in client_crypto mode
+            }
             $('.dirent-update', op_obj).html("{% trans "Just now" %}");
             var dld_link; 
             if (op_obj.attr('class') == 'dir-item') {

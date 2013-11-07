@@ -6,7 +6,8 @@
 
 {% block right_panel %}
 <h2>{% trans "Settings" %}</h2>
-<div id="user-basic-info">
+
+<div id="user-basic-info" class="setting-item">
     <h3>{% trans "Profile Setting" %}</h3>
     <div id="user-avatar-change">
         <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
@@ -32,17 +33,25 @@
     </form>
 </div>
 
-<h3>{% trans "Library Encryption" %}</h3>
-  <form id="option-settings-form" method="post" action="{% url 'options_save' %}">{% csrf_token %}
-    <input type="radio" name="repo-enc" value="server-crypto" {% if server_crypto %}checked="checked"{% endif %} class="vam" /><span class="vam">{% trans "Server Crypto: Send password to server. When you download a file, server decrypts the file before sending it to you." %}</span><br />
-    <input type="radio" name="repo-enc" value="client-crypto" {% if not server_crypto %}checked="checked"{% endif %} class="vam" /><span class="vam">{% trans "Browser Crypto: Store password at your browser. When you download a file, your browser gets the encrypted file from server and decrypts it. More secure, but maybe not work well on some old browsers." %}</span><br />
+<div class="setting-item" id="enc-lib-setting">
+<h3>{% trans "Encrypted Libraries Setting" %}</h3>
+<form method="post" action="{% url 'options_save' %}">{% csrf_token %}
+    <label>{% trans "How to view encrypted libraries online:"%}</label><br />
+    <input type="radio" name="repo-enc" value="server-crypto" {% if server_crypto %}checked="checked"{% endif %} class="vam" />
+    <span class="vam bold">{% trans "Send passwords to the server." %}</span> <span class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
 
-    <input type="submit" value="{% trans "Set" %}" class="submit" />
-  </form>
+    <input type="radio" name="repo-enc" value="client-crypto" {% if not server_crypto %}checked="checked"{% endif %} class="vam" />
+    <span class="vam bold">{% trans "Save passwords in your browser." %}</span> <span class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
+    <p>{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+</div>
 
+<div class="setting-item">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
 <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>
+</div>
 {% endblock %}
 
 {% block extra_script %}

@@ -20,10 +20,8 @@ def save_options(request):
 
     if server_crypto:
         UserOptions.objects.enable_server_crypto(username)
-        messages.success(request, _(u'Server crypto enabled, password will be kept in server for 1 hour.'))
     else:
         UserOptions.objects.disable_server_crypto(username)
-        messages.success(request, _(u'Client crypto enabled, password will be kept in browser for 1 hour.'))
 
     next = request.META.get('HTTP_REFERER', None)
     if next is None:

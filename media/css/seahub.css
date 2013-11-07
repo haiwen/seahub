@@ -444,6 +444,14 @@ textarea:-moz-placeholder {/* for FF */
     font-size: 11px;
     margin: 2px 0 5px;
 }
+/**** wide panel ****/ /* e.g. repo decrypt page */
+.wide-panel {
+    width: 928px;
+    padding: 10px 10px 15px; 
+    border: 1px solid #DDD; 
+    border-radius: 3px;  
+    margin: 2em auto 0;
+}
 /**** text-panel ****/ /* e.g. logout */
 .text-panel {
     font-size:16px;
@@ -1115,12 +1123,14 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:15px;
 }
 /*user-basic-info*/
-#user-basic-info {
+.setting-item {
     margin-top:15px;
     margin-bottom:30px;
 }
+.setting-item h3 {
+    color:#000;
+}
 #user-basic-info label {
-    text-align:right;
     width:5.5em;
     margin-right:1em;
 }
@@ -1220,7 +1230,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:100px;
 }
 .path { margin: 1.4em 0 0; }
-.access-notice { margin: 0.8em 0 0.4em; display: inline-block; }
+.access-notice { margin: 0.8em 0 0.4em; }
 .repo-op {
     text-align:right;
 }
@@ -1293,7 +1303,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list .dirent-name {
     display:inline-block;
-    Width:400px;
+    width:400px;
 }
 .repo-file-list .dirent-size {
     width:89px;
@@ -2455,8 +2465,4 @@ textarea:-moz-placeholder {/* for FF */
 #enable-mods:hover {
     color:#666;
     text-decoration:none;
-}
-#option-settings-form input[type="radio"] {
-    margin: 0;
-    width: 22px;
 }

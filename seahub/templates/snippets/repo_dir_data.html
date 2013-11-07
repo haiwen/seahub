@@ -14,7 +14,10 @@
         {% if user_perm == 'rw' %}
         <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
         <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
+        {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
+        {% else %}
         <button id="add-new-file" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New File"%}</button>
+        {% endif %}
         {% endif %}
 
         {% if path != '/' %}

@@ -53,7 +53,11 @@
         </td>
         <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
         <td>
+            {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
+            <span class="dirent-name">{{ dirent.obj_name }}</span>
+            {% else %}
             <span class="dirent-name"><a class="op" href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></span>
+            {% endif %}
         </td>
 
         <td class="dirent-size">{{ dirent.file_size|filesizeformat }}</td>

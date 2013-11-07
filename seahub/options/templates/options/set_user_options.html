@@ -3,13 +3,15 @@
 {% load i18n %}
 
 {% block main_panel %}
-<div class="narrow-panel">
-  <h3>{% trans "Choose a crypto method when you browse an encrypted library on the website:" %}</h3>
-  <form id="option-settings-form" method="post" action="{% url 'options_save' %}">{% csrf_token %}
-    <input type="radio" name="repo-enc" value="server-crypto" checked="checked" class="vam" /><span class="vam">{% trans "Server Crypto: Send password to server. When you download a file, server decrypts the file before sending it to you." %}</span><br />
-    <input type="radio" name="repo-enc" value="client-crypto" class="vam" /><span class="vam">{% trans "Browser Crypto: Store password at your browser. When you download a file, your browser gets the encrypted file from server and decrypts it. More secure, but maybe not work well on some old browsers." %}</span><br />
-
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-  </form>
+<div class="wide-panel">
+    <h3>{% trans "Please choose how to view encrypted libraries online:" %}</h3>
+    <form method="post" action="{% url 'options_save' %}">{% csrf_token %}
+        <input type="radio" name="repo-enc" value="server-crypto" class="vam" />
+        <span class="vam bold">{% trans "Send passwords to the server." %}</span> <span class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
+        <input type="radio" name="repo-enc" value="client-crypto" class="vam" />
+        <span class="vam bold">{% trans "Save passwords in your browser." %}</span> <span class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
+        <p>{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
 </div>
 {% endblock %}
