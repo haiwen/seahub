@@ -146,6 +146,7 @@ urlpatterns = patterns('',
     (r'^options/', include('seahub.options.urls')),     
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),
+    url(r'^captcha/', include('captcha.urls')),
 
     ### system admin ###                       
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),

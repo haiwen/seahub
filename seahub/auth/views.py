@@ -21,6 +21,9 @@ from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChange
 from seahub.auth.tokens import default_token_generator
 
 from seahub.base.accounts import User
+from seahub.base.models import UserLoginAttempt
+from settings import LOGIN_ATTEMPT_LIMIT, LOGIN_ATTEMPT_TIMEOUT
+from datetime import datetime
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -37,9 +40,19 @@ def login(request, template_name='registration/login.html',
         return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
+    username = request.REQUEST.get('username', '')
+    if username:
+        login_attempt, created = UserLoginAttempt.objects.get_or_create(username=username)
+        if login_attempt.last_attempt_time + LOGIN_ATTEMPT_TIMEOUT < datetime.now():
+            login_attempt.delete()
+            login_attempt = UserLoginAttempt.objects.create(username=username)
+        if login_attempt.failed_attempts >= LOGIN_ATTEMPT_LIMIT:
+            use_captcha = True
+        else:
+            use_captcha = False
     
     if request.method == "POST":
-        form = authentication_form(data=request.POST)
+        form = authentication_form(data=request.POST, use_captcha=use_captcha)
         if form.is_valid():
             # Light security check -- make sure redirect_to isn't garbage.
             if not redirect_to or ' ' in redirect_to:
@@ -58,7 +71,13 @@ def login(request, template_name='registration/login.html',
             if request.session.test_cookie_worked():
                 request.session.delete_test_cookie()
 
+            login_attempt.delete()
             return HttpResponseRedirect(redirect_to)
+        else:
+            login_attempt.failed_attempts += 1
+            login_attempt.save()
+            if login_attempt.failed_attempts == LOGIN_ATTEMPT_LIMIT:
+                form = authentication_form(data=request.POST, use_captcha=True)
 
     else:
         form = authentication_form(request)

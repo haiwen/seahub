@@ -322,3 +322,11 @@ class InnerPubMsgReply(models.Model):
 #                              msg_type='innerpubmsg_reply',
 #                              detail=msg_id)
 #         n.save()
+
+class UserLoginAttempt(models.Model):
+    username = models.CharField(max_length=255)
+    last_attempt_time = models.DateTimeField(auto_now_add=True)
+    failed_attempts = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-last_attempt_time']
