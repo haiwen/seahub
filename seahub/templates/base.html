@@ -5,18 +5,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1382087880" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1382087880" />
-<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1382087880" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1382087880">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1382087880">
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1382087880">
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1382087880"/>
 <![endif]-->
 {% block extra_style %}{% endblock %}
-{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}">{% endif %}
 </head>
 
 <body>
@@ -25,7 +25,7 @@
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
-            <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}" />
+            <img src="{{ MEDIA_URL }}img/close-16.png" class="close" data="{{ request.cur_note.id }}">
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -63,7 +63,7 @@
                     </div>
 
                     <div id="send-msg-popup" class="hide">
-                        <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
+                        <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip">
                         <form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
                             <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
                             <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
@@ -73,8 +73,8 @@
                                 <span class="icon-remove hide"></span>
                             </div>
                             <p class="error hide"></p>
-                            <input type="submit" value="{% trans "Submit"%}" />
-                            <input type="button" value="{% trans "Cancel"%}" class="cancel" />
+                            <input type="submit" value="{% trans "Submit"%}">
+                            <input type="button" value="{% trans "Cancel"%}" class="cancel">
                         </form>
                     </div>
 
@@ -87,11 +87,11 @@
                 {% block notice_panel %}{% endblock %}
                 {% if seacloud_mode %}
                 <a href="http://seacloud.cc/" id="seacloud-logo" class="fleft">
-                    <img src="{{ MEDIA_URL }}img/seacloud-logo.png?t=1362454620" title="Seacloud" alt="Seacloud logo" />
+                    <img src="{{ MEDIA_URL }}img/seacloud-logo.png?t=1362454620" title="Seacloud" alt="Seacloud logo">
                 </a>
                 {% else %}
                 <a href="{{logo_url}}" id="logo" class="fleft">
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="Seafile logo" />
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="Seafile logo">
                 </a>
                 {% endif %}
                 {% block nav %}{% endblock %}
@@ -99,37 +99,37 @@
                 {% if has_file_search and request.user.is_authenticated %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
                     {% if search_repo_id %}
-                    <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
-                    <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />
+                    <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}">
+                    <input type="hidden" name="search_repo" value="{{ search_repo_id }}">
                     {% else %}
-                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}">
                     {% endif %}
                     <span class="icon-caret-down" title="{% trans "advanced" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
                 </form>
 
                 <form id="advanced-search-form" method="get" action="{% url 'search' %}" class="search-form hide">
-                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}">
                     <div class="search-scales">
                         <div class="search-repos">
                             {% if search_repo_id %}
-                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
-                            <label class="item"><input type="radio" name="search_repo" checked="checked" value="{{ search_repo_id }}" class="vam" /> <span class="vam">{% if search_wiki %}{% trans "In this wiki" %}{% else %}{% trans "In this library" %}{% endif %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam"> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" checked="checked" value="{{ search_repo_id }}" class="vam"> <span class="vam">{% if search_wiki %}{% trans "In this wiki" %}{% else %}{% trans "In this library" %}{% endif %}</span></label>
                             {% else %}
                                     {% if search_repo and repo %}
-                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
-                            <label class="item"><input type="radio" name="search_repo" value="{{repo.id}}" checked="checked" class="vam" /> <span class="vam">{% blocktrans with name=repo.name %}in {{name }}{% endblocktrans %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam"> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="{{repo.id}}" checked="checked" class="vam"> <span class="vam">{% blocktrans with name=repo.name %}in {{name }}{% endblocktrans %}</span></label>
                                     {% else %}
-                            <label class="item"><input type="radio" name="search_repo" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="all" checked="checked" class="vam"> <span class="vam">{% trans "In all libraries" %}</span></label>
                                     {% endif %}
                             {% endif %}
                         </div>
                         <div class="search-filetypes">
                             {% if search_ftypes != 'custom' %}
-                            <label class="item"><input type="radio" name="search_ftypes" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
-                            <label class="item"><input type="radio" name="search_ftypes" value="custom" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" checked="checked" class="vam"> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" class="vam" id="custom-search-ftypes"> <span class="vam">{% trans "Custom file types" %}</span></label>
                             {% else %}
-                            <label class="item"><input type="radio" name="search_ftypes" value="all" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
-                            <label class="item"><input type="radio" name="search_ftypes" value="custom" checked="checked" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" class="vam"> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" checked="checked" class="vam" id="custom-search-ftypes"> <span class="vam">{% trans "Custom file types" %}</span></label>
                             {% endif %}
                         </div>
                         {% if search_ftypes != 'custom' %}
@@ -138,21 +138,21 @@
                         <div class="custom-ftype-options">
                         {% endif %}
                             {# ftype value should be the same with utils/file_types.py #}
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Text" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Text files" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Document" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Documents" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Image" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Images" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Video" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Video" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Audio" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Audio" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="SVG" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "svg" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="PDF" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "pdf" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Sf" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "seaf" %}</span></label>
-                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Markdown" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "markdown" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Text" class="checkbox-orig"></span><span class="checkbox-option">{% trans "Text files" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Document" class="checkbox-orig"></span><span class="checkbox-option">{% trans "Documents" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Image" class="checkbox-orig"></span><span class="checkbox-option">{% trans "Images" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Video" class="checkbox-orig"></span><span class="checkbox-option">{% trans "Video" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Audio" class="checkbox-orig"></span><span class="checkbox-option">{% trans "Audio" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="SVG" class="checkbox-orig"></span><span class="checkbox-option">{% trans "svg" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="PDF" class="checkbox-orig"></span><span class="checkbox-option">{% trans "pdf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Sf" class="checkbox-orig"></span><span class="checkbox-option">{% trans "seaf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Markdown" class="checkbox-orig"></span><span class="checkbox-option">{% trans "markdown" %}</span></label>
                             <br/>
-                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" class="fileext-input" />
+                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" class="fileext-input">
                             <p class="error hide">{% trans "Please select at least one file type or input at least one file extension" %}</p>
                         </div>
                     </div>
-                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                    <input type="submit" value="{% trans "Submit" %}" class="submit">
                 </form>
                 {% endif %}
             </div>
@@ -188,7 +188,7 @@
             </div>
         </div>
 
-        <div id="footer" class="ovhd">           
+        <div id="footer" class="ovhd">
             <div class="items fleft">
                 {% if not seacloud_mode %}
                 <div class="item">
@@ -242,17 +242,17 @@
         </div>
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1382087880"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1382087880"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1382087880"></script>
-<script type="text/javascript">
+<script src="{{ MEDIA_URL }}js/jq.min.js?t=1382087880"></script>
+<script src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
+<script src="{{ MEDIA_URL }}js/base.js?t=1382087880"></script>
+<script src="{{ MEDIA_URL }}js/select2.min.js?t=1382087880"></script>
+<script>
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
         feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
-    }    
+    }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
@@ -348,7 +348,7 @@ $(document).click(function(e) {
     if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
         popup.addClass('hide');
         $('#add-msg').removeClass('add-msg-hl');
-    }    
+    }
 });
 $('#msg-file-share-btn').click(function() {
     var msg_file_share = $('#msg-file-share'),
@@ -366,12 +366,12 @@ $('#msg-file-share-btn').click(function() {
                 $('#msg-file-tree').fadeIn(600);
                 msg_file_share.find('.icon-remove').removeClass('hide');
             } else {
-                msg_file_share.html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>'); 
+                msg_file_share.html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>');
             }
         },
         'error': function(jqXHR, textStatus, errorThrown) {
             if (!jqXHR.responseText) {
-                msg_file_share.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>'); 
+                msg_file_share.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
             }
         }
     });
@@ -439,89 +439,90 @@ $(document).click(function(e) {
         popup_switch = $('#top-search-form .icon-caret-down');
     if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
         popup.addClass('hide');
-    }    
+    }
 });
 {% endif %}
 
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
-<script type="text/javascript">
+<script>
 //font icons: for browsers that don't support ':before'
-    var sf_icons = [
-        {'name':'share', 'con':'e001'},
-        {'name':'removeformat', 'con':'f1e7'}
-    ];
-    var fa_icons = [ 
-        {'name':'trash', 'con':'f014'},
-        {'name':'cog', 'con':'f013'},
-        {'name':'cloud-download', 'con':'f0ed'},
-        {'name':'search', 'con':'f002'},
-        {'name':'minus', 'con':'f068'},
-        {'name':'plus', 'con':'f067'},
-        {'name':'pencil', 'con':'f040'},
-        {'name':'globe', 'con':'f0ac'},
-        {'name':'comment-alt', 'con':'f0e5'},
-        {'name':'double-angle-right', 'con':'f101'},
-        {'name':'font', 'con':'f031'},
-        {'name':'text-height', 'con':'f034'},
-        {'name':'tint', 'con':'f043'},
-        {'name':'bold', 'con':'f032'},
-        {'name':'italic', 'con':'f033'},
-        {'name':'strikethrough', 'con':'f0cc'},
-        {'name':'underline', 'con':'f0cd'},
-        {'name':'list-ul', 'con':'f0ca'},
-        {'name':'list-ol', 'con':'f0cb'},
-        {'name':'indent-left', 'con':'f03b'},
-        {'name':'indent-right', 'con':'f03c'},
-        {'name':'align-left', 'con':'f036'},
-        {'name':'align-center', 'con':'f037'},
-        {'name':'align-right', 'con':'f038'},
-        {'name':'align-justify', 'con':'f039'},
-        {'name':'link', 'con':'f0c1'},
-        {'name':'cut', 'con':'f0c4'},
-        {'name':'picture', 'con':'f03e'},
-        {'name':'undo', 'con':'f0e2'},
-        {'name':'repeat', 'con':'f01e'},
-        {'name':'envelope', 'con':'f003'},
-        {'name':'star', 'con':'f005'},
-        {'name':'star-empty', 'con':'f006'},
-        {'name':'caret-down', 'con':'f0d7'},
-        {'name':'caret-up', 'con':'f0d8'},
-        {'name':'ok', 'con':'f00c'},
-        {'name':'double-angle-left', 'con':'f100'},
-        {'name':'double-angle-right', 'con':'f101'},
-        {'name':'double-angle-up', 'con':'f102'},
-        {'name':'double-angle-down', 'con':'f103'},
-        {'name':'zoom-in', 'con':'f00e'},
-        {'name':'zoom-out', 'con':'f010'},
-        {'name':'signout', 'con':'f08b'},
-        {'name':'plus-sign-alt', 'con':'f0fe'},
-        {'name':'upload', 'con':'f01b'},
-        {'name':'ban-circle', 'con':'f05e'},
-        {'name':'move', 'con':'f047'},
-        {'name':'copy', 'con':'f0c5'},
-        {'name':'th', 'con':'f00a'},
-        {'name':'upload-alt', 'con':'f093'}
-    ];  
-    function setCon(icon, icon_class_prefix, icon_list) {
-            for (var i = 0, len = icon_list.length; i < len; i++) {
-                if (icon.hasClass(icon_class_prefix + icon_list[i].name)) {
-                    icon.html('&#x' + icon_list[i].con + ';');
-                    break;
-                }
-            }
-    }
+
     var pseudo_support = true;
     var pseudo_test = $('body').append('<span class="sf-icon-share pseudo-test" style="color:#fff;position:fixed;left:0;bottom:0;"></span>').children('.pseudo-test');
     if (pseudo_test.width() == 0) {
         pseudo_support = false;
+        var sf_icons = [
+            {'name':'share', 'con':'e001'},
+            {'name':'removeformat', 'con':'f1e7'}
+        ];
+        var fa_icons = [
+            {'name':'trash', 'con':'f014'},
+            {'name':'cog', 'con':'f013'},
+            {'name':'cloud-download', 'con':'f0ed'},
+            {'name':'search', 'con':'f002'},
+            {'name':'minus', 'con':'f068'},
+            {'name':'plus', 'con':'f067'},
+            {'name':'pencil', 'con':'f040'},
+            {'name':'globe', 'con':'f0ac'},
+            {'name':'comment-alt', 'con':'f0e5'},
+            {'name':'double-angle-right', 'con':'f101'},
+            {'name':'font', 'con':'f031'},
+            {'name':'text-height', 'con':'f034'},
+            {'name':'tint', 'con':'f043'},
+            {'name':'bold', 'con':'f032'},
+            {'name':'italic', 'con':'f033'},
+            {'name':'strikethrough', 'con':'f0cc'},
+            {'name':'underline', 'con':'f0cd'},
+            {'name':'list-ul', 'con':'f0ca'},
+            {'name':'list-ol', 'con':'f0cb'},
+            {'name':'indent-left', 'con':'f03b'},
+            {'name':'indent-right', 'con':'f03c'},
+            {'name':'align-left', 'con':'f036'},
+            {'name':'align-center', 'con':'f037'},
+            {'name':'align-right', 'con':'f038'},
+            {'name':'align-justify', 'con':'f039'},
+            {'name':'link', 'con':'f0c1'},
+            {'name':'cut', 'con':'f0c4'},
+            {'name':'picture', 'con':'f03e'},
+            {'name':'undo', 'con':'f0e2'},
+            {'name':'repeat', 'con':'f01e'},
+            {'name':'envelope', 'con':'f003'},
+            {'name':'star', 'con':'f005'},
+            {'name':'star-empty', 'con':'f006'},
+            {'name':'caret-down', 'con':'f0d7'},
+            {'name':'caret-up', 'con':'f0d8'},
+            {'name':'ok', 'con':'f00c'},
+            {'name':'double-angle-left', 'con':'f100'},
+            {'name':'double-angle-right', 'con':'f101'},
+            {'name':'double-angle-up', 'con':'f102'},
+            {'name':'double-angle-down', 'con':'f103'},
+            {'name':'zoom-in', 'con':'f00e'},
+            {'name':'zoom-out', 'con':'f010'},
+            {'name':'signout', 'con':'f08b'},
+            {'name':'plus-sign-alt', 'con':'f0fe'},
+            {'name':'upload', 'con':'f01b'},
+            {'name':'ban-circle', 'con':'f05e'},
+            {'name':'move', 'con':'f047'},
+            {'name':'copy', 'con':'f0c5'},
+            {'name':'th', 'con':'f00a'},
+            {'name':'upload-alt', 'con':'f093'}
+        ];
+        function setCon(icon, icon_class_prefix, icon_list) {
+                for (var i = 0, len = icon_list.length; i < len; i++) {
+                    if (icon.hasClass(icon_class_prefix + icon_list[i].name)) {
+                        icon.html('&#x' + icon_list[i].con + ';');
+                        break;
+                    }
+                }
+        }
         $('[class^="sf-icon-"]').each(function() {
             setCon($(this), 'sf-icon-', sf_icons);
-        }); 
+        });
         $('[class^="icon-"], [class$=" icon-"]').each(function() {
             setCon($(this), 'icon-', fa_icons);
-        }); 
+        });
     }
     pseudo_test.remove();
 </script>
