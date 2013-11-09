@@ -9,9 +9,14 @@
 	<input type="text" id="id_email" name="username" value="" />
 	<label for="password">{% trans "Password" %}</label>
 	<input type="password" id="id_password" name="password" value="" />
+    {{ form.captcha }}
     <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
     {% if form.errors %}
+    {% if form.captcha.errors %}
+	<p class="error">{{ form.captcha.errors}}</p>
+    {% else %}
 	<p class="error">{% trans "Incorrect email or password" %}</p>
+    {% endif %}
     {% else %}
 	<p class="error hide"></p>
     {% endif %}
