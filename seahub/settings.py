@@ -346,9 +346,8 @@ LOGGING = {
 }
 
 #Login Attempt
-import datetime
 LOGIN_ATTEMPT_LIMIT = 3
-LOGIN_ATTEMPT_TIMEOUT = datetime.timedelta(minutes=15)
+LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 
 #################
 # Email sending #

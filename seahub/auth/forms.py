@@ -28,10 +28,7 @@ class AuthenticationForm(forms.Form):
         """
         self.request = request
         self.user_cache = None
-        use_captcha = kwargs.pop('use_captcha', False)
         super(AuthenticationForm, self).__init__(*args, **kwargs)
-        if use_captcha:
-            self.fields['captcha'] = CaptchaField()
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -59,6 +56,9 @@ class AuthenticationForm(forms.Form):
     def get_user(self):
         return self.user_cache
 
+class CaptchaAuthenticationForm(AuthenticationForm):
+    captcha = CaptchaField()
+    
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label=_("E-mail"), max_length=255)
 

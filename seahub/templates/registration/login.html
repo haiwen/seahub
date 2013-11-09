@@ -13,7 +13,7 @@
     <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
     {% if form.errors %}
     {% if form.captcha.errors %}
-	<p class="error">{% trans "Incorrect CAPTCHA" %}</p>
+	<p class="error">{{ form.captcha.errors}}</p>
     {% else %}
 	<p class="error">{% trans "Incorrect email or password" %}</p>
     {% endif %}

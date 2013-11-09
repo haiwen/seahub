@@ -1,6 +1,7 @@
 import datetime
 import logging
 import re
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -11,6 +12,7 @@ from seaserv import seafile_api, get_emailusers
 
 from seahub.auth.signals import user_logged_in
 from seahub.shortcuts import get_first_object_or_none
+from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import at_pattern
 from seahub.group.models import GroupMessage
 from seahub.notifications.models import UserNotification
@@ -221,7 +223,7 @@ def update_last_login(sender, user, **kwargs):
     user_last_login.last_login = timezone.now()
     user_last_login.save()
 user_logged_in.connect(update_last_login)
-    
+
 ###### Deprecated
 class InnerPubMsg(models.Model):
     """
@@ -323,10 +325,4 @@ class InnerPubMsgReply(models.Model):
 #                              detail=msg_id)
 #         n.save()
 
-class UserLoginAttempt(models.Model):
-    username = models.CharField(max_length=255)
-    last_attempt_time = models.DateTimeField(auto_now_add=True)
-    failed_attempts = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ['-last_attempt_time']
+        

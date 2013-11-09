@@ -218,7 +218,8 @@ class AuthBackend(object):
                 return user
         except User.DoesNotExist:
             return None
-            
+
+########## Register related        
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:
