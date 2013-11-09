@@ -81,12 +81,12 @@
         {% endif %}
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
-        <td>
+        <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}">
             {% if show_repo_download_button %}
-            <span class="icon-cloud-download download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" title="{% trans "Download and Sync" %}"></span>
+            <span class="icon-cloud-download download op-icon vh" title="{% trans "Download and Sync" %}"></span>
             {% endif %}
-            {% if is_staff or repo.share_from_me  %}
-            <span class="icon-trash cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}"></span>
+            {% if is_staff or repo.share_from_me %}
+            <span class="icon-trash cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
             {% endif %}
         </td>
     </tr>
@@ -175,6 +175,13 @@ addConfirmTo($('#quit-group'), {
         'title':'{% trans "Quit Group" %}',
         'con':'{% trans "Are you sure you want to quit this group?" %}'
 });
+$('.cancel-share').click(function() {
+    var btn_ct = $(this).parent(),
+        repo_id = btn_ct.data('id'),
+        repo_owner = btn_ct.attr('data-owner'),
+        repo_name = btn_ct.attr('data-name');
+    $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}').attr('data-target', repo_name);
+});
 addConfirmTo($('.cancel-share'), {
         'title':'{% trans "Unshare Library" %}',
         'con':'{% trans "Are you sure you want to unshare %s ?" %}'
@@ -188,9 +195,13 @@ $("table tr:gt(0)").hover(
     }
 );
 $('.download').click(function() {
-    window.open($(this).attr('data'));
+    var repo_id = $(this).parent().data('id');
+    window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
+function repoCreateSuccessCallback() {
+    location.reload();
+}
 {% url 'create_group_repo' group.id as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}

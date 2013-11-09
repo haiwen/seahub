@@ -101,7 +101,7 @@ $('#repo-create-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: post_data,
         success: function(data) {
-            location.reload(true);
+            repoCreateSuccessCallback(data);
         },
         error: function(xhr, textStatus, errorThrown) {
             var error = $.parseJSON(xhr.responseText).error;

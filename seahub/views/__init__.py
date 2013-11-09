@@ -1407,6 +1407,7 @@ def repo_create(request):
     if not request.is_ajax() or request.method != 'POST':
         return Http404
 
+    # TODO: set need_guide as False
     result = {}
     content_type = 'application/json; charset=utf-8'
     
@@ -1438,7 +1439,11 @@ def repo_create(request):
         result['error'] = _(u"Internal Server Error")
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
     else:
-        result['success'] = True
+        result = {
+            'repo_id': repo_id,
+            'repo_name': repo_name,
+            'repo_desc': repo_desc,
+        };
         repo_created.send(sender=None,
                           org_id=-1,
                           creator=user,
