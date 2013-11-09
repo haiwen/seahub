@@ -22,7 +22,6 @@ from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChange
 from seahub.auth.tokens import default_token_generator
 
 from seahub.base.accounts import User
-from seahub.base.models import UserLoginAttempt
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
