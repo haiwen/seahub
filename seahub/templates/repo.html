@@ -205,6 +205,18 @@
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
 
+    {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+    <form id="repo-decrypt-form" class="wide-panel hide">
+        <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>
+        <label>{% trans "Password: " %}</label>
+        <input type="password" name="password" autofocus />
+        <input type="submit" value="{% trans "Submit" %}" />
+        <p class="error hide"></p>
+        {% url 'edit_profile' as profile_edit_url %}
+        <p class="tip" style="margin-top:3em;">{% blocktrans %}You can change how to view encrypted libraries online <a class="normal" href="{{ profile_edit_url }}#enc-lib-setting">here</a>.{% endblocktrans %}</p>
+    </form>
+{% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -272,8 +284,8 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     decrypt_repo();
 }
 function decrypt_repo() {
-    var decrypt_form = $('<form id="repo-decrypt" class="wide-panel"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p> <label>{% trans "Password: " %}</label> <input type="password" name="password" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> <p><a href="{% url 'edit_profile' %}#enc-lib-setting">{% trans "Change how to view encrypted libraries online" %}</a></p></form>');
-    $('#header').after(decrypt_form);
+    var decrypt_form = $('#repo-decrypt-form');
+    $('#header').after(decrypt_form.removeClass('hide'));
     $('[type="submit"]', decrypt_form).click(function() {
         var passwd = $('[name="password"]', decrypt_form).val(),
             err = $('.error', decrypt_form);
