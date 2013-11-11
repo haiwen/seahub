@@ -149,7 +149,7 @@
 {% include "snippets/modules_toggle_js.html" %}
 
 // for user login at first time
-{#% if need_guide %#}
+{% if need_guide %}
 var repo_create_form = $('#repo-create-form');
 $('#guide1-for-new').css({'padding':'0 20px', 'width':450}).append(repo_create_form.removeClass('hide')).modal({appendTo: '#main', autoResize: true});
 repo_create_form.css({'padding':0});
@@ -158,6 +158,6 @@ $('[name="repo_name"]', repo_create_form).val("{% trans "MyLibrary" %}");
 $('[name="repo_desc"]', repo_create_form).val("{% trans "My Default Library" %}");
 $('#simplemodal-container').css({'height':'auto'});
 $(window).resize();
-{#% endif %#}
+{% endif %}
 </script>
 {% endblock %}

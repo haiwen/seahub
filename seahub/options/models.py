@@ -8,27 +8,41 @@ KEY_SERVER_CRYPTO = "server_crypto"
 VAL_SERVER_CRYPTO_ENABLED = "1"
 VAL_SERVER_CRYPTO_DISABLED = "0"
 
+KEY_USER_GUIDE = "user_guide"
+VAL_USER_GUIDE_ON = "1"
+VAL_USER_GUIDE_OFF = "0"
+
 class CryptoOptionNotSetError(Exception):
     pass
 
 class UserOptionsManager(models.Manager):
+    def set_user_option(self, username, k, v):
+        """
+        
+        Arguments:
+        - `username`:
+        - `k`:
+        - `v`:
+        """
+        try:
+            user_option = super(UserOptionsManager, self).get(email=username,
+                                                              option_key=k)
+            user_option.option_val = v            
+        except UserOptions.DoesNotExist:
+            user_option = self.model(email=username, option_key=k,
+                                     option_val=v)
+        user_option.save(using=self._db)
+
+        return user_option
+
     def enable_server_crypto(self, username):
         """
         
         Arguments:
         - `username`:
         """
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_SERVER_CRYPTO)
-        except UserOptions.DoesNotExist:
-            user_option = self.model(email=username,
-                                     option_key=KEY_SERVER_CRYPTO,
-                                     option_val=VAL_SERVER_CRYPTO_ENABLED)
-        user_option.option_val = VAL_SERVER_CRYPTO_ENABLED
-        user_option.save(using=self._db)
-
-        return user_option
+        return self.set_user_option(username, KEY_SERVER_CRYPTO,
+                                    VAL_SERVER_CRYPTO_ENABLED)
         
     def disable_server_crypto(self, username):
         """
@@ -36,17 +50,8 @@ class UserOptionsManager(models.Manager):
         Arguments:
         - `username`:
         """
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_SERVER_CRYPTO)
-        except UserOptions.DoesNotExist:
-            user_option = self.model(email=username,
-                                     option_key=KEY_SERVER_CRYPTO,
-                                     option_val=VAL_SERVER_CRYPTO_DISABLED)
-        user_option.option_val = VAL_SERVER_CRYPTO_DISABLED
-        user_option.save(using=self._db)
-
-        return user_option
+        return self.set_user_option(username, KEY_SERVER_CRYPTO,
+                                    VAL_SERVER_CRYPTO_DISABLED)
 
     def is_server_crypto(self, username):
         """Check whether user is set server crypto. Returns ``True`` if
@@ -64,6 +69,41 @@ class UserOptionsManager(models.Manager):
         except UserOptions.DoesNotExist:
             raise CryptoOptionNotSetError
 
+    def enable_user_guide(self, username):
+        """
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        return self.set_user_option(username, KEY_USER_GUIDE,
+                                    VAL_USER_GUIDE_ON)
+
+    def disable_user_guide(self, username):
+        """
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        return self.set_user_option(username, KEY_USER_GUIDE,
+                                    VAL_USER_GUIDE_OFF)
+
+    def is_user_guide_enabled(self, username):
+        """Return ``True`` if user need guide, otherwise ``False``.
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        try:
+            user_option = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_USER_GUIDE)
+            return bool(int(user_option.option_val))
+        except UserOptions.DoesNotExist:
+            return False        # Assume ``user_guide`` is not enabled.
+        
+        
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)
@@ -71,3 +111,19 @@ class UserOptions(models.Model):
 
     objects = UserOptionsManager()
 
+########## signal handers
+from django.dispatch import receiver
+
+from registration.signals import user_registered
+
+@receiver(user_registered)
+def set_user_guide_on_registration(sender, **kwargs):
+    """Show user guide when a user is registered.
+    
+    Arguments:
+    - `sender`:
+    - `**kwargs`:
+    """
+    reg_email = kwargs['user'].email
+    UserOptions.objects.enable_user_guide(reg_email)
+    

@@ -1004,7 +1004,14 @@ def myhome(request):
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_user(username)
     mods_enabled = get_enabled_mods_by_user(username)
-            
+
+    # user guide
+    need_guide = False
+    if len(owned_repos) == 0:
+        need_guide = UserOptions.objects.is_user_guide_enabled(username)
+        if need_guide:
+            UserOptions.objects.disable_user_guide(username)
+
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -1030,6 +1037,7 @@ def myhome(request):
             "ENABLE_EVENTS": EVENTS_ENABLED,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
+            "need_guide": need_guide,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1407,7 +1415,6 @@ def repo_create(request):
     if not request.is_ajax() or request.method != 'POST':
         return Http404
 
-    # TODO: set need_guide as False
     result = {}
     content_type = 'application/json; charset=utf-8'
     
@@ -1425,28 +1432,32 @@ def repo_create(request):
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
-    user = request.user.username
+    username = request.user.username
 
     try:
         if not encryption:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, username,
+                                              None)
         else:
-            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+            repo_id = seafile_api.create_enc_repo(
+                uuid, repo_name, repo_desc, username,
+                magic_str, encrypted_file_key, enc_version=2)
     except SearpcError, e:
         repo_id = None
 
     if not repo_id:
         result['error'] = _(u"Internal Server Error")
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+        return HttpResponse(json.dumps(result), status=500,
+                            content_type=content_type)
     else:
         result = {
             'repo_id': repo_id,
             'repo_name': repo_name,
             'repo_desc': repo_desc,
-        };
+        }
         repo_created.send(sender=None,
                           org_id=-1,
-                          creator=user,
+                          creator=username,
                           repo_id=repo_id,
                           repo_name=repo_name)
         return HttpResponse(json.dumps(result), content_type=content_type)
