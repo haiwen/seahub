@@ -1602,14 +1602,17 @@ var last_start = 0; // for 'list_dir_more'
 $(window).scroll(function() {
     var repo_top = $('#repo-top'),
         file_topbar = $('.repo-file-list-topbar'),
-        list_hd = $('.repo-file-list tr:first-child'),
+        repo_file_list = $('#repo-file-list'),
+        list_hd = $('.repo-file-list tr:first'),
         repo_top_left = $('.block-inner', repo_top).offset().left,
         file_topbar_h = file_topbar.outerHeight(true);
 
-    if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true)) {
+    if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true) + 1) {
+        repo_file_list.css({'padding-top': file_topbar_h + list_hd.outerHeight(true)});
         file_topbar.addClass('fixed-hd').css({'left': repo_top_left});  
         list_hd.addClass('fixed-hd').css({'left': repo_top_left, 'top':file_topbar_h});  
     } else {
+        repo_file_list.css({'padding-top':0});
         file_topbar.removeClass('fixed-hd');  
         list_hd.removeClass('fixed-hd');  
     }

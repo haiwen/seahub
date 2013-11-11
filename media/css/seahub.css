@@ -1337,8 +1337,8 @@ textarea:-moz-placeholder {/* for FF */
     border-color:#efefef; /*for repo-file-list-topbar*/
 }
 .repo-file-list .fixed-hd th {
-    box-shadow:0 2px 2px -3px #aaa;
     -webkit-box-shadow:0 2px 2px -1px #aaa;
+    box-shadow:0 2px 2px -3px #aaa;
 }
 .file-star {
     cursor:pointer;
