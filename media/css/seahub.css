@@ -965,12 +965,19 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:normal;
 }
 
+/*** for separate pages ***/
+/* login */
 .login-form a {
     font-size:12px;
     vertical-align:middle;
 }
-
-/* for separate pages */
+.captcha {
+    float:right;
+}
+#id_captcha_1 {
+    width:auto;
+    margin:3px 0 0;
+}
 /*myhome*/
 .home-profile .pic {
     margin-left:9px;

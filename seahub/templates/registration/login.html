@@ -9,7 +9,13 @@
 	<input type="text" id="id_email" name="username" value="" />
 	<label for="password">{% trans "Password" %}</label>
 	<input type="password" id="id_password" name="password" value="" />
+    {% if form.captcha %}
+    <label>{% trans "CAPTCHA" %}</label>
+    <div class="captcha-ct">
     {{ form.captcha }}
+    <p class="clear"><a href="#" id="refresh-captcha">{% trans "Not clear? Refresh it." %}</a></p>
+    </div>
+    {% endif %}
     <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
     {% if form.errors %}
     {% if form.captcha.errors %}
@@ -28,6 +34,26 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+window.onload = function() {
+    var captcha_img_width = $('.captcha').width();
+    $('#id_captcha_1').css({'width': 318 - captcha_img_width - 10});
+    $('#refresh-captcha').parent().css({'text-align':'right', 'margin':0});
+};
+$('#refresh-captcha').click(function() {
+    $.ajax({
+        url: '{% url 'captcha-refresh' %}',
+        dataType:'json',
+        cache:false,
+        success: function(data) {
+           $('.captcha').attr('src', data['image_url']); 
+           $('#id_captcha_0').val(data['key']);
+        },
+        error: function() {
+            $('.error').removeClass('hide').html("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+        }
+    });
+    return false;
+});
 $('input[type="submit"]').click(function(){
     if (!$.trim($('input[name="username"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
