@@ -983,7 +983,7 @@ def myhome(request):
     nickname = profiles[0].nickname if profiles else ''
 
     autocomp_groups = joined_groups
-    contacts = Contact.objects.get_registered_contacts_by_user(username)
+    contacts = Contact.objects.get_contacts_by_user(username)
 
     allow_public_share = False if request.cloud_mode else True
 
