@@ -20,7 +20,8 @@ from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.views import get_repo_dirents
-from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
+from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
+        get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
@@ -229,6 +230,8 @@ def list_dir(request, repo_id):
     zipped = get_nav_path(path, repo.name)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
+    uploadlink = get_uploadlink(repo.id, username, path)
+    dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     ctx = { 
         'repo': repo,
@@ -238,6 +241,8 @@ def list_dir(request, repo_id):
         'server_crypto': server_crypto,
         'fileshare': fileshare,
         'dir_shared_link': dir_shared_link,
+        'uploadlink': uploadlink,
+        'dir_shared_upload_link': dir_shared_upload_link,
         'dir_list': dir_list,
         'file_list': file_list,
         'dirent_more': dirent_more,

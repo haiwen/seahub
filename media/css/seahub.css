@@ -1542,6 +1542,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /*repo-share-form*/
 #link-send-input,
+#upload-link-send-input,
 #email_or_group,
 #share-link,
 #added-member-name {
@@ -1623,7 +1624,7 @@ textarea:-moz-placeholder {/* for FF */
     left:365px;
     top:50px;
     z-index:10;
-    padding:15px;;
+    padding:15px;
     min-height:130px;
     border:1px solid #ddd;
     background:#fff;
@@ -1944,10 +1945,13 @@ textarea:-moz-placeholder {/* for FF */
     text-align:right;
 }
 #shared-link,
-#shared-link-text {
+#shared-upload-link,
+#shared-link-text,
+#shared-upload-link-text {
     border:0;
 }
-#shared-link-text {
+#shared-link-text,
+#shared-upload-link-text {
     background:transparent;
     height:auto;
 }

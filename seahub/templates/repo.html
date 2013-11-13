@@ -831,11 +831,11 @@ $('#add-new-file').click(function () {
 
 // share current dir
 $('#share-cur-dir').click(function() {
-   var op = $(this), name, aj_url, type;
+   var op = $(this), name, aj_urls, type;
    name = $('#cur-dir-name').html();
-   aj_url = op.data('url');
+   aj_urls = { 'link': op.data('url'), 'upload-link': op.data('upload-url') };
    type = 'd';
-   showSharePopup(op, name, aj_url, type, cur_path);
+   showSharePopup(op, name, aj_urls, type, cur_path);
 });
 
 //select all or not
@@ -1388,17 +1388,20 @@ $('.file-star', context).click(function() {
 
 //share
 $('.file-share, .dir-share', context).click(function() {
-    var op = $(this), name, aj_url, type;
+    var op = $(this), name, aj_urls, type;
     name = op.parents('tr').attr('data-name');
-    aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name);
+    aj_urls = {
+        'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name),
+        'upload-link': '{% url 'get_shared_upload_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name)
+    };
     if (op.hasClass('dir-share')) {
-        aj_url += '&type=d';
+        aj_urls['link'] += '&type=d';
         type = 'd';
     } else {
         type = 'f';
     }
 
-    showSharePopup(op, name, aj_url, type, cur_path);
+    showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
 

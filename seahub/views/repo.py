@@ -15,12 +15,12 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
-    get_httpserver_root, gen_dir_share_link
+    get_httpserver_root, gen_dir_share_link, gen_shared_upload_link
 from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
@@ -169,6 +169,22 @@ def get_dir_share_link(fileshare):
         dir_shared_link = ''
     return dir_shared_link
 
+def get_uploadlink(repo_id, username, path):
+    if path == '/':    # no shared upload link for root dir
+        return None
+
+    l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
+        username=username).filter(path=path)
+    return l[0] if len(l) > 0 else None
+
+def get_dir_shared_upload_link(uploadlink):
+    # dir shared upload link
+    if uploadlink:
+        dir_shared_upload_link = gen_shared_upload_link(uploadlink.token)
+    else:
+        dir_shared_upload_link = ''
+    return dir_shared_upload_link
+
 def render_repo(request, repo):
     """Steps to show repo page:
     If user has permission to view repo
@@ -245,6 +261,8 @@ def render_repo(request, repo):
         ajax_update_url = get_ajax_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
+    uploadlink = get_uploadlink(repo.id, username, path)
+    dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     return render_to_response('repo.html', {
             'repo': repo,
@@ -276,6 +294,8 @@ def render_repo(request, repo):
             'contacts': contacts,
             'fileshare': fileshare,
             'dir_shared_link': dir_shared_link,
+            'uploadlink': uploadlink,
+            'dir_shared_upload_link': dir_shared_upload_link,
             'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             'server_crypto': server_crypto,

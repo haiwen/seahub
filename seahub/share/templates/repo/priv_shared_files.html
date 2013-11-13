@@ -6,13 +6,7 @@
 {% block nav_share_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</a></li>
-        <li class="tabnav-tab  tabnav-tab-cur">{% trans "Private Shares" %}</li>
-    </ul>
-</div>
+{% include "repo/tabnav.html" with cur="private" %}
 {% endblock %}
 
 {% block main_panel %}
