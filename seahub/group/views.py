@@ -1228,6 +1228,9 @@ def group_toggle_modules(request, group):
     if request.method != 'POST':
         raise Http404
 
+    referer = request.META.get('HTTP_REFERER', None)
+    next = SITE_ROOT if referer is None else referer
+    
     username = request.user.username
     group_wiki = request.POST.get('group_wiki', 'off')
     if group_wiki == 'on':
@@ -1235,11 +1238,10 @@ def group_toggle_modules(request, group):
         messages.success(request, _('Successfully enable "Wiki".'))
     else:
         disable_mod_for_group(group.id, MOD_GROUP_WIKI)
+        if referer.find('wiki') > 0:
+            next = reverse('group_info', args=[group.id])
         messages.success(request, _('Successfully disable "Wiki".'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
 
     

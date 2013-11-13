@@ -12,6 +12,7 @@ from types import FunctionType
 from datetime import datetime
 from math import ceil
 from urllib import quote
+
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -28,9 +29,6 @@ from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote
 
-from seahub.auth.decorators import login_required
-from seahub.auth import login as auth_login
-from seahub.auth import authenticate
 import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
@@ -50,6 +48,9 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
+from seahub.auth.decorators import login_required
+from seahub.auth import login as auth_login
+from seahub.auth import authenticate
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
@@ -1993,6 +1994,9 @@ def toggle_modules(request):
     if request.method != 'POST':
         raise Http404
 
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+    
     username = request.user.username
     personal_wiki = request.POST.get('personal_wiki', 'off')
     if personal_wiki == 'on':
@@ -2000,10 +2004,9 @@ def toggle_modules(request):
         messages.success(request, _('Successfully enable "Personal Wiki".'))
     else:
         disable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        if referer.find('wiki') > 0:
+            next = reverse('myhome')
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
 

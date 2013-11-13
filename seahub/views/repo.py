@@ -213,6 +213,7 @@ def render_repo(request, repo):
 
     contacts = Contact.objects.get_contacts_by_user(username)
     accessible_repos = [repo] if repo.encrypted else get_unencry_rw_repos_by_user(username)
+    joined_groups = get_personal_groups_by_user(request.user.username)
 
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:
@@ -244,8 +245,6 @@ def render_repo(request, repo):
         ajax_update_url = get_ajax_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
-
-    joined_groups = get_personal_groups_by_user(request.user.username)
 
     return render_to_response('repo.html', {
             'repo': repo,
