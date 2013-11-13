@@ -23,6 +23,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 
 from pysearpc import SearpcError
+import seaserv
 from seaserv import seafile_api
 from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
@@ -311,6 +312,13 @@ def gen_inner_file_get_url(token, filename):
                                    urlquote(filename))
     else:
         return gen_file_get_url(token, filename)
+
+def get_max_upload_file_size():
+    """Get max upload file size from config file, defaults to no limit.
+
+    Returns ``None`` if this value is not set.
+    """
+    return seaserv.MAX_UPLOAD_FILE_SIZE
     
 def gen_block_get_url(token, blkid):
     """

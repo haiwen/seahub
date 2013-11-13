@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 import seaserv
-from seaserv import seafserv_rpc, seafile_api, MAX_UPLOAD_FILE_SIZE, get_personal_groups_by_user
+from seaserv import seafserv_rpc, seafile_api, get_personal_groups_by_user
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
@@ -20,7 +20,8 @@ from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
-    get_httpserver_root, gen_dir_share_link, gen_shared_upload_link
+    get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
+    get_max_upload_file_size
 from seahub.settings import ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
@@ -224,7 +225,7 @@ def render_repo(request, repo):
     # query context args
     applet_root = get_ccnetapplet_root()
     httpserver_root = get_httpserver_root()
-    max_upload_file_size = MAX_UPLOAD_FILE_SIZE
+    max_upload_file_size = get_max_upload_file_size()
     
     protocol = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain

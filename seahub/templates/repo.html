@@ -90,7 +90,9 @@
                 </div>
                 <ol class="tip">
                     <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
+                    {% if max_upload_file_size %}
                     <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                    {% endif %}
                 </ol>
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">
@@ -124,7 +126,9 @@
                     <span>{% trans "Choose a file" %}</span>
                     <input type="file" name="file" />
                 </span>
+                {% if max_upload_file_size %}
                 <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }}{% endblocktrans %})</span>
+                {% endif %}
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">
                         <div class="bar" style="width:0%"></div>
@@ -1341,7 +1345,9 @@ $('.file-update', context).click(function() {
     // Initialize the jQuery File Upload widget:
     form.fileupload({
         url: '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid'),
+        {% if max_upload_file_size %}
         maxFileSize: {{max_upload_file_size}}, // in bytes
+        {% endif %}
         maxNumberOfFiles: 1 // only 1 file can be uploaded
     })
     .bind('fileuploaddone', function(e, data) {
