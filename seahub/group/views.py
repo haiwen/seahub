@@ -581,6 +581,9 @@ def group_manage(request, group_id):
                 if not is_valid_email(email):
                     continue
 
+                if is_group_user(group.id, email):
+                    continue
+                
                 if not is_registered_user(email):
                     use_https = request.is_secure()
                     domain = RequestSite(request).domain
@@ -615,7 +618,10 @@ def group_manage(request, group_id):
             for email in member_list:
                 if not is_valid_email(email):
                     continue
-                
+
+                if is_group_user(group.id, email):
+                    continue
+
                 if not is_registered_user(email):
                     err_msg = _(u'Failed to add, %s is not registerd.')
                     result['error'] = err_msg % email
