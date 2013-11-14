@@ -1356,6 +1356,12 @@ $('.file-update', context).click(function() {
         }
     });
 
+    {% if max_upload_file_size %}
+    form.fileupload('option', {
+        maxFileSize: {{max_upload_file_size}}
+    });
+    {% endif %}
+    
     // Enable iframe cross-domain access via redirect option:
     form.fileupload(
         'option',
