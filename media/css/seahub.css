@@ -1955,6 +1955,9 @@ textarea:-moz-placeholder {/* for FF */
     background:transparent;
     height:auto;
 }
+#gen-upload-link-btn {
+    margin-top: 0.5em;
+}
 .file-op {
     margin-top:0.8em;
 }

@@ -4,7 +4,7 @@
         <div id="file-share-tabs" class="tab-popup-tabs">
             <ul class="tab-popup-tabs-nav">
                 <li class="tab"><a href="#link-share" class="a">{% trans "Share Link" %}</a></li>
-                <li id="upload-link-tab" class="tab"><a href="#upload-link-share" class="a">{% trans "Share Upload Link" %}</a></li>
+                <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Share Upload Link" %}</a></li>{# for dir #}
                 {% if is_repo_owner %}
                 <li class="tab" id="private-share-tab"><a href="#private-share" class="a">{% trans "Private Share" %}</a></li> {# for file #}
                 {% endif %}
@@ -46,6 +46,7 @@
             </div>
 
             <div id="upload-link-share">
+                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <button id="gen-upload-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-upload-link-body" class="hide">
                     <p><span class="vam">{% trans 'Upload Link: ' %}</span><input type="text" readonly="readonly" id="shared-upload-link-text" class="vam" /></p>
@@ -66,7 +67,6 @@
 
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">
-                <img src="{{MEDIA_URL}}/img/loading-icon.gif" class="loading-tip" />
                 {% url 'share_repo' as repo_share_url %}
                 {% with post_url=repo_share_url groups=joined_groups %}
                 {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}

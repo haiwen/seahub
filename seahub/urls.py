@@ -85,17 +85,17 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_settings, name='repo_settings'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/owner/$', repo_owner, name='repo_owner'),
 
-    ### share file/dir ###
+    ### share file/dir, upload link ###
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
     url(r'^s/f/(?P<token>[a-f0-9]{10})/rm/$', rm_private_file_share, name="rm_private_file_share"),
     url(r'^s/f/(?P<token>[a-f0-9]{10})/save/$', save_private_file_share, name='save_private_file_share'),
     url(r'^f/(?P<token>[a-f0-9]{10})/$', view_shared_file, name='view_shared_file'),
     url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]{10})/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
-    url(r'^u/d/(?P<token>[a-f0-9]{10})/$', view_shared_upload_dir, name='view_shared_upload_dir'),
+    url(r'^u/d/(?P<token>[a-f0-9]{10})/$', view_shared_upload_link, name='view_shared_upload_link'),
 
     ### Misc ###
-    (r'^file_upload_progress_page/$', file_upload_progress_page),
+   (r'^file_upload_progress_page/$', file_upload_progress_page),
     (r'^events/$', events),
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^i18n/$', i18n, name='i18n'),

@@ -1685,7 +1685,7 @@ def view_shared_dir(request, token):
             'zipped': zipped,
             }, context_instance=RequestContext(request))
 
-def view_shared_upload_dir(request, token):
+def view_shared_upload_link(request, token):
     assert token is not None    # Checked by URLconf
 
     try:
@@ -1712,7 +1712,7 @@ def view_shared_upload_dir(request, token):
                                                     'upload', request.user.username)
     ajax_upload_url = gen_file_upload_url(token, 'upload-api').replace('api', 'aj')
 
-    return render_to_response('view_shared_upload_dir.html', {
+    return render_to_response('view_shared_upload_link.html', {
             'repo': repo,
             'token': token,
             'path': path,

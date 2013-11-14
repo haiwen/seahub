@@ -1712,8 +1712,27 @@ function updateCmt() {
             apply_form_error(form.attr('id'), '{% trans "Please enter emails or groups, or select some." %}');
             return false;
         }
-        form.submit();
-        disable($(this));
+
+        // check if a sub-lib exists, if not, create one
+        $.ajax({
+            url: '{% url 'sub_repo' repo.id %}?p=' + e(form.data('dir-path')) + '&name=' + e(form.attr('dir-name')),
+            dataType: 'json',
+            success: function(data) {
+                $('[name="repo_id"]', form).val(data['sub_repo_id']);
+                form.submit();
+                disable($(this));
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var err;
+                if (xhr.responseText) {
+                    err = jQuery.parseJSON(xhr.responseText).error;
+                } else {
+                    err = "{% trans "Failed. Please check the network." %}";
+                } 
+                apply_form_error(form.attr('id'), err);
+            }
+        });
+        return false;
     });
 {% endif %}
 {% include "snippets/list_commit_detail.html" %}

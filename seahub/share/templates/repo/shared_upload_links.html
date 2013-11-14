@@ -11,7 +11,7 @@
 
 {% block main_panel %}
 {% if uploadlinks %}
-<table class="sharelink-list">
+<table>
   <tr>
     <th width="4%"><!--icon--></th>
     <th width="44%">{% trans "Name"%}</th>
@@ -22,7 +22,7 @@
   {% for link in uploadlinks %}
   <tr>
     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-    <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+    <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
     <td><a href="{{ SITE_ROOT }}repo/{{ link.repo.id }}/">{{ link.repo.name }}</a></td>
     <td>{{ link.view_cnt }}</td>
     <td>
@@ -35,8 +35,8 @@
 <input type="text" readonly="readonly" value="" id="shared-upload-link" class="hide" />
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any shared upload link"%}</h2>
-  <p>{% trans "You can share a folder with other users so that they can upload files to your folder." %}</p>
+  <h2 class="alc">{% trans "You don't have any shared upload link"%}</h2>
+  <p>{% trans "When you browse a library online, you can share an upload link of a directory to others, and then they can upload files to this directory." %}</p>
 </div>
 {% endif %}
 

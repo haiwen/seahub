@@ -416,7 +416,7 @@ def list_shared_upload_links(request):
             if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
                 link.delete()
                 continue
-            link.filename = os.path.basename(link.path.rstrip('/'))
+            link.dir_name = os.path.basename(link.path.rstrip('/'))
             link.shared_link = gen_shared_upload_link(link.token)
             link.repo = r
             p_uploadlinks.append(link)
