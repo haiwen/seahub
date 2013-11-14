@@ -43,17 +43,17 @@
 {% endblock %}
 
 {% block right_panel %}
-<div id="tabs">
+<div id="tabs" class="tab-tabs">
     <div class="ovhd">
-        <ul class="fleft" id="tabs-nav">
-            <li><a href="#grp-repos">{% trans "Libraries" %}</a></li>
-            <li class="long-item"><a href="#grp-repos-commits">{% trans "Recent Changes" %}</a></li>
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#grp-repos" class="a">{% trans "Libraries" %}</a></li>
+            <li class="tab long-tab"><a href="#grp-repos-commits" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
         <button id="repo-create" class="add fright">{% trans "New Library" %}</button>
     </div>
     <div id="grp-repos" class="hide">
-{% if repos %}
-<table>
+    {% if repos %}
+    <table>
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="20%">{% trans "Name" %}</th>
@@ -62,7 +62,6 @@
         <th width="14%">{% trans "Shared By" %}</th>
         <th width="13%">{% trans "Operations" %}</th>
     </tr>
-
     {% for repo in repos %}
     <tr>
         <td>
@@ -82,27 +81,29 @@
         {% endif %}
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
-        <td>
-            <span class="icon-cloud-download download op-icon vh" data="{{ SITE_ROOT }}seafile_access_check/?repo_id={{ repo.props.id }}" title="{% trans "Download and Sync" %}"></span>
-        {% if is_staff or repo.share_from_me  %}
-        <span class="icon-trash cancel-share op-icon vh" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.id }}&from={{ repo.owner }}&gid={{ group.id }}" data-target="{{ repo.props.name }}" title="{% trans "Unshare" %}"></span>
-        {% endif %}
+        <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}">
+            {% if show_repo_download_button %}
+            <span class="icon-cloud-download download op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% endif %}
+            {% if is_staff or repo.share_from_me %}
+            <span class="icon-trash cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
-</table>
-{% else %}
-<div class="empty-tips" style="margin-bottom:150px;">
-  <h2 class="center-contents">{% trans "No library is sharing to this group" %}</h2>
-  <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
-  <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
-</div>
-{% endif %}
-</div>
+    </table>
+    {% else %}
+    <div class="empty-tips" style="margin-bottom:150px;">
+        <h2 class="alc">{% trans "No library is sharing to this group" %}</h2>
+        <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
+        <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+    </div>
+    {% endif %}
+    </div>
 
-<div id="grp-repos-commits" class="hide">
-{% if recent_commits|length > 0 %}
-<table>
+    <div id="grp-repos-commits" class="hide">
+    {% if recent_commits|length > 0 %}
+    <table>
     <tr>
         <th width="5%"></th>
         <th width="17%">{% trans "Library" %}</th>
@@ -147,24 +148,23 @@
         </td>
     </tr>
     {% endfor %}
-</table>
+    </table>
+    {% endif %}
+    </div>
+</div>
+
+{% include "snippets/repo_create_form.html" %}
+{% include "group/modules_toggle_form.html" %}
 <form id="repo-decrypt-form" class="simple-input-popup hide">
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />
     <label>{% trans 'Password：' %}</label><br />
-    <input type="password" name="password" maxlength="30" class="long-input" />
+    <input type="password" name="password" class="long-input" />
     <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
     <p class="error"></p>
     <input type="submit" class="submit" value="{% trans 'Submit' %}" />
     <button class="simplemodal-close">{% trans 'Cancel' %}</button>
 </form>
-{% endif %}
-</div>
-</div>
-
-
-{% include "snippets/repo_create_form.html" %}
-{% include "group/modules_toggle_form.html" %}
 
 {% endblock %}
 
@@ -174,6 +174,13 @@
 addConfirmTo($('#quit-group'), {
         'title':'{% trans "Quit Group" %}',
         'con':'{% trans "Are you sure you want to quit this group?" %}'
+});
+$('.cancel-share').click(function() {
+    var btn_ct = $(this).parent(),
+        repo_id = btn_ct.data('id'),
+        repo_owner = btn_ct.attr('data-owner'),
+        repo_name = btn_ct.attr('data-name');
+    $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}').attr('data-target', repo_name);
 });
 addConfirmTo($('.cancel-share'), {
         'title':'{% trans "Unshare Library" %}',
@@ -188,9 +195,13 @@ $("table tr:gt(0)").hover(
     }
 );
 $('.download').click(function() {
-    window.open($(this).attr('data'));
+    var repo_id = $(this).parent().data('id');
+    window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
+function repoCreateSuccessCallback() {
+    location.reload();
+}
 {% url 'create_group_repo' group.id as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
@@ -215,6 +226,5 @@ $('.lsch-encrypted').click(function() {
 {% endif %}
 
 {% include "group/modules_toggle_js.html" %}
-
 </script>
 {% endblock %}

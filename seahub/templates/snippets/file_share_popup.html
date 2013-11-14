@@ -1,17 +1,17 @@
 {% load i18n %} {# for file/dir share #}
     <div id="file-share" class="tab-popup hide">
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
-        <div id="file-share-tabs">
-            <ul id="file-share-tabs-nav">
-                <li><a href="#link-share">{% trans "Share Link" %}</a></li>
+        <div id="file-share-tabs" class="tab-popup-tabs">
+            <ul class="tab-popup-tabs-nav">
+                <li class="tab"><a href="#link-share" class="a">{% trans "Share Link" %}</a></li>
+                <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Share Upload Link" %}</a></li>{# for dir #}
                 {% if is_repo_owner %}
-                <li id="private-share-tab"><a href="#private-share">{% trans "Private Share" %}</a></li> {# for file #}
+                <li class="tab" id="private-share-tab"><a href="#private-share" class="a">{% trans "Private Share" %}</a></li> {# for file #}
                 {% endif %}
                 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-                <li id="syncable-share-tab"><a href="#syncable-share">{% trans "Private Share" %}</a></li> {# for dir #}
+                <li class="tab" id="syncable-share-tab"><a href="#syncable-share" class="a">{% trans "Private Share" %}</a></li> {# for dir #}
                 {% endif %}
             </ul>
-
 
             {% if is_repo_owner %}
             <div id="private-share">
@@ -45,9 +45,28 @@
                 </div>
             </div>
 
+            <div id="upload-link-share">
+                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
+                <button id="gen-upload-link-btn" class="hide">{% trans "Generate"%}</button>
+                <div id="share-upload-link-body" class="hide">
+                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><input type="text" readonly="readonly" id="shared-upload-link-text" class="vam" /></p>
+                    <button id="send-upload-link">{% trans 'Send' %}</button>
+                    <button id="rm-shared-upload-link">{% trans 'Delete' %}</button>
+
+                    <form id="upload-link-send-form" action="" method="post" class="hide">{% csrf_token %}
+                        <label>{% trans "Send to:"%}</label><br />
+                        <textarea id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="hidden" name="shared_upload_link" value="{{ dir_shared_upload_link }}" />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" />
+                        <p id="upload-sending" class="hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">
-                <img src="{{MEDIA_URL}}/img/loading-icon.gif" class="loading-tip" />
                 {% url 'share_repo' as repo_share_url %}
                 {% with post_url=repo_share_url groups=joined_groups %}
                 {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}

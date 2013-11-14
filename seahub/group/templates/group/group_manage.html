@@ -91,8 +91,8 @@
     <input type="submit" value="{% trans "Submit"%}" />
 </form>
 
-{% include 'group/grpmember_add_form.html' %}
-{% include "group/modules_toggle_form.html" %}
+{% include 'group/grpmember_add_form.html' %} {# for member/admin add #}
+{% include 'group/modules_toggle_form.html' %}
 
 {% endblock %}
 
@@ -114,15 +114,8 @@ contact_email = '{{ contact.contact_email }}';
 contact_list.push({value:contact_email, label:contact_email});
 {% endfor %}
 
-{% url 'group_manage' group.id as member_add_url %}
-{% with post_url=member_add_url %}
+{# for member/admin add #}
 {% include 'group/grpmember_add_js.html' %}
-{% endwith %}
-
-{% url 'group_add_admin' group.id as admin_add_url %}
-{% with post_url=admin_add_url %}
-{% include 'group/grpadmin_add_js.html' %}
-{% endwith %}
 
 $('#group-transfer').click(function() {
     $('#group-transfer-form').modal({appendTo: "#main", focus:false});
@@ -135,6 +128,5 @@ $('#group-transfer-form').submit(function() {
 });
 
 {% include "group/modules_toggle_js.html" %}
-
 </script>
 {% endblock %}

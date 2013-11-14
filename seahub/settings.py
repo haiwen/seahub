@@ -135,6 +135,7 @@ LANGUAGES = (
     ('fr', gettext_noop('Français')),
     ('it', gettext_noop('Italiano')),
     ('hu', gettext_noop('Magyar')),
+    ('pt-br', gettext_noop('Portuguese, Brazil')),
     ('ru', gettext_noop(u'Русский')),    
     ('zh-cn', gettext_noop(u'简体中文')),
     ('zh-tw', gettext_noop(u'繁體中文')),
@@ -160,6 +161,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
 
     'registration',
+    'captcha',
 
     'seahub.api2',
     'seahub.avatar',
@@ -169,6 +171,7 @@ INSTALLED_APPS = (
     'seahub.group',
     'seahub.message',
     'seahub.notifications',
+    'seahub.options',
     'seahub.profile',
     'seahub.share',
 )
@@ -180,8 +183,11 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# for v2 enc repo: encrypt/decrypt on the server
-SERVER_CRYPTO = True
+# show library 'download' button
+SHOW_REPO_DOWNLOAD_BUTTON = True
+
+# mininum length for password of encrypted library
+REPO_PASSWORD_MIN_LENGTH = 6
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
@@ -338,6 +344,10 @@ LOGGING = {
         },
     }
 }
+
+#Login Attempt
+LOGIN_ATTEMPT_LIMIT = 3
+LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 
 #################
 # Email sending #

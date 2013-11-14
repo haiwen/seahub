@@ -95,8 +95,11 @@ def personal_wiki_pages(request):
     List personal wiki pages.
     """
     try:
-        repo = get_personal_wiki_repo(request.user.username)
+        username = request.user.username
+        repo = get_personal_wiki_repo(username)
         pages = get_wiki_pages(repo)
+        mods_available = get_available_mods_by_user(username)
+        mods_enabled = get_enabled_mods_by_user(username)
     except SearpcError:
         return render_error(request, _('Internal Server Error'))
     except WikiDoesNotExist:
@@ -107,6 +110,8 @@ def personal_wiki_pages(request):
             "repo_id": repo.id,
             "search_repo_id": repo.id,
             "search_wiki": True,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 

@@ -7,7 +7,7 @@
 <style type="text/css">
 #main { width:auto; }
 #footer { display:none; }
-{% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+{% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
 #main { display:none; }
 {% endif %}
 </style>    
@@ -21,7 +21,9 @@
             <div class="w100 ovhd">
                 <h2 class="fleft">{{repo.props.name}}{% if user_perm == 'r' %} <span class="tip vam">({% trans "Read-Only" %})</span>{% endif %}</h2>
                 <div class="fright">
+                    {% if show_repo_download_button %}
                     <button id="repo-download-btn" class="repo-top-op-btn"><span class="icon-cloud-download"></span>{% trans "Download"%}</button>
+                    {% endif %}
                     {% if is_repo_owner %}
                     <button id="repo-setting-btn" data="{% url 'repo_settings' repo.id %}" class="repo-top-op-btn"><span class="icon-cog"></span>{% trans "Settings" %}</button>
                     {% endif %}
@@ -171,10 +173,10 @@
 
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <div id="mv-dir-list" class="dir-tree-cont">
-            <h5><span class="tri-bg tri-down-bg"></span>{% trans "Current Library"%}</h5>
+            <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
-            <h5><span class="tri-bg tri-right-bg"></span>{% trans "Other Libraries"%}</h5>
+            <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
             <div id="other-repos-dirs" class="hide"></div>
             {% endif %}
         </div>
@@ -202,6 +204,18 @@
     {% with attach_type='dir' %}
     {% include "snippets/group_recommend_form.html" %}
     {% endwith %}
+
+    {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
+    <form id="repo-decrypt-form" class="wide-panel hide">
+        <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>
+        <label>{% trans "Password: " %}</label>
+        <input type="password" name="password" autofocus />
+        <input type="submit" value="{% trans "Submit" %}" />
+        <p class="error hide"></p>
+        {% url 'edit_profile' as profile_edit_url %}
+        <p class="tip" style="margin-top:3em;">{% blocktrans %}You can change how to view encrypted libraries online <a class="normal" href="{{ profile_edit_url }}#enc-lib-setting">here</a>.{% endblocktrans %}</p>
+    </form>
+{% endif %}
 
 {% endblock %}
 
@@ -270,8 +284,8 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     decrypt_repo();
 }
 function decrypt_repo() {
-    var decrypt_form = $('<form id="repo-decrypt" style="width:928px;padding:10px 10px 15px;border:1px solid #ddd;border-radius:3px;margin:2em auto 0"> <p>{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept in the browser for only 1 hour." %}</p>    <input type="password" name="password" maxlength="64" autofocus /> <input type="submit" value="{% trans "Submit" %}" /> <p class="error hide"></p> </form>');
-    $('#header').after(decrypt_form);
+    var decrypt_form = $('#repo-decrypt-form');
+    $('#header').after(decrypt_form.removeClass('hide'));
     $('[type="submit"]', decrypt_form).click(function() {
         var passwd = $('[name="password"]', decrypt_form).val(),
             err = $('.error', decrypt_form);
@@ -421,6 +435,72 @@ var del_dirents = function() {
     });
 };
 
+// render jstree for current path
+function render_jstree_for_cur_path() {
+    var form = $('#mv-form'),
+        file_tree = new FileTree(),
+        container = $('#current-repo-dirs');
+    container.data('site_root', '{{SITE_ROOT}}');
+    $.ajax({
+        url: '{% url 'get_dirents' repo.id %}?path=' + e(cur_path) + '&dir_only=true&all_dir=true',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var json_data = [];
+            var repo_data = {
+                'data': '{{ repo.props.name }}',
+                'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
+                'state': 'open'
+            };
+
+            var path_eles = cur_path.split('/');
+            path_eles.pop();
+            /* e.g.
+             * path: '/xx/'
+             * path_eles: ['', 'xx']
+             * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
+             * when no dir in '/', data will be [[]];
+             */
+            var len = data.length;
+            var children = [];
+            for (var i = len - 1; i > -1; i--) {
+                children[i] = [];
+                if (i == len - 1) {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        children[i].push({
+                            'data': data[i][j],
+                            'state': 'closed'
+                        });
+                    }
+                } else {
+                    for (var j = 0, len_i = data[i].length; j < len_i; j++) {
+                        if (data[i][j] == path_eles[i+1]) {
+                            children[i].push({
+                                'data': data[i][j],
+                                'state': 'open',
+                                'children': children[i+1] 
+                            });
+                        } else {
+                            children[i].push({
+                                'data': data[i][j],
+                                'state': 'closed'
+                            });
+                        }
+                    }
+                }
+            }
+            if (children[0].length > 0) {
+                $.extend(repo_data, {'children': children[0]});
+            }
+            json_data.push(repo_data); 
+            file_tree.renderDirTree(container, form, json_data);
+        },
+        error: function() {
+            file_tree.renderDirTree(container, form, current_repo);
+        }
+    });
+
+}
 // mv, cp multi dirents
 $('#mv-dirents, #cp-dirents').click(function() {
     var form = $('#mv-form'), op;
@@ -435,8 +515,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
         form.prepend("<h3>{% trans "Copy selected directories/files to:" %}</h3>");
     }
 
-    var file_tree = new FileTree();
-    file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, current_repo);
+    render_jstree_for_cur_path();
 
     var files = $('.checkbox-checked').parents('.file-item'),
         dirs = $('.checkbox-checked').parents('.dir-item'),
@@ -752,11 +831,11 @@ $('#add-new-file').click(function () {
 
 // share current dir
 $('#share-cur-dir').click(function() {
-   var op = $(this), name, aj_url, type;
+   var op = $(this), name, aj_urls, type;
    name = $('#cur-dir-name').html();
-   aj_url = op.data('url');
+   aj_urls = { 'link': op.data('url'), 'upload-link': op.data('upload-url') };
    type = 'd';
-   showSharePopup(op, name, aj_url, type, cur_path);
+   showSharePopup(op, name, aj_urls, type, cur_path);
 });
 
 //select all or not
@@ -835,13 +914,14 @@ function sortDirent() {
         table.append(item.element);
     });
   
-    $(this).hide();
-    switch (id) {
-        case 'name-down': $('#name-up').css({'display':'inline-block'}); break;
-        case 'name-up': $('#name-down').removeAttr('style'); break;
-        case 'time-up': $('#time-down').removeAttr('style'); break;
-        case 'time-down': $('#time-up').css({'display':'inline-block'}); break;
+    $(this).addClass('hide');
+    var other;
+    if (id.indexOf('up') != -1) {
+        other = $('#' + id.replace('up', 'down'));
+    } else {
+        other = $('#' + id.replace('down', 'up'));
     }
+    other.removeClass('hide');
 }
 
 var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="vam" />';
@@ -875,20 +955,21 @@ $('.set-file-type').click(function() {
    var file_name = $('#add-new-file-form input[name="name"]');
    file_name.val('.' + $(this).data('filetype'));
    setCaretPos(file_name[0], 0);
+   file_name.focus();
 });
 
 var current_repo = [],
     other_repos = [];
 current_repo.push({
     'data': '{{ repo.props.name }}',
-    'attr': {'repo_id': '{{ repo.props.id }}'},
+    'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
     'state': 'closed'
 });  
 {% for a_repo in accessible_repos %}
 {% if a_repo.props.id != repo.props.id %}
     other_repos.push({
         'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}'},
+        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
         'state': 'closed'
     });  
 {% endif %}
@@ -1183,9 +1264,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     $('input[name="obj_name"]', form).val(obj_name);
     
     form.data('op_obj', dirent);
-
-    var file_tree = new FileTree();
-    file_tree.renderDirTree($('#current-repo-dirs').data('site_root', '{{SITE_ROOT}}'), form, current_repo);
+    render_jstree_for_cur_path();
     return false;
 });
 
@@ -1309,17 +1388,20 @@ $('.file-star', context).click(function() {
 
 //share
 $('.file-share, .dir-share', context).click(function() {
-    var op = $(this), name, aj_url, type;
+    var op = $(this), name, aj_urls, type;
     name = op.parents('tr').attr('data-name');
-    aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name);
+    aj_urls = {
+        'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name),
+        'upload-link': '{% url 'get_shared_upload_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name)
+    };
     if (op.hasClass('dir-share')) {
-        aj_url += '&type=d';
+        aj_urls['link'] += '&type=d';
         type = 'd';
     } else {
         type = 'f';
     }
 
-    showSharePopup(op, name, aj_url, type, cur_path);
+    showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
 
@@ -1397,7 +1479,11 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             updateCmt();
 
             var name_link = $('.dirent-name a', op_obj);
-            name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
+            if (name_link.length == 1) {
+                name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
+            } else {
+                $('.dirent-name', op_obj).html(new_name); // no link for files in client_crypto mode
+            }
             $('.dirent-update', op_obj).html("{% trans "Just now" %}");
             var dld_link; 
             if (op_obj.attr('class') == 'dir-item') {
@@ -1492,27 +1578,27 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
     return false;
 });
 
-$('#mv-dir-list h5').click(function() {
-    var span = $(this).children('.tri-bg'),
+$('#mv-dir-list .hd').click(function() {
+    var span = $('span', $(this)),
         form = $('#mv-form'),
         dir_tree_container = $(this).next().data('site_root', '{{SITE_ROOT}}'),
         file_tree = new FileTree();
-    if (span.hasClass('tri-right-bg')) {
-        span.attr('class','tri-bg tri-down-bg');
+    if (span.hasClass('icon-caret-right')) {
+        span.attr('class','icon-caret-down');
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
-            file_tree.renderDirTree(dir_tree_container, form, current_repo);
+            render_jstree_for_cur_path();
         } else {
             file_tree.renderDirTree(dir_tree_container, form, other_repos);
         }
         dir_tree_container.removeClass('hide');
     } else {
-        span.attr('class','tri-bg tri-right-bg');
+        span.attr('class','icon-caret-right');
         dir_tree_container.addClass('hide');
     }
 });
 $('#private-share-form').submit(function() {
     if (!$('[name="emails"]', $(this)).val()) {
-        apply_form_error($(this).attr('id'), "{% trans "Contacts is required." %}");
+        apply_form_error($(this).attr('id'), "{% trans "Please select at least one contact." %}");
         return false;
     }
 });
@@ -1520,14 +1606,17 @@ var last_start = 0; // for 'list_dir_more'
 $(window).scroll(function() {
     var repo_top = $('#repo-top'),
         file_topbar = $('.repo-file-list-topbar'),
-        list_hd = $('.repo-file-list tr:first-child'),
+        repo_file_list = $('#repo-file-list'),
+        list_hd = $('.repo-file-list tr:first'),
         repo_top_left = $('.block-inner', repo_top).offset().left,
         file_topbar_h = file_topbar.outerHeight(true);
 
-    if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true)) {
+    if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true) + 1) {
+        repo_file_list.css({'padding-top': file_topbar_h + list_hd.outerHeight(true)});
         file_topbar.addClass('fixed-hd').css({'left': repo_top_left});  
         list_hd.addClass('fixed-hd').css({'left': repo_top_left, 'top':file_topbar_h});  
     } else {
+        repo_file_list.css({'padding-top':0});
         file_topbar.removeClass('fixed-hd');  
         list_hd.removeClass('fixed-hd');  
     }
@@ -1623,8 +1712,27 @@ function updateCmt() {
             apply_form_error(form.attr('id'), '{% trans "Please enter emails or groups, or select some." %}');
             return false;
         }
-        form.submit();
-        disable($(this));
+
+        // check if a sub-lib exists, if not, create one
+        $.ajax({
+            url: '{% url 'sub_repo' repo.id %}?p=' + e(form.data('dir-path')) + '&name=' + e(form.attr('dir-name')),
+            dataType: 'json',
+            success: function(data) {
+                $('[name="repo_id"]', form).val(data['sub_repo_id']);
+                form.submit();
+                disable($(this));
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var err;
+                if (xhr.responseText) {
+                    err = jQuery.parseJSON(xhr.responseText).error;
+                } else {
+                    err = "{% trans "Failed. Please check the network." %}";
+                } 
+                apply_form_error(form.attr('id'), err);
+            }
+        });
+        return false;
     });
 {% endif %}
 {% include "snippets/list_commit_detail.html" %}

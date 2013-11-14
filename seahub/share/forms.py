@@ -21,3 +21,12 @@ class FileLinkShareForm(forms.Form):
             })
     file_shared_link = forms.CharField()
     
+class UploadLinkShareForm(forms.Form):
+    """
+    Form for sharing upload link to emails.
+    """
+    email = forms.CharField(max_length=512, error_messages={
+            'required': _("Email is required"),
+            'max_length': _("Email is not longer than 512 characters"),
+            })
+    shared_upload_link = forms.CharField()

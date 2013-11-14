@@ -97,9 +97,9 @@
 <script type="text/javascript">
 $('#share').click(function() {
     var op = $(this), name = '{{ filename }}',
-        aj_url = '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}',
+        aj_urls = { 'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}' },
         type = 'f', cur_path = '{{path}}'.substr(0, '{{path}}'.length - name.length);
-    showSharePopup(op, name, aj_url, type, cur_path);
+    showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
 $('#view-original, #download').click(function() {
