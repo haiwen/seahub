@@ -955,6 +955,7 @@ $('.set-file-type').click(function() {
    var file_name = $('#add-new-file-form input[name="name"]');
    file_name.val('.' + $(this).data('filetype'));
    setCaretPos(file_name[0], 0);
+   file_name.focus();
 });
 
 var current_repo = [],
