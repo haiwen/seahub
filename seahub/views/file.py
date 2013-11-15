@@ -627,12 +627,13 @@ def view_shared_file(request, token):
         fileshare.save()
 
         # send statistic messages
-        try:
-            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, obj_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
+        if ret_dict['filetype'] != 'Unknown':
+            try:
+                obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                             (repo.id, shared_by, obj_id, obj_size))
+            except SearpcError, e:
+                logger.error('Error when sending file-view message: %s' % str(e))
 
     accessible_repos = get_unencry_rw_repos_by_user(request.user.username)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -712,12 +713,13 @@ def view_file_via_shared_dir(request, token):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
         # send statistic messages
-        try:
-            obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, obj_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
+        if ret_dict['filetype'] != 'Unknown':
+            try:
+                obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                             (repo.id, shared_by, obj_id, obj_size))
+            except SearpcError, e:
+                logger.error('Error when sending file-view message: %s' % str(e))
         
     return render_to_response('shared_file_view.html', {
             'repo': repo,

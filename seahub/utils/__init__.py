@@ -866,23 +866,6 @@ def is_textual_file(file_type):
     else:
         return False
 
-TRAFFIC_STATS_ENABLED = False
-if hasattr(seahub.settings, 'TRAFFIC_STATS_CONFIG_FILE'):
-    import seafstats
-
-    TRAFFIC_STATS_ENABLED = True
-    SeafStatsSession = seafstats.init_db_session_class(seahub.settings.TRAFFIC_STATS_CONFIG_FILE)
-    def get_user_traffic_stat(username):
-        session = SeafStatsSession()
-        try:
-            stat = seafstats.get_user_traffic_stat(session, username)
-        finally:
-            session.close()
-        return stat
-else:
-    def get_user_traffic_stat(username):
-        pass
-
 def redirect_to_login(request):
     from django.conf import settings
     login_url = settings.LOGIN_URL
@@ -1088,6 +1071,20 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     HAS_FILE_SEARCH = check_search_enabled()
+
+TRAFFIC_STATS_ENABLED = False
+if EVENTS_CONFIG_FILE and hasattr(seafevents, 'get_user_traffic_stat'):
+    TRAFFIC_STATS_ENABLED = True
+    def get_user_traffic_stat(username):
+        session = SeafEventsSession()
+        try:
+            stat = seafevents.get_user_traffic_stat(session, username)
+        finally:
+            session.close()
+        return stat
+else:
+    def get_user_traffic_stat(username):
+        pass
 
 # Move to here to avoid circular import.
 from seahub.base.models import FileContributors, DirFilesLastModifiedInfo, FileLastModifiedInfo
