@@ -1061,6 +1061,9 @@ def client_mgmt(request):
 
     if clients:
         clients.sort(key=lambda client: client.repo_name)
+        for i, client in enumerate(clients):
+            if i > 0 and client.repo_name == clients[i - 1].repo_name:
+                client.not_show_repo_name = True
 
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_user(username)
@@ -1074,28 +1077,26 @@ def client_mgmt(request):
 
 @login_required
 def client_unsync(request):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
     repo_id = request.GET.get('repo_id', '')
     token = request.GET.get('token', '')
+
+    if not (repo_id and token):
+        return HttpResponse(json.dumps({'error': _(u'Argument missing')}),
+                status=400, content_type=content_type)
+
     username = request.user.username
-    client_name = request.GET.get('name', '')
-
-    if repo_id and token:
-        try:
-            seafile_api.delete_repo_token(repo_id, token, username)
-            if client_name:
-                messages.success(request, _(u'Successfully unsync client %s') % client_name)
-            else:
-                messages.success(request, _(u'Successfully unsync client'))
-        except:
-            if client_name:
-                messages.error(request, _(u'Failed to unsync client %s') % client_name)
-            else:
-                messages.error(request, _(u'Failed to unsync client'))
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-    return HttpResponseRedirect(next)
+    try:
+        seafile_api.delete_repo_token(repo_id, token, username)
+        return HttpResponse(json.dumps({'success': True}),
+                content_type=content_type)
+    except:
+        return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
+                status=500, content_type=content_type)
 
 # @login_required
 # def innerpub_msg_reply(request, msg_id):

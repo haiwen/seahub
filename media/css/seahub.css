@@ -553,6 +553,17 @@ textarea:-moz-placeholder {/* for FF */
 .tab-popup .tip {
     margin:0;
 }
+/**** op confirm popup ****/
+.op-confirm {
+    position:absolute;
+    padding:0 15px 6px;
+    background:#fff;
+    border:1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+.op-confirm button {
+    margin-right:8px;
+}
 /**** simplemodal ****/
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
@@ -1860,16 +1871,6 @@ textarea:-moz-placeholder {/* for FF */
 .reply-cancel {
     margin-top:6px;
     margin-right:2px;
-}
-.msg-del-confirm {
-    position:absolute;
-    padding:0 15px 6px;
-    background:#fff;
-    border:1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
-}
-.msg-del-confirm button {
-    margin-right:8px;
 }
 #msg-upward {
     position:fixed;

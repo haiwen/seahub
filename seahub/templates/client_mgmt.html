@@ -30,39 +30,50 @@
 <table>
     <tr>
         <th width="20%">{% trans "Library" %}</th>
-	<th width="20%">{% trans "Client Name" %}</th>
-	<th width="20%">{% trans "IP" %}</th>
-	<th width="20%">{% trans "Last Sync" %}</th>
-	<th width="20%">{% trans "Operations" %}</th>
+        <th width="20%">{% trans "Client Name" %}</th>
+        <th width="20%">{% trans "IP" %}</th>
+        <th width="20%">{% trans "Last Sync" %}</th>
+        <th width="20%">{% trans "Operations" %}</th>
     </tr>
     {% for client in clients %}
-    <tr>
-        <td><a href="{{ SITE_ROOT }}repo/{{ client.repo_id }}/">{{ client.repo_name }}</a></td>
-	<td>
-	{% if client.peer_name %}
-	{{ client.peer_name }}
-	{% else %}
-	{% trans "Unknown" %}
-	{% endif %}
-	</td>
-	<td>
-	{% if client.peer_ip %}
-	{{ client.peer_ip }}
-	{% else %}
-	{% trans "Unknown" %}
-	{% endif %}
-	</td>
-	<td>
-	{% if client.sync_time > 0 %}
-	{{ client.sync_time|translate_seahub_time }}
-	{% else %}
-	{% trans "Unknown" %}
-	{% endif %}
-	</td>
-	<td><a data-url="{{ SITE_ROOT }}home/clients/unsync/?repo_id={{client.repo_id}}&&token={{client.token}}{% if client.peer_name %}&&name={{client.peer_name}}{% endif %}" data-target={% if client.peer_name %}"{{client.peer_name}}"{% else %}"{% trans "Unknown" %}"{% endif %} href="#" class="unsync-client op">{% trans "Unsync" %}</a></td>
+    <tr data-repoid="{{client.repo_id}}" data-token="{{client.token}}">
+        <td>
+            {% if not client.not_show_repo_name %}
+            <a href="{% url 'repo' client.repo_id %}">{{ client.repo_name }}</a>
+            {% endif %}
+        </td>
+        <td>
+        {% if client.peer_name %}
+        {{ client.peer_name }}
+        {% else %}
+        --
+        {% endif %}
+        </td>
+        <td>
+        {% if client.peer_ip %}
+        {{ client.peer_ip }}
+        {% else %}
+        --
+        {% endif %}
+        </td>
+        <td>
+        {% if client.sync_time > 0 %}
+        {{ client.sync_time|translate_seahub_time }}
+        {% else %}
+        {% trans "Not synced" %}
+        {% endif %}
+        </td>
+        <td>
+            <div><a href="#" class="unsync-client op">{% trans "Unsync" %}</a></div>
+        </td>
     </tr>
     {% endfor %}
 </table>
+<div class="op-confirm unsync-confirm hide">
+    <p>{% trans "Really want to unsync it?" %}</p>
+    <button class="yes">{% trans "Yes" %}</button>
+    <button class="no">{% trans "No" %}</button>
+</div>
 {% else %}
 <div class="empty-tips">
     <h2 class="alc">{% trans "You do not have connected clients" %}</h2>
@@ -76,11 +87,46 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.unsync-client'), {
-    'title':'{% trans "Unsync Client" %}',
-    'con':'{% trans "Are you sure to unsync client %s ?" %}'
-});
+$('#main-panel').removeClass('ovhd');
+$('.unsync-client').click(function() {
+    var op = $(this);
+    var cont = op.parent().css({'position': 'relative'}),
+        cfm,
+        table = $('table');
+    
+    // only show 1 popup each time.
+    $('.unsync-confirm', table).addClass('hide');
 
+    if (cont.find('.unsync-confirm').length == 1) {
+        cfm = cont.find('.unsync-confirm');
+    } else {
+        cfm = table.next().clone(); 
+        cont.append(cfm);
+        cfm.css({'left': op.width() + 10, 'top': op.position().top, 'white-space':'nowrap'});
+    }
+    cfm.removeClass('hide');
+    $('.no',cfm).click(function() {
+        cfm.addClass('hide');
+    });
+    $('.yes',cfm).click(function() {
+        var tr = op.parents('tr');
+        $.ajax({
+            url: '{% url 'client_unsync' %}?repo_id=' + e(tr.data('repoid')) + '&token=' + e(tr.data('token')),
+            dataType: 'json',
+            success: function() {
+                var repo_name_td = $($('td', tr)[0]);
+                var next_repo_name_td = $($('td', tr.next())[0]);
+                if ($.trim(repo_name_td.html()) && !$.trim(next_repo_name_td.html())) {
+                    next_repo_name_td.replaceWith(repo_name_td);
+                }
+                tr.remove();
+                feedback("{% trans "Successfully unsynced." %}", 'success');
+            },
+            error: ajaxErrorHandler
+        });
+    });
+    return false;
+});
 {% include "snippets/modules_toggle_js.html" %}
 </script>
 {% endblock %}
