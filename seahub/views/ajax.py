@@ -200,6 +200,8 @@ def list_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
+
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
@@ -248,6 +250,7 @@ def list_dir(request, repo_id):
         'dirent_more': dirent_more,
         'more_start': more_start,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        "sub_lib_enabled": sub_lib_enabled,
     }   
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
@@ -276,6 +279,8 @@ def list_dir_more(request, repo_id):
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
+
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -318,6 +323,7 @@ def list_dir_more(request, repo_id):
         'dir_list': dir_list,
         'file_list': file_list,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        "sub_lib_enabled": sub_lib_enabled,
     }   
     html = render_to_string('snippets/repo_dirents.html', ctx,
                             context_instance=RequestContext(request))

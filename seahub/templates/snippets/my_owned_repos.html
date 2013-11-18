@@ -4,7 +4,7 @@
 <div class="ovhd">
     <ul class="tab-tabs-nav fleft">
         <li class="tab"><a href="#my-own-repos" class="a">{% trans "Mine" %}</a></li>
-        {% if ENABLE_SUB_LIBRARY %}
+        {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <li class="tab"><a href="#my-sub-repos" class="a">{% trans "Sub-libraries" %}</a></li>
         {% endif %}
         <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
@@ -55,7 +55,7 @@
 {% endif %}
 </div>
 
-{% if ENABLE_SUB_LIBRARY %}
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
 <div id="my-sub-repos" class="hide">
 {% if sub_repos %}
 <table>

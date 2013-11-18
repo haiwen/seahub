@@ -64,10 +64,13 @@ def edit_profile(request):
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
         server_crypto = False   
+
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
             
     return render_to_response('profile/set_profile.html', {
             'form': form,
             'server_crypto': server_crypto,
+            "sub_lib_enabled": sub_lib_enabled,
             }, context_instance=RequestContext(request))
 
 def user_profile(request, username_or_id):

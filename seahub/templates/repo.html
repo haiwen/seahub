@@ -199,12 +199,12 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
     
-    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+    {% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
     <div id="dir-sync-popup" class="hide">
         <h3 class="hd">{% trans "Sync %(dir_name)s" %}</h3>
         <p>{% trans "You need to create a sub-library from this directory to sync it." %}</p>
         <button class="create-sub-repo">{% trans "Create" %}</button>
-        <button class="simplemodal-close hide">{% trans "Close" %}</button>
+        <button class="simplemodal-close hide" style="margin-left:0;">{% trans "Close" %}</button>
         <p class="error hide"></p>
         <p class="tip">{% trans "A sub-library can be created from any folder. It can be independently synced and shared. Files in it will be automatically kept in sync with those in the directory of the origin library." %}</p>
         <p class="tip" style="margin-bottom:0">{% trans "After being created, it will be listed in your desktop client, and you can download it just like downloading a normal library." %}</p>
@@ -1417,7 +1417,7 @@ $('.file-share, .dir-share', context).click(function() {
     return false;
 });
 
-{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
 $('.dir-sync', context).click(function() {
     var name = $(this).parents('.dir-item').attr('data-name');
     var popup = $('#dir-sync-popup'),
@@ -1734,7 +1734,7 @@ function updateCmt() {
     });
 }
 
-{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
 // sub-repo-share submit
 // only share to 1 panel(e.g. enter, groups or contacts)
    $('#share-submit-btn').click(function() {

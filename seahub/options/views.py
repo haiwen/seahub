@@ -29,4 +29,23 @@ def save_options(request):
 
     return HttpResponseRedirect(next)
 
-    
+@login_required
+@require_POST
+def sub_lib_enable_set(request):
+    """
+    """
+    username = request.user.username
+    enable_sub_lib = request.POST.get('enable-sub-lib', '')
+
+    if enable_sub_lib:
+        UserOptions.objects.enable_sub_lib(username)
+    else:
+        UserOptions.objects.disable_sub_lib(username)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if next is None:
+        next = SITE_ROOT
+
+    return HttpResponseRedirect(next)
+
+ 

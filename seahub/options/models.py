@@ -12,6 +12,10 @@ KEY_USER_GUIDE = "user_guide"
 VAL_USER_GUIDE_ON = "1"
 VAL_USER_GUIDE_OFF = "0"
 
+KEY_SUB_LIB = "sub_lib"
+VAL_SUB_LIB_ENABLED = "1"
+VAL_SUB_LIB_DISABLED = "0"
+
 class CryptoOptionNotSetError(Exception):
     pass
 
@@ -102,8 +106,42 @@ class UserOptionsManager(models.Manager):
             return bool(int(user_option.option_val))
         except UserOptions.DoesNotExist:
             return False        # Assume ``user_guide`` is not enabled.
+
+    def enable_sub_lib(self, username):
+        """
         
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        return self.set_user_option(username, KEY_SUB_LIB,
+                                    VAL_SUB_LIB_ENABLED)
+
+    def disable_sub_lib(self, username):
+        """
         
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        return self.set_user_option(username, KEY_SUB_LIB,
+                                    VAL_SUB_LIB_DISABLED)
+
+    def is_sub_lib_enabled(self, username):
+        """Return ``True`` if user need guide, otherwise ``False``.
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        try:
+            user_option = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_SUB_LIB)
+            return bool(int(user_option.option_val))
+        except UserOptions.DoesNotExist:
+            return False
+        
+ 
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)

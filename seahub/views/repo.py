@@ -203,6 +203,8 @@ def render_repo(request, repo):
                 'repo': repo,
                 }, context_instance=RequestContext(request))
 
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
+
     server_crypto = False
     if repo.encrypted:
         try:
@@ -299,6 +301,7 @@ def render_repo(request, repo):
             'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             'server_crypto': server_crypto,
+            "sub_lib_enabled": sub_lib_enabled,
             }, context_instance=RequestContext(request))
    
 @login_required    

@@ -951,8 +951,10 @@ def myhome(request):
             return repo_name + path
 
     # compose abbrev origin path for display
+
     sub_repos = []
-    if ENABLE_SUB_LIBRARY:
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
+    if ENABLE_SUB_LIBRARY and sub_lib_enabled:
         sub_repos = seafile_api.get_virtual_repos_by_owner(username)
         for repo in sub_repos:
             repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
@@ -1064,6 +1066,7 @@ def myhome(request):
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             "need_guide": need_guide,
+            "sub_lib_enabled": sub_lib_enabled,
             "sub_repos": sub_repos,
             }, context_instance=RequestContext(request))
 

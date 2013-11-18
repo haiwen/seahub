@@ -48,6 +48,15 @@
 </div>
 
 <div class="setting-item">
+    <h3>{% trans "Sub-library Setting" %}</h3>
+    <form method="post" action="{% url 'sub_lib_enable_set' %}">{% csrf_token %}
+        <input type="checkbox" name="enable-sub-lib" class="vam" {% if sub_lib_enabled %}checked="checked"{% endif %} /> <span class="vam">{% trans "Enable sub-library" %}</span>
+        <p>{% trans "Tip: if you enable sub-library, you will be able to sync a directory in a library, and your sub-libraries will be listed in the home page." %}</p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+</div>
+
+<div class="setting-item">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
 <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>
