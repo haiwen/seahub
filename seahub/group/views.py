@@ -1138,8 +1138,7 @@ def group_discuss(request, group):
         form = MessageForm()
         
     # remove user notifications
-    UserNotification.objects.filter(to_user=username, msg_type='group_msg',
-                                    detail=str(group.id)).delete()
+    UserNotification.objects.remove_group_msg_notices(username, group.id)
     
     # Get all group members.
     members = get_group_members(group.id)

@@ -976,14 +976,20 @@ def myhome(request):
     grpmsg_list = []
     grpmsg_reply_list = []
     joined_group_ids = [x.id for x in joined_groups]
-    notes = UserNotification.objects.filter(to_user=username)
+    notes = UserNotification.objects.get_user_notifications(username)
     for n in notes:
-        if n.msg_type == 'group_msg':
+        if n.is_group_msg():
             if int(n.detail) not in joined_group_ids:
                 continue
-            grp = get_group(int(n.detail))
-            grpmsg_list.append(grp)
-        elif n.msg_type == 'grpmsg_reply':
+            dup = False
+            for grpmsg in grpmsg_list:
+                if grpmsg.id == int(n.detail):
+                    dup = True
+                    break
+            if not dup:
+                grp = get_group(int(n.detail))
+                grpmsg_list.append(grp)
+        elif n.is_grpmsg_reply():
             grpmsg_reply_list.append(n.detail)
 
     # get nickname
