@@ -19,6 +19,7 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.signals import upload_file_successful
 from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
         get_uploadlink, get_dir_shared_upload_link
@@ -1000,3 +1001,49 @@ def download_enc_file(request, repo_id, file_id):
         'url':url,
         }    
     return HttpResponse(json.dumps(result), content_type=content_type)
+
+def upload_file_done(request):
+    """Send a message when a file is uploaded.
+    
+    Arguments:
+    - `request`:
+    """
+    ct = 'application/json; charset=utf-8'
+    result = {}  
+    
+    filename = request.GET.get('fn', '')
+    if not filename:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+    repo_id = request.GET.get('repo_id', '')
+    if not repo_id:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+    path = request.GET.get('p', '')
+    if not path:  
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    # a few checkings
+    if not seafile_api.get_repo(repo_id):
+        result['error'] = _('Wrong repo id')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    owner = seafile_api.get_repo_owner(repo_id)
+    if not owner:
+        result['error'] = _('Wrong repo id')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    file_path = path.rstrip('/') + '/' + filename
+    if seafile_api.get_file_id_by_path(repo_id, file_path) is None:
+        result['error'] = _('File does not exist')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    # send singal
+    upload_file_successful.send(sender=None,
+                                repo_id=repo_id,
+                                file_path=file_path,
+                                owner=owner)
+
+    return HttpResponse(json.dumps({'success': True}), content_type=ct)
+    

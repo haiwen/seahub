@@ -114,6 +114,7 @@ urlpatterns = patterns('',
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_group_repos, name='get_group_repos'),
     url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
+    url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_dir, name='repo_dir_data'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/more/$', list_dir_more, name='list_dir_more'),

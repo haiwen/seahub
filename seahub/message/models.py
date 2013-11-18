@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -89,7 +90,7 @@ class UserMsgAttachment(models.Model):
 ### handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
-from seahub.signals import share_file_to_user_successful
+from seahub.signals import share_file_to_user_successful, upload_file_successful
 from seahub.share.signals import share_repo_to_user_successful
 
 @receiver(share_repo_to_user_successful)
@@ -122,4 +123,30 @@ def add_share_file_msg(sender, **kwargs):
         UserMessage.objects.add_unread_message(priv_share.from_user,
                                                priv_share.to_user, msg)
         
-        
+@receiver(upload_file_successful)        
+def add_upload_file_msg(sender, **kwargs):
+    """
+    
+    Arguments:
+    - `sender`:
+    - `**kwargs)`:
+    """
+    repo_id = kwargs.get('repo_id', None)
+    file_path = kwargs.get('file_path', None)
+    owner = kwargs.get('owner', None)
+
+    assert repo_id and file_path and owner is not None, 'Arguments error'
+
+    # message body
+    filename = os.path.basename(file_path)
+    folder_path = os.path.dirname(file_path)
+    folder_name = os.path.basename(folder_path)
+
+    msg = u"(System) A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your folder <a href='%(folder_link)s'>%(folder)s</a>" % {
+    'file_link': reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(file_path), 
+    'file_name': filename,
+    'folder_link': reverse('repo', args=[repo_id]) + '?p=' + urlquote(folder_path),
+    'folder': folder_name,
+    }
+
+    UserMessage.objects.add_unread_message("system@system.com", owner, msg)
