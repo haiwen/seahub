@@ -184,7 +184,7 @@
                         if (data.errorThrown !== 'abort') {
                             var file = data.files[index];
                             file.error = file.error || data.errorThrown ||
-                                true;
+                                'can not connect the server';
                             that._transition($(this)).done(
                                 function () {
                                     var node = $(this);
