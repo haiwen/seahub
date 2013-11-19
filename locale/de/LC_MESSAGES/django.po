@@ -34,34 +34,34 @@ msgstr "Die Passwortfelder stimmen nicht überein."
 
 #: seahub/forms.py:49 seahub/group/forms.py:56 seahub/wiki/forms.py:16
 msgid "Name can't be empty"
-msgstr "Name darf nicht leer sein"
+msgstr "Der Name darf nicht leer sein"
 
 #: seahub/forms.py:50 seahub/group/forms.py:57 seahub/wiki/forms.py:17
 msgid "Name is too long (maximum is 255 characters)"
-msgstr "Name ist zu lang (maximal 255 Zeichen)"
+msgstr "Der Name ist zu lang (maximal 255 Zeichen)"
 
 #: seahub/forms.py:53 seahub/group/forms.py:60 seahub/wiki/forms.py:20
 msgid "Description can't be empty"
-msgstr "Beschreibung darf nicht leer sein"
+msgstr "Die Beschreibung darf nicht leer sein"
 
 #: seahub/forms.py:54 seahub/group/forms.py:61 seahub/wiki/forms.py:21
 msgid "Description is too long (maximum is 100 characters)"
-msgstr "Beschreibung ist zu lang (maximal 100 Zeichen)"
+msgstr "Die Beschreibung ist zu lang (maximal 100 Zeichen)"
 
 #: seahub/forms.py:59 seahub/forms.py:64
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short (minimum is 3 characters)"
-msgstr "Passwort ist zu kurz (mindestens 3 Zeichen)"
+msgstr "Das Passwort ist zu kurz (mindestens 3 Zeichen)"
 
 #: seahub/forms.py:60 seahub/forms.py:65
 #: seahub/templates/snippets/repo_create_js.html:54
 msgid "Password is too long (maximum is 30 characters)"
-msgstr "Passwort ist zu lang (maximal 15 Zeichen)"
+msgstr "Das Passwort ist zu lang (maximal 15 Zeichen)"
 
 #: seahub/forms.py:73
 #, python-format
 msgid "Name %s is not valid"
-msgstr "Name %s ist ungültig"
+msgstr "Der Name %s ist ungültig"
 
 #: seahub/forms.py:87
 msgid "Password is required"
@@ -80,7 +80,7 @@ msgstr "Argument fehlt"
 
 #: seahub/forms.py:109
 msgid "Oldname is required"
-msgstr "Alter Name wird benötigt"
+msgstr "Der alte Name wird benötigt"
 
 #: seahub/forms.py:112 seahub/forms.py:133
 msgid "It's too long."
@@ -280,7 +280,7 @@ msgstr "Ordnersymbol"
 #: seahub/group/templates/group/new_msg_reply.html:45
 #, python-format
 msgid "%(amount)s replies"
-msgstr "%(amount)s Nachrichten"
+msgstr "%(amount)s Antworten"
 
 #: seahub/api2/templates/api2/discussions.html:24
 msgid "No discussions."
@@ -292,7 +292,7 @@ msgstr "Keine Diskussionen vorhanden."
 #: seahub/templates/snippets/list_commit_detail.html:3
 #: seahub/templates/snippets/repo_dir_data.html:43
 msgid "Loading..."
-msgstr "Laden..."
+msgstr "Lade..."
 
 #: seahub/api2/templates/api2/discussions.html:75
 #: seahub/api2/templates/api2/events_js.html:34
@@ -334,12 +334,12 @@ msgstr "%(file)s gelöscht"
 #: seahub/api2/templates/api2/event_details.html:24
 #, python-format
 msgid "Renamed or Moved %(file)s"
-msgstr "%(file)s umbenannte oder verschoben"
+msgstr "%(file)s umbenannt oder verschoben"
 
 #: seahub/api2/templates/api2/event_details.html:32
 #, python-format
 msgid "Modified %(file)s"
-msgstr "Datei %(file)s geändert"
+msgstr "%(file)s Dateien geändert"
 
 #: seahub/api2/templates/api2/events.html:19
 msgid "No activity now or the function is not supported."
@@ -358,11 +358,11 @@ msgstr "Bibiliothek %(library_name)s gelöscht"
 
 #: seahub/api2/templates/api2/events_js.html:83
 msgid "Please check the network."
-msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
+msgstr "Bitte überprüfen Sie die Netzwerkverbindung."
 
 #: seahub/api2/templates/api2/new_msg_reply.html:6
 msgid "New Replies"
-msgstr "Neue Nachrichten vorhanden"
+msgstr "Neue Nachrichten"
 
 #: seahub/auth/admin.py:29
 msgid "Personal info"
@@ -430,7 +430,7 @@ msgstr "E-Mail"
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
-msgstr "Eine E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator."
+msgstr "E-Mail konnte nicht versendet werden. Der E-Mail-Service ist nicht korrekt konfiguriert. Bitte kontaktieren Sie den/die Administrator."
 
 #: seahub/auth/forms.py:73
 msgid ""
@@ -457,11 +457,11 @@ msgstr "Altes Passwort"
 
 #: seahub/auth/forms.py:146
 msgid "Your old password was entered incorrectly. Please enter it again."
-msgstr "Das alte Passwort, das Sie eingegeben haben, war nicht korrekt. Bitte geben Sie es erneut ein."
+msgstr "Das alte Passwort, das Sie eingegeben haben, ist nicht korrekt. Bitte geben Sie es erneut ein."
 
 #: seahub/auth/forms.py:155 seahub/base/accounts.py:402
 msgid "Password (again)"
-msgstr "Passwort erneut eingeben:"
+msgstr "Passwort (Wiederholung)"
 
 #: seahub/auth/views.py:90
 msgid "Logged out"
@@ -469,7 +469,7 @@ msgstr "Ausgeloggt"
 
 #: seahub/auth/views.py:138
 msgid "Failed to send email, please contact administrator."
-msgstr "Failed to send email, please contact administrator."
+msgstr "E-Mail versenden fehlgeschlagen. Bitte kontaktieren Sie den Administrator."
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
@@ -512,7 +512,7 @@ msgstr "Neuer Gruppenavatar erfolgreich hochgeladen."
 
 #: seahub/avatar/views.py:166
 msgid "Successfully updated your avatar."
-msgstr "Ihr Avatar wurde geändert."
+msgstr "Ihr Avatar wurde erfolgreich geändert."
 
 #: seahub/avatar/views.py:208
 msgid "Successfully deleted the requested avatars."
@@ -615,7 +615,7 @@ msgstr "Aktueller Avatar: "
 #: seahub/templates/wiki/personal_wiki.html:68
 #: seahub/templates/wiki/personal_wiki_pages.html:42
 msgid "Submit"
-msgstr "Absenden"
+msgstr "Speichern" # not sure, if it fits everywhere, but on many forms its more like "save" (speichern) than "send" (Absenden)
 
 #: seahub/avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
@@ -639,7 +639,7 @@ msgstr "E-Mail-Adresse"
 
 #: seahub/base/accounts.py:397
 msgid "This value must be of length 40"
-msgstr "Dieser Wert muss eine Länge von 40 Zeichen haben"
+msgstr "Der Wert muss eine Länge von 40 Zeichen haben"
 
 #: seahub/base/accounts.py:414
 msgid "Invalid user id."
@@ -647,11 +647,11 @@ msgstr "Ungültige Benutzer-ID."
 
 #: seahub/base/decorators.py:77
 msgid "Files in this library can not be viewed online."
-msgstr "Dateien in dieser Bibliothek können nicht online geöffnet weden."
+msgstr "Dateien in dieser Bibliothek können nicht online angesehen weden."
 
 #: seahub/base/templatetags/seahub_tags.py:82
 msgid "Added"
-msgstr "Hinzugefügtte"
+msgstr "Hinzugefügt"
 
 #: seahub/base/templatetags/seahub_tags.py:83
 msgid "Deleted"
@@ -1066,7 +1066,7 @@ msgstr "Es existiert bereits eine Gruppe mit diesem Namen."
 
 #: seahub/group/views.py:273 seahub/group/views.py:295
 msgid "Only administrators can make the group public"
-msgstr "Nur Administratoren können diese Gruppe zu einer öffentlichen Gruppe machen."
+msgstr "Nur Administratoren können diese Gruppe öffentlich zugänglich machen."
 
 #: seahub/group/views.py:341
 msgid "The message doesn't exist"
@@ -1244,7 +1244,7 @@ msgstr "%(email)s hat sie eingeladen der Gruppe %(group.group_name)s beizutreten
 #: seahub/templates/sysadmin/user_add_email.html:14
 #: seahub/templates/sysadmin/user_reset_email.html:6
 msgid "Thanks for using our site!"
-msgstr "Danke, dass Sie unsere Seite benutzen! "
+msgstr "Danke, dass Sie unsere Seite benutzen!"
 
 #: seahub/group/templates/group/add_member_email.html:7
 #: seahub/group/templates/group/group_join_email.html:8
@@ -1260,7 +1260,7 @@ msgstr "Das %(site_name)s team"
 #: seahub/group/templates/group/group_discuss.html:103
 #: seahub/group/templates/group/new_msg_reply.html:46
 msgid "Hide replies"
-msgstr "Beiträge verbergen"
+msgstr "Antworten verbergen"
 
 #: seahub/group/templates/group/discussion_list.html:31
 #: seahub/group/templates/group/group_discuss.html:117
@@ -1319,7 +1319,7 @@ msgstr "Beginne eine Diskussion..."
 #: seahub/group/templates/group/group_discuss.html:52
 #: seahub/message/templates/message/user_msg_list.html:108
 msgid "After login, you can post discussions and add replies."
-msgstr "Nach dem Anmelden können Sie an Diskussionen teilhaben und Nachrichten versenden."
+msgstr "Nach dem Anmelden können Sie an Diskussionen teilhaben und auf Beiträge antworten."
 
 #: seahub/group/templates/group/group_discuss.html:143
 #: seahub/message/templates/message/user_msg_list.html:88
@@ -1533,7 +1533,7 @@ msgstr "Bearbeitet am"
 #: seahub/group/templates/group/group_info.html:111
 #: seahub/templates/repo_history.html:22
 msgid "Modifier"
-msgstr "Bearbeiter"
+msgstr "Bearbeitet von"
 
 #: seahub/group/templates/group/group_info.html:131
 #: seahub/group/templates/group/group_info.html:133
@@ -3726,7 +3726,7 @@ msgstr[1] " %(counter)s Bearbeiter"
 
 #: seahub/templates/view_file_base.html:136
 msgid "Unstarred successfully"
-msgstr "erfolgreicht nicht mehr favorisiert"
+msgstr "Favorit erfolgreich entfernt."
 
 #: seahub/templates/view_file_base.html:140
 msgid "Starred successfully"
