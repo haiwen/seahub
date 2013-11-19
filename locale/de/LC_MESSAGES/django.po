@@ -4442,7 +4442,7 @@ msgstr "Sind Sie sicher, dass Sie %s die Administratorenrechte entziehen wollen?
 #: seahub/templates/sysadmin/useradmin_js.html:15
 #: seahub/templates/sysadmin/useradmin_table.html:46
 msgid "Set Admin"
-msgstr "Administration"
+msgstr "Adminrechte geben"
 
 #: seahub/templates/sysadmin/useradmin_js.html:16
 #, python-format
