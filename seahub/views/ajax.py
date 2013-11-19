@@ -19,6 +19,7 @@ from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful
 from seahub.views import get_repo_dirents
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
@@ -1046,4 +1047,22 @@ def upload_file_done(request):
                                 owner=owner)
 
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
+
+@login_required
+def unseen_notices_count(request):
+    """Count user's unseen notices.
+    
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    count = UserNotification.objects.count_unseen_user_notifications(username)
+    result = {}
+    result['count'] = count
+    return HttpResponse(json.dumps(result), content_type=content_type)
     

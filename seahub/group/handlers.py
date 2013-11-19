@@ -26,11 +26,9 @@ def grpmsg_reply_added_cb(sender, **kwargs):
     msg_replies = MessageReply.objects.filter(reply_to=group_msg)
     notice_users = set([ x.from_email for x in msg_replies \
                              if x.from_email != reply_from_email])
+    notice_users.add(group_msg.from_email)
 
     for user in notice_users:
-        try:
-            UserNotification.objects.get_group_msg_reply_notice(user, msg_id)
-        except UserNotification.DoesNotExist:
-            UserNotification.objects.add_group_msg_reply_notice(to_user=user,
-                                                                msg_id=msg_id)
+        UserNotification.objects.add_group_msg_reply_notice(to_user=user,
+                                                            msg_id=msg_id)
 

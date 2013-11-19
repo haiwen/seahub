@@ -402,9 +402,8 @@ def msg_reply(request, msg_id):
 
 @login_required
 def msg_reply_new(request):
-    notes = UserNotification.objects.filter(to_user=request.user.username)
-    grpmsg_reply_list = [ n.detail for n in notes if \
-                              n.msg_type == 'grpmsg_reply']
+    username = request.user.username
+    grpmsg_reply_list = [ x.detail for x in UserNotification.objects.get_group_msg_reply_notices(username, seen=False) ]
 
     group_msgs = []
     for msg_id in grpmsg_reply_list:
@@ -413,6 +412,9 @@ def msg_reply_new(request):
         except GroupMessage.DoesNotExist:
             continue
         else:
+            if m in group_msgs:
+                continue
+
             # get group name
             group = get_group(m.group_id)
             if not group:
@@ -443,8 +445,7 @@ def msg_reply_new(request):
             group_msgs.append(m)
 
     # remove new group msg reply notification
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='grpmsg_reply').delete()
+    UserNotification.objects.seen_group_msg_reply_notice(username)
     
     return render_to_response("group/new_msg_reply.html", {
             'group_msgs': group_msgs,
@@ -1138,7 +1139,7 @@ def group_discuss(request, group):
         form = MessageForm()
         
     # remove user notifications
-    UserNotification.objects.remove_group_msg_notices(username, group.id)
+    UserNotification.objects.seen_group_msg_notices(username, group.id)
     
     # Get all group members.
     members = get_group_members(group.id)
