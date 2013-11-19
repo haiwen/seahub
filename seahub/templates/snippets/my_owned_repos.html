@@ -82,12 +82,12 @@
         {% else %}
         <td>--</td>
         {% endif %}
-        <td>
-            <span data="{{ repo.props.id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-      {% if repo.is_original_owner %}
-            <span data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-      {% endif %}
-            <span data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% if repo.is_original_owner %}
+            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            {% endif %}
+            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
         </td>
     </tr>
     {% endfor %}

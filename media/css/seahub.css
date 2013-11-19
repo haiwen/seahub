@@ -1147,6 +1147,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 .setting-item h3 {
     color:#000;
+    padding-bottom:0.2em;
+    border-bottom:1px solid #ddd;
+    margin-bottom:0.7em;
 }
 #user-basic-info label {
     width:5.5em;

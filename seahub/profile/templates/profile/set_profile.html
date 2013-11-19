@@ -51,7 +51,8 @@
     <h3>{% trans "Sub-library Setting" %}</h3>
     <form method="post" action="{% url 'sub_lib_enable_set' %}">{% csrf_token %}
         <input type="checkbox" name="enable-sub-lib" class="vam" {% if sub_lib_enabled %}checked="checked"{% endif %} /> <span class="vam">{% trans "Enable sub-library" %}</span>
-        <p>{% trans "Tip: if you enable sub-library, you will be able to sync a directory in a library, and your sub-libraries will be listed in the home page." %}</p>
+        <p>{% trans "This feature enables you to selectively sync a folder inside a library. A sub-library can be created from any folder. After being created, it will be listed in your desktop client, and you can download it just like downloading a normal library. It will be automatically kept in sync with its origin library." %}</p>
+        <p>{% trans "Sub-library is also used when sharing a folder to a group or another user. A hidden sub-library will be created automatically in such case. After turning this feature on, those hidden sub-libraries will also be listed." %}</p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
