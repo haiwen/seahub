@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 # from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 
 from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
@@ -41,6 +42,7 @@ urlpatterns = patterns('',
 
     (r'^$', root),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
+    url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
