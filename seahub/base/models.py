@@ -223,6 +223,12 @@ def update_last_login(sender, user, **kwargs):
     user_last_login.save()
 user_logged_in.connect(update_last_login)
 
+class CommandsLastCheck(models.Model):
+    """Record last check time for Django/custom commands.
+    """
+    command_type = models.CharField(max_length=100)
+    last_check = models.DateTimeField()
+
 ###### Deprecated
 class InnerPubMsg(models.Model):
     """

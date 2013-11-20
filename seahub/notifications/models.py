@@ -67,6 +67,21 @@ class UserNotificationManager(models.Manager):
             to_user=to_user, msg_type=msg_type, detail=detail)
         n.save()
         return n
+
+    def get_all_notifications(self, seen=None, time_since=None):
+        """Get all notifications of all users.
+        
+        Arguments:
+        - `self`:
+        - `seen`:
+        - `time_since`: 
+        """
+        qs = super(UserNotificationManager, self).all()
+        if seen is not None:
+            qs = qs.filter(seen=seen)
+        if time_since is not None:
+            qs = qs.filter(timestamp__gt=time_since)
+        return qs
         
     def get_user_notifications(self, username, seen=None):
         """Get all notifications(group_msg, grpmsg_reply, etc) of a user.
@@ -365,7 +380,7 @@ class UserNotification(models.Model):
             'href': reverse('message_list'),
             }
         return msg
-        
+
 ########## handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
