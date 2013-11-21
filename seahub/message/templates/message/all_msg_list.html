@@ -2,17 +2,19 @@
 {% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
+{% block extra_style %}
+<style type="text/css">
+    td { cursor:pointer; }
+</style>
+{% endblock %}
 
 {% block title_panel %}
-
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Messages" %}</li>
     </ul>
 </div>
-
 {% endblock %}
-
 
 {% block main_panel %}
 {% if msgs %}
@@ -26,7 +28,7 @@
     {% for key,value in msgs %}
     {% with not_read=value.not_read %}
     <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
-        <td class="icon-container">{% avatar key 20 %}</td>
+        <td class="alc">{% avatar key 20 %}</td>
         <td>{{ key }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
         <td>{{ value.last_msg|truncatechars:60 }}</td>
         <td>{{ value.last_time|translate_seahub_time }}</td>

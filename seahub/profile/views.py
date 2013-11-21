@@ -18,13 +18,15 @@ from seahub.auth.decorators import login_required
 from seahub.utils import render_error
 from seahub.base.accounts import User
 from seahub.contacts.models import Contact
-
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
 @login_required
 def edit_profile(request):
     """
     Show and edit user profile.
     """
+    username = request.user.username
+
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
@@ -35,7 +37,7 @@ def edit_profile(request):
             except Profile.DoesNotExist:
                 profile = Profile()
                 
-            profile.user = request.user.username
+            profile.user = username
             profile.nickname = nickname
             profile.intro = intro
             profile.save()
@@ -56,8 +58,16 @@ def edit_profile(request):
         except Profile.DoesNotExist:
             form = ProfileForm()
 
+    # common logic
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+            
     return render_to_response('profile/set_profile.html', {
             'form': form,
+            'server_crypto': server_crypto,
             }, context_instance=RequestContext(request))
 
 def user_profile(request, username_or_id):
@@ -136,8 +146,17 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request, user):
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+
+    if user == 'demo@seafile.com':
+        messages.error(request, _(u'Demo account can not be deleted.'))
+        return HttpResponseRedirect(next)
+        
     if request.user.username != user:
         messages.error(request, _(u'Operation Failed. You can only delete account of your own'))
+        return HttpResponseRedirect(next)
     else:
         user = User.objects.get(email=user)
         user.delete()

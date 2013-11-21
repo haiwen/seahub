@@ -80,7 +80,7 @@ class UserManager(object):
             from seahub.utils.time import dt
             login_dt = dt(user.ctime)
         user.last_login = login_dt
-        
+
         return user
 
 class User(object):
@@ -218,7 +218,8 @@ class AuthBackend(object):
                 return user
         except User.DoesNotExist:
             return None
-            
+
+########## Register related        
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:

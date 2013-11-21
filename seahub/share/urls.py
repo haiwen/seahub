@@ -5,6 +5,7 @@ from views import *
 urlpatterns = patterns('',
     url(r'^$', list_share_out_repos, name='share_admin'),
     url(r'^links/$', list_shared_links, name='list_shared_links'),
+    url(r'^upload_links/$', list_shared_upload_links, name='list_shared_upload_links'),
     url(r'^files/$', list_priv_shared_files, name='list_priv_shared_files'),
                        
     url(r'^add/$', share_repo, name='share_repo'),
@@ -14,6 +15,10 @@ urlpatterns = patterns('',
     url(r'^link/remove/$', remove_shared_link, name='remove_shared_link'),
     url(r'^link/send/$', send_shared_link, name='send_shared_link'),
     url(r'^link/save/$', save_shared_link, name='save_shared_link'),
+
+    url(r'^upload_link/get/$', get_shared_upload_link, name='get_shared_upload_link'),
+    url(r'^upload_link/remove/$', remove_shared_upload_link, name='remove_shared_upload_link'),
+    url(r'^upload_link/send/$', send_shared_upload_link, name='send_shared_upload_link'),
 
     url(r'^permission_admin/$', share_permission_admin, name='share_permission_admin'),
 

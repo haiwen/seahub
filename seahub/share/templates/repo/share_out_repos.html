@@ -6,13 +6,7 @@
 {% block nav_share_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'list_priv_shared_files' %}">{% trans "Private Shares" %}</a></li>
-    </ul>
-</div>
+{% include "repo/tabnav.html" with cur="library" %}
 {% endblock %}
 
 {% block main_panel %}
@@ -34,7 +28,7 @@
         <td>
             <div class="share-permission">
                 <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="share-permission-edit-icon vh" />
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="share-permission-edit-icon cspt vh" />
             </div>
             <select name="permission" class="share-permission-select hide">
                 <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
@@ -66,7 +60,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You have not shared any library" %}</h2>
+  <h2 class="alc">{% trans "You have not shared any library" %}</h2>
   <p>{% trans "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
 </div>
 {% endif %}

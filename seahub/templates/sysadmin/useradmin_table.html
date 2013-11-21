@@ -19,12 +19,11 @@
               {% else %}
                 <span class="user-status-cur-value">{% trans "Inactive" %}</span>
               {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon vh" />
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
             </div>
             <select name="permission" class="user-status-select hide">
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
                 <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
-
             </select>
         </td>
         
