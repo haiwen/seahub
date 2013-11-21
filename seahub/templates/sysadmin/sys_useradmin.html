@@ -19,7 +19,6 @@
 
 <button class="add" id="add-user-btn">{% trans "Add new user" %}</button>
 
-
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Add new user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
@@ -35,6 +34,9 @@
 {% include "sysadmin/useradmin_table.html"%}
 {% include "sysadmin/useradmin_paginator.html" %}
 
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
 {% endblock %}
 
 {% block extra_script %}

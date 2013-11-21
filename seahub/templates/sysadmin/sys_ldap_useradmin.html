@@ -15,13 +15,16 @@
 {% block main_panel %}
 <table>
     <tr>
-        <th width="80%">{% trans "Email" %}</th>
+        <th width="65%">{% trans "Email" %}</th>
+        <th width="15%">{% trans "Create At / Last Login" %}</th>
         <th width="20%">{% trans "Space Used" %}</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+        <td style="font-size:11px;"> -- / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        </td>
         <td>
             {% if CALC_SHARE_USAGE %}
             {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}

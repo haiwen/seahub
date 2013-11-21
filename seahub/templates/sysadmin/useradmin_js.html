@@ -43,6 +43,14 @@ $('.user-status-select').change(function() {
         type: 'GET',
         dataType: 'json',
         cache: false,
+        beforeSend: function() {
+            if (select_val == 1) {
+                console.log('activating user..please wait');
+                // show activating popup
+                $('#activate-msg').modal();
+                $('#simplemodal-container').css({'height':'auto'});
+            }
+        },
         success: function(data) {
             if (data['email_sent']) {
                 feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
@@ -58,11 +66,13 @@ $('.user-status-select').change(function() {
             
             select.addClass('hide');
             select.prev().removeClass('hide');
+            $.modal.close();
         },
         error: function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             select.prev().removeClass('hide');
+            $.modal.close();
         }   
     });
 });

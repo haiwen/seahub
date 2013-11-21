@@ -21,6 +21,7 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
+from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
@@ -140,6 +141,7 @@ def sys_user_admin(request):
         page_next = False
 
     users = users_plus_one[:per_page]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
@@ -151,6 +153,11 @@ def sys_user_admin(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
 
     have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
 
@@ -186,6 +193,7 @@ def sys_ldap_user_admin(request):
         page_next = False
 
     users = users_plus_one[:per_page]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
@@ -197,6 +205,13 @@ def sys_ldap_user_admin(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+            
             
     return render_to_response(
         'sysadmin/sys_ldap_useradmin.html', {
@@ -597,8 +612,14 @@ def user_search(request):
     email = request.GET.get('email', '')
     email_patt = email.replace('*', '%')
     
-    users  = ccnet_threaded_rpc.search_emailusers(
-        email_patt, -1, -1)        
+    users  = ccnet_threaded_rpc.search_emailusers(email_patt, -1, -1)
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
 
     return render_to_response('sysadmin/user_search.html', {
             'users': users,
