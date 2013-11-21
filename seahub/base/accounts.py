@@ -71,16 +71,6 @@ class UserManager(object):
         user.ctime = emailuser.ctime
         user.org = emailuser.org
 
-        # User last login timestamp is recorded in a seperated table.
-        from seahub.base.models import UserLastLogin
-        try:
-            user_last_login = UserLastLogin.objects.get(username=emailuser.email)
-            login_dt = user_last_login.last_login
-        except UserLastLogin.DoesNotExist:
-            from seahub.utils.time import dt
-            login_dt = dt(user.ctime)
-        user.last_login = login_dt
-        
         return user
 
 class User(object):
