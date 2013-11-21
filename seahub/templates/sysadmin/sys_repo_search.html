@@ -14,22 +14,11 @@
 <h3>{% trans "Result"%}</h3>
 {% if repos %}
 {% include "sysadmin/repoadmin_table.html" %}
-
 {% else %}
 <p>{% trans "No result" %}</p>
 {% endif %}
 
-<form id="repo-transfer-form" method="post" action="{% url 'sys_repo_transfer' %}" class="simple-input-popup hide">{% csrf_token %}
-  <h3>{% trans "Transfer Library"%}</h3>
-  <label>{% trans "Email" %}</label><br />
-  <input type="text" name="email" value="" class="long-input"/><br />
-  <input type="hidden" name="repo_id" value="" />
-
-  <p class="error hide"></p>
-  <input type="submit" value="{% trans "Submit" %}" class="submit" />
-  <button class="simplemodal-close">{% trans "Cancel" %}</button>
-</form>
-
+{% include "sysadmin/repo_transfer_form.html" %}
 {% endblock %}
 
 {% block extra_script %}
@@ -44,6 +33,5 @@ $('#search-repo-form').submit(function() {
     }
 });
 {% include "sysadmin/repoadmin_js.html" %}
-
 </script>
 {% endblock %}

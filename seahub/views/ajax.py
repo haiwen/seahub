@@ -12,7 +12,9 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api, seafserv_rpc
+from seaserv import seafile_api, seafserv_rpc, \
+    get_related_users_by_repo, get_related_users_by_org_repo, \
+    is_org_repo_owner
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
@@ -21,11 +23,13 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful
-from seahub.views import get_repo_dirents
+from seahub.views import get_repo_dirents, validate_owner
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
         get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
-from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
+from seahub.signals import repo_deleted
+from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
+    check_and_get_org_by_repo
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -1072,3 +1076,56 @@ def unseen_notices_count(request):
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)
     
+@login_required
+def repo_remove(request, repo_id):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}  
+
+    repo = get_repo(repo_id)
+    if not repo:
+        result['error'] = _(u'Library does not exist')
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+      
+    user = request.user.username
+    org, base_template = check_and_get_org_by_repo(repo_id, user)
+    if org: 
+        # Remove repo in org context, only repo owner or org staff can
+        # perform this operation.
+        if request.user.is_staff or org.is_staff or \
+                is_org_repo_owner(org.org_id, repo_id, user):
+            # Must get related useres before remove the repo
+            usernames = get_related_users_by_org_repo(org.org_id, repo_id)
+            seafile_api.remove_repo(repo_id)
+            repo_deleted.send(sender=None,
+                              org_id=org.org_id,
+                              usernames=usernames,
+                              repo_owner=user,
+                              repo_id=repo_id,
+                              repo_name=repo.name,
+                          )    
+            result['success'] = True
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
+            result['error'] = _(u'Permission denied.')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    else:
+        # Remove repo in personal context, only repo owner or site staff can
+        # perform this operation.
+        if validate_owner(request, repo_id) or request.user.is_staff:
+            usernames = get_related_users_by_repo(repo_id)
+            seafile_api.remove_repo(repo_id)
+            repo_deleted.send(sender=None,
+                              org_id=-1,
+                              usernames=usernames,
+                              repo_owner=user,
+                              repo_id=repo_id,
+                              repo_name=repo.name,
+                          )
+            result['success'] = True
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
+            result['error'] = _(u'Permission denied.')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)

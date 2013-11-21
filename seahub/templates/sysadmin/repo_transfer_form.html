@@ -1,0 +1,10 @@
+{% load i18n %}
+<form id="repo-transfer-form" method="post" action="{% url 'sys_repo_transfer' %}" class="simple-input-popup hide">{% csrf_token %}
+    <h3>{% trans "Transfer Library"%}</h3>
+    <p class="detail">{% trans "Transfer %(lib_name) to:"%}</p>
+    <input type="text" name="email" placeholder="{% trans "Email" %}" value="" class="long-input" /><br />
+    <input type="hidden" name="repo_id" value="" />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    <button class="simplemodal-close">{% trans "Cancel" %}</button>
+</form>

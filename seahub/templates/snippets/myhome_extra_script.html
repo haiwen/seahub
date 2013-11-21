@@ -55,16 +55,7 @@
         location.href = $(this).data('url');
     });
 
-    $('.repo-delete-btn').click(function() {
-        var btn_ct = $(this).parent(),
-            repo_id = btn_ct.data('id'),
-            repo_name = btn_ct.attr('data-name');
-        $(this).data('url', '{{ SITE_ROOT }}repo/remove/' + repo_id + '/?next={{ request.path }}').data('target', repo_name);
-    });
-    addConfirmTo($('.repo-delete-btn'), {
-        'title':'{% trans "Delete Library" %}',
-        'con':'{% trans "Are you sure you want to delete %s ?" %}'
-    });
+    {% include 'snippets/repo_del_js.html' %}
 
     $(".download-btn").click(function() {
         var repo_id = $(this).parent().data('id');

@@ -29,7 +29,7 @@
     {% else %}
     <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
     {% endif %}
-    <a href="#" class="set-quota">{% trans "Set Quota" %}</a>
+    <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
 </div>
 
@@ -51,14 +51,14 @@
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td>
-        <a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="remove-user-repo op">{% trans "Delete" %}</a>
+        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            <a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}
 </table>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "None" %}</p>
 {% endif %}
 
 <h3>{% trans "Shared" %}</h3>
@@ -81,13 +81,13 @@
     {% endfor %}
 </table>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "None" %}</p>
 {% endif %}
 
-<form id="set-quota-form" method="post" class="hide">{% csrf_token %}
-    <label>{% trans "Set user storage limit" %}</label><br />
+<form id="set-quota-form" method="post" class="simple-input-popup hide">{% csrf_token %}
+    <h3>{% trans "Set user storage limit" %}</h3>
     <input type="hidden" name="email" value="{{ email }}" />
-    <input type="text" name="quota" /> MB <br />
+    <input type="text" name="quota" /> MB
     <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
@@ -99,46 +99,48 @@
 {% block extra_script %}
 <script type="text/javascript">
 
-$('.set-quota').click(function() {
+$('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     return false;
 });
 
 $('#set-quota-form .submit').click(function() {
-    var self = $(this);
-    self.attr('disabled', 'disabled');
+    var form = $('#set-quota-form'),
+        form_id = form.attr('id');
+
+    var quota = $('input[name="quota"]', form).val();
+    if (!$.trim(quota)) {
+        apply_form_error(form_id, "{% trans "Quota can't be empty" %}");
+        return false;
+    }
+
+    var sb_btn = $(this);
+    disable(sb_btn);
     $.ajax({
-        url: '{% url 'user_info' email %}',
+        url: '{% url 'user_set_quota' email %}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
         beforeSend: prepareCSRFToken,
         data: {
-            'email': $('#set-quota-form input[name="email"]').val(),
-            'quota': $('#set-quota-form input[name="quota"]').val()
+            'email': $('input[name="email"]', form).val(),
+            'quota': quota
         },
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            } else {
-                apply_form_error('set-quota-form', data['error']);
-                self.removeAttr('disabled');
-            }
+            location.reload(true);
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error('set-quota-form', value[0]);
-            });
-            self.removeAttr('disabled');
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+            enable(sb_btn);
         }
     });
     return false;
 });
 
-addConfirmTo($('.remove-user-repo'), {
-        'title':'{% trans "Delete Library" %}',
-        'con':'{% trans "Are you sure you want to delete %s ?" %}'
-});
+{% include 'snippets/repo_del_js.html' %}
 </script>
 {% endblock %}

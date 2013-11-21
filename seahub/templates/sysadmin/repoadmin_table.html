@@ -13,11 +13,10 @@
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td>
-          <a href="#" data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="repo-delete-btn op">{% trans "Delete" %}</a>
-          <a href="#" data-id="{{repo.id}}" data-name="{{repo.name}}" class="repo-transfer-btn op">{% trans "Transfer" %}</a>        
+        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            <a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a>
+            <a href="#" data-id="{{repo.id}}" data-name="{{repo.name}}" class="repo-transfer-btn op">{% trans "Transfer" %}</a>        
         </td>
-        
     </tr>
     {% endfor %}
 </table>

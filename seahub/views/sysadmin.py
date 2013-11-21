@@ -228,29 +228,6 @@ def sys_ldap_user_admin(request):
 @login_required
 @sys_staff_required
 def user_info(request, email):
-    if request.method == 'POST':
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        f = SetUserQuotaForm(request.POST)
-        if f.is_valid():
-            email = f.cleaned_data['email']
-            quota_mb = f.cleaned_data['quota']
-            quota = quota_mb * (1 << 20)
-
-            try:
-                seafile_api.set_user_quota(email, quota)
-            except:
-                result['error'] = _(u'Failed to set quota: internal error')
-                return HttpResponse(json.dumps(result), content_type=content_type)
-
-            result['success'] = True
-            return HttpResponse(json.dumps(result), content_type=content_type)
-        else:
-            result['error'] = str(f.errors.values()[0])
-            return HttpResponse(json.dumps(result), content_type=content_type)
-
-    owned_repos = []
 
     owned_repos = seafile_api.get_owned_repo_list(email)
 
@@ -291,6 +268,33 @@ def user_info(request, email):
             'email': email,
             'nickname': nickname,
             }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def user_set_quota(request, email):
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    f = SetUserQuotaForm(request.POST)
+    if f.is_valid():
+        email = f.cleaned_data['email']
+        quota_mb = f.cleaned_data['quota']
+        quota = quota_mb * (1 << 20)
+
+        try:
+            seafile_api.set_user_quota(email, quota)
+        except:
+            result['error'] = _(u'Failed to set quota: internal error')
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        result['error'] = str(f.errors.values()[0])
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required

@@ -874,55 +874,6 @@ def modify_token(request, repo_id):
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 @login_required
-def repo_remove(request, repo_id):
-    repo = get_repo(repo_id)
-    if not repo:
-        return render_error(request, _(u'Library does not exist'))
-        
-    user = request.user.username
-    org, base_template = check_and_get_org_by_repo(repo_id, user)
-    if org:
-        # Remove repo in org context, only repo owner or org staff can
-        # perform this operation.
-        if request.user.is_staff or org.is_staff or \
-                is_org_repo_owner(org.org_id, repo_id, user):
-            # Must get related useres before remove the repo
-            usernames = get_related_users_by_org_repo(org.org_id, repo_id)
-            remove_repo(repo_id)
-            repo_deleted.send(sender=None,
-                              org_id=org.org_id,
-                              usernames=usernames,
-                              repo_owner=user,
-                              repo_id=repo_id,
-                              repo_name=repo.name,
-                          )
-        else:
-            err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
-            messages.error(request, err_msg)
-    else:
-        # Remove repo in personal context, only repo owner or site staff can
-        # perform this operation.
-        if validate_owner(request, repo_id) or request.user.is_staff:
-            usernames = get_related_users_by_repo(repo_id)
-            remove_repo(repo_id)
-            repo_deleted.send(sender=None,
-                              org_id=-1,
-                              usernames=usernames,
-                              repo_owner=user,
-                              repo_id=repo_id,
-                              repo_name=repo.name,
-                          )
-            messages.success(request, _(u'Successfully deleted library "%s".') % repo.name)
-        else:
-            err_msg = _(u'Failed to remove library. Only staff or owner can perform this operation.')
-            messages.error(request, err_msg)
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-    return HttpResponseRedirect(next)
-
-@login_required
 def myhome(request):
     owned_repos = []
 

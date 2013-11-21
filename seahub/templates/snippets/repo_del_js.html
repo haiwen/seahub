@@ -1,0 +1,26 @@
+{% load i18n %}
+$('.repo-delete-btn').click(function() {
+    var btn_ct = $(this).parent(),
+        repo_id = btn_ct.data('id'),
+        repo_name = btn_ct.attr('data-name');
+    var popup = { 
+        'title': "{% trans "Delete Library" %}",
+        'con': "{% trans "Are you sure you want to delete %s ?" %}" 
+    };  
+    var con = popup['con'].replace('%s', '<span class="op-target">' + repo_name + '</span>');
+    $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + con + '</p>');
+    $('#confirm-popup').modal({appendTo:'#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+    $('#confirm-yes').click(function() {
+        $.ajax({
+        url: '{{ SITE_ROOT }}ajax/repo/' + repo_id + '/remove/',
+        dataType: 'json',
+        success: function(data) {
+            $.modal.close();
+            btn_ct.parents('tr').remove();
+            feedback("{% trans "Delete succeeded." %}", 'success');
+        },  
+        error: ajaxErrorHandler
+        }); 
+    }); 
+}); 

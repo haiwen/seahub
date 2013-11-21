@@ -1,16 +1,14 @@
 {% load i18n%}
-addConfirmTo($('.repo-delete-btn'), {
-        'title':'{% trans "Delete Library" %}',
-        'con':'{% trans "Are you sure you want to delete %s ?" %}'
-});
-
 $('.repo-transfer-btn').click(function(){
-    var repo_id = $(this).data('id'),
-        repo_name = $(this).data('name'),
+    var btn_ct = $(this).parent(),
+        repo_id = btn_ct.data('id'),
+        repo_name = btn_ct.attr('data-name'),
         form = $('#repo-transfer-form');
     
-    $('#repo-transfer-form input[name="repo_id"]').val(repo_id);
     form.modal({appendTo:'#main'});
+    $('input[name="repo_id"]', form).val(repo_id);
+    var detail = $('.detail', form);
+    detail.html(detail.html().replace('%(lib_name)', repo_name));
     return false;
 });
 
@@ -18,9 +16,11 @@ $('#repo-transfer-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
         email = $.trim(form.children('[name="email"]').val());
+
     if (!email) {
         apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
         return false;
     }
-    form.submit();
 });
+
+{% include 'snippets/repo_del_js.html' %}
