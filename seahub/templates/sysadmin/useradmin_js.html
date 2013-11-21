@@ -45,7 +45,6 @@ $('.user-status-select').change(function() {
         cache: false,
         beforeSend: function() {
             if (select_val == 1) {
-                console.log('activating user..please wait');
                 // show activating popup
                 $('#activate-msg').modal();
                 $('#simplemodal-container').css({'height':'auto'});
