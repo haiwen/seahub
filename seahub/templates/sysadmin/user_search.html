@@ -11,7 +11,60 @@
 </form>
 <h3>{% trans "Result"%}</h3>
 {% if users %}
-{% include "sysadmin/useradmin_table.html" %}
+<table>
+    <tr>
+        <th width="30%">{% trans "Email" %}</th>
+        <th width="10%">{% trans "Status" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="15%">{% trans "Create At" %}</th>
+        <th width="25%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr>
+        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+        <td>
+          {% if user.source != 'LDAP' %}
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon vh" />
+            </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+
+            </select>
+          {% endif %}
+        </td>
+        
+        <td>
+            {% if CALC_SHARE_USAGE %}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% else %}
+            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% endif %}
+        </td>
+        <td>{% if user.source != 'LDAP' %}{{ user.ctime|tsstr_sec }}{% endif %}</td>
+        <td>
+          {% if user.source != 'LDAP' %}
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          {% if user.is_staff %}
+          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op">{% trans "Revoke Admin" %}</a>
+          {% else %}
+          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op">{% trans "Set Admin" %}</a>
+          {% endif %}
+          {% endif %}
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% else %}
 <p>{% trans "No result" %}</p>
 {% endif %}
