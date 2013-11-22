@@ -36,7 +36,7 @@
 
 {% block right_panel %}
 
-<div id="group-reply" class="msg-panel">
+<div id="group-discussions" class="msg-panel">
     {% if request.user.is_authenticated %}
     <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
         {% avatar request.user.username 48 %}
@@ -55,13 +55,13 @@
     {% if group_msgs %}
     <ul class="msg-list">
     {% for msg in group_msgs.object_list %}
-        <li class="msg w100 ovhd">
+        <li class="msg w100 ovhd" data-id="{{msg.id}}">
         <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
                     {% if is_staff or msg.from_email == request.user.username %}
-                    <span class="msg-del op fright vh" data-url="{% url 'group_message_remove' group.id msg.id %}">{% trans "Delete" %}</span>
+                    <span class="msg-del op fright vh">{% trans "Delete" %}</span>
                     {% endif %}
                     <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
@@ -99,7 +99,7 @@
             </div>
             <div class="msg-op">
                 <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
-                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="unfold-replies">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
                     <span class="fold-replies hide">{% trans "Hide replies" %}</span>
                     <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
                 </div>
@@ -123,7 +123,7 @@
                 </ul>
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                <form action="{% url 'msg_reply' msg.id %}" method="post" class="reply-form">
+                <form action="" method="post" class="reply-form">
                     <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
                     <p class="error hide">{% trans "It can not be blank and should be no more than 2048 characters." %}</p>
                     <button type="submit" class="reply-submit hide">{% trans "Submit" %}</button>
@@ -156,8 +156,42 @@
     {% endif %}
 
     {% if group_msgs.object_list|length > 5 %}
-    <a href="#group-reply" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
+    <a href="#group-discussions" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
     {% endif %}
+
+    {% if request.user.is_authenticated %}
+    <ul class="new-msg-list hide">
+        <li class="msg w100 ovhd">
+        <a href="{% url 'user_msg_list' request.user.username|id_or_email %}" class="pic fleft">{% avatar request.user.username 48 %}</a>
+        <div class="txt">
+            <div class="msg-main">
+                <div class="msg-hd w100 ovhd">
+                    <span class="msg-del op fright vh">{% trans "Delete" %}</span>
+                    <a href="{% url 'user_msg_list' request.user.username|id_or_email %}" class="author">{{ request.user.username|email2nickname }}</a>
+                    <span class="time">{% trans "Just now" %}</span>
+                </div>
+                <p class="msg-con"></p>
+                <span class="say"></span>
+            </div>
+            <div class="msg-op">
+                <div class="replies-op hide" data-rstatus="hide">
+                    <span class="unfold-replies" data-url="">{% blocktrans with amount=0 %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="fold-replies hide">{% trans "Hide replies" %}</span>
+                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                </div>
+                <ul class="reply-list hide"></ul>
+                <form action="" method="post" class="reply-form">
+                    <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
+                    <p class="error hide">{% trans "It can not be blank and should be no more than 2048 characters." %}</p>
+                    <button type="submit" class="reply-submit hide">{% trans "Submit" %}</button>
+                    <button type="button" class="reply-cancel hide">{% trans "Cancel" %}</button>
+                </form>
+            </div>
+        </div>
+        </li>
+    </ul>
+    {% endif %}
+
 </div>
 
 {% include "group/modules_toggle_form.html" %}
@@ -169,7 +203,7 @@
 {% if group_msgs.object_list|length > 5 %}
 $(window).scroll(function() {
     var up_icon = $('#msg-upward');
-    var msg_panel =  $('#group-reply');
+    var msg_panel =  $('#group-discussions');
     var msg_panel_offset = msg_panel.offset();
     var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
     var win_st = $(window).scrollTop();
@@ -191,19 +225,55 @@ $(window).scroll(function() {
 {% if request.user.is_authenticated %}
 $('#message').focus(function() {
     $(this).height(75);
-    $('#group-message-form').find('.submit, .cancel').removeClass('hide');
+    $('.submit, .cancel', $('#group-message-form')).removeClass('hide');
 });
-$('#group-message-form .cancel').click(function() {
-    $(this).addClass('hide');
-    $('#group-message-form .submit').addClass('hide');
+$('#group-message-form .cancel').click(foldDiscussionForm);
+function foldDiscussionForm() {
+    $('.submit, .cancel', $('#group-message-form')).addClass('hide');
     $('#message').val('').height(25);
+}
+$('#group-message-form').submit(function() {
+    var form = $(this);
+    var msg_input = $('[name="message"]');
+    if (!$.trim(msg_input.val())) {
+        return false;
+    }
+
+    var sb_btn = $('.submit', form);
+    disable(sb_btn);
+    $.ajax({
+        url: '{% url 'group_add_discussion' group.id %}',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: { 'message': msg_input.val() },
+        success: function(data) {
+            var new_msg = $('.new-msg-list .msg').clone(true).attr('data-id', data['msg_id']);
+            $('.msg-con', new_msg).html(data['msg_con']); 
+            if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
+                $('#group-message-form').after('<ul class="msg-list"></ul>');    
+            }
+            $('.msg-list').prepend(new_msg);
+            enable(sb_btn);
+            foldDiscussionForm();
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }    
+            apply_form_error(form.attr('id'), err_msg);
+        }
+    });
+    return false;
 });
 {% endif %}
 
 {% include 'group/msg_js.html' %}
 
 $('.msg-del').click(function() {
-    var url = $(this).data('url');
     var msg = $(this).parents('.msg');
     var cfm;
     if (msg.find('.msg-del-confirm').length > 0) {
@@ -219,7 +289,7 @@ $('.msg-del').click(function() {
     cfm.children('.yes').click(function() {
         cfm.addClass('hide');
         $.ajax({
-            url: url,
+            url: '{{SITE_ROOT}}group/{{group.id}}/msgdel/' + msg.attr('data-id') + '/',
             dataType:'json',
             success: function(data) {
                 if (data['success']) {

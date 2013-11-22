@@ -1120,31 +1120,43 @@ def attention(request):
     
 
 @group_check
+def group_add_discussion(request, group):
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
+    # only login user can post to public group
+    if group.view_perm == "pub" and not request.user.is_authenticated():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    username = request.user.username
+
+    form = MessageForm(request.POST)
+    if form.is_valid():
+        msg = form.cleaned_data['message']
+        message = GroupMessage()
+        message.group_id = group.id
+        message.from_email = username
+        message.message = msg
+        message.save()
+
+        # send signal
+        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                          from_email=username)
+    
+        ctx = {'msg': msg}
+        msg_html = render_to_string("group/new_discussion_con.html", ctx)
+        return HttpResponse(json.dumps({'msg_id': message.id, 'msg_con': msg_html}), content_type=content_type)
+    else:
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+@group_check
 def group_discuss(request, group):
     username = request.user.username
-    if request.method == 'POST':
-        # only login user can post to public group
-        if group.view_perm == "pub" and not request.user.is_authenticated():
-            raise Http404
-
-        form = MessageForm(request.POST)
-
-        if form.is_valid():
-            msg = form.cleaned_data['message']
-            message = GroupMessage()
-            message.group_id = group.id
-            message.from_email = request.user.username
-            message.message = msg
-            message.save()
-
-            # send signal
-            grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                              from_email=username)
-            # Always return an HttpResponseRedirect after successfully dealing
-            # with POST data.
-            return HttpResponseRedirect(reverse('group_discuss', args=[group.id]))
-    else:
-        form = MessageForm()
+    form = MessageForm()
         
     # remove user notifications
     UserNotification.objects.seen_group_msg_notices(username, group.id)

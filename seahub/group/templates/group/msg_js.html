@@ -26,18 +26,18 @@ $('.replies-op').hover(
         $(this).children().css({'text-decoration':'none'});
     }
 ).click(function() {
-    var op = $(this); 
-    var uf_r = op.children('.unfold-replies'); 
-    var f_r = op.children('.fold-replies'); 
-    var r_list = op.parent().find('.reply-list');
-    var loading = op.children('.replies-loading-icon');
+    var op = $(this), 
+        uf_r = $('.unfold-replies', op), 
+        f_r = $('.fold-replies', op), 
+        r_list = op.parent().find('.reply-list'),
+        loading = $('.replies-loading-icon', op);
     loading.css({'left': uf_r.outerWidth() - 7});
 
     if (op.attr('data-rstatus') == 'hide') {
         uf_r.addClass('unfold-replies-nobg');
         loading.removeClass('hide');
         $.ajax({
-            url: uf_r.data('url'),
+            url: '{{SITE_ROOT}}group/reply/' + op.parents('.msg').attr('data-id') + '/',
             dataType: 'json',
             cache: true,
             success: function(data) {
@@ -116,7 +116,7 @@ $('.reply-form').submit(function() {
 
     $.ajax({
         type: "POST",
-        url: form.attr('action') + '?r_status=' + e(r_status),
+        url: '{{SITE_ROOT}}group/reply/' + form.parents('.msg').attr('data-id') + '/?r_status=' + e(r_status),
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,

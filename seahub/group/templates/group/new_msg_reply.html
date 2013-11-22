@@ -6,7 +6,7 @@
 {% if group_msgs %}
     <ul class="msg-list msg-panel">
     {% for msg in group_msgs %}
-        <li class="msg w100 ovhd">
+    <li class="msg w100 ovhd" data-id="{{msg.id}}">
         <div class="pic fleft">
             <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}">{% avatar msg.from_email 48 %}</a>
         </div>
@@ -42,7 +42,7 @@
             </div>  
             <div class="msg-op">
                 <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
-                    <span class="unfold-replies" data-url="{% url 'msg_reply' msg.id %}">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
+                    <span class="unfold-replies">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
                     <span class="fold-replies hide">{% trans "Hide replies" %}</span>
                     <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
                 </div>
@@ -59,7 +59,7 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <form action="{% url 'msg_reply' msg.id %}" method="post" class="reply-form">
+                <form action="" method="post" class="reply-form">
                     <textarea placeholder="{% trans "Add a reply..." %}" name="message" class="reply-input"></textarea>
                     <p class="error hide">{% trans "It can not be blank and should be no more than 2048 characters." %}</p>
                     <button type="submit" class="reply-submit hide">{% trans "Submit" %}</button>
