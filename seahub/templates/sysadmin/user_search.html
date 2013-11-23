@@ -11,10 +11,14 @@
 </form>
 <h3>{% trans "Result"%}</h3>
 {% if users %}
-{% include "sysadmin/useradmin_table.html" %}
+{% include "sysadmin/useradmin_table.html"%}
 {% else %}
 <p>{% trans "No result" %}</p>
 {% endif %}
+
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
 
 {% endblock %}
 

@@ -21,6 +21,7 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
+from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
@@ -124,6 +125,8 @@ def sys_repo_search(request):
 @login_required
 @sys_staff_required
 def sys_user_admin(request):
+    """List all users from database.
+    """
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -131,13 +134,14 @@ def sys_user_admin(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    users_plus_one = get_emailusers(per_page * (current_page - 1), per_page + 1)
+    users_plus_one = get_emailusers('DB', per_page * (current_page - 1), per_page + 1)
     if len(users_plus_one) == per_page + 1:
         page_next = True
     else:
         page_next = False
 
     users = users_plus_one[:per_page]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
@@ -149,9 +153,68 @@ def sys_user_admin(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
-            
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
+            'users': users,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'have_ldap': have_ldap,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_ldap_user_admin(request):
+    """List all users from LDAP.
+    """
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+    users_plus_one = get_emailusers('LDAP', per_page * (current_page - 1), per_page + 1)
+    if len(users_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    users = users_plus_one[:per_page]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        if user.props.id == request.user.id:
+            user.is_self = True
+        try:
+            user.self_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.quota = seafile_api.get_user_quota(user.email)
+        except:
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
+
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+            
+            
+    return render_to_response(
+        'sysadmin/sys_ldap_useradmin.html', {
             'users': users,
             'current_page': current_page,
             'prev_page': current_page-1,
@@ -549,8 +612,14 @@ def user_search(request):
     email = request.GET.get('email', '')
     email_patt = email.replace('*', '%')
     
-    users  = ccnet_threaded_rpc.search_emailusers(
-        email_patt, -1, -1)        
+    users  = ccnet_threaded_rpc.search_emailusers(email_patt, -1, -1)
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
 
     return render_to_response('sysadmin/user_search.html', {
             'users': users,
