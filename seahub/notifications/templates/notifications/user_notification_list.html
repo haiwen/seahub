@@ -26,13 +26,13 @@
     </tr>
     {% for notice in notices %}
       {% if notice.is_group_msg %}    
-      <tr data-href="{% url 'group_discuss' notice.group.id %}" class="{% if not notice.seen %}bold{% endif %}">
-        <td>{{ notice.group.group_name }} has new discussion</td>
+      <tr class="{% if not notice.seen %}bold{% endif %}">
+        <td>{{ notice.format_group_message|safe }}</td>
         <td>{{ notice.timestamp|translate_seahub_time }}</td>
       </tr>
       {% elif notice.is_grpmsg_reply %}
-      <tr data-href="{% url 'msg_reply_new' %}" class="{% if not notice.seen %}bold{% endif %}">
-        <td>One group discussion has new reply</td>
+      <tr class="{% if not notice.seen %}bold{% endif %}">
+        <td>{{ notice.format_grpmsg_reply|safe }}</td>
         <td>{{ notice.timestamp|translate_seahub_time }}</td>
       </tr>
       {% elif notice.is_file_uploaded_msg %}

@@ -35,7 +35,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
     get_personal_groups_by_user, is_inner_pub_repo, \
     del_org_group_repo, get_personal_groups, web_get_access_token, remove_repo, \
-    get_group, get_shared_groups_by_repo, is_group_user, check_permission, \
+    get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
     list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
     get_org_repo_owner, is_passwd_set, get_file_size, check_quota, edit_repo,\
@@ -998,19 +998,30 @@ def myhome(request):
     notes = UserNotification.objects.get_user_notifications(username, seen=False)
     for n in notes:
         if n.is_group_msg():
-            if int(n.detail) not in joined_group_ids:
+            try:
+                group_id  = n.group_message_detail_to_dict().get('group_id')
+            except UserNotification.InvalidDetailError:
                 continue
+
+            if group_id not in joined_group_ids:
+                continue
+
             dup = False
             for grpmsg in grpmsg_list:
-                if grpmsg.id == int(n.detail):
+                if grpmsg.id == group_id:
                     dup = True
                     break
             if not dup:
-                grp = get_group(int(n.detail))
+                grp = seaserv.get_group(group_id)
                 grpmsg_list.append(grp)
         elif n.is_grpmsg_reply():
-            if n.detail not in grpmsg_reply_list:
-                grpmsg_reply_list.append(n.detail)
+            try:
+                msg_id = n.grpmsg_reply_detail_to_dict().get('msg_id')
+            except UserNotification.InvalidDetailError:
+                continue
+
+            if msg_id not in grpmsg_reply_list:
+                grpmsg_reply_list.append(msg_id)
 
     # get nickname
     profiles = Profile.objects.filter(user=username)

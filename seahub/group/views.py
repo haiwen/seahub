@@ -403,10 +403,18 @@ def msg_reply(request, msg_id):
 @login_required
 def msg_reply_new(request):
     username = request.user.username
-    grpmsg_reply_list = [ x.detail for x in UserNotification.objects.get_group_msg_reply_notices(username, seen=False) ]
+    grpmsg_reply_list = [ x for x in UserNotification.objects.get_group_msg_reply_notices(username, seen=False) ]
+
+    msg_ids = []
+    for e in grpmsg_reply_list:
+        try:
+            msg_id = e.grpmsg_reply_detail_to_dict().get('msg_id')
+        except UserNotification.InvalidDetailError:
+            continue
+        msg_ids.append(msg_id)
 
     group_msgs = []
-    for msg_id in grpmsg_reply_list:
+    for msg_id in msg_ids:
         try:
             m = GroupMessage.objects.get(id=msg_id)
         except GroupMessage.DoesNotExist:

@@ -9,7 +9,6 @@ from seaserv import get_group_members
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.shortcuts import get_first_object_or_none
-from seahub.notifications.models import UserNotification
 from seahub.profile.models import Profile
 
 class GroupMessage(models.Model):
@@ -41,6 +40,8 @@ class PublicGroup(models.Model):
     group_id = models.IntegerField(db_index=True)
 
 ########## '@<user>' feature need to be redesigned, comment out temporarily.
+# from seahub.notifications.models import UserNotification
+
 # @receiver(post_save, sender=MessageReply)
 # def msgreply_save_handler(sender, instance, **kwargs):
 #     """

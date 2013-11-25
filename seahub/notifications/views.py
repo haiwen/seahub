@@ -67,14 +67,7 @@ def user_notification_list(request):
     - `request`:
     """
     username = request.user.username
-    grpmsg_list = []
-    grpmsg_reply_list = []
-
     notices = UserNotification.objects.get_user_notifications(username)
-    for n in notices:
-        if n.is_group_msg():
-            grp = seaserv.get_group(int(n.detail))
-            n.group = grp
 
     return render_to_response("notifications/user_notification_list.html", {
             'notices': notices,
