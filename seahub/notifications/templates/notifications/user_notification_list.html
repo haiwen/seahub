@@ -1,0 +1,72 @@
+{% extends "myhome_base.html" %}
+{% load avatar_tags i18n seahub_tags %}
+
+{% block sub_title %}{% trans "Notices" %} - {% endblock %}
+{% block extra_style %}
+<style type="text/css">
+    td { cursor:pointer; }
+</style>
+{% endblock %}
+
+{% block title_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur">{% trans "Notices" %}</li>
+        <li class="tabnav-tab"><a href="{% url 'message_list' %}">{% trans "Messages" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main_panel %}
+{% if notices %}
+<table>
+    <tr>
+        <th width="80%">{% trans "Message"%}</th>
+        <th width="20%">{% trans "Time"%}</th>
+    </tr>
+    {% for notice in notices %}
+      {% if notice.is_group_msg %}    
+      <tr data-href="{% url 'group_discuss' notice.group.id %}" class="{% if not notice.seen %}bold{% endif %}">
+        <td>{{ notice.group.group_name }} has new discussion</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_grpmsg_reply %}
+      <tr data-href="{% url 'msg_reply_new' %}" class="{% if not notice.seen %}bold{% endif %}">
+        <td>One group discussion has new reply</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_file_uploaded_msg %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_file_uploaded_msg|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_repo_share_msg %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_repo_share_msg|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_priv_file_share_msg %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_priv_file_share_msg|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_user_message %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_user_message|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(function(){       
+    $('tr[data-href]').click(function() {
+        location.href = $(this).data('href');
+    });
+});
+</script>
+{% endblock %}

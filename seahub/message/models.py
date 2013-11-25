@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -86,40 +87,3 @@ class UserMsgAttachment(models.Model):
                                             on_delete=models.SET_NULL)
     objects = UserMsgAttachmentManager()
 
-### handle signals
-from django.core.urlresolvers import reverse
-from django.dispatch import receiver
-from seahub.signals import share_file_to_user_successful
-from seahub.share.signals import share_repo_to_user_successful
-
-@receiver(share_repo_to_user_successful)
-def add_share_repo_msg(sender, **kwargs):
-    from_user = kwargs.get('from_user', '')
-    to_user = kwargs.get('to_user', '')
-    repo = kwargs.get('repo', None)
-    
-    if from_user and to_user and repo:
-        from seahub.base.templatetags.seahub_tags import email2nickname
-        
-        msg = _(u"(System) %(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") % \
-            {'user': email2nickname(from_user),
-             'href': reverse('repo', args=[repo.id]),
-             'repo_name': repo.name}
-        UserMessage.objects.add_unread_message(from_user, to_user, msg)
-
-@receiver(share_file_to_user_successful)
-def add_share_file_msg(sender, **kwargs):
-    priv_share = kwargs.get('priv_share_obj', None)
-    file_name = os.path.basename(priv_share.path)
-
-    if priv_share is not None:
-        from seahub.base.templatetags.seahub_tags import email2nickname
-
-        msg = _(u"(System) %(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % \
-            {'user': email2nickname(priv_share.from_user),
-             'href': reverse('view_priv_shared_file', args=[priv_share.token]),
-             'file_name': file_name}
-        UserMessage.objects.add_unread_message(priv_share.from_user,
-                                               priv_share.to_user, msg)
-        
-        

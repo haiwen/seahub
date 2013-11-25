@@ -4,8 +4,11 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+import seaserv
+
 from seahub.auth.decorators import login_required
-from seahub.notifications.models import Notification, NotificationForm
+from seahub.notifications.models import Notification, NotificationForm, \
+    UserNotification
 from seahub.notifications.utils import refresh_cache
 
 @login_required
@@ -54,3 +57,26 @@ def set_primary(request, nid):
     refresh_cache()
     
     return HttpResponseRedirect(reverse('notification_list', args=[]))
+
+########## user notifications
+@login_required
+def user_notification_list(request):
+    """
+    
+    Arguments:
+    - `request`:
+    """
+    username = request.user.username
+    grpmsg_list = []
+    grpmsg_reply_list = []
+
+    notices = UserNotification.objects.get_user_notifications(username)
+    for n in notices:
+        if n.is_group_msg():
+            grp = seaserv.get_group(int(n.detail))
+            n.group = grp
+
+    return render_to_response("notifications/user_notification_list.html", {
+            'notices': notices,
+            }, context_instance=RequestContext(request))
+    

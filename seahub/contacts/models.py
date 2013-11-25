@@ -25,19 +25,19 @@ class ContactManager(models.Manager):
             c = None
         return c
 
-    def get_registered_contacts_by_user(self, user_email):
-        """Get a user's registered contacts.
+    # def get_registered_contacts_by_user(self, user_email):
+    #     """Get a user's registered contacts.
 
-        Returns:
-            A list contains the contacts.
-        """
-        contacts = [ c.contact_email for c in super(
-                ContactManager, self).filter(user_email=user_email) ]
-        emailusers = ccnet_threaded_rpc.filter_emailusers_by_emails(
-            ','.join(contacts))
+    #     Returns:
+    #         A list contains the contacts.
+    #     """
+    #     contacts = [ c.contact_email for c in super(
+    #             ContactManager, self).filter(user_email=user_email) ]
+    #     emailusers = ccnet_threaded_rpc.filter_emailusers_by_emails(
+    #         ','.join(contacts))
 
-        return [ Contact(user_email=user_email, contact_email=e.email) \
-                     for e in emailusers ]
+    #     return [ Contact(user_email=user_email, contact_email=e.email) \
+    #                  for e in emailusers ]
 
 class Contact(models.Model):
     """Record user's contacts."""

@@ -54,7 +54,7 @@ class Command(BaseCommand):
             try:
                 send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [user], \
                               fail_silently=False)
-                logger.info('Succesfuuly sended email to %s' % user)
+                logger.info('Successfully sent email to %s' % user)
             except Exception, e:
                 logger.error('Failed to send email to %s, error detail: %s' % (user, e))
     

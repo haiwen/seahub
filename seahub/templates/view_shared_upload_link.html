@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends "myhome_base.html" %}
 
 {% load seahub_tags i18n upload_tags avatar_tags %}
 {% load url from future %}
@@ -96,10 +96,15 @@ form.fileupload({
 })
 .bind('fileuploaddone', function(e, data) {
     if (data.textStatus == 'success') {
+        var filename = "";
         $.each(data.files, function(index, file) {
+            filename = file.name;
             $('#uploaded-files-list').append(
-                '<tr><td></td><td>' + file.name +'</td><td>' + filesizeformat(file.size) + '</td></tr>');
+                '<tr><td></td><td>' + filename +'</td><td>' + filesizeformat(file.size) + '</td></tr>');
         });
+
+        var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + encodeURIComponent(filename) + "&repo_id={{repo.id}}" + "&p={{path}}";
+        $.get(uploaded_done_link);
     }
 });
 

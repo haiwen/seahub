@@ -3,7 +3,6 @@ import logging
 import re
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
@@ -224,6 +223,12 @@ def update_last_login(sender, user, **kwargs):
     user_last_login.save()
 user_logged_in.connect(update_last_login)
 
+class CommandsLastCheck(models.Model):
+    """Record last check time for Django/custom commands.
+    """
+    command_type = models.CharField(max_length=100)
+    last_check = models.DateTimeField()
+
 ###### Deprecated
 class InnerPubMsg(models.Model):
     """
@@ -242,87 +247,5 @@ class InnerPubMsgReply(models.Model):
     message = models.CharField(max_length=150)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-# # @receiver(post_save, sender=InnerPubMsgReply)
-# def msgreply_save_handler(sender, instance, **kwargs):
-#     """
-#     Handle sending notification to '@<user>' when reply messages.
-#     """
-#     from_email = instance.from_email
-#     reply_msg = instance.message
-#     innerpub_msg = instance.reply_to
-#     to_user = ''
-
-
-#     m = re.match(at_pattern, reply_msg)
-#     if m:
-#         nickname_or_emailprefix = m.group()[1:]
-#         for member in get_emailusers(-1, -1):
-#             # For every user, get his username and nickname if
-#             # it exists, check whether match.
-#             username = member.email
-#             if username == from_email:
-#                 continue
-            
-#             p = get_first_object_or_none(
-#                 Profile.objects.filter(user=username))
-#             nickname = p.nickname if p else ''
-#             if nickname == nickname_or_emailprefix or \
-#                     username.split('@')[0] == nickname_or_emailprefix:
-#                 to_user = username
-#                 break
-
-#         if to_user:
-#             # Send notification to the user if he replies someone else'
-#             # message.
-#             try:
-#                 UserNotification.objects.get(to_user=to_user,
-#                                              msg_type='innerpubmsg_reply',
-#                                              detail=innerpub_msg.id)
-#             except UserNotification.DoesNotExist:
-#                 n = UserNotification(to_user=to_user,
-#                                      msg_type='innerpubmsg_reply',
-#                                      detail=innerpub_msg.id)
-#                 n.save()
-    
-# # @receiver(post_save, sender=InnerPubMsg)
-# def innerpub_msg_added_cb(sender, instance, **kwargs):
-#     from_email = instance.from_email
-
-#     users = get_emailusers(-1, -1)
-#     for u in users:
-#         if u.email == from_email:
-#             continue
-#         try:
-#             UserNotification.objects.get(to_user=u.email,
-#                                          msg_type='innerpub_msg')
-#         except UserNotification.DoesNotExist:
-#             n = UserNotification(to_user=u.email, msg_type='innerpub_msg',
-#                                  detail='')
-#             n.save()
-
-# # @receiver(post_save, sender=InnerPubMsgReply)
-# def innerpubmsg_reply_added_cb(sender, instance, **kwargs):
-#     innerpub_msg = instance.reply_to
-#     from_email = instance.from_email
-#     msg_id = innerpub_msg.id
-    
-#     if from_email == innerpub_msg.from_email:
-#         # No need to send notification when reply own message.
-#         return
-
-#     try:
-#         innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
-#     except InnerPubMsg.DoesNotExist:
-#         pass
-
-#     try:
-#         UserNotification.objects.get(to_user=innerpub_msg.from_email,
-#                                      msg_type='innerpubmsg_reply',
-#                                      detail=msg_id)
-#     except UserNotification.DoesNotExist:
-#         n = UserNotification(to_user=innerpub_msg.from_email,
-#                              msg_type='innerpubmsg_reply',
-#                              detail=msg_id)
-#         n.save()
 
         
