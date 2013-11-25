@@ -72,6 +72,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, is_personal_repo
 from seaserv import seafile_api
 
+from seafevents.events.db import UserEventDetail
+from seafevents.events.models import UserEvent
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -2043,6 +2045,13 @@ class PrivateFileDirShareEncoder(json.JSONEncoder):
         return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
                 'permission':obj.permission, 's_type':obj.s_type}
 
+class UserEventDetailEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, UserEventDetail):
+            return None
+        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': obj.timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
+
+
 class SharedLinksView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2123,6 +2132,28 @@ class SharedFilesView(APIView):
         else:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to get repo.')
+
+class Activity(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        events_count = 15
+        username = request.user.username
+        start = int(request.GET.get('start', 0))
+
+        events, start = get_user_events(username, start, events_count)
+        events_more = True if len(events) == events_count else False
+
+        event_groups = group_events_data(events)
+
+        api_pre_events(event_groups)
+
+        return HttpResponse(json.dumps({'event_groups':event_groups, 'events_more':events_more,
+                                    'new_start': start}, cls=UserEventDetailEncoder),
+                            content_type='application/json; charset=utf-8')
+
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
