@@ -808,10 +808,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:2px;
     vertical-align:middle;
 }
-#add-msg.add-msg-hl {
-    background:#fff;
-    line-height:22px;
-}
 .top-bar-con .msg-count {
     color:red;
 }
@@ -876,7 +872,7 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow:0 0 5px #ccc;
     position:absolute;
     right:0;
-    top:24px;
+    top:-24px;
     z-index:100;/* for pages with jquery tabs*/
 }
 #msg-file-share {
@@ -2483,4 +2479,8 @@ textarea:-moz-placeholder {/* for FF */
 #enable-mods:hover {
     color:#666;
     text-decoration:none;
+}
+#add-msg .icon-pencil {
+    font-size:1em;
+    margin:0 3px 0 0;
 }
