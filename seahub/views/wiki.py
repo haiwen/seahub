@@ -28,12 +28,13 @@ import seaserv
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
+from seahub.base.models import FileContributors
 from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
 from seahub.wiki.utils import clean_page_name
-from seahub.utils import get_file_contributors, render_error
+from seahub.utils import render_error
 from seahub.views.modules import get_enabled_mods_by_user, \
     get_available_mods_by_user
 
@@ -67,7 +68,8 @@ def personal_wiki(request, page_name="home"):
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
         file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-        contributors, last_modified, last_commit_id = get_file_contributors(\
+        contributors, last_modified, last_commit_id = \
+            FileContributors.objects.get_file_contributors(
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None
 

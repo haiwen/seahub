@@ -39,7 +39,7 @@ from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
 from signals import grpmsg_added, grpmsg_reply_added
 from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.base.decorators import sys_staff_required
-from seahub.base.models import FileDiscuss
+from seahub.base.models import FileDiscuss, FileContributors
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.notifications.models import UserNotification
@@ -51,7 +51,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    get_file_contributors, is_valid_email, calc_file_path_hash
+    is_valid_email, calc_file_path_hash
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -1311,7 +1311,8 @@ def group_wiki(request, group, page_name="home"):
         # fetch file latest contributor and last modified
         path = '/' + dirent.obj_name
         file_path_hash = calc_file_path_hash(path)
-        contributors, last_modified, last_commit_id = get_file_contributors(
+        contributors, last_modified, last_commit_id = \
+            FileContributors.objects.get_file_contributors(
             repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
         latest_contributor = contributors[0] if contributors else None
 

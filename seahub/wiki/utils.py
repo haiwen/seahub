@@ -13,8 +13,7 @@ from pysearpc import SearpcError
 from seahub.utils import EMPTY_SHA1
 from seahub.utils.slugify import slugify
 from seahub.utils import render_error, render_permission_error, string2list, \
-    gen_file_get_url, get_file_type_and_ext, get_file_contributors, \
-    gen_inner_file_get_url
+    gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.utils.file_types import IMAGE
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 

@@ -55,7 +55,7 @@ from seahub.auth import authenticate
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
-    UserStarredFiles
+    UserStarredFiles, DirFilesLastModifiedInfo
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
@@ -77,8 +77,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
-    get_file_contributors, EVENTS_ENABLED, get_user_events, get_org_user_events, \
-    get_dir_files_last_modified, show_delete_days, \
+    EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
@@ -219,7 +218,7 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
             org_id = request.user.org['org_id']
         starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
 
-        last_modified_info = get_dir_files_last_modified(repo_id, path)
+        last_modified_info = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(repo_id, path)
 
         fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)

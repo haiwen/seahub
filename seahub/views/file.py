@@ -35,13 +35,14 @@ from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
+from seahub.base.models import FileContributors
 from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
-    get_file_contributors, get_ccnetapplet_root, render_permission_error, \
+    get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
@@ -401,7 +402,9 @@ def view_file(request, repo_id):
     file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
 
     # fetch file contributors and latest contributor
-    contributors, last_modified, last_commit_id = get_file_contributors(repo_id, path.encode('utf-8'), file_path_hash, obj_id)
+    contributors, last_modified, last_commit_id = \
+        FileContributors.objects.get_file_contributors(
+        repo_id, path.encode('utf-8'), file_path_hash, obj_id)
     latest_contributor = contributors[0] if contributors else None
 
     # check whether file is starred

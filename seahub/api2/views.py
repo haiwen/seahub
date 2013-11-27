@@ -28,12 +28,13 @@ from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
-from seahub.base.models import FileDiscuss, UserStarredFiles
+from seahub.base.models import FileDiscuss, UserStarredFiles, \
+    DirFilesLastModifiedInfo
 from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_ccnetapplet_root, \
-    get_dir_files_last_modified, get_user_events, EMPTY_SHA1, \
+    get_user_events, EMPTY_SHA1, \
     get_ccnet_server_addr_port, string2list, \
     gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
@@ -671,7 +672,8 @@ def get_dir_entrys_by_id(request, repo_id, path, dir_id):
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
-    mtimes = get_dir_files_last_modified (repo_id, path, dir_id)
+    mtimes = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(
+        repo_id, path, dir_id)
 
     dir_list, file_list = [], []
     for dirent in dirs:
