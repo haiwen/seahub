@@ -34,11 +34,13 @@
         <td>--</td>
         {% endif %}
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            <div>
             {% if show_repo_download_button %}
             <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
             {% endif %}
             <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            </div>
         </td>
     </tr>
     {% endif %}
@@ -83,11 +85,13 @@
         <td>--</td>
         {% endif %}
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            <div>
             <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
             {% if repo.is_original_owner %}
             <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             {% endif %}
             <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            </div>
         </td>
     </tr>
     {% endfor %}
@@ -204,3 +208,4 @@
         </td>
     </tr>
 </table>
+{% include 'snippets/repo_del_popup.html' %}

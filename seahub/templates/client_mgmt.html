@@ -69,7 +69,7 @@
     </tr>
     {% endfor %}
 </table>
-<div class="op-confirm unsync-confirm hide">
+<div class="op-confirm unsync-confirm hide" id="unsync-cfm-popup">
     <p>{% trans "Really want to unsync it?" %}</p>
     <button class="yes">{% trans "Yes" %}</button>
     <button class="no">{% trans "No" %}</button>
@@ -91,18 +91,17 @@ $('#main-panel').removeClass('ovhd');
 $('.unsync-client').click(function() {
     var op = $(this);
     var cont = op.parent().css({'position': 'relative'}),
-        cfm,
-        table = $('table');
+        cfm;
     
     // only show 1 popup each time.
-    $('.unsync-confirm', table).addClass('hide');
+    $('.unsync-confirm', op.parents('table')).addClass('hide');
 
     if (cont.find('.unsync-confirm').length == 1) {
         cfm = cont.find('.unsync-confirm');
     } else {
-        cfm = table.next().clone(); 
+        cfm = $('#unsync-cfm-popup').clone().removeAttr('id'); 
         cont.append(cfm);
-        cfm.css({'left': op.width() + 10, 'top': op.position().top, 'white-space':'nowrap'});
+        cfm.css({'left': op.position().left + op.width() + 10, 'top': op.position().top, 'white-space':'nowrap'});
     }
     cfm.removeClass('hide');
     $('.no',cfm).click(function() {

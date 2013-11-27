@@ -15,7 +15,7 @@
     $(".repo-share-btn").click(function() {
         var form = $("#repo-share-form"),
             hd = $('.hd', form),
-            btn_ct = $(this).parent(),
+            btn_ct = $(this).parents('td'),
             repo_id = btn_ct.data('id'),
             repo_name = btn_ct.attr('data-name');
         form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
@@ -58,7 +58,7 @@
     {% include 'snippets/repo_del_js.html' %}
 
     $(".download-btn").click(function() {
-        var repo_id = $(this).parent().data('id');
+        var repo_id = $(this).parents('td').data('id');
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
     });
 
@@ -81,13 +81,7 @@
                     feedback("{% trans 'Successfully unstarred.' %}", "success");
                 }
             },
-            error:function(xhr, textStatus, errorThrown) {
-                if (xhr.responseText) {
-                    feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-                } else {
-                    feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }
-            }
+            error: ajaxErrorHandler
         });
     });
 

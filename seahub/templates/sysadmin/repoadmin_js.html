@@ -1,6 +1,6 @@
 {% load i18n%}
 $('.repo-transfer-btn').click(function(){
-    var btn_ct = $(this).parent(),
+    var btn_ct = $(this).parents('td'),
         repo_id = btn_ct.data('id'),
         repo_name = btn_ct.attr('data-name'),
         form = $('#repo-transfer-form');
@@ -23,4 +23,5 @@ $('#repo-transfer-form').submit(function() {
     }
 });
 
+$('#main-panel').removeClass('ovhd');
 {% include 'snippets/repo_del_js.html' %}

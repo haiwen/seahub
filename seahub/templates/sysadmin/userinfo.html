@@ -51,8 +51,8 @@
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
-        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
-            <a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a>
+        <td data-id="{{ repo.props.id }}">
+            <div><a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a></div>
         </td>
     </tr>
     {% endfor %}
@@ -92,7 +92,7 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
-
+{% include 'snippets/repo_del_popup.html' %}
 {% endblock %}
 
 
