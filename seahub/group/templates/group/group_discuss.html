@@ -161,7 +161,7 @@
 
     {% if request.user.is_authenticated %}
     <ul class="new-msg-list hide">
-        <li class="msg w100 ovhd">
+        <li class="msg w100 ovhd hide">
         <a href="{% url 'user_msg_list' request.user.username|id_or_email %}" class="pic fleft">{% avatar request.user.username 48 %}</a>
         <div class="txt">
             <div class="msg-main">
@@ -227,18 +227,17 @@ $('#message').focus(function() {
     $(this).height(75);
     $('.submit, .cancel', $('#group-message-form')).removeClass('hide');
 });
-$('#group-message-form .cancel').click(foldDiscussionForm);
-function foldDiscussionForm() {
+$('#group-message-form .cancel').click(function() {
     $('.submit, .cancel', $('#group-message-form')).addClass('hide');
     $('#message').val('').height(25);
-}
+});
 $('#group-message-form').submit(function() {
     var form = $(this);
     var msg_input = $('[name="message"]');
     if (!$.trim(msg_input.val())) {
         return false;
     }
-
+    
     var sb_btn = $('.submit', form);
     disable(sb_btn);
     $.ajax({
@@ -254,8 +253,9 @@ $('#group-message-form').submit(function() {
                 $('#group-message-form').after('<ul class="msg-list"></ul>');    
             }
             $('.msg-list').prepend(new_msg);
+            new_msg.slideDown(600);
+            msg_input.val('');
             enable(sb_btn);
-            foldDiscussionForm();
         },
         error: function (xhr, textStatus, errorThrown) {
             var err_msg;
