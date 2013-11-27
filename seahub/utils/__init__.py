@@ -974,16 +974,14 @@ def more_files_in_commit(commit):
 HAS_OFFICE_CONVERTER = False
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
-        enabled = False
-        if hasattr(seafevents, 'is_office_converter_enabled'):
-            config = ConfigParser.ConfigParser()
-            config.read(EVENTS_CONFIG_FILE)
-            enabled = seafevents.is_office_converter_enabled(config)
+        config = ConfigParser.ConfigParser()
+        config.read(EVENTS_CONFIG_FILE)
+        enabled = seafevents.is_office_converter_enabled(config)
 
-            if enabled:
-                logging.debug('office converter: enabled')
-            else:
-                logging.debug('office converter: not enabled')
+        if enabled:
+            logging.debug('office converter: enabled')
+        else:
+            logging.debug('office converter: not enabled')
         return enabled
 
     def get_office_converter_html_dir():
@@ -1059,7 +1057,7 @@ HAS_FILE_SEARCH = False
 if EVENTS_CONFIG_FILE:
     def check_search_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_office_converter_enabled'):
+        if hasattr(seafevents, 'is_search_enabled'):
             config = ConfigParser.ConfigParser()
             config.read(EVENTS_CONFIG_FILE)
             enabled = seafevents.is_search_enabled(config)
