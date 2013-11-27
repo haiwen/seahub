@@ -46,11 +46,11 @@ def upload_js():
         {% if (file.error) { %}
             <td class="name">{%=file.name%}</td>
             <td class="size">{%=o.formatFileSize(file.size)%}</td>
-            <td class="error"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
-            <td></td>
+            <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}:</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
         {% } else { %}
             <td class="name">{%=file.name%}</td>
-            <td colspan="3"></td>
+            <td class="size">{%=o.formatFileSize(file.size)%}</td>
+            <td colspan="2"></td>
         {% } %}
     </tr>
 {% } %}

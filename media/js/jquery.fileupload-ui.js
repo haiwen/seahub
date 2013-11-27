@@ -143,7 +143,10 @@
                     data.context.each(function (index) {
                         var file = ($.isArray(data.result) &&
                                 data.result[index]) || {error: 'emptyResult'};
+                            file.size = data.files[index].size;
                         if (file.error) {
+                            file.error = data.result.error || 'emptyResult'; // for ie, browsers which use iframe
+                            file.name = data.files[index].name;
                             that._adjustMaxNumberOfFiles(1);
                         }
                         that._transition($(this)).done(
@@ -183,7 +186,14 @@
                     data.context.each(function (index) {
                         if (data.errorThrown !== 'abort') {
                             var file = data.files[index];
-                            file.error = file.error || data.errorThrown ||
+                            var r_error;
+                            if (data.jqXHR.responseText) {
+                                r_error = $.parseJSON(data.jqXHR.responseText).error;
+                            }
+                            if (data.dataType == 'iframe json') { // for browsers which use iframe
+                                data.errorThrown = '';
+                            }
+                            file.error = r_error || file.error || data.errorThrown ||
                                 'can not connect the server';
                             that._transition($(this)).done(
                                 function () {
