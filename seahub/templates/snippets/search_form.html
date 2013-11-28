@@ -1,0 +1,58 @@
+{% load i18n %}
+                <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
+                    {% if search_repo_id %}
+                    <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
+                    <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />
+                    {% else %}
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    {% endif %}
+                    <span class="icon-caret-down" title="{% trans "advanced" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+                </form>
+
+                <form id="advanced-search-form" method="get" action="{% url 'search' %}" class="search-form hide">
+                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <div class="search-scales">
+                        <div class="search-repos">
+                            {% if search_repo_id %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" checked="checked" value="{{ search_repo_id }}" class="vam" /> <span class="vam">{% if search_wiki %}{% trans "In this wiki" %}{% else %}{% trans "In this library" %}{% endif %}</span></label>
+                            {% else %}
+                                    {% if search_repo and repo %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                            <label class="item"><input type="radio" name="search_repo" value="{{repo.id}}" checked="checked" class="vam" /> <span class="vam">{% blocktrans with name=repo.name %}in {{name }}{% endblocktrans %}</span></label>
+                                    {% else %}
+                            <label class="item"><input type="radio" name="search_repo" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "In all libraries" %}</span></label>
+                                    {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="search-filetypes">
+                            {% if search_ftypes != 'custom' %}
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" checked="checked" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            {% else %}
+                            <label class="item"><input type="radio" name="search_ftypes" value="all" class="vam" /> <span class="vam">{% trans "All file types" %}</span></label>
+                            <label class="item"><input type="radio" name="search_ftypes" value="custom" checked="checked" class="vam" id="custom-search-ftypes" /> <span class="vam">{% trans "Custom file types" %}</span></label>
+                            {% endif %}
+                        </div>
+                        {% if search_ftypes != 'custom' %}
+                        <div class="custom-ftype-options hide">
+                        {% else %}
+                        <div class="custom-ftype-options">
+                        {% endif %}
+                            {# ftype value should be the same with utils/file_types.py #}
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Text" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Text files" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Document" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Documents" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Image" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Images" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Video" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Video" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Audio" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "Audio" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="SVG" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "svg" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="PDF" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "pdf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Sf" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "seaf" %}</span></label>
+                            <label class="checkbox-label"><span class="checkbox"><input type="checkbox" name="ftype" value="Markdown" class="checkbox-orig" /></span><span class="checkbox-option">{% trans "markdown" %}</span></label>
+                            <br/>
+                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" class="fileext-input" />
+                            <p class="error hide">{% trans "Please select at least one file type or input at least one file extension" %}</p>
+                        </div>
+                    </div>
+                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                </form>
