@@ -1640,6 +1640,26 @@ def view_shared_dir(request, token):
     except FileShare.DoesNotExist:
         raise Http404
 
+    if fileshare.use_passwd:
+        valid_access = cache.get('SharedLink_' + request.user.username + token, False)
+        if not valid_access:
+            d = { 'token': token, 'view_name': 'view_shared_dir', }
+            if request.method == 'POST':
+                form = SharedLinkPasswordForm(request.POST)
+                d['form'] = form
+                if form.is_valid() and\
+                   check_password(form.cleaned_data['password'], fileshare.password):
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        cache.set('SharedLink_' + request.user.username + token, True,
+                                  settings.SHARE_ACCESS_PASSWD_TIMEOUT)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+
     username = fileshare.username
     repo_id = fileshare.repo_id
     path = request.GET.get('p', '')

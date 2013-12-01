@@ -579,6 +579,10 @@ def get_shared_link(request):
     repo_id = request.GET.get('repo_id', '')
     share_type = request.GET.get('type', 'f') # `f` or `d`
     path = request.GET.get('p', '')
+    use_passwd = request.POST.get('use_passwd', '0')
+    if int(use_passwd) == 1:
+        passwd = request.POST.get('passwd')
+
     if not (repo_id and  path):
         err = _('Invalid arguments')
         data = json.dumps({'error': err})
@@ -610,6 +614,9 @@ def get_shared_link(request):
         fs.path = path
         fs.token = token
         fs.s_type = 'f' if share_type == 'f' else 'd'
+        fs.use_passwd = (int(use_passwd) == 1)
+        if fs.use_passwd:
+            fs.password = make_password(passwd)
 
         try:
             fs.save()

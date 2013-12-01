@@ -27,6 +27,19 @@
             {% endif %}
 
             <div id="link-share">
+                <form id="link-passwd-form" action="" method="post">{% csrf_token %}
+                    <div class="passwd">
+                        <label class="checkbox-label">
+                            <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
+                            <span class="checkbox-option">{% trans "Use Password"%}</span>
+                        </label>
+                        <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least 6 characters){% endblocktrans %}</span><br />
+                        <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
+                        <p class="error hide"></p>
+                    </div>
+                </form>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-link-body" class="hide">
                     <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>

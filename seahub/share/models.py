@@ -24,6 +24,8 @@ class FileShare(models.Model):
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
+    use_passwd = models.BooleanField(default=False)
+    password = models.CharField(max_length=128)
 
 class UploadLinkShare(models.Model):
     """
