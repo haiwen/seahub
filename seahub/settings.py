@@ -349,6 +349,9 @@ LOGGING = {
 LOGIN_ATTEMPT_LIMIT = 3
 LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 
+#Share Access
+SHARE_ACCESS_PASSWD_TIMEOUT = 60 * 60
+
 #################
 # Email sending #
 #################

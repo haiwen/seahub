@@ -35,6 +35,8 @@ class UploadLinkShare(models.Model):
     token = models.CharField(max_length=10, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
+    use_passwd = models.BooleanField(default=False)
+    password = models.CharField(max_length=128)
 
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):
