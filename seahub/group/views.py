@@ -42,6 +42,7 @@ from seahub.base.decorators import sys_staff_required
 from seahub.base.models import FileDiscuss, FileContributors
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
+from seahub.group.utils import validate_group_name
 from seahub.notifications.models import UserNotification
 from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
@@ -234,6 +235,26 @@ def group_dismiss(request, group_id):
     
     return HttpResponseRedirect(reverse('group_list'))
 
+@login_required
+@group_staff_required
+def group_rename(request, group_id):
+    """Rename a group.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    new_name = request.POST.get('new_name', '')
+    if validate_group_name(new_name):
+        ccnet_threaded_rpc.set_group_name(int(group_id), new_name)
+        messages.success(request, _('Successfully renamed group to "%s".') % new_name)
+    else:
+        messages.error(request, _('Failed to rename group, group name can only contain letters, numbers or underscore'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    return HttpResponseRedirect(next)
+    
 @login_required
 @group_staff_required
 def group_transfer(request, group_id):

@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from seaserv import is_valid_filename
 
-from seahub.utils import validate_group_name
+from seahub.group.utils import validate_group_name
 
 class MessageForm(forms.Form):
     message = forms.CharField(max_length=2048)

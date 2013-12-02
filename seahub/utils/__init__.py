@@ -171,14 +171,6 @@ def normalize_cache_key(value, prefix=None):
     key = value if prefix is None else prefix + value
     return urlquote(key)
     
-def validate_group_name(group_name):
-    """
-    Check whether group name is valid.
-    A valid group name only contains alphanumeric character.
-
-    """
-    return re.match('^\w+$', group_name, re.U)
-
 def get_repo_last_modify(repo):
     """ Get last modification time for a repo.
 

@@ -23,6 +23,7 @@
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Operations" %}</h3>
     <ul class="info-item-bottom op-list">
+        <li><a id="group-rename" href="#" data-url="{% url 'group_rename' group.id %}">{% trans "Rename" %}</a></li>
         <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss" %}</a></li>
         {% if group.is_pub %}
         <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
@@ -91,6 +92,14 @@
     <input type="submit" value="{% trans "Submit"%}" />
 </form>
 
+<form id="group-rename-form" method="post" action="{% url 'group_rename' group.id %}" class="hide">{% csrf_token %}
+    <h3>{% trans "Rename Group To"%}</h3>
+    <input type="text" name="new_name" value="" class="input" />
+    <br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit"%}" />
+</form>
+
 {% include 'group/grpmember_add_form.html' %} {# for member/admin add #}
 {% include 'group/modules_toggle_form.html' %}
 
@@ -126,6 +135,17 @@ $('#group-transfer-form').submit(function() {
         return false;
     }
 });
+
+$('#group-rename').click(function() {
+    $('#group-rename-form').modal({appendTo: "#main", focus:false});
+    return false;
+});
+$('#group-rename-form').submit(function() {
+    if (!$.trim($('[name="new_name"]', $(this)).val())) {
+        return false;
+    }
+});
+
 
 {% include "group/modules_toggle_js.html" %}
 </script>

@@ -7,7 +7,7 @@ from views import group_info, group_members, group_member_operations, group_add_
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_remove, group_dismiss, group_quit, \
     group_make_public, group_revoke_public, group_transfer, group_toggle_modules, \
-    group_add_discussion
+    group_add_discussion, group_rename
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/manage/$', group_manage, name='group_manage'),
     url(r'^(?P<group_id>\d+)/remove/$', group_remove, name='group_remove'),
     url(r'^(?P<group_id>\d+)/dismiss/$', group_dismiss, name='group_dismiss'),
+    url(r'^(?P<group_id>\d+)/rename/$', group_rename, name='group_rename'),
     url(r'^(?P<group_id>\d+)/transfer/$', group_transfer, name='group_transfer'),
     url(r'^(?P<group_id>\d+)/make_pub/$', group_make_public, name='group_make_pub'),
     url(r'^(?P<group_id>\d+)/revoke_pub/$', group_revoke_public, name='group_revoke_pub'),
