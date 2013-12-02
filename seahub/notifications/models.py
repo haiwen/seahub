@@ -412,6 +412,9 @@ class UserNotification(models.Model):
         repo_id = d['repo_id']
 
         repo = seafile_api.get_repo(repo_id)
+        if repo is None:
+            return None
+
         msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
             'user': share_from,
             'href': reverse('repo', args=[repo.id]),
@@ -463,7 +466,10 @@ class UserNotification(models.Model):
             return _(u"Internal error")
 
         group_id = d.get('group_id')
-        group = seaserv.get_group(group_id)        
+        group = seaserv.get_group(group_id)
+        if group is None:
+            return None
+
         msg_from = d.get('msg_from')
 
         if msg_from is None:
