@@ -744,8 +744,16 @@ def save_shared_link(request):
     """
     username = request.user.username
     token = request.GET.get('t', '')
-    dst_repo_id = request.POST.get('dst_repo')
-    dst_path = request.POST.get('dst_path')
+    dst_repo_id = request.POST.get('dst_repo', '')
+    dst_path = request.POST.get('dst_path', '')
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    
+    if not dst_repo_id or not dst_path:
+        messages.error(request, _(u'Please choose a directory.'))
+        return HttpResponseRedirect(next)
 
     try:
         fs = FileShare.objects.get(token=token)
@@ -763,9 +771,6 @@ def save_shared_link(request):
 
     messages.success(request, _(u'Successfully saved.'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
     return HttpResponseRedirect(next)
 
 ########## private share
