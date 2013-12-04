@@ -1834,12 +1834,15 @@ class Groups(APIView):
         notes = UserNotification.objects.filter(to_user=request.user.username)
         replynum = 0;
         for n in notes:
-            if n.msg_type == 'group_msg':
-                gid = int(n.detail)
+            if n.is_group_msg():
+                try:
+                    gid  = n.group_message_detail_to_dict().get('group_id')
+                except UserNotification.InvalidDetailError:
+                    continue
                 if gid not in grpmsgs:
                     continue
                 grpmsgs[gid] = grpmsgs[gid] + 1;
-            elif n.msg_type == 'grpmsg_reply':
+            elif n.is_grpmsg_reply():
                 replynum = replynum + 1
 
         for g in joined_groups:
