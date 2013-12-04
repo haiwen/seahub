@@ -16,6 +16,8 @@ KEY_SUB_LIB = "sub_lib"
 VAL_SUB_LIB_ENABLED = "1"
 VAL_SUB_LIB_DISABLED = "0"
 
+KEY_DEFAULT_REPO = "default_repo"
+
 class CryptoOptionNotSetError(Exception):
     pass
 
@@ -140,8 +142,33 @@ class UserOptionsManager(models.Manager):
             return bool(int(user_option.option_val))
         except UserOptions.DoesNotExist:
             return False
+
+    def set_default_repo(self, username, repo_id):
+        """Set a user's default library.
         
- 
+        Arguments:
+        - `self`:
+        - `username`:
+        - `repo_id`:
+        """
+        return self.set_user_option(username, KEY_DEFAULT_REPO, repo_id)
+
+    def get_default_repo(self, username):
+        """Get a user's default library.
+
+        Returns repo_id if default library is found, otherwise ``None``.
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        try:
+            user_option = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_DEFAULT_REPO)
+            return user_option.option_val
+        except UserOptions.DoesNotExist:
+            return None
+        
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)

@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^shared-repos/$', SharedRepos.as_view(), name='sharedrepos'),
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
+    url(r'^default-repo/$', DefaultRepo.as_view(), name='api2-defaultrepo'),
 
     url(r'^groups/$', Groups.as_view()),
     url(r'^html/events/$', ActivityHtml.as_view()),

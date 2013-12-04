@@ -54,6 +54,7 @@ from seahub.group.views import group_check
 from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
+from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
 from seahub.shortcuts import get_first_object_or_none
@@ -1377,6 +1378,51 @@ class BeShared(APIView):
                             status=200, content_type=json_content_type)
 
 
+class DefaultRepo(APIView):
+    """
+    Get user's default library.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        username = request.user.username
+        repo_id = UserOptions.objects.get_default_repo(username)
+        if repo_id is None:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+            
+        last_commit = get_commits(repo.id, 0, 1)[0]
+        repo.latest_modify = last_commit.ctime if last_commit else None
+
+        # query repo infomation
+        repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        root_id = current_commit.root_id if current_commit else None
+
+        repo_json = {
+            "type":"repo",
+            "id":repo.id,
+            "owner":owner,
+            "name":repo.name,
+            "desc":repo.desc,
+            "mtime":repo.latest_modify,
+            "size":repo.size,
+            "encrypted":repo.encrypted,
+            "root":root_id,
+            "permission": check_permission(repo.id, username),
+            }
+        if repo.encrypted:
+            repo_json["enc_version"] = repo.enc_version
+            repo_json["magic"] = repo.magic
+            repo_json["random_key"] = repo.random_key
+
+        return Response(repo_json)
+        
 class SharedRepo(APIView):
     """
     Support uniform interface for shared libraries.

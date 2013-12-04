@@ -1408,7 +1408,7 @@ def validate_filename(request):
 @login_required    
 def repo_create(request):
     '''
-    Handle ajax post.
+    Handle ajax post to create a library.
     
     '''
     if not request.is_ajax() or request.method != 'POST':
@@ -1416,7 +1416,7 @@ def repo_create(request):
 
     result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     form = RepoCreateForm(request.POST)
     if not form.is_valid():
         result['error'] = str(form.errors.values()[0])
@@ -1449,6 +1449,13 @@ def repo_create(request):
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
     else:
+        try:
+            default_lib = (int(request.GET.get('default_lib', 0)) == 1)
+        except ValueError:
+            default_lib = False
+        if default_lib:
+            UserOptions.objects.set_default_repo(username, repo_id)
+
         result = {
             'repo_id': repo_id,
             'repo_name': repo_name,
