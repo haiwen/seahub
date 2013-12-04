@@ -1565,12 +1565,9 @@ def group_discuss(request, group):
         serialized_data = json.dumps({"html": html})
         return HttpResponse(serialized_data, content_type="application/json; charset=utf-8")
 
-    # remove user notifications
-    UserNotification.objects.filter(to_user=username, msg_type='group_msg',
-                                    detail=str(group.id)).delete()
-
     group_msgs = get_group_msgs(group.id, page=1, username=request.user.username)
-
+    # remove user notifications
+    UserNotification.objects.seen_group_msg_notices(username, group.id)
     return render_to_response("api2/discussions.html", {
             "group" : group,
             "group_msgs": group_msgs,
@@ -1770,8 +1767,8 @@ def repo_history_changes(request, repo_id):
 
 
 def msg_reply_new(request):
-    notes = UserNotification.objects.filter(to_user=request.user.username)
-    grpmsg_reply_list = [ n.detail for n in notes if n.msg_type == 'grpmsg_reply']
+    notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
+    grpmsg_reply_list = [ n.grpmsg_reply_detail_to_dict().get('msg_id') for n in notes if n.msg_type == 'grpmsg_reply']
     group_msgs = []
     for msg_id in grpmsg_reply_list:
         try:
@@ -1809,8 +1806,7 @@ def msg_reply_new(request):
             group_msgs.append(m)
 
     # remove new group msg reply notification
-    UserNotification.objects.filter(to_user=request.user.username,
-                                    msg_type='grpmsg_reply').delete()
+    UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
     
     return render_to_response("api2/new_msg_reply.html", {
             'group_msgs': group_msgs,
@@ -1831,7 +1827,7 @@ class Groups(APIView):
         for g in joined_groups:
             grpmsgs[g.id] = 0;
 
-        notes = UserNotification.objects.filter(to_user=request.user.username)
+        notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
         replynum = 0;
         for n in notes:
             if n.is_group_msg():
