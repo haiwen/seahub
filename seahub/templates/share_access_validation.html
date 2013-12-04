@@ -1,0 +1,30 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="wide-panel">
+    <p class="access-notice">{% trans "Please input the password if you want to browse the shared file/directory. And the password will be kept on the server for only 1 hour." %}</p>
+    <form action="{% url view_name token %}" method="post" id="share-passwd-form">{% csrf_token %}
+        <label>{% trans "Password: " %}</label>
+        <input type="password" name="password" autofocus />
+        <input type="submit" value="{% trans "Submit" %}" />
+        <p class="error hide"></p>
+        {% for error in form.errors.values %}
+        {{ error|escape }}
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript">
+$('#share-passwd-form').submit(function() {
+    var form = $(this),
+        pwd = $('[name="password"]', form).val(),
+        err = $('.error',form);
+    if (!$.trim(pwd)) {
+        err.html("{% trans "Please enter the password." %}").removeClass('hide');
+        return false;
+    }
+});
+</script>
+{% endblock %}

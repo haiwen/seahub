@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
+from django.contrib.auth.hashers import make_password
 from pysearpc import SearpcError
 import seaserv
 from seaserv import seafile_api
@@ -578,6 +579,10 @@ def get_shared_link(request):
     repo_id = request.GET.get('repo_id', '')
     share_type = request.GET.get('type', 'f') # `f` or `d`
     path = request.GET.get('p', '')
+    use_passwd = request.POST.get('use_passwd', '0')
+    if int(use_passwd) == 1:
+        passwd = request.POST.get('passwd')
+
     if not (repo_id and  path):
         err = _('Invalid arguments')
         data = json.dumps({'error': err})
@@ -609,6 +614,9 @@ def get_shared_link(request):
         fs.path = path
         fs.token = token
         fs.s_type = 'f' if share_type == 'f' else 'd'
+        fs.use_passwd = (int(use_passwd) == 1)
+        if fs.use_passwd:
+            fs.password = make_password(passwd)
 
         try:
             fs.save()
@@ -920,6 +928,9 @@ def get_shared_upload_link(request):
 
     repo_id = request.GET.get('repo_id', '')
     path = request.GET.get('p', '')
+    use_passwd = request.POST.get('use_passwd', '0')
+    if int(use_passwd) == 1:
+        passwd = request.POST.get('passwd')
 
     if not (repo_id and  path):
         err = _('Invalid arguments')
@@ -946,6 +957,9 @@ def get_shared_upload_link(request):
         upload_link.repo_id = repo_id
         upload_link.path = path
         upload_link.token = token
+        upload_link.use_passwd = (int(use_passwd) == 1)
+        if upload_link.use_passwd:
+            upload_link.password = make_password(passwd)
 
         try:
             upload_link.save()

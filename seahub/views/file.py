@@ -13,8 +13,10 @@ import chardet
 import logging
 import posixpath
 
+from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -49,11 +51,13 @@ from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.forms import SharedLinkPasswordForm
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, query_office_file_pages, \
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE
 
+import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
 from seahub.views import is_registered_user, get_repo_access_permission, \
@@ -587,6 +591,26 @@ def view_shared_file(request, token):
         fileshare = FileShare.objects.get(token=token)
     except FileShare.DoesNotExist:
         raise Http404
+
+    if fileshare.use_passwd:
+        valid_access = cache.get('SharedLink_' + request.user.username + token, False)
+        if not valid_access:
+            d = { 'token': token, 'view_name': 'view_shared_file', }
+            if request.method == 'POST':
+                form = SharedLinkPasswordForm(request.POST)
+                d['form'] = form
+                if form.is_valid() and\
+                   check_password(form.cleaned_data['password'], fileshare.password):
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        cache.set('SharedLink_' + request.user.username + token, True,
+                                  settings.SHARE_ACCESS_PASSWD_TIMEOUT)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
