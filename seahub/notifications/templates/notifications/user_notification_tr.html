@@ -1,0 +1,46 @@
+{% load i18n seahub_tags %}
+    {% for notice in notices %}
+      {% if notice.is_group_msg %}
+      {% with group_message=notice.format_group_message %}
+        {% if group_message %}
+        <tr class="{% if not notice.seen %}bold{% endif %}">
+          <td>{{ group_message|safe }}</td>
+          <td>{{ notice.timestamp|translate_seahub_time }}</td>
+        </tr>
+        {% endif %}
+      {% endwith %}
+      {% elif notice.is_grpmsg_reply %}
+      {% with grpmsg_reply=notice.format_grpmsg_reply %}
+        {% if grpmsg_reply %}
+        <tr class="{% if not notice.seen %}bold{% endif %}">
+          <td>{{ grpmsg_reply|safe }}</td>
+          <td>{{ notice.timestamp|translate_seahub_time }}</td>
+        </tr>
+        {% endif %}
+      {% endwith %}
+      {% elif notice.is_file_uploaded_msg %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_file_uploaded_msg|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_repo_share_msg %}
+      {% with repo_share_msg=notice.format_repo_share_msg %}
+        {% if repo_share_msg %}
+        <tr class="{% if not notice.is_seen %}bold{% endif %}">
+          <td>{{ repo_share_msg|safe }}</td>
+          <td>{{ notice.timestamp|translate_seahub_time }}</td>
+        </tr>
+        {% endif %}
+      {% endwith %}
+      {% elif notice.is_priv_file_share_msg %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_priv_file_share_msg|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% elif notice.is_user_message %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_user_message|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
+      {% endif %}
+    {% endfor %}

@@ -14,57 +14,19 @@
 
 {% block main_panel %}
 {% if notices %}
-<table>
+<table id="notices-table">
     <tr>
         <th width="80%">{% trans "Message"%}</th>
         <th width="20%">{% trans "Time"%}</th>
     </tr>
-    {% for notice in notices %}
-      {% if notice.is_group_msg %}
-      {% with group_message=notice.format_group_message %}
-        {% if group_message %}
-        <tr class="{% if not notice.seen %}bold{% endif %}">
-          <td>{{ group_message|safe }}</td>
-          <td>{{ notice.timestamp|translate_seahub_time }}</td>
-        </tr>
-        {% endif %}
-      {% endwith %}
-      {% elif notice.is_grpmsg_reply %}
-      {% with grpmsg_reply=notice.format_grpmsg_reply %}
-        {% if grpmsg_reply %}
-        <tr class="{% if not notice.seen %}bold{% endif %}">
-          <td>{{ grpmsg_reply|safe }}</td>
-          <td>{{ notice.timestamp|translate_seahub_time }}</td>
-        </tr>
-        {% endif %}
-      {% endwith %}
-      {% elif notice.is_file_uploaded_msg %}
-      <tr class="{% if not notice.is_seen %}bold{% endif %}">
-        <td>{{ notice.format_file_uploaded_msg|safe }}</td>
-        <td>{{ notice.timestamp|translate_seahub_time }}</td>
-      </tr>
-      {% elif notice.is_repo_share_msg %}
-      {% with repo_share_msg=notice.format_repo_share_msg %}
-        {% if repo_share_msg %}
-        <tr class="{% if not notice.is_seen %}bold{% endif %}">
-          <td>{{ repo_share_msg|safe }}</td>
-          <td>{{ notice.timestamp|translate_seahub_time }}</td>
-        </tr>
-        {% endif %}
-      {% endwith %}
-      {% elif notice.is_priv_file_share_msg %}
-      <tr class="{% if not notice.is_seen %}bold{% endif %}">
-        <td>{{ notice.format_priv_file_share_msg|safe }}</td>
-        <td>{{ notice.timestamp|translate_seahub_time }}</td>
-      </tr>
-      {% elif notice.is_user_message %}
-      <tr class="{% if not notice.is_seen %}bold{% endif %}">
-        <td>{{ notice.format_user_message|safe }}</td>
-        <td>{{ notice.timestamp|translate_seahub_time }}</td>
-      </tr>
-      {% endif %}
-    {% endfor %}
+    {% include "notifications/user_notification_tr.html" %}
 </table>
+<div id="notices-more">
+  <div id="notices-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+  <button id="notices-more-btn" class="{% if not notices_more %}hide{% endif %}">{% trans 'More' %}</button>
+  <p id="notices-error" class="error hide"></p>
+</div>    
+
 {% endif %}
 {% endblock %}
 
@@ -75,5 +37,32 @@ $(function(){
         location.href = $(this).data('href');
     });
 });
+
+var start = {{start}}, limit = {{limit}};
+$('#notices-more-btn').click(function() {
+    $(this).addClass('hide');
+    $('#notices-loading').removeClass('hide');
+    $.ajax({
+        url:'{% url "user_notification_more" %}' + '?start=' + start + '&limit=' + limit,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            $('#notices-loading').addClass('hide');
+            $('#notices-table').append(data['html']);
+            start = data['new_start'];
+
+            if (data['notices_more']) {
+                $('#notices-more-btn').removeClass('hide');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#notices-loading').addClass('hide');
+            if (!jqXHR.responseText && textStatus != 'abort') {
+                $('#notices-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
+            }   
+        }
+    });
+});
+
 </script>
 {% endblock %}

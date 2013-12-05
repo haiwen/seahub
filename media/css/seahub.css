@@ -1121,6 +1121,19 @@ textarea:-moz-placeholder {/* for FF */
     color:#000;
     background:#dfdfdf;
 }
+#notices-more {
+    margin-top: -40px;
+}
+#notices-more-btn {
+    text-align:center;
+    width:100%;
+    color:#777;
+    padding:.5em 0;
+}
+#notices-more-btn:hover {
+    color:#000;
+    background:#dfdfdf;
+}
 /* avatar */
 .avatar-op .avatar,
 .home-profile .avatar,

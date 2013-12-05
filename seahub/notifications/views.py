@@ -1,8 +1,10 @@
 import datetime
+import simplejson as json
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
 import seaserv
 
@@ -67,9 +69,46 @@ def user_notification_list(request):
     - `request`:
     """
     username = request.user.username
-    notices = UserNotification.objects.get_user_notifications(username)
+    count = 100                  # initial notification count
+    limit = 50                   # next a mount of notifications fetched by AJAX
+    
+    notices = UserNotification.objects.get_user_notifications(username)[:count]
+    notices_more = True if len(notices) == count else False
 
     return render_to_response("notifications/user_notification_list.html", {
             'notices': notices,
+            'start': count,
+            'limit': limit,
+            'notices_more': notices_more,
             }, context_instance=RequestContext(request))
+
+@login_required
+def user_notification_more(request):
+    """Fetch next ``limit`` notifications starts from ``start``.
+    
+    Arguments:
+    - `request`:
+    - `start`:
+    - `limit`:
+    """
+    if not request.is_ajax():
+        return Http404
+    
+    username = request.user.username
+    start = int(request.GET.get('start', 0))
+    limit = int(request.GET.get('limit', 0))
+
+    notices = UserNotification.objects.get_user_notifications(username)[
+        start: start+limit]
+    notices_more = True if len(notices) == limit else False
+    new_start = start+limit
+
+    ctx = {'notices': notices}
+    html = render_to_string("notifications/user_notification_tr.html", ctx)
+
+    ct = 'application/json; charset=utf-8'
+    return HttpResponse(json.dumps({
+                'html':html,
+                'notices_more':notices_more,
+                'new_start': new_start}), content_type=ct)
     
