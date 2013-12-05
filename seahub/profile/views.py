@@ -8,7 +8,8 @@ from django.template import Context, RequestContext
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids
+from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids, \
+    seafile_api
 from pysearpc import SearpcError
 
 from forms import ProfileForm
@@ -66,11 +67,20 @@ def edit_profile(request):
         server_crypto = False   
 
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-            
+
+    default_repo_id = UserOptions.objects.get_default_repo(username)
+    if default_repo_id:
+        default_repo = seafile_api.get_repo(default_repo_id)
+    else:
+        default_repo = None
+    owned_repos = seafile_api.get_owned_repo_list(username)
+
     return render_to_response('profile/set_profile.html', {
             'form': form,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
+            'default_repo': default_repo,
+            'owned_repos': owned_repos,
             }, context_instance=RequestContext(request))
 
 def user_profile(request, username_or_id):
@@ -164,3 +174,24 @@ def delete_user_account(request, user):
         user = User.objects.get(email=user)
         user.delete()
         return HttpResponseRedirect(settings.LOGIN_URL)
+
+@login_required
+def default_repo(request):
+    """Handle post request to create default repo for user.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    repo_id = request.POST.get('dst_repo', '')
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    repo = seafile_api.get_repo(repo_id)
+    if repo is None:
+        messages.error(request, _('Failed to set default library.'))
+        return HttpResponseRedirect(next)
+
+    username = request.user.username
+    UserOptions.objects.set_default_repo(username, repo.id)
+    messages.success(request, _('Successfully set "%s" as your default library.') % repo.name)
+    return HttpResponseRedirect(next)
