@@ -9,13 +9,13 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 import seaserv
-from seaserv import seafserv_rpc, seafile_api, get_personal_groups_by_user
+from seaserv import seafile_api, get_personal_groups_by_user
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
     get_unencry_rw_repos_by_user
 
@@ -96,63 +96,71 @@ def get_upload_url(request, repo_id):
     else:
         return ''
 
-def get_api_upload_url(request, repo_id):
-    """Get file upload url for web api.
+# def get_api_upload_url(request, repo_id):
+#     """Get file upload url for web api.
+#     """
+#     username = request.user.username
+#     if get_user_permission(request, repo_id) == 'rw':
+#         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+#                                                         'upload', username)
+#         return gen_file_upload_url(token, 'upload-api')
+#     else:
+#         return ''
+
+# def get_api_update_url(request, repo_id):
+#     username = request.user.username
+#     if get_user_permission(request, repo_id) == 'rw':
+#         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+#                                                         'update', username)
+#         return gen_file_upload_url(token, 'update-api')
+#     else:
+#         return ''
+
+def get_ajax_upload_url(request, repo_id):
+    """Get file upload url for AJAX.
     """
     username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'upload', username)
-        return gen_file_upload_url(token, 'upload-api')
+        return gen_file_upload_url(token, 'upload-aj')
     else:
         return ''
 
-def get_ajax_upload_url(request, repo_id):
+def get_ajax_update_url(request, repo_id):
     """Get file upload url for AJAX.
     """
-    api_upload_url = get_api_upload_url(request, repo_id)
-    return api_upload_url.replace('api', 'aj')
+    username = request.user.username
+    if get_user_permission(request, repo_id) == 'rw':
+        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+                                                        'update', username)
+        return gen_file_upload_url(token, 'update-aj')
+    else:
+        return ''
 
 def get_blks_upload_url(request, repo_id):
     '''
     Get upload url for encrypted file (uploaded in blocks)
     '''
+    username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'upload-blks',
-                                                  request.user.username)
-        return gen_file_upload_url(token, 'upload-blks-api').replace('api', 'aj')
+        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+                                                        'upload-blks', username)
+        return gen_file_upload_url(token, 'upload-blks-aj')
     else:
         return ''
-
+    
 def get_blks_update_url(request, repo_id):
     '''
     Get update url for encrypted file (uploaded in blocks)
     '''
-    if get_user_permission(request, repo_id) == 'rw':
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'update-blks',
-                                                  request.user.username)
-        return gen_file_upload_url(token, 'update-blks-api').replace('api', 'aj')
-    else:
-        return ''
-
-def get_api_update_url(request, repo_id):
     username = request.user.username
     if get_user_permission(request, repo_id) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
-                                                        'update', username)
-        return gen_file_upload_url(token, 'update-api')
+                                                        'update-blks', username)
+        return gen_file_upload_url(token, 'update-blks-aj')
     else:
         return ''
-    
-def get_ajax_update_url(request, repo_id):
-    """Get file upload url for AJAX.
-    """
-    api_update_url = get_api_update_url(request, repo_id)
-    return api_update_url.replace('api', 'aj')
 
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
