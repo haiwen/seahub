@@ -183,8 +183,8 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# show library 'download' button
-SHOW_REPO_DOWNLOAD_BUTTON = True
+# show or hide library 'download' button
+SHOW_REPO_DOWNLOAD_BUTTON = False
 
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 6
