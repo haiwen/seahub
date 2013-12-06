@@ -13,6 +13,7 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 ########## system notification
 class Notification(models.Model):
@@ -447,10 +448,11 @@ class UserNotification(models.Model):
         - `self`:
         """
         msg_from = self.detail
+        nickname = email2nickname(msg_from)
 
         msg = _(u"You have recieved a <a href='%(href)s'>new message</a> from %(user)s.") % {
-            'user': msg_from,
-            'href': reverse('message_list'),
+            'user': nickname,
+            'href': reverse('user_msg_list', args=[msg_from]),
             }
         return msg
 
@@ -546,7 +548,6 @@ def add_share_repo_msg_cb(sender, **kwargs):
     
     assert from_user and to_user and repo is not None, 'Arguments error'
 
-    from seahub.base.templatetags.seahub_tags import email2nickname
     nickname = email2nickname(from_user)
 
     detail = repo_share_msg_to_json(nickname, repo.id)
@@ -561,7 +562,6 @@ def add_share_file_msg_cb(sender, **kwargs):
 
     assert priv_share is not None, 'Argument error'
 
-    from seahub.base.templatetags.seahub_tags import email2nickname
     nickname = email2nickname(priv_share.from_user)
 
     detail = priv_file_share_msg_to_json(nickname, file_name, priv_share.token)
@@ -574,9 +574,7 @@ def add_user_message_cb(sender, instance, **kwargs):
     msg_from = instance.from_email
     msg_to = instance.to_email
 
-    from seahub.base.templatetags.seahub_tags import email2nickname
-    nickname = email2nickname(msg_from)
-    UserNotification.objects.add_user_message(msg_to, detail=nickname)
+    UserNotification.objects.add_user_message(msg_to, detail=msg_from)
 
 @receiver(grpmsg_added)
 def grpmsg_added_cb(sender, **kwargs):
@@ -586,7 +584,6 @@ def grpmsg_added_cb(sender, **kwargs):
 
     notify_members = [ x.user_name for x in group_members if x.user_name != from_email ]
 
-    from seahub.base.templatetags.seahub_tags import email2nickname
     detail = group_msg_to_json(group_id, email2nickname(from_email))
     UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
 
@@ -607,7 +604,6 @@ def grpmsg_reply_added_cb(sender, **kwargs):
                              if x.from_email != reply_from_email])
     notice_users.add(group_msg.from_email)
 
-    from seahub.base.templatetags.seahub_tags import email2nickname
     detail = grpmsg_reply_to_json(msg_id, email2nickname(reply_from_email))
 
     for user in notice_users:
