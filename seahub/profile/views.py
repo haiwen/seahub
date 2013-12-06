@@ -71,6 +71,7 @@ def edit_profile(request):
             'form': form,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
+            'force_server_crypto': settings.FORCE_SERVER_CRYPTO,
             }, context_instance=RequestContext(request))
 
 def user_profile(request, username_or_id):

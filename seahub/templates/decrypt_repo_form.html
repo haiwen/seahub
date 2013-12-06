@@ -14,8 +14,11 @@
         {% for error in form.errors.values %}
         {{ error|escape }}
         {% endfor %}
+
+        {% if not force_server_crypto %}
         {% url 'edit_profile' as profile_edit_url %}
         <p class="tip" style="margin-top:3em;">{% blocktrans %}You can change how to view encrypted libraries online <a class="normal" href="{{ profile_edit_url }}#enc-lib-setting">here</a>.{% endblocktrans %}</p>
+        {% endif %}
     </form>
 </div>
 {% endblock %}

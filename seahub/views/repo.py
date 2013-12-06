@@ -22,7 +22,7 @@ from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size
-from seahub.settings import ENABLE_SUB_LIBRARY
+from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -227,7 +227,8 @@ def render_repo(request, repo):
             return render_to_response('decrypt_repo_form.html', {
                     'repo': repo,
                     'next': get_next_url_from_request(request) or \
-                        reverse('repo', args=[repo.id])
+                        reverse('repo', args=[repo.id]),
+                    'force_server_crypto': FORCE_SERVER_CRYPTO,
                     }, context_instance=RequestContext(request))
 
     # query context args

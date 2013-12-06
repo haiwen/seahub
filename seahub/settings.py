@@ -189,6 +189,9 @@ SHOW_REPO_DOWNLOAD_BUTTON = False
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 6
 
+# Using server side crypto by default, otherwise, let user choose crypto method.
+FORCE_SERVER_CRYPTO = True
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
