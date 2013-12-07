@@ -59,8 +59,8 @@ from seahub.contacts.models import Contact
 from seahub.shortcuts import get_first_object_or_none
 
 from pysearpc import SearpcError, SearpcObjEncoder
-from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
-    get_personal_groups_by_user, get_session_info, \
+from seaserv import get_personal_groups_by_user, get_session_info, \
+    server_repo_size, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
@@ -159,7 +159,7 @@ class Account(APIView):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-        
+
         info = {}
         info['email'] = user.email
         info['id'] = user.id
@@ -258,8 +258,7 @@ def repo_download_info(request, repo_id):
     relay_id = get_session_info().id
     addr, port = get_ccnet_server_addr_port ()
     email = request.user.username
-    token = seafserv_threaded_rpc.generate_repo_token(repo_id,
-                                                      request.user.username)
+    token = seafile_api.generate_repo_token(repo_id, request.user.username)
     repo_name = repo.name
     enc = 1 if repo.encrypted else ''
     magic = repo.magic if repo.encrypted else ''
@@ -407,8 +406,8 @@ class Repos(APIView):
 
         # create a repo
         try:
-            repo_id = seafserv_threaded_rpc.create_repo(repo_name, repo_desc,
-                                                        username, passwd)
+            repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                              username, passwd)
         except:
             return api_error(HTTP_520_OPERATION_FAILED, \
                     'Failed to create library.')
@@ -425,7 +424,7 @@ class Repos(APIView):
 
 
             # FIXME: according to the HTTP spec, need to return 201 code and
-            # with a corresponding location header 
+            # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
 
             return resp
@@ -440,7 +439,7 @@ def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
 
     try:
-        seafserv_threaded_rpc.set_passwd(repo.id, request.user.username, password)
+        seafile_api.set_passwd(repo.id, request.user.username, password)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return api_error(status.HTTP_400_BAD_REQUEST, e.msg)
@@ -460,7 +459,7 @@ def check_set_repo_password(request, repo):
     password_set = False
     if repo.encrypted:
         try:
-            ret = seafserv_rpc.is_passwd_set(repo.id, request.user.username)
+            ret = seafile_api.is_passwd_set(repo.id, request.user.username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -506,7 +505,7 @@ class Repo(APIView):
         repo.latest_modify = last_commit.ctime if last_commit else None
 
         # query repo infomation
-        repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
+        repo.size = seafile_api.get_repo_size(repo_id)
         current_commit = get_commits(repo_id, 0, 1)[0]
         root_id = current_commit.root_id if current_commit else None
 
@@ -581,7 +580,7 @@ class DownloadRepo(APIView):
         if not is_repo_accessible(repo_id, username):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to get repo.')
-            
+
         return repo_download_info(request, repo_id)
 
 class UploadLinkView(APIView):
@@ -596,10 +595,8 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'upload',
-                                                  request.user.username)
+        token = seafile_api.get_httpserver_access_token(
+            repo_id, 'dummy', 'upload', request.user.username)
         url = gen_file_upload_url(token, 'upload-api')
         return Response(url)
 
@@ -615,10 +612,8 @@ class UpdateLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'update',
-                                                  request.user.username)
+        token = seafile_api.get_httpserver_access_token(
+            repo_id, 'dummy', 'update', request.user.username)
         url = gen_file_upload_url(token, 'update-api')
         return Response(url)
 
@@ -634,10 +629,8 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'upload-blks',
-                                                  request.user.username)
+        token = seafile_api.get_httpserver_access_token(
+            repo_id, 'dummy', 'upload-blks', request.user.username)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -653,16 +646,14 @@ class UpdateBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  'dummy',
-                                                  'update-blks',
-                                                  request.user.username)
+        token = seafile_api.get_httpserver_access_token(
+            repo_id, 'dummy', 'update-blks', request.user.username)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
 
 def get_file_size (id):
-    size = seafserv_threaded_rpc.get_file_size(id)
+    size = seafile_api.get_file_size(id)
     return size if size else 0
 
 def get_dir_entrys_by_id(request, repo_id, path, dir_id):
@@ -735,8 +726,8 @@ def get_shared_link(request, repo_id, path):
 
 def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'download':
-        token = seafserv_rpc.web_get_access_token(repo_id, file_id,
-                                                  op, request.user.username)
+        token = seafile_api.get_httpserver_access_token(repo_id, file_id, op,
+                                                        request.user.username)
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
                                 content_type=json_content_type)
@@ -759,8 +750,8 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             repo = get_repo(repo_id)
             encrypted = repo.encrypted
             enc_version = repo.enc_version
-        token = seafserv_rpc.web_get_access_token(repo_id, file_id,
-                                                  op, request.user.username)
+        token = seafile_api.get_httpserver_access_token(
+            repo_id, file_id, op, request.user.username)
         url = gen_block_get_url(token, None)
         res = {
             'blklist':blklist,
@@ -785,8 +776,8 @@ def reloaddir(request, repo_id, parent_dir):
                          'Failed to get current commit of repo %s.' % repo_id)
 
     try:
-        dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
-                                                         parent_dir.encode('utf-8'))
+        dir_id = seafile_api.get_dir_id_by_path(current_commit.id,
+                                                parent_dir.encode('utf-8'))
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to get dir id by path")
@@ -811,7 +802,7 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
 # deprecated
 class OpDeleteView(APIView):
     """
-    Delete a file.
+    Delete files.
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
@@ -840,13 +831,107 @@ class OpDeleteView(APIView):
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
             try:
-                seafserv_threaded_rpc.del_file(repo_id, parent_dir,
-                                               file_name, username)
+                seafile_api.del_file(repo_id, parent_dir,
+                                     file_name, username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
+
+class OpMoveView(APIView):
+    """
+    Move files.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        username = request.user.username
+        if not is_repo_writable(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete file.')
+
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        parent_dir = request.GET.get('p', '/')
+        dst_repo = request.POST.get('dst_repo')
+        dst_dir = request.POST.get('dst_dir')
+        file_names = request.POST.get("file_names")
+
+        if not parent_dir or not file_names or not dst_repo or not dst_dir:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Missing argument.')
+        if repo_id == dst_repo and parent_dir == dst_dir:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'The destination directory is the same as the source.')
+
+        for file_name in file_names.split(':'):
+            file_name = unquote(file_name.encode('utf-8'))
+            new_filename = check_filename_with_rename(dst_repo, dst_dir,
+                                                      file_name)
+            try:
+                seafile_api.move_file(repo_id, parent_dir, file_name,
+                                      dst_repo, dst_dir, new_filename,
+                                      username)
+            except SearpcError,e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 "Failed to move file.")
+
+        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+
+
+class OpCopyView(APIView):
+    """
+    Copy files.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request, repo_id, format=None):
+
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        username = request.user.username
+        if not is_repo_writable(repo.id, username):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete file.')
+
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
+
+        parent_dir = request.GET.get('p', '/').encode('utf-8')
+        dst_repo = request.POST.get('dst_repo')
+        dst_dir = request.POST.get('dst_dir')
+        file_names = request.POST.get("file_names")
+
+        if not parent_dir or not file_names or not dst_repo or not dst_dir:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Missing argument.')
+
+        for file_name in file_names.split(':'):
+            file_name = unquote(file_name.encode('utf-8'))
+            new_filename = check_filename_with_rename(dst_repo, dst_dir,
+                                                      file_name)
+            try:
+                seafile_api.copy_file(repo_id, parent_dir, file_name,
+                                      dst_repo, dst_dir, new_filename,
+                                      username)
+            except SearpcError,e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 "Failed to copy file.")
+
+        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+
 
 def append_starred_files(array, files):
     for f in files:
@@ -940,8 +1025,8 @@ class FileView(APIView):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
-                                                             path.encode('utf-8'))
+            file_id = seafile_api.get_file_id_by_path(repo_id,
+                                                      path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get file id by path.")
@@ -967,7 +1052,7 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Path is missing or invalid.')
 
-        username = request.user.username        
+        username = request.user.username
         operation = request.POST.get('operation', '')
         if operation.lower() == 'rename':
             if not is_repo_writable(repo.id, username):
@@ -983,19 +1068,16 @@ class FileView(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
 
             parent_dir = os.path.dirname(path)
-            parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
-            oldname_utf8 = oldname.encode('utf-8')
             if oldname == newname:
                 return api_error(status.HTTP_409_CONFLICT,
                                  'The new name is the same to the old')
 
             newname = check_filename_with_rename(repo_id, parent_dir, newname)
-            newname_utf8 = newname.encode('utf-8')
             try:
-                seafserv_threaded_rpc.rename_file (repo_id, parent_dir_utf8,
-                                                   oldname_utf8, newname,
-                                                   username)
+                seafile_api.rename_file (repo_id, parent_dir,
+                                         oldname, newname,
+                                         username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
@@ -1012,7 +1094,7 @@ class FileView(APIView):
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
-            
+
             src_dir = os.path.dirname(path)
             src_dir_utf8 = src_dir.encode('utf-8')
             src_repo_id = repo_id
@@ -1045,10 +1127,10 @@ class FileView(APIView):
             new_filename_utf8 = new_filename.encode('utf-8')
 
             try:
-                seafserv_threaded_rpc.move_file(src_repo_id, src_dir_utf8,
-                                                filename_utf8, dst_repo_id,
-                                                dst_dir_utf8, new_filename_utf8,
-                                                username)
+                seafile_api.move_file(src_repo_id, src_dir_utf8,
+                                      filename_utf8, dst_repo_id,
+                                      dst_dir_utf8, new_filename_utf8,
+                                      username)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
@@ -1064,7 +1146,7 @@ class FileView(APIView):
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
-            
+
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
@@ -1073,8 +1155,8 @@ class FileView(APIView):
             new_file_name_utf8 = new_file_name.encode('utf-8')
 
             try:
-                seafserv_threaded_rpc.post_empty_file(repo_id, parent_dir,
-                                                      new_file_name, username)
+                seafile_api.post_empty_file(repo_id, parent_dir,
+                                            new_file_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
@@ -1106,7 +1188,7 @@ class FileView(APIView):
         if not is_repo_writable(repo.id, username):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to delete file.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -1120,9 +1202,9 @@ class FileView(APIView):
         file_name_utf8 = os.path.basename(path).encode('utf-8')
 
         try:
-            seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
-                                           file_name_utf8,
-                                           request.user.username)
+            seafile_api.del_file(repo_id, parent_dir_utf8,
+                                 file_name_utf8,
+                                 request.user.username)
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
@@ -1203,8 +1285,8 @@ class DirView(APIView):
             path = path + '/'
 
         try:
-            dir_id = seafserv_threaded_rpc.get_dir_id_by_path(repo_id,
-                                                             path.encode('utf-8'))
+            dir_id = seafile_api.get_dir_id_by_path(repo_id,
+                                                    path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get dir id by path.")
@@ -1239,13 +1321,13 @@ class DirView(APIView):
         if path[-1] == '/':     # Cut out last '/' if possible.
             path = path[:-1]
 
-        username = request.user.username            
+        username = request.user.username
         operation = request.POST.get('operation', '')
         if operation.lower() == 'mkdir':
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create folder.')
-            
+
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_dir_name = os.path.basename(path)
@@ -1254,8 +1336,8 @@ class DirView(APIView):
             new_dir_name_utf8 = new_dir_name.encode('utf-8')
 
             try:
-                seafserv_threaded_rpc.post_dir(repo_id, parent_dir,
-                                               new_dir_name, username)
+                seafile_api.post_dir(repo_id, parent_dir,
+                                     new_dir_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to make directory.')
@@ -1286,7 +1368,7 @@ class DirView(APIView):
         if not is_repo_writable(repo.id, username):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to delete folder.')
-        
+
         resp = check_repo_access_permission(request, repo)
         if resp:
             return resp
@@ -1306,8 +1388,8 @@ class DirView(APIView):
         file_name_utf8 = os.path.basename(path).encode('utf-8')
 
         try:
-            seafserv_threaded_rpc.del_file(repo_id, parent_dir_utf8,
-                                           file_name_utf8, username)
+            seafile_api.del_file(repo_id, parent_dir_utf8,
+                                 file_name_utf8, username)
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
@@ -1421,7 +1503,7 @@ class SharedRepo(APIView):
         if not seafile_api.is_repo_owner(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to share library.')
-        
+
         share_type = request.GET.get('share_type')
         user = request.GET.get('user')
         group_id = request.GET.get('group_id')
@@ -1437,8 +1519,8 @@ class SharedRepo(APIView):
                                  'User does not exist')
             try :
                 from_email = seafile_api.get_repo_owner(repo_id)
-                seafserv_threaded_rpc.add_share(repo_id, from_email, user,
-                                                permission)
+                seafile_api.add_share(repo_id, from_email, user,
+                                      permission)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)
@@ -1465,7 +1547,7 @@ class SharedRepo(APIView):
         elif share_type == 'public':
             if not CLOUD_MODE:
                 try:
-                    seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+                    seafile_api.set_inner_pub_repo(repo_id, permission)
                 except SearpcError, e:
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                      "Searpc Error: " + e.msg)
@@ -1558,7 +1640,7 @@ def group_discuss(request, group):
             # save discussion
             fd = FileDiscuss(group_message=message, repo_id=repo_id, path=path)
             fd.save()
-        
+
         ctx = {}
         ctx['msg'] = message
         html = render_to_string("api2/discussion_posted.html", ctx)
@@ -1628,8 +1710,8 @@ def get_group_msgs(groupid, page, username):
                     if not att.obj_id:
                         att.err = _(u'File does not exist')
                     else:
-                        att.token = seafserv_rpc.web_get_access_token(att.repo_id, att.obj_id,
-                                                         'view', username)
+                        att.token = seafile_api.get_httpserver_access_token(
+                            att.repo_id, att.obj_id, 'view', username)
                         att.img_url = gen_file_get_url(att.token, att.name)
 
             msg.attachment = att
@@ -1684,8 +1766,8 @@ def discussion(request, msg_id):
                 if not att.obj_id:
                     att.err = _(u'File does not exist')
                 else:
-                    att.token = seafserv_rpc.web_get_access_token(att.repo_id, att.obj_id,
-                                                     'view', request.user.username)
+                    att.token = seafile_api.get_httpserver_access_token(
+                        att.repo_id, att.obj_id, 'view', request.user.username)
                     att.img_url = gen_file_get_url(att.token, att.name)
 
         msg.attachment = att
@@ -1781,7 +1863,7 @@ def msg_reply_new(request):
             if not group:
                 continue
             m.group_name = group.group_name
-            
+
             # get attachement
             attachment = get_first_object_or_none(m.messageattachment_set.all())
             if attachment:
@@ -1807,7 +1889,7 @@ def msg_reply_new(request):
 
     # remove new group msg reply notification
     UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
-    
+
     return render_to_response("api2/new_msg_reply.html", {
             'group_msgs': group_msgs,
             }, context_instance=RequestContext(request))
