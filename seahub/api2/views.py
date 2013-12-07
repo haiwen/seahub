@@ -68,6 +68,10 @@ from seaserv import get_personal_groups_by_user, get_session_info, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -770,15 +774,11 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         return get_shared_link(request, repo_id, path)
 
 def reloaddir(request, repo_id, parent_dir):
-    current_commit = get_commits(repo_id, 0, 1)[0]
-    if not current_commit:
-        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                         'Failed to get current commit of repo %s.' % repo_id)
-
     try:
-        dir_id = seafile_api.get_dir_id_by_path(current_commit.id,
+        dir_id = seafile_api.get_dir_id_by_path(repo_id,
                                                 parent_dir.encode('utf-8'))
     except SearpcError, e:
+        logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to get dir id by path")
 
@@ -1288,6 +1288,7 @@ class DirView(APIView):
             dir_id = seafile_api.get_dir_id_by_path(repo_id,
                                                     path.encode('utf-8'))
         except SearpcError, e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get dir id by path.")
 
