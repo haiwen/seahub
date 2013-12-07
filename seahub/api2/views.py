@@ -51,7 +51,7 @@ from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.signals import repo_created
 from seahub.group.views import group_check
-from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, HAS_FILE_SEARCH
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
@@ -68,7 +68,11 @@ from seaserv import get_personal_groups_by_user, get_session_info, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
+
 import logging
+
+if HAS_FILE_SEARCH:
+    from seahub_extra.search.views import search_keyword
 
 logger = logging.getLogger(__name__)
 
@@ -238,6 +242,29 @@ class AccountInfo(APIView):
             info['usage'] = get_user_quota_usage(email)
 
         return Response(info)
+
+class Search(APIView):
+    """ Search all the repos
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_FILE_SEARCH:
+            return api_error(status.HTTP_404_NOT_FOUND, "Search not supported");
+
+        keyword = request.GET.get('q', None)
+        if not keyword:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument");
+
+        results, total, has_more = search_keyword(request, keyword)
+        for e in results:
+            e.pop('repo', None)
+
+        res = { "total":total, "results":results, "has_more":has_more }
+        return Response(res)
+
 
 def calculate_repo_info(repo_list, username):
     """
@@ -861,9 +888,9 @@ class OpMoveView(APIView):
             return resp
 
         parent_dir = request.GET.get('p', '/')
-        dst_repo = request.POST.get('dst_repo')
-        dst_dir = request.POST.get('dst_dir')
-        file_names = request.POST.get("file_names")
+        dst_repo = request.POST.get('dst_repo', None)
+        dst_dir = request.POST.get('dst_dir', None)
+        file_names = request.POST.get("file_names", None)
 
         if not parent_dir or not file_names or not dst_repo or not dst_dir:
             return api_error(status.HTTP_400_BAD_REQUEST,
@@ -910,9 +937,9 @@ class OpCopyView(APIView):
             return resp
 
         parent_dir = request.GET.get('p', '/').encode('utf-8')
-        dst_repo = request.POST.get('dst_repo')
-        dst_dir = request.POST.get('dst_dir')
-        file_names = request.POST.get("file_names")
+        dst_repo = request.POST.get('dst_repo', None)
+        dst_dir = request.POST.get('dst_dir', None)
+        file_names = request.POST.get("file_names", None)
 
         if not parent_dir or not file_names or not dst_repo or not dst_dir:
             return api_error(status.HTTP_400_BAD_REQUEST,
