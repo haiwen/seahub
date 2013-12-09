@@ -3,6 +3,7 @@ import os
 import stat
 import time
 import simplejson as json
+import datetime
 from urllib2 import unquote, quote
 
 from rest_framework import parsers
@@ -22,6 +23,7 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 
 from models import Token
 from authentication import TokenAuthentication
@@ -38,7 +40,11 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_ccnet_server_addr_port, string2list, \
     gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.avatar.templatetags.avatar_tags import avatar_url
+from seahub.message.models import UserMessage
 import seahub.settings as settings
+
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -2002,6 +2008,96 @@ class AjaxDiscussions(APIView):
 
     def get(self, request, group_id, format=None):
         return more_discussions(request, group_id)
+
+class EventsView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not EVENTS_ENABLED:
+            events = None
+            return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
+
+        start = request.GET.get('start', '')
+
+        if not start:
+            start = 0
+        else:
+            try:
+                start = int(start)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'start id must be integer')
+
+        email = request.user.username
+        events_count = 15
+        events, events_more_offset = get_user_events(email, start, events_count)
+        events_more = True if len(events) == events_count else False
+
+        l = []
+        for e in events:
+            d = dict(etype=e.etype)
+            l.append(d)
+            if e.etype == 'repo-update':
+                d['author'] = e.commit.creator_name
+                d['time'] = e.commit.ctime
+                d['desc'] = e.commit.desc
+                d['repo_id'] = e.repo.id
+                d['repo_name'] = e.repo.name
+            else:
+                d['repo_id'] = e.repo_id
+                d['repo_name'] = e.repo_name
+                if e.etype == 'repo-create':
+                    d['author'] = e.creator
+                else:
+                    d['author'] = e.repo_owner
+
+                def utc_to_local(dt):
+                    tz = timezone.get_default_timezone()
+                    utc = dt.replace(tzinfo=timezone.utc)
+                    local = timezone.make_naive(utc, tz)
+                    return local
+
+                epoch = datetime.datetime(1970, 1, 1)
+                local = utc_to_local(e.timestamp)
+                d['time'] = (local - epoch).total_seconds() * 1000
+
+            d['nick'] = email2nickname(d['author'])
+
+        resp = HttpResponse(json.dumps({
+                                'events': l,
+                                'more':  events_more,
+                                'more_offset': events_more_offset,}),
+                            status=200,
+                            content_type=json_content_type)
+        return resp
+
+class MessagesCountView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        username = request.user.username
+        ret = {}
+
+        notes = UserNotification.objects.filter(to_user=username)
+        ret['group_messages'] = len(notes)
+        ret['personal_messages'] = UserMessage.objects.count_unread_messages_by_user(username)
+
+        return HttpResponse(json.dumps(ret), status=200,
+                            content_type=json_content_type)
+
+class AvatarView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, user, size, format=None):
+        url = avatar_url(user, int(size))
+        ret = { 'url': url }
+        return HttpResponse(json.dumps(ret), status=200,
+                            content_type=json_content_type)
 
 class ActivityHtml(APIView):
     authentication_classes = (TokenAuthentication, )
