@@ -60,10 +60,32 @@
 </div>
 
 <div class="setting-item">
+    <h3>{% trans "Default Library Setting" %}</h3>
+    {% if default_repo %}
+    <p>Your default library is <a href="{% url 'repo' default_repo.id %}">{{default_repo.name}}</a>.</p>
+    {% else %}
+    <p>You do not have a default library.</p>
+    {% endif %}
+    <button id="default-lib">{% trans "Choose Default Library" %}</button>
+</div>
+
+<div class="setting-item">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
 <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>
 </div>
+
+<form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
+    <h3>{% trans "Choose default library:" %}</h3>
+    <div class="dir-tree-cont">
+      <div id="repos-dirs"></div>
+    </div>
+    <input type="hidden" name="dst_repo" value="" />
+    <p class="error hide">{% trans "Please click and choose a library."%}</p>
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+    <button class="simplemodal-close">{% trans "Cancel"%}</button>
+</form>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -73,6 +95,27 @@ changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar
 addConfirmTo($('#account-delete-btn'), {
     'title' : '{% trans "Delete Account" %}',
     'con' : '{% trans "Really want to delete your account?" %}'
+});
+
+var all_repos = [];
+{% for a_repo in owned_repos %}
+    all_repos.push({
+        'data': '{{ a_repo.props.name }}',
+        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
+    });  
+{% endfor %}
+$('#default-lib').click(function() {
+    var form = $('#default-lib-form'),
+        file_tree = new FileTree();
+    form.modal({appendTo:'#main', autoResize:true, focus:false});
+    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+});
+$('#default-lib-form').submit(function() {
+    var dst_repo = $('[name="dst_repo"]', $(this)).val();
+    if (!$.trim(dst_repo)) {
+        $('.error', form).removeClass('hide');
+        return false;
+    }
 });
 </script>
 {% endblock %}
