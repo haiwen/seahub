@@ -51,7 +51,7 @@ from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
-from seahub.auth import authenticate
+from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
@@ -1724,12 +1724,13 @@ def demo(request):
     """
     Login as demo account.
     """
+    user = User.objects.get(email='demo@seafile.com')
+    for backend in get_backends():
+        user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+
+    auth_login(request, user)
 
     redirect_to = settings.SITE_ROOT
-
-    auth_login(request, authenticate(username='demo@seafile.com',
-                                     password='demo'))
-
     return HttpResponseRedirect(redirect_to)
 
 @login_required
