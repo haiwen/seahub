@@ -1963,19 +1963,8 @@ class AvatarView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, format=None):
-        email = request.GET.get('user', request.user.username)
-
-        size = request.GET.get('size', None)
-        if size is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'size param is required')
-
-        try:
-            size = int(size)
-        except:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid size param')
-
-        url = avatar_url(email, size)
+    def get(self, request, user, size, format=None):
+        url = avatar_url(user, int(size))
         ret = { 'url': url }
         return HttpResponse(json.dumps(ret), status=200,
                             content_type=json_content_type)
