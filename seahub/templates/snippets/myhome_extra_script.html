@@ -51,6 +51,10 @@
         disable($(this));
     });
 
+    $('.unshare-btn').click(function() {
+        location.href = $(this).data('url');
+    });
+
     {% include 'snippets/repo_del_js.html' %}
 
     $(".download-btn").click(function() {
