@@ -1744,8 +1744,8 @@ function updateCmt() {
     });
 }
 
-{% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
-// sub-repo-share submit
+{% if ENABLE_SUB_LIBRARY and not repo.is_virtual %}
+// private share dir submit
 // only share to 1 panel(e.g. enter, groups or contacts)
    $('#share-submit-btn').click(function() {
         var form = $("#repo-share-form"),
@@ -1770,7 +1770,7 @@ function updateCmt() {
 
         // check if a sub-lib exists, if not, create one
         $.ajax({
-            url: '{% url 'sub_repo' repo.id %}?p=' + e(form.data('dir-path')) + '&name=' + e(form.attr('dir-name')),
+            url: '{% url 'sub_repo' repo.id %}?p=' + e(form.data('dir-path')) + '&name=' + e(form.attr('data-name')),
             dataType: 'json',
             success: function(data) {
                 $('[name="repo_id"]', form).val(data['sub_repo_id']);
