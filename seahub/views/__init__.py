@@ -946,6 +946,11 @@ def myhome(request):
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
 
+    # set to default library after user guide
+    repo_create_url = reverse(repo_create)
+    if need_guide:
+        repo_create_url += '?default_lib=1'
+            
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "in_repos": in_repos,
@@ -959,6 +964,7 @@ def myhome(request):
             "need_guide": need_guide,
             "sub_lib_enabled": sub_lib_enabled,
             "sub_repos": sub_repos,
+            "repo_create_url": repo_create_url,
             }, context_instance=RequestContext(request))
 
 

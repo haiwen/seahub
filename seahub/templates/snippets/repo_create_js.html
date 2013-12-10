@@ -95,7 +95,7 @@ $('#repo-create-form').submit(function() {
     }
 
     $.ajax({
-        url: '{{ post_url }}' + '{{args}}',
+        url: '{{ post_url }}',
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,

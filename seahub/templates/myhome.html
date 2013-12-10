@@ -34,7 +34,6 @@
 <script type="text/javascript">
 {% include "snippets/myhome_extra_script.html" with groups=autocomp_groups %}
 
-{% url 'seahub.views.repo_create' as repo_create_url %}
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
 
 // for user login at first time
