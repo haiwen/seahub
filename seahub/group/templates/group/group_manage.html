@@ -1,88 +1,96 @@
-{% extends base_template %}
+{% extends 'group/group_base.html' %}
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 
-{% block sub_title %}{{group.group_name}} - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
-
-{% block title_panel %}
-{% include "group/tabnav.html" with cur="admin" %}
-{% endblock %}
-
-{% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Group Avatar" %}</h3>
-    <div class="info-item-bottom ovhd">
-        <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
-        <form id="grp-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_group_add' group.id %}" class="fleft">{% csrf_token %}
-            <button type="button" id="grp-avatar-chg-btn">{% trans "Change" %}</button>
-            <input type="file" name="avatar" id="grp-avatar-input" />
-        </form>
-    </div>
-</div>
-
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Operations" %}</h3>
-    <ul class="info-item-bottom op-list">
-        <li><a id="group-rename" href="#" data-url="{% url 'group_rename' group.id %}">{% trans "Rename" %}</a></li>
-        <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss" %}</a></li>
-        {% if group.is_pub %}
-        <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
-        {% else %}
-        <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
-        {% endif %}
-        <li><a id="group-transfer" href="#" >{% trans "Transfer" %}</a></li>
-    </ul>
-</div>
-{% endblock %}
+{% block cur_admin %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Members"%}</h3>
-<button id="group-member-add" class="add">{% trans "Add Members"%}</button>
-{% if members %}
-<table>
-    <tr>
-        <th width="4%"></th>
-        <th width="71%">{% trans "Email"%}</th>
-        <th width="25%">{% trans "Operations"%}</th>
-    </tr>
+<div id="tabs" class="tab-tabs">
+    <ul class="tab-tabs-nav hd ovhd">
+        <li class="tab"><a href="#members" class="a">{% trans "Members" %}</a></li>
+        <li class="tab"><a href="#administrators" class="a">{% trans "Admins" %}</a></li>
+        <li class="tab"><a href="#settings" class="a">{% trans "Settings" %}</a></li>
+    </ul>
+    <div id="members">
+        <div class="ovhd">
+            <button id="group-member-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Members"%}</button>
+        </div>
+        {% if members %}
+        <table>
+            <tr>
+                <th width="4%"></th>
+                <th width="71%">{% trans "Email"%}</th>
+                <th width="25%">{% trans "Operations"%}</th>
+            </tr>
 
-    {% for member in members %}
-    <tr>
-        <td>{% avatar member.user_name 20 %}</td>
-        <td>{{ member.user_name }}</td>
-        <td>
-          {% if member.user_name != request.user.username %}
-            <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
-          {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
+            {% for member in members %}
+            <tr>
+                <td>{% avatar member.user_name 20 %}</td>
+                <td>{{ member.user_name }}</td>
+                <td>
+                  {% if member.user_name != request.user.username %}
+                    <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op vh">{% trans "Delete"%}</a>
+                  {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
 
-<h3>{% trans "Administrators" %}</h3>
-<button id="group-admin-add" class="add">{% trans "Add Administrators"%}</button>
-{% if admins %}
-<table>
-    <tr>
-        <th width="4%"></th>
-        <th width="71%">{% trans "Email"%}</th>
-        <th width="25%">{% trans "Operations"%}</th>
-    </tr>
+    <div class="hide" id="administrators">
+        <div class="ovhd">
+            <button id="group-admin-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Admins"%}</button>
+        </div>
+        {% if admins %}
+        <table>
+            <tr>
+                <th width="4%"></th>
+                <th width="71%">{% trans "Email"%}</th>
+                <th width="25%">{% trans "Operations"%}</th>
+            </tr>
 
-    {% for member in admins %}
-    <tr>
-        <td>{% avatar member.user_name 20 %}</td>
-        <td>{{ member.user_name }}</td>
-        <td>
-            {% if member.user_name != request.user.username %}
-            <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="member-remove-btn op">{% trans "Delete"%}</a>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
+            {% for member in admins %}
+            <tr>
+                <td>{% avatar member.user_name 20 %}</td>
+                <td>{{ member.user_name }}</td>
+                <td>
+                    {% if member.user_name != request.user.username %}
+                    <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="member-remove-btn op vh">{% trans "Delete"%}</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+
+    <div class="hide" id="settings">
+        <div class="setting-item" style="margin-top:40px;">
+            <h3>{% trans "Avatar" %}</h3>
+            <div class="ovhd">
+                <div class="fleft">{% grp_avatar group.props.id 48 %}</div>
+                <form id="grp-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_group_add' group.id %}" class="fleft">{% csrf_token %}
+                    <button type="button" id="grp-avatar-chg-btn">{% trans "Change" %}</button>
+                    <input type="file" name="avatar" id="grp-avatar-input" />
+                </form>
+            </div>
+        </div>
+        <div class="setting-item">
+            <h3>{% trans "Operations" %}</h3>
+            <ul class="op-list">
+                <li><a id="group-rename" href="#" data-url="{% url 'group_rename' group.id %}">{% trans "Rename" %}</a></li>
+                {% if group.is_pub %}
+                <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
+                {% else %}
+                <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
+                {% endif %}
+                <li><a id="group-transfer" href="#" >{% trans "Transfer" %}</a></li>
+                <li><a id="group-dismiss" href="#" data-url="{% url 'group_dismiss' group.id %}">{% trans "Dismiss" %}</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
 
 <form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Transfer Group To"%}</h3>
@@ -101,11 +109,9 @@
 </form>
 
 {% include 'group/grpmember_add_form.html' %} {# for member/admin add #}
-{% include 'group/modules_toggle_form.html' %}
-
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
 changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
@@ -145,8 +151,5 @@ $('#group-rename-form').submit(function() {
         return false;
     }
 });
-
-
-{% include "group/modules_toggle_js.html" %}
 </script>
 {% endblock %}

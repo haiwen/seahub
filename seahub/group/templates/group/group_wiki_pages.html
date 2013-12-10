@@ -1,20 +1,15 @@
-{% extends base_template %}
+{% extends 'group/group_base.html' %}
 
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
-{% block sub_title %}{{group.group_name}} - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
+{% block cur_wiki %}tab-cur{% endblock %}
 
-{% block title_panel %}
-{% include "group/tabnav.html" with cur="wiki"%}
-{% endblock %}
-
-{% block main_panel %}
+{% block right_panel %}
 <div class="wiki-top w100 ovhd">
     <ul class="wiki-nav fleft">
         <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
-        <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
+        <li class="item cur-item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
         {% if group.view_perm != "pub" %}
         <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
         {% endif %}
@@ -37,15 +32,12 @@
     <p class="error hide"></p>
     <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit" />
 </form>
+{% endblock %}
 
-{% include "group/modules_toggle_form.html" %}
-{% endblock main_panel %}
-
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});
 })
-{% include "group/modules_toggle_js.html" %}
 </script>
 {% endblock %}

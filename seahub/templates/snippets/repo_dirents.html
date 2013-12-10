@@ -59,7 +59,7 @@
             {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
             <span class="dirent-name">{{ dirent.obj_name }}</span>
             {% else %}
-            <span class="dirent-name"><a class="op" href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></span>
+            <span class="dirent-name"><a class="normal" href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></span>
             {% endif %}
         </td>
 

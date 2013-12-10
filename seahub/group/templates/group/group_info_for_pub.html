@@ -1,43 +1,11 @@
-{% extends base_template %}
+{% extends 'group/group_base.html' %}
 
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
-{% load url from future %}
+{% load seahub_tags avatar_tags i18n %}
 
-{% block sub_title %}{{group.group_name}} - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
-
-{% block title_panel %}
-
-<div class="tabnav">
-    <div class="grp-profile fright">
-        {% grp_avatar group.props.id 24 %}<span class="name">{{ group.group_name }}</span>
-    </div>
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'group_discuss' group.id %}">{% trans "Discussion" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'group_wiki' group.id %}">{% trans "Wiki" %}</a></li>
-        {% if enable_pubfile %}
-        <li class="tabnav-tab"><a href="{% url 'group_pubfiles' group.id %}">{% trans "Files" %}</a></li>
-        {% endif %}
-    </ul>
-</div>
-
-{% endblock %}
-
-{% block left_panel %}
-<div class="info-item group-basic-info">
-    <h3 class="info-item-top">{% trans "Basic Info" %}<span class="icon-globe" title="{% trans "This group is public." %}"></span></h3>
-    <div class="info-item-bottom ovhd">
-        {% grp_avatar group.props.id 48 %}
-        <div class="txt">
-            {{ group.creator_name|email2nickname }} {% trans "created at" %}<br />{{ group.timestamp|tsstr_day }}</div>
-    </div>
-</div>
-
-{% endblock %}
+{% block cur_library %}tab-cur{% endblock%}
 
 {% block right_panel %}
-
+<h3 class="hd">{% trans "Libraries" %}</h3>
 {% if repos %}
 <table>
     <tr>
@@ -74,7 +42,7 @@
     {% endfor %}
 </table>
 {% else %}
-<div class="empty-tips" style="margin-bottom:150px;">
+<div class="empty-tips">
   <h2 class="alc">{% trans "No public library is in this group" %}</h2>
   <p>{% blocktrans %}A library can be made public in its settings page.(Not implemented yet){% endblocktrans %}</p>
 </div>

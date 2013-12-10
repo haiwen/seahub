@@ -1,27 +1,13 @@
-{% extends "myhome_base.html" %}
+{% extends "home_base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block sub_title %}{% trans "Personal Wiki" %} - {% endblock %}
-{% block nav_myhome_class %}class="cur"{% endblock %}
 
-{% block title_panel %}
+{% block cur_personal_wiki %}tab-cur{% endblock %}
 
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'client_mgmt' %}">{% trans "Clients" %}</a></li>        
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Personal Wiki" %}</li>
-
-        {% include "snippets/modules_toggle_tab.html" %}
-    </ul>
-</div>
-
-{% endblock %}
-
-{% block main_panel %}
-
+{% block right_panel %}
     {% if not wiki_exists %}
     <div class="empty-tips">
         <h2 class="alc">{% trans "You do not have personal wiki" %}</h2>
@@ -41,7 +27,7 @@
     {% else %}
     <div class="wiki-top w100 ovhd">
         <ul class="wiki-nav fleft">
-            <li class="item"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
+            <li class="item cur-item"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
             {% if group.view_perm != "pub" %}
             <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
@@ -69,11 +55,9 @@
     </form>
     {% endif %}
 
-{% include "snippets/modules_toggle_form.html" %}
-    
-{% endblock main_panel %}
+{% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
 <script type="text/javascript">
@@ -157,8 +141,6 @@ $('#wiki-create-form').submit(function () {
     return false;
 });
 {% endif %}                     // END wiki_exists
-
-{% include "snippets/modules_toggle_js.html" %}
 
 </script>
 {% endblock %}

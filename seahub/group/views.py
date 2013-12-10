@@ -37,7 +37,6 @@ from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
-from settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import FileDiscuss, FileContributors
 from seahub.contacts.models import Contact
@@ -482,9 +481,15 @@ def msg_reply_new(request):
 
 
 def group_info_for_pub(request, group):
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+
     return render_to_response("group/group_info_for_pub.html", {
             "repos": [],
             "group": group,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
     
 
@@ -494,9 +499,6 @@ def group_info(request, group):
     if group.view_perm == "pub":
         return group_info_for_pub(request, group)
 
-    # Get all group members.
-    members = get_group_members(group.id)
-        
     org = request.user.org
     if org:
         repos = get_org_group_repos(org['org_id'], group.id,
@@ -526,13 +528,11 @@ def group_info(request, group):
     mods_enabled = get_enabled_mods_by_group(group.id)
 
     return render_to_response("group/group_info.html", {
-            "members": members,
             "repos": repos,
             "recent_commits": recent_commits,
             "group" : group,
             "is_staff": group.is_staff,
             'create_shared_repo': True,
-            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))
@@ -1257,12 +1257,10 @@ def group_discuss(request, group):
     mods_enabled = get_enabled_mods_by_group(group.id)
             
     return render_to_response("group/group_discuss.html", {
-            "members": members,
             "group" : group,
             "is_staff": group.is_staff,
             "group_msgs": group_msgs,
             "form": form,
-            'group_members_default_display': GROUP_MEMBERS_DEFAULT_DISPLAY,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))

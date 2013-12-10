@@ -51,42 +51,42 @@
                 <tr>
                     <th width="5%"></th>
                     <th width="60%">{% trans "Name" %}</th>
-		    <th width="15%">{% trans "Delete Time" %}</th>
+                    <th width="15%">{% trans "Delete Time" %}</th>
                     <th width="10%">{% trans "Size" %}</th>
-		    <th width="10%">{% trans "Operations" %}</th>
+                    <th width="10%">{% trans "Operations" %}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
-		    {% if show_recycle_root %}
-		    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
+                    {% if show_recycle_root %}
+                    <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_seahub_time }}</td>
-		    <td></td>
-		    <td><a class="op" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">{% trans "Restore" %}</a></td>
-		    {% else %}
+                    <td></td>
+                    <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">{% trans "Restore" %}</a></td>
+                    {% else %}
                     <td><a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
-		    <td></td>
-		    <td></td>
-		    <td></td>
-		    {% endif %}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
 
                 {% for dirent in file_list %}
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
-		    {% if show_recycle_root %}
-                    <td><a class="op" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
+                    {% if show_recycle_root %}
+                    <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_seahub_time }}</td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td><a class="op" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
-		    {% else %}
-                    <td><a class="op" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.props.obj_name }}</a></td>
-		    <td></td>
+                    <td><a class="op vh" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
+                    {% else %}
+                    <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.props.obj_name }}</a></td>
+                    <td></td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
-		    <td></td>
-		    {% endif %}
+                    <td></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>

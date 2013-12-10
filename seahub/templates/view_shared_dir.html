@@ -23,7 +23,7 @@
                 {% endfor %}
                 </p>
                 <div class="repo-op fright">
-                    <button data="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" id="download-dir" class="op-btn">{% trans "ZIP"%}</button>
+                    <button data-url="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" id="download-dir" class="op-btn">{% trans "ZIP"%}</button>
                 </div>
             </div>
             <table class="repo-file-list">
@@ -43,11 +43,7 @@
 
                     <td></td>
                     <td>
-                        <div class="repo-file-op vh">
-                            <div class="displayed-op">
-                                <a class="op" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}">{% trans 'Download' %}</a>
-                            </div>
-                        </div>
+                        <a class="op vh" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}">{% trans 'Download' %}</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -56,16 +52,12 @@
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td>
-                        <a class="op" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
+                        <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
                     </td>
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
-                        <div class="repo-file-op vh">
-                            <div class="displayed-op">
-                                <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download&t={{token}}">{% trans "Download"%}</a>
-                            </div>
-                        </div>
+                        <a class="op" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download&t={{token}}">{% trans "Download"%}</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -76,16 +68,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("tr:gt(0)").hover(
-    function() {
-        $(this).find('.repo-file-op').removeClass('vh');
-    },
-    function() {
-        $(this).find('.repo-file-op').addClass('vh');
-    }
-);
 $('#download-dir').click(function() {
-    location.href = $(this).attr('data');
+    location.href = $(this).data('url');
 });
 </script>
 {% endblock %}

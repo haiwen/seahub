@@ -81,8 +81,8 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
-from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI, \
-    enable_mod_for_user, disable_mod_for_user, get_available_mods_by_user
+from seahub.views.modules import MOD_PERSONAL_WIKI, \
+    enable_mod_for_user, disable_mod_for_user
 from seahub.utils import HAS_OFFICE_CONVERTER
 
 if HAS_OFFICE_CONVERTER:
@@ -879,17 +879,6 @@ def myhome(request):
 
     username = request.user.username
 
-    quota = seafserv_threaded_rpc.get_user_quota(username)
-
-    quota_usage = 0
-    share_usage = 0
-    my_usage = get_user_quota_usage(username)
-    if CALC_SHARE_USAGE:
-        share_usage = get_user_share_usage(username)
-        quota_usage = my_usage + share_usage
-    else:
-        quota_usage = my_usage
-
     # Get all personal groups I joined.
     joined_groups = get_personal_groups_by_user(username)
 
@@ -916,7 +905,7 @@ def myhome(request):
     owned_repos = seafserv_threaded_rpc.list_owned_repos(username)
     calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-    
+
     # Personal repos others shared to me
     in_repos = list_personal_shared_repos(username, 'to_email', -1, -1)
     # For each group I joined... 
@@ -940,42 +929,7 @@ def myhome(request):
             r.user_perm = check_permission(r_id, username)
             in_repos.append(r)
     in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
-
-    # user notifications
-    grpmsg_list = []
-    grpmsg_reply_list = []
-    joined_group_ids = [x.id for x in joined_groups]
-    notes = UserNotification.objects.get_user_notifications(username, seen=False)
-    for n in notes:
-        if n.is_group_msg():
-            try:
-                group_id  = n.group_message_detail_to_dict().get('group_id')
-            except UserNotification.InvalidDetailError:
-                continue
-
-            if group_id not in joined_group_ids:
-                continue
-
-            dup = False
-            for grpmsg in grpmsg_list:
-                if grpmsg.id == group_id:
-                    dup = True
-                    break
-            if not dup:
-                grp = seaserv.get_group(group_id)
-                grpmsg_list.append(grp)
-        elif n.is_grpmsg_reply():
-            try:
-                msg_id = n.grpmsg_reply_detail_to_dict().get('msg_id')
-            except UserNotification.InvalidDetailError:
-                continue
-
-            if msg_id not in grpmsg_reply_list:
-                grpmsg_reply_list.append(msg_id)
-
-    # get nickname
-    profiles = Profile.objects.filter(user=username)
-    nickname = profiles[0].nickname if profiles else ''
+ 
 
     autocomp_groups = joined_groups
     contacts = Contact.objects.get_contacts_by_user(username)
@@ -985,22 +939,6 @@ def myhome(request):
     starred_files = UserStarredFiles.objects.get_starred_files_by_username(
         username)
 
-    traffic_stat = 0
-    if TRAFFIC_STATS_ENABLED:
-        # User's network traffic stat in this month
-        try:
-            stat = get_user_traffic_stat(username)
-        except Exception as e:
-            logger.error(e)
-            stat = None
-
-        if stat:
-            traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
-
-    # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_user(username)
-    mods_enabled = get_enabled_mods_by_user(username)
-
     # user guide
     need_guide = False
     if len(owned_repos) == 0:
@@ -1009,34 +947,20 @@ def myhome(request):
             UserOptions.objects.disable_user_guide(username)
 
     return render_to_response('myhome.html', {
-            "nickname": nickname,
             "owned_repos": owned_repos,
-            "quota": quota,
-            "quota_usage": quota_usage,
-            "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
-            "share_usage": share_usage,
-            "my_usage": my_usage,
             "in_repos": in_repos,
             "contacts": contacts,
-            "joined_groups": joined_groups,
             "autocomp_groups": autocomp_groups,
-            "notes": notes,
-            "grpmsg_list": grpmsg_list,
-            "grpmsg_reply_list": grpmsg_reply_list,
+            "joined_groups": joined_groups,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "starred_files": starred_files,
-            "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
-            "traffic_stat": traffic_stat,
-            "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
-            "ENABLE_EVENTS": EVENTS_ENABLED,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
             "need_guide": need_guide,
             "sub_lib_enabled": sub_lib_enabled,
             "sub_repos": sub_repos,
             }, context_instance=RequestContext(request))
+
 
 @login_required
 def client_mgmt(request):
@@ -1054,14 +978,8 @@ def client_mgmt(request):
             if i > 0 and client.repo_name == clients[i - 1].repo_name:
                 client.not_show_repo_name = True
 
-    # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_user(username)
-    mods_enabled = get_enabled_mods_by_user(username)
-        
     return render_to_response('client_mgmt.html', {
             'clients': clients,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1743,15 +1661,9 @@ def pubrepo(request):
         raise Http404
     else:
         public_repos = list_inner_pub_repos(request.user.username)
-        pubrepos_count = len(public_repos)
-        groups_count = len(get_personal_groups(-1, -1))
-        emailusers_count = count_emailusers()
         return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
-                'pubrepos_count': pubrepos_count,
-                'groups_count': groups_count,
-                'emailusers_count': emailusers_count,
                 }, context_instance=RequestContext(request))
 
 @login_required
@@ -1764,14 +1676,8 @@ def pubgrp(request):
         raise Http404
     else:
         groups = get_personal_groups(-1, -1)
-        pubrepos_count = count_inner_pub_repos()
-        groups_count = len(groups)
-        emailusers_count = count_emailusers()
         return render_to_response('pubgrp.html', {
                 'groups': groups,
-                'pubrepos_count': pubrepos_count,
-                'groups_count': groups_count,
-                'emailusers_count': emailusers_count,
                 }, context_instance=RequestContext(request))
 
 @login_required
@@ -1784,9 +1690,6 @@ def pubuser(request):
         raise Http404
     else:
         emailusers_count = seaserv.count_emailusers()
-        pubrepos_count = seaserv.count_inner_pub_repos()
-        groups_count = len(seaserv.get_personal_groups(-1, -1))
-
         '''paginate'''
         # Make sure page request is an int. If not, deliver first page.
         try:
@@ -1823,9 +1726,6 @@ def pubuser(request):
 
         return render_to_response('pubuser.html', {
                 'users': users,
-                'pubrepos_count': pubrepos_count,
-                'groups_count': groups_count,
-                'emailusers_count': emailusers_count,
                 'current_page': current_page,
                 'has_prev': has_prev,
                 'has_next': has_next,
@@ -1922,13 +1822,37 @@ def repo_download_dir(request, repo_id):
     return redirect(url)
 
 @login_required
+def activities(request):
+    if not EVENTS_ENABLED:
+        raise Http404
+
+    events_count = 15
+    username = request.user.username
+    start = int(request.GET.get('start', 0))
+
+    if request.cloud_mode:
+        org_id = request.GET.get('org_id')
+        events, start = get_org_user_events(org_id, username, start, events_count)
+    else:
+        events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
+    
+    return render_to_response('activities.html', {
+        'event_groups':event_groups,
+        'events_more': events_more,
+        'new_start': start,
+            }, context_instance=RequestContext(request))
+
+@login_required
 def events(request):
     if not request.is_ajax():
         raise Http404
 
     events_count = 15
     username = request.user.username
-    start = int(request.GET.get('start', 0))
+    start = int(request.GET.get('start'))
 
     if request.cloud_mode:
         org_id = request.GET.get('org_id')

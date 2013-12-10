@@ -39,12 +39,13 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op">{% trans "View"%}</a>
-                    <a href="#" data-url="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op">{% trans "Restore"%}</a>
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh">{% trans "View"%}</a>
+                    <a href="#" data-url="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ commit.id }}" class="repo-revert op vh">{% trans "Restore"%}</a>
                 </td>
             </tr>
             {% endfor %}
         </table>
+
         <div id="paginator">
             {% if current_page != 1 %}
             <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>

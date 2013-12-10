@@ -1,0 +1,17 @@
+{% extends "myhome_base.html" %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Organization" %} - {% endblock %}
+{% block nav_pubinfo_class %}class="cur"{% endblock %}
+
+{% block left_panel %}
+<div class="side-tabnav">
+    <h3 class="hd">{% trans "Organization" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab {% block cur_lib %}{% endblock %}"><a href="{% url 'pubrepo' %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_grp %}{% endblock %}"><a href="{% url 'pubgrp' %}"><span class="icon-group"></span>{% trans "Groups" %}</a></li>
+        <li class="tab {% block cur_user %}{% endblock %}"><a href="{% url 'pubuser' %}"><span class="icon-user"></span>{% trans "Users" %}</a></li>
+    </ul>
+</div>
+{% endblock %}

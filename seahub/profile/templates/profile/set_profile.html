@@ -4,6 +4,35 @@
 
 {% block sub_title %}{% trans "Profile Setting" %} - {% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+.side-tabnav-tabs .tab a {
+    color:#999;
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+    margin-bottom:3px;
+}
+.side-tabnav-tabs .tab a:hover {
+    color:#de3f1c;
+    background:none;
+}
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<div class="side-tabnav">
+    <ul class="side-tabnav-tabs">
+        <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
+        {% if not force_server_crypto %}
+        <li class="tab"><a href="#enc-lib-setting">{% trans "Encrypted Libraries" %}</a></li>
+        {% endif %}
+        <li class="tab"><a href="#sub-lib-setting">{% trans "Sub-library" %}</a></li>
+        <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
+        <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block right_panel %}
 <h2>{% trans "Settings" %}</h2>
 
@@ -49,7 +78,7 @@
 </div>
 {% endif %}
 
-<div class="setting-item">
+<div class="setting-item" id="sub-lib-setting">
     <h3>{% trans "Sub-library Setting" %}</h3>
     <form method="post" action="{% url 'sub_lib_enable_set' %}">{% csrf_token %}
         <input type="checkbox" name="enable-sub-lib" class="vam" {% if sub_lib_enabled %}checked="checked"{% endif %} /> <span class="vam">{% trans "Enable sub-library" %}</span>
@@ -59,7 +88,7 @@
     </form>
 </div>
 
-<div class="setting-item">
+<div class="setting-item" id="default-lib">
     <h3>{% trans "Default Library Setting" %}</h3>
     {% if default_repo %}
     <p>Your default library is <a href="{% url 'repo' default_repo.id %}">{{default_repo.name}}</a>.</p>
@@ -69,7 +98,7 @@
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
 
-<div class="setting-item">
+<div class="setting-item" id="del-account">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
 <button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>

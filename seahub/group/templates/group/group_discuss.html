@@ -1,41 +1,10 @@
-{% extends base_template %}
+{% extends 'group/group_base.html' %}
 
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load seahub_tags avatar_tags i18n %}
 
-{% block sub_title %}{{group.group_name}} - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
-
-{% block title_panel %}
-{% include "group/tabnav.html" with cur="discuss"%}
-{% endblock %}
-
-{% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Members" %}</h3>
-    <div class="info-item-bottom">
-        {% if members %}
-          <ul>
-            {% for member in members %}
-              {% if forloop.counter0 < group_members_default_display %}
-              <li class="member">{% avatar member.user_name 16 %}<a class="name" href="{% url 'user_msg_list' member.user_name|id_or_email %}">{{ member.user_name|email2nickname }}</a></li>
-              {% else %}
-                {% if forloop.last %}
-                  <li>...</li>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>{% blocktrans %}No members{% endblocktrans %}</p>
-        {% endif %}
-    </div>
-</div>
-
-{% endblock %}
-
+{% block cur_discuss %}tab-cur{% endblock%}
 
 {% block right_panel %}
-
 <div id="group-discussions" class="msg-panel">
     {% if request.user.is_authenticated %}
     <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
@@ -191,14 +160,10 @@
         </li>
     </ul>
     {% endif %}
-
 </div>
-
-{% include "group/modules_toggle_form.html" %}
-
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 {% if group_msgs.object_list|length > 5 %}
 $(window).scroll(function() {
@@ -308,8 +273,5 @@ $('.msg-del').click(function() {
         cfm.addClass('hide');
     });
 });
-
-{% include "group/modules_toggle_js.html" %}
-
 </script>
 {% endblock %}

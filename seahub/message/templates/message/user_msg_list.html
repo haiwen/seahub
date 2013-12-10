@@ -1,37 +1,14 @@
-{% extends base_template %}
-{% load seahub_tags avatar_tags  i18n %}
+{% extends 'home_base.html' %}
+{% load seahub_tags avatar_tags i18n %}
 
 {% block sub_title %}{% trans "Messages" %} - {% endblock %}
 
-{% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Basic Info" %}</h3>
-    <div class="info-item-bottom home-profile ovhd">
-        {% avatar to_email 48 %}
-        <div class="txt fright">
-            <p>{% if to_email %}{{ to_email|email2nickname }}{% else %}{% trans "No Nickname" %}{% endif %}</p>
-            {% if add_to_contacts %}
-            <button class="add-to-contacts" data-email="{{to_email}}">{% trans "Add to contacts" %}</button>
-            {% endif %}
-        </div>
-    </div>
-    
-</div>
-
-{% endblock %}
+{% block cur_messages %}tab-cur{% endblock %}
 
 {% block right_panel %}
-
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_msg_list' to_email|id_or_email %}">{% trans "Messages" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'user_share_list' to_email|id_or_email %}">{% trans "Shares" %}</a></li>
-    </ul>
-</div>
+<h3 class="hd">{% blocktrans with name=to_email|email2nickname%}Messages with {{name}}{% endblocktrans %}</h3>
 
 <div id="personal-msg-panel" class="msg-panel personal-msg-panel">
-
-    {% if request.user.is_authenticated %}
     {% if to_email %}
     <form id="personal-message-form" class="msg-form" action="{% url 'message_send' %}" method="post" onsubmit="return check(this)">{% csrf_token %}
        {% avatar request.user.username 48 %}
@@ -103,18 +80,13 @@
     {% if person_msgs.object_list|length > 5 %}
     <a href="#personal-msg-panel" id="msg-upward" class="hide">{% trans "↑Top" %}</a>
     {% endif %}
-
-    {% else %}
-    <p>{% trans "After login, you can post discussions and add replies." %}</p>
-    {% endif %}
 </div>
 
 {% include 'snippets/add_to_contacts_form.html' %}
-
 {% endblock %}
 
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 
 $('#message').focus(function() {

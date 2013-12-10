@@ -1,4 +1,4 @@
-{% extends "myhome_base.html" %}
+{% extends "home_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
@@ -8,22 +8,18 @@
 </style>
 {% endblock %}
 
-{% block title_panel %}
-<div class="tabnav w100">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab"><a href="{% url 'user_notification_list' %}">{% trans "Notices" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Messages" %}</li>
-    </ul>
+{% block cur_messages %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "Messages" %}</h3>
     <button id="add-msg" class="fright"><span class="icon-pencil"></span>{% trans "New Message" %}</button>
 </div>
-{% endblock %}
-
-{% block main_panel %}
 {% if msgs %}
 <table>
     <tr>
         <th width="5%"></th>
-        <th width="25%">{% trans "Email"%}</th>
+        <th width="25%">{% trans "Name"%}</th>
         <th width="50%">{% trans "Message"%}</th>
         <th width="20%">{% trans "Time"%}</th>
     </tr>
@@ -31,7 +27,7 @@
     {% with not_read=value.not_read %}
     <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
         <td class="alc">{% avatar key 20 %}</td>
-        <td>{{ key }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
+        <td>{{ key|email2nickname }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
         <td>{{ value.last_msg|seahub_urlize|truncatewords_html:12 }}</td>
         <td>{{ value.last_time|translate_seahub_time }}</td>
     </tr>
@@ -58,7 +54,7 @@
 
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $(function(){       
     $('tr[data-href]').click(function() {
@@ -66,7 +62,7 @@ $(function(){
     });
 });
 
-$('#main-panel').removeClass('ovhd').css({'position':'relative'});
+$('#right-panel').css({'position':'relative'});
 $('#add-msg').click(function() {
     var add_msg_btn = $('#add-msg'),
         popup = $('#send-msg-popup');

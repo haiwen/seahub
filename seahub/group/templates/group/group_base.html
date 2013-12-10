@@ -1,0 +1,73 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+
+{% block sub_title %}{{group.group_name}} - {% endblock %}
+{% block nav_group_class %}class="cur"{% endblock %}
+
+{% block left_panel %}
+<div class="side-tabnav">
+    <div class="hd w100 ovhd">
+        <h3 class="fleft">
+        {% grp_avatar group.props.id 24 %} <span title="{{ group.group_name }}">{{ group.group_name|truncatechars:6 }}</span>
+        {% if group.is_pub %}<span class="icon-globe" title="{% trans "This group is public." %}"></span>{% endif %}
+        </h3>
+        {% if is_staff %}
+        <span id="enable-mods" class="icon-th fright" title="{% trans "Enable Modules" %}"></span>
+        {% endif %}
+    </div>
+    <ul class="side-tabnav-tabs">
+        <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
+
+        <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}"><span class="icon-comment"></span>{% trans "Discussion" %}</a></li>
+
+        {% for mod in mods_enabled %}
+        {% if mod == 'group wiki' %}
+        <li class="tab {% block cur_wiki %}{%endblock%}"><a href="{% url 'group_wiki' group.id %}"><span class="icon-book"></span>{% trans "Wiki" %}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if enable_pubfile and group.is_pub %}
+        <li class="tab {% block cur_pubfile %}{%endblock%}"><a href="{% url 'group_pubfiles' group.id %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>
+        {% endif %}
+
+        {% if group.view_perm != 'pub' %}
+        <li class="tab {% block cur_members %}{%endblock%}"><a href="{% url 'group_members' group.id %}"><span class="icon-user"></span>{% trans "Members" %}</a></li>
+        {% endif %}
+
+        {% if is_staff %}
+        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}"><span class="icon-wrench"></span>{% trans "Admin" %}</a></li>
+        {% endif %}
+    </ul>
+    {% if group.view_perm != 'pub' and not is_staff %}
+    <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}">{% trans "Quit Group" %}</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block main_panel %}
+<form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
+    <h3>{% trans "Enable Modules"%}</h3>
+    <ul>
+    {% for mod in mods_available %}
+      {% if mod == 'group wiki' %}
+      <li>
+      <input class="vam" type="checkbox" name="group_wiki" {%if mod in mods_enabled%}checked {% endif%}/></span>
+      <span class="vam">{% trans "Wiki" %}</span>
+      </li>
+      {% endif %}
+    {% endfor %}    
+    </ul>
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#enable-mods').click(function() {
+    $('#mods-enable-form').modal({appendTo: "#main"});
+    $('#simplemodal-container').css('height', 'auto');
+    return false;
+});
+</script>
+{% endblock %}

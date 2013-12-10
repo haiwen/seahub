@@ -14,7 +14,8 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
-    is_org_repo_owner
+    is_org_repo_owner, CALC_SHARE_USAGE, seafserv_threaded_rpc, \
+    get_user_quota_usage, get_user_share_usage
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
@@ -29,7 +30,7 @@ from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
 import seahub.settings as settings
 from seahub.signals import repo_deleted
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
-    check_and_get_org_by_repo
+    check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -1129,3 +1130,57 @@ def repo_remove(request, repo_id):
         else:
             result['error'] = _(u'Permission denied.')
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+@login_required
+def space_and_traffic(request):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}  
+
+    username = request.user.username
+
+    quota = seafserv_threaded_rpc.get_user_quota(username)
+    quota_usage = 0
+    share_usage = 0
+    my_usage = get_user_quota_usage(username)
+    rates = {}
+    if CALC_SHARE_USAGE:
+        share_usage = get_user_share_usage(username)
+        quota_usage = my_usage + share_usage
+        if quota > 0:
+            rates['my_usage'] = str(float(my_usage)/quota * 100) + '%'
+            rates['share_usage'] = str(float(share_usage)/quota * 100) + '%'
+    else:
+        quota_usage = my_usage
+        if quota > 0:
+            rates['quota_usage'] = str(float(my_usage)/quota * 100) + '%'
+
+    traffic_stat = 0
+    if TRAFFIC_STATS_ENABLED:
+        # User's network traffic stat in this month
+        try:
+            stat = get_user_traffic_stat(username)
+        except Exception as e:
+            logger.error(e)
+            stat = None
+
+        if stat:
+            traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
+
+    ctx = {
+        "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
+        "quota": quota,
+        "quota_usage": quota_usage,
+        "share_usage": share_usage,
+        "my_usage": my_usage,
+        "rates": rates,
+        "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
+        "traffic_stat": traffic_stat,
+        "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
+    }
+
+    html = render_to_string('snippets/space_and_traffic.html', ctx,
+                            context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)

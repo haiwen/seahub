@@ -47,12 +47,12 @@
                 <td>{{ commit.revision_file_size|filesizeformat }} </td>
                 <td>
                     {% if commit.id != repo.head_cmmt_id %}
-                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op">{% trans 'Restore' %}</a>
+                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&from=file_revisions" class="op vh">{% trans 'Restore' %}</a>
                     {% endif %}
-                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op">{% trans 'Download' %}</a>
-                    <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}" class="op">{% trans 'View' %}</a>
+                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{path|urlencode}}&op=download" class="op vh">{% trans 'Download' %}</a>
+                    <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.file_id }}&commit_id={{ commit.id }}&p={{path|urlencode}}" class="op vh">{% trans 'View' %}</a>
                     {% if can_compare and not forloop.last %}
-                    <a href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{commit.id}}" class="op">{% trans 'Diff' %}</a>
+                    <a href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
                     {% endif %}
                 </td>
             </tr>

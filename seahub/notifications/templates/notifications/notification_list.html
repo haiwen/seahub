@@ -27,9 +27,9 @@
         {% endif %}
         <td>
           {% if note.primary != 1 %}
-          <a href="#" data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn op">{% trans "Set to current" %}</a>
+          <a href="#" data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn op vh">{% trans "Set to current" %}</a>
           {% endif %}
-          <a href="#" data-url="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" data-target="{{ note.message }}" class="note-delete-btn op">{% trans "Delete" %}</a>
+          <a href="#" data-url="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" data-target="{{ note.message }}" class="note-delete-btn op vh">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}

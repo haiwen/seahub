@@ -1,20 +1,15 @@
-{% extends "myhome_base.html" %}
+{% extends "home_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Contacts" %} - {% endblock %}
-{% block nav_contacts_class %}class="cur"{% endblock %}
 
-{% block left_panel %}
-<div class="info-item">
-<h3 class="info-item-top">{% trans "Tips"%}</h3>
-<p class="info-item-bottom">{% trans "When you share libraries or file links to a friend, his/her email will be added to contacts."%}</p>
-</div>
-
-{% endblock %}
+{% block cur_contacts %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "Contacts"%}</h3>
-<button id="contact-add" class="add">{% trans "Add Contacts"%}</button>
+<div class="ovhd hd">
+    <h3 class="fleft">{% trans "Contacts"%}</h3>
+    <button id="contact-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Contacts"%}</button>
+</div>
 {% if contacts %}
 <table>
     <tr>
@@ -31,8 +26,8 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
-            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op">{% trans "Edit"%}</a>
-            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|urlencode}}" data-target="{{ contact.contact_email}}" class="contact-delete op">{% trans "Delete"%}</a>
+            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op vh">{% trans "Edit"%}</a>
+            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|urlencode}}" data-target="{{ contact.contact_email}}" class="contact-delete op vh">{% trans "Delete"%}</a>
         </td>
     </tr>
 {% endfor %}
@@ -65,7 +60,7 @@
 
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('.contact-edit').click(function() {
     var contact = $(this).parent();

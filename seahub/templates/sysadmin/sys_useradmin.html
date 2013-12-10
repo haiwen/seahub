@@ -17,7 +17,7 @@
 
 {% block main_panel %}
 
-<button class="add" id="add-user-btn">{% trans "Add new user" %}</button>
+<button id="add-user-btn"><span class="add icon-plus-sign-alt"></span>{% trans "Add new user" %}</button>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Add new user" %}</h3>

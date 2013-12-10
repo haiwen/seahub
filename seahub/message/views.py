@@ -101,13 +101,9 @@ def user_msg_list(request, id_or_email):
     person_msgs.page_range = paginator.get_page_range(person_msgs.number)
     person_msgs.object_list = list(person_msgs.object_list)
 
-    c = Contact.objects.get_contact_by_user(username, to_email)
-    add_to_contacts = True if c is None else False
-
     return render_to_response("message/user_msg_list.html", {
             "person_msgs": person_msgs,
             "to_email": to_email,
-            "add_to_contacts": add_to_contacts,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -6,8 +6,7 @@
 {% block title_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Notices" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'message_list' %}">{% trans "Messages" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_notification_list' %}">{% trans "Notices" %}</a></li>
     </ul>
 </div>
 {% endblock %}

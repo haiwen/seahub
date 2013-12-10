@@ -2,7 +2,7 @@
 {% load url from future %}
 
 <h3>{% trans "My Groups" %}</h3>
-<button id="group-add" class="add">{% trans "New Group" %}</button>
+<button id="group-add"><span class="add icon-plus-sign-alt"></span>{% trans "New Group" %}</button>
 {% if joined_groups %}
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}

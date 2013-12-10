@@ -51,10 +51,6 @@
         disable($(this));
     });
 
-    $('.unshare-btn').click(function() {
-        location.href = $(this).data('url');
-    });
-
     {% include 'snippets/repo_del_js.html' %}
 
     $(".download-btn").click(function() {
@@ -84,15 +80,6 @@
             error: ajaxErrorHandler
         });
     });
-
-    $("table tr:gt(0)").hover(
-        function() {
-            $(this).find('.op-icon').removeClass('vh');
-        },
-        function() {
-            $(this).find('.op-icon').addClass('vh');
-        }
-    );
 
 function repoCreateSuccessCallback(data) {
     $.modal.close();
