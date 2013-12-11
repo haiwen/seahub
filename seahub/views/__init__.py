@@ -875,12 +875,7 @@ def modify_token(request, repo_id):
 
 @login_required
 def myhome(request):
-    owned_repos = []
-
     username = request.user.username
-
-    # Get all personal groups I joined.
-    joined_groups = get_personal_groups_by_user(username)
 
     def get_abbrev_origin_path(repo_name, path):
         if len(path) > 20:
@@ -890,7 +885,6 @@ def myhome(request):
             return repo_name + path
 
     # compose abbrev origin path for display
-
     sub_repos = []
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
     if ENABLE_SUB_LIBRARY and sub_lib_enabled:
@@ -901,19 +895,27 @@ def myhome(request):
         calculate_repos_last_modify(sub_repos)
         sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    # Personal repos that I owned.
-    owned_repos = seafserv_threaded_rpc.list_owned_repos(username)
+    # mine
+    owned_repos = seafile_api.get_owned_repo_list(username)
     calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    # Personal repos others shared to me
-    in_repos = list_personal_shared_repos(username, 'to_email', -1, -1)
+    # shared
+    personal_shared_repos = list_personal_shared_repos(username, 'to_email',
+                                                       -1, -1)
+    personal_shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+
+    # group repos
+    group_repos = []
+    # Get all personal groups I joined.
+    joined_groups = get_personal_groups_by_user(username)
     # For each group I joined... 
     for grp in joined_groups:
         # Get group repos, and for each group repos...
         for r_id in get_group_repoids(grp.id):
             # No need to list my own repo
-            if is_repo_owner(username, r_id):
+            repo_owner = seafile_api.get_repo_owner(r_id)
+            if repo_owner == username:
                 continue
             # Convert repo properties due to the different collumns in Repo
             # and SharedRepo
@@ -925,19 +927,22 @@ def myhome(request):
             r.repo_desc = r.desc
             r.last_modified = get_repo_last_modify(r)
             r.share_type = 'group'
-            r.user = get_repo_owner(r_id)
+            r.user = repo_owner
             r.user_perm = check_permission(r_id, username)
-            in_repos.append(r)
-    in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
- 
+            r.group = grp
+            group_repos.append(r)
+    group_repos.sort(key=lambda x: x.group.group_name)
+    for i, repo in enumerate(group_repos):
+        if i == 0:
+            repo.show_group_name = True
+        else:
+            if repo.group.group_name != group_repos[i-1].group.group_name:
+                repo.show_group_name = True
 
+    # misc
     autocomp_groups = joined_groups
     contacts = Contact.objects.get_contacts_by_user(username)
-
     allow_public_share = False if request.cloud_mode else True
-
-    starred_files = UserStarredFiles.objects.get_starred_files_by_username(
-        username)
 
     # user guide
     need_guide = False
@@ -953,13 +958,13 @@ def myhome(request):
             
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
-            "in_repos": in_repos,
+            "group_repos": group_repos,
+            "personal_shared_repos": personal_shared_repos,
             "contacts": contacts,
             "autocomp_groups": autocomp_groups,
             "joined_groups": joined_groups,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
-            "starred_files": starred_files,
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
             "need_guide": need_guide,
             "sub_lib_enabled": sub_lib_enabled,
@@ -967,6 +972,20 @@ def myhome(request):
             "repo_create_url": repo_create_url,
             }, context_instance=RequestContext(request))
 
+@login_required
+def starred(request):
+    """List starred files.
+    
+    Arguments:
+    - `request`:
+    """
+    username = request.user.username
+    starred_files = UserStarredFiles.objects.get_starred_files_by_username(
+        username)
+
+    return render_to_response('starred.html', {
+            "starred_files": starred_files,
+            }, context_instance=RequestContext(request))
 
 @login_required
 def client_mgmt(request):
@@ -1992,3 +2011,4 @@ def toggle_modules(request):
 
     return HttpResponseRedirect(next)
 
+    

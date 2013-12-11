@@ -10,6 +10,7 @@
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}"><span class="icon-star"></span>{% trans "Starred" %}</a></li>
         {% if events_enabled %}
         <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}"><span class="icon-rss"></span>{% trans "Activities" %}</a></li>
         {% endif %}

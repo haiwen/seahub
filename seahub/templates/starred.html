@@ -1,0 +1,39 @@
+{% extends "home_base.html" %}
+{% load seahub_tags i18n %}
+
+{% block sub_title %}{% trans "Stars" %} - {% endblock %}
+{% block cur_stars %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "Starred" %}</h3>
+{% if starred_files %}
+<table>
+    <tr>
+        <th width="5%"></th>
+        <th width="40%">{% trans "File Name" %}</th>
+        <th width="32%">{% trans "Library" %}</th>
+        <th width="18%">{% trans "Last Update" %}</th>
+        <th width="5%"></th>
+    </tr>
+    {% for sfile in starred_files %}
+    <tr>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
+        <td>
+            <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.name }}</a>
+        </td>
+        <td>{{ sfile.repo.name }}</td>
+        <td>{{ sfile.last_modified|translate_seahub_time }}</td>
+        <td>
+          <span data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path|urlencode}}" class="icon-trash unstar-btn op-icon vh" title="{% trans "Unstar" %}"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+  <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
+  <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+</div>
+{% endif %}
+
+{% endblock %}
