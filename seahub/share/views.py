@@ -319,7 +319,7 @@ def repo_remove_share(request):
 #             }, context_instance=RequestContext(request))
 
 @login_required
-def list_share_out_in_repos(request):
+def list_shared_repos(request):
     """
     List personal shared repos.
     """
@@ -361,37 +361,9 @@ def list_share_out_in_repos(request):
             repo.props.user_info = repo.props.user
 
     out_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
-
-    # get repos shared to this user
-    # Get all personal groups I joined.
-    joined_groups = seaserv.get_personal_groups_by_user(username)
-    in_repos = list_personal_shared_repos(username, 'to_email', -1, -1)
-    # For each group I joined... 
-    for grp in joined_groups:
-        # Get group repos, and for each group repos...
-        for r_id in seafile_api.get_group_repoids(grp.id):
-            # No need to list my own repo
-            if seafile_api.is_repo_owner(username, r_id):
-                continue
-            # Convert repo properties due to the different collumns in Repo
-            # and SharedRepo
-            r = seafile_api.get_repo(r_id)
-            if not r:
-                continue
-            r.repo_id = r.id
-            r.repo_name = r.name
-            r.repo_desc = r.desc
-            r.last_modified = get_repo_last_modify(r)
-            r.share_type = 'group'
-            r.user = seafile_api.get_repo_owner(r_id)
-            r.user_perm = check_permission(r_id, username)
-            in_repos.append(r)
-    in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
-
     
-    return render_to_response('share/out_in_repos.html', {
+    return render_to_response('share/repos.html', {
             "out_repos": out_repos,
-            "in_repos": in_repos,
             }, context_instance=RequestContext(request))
 
 @login_required

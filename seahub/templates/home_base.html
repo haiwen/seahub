@@ -22,7 +22,7 @@
         <li class="tab {% block cur_clients %}{% endblock %}"><a href="{% url 'client_mgmt' %}"><span class="icon-desktop"></span>{% trans "Clients" %}</a></li>
         <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}"><span class="icon-user"></span>{% trans "Contacts" %}</a></li>
     </ul>
-    <h3 class="hd">{% trans "Shares" %}</h3>
+    <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="icon-link"></span>{% trans "Links" %}</a></li>

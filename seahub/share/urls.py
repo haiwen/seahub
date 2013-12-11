@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 from views import *
 
 urlpatterns = patterns('',
-    url(r'^$', list_share_out_in_repos, name='share_admin'),
+    url(r'^$', list_shared_repos, name='share_admin'),
     url(r'^links/$', list_shared_links, name='list_shared_links'),
     url(r'^files/$', list_priv_shared_files, name='list_priv_shared_files'),
                        
