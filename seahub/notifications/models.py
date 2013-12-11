@@ -376,7 +376,8 @@ class UserNotification(models.Model):
             else:
                 raise self.InvalidDetailError, 'Wrong detail format of group message reply'
             return {'msg_id': msg_id, 'reply_from': reply_from}
-        
+
+    ########## functions used in templates
     def format_file_uploaded_msg(self):
         """
         
@@ -414,6 +415,7 @@ class UserNotification(models.Model):
 
         repo = seafile_api.get_repo(repo_id)
         if repo is None:
+            self.delete()
             return None
 
         msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
@@ -470,6 +472,7 @@ class UserNotification(models.Model):
         group_id = d.get('group_id')
         group = seaserv.get_group(group_id)
         if group is None:
+            self.delete()
             return None
 
         msg_from = d.get('msg_from')
