@@ -268,6 +268,19 @@ class Search(APIView):
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
             e.pop('repo', None)
+            e.pop('content_highlight', None)
+            e.pop('exists', None)
+            e.pop('last_modified_by', None)
+            e.pop('name_highlight', None)
+            e.pop('score', None)
+            try:
+                path = e['fullpath'].encode('utf-8')
+                file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
+                e['oid'] = file_id
+                e['size'] = get_file_size(file_id)
+            except SearpcError, e:
+                pass
+
 
         res = { "total":total, "results":results, "has_more":has_more }
         return Response(res)
