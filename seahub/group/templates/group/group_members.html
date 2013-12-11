@@ -1,18 +1,10 @@
-{% extends base_template %}
+{% extends 'group/group_base.html' %}
 
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
-
-{% block sub_title %}{{group.group_name}} - {% endblock %}
-{% block nav_group_class %}class="cur"{% endblock %}
-
-{% block title_panel %}
-{% include "group/tabnav.html" with cur="members"%}
-{% endblock %}
-
-{% block left_panel %}
-{% endblock %}
+{% load seahub_tags avatar_tags i18n %}
+{% block cur_members %}tab-cur{%endblock%}
 
 {% block right_panel %}
+<h3 class="hd">{% trans "Members" %}</h3>
 <ul class="user-list">
     {% for m in members %}
     {% with e=m.user_name id=m.user_name|id_or_email %}
@@ -29,16 +21,9 @@
     {% endwith %}
     {% endfor %}
 </ul>
-
 {% include 'snippets/add_to_contacts_form.html' %}
-{% include "group/modules_toggle_form.html" %}
-
 {% endblock %}
 
-{% block extra_script %}
-<script type="text/javascript">
-{% include "group/modules_toggle_js.html" %}
-</script>
-
+{% block extra_script %}{{block.super}}
 {% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

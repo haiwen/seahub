@@ -42,8 +42,10 @@
 
                     <div class="account">
                         {% if request.user.is_authenticated %}
-                        <a href="{% url 'edit_profile' %}" class="top-link avatar-link" title="{% trans 'Profile Setting' %}">{% avatar request.user 16 %}</a> <span class="my-info">{{ request.user }}</span>
-                        <button class="icon-envelope btn" data-url="{% url 'message_list' %}" title="{% trans "messages" %}" id="msg-link"></button>
+                        {% avatar request.user 16 %} <span class="my-info">{{ request.user }} <span class="icon-caret-down"></span></span>
+                        <div id="user-info-popup" class="hide">
+                            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+                        </div>
                         <button class="btn" data-url="{% url 'user_notification_list' %}" id="msg-count" title="{% trans "unread notices" %}">0</button>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>
@@ -51,7 +53,7 @@
                         <a href="{{ SITE_ROOT }}accounts/register/" class="top-link">{% trans "Signup" %}</a>
                             {% endif %}
                         {% endif %}
-                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
+                        <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
                         <ul class="hide" id="lang-context-selector">
                             {% for LANG in LANGUAGES %}
                             <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
@@ -217,11 +219,48 @@ $(document).ready(function(){
             }
         }
     });
+
 });
-$('#msg-count, #msg-link').click(function() {
+
+$('#msg-count').click(function() {
     location.href = $(this).data('url');
 });
 
+(function () {
+    var my_info = $('.account .my-info');
+    var popup = $('#user-info-popup');
+
+    $(window).load(function() {
+        popup.css({'right': my_info.parent().width() - my_info.position().left - my_info.outerWidth()});
+    }); 
+    my_info.click(function() {
+        var loading_tip = $('.loading-tip', popup);
+        if (popup.hasClass('hide')) {
+            popup.removeClass('hide');
+            loading_tip.removeClass('hide');
+            $.ajax({
+                url: '{% url 'space_and_traffic' %}',
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    loading_tip.addClass('hide');
+                    popup.html(data['html']);
+                    $('.item:first', popup).css({'border':0});
+                }
+            });
+        } else {
+            popup.addClass('hide');
+        }
+    });
+})();
+$(document).click(function(e) {
+    var target = e.target || event.srcElement,
+        popup = $('#user-info-popup'),
+        popup_switch = $('.account .my-info');
+    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
+        popup.addClass('hide');
+    }    
+});
 {% if has_file_search %}
     {% include 'snippets/search_js.html' %}
 {% endif %}
@@ -285,6 +324,15 @@ $('#msg-count, #msg-link').click(function() {
         {'name':'move', 'con':'f047'},
         {'name':'copy', 'con':'f0c5'},
         {'name':'th', 'con':'f00a'},
+        {'name':'folder-close', 'con':'f07b'},
+        {'name':'rss', 'con':'f09e'},
+        {'name':'desktop', 'con':'f108'},
+        {'name':'user', 'con':'f007'},
+        {'name':'book', 'con':'f02d'},
+        {'name':'comment', 'con':'f075'},
+        {'name':'file', 'con':'f15b'},
+        {'name':'wrench', 'con':'f0ad'},
+        {'name':'group', 'con':'f0c0'},
         {'name':'upload-alt', 'con':'f093'}
     ];  
     function setCon(icon, icon_class_prefix, icon_list) {

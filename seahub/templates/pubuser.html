@@ -1,21 +1,11 @@
-{% extends "myhome_base.html" %}
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% extends "pub_base.html" %}
+{% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
-{% block nav_pubinfo_class %}class="cur"{% endblock %}
-
-{% block left_panel %}
-{% include 'snippets/pubinfo.html' %}
-{% endblock %}
+{% block cur_user %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<div class="tabnav">
-    <ul id="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'pubrepo' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'pubgrp' %}">{% trans "Groups" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Users" %}</li>
-    </ul>
-</div>
+<h3 class="hd">{% trans "Users" %}</h3>
 {% if users %}
 <ul class="user-list">
     {% for u in users %}
@@ -54,10 +44,8 @@
 {% endif %}
 
 {% include 'snippets/add_to_contacts_form.html' %}
-
 {% endblock %}
 
 {% block extra_script %}
 {% include 'snippets/add_to_contacts_js.html' %}
-
 {% endblock %}

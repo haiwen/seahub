@@ -1,7 +1,7 @@
 {% load seahub_tags i18n %}
 {% load url from future %}
 <div id="tabs" class="tab-tabs">
-<div class="ovhd">
+<div class="hd ovhd">
     <ul class="tab-tabs-nav fleft">
         <li class="tab"><a href="#my-own-repos" class="a">{% trans "Mine" %}</a></li>
         {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
@@ -10,7 +10,7 @@
         <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
         <li class="tab"><a href="#starred-files" class="a">{% trans "Starred" %}</a></li>
     </ul>
-    <button id="repo-create" class="add fright">{% trans "New Library" %}</button>
+    <button id="repo-create" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "New Library" %}</button>
 </div>
 <div id="my-own-repos" class="hide">
 {% if owned_repos %}
@@ -86,7 +86,9 @@
         {% endif %}
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>
+            {% if show_repo_download_button %}
             <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% endif %}
             {% if repo.is_original_owner %}
             <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             {% endif %}
@@ -106,53 +108,53 @@
 {% endif %}
 
 <div id="repos-shared-to-me" class="hide">
-{% if in_repos %}
-<table>
-    <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name" %}</th>
-        <th width="33%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Last Update" %}</th>
-        <th width="15%">{% trans "Shared By" %}</th>
-        <th width="13%">{% trans "Operations" %}</th>
-    </tr>
+    {% if in_repos %}
+    <table>
+        <tr>
+            <th width="4%"><!--icon--></th>
+            <th width="20%">{% trans "Name" %}</th>
+            <th width="33%">{% trans "Description" %}</th>
+            <th width="15%">{% trans "Last Update" %}</th>
+            <th width="15%">{% trans "Shared By" %}</th>
+            <th width="13%">{% trans "Operations" %}</th>
+        </tr>
 
-    {% for repo in in_repos %}
-    <tr>
-        <td>
-            {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+        {% for repo in in_repos %}
+        <tr>
+            <td>
+                {% if repo.user_perm == 'rw' %}
+                <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+                {% else %}
+                <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+                {% endif %}
+            </td>
+            <td><a href="{{ SITE_ROOT }}repo/{{ repo.repo_id }}">{{ repo.repo_name }}</a></td>
+            <td>{{ repo.repo_desc }}</td>
+            {% if repo.last_modified %}
+            <td>{{ repo.last_modified|translate_seahub_time }}</td>
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            <td>--</td>
             {% endif %}
-        </td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.repo_id }}">{{ repo.repo_name }}</a></td>
-        <td>{{ repo.repo_desc }}</td>
-        {% if repo.last_modified %}
-        <td>{{ repo.last_modified|translate_seahub_time }}</td>
-        {% else %}
-        <td>--</td>
-        {% endif %}
-        <td>{{ repo.user|email2nickname }}</td>
-        <td>
-            {% if show_repo_download_button %}
-            <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            {% endif %}
-            {% if repo.share_type == 'personal' %}
-            <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<div class="empty-tips">
-  <h2 class="alc">{% trans "No library is shared to you" %}</h2>
-  <p>{% trans "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
+            <td>{{ repo.user|email2nickname }}</td>
+            <td>
+                {% if show_repo_download_button %}
+                <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+                {% endif %}
+                {% if repo.share_type == 'personal' %}
+                <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty-tips">
+        <h2 class="alc">{% trans "No library is shared to you" %}</h2>
+        <p>{% trans "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
-</div>
-
+ 
 <div id="starred-files" class="hide">
 {% if starred_files %}
 <table>

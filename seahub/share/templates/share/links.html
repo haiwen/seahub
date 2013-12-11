@@ -1,0 +1,101 @@
+{% extends 'home_base.html' %}
+{% load seahub_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Links - Share" %} - {% endblock %}
+
+{% block cur_share_links %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<div id="tabs" class="tab-tabs">
+    <ul class="tab-tabs-nav hd w100 ovhd">
+        <li class="tab"><a href="#download-links" class="a">{% trans "Download Links" %}</a></li>
+        <li class="tab long-tab"><a href="#upload-links" class="a">{% trans "Upload Links" %}</a></li>
+    </ul>
+    <div id="download-links">
+        {% if fileshares %}
+        <table class="sharelink-list">
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="44%">{% trans "Name"%}</th>
+                <th width="25%">{% trans "Library"%}</th>
+                <th width="12%">{% trans "Visits"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
+            </tr>
+            {% for fs in fileshares %}
+            <tr>
+                {% if fs.s_type == 'f' %}
+                <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                <td><a href="{% url 'repo_view_file' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+                {% else %}
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td><a href="{% url 'repo' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+                {% endif %}
+                <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
+                <td>{{ fs.view_cnt }}</td>
+                <td>
+                    <a href="#" class="view-link op vh" data="{{ fs.shared_link }}">{% trans "View" %}</a>
+                    <a class="op vh" href="{% url 'remove_shared_link' %}?t={{ fs.token }}">{% trans "Remove"%}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "You don't have any shared link"%}</h2>
+            <p>{% trans "You can share a folder or a file when you view a library, or share a file when you view it." %}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="upload-links" class="hide">
+        {% if uploadlinks %}
+        <table>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="44%">{% trans "Name"%}</th>
+                <th width="25%">{% trans "Library"%}</th>
+                <th width="12%">{% trans "Visits"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
+            </tr>
+            {% for link in uploadlinks %}
+            <tr>
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+                <td><a href="{{ SITE_ROOT }}repo/{{ link.repo.id }}/">{{ link.repo.name }}</a></td>
+                <td>{{ link.view_cnt }}</td>
+                <td>
+                    <a href="#" class="view-link op vh" data="{{ link.shared_link }}">{% trans "View" %}</a>
+                    <a class="op vh" href="{% url 'remove_shared_upload_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "You don't have any shared upload link"%}</h2>
+            <p>{% trans "When you browse a library online, you can share an upload link of a directory to others, and then they can upload files to this directory." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<input type="text" readonly="readonly" value="" id="shared-link" class="hide" />
+{% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript">
+{% if fileshares or uploadlinks %}
+$(".view-link").click(function() {
+    var link = $(this).attr('data');
+    $('#shared-link').before('<p class="hide">' + link + '</p>')
+    .val(link).css('width', $('#shared-link').prev().width() + 2)
+    .modal({focus:false});
+    $('#shared-link').prev().remove();
+    return false;
+});
+$('#shared-link').click(function() {
+    $(this).select();
+});
+{% endif %}
+</script>
+{% endblock %}

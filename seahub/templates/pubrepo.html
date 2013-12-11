@@ -1,22 +1,11 @@
-{% extends "myhome_base.html" %}
+{% extends "pub_base.html" %}
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
-{% block nav_pubinfo_class %}class="cur"{% endblock %}
-
-{% block left_panel %}
-{% include 'snippets/pubinfo.html' %}
-{% endblock %}
+{% block cur_lib %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<div class="tabnav">
-    <button id="repo-create" class="add fright">{% trans "New Library"%}</button>
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Libraries" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'pubgrp' %}">{% trans "Groups" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'pubuser' %}">{% trans "Users" %}</a></li>
-    </ul>
-</div>
+<h3 class="hd">{% trans "Libraries" %}</h3>
 {% if public_repos %}
 <table>
     <tr>
@@ -63,15 +52,6 @@
     $(".download-btn").click(function() {
         window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).data('id'));
     }); 
-
-    $("table tr:gt(0)").hover(
-        function() {
-            $(this).find('.op-icon').removeClass('vh');
-        },  
-        function() {
-            $(this).find('.op-icon').addClass('vh');
-        }   
-    );  
 
 function repoCreateSuccessCallback() {
     location.reload();

@@ -21,7 +21,7 @@ from seaserv import seafserv_threaded_rpc, ccnet_rpc, \
     ccnet_threaded_rpc, get_personal_groups, list_personal_shared_repos, \
     is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
     del_org_group_repo, list_share_repos, get_group_repos_by_owner, \
-    list_inner_pub_repos_by_owner, remove_share
+    list_inner_pub_repos_by_owner, remove_share, check_permission
 
 from forms import RepoShareForm, FileLinkShareForm, UploadLinkShareForm
 from models import AnonymousShare, FileShare, PrivateFileDirShare, UploadLinkShare
@@ -36,7 +36,8 @@ from seahub.signals import share_file_to_user_successful
 from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
-    gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename
+    gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
+    get_repo_last_modify
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -318,16 +319,16 @@ def repo_remove_share(request):
 #             }, context_instance=RequestContext(request))
 
 @login_required
-def list_share_out_repos(request):
+def list_share_out_in_repos(request):
     """
     List personal shared repos.
     """
     username = request.user.username
 
-    shared_repos = []
+    out_repos = []
 
     # personal repos shared from this user
-    shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+    out_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
 
     # repos shared to groups
     group_repos = get_group_repos_by_owner(username)
@@ -338,7 +339,7 @@ def list_share_out_repos(request):
             continue
         repo.props.user = group.props.group_name
         repo.props.user_info = repo.group_id
-    shared_repos += group_repos
+    out_repos += group_repos
 
     if not CLOUD_MODE:
         # public repos shared by this user
@@ -346,9 +347,9 @@ def list_share_out_repos(request):
         for repo in pub_repos:
             repo.props.user = _(u'all members')
             repo.props.user_info = 'all'
-        shared_repos += pub_repos
+        out_repos += pub_repos
 
-    for repo in shared_repos:
+    for repo in out_repos:
         if repo.props.permission == 'rw':
             repo.share_permission = _(u'Read-Write')
         elif repo.props.permission == 'r':
@@ -359,18 +360,47 @@ def list_share_out_repos(request):
         if repo.props.share_type == 'personal':
             repo.props.user_info = repo.props.user
 
-    shared_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
+    out_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
+
+    # get repos shared to this user
+    # Get all personal groups I joined.
+    joined_groups = seaserv.get_personal_groups_by_user(username)
+    in_repos = list_personal_shared_repos(username, 'to_email', -1, -1)
+    # For each group I joined... 
+    for grp in joined_groups:
+        # Get group repos, and for each group repos...
+        for r_id in seafile_api.get_group_repoids(grp.id):
+            # No need to list my own repo
+            if seafile_api.is_repo_owner(username, r_id):
+                continue
+            # Convert repo properties due to the different collumns in Repo
+            # and SharedRepo
+            r = seafile_api.get_repo(r_id)
+            if not r:
+                continue
+            r.repo_id = r.id
+            r.repo_name = r.name
+            r.repo_desc = r.desc
+            r.last_modified = get_repo_last_modify(r)
+            r.share_type = 'group'
+            r.user = seafile_api.get_repo_owner(r_id)
+            r.user_perm = check_permission(r_id, username)
+            in_repos.append(r)
+    in_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+
     
-    return render_to_response('repo/share_out_repos.html', {
-            "shared_repos": shared_repos,
+    return render_to_response('share/out_in_repos.html', {
+            "out_repos": out_repos,
+            "in_repos": in_repos,
             }, context_instance=RequestContext(request))
 
 @login_required
 def list_shared_links(request):
-    """List share links, and remove invalid links(file/dir is deleted or moved).
+    """List shared links, and remove invalid links(file/dir is deleted or moved).
     """
     username = request.user.username
-
+    
+    # download links
     fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
     for fs in fileshares:
@@ -394,17 +424,8 @@ def list_shared_links(request):
                 fs.shared_link = gen_dir_share_link(fs.token)
             fs.repo = r
             p_fileshares.append(fs)
-    
-    return render_to_response('repo/shared_links.html', {
-            "fileshares": p_fileshares,
-            }, context_instance=RequestContext(request))
 
-@login_required
-def list_shared_upload_links(request):
-    """List upload links, and remove invalid links(dir is deleted or moved).
-    """
-    username = request.user.username
-
+    # upload links
     uploadlinks = UploadLinkShare.objects.filter(username=username)
     p_uploadlinks = []
     for link in uploadlinks:
@@ -421,7 +442,9 @@ def list_shared_upload_links(request):
             link.repo = r
             p_uploadlinks.append(link)
 
-    return render_to_response('repo/shared_upload_links.html', {
+    
+    return render_to_response('share/links.html', {
+            "fileshares": p_fileshares,
             "uploadlinks": p_uploadlinks,
             }, context_instance=RequestContext(request))
 
@@ -442,7 +465,7 @@ def list_priv_shared_files(request):
         e.file_or_dir = os.path.basename(e.path.rstrip('/'))
         e.repo = seafile_api.get_repo(e.repo_id)
     
-    return render_to_response('repo/priv_shared_files.html', {
+    return render_to_response('share/priv_shared_files.html', {
             "priv_share_out": priv_share_out,
             "priv_share_in": priv_share_in,
             }, context_instance=RequestContext(request))
@@ -903,7 +926,7 @@ def user_share_list(request, id_or_email):
     c = Contact.objects.get_contact_by_user(username, to_email)
     add_to_contacts = True if c is None else False
             
-    return render_to_response('repo/user_share_list.html', {
+    return render_to_response('share/user_share_list.html', {
             'to_email': to_email,
             'share_list': share_list,
             'add_to_contacts': add_to_contacts,

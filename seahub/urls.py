@@ -97,7 +97,8 @@ urlpatterns = patterns('',
 
     ### Misc ###
    (r'^file_upload_progress_page/$', file_upload_progress_page),
-    (r'^events/$', events),
+    url(r'^activities/$', activities, name='activities'),
+    (r'^events/$', events), # ajax
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^i18n/$', i18n, name='i18n'),
     (r'^download/repo/$', repo_download),                       
@@ -114,11 +115,6 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/delete/$', delete_dirents, name='delete_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/move/$', mv_dirents, name='mv_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/copy/$', cp_dirents, name='cp_dirents'),
-    url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_group_repos, name='get_group_repos'),
-    url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
-    url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
-    url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
-    url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_dir, name='repo_dir_data'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/more/$', list_dir_more, name='list_dir_more'),
@@ -140,6 +136,12 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
 
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
+    url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_group_repos, name='get_group_repos'),
+    url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
+    url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
+    url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
+    url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
+    url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

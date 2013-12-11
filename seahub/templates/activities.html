@@ -1,9 +1,19 @@
-{% load i18n %}
+{% extends "home_base.html" %}
+{% load seahub_tags avatar_tags i18n %}
+
+{% block sub_title %}{% trans "Activities" %} - {% endblock %}
+
+{% block cur_activities %}tab-cur{% endblock %}
+
+{% block right_panel %}
 <div id="events">
-<h3>{% trans 'File Activities' %}</h3>
-<div id="events-body"></div>
+    <div id="events-body">
+        {% include 'snippets/events_body.html' %}
+    </div>
 <div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-<button id="events-more" class="hide">{% trans 'More' %}</button>
+{% if events_more %}
+<button id="events-more" data-start="{{new_start}}">{% trans 'More' %}</button>
+{% endif %}
 <p id="events-error" class="error hide"></p>
 <form id="repo-decrypt-form" class="simple-input-popup hide">{% csrf_token %}
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
@@ -16,3 +26,10 @@
     <button class="simplemodal-close">{% trans 'Cancel' %}</button>
 </form>
 </div>
+{% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript">
+{% include "snippets/events_js.html" %}
+</script>
+{% endblock %}

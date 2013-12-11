@@ -20,7 +20,7 @@
         <td>{{ org.url_prefix }}</td>
         <td>{{ org.creator }}</td>
         <td>{{ org.ctime|tsstr_sec }}</td>
-        <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="org-remove-btn op">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="org-remove-btn op vh">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>

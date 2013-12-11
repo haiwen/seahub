@@ -85,15 +85,6 @@
         });
     });
 
-    $("table tr:gt(0)").hover(
-        function() {
-            $(this).find('.op-icon').removeClass('vh');
-        },
-        function() {
-            $(this).find('.op-icon').addClass('vh');
-        }
-    );
-
 function repoCreateSuccessCallback(data) {
     $.modal.close();
     var new_repo_item = $('#new-repo .repo-item').clone(true); 

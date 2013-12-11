@@ -123,10 +123,8 @@ class User(object):
         """
         When delete user, we should also delete group relationships.
         """
-        # TODO: what about repo and org?
+        # TODO: what about repos and groups?
         ccnet_threaded_rpc.remove_emailuser(self.username)
-        ccnet_threaded_rpc.remove_group_user(self.username)
-        Profile.objects.filter(user=self.username).delete()
 
     def get_and_delete_messages(self):
         messages = []

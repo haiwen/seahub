@@ -36,7 +36,7 @@ body, input, textarea, button, select {
 input, button, select { line-height:19px;/*for ff*/ }
 h1 { font-size:1.9em; margin:1.1em 0 0.5em; }
 h2 { font-size:1.5em; color:#222;}
-h3 { font-size:1.2em; color:#322; font-weight:normal; margin:0.95em 0 0.4em; }
+h3 { font-size:16px; color:#322; font-weight:normal; margin:0.95em 0 0.4em; }
 h4 { font-size:1.1em; color:#222; font-weight:normal; margin:0.5em 0 0.2em; }
 h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
 ul { list-style:none; }
@@ -223,8 +223,7 @@ input.btn-disabled:hover {/*for input*/
     background-position: 0 -15px; /* to rm background-image */
 }
 .op-list li,
-.modalCloseImg,
-.add {
+.modalCloseImg {
     background:transparent url('../img/bg.png') no-repeat scroll 0 0;
 }
 .op-list li {
@@ -233,9 +232,7 @@ input.btn-disabled:hover {/*for input*/
     background-position:0 -102px;
 }
 .add {
-    padding-left:21px;
-    background-color:#f5f5f5;
-    background-position:3px -206px;
+    margin-right:3px;
 }
 .jstree a {
     font-weight:normal;
@@ -256,9 +253,12 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
 }
 .empty-tips {
-    width: 60%;
-    margin: 40px auto;
-    padding-top: 20px;
+    padding: 30px 40px;
+    background-color: #FAFAFA;
+    border: solid 1px #DDD;
+    border-radius: 3px;
+    box-shadow: inset 0 0 8px #EEE;
+    margin-top:5.5em;
 }
 
 /*******ui widgets**************/
@@ -353,6 +353,50 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     margin-bottom:-1px;
     color:#000;
+}
+.tabnav-tab-cur a {
+    color:#000;
+}
+/**** side-tabnav ****/
+.side-tabnav .hd {
+    padding-bottom:4px;
+    border-bottom:1px solid #ddd;
+    margin-bottom:1em;
+}
+.side-tabnav .hd h3 {
+    margin-bottom:0;
+}
+.side-tabnav .hd .avatar { /*for 'group'*/
+    vertical-align:top;
+}
+.side-tabnav .hd .icon-globe { /*for 'group'*/
+    line-height:1;
+    color:#666;
+}
+.side-tabnav-tabs .tab a {
+    display:block;
+    padding:2px 4px;
+    color:#333;
+    font-weight:normal;
+    border-radius:2px;
+}
+.side-tabnav-tabs .tab a:hover {
+    background:#feefb8;
+    text-decoration:none;
+}
+.side-tabnav-tabs .tab span {
+    font-size:1.2em;
+    color:#999;
+    margin-right:5px;
+}
+.side-tabnav-tabs .tab-cur a,
+.side-tabnav-tabs .tab-cur a:hover {
+    background:#feac74;
+}
+.side-tabnav-tabs .tab-cur span,
+.side-tabnav-tabs .tab-cur a {
+    font-weight:bold;
+    color:#fff;
 }
 /**** checkbox ****/
 .checkbox-orig {
@@ -736,17 +780,44 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0.45em;
 }
 #left-panel {
-    float:right;
-    width:230px;
-    padding-left:10px;
+    float:left;
+    width:200px;
 }
 #right-panel {
-    float:left;
-    width:670px;
+    float:right;
+    width:700px;
 }
 #right-panel h3:first-child,
 #left-panel h3:first-child {
     margin-top: 0px;
+}
+#right-panel .hd {
+    padding-bottom:4px;
+    border-bottom:1px solid #ddd;
+    border-radius:0; /* rm radius when 'hd' is also '.ui-corner-all' */
+    margin-bottom:1.5em;
+}
+#right-panel .hd h3 {
+    margin-bottom:0;
+}
+#right-panel .hd .tab {
+    padding-bottom:0;
+    margin-bottom:0;
+}
+#right-panel .hd .a {
+    border:0; /* rm 'border-bottom' for cur tab */
+    padding:4px 0;
+    line-height:16px; /* for ff*/
+}
+#right-panel .hd button {
+    /*
+    padding-top:2px;
+    padding-bottom:2px;
+    */
+    padding-top:0;
+    padding-bottom:0;
+    height:24px;
+    line-height:24px;
 }
 /* info-bar */
 #info-bar,
@@ -780,6 +851,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .top-bar-con .account {
     text-align:right;
+    position:relative;
 }
 .top-bar-con .top-link {
     display:inline-block;
@@ -800,6 +872,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:16px;
     border-right:1px solid #aaa;
     margin-right:3px;
+    cursor:pointer;
 }
 .top-bar-con .btn {
     padding:0 6px;
@@ -817,7 +890,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .top-bar-con .avatar {
     border-radius: 2px;
-    -moz-border-radius: 2px;
+    vertical-align:middle;
 }
 .top-bar-con .cur {
     background:#000;
@@ -836,6 +909,7 @@ textarea:-moz-placeholder {/* for FF */
 #lang-context-selector {
     position:absolute;
     top:24px;
+    text-align:left;
     border:1px solid #bbb;
     background:#fff;
     min-width:65px;
@@ -844,10 +918,6 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
     -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
-}
-#lang-context-selector {
-    right:23px;
-    text-align:left;
 }
 #lang-context-selector a,
 #to-group a {
@@ -864,16 +934,28 @@ textarea:-moz-placeholder {/* for FF */
 .top-bar-con .icon-signout {
     font-size:15px;
 }
-#send-msg-popup {
-    width:430px;
-    padding:18px;
+#send-msg-popup,
+#user-info-popup {
     background:#fff;
     border:1px solid #ddd;
     box-shadow:0 0 5px #ccc;
     position:absolute;
     right:0;
-    top:-24px;
     z-index:100;/* for pages with jquery tabs*/
+}
+#send-msg-popup {
+    width:430px;
+    padding:18px;
+    top:35px;
+}
+#user-info-popup {
+    width:200px;
+    text-align:left;
+    top:24px;
+}
+#user-info-popup .item {
+    padding:8px 18px;
+    border-top:1px solid #ddd;
 }
 #msg-file-share {
     margin-top:8px;
@@ -919,7 +1001,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #header .nav {
     float:left;
-    padding-top:9px;
+    padding-top:6px;
+    font-size:15px;
 }
 #header .nav li {
     float: left;
@@ -1029,22 +1112,6 @@ textarea:-moz-placeholder {/* for FF */
 #traffic-stat {
     color: #333;
     font-weight: normal;
-    display:inline-block;
-    margin-top:6px;
-}
-.mygroup {
-    display:inline-block; /*to handle different height of items*/
-    vertical-align:top;
-    width:64px;
-    text-align:center;
-    margin:8px 1px 5px 1px;
-}
-.mygroup {
-    *display:inline; /* for ie 6,7 */
-}
-.mygroup .name {
-    display:inline-block;
-    width:100%;
 }
 #repo-create-form {
     padding:0 20px;
@@ -1060,11 +1127,11 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:10px;
 }
 .event-group-hd {
-    margin: 15px 0 0 0;
-    padding: 5px 8px;
+    padding: 4px 8px;
     color: #444;
     text-shadow: 0 1px white;
     background: #f8f8f8;
+    margin:0;
     border: 1px solid #eee;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px; 
@@ -1111,11 +1178,12 @@ textarea:-moz-placeholder {/* for FF */
 #events-loading,
 #events-more {
     text-align:center;
-    width:670px;
+    width:100%;
 }
 #events-more {
     color:#777;
     padding:.5em 0;
+    border:0;
 }
 #events-more:hover {
     color:#000;
@@ -1137,7 +1205,6 @@ textarea:-moz-placeholder {/* for FF */
 /* avatar */
 .avatar-op .avatar,
 .home-profile .avatar,
-.mygroup .avatar,
 .group .avatar {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -2309,19 +2376,26 @@ textarea:-moz-placeholder {/* for FF */
 /* wiki page */
 .wiki-top {
     text-align:right;
-    padding-bottom:8px;
+    padding-bottom:4px;
     border-bottom:1px solid #eee;
 }
 .wiki-top .op-btn {
     margin-left:3px;
+    padding-top:0;
+    padding-bottom:0;
+    height:24px;
 }
 .wiki-nav .item {
     float:left;
     font-size:15px;
-    margin:4px 5px 0 10px;
+    line-height:24px;
+    margin:0 5px 0 10px;
 }
 .wiki-nav .link {
     font-weight:normal;
+}
+.wiki-nav .cur-item .link {
+    color:#333;
 }
 #wiki-area {
     padding: 0 0;
@@ -2488,12 +2562,20 @@ textarea:-moz-placeholder {/* for FF */
 }
 #enable-mods {
     color:#888;
+    margin-top:5px;
 }
 #enable-mods:hover {
     color:#666;
-    text-decoration:none;
+    cursor:pointer;
 }
 #add-msg .icon-pencil {
     font-size:1em;
     margin:0 3px 0 0;
+}
+#quit-group {
+    display:inline-block;
+    margin-top:3em;
+    font-size:12px;
+    font-weight:normal;
+    color:#888;
 }

@@ -9,6 +9,9 @@ RequestContext.
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
     ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_URL, \
     SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
+from seahub.views.modules import get_enabled_mods_by_user, \
+    get_available_mods_by_user
+
 try:
     from seahub.settings import BUSINESS_MODE
 except ImportError:
@@ -18,7 +21,7 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -39,6 +42,12 @@ def base(request):
     except AttributeError:
         base_template = 'myhome_base.html'
 
+    username = request.user.username
+
+    # get available modules(wiki, etc)
+    mods_available = get_available_mods_by_user(username)
+    mods_enabled = get_enabled_mods_by_user(username)
+
     return {
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
@@ -57,4 +66,7 @@ def base(request):
         'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
         'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
+        'events_enabled': EVENTS_ENABLED,
+        'mods_available': mods_available,
+        'mods_enabled': mods_enabled,
         }

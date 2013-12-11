@@ -1,31 +1,12 @@
-{% extends "myhome_base.html" %}
+{% extends "home_base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
 
 {% block sub_title %}{% trans "Clients" %} - {% endblock %}
-{% block nav_myhome_class %}class="cur"{% endblock %}
+{% block cur_clients %}tab-cur{% endblock %}
 
-{% block title_panel %}
-
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'myhome' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Clients" %}</li>
-
-        {% for mod in mods_enabled %}
-        {% if mod == 'personal wiki' %}
-        <li class="tabnav-tab"><a href="{% url 'personal_wiki' %}">{% trans "Personal Wiki" %}</a></li>
-        {% endif %}
-        {% endfor %}
-
-        {% include "snippets/modules_toggle_tab.html" %}
-    </ul>
-</div>
-
-{% endblock %}
-
-{% block main_panel %}
-
+{% block right_panel %}
+<h3 class="hd">{% trans "Clients" %}</h3>
 {% if clients %}
 <table>
     <tr>
@@ -64,7 +45,7 @@
         {% endif %}
         </td>
         <td>
-            <div><a href="#" class="unsync-client op">{% trans "Unsync" %}</a></div>
+            <div><a href="#" class="unsync-client op vh">{% trans "Unsync" %}</a></div>
         </td>
     </tr>
     {% endfor %}
@@ -81,11 +62,9 @@
 </div>
 {% endif %}
 
-{% include "snippets/modules_toggle_form.html" %}
-
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#main-panel').removeClass('ovhd');
 $('.unsync-client').click(function() {
@@ -126,6 +105,5 @@ $('.unsync-client').click(function() {
     });
     return false;
 });
-{% include "snippets/modules_toggle_js.html" %}
 </script>
 {% endblock %}

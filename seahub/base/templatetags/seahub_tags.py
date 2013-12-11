@@ -51,7 +51,12 @@ FILEEXT_ICON_MAP = {
     'xls' : 'ms-excel.png',
     'xlsx' : 'ms-excel.png',
     'txt' : 'txt.png',
-    'odf' : 'odf.png',
+    'odt' : 'x_office_document-24.png',
+    'fodt' : 'x_office_document-24.png',
+    'ods' : 'x_office_spreadsheet-24.png',
+    'fods' : 'x_office_spreadsheet-24.png',
+    'odp' : 'x_office_presentation-24.png',
+    'fodp' : 'x_office_presentation-24.png',
     # music file
     'mp3' : 'music-icon-24.png',
     # picture file
