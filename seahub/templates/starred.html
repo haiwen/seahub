@@ -37,3 +37,30 @@
 {% endif %}
 
 {% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript">
+    $('.unstar-btn').click(function() {
+        var that = $(this),
+            tr = that.parents('tr'),
+            repo_id = that.data('repoid'),
+            path = that.data('path'),
+            post_url;
+
+        post_url = '{{SITE_ROOT}}ajax/repo/' + repo_id + '/file/unstar/?file=' + path;
+        
+        $.ajax({
+            url: post_url,
+            cache: false,
+            dataType: 'json',
+            success:function(data) {
+                if (data['success']) {
+                    tr.hide();
+                    feedback("{% trans 'Successfully unstarred.' %}", "success");
+                }
+            },
+            error: ajaxErrorHandler
+        });
+    });
+</script>
+{% endblock %}
