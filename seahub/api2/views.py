@@ -986,9 +986,16 @@ def append_starred_files(array, files):
                  'repo' : f.repo.id,
                  'path' : f.path,
                  'mtime' : f.last_modified,
-                 'dir' : f.is_dir,
-                 'size' : f.size
+                 'dir' : f.is_dir
                  }
+        if not f.is_dir:
+            try:
+                file_id = seafile_api.get_file_id_by_path(f.repo.id, f.path)
+                sfile['oid'] = file_id
+                sfile['size'] = get_file_size(file_id)
+            except SearpcError, e:
+                pass
+
         array.append(sfile)
 
 def api_starred_files(request):
