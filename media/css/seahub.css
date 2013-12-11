@@ -862,6 +862,12 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:normal;
     vertical-align:middle;
 }
+.top-link .icon-wrench {
+    margin-right:7px;
+}
+.top-link .icon-caret-right {
+    margin-left:7px;
+}
 .top-bar-con .my-info {
     color:#fff;
     font-weight:bold;
@@ -884,27 +890,13 @@ textarea:-moz-placeholder {/* for FF */
 .top-bar-con .msg-count {
     color:red;
 }
-.top-bar-con .avatar-link {
-    height:16px;
-    line-height:16px;
-}
 .top-bar-con .avatar {
     border-radius: 2px;
     vertical-align:middle;
 }
-.top-bar-con .cur {
-    background:#000;
-    border-top:2px solid #B00;
-    height:20px;
-    line-height:20px;
-    padding-bottom:2px;
-}
 .top-bar-con .top-link:hover {
     text-decoration:none;
     background:#a0a;
-}
-.top-bar-con a.avatar-link:hover {
-    background:none;
 }
 #lang-context-selector {
     position:absolute;

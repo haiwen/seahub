@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block top_bar_sys_manager_class %} class="top-link cur"{% endblock %}
+
+{% block sys_admin %}<a href="{{ SITE_ROOT }}home/my/" class="top-link">{% trans "Exit System Admin" %}<span class="icon-caret-right"></span></a>{% endblock %}
+
 {% block nav %}
 <ul class="nav">
     {% if request.user.is_staff %}
