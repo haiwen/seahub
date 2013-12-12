@@ -1065,13 +1065,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #footer .item {
     float:left;
-    width:28%;
+    width:32%;
     padding:0 3% 0 2%;
-}
-#footer .item .hd {
-    font-size:12px;
-    color:#636363;
-    padding-bottom:3px;
 }
 #footer a {
     color:#888;
