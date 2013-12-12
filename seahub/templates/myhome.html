@@ -2,6 +2,25 @@
 {% load seahub_tags i18n %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
+
+{% block extra_style %}
+{% if need_guide %}
+<style type="text/css">
+#guide-for-new {
+    padding: 0 20px;
+    width: 450px;
+}
+#guide-for-new .icon-lightbulb {
+    font-size:6em;
+    color:#feac74;
+}
+#guide-for-new .txt {
+    margin-left:6.4em;
+}
+</style>
+{% endif %}
+{% endblock %}
+
 {% block cur_my_lib %}tab-cur{% endblock %}
 
 {% block right_panel %}
@@ -15,10 +34,16 @@
 
 {% include "snippets/repo_create_form.html" %}
 
-<div id="guide2-for-new" class="hide">
-    <p>{% trans 'Welcome to Seafile. Seafile manages files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later.' %}</p>
-    <button class="simplemodal-close" style="margin-left:0;">{% trans "Close" %}</button>
+{% if need_guide %}
+<div id="guide-for-new" class="hide">
+    <span class="icon-lightbulb fleft"></span>
+    <div class="txt">
+        <h3>{% trans "Welcome to Seafile!" %}</h3>
+        <p>{% trans "Seafile manages files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later." %}</p>
+        <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
+    </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
@@ -28,9 +53,8 @@
 
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
 
-// for user login at first time
 {% if need_guide %}
-$('#guide2-for-new').css({'padding':'0 20px', 'width':450}).modal({appendTo: '#main'});
+$(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
 {% endif %}
 </script>
 {% endblock %}
