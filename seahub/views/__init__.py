@@ -950,11 +950,17 @@ def myhome(request):
         need_guide = UserOptions.objects.is_user_guide_enabled(username)
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
-
-    # set to default library after user guide
+            # create a default library for user
+            default_repo = seafile_api.create_repo(name=_("My Library"),
+                                                   desc=_("My Library"),
+                                                   username=username,
+                                                   passwd=None)
+            UserOptions.objects.set_default_repo(username, default_repo)
+            # refetch owned repos
+            owned_repos = seafile_api.get_owned_repo_list(username)
+            calculate_repos_last_modify(owned_repos)
+            
     repo_create_url = reverse(repo_create)
-    if need_guide:
-        repo_create_url += '?default_lib=1'
             
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,

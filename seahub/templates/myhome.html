@@ -15,15 +15,8 @@
 
 {% include "snippets/repo_create_form.html" %}
 
-<div id="guide1-for-new" class="hide">
-    <h3>{% trans "Welcome to Seafile!" %}</h3>
-    <p>{% trans "Seafile manages files into libraries. You can put files into a library and share it to other users and groups." %}</p>
-    <p class="bold italic">{% trans "Let's create a library now!" %}</p>
-</div>
 <div id="guide2-for-new" class="hide">
-    <h3>{% trans "Great!" %}</h3>
-    <p>{% trans "You have created a library." %}</p>
-    <p>{% trans 'You can install our desktop client to sync files in the library with your desktop. See <a href="http://www.seafile.com/en/help/" target="_blank">client help</a> for more information.' %}</p>
+    <p>{% trans 'Welcome to Seafile. Seafile manages files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later.' %}</p>
     <button class="simplemodal-close" style="margin-left:0;">{% trans "Close" %}</button>
 </div>
 {% endblock %}
@@ -37,14 +30,7 @@
 
 // for user login at first time
 {% if need_guide %}
-var repo_create_form = $('#repo-create-form');
-$('#guide1-for-new').css({'padding':'0 20px', 'width':450}).append(repo_create_form.removeClass('hide')).modal({appendTo: '#main', autoResize: true});
-repo_create_form.css({'padding':0});
-$('h3, .repo-create-encryption', repo_create_form).addClass('hide');
-$('[name="repo_name"]', repo_create_form).val("{% trans "MyLibrary" %}");
-$('[name="repo_desc"]', repo_create_form).val("{% trans "My Default Library" %}");
-$('#simplemodal-container').css({'height':'auto'});
-$(window).resize();
+$('#guide2-for-new').css({'padding':'0 20px', 'width':450}).modal({appendTo: '#main'});
 {% endif %}
 </script>
 {% endblock %}

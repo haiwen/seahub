@@ -114,7 +114,8 @@ class UserOptionsManager(models.Manager):
                 email=username, option_key=KEY_USER_GUIDE)
             return bool(int(user_option.option_val))
         except UserOptions.DoesNotExist:
-            return False        # Assume ``user_guide`` is not enabled.
+            # Assume ``user_guide`` is enabled if this optoin is not set.
+            return True        
 
     def enable_sub_lib(self, username):
         """
@@ -183,19 +184,3 @@ class UserOptions(models.Model):
 
     objects = UserOptionsManager()
 
-########## signal handers
-from django.dispatch import receiver
-
-from registration.signals import user_registered
-
-@receiver(user_registered)
-def set_user_guide_on_registration(sender, **kwargs):
-    """Show user guide when a user is registered.
-    
-    Arguments:
-    - `sender`:
-    - `**kwargs`:
-    """
-    reg_email = kwargs['user'].email
-    UserOptions.objects.enable_user_guide(reg_email)
-    
