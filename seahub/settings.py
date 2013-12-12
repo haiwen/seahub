@@ -281,9 +281,7 @@ SITE_BASE = 'http://seafile.com'
 SITE_NAME = 'Seafile'
 
 # Path to the Logo Imagefile (relative to the media path)
-LOGO_PATH = 'img/logo.png'
-# URL to which the logo links
-LOGO_URL = SITE_BASE
+LOGO_PATH = 'img/seafile_logo.png'
 
 # css to modify the seafile css (e.g. css/my_site.css)
 BRANDING_CSS = ''

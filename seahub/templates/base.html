@@ -69,15 +69,13 @@
         <div id="header">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
-                {% if seacloud_mode %}
-                <a href="http://seacloud.cc/" id="seacloud-logo" class="fleft">
-                    <img src="{{ MEDIA_URL }}img/seacloud-logo.png?t=1362454620" title="Seacloud" alt="Seacloud logo" />
+                <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
+                    {% if seacloud_mode %}
+                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png" title="Seacloud" alt="logo" width="192" height="39" />
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="156" height="39" />
+                    {% endif %}
                 </a>
-                {% else %}
-                <a href="{{logo_url}}" id="logo" class="fleft">
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="Seafile logo" />
-                </a>
-                {% endif %}
                 {% block nav %}{% endblock %}
 
                 {% if has_file_search and request.user.is_authenticated %}

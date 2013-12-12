@@ -759,7 +759,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 auto;
 }
 #header {
-    padding-top:12px;
+    padding:6px 0;
     background:#f4f4f4;
     width:100%;
     font-size: 14px;
@@ -984,16 +984,11 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow:0 0 6px gray;
 }
 #logo {
-    width:95px;
-    height:40px;
     margin-right:30px;
-}
-#seacloud-logo {
-    margin:2px 30px 6px 0;
 }
 #header .nav {
     float:left;
-    padding-top:6px;
+    padding-top:16px;
     font-size:15px;
 }
 #header .nav li {
@@ -2417,7 +2412,7 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
 }
 #top-search-form {
-    margin-top:4px;
+    margin-top:14px;
 }
 .search-input,
 .search-form .search-submit {
