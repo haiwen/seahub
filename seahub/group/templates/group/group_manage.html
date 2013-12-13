@@ -8,7 +8,7 @@
     <ul class="tab-tabs-nav hd ovhd">
         <li class="tab"><a href="#members" class="a">{% trans "Members" %}</a></li>
         <li class="tab"><a href="#administrators" class="a">{% trans "Admins" %}</a></li>
-        <li class="tab"><a href="#settings" class="a">{% trans "Settings" %}</a></li>
+        <li class="tab"><a href="#settings" class="a" id="settings-tab">{% trans "Settings" %}</a></li>
     </ul>
     <div id="members">
         <div class="ovhd">
@@ -114,7 +114,9 @@
 {% block extra_script %}{{block.super}}
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
-changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
+$('#settings-tab').click(function() {
+    changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
+});
 addConfirmTo($("#group-dismiss"), {
         'title':'{% trans "Dismiss Group" %}',
         'con':'{% trans "Really want to dismiss this group?" %}'

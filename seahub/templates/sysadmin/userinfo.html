@@ -3,6 +3,15 @@
 {% load url from future %}
 
 {% block nav_useradmin_class %}class="cur"{% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#set-quota-form {
+    min-width:255px;
+}
+</style>
+{% endblock %}
+
 {% block left_panel %}
 
 <div class="info-item">
@@ -84,7 +93,7 @@
 <p>{% trans "None" %}</p>
 {% endif %}
 
-<form id="set-quota-form" method="post" class="simple-input-popup hide">{% csrf_token %}
+<form id="set-quota-form" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>
     <input type="hidden" name="email" value="{{ email }}" />
     <input type="text" name="quota" /> MB

@@ -22,10 +22,10 @@
   <p>{% blocktrans %}You can create a group by clicking "New Group" button. Group is a place for you and your friends leaving messages and collaborating on libraries.{% endblocktrans %}</p>
 </div>
 {% endif %}
-<form id="group-add-form" action="" method="post" name="group-add-form" class="simple-input-popup hide">{% csrf_token %}
+<form id="group-add-form" action="" method="post" name="group-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "New Group" %}</h3>
     <label>{% trans "Group Name" %}</label><br />
-    <input id="group_name" name="group_name" value="" class="long-input" /><br />
+    <input id="group_name" name="group_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input id="group-add-submit" type="submit" class="submit" value="{% trans "Submit" %}" />
 </form>

@@ -236,10 +236,10 @@
     </div>
 
     {% if not err and repo.encrypted %}
-    <form id="repo-decrypt-form" class="simple-input-popup hide">
+    <form id="repo-decrypt-form" class="hide">
         <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label>{% trans 'Password：' %}</label><br />
-        <input type="password" name="password" class="long-input" />
+        <input type="password" name="password" class="input" />
         <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
         <p class="error"></p>
         <input type="submit" class="submit" value="{% trans 'Submit' %}" />

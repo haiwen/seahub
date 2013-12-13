@@ -42,18 +42,22 @@
 <form action="" method="post" id="contact-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "Add Contacts"%}</h3>
     <label>{% trans "Email"%}</label><br />
-    {{ form.contact_email }}<br />
-    <label>{% trans "Name(optional)"%}</label><br />{{ form.contact_name }}<br />
-    <label>{% trans "Note(optional)"%}</label><br />{{ form.note }}<br />
+    <input maxlength="255" name="contact_email" type="text" class="input" /><br />
+    <label>{% trans "Name(optional)"%}</label><br />
+    <input maxlength="255" name="contact_name" type="text" class="input" /><br />
+    <label>{% trans "Note(optional)"%}</label><br />
+    <input maxlength="255" name="note" type="text" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>
 <form action="" method="post" id="contact-edit-form" class="hide">{% csrf_token %}
     <h3>{% trans "Edit Contact"%}</h3>
     <label>{% trans "Email"%}</label><br />
-    {{ edit_form.contact_email }}<br />
-    <label>{% trans "Name(optional)"%}</label><br />{{ edit_form.contact_name }}<br />
-    <label>{% trans "Note(optional)"%}</label><br />{{ edit_form.note }}<br />
+    <input maxlength="255" name="contact_email" readonly="readonly" type="text" class="input" /><br />
+    <label>{% trans "Name(optional)"%}</label><br />
+    <input maxlength="255" name="contact_name" type="text" class="input" /><br />
+    <label>{% trans "Note(optional)"%}</label><br />
+    <input maxlength="255" name="note" type="text" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}"  class="submit" />
 </form>

@@ -156,6 +156,8 @@ p { margin:0.5em 0; }
 /** for input, textarea in form **/ /* e.g repo-create */
 .input, .textarea {
     width:260px;
+    padding:2px 3px;
+    border-radius:2px;
     margin-bottom:5px;
 }
 .textarea { height:70px; }
@@ -648,16 +650,11 @@ textarea:-moz-placeholder {/* for FF */
 .simplemodal-close {
     margin-left:5px;
 }
-#confirm-popup,
-.simple-input-popup {
+#confirm-popup {
     min-width:255px;
 }
 #confirm-popup .btn {
     margin-top:.8em;
-}
-.simple-input-popup .long-input {
-    width:99%;
-    *width:252px;
 }
 /**** ui-autocomplete *****/
 .ui-autocomplete {
@@ -1107,14 +1104,9 @@ textarea:-moz-placeholder {/* for FF */
 #repo-create-form {
     padding:0 20px;
 }
-#id_contact_email,
-#id_contact_name,
-#id_note {
-    width:260px;
-    margin-bottom:5px;
-}
 #repo-create-form .perm {
-    width:262px;
+    width:268px;
+    height:22px;
     margin-bottom:10px;
 }
 .event-group-hd {

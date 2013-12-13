@@ -142,16 +142,16 @@
         {% endif %}
     </div>
 
-    <form id="add-new-dir-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+    <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "New Directory" %}</h3>
         <label>{% trans "Directory Name" %}</label><br /><!-- <br/> for ie 7 -->
-        <input type="text" name="name" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
 
-    <form id="add-new-file-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+    <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "New File" %}</h3>
         <div id="featured-filetype">
             <label>{% trans "Featured File Type" %}</label><br />
@@ -169,7 +169,7 @@
             {% endif %}
         </div>
         <label>{% trans "File Name" %}</label><br/>
-        <input type="text" name="name" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
@@ -194,10 +194,10 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
-    <form id="rename-form" action="" method="post" class="simple-input-popup hide">{% csrf_token %}
+    <form id="rename-form" action="" method="post" class="hide">{% csrf_token %}
         <p class="detail">{% trans "Rename %(name)s as:" %}</p>
         <input type="hidden" name="oldname" value="" />
-        <input type="text" name="newname" value="" class="long-input" maxlength="{{max_file_name}}"/><br />
+        <input type="text" name="newname" value="" class="input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
