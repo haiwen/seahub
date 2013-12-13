@@ -1014,7 +1014,7 @@ def client_mgmt(request):
             if i == 0:
                 client.show_peer_name = True
             else:
-                if client.peer_name != clients[i-1].peer_name:
+                if client.peer_name != filter_clients[i-1].peer_name:
                     client.show_peer_name = True
 
     return render_to_response('client_mgmt.html', {
