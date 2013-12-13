@@ -99,6 +99,15 @@ class UserNotificationManager(models.Manager):
             qs = qs.filter(seen=seen)
         return qs
 
+    def remove_user_notifications(self, username):
+        """Remove all user notifications.
+        
+        Arguments:
+        - `self`:
+        - `username`:
+        """
+        self.get_user_notifications(username).delete()
+        
     def count_unseen_user_notifications(self, username):
         """
         

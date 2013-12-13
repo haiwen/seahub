@@ -1,10 +1,12 @@
 import datetime
 import simplejson as json
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext as _
 
 import seaserv
 
@@ -69,8 +71,8 @@ def user_notification_list(request):
     - `request`:
     """
     username = request.user.username
-    count = 100                  # initial notification count
-    limit = 50                   # next a mount of notifications fetched by AJAX
+    count = 25                  # initial notification count
+    limit = 25                   # next a mount of notifications fetched by AJAX
     
     notices = UserNotification.objects.get_user_notifications(username)[:count]
     notices_more = True if len(notices) == count else False
@@ -111,4 +113,21 @@ def user_notification_more(request):
                 'html':html,
                 'notices_more':notices_more,
                 'new_start': new_start}), content_type=ct)
+    
+@login_required
+def user_notification_remove(request):
+    """
+    
+    Arguments:
+    - `request`:
+    """
+    UserNotification.objects.remove_user_notifications(request.user.username)
+
+    messages.success(request, _("Successfully cleared all notices."))
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = settings.SITE_ROOT
+    return HttpResponseRedirect(next)
+
+        
     

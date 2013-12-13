@@ -8,6 +8,8 @@
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_notification_list' %}">{% trans "Notices" %}</a></li>
     </ul>
+    <button id="clear" class="fright">Clear</button>
+
 </div>
 {% endblock %}
 
@@ -35,6 +37,10 @@ $(function(){
     $('tr[data-href]').click(function() {
         location.href = $(this).data('href');
     });
+});
+
+$('#clear').click(function() {
+    location.href = "{% url 'user_notification_remove' %}";
 });
 
 var start = {{start}}, limit = {{limit}};
