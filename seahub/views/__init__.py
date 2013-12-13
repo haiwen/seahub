@@ -1003,9 +1003,14 @@ def client_mgmt(request):
     except:
         pass
 
-    if clients:
-        clients.sort(key=lambda client: client.repo_name)
-        for i, client in enumerate(clients):
+    filter_clients = []
+    for c in clients:
+        if c.peer_name is not None:
+            filter_clients.append(c)
+
+    if filter_clients:
+        filter_clients.sort(key=lambda client: client.peer_name)
+        for i, client in enumerate(filter_clients):
             if i == 0:
                 client.show_peer_name = True
             else:
@@ -1013,7 +1018,7 @@ def client_mgmt(request):
                     client.show_peer_name = True
 
     return render_to_response('client_mgmt.html', {
-            'clients': clients,
+            'clients': filter_clients,
             }, context_instance=RequestContext(request))
 
 @login_required
