@@ -476,11 +476,15 @@ textarea:-moz-placeholder {/* for FF */
     font-size:1.3em;
 }
 .narrow-panel input {
-    width:318px;
+    width:312px;
+    padding:2px 3px;
+    border-radius:2px;
     margin:0 0 0.6em;
 }
 .narrow-panel input.submit {
     width:auto; /*for fr,de etc*/
+    height:28px;
+    padding:4px 5px;
     margin:8px 0 0;
 }
 .narrow-panel .note {

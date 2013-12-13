@@ -6,9 +6,10 @@
 <h2>{% trans "Log In" %}</h2>
 <form action="" method="post" class="login-form">{% csrf_token %}
     <label for="username">{% trans "Email" %}</label>
-	<input type="text" id="id_email" name="username" value="" />
+	<input type="text" name="username" value="" />
 	<label for="password">{% trans "Password" %}</label>
-	<input type="password" id="id_password" name="password" value="" />
+	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "(forgot password)" %}</a>
+	<input type="password" name="password" value="" />
     {% if form.captcha %}
     <label>{% trans "CAPTCHA" %}</label><br />
     {{ form.captcha }}
@@ -25,7 +26,9 @@
 	<p class="error hide"></p>
     {% endif %}
 	<input type="submit" value="{% trans "Submit" %}" class="submit" />
-	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "Forgot password?" %}</a>
+    {% if enable_signup %}
+    <a href="{{ SITE_ROOT }}accounts/register/" style="font-size:13px;">{% trans "Signup" %}</a>
+    {% endif %}
 </form>
 </div>
 {% endblock %}
