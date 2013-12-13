@@ -1006,8 +1006,11 @@ def client_mgmt(request):
     if clients:
         clients.sort(key=lambda client: client.repo_name)
         for i, client in enumerate(clients):
-            if i > 0 and client.repo_name == clients[i - 1].repo_name:
-                client.not_show_repo_name = True
+            if i == 0:
+                client.show_peer_name = True
+            else:
+                if client.peer_name != clients[i-1].peer_name:
+                    client.show_peer_name = True
 
     return render_to_response('client_mgmt.html', {
             'clients': clients,

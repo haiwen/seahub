@@ -10,8 +10,8 @@
 {% if clients %}
 <table>
     <tr>
-        <th width="20%">{% trans "Library" %}</th>
         <th width="20%">{% trans "Client Name" %}</th>
+        <th width="20%">{% trans "Library" %}</th>
         <th width="20%">{% trans "IP" %}</th>
         <th width="20%">{% trans "Last Sync" %}</th>
         <th width="20%">{% trans "Operations" %}</th>
@@ -19,16 +19,16 @@
     {% for client in clients %}
     <tr data-repoid="{{client.repo_id}}" data-token="{{client.token}}">
         <td>
-            {% if not client.not_show_repo_name %}
-            <a href="{% url 'repo' client.repo_id %}">{{ client.repo_name }}</a>
-            {% endif %}
-        </td>
-        <td>
         {% if client.peer_name %}
-        {{ client.peer_name }}
+            {% if client.show_peer_name %}
+            {{ client.peer_name }}
+            {% endif %}
         {% else %}
         --
         {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'repo' client.repo_id %}">{{ client.repo_name }}</a>
         </td>
         <td>
         {% if client.peer_ip %}
