@@ -126,56 +126,63 @@ def group_check(func):
     return _decorated
 
 @login_required
+def group_add(request):
+
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
+    username = request.user.username
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    # check plan
+    num_of_groups = getattr(request.user, 'num_of_groups', -1)
+    if num_of_groups > 0:
+        current_groups = len(get_personal_groups_by_user(username))
+        if current_groups > num_of_groups:
+            result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+    
+    form = GroupAddForm(request.POST)
+    if form.is_valid():
+        group_name = form.cleaned_data['group_name']
+
+        # Check whether group name is duplicated.
+        if request.cloud_mode:
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = _(u'There is already a group with that name.')
+                return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
+        # Group name is valid, create that group.
+        try:
+            ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                            username)
+            return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), status=500,
+                            content_type=content_type)
+    else:
+        return HttpResponseBadRequest(json.dumps(form.errors),
+                                      content_type=content_type)
+
+@login_required
 def group_list(request):
     username = request.user.username
-
-    if request.method == 'POST':
-        """
-        Add a new group.
-        """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        # check plan
-        num_of_groups = getattr(request.user, 'num_of_groups', -1)
-        if num_of_groups > 0:
-            current_groups = len(get_personal_groups_by_user(username))
-            if current_groups > num_of_groups:
-                result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
-                return HttpResponse(json.dumps(result), status=500,
-                                    content_type=content_type)
-        
-        form = GroupAddForm(request.POST)
-        if form.is_valid():
-            group_name = form.cleaned_data['group_name']
-
-            # Check whether group name is duplicated.
-            if request.cloud_mode:
-                checked_groups = get_personal_groups_by_user(username)
-            else:
-                checked_groups = get_personal_groups(-1, -1)
-            for g in checked_groups:
-                if g.group_name == group_name:
-                    result['error'] = _(u'There is already a group with that name.')
-                    return HttpResponse(json.dumps(result), status=400,
-                                    content_type=content_type)
-
-            # Group name is valid, create that group.
-            try:
-                ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                                username)
-                return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-            except SearpcError, e:
-                result['error'] = _(e.msg)
-                return HttpResponse(json.dumps(result), status=500,
-                                content_type=content_type)
-        else:
-            return HttpResponseBadRequest(json.dumps(form.errors),
-                                          content_type=content_type)
-
-    ### GET ###
     joined_groups = get_personal_groups_by_user(username)
+    for group in joined_groups:
+        mods_enabled = get_enabled_mods_by_group(group.id)
+        if 'group wiki' in mods_enabled:
+            group.wiki_enabled = True
+        else:
+            group.wiki_enabled = False
 
     return render_to_response('group/groups.html', {
             'joined_groups': joined_groups,

@@ -7,7 +7,7 @@ from views import group_info, group_members, group_member_operations, group_add_
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_remove, group_dismiss, group_quit, \
     group_make_public, group_revoke_public, group_transfer, group_toggle_modules, \
-    group_add_discussion, group_rename
+    group_add_discussion, group_rename, group_add
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
@@ -40,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^joinrequest/(?P<group_id>[\d]+)/$', group_joinrequest, name='group_joinrequest'),
     url(r'^(?P<group_id>\d+)/modules/toggle/$', group_toggle_modules, name='group_toggle_modules'),
     url(r'^(?P<group_id>\d+)/discussion/add/$', group_add_discussion, name='group_add_discussion'),
+    url(r'^add/$', group_add, name='group_add'),
 )
 
 import seahub.settings as settings

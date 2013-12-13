@@ -9,9 +9,16 @@
     <li class="group ovhd">
     <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft" title="{{ group.props.group_name }}">{% grp_avatar group.props.id 56 %}</a>
     <div class="txt fright">
-        <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
+        <h4><a href="{% url 'group_info' group.props.id %}">{{ group.props.group_name }}</a></h4>
         <p><span class="item-name">{% trans "Creator: " %}</span>{{ group.props.creator_name }}</p>
         <p><span class="item-name">{% trans "Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
+        <div class="fast">
+            <a href="{% url 'group_info' group.props.id %}" title="{% trans "Libraries" %}" class="a"><span class="icon-folder-close"></span></a>
+            <a href="{% url 'group_discuss' group.props.id %}" title="{% trans "Discussion" %}" class="a"><span class="icon-comment"></span></a>
+            {% if group.wiki_enabled %}
+            <a href="{% url 'group_wiki' group.props.id %}" title="{% trans "Wiki" %}" class="a"><span class="icon-book"></span></a>
+            {% endif %}
+        </div>
     </div>
     </li>
     {% endfor %}

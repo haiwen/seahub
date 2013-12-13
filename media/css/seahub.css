@@ -1677,6 +1677,14 @@ textarea:-moz-placeholder {/* for FF */
     width:5em;
     color:#666;
 }
+.group .fast .a {
+    font-size:18px;
+    color:#FEAC74;
+    margin-right:5px;
+}
+.group .fast .a:hover {
+    text-decoration:none;
+}
 .ru .group .item-name,
 .de .group .item-name,
 .it .group .item-name {

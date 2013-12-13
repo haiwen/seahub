@@ -15,7 +15,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-{% url 'group_list' as group_add_url %}
+{% url 'group_add' as group_add_url %}
 {% with post_url=group_add_url %}
 {% include "snippets/group_add_js.html" %}
 {% endwith %}
