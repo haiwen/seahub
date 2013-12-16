@@ -5,48 +5,39 @@
 
 <div class="user-profile narrow-panel ovhd">
     <div class="pic fleft">
-        {% if user %}
+      {% if user %}
         {% avatar user.username 80 %}
-        {% else %}
+      {% else %}
         {% avatar "" 80 %}
-        {% endif %}
-        {% if add_to_contact %}
-        <button id="add">{% trans "Add to contacts" %}</button>
-        {% endif %}
+      {% endif %}
     </div>
 
     <div class="txt fright">
-        {% if nickname %}
         <p>{{ nickname }}</p>
+        <p class="intro">{{ intro }}</p>
+        {% if add_to_contacts %}
+        <button class="add-to-contacts" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
         {% endif %}
 
-        {% if intro %}
-        <p class="intro">{{ intro }}</p>
+        {% if user %}
+        <button id="msg">{% trans "Send message" %}</button>
         {% endif %}
     </div>
 </div>
 
-{% if add_to_contact %}
-<form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">{% csrf_token %}
-    <input type="hidden" name="user_email" value="{{ request.user.username }}" />
-    <label>{% trans "Email: " %}</label><br />
-    <input type="text" name="contact_email" maxlength="255" value="{{ email }}" class="input" /><br />
-    <label>{% trans "Name(optional): " %}</label><br />
-    <input type="text" name="contact_name" maxlength="255" class="input" /><br />
-    <label>{% trans "Note(optional): " %}</label><br />
-    <input type="text" name="note" maxlength="255" class="input" /><br />
-    <input type="submit" value="{% trans "Submit" %}"  class="submit" />
-</form>
+{% if add_to_contacts %}
+{% include 'snippets/add_to_contacts_form.html' %}
 {% endif %}
 
 {% endblock %}
 
 {% block extra_script %}
-{% if new_user %}
 <script type="text/javascript">
-$('#add').click(function() {
-    $('#add-as-contact').modal({appendTo: '#main'});
+{% if user %}
+$('#msg').click(function() {
+    location.href = "{% url 'user_msg_list' username_or_id %}";
 });
-</script>
 {% endif %}
+</script>
+{% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

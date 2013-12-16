@@ -4,10 +4,10 @@
 {# for file/dir 'discuss to grp' #}
 {% for msg in messages %}
 <li class="msg ovhd" data-id="{{msg.id}}">
-<a class="pic fleft" href="{% url 'user_msg_list' msg.from_email|id_or_email %}">{% avatar msg.from_email 48 %}</a>
+<a class="pic fleft" href="{% url 'user_profile' msg.from_email|id_or_email %}">{% avatar msg.from_email 48 %}</a>
 <div class="txt">
     <div class="msg-main">
-        <a href="{% url 'user_msg_list' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
+        <a href="{% url 'user_profile' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
         <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
         <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
         <span class="say"></span>
@@ -24,9 +24,9 @@
             {% for r in msg.replies %}
             <li class="reply w100 ovhd">
             {% with id=r.from_email|id_or_email name=r.from_email|email2nickname %}
-            <a href="{% url 'user_msg_list' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
+            <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
             <div class="txt">
-                <a href="{% url 'user_msg_list' id %}">{{ name }}</a>
+                <a href="{% url 'user_profile' id %}">{{ name }}</a>
                 <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
                 <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>
                 <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>

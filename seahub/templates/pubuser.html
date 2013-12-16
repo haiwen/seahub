@@ -11,9 +11,9 @@
     {% for u in users %}
     {% with e=u.email id=u.email|id_or_email %}
     <li class="user ovhd">
-    <a href="{% url 'user_msg_list' id %}" class="pic fleft">{% avatar e 48 %}</a>
+    <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">
-        <a class="name" href="{% url 'user_msg_list' id %}">{{ e|email2nickname }}</a>
+        <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
         <p>{{ e }}</p>
         {% if u.can_be_contact %}
         <button class="add-to-contacts" data-email="{{e}}">{% trans "Add to Contacts" %}</button>

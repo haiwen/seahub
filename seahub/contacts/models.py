@@ -10,6 +10,13 @@ from seahub.base.fields import LowerCaseCharField
 from settings import CONTACT_EMAIL_LENGTH
 
 class ContactManager(models.Manager):
+    def add_contact(self, user_email, contact_email, contact_name=None, note=None):
+        contact = self.model(user_email=user_email,
+                             contact_email=contact_email,
+                             contact_name=contact_name, note=note)
+        contact.save(using=self._db)
+        return contact
+        
     def get_contacts_by_user(self, user_email):
         """Get a user's contacts.
         """
@@ -63,14 +70,6 @@ class ContactAddForm(ModelForm):
     def clean(self):
         if not 'contact_email' in self.cleaned_data:
             raise forms.ValidationError(_('Email is required.'))
-            
-        user_email = self.cleaned_data['user_email']
-        contact_email = self.cleaned_data['contact_email']
-        if user_email == contact_email:
-            raise forms.ValidationError(_("You can't add yourself."))
-        elif Contact.objects.filter(user_email=user_email,
-                                    contact_email=contact_email).count() > 0:
-            raise forms.ValidationError(_("It is already your contact."))
         else:
             return self.cleaned_data
 

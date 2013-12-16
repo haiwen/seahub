@@ -22,7 +22,7 @@
     {% for contact in contacts %}
     <tr>
         <td>{% avatar contact.contact_email 20 %}</td>
-        <td><a href="{% url 'user_msg_list' contact.contact_email|id_or_email%}">{{ contact.contact_email }}</a></td>
+        <td><a href="{% url 'user_profile' contact.contact_email|id_or_email%}">{{ contact.contact_email }}</a></td>
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
@@ -126,7 +126,7 @@ $('#contact-add-form').submit(function() {
         return false;
     }
     if (email == '{{request.user.username}}') {
-        apply_form_error(form_id, "{% trans "You can't add yourself." %}");
+        apply_form_error(form_id, "{% trans "You cannot add yourself." %}");
         return false;
     }
 
@@ -137,7 +137,6 @@ $('#contact-add-form').submit(function() {
         cache: 'false',
         beforeSend: prepareCSRFToken,
         data: {
-            'user_email': '{{request.user.username}}',
             'contact_email': email,
             'contact_name': form.find('input[name="contact_name"]').val(),
             'note': form.find('input[name="note"]').val()
@@ -149,12 +148,7 @@ $('#contact-add-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                var errors = $.parseJSON(jqXHR.responseText);
-                var str = '';
-                for (var i in errors) {
-                    str += errors[i].join();
-                }
-                apply_form_error(form_id, str);
+                location.reload(true);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

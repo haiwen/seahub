@@ -18,6 +18,7 @@ from utils import refresh_cache
 from seahub.auth.decorators import login_required
 from seahub.utils import render_error
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
@@ -84,12 +85,10 @@ def edit_profile(request):
             'owned_repos': owned_repos,
             }, context_instance=RequestContext(request))
 
+@login_required
 def user_profile(request, username_or_id):
-    user_nickname = ''
-    user_intro = ''
-    user = None
-
     # fetch the user by username or id, try id first
+    user = None    
     try:
         user_id = int(username_or_id)
         try:
@@ -101,27 +100,25 @@ def user_profile(request, username_or_id):
             user = User.objects.get(email=username_or_id)
         except User.DoesNotExist:
             pass
-        
-    if user:
-        # profile = Profile.objects.filter(user=user)
-        # if profile:
-        #     profile = profile[0]
-        #     user_nickname = profile.nickname
-        #     user_intro = profile.intro
-        # else:
-        #     username = user.username
-        #     idx = username.find('@')
-        #     user_nickname = username if idx <= 0 else username[:idx]
-        #     user_intro = ''
-        return HttpResponseRedirect(reverse('user_msg_list', args=[user.email]))
+
+    nickname = '' if user is None else email2nickname(user.username)
+
+    if user is not None:
+        profile = Profile.objects.get_profile_by_user(user.username)
+        intro = profile.intro if profile else ''
+        c = Contact.objects.get_contact_by_user(request.user.username,
+                                                user.username)
+        add_to_contacts = True if c is None else False
     else:
-        user_nickname = ""
-        user_intro = _(u'Has not accepted invitation yet')
+        intro = _(u'Has not accepted invitation yet')
+        add_to_contacts = False
 
     return render_to_response('profile/user_profile.html', {
+            'username_or_id': username_or_id,
             'user': user,
-            'nickname': user_nickname,
-            'intro': user_intro,
+            'nickname': nickname,
+            'intro': intro,
+            'add_to_contacts': add_to_contacts,
             }, context_instance=RequestContext(request))
 
 @login_required

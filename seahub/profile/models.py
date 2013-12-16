@@ -5,11 +5,20 @@ from django.dispatch import receiver
 from settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT
 from registration.signals import user_registered
 
+class ProfileManager(models.Manager):
+    def get_profile_by_user(self, username):
+        """Get a user's profile.
+        """
+        try:
+            return super(ProfileManager, self).get(user=username)
+        except Profile.DoesNotExist:
+            return None
+        
 class Profile(models.Model):
     user = models.EmailField(unique=True)
     nickname = models.CharField(max_length=64, blank=True)
     intro = models.TextField(max_length=256, blank=True)
-
+    objects = ProfileManager()
 
 @receiver(user_registered)
 def clean_email_id_cache(sender, **kwargs):

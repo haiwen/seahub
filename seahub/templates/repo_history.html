@@ -30,7 +30,7 @@
                 {% if commit.creator_name %}
                     {% if not commit.second_parent_id %}
                     {% avatar commit.creator_name 16 %}
-                    <a href="{% url 'user_msg_list' commit.creator_name|id_or_email %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
+                    <a href="{% url 'user_profile' commit.creator_name|id_or_email %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
                     {% else %}
                     {% trans "None"%}
                     {% endif %}
