@@ -26,8 +26,9 @@
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="icon-folder-close"></span>{% trans "Folders" %}</a></li>
+        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>        
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="icon-link"></span>{% trans "Links" %}</a></li>
-        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>
     </ul>
 </div>
 {% endblock %}

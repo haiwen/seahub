@@ -325,10 +325,10 @@ def list_shared_repos(request):
     """
     username = request.user.username
 
-    out_repos = []
+    shared_repos = []
 
     # personal repos shared from this user
-    out_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+    shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
 
     # repos shared to groups
     group_repos = get_group_repos_by_owner(username)
@@ -339,7 +339,7 @@ def list_shared_repos(request):
             continue
         repo.props.user = group.props.group_name
         repo.props.user_info = repo.group_id
-    out_repos += group_repos
+    shared_repos += group_repos
 
     if not CLOUD_MODE:
         # public repos shared by this user
@@ -347,9 +347,13 @@ def list_shared_repos(request):
         for repo in pub_repos:
             repo.props.user = _(u'all members')
             repo.props.user_info = 'all'
-        out_repos += pub_repos
+        shared_repos += pub_repos
 
-    for repo in out_repos:
+    out_repos = []
+    for repo in shared_repos:
+        if repo.is_virtual:     # skip virtual repos
+            continue
+
         if repo.props.permission == 'rw':
             repo.share_permission = _(u'Read-Write')
         elif repo.props.permission == 'r':
@@ -359,6 +363,7 @@ def list_shared_repos(request):
 
         if repo.props.share_type == 'personal':
             repo.props.user_info = repo.props.user
+        out_repos.append(repo)
 
     out_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
     
@@ -442,6 +447,78 @@ def list_priv_shared_files(request):
             "priv_share_in": priv_share_in,
             }, context_instance=RequestContext(request))
 
+@login_required
+def list_priv_shared_folders(request):
+    """List private shared folders.
+    
+    Arguments:
+    - `request`:
+    """
+    username = request.user.username
+
+    shared_repos = []
+
+    # personal repos shared from this user
+    shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+
+    # repos shared to groups
+    group_repos = get_group_repos_by_owner(username)
+    for repo in group_repos:
+        group = ccnet_threaded_rpc.get_group(int(repo.group_id))
+        if not group:
+            repo.props.user = ''
+            continue
+        repo.props.user = group.props.group_name
+        repo.props.user_info = repo.group_id
+    shared_repos += group_repos
+
+    if not CLOUD_MODE:
+        # public repos shared by this user
+        pub_repos = list_inner_pub_repos_by_owner(username)
+        for repo in pub_repos:
+            repo.props.user = _(u'all members')
+            repo.props.user_info = 'all'
+        shared_repos += pub_repos
+
+    shared_folders = []
+    for repo in shared_repos:
+        if not repo.is_virtual:     # skip non-virtual repos
+            continue
+
+        if repo.props.permission == 'rw':
+            repo.share_permission = _(u'Read-Write')
+        elif repo.props.permission == 'r':
+            repo.share_permission = _(u'Read-Only')
+        else:
+            repo.share_permission = ''
+
+        if repo.props.share_type == 'personal':
+            repo.props.user_info = repo.props.user
+        shared_folders.append(repo)
+
+    shared_folders.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
+
+    return render_to_response('share/list_priv_shared_folders.html', {
+            'shared_folders': shared_folders,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def view_priv_shared_folder(request, repo_id):
+    """
+    
+    Arguments:
+    - `request`:
+    - `repo_id`:
+    """
+    repo = seafile_api.get_repo(repo_id)
+    if repo is None:
+        raise Http404
+
+    if not repo.is_virtual:
+        raise Http404
+
+    url = reverse('repo', args=[repo.origin_repo_id]) + '?p=' + repo.origin_path
+    return HttpResponseRedirect(url)
     
 @login_required
 def share_permission_admin(request):
