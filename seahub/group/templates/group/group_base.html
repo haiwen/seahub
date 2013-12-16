@@ -17,7 +17,7 @@
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}"><span class="icon-folder-close"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}"><span class="icon-archive"></span>{% trans "Libraries" %}</a></li>
 
         <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}"><span class="icon-comment"></span>{% trans "Discussion" %}</a></li>
 
