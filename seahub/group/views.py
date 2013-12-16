@@ -5,6 +5,7 @@ import stat
 import simplejson as json
 import urllib2
 
+from django.conf import settings
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
@@ -17,6 +18,7 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
 from django.utils import datetime_safe
+from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
@@ -37,6 +39,7 @@ from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added
+from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import FileDiscuss, FileContributors
 from seahub.contacts.models import Contact
@@ -73,7 +76,7 @@ def group_check(func):
     """
     Decorator for initial group permission check tasks
 
-    un-login user & group not pub --> public info page
+    un-login user & group not pub --> login page
     un-login user & group pub --> view_perm = "pub"
     login user & non group member & group not pub --> public info page
     login user & non group member & group pub --> view_perm = "pub"
@@ -93,9 +96,10 @@ def group_check(func):
 
         if not request.user.is_authenticated():
             if not group.is_pub:
-                return render_to_response('group/group_pubinfo.html', {
-                        'group': group,
-                        }, context_instance=RequestContext(request))
+                login_url = settings.LOGIN_URL
+                path = urlquote(request.get_full_path())
+                tup = login_url, REDIRECT_FIELD_NAME, path
+                return HttpResponseRedirect('%s?%s=%s' % tup)
             else:
                 group.view_perm = "pub"
                 return func(request, group, *args, **kwargs)
