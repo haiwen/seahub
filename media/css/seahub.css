@@ -370,6 +370,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav .hd .avatar { /*for 'group'*/
     vertical-align:top;
+	border-radius:1000px;
 }
 .side-tabnav .hd .icon-globe { /*for 'group'*/
     line-height:1;
@@ -1187,10 +1188,14 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* avatar */
 .avatar-op .avatar,
-.home-profile .avatar,
-.group .avatar {
+.home-profile .avatar {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
+}
+.group .avatar {
+	border-radius: 1000px;
+	padding:7px;
+	border:1px solid #fff4cc;
 }
 .avatar-op h3 {
     border:none;
@@ -1650,8 +1655,8 @@ textarea:-moz-placeholder {/* for FF */
 .user-list .user {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
-    width:315px;
-    margin:0 17px 25px 0;
+    width:330px;
+    margin:0 17px 30px 0;
 }
 .group-list .group,
 .user-list .user {
