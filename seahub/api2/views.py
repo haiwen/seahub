@@ -74,6 +74,9 @@ from seaserv import seafile_api
 
 from seafevents.events.db import UserEventDetail
 from seafevents.events.models import UserEvent
+import calendar as cal
+import time
+from datetime import datetime
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -2049,7 +2052,8 @@ class UserEventDetailEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, UserEventDetail):
             return None
-        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': obj.timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
+        timestamp = time.mktime(datetime.timetuple(obj.timestamp))
+        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
 
 
 class SharedLinksView(APIView):
