@@ -143,12 +143,31 @@ def access_to_repo(request, repo_id, repo_ap=None):
         return True if check_permission(repo_id, request.user.username) else False
 
 def get_user_permission(request, repo_id):
+    """
+    NOTE: This function is deprecated, use `check_repo_access_permission`.
+    """
     if request.user.is_authenticated():
         return check_permission(repo_id, request.user.username)
     else:
         token = request.COOKIES.get('anontoken', None)
         return 'r' if token else ''
 
+def get_system_default_repo_id():
+    return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+
+def check_repo_access_permission(repo_id, user):
+    """Check repo access permission of a user, always return 'rw' when repo is
+    system repo and user is admin.
+    
+    Arguments:
+    - `repo_id`:
+    - `user`:
+    """
+    if get_system_default_repo_id() == repo_id and user.is_staff:
+        return 'rw'
+    else:
+        return seafile_api.check_repo_access_permission(repo_id, user.username)
+    
 def get_file_access_permission(repo_id, path, username):
     """Check user has permission to view the file.
     1. check whether this file is private shared.
@@ -165,9 +184,6 @@ def get_file_access_permission(repo_id, path, username):
         return None
     else:
         return pfs.permission
-    
-def get_repo_access_permission(repo_id, username):
-    return seafile_api.check_repo_access_permission(repo_id, username)
     
 def gen_path_link(path, repo_name):
     """
@@ -381,7 +397,7 @@ def render_recycle_dir(request, repo_id, commit_id):
 
 @login_required
 def repo_recycle_view(request, repo_id):
-    if get_user_permission(request, repo_id) != 'rw':
+    if check_repo_access_permission(repo_id, request.user) != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
@@ -609,7 +625,7 @@ def repo_history(request, repo_id):
     """
     List library modification histories.
     """
-    user_perm = get_user_permission(request, repo_id)
+    user_perm = check_repo_access_permission(repo_id, request.user)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view library modification'))
 
@@ -873,6 +889,25 @@ def modify_token(request, repo_id):
 
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
+def create_default_library(username):
+    """Create a default library for user, and copy all the stuffs from system
+    library into it.
+    
+    Arguments:
+    - `username`:
+    """
+    default_repo = seafile_api.create_repo(name=_("My Library"),
+                                           desc=_("My Library"),
+                                           username=username,
+                                           passwd=None)
+    sys_repo_id = get_system_default_repo_id()
+    dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
+    for e in dirents:
+        obj_name = e.obj_name
+        seafile_api.copy_file(sys_repo_id, '/', obj_name,
+                              default_repo, '/', obj_name, username)
+    UserOptions.objects.set_default_repo(username, default_repo)
+    
 @login_required
 def myhome(request):
     username = request.user.username
@@ -951,11 +986,8 @@ def myhome(request):
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
             # create a default library for user
-            default_repo = seafile_api.create_repo(name=_("My Library"),
-                                                   desc=_("My Library"),
-                                                   username=username,
-                                                   passwd=None)
-            UserOptions.objects.set_default_repo(username, default_repo)
+            create_default_library(username)
+
             # refetch owned repos
             owned_repos = seafile_api.get_owned_repo_list(username)
             calculate_repos_last_modify(owned_repos)
@@ -1181,7 +1213,7 @@ def repo_set_access_property(request, repo_id):
 
 @login_required    
 def repo_del_file(request, repo_id):
-    if get_user_permission(request, repo_id) != 'rw':
+    if check_repo_access_permission(repo_id, request.user) != 'rw':
         return render_permission_error(request, _('Failed to delete file.'))
 
     parent_dir = request.GET.get("p", "/")
@@ -1232,7 +1264,7 @@ def repo_access_file(request, repo_id, obj_id):
 
     username = request.user.username
     path = request.GET.get('p', '')
-    if get_repo_access_permission(repo_id, username) or \
+    if check_repo_access_permission(repo_id, request.user) or \
             get_file_access_permission(repo_id, path, username) or from_shared_link:
         # Get a token to access file
         token = seafserv_rpc.web_get_access_token(repo_id, obj_id, op, username)
@@ -1827,7 +1859,8 @@ def repo_download_dir(request, repo_id):
         from_shared_link = True
         shared_by = fileshare.username
     else:
-        allow_download = True if get_user_permission(request, repo_id) else False
+        allow_download = True if check_repo_access_permission(
+            repo_id, request.user) else False
 
     if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
@@ -1970,7 +2003,7 @@ def convert_cmmt_desc_link(request):
         raise Http404
 
     # perm check
-    if get_user_permission(request, repo_id) is None:
+    if check_repo_access_permission(repo_id, request.user) is None:
         raise Http404
     
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)

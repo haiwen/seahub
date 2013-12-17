@@ -25,6 +25,7 @@ from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
+from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare
@@ -72,6 +73,31 @@ def sys_repo_admin(request):
         },
         context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
+def sys_list_orphan(request):
+    try:
+        repos = seafile_api.get_orphan_repo_list()
+    except Exception as e:
+        logger.error(e)
+        repos = []
+
+    return render_to_response('sysadmin/sys_list_orphan.html', {
+            'repos': repos,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_list_system(request):
+    """List system repos.
+    """
+    repos = []
+    sys_repo = seafile_api.get_repo(get_system_default_repo_id())
+    repos.append(sys_repo)
+
+    return render_to_response('sysadmin/sys_list_system.html', {
+            'repos': repos,
+            }, context_instance=RequestContext(request))
 
 def list_repos_by_name_and_owner(repo_name, owner):
     repos = []
@@ -656,15 +682,3 @@ def sys_repo_transfer(request):
         next = reverse(sys_repo_admin)
     return HttpResponseRedirect(next)
     
-@login_required
-@sys_staff_required
-def sys_list_orphan(request):
-    try:
-        repos = seafile_api.get_orphan_repo_list()
-    except Exception as e:
-        logger.error(e)
-        repos = []
-
-    return render_to_response('sysadmin/sys_list_orphan.html', {
-            'repos': repos,
-            }, context_instance=RequestContext(request))

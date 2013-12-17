@@ -20,7 +20,7 @@ from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate, sys_publink_admin, \
     sys_repo_search, sys_repo_transfer, sys_list_orphan, user_deactivate, \
-    user_toggle_status, user_set_quota, sys_ldap_user_admin
+    user_toggle_status, user_set_quota, sys_ldap_user_admin, sys_list_system
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -160,6 +160,7 @@ urlpatterns = patterns('',
     ### system admin ###                       
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
     url(r'^sys/seafadmin/orphan/$', sys_list_orphan, name='sys_list_orphan'),
+    url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
     url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),

@@ -56,18 +56,11 @@ if HAS_OFFICE_CONVERTER:
 
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
-from seahub.views import is_registered_user, get_repo_access_permission, \
+from seahub.views import is_registered_user, check_repo_access_permission, \
     get_unencry_rw_repos_by_user
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-def get_user_permission(request, repo_id):
-    if request.user.is_authenticated():
-        return check_permission(repo_id, request.user.username)
-    else:
-        token = request.COOKIES.get('anontoken', None)
-        return 'r' if token else ''
 
 def gen_path_link(path, repo_name):
     """
@@ -165,7 +158,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
 
     # user_perm = get_file_access_permission(repo_id, path, username) or \
     #     get_repo_access_permission(repo_id, username)
-    user_perm = get_repo_access_permission(repo_id, username)
+    user_perm = check_repo_access_permission(repo_id, request.user)
     if user_perm is None:
         return ('', '', user_perm)
     else:
@@ -755,7 +748,7 @@ def file_edit_submit(request, repo_id):
                             content_type=content_type)
 
     username = request.user.username
-    if get_repo_access_permission(repo_id, username) != 'rw':
+    if check_repo_access_permission(repo_id, request.user) != 'rw':
         return error_json(_(u'Permission denied'))
         
     repo = get_repo(repo_id)
@@ -831,7 +824,7 @@ def file_edit(request, repo_id):
     if request.method == 'POST':
         return file_edit_submit(request, repo_id)
 
-    if get_user_permission(request, repo_id) != 'rw':
+    if check_repo_access_permission(repo_id, request.user) != 'rw':
         return render_permission_error(request, _(u'Unable to edit file'))
 
     path = request.GET.get('p', '/')
@@ -920,7 +913,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
     if not obj_id or obj_id == EMPTY_SHA1:
         return '', None
     else:
-        permission = get_user_permission(request, repo_id)
+        permission = check_repo_access_permission(repo_id, request.user)
         if permission:
             # Get a token to visit file
             token = seafserv_rpc.web_get_access_token(repo_id,

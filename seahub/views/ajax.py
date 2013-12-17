@@ -24,7 +24,8 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful
-from seahub.views import get_repo_dirents, validate_owner
+from seahub.views import get_repo_dirents, validate_owner, \
+    check_repo_access_permission
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
         get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
@@ -42,9 +43,6 @@ def get_repo(repo_id):
 
 def get_commit(commit_id):
     return seaserv.get_commit(commit_id)
-
-def check_repo_access_permission(repo_id, username):
-    return seafile_api.check_repo_access_permission(repo_id, username)
 
 def get_group(gid):
     return seaserv.get_group(gid)
@@ -66,7 +64,7 @@ def get_dirents(request, repo_id):
     username = request.user.username
 
     # permission checking
-    user_perm = check_repo_access_permission(repo_id, username)
+    user_perm = check_repo_access_permission(repo_id, request.user)
     if user_perm is None:
         err_msg = _(u"You don't have permission to access the library.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
@@ -201,7 +199,7 @@ def list_dir(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -281,7 +279,7 @@ def list_dir_more(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -356,7 +354,7 @@ def new_dirent_common(func):
 
         # permission checking
         username = request.user.username
-        if check_repo_access_permission(repo.id, username) != 'rw':
+        if check_repo_access_permission(repo.id, request.user) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -442,7 +440,7 @@ def rename_dirent(request, repo_id):
                             content_type=content_type)
 
     # permission checking
-    if check_repo_access_permission(repo.id, username) != 'rw':
+    if check_repo_access_permission(repo.id, request.user) != 'rw':
         result['error'] = _('Permission denied')
         return HttpResponse(json.dumps(result), status=403,
                             content_type=content_type)
@@ -500,7 +498,7 @@ def delete_dirent(request, repo_id):
 
     # permission checking
     username = request.user.username
-    if check_repo_access_permission(repo.id, username) != 'rw':
+    if check_repo_access_permission(repo.id, request.user) != 'rw':
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=403, content_type=content_type)
@@ -542,7 +540,7 @@ def delete_dirents(request, repo_id):
 
     # permission checking
     username = request.user.username
-    if check_repo_access_permission(repo.id, username) != 'rw':
+    if check_repo_access_permission(repo.id, request.user) != 'rw':
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=403, content_type=content_type)
@@ -586,7 +584,7 @@ def copy_move_common(func):
 
         # permission checking
         username = request.user.username
-        if check_repo_access_permission(repo.id, username) != 'rw':
+        if check_repo_access_permission(repo.id, request.user) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -610,7 +608,7 @@ def copy_move_common(func):
                                 content_type=content_type)
     
         # check whether user has write permission to dest repo
-        if check_repo_access_permission(dst_repo_id, username) != 'rw':
+        if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -746,7 +744,7 @@ def dirents_copy_move_common(func):
 
         # permission checking
         username = request.user.username
-        if check_repo_access_permission(repo.id, username) != 'rw':
+        if check_repo_access_permission(repo.id, request.user) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -771,7 +769,7 @@ def dirents_copy_move_common(func):
                                 content_type=content_type)
     
         # check whether user has write permission to dest repo
-        if check_repo_access_permission(dst_repo_id, username) != 'rw':
+        if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -908,7 +906,7 @@ def get_current_commit(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),

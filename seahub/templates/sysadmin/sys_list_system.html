@@ -6,8 +6,8 @@
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'sys_repo_admin' %}">{% trans "All" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Orphan" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'sys_list_system' %}">{% trans "System" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_list_orphan' %}">{% trans "Orphan" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_list_system' %}">{% trans "System" %}</a></li>
     </ul>
     <button class="icon-search fright" id="search-repo-btn"> {% trans "Search" %}</button>    
 </div>
@@ -15,7 +15,20 @@
 
 {% block main_panel %}
 {% if repos %}
-{% include "sysadmin/repoadmin_table.html" %}
+<table>
+    <tr>
+        <th width="25%">{% trans "Name" %}</th>
+        <th width="25%">ID</th>
+        <th width="50%">{% trans "Description" %}</th>
+    </tr>
+    {% for repo in repos %}
+    <tr>
+        <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
+        <td style="font-size:11px;">{{ repo.id }}</td>
+        <td>{{ repo.props.desc }}</td>
+    </tr>
+    {% endfor %}
+</table>
 {% else %}
 <p>{% trans "None" %}</p>
 {% endif %}
@@ -28,7 +41,6 @@
 $('#search-repo-btn').click(function() {
     location.href = "{% url 'sys_repo_search' %}";
 });
-{% include "sysadmin/repoadmin_js.html" %}
 </script>
 {% endblock %}
  

@@ -16,8 +16,8 @@ from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, UploadLinkShare
-from seahub.views import gen_path_link, get_user_permission, get_repo_dirents, \
-    get_unencry_rw_repos_by_user
+from seahub.views import gen_path_link, get_repo_dirents, \
+    get_unencry_rw_repos_by_user, check_repo_access_permission
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
@@ -58,9 +58,6 @@ def is_password_set(repo_id, username):
 #         return None
 #     else:
 #         return pfs.permission
-    
-def check_repo_access_permission(repo_id, username):
-    return seafile_api.check_repo_access_permission(repo_id, username)
 
 def get_path_from_request(request):
     path = request.GET.get('p', '/')
@@ -89,7 +86,7 @@ def is_no_quota(repo_id):
 
 def get_upload_url(request, repo_id):
     username = request.user.username
-    if get_user_permission(request, repo_id) == 'rw':
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'upload', username)
         return gen_file_upload_url(token, 'upload')
@@ -100,7 +97,7 @@ def get_upload_url(request, repo_id):
 #     """Get file upload url for web api.
 #     """
 #     username = request.user.username
-#     if get_user_permission(request, repo_id) == 'rw':
+#     if check_repo_access_permission(repo_id, request.user) == 'rw':
 #         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
 #                                                         'upload', username)
 #         return gen_file_upload_url(token, 'upload-api')
@@ -109,7 +106,7 @@ def get_upload_url(request, repo_id):
 
 # def get_api_update_url(request, repo_id):
 #     username = request.user.username
-#     if get_user_permission(request, repo_id) == 'rw':
+#     if check_repo_access_permission(repo_id, request.user) == 'rw':
 #         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
 #                                                         'update', username)
 #         return gen_file_upload_url(token, 'update-api')
@@ -120,7 +117,7 @@ def get_ajax_upload_url(request, repo_id):
     """Get file upload url for AJAX.
     """
     username = request.user.username
-    if get_user_permission(request, repo_id) == 'rw':
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'upload', username)
         return gen_file_upload_url(token, 'upload-aj')
@@ -131,7 +128,7 @@ def get_ajax_update_url(request, repo_id):
     """Get file upload url for AJAX.
     """
     username = request.user.username
-    if get_user_permission(request, repo_id) == 'rw':
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'update', username)
         return gen_file_upload_url(token, 'update-aj')
@@ -143,7 +140,7 @@ def get_blks_upload_url(request, repo_id):
     Get upload url for encrypted file (uploaded in blocks)
     '''
     username = request.user.username
-    if get_user_permission(request, repo_id) == 'rw':
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'upload-blks', username)
         return gen_file_upload_url(token, 'upload-blks-aj')
@@ -155,7 +152,7 @@ def get_blks_update_url(request, repo_id):
     Get update url for encrypted file (uploaded in blocks)
     '''
     username = request.user.username
-    if get_user_permission(request, repo_id) == 'rw':
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
                                                         'update-blks', username)
         return gen_file_upload_url(token, 'update-blks-aj')
@@ -206,7 +203,7 @@ def render_repo(request, repo):
     """
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
@@ -348,7 +345,7 @@ def repo_history_view(request, repo_id):
 
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_repo_access_permission(repo.id, username)
+    user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
                 'repo': repo,
