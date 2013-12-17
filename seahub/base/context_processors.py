@@ -49,7 +49,6 @@ def base(request):
         'site_title': SITE_TITLE,
         'branding_css': BRANDING_CSS,
         'logo_path': LOGO_PATH,
-        'logo_url': LOGO_URL,
         'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
