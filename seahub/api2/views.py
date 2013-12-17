@@ -72,6 +72,11 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, is_personal_repo
 from seaserv import seafile_api
 
+from seafevents.events.db import UserEventDetail
+from seafevents.events.models import UserEvent
+import calendar as cal
+import time
+from datetime import datetime
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -2185,6 +2190,28 @@ class VirtualRepos(APIView):
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
         return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
+
+class Activity(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        events_count = 15
+        username = request.user.username
+        start = int(request.GET.get('start', 0))
+
+        events, start = get_user_events(username, start, events_count)
+        events_more = True if len(events) == events_count else False
+
+        event_groups = group_events_data(events)
+
+        api_pre_events(event_groups)
+
+        return HttpResponse(json.dumps({'event_groups':event_groups, 'events_more':events_more,
+                                    'new_start': start}, cls=UserEventDetailEncoder),
+                            content_type='application/json; charset=utf-8')
+
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )

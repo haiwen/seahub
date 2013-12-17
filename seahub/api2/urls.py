@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
+    url(r'^events/$', Activity.as_view()),
+
     url(r'^groups/$', Groups.as_view()),
     url(r'^html/events/$', ActivityHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
