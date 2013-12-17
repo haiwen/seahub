@@ -14,5 +14,8 @@
         <a href="{% url 'pubrepo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Organization" %}</a>
     </li>
     {% endif %}
+    <li>
+        <a href="{{ SITE_ROOT }}help/" {% block nav_help_class %}{% endblock %}>{% trans "Help" %}</a>
+    </li>
 </ul>
 {% endblock %}

@@ -388,7 +388,8 @@ textarea:-moz-placeholder {/* for FF */
     color:#000;
 }
 /**** side-tabnav ****/
-.side-tabnav .hd {
+.side-tabnav .hd,
+.side-textnav .hd {
     padding-bottom:4px;
     border-bottom:1px solid #ddd;
     margin-bottom:1em;
@@ -435,6 +436,23 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:bold;
     color:#fff;
 }
+.side-textnav .hd {
+	margin:2em 0 .5em;
+}
+.side-textnav-tabs .tab a {
+	display:block;
+    padding:10px 0;
+	font-weight:normal;
+    color:#999;
+    border-bottom:1px solid #eee;
+    margin-bottom:3px;
+}
+.side-textnav-tabs .tab-cur a,
+.side-textnav-tabs .tab a:hover {
+    color:#de3f1c;
+	text-decoration:none;
+}
+
 /**** checkbox ****/
 .checkbox-orig {
     font-size:0;
@@ -2605,4 +2623,7 @@ textarea:-moz-placeholder {/* for FF */
     font-size:12px;
     font-weight:normal;
     color:#888;
+}
+.help-con {
+	padding:0 0 0 60px;
 }

@@ -1,0 +1,33 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block nav_help_class %}class="cur"{% endblock %}
+{% block left_panel %}
+<div class="side-textnav">
+	<h3 class="hd">{% trans "Client Program" %}</h2>
+    <ul class="side-textnav-tabs">
+		<li class="tab {%block install %}{% endblock %}"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and Sync Files" %}</a></li>
+        <li class="tab {%block del %}{% endblock %}"><a href="{{ SITE_ROOT }}help/delete/">{% trans "Deleting a library" %}</a></li>
+        <li class="tab {%block security %}{% endblock %}"><a href="{{ SITE_ROOT }}help/security/">{% trans "Encrypting a library" %}</a></li>
+        <li class="tab {%block colab %}{% endblock %}"><a href="{{ SITE_ROOT }}help/colab/">{% trans "File conflicts" %}</a></li>
+		<li class="tab {%block ignore %}{% endblock %}"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
+    </ul>
+    <h3 class="hd">{% trans "Web Site" %}</h2>
+	<ul class="side-textnav-tabs">
+		<li class="tab {%block grp_share %}{% endblock %}"><a href="{{ SITE_ROOT }}help/group_share/">{% trans "Sharing to a group" %}</a></li>
+		<li class="tab {%block view_enc %}{% endblock %}"><a href="{{ SITE_ROOT }}help/view_encrypted/">{% trans "Viewing an encrypted library" %}</a></li>
+		<li class="tab {%block quota %}{% endblock %}"><a href="{{ SITE_ROOT }}help/quota/">{% trans "Storage quota usage" %}</a></li>
+	</ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="help-con article">{% block help_con %}{% endblock %}</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.help-con :first-child').css('margin-top', 0);
+$('.help-con img').css('max-width', $('.help-con').width() - 2);
+</script>
+{% endblock %}

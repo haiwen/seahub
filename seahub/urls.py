@@ -155,6 +155,7 @@ urlpatterns = patterns('',
     (r'^options/', include('seahub.options.urls')),     
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),
+    (r'^help/', include('seahub.help.urls')),
     url(r'^captcha/', include('captcha.urls')),
 
     ### system admin ###                       

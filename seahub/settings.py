@@ -174,6 +174,7 @@ INSTALLED_APPS = (
     'seahub.options',
     'seahub.profile',
     'seahub.share',
+    'seahub.help',
 )
 
 
