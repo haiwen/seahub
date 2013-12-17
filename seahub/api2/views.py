@@ -2048,14 +2048,6 @@ class PrivateFileDirShareEncoder(json.JSONEncoder):
         return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
                 'permission':obj.permission, 's_type':obj.s_type}
 
-class UserEventDetailEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if not isinstance(obj, UserEventDetail):
-            return None
-        timestamp = time.mktime(datetime.timetuple(obj.timestamp))
-        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
-
-
 class SharedLinksView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2136,6 +2128,68 @@ class SharedFilesView(APIView):
         else:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to get repo.')
+
+class SubRepoView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.views.ajax.py::sub_repo
+    def get(self, request, repo_id, format=None):
+        '''
+        check if a dir has a corresponding sub_repo
+        if it does not have, create one
+        '''
+
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        path = request.GET.get('p') 
+        name = request.GET.get('name')
+        if not (path and name):
+            result['error'] = _('Argument missing')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        username = request.user.username
+
+        # check if the sub-lib exist
+        try:
+            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        if sub_repo:
+            result['sub_repo_id'] = sub_repo.id
+        else:
+            # create a sub-lib
+            try:
+                # use name as 'repo_name' & 'repo_desc' for sub_repo
+                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+                result['sub_repo_id'] = sub_repo_id
+            except SearpcError, e:
+                result['error'] = e.msg
+                return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+class VirtualRepos(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        username = request.user.username
+        try:
+            result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
 
 class Activity(APIView):
     authentication_classes = (TokenAuthentication, )
