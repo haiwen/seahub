@@ -2191,6 +2191,13 @@ class VirtualRepos(APIView):
 
         return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
 
+class UserEventDetailEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, UserEventDetail):
+            return None
+        timestamp = time.mktime(datetime.timetuple(obj.timestamp))
+        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
+
 class Activity(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
