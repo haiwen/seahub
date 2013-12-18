@@ -28,9 +28,7 @@ def edit_profile(request):
     Show and edit user profile.
     """
     username = request.user.username
-
-    form_class = DetailedProfileForm if settings.REQUIRE_DETAIL_ON_REGISTRATION \
-        else ProfileForm
+    form_class = DetailedProfileForm
 
     if request.method == 'POST':
         form = form_class(request.POST)
