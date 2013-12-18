@@ -33,7 +33,8 @@ from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo
 from seahub.share.models import FileShare
-from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
+from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, \
+    get_diff, create_default_library
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_ccnetapplet_root, \
     get_user_events, EMPTY_SHA1, \
@@ -1514,7 +1515,7 @@ class BeShared(APIView):
                             status=200, content_type=json_content_type)
 
 
-class DefaultRepo(APIView):
+class DefaultRepoView(APIView):
     """
     Get user's default library.
     """
@@ -1525,40 +1526,33 @@ class DefaultRepo(APIView):
     def get(self, request, format=None):
         username = request.user.username
         repo_id = UserOptions.objects.get_default_repo(username)
-        if repo_id is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-            
-        last_commit = get_commits(repo.id, 0, 1)[0]
-        repo.latest_modify = last_commit.ctime if last_commit else None
-
-        # query repo infomation
-        repo.size = seafserv_threaded_rpc.server_repo_size(repo_id)
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        root_id = current_commit.root_id if current_commit else None
-
-        repo_json = {
-            "type":"repo",
-            "id":repo.id,
-            "owner":owner,
-            "name":repo.name,
-            "desc":repo.desc,
-            "mtime":repo.latest_modify,
-            "size":repo.size,
-            "encrypted":repo.encrypted,
-            "root":root_id,
-            "permission": check_permission(repo.id, username),
+        if repo_id is None or (get_repo(repo_id) is None):
+            json = {
+                'exists': False,
             }
-        if repo.encrypted:
-            repo_json["enc_version"] = repo.enc_version
-            repo_json["magic"] = repo.magic
-            repo_json["random_key"] = repo.random_key
+            return Response(json)
+        else:
+            return self.default_repo_info(repo_id)
+
+    def default_repo_info(self, repo_id):
+        repo_json = {
+            'exists': True,
+            'repo_id': repo_id
+        }
 
         return Response(repo_json)
-        
+
+    def post(self, request):
+        username = request.user.username
+
+        repo_id = UserOptions.objects.get_default_repo(username)
+        if repo_id and (get_repo(repo_id) != None):
+            return self.default_repo_info(repo_id)
+
+        repo_id = create_default_library(username)
+
+        return self.default_repo_info(repo_id)
+
 class SharedRepo(APIView):
     """
     Support uniform interface for shared libraries.
@@ -2119,7 +2113,7 @@ class EventsView(APIView):
                             content_type=json_content_type)
         return resp
 
-class MessagesCountView(APIView):
+class UnseenMessagesCountView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -2128,9 +2122,7 @@ class MessagesCountView(APIView):
         username = request.user.username
         ret = {}
 
-        notes = UserNotification.objects.filter(to_user=username)
-        ret['group_messages'] = len(notes)
-        ret['personal_messages'] = UserMessage.objects.count_unread_messages_by_user(username)
+        ret['count'] = UserNotification.objects.count_unseen_user_notifications(username)
 
         return HttpResponse(json.dumps(ret), status=200,
                             content_type=json_content_type)

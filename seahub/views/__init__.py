@@ -907,6 +907,8 @@ def create_default_library(username):
         seafile_api.copy_file(sys_repo_id, '/', obj_name,
                               default_repo, '/', obj_name, username)
     UserOptions.objects.set_default_repo(username, default_repo)
+
+    return default_repo
     
 @login_required
 def myhome(request):
