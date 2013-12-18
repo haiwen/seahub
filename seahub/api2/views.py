@@ -2205,7 +2205,13 @@ class Activity(APIView):
 
     def get(self, request, format=None):
         events_count = 15
-        username = request.user.username
+        username = request.GET.get('username')
+        if username == None or len(username) == 0:
+            username = request.user.username
+
+        if username != request.user.username and request.user.is_staff == False:
+            return HttpResponse(json.dumps({"err": _(u'Permission denied')}), status=400, content_type=content_type)
+
         start = int(request.GET.get('start', 0))
 
         events, start = get_user_events(username, start, events_count)
