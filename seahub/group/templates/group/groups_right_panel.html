@@ -7,7 +7,7 @@
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}
     <li class="group ovhd">
-    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft" title="{{ group.props.group_name }}">{% grp_avatar group.props.id 48 %}</a>
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft" title="{{ group.props.group_name }}">{% grp_avatar group.props.id 56 %}</a>
     <div class="txt fright">
         <h4><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></h4>
         <p><span class="item-name">{% trans "Creator: " %}</span>{{ group.props.creator_name }}</p>
