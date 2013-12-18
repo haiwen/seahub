@@ -6,11 +6,13 @@ from django.conf import settings
 from registration.views import activate
 from registration.views import register
 
-from seahub.base.accounts import RegistrationForm
+from seahub.base.accounts import RegistrationForm, DetailedRegistrationForm
 from seahub.base.generic import DirectTemplateView
 
+form_class = DetailedRegistrationForm if settings.REQUIRE_DETAIL_ON_REGISTRATION \
+    else RegistrationForm
 reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
-             'form_class': RegistrationForm,
+             'form_class': form_class,
              }
 
 if settings.ACTIVATE_AFTER_REGISTRATION == True:

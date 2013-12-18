@@ -19,8 +19,13 @@
     <div class="info-item-bottom home-profile ovhd">
         {% avatar email 48 %}
         <p class="txt fright">
-        {% if nickname %}
-        {{ nickname }}
+        {% if profile %}
+        <p>{{ profile.nickname }}</p>
+        <p>{{ profile.intro }}</p>
+        {% endif %}
+        {% if d_profile %}
+        <p>{{ d_profile.department }}</p>
+        <p>{{ d_profile.telephone }}</p>
         {% endif %}
         </p>
     </div>

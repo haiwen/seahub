@@ -263,6 +263,8 @@ ACTIVATE_AFTER_REGISTRATION = True
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
 
+REQUIRE_DETAIL_ON_REGISTRATION = False
+
 # Seafile-applet address and port, used in repo download
 CCNET_APPLET_ROOT = "http://127.0.0.1:13420"
 

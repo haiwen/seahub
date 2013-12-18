@@ -12,7 +12,7 @@ from registration import signals
 #from registration.forms import RegistrationForm
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, DetailedProfile
 
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
@@ -295,9 +295,19 @@ class RegistrationBackend(object):
                                                                         password, site,
                                                                         send_email=settings.REGISTRATION_SEND_MAIL)
 
-        userid = kwargs['userid']
-        if userid:
-            ccnet_threaded_rpc.add_binding(new_user.username, userid)
+        # userid = kwargs['userid']
+        # if userid:
+        #     ccnet_threaded_rpc.add_binding(new_user.username, userid)
+
+        if settings.REQUIRE_DETAIL_ON_REGISTRATION:
+            name = kwargs['name']
+            department = kwargs['department']
+            telephone = kwargs['telephone']
+            note = kwargs['note']
+            Profile.objects.add_profile(new_user.username, name, note)
+            DetailedProfile.objects.add_detailed_profile(new_user.username,
+                                                         department,
+                                                         telephone)
 
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
@@ -416,3 +426,14 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 
+class DetailedRegistrationForm(RegistrationForm):
+    attrs_dict = { 'class': 'required' }
+    
+    name = forms.CharField(widget=forms.TextInput(
+            attrs=dict(attrs_dict, maxlength=64)), label=_("name"))
+    department = forms.CharField(widget=forms.TextInput(
+            attrs=dict(attrs_dict, maxlength=512)), label=_("department"))
+    telephone = forms.CharField(widget=forms.TextInput(
+            attrs=dict(attrs_dict, maxlength=100)), label=_("telephone"))
+    note = forms.CharField(widget=forms.TextInput(
+            attrs=dict(attrs_dict, maxlength=100)), label=_("note"))

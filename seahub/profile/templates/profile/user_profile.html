@@ -15,6 +15,10 @@
     <div class="txt fright">
         <p>{{ nickname }}</p>
         <p class="intro">{{ intro }}</p>
+        {% if d_profile %}
+        <p>{{ d_profile.department }}</p>
+        <p>{{ d_profile.telephone }}</p>
+        {% endif %}
         {% if add_to_contacts %}
         <button class="add-to-contacts" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
         {% endif %}

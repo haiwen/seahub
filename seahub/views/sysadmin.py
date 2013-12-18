@@ -27,7 +27,7 @@ from seahub.auth.decorators import login_required
 from seahub.utils import IS_EMAIL_CONFIGURED
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, DetailedProfile
 from seahub.share.models import FileShare
 
 import seahub.settings as settings
@@ -275,13 +275,10 @@ def user_info(request, email):
     # Repos that are share to user
     in_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
 
-    # get nickname
-    if not Profile.objects.filter(user=email):
-        nickname = ''
-    else:
-        profile = Profile.objects.filter(user=email)[0]
-        nickname = profile.nickname
-    
+    # get user profile
+    profile = Profile.objects.get_profile_by_user(email)
+    d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
+
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -292,7 +289,8 @@ def user_info(request, email):
             'my_usage': my_usage,
             'in_repos': in_repos,
             'email': email,
-            'nickname': nickname,
+            'profile': profile,
+            'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 
 @login_required

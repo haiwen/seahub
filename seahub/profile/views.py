@@ -12,8 +12,8 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids, \
     seafile_api
 from pysearpc import SearpcError
 
-from forms import ProfileForm
-from models import Profile
+from forms import ProfileForm, DetailedProfileForm
+from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
 from seahub.utils import render_error
@@ -29,20 +29,13 @@ def edit_profile(request):
     """
     username = request.user.username
 
+    form_class = DetailedProfileForm if settings.REQUIRE_DETAIL_ON_REGISTRATION \
+        else ProfileForm
+
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        form = form_class(request.POST)
         if form.is_valid():
-            nickname = form.cleaned_data['nickname']
-            intro = form.cleaned_data['intro']
-            try:
-                profile = Profile.objects.get(user=request.user.username)
-            except Profile.DoesNotExist:
-                profile = Profile()
-                
-            profile.user = username
-            profile.nickname = nickname
-            profile.intro = intro
-            profile.save()
+            form.save(username=username)
             messages.success(request, _(u'Successfully edited profile.'))
             # refresh nickname cache
             refresh_cache(request.user.username)
@@ -51,15 +44,19 @@ def edit_profile(request):
         else:
             messages.error(request, _(u'Failed to edit profile'))
     else:
-        try:
-            profile = Profile.objects.get(user=request.user.username)
-            form = ProfileForm({
-                    'nickname': profile.nickname,
-                    'intro': profile.intro,
-                    })
-        except Profile.DoesNotExist:
-            form = ProfileForm()
+        profile = Profile.objects.get_profile_by_user(username)
+        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
+            username)
 
+        init_dict = {}
+        if profile:
+            init_dict['nickname'] = profile.nickname
+            init_dict['intro'] = profile.intro
+        if d_profile:
+            init_dict['department'] = d_profile.department
+            init_dict['telephone'] = d_profile.telephone
+        form = form_class(init_dict)
+        
     # common logic
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -106,11 +103,14 @@ def user_profile(request, username_or_id):
     if user is not None:
         profile = Profile.objects.get_profile_by_user(user.username)
         intro = profile.intro if profile else ''
+        d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
+            user.username)
         c = Contact.objects.get_contact_by_user(request.user.username,
                                                 user.username)
         add_to_contacts = True if c is None else False
     else:
         intro = _(u'Has not accepted invitation yet')
+        d_profile = None
         add_to_contacts = False
 
     return render_to_response('profile/user_profile.html', {
@@ -119,6 +119,7 @@ def user_profile(request, username_or_id):
             'nickname': nickname,
             'intro': intro,
             'add_to_contacts': add_to_contacts,
+            'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 
 @login_required
