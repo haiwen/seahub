@@ -19,5 +19,14 @@
 {% with post_url=group_add_url %}
 {% include "snippets/group_add_js.html" %}
 {% endwith %}
+
+$('.group').hover(
+	function() {
+		$('.fast', $(this)).removeClass('vh');
+	},
+	function() {
+		$('.fast', $(this)).addClass('vh');
+	}
+);
 </script>
 {% endblock %}

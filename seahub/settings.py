@@ -211,7 +211,7 @@ AUTO_GENERATE_AVATAR_SIZES = (16, 20, 28, 36, 40, 48, 60, 80)
 # Group avatar
 GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
-AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48)
+AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 48, 56)
 
 LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', '/tmp')
 CACHE_DIR = "/tmp"

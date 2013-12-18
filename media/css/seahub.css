@@ -1657,6 +1657,9 @@ textarea:-moz-placeholder {/* for FF */
     width:330px;
     margin:0 17px 30px 0;
 }
+.group-list .group {
+	margin-bottom:25px;
+}
 .group-list .group,
 .user-list .user {
     *display:inline; /* for ie 6,7 */
