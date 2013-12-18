@@ -1,0 +1,222 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_editor_toolbar.css" />
+<style type="text/css">
+#main {
+    width:100%; 
+}
+#footer {
+    display:none;
+}
+#edit-hd, #path-op {
+    width:950px;
+    margin:0 auto;
+}
+#path-op {
+    padding-bottom:6px;
+}
+#path-op .path {
+    margin-top:1.2em
+}
+#file-edit {
+    min-height:700px;
+    padding:30px 0 60px;
+    background:#f4f4f4;
+    border-top:1px solid #ededed;
+}
+#sf, #md-edit, #edit-tip {
+    box-shadow:0 0 6px #ccc;
+    border:1px solid #ccc;
+    margin:0 auto;
+}
+#sf {
+    min-height:620px;
+    outline:none;
+}
+#edit-tip {
+    min-height:200px;
+    padding:10px;
+    width:928px;
+    background:#fff;
+    margin:0 auto;
+}
+.fixed-path-op {
+    position:fixed;
+    background:#fff;
+    border-bottom:1px solid #ededed;/*for ie*/
+    box-shadow:0 1px 3px #777;
+    z-index:1010;/*make seaf image show below path-op*/
+}
+.CodeMirror {
+    width:950px;
+    margin:0 auto;
+    box-shadow:0 0 6px #272822;
+}
+</style>
+{% endblock %}
+
+{% block main_panel %}
+<div>
+  <div id="op-after-edit" class="fright">
+    <button id="edit-submit">{% trans "Submit" %}</button>
+    <a href="{{cancel_url}}" id="file-edit-cancel">{% trans "Cancel" %}</a>
+  </div>
+</div>
+
+<div>
+                <div class="btn-toolbar" data-role="editor-toolbar" data-target="#sf">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Font" %}"><i class="icon-font"></i><span class="caret"></span></a>
+                        <ul class="dropdown-menu" id="font-list"></ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Font Size" %}"><i class="icon-text-height"></i><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-edit="fontSize 5"><font size="5">{% trans "Huge" %}</font></a></li>
+                            <li><a data-edit="fontSize 3"><font size="3">{% trans "Normal" %}</font></a></li>
+                            <li><a data-edit="fontSize 1"><font size="1">{% trans "Small" %}</font></a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Font Color" %}"><i class="icon-tint" style="color:#e83;"></i><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-edit="forecolor #333" title="{% trans "defaut color" %}"><span class="color-block" style="background:#333;"></span></a></li>
+                            <li><a data-edit="forecolor #FF0000"><span class="color-block" style="background:#FF0000;"></span></a></li>
+                            <li><a data-edit="forecolor #FF704F"><span class="color-block" style="background:#FF704F;"></span></a></li>
+                            <li><a data-edit="forecolor #007000"><span class="color-block" style="background:#007000;"></span></a></li>
+                            <li><a data-edit="forecolor #4D90FE"><span class="color-block" style="background:#4D90FE;"></span></a></li>
+                            <li><a data-edit="forecolor #999999"><span class="color-block" style="background:#999999;"></span></a></li>
+                            <li><a data-edit="forecolor #811201"><span class="color-block" style="background:#811201;"></span></a></li>
+                            <li><a data-edit="forecolor #1E4152"><span class="color-block" style="background:#1E4152;"></span></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" data-edit="bold" title="{% trans "Bold (Ctrl/Cmd+B)" %}"><i class="icon-bold"></i></a>
+                        <a class="btn" data-edit="italic" title="{% trans "Italic (Ctrl/Cmd+I)" %}"><i class="icon-italic"></i></a>
+                        <a class="btn" data-edit="strikethrough" title="{% trans "Strikethrough" %}"><i class="icon-strikethrough"></i></a>
+                        <a class="btn" data-edit="underline" title="{% trans "Underline (Ctrl/Cmd+U)" %}"><i class="icon-underline"></i></a>
+                        <a class="btn" data-edit="removeFormat" title="{% trans "Remove format" %}"><i class="sf-icon-removeformat"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn" data-edit="insertunorderedlist" title="{% trans "Bullet list" %}"><i class="icon-list-ul"></i></a>
+                        <a class="btn" data-edit="insertorderedlist" title="{% trans "Number list" %}"><i class="icon-list-ol"></i></a>
+                        <a class="btn" data-edit="outdent" title="{% trans "Reduce indent (Shift+Tab)" %}"><i class="icon-indent-left"></i></a>
+                        <a class="btn" data-edit="indent" title="{% trans "Indent (Tab)" %}"><i class="icon-indent-right"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn" data-edit="justifyleft" title="{% trans "Align Left (Ctrl/Cmd+L)" %}"><i class="icon-align-left"></i></a>
+                        <a class="btn" data-edit="justifycenter" title="{% trans "Center (Ctrl/Cmd+E)" %}"><i class="icon-align-center"></i></a>
+                        <a class="btn" data-edit="justifyright" title="{% trans "Align Right (Ctrl/Cmd+R)" %}"><i class="icon-align-right"></i></a>
+                        <a class="btn" data-edit="justifyfull" title="{% trans "Justify (Ctrl/Cmd+J)" %}"><i class="icon-align-justify"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans "Hyperlink" %}"><i class="icon-link"></i></a>
+                        <div class="dropdown-menu input-append">
+                            <input placeholder="URL" type="text" data-edit="createLink" />
+                            <button class="btn" type="button">{% trans "Add" %}</button>
+                        </div>
+                        <a class="btn" data-edit="unlink" title="{% trans "Remove Hyperlink" %}"><i class="icon-cut"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn" id="pictureBtn"><i class="icon-picture"></i></a>
+                        <input type="file" title="{% trans "Insert picture (or just drag & drop)" %}" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn" data-edit="undo" title="{% trans "Undo (Ctrl/Cmd+Z)" %}"><i class="icon-undo"></i></a>
+                        <a class="btn" data-edit="redo" title="{% trans "Redo (Ctrl/Cmd+Y)" %}"><i class="icon-repeat"></i></a>
+                    </div>
+                </div>
+
+                <div id="sf" class="article"><p>You can download from <a href="http://seafile.com/download/">http://seafile.com/download/</a></p></div>
+
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap-wysiwyg.js"></script>
+
+<script type="text/javascript">
+        var toolbar = $('.btn-toolbar');
+        var sf_editor = $('#sf');
+        if ($(window).scrollTop() > sf_editor.offset().top - toolbar.outerHeight(true) - $('.fixed-path-op').outerHeight(true)) {
+            $('#sf').css('margin-top', toolbar.outerHeight(true));
+            toolbar.css({'position':'fixed'}); //'fixed' before get the right 'left' value
+            toolbar.css({'left':($(window).width() - toolbar.width())/2, 'top':$('#path-op').outerHeight(true)});
+        } else {
+            toolbar.removeAttr('style');
+            $('#sf').css('margin-top', 0);
+        }
+
+
+
+$(function() {
+    function initToolbarBootstrapBindings() {
+      var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 
+            'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+            'Times New Roman', 'Verdana'],
+            fontTarget = $('#font-list');
+      $.each(fonts, function (idx, fontName) {
+          fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
+      });
+      $('a[title]').tooltip({container:'body'});
+        $('.dropdown-menu input').click(function() {return false;})
+            .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
+        .keydown('esc', function () {this.value='';$(this).change();});
+
+      $('[data-role=magic-overlay]').each(function () { 
+        var overlay = $(this), target = $(overlay.data('target')); 
+        overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+      });
+    };
+    initToolbarBootstrapBindings();  
+    $('#sf').wysiwyg();
+    try {
+        document.execCommand('styleWithCss',0, true);
+    } catch(e) {
+        try {
+            document.execCommand('useCss',0, false);
+        } catch(e) {
+        }
+    }
+});
+
+$('#edit-submit').click(function () {
+    disable($(this));
+    editSubmit();
+});
+function editSubmit() {
+    var content = $('#sf').html();
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'download_edit' %}",
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {content: content, encoding: $('#file-enc').val()},
+        success: function(data) {
+            location.href = data['href'];
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                var resp = jQuery.parseJSON(xhr.responseText);
+                feedback(resp['error'], 'error');
+                if (resp['op'] == 'decrypt') {
+                    $('#repo-decrypt-form').modal();
+                    $('#simplemodal-container').css({'height':'auto'});
+                }
+            } else {
+                feedback("{% trans "Submit failed. Please check the network." %}", 'error');
+            }
+            enable($('#file-edit-submit'));
+        }
+    });
+}
+
+</script>
+{% endblock %}

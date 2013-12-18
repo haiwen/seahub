@@ -55,7 +55,7 @@ from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
-    UserStarredFiles, DirFilesLastModifiedInfo
+    UserStarredFiles, DirFilesLastModifiedInfo, SystemCustomize
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
@@ -2057,5 +2057,31 @@ def toggle_modules(request):
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
     return HttpResponseRedirect(next)
+
+def download(request):
+    """Show download page.
+    """
+
+    content = SystemCustomize.objects.get_download_content()
+    
+    return render_to_response('download.html', {
+            'content': content,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def download_edit(request):
+    """Edit download page.
+    """
+    if request.method == 'POST':
+        content_type = 'application/json; charset=utf-8'
+
+        content = request.POST.get('content', '')
+        SystemCustomize.objects.set_download_content(content)
+
+        next = reverse('download')
+        return HttpResponse(json.dumps({'href': next}),
+                            content_type=content_type)
+    return render_to_response('download_edit.html', {
+            }, context_instance=RequestContext(request))
 
     

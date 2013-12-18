@@ -509,6 +509,7 @@ class GroupEnabledModule(models.Model):
     group_id = models.CharField(max_length=10, db_index=True)
     module_name = models.CharField(max_length=20)
 
+########## misc    
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)
@@ -531,6 +532,35 @@ class CommandsLastCheck(models.Model):
     """
     command_type = models.CharField(max_length=100)
     last_check = models.DateTimeField()
+
+class SystemCustomizeManager(models.Manager):
+    def set_download_content(self, content):
+        """
+        
+        Arguments:
+        - `self`:
+        - `content`:
+        """
+        m = self.model(custom_key="download", custom_val=content)
+        m.save(using=self._db)
+        return m
+
+    def get_download_content(self):
+        """
+        
+        Arguments:
+        - `self`:
+        """
+        try:
+            return super(SystemCustomizeManager, self).get(
+                custom_key="download").custom_val
+        except SystemCustomize.DoesNotExist:
+            return None
+        
+class SystemCustomize(models.Model):
+    custom_key = models.CharField(max_length=50)
+    custom_val = models.TextField()
+    objects = SystemCustomizeManager()
 
 ###### Deprecated
 class InnerPubMsg(models.Model):
