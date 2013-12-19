@@ -55,7 +55,7 @@ from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
-    UserStarredFiles, DirFilesLastModifiedInfo, SystemCustomize
+    UserStarredFiles, DirFilesLastModifiedInfo
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
