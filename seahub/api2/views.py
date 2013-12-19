@@ -33,8 +33,8 @@ from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo
 from seahub.share.models import FileShare
-from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, \
-    get_diff, create_default_library
+from seahub.views import access_to_repo, validate_owner, is_registered_user, \
+    group_events_data, get_diff, create_default_library
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_ccnetapplet_root, \
     get_user_events, EMPTY_SHA1, \
@@ -260,11 +260,11 @@ class Search(APIView):
 
     def get(self, request, format=None):
         if not HAS_FILE_SEARCH:
-            return api_error(status.HTTP_404_NOT_FOUND, "Search not supported");
+            return api_error(status.HTTP_404_NOT_FOUND, "Search not supported")
 
         keyword = request.GET.get('q', None)
         if not keyword:
-            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument");
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
@@ -279,7 +279,7 @@ class Search(APIView):
                 file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
                 e['oid'] = file_id
                 e['size'] = get_file_size(file_id)
-            except SearpcError, e:
+            except SearpcError, err:
                 pass
 
 
@@ -306,7 +306,6 @@ def repo_download_info(request, repo_id):
         return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
     # generate download url for client
-    ccnet_applet_root = get_ccnetapplet_root()
     relay_id = get_session_info().id
     addr, port = get_ccnet_server_addr_port ()
     email = request.user.username
@@ -450,7 +449,7 @@ class Repos(APIView):
     def post(self, request, format=None):
         username = request.user.username
         repo_name = request.POST.get("name", None)
-        repo_desc= request.POST.get("desc", 'new repo')
+        repo_desc = request.POST.get("desc", 'new repo')
         passwd = request.POST.get("passwd")
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST, \
@@ -721,27 +720,27 @@ def get_dir_entrys_by_id(request, repo_id, path, dir_id):
     dir_list, file_list = [], []
     for dirent in dirs:
         dtype = "file"
-        entry={}
+        entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
             try:
                 entry["size"] = get_file_size(dirent.obj_id)
             except Exception, e:
-                entry["size"]=0
+                entry["size"] = 0
 
-        entry["type"]=dtype
-        entry["name"]=dirent.obj_name
-        entry["id"]=dirent.obj_id
-        entry["mtime"]=mtimes.get(dirent.obj_name, None)
+        entry["type"] = dtype
+        entry["name"] = dirent.obj_name
+        entry["id"] = dirent.obj_id
+        entry["mtime"] = mtimes.get(dirent.obj_name, None)
         if dtype == 'dir':
             dir_list.append(entry)
         else:
             file_list.append(entry)
 
 
-    dir_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
-    file_list.sort(lambda x, y : cmp(x['name'].lower(),y['name'].lower()))
+    dir_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    file_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     dentrys = dir_list + file_list
 
     response = HttpResponse(json.dumps(dentrys), status=200,
@@ -881,7 +880,7 @@ class OpDeleteView(APIView):
             try:
                 seafile_api.del_file(repo_id, parent_dir,
                                      file_name, username)
-            except SearpcError,e:
+            except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
 
@@ -2001,7 +2000,7 @@ class Groups(APIView):
         joined_groups = get_personal_groups_by_user(email)
         grpmsgs = {}
         for g in joined_groups:
-            grpmsgs[g.id] = 0;
+            grpmsgs[g.id] = 0
 
         notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
         replynum = 0;
@@ -2013,7 +2012,7 @@ class Groups(APIView):
                     continue
                 if gid not in grpmsgs:
                     continue
-                grpmsgs[gid] = grpmsgs[gid] + 1;
+                grpmsgs[gid] = grpmsgs[gid] + 1
             elif n.is_grpmsg_reply():
                 replynum = replynum + 1
 
