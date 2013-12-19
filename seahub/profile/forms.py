@@ -15,8 +15,8 @@ class ProfileForm(forms.Form):
         
         
 class DetailedProfileForm(ProfileForm):
-    department = forms.CharField(max_length=512)
-    telephone = forms.CharField(max_length=100)
+    department = forms.CharField(max_length=512, required=False)
+    telephone = forms.CharField(max_length=100, required=False)
 
     def save(self, username):
         super(DetailedProfileForm, self).save(username)

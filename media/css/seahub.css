@@ -70,8 +70,8 @@ h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
 ul { list-style:none; }
 ol { padding-left:2em; }
 dl { margin:1.5em 0; }
-dt { font-weight:bold; }
-dd { margin: 0 0 .5em 2em; }
+dt { color:#666; margin:24px 0 2px; }
+dd { margin-bottom:.8em; color:#222; }
 a { color:#ee8833; text-decoration:none; font-weight:bold; }
 a.normal {font-weight: normal;}
 a:hover { color: #ff9933; text-decoration: underline; }
@@ -1282,62 +1282,19 @@ textarea:-moz-placeholder {/* for FF */
 #user-basic-info textarea {
     vertical-align:text-top;
 }
-#user-basic-info .avatar,
-#user-basic-info .text-input,
-#user-basic-info textarea {
+#user-basic-info .avatar {
     margin-bottom:8px;
-}
-#user-basic-info .text-input,
-#user-basic-info textarea {
-    width:260px;
-}
-#user-basic-info textarea {
-    height:70px;
-}
-#user-basic-info .submit {
-    margin-left:6.5em;
-}
-.ru #user-basic-info .submit {
-    margin-left:10em;
-}
-.es #user-basic-info .submit ,
-.hu #user-basic-info .submit {
-    margin-left:8em;
-}
-.it #user-basic-info .submit {
-    margin-left:7em;
-}
-.fr #user-basic-info .submit {
-    margin-left:9em;
 }
 #user-avatar-change {
     position:relative;
 }
 #user-avatar-form {
     position:absolute;
-    left:150px;
     top:5px;
-}
-.ru #user-avatar-form {
-    left:200px;
-}
-.es #user-avatar-form ,
-.hu #user-avatar-form {
-    left:170px;
-}
-.it #user-avatar-form {
-    left:160px;
-}
-.fr #user-avatar-form {
-    left:185px;
 }
 #grp-avatar-form {
     position:relative;
     margin-left:10px;
-}
-#user-avatar-form,
-#grp-avatar-form {
-    overflow:hidden;
 }
 /*repo page*/
 #repo-top {

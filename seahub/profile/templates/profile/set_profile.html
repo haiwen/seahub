@@ -24,8 +24,8 @@
 <div id="user-basic-info" class="setting-item">
     <h3>{% trans "Profile Setting" %}</h3>
     <div id="user-avatar-change">
-        <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 60 %}
-        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">{% csrf_token %}
+        <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 80 %}
+        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}" class="ovhd">{% csrf_token %}
             <button type="button" id="user-avatar-chg-btn">{% trans "Change" %}</button>
             <input type="file" name="avatar" id="user-avatar-input" />
         </form>
@@ -33,24 +33,30 @@
 
     <form action="" method="post">{% csrf_token %}
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
-        <label>{% trans "Nickname:" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="text-input" />
+        <label>{% trans "Nickname:" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
         <br/>
-        <label>{% trans "About me:" %}</label><textarea name="intro">{{ form.data.intro }}</textarea>
-        <br/>
-
-        {% if form.department and form.telephone %}
-        <label>{% trans "Department:" %}</label><input type="text" name="department" value="{{ form.data.department }}" class="text-input" />
-        <br/>
-        <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="text-input" />
-        {% endif %}
-
+        <label>{% trans "About me:" %}</label><textarea name="intro" class="textarea">{{ form.data.intro }}</textarea>
         {% for error in form.intro.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
         <br/>
+
+        {% if form.department and form.telephone %}
+        <label>{% trans "Department:" %}</label><input type="text" name="department" value="{{ form.data.department }}" class="input" />
+        {% for error in form.department.errors %}
+        <span class="error">{{ error|escape }}</span>
+        {% endfor %}
+        <br/>
+        <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="input" />
+        {% for error in form.telephone.errors %}
+        <span class="error">{{ error|escape }}</span>
+        {% endfor %}
+        <br/>
+        {% endif %}
+
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
@@ -113,6 +119,10 @@
 {% block extra_script %}
 {% include 'snippets/avatar_upload_js.html' %}
 <script type="text/javascript">
+var cur_avatar = $('#user-avatar-change .avatar');
+$('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outerWidth() + 10});
+
+$('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)});
 changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar-form'));
 addConfirmTo($('#account-delete-btn'), {
     'title' : '{% trans "Delete Account" %}',

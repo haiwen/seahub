@@ -1,33 +1,55 @@
 {% extends "profile/profile_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
-{% block main_panel %}
+{% block extra_style %}
+<style type="text/css">
+.avatar-cont {
+    padding:25px;
+    border:2px solid #ddd;
+    border-radius:3px;
+    text-align:center;
+}
+.add-to-contacts, #send-msg {
+    margin-top:8px;
+}
+</style>
+{% endblock %}
 
-<div class="user-profile narrow-panel ovhd">
-    <div class="pic fleft">
-      {% if user %}
-        {% avatar user.username 80 %}
-      {% else %}
-        {% avatar "" 80 %}
-      {% endif %}
-    </div>
-
-    <div class="txt fright">
-        <p>{{ nickname }}</p>
-        <p class="intro">{{ intro }}</p>
-        {% if d_profile %}
-        <p>{{ d_profile.department }}</p>
-        <p>{{ d_profile.telephone }}</p>
-        {% endif %}
-        {% if add_to_contacts %}
-        <button class="add-to-contacts" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
-        {% endif %}
-
-        {% if user %}
-        <button id="msg">{% trans "Send message" %}</button>
-        {% endif %}
-    </div>
+{% block left_panel %}
+<div class="avatar-cont">
+    {% if user %}
+    {% avatar user.username 80 %}
+    {% else %}
+    {% avatar "" 80 %}
+    {% endif %}
 </div>
+
+{% if add_to_contacts %}
+<button class="add-to-contacts w100" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
+{% endif %}
+
+{% if user %}
+<button id="send-msg" class="w100">{% trans "Send message" %}</button>
+{% endif %}
+
+{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "Info" %}</h3>
+
+<dl>
+    <dt>{% trans "Nickname" %}</dt>
+    <dd>{{ nickname }}</dd>
+
+    <dt>{% trans "Self-introduction" %}</dt>
+    <dd>{{ intro }}</dd>
+    {% if d_profile %}
+    <dt>{% trans "Department" %}</dt>
+    <dd>{{ d_profile.department }}</dd>
+    <dt>{% trans "Telephone" %}</dt>
+    <dd>{{ d_profile.telephone }}</dd>
+    {% endif %}
+</dl>
 
 {% if add_to_contacts %}
 {% include 'snippets/add_to_contacts_form.html' %}
@@ -38,7 +60,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% if user %}
-$('#msg').click(function() {
+$('#send-msg').click(function() {
     location.href = "{% url 'user_msg_list' username_or_id %}";
 });
 {% endif %}
