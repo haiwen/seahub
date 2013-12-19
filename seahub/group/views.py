@@ -58,8 +58,10 @@ from seahub.utils import render_error, render_permission_error, string2list, \
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
-from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI,\
-    enable_mod_for_group, disable_mod_for_group, get_available_mods_by_group
+from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI, \
+    enable_mod_for_group, disable_mod_for_group, get_available_mods_by_group, \
+    get_wiki_enabled_group_list
+    
 from seahub.forms import SharedRepoCreateForm
 
 # Get an instance of a logger
@@ -177,9 +179,12 @@ def group_add(request):
 def group_list(request):
     username = request.user.username
     joined_groups = get_personal_groups_by_user(username)
+    enabled_groups = get_wiki_enabled_group_list(
+        in_group_ids=[x.id for x in joined_groups])
+    enabled_group_ids = [ int(x.group_id) for x in enabled_groups ]
+
     for group in joined_groups:
-        mods_enabled = get_enabled_mods_by_group(group.id)
-        if 'group wiki' in mods_enabled:
+        if group.id in enabled_group_ids:
             group.wiki_enabled = True
         else:
             group.wiki_enabled = False

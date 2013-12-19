@@ -67,4 +67,15 @@ def disable_mod_for_group(group_id, mod_name):
     GroupEnabledModule.objects.filter(group_id=group_id,
                                      module_name=mod_name).delete()
 
+def get_wiki_enabled_group_list(in_group_ids=None):
+    """Return all groups that enable wiki module by default.
+    If ``in_group_ids`` is provided, return groups within that collection.
+
+    Arguments:
+    - `in_group_ids`: A list contains group ids.
+    """
+    qs = GroupEnabledModule.objects.all()
+    if in_group_ids is not None:
+        qs = qs.filter(group_id__in=in_group_ids)
+    return qs
     
