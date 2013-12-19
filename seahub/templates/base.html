@@ -116,11 +116,7 @@
 
         <div id="footer" class="ovhd">           
             <div class="items fleft">
-                {% if not seacloud_mode %}
-                {% include 'snippets/footer_custom.html' %}
-                {% else %}
-                {% include 'snippets/footer_seacloud.html' %}
-                {% endif %}
+                {% include 'footer.html' %}
             </div>
             <div class="other-info fright">
                 <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
