@@ -108,7 +108,7 @@ urlpatterns = patterns('',
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
     url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
-    url(r'download/$', download, name="download"),
+    url(r'download/$', TemplateView.as_view(template_name="download.html"), name="download"),
 
     ### Ajax ###
     (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/remove/$', repo_remove),

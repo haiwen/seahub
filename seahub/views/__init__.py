@@ -2060,9 +2060,3 @@ def toggle_modules(request):
 
     return HttpResponseRedirect(next)
 
-def download(request):
-    """Show download page.
-    """
-
-    return render_to_response('download.html', {
-            }, context_instance=RequestContext(request))
