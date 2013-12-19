@@ -18,6 +18,34 @@
 }
 .sf-icon-share:before { content:"\e001"; }
 .sf-icon-removeformat:before { content:"\f1e7"; }
+/****** sf2-icon-xx ********/
+@font-face {
+    font-family: 'sf-font2';
+    src:url('sf_font2/sf-font2.eot');
+    src:url('sf_font2/sf-font2.eot?#iefix') format('embedded-opentype'),
+        url('sf_font2/sf-font2.ttf') format('truetype'),
+        url('sf_font2/sf-font2.woff') format('woff'),
+        url('sf_font2/sf-font2.svg#sf-font2') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="sf2-icon-"], [class*=" sf2-icon-"] {
+    font-family: 'sf-font2';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align:baseline;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.sf2-icon-archive:before {
+    content: "\e600";
+}
 /******* tags **********/
 html { background:#fff; }
 body,
@@ -387,16 +415,22 @@ textarea:-moz-placeholder {/* for FF */
     background:#feefb8;
     text-decoration:none;
 }
-.side-tabnav-tabs .tab span {
-    font-size:1.2em;
+.side-tabnav-tabs .tab [class*="icon-"],
+.side-tabnav-tabs .tab [class*="sf2-icon-"] {
+    display:inline-block;
+    width:20px;
+    font-size:16px;
     color:#999;
+    line-height:24px;
+    text-align:center;
     margin-right:5px;
 }
 .side-tabnav-tabs .tab-cur a,
 .side-tabnav-tabs .tab-cur a:hover {
     background:#feac74;
 }
-.side-tabnav-tabs .tab-cur span,
+.side-tabnav-tabs .tab-cur [class*="icon-"],
+.side-tabnav-tabs .tab-cur [class*="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a {
     font-weight:bold;
     color:#fff;

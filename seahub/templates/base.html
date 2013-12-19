@@ -271,6 +271,9 @@ $(document).click(function(e) {
         {'name':'share', 'con':'e001'},
         {'name':'removeformat', 'con':'f1e7'}
     ];
+    var sf2_icons = [
+        {'name':'archive', 'con':'e600'}
+    ];
     var fa_icons = [ 
         {'name':'trash', 'con':'f014'},
         {'name':'cog', 'con':'f013'},
@@ -349,6 +352,9 @@ $(document).click(function(e) {
         pseudo_support = false;
         $('[class^="sf-icon-"]').each(function() {
             setCon($(this), 'sf-icon-', sf_icons);
+        }); 
+        $('[class^="sf2-icon-"]').each(function() {
+            setCon($(this), 'sf2-icon-', sf2_icons);
         }); 
         $('[class^="icon-"], [class$=" icon-"]').each(function() {
             setCon($(this), 'icon-', fa_icons);
