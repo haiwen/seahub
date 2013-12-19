@@ -509,6 +509,7 @@ class GroupEnabledModule(models.Model):
     group_id = models.CharField(max_length=10, db_index=True)
     module_name = models.CharField(max_length=20)
 
+########## misc    
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)

@@ -55,7 +55,7 @@ from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
-    UserStarredFiles, DirFilesLastModifiedInfo
+    UserStarredFiles, DirFilesLastModifiedInfo, SystemCustomize
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.forms import MessageForm, MessageReplyForm
@@ -2060,4 +2060,9 @@ def toggle_modules(request):
 
     return HttpResponseRedirect(next)
 
-    
+def download(request):
+    """Show download page.
+    """
+
+    return render_to_response('download.html', {
+            }, context_instance=RequestContext(request))

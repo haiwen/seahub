@@ -1,0 +1,15 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{% trans "Download" %} - {% endblock %}
+
+{% block main_panel %}
+<div id="sf" class="article">
+    {% if LANGUAGE_CODE == 'zh-cn' %}
+    <p>你可以从Seafile的<a href="http://seafile.com/download/">官方下载页面</a>下载Windows，Mac以及Linux的客户端。</p>
+    {% else %}
+    <p>You can download Seafile desktop client for Windows, Mac and Linux from Seafile's <a href="http://seafile.com/en/download/">official download page</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
