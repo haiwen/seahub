@@ -4,28 +4,12 @@
 {% block sub_title %}{% trans "Download" %} - {% endblock %}
 
 {% block main_panel %}
-{% if request.user.is_staff %}
-<button id="edit">Edit</button>
-{% endif %}
-
 <div id="sf" class="article">
-  {% if content %}
-  {{content|safe}}
-  {% else %}
     {% if LANGUAGE_CODE == 'zh-cn' %}
     <p>你可以从Seafile的<a href="http://seafile.com/download/">官方下载页面</a>下载Windows，Mac以及Linux的客户端。</p>
     {% else %}
     <p>You can download Seafile desktop client for Windows, Mac and Linux from Seafile's <a href="http://seafile.com/en/download/">official download page</a>.</p>
     {% endif %}
-  {% endif %}
 </div>
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-$('#edit').click(function() {
-    location.href = "{% url 'download_edit' %}";
-});
-</script>
 {% endblock %}
 

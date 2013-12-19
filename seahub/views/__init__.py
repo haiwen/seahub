@@ -2062,26 +2062,5 @@ def download(request):
     """Show download page.
     """
 
-    content = SystemCustomize.objects.get_download_content()
-    
     return render_to_response('download.html', {
-            'content': content,
             }, context_instance=RequestContext(request))
-
-@login_required
-def download_edit(request):
-    """Edit download page.
-    """
-    if request.method == 'POST':
-        content_type = 'application/json; charset=utf-8'
-
-        content = request.POST.get('content', '')
-        SystemCustomize.objects.set_download_content(content)
-
-        next = reverse('download')
-        return HttpResponse(json.dumps({'href': next}),
-                            content_type=content_type)
-    return render_to_response('download_edit.html', {
-            }, context_instance=RequestContext(request))
-
-    
