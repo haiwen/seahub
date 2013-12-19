@@ -11,9 +11,4 @@ urlpatterns = patterns('',
 
 		(r'^group_share/$', TemplateView.as_view(template_name="help/help_group_share.html") ),
 		(r'^view_encrypted/$', TemplateView.as_view(template_name="help/help_view_encrypted.html") ),
-		(r'^quota/$', TemplateView.as_view(template_name="help/help_quota.html") ),
-		(r'^traffic/$', TemplateView.as_view(template_name="help/help_traffic.html") ),
-
-		(r'^seaf/$', TemplateView.as_view(template_name="help/help_seaf.html") ),
-		(r'^markdown/$', TemplateView.as_view(template_name="help/help_markdown.html") ),
 )
