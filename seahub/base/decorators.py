@@ -7,6 +7,7 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
 from seahub.utils import check_and_get_org_by_repo, check_and_get_org_by_group, render_error
 from django.utils.translation import ugettext as _
+from seahub.settings import FORCE_SERVER_CRYPTO
 
 def sys_staff_required(func):
     """
@@ -77,6 +78,7 @@ def repo_passwd_set_required(func):
                 return render_to_response('decrypt_repo_form.html', {
                         'repo': repo,
                         'next': request.get_full_path(),
+                        'force_server_crypto': FORCE_SERVER_CRYPTO,
                         }, context_instance=RequestContext(request))
 
             if repo.enc_version == 2 and not server_crypto:

@@ -333,6 +333,7 @@ def repo(request, repo_id):
                     'repo': repo,
                     'form': form,
                     'next': next,
+                    'force_server_crypto': FORCE_SERVER_CRYPTO,      
                     }, context_instance=RequestContext(request))
     
 @login_required
@@ -363,7 +364,8 @@ def repo_history_view(request, repo_id):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or \
-                    reverse('repo', args=[repo.id])
+                    reverse('repo', args=[repo.id]),
+                'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
     
     commit_id = request.GET.get('commit_id', None)
