@@ -103,9 +103,13 @@ def user_profile(request, username_or_id):
         intro = profile.intro if profile else ''
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
             user.username)
-        c = Contact.objects.get_contact_by_user(request.user.username,
-                                                user.username)
-        add_to_contacts = True if c is None else False
+
+        if user.username == request.user.username:
+            add_to_contacts = False
+        else:
+            c = Contact.objects.get_contact_by_user(request.user.username,
+                                                    user.username)
+            add_to_contacts = True if c is None else False
     else:
         intro = _(u'Has not accepted invitation yet')
         d_profile = None
