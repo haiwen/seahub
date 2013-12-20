@@ -388,7 +388,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 /**** side-tabnav ****/
 .side-tabnav .hd,
-.side-textnav .hd {
+.side-textnav .hd,
+.side-info .hd,
+#right-panel .hd {
     padding-bottom:4px;
     border-bottom:1px solid #ddd;
     margin-bottom:1em;
@@ -452,6 +454,9 @@ textarea:-moz-placeholder {/* for FF */
 	text-decoration:none;
 }
 
+.side-info dt {
+    margin-top:15px;
+}
 /**** checkbox ****/
 .checkbox-orig {
     font-size:0;
@@ -845,8 +850,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-top: 0px;
 }
 #right-panel .hd {
-    padding-bottom:4px;
-    border-bottom:1px solid #ddd;
     border-radius:0; /* rm radius when 'hd' is also '.ui-corner-all' */
     margin-bottom:1.5em;
 }

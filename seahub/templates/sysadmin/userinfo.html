@@ -13,29 +13,28 @@
 {% endblock %}
 
 {% block left_panel %}
-
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Profile" %}</h3>
-    <div class="info-item-bottom home-profile ovhd">
-        {% avatar email 48 %}
-        <p class="txt fright">
+<div class="side-info">
+    <h3 class="hd">{% trans "Profile" %}</h3>
+    {% avatar email 48 %}
+    <dl>
         {% if profile %}
-        <p>{{ profile.nickname }}</p>
-        <p>{{ profile.intro }}</p>
-        {% endif %}
-        {% if d_profile %}
-        <p>{{ d_profile.department }}</p>
-        <p>{{ d_profile.telephone }}</p>
-        {% endif %}
-        </p>
-    </div>
-</div>
+        <dt>{% trans "Name" context "true name" %}</dt>
+        <dd>{{ profile.nickname }}</dd>
 
-<div class="info-item">
-<div class="info-item-top">
-    <h3>{% trans "Space Used" %}</h3>
-</div>
-<div class="info-item-bottom">
+        <dt>{% trans "Self-introduction" %}</dt>
+        <dd>{{ profile.intro }}</dd>
+        {% endif %}
+
+        {% if d_profile %}
+        <dt>{% trans "Department" %}</dt>
+        <dd>{{ d_profile.department }}</dd>
+
+        <dt>{% trans "Telephone" %}</dt>
+        <dd>{{ d_profile.telephone }}</dd>
+        {% endif %}
+    </dl>
+
+    <h3 class="hd">{% trans "Space Used" %}</h3>
     {% if CALC_SHARE_USAGE %}
     <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
     <p>{% trans "Used" %}: {{ my_usage|filesizeformat }}</p>
@@ -45,59 +44,6 @@
     {% endif %}
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
-</div>
-
-{% endblock %}
-
-{% block right_panel %}
-<h3>{% trans "Owned" %}</h3>
-{% if owned_repos %}
-<table>
-    <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="30%">{% trans "Name" %}</th>
-        <th width="46%">{% trans "Description" %}</th>
-        <th width="20%">{% trans "Operations" %}</th>
-    </tr>
-
-    {% for repo in owned_repos %}
-    <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.desc }}</td>
-        <td data-id="{{ repo.props.id }}">
-            <div><a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a></div>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>{% trans "None" %}</p>
-{% endif %}
-
-<h3>{% trans "Shared" %}</h3>
-{% if in_repos %}
-<table>
-    <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="30%">{% trans "Name" %}</th>
-        <th width="26%">{% trans "Share From" %}</th>
-        <th width="40%">{% trans "Description" %}</th>
-    </tr>
-
-    {% for repo in in_repos %}
-    <tr>
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="library icon" /></td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.repo_name }}</a></td>
-        <td>{{ repo.props.user }}</td>
-        <td>{{ repo.props.repo_desc }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>{% trans "None" %}</p>
-{% endif %}
-
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>
     <input type="hidden" name="email" value="{{ email }}" />
@@ -106,6 +52,68 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
+{% endblock %}
+
+{% block right_panel %}
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#owned" class="a">{% trans "Owned" %}</a></li>
+            <li class="tab"><a href="#shared" class="a">{% trans "Shared" %}</a></li>
+        </ul>
+    </div>
+
+    <div id="owned">
+        {% if owned_repos %}
+        <table>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="46%">{% trans "Description" %}</th>
+                <th width="20%">{% trans "Operations" %}</th>
+            </tr>
+
+            {% for repo in owned_repos %}
+            <tr>
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+                <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+                <td>{{ repo.props.desc }}</td>
+                <td data-id="{{ repo.props.id }}">
+                    <div><a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a></div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>{% trans "None" %}</p>
+        {% endif %}
+    </div>
+
+    <div id="shared">
+        {% if in_repos %}
+        <table>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="26%">{% trans "Share From" %}</th>
+                <th width="40%">{% trans "Description" %}</th>
+            </tr>
+
+            {% for repo in in_repos %}
+            <tr>
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="library icon" /></td>
+                <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}">{{ repo.props.repo_name }}</a></td>
+                <td>{{ repo.props.user }}</td>
+                <td>{{ repo.props.repo_desc }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>{% trans "None" %}</p>
+        {% endif %}
+    </div>
+</div>
+
 {% include 'snippets/repo_del_popup.html' %}
 {% endblock %}
 

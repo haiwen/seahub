@@ -33,7 +33,7 @@
 
     <form action="" method="post">{% csrf_token %}
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
-        <label>{% trans "Nickname:" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
+        <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>
         {% endfor %}

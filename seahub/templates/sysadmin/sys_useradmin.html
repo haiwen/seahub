@@ -4,7 +4,7 @@
 
 {% block title_panel %}
 <div class="tabnav">
-    <ul class="tabnav-tabs">
+    <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Database" %}</li>
         {% if have_ldap %}
         <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
