@@ -2554,11 +2554,11 @@ msgstr "关于我："
 
 #: seahub/profile/templates/profile/set_profile.html:48
 msgid "Department:"
-msgstr "部门"
+msgstr "部门："
 
 #: seahub/profile/templates/profile/set_profile.html:53
 msgid "Telephone:"
-msgstr "电话"
+msgstr "电话："
 
 #: seahub/profile/templates/profile/set_profile.html:66
 msgid "Encrypted Libraries Setting"
