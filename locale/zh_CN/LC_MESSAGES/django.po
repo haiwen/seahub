@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-19 22:14-0800\n"
+"POT-Creation-Date: 2013-12-20 01:20-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,7 +104,7 @@ msgstr "解密资料库出错"
 msgid "Email is required"
 msgstr "请输入邮箱"
 
-#: seahub/forms.py:164 seahub/templates/sysadmin/userinfo.html:127
+#: seahub/forms.py:164 seahub/templates/sysadmin/userinfo.html:135
 msgid "Quota can't be empty"
 msgstr "容量不能为空"
 
@@ -303,7 +303,7 @@ msgstr "加载中..."
 #: seahub/templates/snippets/shared_link_js.html:306
 #: seahub/templates/snippets/shared_link_js.html:330
 #: seahub/templates/sysadmin/sys_useradmin.html:94
-#: seahub/templates/sysadmin/userinfo.html:150
+#: seahub/templates/sysadmin/userinfo.html:158
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
@@ -568,7 +568,7 @@ msgstr "当前头像："
 #: seahub/group/templates/group/new_msg_reply.html:65
 #: seahub/message/templates/message/all_msg_list.html:50
 #: seahub/message/templates/message/user_msg_list.html:20
-#: seahub/notifications/templates/notifications/add_notification_form.html:11
+#: seahub/notifications/templates/notifications/notification_list.html:15
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:60
 #: seahub/profile/templates/profile/set_profile.html:75
@@ -601,7 +601,7 @@ msgstr "当前头像："
 #: seahub/templates/sysadmin/sys_repo_search.html:11
 #: seahub/templates/sysadmin/sys_useradmin.html:31
 #: seahub/templates/sysadmin/user_search.html:10
-#: seahub/templates/sysadmin/userinfo.html:107
+#: seahub/templates/sysadmin/userinfo.html:53
 #: seahub/templates/wiki/personal_wiki.html:24
 #: seahub/templates/wiki/personal_wiki.html:54
 #: seahub/templates/wiki/personal_wiki_pages.html:31
@@ -768,8 +768,8 @@ msgstr[0] "%(seconds)d 秒前"
 #: seahub/templates/snippets/my_owned_repos.html:223
 #: seahub/templates/snippets/repo_create_form.html:11
 #: seahub/templates/snippets/repo_share_form.html:47
-#: seahub/templates/sysadmin/userinfo.html:65
-#: seahub/templates/sysadmin/userinfo.html:90
+#: seahub/templates/sysadmin/userinfo.html:78
+#: seahub/templates/sysadmin/userinfo.html:104
 msgid "Read-Write"
 msgstr "可读写"
 
@@ -847,6 +847,7 @@ msgstr "邮箱"
 #: seahub/group/templates/group/group_wiki.html:54
 #: seahub/group/templates/group/group_wiki_pages.html:30
 #: seahub/message/templates/message/all_msg_list.html:22
+#: seahub/profile/templates/profile/user_profile.html:41
 #: seahub/share/templates/share/links.html:20
 #: seahub/share/templates/share/links.html:56
 #: seahub/share/templates/share/list_priv_shared_folders.html:15
@@ -872,8 +873,9 @@ msgstr "邮箱"
 #: seahub/templates/sysadmin/sys_org_admin.html:11
 #: seahub/templates/sysadmin/sys_publink_admin.html:10
 #: seahub/templates/sysadmin/sys_repo_search.html:9
-#: seahub/templates/sysadmin/userinfo.html:58
-#: seahub/templates/sysadmin/userinfo.html:83
+#: seahub/templates/sysadmin/userinfo.html:21
+#: seahub/templates/sysadmin/userinfo.html:71
+#: seahub/templates/sysadmin/userinfo.html:97
 #: seahub/templates/wiki/personal_wiki.html:19
 #: seahub/templates/wiki/personal_wiki.html:51
 #: seahub/templates/wiki/personal_wiki_pages.html:28
@@ -892,7 +894,7 @@ msgstr "备注"
 #: seahub/group/templates/group/group_manage.html:49
 #: seahub/group/templates/group/group_manage.html:79
 #: seahub/notifications/templates/notifications/notification_list.html:7
-#: seahub/notifications/templates/notifications/notification_list.html:20
+#: seahub/notifications/templates/notifications/notification_list.html:26
 #: seahub/share/templates/share/links.html:23
 #: seahub/share/templates/share/links.html:59
 #: seahub/share/templates/share/list_priv_shared_folders.html:19
@@ -915,7 +917,7 @@ msgstr "备注"
 #: seahub/templates/sysadmin/sys_org_admin.html:15
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
 #: seahub/templates/sysadmin/useradmin_table.html:8
-#: seahub/templates/sysadmin/userinfo.html:60
+#: seahub/templates/sysadmin/userinfo.html:73
 msgid "Operations"
 msgstr "操作"
 
@@ -935,7 +937,7 @@ msgstr "编辑"
 #: seahub/group/templates/group/group_discuss.html:138
 #: seahub/group/templates/group/group_manage.html:31
 #: seahub/group/templates/group/group_manage.html:58
-#: seahub/notifications/templates/notifications/notification_list.html:32
+#: seahub/notifications/templates/notifications/notification_list.html:38
 #: seahub/profile/templates/profile/set_profile.html:103
 #: seahub/templates/repo.html:58 seahub/templates/repo.html.py:362
 #: seahub/templates/view_shared_upload_link.html:86
@@ -950,7 +952,7 @@ msgstr "编辑"
 #: seahub/templates/sysadmin/sys_group_admin.html:22
 #: seahub/templates/sysadmin/sys_org_admin.html:23
 #: seahub/templates/sysadmin/useradmin_table.html:46
-#: seahub/templates/sysadmin/userinfo.html:69
+#: seahub/templates/sysadmin/userinfo.html:82
 msgid "Delete"
 msgstr "删除"
 
@@ -1001,7 +1003,7 @@ msgid "Delete Contact"
 msgstr "删除联系人"
 
 #: seahub/contacts/templates/contacts/contact_list.html:115
-#: seahub/notifications/templates/notifications/notification_list.html:72
+#: seahub/notifications/templates/notifications/notification_list.html:57
 #: seahub/templates/sysadmin/sys_group_admin.html:63
 #: seahub/templates/sysadmin/sys_org_admin.html:63
 #: seahub/templates/sysadmin/useradmin_js.html:4
@@ -1485,8 +1487,8 @@ msgstr "新建资料库"
 #: seahub/templates/snippets/repo_create_form.html:6
 #: seahub/templates/sysadmin/repoadmin_table.html:7
 #: seahub/templates/sysadmin/sys_list_system.html:22
-#: seahub/templates/sysadmin/userinfo.html:59
-#: seahub/templates/sysadmin/userinfo.html:85
+#: seahub/templates/sysadmin/userinfo.html:72
+#: seahub/templates/sysadmin/userinfo.html:99
 #: seahub/templates/wiki/personal_wiki.html:21
 msgid "Description"
 msgstr "描述"
@@ -1532,7 +1534,7 @@ msgstr "共享来源"
 #: seahub/templates/snippets/my_owned_repos.html:188
 #: seahub/templates/snippets/my_owned_repos.html:190
 #: seahub/templates/snippets/my_owned_repos.html:223
-#: seahub/templates/sysadmin/userinfo.html:65
+#: seahub/templates/sysadmin/userinfo.html:78
 msgid "directory icon"
 msgstr "目录图标"
 
@@ -1620,8 +1622,8 @@ msgstr "详情"
 #: seahub/templates/sysadmin/sys_list_orphan.html:20
 #: seahub/templates/sysadmin/sys_list_system.html:33
 #: seahub/templates/sysadmin/sys_repo_admin.html:49
-#: seahub/templates/sysadmin/userinfo.html:75
-#: seahub/templates/sysadmin/userinfo.html:98
+#: seahub/templates/sysadmin/userinfo.html:88
+#: seahub/templates/sysadmin/userinfo.html:112
 msgid "None"
 msgstr "无"
 
@@ -2344,7 +2346,9 @@ msgstr "发送消息..."
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your "
 "folder <a href='%(folder_link)s'>%(folder)s</a>"
-msgstr "文件<a href='%(file_link)s'>%(file_name)s</a>已经上传到你的文件夹<a href='%(folder_link)s'>%(folder)s</a>"
+msgstr ""
+"文件<a href='%(file_link)s'>%(file_name)s</a>已经上传到你的文件夹<a "
+"href='%(folder_link)s'>%(folder)s</a>"
 
 #: seahub/notifications/models.py:430
 #, python-format
@@ -2390,44 +2394,39 @@ msgstr "一条<a href='%(href)s'>群组讨论</a>有新回复"
 msgid "%(user)s replied your <a href='%(href)s'>group discussion</a>"
 msgstr "%(user)s回复了你的<a href='%(href)s'>群组讨论</a>"
 
-#: seahub/notifications/views.py:126
+#: seahub/notifications/views.py:120
 msgid "Successfully cleared all notices."
 msgstr "成功清空所有通知。"
 
-#: seahub/notifications/templates/notifications/add_notification_form.html:3
-#: seahub/notifications/templates/notifications/add_notification_form.html:7
 #: seahub/notifications/templates/notifications/notification_list.html:9
+#: seahub/notifications/templates/notifications/notification_list.html:13
 msgid "Add new notification"
 msgstr "添加新通知"
 
-#: seahub/notifications/templates/notifications/add_notification_form.html:9
-msgid "Notification"
-msgstr "通知"
-
-#: seahub/notifications/templates/notifications/notification_list.html:15
+#: seahub/notifications/templates/notifications/notification_list.html:21
 msgid "All Notifications"
 msgstr "所有通知"
 
-#: seahub/notifications/templates/notifications/notification_list.html:19
+#: seahub/notifications/templates/notifications/notification_list.html:25
 msgid "Notification Detail"
 msgstr "通知内容"
 
-#: seahub/notifications/templates/notifications/notification_list.html:26
+#: seahub/notifications/templates/notifications/notification_list.html:32
 msgid "(current notification)"
 msgstr "（当前通知）"
 
-#: seahub/notifications/templates/notifications/notification_list.html:30
+#: seahub/notifications/templates/notifications/notification_list.html:36
 msgid "Set to current"
 msgstr "设为当前通知"
 
-#: seahub/notifications/templates/notifications/notification_list.html:64
+#: seahub/notifications/templates/notifications/notification_list.html:44
 #: seahub/templates/sysadmin/sys_group_admin.html:55
 #: seahub/templates/sysadmin/sys_org_admin.html:55
 #: seahub/templates/sysadmin/sys_publink_admin.html:56
 msgid "Empty"
 msgstr "暂无"
 
-#: seahub/notifications/templates/notifications/notification_list.html:71
+#: seahub/notifications/templates/notifications/notification_list.html:56
 msgid "Delete Notification"
 msgstr "删除通知"
 
@@ -2470,7 +2469,9 @@ msgstr "文件会一边下载一边在浏览器里解密。"
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr "提示：后一种更安全，但并不是被所有浏览器所支持。我们建议使用最新的Chrome或Firefox。"
+msgstr ""
+"提示：后一种更安全，但并不是被所有浏览器所支持。我们建议使用最新的Chrome或"
+"Firefox。"
 
 #: seahub/profile/views.py:37
 msgid "Successfully edited profile."
@@ -2508,7 +2509,7 @@ msgid "Profile Setting"
 msgstr "个人信息设置"
 
 #: seahub/profile/templates/profile/set_profile.html:10
-#: seahub/templates/sysadmin/userinfo.html:18
+#: seahub/templates/sysadmin/userinfo.html:17
 msgid "Profile"
 msgstr "设置"
 
@@ -2544,8 +2545,9 @@ msgid "Update"
 msgstr "更新"
 
 #: seahub/profile/templates/profile/set_profile.html:36
-msgid "Nickname:"
-msgstr "昵称："
+#, fuzzy
+msgid "Name:"
+msgstr "名字："
 
 #: seahub/profile/templates/profile/set_profile.html:41
 msgid "About me:"
@@ -2582,18 +2584,37 @@ msgid ""
 "listed in your desktop client, and you can download it just like downloading "
 "a normal library. It will be automatically kept in sync with its origin "
 "library."
-msgstr "这个功能能让你选择性的同步一个资料库里的文件夹。你可以从任意文件夹创建子资料库。创建完后，它会显示在你的桌面客户端。你可以像普通的资料库一样下载它。同时，它会自动跟源资料库保持同步。"
+msgstr ""
+"这个功能能让你选择性的同步一个资料库里的文件夹。你可以从任意文件夹创建子资料"
+"库。创建完后，它会显示在你的桌面客户端。你可以像普通的资料库一样下载它。同"
+"时，它会自动跟源资料库保持同步。"
 
 #: seahub/profile/templates/profile/set_profile.html:85
+#, fuzzy
 msgid ""
-"Sub-library is also used when sharing a folder to a group or another user. A "
-"hidden sub-library will be created automatically in such case. After turning "
-"this feature on, those hidden sub-libraries will also be listed."
-msgstr "子资料库也用来实现共享一个文件夹给群组或其他用户。未开启子资料库选项的时候，一个隐藏的资料库会被创建出来。开启这个功能后，这些隐藏的资料库也会被列出来，方便你来管理。"
+"Sub-library is also used when sharing a folder to a group or another user. "
+"Without this option on, a hidden sub-library will be created automatically "
+"in such case. With this option on, those hidden sub-libraries will also be "
+"listed, which enables you to manage them."
+msgstr ""
+"子资料库也用来实现共享一个文件夹给群组或其他用户。未开启子资料库选项的时候，"
+"一个隐藏的资料库会被创建出来。开启这个功能后，这些隐藏的资料库也会被列出来，"
+"方便你来管理。"
 
 #: seahub/profile/templates/profile/set_profile.html:91
 msgid "Default Library Setting"
 msgstr "默认资料库设置"
+
+#: seahub/profile/templates/profile/set_profile.html:93
+#, fuzzy
+msgid "Your default library:"
+msgstr "选择默认资料库："
+
+#: seahub/profile/templates/profile/set_profile.html:95
+msgid ""
+"You do not have a default library. Default library is the default place to "
+"store your personal documents and pictures."
+msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
@@ -2623,21 +2644,20 @@ msgstr "发送消息"
 msgid "Info"
 msgstr "信息"
 
-#: seahub/profile/templates/profile/user_profile.html:41
-msgid "Nickname"
-msgstr "昵称："
-
 #: seahub/profile/templates/profile/user_profile.html:44
+#: seahub/templates/sysadmin/userinfo.html:24
 msgid "Self-introduction"
 msgstr "自我介绍"
 
-#: seahub/profile/templates/profile/user_profile.html:47
+#: seahub/profile/templates/profile/user_profile.html:48
 #: seahub/templates/registration/registration_form.html:24
+#: seahub/templates/sysadmin/userinfo.html:29
 msgid "Department"
 msgstr "部门"
 
-#: seahub/profile/templates/profile/user_profile.html:49
+#: seahub/profile/templates/profile/user_profile.html:51
 #: seahub/templates/registration/registration_form.html:26
+#: seahub/templates/sysadmin/userinfo.html:32
 msgid "Telephone"
 msgstr "电话"
 
@@ -2844,7 +2864,9 @@ msgstr "你还没有下载外链"
 msgid ""
 "You can generate a download link for a folder or a file. People receive this "
 "link can view the folder or the file online."
-msgstr "你可以给文件或文件夹生成下载外链。别人通过这个链接就可以在线查看你的文件或文件夹。"
+msgstr ""
+"你可以给文件或文件夹生成下载外链。别人通过这个链接就可以在线查看你的文件或文"
+"件夹。"
 
 #: seahub/share/templates/share/links.html:76
 msgid "You don't have any upload link"
@@ -2854,7 +2876,8 @@ msgstr "你还没有上传链接"
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
-msgstr "你可以给任意文件夹生成上传链接。别人通过这个链接就可以上传文件到你的文件夹。"
+msgstr ""
+"你可以给任意文件夹生成上传链接。别人通过这个链接就可以上传文件到你的文件夹。"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:5
 msgid "Folders - Share"
@@ -3587,7 +3610,9 @@ msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. We have created a personal library for you. You can "
 "create more libraries later."
-msgstr "Seafile把文件组织到资料库里。每个资料库可以被单独的同步和共享。我们已经为你创建了一个私人资料库。你之后可以再创建其他的资料库。"
+msgstr ""
+"Seafile把文件组织到资料库里。每个资料库可以被单独的同步和共享。我们已经为你创"
+"建了一个私人资料库。你之后可以再创建其他的资料库。"
 
 #: seahub/templates/myhome.html:43 seahub/templates/repo.html:213
 msgid "Close"
@@ -3635,7 +3660,7 @@ msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
-#: seahub/templates/pubrepo.html:16 seahub/templates/sysadmin/userinfo.html:84
+#: seahub/templates/pubrepo.html:16 seahub/templates/sysadmin/userinfo.html:98
 msgid "Share From"
 msgstr "共享来源"
 
@@ -4218,7 +4243,8 @@ msgstr "请点击以下链接查看："
 msgid ""
 "You're receiving this e-mail because %(email)s has shared an upload link to "
 "you on %(site_name)s."
-msgstr "你收到这封邮件是因为 %(email)s 在 %(site_name)s 上共享了一个上传链接给你。"
+msgstr ""
+"你收到这封邮件是因为 %(email)s 在 %(site_name)s 上共享了一个上传链接给你。"
 
 #: seahub/templates/shared_upload_link_email.html:4
 msgid "You can go to the following page and upload your files:"
@@ -4705,7 +4731,7 @@ msgid "Sub-libraries"
 msgstr "子资料库"
 
 #: seahub/templates/snippets/my_owned_repos.html:10
-#: seahub/templates/sysadmin/userinfo.html:78
+#: seahub/templates/sysadmin/userinfo.html:62
 msgid "Shared"
 msgstr "共享给我的"
 
@@ -4948,7 +4974,7 @@ msgid "Please input at least an email."
 msgstr "请输入至少一个邮箱。"
 
 #: seahub/templates/snippets/space_and_traffic.html:4
-#: seahub/templates/sysadmin/userinfo.html:40
+#: seahub/templates/sysadmin/userinfo.html:39
 msgid "Total"
 msgstr "总空间"
 
@@ -4959,7 +4985,7 @@ msgstr "个人"
 
 #: seahub/templates/snippets/space_and_traffic.html:6
 #: seahub/templates/snippets/space_and_traffic.html:8
-#: seahub/templates/sysadmin/userinfo.html:42
+#: seahub/templates/sysadmin/userinfo.html:41
 msgid "Sharing"
 msgstr "共享"
 
@@ -5029,7 +5055,7 @@ msgstr "创建于/最后登录"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:20
 #: seahub/templates/sysadmin/useradmin_table.html:6
-#: seahub/templates/sysadmin/userinfo.html:36
+#: seahub/templates/sysadmin/userinfo.html:37
 msgid "Space Used"
 msgstr "已用空间"
 
@@ -5215,25 +5241,25 @@ msgstr "不活跃"
 msgid "ResetPwd"
 msgstr "重置密码"
 
-#: seahub/templates/sysadmin/userinfo.html:41
+#: seahub/templates/sysadmin/userinfo.html:40
 msgid "Used"
 msgstr "我使用的"
 
-#: seahub/templates/sysadmin/userinfo.html:46
+#: seahub/templates/sysadmin/userinfo.html:45
 msgid "Set Quota"
 msgstr "设置容量"
 
-#: seahub/templates/sysadmin/userinfo.html:53
-msgid "Owned"
-msgstr "我拥有的"
-
-#: seahub/templates/sysadmin/userinfo.html:102
+#: seahub/templates/sysadmin/userinfo.html:48
 msgid "Set user storage limit"
 msgstr "设置该用户的存储容量上限"
 
-#: seahub/templates/sysadmin/userinfo.html:105
+#: seahub/templates/sysadmin/userinfo.html:51
 msgid "Tip: 0 means default limit"
 msgstr "Tip: 设置为0表示重置为默认上限"
+
+#: seahub/templates/sysadmin/userinfo.html:61
+msgid "Owned"
+msgstr "我拥有的"
 
 #: seahub/templates/wiki/personal_wiki.html:13
 msgid "You do not have personal wiki"
@@ -5661,3 +5687,11 @@ msgstr "转让失败，未找到用户 \"%s\""
 msgid "Failed to transfer, invalid arguments."
 msgstr "转让失败， 参数无效"
 
+#~ msgid "Notification"
+#~ msgstr "通知"
+
+#~ msgid "Nickname:"
+#~ msgstr "昵称："
+
+#~ msgid "Nickname"
+#~ msgstr "昵称："
