@@ -36,7 +36,6 @@
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
-    line-height: 1;
     vertical-align:baseline;
 
     /* Better Font Rendering =========== */
@@ -1688,6 +1687,13 @@ textarea:-moz-placeholder {/* for FF */
     font-size:18px;
     color:#FEAC74;
     margin-right:5px;
+    display:inline-block;
+    vertical-align:middle;
+    line-height:24px;
+    height:24px;
+}
+.group .fast .discuss {
+    margin-top:-2px; /* for vertical alignment */
 }
 .group .fast .a:hover {
     text-decoration:none;

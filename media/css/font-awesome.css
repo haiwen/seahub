@@ -23,29 +23,6 @@
   vertical-align: baseline;
   speak: none;
 }
-li [class^="icon-"],
-.nav li [class^="icon-"],
-li [class*=" icon-"],
-.nav li [class*=" icon-"] {
-  display: inline-block;
-  width: 1.25em;
-  text-align: center;
-}
-li [class^="icon-"].icon-large,
-.nav li [class^="icon-"].icon-large,
-li [class*=" icon-"].icon-large,
-.nav li [class*=" icon-"].icon-large {
-  /* increased font size for icon-large */
-  width: 1.5625em;
-}
-[class^="icon-"].fleft,
-[class*=" icon-"].fleft {
-  margin-right: .3em;
-}
-[class^="icon-"].fright,
-[class*=" icon-"].fright {
-  margin-left: .3em;
-}
 /*  Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
     readers do not read off random characters that represent icons */
 .icon-glass:before                { content: "\f000"; }
