@@ -863,10 +863,6 @@ textarea:-moz-placeholder {/* for FF */
     line-height:16px; /* for ff*/
 }
 #right-panel .hd button {
-    /*
-    padding-top:2px;
-    padding-bottom:2px;
-    */
     padding-top:0;
     padding-bottom:0;
     height:24px;
@@ -877,7 +873,7 @@ textarea:-moz-placeholder {/* for FF */
 #sharelink-infobar {
     color: #fff;
     padding:1px 25px 1px 10px;
-    background: #080;
+    background: #f70;
 }
 #info-bar {
     position:relative;
@@ -889,7 +885,7 @@ textarea:-moz-placeholder {/* for FF */
     top:5px;
 }
 #info-bar-info {
-    margin:0.3em 0;
+    margin:3px 0;
 }
 
 /* top-bar */

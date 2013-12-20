@@ -27,18 +27,12 @@ def notification_list(request):
 
 @login_required
 def notification_add(request):
-    if not request.user.is_staff:
+    if not request.user.is_staff or request.method != 'POST':
         raise Http404
-    if request.method == 'POST':
-        f = NotificationForm(request.POST)
-        f.save()
-        return HttpResponseRedirect(reverse('notification_list', args=[]))
-    else:
-        form = NotificationForm()
 
-    return render_to_response("notifications/add_notification_form.html", {
-            'form': form,
-            }, context_instance=RequestContext(request))
+    f = NotificationForm(request.POST)
+    f.save()
+    return HttpResponseRedirect(reverse('notification_list', args=[]))
 
 @login_required
 def notification_delete(request, nid):
