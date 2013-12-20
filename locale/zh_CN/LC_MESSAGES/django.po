@@ -2582,14 +2582,14 @@ msgid ""
 "listed in your desktop client, and you can download it just like downloading "
 "a normal library. It will be automatically kept in sync with its origin "
 "library."
-msgstr "这个功能能让你选择性的同步一个资料库里的文件夹。任意文件夹都可以创建成子资料库。创建完后，它会显示在你的桌面客户端，你可以像普通的资料库一样下载。同时，它会自动跟源资料库保持同步。"
+msgstr "这个功能能让你选择性的同步一个资料库里的文件夹。你可以从任意文件夹创建子资料库。创建完后，它会显示在你的桌面客户端。你可以像普通的资料库一样下载它。同时，它会自动跟源资料库保持同步。"
 
 #: seahub/profile/templates/profile/set_profile.html:85
 msgid ""
 "Sub-library is also used when sharing a folder to a group or another user. A "
 "hidden sub-library will be created automatically in such case. After turning "
 "this feature on, those hidden sub-libraries will also be listed."
-msgstr "子资料库也可以用来共享一个文件夹给群组或其他用户。这种情况下，一个隐藏的资料库会被创建出来。开启这个功能后，这些隐藏的资料库也会被列出来。"
+msgstr "子资料库也用来实现共享一个文件夹给群组或其他用户。未开启子资料库选项的时候，一个隐藏的资料库会被创建出来。开启这个功能后，这些隐藏的资料库也会被列出来，方便你来管理。"
 
 #: seahub/profile/templates/profile/set_profile.html:91
 msgid "Default Library Setting"

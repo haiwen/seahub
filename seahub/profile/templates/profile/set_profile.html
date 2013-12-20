@@ -82,7 +82,7 @@
     <form method="post" action="{% url 'sub_lib_enable_set' %}">{% csrf_token %}
         <input type="checkbox" name="enable-sub-lib" class="vam" {% if sub_lib_enabled %}checked="checked"{% endif %} /> <span class="vam">{% trans "Enable sub-library" %}</span>
         <p>{% trans "This feature enables you to selectively sync a folder inside a library. A sub-library can be created from any folder. After being created, it will be listed in your desktop client, and you can download it just like downloading a normal library. It will be automatically kept in sync with its origin library." %}</p>
-        <p>{% trans "Sub-library is also used when sharing a folder to a group or another user. A hidden sub-library will be created automatically in such case. After turning this feature on, those hidden sub-libraries will also be listed." %}</p>
+        <p>{% trans "Sub-library is also used when sharing a folder to a group or another user. Without this option on, a hidden sub-library will be created automatically in such case. With this option on, those hidden sub-libraries will also be listed, which enables you to manage them." %}</p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
@@ -90,9 +90,9 @@
 <div class="setting-item" id="default-lib">
     <h3>{% trans "Default Library Setting" %}</h3>
     {% if default_repo %}
-    <p>Your default library is <a href="{% url 'repo' default_repo.id %}">{{default_repo.name}}</a>.</p>
+    <p>{% trans "Your default library:" %} <a href="{% url 'repo' default_repo.id %}">{{default_repo.name}}</a>.</p>
     {% else %}
-    <p>You do not have a default library.</p>
+    <p>{% trans "You do not have a default library. Default library is the default place to store your personal documents and pictures." %}</p>
     {% endif %}
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
