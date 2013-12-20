@@ -920,17 +920,17 @@ textarea:-moz-placeholder {/* for FF */
 .top-link .icon-caret-right {
     margin-left:7px;
 }
-.top-bar-con .my-info {
+#my-info {
     color:#fff;
     font-weight:bold;
-    vertical-align:middle;
+}
+.top-bar-con .spliter {
     display:inline-block;
-    padding-right:7px;
     height:16px;
     line-height:16px;
+    vertical-align:middle;
     border-right:1px solid #aaa;
-    margin-right:3px;
-    cursor:pointer;
+    margin:0 3px;
 }
 .top-bar-con .btn {
     padding:0 6px;
@@ -998,8 +998,13 @@ textarea:-moz-placeholder {/* for FF */
     top:24px;
 }
 #user-info-popup .item {
+    display:block;
     padding:8px 18px;
     border-top:1px solid #ddd;
+}
+#user-info-popup a.item:hover {
+    background:#fafafa;
+    text-decoration:none;
 }
 #msg-file-share {
     margin-top:8px;
@@ -2580,8 +2585,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 3px 0 0;
 }
 #quit-group {
-    display:inline-block;
-    margin-top:3em;
+    margin-top:4px;
     font-size:12px;
     font-weight:normal;
     color:#888;

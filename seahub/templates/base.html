@@ -41,11 +41,12 @@
 
                     <div class="account">
                         {% if request.user.is_authenticated %}
-                        {% avatar request.user 16 %} <span class="my-info">{{ request.user }} <span class="icon-caret-down"></span></span>
+                        {% avatar request.user 16 %} <a href="#" data-url="{% url 'space_and_traffic' %}" class="top-link" id="my-info">{{ request.user }} <span class="icon-caret-down"></span></a>
                         <div id="user-info-popup" class="hide">
                             <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
                         </div>
-                        <button class="btn" data-url="{% url 'user_notification_list' %}" id="msg-count" title="{% trans "unread notices" %}">0</button>
+                        <span class="spliter"></span>
+                        <button class="btn" data-cturl="{% url 'unseen_notices_count' %}" data-pgurl="{% url 'user_notification_list' %}" id="msg-count" title="{% trans "unread notices" %}">0</button>
                         {% else %}
                         <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>
                             {% if enable_signup %}
@@ -163,59 +164,6 @@ $('#info-bar .close').click(function() {
 });
 {% endif %}
 
-$(document).ready(function(){
-    $.ajax({
-        url: '{% url 'unseen_notices_count' %}',
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            if (data['count'] > 0) {
-                $("#msg-count").html(data['count']).addClass('msg-count');
-            }
-        }
-    });
-
-});
-
-$('#msg-count').click(function() {
-    location.href = $(this).data('url');
-});
-
-(function () {
-    var my_info = $('.account .my-info');
-    var popup = $('#user-info-popup');
-
-    $(window).load(function() {
-        popup.css({'right': my_info.parent().width() - my_info.position().left - my_info.outerWidth()});
-    }); 
-    my_info.click(function() {
-        var loading_tip = $('.loading-tip', popup);
-        if (popup.hasClass('hide')) {
-            popup.removeClass('hide');
-            loading_tip.removeClass('hide');
-            $.ajax({
-                url: '{% url 'space_and_traffic' %}',
-                dataType: 'json',
-                cache: false,
-                success: function(data) {
-                    loading_tip.addClass('hide');
-                    popup.html(data['html']);
-                    $('.item:first', popup).css({'border':0});
-                }
-            });
-        } else {
-            popup.addClass('hide');
-        }
-    });
-})();
-$(document).click(function(e) {
-    var target = e.target || event.srcElement,
-        popup = $('#user-info-popup'),
-        popup_switch = $('.account .my-info');
-    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
-        popup.addClass('hide');
-    }    
-});
 {% if has_file_search %}
     {% include 'snippets/search_js.html' %}
 {% endif %}
