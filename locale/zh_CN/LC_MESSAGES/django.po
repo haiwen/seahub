@@ -2442,12 +2442,12 @@ msgstr "更多"
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr ""
+msgstr "请选择查看加密资料库的方式："
 
 #: seahub/options/templates/options/set_user_options.html:10
 #: seahub/profile/templates/profile/set_profile.html:70
 msgid "Send passwords to the server."
-msgstr ""
+msgstr "发送密码到服务器。"
 
 #: seahub/options/templates/options/set_user_options.html:10
 #: seahub/profile/templates/profile/set_profile.html:70
@@ -2487,7 +2487,7 @@ msgstr "还未接受邀请"
 
 #: seahub/profile/views.py:168
 msgid "Demo account can not be deleted."
-msgstr ""
+msgstr "Demo帐号无法被删除。"
 
 #: seahub/profile/views.py:172
 msgid "Operation Failed. You can only delete account of your own"
@@ -2545,7 +2545,6 @@ msgid "Update"
 msgstr "更新"
 
 #: seahub/profile/templates/profile/set_profile.html:36
-#, fuzzy
 msgid "Name:"
 msgstr "名字："
 
@@ -2590,7 +2589,6 @@ msgstr ""
 "时，它会自动跟源资料库保持同步。"
 
 #: seahub/profile/templates/profile/set_profile.html:85
-#, fuzzy
 msgid ""
 "Sub-library is also used when sharing a folder to a group or another user. "
 "Without this option on, a hidden sub-library will be created automatically "
@@ -2606,15 +2604,14 @@ msgid "Default Library Setting"
 msgstr "默认资料库设置"
 
 #: seahub/profile/templates/profile/set_profile.html:93
-#, fuzzy
 msgid "Your default library:"
-msgstr "选择默认资料库："
+msgstr "你的默认资料库："
 
 #: seahub/profile/templates/profile/set_profile.html:95
 msgid ""
 "You do not have a default library. Default library is the default place to "
 "store your personal documents and pictures."
-msgstr ""
+msgstr "你还没有默认资料库。默认资料库是用来存放你的个人文档和照片的地方。"
 
 #: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
@@ -3085,7 +3082,7 @@ msgstr "最后同步"
 
 #: seahub/templates/client_mgmt.html:44
 msgid "Not synced"
-msgstr ""
+msgstr "未同步"
 
 #: seahub/templates/client_mgmt.html:48
 msgid "Unsync"
@@ -3129,7 +3126,7 @@ msgstr "密码："
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
-msgstr ""
+msgstr "你可以在<a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">这里</a>改变加密资料库的查看方式"
 
 #: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:309
 msgid "Please enter the password."
@@ -3816,7 +3813,7 @@ msgid ""
 "A sub-library will be created from this directory. It will be listed in your "
 "desktop client, and you can download it just like downloading a normal "
 "library."
-msgstr ""
+msgstr "一个子资料库会从这个目录创建。它会在你的桌面客户端列出来，你可以像普通的资料库一样去下载。"
 
 #: seahub/templates/repo.html:212
 msgid "Create"
@@ -4676,7 +4673,7 @@ msgstr "发送中..."
 msgid ""
 "You can share the generated link to others and then they can upload files to "
 "this directory via the link."
-msgstr ""
+msgstr "你可以共享生成好的链接给别人，他们就能通过这个链接上传文件到这个文件夹。"
 
 #: seahub/templates/snippets/file_share_popup.html:52
 msgid "Upload Link: "
@@ -5033,7 +5030,7 @@ msgstr "删除群组"
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:8
 #: seahub/templates/sysadmin/sys_useradmin.html:8
 msgid "Database"
-msgstr ""
+msgstr "数据库"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:9
 #: seahub/templates/sysadmin/sys_useradmin.html:10
