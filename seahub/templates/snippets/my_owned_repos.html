@@ -25,7 +25,11 @@
     {% for repo in owned_repos %}
     {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
     <tr>
+        {% if repo.encrypted %}
+        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+        {% else %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+        {% endif %}
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         {% if repo.latest_modify %}
@@ -67,13 +71,11 @@
     </tr>
     {% for repo in sub_repos %}
     <tr>
-        <td>
-            {% if repo.virtual_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
-            {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
-            {% endif %}
-        </td>
+        {% if repo.encrypted %}
+        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+        {% else %}
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+        {% endif %}
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/">{{ repo.name }}</a></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.origin_repo_id}}/?p={{ repo.origin_path }}">{{ repo.abbrev_origin_path }}</a></td>
         {% if repo.latest_modify %}
@@ -119,11 +121,15 @@
         {% for repo in personal_shared_repos %}
         <tr>
             <td>
+              {% if repo.encrypted %}
+                <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+              {% else %}
                 {% if repo.user_perm == 'rw' %}
                 <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
                 {% else %}
                 <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
                 {% endif %}
+              {% endif %}
             </td>
             <td><a href="{{ SITE_ROOT }}repo/{{ repo.repo_id }}">{{ repo.repo_name }}</a></td>
             <td>{{ repo.repo_desc }}</td>
@@ -175,11 +181,15 @@
             <td></td>
           {% endif %}
             <td>
+              {% if repo.encrypted %}
+                <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+              {% else %}
                 {% if repo.user_perm == 'rw' %}
                 <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
                 {% else %}
                 <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
                 {% endif %}
+              {% endif %}
             </td>
             <td><a href="{{ SITE_ROOT }}repo/{{ repo.repo_id }}">{{ repo.repo_name }}</a></td>
             <td>{{ repo.repo_desc }}</td>

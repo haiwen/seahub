@@ -11,16 +11,20 @@
 {% if out_repos %}
 <table>
     <tr>
-        <th width="3%"><!--icon--></th>
-        <th width="19%">{% trans "Name"%}</th>
+        <th width="4%"><!--icon--></th>
+        <th width="20%">{% trans "Name"%}</th>
         <th width="21%">{% trans "Share To"%}</th>
         <th width="15%">{% trans "Permission"%}</th>
-        <th width="29%">{% trans "Description"%}</th>
+        <th width="27%">{% trans "Description"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in out_repos %}
     <tr data="{{repo.props.share_type}}">
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+        {% if repo.encrypted %}
+        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        {% else %}
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        {% endif %}
         <td data="{{ repo.props.repo_id }}"><a href="{{ SITE_ROOT }}repo/{{ repo.props.repo_id }}">{{ repo.props.repo_name }}</a></td>
         <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
         <td>

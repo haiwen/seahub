@@ -19,11 +19,15 @@
     {% for repo in public_repos %}
     <tr>
         <td>
+          {% if repo.encrypted %}
+            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "Directory icon"%}" />
+          {% else %}
             {% if repo.user_perm == 'rw' %}
             <img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write"%}" alt="{% trans "Directory icon"%}" />
             {% else %}
             <img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "Directory icon"%}" />
             {% endif %}
+          {% endif %}
         </td>
         <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.repo_desc }}</td>
