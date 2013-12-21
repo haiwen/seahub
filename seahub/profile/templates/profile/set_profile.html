@@ -91,9 +91,8 @@
     <h3>{% trans "Default Library Setting" %}</h3>
     {% if default_repo %}
     <p>{% trans "Your default library:" %} <a href="{% url 'repo' default_repo.id %}">{{default_repo.name}}</a>.</p>
-    {% else %}
-    <p>{% trans "You do not have a default library. Default library is the default place to store your personal documents and pictures." %}</p>
     {% endif %}
+    <p>{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
 
