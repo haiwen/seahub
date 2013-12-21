@@ -4,7 +4,7 @@
 {% block nav_help_class %}class="cur"{% endblock %}
 {% block left_panel %}
 <div class="side-textnav">
-	<h3 class="hd">{% trans "Client Program" %}</h2>
+	<h3 class="hd">{% trans "Client" context "help" %}</h2>
     <ul class="side-textnav-tabs">
 		<li class="tab {%block install %}{% endblock %}"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and Sync Files" %}</a></li>
         <li class="tab {%block del %}{% endblock %}"><a href="{{ SITE_ROOT }}help/delete/">{% trans "Deleting a library" %}</a></li>

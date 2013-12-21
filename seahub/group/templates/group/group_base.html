@@ -69,5 +69,9 @@ $('#enable-mods').click(function() {
     $('#simplemodal-container').css('height', 'auto');
     return false;
 });
+addConfirmTo($('#quit-group'), {
+        'title':'{% trans "Quit Group" %}',
+        'con':'{% trans "Are you sure you want to quit this group?" %}'
+});
 </script>
 {% endblock %}
