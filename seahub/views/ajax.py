@@ -25,7 +25,7 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful
 from seahub.views import get_repo_dirents, validate_owner, \
-    check_repo_access_permission
+    check_repo_access_permission, get_unencry_rw_repos_by_user
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
         get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
@@ -182,6 +182,25 @@ def get_my_unenc_repos(request):
     
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
+@login_required
+def unenc_rw_repos(request):
+    """Get a user's unencrypt repos that he/she can read-write.
+    
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+    acc_repos = get_unencry_rw_repos_by_user(username)
+
+    repo_list = []
+    for repo in acc_repos:
+        repo_list.append({"name": repo.name, "id": repo.id})
+    return HttpResponse(json.dumps(repo_list), content_type=content_type)
+    
 @login_required        
 def list_dir(request, repo_id):
     """
