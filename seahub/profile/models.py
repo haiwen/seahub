@@ -65,7 +65,7 @@ class DetailedProfileManager(models.Manager):
             return None
     
 class DetailedProfile(models.Model):
-    user = LowerCaseCharField(max_length=255)
+    user = LowerCaseCharField(max_length=255, db_index=True)
     department = models.CharField(max_length=512)
     telephone = models.CharField(max_length=100)
     objects = DetailedProfileManager()
