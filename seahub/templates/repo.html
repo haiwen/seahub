@@ -512,10 +512,14 @@ function render_jstree_for_cur_path() {
             file_tree.renderDirTree(container, form, json_data);
         },
         error: function() {
-            file_tree.renderDirTree(container, form, current_repo);
+            var cur_repo = [{
+                'data': '{{ repo.props.name }}',
+                'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
+                'state': 'closed'
+            }];
+            file_tree.renderDirTree(container, form, cur_repo);
         }
     });
-
 }
 // mv, cp multi dirents
 $('#mv-dirents, #cp-dirents').click(function() {
@@ -973,23 +977,6 @@ $('.set-file-type').click(function() {
    setCaretPos(file_name[0], 0);
    file_name.focus();
 });
-
-var current_repo = [],
-    other_repos = [];
-current_repo.push({
-    'data': '{{ repo.props.name }}',
-    'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
-    'state': 'closed'
-});  
-{% for a_repo in accessible_repos %}
-{% if a_repo.props.id != repo.props.id %}
-    other_repos.push({
-        'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
-        'state': 'closed'
-    });  
-{% endif %}
-{% endfor %}
 
 function opOnDirent(context) { // added param 'context' for 'more' dirents requested with 'list_dir_more'
     var context = context || $('.dir-item, .file-item');
@@ -1645,7 +1632,24 @@ $('#mv-dir-list .hd').click(function() {
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
             render_jstree_for_cur_path();
         } else {
-            file_tree.renderDirTree(dir_tree_container, form, other_repos);
+            $.ajax({
+                url: '{% url 'unenc_rw_repos' %}',
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    var other_repos = [];
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        if (data[i].id != '{{repo.id}}') {
+                        other_repos.push({
+                            'data': data[i].name,
+                            'attr': {'repo_id': data[i].id, 'root_node': true},
+                            'state': 'closed'
+                            });  
+                        }
+                    }
+                    file_tree.renderDirTree(dir_tree_container, form, other_repos);
+                }
+            });
         }
         dir_tree_container.removeClass('hide');
     } else {

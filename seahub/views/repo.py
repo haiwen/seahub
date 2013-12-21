@@ -237,7 +237,6 @@ def render_repo(request, repo):
     domain = RequestSite(request).domain
 
     contacts = Contact.objects.get_contacts_by_user(username)
-    accessible_repos = [repo] if repo.encrypted else get_unencry_rw_repos_by_user(username)
     joined_groups = get_personal_groups_by_user(request.user.username)
 
     head_commit = get_commit(repo.head_cmmt_id)
@@ -287,7 +286,6 @@ def render_repo(request, repo):
             'more_start': more_start,
             'path': path,
             'zipped': zipped,
-            'accessible_repos': accessible_repos,
             'applet_root': applet_root,
             'groups': repo_groups,
             'joined_groups': joined_groups,
