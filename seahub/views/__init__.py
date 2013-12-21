@@ -1187,7 +1187,11 @@ def unsetinnerpub(request, repo_id):
         messages.success(request, _('Unshare "%s" successfully.') % repo.name)
     except SearpcError:
         messages.error(request, _('Failed to unshare "%s".') % repo.name)
-    return HttpResponseRedirect(reverse('share_admin'))
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    return HttpResponseRedirect(next)
 
 # @login_required
 # def ownerhome(request, owner_name):
@@ -1733,7 +1737,11 @@ def pubrepo(request):
         # Users are not allowed to see public information when in cloud mode.
         raise Http404
     else:
-        public_repos = list_inner_pub_repos(request.user.username)
+        username = request.user.username
+        public_repos = list_inner_pub_repos(username)
+        for r in public_repos:
+            if r.user == username:
+                r.share_from_me = True
         return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
