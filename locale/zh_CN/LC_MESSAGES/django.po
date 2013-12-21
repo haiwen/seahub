@@ -1702,7 +1702,7 @@ msgstr "添加管理员"
 
 #: seahub/group/templates/group/group_manage.html:69
 msgid "Avatar"
-msgstr "头像："
+msgstr "头像"
 
 #: seahub/group/templates/group/group_manage.html:73
 #: seahub/profile/templates/profile/set_profile.html:29
