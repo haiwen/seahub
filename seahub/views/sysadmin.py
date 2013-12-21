@@ -330,8 +330,11 @@ def user_remove(request, user_id):
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
-    
-    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+        
+    return HttpResponseRedirect(next)
 
 @login_required
 @sys_staff_required
@@ -345,7 +348,10 @@ def user_make_admin(request, user_id):
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to set admin: the user does not exist'))
 
-    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+        
+    return HttpResponseRedirect(next)
 
 @login_required
 @sys_staff_required
@@ -358,8 +364,11 @@ def user_remove_admin(request, user_id):
         messages.success(request, _(u'Successfully revoke the admin permission of %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to revoke admin: the user does not exist'))
-    
-    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+        
+    return HttpResponseRedirect(next)
 
 @login_required
 @sys_staff_required
