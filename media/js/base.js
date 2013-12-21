@@ -35,7 +35,9 @@ $('#msg-count').click(function() {
     var popup = $('#user-info-popup');
 
     $(window).load(function() {
-        popup.css({'right': my_info.parent().width() - my_info.position().left - my_info.outerWidth()});
+        if (my_info.length > 0) { // before login, no 'my_info'
+            popup.css({'right': my_info.parent().width() - my_info.position().left - my_info.outerWidth()});
+        }
     }); 
     my_info.click(function() {
         var loading_tip = $('.loading-tip', popup);
