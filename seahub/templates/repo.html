@@ -183,7 +183,9 @@
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
             <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-            <div id="other-repos-dirs" class="hide"></div>
+            <div id="other-repos-dirs" class="hide">
+                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />     
+            </div>
             {% endif %}
         </div>
         <input type="hidden" name="obj_name" value="" />
@@ -1631,7 +1633,9 @@ $('#mv-dir-list .hd').click(function() {
         span.attr('class','icon-caret-down');
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
             render_jstree_for_cur_path();
+            dir_tree_container.removeClass('hide');
         } else {
+            dir_tree_container.removeClass('hide');
             $.ajax({
                 url: '{% url 'unenc_rw_repos' %}',
                 cache: false,
@@ -1651,7 +1655,6 @@ $('#mv-dir-list .hd').click(function() {
                 }
             });
         }
-        dir_tree_container.removeClass('hide');
     } else {
         span.attr('class','icon-caret-right');
         dir_tree_container.addClass('hide');
