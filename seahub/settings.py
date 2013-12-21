@@ -376,7 +376,9 @@ def get_events_conf_file():
 
     with open(seafile_ini, 'r') as fp:
         seafile_data_dir = fp.read().strip()
-        globals()['EVENTS_CONFIG_FILE'] = os.path.join(seafile_data_dir, 'seafevents.conf')
+        seafevents_conf = os.path.join(seafile_data_dir, 'seafevents.conf')
+        if os.path.exists(seafevents_conf):
+            globals()['EVENTS_CONFIG_FILE'] = seafevents_conf
 
 get_events_conf_file()
 
