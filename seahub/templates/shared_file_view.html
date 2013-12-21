@@ -32,7 +32,7 @@
               <button data="{{save_to_link}}" id="save">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" id="download">{% trans "Download" %} ({{file_size|filesizeformat}})</button>
+            <a target="_blank" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" id="download">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
