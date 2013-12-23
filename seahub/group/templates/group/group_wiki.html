@@ -5,6 +5,14 @@
 
 {% block cur_wiki %}tab-cur{% endblock %}
 
+{% block left_panel %}
+    {{ block.super }}
+    {% if wiki_index_exists %}
+    <h3>{% trans "Index" %}</h3>
+    <div id="index-content"></div><!--content will be offered by js-->
+    {% endif %}
+{% endblock %}
+
 {% block right_panel %}
 
     {% if not wiki_exists %}
@@ -12,7 +20,7 @@
         <h2 class="alc">{% trans "This group currently has no wiki" %}</h2>
         <p>{% trans "Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server." %}</p>
         {% if is_staff %}
-        <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
+        <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>{% trans " or " %}<a id="wiki-use-lib" href="#">{% trans "Choose a Library" %}</a>
         {% endif %}
     </div>
     <form id="wiki-create-form" action="" method="post" class="hide">{% csrf_token %}
@@ -23,6 +31,17 @@
         <textarea name="repo_desc" class="textarea">{% trans 'Wiki Pages' %}</textarea><br/>
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+
+    <form id="wiki-use-lib-form" action="{% url 'group_wiki_use_lib' group.id %}" method="post" class="file-choose-form hide">{% csrf_token %}
+        <h3>{% trans "Choose a library as wiki:" %}</h3>
+        <div class="dir-tree-cont">
+          <div id="repos-dirs"></div>
+        </div>
+        <input type="hidden" name="dst_repo" value="" />
+        <p class="error hide">{% trans "Please click and choose a library."%}</p>
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+        <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
     {% else %}
@@ -68,7 +87,7 @@
 var converter = new Markdown.Converter();
 {% include 'snippets/md_xss.html' %}
 Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
-$('#wiki-content').html(converter.makeHtml('{{ content|escapejs }}')).children(':first').css('margin-top', '0');
+$('#wiki-content').html(addAnchorsToHeaders(converter.makeHtml('{{ content|escapejs }}'))).children(':first').css('margin-top', '0');
 
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});
@@ -143,6 +162,31 @@ $('#wiki-create-form').submit(function () {
 
     return false;
 });
+
+var all_repos = [];
+{% for a_repo in group_repos %}
+    all_repos.push({
+        'data': '{{ a_repo.props.name }}',
+        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
+    });
+{% endfor %}
+$('#wiki-use-lib').click(function() {
+    var form = $('#wiki-use-lib-form'),
+        file_tree = new FileTree();
+    form.modal({appendTo:'#main', autoResize:true, focus:false});
+    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+});
+$('#wiki-use-lib-form').submit(function() {
+    var dst_repo = $('[name="dst_repo"]', $(this)).val();
+    if (!$.trim(dst_repo)) {
+        $('.error', form).removeClass('hide');
+        return false;
+    }
+});
 {% endif %}                     // END wiki_exists
+
+{% if wiki_index_exists %}
+$('#index-content').html(converter.makeHtml('{{ index_content|escapejs }}'));
+{% endif %}
 </script>
 {% endblock %}
