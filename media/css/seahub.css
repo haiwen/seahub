@@ -804,7 +804,11 @@ textarea:-moz-placeholder {/* for FF */
     padding:6px 13px;
     border:1px solid #ccc;
 }
-
+/**** index ****/
+#index-content li {
+    padding-left: 10px;
+    background: transparent url('../img/li.gif') no-repeat scroll left 6.5px;
+}
 /********** container ***********/
 #main, #footer,
 #repo-top .block-inner,
