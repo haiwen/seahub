@@ -9,7 +9,7 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">
-        {% grp_avatar group.props.id 24 %} <span title="{{ group.group_name }}">{{ group.group_name|truncatechars:8 }}</span>
+        {% grp_avatar group.props.id 24 %} <span title="{{ group.group_name }}">{{ group.group_name|truncatechars:11 }}</span>
         {% if group.is_pub %}<span class="icon-globe" title="{% trans "This group is public." %}"></span>{% endif %}
         </h3>
         {% if is_staff %}
