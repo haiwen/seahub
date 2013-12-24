@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-21 15:57+0800\n"
+"POT-Creation-Date: 2013-12-24 10:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,7 +88,7 @@ msgstr "密码不能为空"
 msgid "Bad url format"
 msgstr "错误的 url 格式"
 
-#: seahub/forms.py:152 seahub/templates/repo.html:333
+#: seahub/forms.py:152 seahub/templates/repo.html:335
 msgid "Wrong password"
 msgstr "密码错误"
 
@@ -270,7 +270,7 @@ msgstr "暂无讨论"
 #: seahub/api2/templates/api2/discussions.html:29
 #: seahub/api2/templates/api2/events.html:13
 #: seahub/notifications/templates/notifications/user_notification_list.html:26
-#: seahub/templates/activities.html:13 seahub/templates/repo.html:943
+#: seahub/templates/activities.html:13 seahub/templates/repo.html:949
 #: seahub/templates/snippets/list_commit_detail.html:3
 #: seahub/templates/snippets/repo_dir_data.html:46
 msgid "Loading..."
@@ -285,9 +285,9 @@ msgstr "加载中..."
 #: seahub/message/templates/message/all_msg_list.html:141
 #: seahub/notifications/templates/notifications/user_notification_list.html:66
 #: seahub/templates/base.html:139 seahub/templates/file_edit.html:590
-#: seahub/templates/repo.html:274 seahub/templates/repo.html.py:1407
-#: seahub/templates/repo.html:1455 seahub/templates/repo.html.py:1629
-#: seahub/templates/repo.html:1715 seahub/templates/repo.html.py:1787
+#: seahub/templates/repo.html:276 seahub/templates/repo.html.py:1396
+#: seahub/templates/repo.html:1444 seahub/templates/repo.html.py:1618
+#: seahub/templates/repo.html:1722 seahub/templates/repo.html.py:1794
 #: seahub/templates/repo_settings.html:100
 #: seahub/templates/repo_settings.html:136
 #: seahub/templates/view_file_base.html:151
@@ -579,8 +579,8 @@ msgstr "当前头像："
 #: seahub/templates/file_edit.html:98 seahub/templates/file_edit.html:245
 #: seahub/templates/home_base.html:49 seahub/templates/repo.html:72
 #: seahub/templates/repo.html.py:122 seahub/templates/repo.html:152
-#: seahub/templates/repo.html.py:176 seahub/templates/repo.html:195
-#: seahub/templates/repo.html.py:204 seahub/templates/repo.html:229
+#: seahub/templates/repo.html.py:176 seahub/templates/repo.html:197
+#: seahub/templates/repo.html.py:206 seahub/templates/repo.html:231
 #: seahub/templates/repo_settings.html:28
 #: seahub/templates/repo_settings.html:36
 #: seahub/templates/shared_file_view.html:50
@@ -716,7 +716,7 @@ msgstr "系统自动合并修改"
 #: seahub/base/templatetags/seahub_tags.py:179
 #: seahub/base/templatetags/seahub_tags.py:213
 #: seahub/group/templates/group/group_discuss.html:140
-#: seahub/templates/repo.html:1544
+#: seahub/templates/repo.html:1533
 #: seahub/templates/snippets/my_owned_repos.html:226
 msgid "Just now"
 msgstr "刚才"
@@ -937,8 +937,8 @@ msgstr "编辑"
 #: seahub/group/templates/group/group_manage.html:58
 #: seahub/notifications/templates/notifications/notification_list.html:38
 #: seahub/profile/templates/profile/set_profile.html:102
-#: seahub/templates/repo.html:58 seahub/templates/repo.html.py:362
-#: seahub/templates/view_shared_upload_link.html:86
+#: seahub/templates/repo.html:58 seahub/templates/repo.html.py:364
+#: seahub/templates/view_shared_upload_link.html:87
 #: seahub/templates/snippets/file_share_popup.html:34
 #: seahub/templates/snippets/file_share_popup.html:54
 #: seahub/templates/snippets/my_owned_repos.html:46
@@ -1332,10 +1332,10 @@ msgstr "输入不能为空且应少于2048个字符。"
 #: seahub/profile/templates/profile/set_profile.html:113
 #: seahub/templates/activities.html:26 seahub/templates/file_edit.html:99
 #: seahub/templates/file_edit.html:246 seahub/templates/repo.html:153
-#: seahub/templates/repo.html.py:177 seahub/templates/repo.html:196
-#: seahub/templates/repo.html.py:205 seahub/templates/repo.html:361
+#: seahub/templates/repo.html.py:177 seahub/templates/repo.html:198
+#: seahub/templates/repo.html.py:207 seahub/templates/repo.html:363
 #: seahub/templates/shared_file_view.html:51
-#: seahub/templates/view_shared_upload_link.html:85
+#: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/snippets/file_share_popup.html:42
 #: seahub/templates/snippets/file_share_popup.html:62
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
@@ -1462,7 +1462,7 @@ msgid "Failed to delete: "
 msgstr "删除失败："
 
 #: seahub/group/templates/group/group_discuss.html:268
-#: seahub/templates/repo.html:757
+#: seahub/templates/repo.html:763
 msgid "Failed."
 msgstr "操作失败"
 
@@ -2447,6 +2447,10 @@ msgstr "删除通知"
 msgid "Notices"
 msgstr "通知"
 
+#: seahub/notifications/templates/notifications/user_notification_list.html:11
+msgid "Clear"
+msgstr "清空"
+
 #: seahub/notifications/templates/notifications/user_notification_list.html:27
 #: seahub/templates/activities.html:15
 msgid "More"
@@ -2861,7 +2865,7 @@ msgstr "访问次数"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:53 seahub/templates/repo.html:620
+#: seahub/templates/file_revisions.html:53 seahub/templates/repo.html:626
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "查看"
@@ -3136,11 +3140,11 @@ msgstr ""
 "该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂"
 "存1小时。"
 
-#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:227
+#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:229
 msgid "Password: "
 msgstr "密码："
 
-#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:232
+#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:234
 #, python-format
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
@@ -3149,7 +3153,7 @@ msgstr ""
 "你可以在<a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">这"
 "里</a>改变加密资料库的查看方式"
 
-#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:309
+#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:311
 msgid "Please enter the password."
 msgstr "请输入密码。"
 
@@ -3627,7 +3631,7 @@ msgstr ""
 "Seafile把文件组织到资料库里。每个资料库可以被单独的同步和共享。我们已经为你创"
 "建了一个私人资料库。你之后可以再创建其他的资料库。"
 
-#: seahub/templates/myhome.html:43 seahub/templates/repo.html:213
+#: seahub/templates/myhome.html:43 seahub/templates/repo.html:215
 msgid "Close"
 msgstr "关闭"
 
@@ -3751,6 +3755,7 @@ msgid "Total size should be smaller than %(max_file_size)s"
 msgstr "文件总大小应小于 %(max_file_size)s"
 
 #: seahub/templates/repo.html:103 seahub/templates/repo.html.py:139
+#: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "保存中..."
 
@@ -3810,21 +3815,21 @@ msgstr "当前资料库"
 msgid "Other Libraries"
 msgstr "其他资料库"
 
-#: seahub/templates/repo.html:194 seahub/templates/shared_file_view.html:49
+#: seahub/templates/repo.html:196 seahub/templates/shared_file_view.html:49
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: seahub/templates/repo.html:200
+#: seahub/templates/repo.html:202
 #, python-format
 msgid "Rename %(name)s as:"
 msgstr "将 %(name)s 重命名为："
 
-#: seahub/templates/repo.html:210
+#: seahub/templates/repo.html:212
 #, python-format
 msgid "Sync %(dir_name)s"
 msgstr "同步 %(dir_name)s"
 
-#: seahub/templates/repo.html:211
+#: seahub/templates/repo.html:213
 msgid ""
 "A sub-library will be created from this directory. It will be listed in your "
 "desktop client, and you can download it just like downloading a normal "
@@ -3833,260 +3838,260 @@ msgstr ""
 "一个子资料库会从这个目录创建。它会在你的桌面客户端列出来，你可以像普通的资料"
 "库一样去下载。"
 
-#: seahub/templates/repo.html:212
+#: seahub/templates/repo.html:214
 msgid "Create"
 msgstr "创建"
 
-#: seahub/templates/repo.html:226
+#: seahub/templates/repo.html:228
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr ""
 "该资料库已加密。如需在线查看，请输入解密密码。密码将在浏览器中暂存1小时。"
 
-#: seahub/templates/repo.html:352
-#: seahub/templates/view_shared_upload_link.html:76
+#: seahub/templates/repo.html:354
+#: seahub/templates/view_shared_upload_link.html:77
 msgid "File is too big"
 msgstr "文件太大"
 
-#: seahub/templates/repo.html:353
-#: seahub/templates/view_shared_upload_link.html:77
+#: seahub/templates/repo.html:355
+#: seahub/templates/view_shared_upload_link.html:78
 msgid "File is too small"
 msgstr "文件太小"
 
-#: seahub/templates/repo.html:354
-#: seahub/templates/view_shared_upload_link.html:78
+#: seahub/templates/repo.html:356
+#: seahub/templates/view_shared_upload_link.html:79
 msgid "Filetype not allowed"
 msgstr "不支持的文件类型"
 
-#: seahub/templates/repo.html:355
-#: seahub/templates/view_shared_upload_link.html:79
+#: seahub/templates/repo.html:357
+#: seahub/templates/view_shared_upload_link.html:80
 msgid "Max number of files exceeded"
 msgstr "文件太多"
 
-#: seahub/templates/repo.html:356
-#: seahub/templates/view_shared_upload_link.html:80
+#: seahub/templates/repo.html:358
+#: seahub/templates/view_shared_upload_link.html:81
 msgid "Uploaded bytes exceed file size"
 msgstr "上传大小超过了文件大小"
 
-#: seahub/templates/repo.html:357
-#: seahub/templates/view_shared_upload_link.html:81
+#: seahub/templates/repo.html:359
+#: seahub/templates/view_shared_upload_link.html:82
 msgid "Empty file upload result"
 msgstr "空文件"
 
-#: seahub/templates/repo.html:359
-#: seahub/templates/view_shared_upload_link.html:83
+#: seahub/templates/repo.html:361
+#: seahub/templates/view_shared_upload_link.html:84
 msgid "Error"
 msgstr "错误"
 
-#: seahub/templates/repo.html:360
-#: seahub/templates/view_shared_upload_link.html:84
+#: seahub/templates/repo.html:362
+#: seahub/templates/view_shared_upload_link.html:85
 msgid "Start"
 msgstr "上传"
 
-#: seahub/templates/repo.html:391
+#: seahub/templates/repo.html:393
 msgid "Delete Items"
 msgstr "删除条目"
 
-#: seahub/templates/repo.html:391
+#: seahub/templates/repo.html:393
 msgid "Are you sure you want to delete these selected items?"
 msgstr "确定要删除选中的条目吗？"
 
-#: seahub/templates/repo.html:395 seahub/templates/repo.html.py:568
+#: seahub/templates/repo.html:397 seahub/templates/repo.html.py:574
 msgid "Processing..."
 msgstr "处理中..."
 
-#: seahub/templates/repo.html:425
+#: seahub/templates/repo.html:427
 #, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s 和其他 %(amount)s 个条目已删除成功。"
 
-#: seahub/templates/repo.html:427
+#: seahub/templates/repo.html:429
 #, python-format
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s 删除成功。"
 
-#: seahub/templates/repo.html:436
+#: seahub/templates/repo.html:438
 #, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr "内部错误。%(name)s 和其他 %(amount)s 个条目删除失败。"
 
-#: seahub/templates/repo.html:438
+#: seahub/templates/repo.html:440
 #, python-format
 msgid "Internal error. Failed to delete %(name)s."
 msgstr "内部错误。%(name)s 删除失败。"
 
-#: seahub/templates/repo.html:528
+#: seahub/templates/repo.html:534
 msgid "Move selected directories/files to:"
 msgstr "移动选中的文件/目录到:"
 
-#: seahub/templates/repo.html:531
+#: seahub/templates/repo.html:537
 msgid "Copy selected directories/files to:"
 msgstr "复制选中的文件/目录到:"
 
-#: seahub/templates/repo.html:557 seahub/templates/repo.html.py:1581
+#: seahub/templates/repo.html:563 seahub/templates/repo.html.py:1570
 #: seahub/views/ajax.py:637 seahub/views/ajax.py:798
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
-#: seahub/templates/repo.html:607
+#: seahub/templates/repo.html:613
 #, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s 和其他 %(amount)s 个条目移动成功。"
 
-#: seahub/templates/repo.html:609
+#: seahub/templates/repo.html:615
 #, python-format
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s 移动成功。"
 
-#: seahub/templates/repo.html:614
+#: seahub/templates/repo.html:620
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s 和其他 %(amount)s 个条目复制成功。"
 
-#: seahub/templates/repo.html:616
+#: seahub/templates/repo.html:622
 #, python-format
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s 复制成功。"
 
-#: seahub/templates/repo.html:628
+#: seahub/templates/repo.html:634
 #, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr "内部错误。%(name)s 和其他 %(amount)s 个条目移动失败。"
 
-#: seahub/templates/repo.html:630
+#: seahub/templates/repo.html:636
 #, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr "内部错误。%(name)s 移动失败。"
 
-#: seahub/templates/repo.html:634
+#: seahub/templates/repo.html:640
 #, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr "内部错误。%(name)s 和其他 %(amount)s 个条目复制失败。"
 
-#: seahub/templates/repo.html:636
+#: seahub/templates/repo.html:642
 #, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "内部错误。%(name)s 复制失败。"
 
-#: seahub/templates/repo.html:696
+#: seahub/templates/repo.html:702
 msgid "Encrypting the file..."
 msgstr "文件加密中..."
 
-#: seahub/templates/repo.html:721
+#: seahub/templates/repo.html:727
 #, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr "加密中， %(num)s% 已完成。"
 
-#: seahub/templates/repo.html:739
+#: seahub/templates/repo.html:745
 msgid "Uploading ..."
 msgstr "上传中..."
 
-#: seahub/templates/repo.html:752 seahub/templates/repo.html.py:1026
+#: seahub/templates/repo.html:758 seahub/templates/repo.html.py:1015
 msgid "Done!"
 msgstr "完成!"
 
-#: seahub/templates/repo.html:1036
+#: seahub/templates/repo.html:1025
 msgid "Downloading..."
 msgstr "下载中..."
 
-#: seahub/templates/repo.html:1069
+#: seahub/templates/repo.html:1058
 #, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr "下载中，%(num)s% 已完成。"
 
-#: seahub/templates/repo.html:1090
+#: seahub/templates/repo.html:1079
 msgid "Decrypting..."
 msgstr "解密中..."
 
-#: seahub/templates/repo.html:1107
+#: seahub/templates/repo.html:1096
 #, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr "解密中, %(num)s% 已完成。"
 
-#: seahub/templates/repo.html:1210
+#: seahub/templates/repo.html:1199
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s 删除成功。"
 
-#: seahub/templates/repo.html:1232
+#: seahub/templates/repo.html:1221
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: seahub/templates/repo.html:1234
+#: seahub/templates/repo.html:1223
 msgid "Rename Directory"
 msgstr "重命名目录"
 
-#: seahub/templates/repo.html:1252
+#: seahub/templates/repo.html:1241
 msgid "Copy File"
 msgstr "复制文件"
 
-#: seahub/templates/repo.html:1254
+#: seahub/templates/repo.html:1243
 msgid "Move File"
 msgstr "移动文件"
 
-#: seahub/templates/repo.html:1256
+#: seahub/templates/repo.html:1245
 msgid "Copy Directory"
 msgstr "复制目录"
 
-#: seahub/templates/repo.html:1258
+#: seahub/templates/repo.html:1247
 msgid "Move Directory"
 msgstr "移动目录"
 
-#: seahub/templates/repo.html:1263
+#: seahub/templates/repo.html:1252
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "复制 %(name)s 到："
 
-#: seahub/templates/repo.html:1266
+#: seahub/templates/repo.html:1255
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "移动 %(name)s 到："
 
-#: seahub/templates/repo.html:1289
+#: seahub/templates/repo.html:1278
 msgid "Directory download is not supported in this library."
 msgstr "该资料库不支持目录下载。"
 
-#: seahub/templates/repo.html:1397 seahub/templates/repo.html.py:1551
+#: seahub/templates/repo.html:1386 seahub/templates/repo.html.py:1540
 #: seahub/templates/snippets/repo_dirents.html:54
 msgid "unstarred"
 msgstr "未加星标"
 
-#: seahub/templates/repo.html:1399
+#: seahub/templates/repo.html:1388
 #: seahub/templates/snippets/repo_dirents.html:52
 msgid "starred"
 msgstr "已加星标"
 
-#: seahub/templates/repo.html:1447
+#: seahub/templates/repo.html:1436
 msgid "Sub-library is created."
 msgstr "子资料库已创建。"
 
-#: seahub/templates/repo.html:1478 seahub/templates/repo.html.py:1519
+#: seahub/templates/repo.html:1467 seahub/templates/repo.html.py:1508
 msgid "It is required."
 msgstr "必填项。"
 
-#: seahub/templates/repo.html:1484
+#: seahub/templates/repo.html:1473
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
-#: seahub/templates/repo.html:1494
+#: seahub/templates/repo.html:1483
 msgid "Creating..."
 msgstr "创建中..."
 
-#: seahub/templates/repo.html:1523
+#: seahub/templates/repo.html:1512
 msgid "You have not renamed it."
 msgstr "你还没重命名。"
 
-#: seahub/templates/repo.html:1560
+#: seahub/templates/repo.html:1549
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "%(old_name)s 已重命名为 %(new_name)s"
 
-#: seahub/templates/repo.html:1658
+#: seahub/templates/repo.html:1665
 msgid "Please select at least one contact."
 msgstr "请至少选择一个联系人。"
 
-#: seahub/templates/repo.html:1769
+#: seahub/templates/repo.html:1776
 #: seahub/templates/snippets/myhome_extra_script.html:47
 msgid "Please enter emails or groups, or select some."
 msgstr "请输入邮箱或群组，或选择一些。"

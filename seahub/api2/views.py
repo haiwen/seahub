@@ -510,7 +510,7 @@ def check_set_repo_password(request, repo):
     password_set = False
     if repo.encrypted:
         try:
-            ret = seafile_api.is_passwd_set(repo.id, request.user.username)
+            ret = seafile_api.is_password_set(repo.id, request.user.username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
