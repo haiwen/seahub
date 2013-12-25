@@ -27,11 +27,9 @@
     {% else %}
     <div class="wiki-top w100 ovhd">
         <ul class="wiki-nav fleft">
-            <li class="item cur-item"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
+            <li class="item{% if page == 'home' %} cur-item{% endif %}"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
-            {% if group.view_perm != "pub" %}
             <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
-            {% endif %}
         </ul>
         
         <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
