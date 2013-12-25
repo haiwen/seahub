@@ -180,12 +180,12 @@
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />     
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
             <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-            <div id="other-repos-dirs" class="hide">
-                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />     
-            </div>
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />     
+            <div id="other-repos-dirs" class="hide"></div>
             {% endif %}
         </div>
         <input type="hidden" name="obj_name" value="" />
@@ -457,7 +457,8 @@ var del_dirents = function() {
 function render_jstree_for_cur_path() {
     var form = $('#mv-form'),
         file_tree = new FileTree(),
-        container = $('#current-repo-dirs');
+        container = $('#current-repo-dirs'),
+        loading_tip = container.prev();
     container.data('site_root', '{{SITE_ROOT}}');
     $.ajax({
         url: '{% url 'get_dirents' repo.id %}?path=' + e(cur_path) + '&dir_only=true&all_dir=true',
@@ -511,7 +512,10 @@ function render_jstree_for_cur_path() {
                 $.extend(repo_data, {'children': children[0]});
             }
             json_data.push(repo_data); 
+
+            loading_tip.hide();
             file_tree.renderDirTree(container, form, json_data);
+            container.removeClass('hide');
         },
         error: function() {
             var cur_repo = [{
@@ -519,7 +523,9 @@ function render_jstree_for_cur_path() {
                 'attr': {'repo_id': '{{ repo.props.id }}', 'root_node': true},
                 'state': 'closed'
             }];
+            loading_tip.hide();
             file_tree.renderDirTree(container, form, cur_repo);
+            container.removeClass('hide');
         }
     });
 }
@@ -1627,15 +1633,15 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
 $('#mv-dir-list .hd').click(function() {
     var span = $('span', $(this)),
         form = $('#mv-form'),
-        dir_tree_container = $(this).next().data('site_root', '{{SITE_ROOT}}'),
+        loading_tip = $(this).next(),
+        dir_tree_container = loading_tip.next().data('site_root', '{{SITE_ROOT}}'),
         file_tree = new FileTree();
     if (span.hasClass('icon-caret-right')) {
         span.attr('class','icon-caret-down');
+        loading_tip.show();
         if (dir_tree_container.attr('id') == 'current-repo-dirs') {
             render_jstree_for_cur_path();
-            dir_tree_container.removeClass('hide');
         } else {
-            dir_tree_container.removeClass('hide');
             $.ajax({
                 url: '{% url 'unenc_rw_repos' %}',
                 cache: false,
@@ -1651,7 +1657,9 @@ $('#mv-dir-list .hd').click(function() {
                             });  
                         }
                     }
+                    loading_tip.hide();
                     file_tree.renderDirTree(dir_tree_container, form, other_repos);
+                    dir_tree_container.removeClass('hide');
                 }
             });
         }
