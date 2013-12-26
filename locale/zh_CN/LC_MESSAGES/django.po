@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-24 10:18+0800\n"
+"POT-Creation-Date: 2013-12-26 10:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,30 +137,54 @@ msgid "Español"
 msgstr ""
 
 #: seahub/settings.py:136
-msgid "Français"
+msgid "Mexican Spanish"
 msgstr ""
 
 #: seahub/settings.py:137
-msgid "Italiano"
+msgid "Français"
 msgstr ""
 
 #: seahub/settings.py:138
-msgid "Magyar"
+msgid "Hebrew"
 msgstr ""
 
 #: seahub/settings.py:139
-msgid "Portuguese, Brazil"
+msgid "Magyar"
 msgstr ""
 
 #: seahub/settings.py:140
-msgid "Русский"
+msgid "Italiano"
 msgstr ""
 
 #: seahub/settings.py:141
-msgid "简体中文"
+msgid "Latvian"
 msgstr ""
 
 #: seahub/settings.py:142
+msgid "Dutch"
+msgstr ""
+
+#: seahub/settings.py:143
+msgid "Portuguese, Brazil"
+msgstr ""
+
+#: seahub/settings.py:144
+msgid "Русский"
+msgstr ""
+
+#: seahub/settings.py:145
+msgid "Slovak"
+msgstr ""
+
+#: seahub/settings.py:146
+msgid "Ukrainian"
+msgstr ""
+
+#: seahub/settings.py:147
+msgid "简体中文"
+msgstr ""
+
+#: seahub/settings.py:148
 msgid "繁體中文"
 msgstr ""
 
