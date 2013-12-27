@@ -292,7 +292,7 @@ class DirFilesLastModifiedInfoManager(models.Manager):
             info.save()
         except IntegrityError, e:
             # If this record is already saved, skip this step.
-            logger.warn(e)
+            pass
         
         return last_modified_info
 
