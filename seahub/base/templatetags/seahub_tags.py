@@ -224,7 +224,10 @@ def email2nickname(value):
     nickname = cache.get(key)
     if not nickname:
         profile = get_first_object_or_none(Profile.objects.filter(user=value))
-        nickname = profile.nickname if profile else value.split('@')[0]
+        if profile is not None and profile.nickname:
+            nickname = profile.nickname
+        else:
+            nickname = value.split('@')[0]
         cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
 
