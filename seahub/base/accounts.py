@@ -125,6 +125,7 @@ class User(object):
         """
         # TODO: what about repos and groups?
         ccnet_threaded_rpc.remove_emailuser(self.username)
+        Profile.objects.delete_profile_by_user(self.username)
 
     def get_and_delete_messages(self):
         messages = []

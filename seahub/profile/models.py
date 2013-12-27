@@ -31,6 +31,9 @@ class ProfileManager(models.Manager):
             return super(ProfileManager, self).get(user=username)
         except Profile.DoesNotExist:
             return None
+      
+    def delete_profile_by_user(self, username):
+        self.filter(user=username).delete()
         
 class Profile(models.Model):
     user = models.EmailField(unique=True)
