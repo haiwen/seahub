@@ -141,10 +141,11 @@ $('#default-lib').click(function() {
     form.modal({appendTo:'#main', autoResize:true, focus:false});
     file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
 });
+
 $('#default-lib-form').submit(function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
     if (!$.trim(dst_repo)) {
-        $('.error', form).removeClass('hide');
+        $('.error', $(this)).removeClass('hide');
         return false;
     }
 });
