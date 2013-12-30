@@ -406,6 +406,8 @@ converter.hooks.chain("preBlockGamut", function (text, rbg) {
         return "<blockquote>" + rbg(inner) + "</blockquote>\n";
     });
 });
+{% include 'snippets/md_xss.html' %}
+
 Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
 
 var local_toolbar_strs = {

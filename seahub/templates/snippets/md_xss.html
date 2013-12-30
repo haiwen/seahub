@@ -1,0 +1,16 @@
+converter.hooks.chain("postConversion", function(html) {
+    var str;
+
+    // rm <script> element
+    str = html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, '');
+
+    str = str.replace(/<[^>]*>?/gim, function(text){
+        var s;
+        // rm attributes start with 'on'
+        s = text.replace(/on\w+=.*(?=\s+|>)/gi, '');
+        // rm attributes of which the values start with 'javascript:'
+        s = s.replace(/\w+=.*javascript\:.*(?=\s+|>)/gi, '');
+        return s;
+    });
+    return str;
+});
