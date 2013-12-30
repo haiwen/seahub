@@ -64,7 +64,7 @@ PREVIEW_FILEEXT = {
     TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico'),
     DOCUMENT: ('doc', 'docx', 'odt', 'fodt', 'ppt', 'pptx', 'odp', 'fodp', 'xls', 'xlsx', 'ods', 'fods'),
-    SVG: ('svg',),
+    # SVG: ('svg',),
     PDF: ('pdf',),
     MARKDOWN: ('markdown', 'md'),
     SF: ('seaf',),
