@@ -1374,6 +1374,23 @@ class BeShared(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class VirtualRepos(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        username = request.user.username
+        try:
+            result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
 
 class SharedRepo(APIView):
     """
