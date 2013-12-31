@@ -546,13 +546,10 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
                         repo_id = node.attr('repo_id');
                     } else {
                         path_array.shift();
+                        repo_id = node.parents('[root_node=true]').attr('repo_id');
                         if (node.attr('type') == 'dir') {
-                            // node is a subdir
-                            repo_id = node.attr('repo_id');
-                            path = '/' + path_array.join('/') + '/'; // dir path is ended with '/'
+                            path = '/' + path_array.join('/') + '/';
                         } else {
-                            // node is a file
-                            repo_id = this._get_parent(node).attr('repo_id');
                             path = '/' + path_array.join('/');
                         }
                     }
@@ -575,12 +572,13 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
             }
         })
         .bind('select_node.jstree', function(e, data) {
-            var path;
-            var repo_id = data.rslt.obj.attr('repo_id') || data.inst._get_parent(data.rslt.obj).attr('repo_id');
+            var path, repo_id;
             var path_array = data.inst.get_path(data.rslt.obj);
             if (path_array.length == 1) {
                 path = '/';
+                repo_id = data.rslt.obj.attr('repo_id');
             } else {
+                repo_id = data.rslt.obj.parents('[root_node=true]').attr('repo_id');
                 path_array.shift();
                 path = '/' + path_array.join('/') + '/';
             }
@@ -598,8 +596,7 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
                             path = '/';
                             repo_id = data.attr('repo_id');
                         } else {
-                            var root_node = data.parents('[root_node=true]');
-                            repo_id = root_node.attr('repo_id');
+                            repo_id = data.parents('[root_node=true]').attr('repo_id');
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
