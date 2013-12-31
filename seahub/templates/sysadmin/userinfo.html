@@ -78,7 +78,7 @@
                 <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
                 <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
                 <td>{{ repo.props.desc }}</td>
-                <td data-id="{{ repo.props.id }}">
+                <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
                     <div><a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a></div>
                 </td>
             </tr>
