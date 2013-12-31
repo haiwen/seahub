@@ -2137,6 +2137,29 @@ class AvatarView(APIView):
         return HttpResponse(json.dumps(ret), status=200,
                             content_type=json_content_type)
 
+class RepoHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits = commits_all[:per_page]
+
+        if len(commits_all) == per_page + 1:
+            page_next = True
+        else:
+            page_next = False
+
+        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+
 class ActivityHtml(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
