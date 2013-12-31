@@ -67,7 +67,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
-
+from seaserv import is_personal_repo
+from seahub.utils import gen_file_share_link, gen_dir_share_link
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -1374,6 +1375,51 @@ class BeShared(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class FileShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, FileShare):
+            return None
+        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
+
+class SharedLinksView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_shared_links
+    def get(self, request, format=None):
+        username = request.user.username
+
+        fileshares = FileShare.objects.filter(username=username)
+        p_fileshares = []           # personal file share
+        for fs in fileshares:
+            if is_personal_repo(fs.repo_id):  # only list files in personal repos
+                r = seafile_api.get_repo(fs.repo_id)
+                if not r:
+                    fs.delete()
+                    continue
+
+                if fs.s_type == 'f':
+                    if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path)
+                    fs.shared_link = gen_file_share_link(fs.token) 
+                else:
+                    if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+                    fs.shared_link = gen_dir_share_link(fs.token)
+                fs.repo = r
+                p_fileshares.append(fs)
+        return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
+
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        FileShare.objects.filter(token=token).delete()
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
 
 class SharedRepo(APIView):
     """
