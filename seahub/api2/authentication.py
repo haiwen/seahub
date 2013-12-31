@@ -30,7 +30,10 @@ class TokenAuthentication(BaseAuthentication):
                 token = self.model.objects.get(key=key)
             except self.model.DoesNotExist:
                 return None
-            user = User.objects.get(email=token.user)
+            try:
+                user = User.objects.get(email=token.user)
+            except User.DoesNotExist:
+                return None
             if user.is_active:
                 return (user, token)
 
