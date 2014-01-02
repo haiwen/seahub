@@ -166,9 +166,10 @@
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 {% if group_msgs.object_list|length > 5 %}
+// 'back to top'
 $(window).scroll(function() {
     var up_icon = $('#msg-upward');
-    var msg_panel =  $('#group-discussions');
+    var msg_panel =  up_icon.parent();
     var msg_panel_offset = msg_panel.offset();
     var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
     var win_st = $(window).scrollTop();
@@ -215,7 +216,7 @@ $('#group-message-form').submit(function() {
             var new_msg = $('.new-msg-list .msg').clone(true).attr('data-id', data['msg_id']);
             $('.msg-con', new_msg).html(data['msg_con']); 
             if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
-                $('#group-message-form').after('<ul class="msg-list"></ul>');    
+                form.after('<ul class="msg-list"></ul>');    
             }
             $('.msg-list').prepend(new_msg);
             new_msg.slideDown(400);

@@ -15,7 +15,6 @@
     <h3 class="fleft">{% trans "Messages" %}</h3>
     <button id="add-msg" class="fright"><span class="icon-pencil"></span>{% trans "New Message" %}</button>
 </div>
-{% if msgs %}
 <table>
     <tr>
         <th width="5%"></th>
@@ -23,6 +22,7 @@
         <th width="50%">{% trans "Message"%}</th>
         <th width="20%">{% trans "Time"%}</th>
     </tr>
+    {% if msgs %}
     {% for key,value in msgs %}
     {% with not_read=value.not_read %}
     <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
@@ -33,12 +33,12 @@
     </tr>
     {% endwith %}
     {% endfor %}
+    {% endif %}
 </table>
-{% endif %}
 
 <div id="send-msg-popup" class="hide">
     <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
-    <form id="send-msg-form" action="{% url 'message_send' %}" method="post" name="send-msg-form" class="hide">{% csrf_token %}
+    <form id="send-msg-form" action="{% url 'message_send' %}?from=all" method="post" name="send-msg-form" class="hide">{% csrf_token %}
         <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
         <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
         <div id="msg-file-share">
@@ -154,15 +154,63 @@ $('#send-msg-form .cancel').click(function() {
 });
 
 $('#send-msg-form').submit(function() {
-    var form_id = $(this).attr('id');
-    if (!$('#mass-msg').val()) {
+    var form = $(this),
+        form_id = form.attr('id'),
+        msg_input = $('[name="mass_msg"]', form),
+        msg = $.trim(msg_input.val()),
+        emails = $('[name="mass_email"]', form).val();
+
+    if (!msg) {
         apply_form_error(form_id, "{% trans "message is required" %}");
         return false;
     }
-    if (!$('#mass-email').val()) { // val is null or ['xx',...]
+    if (!emails) { // val is null or ['xx',...]
         apply_form_error(form_id, "{% trans "contact is required" %}");
         return false;
     }
+
+    var sb_btn = $('.submit', form);
+    disable(sb_btn);
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: { 'mass_msg': msg, 'mass_email': emails },
+        traditional: true,
+        success: function(data) {
+            msg_input.val('');
+            enable(sb_btn);
+            $('#send-msg-popup').addClass('hide');
+            var new_trs = $(data['html']);
+            new_trs.each(function() {
+                var new_tr = $(this),
+                    r = 0;
+                $('tr:gt(0)').each(function() {
+                    if ($(this).data('href') == new_tr.data('href')) {
+                        $(this).replaceWith(new_tr);
+                        r = 1;
+                    }
+                });
+                if (!r) {
+                    $('tr:first').after(new_tr);             
+                }
+                new_tr.click(function() {
+                    location.href = $(this).data('href');
+                });
+            });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error.join('<br />');
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }    
+            apply_form_error(form_id, err_msg);
+        }
+    });
+    return false;
 });
 
 </script>
