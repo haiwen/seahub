@@ -10,10 +10,10 @@
 
 <div id="personal-msg-panel" class="msg-panel personal-msg-panel">
     {% if to_email %}
-    <form id="personal-message-form" class="msg-form" action="{% url 'message_send' %}" method="post" onsubmit="return check(this)">{% csrf_token %}
+    <form id="personal-message-form" class="msg-form" action="{% url 'message_send' %}?from=user" method="post">{% csrf_token %}
        {% avatar request.user.username 48 %}
         <textarea name="mass_msg" id="message" placeholder="{% trans "Send a message..." %}" class="msg-input"></textarea><br />
-        <input type = "hidden" value = "{{ to_email }}" name= "mass_email"/>
+        <input type ="hidden" value="{{ to_email }}" name="mass_email" />
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}
@@ -88,6 +88,28 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
+{% if person_msgs.object_list|length > 5 %}
+// 'back to top'
+$(window).scroll(function() {
+    var up_icon = $('#msg-upward');
+    var msg_panel =  up_icon.parent();
+    var msg_panel_offset = msg_panel.offset();
+    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
+    var win_st = $(window).scrollTop();
+    var win_h = $(window).height() + win_st;
+
+    if (win_st > msg_panel_offset.top) {
+        up_icon.css({'left': msg_panel_offset.left + msg_panel.width() + 60}).removeClass('hide');
+        if (win_h > msg_panel_bot) {
+            up_icon.css({'bottom': win_h - msg_panel_bot + 15});
+        } else {
+            up_icon.css({'bottom': 15});
+        }
+    } else {
+        up_icon.addClass('hide');
+    }
+});
+{% endif %}
 
 $('#message').focus(function() {
     $(this).height(75);
@@ -99,10 +121,45 @@ $('#personal-message-form .cancel').click(function() {
     $('#message').val('').height(25);
 });
 
-function check(it){
-    if(!it.message.value)
+$('#personal-message-form').submit(function() {
+    var form = $(this),
+        msg_input = $('[name="mass_msg"]', form),
+        msg = $.trim(msg_input.val());
+    
+    if (!msg) {
         return false;
-}
+    }
+
+    var sb_btn = $('.submit', form);
+    disable(sb_btn);
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: { 'mass_msg': msg, 'mass_email': '{{to_email}}' },
+        success: function(data) {
+            var new_msg = $(data['html']);
+            if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
+                form.after('<ul class="msg-list"></ul>');    
+            }   
+            $('.msg-list').prepend(new_msg);
+            new_msg.slideDown(400);
+            msg_input.val('');
+            enable(sb_btn);
+        },  
+        error: function (xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error[0];
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }    
+            apply_form_error(form.attr('id'), err_msg);
+        }
+    });
+    return false;
+});
 </script>
 
 {% include 'snippets/add_to_contacts_js.html' %}

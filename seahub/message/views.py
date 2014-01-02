@@ -4,6 +4,7 @@ import simplejson as json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect , Http404
 from django.shortcuts import render_to_response, Http404
+from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.core.paginator import EmptyPage, InvalidPage
@@ -164,6 +165,86 @@ def message_send(request):
     if email_sended:
         messages.success(request, _(u'Message sent successfully.'))
     return HttpResponseRedirect(next)
+
+@login_required
+@require_POST
+def message_send(request):
+    """Handle POST request to send message to user(s).
+    """
+
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    username = request.user.username
+
+    fr = request.GET.get('from')
+    if not fr:
+        result['error'] = [_(u'Argument missing')]
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    mass_msg = request.POST.get('mass_msg')
+    mass_emails = request.POST.getlist('mass_email') # e.g: [u'1@1.com, u'2@1.com']
+    if not mass_msg:
+        result['error'] = [_(u'message is required')]
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    if not mass_emails:
+        result['error'] = [_(u'contact is required')]
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+    # attachment
+    selected = request.POST.getlist('selected') # selected files & dirs: [u'<repo_id><path>', ...] 
+    attached_items = []
+    if len(selected) > 0:
+        for item in selected:
+            att = {}
+            att['repo_id'] = item[0:36]
+            att['path'] = item[36:]
+            attached_items.append(att)
+
+    email_sended = []
+    errors = []
+    msgs = []
+    for to_email in mass_emails:
+        to_email = to_email.strip()
+        if not to_email:
+            continue
+
+        if to_email == username:
+            errors.append(_(u'You can not send message to yourself.'))
+            continue
+
+        if not is_registered_user(to_email):
+            errors.append(_(u'Failed to send message to %s, user not found.') % to_email)
+            continue
+
+        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        msgs.append(usermsg)
+        if len(attached_items) > 0:
+            for att_item in attached_items:
+                repo_id = att_item['repo_id']
+                path = att_item['path']
+                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                    username, to_email, repo_id, path)
+                UserMsgAttachment.objects.add_user_msg_attachment(usermsg, pfds)
+
+        email_sended.append(to_email)
+
+    html = ''
+    if email_sended:
+        ctx = {}
+        if fr == 'all': # from 'all_msg_list' page
+            ctx['msgs'] = msg_info_list(msgs, username)
+            html = render_to_string('message/all_msg.html', ctx)
+        else:
+            ctx['msg'] = msgs[0]   
+            html = render_to_string('message/user_msg.html', ctx)
+        return HttpResponse(json.dumps({"html": html, "error": errors}), content_type=content_type)
+    else:
+        return HttpResponse(json.dumps({"html": html, "error": errors}), status=400, content_type=content_type)
+
 
 @login_required
 def msg_count(request):
