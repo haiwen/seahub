@@ -23,6 +23,7 @@ consult a specific backend's documentation for details.
 
 """
 
+from django.conf import settings
 from django.conf.urls.defaults import *
 
 from seahub.auth import views as auth_views
@@ -56,3 +57,9 @@ urlpatterns = patterns('',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
 )
+
+if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
+    urlpatterns += patterns('',
+                            (r'^login/simple_check/$',
+                             auth_views.login_simple_check),
+                            )

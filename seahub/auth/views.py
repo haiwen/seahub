@@ -1,3 +1,4 @@
+import hashlib
 import re
 import logging
 from django.conf import settings
@@ -14,7 +15,7 @@ from django.utils.http import urlquote, base36_to_int
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 
-from seahub.auth import REDIRECT_FIELD_NAME
+from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
@@ -105,6 +106,32 @@ def login(request, template_name='registration/login.html',
             'site_name': current_site.name,
             }, context_instance=RequestContext(request))
 
+def login_simple_check(request):
+    """A simple check for login called by thirdpart systems(OA, etc).
+    """
+    username = request.REQUEST.get('user', '')
+    random_key = request.REQUEST.get('token', '')
+
+    if not username or not random_key:
+        raise Http404
+
+    expect = hashlib.md5(username+settings.SECRET_KEY).hexdigest()
+    if expect == random_key:
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            raise Http404
+        
+        for backend in get_backends():
+            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+
+        auth_login(request, user)
+
+        return HttpResponseRedirect(settings.SITE_ROOT)
+    else:
+        raise Http404
+
+    
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
     from seahub.auth import logout
