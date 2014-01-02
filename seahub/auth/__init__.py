@@ -80,6 +80,8 @@ def login(request, user):
 
     request.session[SESSION_KEY] = user.username
     request.session[BACKEND_SESSION_KEY] = user.backend
+    if request.session.get('remember_me', False):
+        request.session.set_expiry(7 * 24 * 60 * 60)
     if hasattr(request, 'user'):
         request.user = user
     user_logged_in.send(sender=user.__class__, request=request, user=user)

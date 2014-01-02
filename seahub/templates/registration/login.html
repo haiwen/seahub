@@ -17,15 +17,20 @@
     {% endif %}
     <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
     {% if form.errors %}
-    {% if form.captcha.errors %}
+      {% if form.captcha.errors %}
 	<p class="error">{{ form.captcha.errors}}</p>
-    {% else %}
+      {% else %}
 	<p class="error">{% trans "Incorrect email or password" %}</p>
-    {% endif %}
+      {% endif %}
     {% else %}
 	<p class="error hide"></p>
     {% endif %}
-	<input type="submit" value="{% trans "Submit" %}" class="submit" />
+
+    <div>
+      <label for="id_remember_me"><input id="id_remember_me" type="checkbox" name="remember_me" tabindex="">{% trans "Remember me for 7 days" %}</label>
+    </div>
+
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
     {% if enable_signup %}
     <a href="{{ SITE_ROOT }}accounts/register/" style="font-size:13px;">{% trans "Signup" %}</a>
     {% endif %}

@@ -1107,6 +1107,10 @@ textarea:-moz-placeholder {/* for FF */
     width:auto;
     margin:3px 0 0;
 }
+#id_remember_me {
+    width: auto;
+    margin-right: 5px;
+}
 /*myhome*/
 .home-profile .pic {
     margin-left:9px;
