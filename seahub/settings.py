@@ -207,6 +207,9 @@ USE_PDFJS = True
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 
+# Common settings(file extension, storage) for avatar and group avatar.
+AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseStorage' if save avatar files to database
+AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
 AVATAR_GRAVATAR_BACKUP = False
@@ -214,7 +217,6 @@ AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 14 * 24 * 60 * 60
-AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 AUTO_GENERATE_AVATAR_SIZES = (16, 20, 28, 36, 40, 48, 60, 80)
 # Group avatar
 GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'

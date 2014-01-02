@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.core.files.storage import default_storage, get_storage_class
 from django.utils.http import urlquote
 
 from seahub.base.accounts import User
-from seahub.avatar.settings import (AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,
-                             AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE,
-                             AVATAR_DEFAULT_NON_REGISTERED_URL,
-                             AUTO_GENERATE_GROUP_AVATAR_SIZES)
+from seahub.avatar.settings import AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,\
+    AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE, \
+    AVATAR_DEFAULT_NON_REGISTERED_URL, AUTO_GENERATE_GROUP_AVATAR_SIZES, \
+    AVATAR_FILE_STORAGE
 
 cached_funcs = set()
 
@@ -114,3 +115,20 @@ def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
         if not avatar.thumbnail_exists(size):
             avatar.create_thumbnail(size)
     return avatar
+
+def get_avatar_file_storage():
+    """Get avatar file storage, defaults to file system storage.
+    """
+    if not AVATAR_FILE_STORAGE:
+        return default_storage
+    else:
+        dbs_options = {
+            'table': 'avatar_uploaded',
+            'base_url': '/image-view/',
+            'name_column': 'filename',
+            'data_column': 'data',
+            'size_column': 'size',
+            }
+        return get_storage_class(AVATAR_FILE_STORAGE)(options=dbs_options)
+    
+    

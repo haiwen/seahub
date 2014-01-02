@@ -23,7 +23,7 @@ try:
 except ImportError:
     import Image
 
-from seahub.avatar.util import invalidate_cache
+from seahub.avatar.util import invalidate_cache, get_avatar_file_storage
 from seahub.avatar.settings import (AVATAR_STORAGE_DIR, AVATAR_RESIZE_METHOD,
                              AVATAR_MAX_AVATARS_PER_USER, AVATAR_THUMB_FORMAT,
                              AVATAR_HASH_USERDIRNAMES, AVATAR_HASH_FILENAMES,
@@ -127,11 +127,14 @@ class AvatarBase(object):
             size=size,
             ext=ext
         )
-    
+
 class Avatar(models.Model, AvatarBase):
     emailuser = LowerCaseCharField(max_length=255)
     primary = models.BooleanField(default=False)
-    avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)
+    avatar = models.ImageField(max_length=1024,
+                               upload_to=avatar_file_path,
+                               storage=get_avatar_file_storage(),
+                               blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
@@ -156,7 +159,10 @@ class Avatar(models.Model, AvatarBase):
 
 class GroupAvatar(models.Model, AvatarBase):
     group_id = models.CharField(max_length=255)
-    avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)
+    avatar = models.ImageField(max_length=1024,
+                               upload_to=avatar_file_path,
+                               storage=get_avatar_file_storage(),
+                               blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
     
     def __unicode__(self):
