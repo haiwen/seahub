@@ -1,6 +1,7 @@
 import hashlib
 import re
 import logging
+from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
@@ -108,6 +109,9 @@ def login(request, template_name='registration/login.html',
 
 def login_simple_check(request):
     """A simple check for login called by thirdpart systems(OA, etc).
+
+    Token generation: MD5(secret_key + foo@foo.com + 2014-1-1).hexdigest()
+    Token length: 32 hexadecimal digits.
     """
     username = request.REQUEST.get('user', '')
     random_key = request.REQUEST.get('token', '')
@@ -115,7 +119,8 @@ def login_simple_check(request):
     if not username or not random_key:
         raise Http404
 
-    expect = hashlib.md5(username+settings.SECRET_KEY).hexdigest()
+    today = datetime.now().strftime('%Y-%m-%d')
+    expect = hashlib.md5(settings.SECRET_KEY+username+today).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)
