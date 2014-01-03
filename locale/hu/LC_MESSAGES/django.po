@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # gkiss1988 <mail.gery@gmail.com>, 2013
+# gkiss1988 <mail.gery@gmail.com>, 2013
 # Mate Ory <orymate@ubuntu.com>, 2013
+# szimszon <szimszon@oregpreshaz.eu>, 2013
 # szimszon <szimszon@oregpreshaz.eu>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-26 10:40+0800\n"
-"PO-Revision-Date: 2013-12-21 08:34+0000\n"
-"Last-Translator: gkiss1988 <mail.gery@gmail.com>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/seahub/"
-"language/hu/)\n"
-"Language: hu\n"
+"PO-Revision-Date: 2013-12-29 14:50+0000\n"
+"Last-Translator: szimszon <szimszon@oregpreshaz.eu>\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: seahub/forms.py:26 seahub/base/accounts.py:409
@@ -102,7 +103,7 @@ msgstr "Belső kiszolgálóhiba"
 
 #: seahub/forms.py:156
 msgid "Decrypt library error"
-msgstr "Visszafejtőkönyvtár-hiba"
+msgstr "Titkosított kötet hiba"
 
 #: seahub/forms.py:162 seahub/share/forms.py:19 seahub/share/forms.py:29
 msgid "Email is required"
@@ -118,11 +119,11 @@ msgstr "A kvóta túl alacsony (minimális érték 0)"
 
 #: seahub/forms.py:171
 msgid "Library name is required"
-msgstr "Könyvtárnév megadása kötelező"
+msgstr "Kötetnév megadása kötelező"
 
 #: seahub/forms.py:172
 msgid "Library description is required"
-msgstr "Könyvtár leírása kötelező"
+msgstr "Kötet leírása kötelező"
 
 #: seahub/forms.py:174
 msgid "Please enter a number"
@@ -142,7 +143,7 @@ msgstr "Español"
 
 #: seahub/settings.py:136
 msgid "Mexican Spanish"
-msgstr ""
+msgstr "Mexican Spanish"
 
 #: seahub/settings.py:137
 msgid "Français"
@@ -150,7 +151,7 @@ msgstr "Français"
 
 #: seahub/settings.py:138
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrew"
 
 #: seahub/settings.py:139
 msgid "Magyar"
@@ -162,15 +163,15 @@ msgstr "Italiano"
 
 #: seahub/settings.py:141
 msgid "Latvian"
-msgstr ""
+msgstr "Latvian"
 
 #: seahub/settings.py:142
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 #: seahub/settings.py:143
 msgid "Portuguese, Brazil"
-msgstr ""
+msgstr "Portuguese, Brazil"
 
 #: seahub/settings.py:144
 msgid "Русский"
@@ -178,11 +179,11 @@ msgstr "Русский"
 
 #: seahub/settings.py:145
 msgid "Slovak"
-msgstr ""
+msgstr "Slovak"
 
 #: seahub/settings.py:146
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainian"
 
 #: seahub/settings.py:147
 msgid "简体中文"
@@ -213,11 +214,11 @@ msgstr "Jogosultság megtagadva"
 #: seahub/views/__init__.py:1478 seahub/views/__init__.py:1846
 #: seahub/views/ajax.py:1107
 msgid "Library does not exist"
-msgstr "A könyvtár nem létezik"
+msgstr "A kötet nem létezik"
 
 #: seahub/api2/views.py:1918
 msgid "Library is encrypted"
-msgstr "A könyvtár titkosítva van."
+msgstr "A kötet titkosítva van."
 
 #: seahub/api2/views.py:1922
 msgid "Invalid argument"
@@ -226,7 +227,7 @@ msgstr "Érvénytelen argumentumok"
 #: seahub/api2/views.py:1933 seahub/base/templatetags/seahub_tags.py:120
 #: seahub/views/__init__.py:874
 msgid "Changed library name or description"
-msgstr "Könyvtárnév vagy leírás módosítva"
+msgstr "Kötetnév vagy leírás módosítva"
 
 #: seahub/api2/views.py:1936 seahub/views/__init__.py:877
 msgid "No conflict in the merge."
@@ -364,13 +365,13 @@ msgstr "Nincs aktivitás vagy nem támogatott funkció."
 #: seahub/api2/templates/api2/events_body.html:17
 #: seahub/templates/snippets/events_body.html:29
 msgid "Created library"
-msgstr "Könyvtár létrehozva"
+msgstr "Kötet létrehozva"
 
 #: seahub/api2/templates/api2/events_body.html:21
 #: seahub/templates/snippets/events_body.html:33
 #, python-format
 msgid "Deleted library %(library_name)s"
-msgstr "%(library_name)s könyvtár törölve"
+msgstr "%(library_name)s kötet törölve"
 
 #: seahub/api2/templates/api2/events_js.html:83
 msgid "Please check the network."
@@ -423,11 +424,9 @@ msgstr "Jelszó"
 
 #: seahub/auth/forms.py:40
 msgid ""
-"Please enter a correct username and password. Note that both fields are case-"
-"sensitive."
-msgstr ""
-"Adjon meg helyes felhasználónevet és jelszót. Vegye figyelembe, hogy mindkét "
-"mező megkülönbözteti a kis- és nagybetűket."
+"Please enter a correct username and password. Note that both fields are "
+"case-sensitive."
+msgstr "Adjon meg helyes felhasználónevet és jelszót. Vegye figyelembe, hogy mindkét mező megkülönbözteti a kis- és nagybetűket."
 
 #: seahub/auth/forms.py:42
 msgid "This account is inactive."
@@ -437,9 +436,7 @@ msgstr "Ez a fiók inaktív."
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
-msgstr ""
-"A böngészője úgy tűnik, nem támogatja a cookiekat. A bejelentkezéshez ez "
-"feltétlenül szükséges."
+msgstr "A böngészője úgy tűnik, nem támogatja a cookiekat. A bejelentkezéshez ez feltétlenül szükséges."
 
 #: seahub/auth/forms.py:63
 msgid "E-mail"
@@ -449,9 +446,7 @@ msgstr "E-mail"
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
-msgstr ""
-"Az e-mail küldése meghiúsult, az e-mail szolgáltatás nincs megfelelően "
-"beállítva. Vegye fel a kapcsolatot a rendszergazdával."
+msgstr "Az e-mail küldése meghiúsult, az e-mail szolgáltatás nincs megfelelően beállítva. Vegye fel a kapcsolatot a rendszergazdával."
 
 #: seahub/auth/forms.py:78
 msgid ""
@@ -490,8 +485,7 @@ msgstr "Kijelentkezett"
 
 #: seahub/auth/views.py:166
 msgid "Failed to send email, please contact administrator."
-msgstr ""
-"Az e-mail küldése sikertelen. Vegye fel a kapcsolatot a rendszergazdával."
+msgstr "Az e-mail küldése sikertelen. Vegye fel a kapcsolatot a rendszergazdával."
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
@@ -503,27 +497,21 @@ msgstr "Adjon meg érvényes e-mail címet."
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
-msgstr ""
-"%(ext)s érvénytelen kiterjesztés. Az érvényesek a következők:  "
-"%(valid_exts_list)s"
+msgstr "%(ext)s érvénytelen kiterjesztés. Az érvényesek a következők:  %(valid_exts_list)s"
 
 #: seahub/avatar/forms.py:38 seahub/avatar/forms.py:61
 #, python-format
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
-msgstr ""
-"A fájl túl nagy (%(size)s), a maximális engedélyezett méret "
-"%(max_valid_size)s"
+msgstr "A fájl túl nagy (%(size)s), a maximális engedélyezett méret %(max_valid_size)s"
 
 #: seahub/avatar/forms.py:44
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
-msgstr ""
-"Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám "
-"%(nb_max_avatars)d."
+msgstr "Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám %(nb_max_avatars)d."
 
 #: seahub/avatar/models.py:138 seahub/avatar/models.py:163
 #, python-format
@@ -572,11 +560,9 @@ msgstr "Válassza ki a törlendő avatarokat."
 #: seahub/avatar/templates/avatar/confirm_delete.html:11
 #, python-format
 msgid ""
-"You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
-"\">upload one</a> now."
-msgstr ""
-"Nincs törölhető avatarja. <a href=\"%(avatar_change_url)s\">Töltsön fel "
-"egyet</a> most."
+"You have no avatars to delete. Please <a "
+"href=\"%(avatar_change_url)s\">upload one</a> now."
+msgstr "Nincs törölhető avatarja. <a href=\"%(avatar_change_url)s\">Töltsön fel egyet</a> most."
 
 #: seahub/avatar/templates/avatar/confirm_delete.html:18
 msgid "Delete These"
@@ -655,9 +641,7 @@ msgstr "Beküldés"
 msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
-msgstr ""
-"<a href=\"%(user_url)s\">%(avatar_creator)s</a> frissítette <a href="
-"\"%(avatar_url)s\">%(avatar)s</a> avatarját."
+msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> frissítette <a href=\"%(avatar_url)s\">%(avatar)s</a> avatarját."
 
 #: seahub/avatar/templates/notification/avatar_updated/notice.html:2
 #, python-format
@@ -681,25 +665,24 @@ msgid "Invalid user id."
 msgstr "Érvénytelen felhasználóazonosító."
 
 #: seahub/base/accounts.py:433
-#, fuzzy
 msgid "name"
-msgstr "Átnevezés"
+msgstr "név"
 
 #: seahub/base/accounts.py:435
 msgid "department"
-msgstr ""
+msgstr "osztály"
 
 #: seahub/base/accounts.py:437
 msgid "telephone"
-msgstr ""
+msgstr "telefon"
 
 #: seahub/base/accounts.py:439
 msgid "note"
-msgstr ""
+msgstr "megjegyzés"
 
 #: seahub/base/decorators.py:85
 msgid "Files in this library can not be viewed online."
-msgstr "Ebben a könyvtárban a fájlok nem nézhetők meg online."
+msgstr "Ebben a kötetben a fájlok nem nézhetők meg online."
 
 #: seahub/base/templatetags/seahub_tags.py:87
 msgid "Added"
@@ -743,7 +726,7 @@ msgstr "Könyvtár áthelyezve"
 
 #: seahub/base/templatetags/seahub_tags.py:111
 msgid "Reverted library to status at"
-msgstr "Könyvtár visszaállítva erre az állapotra:"
+msgstr "Kötet visszaállítva erre az állapotra:"
 
 #: seahub/base/templatetags/seahub_tags.py:114
 #, python-format
@@ -843,14 +826,14 @@ msgid "Email is required."
 msgstr "Az e-mail kötelező."
 
 #: seahub/contacts/views.py:62 seahub/contacts/views.py:99
-#, fuzzy, python-format
+#, python-format
 msgid "%s is not a valid email."
-msgstr "„%s” érvénytelen név"
+msgstr "%s nem valós e-mail cím."
 
 #: seahub/contacts/views.py:67 seahub/contacts/views.py:103
-#, fuzzy, python-format
+#, python-format
 msgid "%s is already in your contacts."
-msgstr "Már van ilyen kapcsolata."
+msgstr "%s már a kapcsolatai között van."
 
 #: seahub/contacts/views.py:76 seahub/contacts/views.py:111
 #, python-format
@@ -1011,9 +994,7 @@ msgstr "Nincs egy kapcsolata sem"
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
-msgstr ""
-"Vegyen fel kapcsolatokat, hogy gyorsan tudjon könyvtárakat megosztani és "
-"fájlhivatkozásokat küldeni."
+msgstr "Vegyen fel kapcsolatokat, hogy gyorsan tudjon köteteket megosztani és fájlhivatkozásokat küldeni."
 
 #: seahub/contacts/templates/contacts/contact_list.html:44
 #: seahub/contacts/templates/contacts/contact_list.html:55
@@ -1056,14 +1037,13 @@ msgstr "Kapcsolat törlése"
 #: seahub/templates/sysadmin/sys_group_admin.html:63
 #: seahub/templates/sysadmin/sys_org_admin.html:63
 #: seahub/templates/sysadmin/useradmin_js.html:4
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Biztosan törli: %s?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:129
-#, fuzzy
 msgid "You cannot add yourself."
-msgstr "Nem adhatja hozzá önmagát."
+msgstr "Önmagát nem veheti fel."
 
 #: seahub/group/error_msg.py:7
 msgid "The group has already created"
@@ -1114,7 +1094,6 @@ msgid "Group name is too long (maximum is 255 characters)"
 msgstr "A csoportnév túl hosszú (legfeljebb 255 karakter lehet)"
 
 #: seahub/group/forms.py:36
-#, fuzzy
 msgid "Group name can only contain letters, numbers or underscore"
 msgstr "Csoportnév csak latin betűket, számokat és alulvonást tartalmazhat."
 
@@ -1136,25 +1115,22 @@ msgstr "„%s” érvénytelen név"
 msgid ""
 "You can only create %d groups.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
-msgstr ""
-"Csak %d csoport hozható létre.<a href=\"http://seafile.com/\">Fiók "
-"fejlesztése.</a>"
+msgstr "Csak %d csoport hozható létre.<a href=\"http://seafile.com/\">Fiók fejlesztése.</a>"
 
 #: seahub/group/views.py:160
 msgid "There is already a group with that name."
 msgstr "Van már ilyen nevű csoport."
 
 #: seahub/group/views.py:264
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully renamed group to \"%s\"."
-msgstr "\"%s\" megosztás sikeresen megszüntetve."
+msgstr "A csoport sikeresen át lett nevezve a következőre: \"%s\"."
 
 #: seahub/group/views.py:266
-#, fuzzy
 msgid ""
 "Failed to rename group, group name can only contain letters, numbers or "
 "underscore"
-msgstr "Csoportnév csak latin betűket, számokat és alulvonást tartalmazhat."
+msgstr "A csoport átnevezése nem sikerült. A csoport neve csak betűket, számokat és aláhúzásjel karaktereket tartalmazhat."
 
 #: seahub/group/views.py:309 seahub/group/views.py:331
 msgid "Only administrators can make the group public"
@@ -1173,9 +1149,7 @@ msgstr "Nincs jogosultsága."
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
-msgstr ""
-"Csak %d tagot hívhat meg.<a href=\"http://seafile.com/\">Fiók fejlesztése.</"
-"a>"
+msgstr "Csak %d tagot hívhat meg.<a href=\"http://seafile.com/\">Fiók fejlesztése.</a>"
 
 #: seahub/group/views.py:646
 msgid "Your friend added you to a group at Seafile."
@@ -1220,9 +1194,7 @@ msgstr "Megosztás visszavonása sikertelen: nincs ilyen csoport."
 msgid ""
 "Operation failed: only administrators and the owner of the library can "
 "unshare it."
-msgstr ""
-"Művelet meghiúsult: csak adminisztrátor és a csoporttulajdonos vonhatja "
-"vissza egy könyvtár megosztását."
+msgstr "Művelet meghiúsult: csak adminisztrátor és a csoporttulajdonos vonhatja vissza egy kötet megosztását."
 
 #: seahub/group/views.py:854
 msgid "Failed to unshare: internal error."
@@ -1248,7 +1220,7 @@ msgstr "Hiba: nem tagja a(z) %s csoportnak."
 
 #: seahub/group/views.py:935
 msgid "Error: the library does not exist."
-msgstr "Hiba: a könyvtár nem létezik."
+msgstr "Hiba: a kötet nem létezik."
 
 #: seahub/group/views.py:938
 msgid "Error: no path."
@@ -1331,9 +1303,7 @@ msgstr "„%s” oldal már létezik."
 msgid ""
 "%(email)s invite you to join group %(group.group_name)s. Please go to the "
 "following page and sign up:"
-msgstr ""
-"%(email)s meghívta a(z) „%(group.group_name)s” csoportba. A következő "
-"oldalon tudja elfogadni:"
+msgstr "%(email)s meghívta a(z) „%(group.group_name)s” csoportba. A következő oldalon tudja elfogadni:"
 
 #: seahub/group/templates/group/add_member_email.html:5
 #: seahub/group/templates/group/group_join_email.html:6
@@ -1418,7 +1388,7 @@ msgstr "Modulok engedélyezése"
 
 #: seahub/group/templates/group/group_base.html:19
 msgid "Quit"
-msgstr ""
+msgstr "Kilépés"
 
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/group_info.html:11
@@ -1430,7 +1400,7 @@ msgstr ""
 #: seahub/templates/org_admin_base.html:11 seahub/templates/pub_base.html:12
 #: seahub/templates/pubrepo.html:8
 msgid "Libraries"
-msgstr "Könyvtárak"
+msgstr "Kötetek"
 
 #: seahub/group/templates/group/group_base.html:29
 #: seahub/group/templates/group/group_base.html:56
@@ -1537,7 +1507,7 @@ msgstr "Legutóbbi változások"
 #: seahub/templates/snippets/my_owned_repos.html:13
 #: seahub/templates/snippets/repo_create_form.html:3
 msgid "New Library"
-msgstr "Új könyvtár"
+msgstr "Új kötet"
 
 #: seahub/group/templates/group/group_info.html:22
 #: seahub/group/templates/group/group_info.html:76
@@ -1634,25 +1604,20 @@ msgstr "Megosztás törlése"
 
 #: seahub/group/templates/group/group_info.html:63
 msgid "No library is sharing to this group"
-msgstr "Egy könyvtár sincs megosztva ezzel a csoporttal"
+msgstr "Egy kötet sincs megosztva ezzel a csoporttal"
 
 #: seahub/group/templates/group/group_info.html:64
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
-msgstr ""
-"Az fenti „új könyvtár” menüpont „megosztás” ikonjára kattintva oszthat meg "
-"könyvtárakat."
+msgstr "Az fenti „Új kötet” menüpont „megosztás” ikonjára kattintva oszthat meg köteteket."
 
 #: seahub/group/templates/group/group_info.html:65
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
 "not be uploaded."
-msgstr ""
-"Az írható módon megosztott könyvtárak a többi csoporttag által is "
-"letölthetőek és szinkronizálhatóak. A csak olvasható könyvtárakat "
-"letölthetik, de a módosításaik nem kerülnek mentésre."
+msgstr "Az írható módon megosztott köteteket a többi csoporttag által is letölthetőek és szinkronizálhatóak. A csak olvasható könyvtárakat letölthetik, de a módosításaik nem kerülnek mentésre."
 
 #: seahub/group/templates/group/group_info.html:75
 #: seahub/group/templates/group/group_info.html:124
@@ -1663,7 +1628,7 @@ msgstr ""
 #: seahub/templates/activities.html:19 seahub/templates/client_mgmt.html:14
 #: seahub/templates/file_edit.html:240 seahub/templates/starred.html:14
 msgid "Library"
-msgstr "Könyvtár"
+msgstr "Kötet"
 
 #: seahub/group/templates/group/group_info.html:77
 msgid "Modified at"
@@ -1724,34 +1689,32 @@ msgstr "A jelszó egy órán át lesz tárolva a kiszolgálón."
 
 #: seahub/group/templates/group/group_info.html:147
 msgid "Unshare Library"
-msgstr "Könyvtár megosztásának visszavonása"
+msgstr "Kötet megosztásának visszavonása"
 
 #: seahub/group/templates/group/group_info.html:148
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to unshare %s ?"
 msgstr "Biztosan visszavonja %s megosztását?"
 
 #: seahub/group/templates/group/group_info_for_pub.html:46
 msgid "No public library is in this group"
-msgstr "Nincs nyilvános könyvtár ebben a csoportban"
+msgstr "Nincs nyilvános kötet ebben a csoportban"
 
 #: seahub/group/templates/group/group_info_for_pub.html:47
-msgid "A library can be made public in its settings page.(Not implemented yet)"
-msgstr "Egy könyvtár a beállításainál tehető nyilvánossá. (Hamarosan)"
+msgid ""
+"A library can be made public in its settings page.(Not implemented yet)"
+msgstr "Egy kötet a beállításainál tehető nyilvánossá. (Hamarosan)"
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr ""
-"%(user)s szeretne csatlakozni a(z) „%(group_name)s\" csoporthoz. Ezt az "
-"indoklást adta meg:"
+msgstr "%(user)s szeretne csatlakozni a(z) „%(group_name)s\" csoporthoz. Ezt az indoklást adta meg:"
 
 #: seahub/group/templates/group/group_manage.html:10
-#, fuzzy
 msgid "Admins"
-msgstr "Adminisztrátor"
+msgstr "Adminisztrátorok"
 
 #: seahub/group/templates/group/group_manage.html:11
 #: seahub/profile/templates/profile/set_profile.html:22
@@ -1765,14 +1728,12 @@ msgid "Add Members"
 msgstr "Tagok hozzáadása"
 
 #: seahub/group/templates/group/group_manage.html:42
-#, fuzzy
 msgid "Add Admins"
 msgstr "Adminisztrátorok hozzáadása"
 
 #: seahub/group/templates/group/group_manage.html:69
-#, fuzzy
 msgid "Avatar"
-msgstr "Avatar:"
+msgstr "Embléma"
 
 #: seahub/group/templates/group/group_manage.html:73
 #: seahub/profile/templates/profile/set_profile.html:29
@@ -1815,9 +1776,8 @@ msgid "Tip: the email should be already registered."
 msgstr "Tipp: az e-mail címeknek már regisztrálva kell lenniük."
 
 #: seahub/group/templates/group/group_manage.html:104
-#, fuzzy
 msgid "Rename Group To"
-msgstr "Csoport átadása"
+msgstr "Csoport átnevezése a következőre:"
 
 #: seahub/group/templates/group/group_manage.html:121
 msgid "Dismiss Group"
@@ -1832,7 +1792,7 @@ msgid "Delete Member"
 msgstr "Tag eltávolítása"
 
 #: seahub/group/templates/group/group_manage.html:126
-#, fuzzy, python-format
+#, python-format
 msgid "Really want to delete %s ?"
 msgstr "Biztosan törli: %s?"
 
@@ -1879,10 +1839,7 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr ""
-"A Seafile Wiki lehetővé teszi az egyszerű jegyzetelést. A wiki tartalma egy "
-"rendes könyvtárban kerül tárolásra, egy kötött fájl/könyvtárstruktúrában.  "
-"Ez lehetővé teszi a Wiki helyi szerkesztését."
+msgstr "A Seafile Wiki lehetővé teszi az egyszerű jegyzetelést. A wiki tartalma egy rendes kötetben kerül tárolásra, egy kötött fájl/könyvtárstruktúrában.  Ez lehetővé teszi a Wiki helyi szerkesztését."
 
 #: seahub/group/templates/group/group_wiki.html:15
 #: seahub/templates/wiki/personal_wiki.html:15
@@ -1970,8 +1927,7 @@ msgstr "Tippek"
 #: seahub/group/templates/group/groups_left_panel.html:5
 msgid ""
 "After creating a group, you can add members and share libraries into it."
-msgstr ""
-"A csoport létrehozása után hozzáadhat tagokat és megoszthat könyvtárakat"
+msgstr "A csoport létrehozása után hozzáadhat tagokat és megoszthat köteteket."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
 msgid "My Groups"
@@ -1995,9 +1951,7 @@ msgstr "Nem tagja egy csoportnak sem"
 msgid ""
 "You can create a group by clicking \"New Group\" button. Group is a place "
 "for you and your friends leaving messages and collaborating on libraries."
-msgstr ""
-"Léterhozhat egy csoportot az „új csoport” gombra kattintva. A csoport egy "
-"olyan hely, ahol üzeneteket hagyhat és együtt dolgozhat könyvtárain másokkal."
+msgstr "Létrehozhat egy csoportot az „új csoport” gombra kattintva. A csoport egy olyan hely, ahol üzeneteket hagyhat és együtt dolgozhat kötetein másokkal."
 
 #: seahub/group/templates/group/groups_right_panel.html:34
 msgid "Group Name"
@@ -2029,121 +1983,108 @@ msgid "Add administrators"
 msgstr "Adminisztrátorok hozzáadása"
 
 #: seahub/group/templates/group/grpmember_add_js.html:41
-#, fuzzy
 msgid "Please enter emails, or select some."
-msgstr "Adjon meg e-mail címeket vagy csoportokat, vagy válasszon."
+msgstr "Kérem, adja meg az e-mail címeket, vagy válassza ki őket a listából."
 
 #: seahub/group/templates/group/new_msg_reply.html:18
 msgid "Group: "
 msgstr "Csoport: "
 
 #: seahub/help/templates/help/help_base.html:7
-#, fuzzy
 msgctxt "help"
 msgid "Client"
 msgstr "Kliens"
 
 #: seahub/help/templates/help/help_base.html:9
 msgid "Install and Sync Files"
-msgstr ""
+msgstr "Telepítés és fájlok szinkronizálása"
 
 #: seahub/help/templates/help/help_base.html:10
-#, fuzzy
 msgid "Deleting a library"
-msgstr "Könyvtár törlése"
+msgstr "Kötet törlése"
 
 #: seahub/help/templates/help/help_base.html:11
-#, fuzzy
 msgid "Encrypting a library"
-msgstr "Visszafejtőkönyvtár-hiba"
+msgstr "Kötet titkosítása"
 
 #: seahub/help/templates/help/help_base.html:12
 #: seahub/help/templates/help/help_colab.html:7
-#, fuzzy
 msgid "File conflicts"
-msgstr "Fájl változások"
+msgstr "Fájlütközések"
 
 #: seahub/help/templates/help/help_base.html:13
 msgid "Excluding files"
-msgstr ""
+msgstr "Fájlok kihagyása"
 
 #: seahub/help/templates/help/help_base.html:15
 msgid "Web Site"
-msgstr ""
+msgstr "Weboldal"
 
 #: seahub/help/templates/help/help_base.html:17
-#, fuzzy
 msgid "Sharing to a group"
-msgstr "Csoport létrehozása sikertelen"
+msgstr "Megosztás csoporttal"
 
 #: seahub/help/templates/help/help_base.html:18
 #: seahub/help/templates/help/help_view_encrypted.html:8
-#, fuzzy
 msgid "Viewing an encrypted library"
-msgstr "Könyvtár létrehozva"
+msgstr "Titkosított kötetek megtekintése"
 
 #: seahub/help/templates/help/help_colab.html:8
 msgid ""
-"Once you and your friends sync a shared library onto your computers, you may "
-"add, delete or edit files in the library together.  Every change you make to "
-"the library will be automatically synced to others' computers."
-msgstr ""
+"Once you and your friends sync a shared library onto your computers, you may"
+" add, delete or edit files in the library together.  Every change you make "
+"to the library will be automatically synced to others' computers."
+msgstr "Megosztott köteteknél a megosztásban részt vevő bármely felhasználó szabadon létrehozhat, törölhet és módosíthat fájlokat. Az így keletkezett változások automatikusan lekövetésre kerülnek az összes olyan számítógépen, amelyek szinkronizálva vannak a kötettel."
 
 #: seahub/help/templates/help/help_colab.html:10
 msgid ""
 "\n"
-"    Sometimes you and your friends may edit the same file at the same time. "
-"Your changes may conflict with each other's. In this case, Seafile would "
-"keep your version unchanged, while save your friends' versions as \"conflict "
-"files\". A conflict file's name ends with its author's email address, plus "
-"the current time, e.g. test.txt (name@example.com 2013-10-01-00-12-24).\n"
+"    Sometimes you and your friends may edit the same file at the same time. Your changes may conflict with each other's. In this case, Seafile would keep your version unchanged, while save your friends' versions as \"conflict files\". A conflict file's name ends with its author's email address, plus the current time, e.g. test.txt (name@example.com 2013-10-01-00-12-24).\n"
 "\t"
-msgstr ""
+msgstr "\nElőfordulhat, hogy ugyanazt a fájlt több felhasználó is szerkeszti egyidejűleg, ezáltal ütközések fordulhatnak elő. A Seafile ilyenkor megtartja a fájl eredeti, Ön által módosított változatát, és létrehoz egy másolatot, melybe az ütközést kiváltó felhasználó módosításait menti. A másolat fájlneve az ütközést kiváltó felhasználó email címét és a létrehozás pontos időpontját tartalmazza, pl.: test.txt (name@example.com 2013-10-01-00-12-24).\n\n\t"
 
 #: seahub/help/templates/help/help_delete.html:7
-#, fuzzy
 msgid "Deleting a file library"
-msgstr "Könyvtár törlése"
+msgstr "Kötet törlése"
 
 #: seahub/help/templates/help/help_delete.html:9
 msgid ""
 "To maximize your data security, deletion of file libraries on the website "
 "and on your computer are not \"synced\" automatically. "
-msgstr ""
+msgstr "Az adatbiztonság növelése érdekében a kötetek törlése nem szinkronizálódik automatikusan a webes felület és a számítógép között."
 
 #: seahub/help/templates/help/help_delete.html:11
 msgid ""
 "After a file library is deleted on the website, the library downloaded to "
 "your computer won't be deleted. But it won't be synced with the website any "
 "more."
-msgstr ""
+msgstr "Ha egy kötetet töröl a webes felületen, a törlés nem lesz szinkronizálva a számítógépével, ezzel szemben a webes felület és az asztali kliens közötti szinkronizáció automatikusan megszűnik."
 
 #: seahub/help/templates/help/help_delete.html:12
 msgid ""
-"After a file library is deleted on your computer, the library on the website "
-"won't be deleted. You may download and sync it again later."
-msgstr ""
+"After a file library is deleted on your computer, the library on the website"
+" won't be deleted. You may download and sync it again later."
+msgstr "Ha egy kötetet töröl a számítógépén, a kötet a webes felületen nem kerül törlésre, így később újra beállítható a szinkronizáció."
 
 #: seahub/help/templates/help/help_group_share.html:7
 msgid "Sharing a library to a group"
-msgstr ""
+msgstr "Kötet megosztása egy csoporttal"
 
 #: seahub/help/templates/help/help_group_share.html:9
-#, fuzzy
 msgid "You have two ways to share a library to a group"
-msgstr "Nem osztott még meg egy könyvtárat sem"
+msgstr "Egy kötetet kétféleképp oszthat meg egy csoporttal:"
 
 #: seahub/help/templates/help/help_group_share.html:11
 msgid "Create a file library directly inside the group workspace."
-msgstr ""
+msgstr "Egy kötet létrehozásával közvetlenül a csoport munkaterületén belül"
 
 #: seahub/help/templates/help/help_group_share.html:12
 msgid "Share an existing personal library to the group."
-msgstr ""
+msgstr "Egy meglévő személyes kötet megosztásával valamely csoporttal"
 
 #: seahub/help/templates/help/help_ignore.html:8
 msgid "Excluding files/folders from syncing"
-msgstr ""
+msgstr "Fájlok és könyvtárak kihagyása a szinkronizálásból"
 
 #: seahub/help/templates/help/help_ignore.html:10
 msgid ""
@@ -2152,173 +2093,169 @@ msgid ""
 "folder of this library. In this special file, you specify the files and "
 "folders that Seafile should not sync. Each line in this file specifies a "
 "pattern. The following pattern format are supported."
-msgstr ""
+msgstr "Előfordulhat, hogy egy kötet bizonyos fájljait vagy könyvtárait nem kívánja szinkronizálni. Ennek megvalósításához hozzon létre egy seafile-ignore.txt nevű fájlt a kötet gyökerében, majd a fájlban sorolja fel azokat a fájlokat és könyvtárakat, amelyeket nem kívánja szinkronizálni. A fájl sorai egy-egy mintát jelentenek, melyek az alábbi szabályok szerint határozhatják meg a szinkronizálásból kizárandó fájlok és könyvtárak listáját:"
 
 #: seahub/help/templates/help/help_ignore.html:13
 msgid "A blank line matches no files."
-msgstr ""
+msgstr "Az üres sorok nem illeszkednek semmilyen fájlra."
 
 #: seahub/help/templates/help/help_ignore.html:14
 msgid "A line starting with # serves as a comment."
-msgstr ""
+msgstr "A # karakterrel kezdődő sorokat megjegyzések elhelyezésére használhatja."
 
 #: seahub/help/templates/help/help_ignore.html:15
 msgid ""
 "Seafile supports wildcards in the pattern. For example, \"foo/*\" matches "
-"\"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not \"foo/hello"
-"\". Note that the wildcard character * recursively matches all the paths "
-"under a folder. For instance, \"foo/*.html\" matches \"foo/a.html\" and "
-"\"foo/templates/b.html\"."
-msgstr ""
+"\"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not "
+"\"foo/hello\". Note that the wildcard character * recursively matches all "
+"the paths under a folder. For instance, \"foo/*.html\" matches "
+"\"foo/a.html\" and \"foo/templates/b.html\"."
+msgstr "A mintát megadhatja helyettesítő karakterek használatával is. Például, a \"foo/*\" minta használatával a \"foo/1\" és a \"foo/hello\" útvonalak kizárásra kerülnek a szinkronizálásból. Ezzel szemben a \"foo/?\" minta illeszkedik a \"foo/1 útvonalra, de nem illeszkedik a \"foo/hello\" útvonalra, mivel a ? karakter csak egy karaktert helytessesíthet. A * helyettesítő karakter rekurzívan illeszkedik minden útvonalra a mappán belül, így például a \"foo/*.html\" minta illeszkedik a \"foo/a.html\", és a \"foo/templates/b.html\" útvonalakra egyaránt."
 
 #: seahub/help/templates/help/help_ignore.html:16
 msgid ""
 "If the pattern ends with a slash, it would only match a folder. In other "
 "words, foo/ will match a folder \"foo\" and paths underneath it, but will "
 "not match a regular file or a symbolic link \"foo\"."
-msgstr ""
+msgstr "Ha a minta egy perjellel végződik, akkor az illeszkedés csak könyvtárakra vonatkozik. Ennek megfelelően a \"foo/\" minta illeszkedik a \"foo\" nevű könyvtárra, és annak alkönyvtáraira, de nem illeszkedik egy \"foo\" nevű fájlra vagy szimbolikus linkre."
 
 #: seahub/help/templates/help/help_ignore.html:17
 msgid ""
 "If a pattern doesn't end with a slash or a wildcard, it would not match a "
 "folder. For example, \"foo\" can only match regular file \"foo\" or a "
-"symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under it."
-msgstr ""
+"symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
+"it."
+msgstr "Ha egy minta nem perjellel vagy helyettesítő karakterrel végződik, akkor a Seafile nem vizsgálja az illeszkedést könyvtárak esetében. Például, a \"foo\" minta csak egy \"foo\" nevű fájlra vagy szimbolikus hivatkozásra illeszkedik, míg a \"foo/\" vagy \"foo*\" minták egy foo nevű könyvtárat és annak alkönyvtárait jelölik."
 
 #: seahub/help/templates/help/help_ignore.html:20
 msgid "Example"
-msgstr ""
+msgstr "Példa"
 
 #: seahub/help/templates/help/help_ignore.html:38
-#, fuzzy
 msgid "Notes"
-msgstr "Megjegyzés"
+msgstr "Megjegyzések"
 
 #: seahub/help/templates/help/help_ignore.html:40
 msgid ""
 "The seafile-ignore.txt file only controls which files to exclude on the "
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
-msgstr ""
+msgstr "A seafile-ignore.txt fájlon keresztül szabályozhatja, hogy mely fájlok kerüljenek kizárásra a szinkronizációból a kliens oldaláról, ám az itt megadott kivételek nem vonatkoznak a webes felületre. Ennek megfelelően minden további nélkül létrehozhatók olyan fájlok a webes felületen keresztül, melyek a kliens oldaláról kizárásra kerültek. Ebben az esetben az alábbi szabályok érvényesülnek:"
 
 #: seahub/help/templates/help/help_ignore.html:43
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
-msgstr ""
+msgstr "A létrehozott fájl szinkronizálásra kerül a klienseken, de a klienseken végrehajtott módosítások figyelmen kívül lesznek hagyva."
 
 #: seahub/help/templates/help/help_ignore.html:44
 msgid ""
 "If the file is modified on seahub, the new version will also be synced back "
-"to clients; If the file on the client is also modified, a conflict file will "
-"be generated on the client."
-msgstr ""
+"to clients; If the file on the client is also modified, a conflict file will"
+" be generated on the client."
+msgstr "Ha egy fájlt a seahub-on keresztül módosítanak, a változás szinkronizálódni fog a kliensekre. Ha ezzel egyidejűleg valamelyik kliensen is módosult a fájl, akkor a Seafile egy ütközésfájl létrehozásával oldja fel az ütközést."
 
 #: seahub/help/templates/help/help_ignore.html:47
 msgid ""
 "seafile-ignore.txt only ignores files that are not synced yet. If a file is "
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
-msgstr ""
+msgstr "A seafile-ignore.txt fájllal csak újonnan létrehozott fájlok zárhatók ki a szinkronizálásból. Ha egy fájlt a szinkronizálás után ad hozzá a seafile-ignore.txt fájlhoz, a fájl meglévő verziója megmarad."
 
 #: seahub/help/templates/help/help_install_v2.html:8
 msgid "Installing and Using Seafile Client"
-msgstr ""
+msgstr "A Seafile kliens telepítése és használata"
 
 #: seahub/help/templates/help/help_install_v2.html:10
 msgid ""
-"After downloading Seafile client program, you have 3 steps left to get it up "
-"and running."
-msgstr ""
+"After downloading Seafile client program, you have 3 steps left to get it up"
+" and running."
+msgstr "A Seafile kliens letöltését követően kövesse az alábbi lépéseket:"
 
 #: seahub/help/templates/help/help_install_v2.html:12
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr ""
+msgstr "1. Válasszon ki egy partíciót a Seafile helyi adatainak tárolásához"
 
 #: seahub/help/templates/help/help_install_v2.html:16
 msgid "2. Add an account"
-msgstr ""
+msgstr "2. Vegyen fel egy fiókot"
 
 #: seahub/help/templates/help/help_install_v2.html:17
 msgid "Add an account on your private Seafile server or our public server."
-msgstr ""
+msgstr "Hozzon létre egy Seafile fiókot a saját szerverén vagy a publikus szerveren."
 
 #: seahub/help/templates/help/help_install_v2.html:22
-#, fuzzy
 msgid "3. Download a library and syncing files"
-msgstr "1. Töltse le a könyvtárat (úgy, hogy fut a kliens)."
+msgstr "3. Töltsön le egy kötetet a szinkronizálás megkezdéséhez"
 
 #: seahub/help/templates/help/help_install_v2.html:26
 msgid "Click the \"Download\" button to download a library to a local folder."
-msgstr ""
+msgstr "Kattintson a \"Letöltés\" gombra egy kötet letöltéséhez."
 
 #: seahub/help/templates/help/help_install_v2.html:27
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
-msgstr ""
+msgstr "Ezt követően hozzon létre vagy másoljon fájlokat abba a könyvtárába, ahová a kötetet letöltötte. Ezek a fájlok automatikusan szinkronizálva lesznek a felhőben lévő tárhelyével."
 
 #: seahub/help/templates/help/help_install_v2.html:32
-#, fuzzy
 msgid "4. (Optional) Create a library"
-msgstr "Könyvtár létrehozva"
+msgstr "4. Hozzon létre egy kötetet (opcionális)"
 
 #: seahub/help/templates/help/help_install_v2.html:34
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "Kötetet létrehozhat egy meglévő helyi könyvtár használatával is."
 
 #: seahub/help/templates/help/help_security.html:7
-#, fuzzy
 msgid "Encrypting a file library"
-msgstr "Fájl titkosítása"
+msgstr "Kötet titkosítása"
 
 #: seahub/help/templates/help/help_security.html:8
 msgid ""
 "Seafile supports encryption of file libraries to strengthen your data "
 "security. To encrypt a file library, you need to set a password when you "
 "create a library."
-msgstr ""
+msgstr "Az adatbiztonság növelése érdekében titkosíthatja a kötet tartalmát. A titkosítás bekapcsolásához adjon meg egy jelszót a kötet létrehozásakor."
 
 #: seahub/help/templates/help/help_security.html:10
 msgid "The password won't be stored on Seafile cloud platform."
-msgstr ""
+msgstr "A megadott jelszó nem kerül mentésre a tárhelyében."
 
 #: seahub/help/templates/help/help_security.html:10
 msgid ""
 "So even the adminastrator of the servers cannot view your encrypted data "
 "without the password."
-msgstr ""
+msgstr "Ennek megfelelően a jelszó hiányában még a szerver adminisztrátorai sem fognak tudni hozzáférni a titkosított fájlokhoz."
 
 #: seahub/help/templates/help/help_security.html:12
 msgid ""
 "To download and sync an encrypted library to your computer, you need to "
 "provide the password.  Seafile client program will download the encrypted "
 "data and decrypt it on your computer."
-msgstr ""
+msgstr "Egy titkosított kötet letöltéséhez és szinkronizálásához meg kell adnia a kötet jelszavát. Ezt követően a Seafile kliens letölti a titkosított fájlokat, majd a jelszó használatával feloldja a titkosítást."
 
 #: seahub/help/templates/help/help_security.html:13
 msgid "The password can only be set when you create the library."
-msgstr ""
+msgstr "Jelszót kizárólag a kötet létrehozásakor adhat meg."
 
 #: seahub/help/templates/help/help_security.html:13
-#, fuzzy
 msgid "It cannot be changed since then."
-msgstr "Megadása kötelező."
+msgstr "A kötet létrehozását követően már nem módosíthatja azt."
 
 #: seahub/help/templates/help/help_security.html:14
 msgid ""
 "To share an encrypted library with your friends, you also need to tell them "
 "the password."
-msgstr ""
+msgstr "Egy titkosított kötet megosztása csak akkor lehetséges, ha a jelszót is megosztja azokkal a felhasználókkal, akiknek hozzáférést ad a kötethez."
 
 #: seahub/help/templates/help/help_view_encrypted.html:10
 msgid ""
 "Seafile servers don't store the password for an encrypted library. To view "
 "an encrypted library online, you need to provide the password for the "
 "library. Your password is only stored in the server's encrypted memory. It "
-"would be cleared from the memory in an hour. After that, if you want to view "
-"the library, you'll have to enter password again."
-msgstr ""
+"would be cleared from the memory in an hour. After that, if you want to view"
+" the library, you'll have to enter password again."
+msgstr "A Seafile szervere nem tárolja el a titkosított kötetekhez tartozó jelszavakat. Ha a webes felületen keresztül szeretne hozzáférni egy titkosított kötethez, meg kell adnia a kötethez tartozó jelszót. A jelszó átmenetileg a szerver memóriájába kerül titkosított formában és egy órán belül automatikusan törlődik, mely idő lejárta után a kötet további eléréséhez ismételten meg kell adnia a jelszót."
 
 #: seahub/message/views.py:123
 #: seahub/message/templates/message/all_msg_list.html:159
@@ -2352,9 +2289,8 @@ msgid "Messages"
 msgstr "Üzenetek"
 
 #: seahub/message/templates/message/all_msg_list.html:16
-#, fuzzy
 msgid "New Message"
-msgstr "Üzenet"
+msgstr "Új üzenet"
 
 #: seahub/message/templates/message/all_msg_list.html:23
 #: seahub/notifications/templates/notifications/user_notification_list.html:20
@@ -2390,12 +2326,12 @@ msgstr "Az üzenetküldéshez nem sikerült megkapni a kapcsolatait"
 
 #: seahub/message/templates/message/all_msg_list.html:136
 msgid "You don't have any library at present"
-msgstr "Jelenleg nincs egyetlen könyvtára sem"
+msgstr "Jelenleg nincs egyetlen kötete sem"
 
 #: seahub/message/templates/message/user_msg_list.html:9
-#, fuzzy, python-format
+#, python-format
 msgid "Messages with %(name)s"
-msgstr "%(name)s megosztása"
+msgstr "Üzenetek %(name)s -tól/től"
 
 #: seahub/message/templates/message/user_msg_list.html:15
 msgid "Send a message..."
@@ -2406,29 +2342,26 @@ msgstr "Üzenet küldése"
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your "
 "folder <a href='%(folder_link)s'>%(folder)s</a>"
-msgstr ""
+msgstr "A fájl (<a href='%(file_link)s'>%(file_name)s</a>) feltöltésre került a következő könyvtárba: <a href='%(folder_link)s'>%(folder)s</a>"
 
 #: seahub/notifications/models.py:430
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
-msgstr ""
-"(Rendszer) %(user)s megosztotta a(z) <a href='%(href)s'>%(repo_name)s</a> "
-"könyvtárat."
+msgstr "%(user)s megosztotta a következő kötetet önnel: <a href='%(href)s'>%(repo_name)s</a>."
 
 #: seahub/notifications/models.py:448
-#, fuzzy, python-format
+#, python-format
 msgid ""
-"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you."
-msgstr ""
-"(Rendszer) %(user)s megosztotta a(z) <a href='%(href)s'>%(file_name)s</a> "
-"fájlt."
+"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to "
+"you."
+msgstr "%(user)s megosztotta a következő fájlt önnel: <a href='%(href)s'>%(file_name)s</a>."
 
 #: seahub/notifications/models.py:464
 #, python-format
 msgid "You have recieved a <a href='%(href)s'>new message</a> from %(user)s."
-msgstr ""
+msgstr "<a href='%(href)s'>Új üzenete érkezett</a> a következő felhasználótól: %(user)s."
 
 #: seahub/notifications/models.py:479 seahub/notifications/models.py:510
 #: seahub/utils/__init__.py:110 seahub/utils/__init__.py:772
@@ -2438,33 +2371,27 @@ msgstr "Belső hiba"
 #: seahub/notifications/models.py:490
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has new discussion"
-msgstr ""
+msgstr "Új beszélgetés indult a következő csoportban: <a href='%(href)s'>%(group_name)s</a>"
 
 #: seahub/notifications/models.py:494
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>"
-msgstr ""
-"(Rendszer) %(user)s megosztotta a(z) <a href='%(href)s'>%(repo_name)s</a> "
-"könyvtárat."
+msgstr "%(user)s új beszélgetést kezdeményezett a következő csoportban: <a href='%(href)s'>%(group_name)s</a>."
 
 #: seahub/notifications/models.py:516
-#, fuzzy, python-format
+#, python-format
 msgid "One <a href='%(href)s'>group discussion</a> has new reply"
-msgstr ""
-"\n"
-"    egy megbeszélésre új válasz érkezett\n"
-"    "
+msgstr "Új üzenet érkezett egy <a href='%(href)s'>csoportos megbeszélésben</a>."
 
 #: seahub/notifications/models.py:520
 #, python-format
 msgid "%(user)s replied your <a href='%(href)s'>group discussion</a>"
-msgstr ""
+msgstr "%(user)s válaszolt az ön <a href='%(href)s'>csoportos megbeszélésében</a>."
 
 #: seahub/notifications/views.py:120
-#, fuzzy
 msgid "Successfully cleared all notices."
-msgstr "%s sikeresen megosztva."
+msgstr "Minden üzenet sikeresen törölve."
 
 #: seahub/notifications/templates/notifications/notification_list.html:9
 #: seahub/notifications/templates/notifications/notification_list.html:13
@@ -2500,13 +2427,12 @@ msgstr "Értesítés törlése"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:4
 #: seahub/notifications/templates/notifications/user_notification_list.html:9
-#, fuzzy
 msgid "Notices"
-msgstr "Értesítések"
+msgstr "Üzenetek"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:11
 msgid "Clear"
-msgstr ""
+msgstr "Tisztít"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:27
 #: seahub/templates/activities.html:15
@@ -2515,35 +2441,34 @@ msgstr "Tovább"
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr ""
+msgstr "Kérem, válassza ki, hogyan kívánja megtekinteni a titkosított köteteket a webes felületen:"
 
 #: seahub/options/templates/options/set_user_options.html:10
 #: seahub/profile/templates/profile/set_profile.html:70
 msgid "Send passwords to the server."
-msgstr ""
+msgstr "Jelszavak elküldése a szervernek."
 
 #: seahub/options/templates/options/set_user_options.html:10
 #: seahub/profile/templates/profile/set_profile.html:70
-#, fuzzy
 msgid "Files will be decrypted in the server before being sent to you."
-msgstr "A jelszó egy órán át lesz tárolva a kiszolgálón."
+msgstr "A fájlok titkosítása feloldásra kerül a szerveren továbbítás előtt."
 
 #: seahub/options/templates/options/set_user_options.html:12
 #: seahub/profile/templates/profile/set_profile.html:73
 msgid "Save passwords in your browser."
-msgstr ""
+msgstr "Jelszó mentése a böngészőben."
 
 #: seahub/options/templates/options/set_user_options.html:12
 #: seahub/profile/templates/profile/set_profile.html:73
 msgid "Files will be decrypted in your browser when you download them."
-msgstr ""
+msgstr "A titkosítást a böngésző oldja fel letöltéskor"
 
 #: seahub/options/templates/options/set_user_options.html:13
 #: seahub/profile/templates/profile/set_profile.html:74
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr ""
+msgstr "Tipp: ez utóbbi megoldás nagyobb biztonságot ad, de nem minden böngésző támogatja megfelelően. Ha ezt a lehetőséget választja, kérjük, győződjön meg róla, hogy a Chrome vagy a Firefox böngészők legfrissebb verzióját használja."
 
 #: seahub/profile/views.py:37
 msgid "Successfully edited profile."
@@ -2559,21 +2484,20 @@ msgstr "Még nem fogadta el a meghívást"
 
 #: seahub/profile/views.py:168
 msgid "Demo account can not be deleted."
-msgstr ""
+msgstr "A demó fiók nem törölhető."
 
 #: seahub/profile/views.py:172
 msgid "Operation Failed. You can only delete account of your own"
 msgstr "Sikertelen művelet. Csak saját fiók törölhető"
 
 #: seahub/profile/views.py:192
-#, fuzzy
 msgid "Failed to set default library."
-msgstr "Könyvtár-információ szerkesztése sikertelen."
+msgstr "Az alapértelmezett kötet beállítása nem sikerült."
 
 #: seahub/profile/views.py:197
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr "%s adminisztrátornak való beállítása sikeres"
+msgstr "Az alapértelmezett kötet mostantól a következő: \"%s\"."
 
 #: seahub/profile/templates/profile/profile_base.html:4
 #: seahub/profile/templates/profile/set_profile.html:5
@@ -2587,19 +2511,16 @@ msgid "Profile"
 msgstr "Profil"
 
 #: seahub/profile/templates/profile/set_profile.html:12
-#, fuzzy
 msgid "Encrypted Libraries"
-msgstr "Más könyvtárak"
+msgstr "Titkosított kötetek"
 
 #: seahub/profile/templates/profile/set_profile.html:14
-#, fuzzy
 msgid "Sub-library"
-msgstr "Nyilvános könyvtár"
+msgstr "Al-kötet"
 
 #: seahub/profile/templates/profile/set_profile.html:15
-#, fuzzy
 msgid "Default Library"
-msgstr "Könyvtár törlése"
+msgstr "Alapértelmezett kötet"
 
 #: seahub/profile/templates/profile/set_profile.html:16
 #: seahub/profile/templates/profile/set_profile.html:100
@@ -2621,7 +2542,6 @@ msgid "Update"
 msgstr "Frissítés"
 
 #: seahub/profile/templates/profile/set_profile.html:36
-#, fuzzy
 msgctxt "true name"
 msgid "Name:"
 msgstr "Név: "
@@ -2632,39 +2552,36 @@ msgstr "Bemutatkozás:"
 
 #: seahub/profile/templates/profile/set_profile.html:48
 msgid "Department:"
-msgstr ""
+msgstr "Osztály:"
 
 #: seahub/profile/templates/profile/set_profile.html:53
 msgid "Telephone:"
-msgstr ""
+msgstr "Telefon:"
 
 #: seahub/profile/templates/profile/set_profile.html:66
-#, fuzzy
 msgid "Encrypted Libraries Setting"
-msgstr "Könyvtárbeállítások"
+msgstr "Titkosított kötet beállítások"
 
 #: seahub/profile/templates/profile/set_profile.html:68
 msgid "How to view encrypted libraries online:"
-msgstr ""
+msgstr "Titkosított kötet online megtekintése:"
 
 #: seahub/profile/templates/profile/set_profile.html:81
-#, fuzzy
 msgid "Sub-library Setting"
-msgstr "Könyvtárbeállítások"
+msgstr "Al-kötet beállítás"
 
 #: seahub/profile/templates/profile/set_profile.html:83
-#, fuzzy
 msgid "Enable sub-library"
-msgstr "Könyvtár létrehozva"
+msgstr "Al-kötet engedélyezése"
 
 #: seahub/profile/templates/profile/set_profile.html:84
 msgid ""
 "This feature enables you to selectively sync a folder inside a library. A "
 "sub-library can be created from any folder. After being created, it will be "
-"listed in your desktop client, and you can download it just like downloading "
-"a normal library. It will be automatically kept in sync with its origin "
+"listed in your desktop client, and you can download it just like downloading"
+" a normal library. It will be automatically kept in sync with its origin "
 "library."
-msgstr ""
+msgstr "Ez a funkció lehetővé teszi, hogy egy köteten belül szelektíven szinkronizáljon könyvtárakat. Alkötet létrehozásához bármely könyvtár felhasználható egy adott köteten belül. A létrehozást követően az alkötet megjelenik a kliensen az elérhető kötetek listáján, és a normál kötetekhez hasonlóan letölthetővé és szinkronizálhatóvá válik."
 
 #: seahub/profile/templates/profile/set_profile.html:85
 msgid ""
@@ -2672,80 +2589,72 @@ msgid ""
 "Without this option on, a hidden sub-library will be created automatically "
 "in such case. With this option on, those hidden sub-libraries will also be "
 "listed, which enables you to manage them."
-msgstr ""
+msgstr "Alkötetet létrehozhat akkor is, ha szeretne egy könyvtárat megosztani egy csoporttal vagy felhasználóval. Ezen opció használata nélkül egy rejtett alkötet automatikusan létrehozásra kerül a könyvtár megosztásakor. Ha bekapcsolja az opciót, ezek a rejtett alkötetek listázva lesznek a kliensen, ezáltal menedzselhetővé válnak."
 
 #: seahub/profile/templates/profile/set_profile.html:91
-#, fuzzy
 msgid "Default Library Setting"
-msgstr "Könyvtárbeállítások"
+msgstr "Alapértelmezett kötet beállítások"
 
 #: seahub/profile/templates/profile/set_profile.html:93
-#, fuzzy
 msgid "Your default library:"
-msgstr "Könyvtár létrehozva"
+msgstr "Az Ön alapértelmezett kötete"
 
 #: seahub/profile/templates/profile/set_profile.html:95
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
-msgstr ""
+msgstr "Az alapértelmezett kötet azt a kötetet jelenti, ahová a személyes dokumentumai és képei kerülnek."
 
 #: seahub/profile/templates/profile/set_profile.html:96
-#, fuzzy
 msgid "Choose Default Library"
-msgstr "Könyvtár törlése"
+msgstr "Alapértelmezett kötet kiválasztása"
 
 #: seahub/profile/templates/profile/set_profile.html:101
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "Ezt a műveletet nem lehet visszavonni. Kérem gondolja meg!"
 
 #: seahub/profile/templates/profile/set_profile.html:106
-#, fuzzy
 msgid "Choose default library:"
-msgstr "Könyvtár létrehozva"
+msgstr "Alapértelmezett kötet kiválasztása:"
 
 #: seahub/profile/templates/profile/set_profile.html:111
-#, fuzzy
 msgid "Please click and choose a library."
-msgstr "Kattintson és válasszon könyvtárat."
+msgstr "Kérem, válasszon egy kötetet a kattintást követően."
 
 #: seahub/profile/templates/profile/set_profile.html:128
 msgid "Really want to delete your account?"
 msgstr "Biztosan törli a fiókot?"
 
 #: seahub/profile/templates/profile/user_profile.html:32
-#, fuzzy
 msgid "Send message"
-msgstr "üzenet küldése"
+msgstr "Üzenet küldése"
 
 #: seahub/profile/templates/profile/user_profile.html:38
 msgid "Info"
-msgstr ""
+msgstr "Infó."
 
 #: seahub/profile/templates/profile/user_profile.html:41
 #: seahub/templates/sysadmin/userinfo.html:21
-#, fuzzy
 msgctxt "true name"
 msgid "Name"
 msgstr "Név"
 
 #: seahub/profile/templates/profile/user_profile.html:44
 #: seahub/templates/sysadmin/userinfo.html:24
-#, fuzzy
 msgid "Self-introduction"
-msgstr "Bevezetés"
+msgstr "Bemutatkozás"
 
 #: seahub/profile/templates/profile/user_profile.html:48
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/sysadmin/userinfo.html:29
 msgid "Department"
-msgstr ""
+msgstr "Osztály"
 
 #: seahub/profile/templates/profile/user_profile.html:51
 #: seahub/templates/registration/registration_form.html:26
 #: seahub/templates/sysadmin/userinfo.html:32
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:30
 msgid "Email is not longer than 512 characters"
@@ -2758,34 +2667,26 @@ msgstr "Nem sikerült minden taggal megosztani, később próbálja újra."
 #: seahub/share/views.py:61
 #, python-format
 msgid ""
-"Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
-msgstr ""
-"A megosztás minden taggal sikerült. Ellenőrizheti a <a href=\"%s"
-"\">megosztás</a> oldalon."
+"Shared to all members successfully, go check it at <a "
+"href=\"%s\">Shares</a>."
+msgstr "A megosztás minden taggal sikerült. Ellenőrizheti a <a href=\"%s\">megosztás</a> oldalon."
 
 #: seahub/share/views.py:73
 #, python-format
-msgid ""
-"\"%(repo)s\" is already in group %(group)s. <a href=\"%(href)s\">View</a>"
-msgstr ""
-"\"%(repo)s\" már a(z) %(group)s csoportban van. <a href=\"%(href)s\">Megnéz</"
-"a>"
+msgid "\"%(repo)s\" is already in group %(group)s. <a href=\"%(href)s\">View</a>"
+msgstr "\"%(repo)s\" már a(z) %(group)s csoportban van. <a href=\"%(href)s\">Megnéz</a>"
 
 #: seahub/share/views.py:83
 #, python-format
 msgid "Failed to share %(repo)s to %(group)s, please try again later."
-msgstr ""
-"A(z) %(repo)s megosztása a(z) %(group)s csoportnak nem sikerült, később "
-"próbálja újra."
+msgstr "A(z) %(repo)s megosztása a(z) %(group)s csoportnak nem sikerült, később próbálja újra."
 
 #: seahub/share/views.py:87
 #, python-format
 msgid ""
-"Shared to %(group)s successfully，go check it at <a href=\"%(share)s"
-"\">Shares</a>."
-msgstr ""
-"%(group)s csoporttal sikerült a megosztás，a <a href=\"%(share)s"
-"\">Megosztások</a> oldalon ellenőrizheti."
+"Shared to %(group)s successfully，go check it at <a "
+"href=\"%(share)s\">Shares</a>."
+msgstr "%(group)s csoporttal sikerült a megosztás，a <a href=\"%(share)s\">Megosztások</a> oldalon ellenőrizheti."
 
 #: seahub/share/views.py:97
 msgid "You can not share libray to yourself."
@@ -2799,11 +2700,9 @@ msgstr "A megosztás %s-nak/nek nem sikerült, próbálja később újra."
 #: seahub/share/views.py:113
 #, python-format
 msgid ""
-"Shared to %(email)s successfully，go check it at <a href=\"%(share)s"
-"\">Shares</a>."
-msgstr ""
-"Sikeresen megosztva %(email)s számára. Ellenőrizheti a <a href=\"%(share)s"
-"\">megosztás</a> oldalán."
+"Shared to %(email)s successfully，go check it at <a "
+"href=\"%(share)s\">Shares</a>."
+msgstr "Sikeresen megosztva %(email)s számára. Ellenőrizheti a <a href=\"%(share)s\">megosztás</a> oldalán."
 
 #: seahub/share/views.py:117
 #, python-format
@@ -2812,16 +2711,14 @@ msgstr "Megosztás %s számára sikertelen, mivel nincs regisztrálva."
 
 #: seahub/share/views.py:176
 msgid "Only the owner of the library has permission to share it."
-msgstr "Csak a könyvtár tulajdonosa jogosult megosztani."
+msgstr "Csak a kötet tulajdonosa jogosult megosztani."
 
 #: seahub/share/views.py:206
 #, python-format
 msgid ""
-"Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
-"\">Upgrade account.</a>"
-msgstr ""
-"\"%s\" megosztása sikertelen, nincs elég kvóta. <a href=\"http://seafile.com/"
-"\">Fiók fejlesztése.</a>"
+"Failed to share \"%s\", no enough quota. <a "
+"href=\"http://seafile.com/\">Upgrade account.</a>"
+msgstr "\"%s\" megosztása sikertelen, nincs elég kvóta. <a href=\"http://seafile.com/\">Fiók fejlesztése.</a>"
 
 #: seahub/share/views.py:237 seahub/share/views.py:247
 msgid "Failed to remove share"
@@ -2848,7 +2745,7 @@ msgstr "Érvénytelen argumentumok"
 
 #: seahub/share/views.py:663 seahub/share/views.py:1002
 msgid "You cannot share the library in this way."
-msgstr "Ezen a módon nem oszthat meg könyvtárat."
+msgstr "Ezen a módon nem oszthat meg kötetet."
 
 #: seahub/share/views.py:688 seahub/share/views.py:1025
 msgid "Failed to get the link, please retry later."
@@ -2864,11 +2761,9 @@ msgstr "A link nem létezik"
 
 #: seahub/share/views.py:774
 msgid ""
-"Sending shared link failed. Email service is not properly configured, please "
-"contact administrator."
-msgstr ""
-"Megosztott hivatkozás küldése meghiúsult. Az e-mail szolgáltatás beállítása "
-"nem megfelelő. Vegye fel a kapcsolatot a rendszergazdával."
+"Sending shared link failed. Email service is not properly configured, please"
+" contact administrator."
+msgstr "Megosztott hivatkozás küldése meghiúsult. Az e-mail szolgáltatás beállítása nem megfelelő. Vegye fel a kapcsolatot a rendszergazdával."
 
 #: seahub/share/views.py:799
 msgid "Your friend shared a file to you on Seafile"
@@ -2883,9 +2778,8 @@ msgid "Successfully sent."
 msgstr "A küldés sikeres."
 
 #: seahub/share/views.py:827
-#, fuzzy
 msgid "Please choose a directory."
-msgstr "Kattintson és válasszon könyvtárat."
+msgstr "Válasszon könyvtárat."
 
 #: seahub/share/views.py:844 seahub/share/views.py:935
 msgid "Successfully saved."
@@ -2917,33 +2811,26 @@ msgid "You don't have permission to save %s."
 msgstr "Nincs joga a(z) %s mentésére."
 
 #: seahub/share/views.py:1045
-#, fuzzy
 msgid ""
-"Sending shared upload link failed. Email service is not properly configured, "
-"please contact administrator."
-msgstr ""
-"Megosztott hivatkozás küldése meghiúsult. Az e-mail szolgáltatás beállítása "
-"nem megfelelő. Vegye fel a kapcsolatot a rendszergazdával."
+"Sending shared upload link failed. Email service is not properly configured,"
+" please contact administrator."
+msgstr "A feltöltési hivatkozás nem küldhető el, mert az e-mail szolgáltatás nincs megfelelően konfigurálva. Kérem, lépjen kapcsolatba a szerver adminisztrátorával."
 
 #: seahub/share/views.py:1070
-#, fuzzy
 msgid "Your friend shared a upload link to you on Seafile"
-msgstr "Valaki megosztott Önnel egy fájlt a Seafile rendszeren"
+msgstr "Egy barátja feltöltési hivatkozást küldött Önnek a Seafile-on"
 
 #: seahub/share/templates/share/links.html:5
-#, fuzzy
 msgid "Links - Share"
-msgstr "Megosztás törlése"
+msgstr "Linkek -  Megosztás"
 
 #: seahub/share/templates/share/links.html:12
-#, fuzzy
 msgid "Download Links"
-msgstr "Letöltés"
+msgstr "Letöltési linkek"
 
 #: seahub/share/templates/share/links.html:13
-#, fuzzy
 msgid "Upload Links"
-msgstr "Fájlok feltöltése"
+msgstr "Feltöltési linkek"
 
 #: seahub/share/templates/share/links.html:22
 #: seahub/share/templates/share/links.html:58
@@ -2964,35 +2851,33 @@ msgid "Remove"
 msgstr "Eltávolítás"
 
 #: seahub/share/templates/share/links.html:45
-#, fuzzy
 msgid "You don't have any download link"
-msgstr "Nincs megosztott hivatkozása"
+msgstr "Önnek nincs letöltési linkje"
 
 #: seahub/share/templates/share/links.html:46
 msgid ""
-"You can generate a download link for a folder or a file. People receive this "
-"link can view the folder or the file online."
-msgstr ""
+"You can generate a download link for a folder or a file. People receive this"
+" link can view the folder or the file online."
+msgstr "Lehetősége van letöltési hivatkozást készíteni egy fájlhoz vagy könyvtárhoz. Azon személyek, akiknek elküldi a hivatkozást, megtekinthetik a megosztott tartalmat a Seafile webes felületén."
 
 #: seahub/share/templates/share/links.html:76
-#, fuzzy
 msgid "You don't have any upload link"
-msgstr "Nincs megosztott hivatkozása"
+msgstr "Önnek nincs feltöltési linkje"
 
 #: seahub/share/templates/share/links.html:77
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
-msgstr ""
+msgstr "Lehetősége van feltöltési hivatkozást készíteni egy könyvtárhoz. Azon személyek, akiknek elküldi a hivatkozást, fájlokat tölthetnek fel a kiválasztott könyvtárba."
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:5
 msgid "Folders - Share"
-msgstr ""
+msgstr "Könyvtárak - Megosztás"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:10
 #: seahub/templates/home_base.html:29
 msgid "Folders"
-msgstr ""
+msgstr "Könyvtárak"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:16
 #: seahub/share/templates/share/repos.html:16
@@ -3005,17 +2890,14 @@ msgid "Permission"
 msgstr "Jogosultság"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:61
-#, fuzzy
 msgid "You have not shared any folder"
-msgstr "Nem osztott még meg egy könyvtárat sem"
+msgstr "Nem osztott meg egy könyvtárat sem"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:62
-#, fuzzy
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
-msgstr ""
-"Egy egész könyvtár helyett regisztrált felhasználóval egy fájl is megosztható"
+msgstr "Egy egész kötet helyett regisztrált felhasználóval egy könyvtár is megosztható."
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:97
 #: seahub/share/templates/share/repos.html:101
@@ -3030,9 +2912,8 @@ msgid "Edit failed."
 msgstr "Szerkesztés meghiúsult."
 
 #: seahub/share/templates/share/priv_shared_files.html:5
-#, fuzzy
 msgid "Files - Share"
-msgstr "Fájlnév"
+msgstr "Fájlok - Megosztás"
 
 #: seahub/share/templates/share/priv_shared_files.html:12
 msgid "From Others"
@@ -3047,15 +2928,14 @@ msgid "From"
 msgstr "Feladó"
 
 #: seahub/share/templates/share/priv_shared_files.html:42
-#, fuzzy
 msgid "No file is shared to you"
-msgstr "Nincs egy könyvtár sem megosztva Önnel"
+msgstr "Nincs egy fájl sem megosztva Önnel"
 
 #: seahub/share/templates/share/priv_shared_files.html:43
 msgid ""
-"Single files shared to you will be listed here, and you can download them or "
-"save them to some libraries."
-msgstr ""
+"Single files shared to you will be listed here, and you can download them or"
+" save them to some libraries."
+msgstr "Itt kerülnek listázásra az Önnel megosztott fájlok. Innen letöltheti vagy elmentheti a fájlokat egy kötetbe."
 
 #: seahub/share/templates/share/priv_shared_files.html:55
 msgid "To"
@@ -3069,27 +2949,22 @@ msgstr "Nincs privát megosztott fájl"
 msgid ""
 "You can share a single file with a registered user if you don't want to "
 "share a whole library."
-msgstr ""
-"Egy egész könyvtár helyett regisztrált felhasználóval egy fájl is megosztható"
+msgstr "Egy egész kötet helyett regisztrált felhasználóval egy fájl is megosztható"
 
 #: seahub/share/templates/share/repos.html:5
-#, fuzzy
 msgid "Libraries - Share"
-msgstr "Könyvtárak"
+msgstr "Kötetek - Megosztás"
 
 #: seahub/share/templates/share/repos.html:65
 msgid "You have not shared any library"
-msgstr "Nem osztott még meg egy könyvtárat sem"
+msgstr "Nem osztott még meg egy kötetet sem"
 
 #: seahub/share/templates/share/repos.html:66
 msgid ""
-"You can share libraries to your friends and colleagues by clicking the share "
-"icon of your own libraries in your home page or creating a new library in "
+"You can share libraries to your friends and colleagues by clicking the share"
+" icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
-msgstr ""
-"Megoszthat könyvtárakat barátaival, munkatársaival a megosztás ikonra "
-"kattintva a saját könyvtárainál a kezdőoldalon, vagy létrehozhat egy új "
-"könyvtárat egy csoportban, melynek tagja."
+msgstr "Megoszthat köteteket barátaival, munkatársaival a megosztás ikonra kattintva a saját köteteinél a kezdőoldalon, vagy létrehozhat egy új kötetet egy csoportban, melynek tagja."
 
 #: seahub/share/templates/share/user_share_list.html:4
 #: seahub/share/templates/share/user_share_list.html:25
@@ -3118,21 +2993,19 @@ msgstr "Megosztás elhagyása"
 #: seahub/share/templates/share/user_share_list.html:69
 #, python-format
 msgid "You have no library sharing with %(to_email)s."
-msgstr "%(to_email)s-lel/lal nincs megosztott könyvtára."
+msgstr "%(to_email)s-lel/lal nincs megosztott kötete."
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "Sajnáljuk, a kért oldal nem található."
 
 #: seahub/templates/activities.html:4 seahub/templates/home_base.html:15
-#, fuzzy
 msgid "Activities"
-msgstr "Fájl változások"
+msgstr "Tevékenységek"
 
 #: seahub/templates/admin_base.html:4
-#, fuzzy
 msgid "Exit System Admin"
-msgstr "Rendszer-adminisztrátor"
+msgstr "Admin kilépés"
 
 #: seahub/templates/admin_base.html:13 seahub/templates/pub_base.html:14
 #: seahub/templates/pubuser.html:8
@@ -3152,7 +3025,6 @@ msgid "System Admin"
 msgstr "Rendszer-adminisztrátor"
 
 #: seahub/templates/base.html:49
-#, fuzzy
 msgid "unread notices"
 msgstr "olvasatlan üzenetek"
 
@@ -3202,16 +3074,15 @@ msgstr "Utolsó szinkron"
 
 #: seahub/templates/client_mgmt.html:44
 msgid "Not synced"
-msgstr ""
+msgstr "Nincs szinkronizálva"
 
 #: seahub/templates/client_mgmt.html:48
 msgid "Unsync"
 msgstr "Nem szinkronizál"
 
 #: seahub/templates/client_mgmt.html:54
-#, fuzzy
 msgid "Really want to unsync it?"
-msgstr "Biztosan törli: %s?"
+msgstr "Biztosan leállítja a szinkronizálást?"
 
 #: seahub/templates/client_mgmt.html:60
 msgid "You do not have connected clients"
@@ -3219,26 +3090,20 @@ msgstr "Nincsenek csatlakozott kliensek"
 
 #: seahub/templates/client_mgmt.html:61
 msgid ""
-"The libraries synced to desktop clients are listed in this page. You can see "
-"the client's name and its IP address. You may unsync a client from a library "
-"if you no longer want to sync it."
-msgstr ""
-"Az asztali kliensekkel szinkronizált könyvtárak listája látszik ezen az "
-"oldalon Látható a kliens neve és IP címe. Itt ki lehet kapcsolni a "
-"szinkronizációt ha már nincs rá szükség"
+"The libraries synced to desktop clients are listed in this page. You can see"
+" the client's name and its IP address. You may unsync a client from a "
+"library if you no longer want to sync it."
+msgstr "Az asztali kliensekkel szinkronizált kötetek listája látszik ezen az oldalon. Látható a kliens neve és IP címe. Itt ki lehet kapcsolni a szinkronizációt ha már nincs rá szükség."
 
 #: seahub/templates/client_mgmt.html:101
-#, fuzzy
 msgid "Successfully unsynced."
-msgstr "Csillag törlése sikeres."
+msgstr "A szinkronizálás sikeresen leállítva."
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr ""
-"Ez a könyvtár titkosítva van. Adja meg jelszavát az online böngészéshez. A "
-"jelszó egy óráig kerül tárolásra a kiszolgálón."
+msgstr "Ez a kötet titkosítva van. Adja meg jelszavát az online böngészéshez. A jelszó egy óráig kerül tárolásra a kiszolgálón."
 
 #: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:229
 msgid "Password: "
@@ -3249,7 +3114,7 @@ msgstr "Jelszó: "
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
-msgstr ""
+msgstr "A titkosított kötetek webes elérésének szabályzásához <a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">kattintson ide</a>."
 
 #: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:311
 msgid "Please enter the password."
@@ -3602,9 +3467,7 @@ msgstr "verziónaplója"
 msgid ""
 "Tip:a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
-msgstr ""
-"Tipp: minden módosítás után új verzió keletkezik, amelyekre később "
-"visszaállíthatja a fájlt."
+msgstr "Tipp: minden módosítás után új verzió keletkezik, amelyekre később visszaállíthatja a fájlt."
 
 #: seahub/templates/file_revisions.html:12 seahub/templates/text_diff.html:10
 msgid "Current Path:"
@@ -3689,7 +3552,7 @@ msgstr "kukája"
 #: seahub/templates/repo_recycle_view.html:9
 #: seahub/templates/view_trash_file.html:7
 msgid "Back to Library"
-msgstr "Vissza a könyvtárhoz"
+msgstr "Vissza a kötethez"
 
 #: seahub/templates/history_file_view.html:38
 #: seahub/templates/view_file_base.html:21
@@ -3714,24 +3577,23 @@ msgid "Personal Wiki"
 msgstr "Személyes Wiki"
 
 #: seahub/templates/home_base.html:26
-#, fuzzy
 msgid "Share Admin"
-msgstr "Admin jog megadása"
+msgstr "Megosztások kezelése"
 
 #: seahub/templates/myhome.html:41
 msgid "Welcome to Seafile!"
-msgstr ""
+msgstr "Üdvözli a Seafile!"
 
 #: seahub/templates/myhome.html:42
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. We have created a personal library for you. You can "
 "create more libraries later."
-msgstr ""
+msgstr "A Seafile a fájlokat kötetekbe szervezi, melyek szinkronizálhatók különféle eszközökkel, illetve megoszthatók más felhasználókkal vagy csoportokkal. Egy személyes kötet automatikusan létrejött az Ön felhasználójának. A továbbiakban lehetősége lesz más kötetek létrehozására is."
 
 #: seahub/templates/myhome.html:43 seahub/templates/repo.html:215
 msgid "Close"
-msgstr ""
+msgstr "Bezárás"
 
 #: seahub/templates/myhome_base.html:7
 msgid "My Home"
@@ -3746,9 +3608,7 @@ msgstr "Szervezet"
 msgid ""
 "Organization will be removed in next version, data will be merged into your "
 "current account."
-msgstr ""
-"A szervezet eltávolításra kerül a következő verzióban. Az adatok "
-"összeolvasztásra kerülnek az aktuális fiókban."
+msgstr "A szervezet eltávolításra kerül a következő verzióban. Az adatok összeolvasztásra kerülnek az aktuális fiókban."
 
 #: seahub/templates/org_base.html:18 seahub/templates/view_file_base.html:33
 #: seahub/templates/snippets/my_owned_repos.html:45
@@ -3762,7 +3622,7 @@ msgstr "Megosztás"
 
 #: seahub/templates/org_base.html:21
 msgid "Public Library"
-msgstr "Nyilvános könyvtár"
+msgstr "Nyilvános kötet"
 
 #: seahub/templates/org_base.html:24
 msgid "Public Info"
@@ -3773,11 +3633,8 @@ msgid "No one has created any groups yet"
 msgstr "Még egyetlen csoport sincs"
 
 #: seahub/templates/pubgrp.html:25
-msgid ""
-"You can click \"Add Group\" button under \"Group\" label to create a group. "
-msgstr ""
-"Kattintson az „új csoport” gombra a „csoport” címke alatt csoport "
-"létrehozásához. "
+msgid "You can click \"Add Group\" button under \"Group\" label to create a group. "
+msgstr "Kattintson az „új csoport” gombra a „csoport” címke alatt csoport létrehozásához. "
 
 #: seahub/templates/pubrepo.html:16 seahub/templates/sysadmin/userinfo.html:98
 msgid "Share From"
@@ -3785,15 +3642,13 @@ msgstr "Megosztás innen"
 
 #: seahub/templates/pubrepo.html:50
 msgid "No public library"
-msgstr "Nincs nyilvános könyvtár"
+msgstr "Nincs nyilvános kötet"
 
 #: seahub/templates/pubrepo.html:51
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
-msgstr ""
-"Létrehozhat egy nyilvános könyvtárat az „új könyvtár” gombra kattintva.  A "
-"könyvtárat mások megtekinthetik és letölthetik."
+msgstr "Létrehozhat egy nyilvános kötetet az „Új kötet” gombra kattintva.  A kötetet mások megtekinthetik és letölthetik."
 
 #: seahub/templates/repo.html:31
 msgid "Trash"
@@ -3822,7 +3677,7 @@ msgstr "Fájlok feltöltése"
 #: seahub/templates/repo.html:66 seahub/templates/repo.html.py:114
 #: seahub/templates/view_shared_upload_link.html:24
 msgid "The owner of this library has ran out of space."
-msgstr "A könyvtár tulajdonosának tárhelye megtelt."
+msgstr "A kötet tulajdonosának tárhelye megtelt."
 
 #: seahub/templates/repo.html:71 seahub/templates/repo.html.py:121
 msgid "Please select a file at first."
@@ -3847,9 +3702,7 @@ msgstr "Mindet kivesz"
 #: seahub/templates/view_shared_upload_link.html:45
 msgid ""
 "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
-msgstr ""
-"A húzd és ejtd a következő böngészőkkel támogatott: Chrome, Safari 5.0+, "
-"Firefox 4.0+, IE 10.0+"
+msgstr "A húzd és ejtd a következő böngészőkkel támogatott: Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
 #: seahub/templates/repo.html:94
 #: seahub/templates/view_shared_upload_link.html:46
@@ -3859,12 +3712,11 @@ msgstr "A teljes méret nem lehet nagyobb mint %(max_file_size)s"
 
 #: seahub/templates/repo.html:103 seahub/templates/repo.html.py:139
 #: seahub/templates/view_shared_upload_link.html:54
-#, fuzzy
 msgid "Saving..."
-msgstr "Betöltés..."
+msgstr "Mentés..."
 
 #: seahub/templates/repo.html:112
-#, fuzzy, python-format
+#, python-format
 msgid "Update %(file_name)s"
 msgstr "%(file_name)s frissítés"
 
@@ -3913,45 +3765,42 @@ msgstr "Fájlnév"
 
 #: seahub/templates/repo.html:182
 msgid "Current Library"
-msgstr "Aktuális könyvtár"
+msgstr "Aktuális kötet"
 
 #: seahub/templates/repo.html:185
 msgid "Other Libraries"
-msgstr "Más könyvtárak"
+msgstr "Más kötetek"
 
 #: seahub/templates/repo.html:196 seahub/templates/shared_file_view.html:49
 msgid "Please click and choose a directory."
 msgstr "Kattintson és válasszon könyvtárat."
 
 #: seahub/templates/repo.html:202
-#, fuzzy, python-format
+#, python-format
 msgid "Rename %(name)s as:"
 msgstr "%(name)s átnevezése:"
 
 #: seahub/templates/repo.html:212
-#, fuzzy, python-format
+#, python-format
 msgid "Sync %(dir_name)s"
-msgstr "%(name)s-ban/ben"
+msgstr "%(dir_name)s szinkronizálása"
 
 #: seahub/templates/repo.html:213
 msgid ""
-"A sub-library will be created from this directory. It will be listed in your "
-"desktop client, and you can download it just like downloading a normal "
+"A sub-library will be created from this directory. It will be listed in your"
+" desktop client, and you can download it just like downloading a normal "
 "library."
-msgstr ""
+msgstr "Új alkötet lesz létrehozva a kiválasztott könyvtárból. Az alkötet létrehozás után letölthetővé válik a kliensprogramban."
 
 #: seahub/templates/repo.html:214
-#, fuzzy
 msgid "Create"
-msgstr "Létrehozás helye:"
+msgstr "Létrehozás"
 
 #: seahub/templates/repo.html:228
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept in the browser for only 1 hour."
-msgstr ""
-"Ez a könyvtár titkosítva van. Adja meg jelszavát az online böngészéshez. A "
-"jelszó egy óráig kerül tárolásra a kiszolgálón."
+msgstr "Ez a kötet titkosítva van. Adja meg jelszavát az online böngészéshez. A jelszó egy óráig kerül tárolásra a kiszolgálón."
 
 #: seahub/templates/repo.html:354
 #: seahub/templates/view_shared_upload_link.html:77
@@ -4006,22 +3855,22 @@ msgid "Processing..."
 msgstr "Feldolgozás..."
 
 #: seahub/templates/repo.html:427
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s törlése és még %(amount)s másik elemé sikeres."
 
 #: seahub/templates/repo.html:429
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s törlése sikeres."
 
 #: seahub/templates/repo.html:438
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr "Belső hiba. %(name)s törlése és még %(amount)s másik elemé sikertelen."
 
 #: seahub/templates/repo.html:440
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to delete %(name)s."
 msgstr "Belső hiba. %(name)s törlése sikertelen."
 
@@ -4039,44 +3888,42 @@ msgid "Invalid destination path"
 msgstr "A cél útvonal érvénytelen"
 
 #: seahub/templates/repo.html:613
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s áthelyezése és még %(amount)s másik elemé sikeres."
 
 #: seahub/templates/repo.html:615
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s sikeresen áthelyezve."
 
 #: seahub/templates/repo.html:620
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s másolása és még %(amount)s másik elemé sikeres."
 
 #: seahub/templates/repo.html:622
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s másolása sikeres."
 
 #: seahub/templates/repo.html:634
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
-msgstr ""
-"Belső hiba. %(name)s mozgatása és még %(amount)s másik elemé sikertelen."
+msgstr "Belső hiba. %(name)s mozgatása és még %(amount)s másik elemé sikertelen."
 
 #: seahub/templates/repo.html:636
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Belső hiba. %(name)s mozgatása sikertelen."
 
 #: seahub/templates/repo.html:640
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
-msgstr ""
-"Belső hiba. %(name)s másolása és még %(amount)s másik elemé sikertelen."
+msgstr "Belső hiba. %(name)s másolása és még %(amount)s másik elemé sikertelen."
 
 #: seahub/templates/repo.html:642
-#, fuzzy, python-format
+#, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Belső hiba. %(name)s másolása sikertelen."
 
@@ -4085,7 +3932,7 @@ msgid "Encrypting the file..."
 msgstr "Fájl titkosítása"
 
 #: seahub/templates/repo.html:727
-#, fuzzy, python-format
+#, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr "Titkosítás, %(num)s% kész."
 
@@ -4102,7 +3949,7 @@ msgid "Downloading..."
 msgstr "Letöltés ..."
 
 #: seahub/templates/repo.html:1058
-#, fuzzy, python-format
+#, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr "Letöltés, %(num)s% kész."
 
@@ -4111,12 +3958,12 @@ msgid "Decrypting..."
 msgstr "Titkosítás visszafejtése..."
 
 #: seahub/templates/repo.html:1096
-#, fuzzy, python-format
+#, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr "Titkosítás feloldása, %(num)s% kész."
 
 #: seahub/templates/repo.html:1199
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s törlése sikeres"
 
@@ -4145,12 +3992,12 @@ msgid "Move Directory"
 msgstr "Könyvtár mozgatása"
 
 #: seahub/templates/repo.html:1252
-#, fuzzy, python-format
+#, python-format
 msgid "Copy %(name)s to:"
 msgstr "%(name)s másolása ide:"
 
 #: seahub/templates/repo.html:1255
-#, fuzzy, python-format
+#, python-format
 msgid "Move %(name)s to:"
 msgstr "%(name)s mozgatása ide:"
 
@@ -4169,9 +4016,8 @@ msgid "starred"
 msgstr "csillagozott"
 
 #: seahub/templates/repo.html:1436
-#, fuzzy
 msgid "Sub-library is created."
-msgstr "A könyvtár titkosítva van."
+msgstr "Az alkötet sikeresen létrejött."
 
 #: seahub/templates/repo.html:1467 seahub/templates/repo.html.py:1508
 msgid "It is required."
@@ -4190,14 +4036,13 @@ msgid "You have not renamed it."
 msgstr "Nem nevezte át."
 
 #: seahub/templates/repo.html:1549
-#, fuzzy, python-format
+#, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "%(old_name)s átnevezése %(new_name)s névre sikeres"
 
 #: seahub/templates/repo.html:1665
-#, fuzzy
 msgid "Please select at least one contact."
-msgstr "Válasszon legalább egy csoportot."
+msgstr "Kérem, válasszon ki legalább egy kontaktot."
 
 #: seahub/templates/repo.html:1776
 #: seahub/templates/snippets/myhome_extra_script.html:47
@@ -4206,7 +4051,7 @@ msgstr "Adjon meg e-mail címeket vagy csoportokat, vagy válasszon."
 
 #: seahub/templates/repo_access_deny.html:8
 msgid "You can't access this library."
-msgstr "Nem érheti el ezt a könyvtárat."
+msgstr "Nem érheti el ezt a kötetet."
 
 #: seahub/templates/repo_history.html:9
 msgid "modification history"
@@ -4216,9 +4061,7 @@ msgstr "módosítási napló"
 msgid ""
 "Tip: A snapshot will be generated after modification, which records the "
 "library state before this modification."
-msgstr ""
-"Tipp: Minden módosításkor egy pillanatkép készül, így visszaállítható a "
-"könyvtár előző állapota."
+msgstr "Tipp: Minden módosításkor egy pillanatkép készül, így visszaállítható a kötet előző állapota."
 
 #: seahub/templates/repo_history.html:14
 msgid "View Snapshot"
@@ -4243,7 +4086,7 @@ msgstr "Vissza a pillanatképekhez"
 
 #: seahub/templates/repo_history_view.html:33
 msgid "Can't view this library"
-msgstr "Könyvtár megtekintése sikertelen"
+msgstr "Kötet megtekintése sikertelen"
 
 #: seahub/templates/repo_history_view.html:58
 #: seahub/templates/repo_recycle_view.html:61
@@ -4271,7 +4114,7 @@ msgstr "Törlés ideje"
 
 #: seahub/templates/repo_settings.html:11
 msgid "Library Settings"
-msgstr "Könyvtárbeállítások"
+msgstr "Kötetbeállítások"
 
 #: seahub/templates/repo_settings.html:22
 msgid "Keep full history"
@@ -4295,7 +4138,7 @@ msgstr "Tulajdonjog átadása"
 
 #: seahub/templates/repo_settings.html:33
 msgid "Transfer this library to another user:"
-msgstr "Könyvtár átadása másik felhasználónak:"
+msgstr "Kötet átadása másik felhasználónak:"
 
 #: seahub/templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
@@ -4313,11 +4156,11 @@ msgstr "Részletek"
 
 #: seahub/templates/repo_view_snapshot.html:87
 msgid "Restore Library"
-msgstr "Könyvtár visszaállítása"
+msgstr "Kötet visszaállítása"
 
 #: seahub/templates/repo_view_snapshot.html:88
 msgid "Are you sure you want to restore this library?"
-msgstr "Biztosan visszaállítja a könyvtárat?"
+msgstr "Biztosan visszaállítja a kötetet?"
 
 #: seahub/templates/seafile_access_check.html:6
 msgid "Preparing, please wait..."
@@ -4331,17 +4174,13 @@ msgstr "Nem található futó 1.x-es verziójú Seafile kliens."
 msgid ""
 "If you're sure Seafile client is running, click the following link to "
 "continue downloading:"
-msgstr ""
-"Nem található futó Seafile kliens. Amennyiben mégis biztos benne, hogy fut a "
-"Seafile kliens, kattintson a hivatkozásra a letöltéshez:"
+msgstr "Nem található futó Seafile kliens. Amennyiben mégis biztos benne, hogy fut a Seafile kliens, kattintson a hivatkozásra a letöltéshez:"
 
 #: seahub/templates/seafile_access_check.html:9
 msgid ""
 "If you're using Seafile client version 2.0+, download the library from the "
 "client directly."
-msgstr ""
-"Ha 2.0+ verziójú Seafile klienst használ a könyvtárat közvetlenül a klienből "
-"töltse le."
+msgstr "Ha 2.0+ verziójú Seafile klienst használ a kötetet közvetlenül a klienből töltse le."
 
 #: seahub/templates/seafile_access_check.html:12
 msgid "Your Seafile client is out of date, please upgrade to latest version."
@@ -4369,32 +4208,26 @@ msgstr "Mentés ide:"
 msgid ""
 "You're receiving this e-mail because %(email)s is sharing a file to you on "
 "%(site_name)s."
-msgstr ""
-"Azért kapta ezt a levelet, mert %(email)s megosztott Önnel egy fájlt a(z) "
-"%(site_name)s oldalon."
+msgstr "Azért kapta ezt a levelet, mert %(email)s megosztott Önnel egy fájlt a(z) %(site_name)s oldalon."
 
 #: seahub/templates/shared_link_email.html:4
 msgid "Please go to the following page and view the file:"
 msgstr "Kövesse az alábbi címet és tekintse meg a fájlt:"
 
 #: seahub/templates/shared_upload_link_email.html:2
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You're receiving this e-mail because %(email)s has shared an upload link to "
 "you on %(site_name)s."
-msgstr ""
-"Azért kapta ezt a levelet, mert %(email)s megosztott Önnel egy fájlt a(z) "
-"%(site_name)s oldalon."
+msgstr "%(email)s feltöltési hivatkozást osztott meg Önnel a következő webhelyen: %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:4
-#, fuzzy
 msgid "You can go to the following page and upload your files:"
-msgstr "Kövesse az alábbi hivatkozást a bejelentkezéshez:"
+msgstr "Navigáljon a következő oldalra a fájlok feltöltéséhez:"
 
 #: seahub/templates/starred.html:4
-#, fuzzy
 msgid "Stars"
-msgstr "Csillagozás"
+msgstr "Csillagok"
 
 #: seahub/templates/starred.html:20
 msgid "icon"
@@ -4411,11 +4244,9 @@ msgstr "Nincs még csillagozott fájlja"
 
 #: seahub/templates/starred.html:35
 msgid ""
-"You can star important files by clicking the \"Star\" button on file viewing "
-"page, and they will be listed here."
-msgstr ""
-"Megcsillagozhatja a fontos fájlokat a „csillag” gombra kattintva a fájlnéző "
-"oldalon, és itt felsorolásra kerülnek."
+"You can star important files by clicking the \"Star\" button on file viewing"
+" page, and they will be listed here."
+msgstr "Megcsillagozhatja a fontos fájlokat a „csillag” gombra kattintva a fájlnéző oldalon, és itt felsorolásra kerülnek."
 
 #: seahub/templates/starred.html:59
 msgid "Successfully unstarred."
@@ -4521,13 +4352,10 @@ msgstr "automatikus"
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/file_content_js.html:62
 msgid ""
-"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
-"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
-"\"page-nums\"></span></span>"
-msgstr ""
-"<span id=\"pdf-page\"><label for=\"page-number\">Oldal</label> <input type="
-"\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
-"\"page-nums\"></span></span>"
+"<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input "
+"type=\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id"
+"=\"page-nums\"></span></span>"
+msgstr "<span id=\"pdf-page\"><label for=\"page-number\">Oldal</label> <input type=\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id=\"page-nums\"></span></span>"
 
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/file_content_js.html:62
@@ -4542,10 +4370,9 @@ msgstr "betöltés..."
 #: seahub/templates/view_file_pdf.html:77
 #: seahub/templates/snippets/file_content_js.html:109
 msgid ""
-"You can use IE 10 or other browsers, for example, firefox, to view it online."
-msgstr ""
-"Használhatja az IE 10-et, vagy más böngészőket (mint a Firefox) az online "
-"megtekintéshez."
+"You can use IE 10 or other browsers, for example, firefox, to view it "
+"online."
+msgstr "Használhatja az IE 10-et, vagy más böngészőket (mint a Firefox) az online megtekintéshez."
 
 #: seahub/templates/view_file_svg.html:7
 #: seahub/templates/snippets/file_content_js.html:41
@@ -4562,36 +4389,33 @@ msgid "ZIP"
 msgstr "ZIP"
 
 #: seahub/templates/view_shared_upload_link.html:21
-#, fuzzy, python-format
+#, python-format
 msgid "Upload files to <span class=\"op-target\">%(dir_name)s</span>"
-msgstr "Megosztás <span class=\"op-target\"></span>"
+msgstr "Fájlok feltöltése ide: <span class=\"op-target\">%(dir_name)s</span>"
 
 #: seahub/templates/view_shared_upload_link.html:22
-#, fuzzy
 msgid "shared by:"
-msgstr "Megosztó: "
+msgstr "megosztó:"
 
 #: seahub/templates/registration/login.html:11
-#, fuzzy
 msgid "(forgot password)"
-msgstr "Elfelejtette jelszavát?"
+msgstr "(elfelejtett jelszó)"
 
 #: seahub/templates/registration/login.html:14
 msgid "CAPTCHA"
-msgstr ""
+msgstr "CAPTCHA"
 
 #: seahub/templates/registration/login.html:16
 msgid "Not clear? Refresh it."
-msgstr ""
+msgstr "Nem tudja elolvasni? Frissítse a képet!"
 
 #: seahub/templates/registration/login.html:23
 msgid "Incorrect email or password"
 msgstr "Hibás e-mail cím vagy jelszó"
 
 #: seahub/templates/registration/login.html:55
-#, fuzzy
 msgid "Failed to refresh the CAPTCHA, please try again later."
-msgstr "A megosztás %s-nak/nek nem sikerült, próbálja később újra."
+msgstr "A captcha frissítése nem sikerült, kérem, próbálja meg később."
 
 #: seahub/templates/registration/login.html:62
 #: seahub/templates/registration/registration_form.html:47
@@ -4679,11 +4503,9 @@ msgstr "Küldtünk egy jelszó-átállítási e-mailt."
 #: seahub/templates/registration/password_reset_email.html:2
 #, python-format
 msgid ""
-"You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s. "
-msgstr ""
-"Azért kapta ezt a levelet, mert kérte jelszava átállítását a(z) "
-"%(site_name)s oldalon."
+"You're receiving this e-mail because you requested a password reset for your"
+" user account at %(site_name)s. "
+msgstr "Azért kapta ezt a levelet, mert kérte jelszava átállítását a(z) %(site_name)s oldalon."
 
 #: seahub/templates/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
@@ -4709,17 +4531,13 @@ msgstr "Regisztráció befejeződött"
 msgid ""
 "An activation email has been sent. Please check your email and click on the "
 "link to activate your account."
-msgstr ""
-"Az aktiváláshoz az e-mail-t elküldtük. Kérjük ellenőrizze a leveleit és "
-"kattintson a linkre a fiók aktiválásához."
+msgstr "Az aktiváláshoz az e-mail-t elküldtük. Kérjük ellenőrizze a leveleit és kattintson a linkre a fiók aktiválásához."
 
 #: seahub/templates/registration/registration_complete.html:11
 msgid ""
 "Registration complete, please wait for administrator to activate your "
 "account."
-msgstr ""
-"A regisztráció kész, kérjük várja meg amíg az adminisztrátor aktiválja a "
-"fiókját."
+msgstr "A regisztráció kész, kérjük várja meg amíg az adminisztrátor aktiválja a fiókját."
 
 #: seahub/templates/registration/registration_form.html:3
 msgid "Register"
@@ -4780,19 +4598,17 @@ msgid "Generated by system"
 msgstr "A rendszer generálta"
 
 #: seahub/templates/snippets/file_share_popup.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Share %(name)s"
 msgstr "%(name)s megosztása"
 
 #: seahub/templates/snippets/file_share_popup.html:6
-#, fuzzy
 msgid "Download Link"
-msgstr "Letöltés"
+msgstr "Letöltési hivatkozás"
 
 #: seahub/templates/snippets/file_share_popup.html:7
-#, fuzzy
 msgid "Upload Link"
-msgstr "Fájl feltöltése"
+msgstr "Feltöltési hivatkozás"
 
 #: seahub/templates/snippets/file_share_popup.html:9
 #: seahub/templates/snippets/file_share_popup.html:12
@@ -4830,14 +4646,13 @@ msgstr "Küldés..."
 
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid ""
-"You can share the generated link to others and then they can upload files to "
-"this directory via the link."
-msgstr ""
+"You can share the generated link to others and then they can upload files to"
+" this directory via the link."
+msgstr "A hivatkozást megoszthatja ismerőseivel, akik a link használatával fájlokat tölthetnek fel a kiválasztott könyvtárba."
 
 #: seahub/templates/snippets/file_share_popup.html:52
-#, fuzzy
 msgid "Upload Link: "
-msgstr "Feltöltés ..."
+msgstr "Feltöltési hivatkozás:"
 
 #: seahub/templates/snippets/group_recommend_form.html:5
 msgid "Post a discussion to group"
@@ -4884,9 +4699,8 @@ msgid "Mine"
 msgstr "Saját"
 
 #: seahub/templates/snippets/my_owned_repos.html:8
-#, fuzzy
 msgid "Sub-libraries"
-msgstr "Könyvtárak"
+msgstr "Alkötetek"
 
 #: seahub/templates/snippets/my_owned_repos.html:10
 #: seahub/templates/sysadmin/userinfo.html:62
@@ -4895,43 +4709,38 @@ msgstr "Megosztott"
 
 #: seahub/templates/snippets/my_owned_repos.html:55
 msgid "You have not created any libraries"
-msgstr "Még nincs egy könyvtára sem"
+msgstr "Még nincs egy kötete sem"
 
 #: seahub/templates/snippets/my_owned_repos.html:56
 msgid ""
-"You can create a library to organize your files. For example, you can create "
-"one for each of your projects. Each library can be synchronized and shared "
+"You can create a library to organize your files. For example, you can create"
+" one for each of your projects. Each library can be synchronized and shared "
 "separately."
-msgstr ""
-"Könyvtárakat hozhat létre fájljai rendezéséhez. Például hozzon létre egy-egy "
-"könyvtárat a munkáihoz. Minden könyvtár külön szinkronizálható és "
-"megosztható."
+msgstr "Köteteket hozhat létre fájljai rendezéséhez. Például hozzon létre egy-egy kötetet a munkáihoz. Minden kötet külön szinkronizálható és megosztható."
 
 #: seahub/templates/snippets/my_owned_repos.html:68
 msgid "Origin"
-msgstr ""
+msgstr "Forrás"
 
 #: seahub/templates/snippets/my_owned_repos.html:102
-#, fuzzy
 msgid "You have not created any sub-libraries"
-msgstr "Még nincs egy könyvtára sem"
+msgstr "Még nem hozott létre alköteteket."
 
 #: seahub/templates/snippets/my_owned_repos.html:103
 msgid ""
 "You can create a sub-library from a directory inside a library. A sub-"
 "library can be independently synced and shared. Files in the sub-library "
-"will be automatically kept in sync with those in the directory of the origin "
-"library."
-msgstr ""
+"will be automatically kept in sync with those in the directory of the origin"
+" library."
+msgstr "Alkötetet egy tetszőleges könyvtárból létrehozhat egy köteten belül. A létrehozott alkötet önállóan szinkronizálható, illetve letölthető. Az alkötet fájljai automatikusan szinkronizálva lesznek az forráskötetben található fájlokkal."
 
 #: seahub/templates/snippets/my_owned_repos.html:156
 msgid "No library is shared to you"
-msgstr "Nincs egy könyvtár sem megosztva Önnel"
+msgstr "Nincs egy kötet sem megosztva Önnel"
 
 #: seahub/templates/snippets/my_owned_repos.html:207
-#, fuzzy
 msgid "No library is shared to your groups"
-msgstr "Nincs egy könyvtár sem megosztva Önnel"
+msgstr "Nincsenek az Ön csoportjaival megosztott kötetek."
 
 #: seahub/templates/snippets/office_convert_html.html:4
 msgid "The file is being processed, please wait..."
@@ -4960,9 +4769,9 @@ msgid "Encrypt"
 msgstr "Titkosítás"
 
 #: seahub/templates/snippets/repo_create_form.html:20
-#, fuzzy, python-format
+#, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
-msgstr "(legalább 3 karakter)"
+msgstr "(legalább %(repo_password_min_length)s karakter)"
 
 #: seahub/templates/snippets/repo_create_form.html:22
 msgid "Password again"
@@ -4981,24 +4790,20 @@ msgid "Please enter password"
 msgstr "Adjon meg jelszót"
 
 #: seahub/templates/snippets/repo_create_js.html:50
-#, fuzzy
 msgid "Password is too short"
-msgstr "Jelszó átállítása: %s"
+msgstr "A jelszó túl rövid"
 
 #: seahub/templates/snippets/repo_create_js.html:54
-#, fuzzy
 msgid "Password is too long (maximum is 35 characters)"
-msgstr "A jelszó túl hosszú (maximum hossz: 30 karakter)"
+msgstr "A jelszó túl hosszú (maximum hossz: 35 karakter)"
 
 #: seahub/templates/snippets/repo_del_js.html:27
-#, fuzzy
 msgid "Delete succeeded."
-msgstr "Szerkesztés sikeres."
+msgstr "Sikeres törlés"
 
 #: seahub/templates/snippets/repo_del_popup.html:3
-#, fuzzy
 msgid "Really want to delete this library?"
-msgstr "Biztosan törli: %s?"
+msgstr "Biztosan törölni szeretné a kiválasztott kötetet?"
 
 #: seahub/templates/snippets/repo_dir_data.html:15
 msgid "Upload"
@@ -5010,9 +4815,8 @@ msgid "Fetch failed"
 msgstr "Letöltés meghiúsult"
 
 #: seahub/templates/snippets/repo_dirents.html:28
-#, fuzzy
 msgid "Sync"
-msgstr "Utolsó szinkron"
+msgstr "Szinkronizálás"
 
 #: seahub/templates/snippets/repo_dirents.html:33
 msgid "More operations"
@@ -5023,9 +4827,9 @@ msgid "More Operations"
 msgstr "További műveletek"
 
 #: seahub/templates/snippets/repo_share_form.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Share %(lib_name)s"
-msgstr "%(name)s megosztása"
+msgstr "%(lib_name)s megosztása"
 
 #: seahub/templates/snippets/repo_share_form.html:11
 msgid "Emails or Groups, Seperated by ','"
@@ -5035,9 +4839,7 @@ msgstr "E-mail címek vagy csoportok, ”,”-vel elválasztva"
 msgid ""
 "Tip: must be organization members or organization groups, enter \"all\" to "
 "share to public library."
-msgstr ""
-"Tipp: szervezeti tagok vagy csoportok. Az „all” választásával teljesen "
-"nyilvános lesz."
+msgstr "Tipp: szervezeti tagok vagy csoportok. Az „all” választásával teljesen nyilvános lesz."
 
 #: seahub/templates/snippets/repo_share_form.html:17
 msgid "Tip: enter \"all\" to share to public library."
@@ -5049,7 +4851,7 @@ msgstr "Fájlok keresése a wikiben"
 
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this library"
-msgstr "Fájlok keresése ebben a könyvtárban"
+msgstr "Fájlok keresése ebben a kötetben"
 
 #: seahub/templates/snippets/search_form.html:7
 #: seahub/templates/snippets/search_form.html:13
@@ -5064,7 +4866,7 @@ msgstr "haladó"
 #: seahub/templates/snippets/search_form.html:21
 #: seahub/templates/snippets/search_form.html:24
 msgid "In all libraries"
-msgstr "Minden könyvtárban"
+msgstr "Minden kötetben"
 
 #: seahub/templates/snippets/search_form.html:18
 msgid "In this wiki"
@@ -5072,7 +4874,7 @@ msgstr "Ebben a wikiben"
 
 #: seahub/templates/snippets/search_form.html:18
 msgid "In this library"
-msgstr "Ebben a könyvtárban"
+msgstr "Ebben a kötetben"
 
 #: seahub/templates/snippets/search_form.html:22
 #, python-format
@@ -5126,11 +4928,9 @@ msgid "Input file extensions here, separate with ','"
 msgstr "Fájlkiterjesztések listája ','-vel elválasztva"
 
 #: seahub/templates/snippets/search_form.html:54
-#, fuzzy
 msgid ""
 "Please select at least one file type or input at least one file extension"
-msgstr ""
-"Egy fájltípust ki kell választani vagy egy fájlkiterjesztést be kell írni"
+msgstr "Kérem, válasszon ki legalább egy fájltípust vagy adjon meg legalább egy kiterjesztést."
 
 #: seahub/templates/snippets/shared_link_js.html:79
 msgid "Select contacts"
@@ -5143,9 +4943,8 @@ msgstr "Adjon meg legalább egy e-mail címet"
 
 #: seahub/templates/snippets/space_and_traffic.html:4
 #: seahub/templates/snippets/space_and_traffic.html:12
-#, fuzzy
 msgid "Used:"
-msgstr "Felhasznált"
+msgstr "Foglalt:"
 
 #: seahub/templates/snippets/space_and_traffic.html:6
 #: seahub/templates/snippets/space_and_traffic.html:8
@@ -5168,12 +4967,12 @@ msgstr "Fizetés"
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:3
 msgid "Transfer Library"
-msgstr "Könyvtár átadása"
+msgstr "Kötet átadása"
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
-#, fuzzy, python-format
+#, python-format
 msgid "Transfer %(lib_name) to:"
-msgstr "%(name)s mozgatása ide:"
+msgstr ""
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
 #: seahub/templates/sysadmin/sys_publink_admin.html:11
@@ -5203,12 +5002,12 @@ msgstr "Csoport törlése"
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:8
 #: seahub/templates/sysadmin/sys_useradmin.html:8
 msgid "Database"
-msgstr ""
+msgstr "Adatbázis"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:9
 #: seahub/templates/sysadmin/sys_useradmin.html:10
 msgid "LDAP"
-msgstr ""
+msgstr "LDAP"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:11
 #: seahub/templates/sysadmin/sys_list_orphan.html:12
@@ -5220,9 +5019,8 @@ msgstr "Keres"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:19
 #: seahub/templates/sysadmin/useradmin_table.html:7
-#, fuzzy
 msgid "Create At / Last Login"
-msgstr "Létrehozva: "
+msgstr "Létrehozva / Utolsó bejelentkezés"
 
 #: seahub/templates/sysadmin/sys_ldap_useradmin.html:20
 #: seahub/templates/sysadmin/useradmin_table.html:6
@@ -5245,9 +5043,8 @@ msgstr "Árva"
 #: seahub/templates/sysadmin/sys_list_orphan.html:10
 #: seahub/templates/sysadmin/sys_list_system.html:10
 #: seahub/templates/sysadmin/sys_repo_admin.html:10
-#, fuzzy
 msgid "System"
-msgstr "Rendszer-adminisztrátor"
+msgstr "Rendszer"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:7
 msgid "All Organizations"
@@ -5271,13 +5068,11 @@ msgstr "Számláló"
 
 #: seahub/templates/sysadmin/sys_repo_search.html:5
 msgid "Search Library"
-msgstr "Könyvtár keresés"
+msgstr "Kötet keresés"
 
 #: seahub/templates/sysadmin/sys_repo_search.html:8
 msgid "Tip: you can search by keyword in name or owner or both."
-msgstr ""
-"Tipp: kulcsszóra a névben vagy a tulajdonosban lehet keresni vagy "
-"mindkettőben."
+msgstr "Tipp: kulcsszóra a névben vagy a tulajdonosban lehet keresni vagy mindkettőben."
 
 #: seahub/templates/sysadmin/sys_repo_search.html:14
 #: seahub/templates/sysadmin/user_search.html:12
@@ -5296,9 +5091,8 @@ msgstr "Új felhasználó hozzáadása"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:38
 #: seahub/templates/sysadmin/user_search.html:20
-#, fuzzy
 msgid "Activating..., please wait"
-msgstr "Folyamatban, kérem várjon..."
+msgstr "Aktiválás, kis türelmet..."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:68
 msgid "Passwords do not match"
@@ -5309,17 +5103,13 @@ msgstr "A jelszavak nem egyeznek meg"
 msgid ""
 "You're receiving this e-mail because %(user)s added you to organization "
 "\"%(org.org_name)s\" on %(site_name)s."
-msgstr ""
-"Azért kapja ezt a levelet, mert %(user)s fölvette „%(org.org_name)s” "
-"szervezetbe a(z) %(site_name)s oldalon."
+msgstr "Azért kapja ezt a levelet, mert %(user)s fölvette „%(org.org_name)s” szervezetbe a(z) %(site_name)s oldalon."
 
 #: seahub/templates/sysadmin/user_add_email.html:5
 #, python-format
 msgid ""
 "You're receiving this e-mail because %(user)s added you to %(site_name)s."
-msgstr ""
-"Azért kapja ezt a levelet, mert %(user)s regisztrálta Önt a(z) %(site_name)s "
-"oldalon."
+msgstr "Azért kapja ezt a levelet, mert %(user)s regisztrálta Önt a(z) %(site_name)s oldalon."
 
 #: seahub/templates/sysadmin/user_add_email.html:7
 msgid "Following is your account information:"
@@ -5344,17 +5134,14 @@ msgstr "Kövesse az alábbi hivatkozást a bejelentkezéshez:"
 msgid ""
 "You're receiving this e-mail because staff has reset your password at "
 "%(site_name)s. "
-msgstr ""
-"Azért kapja ezt a levelet, mert a(z) %(site_name)s oldal adminisztrátora új "
-"jelszót állított be Önnek."
+msgstr "Azért kapja ezt a levelet, mert a(z) %(site_name)s oldal adminisztrátora új jelszót állított be Önnek."
 
 #: seahub/templates/sysadmin/user_reset_email.html:4
 #, python-format
 msgid ""
 "Your new password is %(password)s, please modify your password as soon as "
 "possible."
-msgstr ""
-"Az új jelszava: %(password)s. Kérjük, változtassa meg a lehető leghamarabb."
+msgstr "Az új jelszava: %(password)s. Kérjük, változtassa meg a lehető leghamarabb."
 
 #: seahub/templates/sysadmin/user_search.html:5
 msgid "Search User"
@@ -5369,7 +5156,7 @@ msgid "Delete User"
 msgstr "Felhasználó törlése"
 
 #: seahub/templates/sysadmin/useradmin_js.html:8
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to reset the password of %s ?"
 msgstr "Biztosan új jelszót állít be %s részére?"
 
@@ -5379,7 +5166,7 @@ msgid "Revoke Admin"
 msgstr "Admin jog elvétele"
 
 #: seahub/templates/sysadmin/useradmin_js.html:12
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
 msgstr "Biztosan törli %s adminisztrátori jogait?"
 
@@ -5389,7 +5176,7 @@ msgid "Set Admin"
 msgstr "Admin jog megadása"
 
 #: seahub/templates/sysadmin/useradmin_js.html:16
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to set %s as admin?"
 msgstr "Biztosan %s-t beállítja adminisztrátornak?"
 
@@ -5401,9 +5188,7 @@ msgstr "Szerkesztés sikeres. Az e-mail kiküldésre került."
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr ""
-"Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a levelezés "
-"beállításokat."
+msgstr "Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a levelezés beállításokat."
 
 #: seahub/templates/sysadmin/useradmin_table.html:5
 msgid "Status"
@@ -5472,7 +5257,7 @@ msgstr "Újrahasznosítás oldal megjelenítése sikertelen"
 #: seahub/views/ajax.py:514 seahub/views/ajax.py:556 seahub/views/ajax.py:600
 #: seahub/views/ajax.py:760 seahub/views/ajax.py:923
 msgid "Library does not exist."
-msgstr "A könyvtár nem létezik."
+msgstr "A kötet nem létezik."
 
 #: seahub/views/__init__.py:438
 msgid "You do not have permission to perform this action."
@@ -5480,7 +5265,7 @@ msgstr "Nincs jog a művelet végrehajtásához."
 
 #: seahub/views/__init__.py:445 seahub/views/__init__.py:502
 msgid "Failed to edit library information."
-msgstr "Könyvtár-információ szerkesztése sikertelen."
+msgstr "Kötet-információ szerkesztése sikertelen."
 
 #: seahub/views/__init__.py:453 seahub/views/__init__.py:511
 msgid "Failed to save settings on server"
@@ -5498,7 +5283,7 @@ msgstr "%s felhasználó nem található."
 #: seahub/views/__init__.py:558
 #, python-format
 msgid "Library %(repo_name)s has been transfered to %(new_owner)s."
-msgstr "%(repo_name)s könyvtár %(new_owner)s-nak/nek átadva."
+msgstr "%(repo_name)s kötet %(new_owner)s-nak/nek átadva."
 
 #: seahub/views/__init__.py:566
 msgid "Filename contains invalid character"
@@ -5526,15 +5311,15 @@ msgstr "Érvénytelen URL"
 
 #: seahub/views/__init__.py:630
 msgid "Unable to view library modification"
-msgstr "Könyvtármódosítás megtekintése sikertelen"
+msgstr "Sikertelen a kötet módosításainak megtekintése"
 
 #: seahub/views/__init__.py:694
 msgid "Unable to view library snapshots"
-msgstr "Könyvtár-pillanatkép megtekintése sikertelen"
+msgstr "Kötet-pillanatkép megtekintése sikertelen"
 
 #: seahub/views/__init__.py:759
 msgid "You have no permission to restore library"
-msgstr "Nincs joga visszaállítani a könyvtárat"
+msgstr "Nincs joga visszaállítani a kötet"
 
 #: seahub/views/__init__.py:783
 msgid "Please specify history ID"
@@ -5549,18 +5334,16 @@ msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
 #: seahub/views/__init__.py:899 seahub/views/__init__.py:900
-#, fuzzy
 msgid "My Library"
-msgstr "Könyvtár"
+msgstr "Saját kötet"
 
 #: seahub/views/__init__.py:1078
-#, fuzzy
 msgid "Internal server error"
-msgstr "Belső kiszolgálóhiba"
+msgstr "Belső hiba"
 
 #: seahub/views/__init__.py:1182
 msgid "Failed to unshare the library, as it does not exist."
-msgstr "Könyvtármegosztás visszavonása sikertelen, mivel nem is létezik"
+msgstr "Kötetmegosztás visszavonása sikertelen, mivel nem is létezik"
 
 #: seahub/views/__init__.py:1187
 #, python-format
@@ -5592,7 +5375,7 @@ msgstr "Fájl nem érhető el"
 
 #: seahub/views/__init__.py:1304
 msgid "Failed to download library, unable to find server"
-msgstr "Fájl leöltése sikertelen, nem található a kiszolgáló"
+msgstr "Kötet leöltése sikertelen, nem található a kiszolgáló"
 
 #: seahub/views/__init__.py:1315
 msgid "Invalid server setting"
@@ -5600,10 +5383,8 @@ msgstr "Érvénytelen kiszolgálóbeállítások"
 
 #: seahub/views/__init__.py:1559
 #, python-format
-msgid ""
-"Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-msgstr ""
-"%(path)s visszaállítása a <a href=\"%(root)s\">gyökérkönyvtárra</a> sikeres."
+msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
+msgstr "%(path)s visszaállítása a <a href=\"%(root)s\">gyökérkönyvtárra</a> sikeres."
 
 #: seahub/views/__init__.py:1563 seahub/views/__init__.py:1589
 #, python-format
@@ -5613,8 +5394,7 @@ msgstr "<a href=\"%(url)s\">%(path)s</a> visszaállítása sikeres"
 #: seahub/views/__init__.py:1585
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
-msgstr ""
-"%(path)s visszaállítása a <a href=\"%(url)s\">gyökérkönyvtárra</a> sikeres."
+msgstr "%(path)s visszaállítása a <a href=\"%(url)s\">gyökérkönyvtárra</a> sikeres."
 
 #: seahub/views/__init__.py:1883 seahub/views/file.py:745
 msgid "Internal Error"
@@ -5640,7 +5420,7 @@ msgstr "\"Személyes Wiki\" kikapcsolása sikeres."
 
 #: seahub/views/ajax.py:69
 msgid "You don't have permission to access the library."
-msgstr "Nincs joga a könyvtár eléréséhez."
+msgstr "Nincs joga a kötet eléréséhez."
 
 #: seahub/views/ajax.py:77
 msgid "No path."
@@ -5658,7 +5438,7 @@ msgstr "Jogosultság megtagadva"
 
 #: seahub/views/ajax.py:238 seahub/views/ajax.py:318 seahub/views/ajax.py:943
 msgid "Library is encrypted."
-msgstr "A könyvtár titkosítva van."
+msgstr "A kötet titkosítva van."
 
 #: seahub/views/ajax.py:244 seahub/views/ajax.py:324 seahub/views/ajax.py:949
 msgid "Error: no head commit id"
@@ -5685,8 +5465,7 @@ msgstr "%(name)s másolása sikeres. <a href=\"%(url)s\">Megtekintés</a>."
 #: seahub/views/ajax.py:694 seahub/views/ajax.py:813
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr ""
-"A(z) %(src)s könyvtárat nem lehet átmozgatni a(z) %(des)s alkönyvtárába"
+msgstr "A(z) %(src)s könyvtárat nem lehet átmozgatni a(z) %(des)s alkönyvtárába"
 
 #: seahub/views/ajax.py:724 seahub/views/ajax.py:843
 #, python-format
@@ -5703,9 +5482,8 @@ msgid "Failed to get file block list"
 msgstr "A fájl block listát nem lehet elérni"
 
 #: seahub/views/ajax.py:1058 seahub/views/ajax.py:1063
-#, fuzzy
 msgid "Wrong repo id"
-msgstr "Hibás jelszó"
+msgstr "Hibás tárolóazonosító"
 
 #: seahub/views/file.py:111
 msgid "HTTPError: failed to open file online"
@@ -5736,11 +5514,11 @@ msgstr "Fájl megtekintése sikertelen"
 
 #: seahub/views/file.py:756
 msgid "The library does not exist."
-msgstr "A könyvtár nem létezik."
+msgstr "A kötet nem létezik."
 
 #: seahub/views/file.py:760
 msgid "The library is encrypted."
-msgstr "A könyvtár titkosítva van."
+msgstr "A kötet titkosítva van."
 
 #: seahub/views/file.py:828
 msgid "Unable to edit file"
@@ -5774,8 +5552,7 @@ msgstr "%s adminisztrátornak való beállítása sikeres"
 
 #: seahub/views/sysadmin.py:349
 msgid "Failed to set admin: the user does not exist"
-msgstr ""
-"A felhasználót nem lehet adminisztrátornak jelölni, a felhasználó nem létezik"
+msgstr "A felhasználót nem lehet adminisztrátornak jelölni, a felhasználó nem létezik"
 
 #: seahub/views/sysadmin.py:364
 #, python-format
@@ -5784,9 +5561,7 @@ msgstr "%s felhasználótól az adminisztrátori jogok megvonása sikeres"
 
 #: seahub/views/sysadmin.py:366
 msgid "Failed to revoke admin: the user does not exist"
-msgstr ""
-"A felhasználótól nem lehet megvonni az adminisztrátori jogokat, a "
-"felhasználó nem létezik"
+msgstr "A felhasználótól nem lehet megvonni az adminisztrátori jogokat, a felhasználó nem létezik"
 
 #: seahub/views/sysadmin.py:380
 #, python-format
@@ -5811,18 +5586,14 @@ msgstr "Aktiválás megszüntetése sikertelen, a felhasználó nem létezik."
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr ""
-"Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk %(user)s "
-"részére."
+msgstr "Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk %(user)s részére."
 
 #: seahub/views/sysadmin.py:493
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr ""
-"Jelszó sikeresen átállítva erre: %(passwd)s, de a %(user)s felhasználónak "
-"nem sikerült az e-mailt elküldeni. Ellenőrizze a levelezés beállításokat."
+msgstr "Jelszó sikeresen átállítva erre: %(passwd)s, de a %(user)s felhasználónak nem sikerült az e-mailt elküldeni. Ellenőrizze a levelezés beállításokat."
 
 #: seahub/views/sysadmin.py:497
 #, python-format
@@ -5835,9 +5606,7 @@ msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr ""
-"Jelszó sikeresen átállítva erre: %(passwd)s, de a(z) %(user)s felhasználónak "
-"nem lehet levelet küldeni mert a levél küldés nincs megfelelően beállítva."
+msgstr "Jelszó sikeresen átállítva erre: %(passwd)s, de a(z) %(user)s felhasználónak nem lehet levelet küldeni mert a levél küldés nincs megfelelően beállítva."
 
 #: seahub/views/sysadmin.py:503
 msgid "Failed to reset password: user does not exist"
@@ -5855,8 +5624,8 @@ msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldve."
 #: seahub/views/sysadmin.py:566
 #, python-format
 msgid ""
-"Successfully added user %s. An error accurs when sending email notification, "
-"please check your email configuration."
+"Successfully added user %s. An error accurs when sending email notification,"
+" please check your email configuration."
 msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen."
 
 #: seahub/views/sysadmin.py:568
@@ -5869,9 +5638,7 @@ msgstr "%s hozzáadása sikeres."
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
-msgstr ""
-"%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen, mivel nincs "
-"jól beállítva."
+msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen, mivel nincs jól beállítva."
 
 #: seahub/views/sysadmin.py:681
 msgid "Successfully transfered."
@@ -5885,173 +5652,3 @@ msgstr "Átadás sikertelen, a(z) %s felhasználó nem létezik"
 #: seahub/views/sysadmin.py:685
 msgid "Failed to transfer, invalid arguments."
 msgstr "Átadás sikertelen, érvénytelen paraméterek."
-
-#~ msgid "Password is too short (minimum is 3 characters)"
-#~ msgstr "A megadott jelszó túl rövid (minimum hossz: 3 karakter)"
-
-#~ msgid "Password is required"
-#~ msgstr "A jelszó megadása kötelező"
-
-#~ msgid ""
-#~ "When you share libraries or file links to a friend, his/her email will be "
-#~ "added to contacts."
-#~ msgstr ""
-#~ "Ha egy könyvtárat vagy fájlhivatkozást oszt meg valakivel, e-mail címe "
-#~ "hozzáadásra kerül a kapcsolatokhoz."
-
-#~ msgid "No members"
-#~ msgstr "Nincs tag"
-
-#~ msgid "created at"
-#~ msgstr "léterhozva:"
-
-#~ msgid "Group Avatar"
-#~ msgstr "Csoport avatarja"
-
-#~ msgid "Administrators"
-#~ msgstr "Adminisztrátorok"
-
-#~ msgid "Name and description can not be blank."
-#~ msgstr "A név és a leírás nem lehet üres."
-
-#~ msgid "You can also share libraries into groups that you're not in."
-#~ msgstr ""
-#~ "Olyan csoportokkal is oszthat meg könyvtárakat, amelyeknek nem tagja."
-
-#~ msgid "emails, separated by ',' "
-#~ msgstr "e-mail címek ”,”-vel elválasztva "
-
-#~ msgid "Notification"
-#~ msgstr "Értesítés"
-
-#~ msgid "Nickname:"
-#~ msgstr "Azonosító:"
-
-#~ msgid "Email: "
-#~ msgstr "E-mail: "
-
-#~ msgid "Name(optional): "
-#~ msgstr "Név (opcionális): "
-
-#~ msgid "Note(optional): "
-#~ msgstr "Megjegyzés (opcionális): "
-
-#~ msgid "Private Shares"
-#~ msgstr "Magán megosztások"
-
-#~ msgid ""
-#~ "You can share a folder or a file when you view a library, or share a file "
-#~ "when you view it."
-#~ msgstr ""
-#~ "Megoszthat egy könyvtárat vagy fájlt a könyvtárnézetben, vagy egy fájlt "
-#~ "megtekintése közben."
-
-#~ msgid "Workspace"
-#~ msgstr "Saját fiók"
-
-#~ msgid "Forum"
-#~ msgstr "Fórum"
-
-#~ msgid "Unsync Client"
-#~ msgstr "Kliens szinkronizáció törlése"
-
-#~ msgid "Are you sure to unsync client %s ?"
-#~ msgstr "Biztosan megszünteti a(z) %s kliens szinkronizálását?"
-
-#~ msgid "Password should be 3 to 30 characters."
-#~ msgstr "A jelszó hossza 3 és 30 karakter között kell legyen."
-
-#~ msgid "Account"
-#~ msgstr "Fiók"
-
-#~ msgid "Reminding..."
-#~ msgstr "Emlékeztető..."
-
-#~ msgid ""
-#~ "\n"
-#~ "        has new discussion\n"
-#~ "        "
-#~ msgid_plural ""
-#~ "\n"
-#~ "        have new discussions\n"
-#~ "        "
-#~ msgstr[0] ""
-#~ "\n"
-#~ "    új megbeszélése van\n"
-#~ "    "
-#~ msgstr[1] ""
-#~ "\n"
-#~ "    új megbeszélései vannak\n"
-#~ "    "
-
-#~ msgid "Space/Traffic Usage"
-#~ msgstr "Tár/hálózathasználat"
-
-#~ msgid "Contacts is required."
-#~ msgstr "Szükséges a kapcsolat."
-
-#~ msgid "Share Link"
-#~ msgstr "Megosztás link"
-
-#~ msgid "Create a group now"
-#~ msgstr "Csoport létrehozás"
-
-#~ msgid "Synchronize libraries with PC client"
-#~ msgstr "Szinkronizáljon fájlokat PC klienssel"
-
-#~ msgid "2. Add files to the folder and they will be uploaded automatically."
-#~ msgstr ""
-#~ "2. Adjon fájlokat a könyvtárhoz, és azok automatikusan feltöltődnek."
-
-#~ msgid ""
-#~ "Libraries shared to you or shared to groups you joined will be listed "
-#~ "here. Libraries shared as writable can be downloaded and synced. Read "
-#~ "only libraries can only be downloaded, updates on local files will not be "
-#~ "uploaded."
-#~ msgstr ""
-#~ "Az Önnel vagy csoportjával megosztott könyvtárak itt lesznek felsorolva. "
-#~ "Az írhatóan megosztott fájlok letölthetőek és szinkronizálhatóak. A csak "
-#~ "olvasható könyvtárak csak letölthetőek; a helyi fájlok módosításai nem "
-#~ "kerülnek vissza."
-
-#~ msgid "Organization Info"
-#~ msgstr "Szervezeti információ"
-
-#~ msgid "<span class=\"obj\">Library"
-#~ msgid_plural "<span class=\"obj\">Libraries"
-#~ msgstr[0] "<span class=\"obj\">Könyvtár"
-#~ msgstr[1] "<span class=\"obj\">Könyvtár"
-
-#~ msgid "<span class=\"obj\">Group"
-#~ msgid_plural "<span class=\"obj\">Groups"
-#~ msgstr[0] "<span class=\"obj\">Csoport"
-#~ msgstr[1] "<span class=\"obj\">Csoportok"
-
-#~ msgid "User"
-#~ msgid_plural "Users"
-#~ msgstr[0] "Felhasználó"
-#~ msgstr[1] "Felhasználók"
-
-#~ msgid "All Members"
-#~ msgstr "Minden tag"
-
-#~ msgid ""
-#~ "Failed to remove library. Only staff or owner can perform this operation."
-#~ msgstr ""
-#~ "Könyvtár törlése sikertelen. Csak adminisztrátorok vagy a tulajdonos "
-#~ "jogosult erre."
-
-#~ msgid "Successfully deleted library \"%s\"."
-#~ msgstr "„%s” könyvtár törlése sikeres."
-
-#~ msgid "Successfully unsync client %s"
-#~ msgstr "%s kliens szinkronizálás sikeresen megszüntetve"
-
-#~ msgid "Successfully unsync client"
-#~ msgstr "Kliens szinkronizálásának megszüntetése sikeres"
-
-#~ msgid "Failed to unsync client %s"
-#~ msgstr "%s kliens szinkronizálásának megszüntetése sikertelen"
-
-#~ msgid "Failed to unsync client"
-#~ msgstr "Kliens szinkronizálásának megszüntetése sikertelen"
