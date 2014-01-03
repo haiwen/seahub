@@ -71,6 +71,9 @@ def login(request, template_name='registration/login.html',
             form = CaptchaAuthenticationForm(data=request.POST)
             if form.is_valid():
                 # captcha & passwod is valid, log user in
+                remember_me = True if request.REQUEST.get(
+                    'remember_me', '') == 'on' else False
+                request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             # else:
             # show page with captcha
@@ -78,6 +81,9 @@ def login(request, template_name='registration/login.html',
             form = authentication_form(data=request.POST)
             if form.is_valid():
                 # password is valid, log user in
+                remember_me = True if request.REQUEST.get(
+                    'remember_me', '') == 'on' else False
+                request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
                 username = request.REQUEST.get('username', '').strip()
@@ -105,6 +111,7 @@ def login(request, template_name='registration/login.html',
             redirect_field_name: redirect_to,
             'site': current_site,
             'site_name': current_site.name,
+            'remember_days': settings.LOGIN_REMEMBER_DAYS,
             }, context_instance=RequestContext(request))
 
 def login_simple_check(request):
