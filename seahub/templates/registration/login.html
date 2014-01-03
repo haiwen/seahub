@@ -26,9 +26,10 @@
 	<p class="error hide"></p>
     {% endif %}
 
-    <div>
-      <label for="id_remember_me"><input id="id_remember_me" type="checkbox" name="remember_me" tabindex="">{% trans "Remember me for 7 days" %}</label>
-    </div>
+    <label class="checkbox-label">
+        <span class="checkbox"><input type="checkbox" name="remember_me" class="checkbox-orig"/></span>
+        <span class="checkbox-option">{% trans "Remember me for 7 days" %}</span>
+    </label>
 
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
     {% if enable_signup %}
