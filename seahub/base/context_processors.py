@@ -7,7 +7,7 @@ These are referenced from the setting TEMPLATE_CONTEXT_PROCESSORS and used by
 RequestContext.
 """
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
-    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, \
+    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
 from seahub.views.modules import get_enabled_mods_by_user, \
     get_available_mods_by_user
@@ -49,6 +49,8 @@ def base(request):
         'site_title': SITE_TITLE,
         'branding_css': BRANDING_CSS,
         'logo_path': LOGO_PATH,
+        'logo_width': LOGO_WIDTH,
+        'logo_height': LOGO_HEIGHT,
         'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,

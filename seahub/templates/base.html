@@ -74,7 +74,7 @@
                     {% if seacloud_mode %}
                     <img src="{{ MEDIA_URL }}img/seacloud_logo.png" title="Seacloud" alt="logo" width="192" height="39" />
                     {% else %}
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="156" height="39" />
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
                 {% block nav %}{% endblock %}
