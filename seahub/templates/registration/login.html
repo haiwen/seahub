@@ -73,5 +73,11 @@ $('input[type="submit"]').click(function(){
         return false;
     }
 });
+// set tabindex
+$(function() {
+    $('input:not([type="hidden"])', $('.login-form')).each(function(index) {
+        $(this).attr('tabindex', index + 1);
+    });
+});
 </script>
 {% endblock %}
