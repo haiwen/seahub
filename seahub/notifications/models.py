@@ -33,6 +33,7 @@ class NotificationForm(ModelForm):
 
 ########## user notification
 MSG_TYPE_GROUP_MSG = 'group_msg'
+MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_GRPMSG_REPLY = 'grpmsg_reply'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
@@ -57,6 +58,10 @@ def group_msg_to_json(group_id, msg_from):
 
 def grpmsg_reply_to_json(msg_id, reply_from):
     return json.dumps({'msg_id': msg_id, 'reply_from': reply_from})
+
+def group_join_request_to_json(username, group_id, join_request_msg):
+    return json.dumps({'username': username, 'group_id': group_id,
+                       'join_request_msg': join_request_msg})
     
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
@@ -205,6 +210,17 @@ class UserNotificationManager(models.Manager):
         super(UserNotificationManager, self).filter(
             to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY).delete()
 
+    def add_group_join_request_notice(self, to_user, detail):
+        """
+        
+        Arguments:
+        - `self`:
+        - `to_user`:
+        - `detail`:
+        """
+        return self._add_user_notification(to_user,
+                                           MSG_TYPE_GROUP_JOIN_REQUEST, detail)
+        
     def add_file_uploaded_msg(self, to_user, detail):
         """
         
@@ -330,6 +346,14 @@ class UserNotification(models.Model):
         """
         return self.msg_type == MSG_TYPE_USER_MESSAGE
 
+    def is_group_join_request(self):
+        """
+        
+        Arguments:
+        - `self`:
+        """
+        return self.msg_type == MSG_TYPE_GROUP_JOIN_REQUEST
+        
     def group_message_detail_to_dict(self):
         """Parse group message detail, returns dict contains ``group_id`` and
         ``msg_from``.
@@ -385,7 +409,7 @@ class UserNotification(models.Model):
             else:
                 raise self.InvalidDetailError, 'Wrong detail format of group message reply'
             return {'msg_id': msg_id, 'reply_from': reply_from}
-
+            
     ########## functions used in templates
     def format_file_uploaded_msg(self):
         """
@@ -522,14 +546,42 @@ class UserNotification(models.Model):
                 'href': reverse('msg_reply_new')
                 }
         return msg
+
+    def format_group_join_request(self):
+        """
         
+        Arguments:
+        - `self`:
+        """
+        d = json.loads(self.detail)
+        username = d['username']
+        group_id = d['group_id']
+        join_request_msg = d['join_request_msg']
+
+        group = seaserv.get_group(group_id)
+        if group is None:
+            self.delete()
+            return None
+
+        nickname = email2nickname(username)
+        msg = _(u"The user <a href='%(user_profile)s'>%(username)s</a> has asked to join the group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
+            'user_profile': reverse('user_profile', args=[username]),
+            'username': username,
+            'href': reverse('group_members', args=[group_id]),
+            'group_name': group.group_name,
+            'join_request_msg': join_request_msg,
+            }
+        return msg
+
 ########## handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 
 from seahub.signals import share_file_to_user_successful, upload_file_successful
 from seahub.group.models import GroupMessage, MessageReply
-from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.group.signals import grpmsg_added, grpmsg_reply_added, \
+    group_join_request
+    
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.message.models import UserMessage
     
@@ -622,3 +674,17 @@ def grpmsg_reply_added_cb(sender, **kwargs):
         UserNotification.objects.add_group_msg_reply_notice(to_user=user,
                                                             detail=detail)
 
+@receiver(group_join_request)
+def group_join_request_cb(sender, **kwargs):
+    staffs = kwargs['staffs']
+    username = kwargs['username']
+    group_id = kwargs['group'].id
+    join_request_msg = kwargs['join_request_msg']
+
+    detail = group_join_request_to_json(username, group_id,
+                                        join_request_msg)
+    for staff in staffs:
+        UserNotification.objects.add_group_join_request_notice(to_user=staff,
+                                                               detail=detail)
+
+    

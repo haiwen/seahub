@@ -38,7 +38,7 @@ from decorators import group_staff_required
 from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
-from signals import grpmsg_added, grpmsg_reply_added
+from signals import grpmsg_added, grpmsg_reply_added, group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import FileDiscuss, FileContributors
@@ -1064,15 +1064,12 @@ def group_joinrequest(request, group_id):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
-    group_id = int(group_id)
-    group = get_group(group_id) 
+    group = get_group(int(group_id)) 
     if not group:
         raise Http404
 
-    user = request.user.username
-    # TODO: Group creator is group staff now, but may changed in future.
-    staff = group.creator_name
-    if is_group_user(group_id, user):
+    username = request.user.username
+    if is_group_user(group_id, username):
         # Already in the group. Normally, this case should not happen.
         err = _(u'You are already in the group.')
         return HttpResponseBadRequest(json.dumps({'error': err}),
@@ -1080,28 +1077,18 @@ def group_joinrequest(request, group_id):
     else:
         form = GroupJoinMsgForm(request.POST)
         if form.is_valid():
-            group_join_msg = form.cleaned_data['group_join_msg']
-            # Send the message to group staff.
-            use_https = request.is_secure()
-            domain = RequestSite(request).domain
-            t = loader.get_template('group/group_join_email.html')
-            c = {
-                'staff': staff,
-                'user': user,
-                'group_name': group.group_name,
-                'group_join_msg': group_join_msg,
-                'site_name': SITE_NAME,
-                }
-            try:
-                send_mail(_(u'apply to join the group'), t.render(Context(c)), None, [staff],
-                          fail_silently=False)
-                messages.success(request, _(u'Sent successfully, the group admin will handle it.'))
-                return HttpResponse(json.dumps('success'),
-                                    content_type=content_type)
-            except:
-                err = _(u'Failed to send. You can try it again later.')
-                return HttpResponse(json.dumps({'error': err}), status=500,
-                                    content_type=content_type)
+            members_all = ccnet_threaded_rpc.get_group_members(group.id)
+            staffs = [ m.user_name for m in members_all if m.is_staff ]    
+            
+            join_request_msg = form.cleaned_data['group_join_msg']
+
+            group_join_request.send(sender=None, staffs=staffs,
+                                    username=username, group=group,
+                                    join_request_msg=join_request_msg)
+
+            messages.success(request, _(u'Sent successfully, the group admin will handle it.'))
+            return HttpResponse(json.dumps('success'),
+                                content_type=content_type)
         else:
             return HttpResponseBadRequest(json.dumps(form.errors),
                                           content_type=content_type)

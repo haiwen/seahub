@@ -42,5 +42,10 @@
         <td>{{ notice.format_user_message|safe }}</td>
         <td>{{ notice.timestamp|translate_seahub_time }}</td>
       </tr>
+      {% elif notice.is_group_join_request %}
+      <tr class="{% if not notice.is_seen %}bold{% endif %}">
+        <td>{{ notice.format_group_join_request|safe }}</td>
+        <td>{{ notice.timestamp|translate_seahub_time }}</td>
+      </tr>
       {% endif %}
     {% endfor %}
