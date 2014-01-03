@@ -361,7 +361,10 @@ LOGIN_ATTEMPT_LIMIT = 3
 LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 
 # Age of cookie, in seconds (default: 1 day).
-SESSION_COOKIE_AGE = 24 * 60 * 60               
+SESSION_COOKIE_AGE = 24 * 60 * 60
+
+# Days of remembered login info (deafult: 7 days)
+LOGIN_REMEMBER_DAYS = 7
 
 #################
 # Email sending #

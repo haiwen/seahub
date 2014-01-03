@@ -28,7 +28,7 @@
 
     <label class="checkbox-label">
         <span class="checkbox"><input type="checkbox" name="remember_me" class="checkbox-orig"/></span>
-        <span class="checkbox-option">{% trans "Remember me for 7 days" %}</span>
+        <span class="checkbox-option">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
     </label>
 
     <input type="submit" value="{% trans "Submit" %}" class="submit" />

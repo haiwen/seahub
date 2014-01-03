@@ -109,6 +109,7 @@ def login(request, template_name='registration/login.html',
             redirect_field_name: redirect_to,
             'site': current_site,
             'site_name': current_site.name,
+            'remember_days': settings.LOGIN_REMEMBER_DAYS,
             }, context_instance=RequestContext(request))
 
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):

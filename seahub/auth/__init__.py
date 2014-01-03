@@ -1,5 +1,6 @@
 import datetime
 from warnings import warn
+from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
@@ -81,7 +82,7 @@ def login(request, user):
     request.session[SESSION_KEY] = user.username
     request.session[BACKEND_SESSION_KEY] = user.backend
     if request.session.get('remember_me', False):
-        request.session.set_expiry(7 * 24 * 60 * 60)
+        request.session.set_expiry(settings.LOGIN_REMEMBER_DAYS * 24 * 60 * 60)
     if hasattr(request, 'user'):
         request.user = user
     user_logged_in.send(sender=user.__class__, request=request, user=user)
