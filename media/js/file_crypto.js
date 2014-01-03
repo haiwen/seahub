@@ -23,7 +23,8 @@ function encrypt(e) {
         encrypted.block_id = CryptoJS.SHA1(enc_obj.ciphertext).toString(CryptoJS.enc.Hex);
         postMessage(encrypted);
     } catch (e){
-        postMessage("Error");
+        // Error. return the index for debug.
+        postMessage(encrypted.index);
     }
 }
 

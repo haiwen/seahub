@@ -242,6 +242,32 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
+{% else %}
+{% upload_js %}
+<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
+<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
+<script type="text/javascript">
+window.locale = { 
+    "fileupload": {
+        "errors": {
+            "maxFileSize": "{% trans "File is too big" %}",
+            "minFileSize": "{% trans "File is too small" %}",
+            "acceptFileTypes": "{% trans "Filetype not allowed" %}",
+            "maxNumberOfFiles": "{% trans "Max number of files exceeded" %}",
+            "uploadedBytes": "{% trans "Uploaded bytes exceed file size" %}",
+            "emptyResult": "{% trans "Empty file upload result" %}"
+        },  
+        "error": "{% trans "Error" %}",
+        "start": "{% trans "Start" %}",
+        "cancel": "{% trans "Cancel" %}",
+        "destroy": "{% trans "Delete" %}"
+    }   
+};
+</script>
 {% endif %}
 <script type="text/javascript">
 // refresh #repo-file-list, and do things needed to do after that.
@@ -338,32 +364,6 @@ function decrypt_repo() {
     });
 }
 {% endif %}
-</script>
-{% upload_js %}
-<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
-<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
-<script type="text/javascript">
-// for file upload
-window.locale = { 
-    "fileupload": {
-        "errors": {
-            "maxFileSize": "{% trans "File is too big" %}",
-            "minFileSize": "{% trans "File is too small" %}",
-            "acceptFileTypes": "{% trans "Filetype not allowed" %}",
-            "maxNumberOfFiles": "{% trans "Max number of files exceeded" %}",
-            "uploadedBytes": "{% trans "Uploaded bytes exceed file size" %}",
-            "emptyResult": "{% trans "Empty file upload result" %}"
-        },  
-        "error": "{% trans "Error" %}",
-        "start": "{% trans "Start" %}",
-        "cancel": "{% trans "Cancel" %}",
-        "destroy": "{% trans "Delete" %}"
-    }   
-};
 
 //download, trash, repo setting
 $('#repo-download-btn').click(function() {
@@ -704,7 +704,6 @@ function encAndSubmitFile(file, fd, submit_url) {
         onFinish();
         return;
     }
-    
     showMsg("{% trans "Encrypting the file..." %}", 'info');
 
     var workers = [], workersCount = 4, i, len;
@@ -727,12 +726,15 @@ function encAndSubmitFile(file, fd, submit_url) {
     function onWorkerMessage(e) {
         if (typeof e.data != 'object') {
             // error
+            showMsg("{% trans "Error when encrypting." %}", 'error');
+            //console.log('error block index:' + e.data);
+            setTimeout(function() { $('.messages').addClass('hide'); }, 1000);
             return;
         }
 
+        encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id}); 
         var msg = "{% trans "Encrypting, %(num)s% complete." %}";
         showMsg(msg.replace('%(num)s', (encrypted_blocks.length / blocks.length * 100).toFixed(0)), 'info');
-        encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id}); 
         if (encrypted_blocks.length == blocks.length ) {
             onFinish();
         }
