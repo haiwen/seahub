@@ -564,7 +564,7 @@ class UserNotification(models.Model):
             return None
 
         nickname = email2nickname(username)
-        msg = _(u"The user <a href='%(user_profile)s'>%(username)s</a> has asked to join the group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
+        msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
             'href': reverse('group_members', args=[group_id]),
