@@ -872,10 +872,10 @@ $('#share-cur-dir').click(function() {
 $('th .checkbox-orig').unbind().click(function() {
     var dirents_op = $('#dirents-op');
 
-    // keep all checkbox in the same state: selected or not
-    // a case: select all, and then scroll to req 'more'...
-    $(this).parent().toggleClass('checkbox-checked');
-    if ($(this).parent().hasClass('checkbox-checked')) {
+    var checkbox =  $(this).parent();
+    checkbox.toggleClass('checkbox-checked');
+
+    if (checkbox.hasClass('checkbox-checked')) {
         $('.checkbox').addClass('checkbox-checked');
     } else {
         $('.checkbox').removeClass('checkbox-checked');
@@ -992,10 +992,12 @@ function opOnDirent(context) { // added param 'context' for 'more' dirents reque
     var context = context || $('.dir-item, .file-item');
 
 // select
-$('.checkbox-orig', context).unbind().click(function() {
+$('.checkbox-orig', context).unbind();
+$('.select', context).click(function() {
     var dirents_op = $('#dirents-op');
 
-    $(this).parent().toggleClass('checkbox-checked');
+    $(this).find('.checkbox').toggleClass('checkbox-checked');
+
     // show buttons or not
     if ($('.checkbox-checked', context).length > 0) {
         dirents_op.removeClass('hide');
