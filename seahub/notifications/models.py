@@ -15,6 +15,21 @@ from seaserv import seafile_api
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 
+
+class DeviceToken(models.Model):
+    """
+    The iOS device token model.
+    """
+    token = models.CharField(max_length=80)
+    user = LowerCaseCharField(max_length=255)
+
+    class Meta:
+        unique_together = (("token", "user"),)
+
+    def __unicode__(self):
+        return "/".join(self.user, self.token)
+
+
 ########## system notification
 class Notification(models.Model):
     message = models.CharField(max_length=512)
@@ -687,4 +702,4 @@ def group_join_request_cb(sender, **kwargs):
         UserNotification.objects.add_group_join_request_notice(to_user=staff,
                                                                detail=detail)
 
-    
+

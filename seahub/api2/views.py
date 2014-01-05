@@ -51,7 +51,7 @@ try:
 except ImportError:
     CLOUD_MODE = False
 from seahub.group.forms import MessageForm
-from seahub.notifications.models import UserNotification
+from seahub.notifications.models import UserNotification, DeviceToken
 from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
@@ -250,6 +250,25 @@ class AccountInfo(APIView):
             info['usage'] = get_user_quota_usage(email)
 
         return Response(info)
+
+
+class RegDevice(APIView):
+    """Reg device for iOS push notification.
+    """
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, format=None):
+        devicetoken = request.POST.get('deviceToken')
+        if not devicetoken:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        token, created = DeviceToken.objects.get_or_create(
+            token=devicetoken, user=request.user.username)
+        if created:
+            token.save()
+        return Response("success")
 
 class Search(APIView):
     """ Search all the repos

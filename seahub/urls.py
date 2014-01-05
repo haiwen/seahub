@@ -184,7 +184,6 @@ urlpatterns = patterns('',
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
                        
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
-
 )
 
 if settings.SERVE_STATIC:

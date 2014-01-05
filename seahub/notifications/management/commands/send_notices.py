@@ -90,4 +90,3 @@ class Command(BaseCommand):
                 logger.info('Successfully sent email to %s' % to_user)
             except Exception, e:
                 logger.error('Failed to send email to %s, error detail: %s' % (to_user, e))
-
