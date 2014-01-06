@@ -5,7 +5,11 @@
 {% block file_view %}
 {% if not err %}
 <center>
- <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/#{{ raw_path }}" style='width:95%;height:600px;' allowfullscreen webkitallowfullscreen></iframe>
+ <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{{ raw_path }}" style='width:95%;height:600px;' allowfullscreen webkitallowfullscreen></iframe>
+</center>
+{% else %}
+<center>
+  {{ err }}
 </center>
 {% endif %}
 {% endblock %}

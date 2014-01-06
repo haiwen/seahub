@@ -194,6 +194,11 @@ def handle_document(raw_path, obj_id, fileext, ret_dict):
     else:
         ret_dict['filetype'] = 'Unknown'
 
+def handle_opendocument(raw_path, obj_id, fileext, ret_dict, file_size):
+    if file_size <=0 :
+        # populate return value dict
+        ret_dict['err'] = _(u'The file contains actually no data.')
+
 def handle_pdf(raw_path, obj_id, fileext, ret_dict):
     if USE_PDFJS:
         # use pdfjs to preview PDF
@@ -334,6 +339,8 @@ def view_file(request, repo_id):
                 ret_dict['file_content'] = convert_md_link(c, repo_id, username)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == OPENDOCUMENT:
+            handle_opendocument(inner_path, obj_id, fileext, ret_dict, fsize)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
