@@ -1,0 +1,16 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block file_view %}
+{% if not err %}
+<center>
+ <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{{ raw_path }}" style='width:95%;height:600px;' allowfullscreen webkitallowfullscreen></iframe>
+</center>
+{% else %}
+<center>
+  {{ err }}
+</center>
+{% endif %}
+{% endblock %}
+
