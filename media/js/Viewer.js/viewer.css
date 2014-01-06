@@ -290,141 +290,141 @@ html[dir='rtl'] .dropdownToolbarButton {
 
 .toolbarButton,
 .dropdownToolbarButton {
-      min-width: 16px;
-        padding: 2px 6px 2px;
-          border: 1px solid transparent;
-            border-radius: 2px;
-              color: hsl(0,0%,95%);
-                font-size: 12px;
-                  line-height: 14px;
-                    -webkit-user-select:none;
-                      -moz-user-select:none;
-                        -ms-user-select:none;
-                          /* Opera does not support user-select, use <... unselectable="on"> instead */
-                            cursor: default;
-                              -webkit-transition-property: background-color, border-color, box-shadow;
-                                -webkit-transition-duration: 150ms;
-                                  -webkit-transition-timing-function: ease;
-                                    -moz-transition-property: background-color, border-color, box-shadow;
-                                      -moz-transition-duration: 150ms;
-                                        -moz-transition-timing-function: ease;
-                                          -ms-transition-property: background-color, border-color, box-shadow;
-                                            -ms-transition-duration: 150ms;
-                                              -ms-transition-timing-function: ease;
-                                                -o-transition-property: background-color, border-color, box-shadow;
-                                                  -o-transition-duration: 150ms;
-                                                    -o-transition-timing-function: ease;
-                                                      transition-property: background-color, border-color, box-shadow;
-                                                        transition-duration: 150ms;
-                                                          transition-timing-function: ease;
+    min-width: 16px;
+    padding: 2px 6px 2px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    color: hsl(0,0%,95%);
+    font-size: 12px;
+    line-height: 14px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    /* Opera does not support user-select, use <... unselectable="on"> instead */
+    cursor: default;
+    -webkit-transition-property: background-color, border-color, box-shadow;
+    -webkit-transition-duration: 150ms;
+    -webkit-transition-timing-function: ease;
+    -moz-transition-property: background-color, border-color, box-shadow;
+    -moz-transition-duration: 150ms;
+    -moz-transition-timing-function: ease;
+    -ms-transition-property: background-color, border-color, box-shadow;
+    -ms-transition-duration: 150ms;
+    -ms-transition-timing-function: ease;
+    -o-transition-property: background-color, border-color, box-shadow;
+    -o-transition-duration: 150ms;
+    -o-transition-timing-function: ease;
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: ease;
 }
 
 html[dir='ltr'] .toolbarButton,
 html[dir='ltr'] .dropdownToolbarButton {
-      margin: 3px 2px 4px 0;
+    margin: 3px 2px 4px 0;
 }
 html[dir='rtl'] .toolbarButton,
 html[dir='rtl'] .dropdownToolbarButton {
-      margin: 3px 0 4px 2px;
+    margin: 3px 0 4px 2px;
 }
 
 .splitToolbarButton:hover > .splitToolbarButtonSeparator,
 .splitToolbarButton.toggled > .splitToolbarButtonSeparator {
-      padding: 12px 0;
-        margin: 0;
-          box-shadow: 0 0 0 1px hsla(0,0%,100%,.03);
-            -webkit-transition-property: padding;
-              -webkit-transition-duration: 10ms;
-                -webkit-transition-timing-function: ease;
-                  -moz-transition-property: padding;
-                    -moz-transition-duration: 10ms;
-                      -moz-transition-timing-function: ease;
-                        -ms-transition-property: padding;
-                          -ms-transition-duration: 10ms;
-                            -ms-transition-timing-function: ease;
-                              -o-transition-property: padding;
-                                -o-transition-duration: 10ms;
-                                  -o-transition-timing-function: ease;
-                                    transition-property: padding;
-                                      transition-duration: 10ms;
-                                        transition-timing-function: ease;
+    padding: 12px 0;
+    margin: 0;
+    box-shadow: 0 0 0 1px hsla(0,0%,100%,.03);
+    -webkit-transition-property: padding;
+    -webkit-transition-duration: 10ms;
+    -webkit-transition-timing-function: ease;
+    -moz-transition-property: padding;
+    -moz-transition-duration: 10ms;
+    -moz-transition-timing-function: ease;
+    -ms-transition-property: padding;
+    -ms-transition-duration: 10ms;
+    -ms-transition-timing-function: ease;
+    -o-transition-property: padding;
+    -o-transition-duration: 10ms;
+    -o-transition-timing-function: ease;
+    transition-property: padding;
+    transition-duration: 10ms;
+    transition-timing-function: ease;
 }
 
 .toolbarButton.toggled:hover:active,
 .splitToolbarButton > .toolbarButton:hover:active {
-      background-color: hsla(0,0%,0%,.4);
-        border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.5) hsla(0,0%,0%,.55);
-          box-shadow: 0 1px 1px hsla(0,0%,0%,.2) inset,
-                        0 0 1px hsla(0,0%,0%,.3) inset,
-                                      0 1px 0 hsla(0,0%,100%,.05);
+    background-color: hsla(0,0%,0%,.4);
+    border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.5) hsla(0,0%,0%,.55);
+    box-shadow: 0 1px 1px hsla(0,0%,0%,.2) inset,
+    0 0 1px hsla(0,0%,0%,.3) inset,
+    0 1px 0 hsla(0,0%,100%,.05);
 }
 
 html[dir='ltr'] .splitToolbarButton > .toolbarButton:first-child,
 html[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
-      position: relative;
-        margin: 0;
-        margin-left: 4px;
-          margin-right: -1px;
-            border-top-left-radius: 2px;
-              border-bottom-left-radius: 2px;
-                border-right-color: transparent;
+    position: relative;
+    margin: 0;
+    margin-left: 4px;
+    margin-right: -1px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-right-color: transparent;
 }
 html[dir='ltr'] .splitToolbarButton > .toolbarButton:last-child,
 html[dir='rtl'] .splitToolbarButton > .toolbarButton:first-child {
-      position: relative;
-        margin: 0;
-          margin-left: -1px;
-            border-top-right-radius: 2px;
-              border-bottom-right-radius: 2px;
-                border-left-color: transparent;
+    position: relative;
+    margin: 0;
+    margin-left: -1px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-left-color: transparent;
 }
 .splitToolbarButtonSeparator {
-      padding: 8px 0;
-        width: 1px;
-          background-color: hsla(0,0%,00%,.5);
-            z-index: 99;
-              box-shadow: 0 0 0 1px hsla(0,0%,100%,.08);
-                display: inline-block;
-                  margin: 5px 0;
+    padding: 8px 0;
+    width: 1px;
+    background-color: hsla(0,0%,00%,.5);
+    z-index: 99;
+    box-shadow: 0 0 0 1px hsla(0,0%,100%,.08);
+    display: inline-block;
+    margin: 5px 0;
 }
 html[dir='ltr'] .splitToolbarButtonSeparator {
-      float:left;
+    float:left;
 }
 html[dir='rtl'] .splitToolbarButtonSeparator {
-      float:right;
+    float:right;
 }
 
 .dropdownToolbarButton {
-      min-width: 120px;
-        max-width: 120px;
-          padding: 4px 2px 4px;
-            overflow: hidden;
-              background: url(images/toolbarButton-menuArrows.png) no-repeat;
+    min-width: 120px;
+    max-width: 120px;
+    padding: 4px 2px 4px;
+    overflow: hidden;
+    background: url(images/toolbarButton-menuArrows.png) no-repeat;
 }
 
 .dropdownToolbarButton > select {
-      -webkit-appearance: none;
-        -moz-appearance: none; /* in the future this might matter, see bugzilla bug #649849 */
-          min-width: 140px;
-            font-size: 12px;
-              color: hsl(0,0%,95%);
-                margin:0;
-                  padding:0;
-                    border:none;
-                      background: rgba(0,0,0,0); /* Opera does not support 'transparent' <select> background */
+    -webkit-appearance: none;
+    -moz-appearance: none; /* in the future this might matter, see bugzilla bug #649849 */
+    min-width: 140px;
+    font-size: 12px;
+    color: hsl(0,0%,95%);
+    margin:0;
+    padding:0;
+    border:none;
+    background: rgba(0,0,0,0); /* Opera does not support 'transparent' <select> background */
 }
 
 .dropdownToolbarButton > select > option {
-      background: hsl(0,0%,24%);
+    background: hsl(0,0%,24%);
 }
 
 #pageWidthOption {
-  border-bottom: 1px rgba(255, 255, 255, .5) solid;
+    border-bottom: 1px rgba(255, 255, 255, .5) solid;
 }
 
 
 html[dir='ltr'] .dropdownToolbarButton {
-      background-position: 95%;
+    background-position: 95%;
 }
 html[dir='rtl'] .dropdownToolbarButton {
       background-position: 5%;
