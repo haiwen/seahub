@@ -667,6 +667,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     border:1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    z-index:10;
 }
 .op-confirm button {
     margin-right:8px;
