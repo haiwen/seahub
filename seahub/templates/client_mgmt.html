@@ -8,7 +8,7 @@
 {% block right_panel %}
 <h3 class="hd">{% trans "Clients" %}</h3>
 {% if clients %}
-<table>
+<table class="client-list">
     <tr>
         <th width="20%">{% trans "Client Name" %}</th>
         <th width="20%">{% trans "Library" %}</th>
@@ -105,5 +105,20 @@ $('.unsync-client').click(function() {
     });
     return false;
 });
+
+$("tr:gt(0)", $('.client-list')).unbind().hover(
+    function() {
+        if ($('.unsync-confirm:visible', $('.client-list')).length == 0) {
+            $(this).addClass('hl');
+            $(this).find('.op').removeClass('vh');
+        }   
+    },  
+    function() {
+        if ($('.unsync-confirm:visible', $('.client-list')).length == 0) {
+            $(this).find('.op').addClass('vh');
+            $(this).removeClass('hl');
+        }   
+    }   
+);
 </script>
 {% endblock %}
