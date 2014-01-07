@@ -1,4 +1,19 @@
 {% load i18n %}
+$("tr:gt(0)", $('.repo-list')).unbind().hover(
+    function() {
+        if ($('.repo-del-cfm:visible', $('.repo-list')).length == 0) {
+            $(this).addClass('hl');
+            $(this).find('.op-icon, .op').removeClass('vh');
+        }   
+    },  
+    function() {
+        if ($('.repo-del-cfm:visible', $('.repo-list')).length == 0) {
+            $(this).find('.op-icon, .op').addClass('vh');
+            $(this).removeClass('hl');
+        }   
+    }   
+);
+
 $('.repo-delete-btn').click(function() {
     var op = $(this);
     var cont = op.parent().css({'position': 'relative'}),

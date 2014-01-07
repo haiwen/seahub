@@ -14,7 +14,7 @@
 </div>
 <div id="my-own-repos" class="hide">
 {% if owned_repos %}
-<table>
+<table class="repo-list">{# 'repo-list': for repo which has 'repo-delete-btn' #}
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="24%">{% trans "Name" %}</th>
@@ -61,7 +61,7 @@
 {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
 <div id="my-sub-repos" class="hide">
 {% if sub_repos %}
-<table>
+<table class="repo-list">
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="24%">{% trans "Name" %}</th>
