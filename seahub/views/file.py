@@ -334,6 +334,9 @@ def view_file(request, repo_id):
                 ret_dict['file_content'] = convert_md_link(c, repo_id, username)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == OPENDOCUMENT:
+            if fsize == 0:
+                ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
