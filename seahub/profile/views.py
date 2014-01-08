@@ -16,7 +16,7 @@ from forms import ProfileForm, DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error
+from seahub.utils import render_error, is_valid_username
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -164,6 +164,10 @@ def delete_user_account(request, user):
     if not next:
         next = settings.SITE_ROOT
 
+    if not is_valid_username(user):
+        messages.error(request, _(u'Username %s is not valid.') % user)
+        return HttpResponseRedirect(next)
+        
     if user == 'demo@seafile.com':
         messages.error(request, _(u'Demo account can not be deleted.'))
         return HttpResponseRedirect(next)

@@ -37,7 +37,7 @@ from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    get_repo_last_modify
+    get_repo_last_modify, is_valid_username
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -187,7 +187,9 @@ def share_repo(request):
         elif share_to.find('@') == -1:
             share_to_group_names.append(share_to)
         else:
-            share_to_users.append(share_to.lower())
+            share_to = share_to.lower()
+            if is_valid_username(share_to):
+                share_to_users.append(share_to)
 
     share_to_groups = []
     # get all personal groups
@@ -227,11 +229,16 @@ def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')
     group_id = request.GET.get('gid', '')
     from_email = request.GET.get('from', '')
+    if not is_valid_username(from_email):
+        return render_error(request, _(u'Argument is not valid'))
 
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
     if not group_id:
         to_email = request.GET.get('to', '')
+        if not is_valid_username(to_email):
+            return render_error(request, _(u'Argument is not valid'))
+        
         if request.user.username != from_email and \
                 request.user.username != to_email:
             return render_permission_error(request, _(u'Failed to remove share'))
@@ -534,6 +541,10 @@ def share_permission_admin(request):
     from_email = request.user.username
 
     if share_type == 'personal':
+        if not is_valid_username(email_or_group):
+            return HttpResponse(json.dumps({'success': False}), status=400,
+                                content_type=content_type)
+            
         try:
             seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
         except:
@@ -856,6 +867,9 @@ def gen_private_file_share(request, repo_id):
     username = request.user.username
 
     for email in [e.strip() for e in emails if e.strip()]:
+        if not is_valid_username(email):
+            continue
+
         if not is_registered_user(email):
             messages.error(request, _('Failed to share to "%s", user not found.') % email)
             continue

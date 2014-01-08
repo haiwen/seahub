@@ -36,7 +36,7 @@ from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
-    check_filename_with_rename, get_ccnetapplet_root, \
+    check_filename_with_rename, get_ccnetapplet_root, is_valid_username, \
     get_user_events, EMPTY_SHA1, \
     get_ccnet_server_addr_port, string2list, \
     gen_block_get_url
@@ -170,6 +170,9 @@ class Account(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, email, format=None):
+        if not is_valid_username(email):
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            
         # query account info
         try:
             user = User.objects.get(email=email)
@@ -194,6 +197,9 @@ class Account(APIView):
         return Response(info)
 
     def put(self, request, email, format=None):
+        if not is_valid_username(email):
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+        
         # create or update account
         copy = request.DATA.copy()
         copy.update({'email': email})
@@ -220,6 +226,9 @@ class Account(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
 
     def delete(self, request, email, format=None):
+        if not is_valid_username(email):
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+        
         # delete account
         try:
             user = User.objects.get(email=email)
@@ -1571,6 +1580,10 @@ class SharedRepo(APIView):
 
         share_type = request.GET.get('share_type', '')
         user = request.GET.get('user', '')
+        if not is_valid_username(user):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'User is not valid')
+            
         group_id = request.GET.get('group_id', '')
         if not (share_type and user and group_id):
             return api_error(status.HTTP_400_BAD_REQUEST,

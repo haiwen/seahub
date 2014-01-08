@@ -54,7 +54,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    is_valid_email, calc_file_path_hash
+    calc_file_path_hash, is_valid_username
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -281,6 +281,11 @@ def group_transfer(request, group_id):
     group_id = int(group_id)
     username = request.user.username
     email = request.POST.get('email', '')
+    if not is_valid_username(email):
+        messages.error(request, _('Email %s is not valid.') % email)
+        next = reverse('group_manage', args=[group_id])
+        return HttpResponseRedirect(next)
+        
     if email != username:
         if not is_group_user(group_id, email):
             ccnet_threaded_rpc.group_add_member(group_id, username, email)
@@ -607,7 +612,7 @@ def group_manage(request, group_id):
 
         # Add users to contacts.        
         for email in member_list:
-            if not is_valid_email(email):
+            if not is_valid_username(email):
                 continue
             mail_sended.send(sender=None, user=username, email=email)
 
@@ -624,7 +629,7 @@ def group_manage(request, group_id):
                         
             # Can invite unregistered user to group.
             for email in member_list:
-                if not is_valid_email(email):
+                if not is_valid_username(email):
                     continue
 
                 if is_group_user(group.id, email):
@@ -662,7 +667,7 @@ def group_manage(request, group_id):
         else:
             # Can only invite registered user to group if not in cloud mode.
             for email in member_list:
-                if not is_valid_email(email):
+                if not is_valid_username(email):
                     continue
 
                 if is_group_user(group.id, email):
@@ -739,6 +744,12 @@ def group_add_admin(request, group_id):
     member_list = [x.lower() for x in member_list]
 
     for member_name in member_list:
+        if not is_valid_username(member_name):
+            err_msg = _(u'Failed to add, %s is not a valid email.') % member_name
+            result['error'] = err_msg
+            return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+        
         # Add user to contacts.
         mail_sended.send(sender=None, user=request.user.username,
                          email=member_name)
@@ -787,6 +798,10 @@ def group_remove_admin(request, group_id):
     Remove group admin, and becomes normal group member.
     """
     user = request.GET.get('u', '')
+    if not is_valid_username(user):
+        messages.error(request, _(u'%s is not a valid email.') % user)
+        return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
+        
     try:
         ccnet_threaded_rpc.group_unset_admin(int(group_id), user)
         messages.success(request, _(u'Operation succeeded.'))

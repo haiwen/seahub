@@ -13,6 +13,7 @@ from urlparse import urlparse
 
 import ccnet
 
+from django.core.validators import email_re
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -204,11 +205,15 @@ def normalize_file_path(path):
     """
     return path.rstrip('/')
 
-SIMPLE_EMAIL_RE = re.compile(r'^\S+@\S+\.\S+$')
 def is_valid_email(email):
-    """A simple e-mail format validation.
+    """A heavy email format validation.
     """
-    return True if SIMPLE_EMAIL_RE.match(email) is not None else False
+    return True if email_re.match(email) is not None else False
+
+def is_valid_username(username):
+    """Check whether username is valid, currently only email can be a username.
+    """
+    return is_valid_email(username)
     
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)
