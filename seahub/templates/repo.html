@@ -63,7 +63,7 @@
     <div id="upload-file-dialog" class="hide">
         <h3>{% trans "Upload Files" %}</h3>
         {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
+        <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
             {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
@@ -91,7 +91,7 @@
                 <ol class="tip">
                     <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
                     {% if max_upload_file_size %}
-                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}File size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
                     {% endif %}
                 </ol>
                 <div class="fileupload-progress fade">
@@ -111,7 +111,7 @@
     <div id="update-file-dialog" class="hide">
         <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>
         {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
+        <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}      
         <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <input type="hidden" name="target_file" />

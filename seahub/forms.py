@@ -151,7 +151,7 @@ class RepoPassowrdForm(forms.Form):
                 elif e.msg == 'Incorrect password':
                     raise forms.ValidationError(_(u'Wrong password'))
                 elif e.msg == 'Internal server error':
-                    raise forms.ValidationError(_(u'Inernal server error'))
+                    raise forms.ValidationError(_(u'Internal server error'))
                 else:
                     raise forms.ValidationError(_(u'Decrypt library error'))
         
