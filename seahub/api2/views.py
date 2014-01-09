@@ -353,9 +353,12 @@ class Repos(APIView):
         owned_repos = list_personal_repos_by_owner(email)
         calculate_repo_info(owned_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+        sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
+                          and UserOptions.objects.is_sub_lib_enabled(email)
+
         for r in owned_repos:
-            if r.is_virtual:
-                continue        # No need to list virtual libraries
+            if r.is_virtual and not sub_lib_enabled:
+                continue
             repo = {
                 "type":"repo",
                 "id":r.id,
@@ -367,7 +370,8 @@ class Repos(APIView):
                 "size":r.size,
                 "encrypted":r.encrypted,
                 "permission": 'rw', # Always have read-write permission to owned repo
-                }
+                "virtual": r.is_virtual,
+            }
             if r.encrypted:
                 repo["enc_version"] = r.enc_version
                 repo["magic"] = r.magic
