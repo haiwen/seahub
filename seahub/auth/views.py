@@ -86,7 +86,7 @@ def login(request, template_name='registration/login.html',
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
-                username = request.REQUEST.get('username', '').strip()
+                username = urlquote(request.REQUEST.get('username', '').strip())
                 failed_attempt = cache.get(LOGIN_ATTEMPT_PREFIX+username, 1)
                 if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
                     form = CaptchaAuthenticationForm()
