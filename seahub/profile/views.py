@@ -159,26 +159,17 @@ def get_user_profile(request, user):
     return HttpResponse(json.dumps(data), content_type=content_type)
 
 @login_required
-def delete_user_account(request, user):
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-
-    if not is_valid_username(user):
-        messages.error(request, _(u'Username %s is not valid.') % user)
-        return HttpResponseRedirect(next)
+def delete_user_account(request):
+    username = request.user.username
         
-    if user == 'demo@seafile.com':
+    if username == 'demo@seafile.com':
         messages.error(request, _(u'Demo account can not be deleted.'))
+        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
         
-    if request.user.username != user:
-        messages.error(request, _(u'Operation Failed. You can only delete account of your own'))
-        return HttpResponseRedirect(next)
-    else:
-        user = User.objects.get(email=user)
-        user.delete()
-        return HttpResponseRedirect(settings.LOGIN_URL)
+    user = User.objects.get(email=username)
+    user.delete()
+    return HttpResponseRedirect(settings.LOGIN_URL)
 
 @login_required
 def default_repo(request):

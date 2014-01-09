@@ -99,7 +99,7 @@
 <div class="setting-item" id="del-account">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
-<button id="account-delete-btn" data-url="{% url 'delete_user_account' request.user.username %}">{% trans "Delete" %}</button>
+<button id="account-delete-btn" data-url="{% url 'delete_user_account' %}">{% trans "Delete" %}</button>
 </div>
 
 <form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
