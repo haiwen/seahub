@@ -153,7 +153,10 @@ $('.reply-form').submit(function() {
         error:function(jqXHR, textStatus, errorThrown) {
             if (!jqXHR.responseText) {
                 err.html("{% trans "Failed. Please check the network." %}").removeClass('hide'); 
+            } else {
+                err.html("{% trans "Failed to post reply." %}").removeClass('hide');
             }
+
             enable(sm);
         }
     }); 

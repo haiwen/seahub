@@ -404,6 +404,10 @@ def msg_reply(request, msg_id):
             return HttpResponseBadRequest(content_type=content_type)
 
         if request.method == 'POST':
+            if not request.user.is_authenticated():
+                return HttpResponseBadRequest(json.dumps({
+                        "error": "login required"}), content_type=content_type)
+
             form = MessageReplyForm(request.POST)
             r_status = request.GET.get('r_status')
             # TODO: invalid form
