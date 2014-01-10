@@ -863,7 +863,8 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
 
     if op == 'sharelink':
         path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
         return get_shared_link(request, repo_id, path)
 
 def reloaddir(request, repo_id, parent_dir):
@@ -1338,7 +1339,8 @@ class FileRevision(APIView):
 
     def get(self, request, repo_id, format=None):
         path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         file_name = os.path.basename(path)
         commit_id = request.GET.get('commit_id', None)
@@ -1358,7 +1360,8 @@ class FileHistory(APIView):
 
     def get(self, request, repo_id, format=None):
         path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         try:
             commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
@@ -1568,8 +1571,8 @@ class DirDownloadView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
         path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
-
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
         if path[-1] != '/':         # Normalize dir path
             path += '/'
 
