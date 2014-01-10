@@ -1151,6 +1151,26 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class FileRevert(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id, format=None):
+        path = unquote(request.DATA.get('p', '').encode('utf-8'))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        commit_id = unquote(request.DATA.get('commit_id', '').encode('utf-8'))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        try:
+            ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
+                            path, request.user.username)
+        except SearpcError, e:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
+
+        return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
+    
 class FileRevision(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
