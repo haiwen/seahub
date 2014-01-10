@@ -21,7 +21,7 @@
         <h3>{% blocktrans %}Upload files to <span class="op-target">{{ dir_name }}</span>{% endblocktrans %}</h3>
         <p>{% trans "shared by:" %} {{username|email2nickname}} {% avatar username 16 %} </p>
         {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has ran out of space." %}</p>
+        <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
             <input type="hidden" name="parent_dir" value="{{ path }}" />
@@ -43,7 +43,7 @@
                 </div>
                 <ol class="tip">
                     <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
-                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Total size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}File size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
                 </ol>
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">

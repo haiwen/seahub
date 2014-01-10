@@ -73,7 +73,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
-    EMPTY_SHA1, normalize_file_path, \
+    EMPTY_SHA1, normalize_file_path, is_valid_username, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
@@ -545,6 +545,11 @@ def repo_owner(request, repo_id):
 
     content_type = 'application/json; charset=utf-8'
     repo_owner = request.POST.get('repo_owner', '').lower()
+    if not is_valid_username(repo_owner):
+        return HttpResponse(json.dumps({
+                        'error': _('Username %s is not valid.') % repo_owner,
+                        }), status=400, content_type=content_type)
+        
     try:
         User.objects.get(email=repo_owner)
     except User.DoesNotExist:

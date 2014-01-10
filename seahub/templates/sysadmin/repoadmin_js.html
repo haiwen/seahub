@@ -8,7 +8,7 @@ $('.repo-transfer-btn').click(function(){
     form.modal({appendTo:'#main'});
     $('input[name="repo_id"]', form).val(repo_id);
     var detail = $('.detail', form);
-    detail.html(detail.html().replace('%(lib_name)', repo_name));
+    detail.html(detail.html().replace('%(lib_name)s', repo_name));
     return false;
 });
 

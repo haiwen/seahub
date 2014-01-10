@@ -16,7 +16,7 @@ from forms import ProfileForm, DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error
+from seahub.utils import render_error, is_valid_username
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -159,22 +159,17 @@ def get_user_profile(request, user):
     return HttpResponse(json.dumps(data), content_type=content_type)
 
 @login_required
-def delete_user_account(request, user):
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-
-    if user == 'demo@seafile.com':
+def delete_user_account(request):
+    username = request.user.username
+        
+    if username == 'demo@seafile.com':
         messages.error(request, _(u'Demo account can not be deleted.'))
+        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
         
-    if request.user.username != user:
-        messages.error(request, _(u'Operation Failed. You can only delete account of your own'))
-        return HttpResponseRedirect(next)
-    else:
-        user = User.objects.get(email=user)
-        user.delete()
-        return HttpResponseRedirect(settings.LOGIN_URL)
+    user = User.objects.get(email=username)
+    user.delete()
+    return HttpResponseRedirect(settings.LOGIN_URL)
 
 @login_required
 def default_repo(request):

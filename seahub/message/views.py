@@ -21,6 +21,7 @@ from seahub.base.accounts import User
 from seahub.views import is_registered_user
 from seahub.contacts.models import Contact
 from seahub.share.models import PrivateFileDirShare
+from seahub.utils import is_valid_username
 from seahub.utils.paginator import Paginator
 from seahub.settings import SITE_ROOT
 
@@ -112,65 +113,6 @@ def user_msg_list(request, id_or_email):
 def message_send(request):
     """Handle POST request to send message to user(s).
     """
-    username = request.user.username
-
-    next = request.META.get('HTTP_REFERER', None)
-    if next is None:
-        next = SITE_ROOT
-    
-    mass_msg = request.POST.get('mass_msg')
-    mass_emails = request.POST.getlist('mass_email') # e.g: [u'1@1.com, u'2@1.com']
-    if not mass_msg:
-        messages.error(request, _(u'message is required'))
-        return HttpResponseRedirect(next)
-    if not mass_emails:
-        messages.error(request, _(u'contact is required'))
-        return HttpResponseRedirect(next)
-
-    # attachment
-    selected = request.POST.getlist('selected') # selected files & dirs: [u'<repo_id><path>', ...] 
-    attached_items = []
-    if len(selected) > 0:
-        for item in selected:
-            att = {}
-            att['repo_id'] = item[0:36]
-            att['path'] = item[36:]
-            attached_items.append(att)
-
-    email_sended = []
-    for to_email in mass_emails:
-        to_email = to_email.strip()
-        if not to_email:
-            continue
-
-        if to_email == username:
-            messages.error(request, _(u'You can not send message to yourself.'))
-            continue
-
-        if not is_registered_user(to_email):
-            messages.error(request, _(u'Failed to send message to %s, user not found.') % to_email)
-            continue
-
-        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
-        if len(attached_items) > 0:
-            for att_item in attached_items:
-                repo_id = att_item['repo_id']
-                path = att_item['path']
-                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
-                    username, to_email, repo_id, path)
-                UserMsgAttachment.objects.add_user_msg_attachment(usermsg, pfds)
-
-        email_sended.append(to_email)
-
-    if email_sended:
-        messages.success(request, _(u'Message sent successfully.'))
-    return HttpResponseRedirect(next)
-
-@login_required
-@require_POST
-def message_send(request):
-    """Handle POST request to send message to user(s).
-    """
 
     if not request.is_ajax() or request.method != 'POST':
         raise Http404
@@ -187,6 +129,7 @@ def message_send(request):
 
     mass_msg = request.POST.get('mass_msg')
     mass_emails = request.POST.getlist('mass_email') # e.g: [u'1@1.com, u'2@1.com']
+
     if not mass_msg:
         result['error'] = [_(u'message is required')]
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -209,7 +152,7 @@ def message_send(request):
     msgs = []
     for to_email in mass_emails:
         to_email = to_email.strip()
-        if not to_email:
+        if not to_email or not is_valid_username(to_email):
             continue
 
         if to_email == username:
