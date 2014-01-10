@@ -23,7 +23,6 @@ from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
-from django.utils.translation import ugettext as _
 from django.utils import timezone
 
 from models import Token
@@ -1662,7 +1661,7 @@ class DirSubRepoView(APIView):
         path = request.GET.get('p') 
         name = request.GET.get('name')
         if not (path and name):
-            result['error'] = _('Argument missing')
+            result['error'] = 'Argument missing'
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
         username = request.user.username
@@ -2154,7 +2153,7 @@ def get_group_msgs(groupid, page, username):
                 if att.filetype == IMAGE:
                     att.obj_id = get_file_id_by_path(att.repo_id, path)
                     if not att.obj_id:
-                        att.err = _(u'File does not exist')
+                        att.err = 'File does not exist'
                     else:
                         att.token = seafile_api.get_httpserver_access_token(
                             att.repo_id, att.obj_id, 'view', username)
@@ -2199,7 +2198,7 @@ def discussion(request, msg_id):
             if repo:
                 att.name = repo.name
             else:
-                att.err = _(u'the libray does not exist')
+                att.err = 'the libray does not exist'
         else:
             path = path.rstrip('/') # cut out last '/' if possible
             att.name = os.path.basename(path)
@@ -2210,7 +2209,7 @@ def discussion(request, msg_id):
             if att.filetype == IMAGE:
                 att.obj_id = get_file_id_by_path(att.repo_id, path)
                 if not att.obj_id:
-                    att.err = _(u'File does not exist')
+                    att.err = 'File does not exist'
                 else:
                     att.token = seafile_api.get_httpserver_access_token(
                         att.repo_id, att.obj_id, 'view', request.user.username)
@@ -2261,18 +2260,18 @@ def repo_history_changes(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not access_to_repo(request, repo_id, ''):
-        return HttpResponse(json.dumps({"err": _(u'Permission denied')}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=content_type)
 
     repo = get_repo(repo_id)
     if not repo:
-        return HttpResponse(json.dumps({"err": _(u'Library does not exist')}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=content_type)
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return HttpResponse(json.dumps({"err": _(u'Library is encrypted')}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return HttpResponse(json.dumps({"err": _(u'Invalid argument')}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=content_type)
 
     changes = get_diff(repo_id, '', commit_id)
 
@@ -2283,10 +2282,10 @@ def repo_history_changes(request, repo_id):
     elif c.second_parent_id is None:
         # Normal commit only has one parent.
         if c.desc.startswith('Changed library'):
-            changes['cmt_desc'] = _('Changed library name or description')
+            changes['cmt_desc'] = 'Changed library name or description'
     else:
         # A commit is a merge only if it has two parents.
-        changes['cmt_desc'] = _('No conflict in the merge.')
+        changes['cmt_desc'] = 'No conflict in the merge.'
     for k in changes:
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
 
