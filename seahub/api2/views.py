@@ -1,4 +1,5 @@
 # encoding: utf-8
+import logging
 import os
 import stat
 import time
@@ -58,17 +59,21 @@ from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.signals import repo_created
 from seahub.group.views import group_check
-from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, HAS_FILE_SEARCH
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, \
+    api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
+    HAS_FILE_SEARCH, gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
 from seahub.shortcuts import get_first_object_or_none
+if HAS_FILE_SEARCH:
+    from seahub_extra.search.views import search_keyword
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import get_personal_groups_by_user, get_session_info, \
-    server_repo_size, \
+    server_repo_size, is_personal_repo, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
@@ -77,15 +82,8 @@ from seaserv import get_personal_groups_by_user, get_session_info, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
 
-import logging
-
-if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search_keyword
 
 logger = logging.getLogger(__name__)
-
-
-
 json_content_type = 'application/json; charset=utf-8'
 
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
@@ -639,6 +637,29 @@ class Repo(APIView):
 
         seafile_api.remove_repo(repo_id)
         return Response('success', status=status.HTTP_200_OK)
+
+class RepoHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits = commits_all[:per_page]
+
+        if len(commits_all) == per_page + 1:
+            page_next = True
+        else:
+            page_next = False
+
+        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1284,6 +1305,26 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class FileHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        try:
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
+        except SearpcError, e:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
+
+        if not commits:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+
 class FileSharedLinkView(APIView):
     """
     Support uniform interface for file shared link.
@@ -1470,6 +1511,50 @@ class DirView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class DirSubRepoView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.views.ajax.py::sub_repo
+    def get(self, request, repo_id, format=None):
+        '''
+        check if a dir has a corresponding sub_repo
+        if it does not have, create one
+        '''
+
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        path = request.GET.get('p') 
+        name = request.GET.get('name')
+        if not (path and name):
+            result['error'] = _('Argument missing')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        username = request.user.username
+
+        # check if the sub-lib exist
+        try:
+            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        if sub_repo:
+            result['sub_repo_id'] = sub_repo.id
+        else:
+            # create a sub-lib
+            try:
+                # use name as 'repo_name' & 'repo_desc' for sub_repo
+                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+                result['sub_repo_id'] = sub_repo_id
+            except SearpcError, e:
+                result['error'] = e.msg
+                return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
 class SharedRepos(APIView):
     """
     List repos that a user share to others/groups/public.
@@ -1532,6 +1617,51 @@ class BeShared(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class FileShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, FileShare):
+            return None
+        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
+
+class SharedLinksView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_shared_links
+    def get(self, request, format=None):
+        username = request.user.username
+
+        fileshares = FileShare.objects.filter(username=username)
+        p_fileshares = []           # personal file share
+        for fs in fileshares:
+            if is_personal_repo(fs.repo_id):  # only list files in personal repos
+                r = seafile_api.get_repo(fs.repo_id)
+                if not r:
+                    fs.delete()
+                    continue
+
+                if fs.s_type == 'f':
+                    if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path)
+                    fs.shared_link = gen_file_share_link(fs.token) 
+                else:
+                    if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+                    fs.shared_link = gen_dir_share_link(fs.token)
+                fs.repo = r
+                p_fileshares.append(fs)
+        return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
+
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        FileShare.objects.filter(token=token).delete()
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
 
 class DefaultRepoView(APIView):
     """
