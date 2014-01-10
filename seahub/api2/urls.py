@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
     url(r'^shared-links/$', SharedLinksView.as_view()),
+    url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
     url(r'^groups/$', Groups.as_view()),

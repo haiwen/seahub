@@ -68,9 +68,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
 from seaserv import seafile_api
-from seaserv import MAX_DOWNLOAD_DIR_SIZE
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -1591,6 +1590,55 @@ class BeShared(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class PrivateFileDirShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, PrivateFileDirShare):
+            return None
+        return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'permission':obj.permission, 's_type':obj.s_type}
+
+class SharedFilesView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_priv_shared_files
+    def get(self, request, format=None):
+        username = request.user.username
+
+        # Private share out/in files.
+        priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
+        for e in priv_share_out:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+
+        priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
+        for e in priv_share_in:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+    
+        return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
+                status=200, content_type=json_content_type)
+
+    # from seahub.share.view:rm_private_file_share
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        try:
+            pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token does not exist")
+    
+        from_user = pfs.from_user
+        to_user = pfs.to_user
+        username = request.user.username
+
+        if username == from_user or username == to_user:
+            pfs.delete()
+            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)    
+        else:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to get repo.')
+    
 class VirtualRepos(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
