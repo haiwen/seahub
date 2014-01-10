@@ -48,9 +48,12 @@ from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
-from seahub.signals import repo_created
 from seahub.group.views import group_check
-from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext
+from seahub.signals import repo_created, share_file_to_user_successful
+from seahub.share.models import PrivateFileDirShare
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, \
+    api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
+    gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
 from seahub.profile.models import Profile
@@ -59,7 +62,7 @@ from seahub.shortcuts import get_first_object_or_none
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
-    get_personal_groups_by_user, get_session_info, \
+    get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
@@ -67,8 +70,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
-from seaserv import is_personal_repo
-from seahub.utils import gen_file_share_link, gen_dir_share_link
+
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -1395,6 +1397,38 @@ class DirView(APIView):
                              "Failed to delete file.")
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
+
+class DirShareView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::gen_private_file_share
+    def post(self, request, repo_id, format=None):
+        emails = request.POST.getlist('emails', '')
+        s_type = request.POST.get('s_type', '')
+        path = request.POST.get('path', '')
+        perm = request.POST.get('perm', 'r')
+        file_or_dir = os.path.basename(path.rstrip('/'))
+        username = request.user.username
+
+        for email in [e.strip() for e in emails if e.strip()]:
+            if not is_registered_user(email):
+                continue
+        
+            if s_type == 'f':
+                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                    username, email, repo_id, path)
+            elif s_type == 'd':
+                pfds = PrivateFileDirShare.objects.add_private_dir_share(
+                    username, email, repo_id, path, perm)
+            else:
+                continue
+
+            # send a signal when sharing file successful
+            share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+    
 
 class DirSubRepoView(APIView):
     authentication_classes = (TokenAuthentication, )
