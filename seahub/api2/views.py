@@ -1151,6 +1151,26 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class FileRevision(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        file_name = os.path.basename(path)
+        commit_id = request.GET.get('commit_id', None)
+
+        try:
+            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                                        commit_id, path)
+        except:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+
+        return get_repo_file(request, repo_id, obj_id, file_name, 'download')
+
 class FileHistory(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
