@@ -448,7 +448,7 @@ def msg_reply(request, msg_id):
 @login_required
 def msg_reply_new(request):
     username = request.user.username
-    grpmsg_reply_list = [ x for x in UserNotification.objects.get_group_msg_reply_notices(username, seen=False) ]
+    grpmsg_reply_list = [ x for x in UserNotification.objects.get_group_msg_reply_notices(username) ]
 
     msg_ids = []
     for e in grpmsg_reply_list:
