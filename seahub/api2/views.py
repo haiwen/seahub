@@ -70,6 +70,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path
 from seaserv import seafile_api
+from seaserv import MAX_DOWNLOAD_DIR_SIZE
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -1397,6 +1398,60 @@ class DirView(APIView):
                              "Failed to delete file.")
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
+
+class DirDownloadView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return render_error(request, _(u'Library does not exist'))
+
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        if path[-1] != '/':         # Normalize dir path
+            path += '/'
+
+        if len(path) > 1:
+            dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
+        else:
+            dirname = repo.name
+
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        if not current_commit:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         'Failed to get current commit of repo %s.' % repo_id)
+
+        try:
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                         path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                         "Failed to get dir id by path")
+
+        if not dir_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+
+        try:
+            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+        except Exception, e:
+            logger.error(str(e))
+            return api_error(status.HTTP_520_OPERATION_FAILED, "Internal error")
+
+        if total_size > MAX_DOWNLOAD_DIR_SIZE:
+            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
+
+        redirect_url = gen_file_get_url(token, dirname)
+        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
+    
 
 class DirShareView(APIView):
     authentication_classes = (TokenAuthentication, )
