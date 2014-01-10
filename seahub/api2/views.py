@@ -1900,6 +1900,69 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
+class EventsView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not EVENTS_ENABLED:
+            events = None
+            return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
+
+        start = request.GET.get('start', '')
+
+        if not start:
+            start = 0
+        else:
+            try:
+                start = int(start)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'start id must be integer')
+
+        email = request.user.username
+        events_count = 15
+        events, events_more_offset = get_user_events(email, start, events_count)
+        events_more = True if len(events) == events_count else False
+
+        l = []
+        for e in events:
+            d = dict(etype=e.etype)
+            l.append(d)
+            if e.etype == 'repo-update':
+                d['author'] = e.commit.creator_name
+                d['time'] = e.commit.ctime
+                d['desc'] = e.commit.desc
+                d['repo_id'] = e.repo.id
+                d['repo_name'] = e.repo.name
+            else:
+                d['repo_id'] = e.repo_id
+                d['repo_name'] = e.repo_name
+                if e.etype == 'repo-create':
+                    d['author'] = e.creator
+                else:
+                    d['author'] = e.repo_owner
+
+                def utc_to_local(dt):
+                    tz = timezone.get_default_timezone()
+                    utc = dt.replace(tzinfo=timezone.utc)
+                    local = timezone.make_naive(utc, tz)
+                    return local
+
+                epoch = datetime.datetime(1970, 1, 1)
+                local = utc_to_local(e.timestamp)
+                d['time'] = (local - epoch).total_seconds() * 1000
+
+            d['nick'] = email2nickname(d['author'])
+
+        resp = HttpResponse(json.dumps({
+                                'events': l,
+                                'more':  events_more,
+                                'more_offset': events_more_offset,}),
+                            status=200,
+                            content_type=json_content_type)
+        return resp
+
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
