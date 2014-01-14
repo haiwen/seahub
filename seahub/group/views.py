@@ -1362,7 +1362,17 @@ def group_wiki(request, group, page_name="home"):
 
         repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
 
-        d = {
+        wiki_index_exists = True
+        index_pagename = 'index'
+        index_content = None
+        try:
+            index_content, index_repo, index_dirent = get_group_wiki_page(username, group, index_pagename)
+        except (WikiDoesNotExist, WikiPageMissing) as e:
+            wiki_index_exists = False
+        else:
+            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
+
+        return render_to_response("group/group_wiki.html", {
             "group" : group,
             "is_staff": group.is_staff,
             "wiki_exists": wiki_exists,
@@ -1377,21 +1387,9 @@ def group_wiki(request, group, page_name="home"):
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             "repo_perm": repo_perm,
-        }
-
-        wiki_index_exists = True
-        index_pagename = 'index'
-        try:
-            index_content, index_repo, index_dirent = get_group_wiki_page(username, group, index_pagename)
-        except (WikiDoesNotExist, WikiPageMissing) as e:
-            wiki_index_exists = False
-        else:
-            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
-            d["index_content"] = index_content
-
-        d["wiki_index_exists"] = wiki_index_exists
-
-        return render_to_response("group/group_wiki.html", d, context_instance=RequestContext(request))
+            "wiki_index_exists": wiki_index_exists,
+            "index_content": index_content,
+            }, context_instance=RequestContext(request))
 
 @group_check
 def group_wiki_pages(request, group):
@@ -1490,7 +1488,7 @@ def group_wiki_use_lib(request, group):
 
     # create home page if not exist
     page_name = "home.md"
-    if not seaserv.get_file_id_by_path(repo_id, "/" + page_name + ".md"):
+    if not seaserv.get_file_id_by_path(repo_id, "/" + page_name):
         if not seaserv.post_empty_file(repo_id, "/", page_name, username):
             messages.error(request, _('Failed to create home page. Please retry later'))
 

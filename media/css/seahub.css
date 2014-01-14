@@ -805,11 +805,6 @@ textarea:-moz-placeholder {/* for FF */
     padding:6px 13px;
     border:1px solid #ccc;
 }
-/**** index ****/
-#index-content li {
-    padding-left: 10px;
-    background: transparent url('../img/li.gif') no-repeat scroll left 6.5px;
-}
 /********** container ***********/
 #main, #footer,
 #repo-top .block-inner,
@@ -2148,6 +2143,13 @@ textarea:-moz-placeholder {/* for FF */
     margin-left: auto;
     margin-right: auto;     
 }
+.anchor {
+   font-size:0.8em;
+   margin-left:6px; 
+}
+.anchor:hover {
+   text-decoration:none; 
+}
 #svg-view {
     min-height:500px;/*for ff*/
 }
@@ -2597,4 +2599,20 @@ textarea:-moz-placeholder {/* for FF */
 }
 .help-con {
 	padding:0 0 0 60px;
+}
+/* wiki index */
+.wiki-index {
+    border:1px solid #ddd;
+    padding:10px;
+    background:#f7f7f7;
+    border-radius:5px;
+    margin-top:25px;
+}
+.wiki-index h3 {
+    border-bottom:1px solid #ddd;
+}
+.wiki-index ul {
+    list-style-type: square;
+    padding-left: 1.5em;
+    margin-bottom:5px;
 }
