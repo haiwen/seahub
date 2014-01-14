@@ -2602,10 +2602,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* wiki index */
 .wiki-index {
-    border:1px solid #ddd;
-    padding:10px;
-    background:#f7f7f7;
-    border-radius:5px;
     margin-top:25px;
 }
 .wiki-index h3 {
