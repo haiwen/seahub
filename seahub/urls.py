@@ -196,24 +196,29 @@ if getattr(settings, 'CLOUD_MODE', False):
     urlpatterns += patterns('',
         (r'^demo/', demo),
     )
-else:
-    urlpatterns += patterns('',
+
+urlpatterns += patterns('',
         url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
         (r'^publicrepo/create/$', public_repo_create),
         url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
         url(r'^pubinfo/users/$', pubuser, name='pubuser'),
-    )
+)
 
-from seahub.utils import HAS_FILE_SEARCH
-if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search
+if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += patterns('',
-        url(r'^search/$', search, name='search'),
+        (r'^org/', include('seahub_extra.organizations.urls')),
     )
 
 if getattr(settings, 'ENABLE_PAYMENT', False):
     urlpatterns += patterns('',
         (r'^pay/', include('seahub_extra.pay.urls')),
+    )
+    
+from seahub.utils import HAS_FILE_SEARCH
+if HAS_FILE_SEARCH:
+    from seahub_extra.search.views import search
+    urlpatterns += patterns('',
+        url(r'^search/$', search, name='search'),
     )
 
 # serve office converter static files

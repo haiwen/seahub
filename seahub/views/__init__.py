@@ -1738,11 +1738,20 @@ def pubrepo(request):
     """
     Show public libraries.
     """
-    if request.cloud_mode:
-        # Users are not allowed to see public information when in cloud mode.
-        raise Http404
-    else:
-        username = request.user.username
+    username = request.user.username
+    
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        public_repos = seaserv.list_org_inner_pub_repos(org_id, username)
+        for r in public_repos:
+            if r.user == username:
+                r.share_from_me = True
+        return render_to_response('pubrepo.html', {
+                'public_repos': public_repos,
+                'create_shared_repo': True,
+                }, context_instance=RequestContext(request))
+        
+    elif not request.cloud_mode:
         public_repos = list_inner_pub_repos(username)
         for r in public_repos:
             if r.user == username:
@@ -1751,6 +1760,8 @@ def pubrepo(request):
                 'public_repos': public_repos,
                 'create_shared_repo': True,
                 }, context_instance=RequestContext(request))
+    else:
+        raise Http404
 
 @login_required
 def pubgrp(request):

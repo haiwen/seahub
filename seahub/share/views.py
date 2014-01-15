@@ -51,9 +51,15 @@ logger = logging.getLogger(__name__)
 def share_to_public(request, repo, permission):
     """Share repo to public with given permission.
     """
-    repo_id = repo.id
+    if request.cloud_mode and request.user.org is not None:
+        add_inner_pub_func = seafile_api.add_inner_pub_repo
+    elif not request.cloud_mode:
+        add_inner_pub_func = seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo
+    else:
+        return
+    
     try:
-        seafile_api.add_inner_pub_repo(repo_id, permission)
+        add_inner_pub_func(repo.id, permission)
     except Exception, e:
         logger.error(e)
         messages.error(request, _(u'Failed to share to all members, please try again later.'))
@@ -200,7 +206,7 @@ def share_repo(request):
             share_to_groups.append(group)
 
 
-    if share_to_all and not CLOUD_MODE:
+    if share_to_all:
         share_to_public(request, repo, permission)
 
     if not check_user_share_quota(from_email, repo, users=share_to_users,

@@ -24,6 +24,11 @@ try:
 except ImportError:
     ENABLE_PUBFILE = False
 
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
+
 def base(request):
     """
     Add seahub base configure to the context.
@@ -65,4 +70,5 @@ def base(request):
         'events_enabled': EVENTS_ENABLED,
         'mods_available': mods_available,
         'mods_enabled': mods_enabled,
+        'multi_tenancy': MULTI_TENANCY,
         }
