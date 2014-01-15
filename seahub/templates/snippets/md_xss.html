@@ -8,9 +8,11 @@ converter.hooks.chain("postConversion", function(html) {
         }
 
         // rm attributes start with 'on'
-        s = tag.replace(/on\w+=.*(?=\s+|>)/gi, '');
+        s = tag.replace(/on\w+\s*=.*(?=\s+|>)/gi, '');
+
         // rm attributes of which the values start with 'javascript:'
-        s = s.replace(/\w+=.*javascript\:.*(?=\s+|>)/gi, '');
+        s = s.replace(/\w+\s*=.*javascript\:.*(?=\s+|>)/gi, '');
+
         return s;
     });
 

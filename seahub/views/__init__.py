@@ -1971,26 +1971,23 @@ def group_events_data(events):
     """
     Group events according to the date.
     """
+    # e.timestamp is a datetime.datetime in UTC
+    # change from UTC timezone to current seahub timezone
+    def utc_to_local(dt):
+        tz = timezone.get_default_timezone()
+        utc = dt.replace(tzinfo=timezone.utc)
+        local = timezone.make_naive(utc, tz)
+        return local
+    
     event_groups = []
     for e in events:
+        e.date = utc_to_local(e.timestamp).strftime("%Y-%m-%d")        
         if e.etype == 'repo-update':
-            e.time = datetime.fromtimestamp(int(e.commit.ctime)) # e.commit.ctime is a timestamp
             e.author = e.commit.creator_name
+        elif e.etype == 'repo-create':
+            e.author = e.creator
         else:
-            # e.timestamp is a datetime.datetime in UTC
-            # change from UTC timezone to current seahub timezone
-            def utc_to_local(dt):
-                tz = timezone.get_default_timezone()
-                utc = dt.replace(tzinfo=timezone.utc)
-                local = timezone.make_naive(utc, tz)
-                return local
-
-            e.time = utc_to_local(e.timestamp)
-            if e.etype == 'repo-create':
-                e.author = e.creator
-            else:
-                e.author = e.repo_owner
-        e.date = (e.time).strftime("%Y-%m-%d")
+            e.author = e.repo_owner
         
         if len(event_groups) == 0 or \
             len(event_groups) > 0 and e.date != event_groups[-1]['date']:
