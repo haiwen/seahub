@@ -33,7 +33,7 @@
             <p>{% blocktrans with library_name=e.repo_name %}Deleted library {{ library_name }}{% endblocktrans %}</p>
             {% endif %}
 
-            <p><a class="normal" href="{% url 'user_profile' e.author|id_or_email %}">{{ e.author|email2nickname }}</a> <span class="time">{{ e.time|translate_seahub_time }}</span></p>
+            <p><a class="normal" href="{% url 'user_profile' e.author|id_or_email %}">{{ e.author|email2nickname }}</a> <span class="time">{{ e.timestamp|translate_seahub_time }}</span></p>
         </div>
     </li>
     {% endfor %}
