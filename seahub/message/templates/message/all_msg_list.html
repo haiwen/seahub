@@ -171,12 +171,21 @@ $('#send-msg-form').submit(function() {
 
     var sb_btn = $('.submit', form);
     disable(sb_btn);
+
+    var selected = [];
+    $('[name="selected"][checked="checked"]', form).each(function() {
+        var val =  $(this).val();
+        if (val.charAt(val.length - 1) != '/') { // only submit file
+            selected.push($(this).val());
+        }
+    });
+
     $.ajax({
         url: form.attr('action'),
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: { 'mass_msg': msg, 'mass_email': emails },
+        data: { 'mass_msg': msg, 'mass_email': emails, 'selected': selected },
         traditional: true,
         success: function(data) {
             msg_input.val('');
