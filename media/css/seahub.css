@@ -2130,18 +2130,26 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
+.wiki-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;     
+    max-width: 100%;
+}
 #wiki-content img {
     padding: 5px; 
     border: 1px solid #DDD;
     box-shadow: 0 1px 1px #CCC;
     border-radius: 2px; 
-    max-width:938px;
+    max-width:688px;
     margin:15px 0;
 }
-.wiki-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;     
+#wiki-content .file-icon {
+    border:0;
+    padding:0;
+    border-radius:0;
+    box-shadow:none;
+    margin:0 2px 0 0;
 }
 .anchor {
    font-size:0.8em;
