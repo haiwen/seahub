@@ -1,7 +1,9 @@
 # encoding: utf-8
+import hashlib
 import os
 import stat
 import simplejson as json
+import mimetypes
 import re
 import sys
 import urllib
@@ -9,6 +11,7 @@ import urllib2
 import logging
 import chardet
 from types import FunctionType
+import datetime as dt
 from datetime import datetime
 from math import ceil
 from urllib import quote
@@ -21,13 +24,14 @@ from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect
+    HttpResponseRedirect, HttpResponseNotModified
 from django.shortcuts import render_to_response, redirect
 from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote
+from django.views.decorators.http import condition
 
 import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
@@ -49,6 +53,7 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
+from seahub.avatar.util import get_avatar_file_storage
 from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
 from seahub.auth import authenticate, get_backends
@@ -89,8 +94,9 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
 
 import seahub.settings as settings
-from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
-    FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
+from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
+    FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
+    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
@@ -2081,3 +2087,32 @@ def toggle_modules(request):
 
     return HttpResponseRedirect(next)
 
+
+storage = get_avatar_file_storage()
+def latest_entry(request, filename):
+    return storage.modified_time(filename)
+
+@condition(last_modified_func=latest_entry)
+def image_view(request, filename):
+    if AVATAR_FILE_STORAGE is None:
+        raise Http404
+
+    # read file from cache, if hit
+    filename_md5 = hashlib.md5(filename).hexdigest()
+    cache_key = 'image_view__%s' % filename_md5
+    file_content = cache.get(cache_key)
+    if file_content is None:
+        # otherwise, read file from database and update cache
+        image_file = storage.open(filename, 'rb')
+        if not image_file:
+            raise Http404
+        file_content = image_file.read()
+        cache.set(cache_key, file_content, 365 * 24 * 60 * 60)
+
+    # Prepare response
+    content_type, content_encoding = mimetypes.guess_type(filename)
+    response = HttpResponse(content=file_content, mimetype=content_type)
+    response['Content-Disposition'] = 'inline; filename=%s' % filename
+    if content_encoding:
+        response['Content-Encoding'] = content_encoding
+    return response
