@@ -1,5 +1,5 @@
 {% load i18n %}
-                <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fright">
+                <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fleft">
                     {% if search_repo_id %}
                     <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
                     <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />

@@ -1,4 +1,7 @@
-$('.top-bar-con .account').css('margin-left', $('.top-bar-con .manage').width() + 10);
+$('.checkbox-orig').click(function() {
+    $(this).parent().toggleClass('checkbox-checked');
+});
+
 $('#title-panel, #left-panel, #right-panel').each(function() { // for ie 7
     if ($(this).children().length == 0) {
         $(this).addClass('hide');
@@ -21,7 +24,7 @@ $(document).ready(function(){
         cache: false,
         success: function(data) {
             if (data['count'] > 0) {
-                msg_ct.html(data['count']).addClass('msg-count');
+                $('.num', msg_ct).html(data['count']).removeClass('hide');
             }
         }
     });
@@ -50,8 +53,7 @@ $('#msg-count').click(function() {
                 cache: false,
                 success: function(data) {
                     loading_tip.addClass('hide');
-                    popup.html(data['html']);
-                    $('.item:first', popup).css({'border':0});
+                    $('#space-traffic').html(data['html']);
                 }
             });
         } else {
@@ -98,30 +100,6 @@ $("tr:gt(0)", $('table')).hover(
 );
 
 $('input, textarea').placeholder();
-$('.checkbox-orig').click(function() {
-    $(this).parent().toggleClass('checkbox-checked');
-});
-
-(function() {
-    var lang_context = $('#lang-context'),
-        lang_selector = $('#lang-context-selector');
-
-    $(window).load(function() { // after the small images, icons loaded.
-        lang_selector.css({'right': lang_context.parent().width() - lang_context.position().left - lang_context.outerWidth()});
-    });
-
-    lang_context.click(function() {
-        lang_selector.toggleClass('hide');
-        return false;
-    }).focus(function() { $(this).blur(); });
-
-    $(document).click(function(e) {
-        var element = e.target || e.srcElement;
-        if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
-            lang_selector.addClass('hide');
-        }
-    });
-})();
 
 // clear repo enc info when log out
 $('#logout').click(function() {

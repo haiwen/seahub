@@ -30,43 +30,6 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="top-bar">
-            <div class="top-bar-inner">
-                <div class="top-bar-con">
-                    {% if request.user.is_staff %}
-                    <div class="manage fleft">
-                        {% block sys_admin %}<a href="{{ SITE_ROOT }}sys/useradmin/" class="top-link"><span class="icon-wrench"></span>{% trans "System Admin" %}</a>{% endblock %}
-                    </div>
-                    {% endif %}
-
-                    <div class="account">
-                        {% if request.user.is_authenticated %}
-                        {% avatar request.user 16 %} <a href="#" data-url="{% url 'space_and_traffic' %}" class="top-link" id="my-info">{{ request.user }} <span class="icon-caret-down"></span></a>
-                        <div id="user-info-popup" class="hide">
-                            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
-                        </div>
-                        <span class="spliter"></span>
-                        <button class="btn" data-cturl="{% url 'unseen_notices_count' %}" data-pgurl="{% url 'user_notification_list' %}" id="msg-count" title="{% trans "unread notices" %}">0</button>
-                        {% else %}
-                        <a href="{{ SITE_ROOT }}accounts/login/" class="top-link">{% trans "Log In" %}</a>
-                            {% if enable_signup %}
-                        <a href="{{ SITE_ROOT }}accounts/register/" class="top-link">{% trans "Signup" %}</a>
-                            {% endif %}
-                        {% endif %}
-                        <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
-                        <ul class="hide" id="lang-context-selector">
-                            {% for LANG in LANGUAGES %}
-                            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
-                            {% endfor %}
-                        </ul>
-                        {% if request.user.is_authenticated %}
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="icon-signout top-link" title="{% trans "Log out" %}" id="logout"></a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="header">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
@@ -79,8 +42,42 @@
                 </a>
                 {% block nav %}{% endblock %}
 
-                {% if has_file_search and request.user.is_authenticated %}
+                {% if request.user.is_authenticated %}
+                <div class="fright">
+                {% if has_file_search %}
                     {% include 'snippets/search_form.html' %}
+                {% endif %}
+
+                <div data-cturl="{% url 'unseen_notices_count' %}" data-pgurl="{% url 'user_notification_list' %}" id="msg-count" title="{% trans "unread notices" %}" class="fleft">
+                    <img src="{{ MEDIA_URL }}img/bell.png" alt="" />
+                    <span class="num hide">0</span>
+                </div>
+
+                <div id="account" class="fright">
+                    <div id="my-info" data-url="{% url 'space_and_traffic' %}">
+                        {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
+                    </div>
+                    <div id="user-info-popup" class="hide">
+                        <div class="item ovhd">
+                            {% avatar request.user 36 %}
+                            <div class="txt">
+                                {{ request.user.username|email2nickname }} <br />
+                                {{ request.user.username}}
+                            </div>
+                        </div>
+                        <div id="space-traffic">
+                            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+                        </div>
+                        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" title="{% trans "Log out" %}" id="logout">{% trans "Log out" %}</a>
+                    </div>
+                    {% if request.user.is_staff %}
+                    <div class="manage">
+                        {% block sys_admin %}<a href="{{ SITE_ROOT }}sys/useradmin/" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
                 {% endif %}
             </div>
         </div>

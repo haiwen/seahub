@@ -837,16 +837,15 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 auto;
 }
 #header {
-    padding:6px 0;
-    background:#f4f4f4;
+    padding:16px 0;
+    background:#f4f4f7 url('../img/nav.png') center top repeat-x;
+    border-bottom:1px solid #e3e4e5;
     width:100%;
     font-size: 14px;
-    font-weight: bold;
-    border-bottom:1px solid #ddd;
     margin-bottom:25px;
 }
 #header-inner {
-    height:40px;
+    height:32px;
     width:950px;
     margin:0 auto;
 }
@@ -915,76 +914,54 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:underline;
 }
 /* top-bar */
-.top-bar-inner {
-    background:#2d2d2d;
+#msg-count {
+    position:relative; 
+    margin:10px 32px 0 25px;
+    cursor:pointer;
 }
-.top-bar-con {
-    height:24px;
-    width:950px;
-    margin:0 auto;
+#msg-count .num {
+    position:absolute;
+    color:#fff;
+    font-size:12px;
+    line-height:1;
+    padding:1px 2px;
+    background:#feac74;
+    border:1px solid #cb8a5d;
+    top:0;
+    left:15px;
+}
+#account {
     position:relative;
 }
-.top-bar-con .account {
-    text-align:right;
-    position:relative;
-}
-.top-bar-con .top-link {
-    display:inline-block;
-    height:24px;
-    padding:0 3px;
-    line-height:24px;
-    color:#ddd;
-    font-weight:normal;
+#account .avatar {
     vertical-align:middle;
-}
-.top-link .icon-wrench {
-    margin-right:7px;
-}
-.top-link .icon-caret-right {
-    margin-left:7px;
+    border-radius:1000px;
 }
 #my-info {
-    color:#fff;
-    font-weight:bold;
+    cursor: pointer;
+    color: #d6d6d6;
 }
-.top-bar-con .spliter {
-    display:inline-block;
-    height:16px;
-    line-height:16px;
-    vertical-align:middle;
-    border-right:1px solid #aaa;
-    margin:0 3px;
+#user-info-popup .avatar {
+    float:left;
 }
-.top-bar-con .btn {
-    padding:0 6px;
-    border-radius:2px;
-    line-height:16px;
-    margin-right:2px;
-    vertical-align:middle;
+#user-info-popup .txt {
+    margin-left:45px;
 }
-.top-bar-con .msg-count {
-    color:red;
+#account .manage {
+    position:absolute;
+    left:60px;
+    top:-16px;
 }
-.top-bar-con .avatar {
-    border-radius: 2px;
-    vertical-align:middle;
-}
-.top-bar-con .top-link:hover {
+#account .manage .a:hover {
     text-decoration:none;
-    background:#a0a;
 }
 #lang-context-selector {
     position:absolute;
-    top:24px;
-    text-align:left;
+    top:60px;
     border:1px solid #bbb;
     background:#fff;
-    min-width:65px;
     padding:5px 0;
-    z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
-    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
-    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
 }
 #lang-context-selector a,
 #to-group a {
@@ -997,9 +974,6 @@ textarea:-moz-placeholder {/* for FF */
 #to-group a:hover {
     background:#eee;
     text-decoration:none;
-}
-.top-bar-con .icon-signout {
-    font-size:15px;
 }
 #send-msg-popup,
 #user-info-popup {
@@ -1018,12 +992,17 @@ textarea:-moz-placeholder {/* for FF */
 #user-info-popup {
     width:200px;
     text-align:left;
-    top:24px;
+    top:48px;
+    font-size:13px;
 }
 #user-info-popup .item {
     display:block;
     padding:8px 18px;
     border-top:1px solid #ddd;
+}
+#user-info-popup a.item {
+    color:#333;
+    font-weight:normal;
 }
 #user-info-popup a.item:hover {
     background:#fafafa;
@@ -1068,7 +1047,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #header .nav {
     float:left;
-    padding-top:16px;
+    padding-top:8px;
     font-size:15px;
 }
 #header .nav li {
@@ -2479,7 +2458,7 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
 }
 #top-search-form {
-    margin-top:14px;
+    margin-top:7px;
 }
 .search-input,
 .search-form .search-submit {
@@ -2489,7 +2468,7 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align:top;
 }
 .search-input {
-    width:172px;
+    width:160px;
     outline:0;
 }
 .search-form .icon-caret-down {
@@ -2502,7 +2481,6 @@ textarea:-moz-placeholder {/* for FF */
     width:500px;
     padding:18px;
     height:auto;
-    font-weight:normal;
     box-shadow:0 0 10px #ddd;
     z-index:100;/* for pages with jquery tabs*/
 }

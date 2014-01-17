@@ -223,7 +223,7 @@ AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 AVATAR_STORAGE_DIR = 'avatars'
 AVATAR_HASH_USERDIRNAMES = True
 AVATAR_GRAVATAR_BACKUP = False
-AVATAR_DEFAULT_URL = '/avatars/default.jpg'
+AVATAR_DEFAULT_URL = '/avatars/default.png'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 14 * 24 * 60 * 60
@@ -305,8 +305,8 @@ SITE_NAME = 'Seafile'
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile_logo.png'
 # logo size. the unit is 'px'
-LOGO_WIDTH = 156
-LOGO_HEIGHT = 39
+LOGO_WIDTH = 149
+LOGO_HEIGHT = 32
 
 # css to modify the seafile css (e.g. css/my_site.css)
 BRANDING_CSS = ''

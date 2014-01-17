@@ -1,6 +1,32 @@
 {% extends "myhome_base.html" %}
 {% load i18n %}
+
 {% block title %}{% trans "Log In" %}{% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#lang {
+    font-weight:normal;
+    font-size:13px;
+    margin-top:12px;
+}
+#lang-context:hover {
+    text-decoration:none;
+}
+</style>
+{% endblock %} 
+
+{% block nav %}
+<div class="fright" id="lang">
+    <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
+    <ul id="lang-context-selector" class="hide">
+        {% for LANG in LANGUAGES %}
+        <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
 {% block main_panel %}
 <div class="narrow-panel">
 <h2>{% trans "Log In" %}</h2>
@@ -79,5 +105,26 @@ $(function() {
         $(this).attr('tabindex', index + 1);
     });
 });
+
+(function() {
+    var lang_context = $('#lang-context'),
+        lang_selector = $('#lang-context-selector');
+
+    lang_context.parent().css({'position':'relative'});
+    lang_selector.css({'top': lang_context.position().top + lang_context.height() + 3});
+
+    lang_context.click(function() {
+        lang_selector.toggleClass('hide');
+        return false;
+    }).focus(function() { $(this).blur(); });
+
+    $(document).click(function(e) {
+        var element = e.target || e.srcElement;
+        if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
+            lang_selector.addClass('hide');
+        }
+    });
+})();
+
 </script>
 {% endblock %}

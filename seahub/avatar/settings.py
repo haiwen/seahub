@@ -9,7 +9,7 @@ except ImportError:
 ### User avatar settings ###
 AVATAR_DEFAULT_SIZE = getattr(settings, 'AVATAR_DEFAULT_SIZE', 80)
 AVATAR_STORAGE_DIR = getattr(settings, 'AVATAR_STORAGE_DIR', 'avatars')
-AVATAR_DEFAULT_URL = getattr(settings, 'AVATAR_DEFAULT_URL', 'avatar/img/default.jpg')
+AVATAR_DEFAULT_URL = getattr(settings, 'AVATAR_DEFAULT_URL', 'avatar/img/default.png')
 AVATAR_DEFAULT_NON_REGISTERED_URL = getattr(settings, 'AVATAR_DEFAULT_NON_REGISTERED_URL', '/avatars/default-non-register.jpg')
 AUTO_GENERATE_AVATAR_SIZES = getattr(settings, 'AUTO_GENERATE_AVATAR_SIZES', (AVATAR_DEFAULT_SIZE,))
     

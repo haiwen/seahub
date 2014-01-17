@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block sys_admin %}<a href="{{ SITE_ROOT }}home/my/" class="top-link">{% trans "Exit System Admin" %}<span class="icon-caret-right"></span></a>{% endblock %}
+{% block sys_admin %}<a href="{{ SITE_ROOT }}home/my/" title="{% trans "Exit System Admin" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>{% endblock %}
 
 {% block nav %}
 <ul class="nav">
