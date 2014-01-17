@@ -10,6 +10,8 @@ from seaserv import seafile_api
 from seahub.auth.signals import user_logged_in
 from seahub.group.models import GroupMessage
 from seahub.utils import calc_file_path_hash
+from fields import LowerCaseCharField
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -552,4 +554,19 @@ class InnerPubMsgReply(models.Model):
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
 
-        
+class DeviceToken(models.Model):
+    """
+    The iOS device token model.
+    """
+    token = models.CharField(max_length=80)
+    user = LowerCaseCharField(max_length=255)
+    platform = LowerCaseCharField(max_length=32)
+    version = LowerCaseCharField(max_length=16)
+    pversion = LowerCaseCharField(max_length=16)
+
+    class Meta:
+        unique_together = (("token", "user"),)
+
+    def __unicode__(self):
+        return "/".join(self.user, self.token)
+

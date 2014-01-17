@@ -31,7 +31,7 @@ from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
-    DirFilesLastModifiedInfo
+    DirFilesLastModifiedInfo, DeviceToken
 from seahub.share.models import FileShare
 from seahub.views import access_to_repo, validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library
@@ -47,13 +47,15 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-from seahub.notifications.models import UserNotification, DeviceToken
+from seahub.notifications.models import UserNotification
 from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check
+from seahub.contacts.models import Contact
 from seahub.signals import repo_created, share_file_to_user_successful
 from seahub.share.models import PrivateFileDirShare
+from seahub.message.models import UserMessage, UserMsgAttachment
 from seahub.utils import EVENTS_ENABLED, \
     api_convert_desc_link, get_file_type_and_ext, \
     HAS_FILE_SEARCH, gen_file_share_link, gen_dir_share_link
@@ -163,7 +165,7 @@ class Account(APIView):
     def get(self, request, email, format=None):
         if not is_valid_username(email):
             return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-            
+
         # query account info
         try:
             user = User.objects.get(email=email)
@@ -190,7 +192,7 @@ class Account(APIView):
     def put(self, request, email, format=None):
         if not is_valid_username(email):
             return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-        
+
         # create or update account
         copy = request.DATA.copy()
         copy.update({'email': email})
@@ -219,7 +221,7 @@ class Account(APIView):
     def delete(self, request, email, format=None):
         if not is_valid_username(email):
             return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-        
+
         # delete account
         try:
             user = User.objects.get(email=email)
@@ -260,13 +262,26 @@ class RegDevice(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, format=None):
+        version = request.POST.get('version')
+        platform = request.POST.get('platform')
+        pversion = request.POST.get('pversion')
         devicetoken = request.POST.get('deviceToken')
-        if not devicetoken:
+        if not devicetoken or not version or not platform or not pversion:
             return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
-        token, created = DeviceToken.objects.get_or_create(
+        token, modified = DeviceToken.objects.get_or_create(
             token=devicetoken, user=request.user.username)
-        if created:
+        if token.version != version:
+            token.version = version
+            modified = True
+        if token.pversion != pversion:
+            token.pversion = pversion
+            modified = True
+        if token.platform != platform:
+            token.platform = platform
+            modified = True
+
+        if modified:
             token.save()
         return Response("success")
 
@@ -1331,7 +1346,7 @@ class FileRevert(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
 
         return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
-    
+
 class FileRevision(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1612,7 +1627,7 @@ class DirDownloadView(APIView):
 
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
-    
+
 
 class DirShareView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1631,7 +1646,7 @@ class DirShareView(APIView):
         for email in [e.strip() for e in emails if e.strip()]:
             if not is_registered_user(email):
                 continue
-        
+
             if s_type == 'f':
                 pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
                     username, email, repo_id, path)
@@ -1644,7 +1659,7 @@ class DirShareView(APIView):
             # send a signal when sharing file successful
             share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
-    
+
 
 class DirSubRepoView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1658,14 +1673,13 @@ class DirSubRepoView(APIView):
         if it does not have, create one
         '''
 
-        content_type = 'application/json; charset=utf-8'
         result = {}
 
-        path = request.GET.get('p') 
+        path = request.GET.get('p')
         name = request.GET.get('name')
         if not (path and name):
             result['error'] = 'Argument missing'
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+            return HttpResponse(json.dumps(result), status=400, content_type=json_content_type)
 
         username = request.user.username
 
@@ -1674,7 +1688,7 @@ class DirSubRepoView(APIView):
             sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
         except SearpcError, e:
             result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+            return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
 
         if sub_repo:
             result['sub_repo_id'] = sub_repo.id
@@ -1686,9 +1700,9 @@ class DirSubRepoView(APIView):
                 result['sub_repo_id'] = sub_repo_id
             except SearpcError, e:
                 result['error'] = e.msg
-                return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+                return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
 
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return HttpResponse(json.dumps(result), content_type=json_content_type)
 
 class SharedRepos(APIView):
     """
@@ -1778,7 +1792,7 @@ class SharedFilesView(APIView):
         for e in priv_share_in:
             e.file_or_dir = os.path.basename(e.path.rstrip('/'))
             e.repo = seafile_api.get_repo(e.repo_id)
-    
+
         return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
                 status=200, content_type=json_content_type)
 
@@ -1789,25 +1803,24 @@ class SharedFilesView(APIView):
             pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
         except PrivateFileDirShare.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND, "Token does not exist")
-    
+
         from_user = pfs.from_user
         to_user = pfs.to_user
         username = request.user.username
 
         if username == from_user or username == to_user:
             pfs.delete()
-            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)    
+            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
         else:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to get repo.')
-    
+
 class VirtualRepos(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        content_type = 'application/json; charset=utf-8'
         result = {}
 
         username = request.user.username
@@ -1815,10 +1828,10 @@ class VirtualRepos(APIView):
             result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
         except SearpcError, e:
             result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+            return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
 
-        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
-    
+        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=json_content_type)
+
 class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, FileShare):
@@ -1849,7 +1862,7 @@ class SharedLinksView(APIView):
                         fs.delete()
                         continue
                     fs.filename = os.path.basename(fs.path)
-                    fs.shared_link = gen_file_share_link(fs.token) 
+                    fs.shared_link = gen_file_share_link(fs.token)
                 else:
                     if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
                         fs.delete()
@@ -1863,7 +1876,7 @@ class SharedLinksView(APIView):
     def delete(self, request, format=None):
         token = request.GET.get('t')
         FileShare.objects.filter(token=token).delete()
-        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
 
 class DefaultRepoView(APIView):
     """
@@ -1925,7 +1938,7 @@ class SharedRepo(APIView):
         if not is_valid_username(user):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'User is not valid')
-            
+
         group_id = request.GET.get('group_id', '')
         if not (share_type and user and group_id):
             return api_error(status.HTTP_400_BAD_REQUEST,
@@ -2054,7 +2067,7 @@ def events(request):
 
     return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
                                     'new_start': start}),
-                            content_type='application/json; charset=utf-8')
+                            content_type=json_content_type)
 
 
 @group_check
@@ -2093,7 +2106,7 @@ def group_discuss(request, group):
         ctx['msg'] = message
         html = render_to_string("api2/discussion_posted.html", ctx)
         serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type="application/json; charset=utf-8")
+        return HttpResponse(serialized_data, content_type=json_content_type)
 
     group_msgs = get_group_msgs(group.id, page=1, username=request.user.username)
     # remove user notifications
@@ -2101,6 +2114,42 @@ def group_discuss(request, group):
     return render_to_response("api2/discussions.html", {
             "group" : group,
             "group_msgs": group_msgs,
+            }, context_instance=RequestContext(request))
+
+
+def user_messages(request, id_or_email):
+    try:
+        uid = int(id_or_email)
+        try:
+            user = User.objects.get(id=uid)
+        except User.DoesNotExist:
+            user = None
+        if not user:
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+        to_email = user.email
+    except ValueError:
+        to_email = id_or_email
+
+    username = request.user.username
+
+    if request.method == 'POST':
+        mass_msg = request.POST.get('message')
+        if not mass_msg:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        ctx = { 'msg' : usermsg }
+        html = render_to_string("api2/user_msg.html", ctx)
+        serialized_data = json.dumps({"html": html})
+        return HttpResponse(serialized_data, content_type=json_content_type)
+
+    UserNotification.objects.seen_user_msg_notices(username, to_email)
+    UserMessage.objects.update_unread_messages(to_email, username)
+    person_msgs = get_person_msgs(to_email, 1, username)
+
+    return render_to_response("api2/user_msg_list.html", {
+            "person_msgs": person_msgs,
+            "to_email": to_email,
             }, context_instance=RequestContext(request))
 
 
@@ -2166,9 +2215,70 @@ def get_group_msgs(groupid, page, username):
 
     return group_msgs
 
+def get_person_msgs(to_email, page, username):
+
+    # Show 15 group messages per page.
+    paginator = Paginator(UserMessage.objects.get_messages_between_users(username, to_email).order_by('-timestamp'), 15)
+
+    # If page request (9999) is out of range, return None
+    try:
+        person_msgs = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        person_msgs = paginator.page(paginator.num_pages)
+
+    # Force evaluate queryset to fix some database error for mysql.
+    person_msgs.object_list = list(person_msgs.object_list)
+    attachments = UserMsgAttachment.objects.list_attachments_by_user_msgs(person_msgs.object_list)
+
+    for msg in person_msgs.object_list:
+            msg.attachments = []
+            for att in attachments:
+                if att.user_msg != msg:
+                    continue
+
+                pfds = att.priv_file_dir_share
+                if pfds is None: # in case that this attachment is unshared.
+                    continue
+
+                att.repo_id = pfds.repo_id
+                att.path = pfds.path
+                att.name = os.path.basename(pfds.path.rstrip('/'))
+                att.token = pfds.token
+                msg.attachments.append(att)
+
+    return person_msgs
+
+
+def more_usermsgs(request, id_or_email):
+    try:
+        page = int(request.GET.get('page'))
+    except ValueError:
+        page = 2
+
+    try:
+        uid = int(id_or_email)
+        try:
+            user = User.objects.get(id=uid)
+        except User.DoesNotExist:
+            user = None
+        if not user:
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+        to_email = user.email
+    except ValueError:
+        to_email = id_or_email
+
+    person_msgs = get_person_msgs(to_email, page, request.user.username)
+    if person_msgs.has_next():
+        next_page = person_msgs.next_page_number()
+    else:
+        next_page = None
+
+    html = render_to_string('api2/user_msg_body.html', {"person_msgs": person_msgs}, context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
+
+
 @group_check
 def more_discussions(request, group):
-    content_type = 'application/json; charset=utf-8'
     try:
         page = int(request.GET.get('page'))
     except ValueError:
@@ -2181,7 +2291,7 @@ def more_discussions(request, group):
         next_page = None
 
     html = render_to_string('api2/discussions_body.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=content_type)
+    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
 
 def discussion(request, msg_id):
     try:
@@ -2231,7 +2341,6 @@ def discussion(request, msg_id):
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
 
-    content_type = 'application/json; charset=utf-8'
     ctx = {}
     try:
         group_msg = GroupMessage.objects.get(id=msg_id)
@@ -2255,26 +2364,25 @@ def msg_reply(request, msg_id):
     ctx['r'] = msg_reply
     html = render_to_string("api2/reply.html", ctx)
     serialized_data = json.dumps({"html": html})
-    return HttpResponse(serialized_data, content_type=content_type)
+    return HttpResponse(serialized_data, content_type=json_content_type)
 
 
 def repo_history_changes(request, repo_id):
     changes = {}
-    content_type = 'application/json; charset=utf-8'
 
     if not access_to_repo(request, repo_id, ''):
-        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=json_content_type)
 
     repo = get_repo(repo_id)
     if not repo:
-        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=json_content_type)
 
     changes = get_diff(repo_id, '', commit_id)
 
@@ -2293,7 +2401,7 @@ def repo_history_changes(request, repo_id):
         changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
 
     html = render_to_string('api2/event_details.html', {'changes': changes})
-    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+    return HttpResponse(json.dumps({"html": html}), content_type=json_content_type)
 
 
 def msg_reply_new(request):
@@ -2343,50 +2451,128 @@ def msg_reply_new(request):
             }, context_instance=RequestContext(request))
 
 
+def get_groups(email):
+    group_json = []
+
+    joined_groups = get_personal_groups_by_user(email)
+    grpmsgs = {}
+    for g in joined_groups:
+        grpmsgs[g.id] = 0
+
+    notes = UserNotification.objects.get_user_notifications(email, seen=False)
+    replynum = 0;
+    for n in notes:
+        if n.is_group_msg():
+            try:
+                gid  = n.group_message_detail_to_dict().get('group_id')
+            except UserNotification.InvalidDetailError:
+                continue
+            if gid not in grpmsgs:
+                continue
+            grpmsgs[gid] = grpmsgs[gid] + 1
+        elif n.is_grpmsg_reply():
+            replynum = replynum + 1
+
+    for g in joined_groups:
+        msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
+        mtime = 0
+        if len(msg) >= 1:
+            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+        group = {
+            "id":g.id,
+            "name":g.group_name,
+            "creator":g.creator_name,
+            "ctime":g.timestamp,
+            "mtime":mtime,
+            "msgnum":grpmsgs[g.id],
+            }
+        group_json.append(group)
+    return group_json, replynum
+
+
+def get_contacts(email):
+    group_json = []
+    contacts_json = []
+    gmsgnum = umsgnum = replynum = 0
+
+    contacts = Contact.objects.filter(user_email=email)
+    joined_groups = get_personal_groups_by_user(email)
+    gmsgnums = umsgnums = {}
+
+    notes = UserNotification.objects.get_user_notifications(email, seen=False)
+    for n in notes:
+        if n.is_group_msg():
+            try:
+                gid  = n.group_message_detail_to_dict().get('group_id')
+            except UserNotification.InvalidDetailError:
+                continue
+            gmsgnums[gid] = gmsgnums.get(gid, 0) + 1
+        elif n.is_grpmsg_reply():
+            replynum = replynum + 1
+        elif n.is_user_message():
+            umsgnums[n.detail] = umsgnums.get(n.detail, 0) + 1
+
+    for g in joined_groups:
+        msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
+        mtime = 0
+        if len(msg) >= 1:
+            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+        group = {
+            "id":g.id,
+            "name":g.group_name,
+            "creator":g.creator_name,
+            "ctime":g.timestamp,
+            "mtime":mtime,
+            "msgnum":gmsgnums.get(g.id, 0),
+            }
+
+        gmsgnum = gmsgnum + gmsgnums.get(g.id, 0)
+        group_json.append(group)
+
+    for contact in contacts:
+        msg = UserMessage.objects.get_messages_related_to_user(
+            contact.contact_email).order_by('-timestamp')[:1]
+        mtime = 0
+        if len(msg) >= 1:
+            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+        c = {
+            'email' : contact.contact_email,
+            'name' : email2nickname(contact.contact_email),
+            "msgnum" : umsgnums.get(contact.contact_email, 0),
+            "mtime" : mtime,
+            }
+        umsgnum = umsgnum + umsgnums.get(contact.contact_email, 0)
+        contacts_json.append(c)
+
+    return contacts_json, umsgnum, group_json, replynum, gmsgnum
+
+
 class Groups(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        email = request.user.username
-        group_json = []
-
-        joined_groups = get_personal_groups_by_user(email)
-        grpmsgs = {}
-        for g in joined_groups:
-            grpmsgs[g.id] = 0
-
-        notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
-        replynum = 0;
-        for n in notes:
-            if n.is_group_msg():
-                try:
-                    gid  = n.group_message_detail_to_dict().get('group_id')
-                except UserNotification.InvalidDetailError:
-                    continue
-                if gid not in grpmsgs:
-                    continue
-                grpmsgs[gid] = grpmsgs[gid] + 1
-            elif n.is_grpmsg_reply():
-                replynum = replynum + 1
-
-        for g in joined_groups:
-            msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
-            mtime = 0
-            if len(msg) >= 1:
-                mtime = int(time.mktime(msg[0].timestamp.timetuple()))
-            group = {
-                "id":g.id,
-                "name":g.group_name,
-                "creator":g.creator_name,
-                "ctime":g.timestamp,
-                "mtime":mtime,
-                "msgnum":grpmsgs[g.id],
-                }
-            group_json.append(group)
+        group_json, replynum = get_groups(request.user.username)
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
+
+class Contacts(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        contacts, umsgnum, group_json, replynum, gmsgnum = get_contacts(request.user.username)
+        res = {
+            "groups": group_json,
+            "contacts": contacts,
+            "replynum": replynum,
+            "umsgnum" : umsgnum,
+            "gmsgnum" : gmsgnum,
+            }
+        return Response(res)
+
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2403,6 +2589,15 @@ class AjaxDiscussions(APIView):
 
     def get(self, request, group_id, format=None):
         return more_discussions(request, group_id)
+
+class AjaxUserMsgs(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, id_or_email, format=None):
+        return more_usermsgs(request, id_or_email)
+
 
 class EventsView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2519,6 +2714,16 @@ class DiscussionsHtml(APIView):
     def post(self, request, group_id, format=None):
         return group_discuss(request, group_id)
 
+class UserMsgsHtml(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, id_or_email, format=None):
+        return user_messages(request, id_or_email)
+
+    def post(self, request, id_or_email, format=None):
+        return user_messages(request, id_or_email)
 
 class DiscussionHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2574,3 +2779,11 @@ def api_msg_reply(request, msg_id):
 @login_required
 def api_new_replies(request):
     return msg_reply_new(request)
+
+@login_required
+def api_usermsgs(request, id_or_email):
+    return user_messages(request, id_or_email)
+
+@login_required
+def api_more_usermsgs(request, id_or_email):
+    return more_usermsgs(request, id_or_email)
