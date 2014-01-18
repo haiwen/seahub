@@ -1,0 +1,52 @@
+{% extends "myhome_base.html" %}
+{% block title %}注册{% endblock %}
+{% block main_panel %}
+<div class="narrow-panel">
+{% if request.user.is_authenticated %}
+    <h2>欢迎回来，您已登录。</h2>
+{% else %}
+    <h2>注册企业帐号</h2>
+    <form action="" method="post">{% csrf_token %}
+        <label for="id_email">邮箱：</label>
+        {{ form.email }}
+        <label for="id_password1">密码：</label>
+        {{ form.password1 }}
+        <label for="id_password2">确认密码：</label>
+        {{ form.password2 }}
+        <label for="id_org_name">企业名称：</label>
+        {{ form.org_name}}
+        <lable for="id_url_prefix">域名前缀：</label>
+        {{ form.url_prefix }}
+        <p class="error hide"></p>
+        {{ form.email.errors }}
+        {{ form.password1.errors }}
+        {{ form.password2.errors }}
+        {{ form.url_prefix.errors }}
+        <input type="submit" value="提交" class="submit" />
+    </form>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('input[type="submit"]').click(function(){
+        if (!$.trim($('input[name="email"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请输入邮箱。');
+            return false;
+        }
+        if (!$.trim($('input[name="password1"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请输入密码。');
+            return false;
+        }
+        if (!$.trim($('input[name="password2"]').attr('value'))) {
+            $('.error').removeClass('hide').html('请确认密码。');
+            return false;
+        }
+        if ($.trim($('input[name="password1"]').attr('value')) != $.trim($('input[name="password2"]').attr('value'))) {
+            $('.error').removeClass('hide').html('两次输入的密码不一致。');
+            return false;
+        }
+   });
+</script>
+{% endblock %}

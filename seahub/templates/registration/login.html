@@ -35,11 +35,6 @@
     {% if enable_signup %}
     <a href="{{ SITE_ROOT }}accounts/register/" style="font-size:13px;">{% trans "Signup" %}</a>
     {% endif %}
-
-    {% if multi_tenancy %}
-    <a href="{% url 'org_register' %}" style="font-size:13px;">{% trans "Create a business account" %}</a>
-    {% endif %}
-    
 </form>
 </div>
 {% endblock %}
