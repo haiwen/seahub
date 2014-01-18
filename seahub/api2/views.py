@@ -2490,7 +2490,7 @@ def get_groups(email):
     return group_json, replynum
 
 
-def get_contacts(email):
+def get_group_and_contacts(email):
     group_json = []
     contacts_json = []
     gmsgnum = umsgnum = replynum = 0
@@ -2559,13 +2559,13 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
-class Contacts(APIView):
+class GroupAndContacts(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        contacts, umsgnum, group_json, replynum, gmsgnum = get_contacts(request.user.username)
+        contacts, umsgnum, group_json, replynum, gmsgnum = get_group_and_contacts(request.user.username)
         res = {
             "groups": group_json,
             "contacts": contacts,
