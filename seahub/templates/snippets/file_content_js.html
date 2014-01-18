@@ -79,6 +79,10 @@ window.onload = function () {
     {% include 'snippets/office_convert_js.html' %}
 {% endif %}
 
+{% if filetype == 'SpreadSheet' %}
+    {% include 'snippets/spreadsheet_convert_js.html' %}
+{% endif %}
+
 {% if filetype == 'PDF' and use_pdfjs %}
 if (!($.browser.msie && parseInt($.browser.version) < 10)) {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';

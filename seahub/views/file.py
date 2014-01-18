@@ -45,7 +45,7 @@ from seahub.utils import show_delete_days, render_error, \
     get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path
-from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
+from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, SPREADSHEET, MARKDOWN, \
                                          TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -194,6 +194,9 @@ def handle_document(raw_path, obj_id, fileext, ret_dict):
     else:
         ret_dict['filetype'] = 'Unknown'
 
+def handle_spreadsheet(raw_path, obj_id, fileext, ret_dict):
+    handle_document(raw_path, obj_id, fileext, ret_dict)
+
 def handle_pdf(raw_path, obj_id, fileext, ret_dict):
     if USE_PDFJS:
         # use pdfjs to preview PDF
@@ -334,6 +337,8 @@ def view_file(request, repo_id):
                 ret_dict['file_content'] = convert_md_link(c, repo_id, username)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == SPREADSHEET:
+            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == OPENDOCUMENT:
             if fsize == 0:
                 ret_dict['err'] = _(u'Invalid file format.')
@@ -411,6 +416,7 @@ def view_file(request, repo_id):
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
 
     template = 'view_file_%s.html' % ret_dict['filetype'].lower()
+        
     search_repo_id = None
     if not repo.encrypted:
         search_repo_id = repo.id
@@ -502,6 +508,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_textual_file(request, filetype, inner_path, ret_dict)
             elif filetype == DOCUMENT:
                 handle_document(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == SPREADSHEET:
+                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
             elif filetype == PDF:
                 handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
@@ -618,6 +626,8 @@ def view_shared_file(request, token):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == SPREADSHEET:
+            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
@@ -711,6 +721,8 @@ def view_file_via_shared_dir(request, token):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == SPREADSHEET:
+            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
@@ -1128,6 +1140,8 @@ def view_priv_shared_file(request, token):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == SPREADSHEET:
+            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 

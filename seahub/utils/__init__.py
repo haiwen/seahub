@@ -64,7 +64,8 @@ MAX_INT = 2147483647
 PREVIEW_FILEEXT = {
     TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico'),
-    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx',),
+    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx'),
+    SPREADSHEET: ('xls', 'xlsx'),
     # SVG: ('svg',),
     PDF: ('pdf',),
     OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp', 'ods', 'fods'),
@@ -775,7 +776,7 @@ if HAS_OFFICE_CONVERTER:
             logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error'), False
         else:
-            if ret.exists:
+            if ret.exists and (doctype not in ('xls', 'xlsx')):
                 try:
                     ret_dict['html_detail'] = get_converted_html_detail(obj_id)
                 except:

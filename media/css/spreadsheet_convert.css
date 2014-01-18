@@ -1,0 +1,8 @@
+
+#spreadsheet-container iframe {
+    margin: auto;
+    max-width: 800px;
+    min-height: 500px;
+    max-height: 1000px;
+    overflow: auto;
+};

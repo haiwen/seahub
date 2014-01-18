@@ -43,6 +43,11 @@ For details please refer to 'snippets/file_content_js.html'.
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
             {% include 'snippets/office_convert_html.html' %}
         {% endif %}
+
+        {% if filetype == 'SpreadSheet' %}
+            {% include 'snippets/spreadsheet_convert_html.html' %}
+        {% endif %}
+
     {% else %}
     <div id="file-view-tip">
         <p class="error">{{ err }}</p>
