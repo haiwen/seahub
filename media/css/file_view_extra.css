@@ -56,3 +56,6 @@
 #md-view {
     min-height:400px;
 }
+#md-view img {
+    max-width: 100%;
+}

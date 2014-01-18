@@ -805,7 +805,6 @@ textarea:-moz-placeholder {/* for FF */
     padding:6px 13px;
     border:1px solid #ccc;
 }
-
 /********** container ***********/
 #main, #footer,
 #repo-top .block-inner,
@@ -2131,18 +2130,33 @@ textarea:-moz-placeholder {/* for FF */
 #wiki-content h2 {
     border-bottom: 1px solid #ccc;
 }
+.wiki-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;     
+    max-width: 100%;
+}
 #wiki-content img {
     padding: 5px; 
     border: 1px solid #DDD;
     box-shadow: 0 1px 1px #CCC;
     border-radius: 2px; 
-    max-width:938px;
+    max-width:688px;
     margin:15px 0;
 }
-.wiki-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;     
+#wiki-content .file-icon {
+    border:0;
+    padding:0;
+    border-radius:0;
+    box-shadow:none;
+    margin:0 2px 0 0;
+}
+.anchor {
+   font-size:0.8em;
+   margin-left:6px; 
+}
+.anchor:hover {
+   text-decoration:none; 
 }
 #svg-view {
     min-height:500px;/*for ff*/
@@ -2593,4 +2607,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 .help-con {
 	padding:0 0 0 60px;
+}
+/* wiki index */
+.wiki-index {
+    margin-top:25px;
+}
+.wiki-index h3 {
+    border-bottom:1px solid #ddd;
+}
+.wiki-index ul {
+    list-style-type: square;
+    padding-left: 1.5em;
+    margin-bottom:5px;
 }

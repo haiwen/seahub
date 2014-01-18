@@ -15,7 +15,7 @@ from share.views import user_share_list, gen_private_file_share, \
     rm_private_file_share, save_private_file_share
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
-    personal_wiki_page_delete
+    personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate, sys_publink_admin, \
@@ -48,6 +48,7 @@ urlpatterns = patterns('',
     url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
     url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
+    url(r'^home/wiki_use_lib/$', personal_wiki_use_lib, name='personal_wiki_use_lib'),
     url(r'^home/wiki_page_new/$', personal_wiki_page_new, name='personal_wiki_page_new'),
     url(r'^home/wiki_page_edit/(?P<page_name>[^/]+)$', personal_wiki_page_edit, name='personal_wiki_page_edit'),
     url(r'^home/wiki_page_delete/(?P<page_name>[^/]+)$', personal_wiki_page_delete, name='personal_wiki_page_delete'),
@@ -197,29 +198,24 @@ if getattr(settings, 'CLOUD_MODE', False):
     urlpatterns += patterns('',
         (r'^demo/', demo),
     )
-
-urlpatterns += patterns('',
+else:
+    urlpatterns += patterns('',
         url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
         (r'^publicrepo/create/$', public_repo_create),
         url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
         url(r'^pubinfo/users/$', pubuser, name='pubuser'),
-)
-
-if getattr(settings, 'MULTI_TENANCY', False):
-    urlpatterns += patterns('',
-        (r'^org/', include('seahub_extra.organizations.urls')),
     )
 
-if getattr(settings, 'ENABLE_PAYMENT', False):
-    urlpatterns += patterns('',
-        (r'^pay/', include('seahub_extra.pay.urls')),
-    )
-    
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search
     urlpatterns += patterns('',
         url(r'^search/$', search, name='search'),
+    )
+
+if getattr(settings, 'ENABLE_PAYMENT', False):
+    urlpatterns += patterns('',
+        (r'^pay/', include('seahub_extra.pay.urls')),
     )
 
 # serve office converter static files

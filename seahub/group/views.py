@@ -1326,12 +1326,15 @@ def group_wiki(request, group, page_name="home"):
         content, repo, dirent = get_group_wiki_page(username, group, page_name)
     except WikiDoesNotExist:
         wiki_exists = False
+        group_repos = get_group_repos(group.id, username)
+        group_repos = [r for r in group_repos if not r.encrypted]
         return render_to_response("group/group_wiki.html", {
                 "group" : group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
                 "mods_enabled": mods_enabled,
                 "mods_available": mods_available,
+                "group_repos": group_repos,
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         '''create that page for user if he/she is a group member'''
@@ -1358,22 +1361,35 @@ def group_wiki(request, group, page_name="home"):
         latest_contributor = contributors[0] if contributors else None
 
         repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
+
+        wiki_index_exists = True
+        index_pagename = 'index'
+        index_content = None
+        try:
+            index_content, index_repo, index_dirent = get_group_wiki_page(username, group, index_pagename)
+        except (WikiDoesNotExist, WikiPageMissing) as e:
+            wiki_index_exists = False
+        else:
+            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
+
         return render_to_response("group/group_wiki.html", {
-                "group" : group,
-                "is_staff": group.is_staff,
-                "wiki_exists": wiki_exists,
-                "content": content,
-                "page": os.path.splitext(dirent.obj_name)[0],
-                "last_modified": last_modified,
-                "latest_contributor": latest_contributor,
-                "path": path,
-                "repo_id": repo.id,
-                "search_repo_id": repo.id,
-                "search_wiki": True,
-                "mods_enabled": mods_enabled,
-                "mods_available": mods_available,
-                "repo_perm": repo_perm,
-                }, context_instance=RequestContext(request))
+            "group" : group,
+            "is_staff": group.is_staff,
+            "wiki_exists": wiki_exists,
+            "content": content,
+            "page": os.path.splitext(dirent.obj_name)[0],
+            "last_modified": last_modified,
+            "latest_contributor": latest_contributor,
+            "path": path,
+            "repo_id": repo.id,
+            "search_repo_id": repo.id,
+            "search_wiki": True,
+            "mods_enabled": mods_enabled,
+            "mods_available": mods_available,
+            "repo_perm": repo_perm,
+            "wiki_index_exists": wiki_index_exists,
+            "index_content": index_content,
+            }, context_instance=RequestContext(request))
 
 @group_check
 def group_wiki_pages(request, group):
@@ -1453,6 +1469,30 @@ def group_wiki_create(request, group):
 
     next = reverse('group_wiki', args=[group.id])
     return HttpResponse(json.dumps({'href': next}), content_type=content_type)
+
+@group_check
+def group_wiki_use_lib(request, group):
+    if group.view_perm == "pub":
+        raise Http404
+    if request.method != 'POST':
+        raise Http404
+    repo_id = request.POST.get('dst_repo', '')
+    username = request.user.username
+    next = reverse('group_wiki', args=[group.id])
+    repo = seafile_api.get_repo(repo_id)
+    if repo is None:
+        messages.error(request, _('Failed to set wiki library.'))
+        return HttpResponseRedirect(next)
+
+    GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
+
+    # create home page if not exist
+    page_name = "home.md"
+    if not seaserv.get_file_id_by_path(repo_id, "/" + page_name):
+        if not seaserv.post_empty_file(repo_id, "/", page_name, username):
+            messages.error(request, _('Failed to create home page. Please retry later'))
+
+    return HttpResponseRedirect(next)
 
 @group_check
 def group_wiki_page_new(request, group, page_name="home"):

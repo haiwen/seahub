@@ -9,7 +9,7 @@
     <li>
         <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>{% trans "Groups" %}</a>
     </li>
-    {% if request.user.org or not cloud_mode %}
+    {% if not cloud_mode %}
     <li>
         <a href="{% url 'pubrepo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Organization" %}</a>
     </li>

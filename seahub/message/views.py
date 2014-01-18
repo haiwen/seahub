@@ -142,6 +142,9 @@ def message_send(request):
     attached_items = []
     if len(selected) > 0:
         for item in selected:
+            if item[-1] == '/': # dir is not allowed, for now
+                continue
+
             att = {}
             att['repo_id'] = item[0:36]
             att['path'] = item[36:]

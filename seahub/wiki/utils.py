@@ -161,7 +161,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             icon = file_icon_filter(page_name)
             s = reverse('repo_view_file', args=[repo_id]) + \
                 '?p=' + urlquote(path)
-            a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
+            a_tag = '''<img src="%simg/file/%s" alt="%s" class="file-icon vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
             ret = a_tag % (settings.MEDIA_URL, icon, icon, smart_str(s), page_name)
             return smart_str(ret)
 
