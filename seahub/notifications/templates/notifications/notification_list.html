@@ -1,24 +1,18 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load i18n %}
-{% block nav_notificationadmin_class %}class="cur"{% endblock %}
 
-{% block left_panel %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Operations" %}</h3>
-    <ul class="info-item-bottom op-list">
-        <li><a href="#" id="add-n">{% trans "Add new notification" %}</a></li>
-    </ul>
-</div>
+{% block cur_notice %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "All Notifications" %}</h3>
+
+<button id="add-n">{% trans "Add new notification" %}</button>
 <form action="{% url 'notification_add' %}" method="post" class="hide" id="add-n-form">{% csrf_token %}
     <h3>{% trans "Add new notification" %}</h3>
     <textarea name="message" class="textarea"></textarea><br />
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
-{% endblock %}
-
-{% block right_panel %}
-<h3>{% trans "All Notifications" %}</h3>
 {% if notes %}
 <table>
     <tr>

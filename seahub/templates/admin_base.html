@@ -3,26 +3,5 @@
 
 {% block sys_admin %}<a href="{{ SITE_ROOT }}home/my/" title="{% trans "Exit System Admin" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>{% endblock %}
 
-{% block nav %}
-<ul class="nav">
-    {% if request.user.is_staff %}
-    <li>
-        <a href="{{ SITE_ROOT }}sys/seafadmin/" {% block nav_seafadmin_class %}{% endblock %}>{% trans "Libraries" %}</a>
-    </li>
-    <li>
-        <a href="{{ SITE_ROOT }}sys/useradmin/" {% block nav_useradmin_class %}{% endblock %}>{% trans "Users" %}</a>
-    </li>
-    <li>
-        <a href="{{ SITE_ROOT }}sys/groupadmin/" {% block nav_groupadmin_class %}{% endblock %}>{% trans "Groups" %}</a>
-    </li>
-    <li>
-        <a href="{{ SITE_ROOT }}sys/notificationadmin/" {% block nav_notificationadmin_class %}{% endblock %}>{% trans "Notifications" %}</a>
-    </li>
-    <li>
-        <a href="{{ SITE_ROOT }}sys/publinkadmin/" {% block nav_publinkadmin_class %}{% endblock %}>{% trans "Links" %}</a>
-    </li>
-
-    {% endif %}
-</ul>
-{% endblock %}
+{% block nav %}{% endblock %}
 

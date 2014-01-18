@@ -1,8 +1,8 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
-{% block nav_useradmin_class %}class="cur"{% endblock %}
+{% block cur_users %}tab-cur{% endblock %}
 
-{% block title_panel %}
+{% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "Database" %}</li>
@@ -10,12 +10,8 @@
         <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
     </ul>
-    <button class="icon-search fright" id="search-user-btn"> {% trans "Search" %}</button>    
+    <button class="icon-search fright" id="search-user-btn">{% trans "Search" %}</button>    
 </div>
-
-{% endblock %}
-
-{% block main_panel %}
 
 <button id="add-user-btn"><span class="add icon-plus-sign-alt"></span>{% trans "Add new user" %}</button>
 

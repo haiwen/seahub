@@ -1,8 +1,9 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
-{% block nav_useradmin_class %}class="cur"{% endblock %}
 
-{% block title_panel %}
+{% block cur_users %}tab-cur{% endblock %}
+
+{% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
@@ -10,14 +11,12 @@
     </ul>
     <button class="icon-search fright" id="search-user-btn"> {% trans "Search" %}</button>    
 </div>
-{% endblock %}
 
-{% block main_panel %}
 <table>
     <tr>
-        <th width="65%">{% trans "Email" %}</th>
-        <th width="15%">{% trans "Create At / Last Login" %}</th>
-        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="40%">{% trans "Email" %}</th>
+        <th width="35%">{% trans "Create At / Last Login" %}</th>
+        <th width="25%">{% trans "Space Used" %}</th>
     </tr>
 
     {% for user in users %}

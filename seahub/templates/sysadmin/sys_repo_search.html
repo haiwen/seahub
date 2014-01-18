@@ -1,7 +1,9 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 
-{% block main_panel %}
+{% block cur_repo %}tab-cur{% endblock %}
+
+{% block right_panel %}
 <h3>{% trans "Search Library"%}</h3>
 
 <form id="search-repo-form" method="get" action=".">

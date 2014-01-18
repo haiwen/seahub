@@ -1,7 +1,9 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 
-{% block main_panel %}
+{% block cur_users %}tab-cur{% endblock %}
+
+{% block right_panel %}
 <h3>{% trans "Search User"%}</h3>
 
 <form id="search-user-form" method="get" action=".">
@@ -31,6 +33,5 @@ $('#search-user-form').submit(function() {
 });
 
 {% include "sysadmin/useradmin_js.html" %}
-
 </script>
 {% endblock %}

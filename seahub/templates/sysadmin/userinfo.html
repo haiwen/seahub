@@ -2,8 +2,6 @@
 {% load i18n avatar_tags %}
 {% load url from future %}
 
-{% block nav_useradmin_class %}class="cur"{% endblock %}
-
 {% block extra_style %}
 <style type="text/css">
 #set-quota-form {
@@ -17,6 +15,9 @@
     <h3 class="hd">{% trans "Profile" %}</h3>
     {% avatar email 48 %}
     <dl>
+        <dt>{% trans "Email" %}</dt>
+        <dd>{{ email }}</dd>
+
         {% if profile %}
         <dt>{% trans "Name" context "true name" %}</dt>
         <dd>{{ profile.nickname }}</dd>

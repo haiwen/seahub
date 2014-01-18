@@ -1,17 +1,19 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load i18n seahub_tags %}
-{% block nav_publinkadmin_class %}class="cur"{% endblock %}
 
-{% block main_panel %}
-<h3>{% trans "All Public Links" %}</h3>
+{% block cur_links %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "All Public Links" %}</h3>
+
 {% if publinks %}
 <table>
     <tr>
         <th width="20%">{% trans "Name" %}</th>
         <th width="20%">{% trans "Owner" %}</th>
         <th width="20%">{% trans "Create At" %}</th>
-        <th width="30%">{% trans "Count" %}</th>
-        <th width="10%">{% trans "Operations" %}</th>
+        <th width="15%">{% trans "Count" %}</th>
+        <th width="25%">{% trans "Operations" %}</th>
     </tr>
     {% for publink in publinks %}
     <tr>

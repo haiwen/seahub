@@ -1,11 +1,12 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 {% load url from future %}
 
-{% block nav_groupadmin_class %}class="cur"{% endblock %}
+{% block cur_groups %}tab-cur{% endblock %}
 
-{% block main_panel %}
-<h3>{% trans "All Groups" %}</h3>
+{% block right_panel %}
+<h3 class="hd">{% trans "All Groups" %}</h3>
+
 {% if groups %}
 <table>
     <tr>

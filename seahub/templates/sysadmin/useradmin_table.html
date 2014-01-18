@@ -1,11 +1,11 @@
-{%load seahub_tags i18n%}
+{% load seahub_tags i18n %}
 <table>
     <tr>
         <th width="30%">{% trans "Email" %}</th>
         <th width="10%">{% trans "Status" %}</th>
         <th width="20%">{% trans "Space Used" %}</th>
-        <th width="15%">{% trans "Create At / Last Login" %}</th>
-        <th width="25%">{% trans "Operations" %}</th>
+        <th width="22%">{% trans "Create At / Last Login" %}</th>
+        <th width="18%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -36,9 +36,11 @@
             {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
             {% endif %}
         </td>
-        <td style="font-size:11px;">{% if user.source != 'LDAP' %}
-        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
-        {% endif %}
+        <td style="font-size:11px;">
+            {% if user.source != 'LDAP' %}
+            {{ user.ctime|tsstr_sec }} /<br />
+            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            {% endif %}
         </td>
         <td>
           {% if user.source != 'LDAP' %}

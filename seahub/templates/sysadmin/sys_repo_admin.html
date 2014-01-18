@@ -1,8 +1,9 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load i18n %}
-{% block nav_seafadmin_class %}class="cur"{% endblock %}
+{% block cur_repo %}tab-cur{% endblock %}
 
-{% block title_panel %}
+{% block right_panel %}
+
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur">{% trans "All" %}</li>
@@ -12,9 +13,6 @@
     <button class="icon-search fright" id="search-repo-btn"> {% trans "Search" %}</button>    
 </div>
 
-{% endblock %}
-
-{% block main_panel %}
 {% if repos %}
 {% include "sysadmin/repoadmin_table.html" %}
 
