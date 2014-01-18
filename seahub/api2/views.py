@@ -2495,7 +2495,7 @@ def get_contacts(email):
     contacts_json = []
     gmsgnum = umsgnum = replynum = 0
 
-    contacts = Contact.objects.filter(user_email=email)
+    contacts = [c.contact_email for c in Contact.objects.filter(user_email=email)]
     joined_groups = get_personal_groups_by_user(email)
     gmsgnums = umsgnums = {}
 
@@ -2510,6 +2510,8 @@ def get_contacts(email):
         elif n.is_grpmsg_reply():
             replynum = replynum + 1
         elif n.is_user_message():
+            if n.detail not in contacts:
+                contacts.append(n.detail)
             umsgnums[n.detail] = umsgnums.get(n.detail, 0) + 1
 
     for g in joined_groups:
@@ -2531,19 +2533,19 @@ def get_contacts(email):
 
     for contact in contacts:
         msg = UserMessage.objects.get_messages_related_to_user(
-            contact.contact_email).order_by('-timestamp')[:1]
+            contact).order_by('-timestamp')[:1]
         mtime = 0
         if len(msg) >= 1:
             mtime = int(time.mktime(msg[0].timestamp.timetuple()))
         c = {
-            'email' : contact.contact_email,
-            'name' : email2nickname(contact.contact_email),
-            "msgnum" : umsgnums.get(contact.contact_email, 0),
+            'email' : contact,
+            'name' : email2nickname(contact),
+            "msgnum" : umsgnums.get(contact, 0),
             "mtime" : mtime,
             }
-        umsgnum = umsgnum + umsgnums.get(contact.contact_email, 0)
+        umsgnum = umsgnum + umsgnums.get(contact, 0)
         contacts_json.append(c)
-
+    contacts_json.sort(key=lambda x: x["mtime"], reverse=True)
     return contacts_json, umsgnum, group_json, replynum, gmsgnum
 
 
