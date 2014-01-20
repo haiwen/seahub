@@ -203,6 +203,7 @@ else:
         (r'^publicrepo/create/$', public_repo_create),
         url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
         url(r'^pubinfo/users/$', pubuser, name='pubuser'),
+        url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     )
 
 from seahub.utils import HAS_FILE_SEARCH
