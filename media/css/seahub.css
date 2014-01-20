@@ -217,6 +217,10 @@ p { margin:0.5em 0; }
     cursor:pointer;
     margin-right:3px;
 }
+.op-icon:hover {/** for <a> **/
+    color:#888;
+    text-decoration:none;
+}
 .big-more-btn {
     padding:.5em 0;
     color:#777;
