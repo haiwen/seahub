@@ -1848,10 +1848,15 @@ def pubuser_search(request):
 
     profile_all = Profile.objects.all().values('user', 'nickname')
     for p in profile_all:
-        if email_or_nickname in p['nickname']:
-            can_be_contact = True if p['user'] not in contact_emails else False
-            search_result.append({'email': p['user'],
-                                  'can_be_contact': can_be_contact})
+        if email_or_nickname not in p['nickname']:
+            continue
+
+        if p['user'] in [ x['email'] for x in search_result ]:
+            continue            # remove duplicated record
+            
+        can_be_contact = True if p['user'] not in contact_emails else False
+        search_result.append({'email': p['user'],
+                              'can_be_contact': can_be_contact})
 
     return render_to_response('pubuser.html', {
             'search': email_or_nickname,
