@@ -2,7 +2,30 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block extra_style %}
+<style type="text/css">
+#search-org-user-form {
+    margin-top:25px;
+}
+#search-org-user-form .input {
+    width:188px;
+    padding:2px 5px;
+    background:#fafafa;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+}
+#search-org-user-form .input:focus {
+    background:#fff;
+}
+</style>
+{% endblock %}
+
 {% block cur_user %}tab-cur{% endblock %}
+
+{% block left_panel %}{{block.super}}
+<form action="{% url "pubuser_search" %}" method="get" id="search-org-user-form">
+    <input type="text" name="search" value="{{search}}" placeholder="{% trans "Find users..." %}" class="input" />
+</form>
+{% endblock %}
 
 {% block right_panel %}
 <h3 class="hd">{% trans "Users" %}</h3>

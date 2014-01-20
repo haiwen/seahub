@@ -1854,6 +1854,7 @@ def pubuser_search(request):
                                   'can_be_contact': can_be_contact})
 
     return render_to_response('pubuser.html', {
+            'search': email_or_nickname,
             'users': search_result,
             }, context_instance=RequestContext(request))
 
