@@ -420,16 +420,14 @@ if EVENTS_CONFIG_FILE:
 
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
-        1. event1.username = event2.username
+        1. event1.commit.creator = event2.commit.creator
         2. event1.commit.desc = event2.commit.desc
         """
-        if e1.username != e2.username:
-            return False
-        else:
-            if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-                if e1.commit.desc == e2.commit.desc:
-                    return True
-            return False
+        if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
+            if e1.commit.desc == e2.commit.desc and \
+                    e1.commit.creator_name == e2.commit.creator_name:
+                return True
+        return False
 
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
