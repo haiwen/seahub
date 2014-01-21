@@ -693,6 +693,9 @@ def view_file_via_shared_dir(request, token):
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
 
+    img_prev = None
+    img_next = None
+
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
@@ -710,6 +713,27 @@ def view_file_via_shared_dir(request, token):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == IMAGE:
+            current_commit = get_commits(repo_id, 0, 1)[0]
+            parent_dir = os.path.dirname(path)
+            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.id, parent_dir)
+            if not dirs:
+                raise Http404
+
+            img_list = []
+            for dirent in dirs:
+                if not stat.S_ISDIR(dirent.props.mode):
+                    fltype, flext = get_file_type_and_ext(dirent.obj_name)
+                    if fltype == 'Image':
+                        img_list.append(dirent.obj_name)
+
+            if len(img_list) > 1:
+                img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
+                cur_img_index = img_list.index(filename) 
+                if cur_img_index != 0:
+                    img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
+                if cur_img_index != len(img_list) - 1:
+                    img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
@@ -741,6 +765,8 @@ def view_file_via_shared_dir(request, token):
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
+            'img_prev': img_prev,
+            'img_next': img_next,
             }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
