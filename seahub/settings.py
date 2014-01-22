@@ -209,6 +209,7 @@ FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
+AVATAR_HASH_USERDIRNAMES = True
 AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
