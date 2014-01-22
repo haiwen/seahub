@@ -196,6 +196,19 @@ class Account(APIView):
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
 
+            name = request.DATA.get("name", None)
+            note = request.DATA.get("note", None)
+            if name or note:
+                try:
+                   profile = Profile.objects.get(user=user.username)
+                except Profile.DoesNotExist:
+                   profile = Profile()
+
+                profile.user = user.username
+                profile.nickname = name
+                profile.intro = note
+                profile.save()
+
             if update:
                 resp = Response('success')
             else:
