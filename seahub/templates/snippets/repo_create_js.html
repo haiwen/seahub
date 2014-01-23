@@ -25,8 +25,8 @@ $('#encrypt-switch').click(function () {
 $('#repo-create-form').submit(function() {
     var form = $(this), 
         form_id = form.attr('id'),
-        name = $('#repo-name').val(),
-        desc = $('#repo-desc').val(),
+        name = $('[name="repo_name"]', form).val(),
+        desc = $('[name="repo_desc"]', form).val(),
         encrypted = $('#encrypt-switch').attr('checked'),
         passwd, passwd_again;
 
@@ -46,12 +46,12 @@ $('#repo-create-form').submit(function() {
             apply_form_error(form_id, "{% trans "Please enter password" %}");
             return false;
         }
-        if ($.trim(passwd).length < 3) {
-            apply_form_error(form_id, "{% trans "Password is too short (minimum is 3 characters)" %}");
+        if ($.trim(passwd).length < {{repo_password_min_length}}) {
+        apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
-        if ($.trim(passwd).length > 30) {
-            apply_form_error(form_id, "{% trans "Password is too long (maximum is 30 characters)" %}");
+        if ($.trim(passwd).length > 35) {
+            apply_form_error(form_id, "{% trans "Password is too long (maximum is 35 characters)" %}");
             return false;
         }
         if (!$.trim(passwd_again)) {
@@ -63,7 +63,6 @@ $('#repo-create-form').submit(function() {
             return false;
         }
 
-        {% if not server_crypto %}
         // gen uu_id as new repo_id
         var uu_id = uuid.v4();
 
@@ -71,7 +70,6 @@ $('#repo-create-form').submit(function() {
 
         var fileKey = new FileKey(passwd);
         var encrypted_file_key = fileKey.gen_enc();
-        {% endif %}
     }
 
     var submit_btn = $('input[type="submit"]', form);
@@ -89,18 +87,11 @@ $('#repo-create-form').submit(function() {
     {% endif %}
 
     if (encrypted) {
-        {% if server_crypto %}
-        $.extend(post_data, {
-            'passwd': passwd,
-            'passwd_again': passwd_again
-        });
-        {% else %}
         $.extend(post_data, {
             'uuid': uu_id,
             'magic_str': magic_str,
             'encrypted_file_key': encrypted_file_key
         });
-        {% endif %}
     }
 
     $.ajax({
@@ -110,7 +101,7 @@ $('#repo-create-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: post_data,
         success: function(data) {
-            location.reload(true);
+            repoCreateSuccessCallback(data);
         },
         error: function(xhr, textStatus, errorThrown) {
             var error = $.parseJSON(xhr.responseText).error;

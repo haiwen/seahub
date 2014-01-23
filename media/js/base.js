@@ -398,7 +398,7 @@ FileTree.prototype.format_repo_data = function(data) {
     for (var i = 0, len = data.length; i < len; i++) {
         repo = {
             'data': data[i].name,
-            'attr': {'repo_id': data[i].id },
+            'attr': {'repo_id': data[i].id, 'root_node': true},
             'state': 'closed'
         }
         repos.push(repo);
@@ -422,10 +422,13 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
                 'ajax': {
                     'url': function(data) {
                         var path = this.get_path(data);
-                        var repo_id = data.attr('repo_id');
+                        var repo_id;
                         if (path.length == 1) {
                             path = '/';
+                            repo_id = data.attr('repo_id');
                         } else {
+                            var root_node = data.parents('[root_node=true]');
+                            repo_id = root_node.attr('repo_id');
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
@@ -439,7 +442,7 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
                             if (o.type == 'dir') {
                                 item = { 
                                     'data': o.name, 
-                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'attr': { 'type': o.type },
                                     'state': 'closed'
                                 };
                             } else {
@@ -521,10 +524,13 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
                 'ajax': {
                     'url': function(data) {
                         var path = this.get_path(data);
-                        var repo_id = data.attr('repo_id');
+                        var repo_id;
                         if (path.length == 1) {
                             path = '/';
+                            repo_id = data.attr('repo_id');
                         } else {
+                            var root_node = data.parents('[root_node=true]');
+                            repo_id = root_node.attr('repo_id');
                             path.shift();
                             path = '/' + path.join('/') + '/';
                         }
@@ -538,7 +544,7 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
                             if (o.has_subdir) {
                                 item = { 
                                     'data': o.name, 
-                                    'attr': { 'repo_id': o.repo_id, 'type': o.type },
+                                    'attr': { 'type': o.type },
                                     'state': 'closed'
                                 };
                             } else {

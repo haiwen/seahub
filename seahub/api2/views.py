@@ -196,6 +196,19 @@ class Account(APIView):
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
 
+            name = request.DATA.get("name", None)
+            note = request.DATA.get("note", None)
+            if name or note:
+                try:
+                   profile = Profile.objects.get(user=user.username)
+                except Profile.DoesNotExist:
+                   profile = Profile()
+
+                profile.user = user.username
+                profile.nickname = name
+                profile.intro = note
+                profile.save()
+
             if update:
                 resp = Response('success')
             else:
@@ -556,6 +569,20 @@ class Repo(APIView):
             if resp:
                 return resp
             return Response("success")
+        elif op == 'rename':
+            username = request.user.username
+            repo_name = request.POST.get('repo_name')
+            repo_desc = request.POST.get('repo_desc')
+
+            if not seafile_api.is_repo_owner(username, repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, \
+                    'Only library owner can perform this operation.')
+
+            if edit_repo(repo_id, repo_name, repo_desc, username):
+                return Response("success")
+            else:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "Unable to rename repo")
 
         return Response("unsupported operation")
 
@@ -2184,6 +2211,47 @@ class Groups(APIView):
             group_json.append(group)
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
+
+    def put(self, request, format=None):
+        # modified slightly from groups/views.py::group_list
+        """
+        Add a new group.
+        """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        # check plan
+        num_of_groups = getattr(request.user, 'num_of_groups', -1)
+        if num_of_groups > 0:
+            current_groups = len(get_personal_groups_by_user(username))
+            if current_groups > num_of_groups:
+                result['error'] = _(u'You can only create %d groups.') % num_of_groups
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+        
+        group_name = request.DATA.get('group_name', None);
+
+        # Check whether group name is duplicated.
+        if request.cloud_mode:
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = _(u'There is already a group with that name.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+        # Group name is valid, create that group.
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                                request.user.username)
+            return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
+                            content_type=content_type)
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
 
 class GroupManage(APIView):
     authentication_classes = (TokenAuthentication, )

@@ -6,21 +6,15 @@
 {% block nav_share_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'list_shared_links' %}">{% trans "Links" %}</a></li>
-        <li class="tabnav-tab  tabnav-tab-cur">{% trans "Private Shares" %}</li>
-    </ul>
-</div>
+{% include "repo/tabnav.html" with cur="private" %}
 {% endblock %}
 
 {% block main_panel %}
 {% if priv_share_in or priv_share_out %}
-<div id="tabs">
-    <ul id="tabs-nav">
-        <li><a href="#priv-share-in">{% trans "From Others" %}</a></li>
-        <li class="long-item"><a href="#priv-share-out">{% trans "To Others" %}</a></li>
+<div id="tabs" class="tab-tabs">
+    <ul class="tab-tabs-nav">
+        <li class="tab"><a href="#priv-share-in" class="a">{% trans "From Others" %}</a></li>
+        <li class="tab long-tab"><a href="#priv-share-out" class="a">{% trans "To Others" %}</a></li>
     </ul>
     <div id="priv-share-in">
     <table>
@@ -50,7 +44,7 @@
     </table>
     </div>
 
-    <div id="priv-share-out">
+    <div id="priv-share-out" class="hide">
     <table>
         <tr>
             <th width="5%"><!--icon--></th>
@@ -80,7 +74,7 @@
 
 {% else%}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any private shared files" %}</h2>
+  <h2 class="alc">{% trans "You don't have any private shared files" %}</h2>
   <p>{% trans "You can share a single file with a registered user if you don't want to share a whole library." %}</p>
 </div>
 {% endif %}
