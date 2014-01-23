@@ -13,9 +13,14 @@
     {% endfor %}
 
     $(".repo-share-btn").click(function() {
-        $("#repo_id").val($(this).data("id"));
-        $("#repo-share-form .op-target").html($(this).data("name"));
-        $("#repo-share-form").modal({appendTo: "#main", focus:false, containerCss:{"padding": "10px 0 0"}});
+        var form = $("#repo-share-form"),
+            hd = $('.hd', form),
+            btn_ct = $(this).parent(),
+            repo_id = btn_ct.data('id'),
+            repo_name = btn_ct.attr('data-name');
+        form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
+        $('[name="repo_id"]', form).val(repo_id);
+        hd.html(hd.html().replace('%(lib_name)s', '<span class="op-target">' + repo_name + '</span>'));
         $('#repo-share-tabs').tabs();
         $('#simplemodal-container').css('height', 'auto');
         addAutocomplete('#email_or_group', '#repo-share-form', share_list);
@@ -49,13 +54,21 @@
     $('.unshare-btn').click(function() {
         location.href = $(this).data('url');
     });
+
+    $('.repo-delete-btn').click(function() {
+        var btn_ct = $(this).parent(),
+            repo_id = btn_ct.data('id'),
+            repo_name = btn_ct.attr('data-name');
+        $(this).data('url', '{{ SITE_ROOT }}repo/remove/' + repo_id + '/?next={{ request.path }}').data('target', repo_name);
+    });
     addConfirmTo($('.repo-delete-btn'), {
         'title':'{% trans "Delete Library" %}',
         'con':'{% trans "Are you sure you want to delete %s ?" %}'
     });
 
     $(".download-btn").click(function() {
-        window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).attr('data'));
+        var repo_id = $(this).parent().data('id');
+        window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
     });
 
     $('.unstar-btn').click(function() {
@@ -95,3 +108,28 @@
             $(this).find('.op-icon').addClass('vh');
         }
     );
+
+function repoCreateSuccessCallback(data) {
+    $.modal.close();
+    var new_repo_item = $('#new-repo .repo-item').clone(true); 
+    var tds = $('td', new_repo_item);
+    var repo_id = data['repo_id'], repo_name = data['repo_name'];
+    $(tds[1]).html('<a href="{{ SITE_ROOT }}repo/' + repo_id + '/">' + repo_name + '</a>');
+    $(tds[2]).html(data['repo_desc']);
+    $(tds[4]).attr('data-id', repo_id).attr('data-name', repo_name);
+    
+    var my_own_repos = $('#my-own-repos');
+    var empty_tip = $('.empty-tips', my_own_repos);
+    if (empty_tip.length == 1) {
+        var repo_table = $('#new-repo').clone().removeAttr('id').removeClass('hide');
+        $('.repo-item', repo_table).replaceWith(new_repo_item);
+        empty_tip.replaceWith(repo_table);
+        {#% if need_guide %#}
+        setTimeout(function() {
+            $('#guide2-for-new').css({'padding':'0 20px', 'width':450}).modal({appendTo: '#main'});
+        }, 10);
+        {#% endif %#}
+    } else {
+        $('tr:first', my_own_repos).after(new_repo_item);
+    }
+}

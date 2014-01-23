@@ -9,9 +9,18 @@
 	<input type="text" id="id_email" name="username" value="" />
 	<label for="password">{% trans "Password" %}</label>
 	<input type="password" id="id_password" name="password" value="" />
+    {% if form.captcha %}
+    <label>{% trans "CAPTCHA" %}</label><br />
+    {{ form.captcha }}
+    <p class="clear"><a href="#" id="refresh-captcha">{% trans "Not clear? Refresh it." %}</a></p>
+    {% endif %}
     <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
     {% if form.errors %}
+    {% if form.captcha.errors %}
+	<p class="error">{{ form.captcha.errors}}</p>
+    {% else %}
 	<p class="error">{% trans "Incorrect email or password" %}</p>
+    {% endif %}
     {% else %}
 	<p class="error hide"></p>
     {% endif %}
@@ -23,6 +32,28 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+function setCaptchaInputWidth() {
+    $('#id_captcha_1').css({'width': 318 - $('.captcha').width() - 10});
+}
+$(window).load(setCaptchaInputWidth);
+$('.captcha').load(setCaptchaInputWidth);
+
+$('#refresh-captcha').parent().css({'text-align':'right', 'margin':0});
+$('#refresh-captcha').click(function() {
+    $.ajax({
+        url: '{% url 'captcha-refresh' %}',
+        dataType:'json',
+        cache:false,
+        success: function(data) {
+            $('.captcha').attr('src', data['image_url']); 
+            $('#id_captcha_0').val(data['key']);
+        },
+        error: function() {
+            $('.error').removeClass('hide').html("{% trans "Failed to refresh the CAPTCHA, please try again later." %}");
+        }
+    });
+    return false;
+});
 $('input[type="submit"]').click(function(){
     if (!$.trim($('input[name="username"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");

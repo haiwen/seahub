@@ -68,7 +68,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo
 from seaserv import seafile_api, check_group_staff
 
 
@@ -195,6 +195,19 @@ class Account(APIView):
                                             serializer.object['password'],
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
+
+            name = request.DATA.get("name", None)
+            note = request.DATA.get("note", None)
+            if name or note:
+                try:
+                   profile = Profile.objects.get(user=user.username)
+                except Profile.DoesNotExist:
+                   profile = Profile()
+
+                profile.user = user.username
+                profile.nickname = name
+                profile.intro = note
+                profile.save()
 
             if update:
                 resp = Response('success')
@@ -556,6 +569,20 @@ class Repo(APIView):
             if resp:
                 return resp
             return Response("success")
+        elif op == 'rename':
+            username = request.user.username
+            repo_name = request.POST.get('repo_name')
+            repo_desc = request.POST.get('repo_desc')
+
+            if not seafile_api.is_repo_owner(username, repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, \
+                    'Only library owner can perform this operation.')
+
+            if edit_repo(repo_id, repo_name, repo_desc, username):
+                return Response("success")
+            else:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "Unable to rename repo")
 
         return Response("unsupported operation")
 
