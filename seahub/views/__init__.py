@@ -1818,51 +1818,6 @@ def pubuser(request):
                 'page_range': page_range, 
                 }, context_instance=RequestContext(request))
 
-@login_required
-def pubuser_search(request):
-    if request.cloud_mode:
-        # Users are not allowed to search public user when in cloud mode.
-        raise Http404
-
-    email_or_nickname = request.GET.get('search', '')
-    if not email_or_nickname:
-        return HttpResponseRedirect(reverse('pubuser'))
-
-    # Get user's contacts.
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-    contact_emails = [] 
-    for c in contacts:
-        contact_emails.append(c.contact_email)
-
-    # search username and nickname
-    search_result = []
-    users = ccnet_threaded_rpc.get_emailusers('LDAP', -1, -1)
-    if len(users) == 0:
-        users = ccnet_threaded_rpc.get_emailusers('DB', -1, -1)
-    for u in users:
-        if email_or_nickname in u.email:
-            can_be_contact = True if u.email not in contact_emails else False
-            search_result.append({'email': u.email,
-                                  'can_be_contact': can_be_contact})
-
-    profile_all = Profile.objects.all().values('user', 'nickname')
-    for p in profile_all:
-        if email_or_nickname not in p['nickname']:
-            continue
-
-        if p['user'] in [ x['email'] for x in search_result ]:
-            continue            # remove duplicated record
-            
-        can_be_contact = True if p['user'] not in contact_emails else False
-        search_result.append({'email': p['user'],
-                              'can_be_contact': can_be_contact})
-
-    return render_to_response('pubuser.html', {
-            'search': email_or_nickname,
-            'users': search_result,
-            }, context_instance=RequestContext(request))
-
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
 
