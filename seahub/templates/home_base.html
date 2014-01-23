@@ -9,23 +9,24 @@
         <span id="enable-mods" class="icon-th fright" title="{% trans "Enable Modules" %}"></span>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}"><span class="sf2-icon-archive vam"></span><span class="vam">{% trans "Libraries" %}</span></a></li>
-        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}"><span class="icon-star"></span>{% trans "Starred" %}</a></li>
+        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
         {% if events_enabled %}
-        <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}"><span class="icon-rss"></span>{% trans "Activities" %}</a></li>
+        <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
         {% endif %}
         {% for mod in mods_enabled %}
         {% if mod == 'personal wiki' %}
-        <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="icon-book"></span>{% trans "Personal Wiki" %}</a></li>
+        <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
         {% endif %}
         {% endfor %}
-        <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}"><span class="icon-comment"></span>{% trans "Messages" %}</a></li>
-        <li class="tab {% block cur_clients %}{% endblock %}"><a href="{% url 'client_mgmt' %}"><span class="icon-desktop"></span>{% trans "Clients" %}</a></li>
-        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}"><span class="icon-user"></span>{% trans "Contacts" %}</a></li>
+        <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
+        <li class="tab {% block cur_clients %}{% endblock %}"><a href="{% url 'client_mgmt' %}" class="clients">{% trans "Clients" %}</a></li>
+        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="">{% trans "Contacts" %}</a></li>
     </ul>
+
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="sf2-icon-archive vam"></span><span class="vam">{% trans "Libraries" %}</span></a></li>
+        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="icon-folder-close"></span>{% trans "Folders" %}</a></li>
         <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>        
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="icon-link"></span>{% trans "Links" %}</a></li>

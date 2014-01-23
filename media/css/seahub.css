@@ -412,13 +412,51 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab a {
     display:block;
-    padding:2px 4px;
+    font-size:14px;
+    padding:4px 4px 4px 30px;
     color:#333;
     font-weight:normal;
     border-radius:2px;
+    background:no-repeat scroll 4px 50%;
+}
+.side-tabnav-tabs .tab .lib {
+    background-image:url('../img/lib.png');
+}
+.side-tabnav-tabs .tab-cur .lib {
+    background-image:url('../img/lib_w.png');
+}
+.side-tabnav-tabs .tab .star {
+    background-image:url('../img/star.png');
+}
+.side-tabnav-tabs .tab-cur .star {
+    background-image:url('../img/star_w.png');
+}
+.side-tabnav-tabs .tab .activity {
+    background-image:url('../img/activity.png');
+}
+.side-tabnav-tabs .tab-cur .activity {
+    background-image:url('../img/activity_w.png');
+}
+.side-tabnav-tabs .tab .wiki {
+    background-image:url('../img/wiki.png');
+}
+.side-tabnav-tabs .tab-cur .wiki {
+    background-image:url('../img/wiki_w.png');
+}
+.side-tabnav-tabs .tab .msgs {
+    background-image:url('../img/msgs.png');
+}
+.side-tabnav-tabs .tab-cur .msgs {
+    background-image:url('../img/msgs_w.png');
+}
+.side-tabnav-tabs .tab .clients {
+    background-image:url('../img/clients.png');
+}
+.side-tabnav-tabs .tab-cur .clients {
+    background-image:url('../img/clients_w.png');
 }
 .side-tabnav-tabs .tab a:hover {
-    background:#feefb8;
+    background-color:#feefb8;
     text-decoration:none;
 }
 .side-tabnav-tabs .tab [class*="icon-"],
@@ -433,7 +471,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur a,
 .side-tabnav-tabs .tab-cur a:hover {
-    background:#feac74;
+    background-color:#feac74;
 }
 .side-tabnav-tabs .tab-cur [class*="icon-"],
 .side-tabnav-tabs .tab-cur [class*="sf2-icon-"],
