@@ -2310,11 +2310,67 @@ class GroupPublic(APIView):
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
 
+class GroupManage(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, group_id, format=None):
+        """
+        Add group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group') 
+
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
+
+        user_name = request.DATA.get('user_name', None)
+        if not is_registered_user(user_name):
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Not a valid user')
+
+        try:
+            ccnet_threaded_rpc.group_add_member(group.id, request.user.username, user_name)
+        except SearpcError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+    def delete(self, request, group_id, format=None):
+        """
+        Delete group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can remove group members')
+
+        user_name = request.DATA.get('user_name', None)
+
+        try:
+            ccnet_threaded_rpc.group_remove_member(group.id, request.user.username, user_name)
+        except SearpcError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False
     return check_group_staff(group.id, user.username)
-
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
