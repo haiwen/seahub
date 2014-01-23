@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from pysearpc import SearpcError
-from seaserv import seafile_api, get_emailusers
+from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.shortcuts import get_first_object_or_none

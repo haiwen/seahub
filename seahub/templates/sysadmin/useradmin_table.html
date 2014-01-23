@@ -4,7 +4,7 @@
         <th width="30%">{% trans "Email" %}</th>
         <th width="10%">{% trans "Status" %}</th>
         <th width="20%">{% trans "Space Used" %}</th>
-        <th width="15%">{% trans "Create At" %}</th>
+        <th width="15%">{% trans "Create At / Last Login" %}</th>
         <th width="25%">{% trans "Operations" %}</th>
     </tr>
 
@@ -13,6 +13,7 @@
         <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
 
         <td>
+          {% if user.source != 'LDAP' %}
             <div class="user-status">
               {% if user.is_active %}
                 <span class="user-status-cur-value">{% trans "Active" %}</span>
@@ -25,6 +26,7 @@
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
                 <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
             </select>
+          {% endif %}
         </td>
         
         <td>
@@ -34,8 +36,12 @@
             {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
             {% endif %}
         </td>
-        <td>{{ user.ctime|tsstr_sec }}</td>
+        <td style="font-size:11px;">{% if user.source != 'LDAP' %}
+        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        {% endif %}
+        </td>
         <td>
+          {% if user.source != 'LDAP' %}
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
@@ -43,6 +49,7 @@
           <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op">{% trans "Revoke Admin" %}</a>
           {% else %}
           <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op">{% trans "Set Admin" %}</a>
+          {% endif %}
           {% endif %}
           {% endif %}
         </td>

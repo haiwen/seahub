@@ -1796,8 +1796,16 @@ def pubuser(request):
         except ValueError:
             current_page = 1
         per_page = 20           # show 20 users per-page
-        users_plus_one = seaserv.get_emailusers(per_page * (current_page - 1),
+
+        # Get ldap users first, if no users found, use database.
+        users_plus_one = seaserv.get_emailusers('LDAP',
+                                                per_page * (current_page - 1),
                                                 per_page + 1)
+        if len(users_plus_one) == 0:
+            users_plus_one = seaserv.get_emailusers('DB',
+                                                per_page * (current_page - 1),
+                                                per_page + 1)
+
         has_prev = False if current_page == 1 else True
         has_next = True if len(users_plus_one) == per_page + 1 else False
         num_pages = int(ceil(emailusers_count / float(per_page)))
