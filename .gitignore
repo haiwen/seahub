@@ -19,6 +19,7 @@ setenv.sh
 *.mo
 media/avatars/*
 !media/avatars/default-non-register.jpg
+!media/avatars/default.png
 !media/default.jpg
 !media/groups/default.jpg
 logs/
