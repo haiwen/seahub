@@ -2217,9 +2217,9 @@ class Groups(APIView):
 
         # Group name is valid, create that group.
         try:
-            ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
                                                 request.user.username)
-            return HttpResponse(json.dumps({'success': True}),
+            return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                             content_type=content_type)
         except SearpcError, e:
             result['error'] = _(e.msg)
