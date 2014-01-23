@@ -1,11 +1,11 @@
 {% load seahub_tags i18n %}
 {% load url from future %}
-<div id="tabs">
+<div id="tabs" class="tab-tabs">
 <div class="ovhd">
-    <ul class="fleft" id="tabs-nav">
-        <li><a href="#my-own-repos">{% trans "Mine" %}</a></li>
-        <li><a href="#repos-shared-to-me">{% trans "Shared" %}</a></li>
-        <li><a href="#starred-files">{% trans "Starred" %}</a></li>
+    <ul class="tab-tabs-nav fleft">
+        <li class="tab"><a href="#my-own-repos" class="a">{% trans "Mine" %}</a></li>
+        <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
+        <li class="tab"><a href="#starred-files" class="a">{% trans "Starred" %}</a></li>
     </ul>
     <button id="repo-create" class="add fright">{% trans "New Library" %}</button>
 </div>
@@ -30,10 +30,12 @@
         {% else %}
         <td>--</td>
         {% endif %}
-        <td>
-            <span data="{{ repo.props.id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            <span data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}" class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-            <span data-url="{{ SITE_ROOT }}repo/remove/{{ repo.props.id }}/?next={{ request.path }}" data-target="{{ repo.props.name }}" class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            {% if show_repo_download_button %}
+            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% endif %}
+            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
         </td>
     </tr>
     {% endif %}
@@ -41,7 +43,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You have not created any libraries" %}</h2>
+  <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
   <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
   <h3>{% trans "Synchronize libraries with PC client" %}</h3>
   <p>{% trans "1. Download the library (make sure PC client is running)." %}</p>
@@ -80,7 +82,9 @@
         {% endif %}
         <td>{{ repo.user|email2nickname }}</td>
         <td>
+            {% if show_repo_download_button %}
             <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% endif %}
             {% if repo.share_type == 'personal' %}
             <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
             {% endif %}
@@ -90,7 +94,7 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "No library is shared to you" %}</h2>
+  <h2 class="alc">{% trans "No library is shared to you" %}</h2>
   <p>{% trans "Libraries shared to you or shared to groups you joined will be listed here. Libraries shared as writable can be downloaded and synced. Read only libraries can only be downloaded, updates on local files will not be uploaded." %}</p>
 </div>
 {% endif %}
@@ -108,7 +112,7 @@
     </tr>
     {% for sfile in starred_files %}
     <tr>
-        <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
         <td>
             <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.name }}</a>
         </td>
@@ -122,9 +126,32 @@
 </table>
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any starred files yet" %}</h2>
+  <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
   <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
 </div>
 {% endif %}
 </div>
 </div>
+
+<table id="new-repo" class="hide">
+    <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="24%">{% trans "Name" %}</th>
+        <th width="43%">{% trans "Description" %}</th>
+        <th width="15%">{% trans "Last Update" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
+    </tr>
+    <tr class="repo-item">
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td>{{ repo.props.desc }}</td>
+        <td>{% trans "Just now" %}</td>
+        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+            {% if show_repo_download_button %}
+            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+            {% endif %}
+            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+        </td>
+    </tr>
+</table>

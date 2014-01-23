@@ -25,6 +25,16 @@ class FileShare(models.Model):
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
 
+class UploadLinkShare(models.Model):
+    """
+    Model used for shared upload link.
+    """
+    username = LowerCaseCharField(max_length=255, db_index=True)
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    token = models.CharField(max_length=10, unique=True)
+    ctime = models.DateTimeField(default=datetime.datetime.now)
+    view_cnt = models.IntegerField(default=0)
 
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):

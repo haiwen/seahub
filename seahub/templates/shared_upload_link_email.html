@@ -1,0 +1,11 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}You're receiving this e-mail because {{ email }} has shared an upload link to you on {{ site_name }}.{% endblocktrans%}
+
+{% trans "You can go to the following page and upload your files:" %}
+{{ shared_upload_link }}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

@@ -1,10 +1,10 @@
 {% load i18n avatar_tags %}
 <form id="member-add-form"  method="post" name="member-add-form" class="tab-popup hide">{% csrf_token %}
     <h3 class="hd">{% trans "Add members"%}</h3>
-    <div id="member-add-tabs">
-        <ul id="member-add-tabs-nav">
-            <li><a href="#enter">{% trans 'Enter' %}</a></li>
-            <li><a href="#contact-options">{% trans 'Contacts' %}</a></li>
+    <div id="member-add-tabs" class="tab-popup-tabs">
+        <ul class="tab-popup-tabs-nav">
+            <li class="tab"><a href="#enter" class="a">{% trans 'Enter' %}</a></li>
+            <li class="tab"><a href="#contact-options" class="a">{% trans 'Contacts' %}</a></li>
         </ul>
         <div id="enter">
             <textarea id="added-member-name" name="user_name" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />

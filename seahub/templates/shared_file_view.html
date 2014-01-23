@@ -64,7 +64,7 @@ var all_repos = [];
 {% for a_repo in accessible_repos %}
     all_repos.push({
         'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}'},
+        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
         'state': 'closed'
     });  
 {% endfor %}

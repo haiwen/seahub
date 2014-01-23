@@ -54,16 +54,6 @@ class RepoCreateForm(forms.Form):
             'max_length': _(u'Description is too long (maximum is 100 characters)')
             })
     encryption = forms.CharField(max_length=1)
-    passwd = forms.CharField(min_length=3, max_length=30, required=False,
-                             error_messages={
-            'min_length': _(u'Password is too short (minimum is 3 characters)'),
-            'max_length': _(u'Password is too long (maximum is 30 characters)'),
-            })
-    passwd_again = forms.CharField(min_length=3, max_length=30, required=False,
-                                   error_messages={
-            'min_length': _(u'Password is too short (minimum is 3 characters)'),
-            'max_length': _(u'Password is too long (maximum is 30 characters)'),
-            })
     uuid = forms.CharField(required=False)
     magic_str = forms.CharField(required=False)
     encrypted_file_key = forms.CharField(required=False)
@@ -80,19 +70,11 @@ class RepoCreateForm(forms.Form):
         if int(encryption) == 0:
             return self.cleaned_data
 
-        if settings.SERVER_CRYPTO:
-            passwd = self.cleaned_data['passwd']
-            passwd_again = self.cleaned_data['passwd_again']
-            if not (passwd and passwd_again):
-                raise forms.ValidationError(_("Password is required"))
-            if passwd != passwd_again:
-                raise forms.ValidationError(_("Passwords don't match"))
-        else:
-            uuid = self.cleaned_data['uuid']
-            magic_str = self.cleaned_data['magic_str']
-            encrypted_file_key = self.cleaned_data['encrypted_file_key']
-            if not (uuid and magic_str and encrypted_file_key):
-                raise forms.ValidationError(_("Argument missing"))
+        uuid = self.cleaned_data['uuid']
+        magic_str = self.cleaned_data['magic_str']
+        encrypted_file_key = self.cleaned_data['encrypted_file_key']
+        if not (uuid and magic_str and encrypted_file_key):
+            raise forms.ValidationError(_("Argument missing"))
 
         return self.cleaned_data
 
