@@ -45,7 +45,7 @@ except ImportError:
 from seahub.group.forms import MessageForm
 from seahub.notifications.models import UserNotification
 from seahub.utils.paginator import Paginator
-from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
+from seahub.group.models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check
@@ -69,7 +69,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
-from seaserv import seafile_api
+from seaserv import seafile_api, check_group_staff
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -2184,6 +2184,68 @@ class Groups(APIView):
             group_json.append(group)
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
+
+class GroupPublic(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, group_id, format=None):
+        # Based on groups/views.py::group_make_public
+        """
+        Make a group public, only group staff can perform this operation.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        # Check whether user is group staff
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can make the group public')
+
+        try:
+            p = PublicGroup(group_id=group.id)
+            p.save()
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make group public')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+    def delete(self, request, group_id, format=None):
+        # Based on groups/views.py::group_revoke_public
+        """
+        Revoke a group from public, only group staff can perform this operation.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        # Check whether user is group staff
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can make the group public')
+
+        try:
+            p = PublicGroup.objects.get(group_id=group.id)
+            p.delete()
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make group private')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+def is_group_staff(group, user):
+    if user.is_anonymous():
+        return False
+    return check_group_staff(group.id, user.username)
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
