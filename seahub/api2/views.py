@@ -22,17 +22,14 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext as _
-from django.contrib import messages
 
 from models import Token
-from seahub.share.models import AnonymousShare, PrivateFileDirShare
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles
 from seahub.share.models import FileShare
-from seahub.signals import share_file_to_user_successful
 from seahub.views import access_to_repo, validate_owner, is_registered_user, events, group_events_data, get_diff
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, get_ccnetapplet_root, \
@@ -51,9 +48,11 @@ from seahub.utils.paginator import Paginator
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
-from seahub.signals import repo_created
 from seahub.group.views import group_check
-from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
+from seahub.signals import repo_created, share_file_to_user_successful
+from seahub.share.models import PrivateFileDirShare
+from seahub.utils import EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, \
+    api_convert_desc_link, api_tsstr_sec, get_file_type_and_ext, \
     gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
 from seaserv import get_group_repoids, is_repo_owner, get_personal_groups, get_emailusers
@@ -63,20 +62,15 @@ from seahub.shortcuts import get_first_object_or_none
 
 from pysearpc import SearpcError, SearpcObjEncoder
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
-    get_personal_groups_by_user, get_session_info, \
+    get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, is_personal_repo
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
 from seaserv import seafile_api
 
-from seafevents.events.db import UserEventDetail
-from seafevents.events.models import UserEvent
-import calendar as cal
-import time
-from datetime import datetime
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -578,6 +572,29 @@ class Repo(APIView):
 
         seafile_api.remove_repo(repo_id)
         return Response('success', status=status.HTTP_200_OK)
+
+class RepoHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits = commits_all[:per_page]
+
+        if len(commits_all) == per_page + 1:
+            page_next = True
+        else:
+            page_next = False
+
+        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1136,6 +1153,66 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class FileRevert(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id, format=None):
+        path = unquote(request.DATA.get('p', '').encode('utf-8'))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        commit_id = unquote(request.DATA.get('commit_id', '').encode('utf-8'))
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        try:
+            ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
+                            path, request.user.username)
+        except SearpcError, e:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
+
+        return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
+    
+class FileRevision(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        file_name = os.path.basename(path)
+        commit_id = request.GET.get('commit_id', None)
+
+        try:
+            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                                        commit_id, path)
+        except:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+
+        return get_repo_file(request, repo_id, obj_id, file_name, 'download')
+
+class FileHistory(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        try:
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
+        except SearpcError, e:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
+
+        if not commits:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+
 class FileSharedLinkView(APIView):
     """
     Support uniform interface for file shared link.
@@ -1321,6 +1398,136 @@ class DirView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class DirDownloadView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return render_error(request, _(u'Library does not exist'))
+
+        path = request.GET.get('p', None)
+        assert path, 'path must be passed in the url'
+
+        if path[-1] != '/':         # Normalize dir path
+            path += '/'
+
+        if len(path) > 1:
+            dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
+        else:
+            dirname = repo.name
+
+        current_commit = get_commits(repo_id, 0, 1)[0]
+        if not current_commit:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                         'Failed to get current commit of repo %s.' % repo_id)
+
+        try:
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
+                                                         path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                         "Failed to get dir id by path")
+
+        if not dir_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+
+        try:
+            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+        except Exception, e:
+            logger.error(str(e))
+            return api_error(status.HTTP_520_OPERATION_FAILED, "Internal error")
+
+        if total_size > MAX_DOWNLOAD_DIR_SIZE:
+            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
+
+        redirect_url = gen_file_get_url(token, dirname)
+        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
+    
+
+class DirShareView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::gen_private_file_share
+    def post(self, request, repo_id, format=None):
+        emails = request.POST.getlist('emails', '')
+        s_type = request.POST.get('s_type', '')
+        path = request.POST.get('path', '')
+        perm = request.POST.get('perm', 'r')
+        file_or_dir = os.path.basename(path.rstrip('/'))
+        username = request.user.username
+
+        for email in [e.strip() for e in emails if e.strip()]:
+            if not is_registered_user(email):
+                continue
+        
+            if s_type == 'f':
+                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
+                    username, email, repo_id, path)
+            elif s_type == 'd':
+                pfds = PrivateFileDirShare.objects.add_private_dir_share(
+                    username, email, repo_id, path, perm)
+            else:
+                continue
+
+            # send a signal when sharing file successful
+            share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+    
+
+class DirSubRepoView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.views.ajax.py::sub_repo
+    def get(self, request, repo_id, format=None):
+        '''
+        check if a dir has a corresponding sub_repo
+        if it does not have, create one
+        '''
+
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        path = request.GET.get('p') 
+        name = request.GET.get('name')
+        if not (path and name):
+            result['error'] = _('Argument missing')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        username = request.user.username
+
+        # check if the sub-lib exist
+        try:
+            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        if sub_repo:
+            result['sub_repo_id'] = sub_repo.id
+        else:
+            # create a sub-lib
+            try:
+                # use name as 'repo_name' & 'repo_desc' for sub_repo
+                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+                result['sub_repo_id'] = sub_repo_id
+            except SearpcError, e:
+                result['error'] = e.msg
+                return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
 class SharedRepos(APIView):
     """
     List repos that a user share to others/groups/public.
@@ -1383,6 +1590,118 @@ class BeShared(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
+class PrivateFileDirShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, PrivateFileDirShare):
+            return None
+        return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'permission':obj.permission, 's_type':obj.s_type}
+
+class SharedFilesView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_priv_shared_files
+    def get(self, request, format=None):
+        username = request.user.username
+
+        # Private share out/in files.
+        priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
+        for e in priv_share_out:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+
+        priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
+        for e in priv_share_in:
+            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
+            e.repo = seafile_api.get_repo(e.repo_id)
+    
+        return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
+                status=200, content_type=json_content_type)
+
+    # from seahub.share.view:rm_private_file_share
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        try:
+            pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token does not exist")
+    
+        from_user = pfs.from_user
+        to_user = pfs.to_user
+        username = request.user.username
+
+        if username == from_user or username == to_user:
+            pfs.delete()
+            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)    
+        else:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to get repo.')
+    
+class VirtualRepos(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        username = request.user.username
+        try:
+            result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
+    
+class FileShareEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, FileShare):
+            return None
+        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
+
+class SharedLinksView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    # from seahub.share.view::list_shared_links
+    def get(self, request, format=None):
+        username = request.user.username
+
+        fileshares = FileShare.objects.filter(username=username)
+        p_fileshares = []           # personal file share
+        for fs in fileshares:
+            if is_personal_repo(fs.repo_id):  # only list files in personal repos
+                r = seafile_api.get_repo(fs.repo_id)
+                if not r:
+                    fs.delete()
+                    continue
+
+                if fs.s_type == 'f':
+                    if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path)
+                    fs.shared_link = gen_file_share_link(fs.token) 
+                else:
+                    if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                        fs.delete()
+                        continue
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+                    fs.shared_link = gen_dir_share_link(fs.token)
+                fs.repo = r
+                p_fileshares.append(fs)
+        return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
+
+    def delete(self, request, format=None):
+        token = request.GET.get('t')
+        FileShare.objects.filter(token=token).delete()
+        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
 
 class SharedRepo(APIView):
     """
@@ -1775,6 +2094,7 @@ def repo_history_changes(request, repo_id):
     html = render_to_string('api2/event_details.html', {'changes': changes})
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
+
 def msg_reply_new(request):
     notes = UserNotification.objects.filter(to_user=request.user.username)
     grpmsg_reply_list = [ n.detail for n in notes if n.msg_type == 'grpmsg_reply']
@@ -1865,367 +2185,6 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
-class RepoHistory(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        try:
-            current_page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
-        except ValueError:
-            current_page = 1
-            per_page = 25
-
-        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
-        commits = commits_all[:per_page]
-
-        if len(commits_all) == per_page + 1:
-            page_next = True
-        else:
-            page_next = False
-
-        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
-
-class FileHistory(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
-
-        try:
-            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                            -1, -1)
-        except SearpcError, e:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
-
-        if not commits:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
-
-        return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
-
-class FileRevision(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
-
-        file_name = os.path.basename(path)
-        commit_id = request.GET.get('commit_id', None)
-
-        try:
-            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        commit_id, path)
-        except:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
-
-        return get_repo_file(request, repo_id, obj_id, file_name, 'download')
-
-class FileRevert(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def put(self, request, repo_id, format=None):
-        path = unquote(request.DATA.get('p', '').encode('utf-8'))
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-        commit_id = unquote(request.DATA.get('commit_id', '').encode('utf-8'))
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-        try:
-            ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
-                            path, request.user.username)
-        except SearpcError, e:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
-
-        return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
-
-class DirDownloadView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return render_error(request, _(u'Library does not exist'))
-
-        path = request.GET.get('p', None)
-        assert path, 'path must be passed in the url'
-
-        if path[-1] != '/':         # Normalize dir path
-            path += '/'
-
-        if len(path) > 1:
-            dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
-        else:
-            dirname = repo.name
-
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        if not current_commit:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                         'Failed to get current commit of repo %s.' % repo_id)
-
-        try:
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
-                                                         path.encode('utf-8'))
-        except SearpcError, e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                         "Failed to get dir id by path")
-
-        if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
-
-        try:
-            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
-        except Exception, e:
-            logger.error(str(e))
-            return api_error(status.HTTP_520_OPERATION_FAILED, "Internal error")
-
-        if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
-
-        token = seafserv_rpc.web_get_access_token(repo_id,
-                                                  dir_id,
-                                                  'download-dir',
-                                                  request.user.username)
-
-        redirect_url = gen_file_get_url(token, dirname)
-        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
-
-class DirShareView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    # from seahub.share.view::gen_private_file_share
-    def post(self, request, repo_id, format=None):
-        emails = request.POST.getlist('emails', '')
-        s_type = request.POST.get('s_type', '')
-        path = request.POST.get('path', '')
-        perm = request.POST.get('perm', 'r')
-        file_or_dir = os.path.basename(path.rstrip('/'))
-        username = request.user.username
-
-        for email in [e.strip() for e in emails if e.strip()]:
-            if not is_registered_user(email):
-                messages.error(request, _('Failed to share to "%s", user not found.') % email)
-                continue
-        
-            if s_type == 'f':
-                pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
-                    username, email, repo_id, path)
-            elif s_type == 'd':
-                pfds = PrivateFileDirShare.objects.add_private_dir_share(
-                    username, email, repo_id, path, perm)
-            else:
-                continue
-
-            # send a signal when sharing file successful
-            share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
-            messages.success(request, _('Successfully shared %s.') % file_or_dir)
-        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
-
-class FileShareEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if not isinstance(obj, FileShare):
-            return None
-        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
-                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
-
-class PrivateFileDirShareEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if not isinstance(obj, PrivateFileDirShare):
-            return None
-        return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
-                'permission':obj.permission, 's_type':obj.s_type}
-
-class SharedLinksView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    # from seahub.share.view::list_shared_links
-    def get(self, request, format=None):
-        username = request.user.username
-
-        fileshares = FileShare.objects.filter(username=username)
-        p_fileshares = []           # personal file share
-        for fs in fileshares:
-            if is_personal_repo(fs.repo_id):  # only list files in personal repos
-                r = seafile_api.get_repo(fs.repo_id)
-                if not r:
-                    fs.delete()
-                    continue
-
-                if fs.s_type == 'f':
-                    if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
-                        fs.delete()
-                        continue
-                    fs.filename = os.path.basename(fs.path)
-                    fs.shared_link = gen_file_share_link(fs.token) 
-                else:
-                    if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
-                        fs.delete()
-                        continue
-                    fs.filename = os.path.basename(fs.path.rstrip('/'))
-                    fs.shared_link = gen_dir_share_link(fs.token)
-                fs.repo = r
-                p_fileshares.append(fs)
-        return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
-
-    def delete(self, request, format=None):
-        token = request.GET.get('t')
-        FileShare.objects.filter(token=token).delete()
-        return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
-
-class SharedFilesView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    # from seahub.share.view::list_priv_shared_files
-    def get(self, request, format=None):
-        username = request.user.username
-
-        # Private share out/in files.
-        priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
-        for e in priv_share_out:
-            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-            e.repo = seafile_api.get_repo(e.repo_id)
-
-        priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
-        for e in priv_share_in:
-            e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-            e.repo = seafile_api.get_repo(e.repo_id)
-    
-        return HttpResponse(json.dumps({"priv_share_out": list(priv_share_out), "priv_share_in": list(priv_share_in)}, cls=PrivateFileDirShareEncoder),
-                status=200, content_type=json_content_type)
-
-    # from seahub.share.view:rm_private_file_share
-    def delete(self, request, format=None):
-        token = request.GET.get('t')
-        try:
-            pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
-        except PrivateFileDirShare.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, "Token does not exist")
-    
-        from_user = pfs.from_user
-        to_user = pfs.to_user
-        username = request.user.username
-
-        if username == from_user or username == to_user:
-            pfs.delete()
-            return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)		
-        else:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to get repo.')
-
-class SubRepoView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    # from seahub.views.ajax.py::sub_repo
-    def get(self, request, repo_id, format=None):
-        '''
-        check if a dir has a corresponding sub_repo
-        if it does not have, create one
-        '''
-
-        content_type = 'application/json; charset=utf-8'
-        result = {}
-
-        path = request.GET.get('p') 
-        name = request.GET.get('name')
-        if not (path and name):
-            result['error'] = _('Argument missing')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-        username = request.user.username
-
-        # check if the sub-lib exist
-        try:
-            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
-        except SearpcError, e:
-            result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-        if sub_repo:
-            result['sub_repo_id'] = sub_repo.id
-        else:
-            # create a sub-lib
-            try:
-                # use name as 'repo_name' & 'repo_desc' for sub_repo
-                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
-                result['sub_repo_id'] = sub_repo_id
-            except SearpcError, e:
-                result['error'] = e.msg
-                return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-        return HttpResponse(json.dumps(result), content_type=content_type)
-
-class VirtualRepos(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        content_type = 'application/json; charset=utf-8'
-        result = {}
-
-        username = request.user.username
-        try:
-            result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
-        except SearpcError, e:
-            result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
-
-class UserEventDetailEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if not isinstance(obj, UserEventDetail):
-            return None
-        timestamp = time.mktime(datetime.timetuple(obj.timestamp))
-        return {'org_id': obj.org_id, 'username': obj.username, 'etype': obj.etype, 'timestamp': timestamp, 'uuid': obj.uuid, 'details': obj.__dict__ }
-
-class Activity(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        events_count = 15
-        username = request.GET.get('username')
-        if username == None or len(username) == 0:
-            username = request.user.username
-
-        if username != request.user.username and request.user.is_staff == False:
-            return HttpResponse(json.dumps({"err": _(u'Permission denied')}), status=400, content_type=content_type)
-
-        start = int(request.GET.get('start', 0))
-
-        events, start = get_user_events(username, start, events_count)
-        events_more = True if len(events) == events_count else False
-
-        event_groups = group_events_data(events)
-
-        api_pre_events(event_groups)
-
-        return HttpResponse(json.dumps({'event_groups':event_groups, 'events_more':events_more,
-                                    'new_start': start}, cls=UserEventDetailEncoder),
-                            content_type='application/json; charset=utf-8')
-
-
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2280,6 +2239,7 @@ class DiscussionHtml(APIView):
 
     def post(self, request, msg_id, format=None):
         return msg_reply (request, msg_id)
+
 
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
