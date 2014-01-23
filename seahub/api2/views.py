@@ -68,7 +68,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, ccnet_threaded_rpc
 from seaserv import seafile_api, check_group_staff
 
 
@@ -2212,6 +2212,47 @@ class Groups(APIView):
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
 
+    def put(self, request, format=None):
+        # modified slightly from groups/views.py::group_list
+        """
+        Add a new group.
+        """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        # check plan
+        num_of_groups = getattr(request.user, 'num_of_groups', -1)
+        if num_of_groups > 0:
+            current_groups = len(get_personal_groups_by_user(username))
+            if current_groups > num_of_groups:
+                result['error'] = _(u'You can only create %d groups.') % num_of_groups
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+        
+        group_name = request.DATA.get('group_name', None);
+
+        # Check whether group name is duplicated.
+        if request.cloud_mode:
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = _(u'There is already a group with that name.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+        # Group name is valid, create that group.
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                                request.user.username)
+            return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
+                            content_type=content_type)
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+
 class GroupPublic(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2273,6 +2314,7 @@ def is_group_staff(group, user):
     if user.is_anonymous():
         return False
     return check_group_staff(group.id, user.username)
+
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
