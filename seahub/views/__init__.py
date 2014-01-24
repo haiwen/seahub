@@ -1823,7 +1823,7 @@ def pubuser(request):
                 'has_next': has_next,
                 'page_range': page_range, 
                 }, context_instance=RequestContext(request))
-   
+
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
 
@@ -1976,7 +1976,8 @@ def group_events_data(events):
     
     event_groups = []
     for e in events:
-        e.date = utc_to_local(e.timestamp).strftime("%Y-%m-%d")        
+        e.time = utc_to_local(e.timestamp)
+        e.date = e.time.strftime("%Y-%m-%d")        
         if e.etype == 'repo-update':
             e.author = e.commit.creator_name
         elif e.etype == 'repo-create':

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-10 14:09+0800\n"
+"POT-Creation-Date: 2014-01-22 14:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,10 +49,10 @@ msgstr "名称 %s 含有无效字符"
 
 #: seahub/forms.py:77 seahub/message/views.py:127 seahub/share/views.py:729
 #: seahub/share/views.py:762 seahub/views/__init__.py:1074
-#: seahub/views/ajax.py:334 seahub/views/ajax.py:393 seahub/views/ajax.py:484
-#: seahub/views/ajax.py:619 seahub/views/ajax.py:779 seahub/views/ajax.py:977
-#: seahub/views/ajax.py:1045 seahub/views/ajax.py:1049
-#: seahub/views/ajax.py:1053
+#: seahub/views/ajax.py:335 seahub/views/ajax.py:394 seahub/views/ajax.py:485
+#: seahub/views/ajax.py:620 seahub/views/ajax.py:780 seahub/views/ajax.py:978
+#: seahub/views/ajax.py:1046 seahub/views/ajax.py:1050
+#: seahub/views/ajax.py:1054
 msgid "Argument missing"
 msgstr "参数缺失"
 
@@ -231,8 +231,8 @@ msgstr "文件"
 #: seahub/share/templates/share/links.html:31
 #: seahub/share/templates/share/links.html:63
 #: seahub/share/templates/share/priv_shared_files.html:64
-#: seahub/templates/pubrepo.html:23 seahub/templates/pubrepo.html.py:26
-#: seahub/templates/pubrepo.html:28 seahub/templates/view_shared_dir.html:39
+#: seahub/templates/pubrepo.html:26 seahub/templates/pubrepo.html.py:29
+#: seahub/templates/pubrepo.html:31 seahub/templates/view_shared_dir.html:39
 #: seahub/templates/snippets/group_recommend_form.html:22
 #: seahub/templates/snippets/repo_dirents.html:8
 msgid "Directory icon"
@@ -268,7 +268,7 @@ msgstr "加载中..."
 #: seahub/group/templates/group/group_discuss.html:231
 #: seahub/group/templates/group/msg_js.html:155
 #: seahub/message/templates/message/all_msg_list.html:141
-#: seahub/message/templates/message/all_msg_list.html:208
+#: seahub/message/templates/message/all_msg_list.html:217
 #: seahub/message/templates/message/user_msg_list.html:156
 #: seahub/notifications/templates/notifications/user_notification_list.html:66
 #: seahub/templates/base.html:139 seahub/templates/file_edit.html:592
@@ -471,7 +471,7 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr ""
 
-#: seahub/avatar/models.py:138 seahub/avatar/models.py:163
+#: seahub/avatar/models.py:134 seahub/avatar/models.py:159
 #, python-format
 msgid "Avatar for %s"
 msgstr ""
@@ -547,8 +547,9 @@ msgstr "当前头像："
 #: seahub/group/templates/group/group_manage.html:100
 #: seahub/group/templates/group/group_manage.html:108
 #: seahub/group/templates/group/group_pubinfo.html:24
-#: seahub/group/templates/group/group_wiki.html:25
-#: seahub/group/templates/group/group_wiki.html:57
+#: seahub/group/templates/group/group_wiki.html:39
+#: seahub/group/templates/group/group_wiki.html:49
+#: seahub/group/templates/group/group_wiki.html:82
 #: seahub/group/templates/group/group_wiki_pages.html:33
 #: seahub/group/templates/group/groups_right_panel.html:37
 #: seahub/group/templates/group/grpmember_add_form.html:32
@@ -589,8 +590,9 @@ msgstr "当前头像："
 #: seahub/templates/sysadmin/sys_useradmin.html:31
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/userinfo.html:53
-#: seahub/templates/wiki/personal_wiki.html:24
-#: seahub/templates/wiki/personal_wiki.html:52
+#: seahub/templates/wiki/personal_wiki.html:38
+#: seahub/templates/wiki/personal_wiki.html:48
+#: seahub/templates/wiki/personal_wiki.html:77
 #: seahub/templates/wiki/personal_wiki_pages.html:31
 msgid "Submit"
 msgstr "提交"
@@ -607,7 +609,7 @@ msgstr ""
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr ""
 
-#: seahub/avatar/templatetags/avatar_tags.py:46
+#: seahub/avatar/templatetags/avatar_tags.py:47
 msgid "Default Avatar"
 msgstr ""
 
@@ -747,7 +749,7 @@ msgstr[0] "%(seconds)d 秒前"
 #: seahub/share/templates/share/repos.html:26
 #: seahub/share/templates/share/repos.html:40
 #: seahub/share/templates/share/user_share_list.html:42
-#: seahub/templates/pubrepo.html:23 seahub/templates/pubrepo.html.py:26
+#: seahub/templates/pubrepo.html:26 seahub/templates/pubrepo.html.py:29
 #: seahub/templates/snippets/my_owned_repos.html:29
 #: seahub/templates/snippets/my_owned_repos.html:31
 #: seahub/templates/snippets/my_owned_repos.html:75
@@ -771,7 +773,7 @@ msgstr "可读写"
 #: seahub/share/templates/share/list_priv_shared_folders.html:34
 #: seahub/share/templates/share/repos.html:38
 #: seahub/share/templates/share/user_share_list.html:44
-#: seahub/templates/pubrepo.html:28 seahub/templates/repo.html:22
+#: seahub/templates/pubrepo.html:31 seahub/templates/repo.html:22
 #: seahub/templates/snippets/my_owned_repos.html:130
 #: seahub/templates/snippets/my_owned_repos.html:190
 #: seahub/templates/snippets/repo_create_form.html:12
@@ -835,8 +837,8 @@ msgstr "邮箱"
 #: seahub/contacts/templates/contacts/contact_list.html:18
 #: seahub/group/templates/group/group_info.html:21
 #: seahub/group/templates/group/group_info_for_pub.html:13
-#: seahub/group/templates/group/group_wiki.html:20
-#: seahub/group/templates/group/group_wiki.html:54
+#: seahub/group/templates/group/group_wiki.html:34
+#: seahub/group/templates/group/group_wiki.html:79
 #: seahub/group/templates/group/group_wiki_pages.html:30
 #: seahub/message/templates/message/all_msg_list.html:21
 #: seahub/share/templates/share/links.html:20
@@ -846,7 +848,7 @@ msgstr "邮箱"
 #: seahub/share/templates/share/priv_shared_files.html:53
 #: seahub/share/templates/share/repos.html:15
 #: seahub/share/templates/share/user_share_list.html:33
-#: seahub/templates/pubrepo.html:13 seahub/templates/repo_history_view.html:52
+#: seahub/templates/pubrepo.html:16 seahub/templates/repo_history_view.html:52
 #: seahub/templates/repo_recycle_view.html:53
 #: seahub/templates/repo_settings.html:15
 #: seahub/templates/view_shared_dir.html:32
@@ -866,8 +868,8 @@ msgstr "邮箱"
 #: seahub/templates/sysadmin/sys_repo_search.html:9
 #: seahub/templates/sysadmin/userinfo.html:71
 #: seahub/templates/sysadmin/userinfo.html:97
-#: seahub/templates/wiki/personal_wiki.html:19
-#: seahub/templates/wiki/personal_wiki.html:49
+#: seahub/templates/wiki/personal_wiki.html:33
+#: seahub/templates/wiki/personal_wiki.html:74
 #: seahub/templates/wiki/personal_wiki_pages.html:28
 msgid "Name"
 msgstr "名称"
@@ -893,7 +895,7 @@ msgstr "备注"
 #: seahub/share/templates/share/repos.html:19
 #: seahub/share/templates/share/user_share_list.html:36
 #: seahub/templates/client_mgmt.html:17
-#: seahub/templates/file_revisions.html:28 seahub/templates/pubrepo.html:17
+#: seahub/templates/file_revisions.html:28 seahub/templates/pubrepo.html:20
 #: seahub/templates/repo_recycle_view.html:56
 #: seahub/templates/repo_view_snapshot.html:18
 #: seahub/templates/view_shared_dir.html:34
@@ -1204,12 +1206,12 @@ msgid "Failed to create: you are not in the group."
 msgstr "创建失败：你不在该群组中。"
 
 #: seahub/group/views.py:1025 seahub/group/views.py:1056
-#: seahub/group/views.py:1436 seahub/views/wiki.py:127
+#: seahub/group/views.py:1452 seahub/views/wiki.py:143
 msgid "Failed to create"
 msgstr "创建失败"
 
 #: seahub/group/views.py:1039 seahub/group/views.py:1069
-#: seahub/group/views.py:1445
+#: seahub/group/views.py:1461
 msgid "Failed to create: internal error."
 msgstr "创建团体群组失败。"
 
@@ -1222,7 +1224,7 @@ msgid "Sent successfully, the group admin will handle it."
 msgstr "发送成功，请等候管理员处理。"
 
 #: seahub/group/views.py:1269 seahub/views/__init__.py:575
-#: seahub/views/ajax.py:1068 seahub/views/file.py:297 seahub/views/file.py:596
+#: seahub/views/ajax.py:1069 seahub/views/file.py:297 seahub/views/file.py:596
 #: seahub/views/file.py:686
 msgid "File does not exist"
 msgstr "文件不存在"
@@ -1235,35 +1237,50 @@ msgstr "\"维基\"模块已添加。"
 msgid "Successfully disable \"Wiki\"."
 msgstr "\"维基\"模块已删除。"
 
-#: seahub/group/views.py:1346 seahub/group/views.py:1483
-#: seahub/views/wiki.py:54 seahub/views/wiki.py:161
+#: seahub/group/views.py:1349 seahub/group/views.py:1523
+#: seahub/views/wiki.py:58 seahub/views/wiki.py:199
 msgid "Failed to create wiki page. Please retry later."
 msgstr "创建维基页面失败，请稍后再试"
 
-#: seahub/group/views.py:1388 seahub/views/__init__.py:569
+#: seahub/group/views.py:1404 seahub/views/__init__.py:569
 #: seahub/views/__init__.py:1171 seahub/views/__init__.py:1448
-#: seahub/views/wiki.py:90
+#: seahub/views/wiki.py:106
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
-#: seahub/group/views.py:1390 seahub/views/wiki.py:92
+#: seahub/group/views.py:1406 seahub/views/wiki.py:108
 msgid "Wiki does not exists."
 msgstr "Wiki不存在"
 
-#: seahub/group/views.py:1452 seahub/views/wiki.py:134
+#: seahub/group/views.py:1468 seahub/group/views.py:1493
+#: seahub/views/wiki.py:150 seahub/views/wiki.py:173
 msgid "Failed to create home page. Please retry later"
 msgstr "创建首页失败，请稍后再试"
 
-#: seahub/group/views.py:1473 seahub/group/views.py:1499
-#: seahub/group/views.py:1517 seahub/views/wiki.py:151
-#: seahub/views/wiki.py:174 seahub/views/wiki.py:189
+#: seahub/group/views.py:1484 seahub/views/wiki.py:164
+msgid "Failed to set wiki library."
+msgstr "设置维基资料库失败。"
+
+#: seahub/group/views.py:1513 seahub/group/views.py:1539
+#: seahub/group/views.py:1557 seahub/views/wiki.py:189
+#: seahub/views/wiki.py:212 seahub/views/wiki.py:227
 msgid "Wiki is not found."
 msgstr "Wiki未找到。"
 
-#: seahub/group/views.py:1480 seahub/views/wiki.py:158
+#: seahub/group/views.py:1520 seahub/views/wiki.py:196
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "页面 \"%s\" 已存在。"
+
+#: seahub/group/views.py:1562
+#, python-format
+msgid "Successfully deleted \"%s\"."
+msgstr "\"%s\" 删除成功。"
+
+#: seahub/group/views.py:1564
+#, python-format
+msgid "Failed to delete \"%s\". Please retry later."
+msgstr "删除\"%s\"失败，请稍后再试"
 
 #: seahub/group/templates/group/add_member_email.html:2
 #, python-format
@@ -1326,6 +1343,7 @@ msgstr "输入不能为空且应少于2048个字符。"
 #: seahub/group/templates/group/group_discuss.html:99
 #: seahub/group/templates/group/group_discuss.html:156
 #: seahub/group/templates/group/group_info.html:131
+#: seahub/group/templates/group/group_wiki.html:50
 #: seahub/group/templates/group/new_msg_reply.html:66
 #: seahub/message/templates/message/all_msg_list.html:51
 #: seahub/message/templates/message/user_msg_list.html:21
@@ -1339,6 +1357,7 @@ msgstr "输入不能为空且应少于2048个字符。"
 #: seahub/templates/snippets/file_share_popup.html:42
 #: seahub/templates/snippets/file_share_popup.html:62
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
+#: seahub/templates/wiki/personal_wiki.html:49
 msgid "Cancel"
 msgstr "取消"
 
@@ -1365,7 +1384,7 @@ msgstr "退出"
 #: seahub/templates/admin_base.html:10 seahub/templates/home_base.html:12
 #: seahub/templates/home_base.html.py:28 seahub/templates/myhome.html:4
 #: seahub/templates/org_admin_base.html:11 seahub/templates/pub_base.html:12
-#: seahub/templates/pubrepo.html:8
+#: seahub/templates/pubrepo.html:9
 msgid "Libraries"
 msgstr "资料库"
 
@@ -1408,10 +1427,10 @@ msgstr "登录之后，你就可以发起讨论和回复。"
 
 #: seahub/group/templates/group/group_discuss.html:112
 #: seahub/message/templates/message/user_msg_list.html:65
-#: seahub/templates/pubuser.html:28 seahub/templates/repo_history.html:52
+#: seahub/templates/pubuser.html:51 seahub/templates/repo_history.html:52
 #: seahub/templates/repo_view_snapshot.html:51
 #: seahub/templates/view_file_pdf.html:30
-#: seahub/templates/snippets/file_content_js.html:63
+#: seahub/templates/snippets/file_content_js.html:85
 #: seahub/templates/sysadmin/sys_group_admin.html:29
 #: seahub/templates/sysadmin/sys_publink_admin.html:30
 #: seahub/templates/sysadmin/sys_repo_admin.html:23
@@ -1421,10 +1440,10 @@ msgstr "前一页"
 
 #: seahub/group/templates/group/group_discuss.html:122
 #: seahub/message/templates/message/user_msg_list.html:75
-#: seahub/templates/pubuser.html:38 seahub/templates/repo_history.html:55
+#: seahub/templates/pubuser.html:61 seahub/templates/repo_history.html:55
 #: seahub/templates/repo_view_snapshot.html:54
 #: seahub/templates/view_file_pdf.html:30
-#: seahub/templates/snippets/file_content_js.html:63
+#: seahub/templates/snippets/file_content_js.html:85
 #: seahub/templates/sysadmin/sys_group_admin.html:32
 #: seahub/templates/sysadmin/sys_publink_admin.html:33
 #: seahub/templates/sysadmin/sys_repo_admin.html:26
@@ -1471,6 +1490,7 @@ msgid "Recent Changes"
 msgstr "最近修改"
 
 #: seahub/group/templates/group/group_info.html:14
+#: seahub/templates/pubrepo.html:10
 #: seahub/templates/snippets/my_owned_repos.html:13
 #: seahub/templates/snippets/repo_create_form.html:3
 msgid "New Library"
@@ -1479,11 +1499,11 @@ msgstr "新建资料库"
 #: seahub/group/templates/group/group_info.html:22
 #: seahub/group/templates/group/group_info.html:76
 #: seahub/group/templates/group/group_info_for_pub.html:14
-#: seahub/group/templates/group/group_wiki.html:22
+#: seahub/group/templates/group/group_wiki.html:36
 #: seahub/share/templates/share/list_priv_shared_folders.html:18
 #: seahub/share/templates/share/repos.html:18
 #: seahub/share/templates/share/user_share_list.html:34
-#: seahub/templates/pubrepo.html:14 seahub/templates/repo_history.html:23
+#: seahub/templates/pubrepo.html:17 seahub/templates/repo_history.html:23
 #: seahub/templates/repo_settings.html:17
 #: seahub/templates/snippets/my_owned_repos.html:21
 #: seahub/templates/snippets/my_owned_repos.html:115
@@ -1494,14 +1514,14 @@ msgstr "新建资料库"
 #: seahub/templates/sysadmin/sys_list_system.html:22
 #: seahub/templates/sysadmin/userinfo.html:72
 #: seahub/templates/sysadmin/userinfo.html:99
-#: seahub/templates/wiki/personal_wiki.html:21
+#: seahub/templates/wiki/personal_wiki.html:35
 msgid "Description"
 msgstr "描述"
 
 #: seahub/group/templates/group/group_info.html:23
 #: seahub/group/templates/group/group_info_for_pub.html:15
 #: seahub/share/templates/share/user_share_list.html:35
-#: seahub/templates/pubrepo.html:15 seahub/templates/starred.html:15
+#: seahub/templates/pubrepo.html:18 seahub/templates/starred.html:15
 #: seahub/templates/snippets/my_owned_repos.html:22
 #: seahub/templates/snippets/my_owned_repos.html:69
 #: seahub/templates/snippets/my_owned_repos.html:116
@@ -1545,7 +1565,7 @@ msgstr "目录图标"
 
 #: seahub/group/templates/group/group_info.html:52
 #: seahub/share/templates/share/user_share_list.html:56
-#: seahub/templates/pubrepo.html:38
+#: seahub/templates/pubrepo.html:41
 #: seahub/templates/snippets/my_owned_repos.html:43
 #: seahub/templates/snippets/my_owned_repos.html:89
 #: seahub/templates/snippets/my_owned_repos.html:144
@@ -1565,7 +1585,7 @@ msgstr "下载和同步"
 #: seahub/share/templates/share/repos.html:54
 #: seahub/share/templates/share/repos.html:56
 #: seahub/share/templates/share/user_share_list.html:61
-#: seahub/templates/pubrepo.html:41
+#: seahub/templates/pubrepo.html:44
 msgid "Unshare"
 msgstr "取消共享"
 
@@ -1623,7 +1643,7 @@ msgstr "详情"
 
 #: seahub/group/templates/group/group_info.html:107
 #: seahub/group/templates/group/new_msg_reply.html:74
-#: seahub/templates/pubuser.html:43 seahub/templates/repo_history.html:35
+#: seahub/templates/pubuser.html:66 seahub/templates/repo_history.html:35
 #: seahub/templates/repo_view_snapshot.html:29
 #: seahub/templates/sysadmin/sys_list_orphan.html:20
 #: seahub/templates/sysadmin/sys_list_system.html:33
@@ -1767,7 +1787,7 @@ msgstr "确定要删除 %s 吗？"
 
 #: seahub/group/templates/group/group_members.html:17
 #: seahub/profile/templates/profile/user_profile.html:28
-#: seahub/templates/pubuser.html:19
+#: seahub/templates/pubuser.html:42
 msgid "Add to Contacts"
 msgstr "加到通讯录"
 
@@ -1797,12 +1817,27 @@ msgstr "成员数："
 msgid "Verification Message"
 msgstr "验证消息"
 
-#: seahub/group/templates/group/group_wiki.html:12
+#: seahub/group/templates/group/group_wiki.html:11
+#: seahub/templates/wiki/personal_wiki.html:13
+msgid "Wiki Index"
+msgstr "维基索引"
+
+#: seahub/group/templates/group/group_wiki.html:13
+#: seahub/templates/wiki/personal_wiki.html:15
+msgid "You do not have index now."
+msgstr "你还未创建维基索引"
+
+#: seahub/group/templates/group/group_wiki.html:14
+#: seahub/templates/repo.html:214 seahub/templates/wiki/personal_wiki.html:16
+msgid "Create"
+msgstr "创建"
+
+#: seahub/group/templates/group/group_wiki.html:23
 msgid "This group currently has no wiki"
 msgstr "该群组目前还没创建Wiki"
 
-#: seahub/group/templates/group/group_wiki.html:13
-#: seahub/templates/wiki/personal_wiki.html:14
+#: seahub/group/templates/group/group_wiki.html:24
+#: seahub/templates/wiki/personal_wiki.html:25
 msgid ""
 "Seafile Wiki enables you to organize your knowledge in a simple way. The "
 "contents of wiki is stored in a normal library with pre-defined file/folder "
@@ -1812,82 +1847,105 @@ msgstr ""
 "Seafile Wiki 能让你以一种非常简单的方式管理你的知识。Wiki 的内容以预定义的文"
 "件/目录结构存储在一个普通的资料库中，这样便可以在本地编辑，然后同步回服务器。"
 
-#: seahub/group/templates/group/group_wiki.html:15
-#: seahub/templates/wiki/personal_wiki.html:15
+#: seahub/group/templates/group/group_wiki.html:26
+#: seahub/templates/wiki/personal_wiki.html:26
 msgid "Create Wiki Now"
 msgstr "现在创建Wiki"
 
-#: seahub/group/templates/group/group_wiki.html:19
-#: seahub/templates/wiki/personal_wiki.html:18
+#: seahub/group/templates/group/group_wiki.html:28
+#: seahub/templates/wiki/personal_wiki.html:28
+msgid "Choose a library as wiki"
+msgstr "从已有资料库选择"
+
+#: seahub/group/templates/group/group_wiki.html:33
+#: seahub/templates/wiki/personal_wiki.html:32
 msgid "Create Wiki"
 msgstr "创建Wiki"
 
-#: seahub/group/templates/group/group_wiki.html:23
+#: seahub/group/templates/group/group_wiki.html:37
 msgid "Wiki Pages"
 msgstr "Wiki 页面"
 
-#: seahub/group/templates/group/group_wiki.html:31
+#: seahub/group/templates/group/group_wiki.html:43
+#: seahub/templates/wiki/personal_wiki.html:42
+msgid "Choose a library as wiki:"
+msgstr "选择一个资料库作为维基："
+
+#: seahub/group/templates/group/group_wiki.html:48
+#: seahub/profile/templates/profile/set_profile.html:111
+#: seahub/templates/wiki/personal_wiki.html:47
+msgid "Please click and choose a library."
+msgstr "请选择资料库。"
+
+#: seahub/group/templates/group/group_wiki.html:56
 #: seahub/group/templates/group/group_wiki_pages.html:11
-#: seahub/templates/wiki/personal_wiki.html:30
+#: seahub/templates/wiki/personal_wiki.html:55
 #: seahub/templates/wiki/personal_wiki_pages.html:13
 msgid "Home"
 msgstr "首页"
 
-#: seahub/group/templates/group/group_wiki.html:32
+#: seahub/group/templates/group/group_wiki.html:57
 #: seahub/group/templates/group/group_wiki_pages.html:12
-#: seahub/templates/wiki/personal_wiki.html:31
+#: seahub/templates/wiki/personal_wiki.html:56
 #: seahub/templates/wiki/personal_wiki_pages.html:14
 msgid "Pages"
 msgstr "页面"
 
-#: seahub/group/templates/group/group_wiki.html:34
+#: seahub/group/templates/group/group_wiki.html:59
 #: seahub/group/templates/group/group_wiki_pages.html:14
-#: seahub/templates/wiki/personal_wiki.html:32
+#: seahub/templates/wiki/personal_wiki.html:57
 #: seahub/templates/wiki/personal_wiki_pages.html:15
 msgid "Wiki History"
 msgstr "Wiki历史"
 
-#: seahub/group/templates/group/group_wiki.html:39
-#: seahub/group/templates/group/group_wiki.html:53
+#: seahub/group/templates/group/group_wiki.html:64
+#: seahub/group/templates/group/group_wiki.html:78
 #: seahub/group/templates/group/group_wiki_pages.html:18
 #: seahub/group/templates/group/group_wiki_pages.html:29
-#: seahub/templates/wiki/personal_wiki.html:35
-#: seahub/templates/wiki/personal_wiki.html:48
+#: seahub/templates/wiki/personal_wiki.html:60
+#: seahub/templates/wiki/personal_wiki.html:73
 #: seahub/templates/wiki/personal_wiki_pages.html:17
 #: seahub/templates/wiki/personal_wiki_pages.html:27
 msgid "New Page"
 msgstr "新建页面"
 
-#: seahub/group/templates/group/group_wiki.html:40
-#: seahub/templates/wiki/personal_wiki.html:36
+#: seahub/group/templates/group/group_wiki.html:65
+#: seahub/group/templates/group/group_wiki.html:124
+#: seahub/templates/wiki/personal_wiki.html:61
+#: seahub/templates/wiki/personal_wiki.html:119
 msgid "Delete Page"
 msgstr "删除页面"
 
-#: seahub/group/templates/group/group_wiki.html:41
-#: seahub/templates/wiki/personal_wiki.html:37
+#: seahub/group/templates/group/group_wiki.html:66
+#: seahub/templates/wiki/personal_wiki.html:62
 msgid "Edit Page"
 msgstr "编辑页面"
 
-#: seahub/group/templates/group/group_wiki.html:42
-#: seahub/templates/wiki/personal_wiki.html:38
+#: seahub/group/templates/group/group_wiki.html:67
+#: seahub/templates/wiki/personal_wiki.html:63
 msgid "Page History"
 msgstr "页面历史"
 
-#: seahub/group/templates/group/group_wiki.html:49
-#: seahub/templates/wiki/personal_wiki.html:44
+#: seahub/group/templates/group/group_wiki.html:74
+#: seahub/templates/wiki/personal_wiki.html:69
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
 msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
-#: seahub/group/templates/group/group_wiki.html:112
+#: seahub/group/templates/group/group_wiki.html:125
+#: seahub/templates/wiki/personal_wiki.html:120
+msgid "Are you sure you want to delete this page?"
+msgstr "确定要删除该页面？"
+
+#: seahub/group/templates/group/group_wiki.html:146
 #: seahub/templates/repo_settings.html:60
-#: seahub/templates/wiki/personal_wiki.html:107
+#: seahub/templates/wiki/personal_wiki.html:141
 msgid "Name is required."
 msgstr "名称为必填项。"
 
-#: seahub/group/templates/group/group_wiki.html:116
+#: seahub/group/templates/group/group_wiki.html:150
 #: seahub/templates/repo_settings.html:64
-#: seahub/templates/wiki/personal_wiki.html:111
+#: seahub/templates/wiki/personal_wiki.html:145
 msgid "Description is required."
 msgstr "描述为必填项"
 
@@ -2287,11 +2345,11 @@ msgstr "消息是必填项"
 msgid "contact is required"
 msgstr "联系人是必填项"
 
-#: seahub/message/views.py:159
+#: seahub/message/views.py:162
 msgid "You can not send message to yourself."
 msgstr "你不能发消息给自己。"
 
-#: seahub/message/views.py:163
+#: seahub/message/views.py:166
 #, python-format
 msgid "Failed to send message to %s, user not found."
 msgstr "发送消息失败，%s 未找到。"
@@ -2381,7 +2439,7 @@ msgid "You have recieved a <a href='%(href)s'>new message</a> from %(user)s."
 msgstr "你收到来自 %(user)s 的<a href='%(href)s'>新消息</a>。"
 
 #: seahub/notifications/models.py:518 seahub/notifications/models.py:549
-#: seahub/utils/__init__.py:112 seahub/utils/__init__.py:778
+#: seahub/utils/__init__.py:112 seahub/utils/__init__.py:776
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -2648,10 +2706,6 @@ msgstr "该操作将不可撤销。请三思！"
 msgid "Choose default library:"
 msgstr "选择默认资料库："
 
-#: seahub/profile/templates/profile/set_profile.html:111
-msgid "Please click and choose a library."
-msgstr "请选择资料库。"
-
 #: seahub/profile/templates/profile/set_profile.html:128
 msgid "Really want to delete your account?"
 msgstr "确定要注销该帐号吗？"
@@ -2774,8 +2828,8 @@ msgstr "所有成员"
 
 #: seahub/share/views.py:665 seahub/share/views.py:1011
 #: seahub/views/__init__.py:794 seahub/views/__init__.py:1543
-#: seahub/views/__init__.py:1578 seahub/views/ajax.py:873
-#: seahub/views/ajax.py:890 seahub/views/file.py:770
+#: seahub/views/__init__.py:1578 seahub/views/ajax.py:874
+#: seahub/views/ajax.py:891 seahub/views/file.py:796
 msgid "Invalid arguments"
 msgstr "非法参数"
 
@@ -2939,13 +2993,13 @@ msgid ""
 msgstr "如果你不想共享整个资料库，你可以共享单个文件夹给已注册的用户。"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:97
-#: seahub/share/templates/share/repos.html:101
+#: seahub/share/templates/share/repos.html:107
 #: seahub/templates/sysadmin/useradmin_js.html:62
 msgid "Edit succeeded"
 msgstr "权限修改成功"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:104
-#: seahub/share/templates/share/repos.html:108
+#: seahub/share/templates/share/repos.html:114
 #: seahub/templates/sysadmin/useradmin_js.html:71
 msgid "Edit failed."
 msgstr "权限修改失败"
@@ -3049,7 +3103,7 @@ msgid "Exit System Admin"
 msgstr "退出系统管理"
 
 #: seahub/templates/admin_base.html:13 seahub/templates/pub_base.html:14
-#: seahub/templates/pubuser.html:8
+#: seahub/templates/pubuser.html:31
 msgid "Users"
 msgstr "成员"
 
@@ -3687,21 +3741,25 @@ msgid ""
 "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "你可以到“群组”页面点击“新建群组”按钮创建一个群组。"
 
-#: seahub/templates/pubrepo.html:16 seahub/templates/sysadmin/userinfo.html:98
+#: seahub/templates/pubrepo.html:19 seahub/templates/sysadmin/userinfo.html:98
 msgid "Share From"
 msgstr "共享来源"
 
-#: seahub/templates/pubrepo.html:50
+#: seahub/templates/pubrepo.html:53
 msgid "No public library"
 msgstr "当前没有公共资料"
 
-#: seahub/templates/pubrepo.html:51
+#: seahub/templates/pubrepo.html:54
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr ""
 "你可以点击“新建资料库”按钮创建一个公开的资料库，网站内的其他人都可以查看下载"
 "这个资料库。"
+
+#: seahub/templates/pubuser.html:26
+msgid "Find users..."
+msgstr "查找用户..."
 
 #: seahub/templates/repo.html:31
 msgid "Trash"
@@ -3848,10 +3906,6 @@ msgstr ""
 "一个子资料库会从这个目录创建。它会在你的桌面客户端列出来，你可以像普通的资料"
 "库一样去下载。"
 
-#: seahub/templates/repo.html:214
-msgid "Create"
-msgstr "创建"
-
 #: seahub/templates/repo.html:228
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
@@ -3940,7 +3994,7 @@ msgid "Copy selected directories/files to:"
 msgstr "复制选中的文件/目录到:"
 
 #: seahub/templates/repo.html:569 seahub/templates/repo.html.py:1580
-#: seahub/views/ajax.py:637 seahub/views/ajax.py:798
+#: seahub/views/ajax.py:638 seahub/views/ajax.py:799
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
@@ -4379,22 +4433,22 @@ msgid "Starred successfully"
 msgstr "星标添加成功"
 
 #: seahub/templates/view_file_image.html:15
-#: seahub/templates/snippets/file_content_html.html:31
+#: seahub/templates/snippets/file_content_html.html:30
 msgid "you can also press ← "
 msgstr "可用方向键 ← "
 
 #: seahub/templates/view_file_image.html:15
-#: seahub/templates/snippets/file_content_html.html:31
+#: seahub/templates/snippets/file_content_html.html:30
 msgid "prev"
 msgstr "上一张"
 
 #: seahub/templates/view_file_image.html:21
-#: seahub/templates/snippets/file_content_html.html:37
+#: seahub/templates/snippets/file_content_html.html:36
 msgid "you can also press → "
 msgstr "可用方向键 → "
 
 #: seahub/templates/view_file_image.html:21
-#: seahub/templates/snippets/file_content_html.html:37
+#: seahub/templates/snippets/file_content_html.html:36
 msgid "next"
 msgstr "下一张"
 
@@ -4413,7 +4467,7 @@ msgid "auto detect"
 msgstr "自动检测"
 
 #: seahub/templates/view_file_pdf.html:30
-#: seahub/templates/snippets/file_content_js.html:63
+#: seahub/templates/snippets/file_content_js.html:85
 msgid ""
 "<span id=\"pdf-page\"><label for=\"page-number\">Page</label> <input type="
 "\"number\" id=\"page-number\" value=\"1\" min=\"1\"></input> / <span id="
@@ -4424,28 +4478,28 @@ msgstr ""
 "\"page-nums\"></span> 页</span>"
 
 #: seahub/templates/view_file_pdf.html:30
-#: seahub/templates/snippets/file_content_js.html:63
+#: seahub/templates/snippets/file_content_js.html:85
 msgid "Full Screen"
 msgstr "全屏"
 
 #: seahub/templates/view_file_pdf.html:30
-#: seahub/templates/snippets/file_content_js.html:63
+#: seahub/templates/snippets/file_content_js.html:85
 msgid "loading..."
 msgstr "加载中..."
 
 #: seahub/templates/view_file_pdf.html:77
-#: seahub/templates/snippets/file_content_js.html:110
+#: seahub/templates/snippets/file_content_js.html:132
 msgid ""
 "You can use IE 10 or other browsers, for example, firefox, to view it online."
 msgstr "如果您想在线查看该文件，您可以使用 IE 10 或其他浏览器比如 firefox 。"
 
 #: seahub/templates/view_file_svg.html:7
-#: seahub/templates/snippets/file_content_js.html:41
+#: seahub/templates/snippets/file_content_js.html:63
 msgid "To view it online, you can use firefox, chrome or IE 9."
 msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
 
 #: seahub/templates/view_file_unknown.html:6
-#: seahub/templates/snippets/file_content_js.html:124
+#: seahub/templates/snippets/file_content_js.html:146
 msgid "This type of file cannot be viewed online."
 msgstr "该类型文件无法在线查看。"
 
@@ -5310,15 +5364,15 @@ msgstr "Tip: 设置为0表示重置为默认上限"
 msgid "Owned"
 msgstr "我拥有的"
 
-#: seahub/templates/wiki/personal_wiki.html:13
+#: seahub/templates/wiki/personal_wiki.html:24
 msgid "You do not have personal wiki"
 msgstr "你还未创建个人维基"
 
-#: seahub/templates/wiki/personal_wiki.html:20
+#: seahub/templates/wiki/personal_wiki.html:34
 msgid "personal-wiki"
 msgstr "个人维基"
 
-#: seahub/templates/wiki/personal_wiki.html:22
+#: seahub/templates/wiki/personal_wiki.html:36
 msgid "Personal Wiki Pages"
 msgstr "个人维基页面"
 
@@ -5330,10 +5384,10 @@ msgstr "权限错误"
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: seahub/views/__init__.py:427 seahub/views/ajax.py:216
-#: seahub/views/ajax.py:296 seahub/views/ajax.py:370 seahub/views/ajax.py:457
-#: seahub/views/ajax.py:514 seahub/views/ajax.py:556 seahub/views/ajax.py:600
-#: seahub/views/ajax.py:760 seahub/views/ajax.py:923
+#: seahub/views/__init__.py:427 seahub/views/ajax.py:217
+#: seahub/views/ajax.py:297 seahub/views/ajax.py:371 seahub/views/ajax.py:458
+#: seahub/views/ajax.py:515 seahub/views/ajax.py:557 seahub/views/ajax.py:601
+#: seahub/views/ajax.py:761 seahub/views/ajax.py:924
 msgid "Library does not exist."
 msgstr "资料库不存在"
 
@@ -5409,7 +5463,7 @@ msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
 #: seahub/views/__init__.py:796 seahub/views/__init__.py:1483
-#: seahub/views/__init__.py:1851 seahub/views/ajax.py:1107
+#: seahub/views/__init__.py:1896 seahub/views/ajax.py:1112
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -5452,7 +5506,7 @@ msgstr "删除文件出错。"
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: seahub/views/__init__.py:1237 seahub/views/ajax.py:540
+#: seahub/views/__init__.py:1237 seahub/views/ajax.py:541
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
@@ -5485,100 +5539,104 @@ msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: seahub/views/__init__.py:1888 seahub/views/file.py:748
+#: seahub/views/__init__.py:1933 seahub/views/file.py:774
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: seahub/views/__init__.py:1891
+#: seahub/views/__init__.py:1936
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: seahub/views/__init__.py:1905
+#: seahub/views/__init__.py:1950
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
 
-#: seahub/views/__init__.py:2067
+#: seahub/views/__init__.py:2110
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"个人维基\"模块添加成功。"
 
-#: seahub/views/__init__.py:2072
+#: seahub/views/__init__.py:2115
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"个人维基\"模块删除成功。"
 
-#: seahub/views/ajax.py:69
+#: seahub/views/ajax.py:70
 msgid "You don't have permission to access the library."
 msgstr "你没有权限访问该资料库。"
 
-#: seahub/views/ajax.py:77
+#: seahub/views/ajax.py:78
 msgid "No path."
 msgstr "路径不存在"
 
-#: seahub/views/ajax.py:150
+#: seahub/views/ajax.py:151
 msgid "The group doesn't exist"
 msgstr "该群组不存在"
 
-#: seahub/views/ajax.py:156 seahub/views/ajax.py:377 seahub/views/ajax.py:463
-#: seahub/views/ajax.py:607 seahub/views/ajax.py:631 seahub/views/ajax.py:767
-#: seahub/views/ajax.py:792 seahub/views/file.py:755
+#: seahub/views/ajax.py:157 seahub/views/ajax.py:378 seahub/views/ajax.py:464
+#: seahub/views/ajax.py:608 seahub/views/ajax.py:632 seahub/views/ajax.py:768
+#: seahub/views/ajax.py:793 seahub/views/file.py:781
 msgid "Permission denied"
 msgstr "没有权限"
 
-#: seahub/views/ajax.py:223 seahub/views/ajax.py:303 seahub/views/ajax.py:521
-#: seahub/views/ajax.py:563 seahub/views/ajax.py:930 seahub/views/ajax.py:1130
-#: seahub/views/ajax.py:1148
+#: seahub/views/ajax.py:224 seahub/views/ajax.py:304 seahub/views/ajax.py:522
+#: seahub/views/ajax.py:564 seahub/views/ajax.py:931 seahub/views/ajax.py:1135
+#: seahub/views/ajax.py:1153
 msgid "Permission denied."
 msgstr "没有权限"
 
-#: seahub/views/ajax.py:238 seahub/views/ajax.py:318 seahub/views/ajax.py:943
+#: seahub/views/ajax.py:239 seahub/views/ajax.py:319 seahub/views/ajax.py:944
 msgid "Library is encrypted."
 msgstr "该资料库已加密"
 
-#: seahub/views/ajax.py:244 seahub/views/ajax.py:324 seahub/views/ajax.py:949
+#: seahub/views/ajax.py:245 seahub/views/ajax.py:325 seahub/views/ajax.py:950
 msgid "Error: no head commit id"
 msgstr "错误：没有 head commit id。"
 
-#: seahub/views/ajax.py:529 seahub/views/ajax.py:571
+#: seahub/views/ajax.py:530 seahub/views/ajax.py:572
 msgid "Argument missing."
 msgstr "参数缺失"
 
-#: seahub/views/ajax.py:625
+#: seahub/views/ajax.py:626
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: seahub/views/ajax.py:654 seahub/views/ajax.py:706
+#: seahub/views/ajax.py:655 seahub/views/ajax.py:707
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "移动 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: seahub/views/ajax.py:676 seahub/views/ajax.py:735
+#: seahub/views/ajax.py:677 seahub/views/ajax.py:736
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "复制 %(name)s 成功：<a href=\"%(url)s\">查看</a>"
 
-#: seahub/views/ajax.py:694 seahub/views/ajax.py:813
+#: seahub/views/ajax.py:695 seahub/views/ajax.py:814
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
-#: seahub/views/ajax.py:724 seahub/views/ajax.py:843
+#: seahub/views/ajax.py:725 seahub/views/ajax.py:844
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 复制到它的子目录 %(des)s 中"
 
-#: seahub/views/ajax.py:786
+#: seahub/views/ajax.py:787
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "目标路径对 %s 来说过长。"
 
-#: seahub/views/ajax.py:1020
+#: seahub/views/ajax.py:1021
 msgid "Failed to get file block list"
 msgstr "获取文件块列表失败"
 
-#: seahub/views/ajax.py:1058 seahub/views/ajax.py:1063
+#: seahub/views/ajax.py:1059 seahub/views/ajax.py:1064
 msgid "Wrong repo id"
 msgstr "错误的repo id"
+
+#: seahub/views/ajax.py:1107
+msgid "System library can not be deleted."
+msgstr "系统资料库无法被删除。"
 
 #: seahub/views/file.py:111
 msgid "HTTPError: failed to open file online"
@@ -5611,23 +5669,23 @@ msgstr "无法查看该文件"
 msgid "Invalid file format."
 msgstr "错误的文件格式。"
 
-#: seahub/views/file.py:759
+#: seahub/views/file.py:785
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: seahub/views/file.py:763
+#: seahub/views/file.py:789
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: seahub/views/file.py:831
+#: seahub/views/file.py:857
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: seahub/views/file.py:843
+#: seahub/views/file.py:869
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: seahub/views/file.py:871
+#: seahub/views/file.py:897
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
@@ -5755,4 +5813,3 @@ msgstr "转让失败，未找到用户 \"%s\""
 #: seahub/views/sysadmin.py:685
 msgid "Failed to transfer, invalid arguments."
 msgstr "转让失败， 参数无效"
-

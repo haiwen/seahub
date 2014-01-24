@@ -64,7 +64,8 @@ MAX_INT = 2147483647
 PREVIEW_FILEEXT = {
     TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico'),
-    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx',),
+    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx'),
+    SPREADSHEET: ('xls', 'xlsx'),
     # SVG: ('svg',),
     PDF: ('pdf',),
     OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp', 'ods', 'fods'),
@@ -420,16 +421,14 @@ if EVENTS_CONFIG_FILE:
 
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
-        1. event1.username = event2.username
+        1. event1.commit.creator = event2.commit.creator
         2. event1.commit.desc = event2.commit.desc
         """
-        if e1.username != e2.username:
-            return False
-        else:
-            if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-                if e1.commit.desc == e2.commit.desc:
-                    return True
-            return False
+        if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
+            if e1.commit.desc == e2.commit.desc and \
+                    e1.commit.creator_name == e2.commit.creator_name:
+                return True
+        return False
 
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
@@ -777,7 +776,7 @@ if HAS_OFFICE_CONVERTER:
             logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error'), False
         else:
-            if ret.exists:
+            if ret.exists and (doctype not in ('xls', 'xlsx')):
                 try:
                     ret_dict['html_detail'] = get_converted_html_detail(obj_id)
                 except:

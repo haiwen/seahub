@@ -32,7 +32,7 @@
               <button data="{{save_to_link}}" id="save">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
-            <a target="_blank" href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" id="download">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
@@ -56,10 +56,6 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-$('#download').click(function() {
-    window.open($(this).attr('data'));
-});
-
 var all_repos = [];
 {% for a_repo in accessible_repos %}
     all_repos.push({

@@ -58,13 +58,13 @@ from seahub.utils import EVENTS_ENABLED, \
     api_convert_desc_link, get_file_type_and_ext, \
     HAS_FILE_SEARCH, gen_file_share_link, gen_dir_share_link
 from seahub.utils.file_types import IMAGE
-from seaserv import get_group_repoids, get_emailusers
 from seahub.options.models import UserOptions
 from seahub.shortcuts import get_first_object_or_none
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
 
 from pysearpc import SearpcError, SearpcObjEncoder
+import seaserv
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
@@ -144,7 +144,9 @@ class Accounts(APIView):
         # list accounts
         start = int(request.GET.get('start', '0'))
         limit = int(request.GET.get('limit', '100'))
-        accounts = get_emailusers(start, limit)
+        accounts = seaserv.get_emailusers('LDAP', start, limit)
+        if len(accounts) == 0:
+            accounts = seaserv.get_emailusers('DB', start, limit)
 
         accounts_json = []
         for account in accounts:
