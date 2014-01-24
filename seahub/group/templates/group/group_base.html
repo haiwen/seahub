@@ -13,33 +13,33 @@
         {% if group.is_pub %}<span class="icon-globe" title="{% trans "This group is public." %}"></span>{% endif %}
         </h3>
         {% if is_staff %}
-        <span id="enable-mods" class="icon-th fright" title="{% trans "Enable Modules" %}"></span>
+        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
         {% endif %}
         {% if group.view_perm != 'pub' and not is_staff %}
         <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}"><span class="sf2-icon-archive vam"></span><span class="vam">{% trans "Libraries" %}</span></a></li>
+        <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}" class="lib">{% trans "Libraries" %}</a></li>
 
-        <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}"><span class="icon-comment"></span>{% trans "Discussion" %}</a></li>
+        <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}" class="msgs">{% trans "Discussion" %}</a></li>
 
         {% for mod in mods_enabled %}
         {% if mod == 'group wiki' %}
-        <li class="tab {% block cur_wiki %}{%endblock%}"><a href="{% url 'group_wiki' group.id %}"><span class="icon-book"></span>{% trans "Wiki" %}</a></li>
+        <li class="tab {% block cur_wiki %}{%endblock%}"><a href="{% url 'group_wiki' group.id %}" class="wiki">{% trans "Wiki" %}</a></li>
         {% endif %}
         {% endfor %}
 
         {% if enable_pubfile and group.is_pub %}
-        <li class="tab {% block cur_pubfile %}{%endblock%}"><a href="{% url 'group_pubfiles' group.id %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>
+        <li class="tab {% block cur_pubfile %}{%endblock%}"><a href="{% url 'group_pubfiles' group.id %}" class="files">{% trans "Files" %}</a></li>
         {% endif %}
 
         {% if group.view_perm != 'pub' %}
-        <li class="tab {% block cur_members %}{%endblock%}"><a href="{% url 'group_members' group.id %}"><span class="icon-user"></span>{% trans "Members" %}</a></li>
+        <li class="tab {% block cur_members %}{%endblock%}"><a href="{% url 'group_members' group.id %}" class="members">{% trans "Members" %}</a></li>
         {% endif %}
 
         {% if is_staff %}
-        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}"><span class="icon-wrench"></span>{% trans "Admin" %}</a></li>
+        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
         {% endif %}
     </ul>
 </div>

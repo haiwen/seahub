@@ -493,6 +493,20 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur .links {
     background-image:url('../img/links_w.png');
 }
+.side-tabnav-tabs .tab .members {
+    background-image:url('../img/members.png');
+    background-position: 9px 50%;
+}
+.side-tabnav-tabs .tab-cur .members {
+    background-image:url('../img/members_w.png');
+}
+.side-tabnav-tabs .tab .group {
+    background-image:url('../img/groups.png');
+    background-position: 9px 50%;
+}
+.side-tabnav-tabs .tab-cur .group {
+    background-image:url('../img/groups_w.png');
+}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;
@@ -2671,7 +2685,7 @@ textarea:-moz-placeholder {/* for FF */
 #enable-mods,
 #edit-index {
     color:#888;
-    margin-top:5px;
+    margin-top:3px;
 }
 #enable-mods:hover,
 #edit-index:hover {
