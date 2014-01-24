@@ -391,7 +391,6 @@ textarea:-moz-placeholder {/* for FF */
     color:#000;
 }
 /**** side-tabnav ****/
-.side-tabnav .hd,
 .side-textnav .hd,
 .side-info .hd,
 #right-panel .hd {
@@ -399,7 +398,14 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom:1px solid #ddd;
     margin-bottom:1em;
 }
+.side-tabnav .hd {
+    margin-bottom:0.5em;
+}
+.side-tabnav h3.hd {
+    color:#f7941d;
+}
 .side-tabnav .hd h3 {
+    color:#f7941d;
     margin-bottom:0;
 }
 .side-tabnav .hd .avatar { /*for 'group'*/
@@ -410,23 +416,28 @@ textarea:-moz-placeholder {/* for FF */
     line-height:1;
     color:#666;
 }
+.side-tabnav-tabs {
+    margin-bottom:1em;
+}
 .side-tabnav-tabs .tab a {
     display:block;
     font-size:14px;
-    padding:4px 4px 4px 30px;
+    padding:4px 4px 4px 35px;
     color:#333;
     font-weight:normal;
     border-radius:2px;
-    background:no-repeat scroll 4px 50%;
+    background:no-repeat scroll 6px 50%;
 }
 .side-tabnav-tabs .tab .lib {
     background-image:url('../img/lib.png');
+    background-position: 7px 50%;
 }
 .side-tabnav-tabs .tab-cur .lib {
     background-image:url('../img/lib_w.png');
 }
 .side-tabnav-tabs .tab .star {
     background-image:url('../img/star.png');
+    background-position: 4px 50%;
 }
 .side-tabnav-tabs .tab-cur .star {
     background-image:url('../img/star_w.png');
@@ -439,6 +450,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab .wiki {
     background-image:url('../img/wiki.png');
+    background-position: 8px 50%;
 }
 .side-tabnav-tabs .tab-cur .wiki {
     background-image:url('../img/wiki_w.png');
@@ -454,6 +466,32 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur .clients {
     background-image:url('../img/clients_w.png');
+}
+.side-tabnav-tabs .tab .contacts {
+    background-image:url('../img/contacts.png');
+}
+.side-tabnav-tabs .tab-cur .contacts {
+    background-image:url('../img/contacts_w.png');
+}
+.side-tabnav-tabs .tab .folders {
+    background-image:url('../img/folders.png');
+    background-position: 5px 50%;
+}
+.side-tabnav-tabs .tab-cur .folders {
+    background-image:url('../img/folders_w.png');
+}
+.side-tabnav-tabs .tab .files {
+    background-image:url('../img/files.png');
+    background-position: 8px 50%;
+}
+.side-tabnav-tabs .tab-cur .files {
+    background-image:url('../img/files_w.png');
+}
+.side-tabnav-tabs .tab .links {
+    background-image:url('../img/links.png');
+}
+.side-tabnav-tabs .tab-cur .links {
+    background-image:url('../img/links_w.png');
 }
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
@@ -877,7 +915,7 @@ textarea:-moz-placeholder {/* for FF */
 #header {
     padding:16px 0;
     background:#f4f4f7 url('../img/nav.png') center top repeat-x;
-    border-bottom:1px solid #e3e4e5;
+    /*border-bottom:1px solid #e3e4e5;*/
     width:100%;
     font-size: 14px;
     margin-bottom:25px;

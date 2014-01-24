@@ -6,7 +6,7 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
-        <span id="enable-mods" class="icon-th fright" title="{% trans "Enable Modules" %}"></span>
+        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
@@ -21,15 +21,15 @@
         {% endfor %}
         <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
         <li class="tab {% block cur_clients %}{% endblock %}"><a href="{% url 'client_mgmt' %}" class="clients">{% trans "Clients" %}</a></li>
-        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="">{% trans "Contacts" %}</a></li>
+        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="icon-folder-close"></span>{% trans "Folders" %}</a></li>
-        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}"><span class="icon-file"></span>{% trans "Files" %}</a></li>        
-        <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="icon-link"></span>{% trans "Links" %}</a></li>
+        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
+        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>        
+        <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
     </ul>
 </div>
 {% endblock %}
