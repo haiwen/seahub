@@ -1749,6 +1749,9 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
 }
 /* group, org */
+.group-hl {
+    background:#fbfbfb;
+}
 .group-list,
 .user-list {
     margin-top:30px;
@@ -1761,7 +1764,9 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 17px 30px 0;
 }
 .group-list .group {
-	margin-bottom:25px;
+    width:310px;
+    padding:10px;
+	margin-bottom:20px;
 }
 .group-list .group,
 .user-list .user {
@@ -1771,6 +1776,9 @@ textarea:-moz-placeholder {/* for FF */
 .user-list .user .txt {
     color:#333;
     width:250px;
+}
+.group .txt {
+    width:240px;
 }
 .group h4 {
     margin:0 0 4px;
@@ -1785,15 +1793,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 .group .fast .a {
     font-size:18px;
-    color:#FEAC74;
-    margin-right:5px;
+    margin:8px 12px 0 0;
     display:inline-block;
     vertical-align:middle;
     line-height:24px;
     height:24px;
-}
-.group .fast .discuss {
-    margin-top:-2px; /* for vertical alignment */
 }
 .group .fast .a:hover {
     text-decoration:none;

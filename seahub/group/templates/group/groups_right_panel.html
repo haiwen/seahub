@@ -7,16 +7,16 @@
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}
     <li class="group ovhd">
-    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft" title="{{ group.props.group_name }}">{% grp_avatar group.props.id 56 %}</a>
+    <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/" class="no-deco fleft" title="{{ group.props.group_name }}">{% grp_avatar group.props.id 48 %}</a>
     <div class="txt fright">
         <h4><a href="{% url 'group_info' group.props.id %}">{{ group.props.group_name }}</a></h4>
         <p><span class="item-name">{% trans "Creator: " %}</span>{{ group.props.creator_name }}</p>
         <p><span class="item-name">{% trans "Time: "%}</span>{{ group.props.timestamp|tsstr_sec }}</p>
         <div class="fast vh">
-            <a href="{% url 'group_info' group.props.id %}" title="{% trans "Libraries" %}" class="a"><span class="sf2-icon-archive"></span></a>
-            <a href="{% url 'group_discuss' group.props.id %}" title="{% trans "Discussion" %}" class="a discuss"><span class="icon-comment"></span></a>
+            <a href="{% url 'group_info' group.props.id %}" title="{% trans "Libraries" %}" class="a"><img src="{{MEDIA_URL}}img/lib.png" alt="" /></a>
+            <a href="{% url 'group_discuss' group.props.id %}" title="{% trans "Discussion" %}" class="a"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a>
             {% if group.wiki_enabled %}
-            <a href="{% url 'group_wiki' group.props.id %}" title="{% trans "Wiki" %}" class="a"><span class="icon-book"></span></a>
+            <a href="{% url 'group_wiki' group.props.id %}" title="{% trans "Wiki" %}" class="a"><img src="{{MEDIA_URL}}img/wiki.png" alt="" /></a>
             {% endif %}
         </div>
     </div>
