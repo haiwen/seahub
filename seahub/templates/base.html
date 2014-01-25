@@ -57,7 +57,7 @@
                     <div id="my-info" data-url="{% url 'space_and_traffic' %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </div>
-                    <div id="user-info-popup" class="hide">
+                    <div id="user-info-popup" class="top-info-popup hide">
                         <div class="item ovhd">
                             {% avatar request.user 36 %}
                             <div class="txt">
@@ -129,6 +129,26 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1392877560"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1392877560"></script>
 <script type="text/javascript">
+$('#top-nav-grp').click(function() {
+    var grp_nav = $(this);
+    var popup = $('#top-nav-grp-info');
+    var loading_tip = $('.loading-tip', popup);
+    if (popup.hasClass('hide')) {
+        popup.removeClass('hide');
+        loading_tip.removeClass('hide');
+        $.ajax({
+            url: grp_nav.attr('href'), 
+            dataType: 'json', 
+            success: function(data) {
+               loading_tip.addClass('hide'); 
+               $('#grp-list').html(data['html']);
+            }
+        });
+    } else {
+        popup.addClass('hide');
+    }
+    return false;
+});
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
         feedback(jQuery.parseJSON(xhr.responseText).error, 'error');

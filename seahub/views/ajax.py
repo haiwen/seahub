@@ -15,7 +15,8 @@ import seaserv
 from seaserv import seafile_api, seafserv_rpc, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     is_org_repo_owner, CALC_SHARE_USAGE, seafserv_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage
+    get_user_quota_usage, get_user_share_usage, \
+    get_personal_groups_by_user
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
@@ -1207,5 +1208,18 @@ def space_and_traffic(request):
     }
 
     html = render_to_string('snippets/space_and_traffic.html', ctx,
+                            context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+
+def groups(request):
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    username = request.user.username
+    joined_groups = get_personal_groups_by_user(username)
+    
+    html = render_to_string('snippets/groups.html', {"groups": joined_groups[:4],},
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)

@@ -1,0 +1,11 @@
+{% load seahub_tags group_avatar_tags i18n %}
+
+<ul>
+{% for grp in groups %}
+<li>
+<a href="{% url "group_info" grp.id %}" class="item">
+    {% grp_avatar grp.id 48 %} <span class="vam">{{ grp.group_name }}</span>
+</a>
+</li>
+{% endfor %}
+</ul>

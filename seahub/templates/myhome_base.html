@@ -3,19 +3,26 @@
 {% load i18n %}
 {% block nav %}
 <ul class="nav">
-    <li>
-        <a href="{{ SITE_ROOT }}home/my/" {% block nav_myhome_class %}{% endblock %}>{% trans "My Home" %}</a>
+    <li class="nav-item">
+        <a href="{{ SITE_ROOT }}home/my/" class="a {% block cur_myhome %}{% endblock %}">{% trans "My Home" %}</a>
     </li>
-    <li>
-        <a href="{{ SITE_ROOT }}groups/" {% block nav_group_class %}{% endblock %}>{% trans "Groups" %}</a>
+    <li style="position:relative;" class="nav-item">
+        <a href="{% url "groups" %}" class="a {% block cur_group %}{% endblock %}" id="top-nav-grp">{% trans "Groups" %} <span class="icon-caret-down"></span></a>
+        <div id="top-nav-grp-info" class="top-info-popup hide">
+            <div id="grp-list">
+                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt=""  class="loading-tip" />
+            </div>
+            <a href="{% url 'group_list' %}" class="item">{% trans "Group List" %}</a>
+            <span class="item"><span class="icon-plus-sign-alt"></span> {% trans "New Group" %}</span> 
+        </div>
     </li>
     {% if not cloud_mode %}
-    <li>
-        <a href="{% url 'pubrepo' %}" {% block nav_pubinfo_class %}{% endblock %}>{% trans "Organization" %}</a>
+    <li class="nav-item">
+        <a href="{% url 'pubrepo' %}" class="a {% block cur_pubinfo %}{% endblock %}">{% trans "Organization" %}</a>
     </li>
     {% endif %}
-    <li>
-        <a href="{{ SITE_ROOT }}help/" {% block nav_help_class %}{% endblock %}>{% trans "Help" %}</a>
+    <li class="nav-item">
+        <a href="{{ SITE_ROOT }}help/" class="a {% block cur_help %}{% endblock %}">{% trans "Help" %}</a>
     </li>
 </ul>
 {% endblock %}
