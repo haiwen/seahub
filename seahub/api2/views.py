@@ -3,7 +3,7 @@ import os
 import stat
 import time
 import datetime
-import timezone
+from django.utils import timezone
 import simplejson as json
 from urllib2 import unquote, quote
 
@@ -2428,7 +2428,7 @@ class EventsView(APIView):
                 local = utc_to_local(e.timestamp)
                 d['time'] = (local - epoch).total_seconds() * 1000
 
-            d['nick'] = email2nickname(d['author'])
+            #d['nick'] = email2nickname(d['author'])
 
         resp = HttpResponse(json.dumps({
                                 'events': l,
