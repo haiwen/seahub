@@ -97,7 +97,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY
+    ENABLE_SUB_LIBRARY, REPO_PASSWORD_MIN_LENGTH
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -529,6 +529,7 @@ def repo_settings(request, repo_id):
             'repo': repo,
             'repo_owner': repo_owner,
             'history_limit': history_limit,
+            'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -570,6 +571,37 @@ def repo_owner(request, repo_id):
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
         
+@login_required
+def repo_change_passwd(request, repo_id):
+    """Handle post request to change library password.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # check permission
+    is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
+    if not is_owner:
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    old_passwd = request.POST.get('old_passwd', '')
+    new_passwd = request.POST.get('new_passwd', '')
+    try:
+        seafile_api.change_repo_passwd(repo_id, old_passwd, new_passwd, username)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({
+                    'error': e.msg,
+                    }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') % {'repo_name': repo.name})
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
     
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
