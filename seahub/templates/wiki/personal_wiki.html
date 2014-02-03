@@ -24,18 +24,18 @@
 
     {% if not wiki_exists %}
     <div class="empty-tips">
-        <h2 class="center-contents">{% trans "You do not have personal wiki" %}</h2>
+        <h2 class="alc">{% trans "You do not have personal wiki" %}</h2>
         <p>{% trans "Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server." %}</p>
         <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
     </div>
     <form id="wiki-create-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "Create Wiki" %}</h3>
         <label>{% trans "Name" %}</label><br/>
-        <input id="repo-name" type="text" name="repo_name" value="{% trans "personal-wiki" %}" maxlength="{{max_file_name}}"/><br />
+        <input type="text" name="repo_name" value="{% trans "personal-wiki" %}" maxlength="{{max_file_name}}" class="input" /><br />
         <label>{% trans "Description" %}</label><br/>
-        <textarea id="repo-desc" name="repo_desc">{% trans "Personal Wiki Pages" %}</textarea><br/>
+        <textarea name="repo_desc" class="textarea">{% trans "Personal Wiki Pages" %}</textarea><br/>
         <p class="error hide"></p>
-        <input type="submit" id="wiki-create-submit" value="{% trans "Submit"%}" class="submit" />
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>
 
     {% else %}
@@ -115,14 +115,23 @@ $('#wiki-create').click(function() {
     $('#wiki-create-form').modal({appendTo: '#main', autoResize: true});
     return false;
 });
-$('#wiki-create-submit').click(function () {
-    if (!$.trim($('#repo-name').val()) || !$.trim($('#repo-desc').val())) {
-         apply_form_error('wiki-create-form', '{% trans 'Name and description can not be blank.' %}');
+$('#wiki-create-form').submit(function () {
+    var form = $(this),
+        form_id = form.attr('id'),
+        repo_name = $('[name="repo_name"]', form).val(),
+        repo_desc = $('[name="repo_desc"]', form).val();
+    if (!$.trim(repo_name)) {
+         apply_form_error(form_id, "{% trans "Name is required." %}");
+         return false;
+    }
+    if (!$.trim(repo_desc)) {
+         apply_form_error(form_id, "{% trans "Description is required." %}");
          return false;
     }
 
-    var submit_btn = $(this);
+    var submit_btn = $('[type="submit"]', form);
     disable(submit_btn);
+
     $.ajax({
         url: '{% url 'personal_wiki_create' %}',
         type: 'POST',
@@ -130,8 +139,8 @@ $('#wiki-create-submit').click(function () {
         cache: false,
         beforeSend: prepareCSRFToken,
         data: {
-            'repo_name': $('#repo-name').val(),
-            'repo_desc': $('#repo-desc').val()
+            'repo_name': repo_name,
+            'repo_desc': repo_desc
         },
         success: function(data) {
             location.href = data['href'];
@@ -139,7 +148,7 @@ $('#wiki-create-submit').click(function () {
         error: function(data, textStatus, jqXHR) {
             var errors = $.parseJSON(data.responseText);
             $.each(errors, function(index, value) {
-                apply_form_error('wiki-create-form', value);
+                apply_form_error(form_id, value);
             });
             enable(submit_btn);
         }

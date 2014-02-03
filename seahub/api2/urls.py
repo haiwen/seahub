@@ -41,6 +41,11 @@ urlpatterns = patterns('',
     url(r'^f/(?P<token>[a-f0-9]{10})/$', DownloadSharedFileView.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
+    url(r'^group/(?P<group_id>\d+)/public/$', GroupPublic.as_view()),
+    url(r'^group/(?P<group_id>\d+)/manage/$', GroupManage.as_view()),
+    
+    url(r'^events/$', EventsView.as_view()),
+
     url(r'^html/events/$', ActivityHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
     url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),

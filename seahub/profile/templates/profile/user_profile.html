@@ -28,13 +28,13 @@
 
 {% if add_to_contact %}
 <form id="add-as-contact" class="hide" action="{{ SITE_ROOT }}contacts/add/" method="post">{% csrf_token %}
-    <input type="hidden" name="user_email" value="{{ request.user.username }}" id="id_user_email" />
+    <input type="hidden" name="user_email" value="{{ request.user.username }}" />
     <label>{% trans "Email: " %}</label><br />
-    <input id="id_contact_email" type="text" name="contact_email" maxlength="255" value="{{ email }}" /><br />
+    <input type="text" name="contact_email" maxlength="255" value="{{ email }}" class="input" /><br />
     <label>{% trans "Name(optional): " %}</label><br />
-    <input id="id_contact_name" type="text" name="contact_name" maxlength="255" /><br />
+    <input type="text" name="contact_name" maxlength="255" class="input" /><br />
     <label>{% trans "Note(optional): " %}</label><br />
-    <input id="id_note" type="text" name="note" maxlength="255" /><br />
+    <input type="text" name="note" maxlength="255" class="input" /><br />
     <input type="submit" value="{% trans "Submit" %}"  class="submit" />
 </form>
 {% endif %}

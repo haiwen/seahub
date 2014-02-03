@@ -1,0 +1,17 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n %}
+
+{% block main_panel %}
+<div class="wide-panel">
+    <h3>{% trans "Please choose how to view encrypted libraries online:" %}</h3>
+    <form method="post" action="{% url 'options_save' %}">{% csrf_token %}
+        <input type="radio" name="repo-enc" value="server-crypto" class="vam" />
+        <span class="vam bold">{% trans "Send passwords to the server." %}</span> <span class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
+        <input type="radio" name="repo-enc" value="client-crypto" class="vam" />
+        <span class="vam bold">{% trans "Save passwords in your browser." %}</span> <span class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
+        <p>{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+</div>
+{% endblock %}

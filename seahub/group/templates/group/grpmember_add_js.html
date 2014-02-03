@@ -2,7 +2,7 @@
 $("#group-member-add, #group-admin-add").click(function() {
     var form = $("#member-add-form");
     form.modal({appendTo: "#main", focus:false});
-    $('#simplemodal-container').css({'height':'auto', 'padding':'10px 0 0'});
+    $('#simplemodal-container').css({'height':'auto', 'padding':0});
     $('#member-add-tabs').tabs();
     if ($(this).attr('id') == 'group-admin-add') {
         $('.hd', form).html("{% trans "Add administrators"%}");

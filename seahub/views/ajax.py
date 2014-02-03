@@ -5,7 +5,7 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
@@ -18,14 +18,13 @@ from pysearpc import SearpcError
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.views import get_repo_dirents
-from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link
+from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
+        get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
-from seahub.signals import repo_created
-from seahub.utils import check_filename_with_rename
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url
 from seahub.utils.star import star_file, unstar_file
-from seahub.settings import SERVER_CRYPTO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -68,17 +67,35 @@ def get_dirents(request, repo_id):
 
     path = request.GET.get('path', '')
     dir_only = request.GET.get('dir_only', False)
+    all_dir = request.GET.get('all_dir', False)
     if not path:
         err_msg = _(u"No path.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
                             content_type=content_type)
 
+    # get dirents for every path element
+    if all_dir:
+        all_dirents = []
+        path_eles = path.split('/')[:-1]
+        for i, x in enumerate(path_eles):
+            ele_path = '/'.join(path_eles[:i+1]) + '/'
+            try:
+                ele_path_dirents = seafile_api.list_dir_by_path(repo_id, ele_path.encode('utf-8'))
+            except SearpcError, e:
+                ele_path_dirents = []
+            ds = []
+            for d in ele_path_dirents:
+                if stat.S_ISDIR(d.mode):
+                    ds.append(d.obj_name)
+            all_dirents.append(ds)
+        return HttpResponse(json.dumps(all_dirents), content_type=content_type)
+
+    # get dirents in path
     try:
         dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
     except SearpcError, e:
         return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
                             content_type=content_type)
-
     dirent_list = []
     for dirent in dirents:
         if stat.S_ISDIR(dirent.mode):
@@ -183,8 +200,14 @@ def list_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -207,14 +230,19 @@ def list_dir(request, repo_id):
     zipped = get_nav_path(path, repo.name)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
+    uploadlink = get_uploadlink(repo.id, username, path)
+    dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     ctx = { 
         'repo': repo,
         'zipped': zipped,
         'user_perm': user_perm,
         'path': path,
+        'server_crypto': server_crypto,
         'fileshare': fileshare,
         'dir_shared_link': dir_shared_link,
+        'uploadlink': uploadlink,
+        'dir_shared_upload_link': dir_shared_upload_link,
         'dir_list': dir_list,
         'file_list': file_list,
         'dirent_more': dirent_more,
@@ -249,8 +277,14 @@ def list_dir_more(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
            and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -280,6 +314,7 @@ def list_dir_more(request, repo_id):
         'repo': repo,
         'user_perm': user_perm,
         'path': path,
+        'server_crypto': server_crypto,
         'dir_list': dir_list,
         'file_list': file_list,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
@@ -517,8 +552,8 @@ def delete_dirents(request, repo_id):
             logger.error(e)
             undeleted.append(dirent_name)
 
-    return HttpResponse(json.dumps({'deleted': deleted,'undeleted': undeleted}),
-                            content_type=content_type)
+    return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
+                        content_type=content_type)
 
 def copy_move_common(func):
     """Decorator for common logic in copying/moving dir/file.
@@ -739,6 +774,7 @@ def dirents_copy_move_common(func):
 @login_required
 @dirents_copy_move_common
 def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    result = {}
     content_type = 'application/json; charset=utf-8'
 
     for obj_name in obj_dir_names:
@@ -768,6 +804,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
 @login_required
 @dirents_copy_move_common
 def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+    result = {}
     content_type = 'application/json; charset=utf-8'
 
     for obj_name in obj_dir_names:
@@ -864,8 +901,14 @@ def get_current_commit(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=403, content_type=content_type)
 
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
         return HttpResponse(json.dumps({'error': err_msg}),

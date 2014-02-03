@@ -239,7 +239,7 @@
     <form id="repo-decrypt-form" class="simple-input-popup hide">
         <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label>{% trans 'Password：' %}</label><br />
-        <input type="password" name="password" maxlength="15" class="long-input" />
+        <input type="password" name="password" class="long-input" />
         <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
         <p class="error"></p>
         <input type="submit" class="submit" value="{% trans 'Submit' %}" />
@@ -559,8 +559,6 @@ $('#repo-decrypt-form').submit(function() {
     var err = $(this).find('.error');
     if (!pwd) {
         err.html("{% trans "Password is required." %}");
-    } else if (pwd.length < 3 || pwd.length > 30) {
-        err.html("{% trans "Password should be 3 to 30 characters." %}");
     } else {
         $.ajax({
             url: '{% url 'repo_set_password' %}',

@@ -36,7 +36,7 @@
 
                 {% for dirent in dir_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>
                         <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
                     </td>
@@ -54,7 +54,7 @@
 
                 {% for dirent in file_list %}
                 <tr>
-                    <td class="icon-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td>
                         <a class="op" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
                     </td>
