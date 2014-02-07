@@ -51,7 +51,7 @@
                         <a href="{{ SITE_ROOT }}accounts/register/" class="top-link">{% trans "Signup" %}</a>
                             {% endif %}
                         {% endif %}
-                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="tri-bg tri-down-bg"></span></a>
+                        <a href="#" id="lang-context" data="no-popup" data-lang="{{ LANGUAGE_CODE }}" class="top-link">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
                         <ul class="hide" id="lang-context-selector">
                             {% for LANG in LANGUAGES %}
                             <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
@@ -183,8 +183,8 @@
             </div>
             <div id="confirm-popup" class="hide">
                 <div id="confirm-con"></div>
-                <button id="confirm-yes">{% trans "Yes"%}</button>
-                <button class="simplemodal-close">{% trans "No"%}</button>
+                <button id="confirm-yes" class="btn">{% trans "Yes"%}</button>
+                <button class="simplemodal-close btn">{% trans "No"%}</button>
             </div>
         </div>
 
@@ -192,7 +192,7 @@
             <div class="items fleft">
                 {% if not seacloud_mode %}
                 <div class="item">
-                    <h4>Seafile</h4>
+                    <h4 class="hd">Seafile</h4>
                     <ul>
                         <li><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
                         <li><a href="https://github.com/haiwen/seafile/wiki{% if LANGUAGE_CODE == 'zh-cn' %}/Seafile-服务器手册中文版{% endif %}" target="_blank">Wiki</a></li>
@@ -200,7 +200,7 @@
                     </ul>
                 </div>
                 <div class="item">
-                    <h4>{% trans "Client" %}</h4>
+                    <h4 class="hd">{% trans "Client" %}</h4>
                     <ul>
                         <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
                     </ul>
@@ -213,22 +213,21 @@
                 </div>
                 {% else %}
                 <div class="item">
-                    <h4>Seacloud</h4>
+                    <h4 class="hd">Seacloud</h4>
                     <ul>
                         <li><a href="https://seacloud.cc/group/2/wiki/" target="_blank">{% trans "Introduction" %}</a></li>
                         <li><a href="https://seacloud.cc/group/2/wiki/">Wiki</a></li>
                         <li><a href="https://seacloud.cc/group/2/wiki/terms/">Privacy & Terms</a></li>
-
                     </ul>
                 </div>
                 <div class="item">
-                    <h4>{% trans "Client" %}</h4>
+                    <h4 class="hd">{% trans "Client" %}</h4>
                     <ul>
                         <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}download/">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
                     </ul>
                 </div>
                 <div class="item">
-                    <h4>{% trans "Documents" %}</h4>
+                    <h4 class="hd">{% trans "Documents" %}</h4>
                     <ul>
                         <li><a href="http://www.seafile.com/{% if LANGUAGE_CODE == 'en' %}en/{% endif %}help/" target="_blank">{% trans "Help" %}</a></li>
                     </ul>
@@ -488,6 +487,7 @@ $(document).click(function(e) {
         {'name':'star', 'con':'f005'},
         {'name':'star-empty', 'con':'f006'},
         {'name':'caret-down', 'con':'f0d7'},
+        {'name':'caret-up', 'con':'f0d8'},
         {'name':'ok', 'con':'f00c'},
         {'name':'double-angle-left', 'con':'f100'},
         {'name':'double-angle-right', 'con':'f101'},

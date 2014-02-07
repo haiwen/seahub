@@ -13,9 +13,9 @@
 <h3>{% trans "Basic Info" %}</h3>
 <form id="repo-setting-form" action="" method="post" style="margin-bottom:30px;">{% csrf_token %}
     <label>{% trans "Name" %}</label><br />
-    <input type="text" name="repo_name" value="{{ repo.name }}" id="repo-name" /><br />
+    <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
     <label>{% trans "Description" %}</label></br />
-    <textarea name="repo_desc" id="repo-desc">{{ repo.desc }}</textarea><br />
+    <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
 
 {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
     <label>{% trans "History" %}</label><br />
@@ -31,7 +31,7 @@
 <h3>{% trans "Transfer Ownership" %}</h3>
 <form id="repo-owner-form" action="" method="post">{% csrf_token %}
     <p>{% trans "Transfer this library to another user:" %}</p>
-    <input type="text" name="repo_owner" value="" id="repo-owner" placeholder="{% trans "Email" %}" /><br />
+    <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>

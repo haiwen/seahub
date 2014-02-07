@@ -12,14 +12,17 @@
     </p>
     <div class="repo-op fright">
         {% if user_perm == 'rw' %}
-        <button data="{{ SITE_ROOT }}repo/upload_file/{{repo.id}}/?p={{ path|urlencode }}" id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
+        <button id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
         <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
+        {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
+        {% else %}
         <button id="add-new-file" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New File"%}</button>
+        {% endif %}
         {% endif %}
 
         {% if path != '/' %}
         {% if not repo.encrypted %}
-        <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" data-token="{{fileshare.token}}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
+        <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" data-token="{{fileshare.token}}" data-upload-url="{% url 'get_shared_upload_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}" data-upload-link="{{ dir_shared_upload_link }}" data-upload-token="{{ uploadlink.token }}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
         {% endif %}
         {% endif %}
     </div>
@@ -32,9 +35,9 @@
         </th>
         <th class="star"></th>
         <th class="dirent-icon"></th>
-        <th><span class="dirent-name">{% trans "Name"%} <span id="name-up" class="tri-bg tri-up-order-bg"></span> <span id="name-down" class="tri-bg tri-down-order-bg"></span></span></th>
+        <th><span class="dirent-name">{% trans "Name"%} <span id="name-up" class="icon-caret-up cspt hide"></span> <span id="name-down" class="icon-caret-down cspt"></span></span></th>
         <th class="dirent-size">{% trans "Size"%}</th>
-        <th class="dirent-update">{% trans "Last Update" %} <span id="time-up" class="tri-bg tri-up-order-bg"></span> <span id="time-down" class="tri-bg tri-down-order-bg"></span></th>
+        <th class="dirent-update">{% trans "Last Update" %} <span id="time-up" class="icon-caret-up cspt hide"></span> <span id="time-down" class="icon-caret-down cspt"></span></th>
         <th class="dirent-op">{% trans "Operations"%}</th>
     </tr>
     {% include 'snippets/repo_dirents.html' %}

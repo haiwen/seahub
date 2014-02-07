@@ -12,6 +12,7 @@ from types import FunctionType
 from datetime import datetime
 from math import ceil
 from urllib import quote
+
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -28,9 +29,6 @@ from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote
 
-from seahub.auth.decorators import login_required
-from seahub.auth import login as auth_login
-from seahub.auth import authenticate
 import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
@@ -46,10 +44,14 @@ from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     set_repo_history_limit, \
     get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
     count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
-    get_user_share_usage, send_message
+    get_user_share_usage, send_message, \
+    MAX_UPLOAD_FILE_SIZE
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
+from seahub.auth.decorators import login_required
+from seahub.auth import login as auth_login
+from seahub.auth import authenticate
 from seahub.base.accounts import User
 from seahub.base.decorators import sys_staff_required
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
@@ -60,14 +62,15 @@ from seahub.group.forms import MessageForm, MessageReplyForm
 from seahub.group.models import GroupMessage, MessageAttachment
 from seahub.group.signals import grpmsg_added
 from seahub.notifications.models import UserNotification
+from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare, PrivateFileDirShare
+from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import AddUserForm, RepoCreateForm, \
     RepoPassowrdForm, SharedRepoCreateForm,\
     SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, \
+    get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
     EMPTY_SHA1, normalize_file_path, \
@@ -79,7 +82,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
-from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI,\
+from seahub.views.modules import get_enabled_mods_by_user, MOD_PERSONAL_WIKI, \
     enable_mod_for_user, disable_mod_for_user, get_available_mods_by_user
 from seahub.utils import HAS_OFFICE_CONVERTER
 
@@ -89,7 +92,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, FILE_ENCODING_LIST, \
     FILE_ENCODING_TRY_LIST, SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, SERVER_CRYPTO
+    ENABLE_SUB_LIBRARY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -219,10 +222,12 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
         last_modified_info = get_dir_files_last_modified(repo_id, path)
 
         fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
+        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
 
         for dirent in dirs:
             dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
             dirent.sharelink = ''
+            dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
                 dpath = os.path.join(path, dirent.obj_name)
                 if dpath[-1] != '/':
@@ -231,6 +236,11 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
                     if dpath == share.path:
                         dirent.sharelink = gen_dir_share_link(share.token)
                         dirent.sharetoken = share.token
+                        break
+                for link in uploadlinks:
+                    if dpath == link.path:
+                        dirent.uploadlink = gen_shared_upload_link(link.token)
+                        dirent.uploadtoken = link.token
                         break
                 dir_list.append(dirent)
             else:
@@ -608,11 +618,18 @@ def repo_history(request, repo_id):
     if not repo:
         raise Http404
 
+    username = request.user.username
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -665,11 +682,18 @@ def repo_view_snapshot(request, repo_id):
     if not repo:
         raise Http404
 
+    username = request.user.username
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -719,11 +743,18 @@ def repo_history_revert(request, repo_id):
     if not access_to_repo(request, repo_id):
         return render_permission_error(request, _(u'You have no permission to restore library'))
 
+    username = request.user.username
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     password_set = False
     if repo.props.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
+            ret = seafserv_rpc.is_passwd_set(repo_id, username)
             if ret == 1:
                 password_set = True
         except SearpcError, e:
@@ -800,9 +831,16 @@ def repo_history_changes(request, repo_id):
     if not repo:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
+    username = request.user.username
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
     if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and SERVER_CRYPTO)) \
-            and not is_passwd_set(repo_id, request.user.username):
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
+            and not is_passwd_set(repo_id, username):
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
@@ -975,7 +1013,14 @@ def myhome(request):
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_user(username)
     mods_enabled = get_enabled_mods_by_user(username)
-            
+
+    # user guide
+    need_guide = False
+    if len(owned_repos) == 0:
+        need_guide = UserOptions.objects.is_user_guide_enabled(username)
+        if need_guide:
+            UserOptions.objects.disable_user_guide(username)
+
     return render_to_response('myhome.html', {
             "nickname": nickname,
             "owned_repos": owned_repos,
@@ -1001,6 +1046,7 @@ def myhome(request):
             "ENABLE_EVENTS": EVENTS_ENABLED,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
+            "need_guide": need_guide,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1116,26 +1162,24 @@ def public_repo_create(request):
     permission = form.cleaned_data['permission']
     encryption = int(form.cleaned_data['encryption'])
 
-    passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
     user = request.user.username
 
     try:
         if not encryption:
             repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
         else:
-            if SERVER_CRYPTO:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
-            else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
 
         # set this repo as inner pub
         seafile_api.add_inner_pub_repo(repo_id, permission)
         #seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-    except SearpcError, e:
+    except SearpcError as e:
         repo_id = None
+        logger.error(e)
 
     if not repo_id:
         result['error'] = _(u'Internal Server Error')
@@ -1393,30 +1437,36 @@ def repo_create(request):
     repo_desc = form.cleaned_data['repo_desc']
     encryption = int(form.cleaned_data['encryption'])
 
-    passwd = form.cleaned_data['passwd']
     uuid = form.cleaned_data['uuid']
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
-    user = request.user.username
+
+    username = request.user.username
+
     try:
         if not encryption:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, username,
+                                              None)
         else:
-            if SERVER_CRYPTO:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
-            else:
-                repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+            repo_id = seafile_api.create_enc_repo(
+                uuid, repo_name, repo_desc, username,
+                magic_str, encrypted_file_key, enc_version=2)
     except SearpcError, e:
         repo_id = None
 
     if not repo_id:
         result['error'] = _(u"Internal Server Error")
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+        return HttpResponse(json.dumps(result), status=500,
+                            content_type=content_type)
     else:
-        result['success'] = True
+        result = {
+            'repo_id': repo_id,
+            'repo_name': repo_name,
+            'repo_desc': repo_desc,
+        }
         repo_created.send(sender=None,
                           org_id=-1,
-                          creator=user,
+                          creator=username,
                           repo_id=repo_id,
                           repo_name=repo_name)
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -1427,7 +1477,6 @@ def render_file_revisions (request, repo_id):
     if path[-1] == '/':
         path = path[:-1]
     u_filename = os.path.basename(path)
-    filename = urllib2.quote(u_filename.encode('utf-8'))
 
     if not path:
         return render_error(request)
@@ -1635,7 +1684,45 @@ def view_shared_dir(request, token):
             'dir_list': dir_list,
             'zipped': zipped,
             }, context_instance=RequestContext(request))
-    
+
+def view_shared_upload_link(request, token):
+    assert token is not None    # Checked by URLconf
+
+    try:
+        uploadlink = UploadLinkShare.objects.get(token=token)
+    except UploadLinkShare.DoesNotExist:
+        raise Http404
+
+    username = uploadlink.username
+    repo_id = uploadlink.repo_id
+    path = uploadlink.path
+    dir_name = os.path.basename(path[:-1])
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    uploadlink.view_cnt = F('view_cnt') + 1
+    uploadlink.save()
+
+    max_upload_file_size = MAX_UPLOAD_FILE_SIZE
+    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
+
+    token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+                                                    'upload', request.user.username)
+    ajax_upload_url = gen_file_upload_url(token, 'upload-api').replace('api', 'aj')
+
+    return render_to_response('view_shared_upload_link.html', {
+            'repo': repo,
+            'token': token,
+            'path': path,
+            'username': username,
+            'dir_name': dir_name,
+            'max_upload_file_size': max_upload_file_size,
+            'no_quota': no_quota,
+            'ajax_upload_url': ajax_upload_url
+            }, context_instance=RequestContext(request))
+
 def demo(request):
     """
     Login as demo account.
@@ -1829,7 +1916,6 @@ def repo_download_dir(request, repo_id):
                              (repo_id, shared_by, dir_id, total_size))
             except Exception, e:
                 logger.error('Error when sending dir-download message: %s' % str(e))
-                pass
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )
 
@@ -1962,6 +2048,9 @@ def toggle_modules(request):
     if request.method != 'POST':
         raise Http404
 
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+    
     username = request.user.username
     personal_wiki = request.POST.get('personal_wiki', 'off')
     if personal_wiki == 'on':
@@ -1969,10 +2058,9 @@ def toggle_modules(request):
         messages.success(request, _('Successfully enable "Personal Wiki".'))
     else:
         disable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        if referer.find('wiki') > 0:
+            next = reverse('myhome')
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
 

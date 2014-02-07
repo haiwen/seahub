@@ -2,6 +2,8 @@
 import os
 import stat
 import time
+import datetime
+from django.utils import timezone
 import simplejson as json
 from urllib2 import unquote, quote
 
@@ -45,9 +47,10 @@ except ImportError:
 from seahub.group.forms import MessageForm
 from seahub.notifications.models import UserNotification
 from seahub.utils.paginator import Paginator
-from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
+from seahub.group.models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from seahub.group.settings import GROUP_MEMBERS_DEFAULT_DISPLAY
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.signals import repo_created
 from seahub.group.views import group_check
 from seahub.signals import repo_created, share_file_to_user_successful
 from seahub.share.models import PrivateFileDirShare
@@ -68,8 +71,9 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
     list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
-from seaserv import seafile_api
+    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, ccnet_threaded_rpc
+from seaserv import seafile_api, check_group_staff
+from django.db.models import F
 from seahub.views.file import get_file_view_path_and_perm
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
                                          TEXT, SF)
@@ -77,7 +81,6 @@ from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, query_office_file_pages, \
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
-
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -202,6 +205,19 @@ class Account(APIView):
                                             serializer.object['password'],
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
+
+            name = request.DATA.get("name", None)
+            note = request.DATA.get("note", None)
+            if name or note:
+                try:
+                   profile = Profile.objects.get(user=user.username)
+                except Profile.DoesNotExist:
+                   profile = Profile()
+
+                profile.user = user.username
+                profile.nickname = name
+                profile.intro = note
+                profile.save()
 
             if update:
                 resp = Response('success')
@@ -563,6 +579,20 @@ class Repo(APIView):
             if resp:
                 return resp
             return Response("success")
+        elif op == 'rename':
+            username = request.user.username
+            repo_name = request.POST.get('repo_name')
+            repo_desc = request.POST.get('repo_desc')
+
+            if not seafile_api.is_repo_owner(username, repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, \
+                    'Only library owner can perform this operation.')
+
+            if edit_repo(repo_id, repo_name, repo_desc, username):
+                return Response("success")
+            else:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "Unable to rename repo")
 
         return Response("unsupported operation")
 
@@ -1663,6 +1693,88 @@ class VirtualRepos(APIView):
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
         return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
+
+class DownloadPrivateSharedFileView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = PrivateFileDirShare.objects.get(token=token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_by = fileshare.from_user
+        shared_to = fileshare.to_user
+
+        if shared_to != request.user.username:
+            return api_error(status.HTTP_403_FORBIDDEN, "You don't have permission to view this file")
+
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path 
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)
+
+class DownloadSharedFileView(APIView):
+# Anyone should be able to access a Shared File assuming they have the token
+#    authentication_classes = (TokenAuthentication, )
+#    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_by = fileshare.username
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path 
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                             path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        # Increase file shared link view_cnt, this operation should be atomic
+        fileshare.view_cnt = F('view_cnt') + 1
+        fileshare.save()
+
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)    
     
 class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -2191,6 +2303,230 @@ class Groups(APIView):
             group_json.append(group)
         res = {"groups": group_json, "replynum":replynum}
         return Response(res)
+
+    def put(self, request, format=None):
+        # modified slightly from groups/views.py::group_list
+        """
+        Add a new group.
+        """
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+
+        # check plan
+        num_of_groups = getattr(request.user, 'num_of_groups', -1)
+        if num_of_groups > 0:
+            current_groups = len(get_personal_groups_by_user(username))
+            if current_groups > num_of_groups:
+                result['error'] = _(u'You can only create %d groups.') % num_of_groups
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+        
+        group_name = request.DATA.get('group_name', None);
+
+        # Check whether group name is duplicated.
+        if request.cloud_mode:
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = _(u'There is already a group with that name.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+        # Group name is valid, create that group.
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                                request.user.username)
+            return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
+                            content_type=content_type)
+        except SearpcError, e:
+            result['error'] = _(e.msg)
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+
+class GroupPublic(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, group_id, format=None):
+        # Based on groups/views.py::group_make_public
+        """
+        Make a group public, only group staff can perform this operation.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        # Check whether user is group staff
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can make the group public')
+
+        try:
+            p = PublicGroup(group_id=group.id)
+            p.save()
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make group public')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+    def delete(self, request, group_id, format=None):
+        # Based on groups/views.py::group_revoke_public
+        """
+        Revoke a group from public, only group staff can perform this operation.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        # Check whether user is group staff
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can make the group public')
+
+        try:
+            p = PublicGroup.objects.get(group_id=group.id)
+            p.delete()
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make group private')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+class GroupManage(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, group_id, format=None):
+        """
+        Add group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group') 
+
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
+
+        user_name = request.DATA.get('user_name', None)
+        if not is_registered_user(user_name):
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Not a valid user')
+
+        try:
+            ccnet_threaded_rpc.group_add_member(group.id, request.user.username, user_name)
+        except SearpcError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+    def delete(self, request, group_id, format=None):
+        """
+        Delete group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Invalid group id')
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Unable to find group')
+
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can remove group members')
+
+        user_name = request.DATA.get('user_name', None)
+
+        try:
+            ccnet_threaded_rpc.group_remove_member(group.id, request.user.username, user_name)
+        except SearpcError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to add user to group')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+def is_group_staff(group, user):
+    if user.is_anonymous():
+        return False
+    return check_group_staff(group.id, user.username)
+
+class EventsView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not EVENTS_ENABLED:
+            events = None
+            return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
+
+        start = request.GET.get('start', '')
+
+        if not start:
+            start = 0
+        else:
+            try:
+                start = int(start)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'start id must be integer')
+
+        email = request.user.username
+        events_count = 15
+        events, events_more_offset = get_user_events(email, start, events_count)
+        events_more = True if len(events) == events_count else False
+
+        l = []
+        for e in events:
+            d = dict(etype=e.etype)
+            l.append(d)
+            if e.etype == 'repo-update':
+                d['author'] = e.commit.creator_name
+                d['time'] = e.commit.ctime
+                d['desc'] = e.commit.desc
+                d['repo_id'] = e.repo.id
+                d['repo_name'] = e.repo.name
+            else:
+                d['repo_id'] = e.repo_id
+                d['repo_name'] = e.repo_name
+                if e.etype == 'repo-create':
+                    d['author'] = e.creator
+                else:
+                    d['author'] = e.repo_owner
+
+                def utc_to_local(dt):
+                    tz = timezone.get_default_timezone()
+                    utc = dt.replace(tzinfo=timezone.utc)
+                    local = timezone.make_naive(utc, tz)
+                    return local
+
+                epoch = datetime.datetime(1970, 1, 1)
+                local = utc_to_local(e.timestamp)
+                d['time'] = (local - epoch).total_seconds() * 1000
+
+            #d['nick'] = email2nickname(d['author'])
+
+        resp = HttpResponse(json.dumps({
+                                'events': l,
+                                'more':  events_more,
+                                'more_offset': events_more_offset,}),
+                            status=200,
+                            content_type=json_content_type)
+        return resp
+
 
 class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
