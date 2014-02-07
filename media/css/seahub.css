@@ -1103,6 +1103,9 @@ textarea:-moz-placeholder {/* for FF */
     top:48px;
     font-size:13px;
 }
+#user-info-popup {
+    width:220px;
+}
 #top-nav-grp-info {
     top:40px;
 }

@@ -3,8 +3,8 @@
 <ul>
 {% for grp in groups %}
 <li>
-<a href="{% url "group_info" grp.id %}" class="item">
-    {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name }}</span>
+<a href="{% url "group_info" grp.id %}" class="item" title="{{ grp.group_name }}">
+    {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name|truncatechars:14 }}</span>
 </a>
 </li>
 {% endfor %}
