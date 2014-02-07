@@ -70,6 +70,13 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE
 from seaserv import seafile_api
+from seahub.views.file import get_file_view_path_and_perm
+from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, MARKDOWN, \
+                                         TEXT, SF)
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import query_office_convert_status, query_office_file_pages, \
+        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
 
 
 json_content_type = 'application/json; charset=utf-8'
@@ -2249,6 +2256,111 @@ class RepoHistoryChangeHtml(APIView):
     def get(self, request, repo_id, format=None):
         return api_repo_history_changes (request, repo_id)
 
+# based on views/file.py::office_convert_query_status
+class OfficeConvertQueryStatus(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_OFFICE_CONVERTER:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
+
+        content_type = 'application/json; charset=utf-8'
+
+        ret = {'success': False}
+
+        file_id = request.GET.get('file_id', '')
+        if len(file_id) != 40:
+            ret['error'] = 'invalid param'
+        else:
+            try:
+                d = query_office_convert_status(file_id)
+                if d.error:
+                    ret['error'] = d.error
+                else:
+                    ret['success'] = True
+                    ret['status'] = d.status
+            except Exception, e:
+                logging.exception('failed to call query_office_convert_status')
+                ret['error'] = str(e)
+            
+        return HttpResponse(json.dumps(ret), content_type=content_type)
+
+# based on views/file.py::office_convert_query_page_num
+class OfficeConvertQueryPageNum(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_OFFICE_CONVERTER:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
+
+        content_type = 'application/json; charset=utf-8'
+
+        ret = {'success': False}
+
+        file_id = request.GET.get('file_id', '')
+        if len(file_id) != 40:
+            ret['error'] = 'invalid param'
+        else:
+            try:
+                d = query_office_file_pages(file_id)
+                if d.error:
+                    ret['error'] = d.error
+                else:
+                    ret['success'] = True
+                    ret['count'] = d.count
+            except Exception, e:
+                logging.exception('failed to call query_office_file_pages')
+                ret['error'] = str(e)
+            
+        return HttpResponse(json.dumps(ret), content_type=content_type)
+
+# based on views/file.py::view_file and views/file.py::handle_document
+class OfficeGenerateView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        username = request.user.username
+        # check arguments
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+    
+        path = request.GET.get('p', '/').rstrip('/')
+        obj_id = get_file_id_by_path(repo_id, path)
+        if not obj_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        # Check whether user has permission to view file and get file raw path,
+        # render error page if permission deny.
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                      repo_id,
+                                                                      obj_id, path)
+
+        if not user_perm:
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to view this file.')
+
+        u_filename = os.path.basename(path)
+        filetype, fileext = get_file_type_and_ext(u_filename)
+        if filetype != DOCUMENT:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is not a convertable document')
+
+        ret_dict = {}
+        if HAS_OFFICE_CONVERTER:
+            err, html_exists = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
+            # populate return value dict
+            ret_dict['err'] = err
+            ret_dict['html_exists'] = html_exists
+            ret_dict['obj_id'] = obj_id
+        else:
+            ret_dict['filetype'] = 'Unknown'
+
+        return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 #Following is only for debug
 from seahub.auth.decorators import login_required
