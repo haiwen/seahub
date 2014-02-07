@@ -4,7 +4,7 @@
 {% for grp in groups %}
 <li>
 <a href="{% url "group_info" grp.id %}" class="item">
-    {% grp_avatar grp.id 48 %} <span class="vam">{{ grp.group_name }}</span>
+    {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name }}</span>
 </a>
 </li>
 {% endfor %}

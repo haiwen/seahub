@@ -141,7 +141,7 @@ $('#top-nav-grp').click(function() {
             dataType: 'json', 
             success: function(data) {
                loading_tip.addClass('hide'); 
-               $('#grp-list').html(data['html']);
+               $('#top-nav-grp-list').html(data['html']);
             }
         });
     } else {

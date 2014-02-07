@@ -1,17 +1,8 @@
 {% load i18n %}
 //repo-create-form
-$('#repo-create')
-.click(function() {
+$('#repo-create').click(function() {
     $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
-})
-.hover(
-    function() {
-        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
-    },
-    function() {
-        $(this).css('background-color', '#f5f5f5');
-    }
-);
+});
 $('#encrypt-switch').click(function () {
     var form = $('#repo-create-form'),
         pwd_input = $('input[type="password"]', form);

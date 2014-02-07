@@ -39,7 +39,7 @@
         {% endif %}
 
         {% if is_staff %}
-        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}">{% trans "Admin" %}</a></li>
+        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}" class="admin">{% trans "Admin" %}</a></li>
         {% endif %}
     </ul>
 </div>

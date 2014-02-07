@@ -154,7 +154,7 @@ table {
     margin:8px 0 40px;
 }
 caption {font-size:1.1em; font-weight:bold; margin-bottom:.6em;}
-th { text-align:left; font-weight:bold; }
+th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; }
 table img { vertical-align:middle; }
@@ -392,8 +392,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /**** side-tabnav ****/
 .side-textnav .hd,
-.side-info .hd,
-#right-panel .hd {
+.side-info .hd {
     padding-bottom:4px;
     border-bottom:1px solid #ddd;
     margin-bottom:1em;
@@ -422,22 +421,22 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab a {
     display:block;
     font-size:14px;
-    padding:4px 4px 4px 35px;
+    padding:5px 4px 5px 47px;
     color:#333;
     font-weight:normal;
     border-radius:2px;
-    background:no-repeat scroll 6px 50%;
+    background:no-repeat scroll 10px 50%;
 }
 .side-tabnav-tabs .tab .lib {
     background-image:url('../img/lib.png');
-    background-position: 7px 50%;
+    background-position: 11px 50%;
 }
 .side-tabnav-tabs .tab-cur .lib {
     background-image:url('../img/lib_w.png');
 }
 .side-tabnav-tabs .tab .star {
     background-image:url('../img/star.png');
-    background-position: 4px 50%;
+    background-position: 8px 50%;
 }
 .side-tabnav-tabs .tab-cur .star {
     background-image:url('../img/star_w.png');
@@ -450,7 +449,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab .wiki {
     background-image:url('../img/wiki.png');
-    background-position: 8px 50%;
+    background-position: 12px 50%;
 }
 .side-tabnav-tabs .tab-cur .wiki {
     background-image:url('../img/wiki_w.png');
@@ -475,14 +474,14 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab .folders {
     background-image:url('../img/folders.png');
-    background-position: 5px 50%;
+    background-position: 9px 50%;
 }
 .side-tabnav-tabs .tab-cur .folders {
     background-image:url('../img/folders_w.png');
 }
 .side-tabnav-tabs .tab .files {
     background-image:url('../img/files.png');
-    background-position: 8px 50%;
+    background-position: 12px 50%;
 }
 .side-tabnav-tabs .tab-cur .files {
     background-image:url('../img/files_w.png');
@@ -495,14 +494,21 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab .members {
     background-image:url('../img/members.png');
-    background-position: 9px 50%;
+    background-position: 13px 50%;
 }
 .side-tabnav-tabs .tab-cur .members {
     background-image:url('../img/members_w.png');
 }
+.side-tabnav-tabs .tab .admin {
+    background-image:url('../img/admin.png');
+    background-position: 9px 50%;
+}
+.side-tabnav-tabs .tab-cur .admin {
+    background-image:url('../img/admin_w.png');
+}
 .side-tabnav-tabs .tab .group {
     background-image:url('../img/groups.png');
-    background-position: 9px 50%;
+    background-position: 13px 50%;
 }
 .side-tabnav-tabs .tab-cur .group {
     background-image:url('../img/groups_w.png');
@@ -929,10 +935,9 @@ textarea:-moz-placeholder {/* for FF */
 #header {
     padding:16px 0;
     background:#f4f4f7 url('../img/nav.png') center top repeat-x;
-    /*border-bottom:1px solid #e3e4e5;*/
     width:100%;
     font-size: 14px;
-    margin-bottom:25px;
+    margin-bottom:40px;
 }
 #header-inner {
     height:32px;
@@ -959,10 +964,15 @@ textarea:-moz-placeholder {/* for FF */
     margin-top: 0px;
 }
 #right-panel .hd {
-    border-radius:0; /* rm radius when 'hd' is also '.ui-corner-all' */
-    margin-bottom:1.5em;
+    padding:10px;
+    background:#f2f2f2;
+    margin-bottom:.5em;
+    border-radius:2px;
 }
-#right-panel .hd h3 {
+#right-panel .hd h3,
+#right-panel h3.hd {
+    height:29px;
+    line-height:29px;
     margin-bottom:0;
 }
 #right-panel .hd .tab {
@@ -970,15 +980,23 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0;
 }
 #right-panel .hd .a {
-    border:0; /* rm 'border-bottom' for cur tab */
     padding:4px 0;
-    line-height:16px; /* for ff*/
+    font-size:14px;
+    color:#333;
+    line-height:1.5;
+    border:0; /* rm 'border-bottom' for cur tab */
+    margin:0 8px;
+}
+#right-panel .hd .ui-state-active .a,
+#right-panel .hd .a:hover {
+    color:#eb8205;
+    text-decoration:underline;
 }
 #right-panel .hd button {
-    padding-top:0;
-    padding-bottom:0;
-    height:24px;
-    line-height:24px;
+    height:29px;
+    padding-left:5px;
+    padding-right:5px;
+    background:#fff;
 }
 /* info-bar */
 #info-bar,
@@ -1096,6 +1114,11 @@ textarea:-moz-placeholder {/* for FF */
 .top-info-popup a.item {
     color:#333;
     font-weight:normal;
+}
+#top-nav-grp-list .item {
+    font-size:14px;
+    padding:5px 10px;
+    border:none;
 }
 .top-info-popup a.item:hover {
     background:#fafafa;

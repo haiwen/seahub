@@ -9,7 +9,7 @@
     <li style="position:relative;" class="nav-item">
         <a href="{% url "groups" %}" class="a {% block cur_group %}{% endblock %}" id="top-nav-grp">{% trans "Groups" %} <span class="icon-caret-down"></span></a>
         <div id="top-nav-grp-info" class="top-info-popup hide">
-            <div id="grp-list">
+            <div id="top-nav-grp-list">
                 <img src="{{MEDIA_URL}}img/loading-icon.gif" alt=""  class="loading-tip" />
             </div>
             <a href="{% url 'group_list' %}" class="item">{% trans "Group List" %}</a>
