@@ -217,6 +217,10 @@ p { margin:0.5em 0; }
     cursor:pointer;
     margin-right:3px;
 }
+.op-icon:hover {/** for <a> **/
+    color:#888;
+    text-decoration:none;
+}
 .big-more-btn {
     padding:.5em 0;
     color:#777;
@@ -804,6 +808,22 @@ textarea:-moz-placeholder {/* for FF */
 .article td {
     padding:6px 13px;
     border:1px solid #ccc;
+}
+/**** obvious btn ****/ /* e.g. download btn in shared file/dir */
+.obv-btn {
+    color:#fff;
+    padding:4px 10px;
+    background-color: #60b044;
+    background-image:-webkit-linear-gradient(#8add6d, #60b044);
+    background-image:linear-gradient(#79d858, #569e3d);
+    background-repeat: repeat-x;
+    border:1px solid #5ca941;
+    border-radius:3px;
+
+}
+.obv-btn:hover {
+    color:#fff;
+    text-decoration:none;  
 }
 /********** container ***********/
 #main, #footer,

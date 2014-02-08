@@ -1,0 +1,41 @@
+<script type="text/javascript">
+{% load i18n %}
+    function load_excel() {
+        $('#convert-loading').remove();
+        var iframe = document.createElement('iframe');
+        iframe.src = "{% url 'office_convert_static' obj_id %}/index.html";
+        $('#spreadsheet-container').append(iframe);
+    }
+
+    {% if html_exists %}
+    load_excel();
+    {% else %}
+
+    function check_status () {
+        $.ajax({
+            url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                var status = data['status'];
+                if (status == 'QUEUED' || status == 'PROCESSING') {
+                    setTimeout(check_status, 2000);
+                } else {
+                    load_excel();
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var str;
+                if (xhr.responseText) {
+                    str = "{% trans "Document convertion failed." %}";
+                } else {
+                    str = "{% trans "Failed. Please check the network." %}";
+                }
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+          }
+      });
+  }
+
+  check_status();
+  {% endif %}
+</script>

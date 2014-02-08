@@ -34,17 +34,13 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     if isinstance(instance, Avatar):
         tmppath = [AVATAR_STORAGE_DIR]
         if AVATAR_HASH_USERDIRNAMES:
-            tmp = hashlib.md5(instance.user.username).hexdigest()
-            tmppath.extend([tmp[0], tmp[1], instance.emailuser])
+            tmp = hashlib.md5(instance.emailuser).hexdigest()
+            tmppath.extend([tmp[0], tmp[1], tmp[2:]])
         else:
             tmppath.append(instance.emailuser)
     elif isinstance(instance, GroupAvatar):
         tmppath = [GROUP_AVATAR_STORAGE_DIR]
-        if AVATAR_HASH_USERDIRNAMES:
-            tmp = hashlib.md5(instance.group_id).hexdigest()
-            tmppath.extend([tmp[0], tmp[1], instance.group_id])
-        else:
-            tmppath.append(instance.group_id)
+        tmppath.append(instance.group_id)
     else:
         return ""
     

@@ -25,7 +25,8 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful
 from seahub.views import get_repo_dirents, validate_owner, \
-    check_repo_access_permission, get_unencry_rw_repos_by_user
+    check_repo_access_permission, get_unencry_rw_repos_by_user, \
+    get_system_default_repo_id
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
         get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
@@ -1102,6 +1103,10 @@ def repo_remove(request, repo_id):
     content_type = 'application/json; charset=utf-8'
     result = {}  
 
+    if get_system_default_repo_id() == repo_id:
+        result['error'] = _(u'System library can not be deleted.')
+        return HttpResponse(json.dumps(result), status=403, content_type=content_type)
+        
     repo = get_repo(repo_id)
     if not repo:
         result['error'] = _(u'Library does not exist')

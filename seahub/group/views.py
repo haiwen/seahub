@@ -1559,9 +1559,9 @@ def group_wiki_page_delete(request, group, page_name):
     file_name = page_name + '.md'
     user = request.user.username
     if del_file(repo.id, '/', file_name, user):
-        messages.success(request, 'Successfully deleted "%s".' % page_name)
+        messages.success(request, _('Successfully deleted "%s".') % page_name)
     else:
-        messages.error(request, 'Failed to delete "%s". Please retry later.' % page_name)
+        messages.error(request, _('Failed to delete "%s". Please retry later.') % page_name)
 
     return HttpResponseRedirect(reverse('group_wiki', args=[group.id]))
     

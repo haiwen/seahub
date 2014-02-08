@@ -24,20 +24,18 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
 
         {% if filetype == 'Image' %}
-            {% if page == 'file_view'%}
             {% if img_prev or img_next %}
             <div id="img-prev-next">
                 {% if img_prev %}
-                <a href="{% url 'repo_view_file' repo.id %}?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
+                <a href="?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
                 {% endif %}
                 {% if img_prev and img_next %}
                 <span>/</span>
                 {% endif %}
                 {% if img_next %}
-                <a href="{% url 'repo_view_file' repo.id %}?p={{img_next|urlencode}}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
+                <a href="?p={{img_next|urlencode}}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
                 {% endif %}
             </div>
-            {% endif %}
             {% endif %}
             <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
         {% endif %}
@@ -45,6 +43,11 @@ For details please refer to 'snippets/file_content_js.html'.
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
             {% include 'snippets/office_convert_html.html' %}
         {% endif %}
+
+        {% if filetype == 'SpreadSheet' %}
+            {% include 'snippets/spreadsheet_convert_html.html' %}
+        {% endif %}
+
     {% else %}
     <div id="file-view-tip">
         <p class="error">{{ err }}</p>

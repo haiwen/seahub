@@ -212,6 +212,7 @@ AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseSt
 AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
+AVATAR_HASH_USERDIRNAMES = True
 AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.jpg'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
@@ -371,6 +372,8 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
+SEAFILE_VERSION = '2.1.4'
+
 #################
 # Email sending #
 #################
@@ -471,8 +474,6 @@ if 'win32' in sys.platform:
     fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
     fp.write("%d\n" % os.getpid())
     fp.close()
-
-SEAFILE_VERSION = '2.1.3'
 
 # Put here after loading other settings files if `SITE_ROOT` is modified in
 # other settings files.

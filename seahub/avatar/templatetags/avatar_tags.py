@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.views import is_registered_user
 
 from seahub.avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFAULT,
@@ -39,14 +40,15 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:
             user = User.objects.get(email=user)
-            alt = unicode(user)
+            alt = email2nickname(user.username)
             url = avatar_url(user, size)
         except User.DoesNotExist:
             url = get_default_avatar_non_registered_url()
             alt = _("Default Avatar")
     else:
-        alt = unicode(user)
+        alt = email2nickname(user.username)
         url = avatar_url(user, size)
+
     return """<img src="%s" alt="%s" width="%s" height="%s" class="avatar" />""" % (url, alt,
         size, size)
 

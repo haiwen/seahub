@@ -208,9 +208,10 @@ else:
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search
+    from seahub_extra.search.views import search, pubuser_search
     urlpatterns += patterns('',
         url(r'^search/$', search, name='search'),
+        url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     )
 
 if getattr(settings, 'ENABLE_PAYMENT', False):

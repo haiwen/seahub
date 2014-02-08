@@ -5,7 +5,10 @@
 {% block cur_lib %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "Libraries" %}</h3>
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "Libraries" %}</h3>
+    <button id="repo-create" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "New Library"%}</button>
+</div>
 {% if public_repos %}
 <table>
     <tr>
