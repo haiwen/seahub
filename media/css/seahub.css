@@ -129,7 +129,7 @@ table {
 caption {font-size:1.1em; font-weight:bold; margin-bottom:.6em;}
 th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
-td { color: #333; }
+td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
 p { margin:0.5em 0; }
 
@@ -954,7 +954,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #right-panel .hd .a {
     padding:4px 0;
-    font-size:14px;
+    font-size:15px;
     color:#333;
     line-height:1.5;
     border:0; /* rm 'border-bottom' for cur tab */
