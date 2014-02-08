@@ -148,7 +148,6 @@ urlpatterns = patterns('',
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
     url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
-    url(r'^ajax/groups/$', groups, name='groups'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

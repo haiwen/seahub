@@ -16,6 +16,14 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
+$('#top-nav-grp').click(function() {
+    var grp_nav = $(this),
+        popup = $('#top-nav-grp-info');
+    popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/2});
+    popup.toggleClass('hide');
+    return false;
+});
+
 $(document).ready(function(){
     var msg_ct = $("#msg-count"); 
     $.ajax({
@@ -36,12 +44,6 @@ $('#msg-count').click(function() {
 (function () {
     var my_info = $('#my-info');
     var popup = $('#user-info-popup');
-
-    $(window).load(function() {
-        if (my_info.length > 0) { // before login, no 'my_info'
-            popup.css({'right': my_info.parent().width() - my_info.position().left - my_info.outerWidth()});
-        }
-    }); 
     my_info.click(function() {
         var loading_tip = $('.loading-tip', popup);
         if (popup.hasClass('hide')) {
@@ -62,14 +64,15 @@ $('#msg-count').click(function() {
         return false;
     });
 })();
-
 $(document).click(function(e) {
-    var target = e.target || event.srcElement,
-        popup = $('#user-info-popup'),
-        popup_switch = $('#my-info');
-    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
-        popup.addClass('hide');
-    }    
+    var target = e.target || event.srcElement;
+    var closePopup = function(popup, popup_switch) {
+        if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
+            popup.addClass('hide');
+        }    
+    };
+    closePopup($('#user-info-popup'), $('#my-info'));
+    closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
 });
 
 // search: disable submit when input nothing
