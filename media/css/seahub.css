@@ -374,7 +374,8 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0.5em;
 }
 .side-tabnav h3.hd,
-.side-tabnav .hd h3 {
+.side-tabnav .hd h3,
+.wiki-index h3 {
     color:#f7941d;
 }
 .side-tabnav .hd h3 {
@@ -2719,13 +2720,6 @@ textarea:-moz-placeholder {/* for FF */
 /* wiki index */
 .wiki-index {
     margin-top:25px;
-}
-.wiki-index .hd {
-    border-bottom:1px solid #ddd;
-    margin-bottom:0.4em;
-}
-.wiki-index .hd h3 {
-    margin-bottom:0;
 }
 .wiki-index ul {
     list-style-type: square;
