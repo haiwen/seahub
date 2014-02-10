@@ -59,18 +59,19 @@ input, button { display:inline-block;/*for ie*/ }
 input[type=submit],
 input[type=button],
 input.submit { 
-    height:27px;/*for ff*/
-    line-height:1.5;
+    height:auto;
 }
 button,
 input[type=submit],
 input[type=button],
 input.submit,
 .fileinput-button { 
-    padding:3px;
-    background: #efefef;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+    padding:5px 6px;
+    background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
+    background:-moz-linear-gradient(top, #fafafb, #eeeeee);
+    background:linear-gradient(top, #fafafb, #eeeeee);
+    border: 1px solid #c5c5c5;
+    border-radius: 2px;
 }
 button {
     overflow:visible;/*for ie 7*/
@@ -100,7 +101,7 @@ input[type=button]:hover,
 button:hover, 
 .fileinput-button:hover {
     cursor:pointer;
-    background-color:#fff;
+    background:#fff;
 }
 input[type="file"] {
     border:none;
@@ -969,8 +970,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #right-panel .hd button {
     height:29px;
-    padding-left:5px;
-    padding-right:5px;
     background:#fff;
 }
 /* info-bar */
