@@ -2196,9 +2196,10 @@ class Groups(APIView):
         # check plan
         num_of_groups = getattr(request.user, 'num_of_groups', -1)
         if num_of_groups > 0:
+            username = request.user.username
             current_groups = len(get_personal_groups_by_user(username))
             if current_groups > num_of_groups:
-                result['error'] = _(u'You can only create %d groups.') % num_of_groups
+                result['error'] = 'You can only create %d groups.' % num_of_groups
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
         
@@ -2211,7 +2212,7 @@ class Groups(APIView):
             checked_groups = get_personal_groups(-1, -1)
         for g in checked_groups:
             if g.group_name == group_name:
-                result['error'] = _(u'There is already a group with that name.')
+                result['error'] = 'There is already a group with that name.'
                 return HttpResponse(json.dumps(result), status=400,
                                     content_type=content_type)
 
@@ -2222,7 +2223,7 @@ class Groups(APIView):
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                             content_type=content_type)
         except SearpcError, e:
-            result['error'] = _(e.msg)
+            result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
 
