@@ -67,6 +67,9 @@ function repoCreateSuccessCallback(data) {
     var new_repo_item = $('#new-repo .repo-item').clone(true); 
     var tds = $('td', new_repo_item);
     var repo_id = data['repo_id'], repo_name = data['repo_name'];
+    if (data['repo_enc']) {
+        $('img', $(tds[0])).attr('src', '{{MEDIA_URL}}img/sync-folder-encrypt-20.png');
+    }
     $(tds[1]).html('<a href="{{ SITE_ROOT }}repo/' + repo_id + '/">' + repo_name + '</a>');
     $(tds[2]).html(data['repo_desc']);
     $(tds[4]).attr('data-id', repo_id).attr('data-name', repo_name);

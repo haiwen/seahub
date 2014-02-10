@@ -1460,6 +1460,7 @@ def repo_create(request):
             'repo_id': repo_id,
             'repo_name': repo_name,
             'repo_desc': repo_desc,
+            'repo_enc': encryption,
         }
         repo_created.send(sender=None,
                           org_id=-1,
