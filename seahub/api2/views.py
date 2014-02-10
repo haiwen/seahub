@@ -1969,7 +1969,7 @@ class SharedRepo(APIView):
                                  'User does not exist')
             try :
                 from_email = seafile_api.get_repo_owner(repo_id)
-                seafile_api.add_share(repo_id, from_email, user,
+                seafile_api.share_repo(repo_id, from_email, user,
                                       permission)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
