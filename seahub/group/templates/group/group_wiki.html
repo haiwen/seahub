@@ -7,6 +7,7 @@
 
 {% block left_panel %}
     {{ block.super }}
+    {% if wiki_exists %}
     <div class="wiki-index">
         <h3>{% trans "Wiki Index" %}</h3>
         {% if not wiki_index_exists %}
@@ -14,6 +15,7 @@
         <button id="create-index">{% trans "Create" %}</button>
         {% endif %}    
     </div>
+    {% endif %}    
 {% endblock %}
 
 {% block right_panel %}
@@ -204,6 +206,7 @@ $('#wiki-use-lib-form').submit(function() {
 
 {% endif %}                     // END wiki_exists
 
+{% if wiki_exists %}
 {% if wiki_index_exists %}
 $('.wiki-index').append(converter.makeHtml('{{ index_content|escapejs }}'));
 {% else %}
@@ -212,6 +215,7 @@ $('#create-index').click(function() {
     $('[name="page_name"]', form).val('index');
     form.submit();
 });
+{% endif %}
 {% endif %}
 </script>
 {% endblock %}
