@@ -382,8 +382,9 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0;
 }
 .side-tabnav .hd .avatar { /*for 'group'*/
-    vertical-align:top;
+    vertical-align:middle;
 	border-radius:1000px;
+    margin:0 6px 0 4px;
 }
 .side-tabnav .hd .icon-globe { /*for 'group'*/
     line-height:1;

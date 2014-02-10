@@ -9,11 +9,11 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">
-        {% grp_avatar group.props.id 24 %} <span title="{{ group.group_name }}">{{ group.group_name|truncatechars:11 }}</span>
+        {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="vam">{{ group.group_name|truncatechars:11 }}</span>
         {% if group.is_pub %}<span class="icon-globe" title="{% trans "This group is public." %}"></span>{% endif %}
         </h3>
         {% if is_staff %}
-        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin-top:8px;" />
         {% endif %}
         {% if group.view_perm != 'pub' and not is_staff %}
         <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</a>

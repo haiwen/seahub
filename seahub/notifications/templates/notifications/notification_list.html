@@ -4,9 +4,10 @@
 {% block cur_notice %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "All Notifications" %}</h3>
-
-<button id="add-n">{% trans "Add new notification" %}</button>
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "All Notifications" %}</h3>
+    <button id="add-n" class="fright">{% trans "Add new notification" %}</button>
+</div>
 <form action="{% url 'notification_add' %}" method="post" class="hide" id="add-n-form">{% csrf_token %}
     <h3>{% trans "Add new notification" %}</h3>
     <textarea name="message" class="textarea"></textarea><br />

@@ -6,19 +6,19 @@
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_repo %}{% endblock %}">
-        <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-archive vam"></span><span class="vam">{% trans "Libraries" %}</span></a>
+            <a href="{{ SITE_ROOT }}sys/seafadmin/" class="lib">{% trans "Libraries" %}</a>
         </li>
         <li class="tab {% block cur_users %}{% endblock %}">
-        <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="icon-user"></span>{% trans "Users" %}</a>
+            <a href="{{ SITE_ROOT }}sys/useradmin/" class="members">{% trans "Users" %}</a>
         </li>
         <li class="tab {% block cur_groups %}{% endblock %}">
-        <a href="{{ SITE_ROOT }}sys/groupadmin/"><span class="icon-group"></span>{% trans "Groups" %}</a>
+            <a href="{{ SITE_ROOT }}sys/groupadmin/" class="group">{% trans "Groups" %}</a>
         </li>
         <li class="tab {% block cur_notice %}{% endblock %}">
-        <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="icon-comment"></span>{% trans "Notifications" %}</a>
+            <a href="{{ SITE_ROOT }}sys/notificationadmin/" class="msgs">{% trans "Notifications" %}</a>
         </li>
         <li class="tab {% block cur_links %}{% endblock %}">
-        <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="icon-link"></span>{% trans "Links" %}</a>
+            <a href="{{ SITE_ROOT }}sys/publinkadmin/" class="links">{% trans "Links" %}</a>
         </li>   
     </ul>
 </div>
