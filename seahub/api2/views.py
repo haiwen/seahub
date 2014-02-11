@@ -1171,12 +1171,14 @@ class FileView(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
 
             parent_dir = os.path.dirname(path)
+            parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
             if oldname == newname:
                 return api_error(status.HTTP_409_CONFLICT,
                                  'The new name is the same to the old')
 
             newname = check_filename_with_rename(repo_id, parent_dir, newname)
+            newname_utf8 = newname.encode('utf-8')
             try:
                 seafile_api.rename_file (repo_id, parent_dir,
                                          oldname, newname,
