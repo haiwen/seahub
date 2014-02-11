@@ -910,7 +910,10 @@ textarea:-moz-placeholder {/* for FF */
 #info-bar-info {
     margin:3px 0;
 }
-
+#info-bar-info a {
+    color:#fff;
+    text-decoration:underline;
+}
 /* top-bar */
 .top-bar-inner {
     background:#2d2d2d;
