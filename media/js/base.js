@@ -19,7 +19,7 @@ if ($('.messages')[0]) {
 $('#top-nav-grp').click(function() {
     var grp_nav = $(this),
         popup = $('#top-nav-grp-info');
-    popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/2});
+    popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
     popup.toggleClass('hide');
     return false;
 });

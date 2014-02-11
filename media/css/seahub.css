@@ -1081,6 +1081,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #top-nav-grp-info {
     top:40px;
+    font-size:14px;
 }
 .top-info-popup .item {
     display:block;
@@ -1092,7 +1093,6 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:normal;
 }
 #top-nav-grp-list .item {
-    font-size:14px;
     padding:5px 10px;
     border:none;
 }
@@ -1104,6 +1104,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:1000px;
     margin-right:5px;
     vertical-align:middle;
+}
+#top-nav-grp-info .all-grp {
+    padding-left:50px;
 }
 #msg-file-share {
     margin-top:8px;
