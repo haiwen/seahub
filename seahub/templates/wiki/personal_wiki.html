@@ -11,13 +11,16 @@
     {{ block.super }}
     {% if wiki_exists %}
     <div class="wiki-index">
-        <h3>{% trans "Wiki Index" %}</h3>
         {% if not wiki_index_exists %}
+        <h3 class="hd">{% trans "Wiki Index" %}</h3>
         <p>{% trans "No index now." %}</p>
         <button id="create-index">{% trans "Create" %}</button>
         {% else %}
+        <div class="hd ovhd">
+            <h3 class="fleft">{% trans "Wiki Index" %}</h3>
+            <span id="edit-index" class="icon-pencil fright" title="{% trans "Edit" %}"></span>
+        </div>
         <div id="wiki-index-con"></div>
-        <button id="edit-index">{% trans "Edit" %}</button>
         {% endif %}
     </div>
     {% endif %}
