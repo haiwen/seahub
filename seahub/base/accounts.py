@@ -428,7 +428,7 @@ class RegistrationForm(forms.Form):
         return self.cleaned_data
 
 class DetailedRegistrationForm(RegistrationForm):
-    attrs_dict = { 'class': 'required' }
+    attrs_dict = { 'class': 'input' }
     
     name = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=64)), label=_("name"))
