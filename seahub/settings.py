@@ -200,6 +200,9 @@ REPO_PASSWORD_MIN_LENGTH = 6
 # Using server side crypto by default, otherwise, let user choose crypto method.
 FORCE_SERVER_CRYPTO = True
 
+# Enable or disable repo history setting
+ENABLE_REPO_HISTORY_SETTING = True
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
