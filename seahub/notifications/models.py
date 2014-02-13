@@ -500,7 +500,7 @@ class UserNotification(models.Model):
         msg_from = self.detail
         nickname = email2nickname(msg_from)
 
-        msg = _(u"You have recieved a <a href='%(href)s'>new message</a> from %(user)s.") % {
+        msg = _(u"You have received a <a href='%(href)s'>new message</a> from %(user)s.") % {
             'user': nickname,
             'href': reverse('user_msg_list', args=[msg_from]),
             }
