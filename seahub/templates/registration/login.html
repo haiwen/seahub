@@ -28,14 +28,14 @@
 {% endblock %}
 
 {% block main_panel %}
-<div class="narrow-panel">
-<h2>{% trans "Log In" %}</h2>
-<form action="" method="post" class="login-form">{% csrf_token %}
+<div class="new-narrow-panel">
+<h2 class="hd">{% trans "Log In" %}</h2>
+<form action="" method="post" class="con">{% csrf_token %}
     <label for="username">{% trans "Email" %}</label>
-	<input type="text" name="username" value="" />
+	<input type="text" name="username" value="" class="input" />
 	<label for="password">{% trans "Password" %}</label>
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "(forgot password)" %}</a>
-	<input type="password" name="password" value="" />
+	<input type="password" name="password" value="" class="input" />
     {% if form.captcha %}
     <label>{% trans "CAPTCHA" %}</label><br />
     {{ form.captcha }}
@@ -57,9 +57,9 @@
         <span class="checkbox-option">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
     </label>
 
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    <input type="submit" value="{% trans "Log In" %}" class="submit" />
     {% if enable_signup %}
-    <a href="{{ SITE_ROOT }}accounts/register/" style="font-size:13px;">{% trans "Signup" %}</a>
+    <a href="{{ SITE_ROOT }}accounts/register/">{% trans "Signup" %}</a>
     {% endif %}
 </form>
 </div>
@@ -68,7 +68,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 function setCaptchaInputWidth() {
-    $('#id_captcha_1').css({'width': 318 - $('.captcha').width() - 10});
+    $('#id_captcha_1').css({'width': $('.input').outerWidth() - $('.captcha').width() - 10});
 }
 $(window).load(setCaptchaInputWidth);
 $('.captcha').load(setCaptchaInputWidth);
@@ -101,7 +101,7 @@ $('input[type="submit"]').click(function(){
 });
 // set tabindex
 $(function() {
-    $('input:not([type="hidden"])', $('.login-form')).each(function(index) {
+    $('input:not([type="hidden"])').each(function(index) {
         $(this).attr('tabindex', index + 1);
     });
 });

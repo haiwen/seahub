@@ -2,15 +2,16 @@
 {% load i18n %}
 {% block title %}{% trans "Register" %}{% endblock %}
 {% block main_panel %}
-<div class="narrow-panel">
+<div class="new-narrow-panel">
+    <h2 class="hd">{% trans "Signup" %}</h2>
+    <div class="con">
 {% if request.user.is_authenticated %}
-    <h2>{% trans "Welcome back, you are already signed in." %}</h2>
+    <p>{% trans "Welcome back, you are already signed in." %}</p>
 {% else %}
-    <h2>{% trans "Signup" %}</h2>
     <form action="" method="post">{% csrf_token %}
         {% if form.name %}
         <label for="id_name">{% trans "Name" %}</label>
-        {{ form.name }}             {{ form.name.errors }}
+        {{ form.name }} {{ form.name.errors }}
         {% endif %}
 
         <label for="id_email">{% trans "Email" %}</label>
@@ -30,9 +31,10 @@
         {% endif %}
 
         <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <input type="submit" value="{% trans "Sign Up" %}" class="submit" />
     </form>
 {% endif %}
+    </div>
 </div>
 {% endblock %}
 

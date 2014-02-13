@@ -384,7 +384,7 @@ class RegistrationForm(forms.Form):
     Validates that the requested email is not already in use, and
     requires the password to be entered twice to catch typos.    
     """
-    attrs_dict = { 'class': 'required' }
+    attrs_dict = { 'class': 'input' }
 
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
