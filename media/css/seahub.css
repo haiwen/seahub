@@ -354,15 +354,10 @@ textarea:-moz-placeholder {/* for FF */
     color:#666;
     font-weight:normal;
 }
-.tabnav-tab-cur {
-    border-color:#ddd;
-    border-radius:3px 3px 0 0;
-    background:#fff;
-    margin-bottom:-1px;
-    color:#000;
-}
-.tabnav-tab-cur a {
-    color:#000;
+.tabnav-tab-cur a,
+.tabnav-tab a:hover {
+    color: #eb8205;
+    text-decoration: underline;
 }
 /**** side-tabnav ****/
 .side-textnav .hd,
@@ -1922,6 +1917,9 @@ textarea:-moz-placeholder {/* for FF */
     width:640px;
     margin-top:10px;
 }
+#personal-msg-panel {
+    margin-top:22px;
+}
 .msg-num {
     font-size:12px;
     color:#333;
@@ -2548,10 +2546,13 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 5px 0 10px;
 }
 .wiki-nav .link {
+    color:#333;
     font-weight:normal;
 }
-.wiki-nav .cur-item .link {
-    color:#333;
+.wiki-nav .cur-item .link,
+.wiki-nav .link:hover {
+    color: #eb8205;
+    text-decoration: underline;
 }
 #wiki-area {
     padding: 0 0;

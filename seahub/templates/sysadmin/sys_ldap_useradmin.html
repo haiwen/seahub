@@ -7,7 +7,7 @@
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "LDAP" %}</li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
     </ul>
     <button class="icon-search fright" id="search-user-btn"> {% trans "Search" %}</button>    
 </div>

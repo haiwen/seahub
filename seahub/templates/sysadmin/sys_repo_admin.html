@@ -6,7 +6,7 @@
 
 <div class="tabnav">
     <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "All" %}</li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_repo_admin' %}">{% trans "All" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_list_orphan' %}">{% trans "Orphan" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_list_system' %}">{% trans "System" %}</a></li>
     </ul>

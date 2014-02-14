@@ -9,11 +9,11 @@
 {% if publinks %}
 <table>
     <tr>
-        <th width="20%">{% trans "Name" %}</th>
-        <th width="20%">{% trans "Owner" %}</th>
+        <th width="25%">{% trans "Name" %}</th>
+        <th width="25%">{% trans "Owner" %}</th>
         <th width="20%">{% trans "Create At" %}</th>
-        <th width="15%">{% trans "Count" %}</th>
-        <th width="25%">{% trans "Operations" %}</th>
+        <th width="12%">{% trans "Count" %}</th>
+        <th width="18%">{% trans "Operations" %}</th>
     </tr>
     {% for publink in publinks %}
     <tr>
@@ -21,8 +21,7 @@
         <td>{{ publink.username }}</td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
-        <td><a class="op vh" href="{% url 'remove_shared_link' %}?t={{ publink.token }}">{% trans "Remove" %}</a>
-</td>
+        <td><a class="op vh" href="{% url 'remove_shared_link' %}?t={{ publink.token }}">{% trans "Remove" %}</a></td>
     </tr>
     {% endfor %}
 </table>
