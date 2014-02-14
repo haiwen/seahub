@@ -956,7 +956,7 @@ function sortDirent() {
 
 var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="vam" />';
 // cur_path: will be updated after reqDirdata
-var cur_path = '{{ path }}';
+var cur_path = "{{ path|safe }}"; {# safe is for ''', '&' included in path #}
 
 // '.dir-link' click handler
 function dirlinkClick() {
