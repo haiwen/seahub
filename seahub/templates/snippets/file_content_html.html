@@ -48,6 +48,9 @@ For details please refer to 'snippets/file_content_js.html'.
             {% include 'snippets/spreadsheet_convert_html.html' %}
         {% endif %}
 
+        {% if filetype == 'OpenDocument' %}
+        <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{{ raw_path }}" style="width:95%;height:600px;border:0;margin:0 auto;" allowfullscreen webkitallowfullscreen></iframe>
+        {% endif %}
     {% else %}
     <div id="file-view-tip">
         <p class="error">{{ err }}</p>
