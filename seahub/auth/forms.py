@@ -84,7 +84,8 @@ class PasswordResetForm(forms.Form):
         """
         Generates a one-use only link for resetting password and sends to the user
         """
-        from django.core.mail import send_mail
+        #from django.core.mail import send_mail
+        from django.core.mail import EmailMessage
 
         user = self.users_cache
         if not domain_override:
@@ -105,8 +106,10 @@ class PasswordResetForm(forms.Form):
             'protocol': use_https and 'https' or 'http',
         }
 
-        send_mail(_("Password reset on %s") % site_name,
+        msg = EmailMessage(_("Password reset on %s") % site_name,
                   t.render(Context(c)), None, [user.username])
+        msg.content_subtype = "html"  # Main content is now text/html
+        msg.send()
 
 class SetPasswordForm(forms.Form):
     """

@@ -1,9 +1,10 @@
 {% load i18n %}{% autoescape off %}
 {% if org %}
-{% blocktrans %}You're receiving this e-mail because {{ user }} added you to organization "{{ org.org_name }}" on {{ site_name }}.{% endblocktrans%}
+{% blocktrans with org_name=org.org_name %}You're receiving this e-mail because {{ user }} added you to organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
 {% blocktrans %}You're receiving this e-mail because {{ user }} added you to {{ site_name }}.{% endblocktrans%}
 {% endif %}
+
 {% trans "Following is your account information:" %}
 {% blocktrans %}Email: {{ email }}{% endblocktrans %}
 {% blocktrans %}Password:  {{ password }}{% endblocktrans %}
