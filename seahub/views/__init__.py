@@ -78,7 +78,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
-    TRAFFIC_STATS_ENABLED, get_user_traffic_stat
+    TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, \
@@ -693,6 +693,8 @@ def repo_history(request, repo_id):
     commits_all = get_commits(repo_id, per_page * (current_page -1),
                               per_page + 1)
     commits = commits_all[:per_page]
+    for c in commits:
+        c.show = False if new_merge_with_no_conflict(c) else True
 
     if len(commits_all) == per_page + 1:
         page_next = True

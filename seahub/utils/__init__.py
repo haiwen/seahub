@@ -301,6 +301,37 @@ def get_file_revision_id_size (commit_id, path):
 
     return None, None
 
+def new_merge_with_no_conflict(commit):
+    """Check whether a commit is a new merge, and no conflict.
+    
+    Arguments:
+    - `commit`:
+    """
+    if commit.second_parent_id is not None and commit.new_merge is True and \
+            commit.conflict is False:
+        return True
+    else:
+        return False
+
+def get_commit_before_new_merge(commit):
+    """Traverse parents of ``commit``, and get a commit which is not a new merge.
+
+    Pre-condition: ``commit`` must be a new merge and not conflict.
+
+    Arguments:
+    - `commit`:
+    """
+    assert new_merge_with_no_conflict(commit) is True
+
+    while(new_merge_with_no_conflict(commit)):
+        p1 = seafserv_threaded_rpc.get_commit(commit.parent_id)
+        p2 = seafserv_threaded_rpc.get_commit(commit.second_parent_id)
+        commit = p1 if p1.ctime > p2.ctime else p2
+
+    assert new_merge_with_no_conflict(commit) is False
+        
+    return commit
+
 def gen_inner_file_get_url(token, filename):
     """Generate inner httpserver file url.
 
@@ -446,7 +477,12 @@ if EVENTS_CONFIG_FILE:
                     duplicate = False
                     for e2 in valid_events:
                         if _same_events(e1, e2): duplicate = True; break
-                    if not duplicate:
+
+                    new_merge = False
+                    if hasattr(e1, 'commit') and new_merge_with_no_conflict(e1.commit):
+                        new_merge = True
+                        
+                    if not duplicate and not new_merge:
                         valid_events.append(e1)
                     total_used = total_used + 1
                     if len(valid_events) == count:

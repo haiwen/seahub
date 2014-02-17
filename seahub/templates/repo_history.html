@@ -24,6 +24,7 @@
             </tr>
 
             {% for commit in commits %}
+            {% if commit.show %}
             <tr>
                 <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
                 <td>
@@ -45,6 +46,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </table>
         <div id="paginator">
