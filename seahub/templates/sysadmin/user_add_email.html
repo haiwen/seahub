@@ -1,19 +1,32 @@
-{% load i18n %}{% autoescape off %}
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
 {% if org %}
 {% blocktrans with org_name=org.org_name %}You're receiving this e-mail because {{ user }} added you to organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
 {% blocktrans %}You're receiving this e-mail because {{ user }} added you to {{ site_name }}.{% endblocktrans%}
 {% endif %}
+</p>
 
-{% trans "Following is your account information:" %}
-{% blocktrans %}Email: {{ email }}{% endblocktrans %}
+<p style="font-size:14px;color:#434144;">
+{% trans "Following is your account information:" %}<br />
+{% blocktrans %}Email: {{ email }}{% endblocktrans %}<br />
 {% blocktrans %}Password:  {{ password }}{% endblocktrans %}
+</p>
 
-{% trans "Please go to the following page and log in:" %}
+<p style="font-size:14px;color:#434144;">
+{% trans "Please go to the following page and log in:" %}<br />
 {{ protocol }}://{{ domain }}{% url 'auth_login' %}
-
-{% trans "Thanks for using our site!" %}
-
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+</p>
 
 {% endautoescape %}
+
+{% endblock %}

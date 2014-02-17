@@ -6,7 +6,7 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -459,14 +459,25 @@ def send_user_reset_email(request, email, password):
     Send email when reset user password.
     """
     
+    use_https = request.is_secure()
+    domain = RequestSite(request).domain
+
     t = loader.get_template('sysadmin/user_reset_email.html')
     c = {
         'email': email,
         'password': password,
         'site_name': settings.SITE_NAME,
+        'media_url': settings.MEDIA_URL,
+        'logo_path': settings.LOGO_PATH,
+        'domain': domain,
+        'protocol': use_https and 'https' or 'http',
+        'media_url': settings.MEDIA_URL,
+        'logo_path': settings.LOGO_PATH,
         }
-    send_mail(_(u'Password Reset'), t.render(Context(c)),
-              None, [email], fail_silently=False)
+    msg = EmailMessage(_(u'Password Reset'), t.render(Context(c)),
+              None, [email])
+    msg.content_subtype = "html"
+    msg.send()
     
 @login_required
 @sys_staff_required
@@ -520,9 +531,14 @@ def send_user_add_mail(request, email, password):
         'domain': domain,
         'protocol': use_https and 'https' or 'http',
         'site_name': settings.SITE_NAME,
+        'media_url': settings.MEDIA_URL,
+        'logo_path': settings.LOGO_PATH,
         }
-    send_mail(_(u'Seafile Registration Information'), t.render(Context(c)),
-              None, [email], fail_silently=False)
+    msg = EmailMessage(_(u'Seafile Registration Information'), t.render(Context(c)),
+              None, [email])
+    msg.content_subtype = "html"
+    msg.send()
+
 
 @login_required
 def user_add(request):

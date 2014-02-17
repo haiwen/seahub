@@ -1,11 +1,22 @@
-{% load i18n %}{% autoescape off %}
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
 {% blocktrans %}You're receiving this e-mail because {{ email }} is sharing a file to you on {{ site_name }}.{% endblocktrans%}
+</p>
 
-{% trans "Please go to the following page and view the file:" %}
+<p style="font-size:14px;color:#434144;">
+{% trans "Please go to the following page and view the file:" %}<br />
 {{ file_shared_link }}
-
-{% trans "Thanks for using our site!" %}
-
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+</p>
 
 {% endautoescape %}
+
+{% endblock %}

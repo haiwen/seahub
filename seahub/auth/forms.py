@@ -11,6 +11,8 @@ from seahub.utils import IS_EMAIL_CONFIGURED
 
 from captcha.fields import CaptchaField
 
+import seahub.settings as settings
+
 class AuthenticationForm(forms.Form):
     """
     Base class for authenticating users. Extend this to get a form that accepts
@@ -84,7 +86,6 @@ class PasswordResetForm(forms.Form):
         """
         Generates a one-use only link for resetting password and sends to the user
         """
-        #from django.core.mail import send_mail
         from django.core.mail import EmailMessage
 
         user = self.users_cache
@@ -104,6 +105,8 @@ class PasswordResetForm(forms.Form):
             'user': user,
             'token': token_generator.make_token(user),
             'protocol': use_https and 'https' or 'http',
+            'media_url': settings.MEDIA_URL,
+            'logo_path': settings.LOGO_PATH,
         }
 
         msg = EmailMessage(_("Password reset on %s") % site_name,

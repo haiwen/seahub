@@ -2,7 +2,7 @@
 import os
 import logging
 import simplejson as json
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
@@ -39,6 +39,7 @@ from seahub.utils import render_permission_error, string2list, render_error, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     get_repo_last_modify, is_valid_username
 
+import seahub.settings as settings
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -799,17 +800,24 @@ def send_shared_link(request):
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
+            use_https = request.is_secure()
+            domain = RequestSite(request).domain
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
                 'site_name': SITE_NAME,
+                'domain': domain,
+                'protocol': use_https and 'https' or 'http',
+                'media_url': settings.MEDIA_URL,
+                'logo_path': settings.LOGO_PATH,
                 }
 
             try:
-                send_mail(_(u'Your friend shared a file to you on Seafile'),
-                          t.render(Context(c)), None, [to_email],
-                          fail_silently=False)
+                msg = EmailMessage(_(u'Your friend shared a file to you on Seafile'),
+                          t.render(Context(c)), None, [to_email])
+                msg.content_subtype = "html"
+                msg.send()
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
@@ -1073,17 +1081,25 @@ def send_shared_upload_link(request):
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
+
+            use_https = request.is_secure()
+            domain = RequestSite(request).domain
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'shared_upload_link': shared_upload_link,
                 'site_name': SITE_NAME,
+                'domain': domain,
+                'protocol': use_https and 'https' or 'http',
+                'media_url': settings.MEDIA_URL,
+                'logo_path': settings.LOGO_PATH,
                 }
 
             try:
-                send_mail(_(u'Your friend shared a upload link to you on Seafile'),
-                          t.render(Context(c)), None, [to_email],
-                          fail_silently=False)
+                msg = EmailMessage(_(u'Your friend shared a upload link to you on Seafile'),
+                          t.render(Context(c)), None, [to_email])
+                msg.content_subtype = "html"
+                msg.send()
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})

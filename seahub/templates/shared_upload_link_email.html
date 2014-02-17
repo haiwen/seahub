@@ -1,11 +1,20 @@
-{% load i18n %}{% autoescape off %}
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
 {% blocktrans %}You're receiving this e-mail because {{ email }} has shared an upload link to you on {{ site_name }}.{% endblocktrans%}
+</p>
 
-{% trans "You can go to the following page and upload your files:" %}
+<p style="font-size:14px;color:#434144;">
+{% trans "You can go to the following page and upload your files:" %}<br />
 {{ shared_upload_link }}
-
-{% trans "Thanks for using our site!" %}
-
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+</p>
 
 {% endautoescape %}
+{% endblock %}
