@@ -10,22 +10,19 @@
 
 <p style="font-size:14px;color:#434144;">
 {% if org %}
-{% blocktrans with org_name=org.org_name %}You're receiving this e-mail because {{ user }} added you to organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
+{% blocktrans with org_name=org.org_name %}{{ user }} invited you to join organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
-{% blocktrans %}You're receiving this e-mail because {{ user }} added you to {{ site_name }}.{% endblocktrans%}
+{% blocktrans %}{{ user }} invited you to join {{ site_name }}.{% endblocktrans%}
 {% endif %}
 </p>
 
 <p style="font-size:14px;color:#434144;">
-{% trans "Following is your account information:" %}<br />
+{% trans "Here is your account information:" %}<br />
 {% blocktrans %}Email: {{ email }}{% endblocktrans %}<br />
-{% blocktrans %}Password:  {{ password }}{% endblocktrans %}
+{% blocktrans %}Password: {{ password }}{% endblocktrans %}
 </p>
 
-<p style="font-size:14px;color:#434144;">
-{% trans "Please go to the following page and log in:" %}<br />
-{{ protocol }}://{{ domain }}{% url 'auth_login' %}
-</p>
+<a href="{{ service_url }}{% url 'auth_login' %}" target="_blank">{% trans "Log In" %}</a> 
 
 {% endautoescape %}
 

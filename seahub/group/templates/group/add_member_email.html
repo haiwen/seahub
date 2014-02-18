@@ -1,9 +1,18 @@
-{% load url from future %}{% load i18n %}{% autoescape off %}
-{% blocktrans %}{{ email }} invite you to join group {{ group.group_name }}. Please go to the following page and sign up:{% endblocktrans %}
-{{ protocol }}://{{ domain }}{% url 'registration_register' %}?src={{ to_email }}
+{% extends 'email_base.html' %}
 
-{% trans "Thanks for using our site!" %}
+{% load i18n seahub_tags %}
 
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% block email_con %}
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi, " %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans with grp_name=group.group_name %}{{ email }} invited you to join group {{ grp_name }} on {{ site_name }}: {% endblocktrans %}<br />
+{{ service_url }}{% url 'registration_register' %}?src={{ to_email }}
+</p>
 
 {% endautoescape %}
+{% endblock %}
+
+

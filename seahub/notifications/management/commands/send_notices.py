@@ -3,44 +3,28 @@ import datetime
 import logging
 import string
 
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
+from seahub.utils import get_service_url
 import seahub.settings as settings
+
+from django.template import Context, loader
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-email_templates = (u'''Hi, ${to_user}
-You've got ${count} new notice on ${site_name}.
-
-Go check out at ${url}
-
-Thanks for using our site!
-
-${site_name} team
-''',
-u'''Hi, ${to_user}
-You've got ${count} new notices on ${site_name}.
-
-Go check out at ${url}
-
-Thanks for using our site!
-
-${site_name} team
-''')
-
-                  
-
 site_name = settings.SITE_NAME
 subjects = (u'New notice on %s' % site_name, u'New notices on %s' % site_name)
-url = settings.SITE_BASE.rstrip('/') + reverse('user_notification_list')
+service_url = get_service_url() 
+media_url = settings.MEDIA_URL
+logo_path = settings.LOGO_PATH
 
 class Command(BaseCommand):
-    help = 'Send Email notifications to user if he/she has a unread notices every period of seconds .'
+    help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'
     label = "notifications_send_notices"
 
     def handle(self, *args, **options):
@@ -79,14 +63,22 @@ class Command(BaseCommand):
         
         for to_user, count in email_ctx.items():
             subject = subjects[1] if count > 1 else subjects[0]
-            template = string.Template(email_templates[1]) if count > 1 else \
-                string.Template(email_templates[0])
-            content = template.substitute(to_user=to_user, count=count,
-                                         site_name=site_name, url=url)
+            t = loader.get_template('notifications/notice_email.html')
+            c = { 
+                    'site_name': site_name,
+                    'media_url': media_url,
+                    'logo_path': logo_path,
+                    'service_url': service_url,
+                    'to_user': to_user,
+                    'notice_count': count,
+                }   
 
             try:
-                send_mail(subject, content, settings.DEFAULT_FROM_EMAIL,
-                          [to_user], fail_silently=False)
+                msg = EmailMessage(subject, t.render(Context(c)), settings.DEFAULT_FROM_EMAIL,
+                        [to_user])
+                msg.content_subtype = "html"
+                msg.send()
                 logger.info('Successfully sent email to %s' % to_user)
+
             except Exception, e:
                 logger.error('Failed to send email to %s, error detail: %s' % (to_user, e))

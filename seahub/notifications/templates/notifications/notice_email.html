@@ -1,0 +1,24 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% blocktrans with name=to_user|email2nickname %}Hi {{ name }},{% endblocktrans %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans count num=notice_count %}
+You've got 1 new notice on {{ site_name }}.
+{% plural %}
+You've got {{num}} new notices on {{ site_name }}.
+{% endblocktrans %}
+</p>
+
+<p style="font-size:14px;color:#434144;">
+{% trans "Go check out at the following page:" %}<br />
+{{ service_url }}{% url 'user_notification_list' %}
+</p>
+
+{% endautoescape %}
+{% endblock %}

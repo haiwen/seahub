@@ -6,7 +6,7 @@ import simplejson as json
 import urllib2
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -50,11 +50,11 @@ from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_l
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name, get_wiki_dirent
-from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL
+from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL, LOGO_PATH
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username
+    calc_file_path_hash, is_valid_username, get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -640,21 +640,23 @@ def group_manage(request, group_id):
                     continue
                 
                 if not is_registered_user(email):
-                    use_https = request.is_secure()
-                    domain = RequestSite(request).domain
+                    service_url = get_service_url()
                     t = loader.get_template('group/add_member_email.html')
                     c = {
                         'email': username,
                         'to_email': email,
                         'group': group,
-                        'domain': domain,
-                        'protocol': use_https and 'https' or 'http',
+                        'service_url': service_url,
                         'site_name': SITE_NAME,
+                        'media_url': MEDIA_URL,
+                        'logo_path': LOGO_PATH,
                         }
                     try:
-                        send_mail(_(u'Your friend added you to a group at Seafile.'),
-                                  t.render(Context(c)), None, [email],
-                                  fail_silently=False)
+                        msg = EmailMessage(_(u'You are invited to join a group on %s.') % SITE_NAME,
+                                  t.render(Context(c)), None, [email])
+                        msg.content_subtype = "html"
+                        msg.send() 
+
                         mail_sended_list.append(email)
                     except Exception, e:
                         logger.warn(e)

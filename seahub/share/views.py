@@ -37,7 +37,7 @@ from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    get_repo_last_modify, is_valid_username
+    get_repo_last_modify, is_valid_username, get_service_url
 
 import seahub.settings as settings
 try:
@@ -800,21 +800,19 @@ def send_shared_link(request):
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
-            use_https = request.is_secure()
-            domain = RequestSite(request).domain
+            service_url = get_service_url()
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
                 'site_name': SITE_NAME,
-                'domain': domain,
-                'protocol': use_https and 'https' or 'http',
+                'service_url': service_url,
                 'media_url': settings.MEDIA_URL,
                 'logo_path': settings.LOGO_PATH,
-                }
+            }
 
             try:
-                msg = EmailMessage(_(u'Your friend shared a file to you on Seafile'),
+                msg = EmailMessage(_(u'A file is shared to you on s%') % SITE_NAME,
                           t.render(Context(c)), None, [to_email])
                 msg.content_subtype = "html"
                 msg.send()
@@ -1081,22 +1079,19 @@ def send_shared_upload_link(request):
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
-
-            use_https = request.is_secure()
-            domain = RequestSite(request).domain
+            service_url = get_service_url()
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'shared_upload_link': shared_upload_link,
                 'site_name': SITE_NAME,
-                'domain': domain,
-                'protocol': use_https and 'https' or 'http',
+                'service_url': service_url,
                 'media_url': settings.MEDIA_URL,
                 'logo_path': settings.LOGO_PATH,
                 }
 
             try:
-                msg = EmailMessage(_(u'Your friend shared a upload link to you on Seafile'),
+                msg = EmailMessage(_(u'An upload link is shared to you on s%') % SITE_NAME,
                           t.render(Context(c)), None, [to_email])
                 msg.content_subtype = "html"
                 msg.send()

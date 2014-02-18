@@ -9,11 +9,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}You're receiving this e-mail because {{ email }} is sharing a file to you on {{ site_name }}.{% endblocktrans%}
-</p>
-
-<p style="font-size:14px;color:#434144;">
-{% trans "Please go to the following page and view the file:" %}<br />
+{% blocktrans %}{{ email }} shared a file to you on {{ site_name }}:{% endblocktrans%} <br />
 {{ file_shared_link }}
 </p>
 

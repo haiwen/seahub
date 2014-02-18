@@ -18,7 +18,6 @@ from urllib import quote
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
 from django.db import IntegrityError
