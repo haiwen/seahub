@@ -15,10 +15,11 @@ import ccnet
 
 from django.core.validators import email_re
 from django.core.urlresolvers import reverse
+from django.core.mail import EmailMessage
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import RequestContext, Context, loader
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
@@ -34,6 +35,7 @@ from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
     list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
     list_inner_pub_repos, list_org_inner_pub_repos, CCNET_CONF_PATH, SERVICE_URL
 import seahub.settings
+from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -581,7 +583,22 @@ def get_site_scheme_and_netloc():
     """
     parse_result = urlparse(get_service_url())
     return "%s://%s" % (parse_result.scheme, parse_result.netloc)
-    
+
+def send_html_email(subject, con_template, con_context, from_email, to_email):
+    """Send HTML email
+    """
+    base_context = {
+        'url_base': get_site_scheme_and_netloc(),  
+        'site_name': SITE_NAME,
+        'media_url': MEDIA_URL,
+        'logo_path': LOGO_PATH,
+    }
+    t = loader.get_template(con_template)
+    con_context.update(base_context)
+    msg = EmailMessage(subject, t.render(Context(con_context)), from_email, to_email)
+    msg.content_subtype = "html"
+    msg.send()
+ 
 def gen_dir_share_link(token):
     """Generate directory share link.
     """

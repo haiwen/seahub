@@ -54,7 +54,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL, LOGO_PATH
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username, get_service_url
+    calc_file_path_hash, is_valid_username, get_service_url, send_html_email
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -640,22 +640,14 @@ def group_manage(request, group_id):
                     continue
                 
                 if not is_registered_user(email):
-                    service_url = get_service_url()
-                    t = loader.get_template('group/add_member_email.html')
                     c = {
                         'email': username,
                         'to_email': email,
                         'group': group,
-                        'service_url': service_url,
-                        'site_name': SITE_NAME,
-                        'media_url': MEDIA_URL,
-                        'logo_path': LOGO_PATH,
                         }
                     try:
-                        msg = EmailMessage(_(u'You are invited to join a group on %s.') % SITE_NAME,
-                                  t.render(Context(c)), None, [email])
-                        msg.content_subtype = "html"
-                        msg.send() 
+                        subject = _(u'You are invited to join a group on %s.') % SITE_NAME
+                        send_html_email(subject, 'group/add_member_email.html', c, None, [email])
 
                         mail_sended_list.append(email)
                     except Exception, e:

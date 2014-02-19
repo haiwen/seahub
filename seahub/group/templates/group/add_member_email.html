@@ -9,7 +9,7 @@
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans with grp_name=group.group_name %}{{ email }} invited you to join group {{ grp_name }} on {{ site_name }}: {% endblocktrans %}<br />
-{{ service_url }}{% url 'registration_register' %}?src={{ to_email }}
+{{ url_base }}{% url 'registration_register' %}?src={{ to_email }}
 </p>
 
 {% endautoescape %}
