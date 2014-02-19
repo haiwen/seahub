@@ -409,7 +409,6 @@ def email_user_on_activation(user):
     """
     service_url = get_service_url() 
     site_name = settings.SITE_NAME
-
     t = loader.get_template('sysadmin/user_activation_email.html')
     c = {
         'site_name': site_name,
@@ -418,7 +417,7 @@ def email_user_on_activation(user):
         'service_url': service_url,
         'username': user.email,
         }
-    msg = EmailMessage(_(u'Your account on s% is activated') % site_name, t.render(Context(c)),
+    msg = EmailMessage(_(u'Your account on %s is activated') % site_name, t.render(Context(c)),
               None, [user.email])
     msg.content_subtype = "html"
     msg.send()
