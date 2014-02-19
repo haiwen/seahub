@@ -22,7 +22,7 @@
 {% blocktrans %}Password: {{ password }}{% endblocktrans %}
 </p>
 
-<a href="{{ service_url }}{% url 'auth_login' %}" target="_blank">{% trans "Log In" %}</a> 
+<a href="{{ url_base }}{% url 'auth_login' %}" target="_blank">{% trans "Log In" %}</a> 
 
 {% endautoescape %}
 

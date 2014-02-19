@@ -6,7 +6,6 @@ import simplejson as json
 import urllib2
 
 from django.conf import settings
-from django.core.mail import EmailMessage
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -50,11 +49,11 @@ from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_l
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name, get_wiki_dirent
-from seahub.settings import SITE_ROOT, SITE_NAME, MEDIA_URL, LOGO_PATH
+from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username, get_service_url, send_html_email
+    calc_file_path_hash, is_valid_username, send_html_email
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user

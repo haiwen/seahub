@@ -1,5 +1,4 @@
 from django.contrib.sites.models import Site
-from django.template import Context, loader
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
@@ -7,7 +6,7 @@ from django.utils.http import int_to_base36
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
-from seahub.utils import IS_EMAIL_CONFIGURED, get_service_url
+from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email
 
 from captcha.fields import CaptchaField
 
@@ -86,7 +85,6 @@ class PasswordResetForm(forms.Form):
         """
         Generates a one-use only link for resetting password and sends to the user
         """
-        from django.core.mail import EmailMessage
 
         user = self.users_cache
         if not domain_override:
@@ -95,24 +93,15 @@ class PasswordResetForm(forms.Form):
         else:
             site_name = domain_override
 
-        service_url = get_service_url()
-        t = loader.get_template(email_template_name)
-
         c = {
             'email': user.username,
-            'site_name': site_name,
             'uid': int_to_base36(user.id),
             'user': user,
             'token': token_generator.make_token(user),
-            'service_url': service_url,
-            'media_url': settings.MEDIA_URL,
-            'logo_path': settings.LOGO_PATH,
         }
 
-        msg = EmailMessage(_("Reset Password on %s") % site_name,
-                  t.render(Context(c)), None, [user.username])
-        msg.content_subtype = "html"  # Main content is now text/html
-        msg.send()
+        send_html_email(_("Reset Password on %s") % site_name,
+                  email_template_name, c, None, [user.username])
 
 class SetPasswordForm(forms.Form):
     """

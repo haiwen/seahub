@@ -17,7 +17,7 @@ You've got {{num}} new notices on {{ site_name }}.
 
 <p style="font-size:14px;color:#434144;">
 {% trans "Go check out at the following page:" %}<br />
-{{ service_url }}{% url 'user_notification_list' %}
+{{ url_base }}{% url 'user_notification_list' %}
 </p>
 
 {% endautoescape %}

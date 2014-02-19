@@ -2,7 +2,6 @@
 import os
 import logging
 import simplejson as json
-from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
@@ -37,7 +36,7 @@ from seahub.views import validate_owner, is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    get_repo_last_modify, is_valid_username, get_service_url
+    get_repo_last_modify, is_valid_username, send_html_email
 
 import seahub.settings as settings
 try:
@@ -793,29 +792,21 @@ def send_shared_link(request):
         email = form.cleaned_data['email']
         file_shared_link = form.cleaned_data['file_shared_link']
 
-        t = loader.get_template('shared_link_email.html')
         to_email_list = string2list(email)
         for to_email in to_email_list:
             # Add email to contacts.
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
-            service_url = get_service_url()
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
-                'site_name': SITE_NAME,
-                'service_url': service_url,
-                'media_url': settings.MEDIA_URL,
-                'logo_path': settings.LOGO_PATH,
             }
 
             try:
-                msg = EmailMessage(_(u'A file is shared to you on s%') % SITE_NAME,
-                          t.render(Context(c)), None, [to_email])
-                msg.content_subtype = "html"
-                msg.send()
+                send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
+                          'shared_link_email.html', c, None, [to_email])
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
@@ -1072,29 +1063,21 @@ def send_shared_upload_link(request):
         email = form.cleaned_data['email']
         shared_upload_link = form.cleaned_data['shared_upload_link']
 
-        t = loader.get_template('shared_upload_link_email.html')
         to_email_list = string2list(email)
         for to_email in to_email_list:
             # Add email to contacts.
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
 
-            service_url = get_service_url()
             c = {
                 'email': request.user.username,
                 'to_email': to_email,
                 'shared_upload_link': shared_upload_link,
-                'site_name': SITE_NAME,
-                'service_url': service_url,
-                'media_url': settings.MEDIA_URL,
-                'logo_path': settings.LOGO_PATH,
                 }
 
             try:
-                msg = EmailMessage(_(u'An upload link is shared to you on s%') % SITE_NAME,
-                          t.render(Context(c)), None, [to_email])
-                msg.content_subtype = "html"
-                msg.send()
+                send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
+                          'shared_upload_link_email.html', c, None, [to_email])
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})

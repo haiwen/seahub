@@ -6,7 +6,6 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -31,9 +30,9 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.share.models import FileShare
 
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, \
+from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
-from seahub.utils import get_site_scheme_and_netloc, get_service_url
+from seahub.utils import send_html_email
 
 logger = logging.getLogger(__name__)
 
@@ -407,20 +406,11 @@ def user_deactivate(request, user_id):
 def email_user_on_activation(user):
     """Send an email to user when admin activate his/her account.
     """
-    service_url = get_service_url() 
-    site_name = settings.SITE_NAME
-    t = loader.get_template('sysadmin/user_activation_email.html')
     c = {
-        'site_name': site_name,
-        'media_url': settings.MEDIA_URL,
-        'logo_path': settings.LOGO_PATH,
-        'service_url': service_url,
         'username': user.email,
         }
-    msg = EmailMessage(_(u'Your account on %s is activated') % site_name, t.render(Context(c)),
-              None, [user.email])
-    msg.content_subtype = "html"
-    msg.send()
+    send_html_email(_(u'Your account on %s is activated') % SITE_NAME,
+            'sysadmin/user_activation_email.html', c, None, [user.email])
     
 @login_required
 @sys_staff_required
@@ -458,23 +448,13 @@ def send_user_reset_email(request, email, password):
     """
     Send email when reset user password.
     """
-    
-    service_url = get_service_url() 
-    site_name = settings.SITE_NAME
 
-    t = loader.get_template('sysadmin/user_reset_email.html')
     c = {
         'email': email,
         'password': password,
-        'site_name': site_name,
-        'media_url': settings.MEDIA_URL,
-        'logo_path': settings.LOGO_PATH,
-        'service_url': service_url,
         }
-    msg = EmailMessage(_(u'Password has been reset on %s') % site_name, t.render(Context(c)),
-              None, [email])
-    msg.content_subtype = "html"
-    msg.send()
+    send_html_email(_(u'Password has been reset on %s') % SITE_NAME,
+            'sysadmin/user_reset_email.html', c, None, [email])
     
 @login_required
 @sys_staff_required
@@ -515,26 +495,14 @@ def user_reset(request, user_id):
     
 def send_user_add_mail(request, email, password):
     """Send email when add new user."""
-    
-    service_url = get_service_url() 
-    site_name = settings.SITE_NAME
-
-    t = loader.get_template('sysadmin/user_add_email.html')
     c = {
         'user': request.user.username,
         'org': request.user.org,
         'email': email,
         'password': password,
-        'service_url': service_url,
-        'site_name': site_name,
-        'media_url': settings.MEDIA_URL,
-        'logo_path': settings.LOGO_PATH,
         }
-    msg = EmailMessage(_(u'You are invited to join %s') % site_name, t.render(Context(c)),
-              None, [email])
-    msg.content_subtype = "html"
-    msg.send()
-
+    send_html_email(_(u'You are invited to join %s') % SITE_NAME,
+            'sysadmin/user_add_email.html', c, None, [email])
 
 @login_required
 def user_add(request):

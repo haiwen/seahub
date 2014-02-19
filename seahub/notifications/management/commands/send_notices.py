@@ -3,13 +3,12 @@ import datetime
 import logging
 import string
 
-from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
-from seahub.utils import get_service_url
+from seahub.utils import send_html_email
 import seahub.settings as settings
 
 from django.template import Context, loader
@@ -19,9 +18,6 @@ logger = logging.getLogger(__name__)
 
 site_name = settings.SITE_NAME
 subjects = (u'New notice on %s' % site_name, u'New notices on %s' % site_name)
-service_url = get_service_url() 
-media_url = settings.MEDIA_URL
-logo_path = settings.LOGO_PATH
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'
@@ -63,21 +59,15 @@ class Command(BaseCommand):
         
         for to_user, count in email_ctx.items():
             subject = subjects[1] if count > 1 else subjects[0]
-            t = loader.get_template('notifications/notice_email.html')
             c = { 
-                    'site_name': site_name,
-                    'media_url': media_url,
-                    'logo_path': logo_path,
-                    'service_url': service_url,
                     'to_user': to_user,
                     'notice_count': count,
                 }   
 
             try:
-                msg = EmailMessage(subject, t.render(Context(c)), settings.DEFAULT_FROM_EMAIL,
-                        [to_user])
-                msg.content_subtype = "html"
-                msg.send()
+                send_html_email(subject, 'notifications/notice_email.html', c, 
+                        settings.DEFAULT_FROM_EMAIL, [to_user])
+
                 logger.info('Successfully sent email to %s' % to_user)
 
             except Exception, e:
