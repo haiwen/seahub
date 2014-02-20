@@ -379,7 +379,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-SEAFILE_VERSION = '2.1.4'
+SEAFILE_VERSION = '2.1.5'
 
 #################
 # Email sending #
