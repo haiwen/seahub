@@ -239,6 +239,7 @@ input.btn-disabled:hover {/*for input*/
     background-position:0 -102px;
 }
 .add {
+    color:#555;
     margin-right:3px;
 }
 .jstree a {
@@ -331,33 +332,13 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0.4em;
 }
 /**** tabnav *****/
-.tabnav {
-    height:37px;
-    border-bottom:1px solid #ddd;
-    margin-bottom:16px;
-}
 .tabnav-tabs,
 .tabnav-tab {
     display:inline-block;
 }
-.tabnav-tab {
-    font-size:14px;
-    padding:8px 10px;
-    border:1px solid transparent;
-    border-bottom:0;
-}
 .tabnav-tabs,
 .tabnav-tab {
     *display:inline;
-}
-.tabnav-tab a {
-    color:#666;
-    font-weight:normal;
-}
-.tabnav-tab-cur a,
-.tabnav-tab a:hover {
-    color: #eb8205;
-    text-decoration: underline;
 }
 /**** side-tabnav ****/
 .side-textnav .hd,
@@ -640,6 +621,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:30px 60px 60px;
 }
 .new-narrow-panel .input {
+    font-size:14px;
     border-color:#c7c7c7;
     box-shadow:inset 0 1px 1px #f1f1f1;
     margin:5px 0 20px;
@@ -956,7 +938,7 @@ textarea:-moz-placeholder {/* for FF */
 #left-panel h3:first-child {
     margin-top: 0px;
 }
-#right-panel .hd {
+#right-panel .hd, .tabnav {
     padding:10px;
     background:#f2f2f2;
     margin-bottom:.5em;
@@ -972,20 +954,26 @@ textarea:-moz-placeholder {/* for FF */
     padding-bottom:0;
     margin-bottom:0;
 }
-#right-panel .hd .a {
+#right-panel .hd .a,
+.tabnav-tab a {
+    display:inline-block;
     padding:4px 0;
     font-size:15px;
     color:#333;
     line-height:1.5;
+    font-weight:normal;
     border:0; /* rm 'border-bottom' for cur tab */
     margin:0 8px;
 }
+.tabnav-tab-cur a,
+.tabnav-tab a:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
     color:#eb8205;
     text-decoration:underline;
 }
-#right-panel .hd button {
+#right-panel .hd button,
+.tabnav button {
     height:29px;
     background:#fff;
 }
