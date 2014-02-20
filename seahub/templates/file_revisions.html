@@ -34,6 +34,10 @@
                     {% if commit.is_current_version %}
                     {% trans '(current version)' %}
                     {% endif %}
+
+                    {% if commit.rev_renamed_old_path %}
+                    <br /><span class="tip">{% blocktrans with old_path=commit.rev_renamed_old_path %}(Renamed or moved from {{ old_path }}){% endblocktrans %}</span>
+                    {% endif %}
                 </td>
 
                 {% if commit.creator_name %}
@@ -44,9 +48,7 @@
                 {% else %}
                 <td>{% trans 'Unknown' %}</td>
                 {% endif %}
-		{% if commit.rev_renamed_old_path %}
-		<td>{% trans 'Renamed or moved from ' %} {{ commit.rev_renamed_old_path }}</td>
-		{% else %}
+
                 <td>{{ commit.rev_file_size|filesizeformat }} </td>
                 <td>
                     {% if commit.id != repo.head_cmmt_id %}
@@ -58,7 +60,6 @@
                     <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
                     {% endif %}
                 </td>
-		{% endif %}
             </tr>
             {% endfor %}
         </table>
