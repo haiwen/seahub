@@ -1573,6 +1573,10 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     overflow:hidden;
 }       
+.fileinput-button .icon-plus {
+    font-size:13px;
+    color:#333;
+}  
 .fileinput-button input {
     position: absolute;
     top: 0;     
