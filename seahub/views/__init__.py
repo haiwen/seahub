@@ -1533,16 +1533,11 @@ def render_file_revisions (request, repo_id):
     else:
         is_owner = False
 
-    try:
-        for commit in commits:
-            file_id, file_size = get_file_revision_id_size (commit.id, path)
-            if not file_id or file_size is None:
-                # do not use 'not file_size', since it's ok to have file_size = 0
-                return render_error(request)
-            commit.revision_file_size = file_size
-            commit.file_id = file_id
-    except Exception, e:
-        return render_error(request, str(e))
+    cur_path = path
+    for commit in commits:
+        commit.path = cur_path
+        if commit.rev_renamed_old_path:
+            cur_path = '/' + commit.rev_renamed_old_path
 
     zipped = gen_path_link(path, repo.name)
 
