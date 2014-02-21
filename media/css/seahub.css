@@ -1416,9 +1416,6 @@ textarea:-moz-placeholder {/* for FF */
 #repo-top .hd {
     margin-right:15px;
 }
-#repo-basic-info .desc {
-    font-size:1.2em;
-}
 #repo-basic-info .link-icon {
     margin:0 5px 0 15px;
 }
@@ -1474,6 +1471,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:8px 10px;
 }
 .repo-file-list-topbar .path {
+    font-size:14px;
     line-height:25px;
     margin:0;
 }
@@ -2351,11 +2349,13 @@ textarea:-moz-placeholder {/* for FF */
     right:10px;
 }
 #bottom-bar button {
-    color:#fff;
-    font-size:15px;
-    background:#000;
-    opacity:0.75;
-    margin-left:5px;
+    color:#424242;
+    background:#fff;
+    border-color:#cacaca;
+    margin-left:2px;
+}
+#bottom-bar button:focus {
+    outline:none;
 }
 #bottom-bar [class^='icon-'] {
     margin-right:3px;

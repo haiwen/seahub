@@ -1,12 +1,11 @@
 {% load seahub_tags i18n %}
 <div class="repo-file-list-topbar ovhd">
     <p class="path fleft">
-    {% trans "Current path: "%}
     {% for name, link in zipped %}
-    {% if not forloop.last %}
-    <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}" class="dir-link">{{ name }}</a> /    
+    {% if forloop.first or not forloop.last %}
+    <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}" class="dir-link normal">{{ name }}</a> /    
     {% else %}
-    <span id="cur-dir-name">{{ name }}</span>
+    <span id="cur-dir-name">{{ name }}</span> /
     {% endif %}
     {% endfor %}
     </p>
@@ -26,9 +25,9 @@
         {% endif %}
         {% endif %}
     </div>
-            <div id="repo-latest-commit" class="clear">
-                {% include 'snippets/current_commit.html' %}
-            </div>
+    <div id="repo-latest-commit" class="clear">
+        {% include 'snippets/current_commit.html' %}
+    </div>
 </div>
 
 <table class="repo-file-list">
