@@ -2593,7 +2593,7 @@ msgid ""
 "Without this option on, a hidden sub-library will be created automatically "
 "in such case. With this option on, those hidden sub-libraries will also be "
 "listed, which enables you to manage them."
-msgstr "Verschachtelte Bibliotheken werden verwendet, wenn ein Ordner einer Gruppe oder einem Nutzer freigegeben wird. Wenn Sie die verschachtelten Bibliotheken nicht aktivieren werden in solchen fällen unsichtbare Bibliotheken erstellt.\nDurch Aktivieren der verschachtelten Bibliotheken werden diese angezeigt und Sie können dadurch verwaltet werden."
+msgstr "Verschachtelte Bibliotheken werden verwendet, wenn ein Ordner einer Gruppe oder einem Nutzer freigegeben wird. Wenn Sie die verschachtelten Bibliotheken nicht aktivieren werden in solchen Fällen unsichtbare Bibliotheken erstellt.\nDurch Aktivieren der verschachtelten Bibliotheken werden diese angezeigt und Sie können dadurch verwaltet werden."
 
 #: seahub/profile/templates/profile/set_profile.html:91
 msgid "Default Library Setting"
