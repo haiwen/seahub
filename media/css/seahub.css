@@ -2347,12 +2347,20 @@ textarea:-moz-placeholder {/* for FF */
     position:fixed;
     bottom:0;
     right:10px;
+    border-style:solid;
+    border-width:1px;
+    border-color:#f2f2f2 #cacaca #919191;
+    border-top-left-radius:4px;
+    border-top-right-radius:4px;
 }
-#bottom-bar button {
+#discuss, #click-into-group {
     color:#424242;
+    padding:3px 12px;
     background:#fff;
-    border-color:#cacaca;
-    margin-left:2px;
+    border:none;
+}
+#click-into-group {
+    border-left:1px solid #ebebeb;
 }
 #bottom-bar button:focus {
     outline:none;

@@ -758,6 +758,11 @@ function dirOP() {
 
 $('.path .dir-link').click(dirlinkClick);
 
+$('.lsch').click(function() {
+    listCommitDetails($(this).data('url'), $(this).data('time'));
+    return false;
+}); 
+
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
