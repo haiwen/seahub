@@ -183,7 +183,7 @@ p { margin:0.5em 0; }
     font-size:12px;
 }
 .op { font-size:13px; padding-right:2px; }
-.op-target { color:#803; word-wrap:break-word; }
+.op-target { color:#ee8204; word-wrap:break-word; }
 .op-icon {
     font-size:20px;
     line-height:1;
@@ -229,14 +229,10 @@ input.btn-disabled:hover {/*for input*/
     background-color: #E6E6E6;
     background-position: 0 -15px; /* to rm background-image */
 }
-.op-list li,
-.modalCloseImg {
-    background:transparent url('../img/bg.png') no-repeat scroll 0 0;
-}
 .op-list li {
-    padding-left:10px;
-    line-height:20px;
-    background-position:0 -102px;
+    padding-left:23px;
+    line-height:23px;
+    background:transparent url('../img/go_link.png') no-repeat scroll 0 50%;
 }
 .add {
     color:#555;
@@ -686,36 +682,36 @@ textarea:-moz-placeholder {/* for FF */
 .tab-popup .hd {
     padding-left:12px;
 }
+/*
 .tab-popup-tabs ,
-.tab-popup-tabs-nav .ui-state-active .a,
 .tab-popup .bot {
     background:#fafafa;
 }
+*/
 .tab-popup-tabs .tab-popup-tabs-nav {
     height:30px;
     padding:0 0 0 12px;
-    background:#fff;
+   /*background:#fff;*/
     border-bottom:1px solid #ddd;
     border-radius:0;
 }
 .tab-popup-tabs-nav .tab {
     display:inline-block;
-    border:1px solid transparent;
-    border-bottom:0;
+    border:0;
     background:none;
 }
-.tab-popup-tabs-nav .ui-state-active {
-    background:#fafafa;
-    border-color:#ddd;
-    border-radius:3px 3px 0 0;
-}
 .tab-popup-tabs-nav .tab .a {
-    color:#666;
+    color:#000;
+    font-size:15px;
     line-height:16px;
-    padding:6px 13px;
+    padding:6px 13px 4px;
+    border-bottom:3px solid transparent;
+    margin-right:5px;
 }
+.tab-popup-tabs-nav .ui-state-active .a,
 .tab-popup-tabs-nav .tab .a:hover {
-    color:#333;
+    color:#eb8205;
+    border-bottom-color:#eb8205;
 }
 .tab-popup-tabs .ui-tabs-panel .option-list {
     max-height:200px;
@@ -752,19 +748,19 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-overlay { background-color:#000; }
 #simplemodal-container {
     padding: 20px; 
-    background-color:#fff; 
+    background-color:#fcfcfc; 
     border-radius:4px;
     -moz-border-radius:4px;
 }
 #simplemodal-container a {font-weight:normal;}
 .modalCloseImg {
     position:absolute;
-    width:25px;
-    height:29px;
-    background-position:0 0;
+    width:28px;
+    height:28px;
+    background:transparent url('../img/popup_close.png') scroll no-repeat 0 0;
     cursor:pointer;
-    top:-15px;
-    right:-16px;
+    top:-14px;
+    right:-14px;
     z-index:3200;
 }
 #simplemodal-container h3 {
@@ -937,41 +933,47 @@ textarea:-moz-placeholder {/* for FF */
 #right-panel .hd,
 .tabnav,
 .repo-file-list-topbar {
-    padding:10px;
+    padding:9px 10px;
     background:#f2f2f2;
     margin-bottom:.5em;
     border-radius:2px;
+}
+#right-panel .hd,
+.tabnav {
+    padding-bottom:0;
+    height:39px;
 }
 .repo-file-list-topbar {
     margin-bottom:0;
 }
 #right-panel .hd h3,
 #right-panel h3.hd {
-    height:29px;
-    line-height:29px;
+    line-height:30px;
     margin-bottom:0;
 }
 #right-panel .hd .tab {
     padding-bottom:0;
     margin-bottom:0;
+    top:0;
 }
 #right-panel .hd .a,
 .tabnav-tab a {
     display:inline-block;
-    padding:4px 0;
     font-size:15px;
     color:#333;
     line-height:1.5;
     font-weight:normal;
-    border:0; /* rm 'border-bottom' for cur tab */
-    margin:0 8px;
+    padding: 4px 10px 9px;
+    border-bottom: 3px solid transparent;
+    margin-left:5px;
 }
 .tabnav-tab-cur a,
 .tabnav-tab a:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
     color:#eb8205;
-    text-decoration:underline;
+    text-decoration:none;
+    border-bottom-color: #eb8205;
 }
 #right-panel .hd button,
 .tabnav button,
@@ -2338,6 +2340,7 @@ textarea:-moz-placeholder {/* for FF */
 .share-permission-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
+    padding:3px 2px;
     background:#fff;
     border:1px solid #ddd;
     border-radius:2px;
