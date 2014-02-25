@@ -10,13 +10,10 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">
         {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="vam">{{ group.group_name|truncatechars:11 }}</span>
-        {% if group.is_pub %}<span class="icon-globe" title="{% trans "This group is public." %}"></span>{% endif %}
+        {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="vam" />{% endif %}
         </h3>
         {% if is_staff %}
         <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin-top:8px;" />
-        {% endif %}
-        {% if group.view_perm != 'pub' and not is_staff %}
-        <a id="quit-group" href="#" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -68,10 +65,6 @@ $('#enable-mods').click(function() {
     $('#mods-enable-form').modal({appendTo: "#main"});
     $('#simplemodal-container').css('height', 'auto');
     return false;
-});
-addConfirmTo($('#quit-group'), {
-        'title':'{% trans "Quit Group" %}',
-        'con':'{% trans "Are you sure you want to quit this group?" %}'
 });
 </script>
 {% endblock %}

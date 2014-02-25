@@ -2,6 +2,12 @@
 {% load seahub_tags i18n %}
 {% block cur_users %}tab-cur{% endblock %}
 
+{% block left_panel %}{{block.super}}
+<form action="{% url 'user_search' %}" method="get" class="side-search-form">
+    <input type="text" name="email" class="input" value="" placeholder="{% trans "Search users..." %}" />
+</form>
+{% endblock %}
+
 {% block right_panel %}
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
@@ -10,15 +16,14 @@
         <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
     </ul>
-    <button class="icon-search fright" id="search-user-btn"> {% trans "Search" %}</button>    
+    <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
 </div>
 
-<button id="add-user-btn"><span class="add icon-plus-sign-alt"></span>{% trans "Add new user" %}</button>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
-    <h3>{% trans "Add new user" %}</h3>
+    <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
-    <input type="text" name="email" id="id_email" class="input" /><br />    
+    <input type="text" name="email" id="id_email" class="input" /><br />
     <label for="id_password1">{% trans "Password" %}</label><br />
     <input type="password" name="password1" id="id_password1" class="input" /><br />    
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
@@ -37,10 +42,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#search-user-btn').click(function() {
-    location.href = "{% url 'user_search' %}";
-});
-
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),

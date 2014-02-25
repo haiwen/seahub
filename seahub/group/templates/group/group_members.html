@@ -4,7 +4,12 @@
 {% block cur_members %}tab-cur{%endblock%}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "Members" %}</h3>
+<div class="hd">
+<h3 class="fleft">{% trans "Members" %}</h3>
+{% if group.view_perm != 'pub' and not is_staff %}
+<button id="quit-group" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</button>
+{% endif %}
+</div>
 <ul class="user-list">
     {% for m in members %}
     {% with e=m.user_name id=m.user_name|id_or_email %}
@@ -25,5 +30,12 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+<script type="text/javascript">
+addConfirmTo($('#quit-group'), {
+    'title':'{% trans "Quit Group" %}',
+    'con':'{% trans "Are you sure you want to quit this group?" %}'
+});
+</script>
+
 {% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

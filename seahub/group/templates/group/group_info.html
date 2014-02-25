@@ -11,7 +11,7 @@
             <li class="tab"><a href="#grp-repos" class="a">{% trans "Libraries" %}</a></li>
             <li class="tab long-tab"><a href="#grp-repos-commits" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
-        <button id="repo-create" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "New Library" %}</button>
+        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
     </div>
     <div id="grp-repos" class="hide">
     {% if repos %}

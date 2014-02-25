@@ -7,7 +7,7 @@
 {% block right_panel %}
 <div class="hd ovhd">
     <h3 class="fleft">{% trans "Libraries" %}</h3>
-    <button id="repo-create" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "New Library"%}</button>
+    <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
 </div>
 {% if public_repos %}
 <table>

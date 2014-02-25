@@ -359,10 +359,6 @@ textarea:-moz-placeholder {/* for FF */
 	border-radius:1000px;
     margin:0 6px 0 4px;
 }
-.side-tabnav .hd .icon-globe { /*for 'group'*/
-    line-height:1;
-    color:#666;
-}
 .side-tabnav-tabs {
     margin-bottom:1em;
 }
@@ -501,9 +497,20 @@ textarea:-moz-placeholder {/* for FF */
     color:#de3f1c;
 	text-decoration:none;
 }
-
 .side-info dt {
     margin-top:15px;
+}
+.side-search-form {
+    margin-top:25px;
+}
+.side-search-form .input {
+    width:188px;
+    padding:2px 5px;
+    background:#fafafa;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+}
+.side-search-form .input:focus {
+    background:#fff;
 }
 /**** checkbox ****/
 .checkbox-orig {
@@ -980,6 +987,7 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-topbar button {
     height:29px;
     background:#fff;
+    line-height:17px;
 }
 /* info-bar */
 #info-bar,
@@ -2725,12 +2733,6 @@ textarea:-moz-placeholder {/* for FF */
 #add-msg .icon-pencil {
     font-size:1em;
     margin:0 3px 0 0;
-}
-#quit-group {
-    margin-top:4px;
-    font-size:12px;
-    font-weight:normal;
-    color:#888;
 }
 .help-con {
 	padding:0 0 0 30px;

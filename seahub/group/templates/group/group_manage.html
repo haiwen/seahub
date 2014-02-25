@@ -12,7 +12,7 @@
     </ul>
     <div id="members">
         <div class="ovhd">
-            <button id="group-member-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Members"%}</button>
+            <button id="group-member-add" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Members"%}</span></button>
         </div>
         {% if members %}
         <table>
@@ -39,7 +39,7 @@
 
     <div class="hide" id="administrators">
         <div class="ovhd">
-            <button id="group-admin-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Admins"%}</button>
+            <button id="group-admin-add" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Admins"%}</span></button>
         </div>
         {% if admins %}
         <table>

@@ -2,6 +2,12 @@
 {% load i18n %}
 {% block cur_repo %}tab-cur{% endblock %}
 
+{% block left_panel %}{{block.super}}
+<form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form">
+    <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" />
+</form>
+{% endblock %}
+
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
@@ -9,7 +15,6 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_list_orphan' %}">{% trans "Orphan" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_list_system' %}">{% trans "System" %}</a></li>
     </ul>
-    <button class="icon-search fright" id="search-repo-btn"> {% trans "Search" %}</button>    
 </div>
 
 {% if repos %}
@@ -23,9 +28,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#search-repo-btn').click(function() {
-    location.href = "{% url 'sys_repo_search' %}";
-});
 {% include "sysadmin/repoadmin_js.html" %}
 </script>
 {% endblock %}

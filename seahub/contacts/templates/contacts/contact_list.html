@@ -8,7 +8,7 @@
 {% block right_panel %}
 <div class="ovhd hd">
     <h3 class="fleft">{% trans "Contacts"%}</h3>
-    <button id="contact-add" class="fright"><span class="add icon-plus-sign-alt"></span>{% trans "Add Contacts"%}</button>
+    <button id="contact-add" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Contacts"%}</span></button>
 </div>
 {% if contacts %}
 <table>
