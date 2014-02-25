@@ -754,7 +754,14 @@ function encAndSubmitFile(file, fd, submit_url) {
 // js on repo file list
 var no_file_op_popup = true;
 
+function setPathWidth() {
+    $('.path').width($('.repo-file-list-topbar').width() - $('.repo-op').width() - 10);
+}
+setPathWidth();
+
 function dirOP() {
+
+setPathWidth();
 
 $('.path .dir-link').click(dirlinkClick);
 
