@@ -16,20 +16,6 @@ from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 
-class DeviceToken(models.Model):
-    """
-    The iOS device token model.
-    """
-    token = models.CharField(max_length=80)
-    user = LowerCaseCharField(max_length=255)
-
-    class Meta:
-        unique_together = (("token", "user"),)
-
-    def __unicode__(self):
-        return "/".join(self.user, self.token)
-
-
 ########## system notification
 class Notification(models.Model):
     message = models.CharField(max_length=512)
@@ -170,6 +156,14 @@ class UserNotificationManager(models.Manager):
             except UserNotification.InvalidDetailError:
                 continue
                 
+    def seen_user_msg_notices(self, to_user, from_user):
+        """Mark group message notices of a user as seen.
+        """
+        user_notices = super(UserNotificationManager, self).filter(
+            detail=from_user, to_user=to_user, msg_type=MSG_TYPE_USER_MESSAGE)
+        for notice in user_notices:
+            notice.is_seen()
+
     def remove_group_msg_notices(self, to_user, group_id):
         """Remove group message notices of a user.
         """
@@ -500,7 +494,7 @@ class UserNotification(models.Model):
         msg_from = self.detail
         nickname = email2nickname(msg_from)
 
-        msg = _(u"You have recieved a <a href='%(href)s'>new message</a> from %(user)s.") % {
+        msg = _(u"You have received a <a href='%(href)s'>new message</a> from %(user)s.") % {
             'user': nickname,
             'href': reverse('user_msg_list', args=[msg_from]),
             }

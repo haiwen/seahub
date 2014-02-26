@@ -910,7 +910,10 @@ textarea:-moz-placeholder {/* for FF */
 #info-bar-info {
     margin:3px 0;
 }
-
+#info-bar-info a {
+    color:#fff;
+    text-decoration:underline;
+}
 /* top-bar */
 .top-bar-inner {
     background:#2d2d2d;
@@ -1570,6 +1573,10 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     overflow:hidden;
 }       
+.fileinput-button .icon-plus {
+    font-size:13px;
+    color:#333;
+}  
 .fileinput-button input {
     position: absolute;
     top: 0;     
@@ -2607,11 +2614,13 @@ textarea:-moz-placeholder {/* for FF */
 #search-user-form .submit {
     margin-left:3.5em;
 }
-#enable-mods {
+#enable-mods,
+#edit-index {
     color:#888;
     margin-top:5px;
 }
-#enable-mods:hover {
+#enable-mods:hover,
+#edit-index:hover {
     color:#666;
     cursor:pointer;
 }
@@ -2632,8 +2641,12 @@ textarea:-moz-placeholder {/* for FF */
 .wiki-index {
     margin-top:25px;
 }
-.wiki-index h3 {
+.wiki-index .hd {
     border-bottom:1px solid #ddd;
+    margin-bottom:0.4em;
+}
+.wiki-index .hd h3 {
+    margin-bottom:0;
 }
 .wiki-index ul {
     list-style-type: square;

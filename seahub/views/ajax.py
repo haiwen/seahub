@@ -32,7 +32,8 @@ from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
 import seahub.settings as settings
 from seahub.signals import repo_deleted
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
-    check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat
+    check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
+    new_merge_with_no_conflict, get_commit_before_new_merge
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -950,6 +951,8 @@ def get_current_commit(request, repo_id):
         err_msg = _(u'Error: no head commit id')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
+    if new_merge_with_no_conflict(head_commit):
+        head_commit = get_commit_before_new_merge(head_commit)
 
     ctx = { 
         'repo': repo,

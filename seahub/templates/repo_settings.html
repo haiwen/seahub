@@ -19,9 +19,10 @@
 
 {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
     <label>{% trans "History" %}</label><br />
-    <input type="radio" name="history" value="full_history" {% if history_limit < 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Keep full history" %}</span><br />
-    <input type="radio" name="history" value="no_history" {% if history_limit == 0 %}checked="checked"{% endif %} class="vam" /> <span class="vam">{% trans "Don't keep history" %}</span><br />
-    <input type="radio" name="history" value="partial_history" {% if history_limit > 0 %}checked="checked"{% endif %} class="vam" /> <span calss="vam">{% trans "Only keep a period of history:" %} <input type="text" name="days" size="4" {% if history_limit <= 0 %} disabled="disabled" class="input-disabled" {% else %} value="{{history_limit}}" {% endif %} /> {% trans "days" %}</span><br />
+    <input type="radio" name="history" value="full_history" {% if full_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Keep full history" %}</span><br />
+    <input type="radio" name="history" value="no_history" {% if no_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Don't keep history" %}</span><br />
+    <input type="radio" name="history" value="partial_history" {% if partial_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span calss="vam">{% trans "Only keep a period of history:" %}
+    <input type="text" name="days" size="4" {% if not days_enabled %} disabled="disabled" class="input-disabled"{% endif %} value="{{history_limit}}" /> {% trans "days" %}</span><br />
 {% endif %}
     
     <p class="error hide"></p>

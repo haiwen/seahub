@@ -510,6 +510,9 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_document(inner_path, obj_id, fileext, ret_dict)
             elif filetype == SPREADSHEET:
                 handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == OPENDOCUMENT:
+                if fsize == 0:
+                    ret_dict['err'] = _(u'Invalid file format.')
             elif filetype == PDF:
                 handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
@@ -628,6 +631,9 @@ def view_shared_file(request, token):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == OPENDOCUMENT:
+            if fsize == 0:
+                ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 

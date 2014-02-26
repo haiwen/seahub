@@ -21,7 +21,8 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
-    get_max_upload_file_size
+    get_max_upload_file_size, new_merge_with_no_conflict, \
+    get_commit_before_new_merge
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO
 
 # Get an instance of a logger
@@ -242,6 +243,9 @@ def render_repo(request, repo):
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:
         raise Http404
+    if new_merge_with_no_conflict(head_commit):
+        head_commit = get_commit_before_new_merge(head_commit)
+    
     repo_size = get_repo_size(repo.id)
     no_quota = is_no_quota(repo.id)
     search_repo_id = None if repo.encrypted else repo.id

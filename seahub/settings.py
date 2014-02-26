@@ -130,20 +130,26 @@ TEMPLATE_DIRS = (
 # django.utils.translation -- that module depends on the settings.
 gettext_noop = lambda s: s
 LANGUAGES = (
+    ('ca', gettext_noop('català')),
     ('de', gettext_noop(u'Deutsch')),
     ('en', gettext_noop('English')),
     ('es', gettext_noop('Español')),
+    ('es-ar', gettext_noop('Argentinian Spanish')),
     ('es-mx', gettext_noop('Mexican Spanish')),
-    ('fr', gettext_noop('Français')),
-    ('he', gettext_noop('Hebrew')),
+    ('fr', gettext_noop('français')),
+    ('he', gettext_noop('עברית')),
     ('hu', gettext_noop('Magyar')),
+    ('is', gettext_noop('Íslenska')),
     ('it', gettext_noop('Italiano')),
+    ('ko', gettext_noop('한국어')),
     ('lv', gettext_noop('Latvian')),
-    ('nl', gettext_noop('Dutch')),
+    ('nl', gettext_noop('Nederlands')),
+    ('pl', gettext_noop('Polski')),
     ('pt-br', gettext_noop('Portuguese, Brazil')),
     ('ru', gettext_noop(u'Русский')),
     ('sk', gettext_noop('Slovak')),
-    ('uk', gettext_noop('Ukrainian')),
+    ('sv', gettext_noop('Svenska')),
+    ('uk', gettext_noop('українська мова')),
     ('zh-cn', gettext_noop(u'简体中文')),
     ('zh-tw', gettext_noop(u'繁體中文')),
 )
@@ -199,6 +205,9 @@ REPO_PASSWORD_MIN_LENGTH = 6
 
 # Using server side crypto by default, otherwise, let user choose crypto method.
 FORCE_SERVER_CRYPTO = True
+
+# Enable or disable repo history setting
+ENABLE_REPO_HISTORY_SETTING = True
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
@@ -372,7 +381,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-SEAFILE_VERSION = '2.1.4'
+SEAFILE_VERSION = '2.1.5'
 
 #################
 # Email sending #

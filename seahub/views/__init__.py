@@ -83,7 +83,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
-    TRAFFIC_STATS_ENABLED, get_user_traffic_stat
+    TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, \
@@ -510,7 +510,7 @@ def repo_settings(request, repo_id):
                                     status=500, content_type=content_type)
 
         # set library history
-        if days != None:
+        if days != None and ENABLE_REPO_HISTORY_SETTING:
             res = set_repo_history_limit(repo_id, days)
             if res != 0:
                 return HttpResponse(json.dumps({
@@ -525,10 +525,34 @@ def repo_settings(request, repo_id):
     repo_owner = seafile_api.get_repo_owner(repo.id)
     history_limit = seaserv.get_repo_history_limit(repo.id)
 
+    full_history_checked = no_history_checked = partial_history_checked = False
+    if history_limit > 0:
+        partial_history_checked = True
+    elif history_limit == 0:
+        no_history_checked = True
+    else:
+        full_history_checked = True
+
+    full_history_enabled = no_history_enabled = partial_history_enabled = True
+    days_enabled = True
+    if not ENABLE_REPO_HISTORY_SETTING:
+        full_history_enabled = no_history_enabled = partial_history_enabled = False
+        days_enabled = False
+    
+    if history_limit <= 0:
+        days_enabled = False
+        
     return render_to_response('repo_settings.html', {
             'repo': repo,
             'repo_owner': repo_owner,
             'history_limit': history_limit,
+            'full_history_checked': full_history_checked,
+            'no_history_checked': no_history_checked,
+            'partial_history_checked': partial_history_checked,
+            'full_history_enabled': full_history_enabled,
+            'no_history_enabled': no_history_enabled,
+            'partial_history_enabled': partial_history_enabled,
+            'days_enabled': days_enabled,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -674,6 +698,8 @@ def repo_history(request, repo_id):
     commits_all = get_commits(repo_id, per_page * (current_page -1),
                               per_page + 1)
     commits = commits_all[:per_page]
+    for c in commits:
+        c.show = False if new_merge_with_no_conflict(c) else True
 
     if len(commits_all) == per_page + 1:
         page_next = True
@@ -1466,6 +1492,7 @@ def repo_create(request):
             'repo_id': repo_id,
             'repo_name': repo_name,
             'repo_desc': repo_desc,
+            'repo_enc': encryption,
         }
         repo_created.send(sender=None,
                           org_id=-1,
@@ -1511,16 +1538,11 @@ def render_file_revisions (request, repo_id):
     else:
         is_owner = False
 
-    try:
-        for commit in commits:
-            file_id, file_size = get_file_revision_id_size (commit.id, path)
-            if not file_id or file_size is None:
-                # do not use 'not file_size', since it's ok to have file_size = 0
-                return render_error(request)
-            commit.revision_file_size = file_size
-            commit.file_id = file_id
-    except Exception, e:
-        return render_error(request, str(e))
+    cur_path = path
+    for commit in commits:
+        commit.path = cur_path
+        if commit.rev_renamed_old_path:
+            cur_path = '/' + commit.rev_renamed_old_path
 
     zipped = gen_path_link(path, repo.name)
 
