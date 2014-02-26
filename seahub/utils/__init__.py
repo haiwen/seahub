@@ -864,7 +864,16 @@ if EVENTS_CONFIG_FILE and hasattr(seafevents, 'get_user_traffic_stat'):
         finally:
             session.close()
         return stat
+
+    def get_user_traffic_list(month, start=0, limit=25):
+        session = SeafEventsSession()
+        try:
+            stat = seafevents.get_user_traffic_list(session, month, start, limit)
+        finally:
+            session.close()
+        return stat
 else:
     def get_user_traffic_stat(username):
         pass
-
+    def get_user_traffic_list():
+        pass

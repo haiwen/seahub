@@ -18,7 +18,7 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -67,6 +67,7 @@ def base(request):
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
         'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
+        'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
         'mods_available': mods_available,
         'mods_enabled': mods_enabled,
         'grps': grps,

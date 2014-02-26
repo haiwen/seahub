@@ -233,3 +233,9 @@ if HAS_OFFICE_CONVERTER:
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
         url(r'^office-convert/page-num/$', office_convert_query_page_num, name='office_convert_query_page_num'),
     )
+
+if TRAFFIC_STATS_ENABLED:
+    from seahub.views.sysadmin import sys_traffic_admin
+    urlpatterns += patterns('',
+        url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
+    )

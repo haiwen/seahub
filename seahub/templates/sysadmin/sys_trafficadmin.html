@@ -1,0 +1,68 @@
+{% extends "admin_base.html" %}
+{% load seahub_tags i18n %}
+{% block nav_trafficadmin_class %}class="cur"{% endblock %}
+
+{% block main_panel %}
+
+<form action="{{ sys_traffic_admin }}" method="GET" autocomplete="off">
+  <label for="month">{% trans "Month (like 201403):" %}</label>
+  <input type="text" name="month" maxlength="6" value="{{ month }}" />
+</form>
+
+<table>
+  <tr>
+    <th>{% trans "User" %}</th>
+    <th>{% trans "Total Usage" %}</th>
+    <th>{% trans "Shared File View" %}</th>
+    <th>{% trans "Shared File Download" %}</th>
+    <th>{% trans "Shared Folder Download" %}</th>
+  </tr>
+  {% for info in traffic_info_list %}
+  <tr>
+    <td>{{ info.email }}</td>
+    <td>{{ info.total |filesizeformat }}</td>
+    <td>{{ info.file_view |filesizeformat }}</td>
+    <td>{{ info.file_download |filesizeformat }}</td>
+    <td>{{ info.dir_download |filesizeformat }}</td>
+    <td></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div id="paginator">
+    {% if current_page != 1 %}
+    <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
+    {% endif %}
+    {% if page_next %}
+    <a href="?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next" %}</a>
+    {% endif %}
+    {% if current_page != 1 or page_next %}
+    |
+    {% endif %}
+    <span>{% trans "Per page: " %}</span>
+    {% if per_page == 25 %}
+    <span> 25 </span>
+    {% else %}
+    <a href="?per_page=25" class="per-page">25</a>
+    {% endif %}
+    {% if per_page == 50 %}
+    <span> 50 </span>
+    {% else %}
+    <a href="?per_page=50" class="per-page">50</a>
+    {% endif %}
+    {% if per_page == 100 %}
+    <span> 100 </span>
+    {% else %}
+    <a href="?per_page=100" class="per-page">100</a>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#paginator a').each(function (index, link) {
+    link.href = link.href + '&month={{ month }}';
+});
+</script>
+{% endblock %}

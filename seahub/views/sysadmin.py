@@ -4,6 +4,8 @@ import os
 from types import FunctionType
 import logging
 import simplejson as json
+import re
+import datetime
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -32,7 +34,7 @@ from seahub.share.models import FileShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
-from seahub.utils import send_html_email
+from seahub.utils import send_html_email, get_user_traffic_list
 
 logger = logging.getLogger(__name__)
 
@@ -669,3 +671,39 @@ def sys_repo_transfer(request):
         next = reverse(sys_repo_admin)
     return HttpResponseRedirect(next)
     
+@login_required
+@sys_staff_required
+def sys_traffic_admin(request):
+    """List all users from database.
+    """
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    month = request.GET.get('month', '')
+    if not re.match(r'[\d]{6}', month):
+        month = datetime.datetime.now().strftime('%Y%m')
+
+    start = per_page * (current_page -1)
+    limit = per_page + 1
+    traffic_info_list = get_user_traffic_list(month, start, limit)
+
+    page_next = len(traffic_info_list) == limit
+
+    for info in traffic_info_list:
+        info['total'] = info['file_view'] + info['file_download'] + info['dir_download']
+
+    return render_to_response(
+        'sysadmin/sys_trafficadmin.html', {
+            'traffic_info_list': traffic_info_list,
+            'month': month,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        },
+        context_instance=RequestContext(request))
