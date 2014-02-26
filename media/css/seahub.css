@@ -2584,6 +2584,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .search-input,
 .search-form .search-submit {
+    padding:0;
     height:24px;
     border:0;
     margin:0;
