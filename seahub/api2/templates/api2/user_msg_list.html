@@ -1,0 +1,84 @@
+{% extends "api2/base.html" %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Messages" %} - {% endblock %}
+
+{% block main_panel %}
+
+<h3 class="hd">{% blocktrans with name=to_email|email2nickname%}Messages with {{name}}{% endblocktrans %}</h3>
+
+<div id="personal-msg-panel" class="msg-panel personal-msg-panel">
+
+    <ul class="msg-list">
+    {% if person_msgs %}
+    {% include "api2/user_msg_body.html" %}
+    {% else %}
+    <div id="placeholder" style="margin-top:20%;">
+      <p style="text-align:center">{% trans "No messages." %}</p>
+    </div>
+    {% endif %}
+    </ul>
+
+    {% if person_msgs.has_other_pages %}
+    <div id="loading-icon" data-next="{{ person_msgs.next_page_number }}"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+    <p id="loading-error" class="error hide"></p>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+{% block extra_script %}{{block.super}}
+
+<script type="text/javascript">
+var g_token = "TOKEN";
+function setToken(token) {
+    g_token = token;
+}
+function getToken() {
+    return g_token;
+}
+
+function addMessage(html) {
+    $('.msg-list').prepend(html);
+}
+
+{% if person_msgs.has_next %}
+var g_loading = false;
+$(document).scroll(function() {
+    var loading_icon = $('#loading-icon');
+    if (loading_icon.data('next') && $(window).height() + $(window).scrollTop() == $(document).height() && !g_loading) {
+        g_loading = true;
+        loading_icon.show();
+        $.ajax({
+            url:'{% url 'api_more_usermsgs' to_email %}?page=' + e(loading_icon.data('next')),
+            dataType: 'json',
+            cache: false,
+            headers:{Authorization:'Token '+g_token},
+            success: function(data) {
+                loading_icon.data('next', data['next_page']);
+                $('.msg-list').append(data['html']);
+                if (!data['next_page']) {
+                    loading_icon.hide();
+                    $('.msg:last-child').css({'border-bottom':0});
+                }
+                g_loading = false;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                loading_icon.hide();
+                g_loading = false;
+                if (!jqXHR.responseText) {
+                    $('#loading-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
+                }   
+            }
+        });
+    }
+});
+{% endif %}
+
+</script>
+
+{% endblock %}
+
+
