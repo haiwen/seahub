@@ -58,13 +58,13 @@
     </form>
 
     {% else %}
-    <div class="wiki-top w100 ovhd">
+    <div class="wiki-top ovhd">
         <ul class="wiki-nav fleft">
             <li class="item{% if page == 'home' %} cur-item{% endif %}"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
             <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
         </ul>
-        
+
         <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
         <button id="page-delete" class="op-btn" data-url="{% url 'personal_wiki_page_delete' page %}">{% trans "Delete Page" %}</button>
         <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>

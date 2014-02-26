@@ -63,7 +63,7 @@
     </form>
 
     {% else %}
-    <div class="wiki-top w100 ovhd">
+    <div class="wiki-top ovhd">
         <ul class="wiki-nav fleft">
             <li class="item{% if page == 'home' %} cur-item{% endif %}"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>

@@ -939,14 +939,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 #right-panel .hd,
 .tabnav,
-.repo-file-list-topbar {
+.repo-file-list-topbar,
+.wiki-top {
     padding:9px 10px;
     background:#f2f2f2;
     margin-bottom:.5em;
     border-radius:2px;
 }
 #right-panel .hd,
-.tabnav {
+.tabnav,
+.wiki-top {
     padding-bottom:0;
     height:39px;
 }
@@ -964,7 +966,8 @@ textarea:-moz-placeholder {/* for FF */
     top:0;
 }
 #right-panel .hd .a,
-.tabnav-tab a {
+.tabnav-tab a,
+.wiki-nav .link {
     display:inline-block;
     font-size:15px;
     color:#333;
@@ -976,6 +979,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .tabnav-tab-cur a,
 .tabnav-tab a:hover,
+.wiki-nav .cur-item .link,
+.wiki-nav .link:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
     color:#eb8205;
@@ -984,7 +989,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #right-panel .hd button,
 .tabnav button,
-.repo-file-list-topbar button {
+.repo-file-list-topbar button,
+.wiki-top .op-btn {
     height:29px;
     background:#fff;
     line-height:17px;
@@ -2532,31 +2538,19 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* wiki page */
-.wiki-top {
+.wiki-top {/* for lang with long words */
     text-align:right;
-    padding-bottom:4px;
-    border-bottom:1px solid #eee;
+    height:auto;
 }
 .wiki-top .op-btn {
     margin-left:3px;
-    padding-top:0;
-    padding-bottom:0;
-    height:24px;
 }
 .wiki-nav .item {
     float:left;
-    font-size:15px;
-    line-height:24px;
-    margin:0 5px 0 10px;
 }
 .wiki-nav .link {
     color:#333;
     font-weight:normal;
-}
-.wiki-nav .cur-item .link,
-.wiki-nav .link:hover {
-    color: #eb8205;
-    text-decoration: underline;
 }
 #wiki-area {
     padding: 0 0;
