@@ -1795,13 +1795,11 @@ textarea:-moz-placeholder {/* for FF */
 .user-list .user {
     *display:inline; /* for ie 6,7 */
 }
-.group .txt,
-.user-list .user .txt {
-    color:#333;
-    width:250px;
-}
 .group .txt {
     width:240px;
+}
+.user-list .txt {
+    width:265px;
 }
 .group h4 {
     margin:0 0 4px;
