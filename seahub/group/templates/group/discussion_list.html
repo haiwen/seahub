@@ -29,7 +29,7 @@
                 <a href="{% url 'user_profile' id %}">{{ name }}</a>
                 <span class="time">{{ r.timestamp|translate_seahub_time }}</span>
                 <span class="reply-at op vh" data="{{ name }}">{% trans 'Reply' %}</span>
-                <p class="reply-con">{{ r.message|seahub_urlize|find_at }}</p>
+                <p class="reply-con">{{ r.message|seahub_urlize|find_at|linebreaksbr }}</p>
             </div>
             {% endwith %}
             </li>
