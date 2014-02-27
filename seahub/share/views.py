@@ -910,7 +910,7 @@ def rm_private_file_share(request, token):
         pfs.delete()
         messages.success(request, _('Successfully unshared "%s".') % file_or_dir)
     else:
-        messages.error(request, _("You don't have permission to unshared %s.") % file_or_dir)
+        messages.error(request, _("You don't have permission to unshare %s.") % file_or_dir)
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:

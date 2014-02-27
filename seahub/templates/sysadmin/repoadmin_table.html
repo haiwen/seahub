@@ -3,15 +3,21 @@
     <tr>
         <th width="15%">{% trans "Name" %}</th>
         <th width="25%">ID</th>
-        <th width="20%">{% trans "Owner" %}</th>
-        <th width="27%">{% trans "Description" %}</th>
+        <th width="25%">{% trans "Owner" %}</th>
+        <th width="22%">{% trans "Description" %}</th>
         <th width="13%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
         <td>{{ repo.props.name }}</td>
         <td style="font-size:11px;">{{ repo.id }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a></td>
+        <td>
+            {% if repo.owner %}
+            <a href="{{ SITE_ROOT }}useradmin/info/{{ repo.owner }}/">{{ repo.owner}}</a>
+            {% else %}
+            --
+            {% endif %}
+        </td>
         <td>{{ repo.props.desc }}</td>
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>

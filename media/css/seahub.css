@@ -1099,7 +1099,8 @@ textarea:-moz-placeholder {/* for FF */
 #send-msg-popup {
     width:430px;
     padding:18px;
-    top:35px;
+    top:38px;
+    right:10px;
 }
 .top-info-popup {
     width:200px;
@@ -2722,7 +2723,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #enable-mods,
 #edit-index {
-    color:#888;
+    color:#d7d7d7;
     margin-top:3px;
 }
 #enable-mods:hover,
