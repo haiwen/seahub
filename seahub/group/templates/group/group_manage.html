@@ -5,15 +5,18 @@
 
 {% block right_panel %}
 <div id="tabs" class="tab-tabs">
-    <ul class="tab-tabs-nav hd ovhd">
-        <li class="tab"><a href="#members" class="a">{% trans "Members" %}</a></li>
-        <li class="tab"><a href="#administrators" class="a">{% trans "Admins" %}</a></li>
+    <div class="hd ovhd">
+    <ul class="tab-tabs-nav fleft">
+        <li class="tab"><a href="#members" class="a" id="members-tab">{% trans "Members" %}</a></li>
+        <li class="tab"><a href="#administrators" class="a" id="admin-tab">{% trans "Admins" %}</a></li>
         <li class="tab"><a href="#settings" class="a" id="settings-tab">{% trans "Settings" %}</a></li>
     </ul>
+    <div class="fright">
+        <button id="group-member-add" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Members"%}</span></button>
+        <button id="group-admin-add" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Admins"%}</span></button>
+    </div>
+    </div>
     <div id="members">
-        <div class="ovhd">
-            <button id="group-member-add" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Members"%}</span></button>
-        </div>
         {% if members %}
         <table>
             <tr>
@@ -38,9 +41,6 @@
     </div>
 
     <div class="hide" id="administrators">
-        <div class="ovhd">
-            <button id="group-admin-add" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Admins"%}</span></button>
-        </div>
         {% if admins %}
         <table>
             <tr>
@@ -114,8 +114,27 @@
 {% block extra_script %}{{block.super}}
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
+var cur_tab = $('.ui-tabs-selected .a');    
+var member_add_btn = $('#group-member-add'),
+    admin_add_btn = $('#group-admin-add');
+if (cur_tab.attr('id') == 'members-tab') {
+    member_add_btn.removeClass('hide');
+}
+if (cur_tab.attr('id') == 'admin-tab') {
+    admin_add_btn.removeClass('hide');
+}
+$('#members-tab').click(function() {
+    member_add_btn.removeClass('hide');
+    admin_add_btn.addClass('hide');
+});
+$('#admin-tab').click(function() {
+    member_add_btn.addClass('hide');
+    admin_add_btn.removeClass('hide');
+});
 $('#settings-tab').click(function() {
     changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
+    member_add_btn.addClass('hide');
+    admin_add_btn.addClass('hide');
 });
 addConfirmTo($("#group-dismiss"), {
         'title':'{% trans "Dismiss Group" %}',

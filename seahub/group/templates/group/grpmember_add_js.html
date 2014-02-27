@@ -12,15 +12,7 @@ $("#group-member-add, #group-admin-add").click(function() {
         form.data('post_url', '{% url 'group_manage' group.id %}');
     }
     addAutocomplete('#added-member-name', '#enter', contact_list);
-})
-.hover(
-    function() {
-        $(this).css({'background-color': '#fff', 'cursor': 'pointer'});
-    },
-    function() {
-        $(this).css('background-color', '#f5f5f5');
-    }
-);
+});
 
 $('#member-add-form').submit(function() {
     var form = $(this),
