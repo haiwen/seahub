@@ -457,6 +457,13 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur .group {
     background-image:url('../img/groups_w.png');
 }
+.side-tabnav-tabs .tab .traffic {
+    background-image:url('../img/traffic.png');
+    background-position: 13px 50%;
+}
+.side-tabnav-tabs .tab-cur .traffic {
+    background-image:url('../img/traffic_w.png');
+}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;

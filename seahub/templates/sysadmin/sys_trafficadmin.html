@@ -1,32 +1,39 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
+
 {% load seahub_tags i18n %}
-{% block nav_trafficadmin_class %}class="cur"{% endblock %}
 
-{% block main_panel %}
+{% block cur_traffic %}tab-cur{% endblock %}
 
-<form action="{{ sys_traffic_admin }}" method="GET" autocomplete="off">
-  <label for="month">{% trans "Month (like 201403):" %}</label>
-  <input type="text" name="month" maxlength="6" value="{{ month }}" />
+{% block extra_style %}
+<style type="text/css">
+#traffic-month-form {
+    margin-top:10px; 
+}
+#traffic-month-form .input {
+    width:100px;
+}
+</style>
+{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "User Traffic" %}</h3>
+
+<form action="{{ sys_traffic_admin }}" method="get" autocomplete="off" id="traffic-month-form">
+    <label for="month">{% trans "Month:" %}</label>
+    <input type="text" name="month" maxlength="6" value="{{ month }}" class="input" />
 </form>
 
 <table>
-  <tr>
-    <th>{% trans "User" %}</th>
-    <th>{% trans "Total Usage" %}</th>
-    <th>{% trans "Shared File View" %}</th>
-    <th>{% trans "Shared File Download" %}</th>
-    <th>{% trans "Shared Folder Download" %}</th>
-  </tr>
-  {% for info in traffic_info_list %}
-  <tr>
-    <td>{{ info.email }}</td>
-    <td>{{ info.total |filesizeformat }}</td>
-    <td>{{ info.file_view |filesizeformat }}</td>
-    <td>{{ info.file_download |filesizeformat }}</td>
-    <td>{{ info.dir_download |filesizeformat }}</td>
-    <td></td>
-  </tr>
-  {% endfor %}
+    <tr>
+        <th>{% trans "User" %}</th>
+        <th>{% trans "Total Usage" %}</th>
+    </tr>
+    {% for info in traffic_info_list %}
+    <tr>
+        <td>{{ info.email }}</td>
+        <td>{{ info.total |filesizeformat }}</td>
+    </tr>
+    {% endfor %}
 </table>
 
 <div id="paginator">
