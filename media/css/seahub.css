@@ -73,10 +73,6 @@ input.submit,
     border: 1px solid #c5c5c5;
     border-radius: 2px;
 }
-button {
-    overflow:visible;/*for ie 7*/
-    padding-bottom:0 \9;/*for ie; to make height right*/
-}
 input[type=radio] {
     height:auto;
     border:0;/*for ie*/
@@ -1694,7 +1690,7 @@ textarea:-moz-placeholder {/* for FF */
     width:60%;
 }   
 .table .size {
-    width:15%;
+    width:14%;
 }
 .template-upload .start {
     text-align:right;
@@ -1704,7 +1700,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .template-upload .start,
 .template-upload .cancel {
-    width:12.5%;
+    width:13%;
 }
 .fileupload-progress {
     margin-top:10px;

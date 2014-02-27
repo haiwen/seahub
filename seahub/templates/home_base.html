@@ -41,8 +41,10 @@
     {% for mod in mods_available %}
       {% if mod == 'personal wiki' %}
       <li>
-      <input class="vam" type="checkbox" name="personal_wiki" {%if mod in mods_enabled%}checked {% endif%}/>
-      <span class="vam">{% trans "Personal Wiki" %}</span>
+      <label class="checkbox-label">
+          <span class="checkbox {% if mod in mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="personal_wiki" class="checkbox-orig" {%if mod in mods_enabled%}checked{% endif%} /></span>
+          <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
+      </label>
       </li>
       {% endif %}
     {% endfor %}    
