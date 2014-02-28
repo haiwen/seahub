@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-import stat
 import simplejson as json
 import urllib2
 
@@ -9,21 +8,18 @@ from django.conf import settings
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.sites.models import RequestSite
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from django.template import Context, loader, RequestContext
+from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.utils.encoding import smart_str
-from django.utils import datetime_safe
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
 from seahub.auth.decorators import login_required
 import seaserv
-from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, seafserv_rpc, \
+from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     web_get_access_token, seafile_api, \
     get_repo, get_group_repos, get_commits, is_group_user, \
     get_personal_groups_by_user, get_group, get_group_members, create_repo, \
@@ -48,7 +44,7 @@ from seahub.notifications.models import UserNotification
 from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
-from seahub.wiki.utils import clean_page_name, get_wiki_dirent
+from seahub.wiki.utils import clean_page_name
 from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \

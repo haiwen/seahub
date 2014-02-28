@@ -10,8 +10,6 @@ from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email
 
 from captcha.fields import CaptchaField
 
-import seahub.settings as settings
-
 class AuthenticationForm(forms.Form):
     """
     Base class for authenticating users. Extend this to get a form that accepts

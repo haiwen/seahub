@@ -96,7 +96,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY
+    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)

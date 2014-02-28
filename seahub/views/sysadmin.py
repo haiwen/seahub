@@ -11,10 +11,8 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.template import Context, loader, RequestContext
-from django.template.loader import render_to_string
+from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from django.contrib.sites.models import RequestSite
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, get_emailusers, CALC_SHARE_USAGE
