@@ -358,14 +358,18 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs {
     margin-bottom:1em;
 }
+.side-tabnav-tabs .tab {
+    border-radius:2px;
+    overflow:hidden;
+}
 .side-tabnav-tabs .tab a {
     display:block;
     font-size:15px;
     padding:5px 4px 5px 47px;
     color:#333;
     font-weight:normal;
-    border-radius:2px;
     background:no-repeat scroll 10px 50%;
+    /* for IE 11: no border-radius here */
 }
 .side-tabnav-tabs .tab .lib {
     background-image:url('../img/lib.png');
