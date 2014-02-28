@@ -3,6 +3,7 @@
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
+
 {% block cur_group %}cur{% endblock %}
 
 {% block left_panel %}
@@ -10,11 +11,11 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">
         {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="vam">{{ group.group_name|truncatechars:11 }}</span>
-        {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="vam" />{% endif %}
         </h3>
         {% if is_staff %}
-        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin-top:8px;" />
+        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
         {% endif %}
+        {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />{% endif %}
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_library %}{% endblock%}"><a href="{% url 'group_info' group.id %}" class="lib">{% trans "Libraries" %}</a></li>
