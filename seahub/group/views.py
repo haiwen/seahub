@@ -645,7 +645,7 @@ def group_manage(request, group_id):
                         'group': group,
                         }
                     try:
-                        subject = _(u'You are invited to join a group on %s.') % SITE_NAME
+                        subject = _(u'You are invited to join a group on %s') % SITE_NAME
                         send_html_email(subject, 'group/add_member_email.html', c, None, [email])
 
                         mail_sended_list.append(email)

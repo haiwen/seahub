@@ -7,13 +7,13 @@
 {% block left_panel %}{{block.super}}
 {% if has_file_search %}
 <form action="{% url "pubuser_search" %}" method="get" class="side-search-form">
-    <input type="text" name="search" value="{{search}}" placeholder="{% trans "Find users..." %}" class="input" />
+    <input type="text" name="search" value="{{search}}" placeholder="{% trans "Search members..." %}" class="input" />
 </form>
 {% endif %}
 {% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "Users" %}</h3>
+<h3 class="hd">{% trans "Members" %}</h3>
 {% if users %}
 <ul class="user-list">
     {% for u in users %}

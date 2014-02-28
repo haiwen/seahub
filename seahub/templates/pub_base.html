@@ -11,7 +11,7 @@
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_lib %}{% endblock %}"><a href="{% url 'pubrepo' %}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_grp %}{% endblock %}"><a href="{% url 'pubgrp' %}" class="group">{% trans "Groups" %}</a></li>
-        <li class="tab {% block cur_user %}{% endblock %}"><a href="{% url 'pubuser' %}" class="members">{% trans "Users" %}</a></li>
+        <li class="tab {% block cur_user %}{% endblock %}"><a href="{% url 'pubuser' %}" class="members">{% trans "Members" %}</a></li>
     </ul>
 </div>
 {% endblock %}
