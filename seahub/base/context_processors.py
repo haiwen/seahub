@@ -46,7 +46,7 @@ def base(request):
     mods_enabled = get_enabled_mods_by_user(username)
 
     # get groups
-    grps = get_personal_groups_by_user(username)[:4] 
+    grps = get_personal_groups_by_user(username)[:8] 
 
     return {
         'seafile_version': SEAFILE_VERSION,

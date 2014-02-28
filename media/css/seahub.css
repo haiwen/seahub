@@ -2742,6 +2742,9 @@ textarea:-moz-placeholder {/* for FF */
 .wiki-index {
     margin-top:25px;
 }
+#wiki-index-con {
+    padding-left:12px;
+}
 .wiki-index ul {
     list-style-type: square;
     padding-left: 1.5em;
