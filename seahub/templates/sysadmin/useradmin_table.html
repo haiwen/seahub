@@ -36,7 +36,7 @@
             {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
             {% endif %}
         </td>
-        <td style="font-size:11px;">
+        <td>
             {% if user.source != 'LDAP' %}
             {{ user.ctime|tsstr_sec }} /<br />
             {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}

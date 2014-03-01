@@ -491,7 +491,10 @@ def user_reset(request, user_id):
         msg = _(u'Failed to reset password: user does not exist')
         messages.error(request, msg)
 
-    return HttpResponseRedirect(reverse('sys_useradmin'))
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+        
+    return HttpResponseRedirect(next)
     
 def send_user_add_mail(request, email, password):
     """Send email when add new user."""
