@@ -114,6 +114,25 @@ def user_msg_list(request, id_or_email):
             }, context_instance=RequestContext(request))
 
 @login_required
+def user_msg_remove(request, msg_id):
+    """Remove message related to a certain person.
+    """
+    try:
+        msg = UserMessage.objects.get(message_id=msg_id)
+    except UserMessage.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False, 'err_msg':_(u"The message doesn't exist")}),
+                                   content_type='application/json; charset=utf-8')
+    else:
+        # Test whether user is admin or message owner.
+        if request.user.is_staff or msg.from_email == request.user.username:
+            msg.delete()
+            return HttpResponse(json.dumps({'success': True}),
+                                        content_type='application/json; charset=utf-8')
+        else:
+            return HttpResponse(json.dumps({'success': False, 'err_msg': _(u"You don't have the permission.")}),
+                                        content_type='application/json; charset=utf-8')
+
+@login_required
 @require_POST
 def message_send(request):
     """Handle POST request to send message to user(s)/group(s).

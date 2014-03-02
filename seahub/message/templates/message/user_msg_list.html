@@ -27,15 +27,18 @@
     <ul class="msg-list">
     {% for msg in person_msgs.object_list %}
         {% if msg.to_email == request.user.email %}
-        <li class="msg msg-received w100 ovhd">
+        <li class="msg msg-received w100 ovhd" data-id="{{msg.message_id}}">
         <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
         {% else %}        
-        <li class="msg w100 ovhd">
+        <li class="msg w100 ovhd" data-id="{{msg.message_id}}">
         <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         {% endif %}
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">                    
+                    {% if request.user.is_staff or msg.from_email == request.user.username %}
+                    <span class="msg-del op fright vh">{% trans "Delete" %}</span>
+                    {% endif %}
                     <a class="author" href="{% url 'user_profile' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
@@ -160,6 +163,60 @@ $('#personal-message-form').submit(function() {
     });
     return false;
 });
+
+
+$('.msg-del').click(function() {
+    var msg = $(this).parents('.msg');
+    var cfm;
+    if (msg.find('.msg-del-confirm').length > 0) {
+        cfm = msg.find('.msg-del-confirm');
+    } else {
+        cfm = '<div class="op-confirm msg-del-confirm hide"><p>{% trans "Really want to delete this discussion?" %}</p><button class="yes">{% trans "Yes" %}</button><button class="no">{% trans "No" %}</button></div>';
+        var msg_main = msg.find('.msg-main');
+        var msg_hd = msg.find('.msg-hd');
+        cfm = msg_main.append(cfm).children(':last');
+        cfm.css({'right':msg_main.css('padding-right'), 'top':msg_hd.position().top + msg_hd.height()});
+    }
+    cfm.removeClass('hide');
+    cfm.children('.yes').click(function() {
+        cfm.addClass('hide');
+        $.ajax({
+            url: '{{SITE_ROOT}}user/' + msg.attr('data-id') + '/msgdel/',
+            dataType:'json',
+            success: function(data) {
+                if (data['success']) {
+                    msg.remove();
+                    feedback('{% trans "Successfully deleted" %}', 'success');
+                } else {
+                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
+                }
+            },
+            error: function() {
+                feedback('{% trans "Failed." %}', 'error');
+            }
+        });
+    });
+    cfm.children('.no').click(function() {
+        cfm.addClass('hide');
+    });
+});
+
+$('.msg-main').hover(
+    function(){
+        $(this).find('.op').removeClass('vh');
+    },
+    function(){
+        $(this).find('.op').addClass('vh');
+    }
+);
+$('.msg .op').hover(
+    function() {
+        $(this).css({'text-decoration':'underline'});
+    },
+    function() {
+        $(this).css({'text-decoration':'none'});
+    }
+);
 </script>
 
 {% include 'snippets/add_to_contacts_js.html' %}
