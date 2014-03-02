@@ -144,7 +144,7 @@ urlpatterns = patterns('',
     url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
                        
-    url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
+    url(r'^ajax/contacts_and_groups/$', get_contacts_and_groups, name='get_contacts_and_groups'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
     url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
