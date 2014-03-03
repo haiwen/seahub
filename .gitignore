@@ -15,6 +15,7 @@ settings.py.sqlite
 secret_key.py
 run-seahub.sh
 setenv.sh
+pylintrc
 .DS_Store
 *.mo
 media/avatars/*

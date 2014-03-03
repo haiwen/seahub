@@ -48,6 +48,10 @@ fi
 pylintrc=${PROJECT_DIR}/pylintrc
 if ! [[ -f ${pylintrc} ]]; then
     echo "${pylintrc} not found"
+    echo 
+    echo "mv pylintrc.template pylintrc"
+    echo
+    
     exit 1
 fi
 

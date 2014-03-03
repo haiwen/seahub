@@ -5,7 +5,7 @@
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-init-hook='import sys; sys.path.extend(["/Users/xiez/.virtualenvs/seahub/lib/python2.7/site-packages", "/usr/local/lib/python2.7/site-packages/"])'
+#init-hook='import sys; sys.path.extend(["/Users/xiez/.virtualenvs/seahub/lib/python2.7/site-packages", "/usr/local/lib/python2.7/site-packages/"])'
 
 # Profiled execution.
 profile=no
