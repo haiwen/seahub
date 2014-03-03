@@ -36,7 +36,7 @@ import seaserv
 from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
     get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
     seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
-    get_personal_groups_by_user, is_inner_pub_repo, \
+    is_inner_pub_repo, \
     del_org_group_repo, get_personal_groups, web_get_access_token, remove_repo, \
     get_shared_groups_by_repo, is_group_user, check_permission, \
     list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
@@ -973,47 +973,8 @@ def myhome(request):
     calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
-    # shared
-    personal_shared_repos = list_personal_shared_repos(username, 'to_email',
-                                                       -1, -1)
-    personal_shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
-
-    # group repos
-    group_repos = []
-    # Get all personal groups I joined.
-    joined_groups = get_personal_groups_by_user(username)
-    # For each group I joined... 
-    for grp in joined_groups:
-        # Get group repos, and for each group repos...
-        for r_id in get_group_repoids(grp.id):
-            # No need to list my own repo
-            repo_owner = seafile_api.get_repo_owner(r_id)
-            if repo_owner == username:
-                continue
-            # Convert repo properties due to the different collumns in Repo
-            # and SharedRepo
-            r = get_repo(r_id)
-            if not r:
-                continue
-            r.repo_id = r.id
-            r.repo_name = r.name
-            r.repo_desc = r.desc
-            r.last_modified = get_repo_last_modify(r)
-            r.share_type = 'group'
-            r.user = repo_owner
-            r.user_perm = check_permission(r_id, username)
-            r.group = grp
-            group_repos.append(r)
-    group_repos.sort(key=lambda x: x.group.group_name)
-    for i, repo in enumerate(group_repos):
-        if i == 0:
-            repo.show_group_name = True
-        else:
-            if repo.group.group_name != group_repos[i-1].group.group_name:
-                repo.show_group_name = True
-
     # misc
-    autocomp_groups = joined_groups
+    autocomp_groups = joined_groups = request.user.joined_groups
     contacts = Contact.objects.get_contacts_by_user(username)
     allow_public_share = False if request.cloud_mode else True
 
@@ -1034,8 +995,6 @@ def myhome(request):
             
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
-            "group_repos": group_repos,
-            "personal_shared_repos": personal_shared_repos,
             "contacts": contacts,
             "autocomp_groups": autocomp_groups,
             "joined_groups": joined_groups,

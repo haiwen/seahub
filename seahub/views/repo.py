@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 import seaserv
-from seaserv import seafile_api, get_personal_groups_by_user
+from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
@@ -238,7 +238,7 @@ def render_repo(request, repo):
     domain = RequestSite(request).domain
 
     contacts = Contact.objects.get_contacts_by_user(username)
-    joined_groups = get_personal_groups_by_user(request.user.username)
+    joined_groups = request.user.joined_groups
 
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:

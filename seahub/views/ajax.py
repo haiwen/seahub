@@ -33,7 +33,8 @@ import seahub.settings as settings
 from seahub.signals import repo_deleted
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
     check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
-    new_merge_with_no_conflict, get_commit_before_new_merge
+    new_merge_with_no_conflict, get_commit_before_new_merge, \
+    get_repo_last_modify
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -1210,3 +1211,80 @@ def space_and_traffic(request):
     html = render_to_string('snippets/space_and_traffic.html', ctx,
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+
+@login_required
+def my_shared_repos(request):
+    """Return html snippet of repos that shared to user.
+    
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    username = request.user.username
+    
+    shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
+    shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+
+    ctx = {
+        "shared_repos": shared_repos,
+        }
+    html = render_to_string('my_shared_repos.html', ctx,
+                            context_instance=RequestContext(request))
+
+    return HttpResponse(html)
+    
+@login_required
+def my_group_repos(request):
+    """Return html snippet of group repos.
+    
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+    
+    username = request.user.username
+    
+    group_repos = []
+    # Get all personal groups I joined.
+    joined_groups = request.user.joined_groups
+    # For each group I joined... 
+    for grp in joined_groups:
+        # Get group repos, and for each group repos...
+        for r_id in seaserv.get_group_repoids(grp.id):
+            # No need to list my own repo
+            repo_owner = seafile_api.get_repo_owner(r_id)
+            if repo_owner == username:
+                continue
+            # Convert repo properties due to the different collumns in Repo
+            # and SharedRepo
+            r = seaserv.get_repo(r_id)
+            if not r:
+                continue
+            r.repo_id = r.id
+            r.repo_name = r.name
+            r.repo_desc = r.desc
+            r.last_modified = get_repo_last_modify(r)
+            r.share_type = 'group'
+            r.user = repo_owner
+            r.user_perm = seaserv.check_permission(r_id, username)
+            r.group = grp
+            group_repos.append(r)
+    group_repos.sort(key=lambda x: x.group.group_name)
+    for i, repo in enumerate(group_repos):
+        if i == 0:
+            repo.show_group_name = True
+        else:
+            if repo.group.group_name != group_repos[i-1].group.group_name:
+                repo.show_group_name = True
+
+    ctx = {
+        "group_repos": group_repos,
+        }
+    html = render_to_string('my_group_repos.html', ctx,
+                            context_instance=RequestContext(request))
+
+    return HttpResponse(html)
+                
