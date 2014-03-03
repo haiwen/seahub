@@ -1316,6 +1316,53 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo_id, parent_dir)
 
+class FileDetailView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        file_name = os.path.basename(path)
+        commit_id = request.GET.get('commit_id', None)
+
+        if commit_id:
+            try:
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                             commit_id, path)
+                c = get_commit(commit_id)
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+        else:
+            try:
+                obj_id = seafile_api.get_file_id_by_path(repo_id,
+                                                      path.encode('utf-8'))
+                commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
+                c = commits[0]
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        if not obj_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        entry = {}
+        try:
+            entry["size"] = get_file_size(obj_id)
+        except Exception, e:
+            entry["size"] = 0
+
+        entry["type"] = "file"
+        entry["name"] = os.path.basename(path)
+        entry["id"] = obj_id
+        entry["mtime"] = c.ctime
+
+        return HttpResponse(json.dumps(entry), status=200,
+                            content_type=json_content_type)
+
 class FileRevert(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
