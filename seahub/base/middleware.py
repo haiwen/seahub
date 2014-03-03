@@ -1,5 +1,6 @@
 from django.core.cache import cache
 
+import seaserv
 from seaserv import get_binding_peerids, get_orgs_by_user
 
 from seahub.notifications.models import Notification
@@ -11,8 +12,7 @@ except ImportError:
 
 class BaseMiddleware(object):
     """
-    Middleware that add organization info to request when user in organization
-    context.
+    Middleware that add organization, group info to user.
     """
     
     def process_request(self, request):
@@ -27,6 +27,9 @@ class BaseMiddleware(object):
 
         request.user.org = None
         request.user.orgs = None
+
+        username = request.user.username
+        request.user.joined_groups = seaserv.get_personal_groups_by_user(username)
             
         return None
 

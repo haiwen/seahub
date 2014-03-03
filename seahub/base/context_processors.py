@@ -11,7 +11,6 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
     SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
 from seahub.views.modules import get_enabled_mods_by_user, \
     get_available_mods_by_user
-from seaserv import get_personal_groups_by_user 
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -45,8 +44,8 @@ def base(request):
     mods_available = get_available_mods_by_user(username)
     mods_enabled = get_enabled_mods_by_user(username)
 
-    # get groups
-    grps = get_personal_groups_by_user(username)[:8] 
+    # get 8 user groups
+    grps = request.user.joined_groups[:8]
 
     return {
         'seafile_version': SEAFILE_VERSION,

@@ -7,8 +7,8 @@
         {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <li class="tab"><a href="#my-sub-repos" class="a">{% trans "Sub-libraries" %}</a></li>
         {% endif %}
-        <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
-        <li class="tab"><a href="#group-repos" class="a">{% trans "Group" %}</a></li>
+        <li class="tab"><a href="{% url 'my_shared_repos' %}" class="a">{% trans "Shared" %}</a></li>
+        <li class="tab"><a href="{% url 'my_group_repos' %}" class="a">{% trans "Group" %}</a></li>
     </ul>
     <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
 </div>
@@ -105,109 +105,6 @@
 {% endif %}
 </div>
 {% endif %}
-
-<div id="repos-shared-to-me" class="hide">
-    {% if personal_shared_repos %}
-    <table>
-        <tr>
-            <th width="4%"><!--icon--></th>
-            <th width="20%">{% trans "Name" %}</th>
-            <th width="33%">{% trans "Description" %}</th>
-            <th width="15%">{% trans "Last Update" %}</th>
-            <th width="15%">{% trans "Shared By" %}</th>
-            <th width="13%">{% trans "Operations" %}</th>
-        </tr>
-
-        {% for repo in personal_shared_repos %}
-        <tr>
-            <td>
-              {% if repo.encrypted %}
-                <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
-              {% else %}
-                {% if repo.user_perm == 'rw' %}
-                <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
-                {% else %}
-                <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
-                {% endif %}
-              {% endif %}
-            </td>
-            <td><a href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a></td>
-            <td>{{ repo.repo_desc }}</td>
-            {% if repo.last_modified %}
-            <td>{{ repo.last_modified|translate_seahub_time }}</td>
-            {% else %}
-            <td>--</td>
-            {% endif %}
-            <td>{{ repo.user|email2nickname }}</td>
-            <td>
-                {% if show_repo_download_button %}
-                <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-                {% endif %}
-                {% if repo.share_type == 'personal' %}
-                <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-
-    </table>
-    {% else %}
-    <div class="empty-tips">
-        <h2 class="alc">{% trans "No library is shared to you" %}</h2>
-    </div>
-    {% endif %}
-</div>
-
-<div id="group-repos" class="hide">
-    {% if group_repos %}
-    <table>
-        <tr>
-            <th width="4%"><!--icon--></th>
-            <th width="13%">{% trans "Group" %}</th>
-            <th width="4%"><!--icon--></th>
-            <th width="20%">{% trans "Name" %}</th>
-            <th width="29%">{% trans "Description" %}</th>
-            <th width="15%">{% trans "Last Update" %}</th>
-            <th width="15%">{% trans "Shared By" %}</th>
-        </tr>
-
-        {% for repo in group_repos %}
-        <tr>
-          {% if repo.show_group_name %}
-            <td>{% grp_avatar repo.group.id 20 %}</td>
-            <td><a href="{% url 'group_info' repo.group.id %}">{{ repo.group.group_name }}</a></td>
-          {% else %}
-            <td></td>
-            <td></td>
-          {% endif %}
-            <td>
-              {% if repo.encrypted %}
-                <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
-              {% else %}
-                {% if repo.user_perm == 'rw' %}
-                <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
-                {% else %}
-                <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
-                {% endif %}
-              {% endif %}
-            </td>
-            <td><a href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a></td>
-            <td>{{ repo.repo_desc }}</td>
-            {% if repo.last_modified %}
-            <td>{{ repo.last_modified|translate_seahub_time }}</td>
-            {% else %}
-            <td>--</td>
-            {% endif %}
-            <td>{{ repo.user|email2nickname }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <div class="empty-tips">
-        <h2 class="alc">{% trans "No library is shared to your groups" %}</h2>
-    </div>
-    {% endif %}
-</div>
 
 </div>
 

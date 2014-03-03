@@ -22,7 +22,7 @@ import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     web_get_access_token, seafile_api, \
     get_repo, get_group_repos, get_commits, is_group_user, \
-    get_personal_groups_by_user, get_group, get_group_members, create_repo, \
+    get_group, get_group_members, create_repo, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
     check_permission, is_passwd_set, remove_repo, \
     unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
@@ -135,7 +135,7 @@ def group_add(request):
     # check plan
     num_of_groups = getattr(request.user, 'num_of_groups', -1)
     if num_of_groups > 0:
-        current_groups = len(get_personal_groups_by_user(username))
+        current_groups = len(request.user.joined_groups)
         if current_groups > num_of_groups:
             result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
             return HttpResponse(json.dumps(result), status=500,
@@ -147,7 +147,7 @@ def group_add(request):
 
         # Check whether group name is duplicated.
         if request.cloud_mode:
-            checked_groups = get_personal_groups_by_user(username)
+            checked_groups = request.user.joined_groups
         else:
             checked_groups = get_personal_groups(-1, -1)
         for g in checked_groups:
@@ -173,7 +173,7 @@ def group_add(request):
 @login_required
 def group_list(request):
     username = request.user.username
-    joined_groups = get_personal_groups_by_user(username)
+    joined_groups = request.user.joined_groups
     enabled_groups = get_wiki_enabled_group_list(
         in_group_ids=[x.id for x in joined_groups])
     enabled_group_ids = [ int(x.group_id) for x in enabled_groups ]

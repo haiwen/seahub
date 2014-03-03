@@ -191,7 +191,7 @@ def share_repo(request):
 
     share_to_groups = []
     # get all personal groups
-    for group in seaserv.get_personal_groups_by_user(from_email):
+    for group in request.user.joined_groups:
         # for every group that user joined, if group name matchs,
         # then has find the group
         if group.group_name in share_to_group_names:
