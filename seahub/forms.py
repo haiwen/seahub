@@ -173,3 +173,14 @@ class RepoSettingForm(forms.Form):
     days = forms.IntegerField(required=False,
                               error_messages={'invalid': _('Please enter a number')})
 
+class SharedLinkPasswordForm(forms.Form):
+    """
+    Form for user to access shared files/directory.
+    """
+    password = forms.CharField(error_messages={'required': _('Password can\'t be empty')})
+
+class SharedUploadLinkPasswordForm(forms.Form):
+    """
+    Form for user to access shared directory for uploading.
+    """
+    password = forms.CharField(error_messages={'required': _('Password can\'t be empty')})

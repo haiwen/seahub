@@ -30,6 +30,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     // share link
     if (op.data('link')) {
         $('#gen-link-btn').addClass('hide');
+        $('#link-passwd-form').addClass('hide');
         $('#share-link-body').removeClass('hide');
         var link = op.data('link');
         $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
@@ -38,6 +39,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         $('#linkwidth').remove();
     } else {
         $('#gen-link-btn').removeClass('hide');
+        $('#link-passwd-form').removeClass('hide');
         $('#share-link-body').addClass('hide');
     }
     $('#gen-link-btn').data('url', aj_urls['link']).data('obj', op);
@@ -47,6 +49,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     $('#upload-link-share-tab .a').click(function() {
         if (op.data('upload-link')) {
             $('#gen-upload-link-btn').addClass('hide');
+            $('#upload-link-passwd-form').addClass('hide');
             $('#share-upload-link-body').removeClass('hide');
             var link = op.data('upload-link');
             $('#shared-upload-link-text, #upload-link-send-form input[name="shared_upload_link"]').val(link);
@@ -55,6 +58,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
             $('#linkwidth').remove();
         } else {
             $('#gen-upload-link-btn').removeClass('hide');
+            $('#upload-link-passwd-form').removeClass('hide');
             $('#share-upload-link-body').addClass('hide');
         }
         $('#gen-upload-link-btn').data('url', aj_urls['upload-link']).data('obj', op);
@@ -165,16 +169,52 @@ $('#shared-link-text').click(function() {
 
 $('#gen-link-btn').click(function() {
     var gen_link_btn = $(this),
-        obj = gen_link_btn.data('obj');
+        obj = gen_link_btn.data('obj'),
+        form = $('#link-passwd-form'),
+        form_id = form.attr('id'),
+        use_passwd = $('#link-passwd-switch').attr('checked'),
+        passwd, passwd_again, post_data;
+
+    if (use_passwd) {
+        passwd = $('input[name="passwd"]', form).val();
+        passwd_again = $('input[name="passwd_again"]', form).val();
+
+        if (!$.trim(passwd)) {
+            apply_form_error(form_id, "{% trans "Please enter password" %}");
+            return false;
+        }
+        if ($.trim(passwd).length < 6) {
+            apply_form_error(form_id, "{% trans "Password is too short" %}");
+            return false;
+        }
+        if ($.trim(passwd).length > 35) {
+            apply_form_error(form_id, "{% trans "Password is too long (maximum is 35 characters)" %}");
+            return false;
+        }
+        if (!$.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Please enter the password again" %}");
+            return false;
+        }
+        if ($.trim(passwd) != $.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Passwords don't match" %}");
+            return false;
+        }
+        post_data = {'use_passwd': 1, 'passwd': passwd};
+    } else {
+        post_data = {'use_passwd': 0};
+    }
 
     $.ajax({
             url: gen_link_btn.data('url'),
+            type: 'POST',
             dataType: 'json',
-            cache: false,
+            beforeSend: prepareCSRFToken,
+            data: post_data,
             success: function(data) {
                 var link = data['shared_link'];
                 // hide gen-link button, and show link
                 gen_link_btn.addClass('hide');
+                $('#link-passwd-form').addClass('hide');
                 $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
                 $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
                 $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
@@ -204,6 +244,7 @@ $('#rm-shared-link').click(function() {
         success: function(data) {
             $('#share-link-body').addClass('hide');
             $('#gen-link-btn').removeClass('hide');
+            $('#link-passwd-form').removeClass('hide');
             obj.data('link', '').data('token', '');
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -283,15 +324,51 @@ $("#upload-link-send-form").submit(function(event) {
 
 $('#gen-upload-link-btn').click(function() {
     var gen_upload_link_btn = $(this),
-    obj = gen_upload_link_btn.data('obj');
+        obj = gen_upload_link_btn.data('obj'),
+        form = $('#upload-link-passwd-form'),
+        form_id = form.attr('id'),
+        use_passwd = $('#upload-link-passwd-switch').attr('checked'),
+        passwd, passwd_again, post_data;
+
+    if (use_passwd) {
+        passwd = $('input[name="passwd"]', form).val();
+        passwd_again = $('input[name="passwd_again"]', form).val();
+
+        if (!$.trim(passwd)) {
+            apply_form_error(form_id, "{% trans "Please enter password" %}");
+            return false;
+        }
+        if ($.trim(passwd).length < 6) {
+            apply_form_error(form_id, "{% trans "Password is too short" %}");
+            return false;
+        }
+        if ($.trim(passwd).length > 35) {
+            apply_form_error(form_id, "{% trans "Password is too long (maximum is 35 characters)" %}");
+            return false;
+        }
+        if (!$.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Please enter the password again" %}");
+            return false;
+        }
+        if ($.trim(passwd) != $.trim(passwd_again)) {
+            apply_form_error(form_id, "{% trans "Passwords don't match" %}");
+            return false;
+        }
+        post_data = {'use_passwd': 1, 'passwd': passwd};
+    } else {
+        post_data = {'use_passwd': 0};
+    }
 
     $.ajax({
         url: gen_upload_link_btn.data('url'),
+        type: 'POST',
         dataType: 'json',
-        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: post_data,
         success: function(data) {
             var upload_link = data['shared_upload_link'];
             gen_upload_link_btn.addClass('hide');
+            $('#upload-link-passwd-form').addClass('hide');
             $('#shared-upload-link-text, #upload-link-send-form input[name="shared_upload_link"]').val(upload_link);
             $('#main').append('<p id="linkwidth" class="hide">' + upload_link + '</p>');
             $('#shared-upload-link-text').css({'width':$('#linkwidth').width() + 25});
@@ -321,6 +398,7 @@ $('#rm-shared-upload-link').click(function() {
         success: function(data) {
             $('#share-upload-link-body').addClass('hide');
             $('#gen-upload-link-btn').removeClass('hide');
+            $('#upload-link-passwd-form').removeClass('hide');
             obj.data('upload-link', '').data('upload-token', '');
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -331,4 +409,26 @@ $('#rm-shared-upload-link').click(function() {
             }
         }
     });
+});
+
+$('#upload-link-passwd-switch').click(function () {
+    var form = $('#upload-link-passwd-form'),
+        pwd_input = $('input[type="password"]', form);
+
+    if ($(this).attr('checked')) {
+        pwd_input.attr('disabled', false).removeClass('input-disabled');
+    } else {
+        pwd_input.attr('disabled', true).addClass('input-disabled');
+    }
+});
+
+$('#link-passwd-switch').click(function () {
+    var form = $('#link-passwd-form'),
+        pwd_input = $('input[type="password"]', form);
+
+    if ($(this).attr('checked')) {
+        pwd_input.attr('disabled', false).removeClass('input-disabled');
+    } else {
+        pwd_input.attr('disabled', true).addClass('input-disabled');
+    }
 });

@@ -20,6 +20,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.sites.models import Site, RequestSite
+from django.contrib.auth.hashers import check_password
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
@@ -71,7 +72,8 @@ from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import AddUserForm, RepoCreateForm, \
     RepoPassowrdForm, SharedRepoCreateForm,\
-    SetUserQuotaForm, RepoSettingForm
+    SetUserQuotaForm, RepoSettingForm,\
+    SharedLinkPasswordForm, SharedUploadLinkPasswordForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
@@ -1631,6 +1633,26 @@ def view_shared_dir(request, token):
     except FileShare.DoesNotExist:
         raise Http404
 
+    if fileshare.use_passwd:
+        valid_access = cache.get('SharedLink_' + request.user.username + token, False)
+        if not valid_access:
+            d = { 'token': token, 'view_name': 'view_shared_dir', }
+            if request.method == 'POST':
+                form = SharedLinkPasswordForm(request.POST)
+                d['form'] = form
+                if form.is_valid() and\
+                   check_password(form.cleaned_data['password'], fileshare.password):
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        cache.set('SharedLink_' + request.user.username + token, True,
+                                  settings.SHARE_ACCESS_PASSWD_TIMEOUT)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+
     username = fileshare.username
     repo_id = fileshare.repo_id
     path = request.GET.get('p', '')
@@ -1675,6 +1697,26 @@ def view_shared_upload_link(request, token):
         uploadlink = UploadLinkShare.objects.get(token=token)
     except UploadLinkShare.DoesNotExist:
         raise Http404
+
+    if uploadlink.use_passwd:
+        valid_access = cache.get('SharedUploadLink_' + request.user.username + token, False)
+        if not valid_access:
+            d = { 'token': token, 'view_name': 'view_shared_upload_link', }
+            if request.method == 'POST':
+                form = SharedUploadLinkPasswordForm(request.POST)
+                d['form'] = form
+                if form.is_valid() and\
+                   check_password(form.cleaned_data['password'], uploadlink.password):
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        cache.set('SharedUploadLink_' + request.user.username + token, True,
+                                  settings.SHARE_ACCESS_PASSWD_TIMEOUT)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id
