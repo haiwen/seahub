@@ -86,6 +86,7 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/$', repo_access_file, name='repo_access_file'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_settings, name='repo_settings'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/owner/$', repo_owner, name='repo_owner'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/passwd/$', repo_change_passwd, name='repo_change_passwd'),
 
     ### share file/dir, upload link ###
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
