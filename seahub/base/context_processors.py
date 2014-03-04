@@ -45,7 +45,10 @@ def base(request):
     mods_enabled = get_enabled_mods_by_user(username)
 
     # get 8 user groups
-    grps = request.user.joined_groups[:8]
+    try:
+        grps = request.user.joined_groups[:8]
+    except AttributeError:      # anonymous user
+        grps = None
 
     return {
         'seafile_version': SEAFILE_VERSION,
