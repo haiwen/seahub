@@ -604,10 +604,11 @@ def view_shared_file(request, token):
         if not valid_access:
             d = { 'token': token, 'view_name': 'view_shared_file', }
             if request.method == 'POST':
-                form = SharedLinkPasswordForm(request.POST)
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
-                if form.is_valid() and\
-                   check_password(form.cleaned_data['password'], fileshare.password):
+                if form.is_valid():
                     # set cache for non-anonymous user
                     if request.user.is_authenticated():
                         cache.set('SharedLink_' + request.user.username + token, True,

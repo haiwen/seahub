@@ -72,8 +72,7 @@ from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import AddUserForm, RepoCreateForm, \
     RepoPassowrdForm, SharedRepoCreateForm,\
-    SetUserQuotaForm, RepoSettingForm,\
-    SharedLinkPasswordForm, SharedUploadLinkPasswordForm
+    SetUserQuotaForm, RepoSettingForm, SharedLinkPasswordForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
@@ -1638,10 +1637,11 @@ def view_shared_dir(request, token):
         if not valid_access:
             d = { 'token': token, 'view_name': 'view_shared_dir', }
             if request.method == 'POST':
-                form = SharedLinkPasswordForm(request.POST)
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
-                if form.is_valid() and\
-                   check_password(form.cleaned_data['password'], fileshare.password):
+                if form.is_valid():
                     # set cache for non-anonymous user
                     if request.user.is_authenticated():
                         cache.set('SharedLink_' + request.user.username + token, True,
@@ -1703,10 +1703,11 @@ def view_shared_upload_link(request, token):
         if not valid_access:
             d = { 'token': token, 'view_name': 'view_shared_upload_link', }
             if request.method == 'POST':
-                form = SharedUploadLinkPasswordForm(request.POST)
+                post_values = request.POST.copy()
+                post_values['enc_password'] = uploadlink.password
+                form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
-                if form.is_valid() and\
-                   check_password(form.cleaned_data['password'], uploadlink.password):
+                if form.is_valid():
                     # set cache for non-anonymous user
                     if request.user.is_authenticated():
                         cache.set('SharedUploadLink_' + request.user.username + token, True,
