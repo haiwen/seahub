@@ -15,7 +15,7 @@ import seaserv
 from seaserv import seafile_api, seafserv_rpc, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     is_org_repo_owner, CALC_SHARE_USAGE, seafserv_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage
+    get_user_quota_usage, get_user_share_usage, get_personal_groups_by_user
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
@@ -900,7 +900,7 @@ def repo_unstar_file(request, repo_id):
 
 ########## contacts related
 @login_required
-def get_contacts(request):
+def get_contacts_and_groups(request):
     if not request.is_ajax():
         raise Http404
     
@@ -913,7 +913,12 @@ def get_contacts(request):
     for c in contacts:
         contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
     
-    return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
+    joined_groups = get_personal_groups_by_user(username)
+    group_list = []
+    from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
+    for g in joined_groups:
+        group_list.append({"id": g.id, "name": g.group_name, "avatar": grp_avatar(g.id, 16)})
+    return HttpResponse(json.dumps({"contacts":contact_list, "groups":group_list}), content_type=content_type)
 
 @login_required
 def get_current_commit(request, repo_id):
