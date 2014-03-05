@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss"><img src="{{MEDIA_URL}}img/msgs.png" alt="" style="vertical-align:bottom;" /> {% trans "Discuss" %}</button><button id="click-into-group">{% trans "Group" %} &gt;&gt;</button>{% endif %}</div>';
+var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss">{% trans "Discuss" %}</button><button id="click-into-group">{% trans "Group" %} &gt;&gt;</button>{% endif %}</div>';
 $('#wrapper').append(Bottom_bar);
 $('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
 

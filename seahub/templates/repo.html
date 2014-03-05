@@ -4,6 +4,7 @@
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <style type="text/css">
 #footer { display:none; }
 {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
@@ -228,6 +229,7 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>

@@ -5,6 +5,7 @@
 {% block sub_title %}{{filename}} - {% endblock %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">                                                
 #footer { display:none; }                                              
@@ -94,6 +95,7 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 <script type="text/javascript">
 $('#share').click(function() {
     var op = $(this), name = '{{ filename }}',

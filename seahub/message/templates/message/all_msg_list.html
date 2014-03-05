@@ -3,6 +3,7 @@
 
 {% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <style type="text/css">
     td { cursor:pointer; }
 </style>
@@ -55,6 +56,7 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 <script type="text/javascript">
 $(function(){       
     $('tr[data-href]').click(function() {

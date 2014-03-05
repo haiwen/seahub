@@ -4,11 +4,8 @@
 {% load url from future %}
 
 {% block main_panel %}
-    <h2 id="view-hd">{{ dir_name }}</h2>
-    <div>
-      <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
-    </div>
-
+    <h2>{{ dir_name }}</h2>
+    <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar ovhd">
@@ -22,9 +19,7 @@
                 {% endif %}
                 {% endfor %}
                 </p>
-                <div class="repo-op fright">
-                    <a href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" class="obv-btn">{% trans "ZIP"%}</a>
-                </div>
+                <a href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" class="obv-btn fright">{% trans "ZIP"%}</a>
             </div>
             <table class="repo-file-list">
                 <tr>
