@@ -2668,7 +2668,21 @@ class OfficeGenerateView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
     
         path = request.GET.get('p', '/').rstrip('/')
-        obj_id = get_file_id_by_path(repo_id, path)
+        commit_id = request.GET.get('commit_id', None)
+
+        if commit_id:
+            try:
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                             commit_id, path)
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+        else:
+            try:
+                obj_id = seafile_api.get_file_id_by_path(repo_id,
+                                                      path.encode('utf-8'))
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
         if not obj_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
