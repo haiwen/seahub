@@ -5,7 +5,7 @@ from seaserv import get_repo, is_passwd_set
 
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
-from seahub.utils import check_and_get_org_by_repo, check_and_get_org_by_group, render_error
+from seahub.utils import render_error
 from django.utils.translation import ugettext as _
 from seahub.views.modules import get_enabled_mods_by_user, \
     get_available_mods_by_user
@@ -36,40 +36,6 @@ def user_mods_check(func):
     _decorated.__name__ = func.__name__
     return _decorated
     
-# def ctx_switch_required(func):
-#     """
-#     Decorator for views to change navigation bar automatically that render
-#     same template when both in org context and personal context.
-#     """
-#     def _decorated(request, *args, **kwargs):
-#         if not request.cloud_mode:
-#             # no need to switch context when `CLOUD_MODE` is false
-#             request.user.org = None
-#             request.base_template = 'myhome_base.html'
-#             return func(request, *args, **kwargs)
-    
-#         repo_id = kwargs.get('repo_id', '')
-#         group_id = kwargs.get('group_id', '')
-#         if repo_id and group_id:
-#             return func(request, *args, **kwargs)
-#         if not repo_id and not group_id:
-#             return func(request, *args, **kwargs)
-            
-#         user = request.user.username
-#         if repo_id:
-#             org, base_template = check_and_get_org_by_repo(repo_id, user)
-
-#         if group_id:
-#             org, base_template = check_and_get_org_by_group(int(group_id), user)
-
-#         if org:
-#             request.user.org = org._dict
-#         else:
-#             request.user.org = None
-#         request.base_template = base_template
-#         return func(request, *args, **kwargs)
-#     return _decorated
-
 def repo_passwd_set_required(func):
     """
     Decorator for views to redirect user to repo decryption page if repo is

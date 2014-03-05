@@ -26,7 +26,6 @@ from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     get_personal_groups, create_org_repo, get_org_group_repos, \
     check_permission, is_passwd_set, remove_repo, \
     unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
-from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from decorators import group_staff_required
@@ -49,7 +48,7 @@ from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username, send_html_email
+    calc_file_path_hash, is_valid_username, send_html_email, is_org_context
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -62,13 +61,35 @@ from seahub.forms import SharedRepoCreateForm
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+########## ccnet rpc wrapper
+def create_group(group_name, username):
+    return seaserv.ccnet_threaded_rpc.create_group(group_name, username)
+    
+def create_org_group(org_id, group_name, username):
+    return seaserv.ccnet_threaded_rpc.create_org_group(org_id, group_name,
+                                                       username)
 
+def get_all_groups(start, limit):
+    return seaserv.ccnet_threaded_rpc.get_all_groups(start, limit)
+
+def org_user_exists(org_id, username):
+    return seaserv.ccnet_threaded_rpc.org_user_exists(org_id, username) 
+
+########## helper functions
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False
     return seaserv.check_group_staff(group.id, user.username)
 
-
+def remove_group_common(group_id, username):
+    """Common function to remove a group, and it's repos,
+    
+    Arguments:
+    - `group_id`:
+    """
+    seaserv.ccnet_threaded_rpc.remove_group(group_id, username)
+    seaserv.seafserv_threaded_rpc.remove_repo_group(group_id)
+    
 def group_check(func):
     """
     Decorator for initial group permission check tasks
@@ -122,9 +143,19 @@ def group_check(func):
 
     return _decorated
 
+def get_user_groups(request):
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        user_groups = seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        user_groups = seaserv.get_personal_groups_by_user(username)
+    return user_groups
+    
+########## views
 @login_required
 def group_add(request):
-
+    """Add a new group"""
     if not request.is_ajax() or request.method != 'POST':
         raise Http404
 
@@ -138,7 +169,7 @@ def group_add(request):
         current_groups = len(request.user.joined_groups)
         if current_groups > num_of_groups:
             result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
-            return HttpResponse(json.dumps(result), status=500,
+            return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
     
     form = GroupAddForm(request.POST)
@@ -146,20 +177,28 @@ def group_add(request):
         group_name = form.cleaned_data['group_name']
 
         # Check whether group name is duplicated.
-        if request.cloud_mode:
-            checked_groups = request.user.joined_groups
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            checked_groups = seaserv.get_org_groups_by_user(org_id, username)
         else:
-            checked_groups = get_personal_groups(-1, -1)
+            if request.cloud_mode:
+                checked_groups = seaserv.get_personal_groups_by_user(username)
+            else:
+                checked_groups = get_all_groups(-1, -1)
         for g in checked_groups:
             if g.group_name == group_name:
                 result['error'] = _(u'There is already a group with that name.')
                 return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+                                    content_type=content_type)
 
         # Group name is valid, create that group.
         try:
-            ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                            username)
+            if org_id > 0:
+                create_org_group(org_id, group_name, username)
+            else:
+                create_group(group_name, username)
+
             return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
         except SearpcError, e:
@@ -172,8 +211,10 @@ def group_add(request):
 
 @login_required
 def group_list(request):
+    """List user groups"""
     username = request.user.username
     joined_groups = request.user.joined_groups
+
     enabled_groups = get_wiki_enabled_group_list(
         in_group_ids=[x.id for x in joined_groups])
     enabled_group_ids = [ int(x.group_id) for x in enabled_groups ]
@@ -196,20 +237,14 @@ def group_remove(request, group_id):
     operation.
     """
     # Request header may missing HTTP_REFERER, we need to handle that case.
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-
+    next = request.META.get('HTTP_REFERER', SITE_ROOT)
+    
     try:
         group_id_int = int(group_id)
     except ValueError:
         return HttpResponseRedirect(next)
 
-    try:
-        ccnet_threaded_rpc.remove_group(group_id_int, request.user.username)
-        seafserv_threaded_rpc.remove_repo_group(group_id_int, None)
-    except SearpcError, e:
-        return render_error(request, _(e.msg))
+    remove_group_common(group_id_int, request.user.username)
 
     return HttpResponseRedirect(next)
 
@@ -520,17 +555,17 @@ def group_info(request, group):
     if group.view_perm == "pub":
         return group_info_for_pub(request, group)
 
-    org = request.user.org
-    if org:
-        repos = get_org_group_repos(org['org_id'], group.id,
-                                    request.user.username)
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        repos = get_org_group_repos(org_id, group.id, username)
     else:
-        repos = get_group_repos(group.id, request.user.username)
+        repos = get_group_repos(group.id, username)
 
     recent_commits = []
     cmt_repo_dict = {}
     for repo in repos:
-        repo.user_perm = check_permission(repo.props.id, request.user.username)
+        repo.user_perm = check_permission(repo.props.id, username)
         cmmts = get_commits(repo.props.id, 0, 10)
         for c in cmmts:
             cmt_repo_dict[c.id] = repo
@@ -540,8 +575,7 @@ def group_info(request, group):
     recent_commits = recent_commits[:15]
     for cmt in recent_commits:
         cmt.repo = cmt_repo_dict[cmt.id]
-        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id,
-                                              request.user.username)
+        cmt.repo.password_set = is_passwd_set(cmt.props.repo_id, username)
         cmt.tp = cmt.props.desc.split(' ')[0]
 
     # get available modules(wiki, etc)
@@ -560,7 +594,6 @@ def group_info(request, group):
 
 @group_check
 def group_members(request, group):
-
     if group.view_perm == 'pub':
         raise Http404
 
@@ -590,115 +623,145 @@ def group_members(request, group):
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
+def send_group_member_add_mail(request, group, from_user, to_user):
+    c = {
+        'email': from_user,
+        'to_email': to_user,
+        'group': group,
+        }
+
+    subject = _(u'You are invited to join a group on %s') % SITE_NAME
+    send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
+
+def ajax_add_group_member(request, group):
+    """Add user to group in ajax.
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    member_name_str = request.POST.get('user_name', '')
+    member_list = string2list(member_name_str)
+    member_list = [x.lower() for x in member_list]
+
+    # Add users to contacts.        
+    for email in member_list:
+        if not is_valid_username(email):
+            continue
+        mail_sended.send(sender=None, user=username, email=email)
+
+    mail_sent_list = []
+    if is_org_context(request):
+        # Can only invite organization users to group
+        org_id = request.user.org.org_id
+        for email in member_list:
+            if not is_valid_username(email):
+                continue
+
+            if is_group_user(group.id, email):
+                continue
+
+            if not org_user_exists(org_id, email):
+                err_msg = _(u'Failed to add, %s is not in current organization.')
+                result['error'] = err_msg % email
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username, email)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+    elif request.cloud_mode:
+        # check plan
+        group_members = getattr(request.user, 'group_members', -1)
+        if group_members > 0:
+            current_group_members = len(get_group_members(group.id))
+            if current_group_members > group_members:
+                result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
+                return HttpResponse(json.dumps(result), status=403,
+                                    content_type=content_type)
+                        
+        # Can invite unregistered user to group.
+        for email in member_list:
+            if not is_valid_username(email):
+                continue
+
+            if is_group_user(group.id, email):
+                continue
+
+            # Add user to group, unregistered user will see the group
+            # when he logs in.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username, email)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+
+            if not is_registered_user(email):
+                try:
+                    send_group_member_add_mail(request, group, username, email)
+                    mail_sent_list.append(email)
+                except Exception, e:
+                    logger.warn(e)
+    else:
+        # Can only invite registered user to group if not in cloud mode.
+        for email in member_list:
+            if not is_valid_username(email):
+                continue
+
+            if is_group_user(group.id, email):
+                continue
+
+            if not is_registered_user(email):
+                err_msg = _(u'Failed to add, %s is not registerd.')
+                result['error'] = err_msg % email
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username, email)
+            except SearpcError, e:
+                result['error'] = _(e.msg)
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+
+    if mail_sent_list:
+        msg = ungettext(
+            'Successfully added. An email has been sent.',
+            'Successfully added. %(count)s emails have been sent.',
+            len(mail_sent_list)) % {
+            'count': len(mail_sent_list),
+            }
+        messages.success(request, msg)
+    else:
+        messages.success(request, _(u'Successfully added.'))
+    return HttpResponse(json.dumps('success'), status=200,
+                        content_type=content_type)
+    
 @login_required
 @group_staff_required
 def group_manage(request, group_id):
-    group_id_int = int(group_id) # Checked by URL Conf
-    group = get_group(group_id_int)
+    group = get_group(group_id)
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
-    username = request.user.username
-    
+
     if request.method == 'POST':
         """
         Add group members.
         """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        member_name_str = request.POST.get('user_name', '')
-        member_list = string2list(member_name_str)
-        member_list = [x.lower() for x in member_list]
-
-        # Add users to contacts.        
-        for email in member_list:
-            if not is_valid_username(email):
-                continue
-            mail_sended.send(sender=None, user=username, email=email)
-
-        mail_sended_list = []
-        if request.cloud_mode:
-            # check plan
-            group_members = getattr(request.user, 'group_members', -1)
-            if group_members > 0:
-                current_group_members = len(get_group_members(group.id))
-                if current_group_members > group_members:
-                    result['error'] = _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members
-                    return HttpResponse(json.dumps(result), status=500,
-                                        content_type=content_type)
-                        
-            # Can invite unregistered user to group.
-            for email in member_list:
-                if not is_valid_username(email):
-                    continue
-
-                if is_group_user(group.id, email):
-                    continue
-                
-                if not is_registered_user(email):
-                    c = {
-                        'email': username,
-                        'to_email': email,
-                        'group': group,
-                        }
-                    try:
-                        subject = _(u'You are invited to join a group on %s') % SITE_NAME
-                        send_html_email(subject, 'group/add_member_email.html', c, None, [email])
-
-                        mail_sended_list.append(email)
-                    except Exception, e:
-                        logger.warn(e)
-
-                # Add user to group, unregistered user will see the group
-                # when he logs in.
-                try:
-                    ccnet_threaded_rpc.group_add_member(group.id,
-                                                        username, email)
-                except SearpcError, e:
-                    result['error'] = _(e.msg)
-                    return HttpResponse(json.dumps(result), status=500,
-                                        content_type=content_type)
-        else:
-            # Can only invite registered user to group if not in cloud mode.
-            for email in member_list:
-                if not is_valid_username(email):
-                    continue
-
-                if is_group_user(group.id, email):
-                    continue
-
-                if not is_registered_user(email):
-                    err_msg = _(u'Failed to add, %s is not registerd.')
-                    result['error'] = err_msg % email
-                    return HttpResponse(json.dumps(result), status=400,
-                                        content_type=content_type)
-                # Add user to group.
-                try:
-                    ccnet_threaded_rpc.group_add_member(group.id,
-                                               username, email)
-                except SearpcError, e:
-                    result['error'] = _(e.msg)
-                    return HttpResponse(json.dumps(result), status=500,
-                                        content_type=content_type)
-        if mail_sended_list:
-            msg = ungettext(
-                'Successfully added. An email has been sent.',
-                'Successfully added. %(count)s emails have been sent.',
-            len(mail_sended_list)) % {
-                'count': len(mail_sended_list),
-            }
-            messages.success(request, msg)
-
-        else:
-            messages.success(request, _(u'Successfully added.'))
-        return HttpResponse(json.dumps('success'), status=200,
-                            content_type=content_type)
+        return ajax_add_group_member(request, group)
 
     ### GET ###
     members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [ m for m in members_all if m.is_staff ]    
 
-    contacts = Contact.objects.filter(user_email=username)
+    contacts = Contact.objects.get_contacts_by_user(request.user.username)
 
     if PublicGroup.objects.filter(group_id=group.id):
         group.is_pub = True
@@ -834,19 +897,6 @@ def group_remove_member(request, group_id, user_name):
         messages.error(request, _(u'Failed：%s') % _(e.msg))
 
     return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
-
-# def add_group_repo(request, repo_id, group_id, from_email, permission):
-#     """
-#     Share a repo to a group.
-    
-#     """
-#     # Check whether group exists
-#     group = get_group(group_id)
-#     if not group:
-#         raise Exception, _(u"Failed to share: the group doesn't exist.")
-    
-#     seafserv_threaded_rpc.group_share_repo(repo_id, group_id, from_email,
-#                                            permission)
 
 def group_unshare_repo(request, repo_id, group_id, from_email):
     """
@@ -990,83 +1040,69 @@ def create_group_repo(request, group_id):
         return json_error(_(u'Failed to create: the group does not exist.'))
 
     # Check whether user belongs to the group.
-    if not is_group_user(group_id, request.user.username):
+    username = request.user.username
+    if not is_group_user(group_id, username):
         return json_error(_(u'Failed to create: you are not in the group.'))
 
     form = SharedRepoCreateForm(request.POST)
     if not form.is_valid():
         return json_error(str(form.errors.values()[0]))
-    else:
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        permission = form.cleaned_data['permission']
-        encryption = int(form.cleaned_data['encryption'])
 
-        uuid = form.cleaned_data['uuid']
-        magic_str = form.cleaned_data['magic_str']
-        encrypted_file_key = form.cleaned_data['encrypted_file_key']
+    # Form is valid, create group repo
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    permission = form.cleaned_data['permission']
+    encryption = int(form.cleaned_data['encryption'])
 
-        user = request.user.username
+    uuid = form.cleaned_data['uuid']
+    magic_str = form.cleaned_data['magic_str']
+    encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
-        org, base_template = check_and_get_org_by_group(group.id, user)
-        if org:
-            # create group repo in org context
-            try:
-                repo_id = create_org_repo(repo_name, repo_desc, user, passwd,
-                                          org.org_id)
-            except:
-                repo_id = None
-            if not repo_id:
-                return json_error(_(u'Failed to create'))
-
-            try:
-                status = seafserv_threaded_rpc.add_org_group_repo(repo_id,
-                                                                  org.org_id,
-                                                                  group.id,
-                                                                  user,
-                                                                  permission)
-            except SearpcError, e:
-                status = -1
-                
-            # if share failed, remove the newly created repo
-            if status != 0:
-                remove_repo(repo_id)
-                return json_error(_(u'Failed to create: internal error.'))
+    if is_org_context(request):
+        org_id = request.user.org.org_id        
+        try:
+            if encryption:
+                repo_id = seafile_api.create_org_enc_repo(
+                    uuid, repo_name, repo_desc, username, magic_str,
+                    encrypted_file_key, enc_version=2, org_id=org_id)
             else:
-                result = {'success': True}
-                return HttpResponse(json.dumps(result),
-                                    content_type=content_type)
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, None, org_id)
+        except SearpcError, e:
+            logger.error(e)
+            return json_error(_(u'Failed to create'))
+
+        try:
+            seafile_api.add_org_group_repo(repo_id, org_id, group.id,
+                                           username, permission)
+        except SearpcError, e:
+            logger.error(e)
+            return json_error(_(u'Failed to create: internal error.'))
         else:
-            # create group repo in user context
-            try: 
-                if not encryption:
-                    repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
-                else:
-                    repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
-
-            except SearpcError, e:
-                repo_id = None 
-
-            if not repo_id:
-                return json_error(_(u'Failed to create'))
-
-            try:
-                status = seafserv_threaded_rpc.group_share_repo(repo_id,
-                                                                group.id,
-                                                                user,
-                                                                permission)
-            except SearpcError, e:
-                status = -1
-                
-            # if share failed, remove the newly created repo
-            if status != 0:
-                remove_repo(repo_id)
-                return json_error(_(u'Failed to create: internal error.'))
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=content_type)
+    else:
+        try:
+            if encryption:
+                repo_id = seafile_api.create_enc_repo(
+                    uuid, repo_name, repo_desc, username, magic_str,
+                    encrypted_file_key, enc_version=2)
             else:
-                result = {'success': True}
-                return HttpResponse(json.dumps(result),
-                                    content_type=content_type)
+                repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                  username, None)
+        except SearpcError, e:
+            logger.error(e)
+            return json_error(_(u'Failed to create'))
 
+        try:
+            seafile_api.add_group_repo(repo_id, group.id, username, permission)
+        except SearpcError, e:
+            logger.error(e)
+            return json_error(_(u'Failed to create: internal error.'))
+        else:
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=content_type)
+                
 @login_required
 def group_joinrequest(request, group_id):
     """

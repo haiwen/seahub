@@ -3,7 +3,7 @@
 
 {% block nav_orgadmin_class %}class="cur"{% endblock %}
 
-{% block right_panel %}
+{% block main_panel %}
 <h3>{% trans "All Organizations" %}</h3>
 {% if orgs %}
 <table>
@@ -16,7 +16,7 @@
     </tr>
     {% for org in orgs %}
     <tr>
-        <td>{{ org.org_name }}</td>
+        <td><a href="{% url 'sys_org_info' org.org_id %}">{{ org.org_name }}</a></td>
         <td>{{ org.url_prefix }}</td>
         <td>{{ org.creator }}</td>
         <td>{{ org.ctime|tsstr_sec }}</td>
@@ -25,32 +25,8 @@
     {% endfor %}
 </table>
 
-<!--
-<div id="paginator">
-    {% if current_page != 1 %}
-    <a href="{{ SITE_ROOT }}groupadmin/?page={{ prev_page }}&per_page={{ per_page }}">上一页</a>
-    {% endif %}
-    {% if page_next %}
-    <a href="{{ SITE_ROOT }}groupadmin/?page={{ next_page }}&per_page={{ per_page }}">下一页</a>
-    {% endif %}
-    <span>每页：</span> 
-    {% if per_page == 25 %}
-    <span> 25 </span> 
-    {% else %}
-    <a href="{{ SITE_ROOT }}groupadmin/?per_page=25" class="per-page">25</a>
-    {% endif %}
-    {% if per_page == 50 %}
-    <span> 50 </span> 
-    {% else %}
-    <a href="{{ SITE_ROOT }}groupadmin/?per_page=50" class="per-page">50</a>
-    {% endif %}
-    {% if per_page == 100 %}
-    <span> 100 </span> 
-    {% else %}
-    <a href="{{ SITE_ROOT }}groupadmin/?per_page=100" class="per-page">100</a>
-    {% endif %}
-</div>
--->
+{% include "snippets/admin_paginator.html" %}
+
 {% else %}
 <p>{% trans "Empty" %}</p>
 {% endif %}
@@ -58,9 +34,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.org-remove-btn'), {
-        'title':"{% trans "Delete Organization" %}",
-        'con':"{% trans "Are you sure you want to delete %s ?" %}"
+addConfirmTo($('.group-remove-btn'), {
+        'title':'{% trans "Delete Group" %}',
+        'con':'{% trans "Are you sure you want to delete %s ?" %}'
 });
 </script>
 {% endblock %}

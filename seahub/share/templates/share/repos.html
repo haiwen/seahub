@@ -50,11 +50,7 @@
             <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            {% if not org %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op vh">{% trans "Unshare"%}</a>
-            {% else %}
-            <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
-            {% endif %}
+            <a href="#" data="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op vh">{% trans "Unshare"%}</a>
             {% endif %}
         </td>
     </tr>
@@ -85,11 +81,7 @@ $('.share-permission-select').change(function() {
         share_repoid = share_item.data('repoid'),
         share_user = share_item.data('user');
 
-    {% if org %}
-    var url = '{% url 'org_share_permission_admin' org.url_prefix %}?org_id={{ org.org_id }}&share_type=' + share_type;
-    {% else %}
     var url = '{% url 'share_permission_admin' %}?share_type=' + share_type;
-    {% endif %}
 
     $.ajax({
         url: url,

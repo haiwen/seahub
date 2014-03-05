@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
-    is_org_repo_owner, CALC_SHARE_USAGE, seafserv_threaded_rpc, \
+    CALC_SHARE_USAGE, seafserv_threaded_rpc, \
     get_user_quota_usage, get_user_share_usage
 from pysearpc import SearpcError
 
@@ -28,13 +28,13 @@ from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
     get_system_default_repo_id
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
-        get_uploadlink, get_dir_shared_upload_link
+    get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
 from seahub.signals import repo_deleted
-from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
-    check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
+from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
+    gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
-    get_repo_last_modify, gen_file_upload_url
+    get_repo_last_modify, gen_file_upload_url, is_org_context
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -1261,13 +1261,13 @@ def unseen_notices_count(request):
     result = {}
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)
-    
+
 @login_required
 def repo_remove(request, repo_id):
     if not request.is_ajax():
         raise Http404
 
-    content_type = 'application/json; charset=utf-8'
+    ct = 'application/json; charset=utf-8'
     result = {}  
 
     if get_system_default_repo_id() == repo_id:
@@ -1277,30 +1277,31 @@ def repo_remove(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         result['error'] = _(u'Library does not exist')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
       
-    user = request.user.username
-    org, base_template = check_and_get_org_by_repo(repo_id, user)
-    if org: 
+    username = request.user.username
+    if is_org_context(request):
         # Remove repo in org context, only repo owner or org staff can
         # perform this operation.
-        if request.user.is_staff or org.is_staff or \
-                is_org_repo_owner(org.org_id, repo_id, user):
+        org_id = request.user.org.org_id
+        is_org_staff = request.user.org.is_staff
+        org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if request.user.is_staff or is_org_staff or org_repo_owner == username:
             # Must get related useres before remove the repo
-            usernames = get_related_users_by_org_repo(org.org_id, repo_id)
+            usernames = get_related_users_by_org_repo(org_id, repo_id)
             seafile_api.remove_repo(repo_id)
             repo_deleted.send(sender=None,
-                              org_id=org.org_id,
+                              org_id=org_id,
                               usernames=usernames,
-                              repo_owner=user,
+                              repo_owner=username,
                               repo_id=repo_id,
                               repo_name=repo.name,
-                          )    
+                              )    
             result['success'] = True
-            return HttpResponse(json.dumps(result), content_type=content_type)
+            return HttpResponse(json.dumps(result), content_type=ct)
         else:
             result['error'] = _(u'Permission denied.')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+            return HttpResponse(json.dumps(result), status=403, content_type=ct)
     else:
         # Remove repo in personal context, only repo owner or site staff can
         # perform this operation.
@@ -1310,15 +1311,15 @@ def repo_remove(request, repo_id):
             repo_deleted.send(sender=None,
                               org_id=-1,
                               usernames=usernames,
-                              repo_owner=user,
+                              repo_owner=username,
                               repo_id=repo_id,
                               repo_name=repo.name,
                           )
             result['success'] = True
-            return HttpResponse(json.dumps(result), content_type=content_type)
+            return HttpResponse(json.dumps(result), content_type=ct)
         else:
             result['error'] = _(u'Permission denied.')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+            return HttpResponse(json.dumps(result), status=403, content_type=ct)
 
 @login_required
 def space_and_traffic(request):

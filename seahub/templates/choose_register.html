@@ -1,0 +1,21 @@
+{% extends "myhome_base.html" %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="article">
+  <button id="personal">Create a personal account</button>
+  <button id="org">Create an organization account</button>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#personal').click(function() {
+    location.href = "{% url 'registration_register'%}";
+});
+
+$('#org').click(function() {
+    location.href = "{% url 'org_register'%}";
+});
+</script>
+{% endblock %}

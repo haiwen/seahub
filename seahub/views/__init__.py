@@ -4,31 +4,20 @@ import os
 import stat
 import simplejson as json
 import mimetypes
-import re
-import sys
-import urllib
 import urllib2
 import logging
-import chardet
-from types import FunctionType
-import datetime as dt
-from datetime import datetime
 from math import ceil
 from urllib import quote
 import posixpath
 
-from django.utils.datastructures import SortedDict
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.sites.models import Site, RequestSite
-from django.contrib.auth.hashers import check_password
-from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect, HttpResponseNotModified
+    HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
-from django.template import Context, loader, RequestContext
+from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.utils import timezone
@@ -36,22 +25,11 @@ from django.utils.http import urlquote
 from django.views.decorators.http import condition
 
 import seaserv
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_repos, get_emailusers, \
-    get_repo, get_commits, get_branches, is_valid_filename, remove_group_user,\
-    seafserv_threaded_rpc, seafserv_rpc, get_binding_peerids, is_repo_owner, \
-    is_inner_pub_repo, \
-    del_org_group_repo, get_personal_groups, web_get_access_token, remove_repo, \
-    get_shared_groups_by_repo, is_group_user, check_permission, \
-    list_personal_shared_repos, is_org_group, get_org_id_by_group, is_org_repo,\
-    list_inner_pub_repos, get_org_groups_by_repo, is_org_repo_owner, \
-    get_org_repo_owner, is_passwd_set, get_file_size, check_quota, edit_repo,\
-    get_related_users_by_repo, get_related_users_by_org_repo, \
-    get_session_info, get_group_repoids, get_repo_owner, get_file_id_by_path, \
-    set_repo_history_limit, \
-    get_commit, MAX_DOWNLOAD_DIR_SIZE, CALC_SHARE_USAGE, count_emailusers, \
-    count_inner_pub_repos, unset_inner_pub_repo, get_user_quota_usage, \
-    get_user_share_usage, send_message, \
-    MAX_UPLOAD_FILE_SIZE
+from seaserv import get_repo, get_commits, is_valid_filename, \
+    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
+    list_inner_pub_repos, is_passwd_set, get_file_size, edit_repo, \
+    get_session_info, set_repo_history_limit, get_commit, \
+    MAX_DOWNLOAD_DIR_SIZE, send_message, MAX_UPLOAD_FILE_SIZE
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -72,9 +50,8 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
-from seahub.forms import AddUserForm, RepoCreateForm, \
-    RepoPassowrdForm, SharedRepoCreateForm,\
-    SetUserQuotaForm, RepoSettingForm, SharedLinkPasswordForm
+from seahub.forms import AddUserForm, RepoCreateForm, RepoPassowrdForm, \
+    SharedRepoCreateForm, SetUserQuotaForm, RepoSettingForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, gen_shared_upload_link, \
@@ -83,20 +60,15 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     EMPTY_SHA1, normalize_file_path, is_valid_username, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
-    gen_file_upload_url, check_and_get_org_by_repo, \
+    gen_file_upload_url, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
-    user_traffic_over_limit
+    user_traffic_over_limit, is_org_context
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
-from seahub.views.modules import MOD_PERSONAL_WIKI, \
-    enable_mod_for_user, disable_mod_for_user
-from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
+    disable_mod_for_user
 from seahub.utils.devices import get_user_devices, do_unlink_device
-
-if HAS_OFFICE_CONVERTER:
-    from seahub.utils import prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
-
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
@@ -105,7 +77,6 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
 
 def root(request):
     if request.user.is_authenticated():
@@ -240,8 +211,6 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
             # return render_error(self.request, e.msg)
 
         org_id = -1
-        if hasattr(request.user, 'org') and request.user.org:
-            org_id = request.user.org['org_id']
         starred_files = get_dir_starred_files(request.user.username, repo.id, path, org_id)
 
         if repo.version == 0:
@@ -459,8 +428,8 @@ def repo_save_settings(request):
 
         # check permission
         if request.user.org:
-            is_owner = True if is_org_repo_owner(
-                request.user.org['org_id'], repo_id, username) else False
+            org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
+            is_owner = True if org_repo_owner == username else False
         else:
             is_owner = True if is_repo_owner(username, repo_id) else False
         if not is_owner:
@@ -981,16 +950,25 @@ def modify_token(request, repo_id):
 
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
-def create_default_library(username):
+def create_default_library(request):
     """Create a default library for user.
 
     Arguments:
     - `username`:
     """
-    default_repo = seafile_api.create_repo(name=_("My Library"),
-                                           desc=_("My Library"),
-                                           username=username,
-                                           passwd=None)
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        default_repo = seafile_api.create_org_repo(name=_("My Library"),
+                                                   desc=_("My Library"),
+                                                   username=username,
+                                                   passwd=None,
+                                                   org_id=org_id)
+    else:
+        default_repo = seafile_api.create_repo(name=_("My Library"),
+                                               desc=_("My Library"),
+                                               username=username,
+                                               passwd=None)
     sys_repo_id = get_system_default_repo_id()
     if sys_repo_id is None:
         return
@@ -1009,6 +987,90 @@ def create_default_library(username):
 
     return default_repo
 
+def get_owned_repo_list(request):
+    """List owned repos.
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        return seafile_api.get_org_owned_repo_list(org_id, username)
+    else:
+        return seafile_api.get_owned_repo_list(username)
+
+def get_share_in_repo_list(request, start, limit):
+    """List share in repos;
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        return seafile_api.get_org_share_in_repo_list(org_id, username, -1, -1)
+    else:
+        return seafile_api.get_share_in_repo_list(username, -1, -1)
+
+def get_groups_by_user(request):
+    """List user groups.
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        return seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        return seaserv.get_personal_groups_by_user(username)
+        
+def get_group_repos(request, groups):
+    """Get repos shared to groups.
+    """
+    username = request.user.username
+    group_repos = []
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        # For each group I joined... 
+        for grp in groups:
+            # Get group repos, and for each group repos...
+            for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
+                # No need to list my own repo
+                repo_owner = seafile_api.get_org_repo_owner(r_id)
+                if repo_owner == username:
+                    continue
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
+                r = get_repo(r_id)
+                if not r:
+                    continue
+                r.repo_id = r.id
+                r.repo_name = r.name
+                r.repo_desc = r.desc
+                r.last_modified = get_repo_last_modify(r)
+                r.share_type = 'group'
+                r.user = repo_owner
+                r.user_perm = check_permission(r_id, username)
+                r.group = grp
+                group_repos.append(r)
+    else:
+        # For each group I joined... 
+        for grp in groups:
+            # Get group repos, and for each group repos...
+            for r_id in seafile_api.get_group_repoids(grp.id):
+                # No need to list my own repo
+                repo_owner = seafile_api.get_repo_owner(r_id)
+                if repo_owner == username:
+                    continue
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
+                r = get_repo(r_id)
+                if not r:
+                    continue
+                r.repo_id = r.id
+                r.repo_name = r.name
+                r.repo_desc = r.desc
+                r.last_modified = get_repo_last_modify(r)
+                r.share_type = 'group'
+                r.user = repo_owner
+                r.user_perm = check_permission(r_id, username)
+                r.group = grp
+                group_repos.append(r)
+    return group_repos
+    
 @login_required
 @user_mods_check
 def myhome(request):
@@ -1033,12 +1095,15 @@ def myhome(request):
         sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # mine
-    owned_repos = seafile_api.get_owned_repo_list(username)
+    owned_repos = get_owned_repo_list(request)
     calculate_repos_last_modify(owned_repos)
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # misc
-    allow_public_share = False if request.cloud_mode else True
+    if request.cloud_mode and request.user.org is None:
+        allow_public_share = False
+    else:
+        allow_public_share = True
 
     # user guide
     need_guide = False
@@ -1047,14 +1112,14 @@ def myhome(request):
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
             # create a default library for user
-            create_default_library(username)
+            create_default_library(request)
 
             # refetch owned repos
-            owned_repos = seafile_api.get_owned_repo_list(username)
+            owned_repos = get_owned_repo_list(request)
             calculate_repos_last_modify(owned_repos)
-            
+
     repo_create_url = reverse(repo_create)
-            
+
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "create_shared_repo": False,
@@ -1272,8 +1337,16 @@ def unsetinnerpub(request, repo_id):
         messages.error(request, _('Failed to unshare the library, as it does not exist.'))
         return HttpResponseRedirect(reverse('share_admin'))
 
+    # TODO: permission check
+
     try:
-        unset_inner_pub_repo(repo_id)
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id,
+                                                                   repo.id)
+        else:
+            seaserv.unset_inner_pub_repo(repo.id)
+
         messages.success(request, _('Unshare "%s" successfully.') % repo.name)
     except SearpcError:
         messages.error(request, _('Failed to unshare "%s".') % repo.name)
@@ -1451,16 +1524,28 @@ def repo_create(request):
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
     username = request.user.username
-
+    org_id = -1
     try:
         if not encryption:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc, username,
-                                              None)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, None, org_id)
+            else:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                  username, None)
         else:
-            repo_id = seafile_api.create_enc_repo(
-                uuid, repo_name, repo_desc, username,
-                magic_str, encrypted_file_key, enc_version=2)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_enc_repo(
+                    uuid, repo_name, repo_desc, username, magic_str,
+                    encrypted_file_key, enc_version=2, org_id=org_id)
+            else:
+                repo_id = seafile_api.create_enc_repo(
+                    uuid, repo_name, repo_desc, username,
+                    magic_str, encrypted_file_key, enc_version=2)
     except SearpcError, e:
+        logger.error(e)
         repo_id = None
 
     if not repo_id:
@@ -1468,13 +1553,6 @@ def repo_create(request):
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
     else:
-        try:
-            default_lib = (int(request.GET.get('default_lib', 0)) == 1)
-        except ValueError:
-            default_lib = False
-        if default_lib:
-            UserOptions.objects.set_default_repo(username, repo_id)
-
         result = {
             'repo_id': repo_id,
             'repo_name': repo_name,
@@ -1482,7 +1560,7 @@ def repo_create(request):
             'repo_enc': encryption,
         }
         repo_created.send(sender=None,
-                          org_id=-1,
+                          org_id=org_id,
                           creator=username,
                           repo_id=repo_id,
                           repo_name=repo_name)
@@ -1756,11 +1834,20 @@ def pubrepo(request):
     """
     Show public libraries.
     """
-    if request.cloud_mode:
-        # Users are not allowed to see public information when in cloud mode.
-        raise Http404
-    else:
-        username = request.user.username
+    username = request.user.username
+    
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        public_repos = seaserv.list_org_inner_pub_repos(org_id, username)
+        for r in public_repos:
+            if r.user == username:
+                r.share_from_me = True
+        return render_to_response('organizations/pubrepo.html', {
+                'public_repos': public_repos,
+                'create_shared_repo': True,
+                }, context_instance=RequestContext(request))
+        
+    if not request.cloud_mode:
         public_repos = list_inner_pub_repos(username)
         for r in public_repos:
             if r.user == username:
@@ -1770,65 +1857,90 @@ def pubrepo(request):
                 'create_shared_repo': True,
                 }, context_instance=RequestContext(request))
 
+    raise Http404
+
 @login_required
 def pubgrp(request):
     """
     Show public groups.
     """
-    if request.cloud_mode:
-        # Users are not allowed to see public information when in cloud mode.
-        raise Http404
-    else:
-        groups = get_personal_groups(-1, -1)
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        groups = seaserv.get_org_groups(org_id, -1, -1)
+        return render_to_response('organizations/pubgrp.html', {
+                'groups': groups,
+                }, context_instance=RequestContext(request))
+    
+    if not request.cloud_mode:
+        groups = seaserv.get_personal_groups(-1, -1)
         return render_to_response('pubgrp.html', {
                 'groups': groups,
                 }, context_instance=RequestContext(request))
+
+    raise Http404
+
+def get_pub_users(request, start, limit):
+    if is_org_context(request):
+        url_prefix = request.user.org.url_prefix
+        users_plus_one = seaserv.get_org_users_by_url_prefix(url_prefix,
+                                                             start, limit)
+    
+    elif request.cloud_mode:
+        raise Http404           # no pubuser in cloud mode
+
+    else:
+        # Get ldap users first, if no users found, use database.
+        users_plus_one = seaserv.get_emailusers('LDAP', start, limit)
+        if len(users_plus_one) == 0:
+            users_plus_one = seaserv.get_emailusers('DB', start, limit)
+    return users_plus_one
+
+def count_pub_users(request):
+    if is_org_context(request):
+        url_prefix = request.user.org.url_prefix
+        # TODO: need a new api to count org users.
+        org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
+        return len(org_users)
+    elif request.cloud_mode:
+        return 0
+    else:
+        return seaserv.count_emailusers()
 
 @login_required
 def pubuser(request):
     """
     Show public users.
     """
-    if request.cloud_mode:
-        # Users are not allowed to see public information when in cloud mode.
-        raise Http404
-    else:
-        emailusers_count = seaserv.count_emailusers()
-        '''paginate'''
-        # Make sure page request is an int. If not, deliver first page.
-        try:
-            current_page = int(request.GET.get('page', '1'))
-        except ValueError:
-            current_page = 1
-        per_page = 20           # show 20 users per-page
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+    except ValueError:
+        current_page = 1
+    per_page = 20           # show 20 users per-page
 
-        # Get ldap users first, if no users found, use database.
-        users_plus_one = seaserv.get_emailusers('LDAP',
-                                                per_page * (current_page - 1),
-                                                per_page + 1)
-        if len(users_plus_one) == 0:
-            users_plus_one = seaserv.get_emailusers('DB',
-                                                per_page * (current_page - 1),
-                                                per_page + 1)
+    users_plus_one = get_pub_users(request, per_page * (current_page - 1),
+                                  per_page + 1)
 
-        has_prev = False if current_page == 1 else True
-        has_next = True if len(users_plus_one) == per_page + 1 else False
-        num_pages = int(ceil(emailusers_count / float(per_page)))
-        page_range = get_page_range(current_page, num_pages)
+    has_prev = False if current_page == 1 else True
+    has_next = True if len(users_plus_one) == per_page + 1 else False
 
-        users = users_plus_one[:per_page]
-        username = request.user.username
-        contacts = Contact.objects.get_contacts_by_user(username)
-        contact_emails = [] 
-        for c in contacts:
-            contact_emails.append(c.contact_email)
-        for u in users:
-            if u.email == username or u.email in contact_emails:
-                u.can_be_contact = False
-            else:
-                u.can_be_contact = True 
+    emailusers_count = count_pub_users(request)
+    num_pages = int(ceil(emailusers_count / float(per_page)))
+    page_range = get_page_range(current_page, num_pages)
 
-        return render_to_response('pubuser.html', {
+    users = users_plus_one[:per_page]
+    username = request.user.username
+    contacts = Contact.objects.get_contacts_by_user(username)
+    contact_emails = [] 
+    for c in contacts:
+        contact_emails.append(c.contact_email)
+    for u in users:
+        if u.email == username or u.email in contact_emails:
+            u.can_be_contact = False
+        else:
+            u.can_be_contact = True 
+
+    return render_to_response('pubuser.html', {
                 'users': users,
                 'current_page': current_page,
                 'has_prev': has_prev,
@@ -1944,11 +2056,13 @@ def activities(request):
     username = request.user.username
     start = int(request.GET.get('start', 0))
 
-    if request.cloud_mode:
-        org_id = request.GET.get('org_id')
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
+    # if request.cloud_mode:
+    #     org_id = request.GET.get('org_id')
+    #     events, start = get_org_user_events(org_id, username, start, events_count)
+    # else:
+    #     events, start = get_user_events(username, start, events_count)
+
+    events, start = get_user_events(username, start, events_count)
     events_more = True if len(events) == events_count else False
 
     event_groups = group_events_data(events)
@@ -1968,11 +2082,12 @@ def events(request):
     username = request.user.username
     start = int(request.GET.get('start'))
 
-    if request.cloud_mode:
-        org_id = request.GET.get('org_id')
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
+    # if request.cloud_mode:
+    #     org_id = request.GET.get('org_id')
+    #     events, start = get_org_user_events(org_id, username, start, events_count)
+    # else:
+    #     events, start = get_user_events(username, start, events_count)
+    events, start = get_user_events(username, start, events_count)
     events_more = True if len(events) == events_count else False
 
     event_groups = group_events_data(events)

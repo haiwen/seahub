@@ -400,7 +400,7 @@ def view_file(request, repo_id):
     """List repo groups"""
     # Get groups this repo is shared.    
     if request.user.org:
-        org_id = request.user.org['org_id']
+        org_id = request.user.org.org_id
         repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
     else:
         repo_shared_groups = get_shared_groups_by_repo(repo_id)
@@ -425,7 +425,7 @@ def view_file(request, repo_id):
     is_starred = False
     org_id = -1
     if request.user.org:
-        org_id = request.user.org['org_id']
+        org_id = request.user.org.org_id
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
 
     template = 'view_file_%s.html' % ret_dict['filetype'].lower()

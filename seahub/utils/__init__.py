@@ -388,8 +388,8 @@ def get_ccnet_server_addr_port():
 
 def string2list(string):
     """
-    Split strings contacted with diffent separator to a list, and remove
-    duplicated string.
+    Split string contacted with different separators to a list, and remove
+    duplicated strings.
     """
     tmp_str = string.replace(';', ',').replace('\n', ',').replace('\r', ',')
     # Remove empty and duplicate strings
@@ -411,23 +411,32 @@ def string2list(string):
 #     request.session['current_context'] = ctx_dict
 #     request.user.org = ctx_dict.get('org_dict', None)
 
-def check_and_get_org_by_repo(repo_id, user):
-    """
-    Check whether repo is org repo, get org info if it is, and set
-    base template.
-    """
-    org_id = get_org_id_by_repo_id(repo_id)
-    if org_id > 0:
-        # this repo is org repo, get org info
-        org = get_org_by_id(org_id)
-        org._dict['is_staff'] = is_org_staff(org_id, user)
-        org._dict['email'] = user
-        base_template = 'org_base.html'
-    else:
-        org = None
-        base_template = 'myhome_base.html'
+def is_org_context(request):
+    """An organization context is a virtual private Seafile instance on cloud
+    service.
     
-    return org, base_template
+    Arguments:
+    - `request`:
+    """
+    return request.cloud_mode and request.user.org is not None
+    
+# def check_and_get_org_by_repo(repo_id, user):
+#     """
+#     Check whether repo is org repo, get org info if it is, and set
+#     base template.
+#     """
+#     org_id = get_org_id_by_repo_id(repo_id)
+#     if org_id > 0:
+#         # this repo is org repo, get org info
+#         org = get_org_by_id(org_id)
+#         org._dict['is_staff'] = is_org_staff(org_id, user)
+#         org._dict['email'] = user
+#         base_template = 'org_base.html'
+#     else:
+#         org = None
+#         base_template = 'myhome_base.html'
+    
+#     return org, base_template
 
 def check_and_get_org_by_group(group_id, user):
     """
