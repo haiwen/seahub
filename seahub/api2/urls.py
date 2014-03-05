@@ -37,7 +37,15 @@ urlpatterns = patterns('',
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', DownloadPrivateSharedFileView.as_view()),
+    url(r'^f/(?P<token>[a-f0-9]{10})/$', DownloadSharedFileView.as_view()),
+
     url(r'^groups/$', Groups.as_view()),
+    url(r'^group/(?P<group_id>\d+)/public/$', GroupPublic.as_view()),
+    url(r'^group/(?P<group_id>\d+)/manage/$', GroupManage.as_view()),
+    
+    url(r'^events/$', EventsView.as_view()),
+
     url(r'^html/events/$', ActivityHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
     url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
@@ -59,3 +67,19 @@ urlpatterns = patterns('',
     # Deprecated                       
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
 )
+
+# serve office converter static files
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import OFFICE_HTML_DIR
+    urlpatterns += patterns('',
+        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
+        url(r'^office-convert/page-num/$', OfficeConvertQueryPageNum.as_view()),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
+    )
+

@@ -6,13 +6,7 @@
 {% block nav_share_class %}class="cur"{% endblock %}
 
 {% block title_panel %}
-<div class="tabnav">
-    <ul class="tabnav-tabs">
-        <li class="tabnav-tab"><a href="{% url 'share_admin' %}">{% trans "Libraries" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur">{% trans "Links" %}</li>
-        <li class="tabnav-tab"><a href="{% url 'list_priv_shared_files' %}">{% trans "Private Shares" %}</a></li>
-    </ul>
-</div>
+{% include "repo/tabnav.html" with cur="links" %}
 {% endblock %}
 
 {% block main_panel %}
@@ -46,7 +40,7 @@
 <input type="text" readonly="readonly" value="" id="shared-link" class="hide" />
 {% else %}
 <div class="empty-tips">
-  <h2 class="center-contents">{% trans "You don't have any shared link"%}</h2>
+  <h2 class="alc">{% trans "You don't have any shared link"%}</h2>
   <p>{% trans "You can share a folder or a file when you view a library, or share a file when you view it." %}</p>
 </div>
 {% endif %}
