@@ -15,17 +15,15 @@ from django.contrib import messages
 # from django.contrib.sites.models import RequestSite
 import seaserv
 from seaserv import seafile_api
-from seaserv import seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    check_group_staff, is_org_group, get_org_id_by_group, \
-    del_org_group_repo, get_group_repos_by_owner, \
-    list_inner_pub_repos_by_owner, remove_share, \
-    is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
-    del_org_group_repo, remove_share
+from seaserv import ccnet_threaded_rpc, check_group_staff, is_org_group, \
+    get_org_id_by_group, del_org_group_repo, get_group_repos_by_owner, \
+    remove_share
 
-from forms import RepoShareForm, FileLinkShareForm, UploadLinkShareForm
-from models import FileShare, PrivateFileDirShare, \
+from seahub.share.forms import RepoShareForm, FileLinkShareForm, \
+    UploadLinkShareForm
+from seahub.share.models import FileShare, PrivateFileDirShare, \
     UploadLinkShare, OrgFileShare
-from signals import share_repo_to_user_successful
+from seahub.share.signals import share_repo_to_user_successful
 # from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
 # from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
@@ -35,16 +33,12 @@ from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.views import get_user_groups
 from seahub.signals import share_file_to_user_successful
-from seahub.views import validate_owner, is_registered_user
+from seahub.views import is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, send_html_email, is_org_context, \
     normalize_file_path, normalize_dir_path
-try:
-    from seahub.settings import CLOUD_MODE
-except ImportError:
-    CLOUD_MODE = False
 from seahub.settings import SITE_ROOT
 
 # Get an instance of a logger
@@ -76,7 +70,7 @@ def share_to_public(request, repo, permission):
         elif request.cloud_mode:
             return              # no share to public in cloud mode
         else:
-            seafile_api.add_inner_pub_repo(repo_id, permission)
+            seafile_api.add_inner_pub_repo(repo.id, permission)
     except Exception, e:
         logger.error(e)
         messages.error(request, _(u'Failed to share to all members, please try again later.'))

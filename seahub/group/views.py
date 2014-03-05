@@ -20,11 +20,9 @@ from django.utils.translation import ungettext
 from seahub.auth.decorators import login_required
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    web_get_access_token, seafile_api, \
-    get_repo, get_group_repos, get_commits, is_group_user, \
-    get_group, get_group_members, create_repo, \
-    get_personal_groups, create_org_repo, get_org_group_repos, \
-    check_permission, is_passwd_set, remove_repo, \
+    web_get_access_token, seafile_api, get_repo, get_group_repos, get_commits, \
+    is_group_user, get_group, get_group_members, create_repo, \
+    get_org_group_repos, check_permission, is_passwd_set, remove_repo, \
     unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
@@ -47,7 +45,7 @@ from seahub.wiki.utils import clean_page_name
 from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
-    check_and_get_org_by_group, gen_file_get_url, get_file_type_and_ext, \
+    gen_file_get_url, get_file_type_and_ext, \
     calc_file_path_hash, is_valid_username, send_html_email, is_org_context
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
@@ -212,7 +210,6 @@ def group_add(request):
 @login_required
 def group_list(request):
     """List user groups"""
-    username = request.user.username
     joined_groups = request.user.joined_groups
 
     enabled_groups = get_wiki_enabled_group_list(

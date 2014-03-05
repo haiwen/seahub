@@ -1,9 +1,9 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 
-{% block nav_orgadmin_class %}class="cur"{% endblock %}
+{% block cur_org %}tab-cur{% endblock %}
 
-{% block main_panel %}
+{% block right_panel %}
 <h3>{% trans "All Organizations" %}</h3>
 {% if orgs %}
 <table>

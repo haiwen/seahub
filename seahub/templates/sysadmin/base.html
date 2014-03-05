@@ -15,7 +15,7 @@
             <a href="{{ SITE_ROOT }}sys/groupadmin/" class="group">{% trans "Groups" %}</a>
         </li>
         {% if multi_tenancy %}
-        <li>
+        <li class="tab {% block cur_org %}{% endblock %}">
           <a href="{{ SITE_ROOT }}sys/orgadmin/" class="org">{% trans "Organizations" %}</a>
         </li>
         {% endif %}
