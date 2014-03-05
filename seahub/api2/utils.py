@@ -1,21 +1,24 @@
 # encoding: utf-8
 # Utility functions for api2
 
+import os
 import time
-import urllib2
 
-
+from django.core.paginator import EmptyPage, InvalidPage
 from rest_framework.response import Response
+from rest_framework import status
 from seaserv import seafile_api, get_commits, server_repo_size, \
     get_personal_groups_by_user, is_group_user, get_group
+from pysearpc import SearpcError
 
-from seahub.notifications.models import UserNotification
+from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.contacts.models import Contact
 from seahub.group.models import GroupMessage, MessageReply, \
- MessageAttachment, PublicGroup
+    MessageAttachment, PublicGroup
 from seahub.group.views import is_group_staff
 from seahub.message.models import UserMessage, UserMsgAttachment
-from seahub.contacts.models import Contact
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.notifications.models import UserNotification
 from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
     gen_file_get_url
 from seahub.utils.paginator import Paginator
@@ -98,7 +101,7 @@ def get_groups(email):
         grpmsgs[g.id] = 0
 
     notes = UserNotification.objects.get_user_notifications(email, seen=False)
-    replynum = 0;
+    replynum = 0
     for n in notes:
         if n.is_group_msg():
             try:
@@ -230,7 +233,7 @@ def get_group_msgs(groupid, page, username):
             # If is top directory, use repo name instead.
             path = att.path
             if path == '/':
-                repo = get_repo(att.repo_id)
+                repo = seafile_api.get_repo(att.repo_id)
                 if not repo:
                     # TODO: what should we do here, tell user the repo
                     # is no longer exists?
@@ -244,7 +247,7 @@ def get_group_msgs(groupid, page, username):
             if att.attach_type == 'file' and att.src == 'recommend':
                 att.filetype, att.fileext = get_file_type_and_ext(att.name)
                 if att.filetype == IMAGE:
-                    att.obj_id = get_file_id_by_path(att.repo_id, path)
+                    att.obj_id = seafile_api.get_file_id_by_path(att.repo_id, path)
                     if not att.obj_id:
                         att.err = 'File does not exist'
                     else:
@@ -343,37 +346,37 @@ def get_person_msgs(to_email, page, username):
     attachments = UserMsgAttachment.objects.list_attachments_by_user_msgs(person_msgs.object_list)
 
     for msg in person_msgs.object_list:
-            msg.attachments = []
-            for att in attachments:
-                if att.user_msg != msg:
-                    continue
+        msg.attachments = []
+        for att in attachments:
+            if att.user_msg != msg:
+                continue
 
-                pfds = att.priv_file_dir_share
-                if pfds is None: # in case that this attachment is unshared.
-                    continue
+            pfds = att.priv_file_dir_share
+            if pfds is None: # in case that this attachment is unshared.
+                continue
 
-                att.repo_id = pfds.repo_id
-                att.path = pfds.path
-                att.name = os.path.basename(pfds.path.rstrip('/'))
-                att.token = pfds.token
-                msg.attachments.append(att)
+            att.repo_id = pfds.repo_id
+            att.path = pfds.path
+            att.name = os.path.basename(pfds.path.rstrip('/'))
+            att.token = pfds.token
+            msg.attachments.append(att)
 
     return person_msgs
 
 def get_email(id_or_email):
-  try:
-      uid = int(id_or_email)
-      try:
-          user = User.objects.get(id=uid)
-      except User.DoesNotExist:
-          user = None
-      if not user:
-          return None
-      to_email = user.email
-  except ValueError:
-      to_email = id_or_email
+    try:
+        uid = int(id_or_email)
+        try:
+            user = User.objects.get(id=uid)
+        except User.DoesNotExist:
+            user = None
+        if not user:
+            return None
+        to_email = user.email
+    except ValueError:
+        to_email = id_or_email
 
-  return to_email
+    return to_email
 
 def api_group_check(func):
     """
