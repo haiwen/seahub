@@ -28,7 +28,11 @@ from django.utils import timezone
 from models import Token
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
-from utils import is_repo_writable, is_repo_accessible
+from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
+    api_error, get_file_size, prepare_starred_files, \
+    get_groups, get_group_and_contacts, prepare_events, \
+    get_person_msgs, api_group_check, get_email, \
+    get_group_message_json, get_group_msgs, get_group_msgs_json
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo, DeviceToken
@@ -86,6 +90,13 @@ HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
 HTTP_520_OPERATION_FAILED = 520
 
+def get_page_index(request, default=1):
+    try:
+        page = int(request.GET.get('page', default))
+    except ValueError:
+        page = default
+    return page
+
 class Ping(APIView):
     """
     Returns a simple `pong` message when client calls `api2/ping/`.
@@ -129,10 +140,6 @@ class ObtainAuthToken(APIView):
             return Response({'token': token.key})
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-def api_error(code, msg):
-    err_resp = {'error_msg': msg}
-    return Response(err_resp, status=code)
 
 class Accounts(APIView):
     """List all accounts.
@@ -255,7 +262,6 @@ class AccountInfo(APIView):
 
         return Response(info)
 
-
 class RegDevice(APIView):
     """Reg device for iOS push notification.
     """
@@ -323,19 +329,6 @@ class Search(APIView):
         return Response(res)
 
 
-def calculate_repo_info(repo_list, username):
-    """
-    Get some info for repo.
-
-    """
-    for repo in repo_list:
-        commit = get_commits(repo.id, 0, 1)[0]
-        if not commit:
-            continue
-        repo.latest_modify = commit.ctime
-        repo.root = commit.root_id
-        repo.size = server_repo_size(repo.id)
-
 def repo_download_info(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -366,7 +359,6 @@ def repo_download_info(request, repo_id):
         'random_key': random_key
         }
     return Response(info_json)
-
 
 class Repos(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -521,11 +513,6 @@ class Repos(APIView):
             return resp
 
 
-def can_access_repo(request, repo_id):
-    if not check_permission(repo_id, request.user.username):
-        return False
-    return True
-
 def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
 
@@ -544,7 +531,7 @@ def set_repo_password(request, repo, password):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
 def check_set_repo_password(request, repo):
-    if not can_access_repo(request, repo.id):
+    if not check_permission(repo.id, request.user.username):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
     password_set = False
@@ -565,11 +552,9 @@ def check_set_repo_password(request, repo):
 
             return set_repo_password(request, repo, password)
 
-
 def check_repo_access_permission(request, repo):
-    if not can_access_repo(request, repo.id):
+    if not check_permission(repo.id, request.user.username):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
-
 
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -766,9 +751,6 @@ class UpdateBlksLinkView(APIView):
         return Response(url)
 
 
-def get_file_size (id):
-    size = seafile_api.get_file_size(id)
-    return size if size else 0
 
 def get_dir_entrys_by_id(request, repo_id, path, dir_id):
     try:
@@ -997,7 +979,6 @@ class OpMoveView(APIView):
 
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
 
-
 class OpCopyView(APIView):
     """
     Copy files.
@@ -1044,31 +1025,6 @@ class OpCopyView(APIView):
         return reloaddir_if_neccessary (request, repo_id, parent_dir)
 
 
-def append_starred_files(array, files):
-    for f in files:
-        sfile = {'org' : f.org_id,
-                 'repo' : f.repo.id,
-                 'path' : f.path,
-                 'mtime' : f.last_modified,
-                 'dir' : f.is_dir
-                 }
-        if not f.is_dir:
-            try:
-                file_id = seafile_api.get_file_id_by_path(f.repo.id, f.path)
-                sfile['oid'] = file_id
-                sfile['size'] = get_file_size(file_id)
-            except SearpcError, e:
-                pass
-
-        array.append(sfile)
-
-def api_starred_files(request):
-    starred_files = []
-    personal_files = UserStarredFiles.objects.get_starred_files_by_username(
-        request.user.username)
-    append_starred_files (starred_files, personal_files)
-    return Response(starred_files)
-
 class StarredFileView(APIView):
     """
     Support uniform interface for starred file operation,
@@ -1081,7 +1037,10 @@ class StarredFileView(APIView):
 
     def get(self, request, format=None):
         # list starred files
-        return api_starred_files(request)
+        personal_files = UserStarredFiles.objects.get_starred_files_by_username(
+            request.user.username)
+        starred_files = prepare_starred_files(personal_files)
+        return Response(starred_files)
 
     def post(self, request, format=None):
         # add starred file
@@ -1632,7 +1591,6 @@ class DirDownloadView(APIView):
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
 
-
 class DirShareView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1663,7 +1621,6 @@ class DirShareView(APIView):
             # send a signal when sharing file successful
             share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
-
 
 class DirSubRepoView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2022,537 +1979,6 @@ class SharedRepo(APIView):
 
         return Response('success', status=status.HTTP_200_OK)
 
-def api_pre_events(event_groups):
-    for g in event_groups:
-        for e in g["events"]:
-            if e.etype != "repo-delete":
-                e.link = "api://repos/%s" % e.repo_id
-
-            if e.etype == "repo-update":
-                api_convert_desc_link(e)
-
-
-def activity(request):
-    if not EVENTS_ENABLED:
-        events = None
-        return render_to_response('api2/events.html', {
-            "events":events,
-            }, context_instance=RequestContext(request))
-
-    email = request.user.username
-    events_count = 15
-    events, events_more_offset = get_user_events(email, 0, events_count)
-    events_more = True if len(events) == events_count else False
-    event_groups = group_events_data(events)
-    api_pre_events(event_groups)
-
-    return render_to_response('api2/events.html', {
-            "events": events,
-            "events_more_offset": events_more_offset,
-            "events_more": events_more,
-            "event_groups": event_groups,
-            "events_count": events_count,
-            }, context_instance=RequestContext(request))
-
-
-def events(request):
-    events_count = 15
-    username = request.user.username
-    start = int(request.GET.get('start', 0))
-
-    events, start = get_user_events(username, start, events_count)
-    events_more = True if len(events) == events_count else False
-
-    event_groups = group_events_data(events)
-
-    api_pre_events(event_groups)
-    ctx = {'event_groups': event_groups}
-    html = render_to_string("api2/events_body.html", ctx)
-
-    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
-                                    'new_start': start}),
-                            content_type=json_content_type)
-
-
-@group_check
-def group_discuss(request, group):
-    username = request.user.username
-    if request.method == 'POST':
-        # only login user can post to public group
-        if group.view_perm == "pub" and not request.user.is_authenticated():
-            raise Http404
-
-        msg = request.POST.get('message')
-        message = GroupMessage()
-        message.group_id = group.id
-        message.from_email = request.user.username
-        message.message = msg
-        message.save()
-
-        # send signal
-        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                              from_email=username)
-
-        repo_id = request.POST.get('repo_id', None)
-        path = request.POST.get('path', None)
-        if repo_id and path:
-            # save attachment
-            ma = MessageAttachment(group_message=message, repo_id=repo_id,
-                                   attach_type='file', path=path,
-                                   src='recommend')
-            ma.save()
-
-            # save discussion
-            fd = FileDiscuss(group_message=message, repo_id=repo_id, path=path)
-            fd.save()
-
-        ctx = {}
-        ctx['msg'] = message
-        html = render_to_string("api2/discussion_posted.html", ctx)
-        serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=json_content_type)
-
-    group_msgs = get_group_msgs(group.id, page=1, username=request.user.username)
-    # remove user notifications
-    UserNotification.objects.seen_group_msg_notices(username, group.id)
-    return render_to_response("api2/discussions.html", {
-            "group" : group,
-            "group_msgs": group_msgs,
-            }, context_instance=RequestContext(request))
-
-
-def user_messages(request, id_or_email):
-    try:
-        uid = int(id_or_email)
-        try:
-            user = User.objects.get(id=uid)
-        except User.DoesNotExist:
-            user = None
-        if not user:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-        to_email = user.email
-    except ValueError:
-        to_email = id_or_email
-
-    username = request.user.username
-
-    if request.method == 'POST':
-        mass_msg = request.POST.get('message')
-        if not mass_msg:
-            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
-
-        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
-        ctx = { 'msg' : usermsg }
-        html = render_to_string("api2/user_msg.html", ctx)
-        serialized_data = json.dumps({"html": html})
-        return HttpResponse(serialized_data, content_type=json_content_type)
-
-    UserNotification.objects.seen_user_msg_notices(username, to_email)
-    UserMessage.objects.update_unread_messages(to_email, username)
-    person_msgs = get_person_msgs(to_email, 1, username)
-
-    return render_to_response("api2/user_msg_list.html", {
-            "person_msgs": person_msgs,
-            "to_email": to_email,
-            }, context_instance=RequestContext(request))
-
-
-def get_group_msgs(groupid, page, username):
-
-    # Show 15 group messages per page.
-    paginator = Paginator(GroupMessage.objects.filter(
-            group_id=groupid).order_by('-timestamp'), 15)
-
-    # If page request (9999) is out of range, return None
-    try:
-        group_msgs = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        return None
-
-    # Force evaluate queryset to fix some database error for mysql.
-    group_msgs.object_list = list(group_msgs.object_list)
-
-    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
-
-    msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs.object_list)
-    reply_to_list = [ r.reply_to_id for r in msg_replies ]
-
-    for msg in group_msgs.object_list:
-        msg.reply_cnt = reply_to_list.count(msg.id)
-        msg.replies = []
-        for r in msg_replies:
-            if msg.id == r.reply_to_id:
-                msg.replies.append(r)
-        msg.replies = msg.replies[-3:]
-
-        for att in attachments:
-            if att.group_message_id != msg.id:
-                continue
-
-            # Attachment name is file name or directory name.
-            # If is top directory, use repo name instead.
-            path = att.path
-            if path == '/':
-                repo = get_repo(att.repo_id)
-                if not repo:
-                    # TODO: what should we do here, tell user the repo
-                    # is no longer exists?
-                    continue
-                att.name = repo.name
-            else:
-                path = path.rstrip('/') # cut out last '/' if possible
-                att.name = os.path.basename(path)
-
-            # Load to discuss page if attachment is a image and from recommend.
-            if att.attach_type == 'file' and att.src == 'recommend':
-                att.filetype, att.fileext = get_file_type_and_ext(att.name)
-                if att.filetype == IMAGE:
-                    att.obj_id = get_file_id_by_path(att.repo_id, path)
-                    if not att.obj_id:
-                        att.err = 'File does not exist'
-                    else:
-                        att.token = seafile_api.get_httpserver_access_token(
-                            att.repo_id, att.obj_id, 'view', username)
-                        att.img_url = gen_file_get_url(att.token, att.name)
-
-            msg.attachment = att
-
-    return group_msgs
-
-def get_person_msgs(to_email, page, username):
-
-    # Show 15 group messages per page.
-    paginator = Paginator(UserMessage.objects.get_messages_between_users(username, to_email).order_by('-timestamp'), 15)
-
-    # If page request (9999) is out of range, return None
-    try:
-        person_msgs = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        person_msgs = paginator.page(paginator.num_pages)
-
-    # Force evaluate queryset to fix some database error for mysql.
-    person_msgs.object_list = list(person_msgs.object_list)
-    attachments = UserMsgAttachment.objects.list_attachments_by_user_msgs(person_msgs.object_list)
-
-    for msg in person_msgs.object_list:
-            msg.attachments = []
-            for att in attachments:
-                if att.user_msg != msg:
-                    continue
-
-                pfds = att.priv_file_dir_share
-                if pfds is None: # in case that this attachment is unshared.
-                    continue
-
-                att.repo_id = pfds.repo_id
-                att.path = pfds.path
-                att.name = os.path.basename(pfds.path.rstrip('/'))
-                att.token = pfds.token
-                msg.attachments.append(att)
-
-    return person_msgs
-
-
-def more_usermsgs(request, id_or_email):
-    try:
-        page = int(request.GET.get('page'))
-    except ValueError:
-        page = 2
-
-    try:
-        uid = int(id_or_email)
-        try:
-            user = User.objects.get(id=uid)
-        except User.DoesNotExist:
-            user = None
-        if not user:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-        to_email = user.email
-    except ValueError:
-        to_email = id_or_email
-
-    person_msgs = get_person_msgs(to_email, page, request.user.username)
-    if person_msgs.has_next():
-        next_page = person_msgs.next_page_number()
-    else:
-        next_page = None
-
-    html = render_to_string('api2/user_msg_body.html', {"person_msgs": person_msgs}, context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
-
-
-@group_check
-def more_discussions(request, group):
-    try:
-        page = int(request.GET.get('page'))
-    except ValueError:
-        page = 2
-
-    group_msgs = get_group_msgs(group.id, page, request.user.username)
-    if group_msgs.has_next():
-        next_page = group_msgs.next_page_number()
-    else:
-        next_page = None
-
-    html = render_to_string('api2/discussions_body.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
-
-def discussion(request, msg_id):
-    try:
-        msg = GroupMessage.objects.get(id=msg_id)
-    except GroupMessage.DoesNotExist:
-        raise Http404
-
-    try:
-        att = MessageAttachment.objects.get(group_message_id=msg_id)
-    except MessageAttachment.DoesNotExist:
-        att = None
-
-    if att:
-        path = att.path
-        if path == '/':
-            repo = get_repo(att.repo_id)
-            if repo:
-                att.name = repo.name
-            else:
-                att.err = 'the libray does not exist'
-        else:
-            path = path.rstrip('/') # cut out last '/' if possible
-            att.name = os.path.basename(path)
-
-        # Load to discuss page if attachment is a image and from recommend.
-        if att.attach_type == 'file' and att.src == 'recommend':
-            att.filetype, att.fileext = get_file_type_and_ext(att.name)
-            if att.filetype == IMAGE:
-                att.obj_id = get_file_id_by_path(att.repo_id, path)
-                if not att.obj_id:
-                    att.err = 'File does not exist'
-                else:
-                    att.token = seafile_api.get_httpserver_access_token(
-                        att.repo_id, att.obj_id, 'view', request.user.username)
-                    att.img_url = gen_file_get_url(att.token, att.name)
-
-        msg.attachment = att
-
-    msg.replies = MessageReply.objects.filter(reply_to=msg)
-    msg.reply_cnt = len(msg.replies)
-
-    return render_to_response("api2/discussion.html", {
-            "msg": msg,
-            }, context_instance=RequestContext(request))
-
-
-def msg_reply(request, msg_id):
-    """Show group message replies, and process message reply in ajax"""
-
-    ctx = {}
-    try:
-        group_msg = GroupMessage.objects.get(id=msg_id)
-    except GroupMessage.DoesNotExist:
-        raise Http404
-
-    msg = request.POST.get('message')
-    msg_reply = MessageReply()
-    msg_reply.reply_to = group_msg
-    msg_reply.from_email = request.user.username
-    msg_reply.message = msg
-    msg_reply.save()
-
-    # send signal if reply other's message
-    if group_msg.from_email != request.user.username:
-        grpmsg_reply_added.send(sender=MessageReply,
-                                msg_id=msg_id,
-                                from_email=request.user.username)
-    replies = MessageReply.objects.filter(reply_to=group_msg)
-    r_num = len(replies)
-    ctx['r'] = msg_reply
-    html = render_to_string("api2/reply.html", ctx)
-    serialized_data = json.dumps({"html": html})
-    return HttpResponse(serialized_data, content_type=json_content_type)
-
-
-def repo_history_changes(request, repo_id):
-    changes = {}
-
-    if not access_to_repo(request, repo_id, ''):
-        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=json_content_type)
-
-    repo = get_repo(repo_id)
-    if not repo:
-        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
-
-    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
-
-    commit_id = request.GET.get('commit_id', '')
-    if not commit_id:
-        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=json_content_type)
-
-    changes = get_diff(repo_id, '', commit_id)
-
-    c = get_commit(commit_id)
-    if c.parent_id is None:
-        # A commit is a first commit only if its parent id is None.
-        changes['cmt_desc'] = repo.desc
-    elif c.second_parent_id is None:
-        # Normal commit only has one parent.
-        if c.desc.startswith('Changed library'):
-            changes['cmt_desc'] = 'Changed library name or description'
-    else:
-        # A commit is a merge only if it has two parents.
-        changes['cmt_desc'] = 'No conflict in the merge.'
-    for k in changes:
-        changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
-
-    html = render_to_string('api2/event_details.html', {'changes': changes})
-    return HttpResponse(json.dumps({"html": html}), content_type=json_content_type)
-
-
-def msg_reply_new(request):
-    notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
-    grpmsg_reply_list = [ n.grpmsg_reply_detail_to_dict().get('msg_id') for n in notes if n.msg_type == 'grpmsg_reply']
-    group_msgs = []
-    for msg_id in grpmsg_reply_list:
-        try:
-            m = GroupMessage.objects.get(id=msg_id)
-        except GroupMessage.DoesNotExist:
-            continue
-        else:
-            # get group name
-            group = get_group(m.group_id)
-            if not group:
-                continue
-            m.group_name = group.group_name
-
-            # get attachement
-            attachment = get_first_object_or_none(m.messageattachment_set.all())
-            if attachment:
-                path = attachment.path
-                if path == '/':
-                    repo = get_repo(attachment.repo_id)
-                    if not repo:
-                        continue
-                    attachment.name = repo.name
-                else:
-                    attachment.name = os.path.basename(path)
-                m.attachment = attachment
-
-            # get message replies
-            reply_list = MessageReply.objects.filter(reply_to=m)
-            m.reply_cnt = reply_list.count()
-            if m.reply_cnt > 3:
-                m.replies = reply_list[m.reply_cnt - 3:]
-            else:
-                m.replies = reply_list
-
-            group_msgs.append(m)
-
-    # remove new group msg reply notification
-    UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
-
-    return render_to_response("api2/new_msg_reply.html", {
-            'group_msgs': group_msgs,
-            }, context_instance=RequestContext(request))
-
-
-def get_groups(email):
-    group_json = []
-
-    joined_groups = get_personal_groups_by_user(email)
-    grpmsgs = {}
-    for g in joined_groups:
-        grpmsgs[g.id] = 0
-
-    notes = UserNotification.objects.get_user_notifications(email, seen=False)
-    replynum = 0;
-    for n in notes:
-        if n.is_group_msg():
-            try:
-                gid  = n.group_message_detail_to_dict().get('group_id')
-            except UserNotification.InvalidDetailError:
-                continue
-            if gid not in grpmsgs:
-                continue
-            grpmsgs[gid] = grpmsgs[gid] + 1
-        elif n.is_grpmsg_reply():
-            replynum = replynum + 1
-
-    for g in joined_groups:
-        msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
-        mtime = 0
-        if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
-        group = {
-            "id":g.id,
-            "name":g.group_name,
-            "creator":g.creator_name,
-            "ctime":g.timestamp,
-            "mtime":mtime,
-            "msgnum":grpmsgs[g.id],
-            }
-        group_json.append(group)
-    return group_json, replynum
-
-
-def get_group_and_contacts(email):
-    group_json = []
-    contacts_json = []
-    gmsgnum = umsgnum = replynum = 0
-
-    contacts = [c.contact_email for c in Contact.objects.filter(user_email=email)]
-    joined_groups = get_personal_groups_by_user(email)
-    gmsgnums = umsgnums = {}
-
-    notes = UserNotification.objects.get_user_notifications(email, seen=False)
-    for n in notes:
-        if n.is_group_msg():
-            try:
-                gid  = n.group_message_detail_to_dict().get('group_id')
-            except UserNotification.InvalidDetailError:
-                continue
-            gmsgnums[gid] = gmsgnums.get(gid, 0) + 1
-        elif n.is_grpmsg_reply():
-            replynum = replynum + 1
-        elif n.is_user_message():
-            if n.detail not in contacts:
-                contacts.append(n.detail)
-            umsgnums[n.detail] = umsgnums.get(n.detail, 0) + 1
-
-    for g in joined_groups:
-        msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
-        mtime = 0
-        if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
-        group = {
-            "id":g.id,
-            "name":g.group_name,
-            "creator":g.creator_name,
-            "ctime":g.timestamp,
-            "mtime":mtime,
-            "msgnum":gmsgnums.get(g.id, 0),
-            }
-
-        gmsgnum = gmsgnum + gmsgnums.get(g.id, 0)
-        group_json.append(group)
-
-    for contact in contacts:
-        msg = UserMessage.objects.get_messages_related_to_user(
-            contact).order_by('-timestamp')[:1]
-        mtime = 0
-        if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
-        c = {
-            'email' : contact,
-            'name' : email2nickname(contact),
-            "msgnum" : umsgnums.get(contact, 0),
-            "mtime" : mtime,
-            }
-        umsgnum = umsgnum + umsgnums.get(contact, 0)
-        contacts_json.append(c)
-    contacts_json.sort(key=lambda x: x["mtime"], reverse=True)
-    return contacts_json, umsgnum, group_json, replynum, gmsgnum
-
-
 class Groups(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2578,32 +2004,6 @@ class GroupAndContacts(APIView):
             "gmsgnum" : gmsgnum,
             }
         return Response(res)
-
-
-class AjaxEvents(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        return events(request)
-
-class AjaxDiscussions(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, group_id, format=None):
-        return more_discussions(request, group_id)
-
-class AjaxUserMsgs(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, id_or_email, format=None):
-        return more_usermsgs(request, id_or_email)
-
 
 class EventsView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2660,13 +2060,12 @@ class EventsView(APIView):
 
             d['nick'] = email2nickname(d['author'])
 
-        resp = HttpResponse(json.dumps({
-                                'events': l,
-                                'more':  events_more,
-                                'more_offset': events_more_offset,}),
-                            status=200,
-                            content_type=json_content_type)
-        return resp
+        ret = {
+            'events': l,
+            'more':  events_more,
+            'more_offset': events_more_offset,
+            }
+        return Response(ret)
 
 class UnseenMessagesCountView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2675,12 +2074,168 @@ class UnseenMessagesCountView(APIView):
 
     def get(self, request, format=None):
         username = request.user.username
-        ret = {}
+        ret = { 'count' : UserNotification.objects.count_unseen_user_notifications(username)
+                }
+        return Response(ret)
 
-        ret['count'] = UserNotification.objects.count_unseen_user_notifications(username)
+class GroupMsgsView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
 
-        return HttpResponse(json.dumps(ret), status=200,
-                            content_type=json_content_type)
+    @api_group_check
+    def get(self, request, group, format=None):
+        username = request.user.username
+        page = get_page_index (request, 1)
+        msgs, next_page  = get_group_msgs_json(group.id, page, username)
+
+        # remove user notifications
+        UserNotification.objects.seen_group_msg_notices(username, group.id)
+        ret = {
+            'next_page' : next_page,
+            'msgs' : msgs,
+            }
+        return Response(ret)
+
+    @api_group_check
+    def post(self, request, group, format=None):
+        username = request.user.username
+        msg = request.POST.get('message')
+        message = GroupMessage()
+        message.group_id = group.id
+        message.from_email = request.user.username
+        message.message = msg
+        message.save()
+
+        # send signal
+        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                              from_email=username)
+
+        repo_id = request.POST.get('repo_id', None)
+        path = request.POST.get('path', None)
+        if repo_id and path:
+            # save attachment
+            ma = MessageAttachment(group_message=message, repo_id=repo_id,
+                                   attach_type='file', path=path,
+                                   src='recommend')
+            ma.save()
+
+            # save discussion
+            fd = FileDiscuss(group_message=message, repo_id=repo_id, path=path)
+            fd.save()
+
+        ret = { "msgid" : message.id }
+        return Response(ret)
+
+class GroupMsgView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    @api_group_check
+    def get(self, request, group, msg_id, format=None):
+        msg = get_group_message_json(group.id, msg_id, True)
+        if not msg:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Messageg not found.')
+        return Response(msg)
+
+    @api_group_check
+    def post(self, request, group, msg_id, format=None):
+        try:
+            group_msg = GroupMessage.objects.get(group_id=group.id, id=msg_id)
+        except GroupMessage.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Messageg not found.')
+
+        msg = request.POST.get('message')
+        msg_reply = MessageReply()
+        msg_reply.reply_to = group_msg
+        msg_reply.from_email = request.user.username
+        msg_reply.message = msg
+        msg_reply.save()
+
+        # send signal if reply other's message
+        if group_msg.from_email != request.user.username:
+            grpmsg_reply_added.send(sender=MessageReply,
+                                    msg_id=msg_id,
+                                    from_email=request.user.username)
+        ret = { "msgid" : msg_reply.id }
+        return Response(ret)
+
+class UserMsgsView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, id_or_email, format=None):
+        username = request.user.username
+        to_email = get_email(id_or_email)
+        if not to_email:
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+
+        UserNotification.objects.seen_user_msg_notices(username, to_email)
+        UserMessage.objects.update_unread_messages(to_email, username)
+        page = get_page_index(request, 1)
+
+        person_msgs = get_person_msgs(to_email, page, username)
+        next_page = -1
+        if person_msgs.has_next():
+            next_page = person_msgs.next_page_number()
+
+        msgs = []
+        for msg in person_msgs.object_list:
+            atts = []
+            for att in msg.attachments:
+                atts.append({
+                        'repo_id' : att.repo_id,
+                        'path' : att.path,
+                        })
+            m = {
+                'from_email' : msg.from_email,
+                'nick' : email2nickname(msg.from_email),
+                'time' : msg.timestamp,
+                'msg' : msg.message,
+                'attachments' : atts,
+                }
+            msgs.append(m)
+
+        ret = {
+            'to_email' : to_email,
+            'next_page' : next_page,
+            'msgs' : msgs,
+            }
+        return Response(ret)
+
+    def post(self, request, id_or_email, format=None):
+        username = request.user.username
+        to_email = get_email(id_or_email)
+        if not to_email:
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+
+        mass_msg = request.POST.get('message')
+        if not mass_msg:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        ret = { 'msgid' : usermsg.message_id }
+        return Response(ret)
+
+class NewRepliesView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
+        grpmsg_reply_list = [ n.grpmsg_reply_detail_to_dict().get('msg_id') for n in notes if n.msg_type == 'grpmsg_reply']
+        group_msgs = []
+        for msg_id in grpmsg_reply_list:
+            msg = get_group_message_json (None, msg_id, False)
+            if msg:
+                group_msgs.append(msg)
+
+        # remove new group msg reply notification
+        UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
+        return Response(group_msgs)
 
 class AvatarView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2690,16 +2245,342 @@ class AvatarView(APIView):
     def get(self, request, user, size, format=None):
         url = avatar_url(user, int(size))
         ret = { 'url': url }
-        return HttpResponse(json.dumps(ret), status=200,
+        return Response(ret)
+
+
+# Html related code
+def html_events(request):
+    if not EVENTS_ENABLED:
+        events = None
+        return render_to_response('api2/events.html', {
+            "events":events,
+            }, context_instance=RequestContext(request))
+
+    email = request.user.username
+    events_count = 15
+    events, events_more_offset = get_user_events(email, 0, events_count)
+    events_more = True if len(events) == events_count else False
+    event_groups = group_events_data(events)
+    prepare_events(event_groups)
+
+    return render_to_response('api2/events.html', {
+            "events": events,
+            "events_more_offset": events_more_offset,
+            "events_more": events_more,
+            "event_groups": event_groups,
+            "events_count": events_count,
+            }, context_instance=RequestContext(request))
+
+def ajax_events(request):
+    events_count = 15
+    username = request.user.username
+    start = int(request.GET.get('start', 0))
+
+    events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
+
+    prepare_events(event_groups)
+    ctx = {'event_groups': event_groups}
+    html = render_to_string("api2/events_body.html", ctx)
+
+    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
+                                    'new_start': start}),
                             content_type=json_content_type)
 
-class ActivityHtml(APIView):
+@group_check
+def html_group_discussions(request, group):
+    username = request.user.username
+    if request.method == 'POST':
+        # only login user can post to public group
+        if group.view_perm == "pub" and not request.user.is_authenticated():
+            raise Http404
+
+        msg = request.POST.get('message')
+        message = GroupMessage()
+        message.group_id = group.id
+        message.from_email = request.user.username
+        message.message = msg
+        message.save()
+
+        # send signal
+        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                              from_email=username)
+
+        repo_id = request.POST.get('repo_id', None)
+        path = request.POST.get('path', None)
+        if repo_id and path:
+            # save attachment
+            ma = MessageAttachment(group_message=message, repo_id=repo_id,
+                                   attach_type='file', path=path,
+                                   src='recommend')
+            ma.save()
+
+            # save discussion
+            fd = FileDiscuss(group_message=message, repo_id=repo_id, path=path)
+            fd.save()
+
+        ctx = {}
+        ctx['msg'] = message
+        html = render_to_string("api2/discussion_posted.html", ctx)
+        serialized_data = json.dumps({"html": html})
+        return HttpResponse(serialized_data, content_type=json_content_type)
+
+    group_msgs = get_group_msgs(group.id, page=1, username=request.user.username)
+    # remove user notifications
+    UserNotification.objects.seen_group_msg_notices(username, group.id)
+    return render_to_response("api2/discussions.html", {
+            "group" : group,
+            "group_msgs": group_msgs,
+            }, context_instance=RequestContext(request))
+
+@group_check
+def ajax_discussions(request, group):
+    try:
+        page = int(request.GET.get('page'))
+    except ValueError:
+        page = 2
+
+    group_msgs = get_group_msgs(group.id, page, request.user.username)
+    if group_msgs.has_next():
+        next_page = group_msgs.next_page_number()
+    else:
+        next_page = None
+
+    html = render_to_string('api2/discussions_body.html', {"group_msgs": group_msgs}, context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
+
+def html_get_group_discussion(request, msg_id):
+    try:
+        msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        raise Http404
+
+    try:
+        att = MessageAttachment.objects.get(group_message_id=msg_id)
+    except MessageAttachment.DoesNotExist:
+        att = None
+
+    if att:
+        path = att.path
+        if path == '/':
+            repo = get_repo(att.repo_id)
+            if repo:
+                att.name = repo.name
+            else:
+                att.err = 'the libray does not exist'
+        else:
+            path = path.rstrip('/') # cut out last '/' if possible
+            att.name = os.path.basename(path)
+
+        # Load to discuss page if attachment is a image and from recommend.
+        if att.attach_type == 'file' and att.src == 'recommend':
+            att.filetype, att.fileext = get_file_type_and_ext(att.name)
+            if att.filetype == IMAGE:
+                att.obj_id = get_file_id_by_path(att.repo_id, path)
+                if not att.obj_id:
+                    att.err = 'File does not exist'
+                else:
+                    att.token = seafile_api.get_httpserver_access_token(
+                        att.repo_id, att.obj_id, 'view', request.user.username)
+                    att.img_url = gen_file_get_url(att.token, att.name)
+
+        msg.attachment = att
+
+    msg.replies = MessageReply.objects.filter(reply_to=msg)
+    msg.reply_cnt = len(msg.replies)
+
+    return render_to_response("api2/discussion.html", {
+            "msg": msg,
+            }, context_instance=RequestContext(request))
+
+def html_msg_reply(request, msg_id):
+    """Show group message replies, and process message reply in ajax"""
+
+    ctx = {}
+    try:
+        group_msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        raise Http404
+
+    msg = request.POST.get('message')
+    msg_reply = MessageReply()
+    msg_reply.reply_to = group_msg
+    msg_reply.from_email = request.user.username
+    msg_reply.message = msg
+    msg_reply.save()
+
+    # send signal if reply other's message
+    if group_msg.from_email != request.user.username:
+        grpmsg_reply_added.send(sender=MessageReply,
+                                msg_id=msg_id,
+                                from_email=request.user.username)
+    ctx['r'] = msg_reply
+    html = render_to_string("api2/reply.html", ctx)
+    serialized_data = json.dumps({"html": html})
+    return HttpResponse(serialized_data, content_type=json_content_type)
+
+def html_user_messages(request, id_or_email):
+    to_email = get_email(id_or_email)
+    if not to_email:
+        return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+
+    username = request.user.username
+
+    if request.method == 'POST':
+        mass_msg = request.POST.get('message')
+        if not mass_msg:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
+        ctx = { 'msg' : usermsg }
+        html = render_to_string("api2/user_msg.html", ctx)
+        serialized_data = json.dumps({"html": html})
+        return HttpResponse(serialized_data, content_type=json_content_type)
+
+    UserNotification.objects.seen_user_msg_notices(username, to_email)
+    UserMessage.objects.update_unread_messages(to_email, username)
+    person_msgs = get_person_msgs(to_email, 1, username)
+
+    return render_to_response("api2/user_msg_list.html", {
+            "person_msgs": person_msgs,
+            "to_email": to_email,
+            }, context_instance=RequestContext(request))
+
+def ajax_usermsgs(request, id_or_email):
+    try:
+        page = int(request.GET.get('page'))
+    except ValueError:
+        page = 2
+
+    to_email = get_email(id_or_email)
+    if not to_email:
+        return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+
+    person_msgs = get_person_msgs(to_email, page, request.user.username)
+    if person_msgs.has_next():
+        next_page = person_msgs.next_page_number()
+    else:
+        next_page = None
+
+    html = render_to_string('api2/user_msg_body.html', {"person_msgs": person_msgs}, context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({"html": html, 'next_page': next_page}), content_type=json_content_type)
+
+def html_repo_history_changes(request, repo_id):
+    changes = {}
+
+    if not access_to_repo(request, repo_id, ''):
+        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=json_content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
+
+    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=json_content_type)
+
+    changes = get_diff(repo_id, '', commit_id)
+
+    c = get_commit(commit_id)
+    if c.parent_id is None:
+        # A commit is a first commit only if its parent id is None.
+        changes['cmt_desc'] = repo.desc
+    elif c.second_parent_id is None:
+        # Normal commit only has one parent.
+        if c.desc.startswith('Changed library'):
+            changes['cmt_desc'] = 'Changed library name or description'
+    else:
+        # A commit is a merge only if it has two parents.
+        changes['cmt_desc'] = 'No conflict in the merge.'
+    for k in changes:
+        changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
+
+    html = render_to_string('api2/event_details.html', {'changes': changes})
+    return HttpResponse(json.dumps({"html": html}), content_type=json_content_type)
+
+def html_new_replies(request):
+    notes = UserNotification.objects.get_user_notifications(request.user.username, seen=False)
+    grpmsg_reply_list = [ n.grpmsg_reply_detail_to_dict().get('msg_id') for n in notes if n.msg_type == 'grpmsg_reply']
+    group_msgs = []
+    for msg_id in grpmsg_reply_list:
+        try:
+            m = GroupMessage.objects.get(id=msg_id)
+        except GroupMessage.DoesNotExist:
+            continue
+        else:
+            # get group name
+            group = get_group(m.group_id)
+            if not group:
+                continue
+            m.group_name = group.group_name
+
+            # get attachement
+            attachment = get_first_object_or_none(m.messageattachment_set.all())
+            if attachment:
+                path = attachment.path
+                if path == '/':
+                    repo = get_repo(attachment.repo_id)
+                    if not repo:
+                        continue
+                    attachment.name = repo.name
+                else:
+                    attachment.name = os.path.basename(path)
+                m.attachment = attachment
+
+            # get message replies
+            reply_list = MessageReply.objects.filter(reply_to=m)
+            m.reply_cnt = reply_list.count()
+            if m.reply_cnt > 3:
+                m.replies = reply_list[m.reply_cnt - 3:]
+            else:
+                m.replies = reply_list
+
+            group_msgs.append(m)
+
+    # remove new group msg reply notification
+    UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
+
+    return render_to_response("api2/new_msg_reply.html", {
+            'group_msgs': group_msgs,
+            }, context_instance=RequestContext(request))
+
+
+class AjaxEvents(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        return activity(request)
+        return ajax_events(request)
+
+class AjaxDiscussions(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        return ajax_discussions(request, group_id)
+
+class AjaxUserMsgs(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, id_or_email, format=None):
+        return ajax_usermsgs(request, id_or_email)
+
+class EventsHtml(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        return html_events(request)
 
 class NewReplyHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2707,7 +2588,7 @@ class NewReplyHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        return msg_reply_new(request)
+        return html_new_replies(request)
 
 class DiscussionsHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2715,10 +2596,10 @@ class DiscussionsHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, group_id, format=None):
-        return group_discuss(request, group_id)
+        return html_group_discussions(request, group_id)
 
     def post(self, request, group_id, format=None):
-        return group_discuss(request, group_id)
+        return html_group_discussions(request, group_id)
 
 class UserMsgsHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2726,10 +2607,10 @@ class UserMsgsHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, id_or_email, format=None):
-        return user_messages(request, id_or_email)
+        return html_user_messages(request, id_or_email)
 
     def post(self, request, id_or_email, format=None):
-        return user_messages(request, id_or_email)
+        return html_user_messages(request, id_or_email)
 
 class DiscussionHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2737,11 +2618,10 @@ class DiscussionHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, msg_id, format=None):
-        return discussion(request, msg_id)
+        return html_get_group_discussion(request, msg_id)
 
     def post(self, request, msg_id, format=None):
-        return msg_reply (request, msg_id)
-
+        return html_msg_reply(request, msg_id)
 
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2749,47 +2629,47 @@ class RepoHistoryChangeHtml(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        return api_repo_history_changes (request, repo_id)
+        return html_repo_history_changes(request, repo_id)
 
 
 #Following is only for debug
 from seahub.auth.decorators import login_required
 @login_required
 def activity2(request):
-    return activity(request)
+    return html_events(request)
 
 @login_required
 def discussions2(request, group_id):
-    return group_discuss(request, group_id)
+    return html_group_discussions(request, group_id)
 
 @login_required
 def more_discussions2(request, group_id):
-    return more_discussions(request, group_id)
+    return ajax_discussions(request, group_id)
 
 @login_required
 def discussion2(request, msg_id):
-    return discussion(request, msg_id)
+    return html_get_group_discussion(request, msg_id)
 
 @login_required
 def events2(request):
-    return events(request)
+    return ajax_events(request)
 
 @login_required
 def api_repo_history_changes(request, repo_id):
-    return repo_history_changes(request, repo_id)
+    return html_repo_history_changes(request, repo_id)
 
 @login_required
 def api_msg_reply(request, msg_id):
-    return msg_reply(request, msg_id)
+    return html_msg_reply(request, msg_id)
 
 @login_required
 def api_new_replies(request):
-    return msg_reply_new(request)
+    return html_new_replies(request)
 
 @login_required
 def api_usermsgs(request, id_or_email):
-    return user_messages(request, id_or_email)
+    return html_user_messages(request, id_or_email)
 
 @login_required
 def api_more_usermsgs(request, id_or_email):
-    return more_usermsgs(request, id_or_email)
+    return ajax_usermsgs(request, id_or_email)
