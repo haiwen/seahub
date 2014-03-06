@@ -158,7 +158,10 @@ def get_user_permission(request, repo_id):
         return 'r' if token else ''
 
 def get_system_default_repo_id():
-    return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+    try:
+        return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+    except SearpcError as e:
+        return None
 
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
@@ -937,11 +940,19 @@ def create_default_library(username):
                                            username=username,
                                            passwd=None)
     sys_repo_id = get_system_default_repo_id()
-    dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
-    for e in dirents:
-        obj_name = e.obj_name
-        seafile_api.copy_file(sys_repo_id, '/', obj_name,
-                              default_repo, '/', obj_name, username)
+    if sys_repo_id is None:
+        return
+
+    try:
+        dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
+        for e in dirents:
+            obj_name = e.obj_name
+            seafile_api.copy_file(sys_repo_id, '/', obj_name,
+                                  default_repo, '/', obj_name, username)
+    except SearpcError as e:
+        logger.error(e)
+        return 
+        
     UserOptions.objects.set_default_repo(username, default_repo)
 
     return default_repo
