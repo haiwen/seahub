@@ -1,7 +1,7 @@
 from django.core.cache import cache
 
 import seaserv
-from seaserv import get_binding_peerids, get_orgs_by_user
+from seaserv import get_binding_peerids
 
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
@@ -9,6 +9,10 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 class BaseMiddleware(object):
     """
@@ -16,19 +20,20 @@ class BaseMiddleware(object):
     """
     
     def process_request(self, request):
+        username = request.user.username        
+        request.user.org = None
+        request.user.orgs = None
+        
         if CLOUD_MODE:
             request.cloud_mode = True
-            
-            # Get all orgs user created.
-            # orgs = get_orgs_by_user(request.user.username)
-            # request.user.orgs = orgs
+
+            if MULTI_TENANCY:
+                orgs = seaserv.get_orgs_by_user(username)
+                if orgs:
+                    request.user.org = orgs[0]
         else:
             request.cloud_mode = False
 
-        request.user.org = None
-        request.user.orgs = None
-
-        username = request.user.username
         request.user.joined_groups = seaserv.get_personal_groups_by_user(username)
             
         return None

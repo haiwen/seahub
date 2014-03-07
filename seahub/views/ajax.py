@@ -1359,6 +1359,20 @@ def space_and_traffic(request):
         if stat:
             traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
+    payment_url = ''
+    ENABLE_PAYMENT = getattr(settings, 'ENABLE_PAYMENT', False)
+    if ENABLE_PAYMENT:
+        if is_org_context(request):
+            if request.user.org and bool(request.user.org.is_staff) is True:
+                # payment for org admin
+                payment_url = reverse('org_plan')
+            else:
+                # no payment for org members
+                ENABLE_PAYMENT = False
+        else:
+            # payment for personal account
+            payment_url = reverse('plan')
+    
     ctx = {
         "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
         "quota": quota,
@@ -1368,7 +1382,8 @@ def space_and_traffic(request):
         "rates": rates,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
         "traffic_stat": traffic_stat,
-        "ENABLE_PAYMENT": getattr(settings, 'ENABLE_PAYMENT', False),
+        "ENABLE_PAYMENT": ENABLE_PAYMENT,
+        "payment_url": payment_url,
     }
 
     html = render_to_string('snippets/space_and_traffic.html', ctx,
