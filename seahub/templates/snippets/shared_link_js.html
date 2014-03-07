@@ -1,4 +1,4 @@
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags group_avatar_tags %}
 {% load url from future %}
 
 var share_list = [], contacts = [], contact_email;    
@@ -15,7 +15,44 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     } else {
         path = cur_path + name;
     }
-    $('#file-share').modal({appendTo: "#main",'focus':false, containerCss:{"padding":0}});
+
+    var form = $('#file-share');
+
+    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
+    var grp_options_ct = $('#share-grp-options');
+    if (!$.trim(grp_options_ct.html())) {
+        var grp_options = '<ul class="option-list">';
+        {% for group in request.user.joined_groups %}
+        grp_options += '<li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span> {% grp_avatar group.id 20 %} <span class="checkbox-option">{{ group.group_name }}</span> </label> </li>';
+        {% endfor %}
+        grp_options += '</ul>';
+        grp_options_ct.html(grp_options);
+    }
+    var contact_options_ct = $('#share-contact-options');
+    if (!$.trim(contact_options_ct.html())) {
+        var contact_options = '<ul class="option-list">';
+        for (var i = 0, len = contacts.length; i < len; i++) {
+            contact_email = contacts[i].value;
+            contact_options += ' <li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="contact" value="' + contact_email + '" class="checkbox-orig" /></span>' + contacts[i].avatar + ' <span class="checkbox-option">' + contact_email + '</span> </label> </li>';
+        }
+        contact_options += '</ul>';
+        contact_options_ct.html(contact_options);
+    }
+
+    $('.checkbox-orig', form).unbind().click(function() {
+        $(this).parent().toggleClass('checkbox-checked');
+    });
+    $(".checkbox-label", form).unbind().hover(
+        function() {
+            $(this).addClass('hl');
+        },  
+        function() {
+            $(this).removeClass('hl');
+        }   
+    );
+    {% endif %}
+
+    form.modal({appendTo: "#main",'focus':false, containerCss:{"padding":0}});
 
     var hd = $('#file-share .hd');
     hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
@@ -83,6 +120,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         });
     });
 
+    {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
     // syncable share for dir
     $('#syncable-share-tab a').click(function() {
         var form = $("#repo-share-form");
@@ -91,9 +129,10 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         $('.checkbox-label', form).css({'margin-right':'3px'}); // make it not show on top of the scrollbar when hover
         form.data('dir-path', path).attr('data-name', name);
         $("#repo-share-tabs").tabs();
-        $('#repo-share-tabs .ui-tabs-nav').removeClass('tab-popup-tabs-nav').addClass('tab-tabs-nav').css({'padding-left': '1.4em'});
+        $('#repo-share-tabs .ui-tabs-nav').css({'padding-left': '1.4em'});
         $(window).resize(); // to reposition the popup, as this panel is 'taller'
     });
+    {% endif %}
 
     $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
 }

@@ -68,7 +68,7 @@
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">
                 {% url 'share_repo' as repo_share_url %}
-                {% with post_url=repo_share_url groups=joined_groups %}
+                {% with post_url=repo_share_url %}
                 {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}
                 {% endwith %} 
             </div>
