@@ -1,30 +1,69 @@
-{% load seahub_tags avatar_tags i18n %}
-    //repo-share-form share-list autocomplete
-    var share_list = [], contact_email, group_name, group_name_py;
-    {% for contact in contacts %}
-    contact_email = '{{ contact.contact_email }}';    
-    share_list.push({value:contact_email, label:contact_email});
-    {% endfor %}
-    
-    {% for group in groups %}
-    group_name = '{{ group.group_name }}';
-    group_name_py = '{{ group.group_name|char2pinyin }}'
-    share_list.push({value:group_name + group_name_py, label:group_name});
-    {% endfor %}
+{% load seahub_tags group_avatar_tags i18n %}
+$(function () {
+    $.ajax({
+        url:'{% url 'get_contacts' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var share_list = [];
+            var contacts = data['contacts'], contact_email, group_name, group_name_py;   
+            for (var i = 0, len = contacts.length; i < len; i++) {
+                contact_email = contacts[i].email;
+                share_list.push({value:contact_email, label:contact_email});
+            }
+            {% for group in request.user.joined_groups %}
+            group_name = '{{ group.group_name }}';
+            group_name_py = '{{ group.group_name|char2pinyin }}'
+            share_list.push({value:group_name + group_name_py, label:group_name});
+            {% endfor %}
 
-    $(".repo-share-btn").click(function() {
-        var form = $("#repo-share-form"),
-            hd = $('.hd', form),
-            btn_ct = $(this).parents('td'),
-            repo_id = btn_ct.data('id'),
-            repo_name = btn_ct.attr('data-name');
-        form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
-        $('[name="repo_id"]', form).val(repo_id);
-        hd.html(hd.html().replace('%(lib_name)s', '<span class="op-target">' + repo_name + '</span>'));
-        $('#repo-share-tabs').tabs();
-        $('#simplemodal-container').css('height', 'auto');
-        addAutocomplete('#email_or_group', '#repo-share-form', share_list);
+            $(".repo-share-btn").click(function() {
+                var form = $("#repo-share-form"),
+                    hd = $('.hd', form),
+                    btn_ct = $(this).parents('td'),
+                    repo_id = btn_ct.data('id'),
+                    repo_name = btn_ct.attr('data-name');
+                var grp_options_ct = $('#share-grp-options');
+                if (!$.trim(grp_options_ct.html())) {
+                    var grp_options = '<ul class="option-list">';
+                    {% for group in request.user.joined_groups %}
+                    grp_options += '<li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span> {% grp_avatar group.id 20 %} <span class="checkbox-option">{{ group.group_name }}</span> </label> </li>';
+                    {% endfor %}
+                    grp_options += '</ul>';
+                    grp_options_ct.html(grp_options);
+                }
+                var contact_options_ct = $('#share-contact-options');
+                if (!$.trim(contact_options_ct.html())) {
+                    var contact_options = '<ul class="option-list">';
+                    for (var i = 0, len = contacts.length; i < len; i++) {
+                        contact_email = contacts[i].email;
+                        contact_options += ' <li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="contact" value="' + contact_email + '" class="checkbox-orig" /></span>' + contacts[i].avatar + ' <span class="checkbox-option">' + contact_email + '</span> </label> </li>';
+                    }
+                    contact_options += '</ul>';
+                    contact_options_ct.html(contact_options);
+                }
+
+                $('.checkbox-orig', form).unbind().click(function() {
+                    $(this).parent().toggleClass('checkbox-checked');
+                });
+                $(".checkbox-label", form).unbind().hover(
+                    function() {
+                        $(this).addClass('hl');
+                    },  
+                    function() {
+                        $(this).removeClass('hl');
+                    }   
+                );
+                form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
+                $('[name="repo_id"]', form).val(repo_id);
+                hd.html(hd.html().replace('%(lib_name)s', '<span class="op-target">' + repo_name + '</span>'));
+                $('#repo-share-tabs').tabs();
+                $('#simplemodal-container').css('height', 'auto');
+                addAutocomplete('#email_or_group', '#repo-share-form', share_list);
+            });
+        }
     });
+});
 
     //check before post
     $('#share-submit-btn').click(function() {

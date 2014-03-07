@@ -985,8 +985,6 @@ def myhome(request):
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # misc
-    autocomp_groups = joined_groups = request.user.joined_groups
-    contacts = Contact.objects.get_contacts_by_user(username)
     allow_public_share = False if request.cloud_mode else True
 
     # user guide
@@ -1006,9 +1004,6 @@ def myhome(request):
             
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
-            "contacts": contacts,
-            "autocomp_groups": autocomp_groups,
-            "joined_groups": joined_groups,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,

@@ -27,7 +27,7 @@
 {% include "snippets/my_owned_repos.html" %}
 
 {% url 'share_repo' as repo_share_url %}
-{% with post_url=repo_share_url groups=joined_groups %}
+{% with post_url=repo_share_url %}
 {% include "snippets/repo_share_form.html" %}
 {% endwith %}
 
