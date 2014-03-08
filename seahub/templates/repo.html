@@ -231,9 +231,7 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/repo_crypto.js"></script>
 {% else %}
 {% upload_js %}
 <script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>

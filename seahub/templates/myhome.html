@@ -46,14 +46,11 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
-{% include 'snippets/repo_create_js_files.html' %}
 <script type="text/javascript">
-{% include "snippets/myhome_extra_script.html" %}
-
-{% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
-
 {% if need_guide %}
 $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
 {% endif %}
+{% include "snippets/myhome_extra_script.html" %}
+{% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
 </script>
 {% endblock %}

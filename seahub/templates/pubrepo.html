@@ -58,7 +58,6 @@
 {% endblock %}
 
 {% block extra_script %}
-{% include 'snippets/repo_create_js_files.html' %}
 <script type="text/javascript">
 $(".download-btn").click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).data('id'));
