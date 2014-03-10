@@ -24,7 +24,7 @@ $('#top-nav-grp').click(function() {
     return false;
 });
 
-$(document).ready(function(){
+$(function(){
     var msg_ct = $("#msg-count"); 
     $.ajax({
         url: msg_ct.data('cturl'),
