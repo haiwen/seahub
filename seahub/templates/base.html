@@ -109,16 +109,9 @@
             </div>
         </div>
 
-        <div id="footer" class="ovhd">           
-            <div class="items fleft">
-                {% include 'footer.html' %}
-            </div>
-            <div class="other-info fright">
-                <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
-                <p>© 2013 {% trans "Seafile" %}</p>
-                <p><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
-            </div>
-        </div>
+        <!-- footer -->
+        {% include 'footer.html' %}
+        <!-- footer -->
 </div><!-- wrapper -->
 
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1393578720"></script>
