@@ -327,7 +327,7 @@ def view_file(request, repo_id):
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
     
-    fsize = get_file_size(obj_id)
+    fsize = get_file_size(repo.store_id, repo.version, obj_id)
 
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
     if exceeds_limit:
@@ -350,7 +350,8 @@ def view_file(request, repo_id):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
-            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.id, parent_dir)
+            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
+                                                           current_commit.id, parent_dir)
             if not dirs:
                 raise Http404
 
@@ -480,7 +481,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     
     # construct some varibles
     u_filename = os.path.basename(path)
-    current_commit = get_commit(commit_id)
+    current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         raise Http404
 
@@ -496,7 +497,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     if user_perm:
         # Check file size
-        fsize = get_file_size(obj_id)
+        fsize = get_file_size(repo.store_id, repo.version, obj_id)
         if fsize > FILE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
@@ -629,7 +630,7 @@ def view_shared_file(request, token):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
-    file_size = seafile_api.get_file_size(obj_id)
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
@@ -642,8 +643,7 @@ def view_shared_file(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    fsize = get_file_size(obj_id)
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
         err = err_msg
     else:
@@ -656,7 +656,7 @@ def view_shared_file(request, token):
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == OPENDOCUMENT:
-            if fsize == 0:
+            if file_size == 0:
                 ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
@@ -668,9 +668,8 @@ def view_shared_file(request, token):
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
             try:
-                obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
                 send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, obj_size))
+                             (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
 
@@ -723,7 +722,7 @@ def view_file_via_shared_dir(request, token):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
-    file_size = seafile_api.get_file_size(obj_id)
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
@@ -739,8 +738,7 @@ def view_file_via_shared_dir(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    fsize = get_file_size(obj_id)
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
         err = err_msg
     else:
@@ -757,7 +755,8 @@ def view_file_via_shared_dir(request, token):
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
             parent_dir = os.path.dirname(path)
-            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.id, parent_dir)
+            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
+                                                           current_commit.id, parent_dir)
             if not dirs:
                 raise Http404
 
@@ -779,9 +778,8 @@ def view_file_via_shared_dir(request, token):
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
             try:
-                obj_size = seafserv_threaded_rpc.get_file_size(obj_id)
                 send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, obj_size))
+                             (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
         
@@ -976,7 +974,7 @@ def file_edit(request, repo_id):
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:
         obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        commit_id, path)
+                                        repo_id, commit_id, path)
     except:
         return None, 'bad path'
 
@@ -1018,11 +1016,11 @@ def text_diff(request, repo_id):
     if not repo:
         return render_error(request, 'bad repo')
 
-    current_commit = seafserv_threaded_rpc.get_commit(commit_id)
+    current_commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         return render_error(request, 'bad commit id')
 
-    prev_commit = seafserv_threaded_rpc.get_commit(current_commit.parent_id)
+    prev_commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, current_commit.parent_id)
     if not prev_commit:
         return render_error('bad commit id')
 
@@ -1158,7 +1156,7 @@ def view_priv_shared_file(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    fsize = get_file_size(obj_id)
+    fsize = get_file_size(repo.store_id, repo.version, obj_id)
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
     if exceeds_limit:
         err = err_msg

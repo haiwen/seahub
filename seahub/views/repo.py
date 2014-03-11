@@ -31,14 +31,14 @@ logger = logging.getLogger(__name__)
 def get_repo(repo_id):
     return seafile_api.get_repo(repo_id)
 
-def get_commit(commit_id):
-    return seaserv.get_commit(commit_id)
+def get_commit(repo_id, repo_version, commit_id):
+    return seaserv.get_commit(repo_id, repo_version, commit_id)
 
 def get_repo_size(repo_id):
     return seafile_api.get_repo_size(repo_id)
 
 def list_dir_by_commit_and_path(commit, path):
-    return seafile_api.list_dir_by_commit_and_path(commit.id, path)
+    return seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path)
 
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
@@ -193,9 +193,10 @@ def render_repo(request, repo):
 
     contacts = Contact.objects.get_contacts_by_user(username)
 
-    head_commit = get_commit(repo.head_cmmt_id)
+    head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
     if not head_commit:
         raise Http404
+
     if new_merge_with_no_conflict(head_commit):
         head_commit = get_commit_before_new_merge(head_commit)
     
@@ -206,7 +207,7 @@ def render_repo(request, repo):
     is_repo_owner = True if repo_owner == username else False
     
     more_start = None
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo.id, head_commit, path, offset=0, limit=100)
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, head_commit, path, offset=0, limit=100)
     if dirent_more:
         more_start = 100
     zipped = get_nav_path(path, repo.name)
@@ -317,11 +318,11 @@ def repo_history_view(request, repo_id):
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
         return HttpResponseRedirect(reverse('repo', args=[repo.id]))
-    current_commit = get_commit(commit_id)
+    current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
-        current_commit = get_commit(repo.head_cmmt_id)
+        current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
 
-    file_list, dir_list = get_repo_dirents(request, repo.id, current_commit, path)
+    file_list, dir_list = get_repo_dirents(request, repo, current_commit, path)
     zipped = get_nav_path(path, repo.name)
     search_repo_id = None if repo.encrypted else repo.id
 

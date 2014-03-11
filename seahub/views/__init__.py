@@ -219,7 +219,7 @@ def gen_path_link(path, repo_name):
     
     return zipped
 
-def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
+def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
     dir_list = []
     file_list = []
     dirent_more = False
@@ -228,9 +228,9 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
     else:
         try:
             if limit == -1:
-                dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path, offset, limit)
+                dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path, offset, limit)
             else:
-                dirs = seafile_api.list_dir_by_commit_and_path(commit.id, path, offset, limit + 1)
+                dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path, offset, limit + 1)
                 if len(dirs) == limit + 1:
                     dirs = dirs[:limit]
                     dirent_more = True
@@ -241,15 +241,19 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
         org_id = -1
         if hasattr(request.user, 'org') and request.user.org:
             org_id = request.user.org['org_id']
-        starred_files = get_dir_starred_files(request.user.username, repo_id, path, org_id)
+        starred_files = get_dir_starred_files(request.user.username, repo.id, path, org_id)
 
-        last_modified_info = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(repo_id, path)
+        if repo.version == 0:
+            last_modified_info = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(repo.id, path)
 
-        fileshares = FileShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
-        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id).filter(username=request.user.username)
+        fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
+        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
 
         for dirent in dirs:
-            dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
+            if repo.version == 0:
+                dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
+            else:
+                dirent.last_modified = dirent.mtime
             dirent.sharelink = ''
             dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
@@ -269,7 +273,10 @@ def get_repo_dirents(request, repo_id, commit, path, offset=-1, limit=-1):
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
-                dirent.file_size = get_file_size(dirent.obj_id)
+                if repo.version == 0:
+                    dirent.file_size = get_file_size(repo.store_id, repo.version, dirent.obj_id)
+                else:
+                    dirent.file_size = dirent.size
                 dirent.starred = False
                 fpath = os.path.join(path, dirent.obj_name)
                 if fpath in starred_files:
@@ -378,12 +385,12 @@ def render_recycle_dir(request, repo_id, commit_id):
     if not repo:
         raise Http404
 
-    commit = seafserv_threaded_rpc.get_commit(commit_id)
+    commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     if not commit:
         raise Http404
 
     zipped = gen_path_link(path, '')
-    file_list, dir_list = get_repo_dirents(request, repo_id, commit, basedir + path)
+    file_list, dir_list = get_repo_dirents(request, repo, commit, basedir + path)
 
     days = show_delete_days(request)
 
@@ -936,7 +943,7 @@ def repo_history_changes(request, repo_id):
 
     changes = get_diff(repo_id, '', commit_id)
 
-    c = get_commit(commit_id)
+    c = get_commit(repo.id, repo.version, commit_id)
     if c.parent_id is None:
         # A commit is a first commit only if it's parent id is None.
         changes['cmt_desc'] = repo.desc
@@ -1316,7 +1323,7 @@ def repo_access_file(request, repo_id, obj_id):
     if from_shared_link:
         # send stats message
         try:
-            file_size = seafserv_threaded_rpc.get_file_size(obj_id)
+            file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version, obj_id)
             send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' % \
                          (repo.id, shared_by, obj_id, file_size))
         except Exception, e:
@@ -1641,7 +1648,8 @@ def file_revisions(request, repo_id):
         def handle_download():
             parent_dir = os.path.dirname(path)
             file_name  = os.path.basename(path)
-            seafdir = seafile_api.list_dir_by_commit_and_path (commit_id,
+            seafdir = seafile_api.list_dir_by_commit_and_path (repo_id,
+                                                               commit_id,
                                                                parent_dir)
             if not seafdir:
                 return render_error(request)
@@ -1706,7 +1714,7 @@ def view_shared_dir(request, token):
 
     dir_name = os.path.basename(path[:-1])
     current_commit = get_commits(repo_id, 0, 1)[0]
-    file_list, dir_list = get_repo_dirents(request, repo_id, current_commit,
+    file_list, dir_list = get_repo_dirents(request, repo, current_commit,
                                            path)
     zipped = gen_path_link(path, '')
 
@@ -1944,11 +1952,13 @@ def repo_download_dir(request, repo_id):
             repo_id, request.user) else False
 
     if allow_download:
-        dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.head_cmmt_id,
+        dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.id,
+                                                          repo.head_cmmt_id,
                                                           path.encode('utf-8'))
 
         try:
-            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, repo.version,
+                                                            dir_id)
         except Exception, e:
             logger.error(str(e))
             return render_error(request, _(u'Internal Error'))
