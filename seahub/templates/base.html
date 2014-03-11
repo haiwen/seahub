@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 <!DOCTYPE html>
@@ -109,9 +109,7 @@
             </div>
         </div>
 
-        <!-- footer -->
         {% include 'footer.html' %}
-        <!-- footer -->
 </div><!-- wrapper -->
 
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1393578720"></script>
@@ -147,6 +145,40 @@ $('#info-bar .close').click(function() {
             document.cookie = 'info_id=' + new_info_id;
         }
     }
+});
+{% endif %}
+
+{% if grps %}
+$(function() {
+    $('#top-nav-grp').after('<div id="top-nav-grp-info" class="top-info-popup hide"></div>').click(function() {
+        var grp_nav = $(this),
+            popup = $('#top-nav-grp-info');
+        
+        if (!$.trim(popup.html())) {
+            var popup_con = '<ul id="top-nav-grp-list">';
+                {% for grp in grps %}
+            popup_con += '<li class="item" data-url="{% url "group_info" grp.id %}" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name|truncatechars:14 }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
+                {% endfor %}
+            popup_con += '</ul>';
+            popup_con += '<a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>';
+            popup.html(popup_con);
+            $('.item', popup).hover(
+                function() {
+                    $(this).addClass('hl').children('.a').removeClass('vh');
+                },
+                function() {
+                    $(this).removeClass('hl').children('.a').addClass('vh');
+                }
+            )
+            .click(function() {
+                location.href = $(this).data('url'); 
+            }); 
+        }
+
+        popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
+        popup.toggleClass('hide');
+        return false;
+    });
 });
 {% endif %}
 

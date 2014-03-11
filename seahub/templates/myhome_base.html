@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
-{% load i18n group_avatar_tags %}
+{% load i18n %}
 {% block nav %}
 <ul class="nav">
     <li class="nav-item">
@@ -8,22 +7,7 @@
     </li>
     <li class="nav-item" {% if grps %}style="position:relative;"{% endif %}>
         <a href="{% url 'group_list' %}" class="a {% block cur_group %}{% endblock %}" {% if grps %}id="top-nav-grp"{% endif %}>{% trans "Groups" %}{% if grps %} <span class="icon-caret-down"></span>{% endif %}</a>
-        {% if grps %}
-        <div id="top-nav-grp-info" class="top-info-popup hide">
-            <ul id="top-nav-grp-list">
-                {% for grp in grps %}
-                <li>
-                <a href="{% url "group_info" grp.id %}" class="item" title="{{ grp.group_name }}">
-                    {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name|truncatechars:14 }}</span>
-                </a>
-                </li>
-                {% endfor %}
-            </ul>
-            <a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>
-        </div>
-        {% endif %}
     </li>
-    
     {% if not cloud_mode %}
     <li class="nav-item">
         <a href="{% url 'pubrepo' %}" class="a {% block cur_pubinfo %}{% endblock %}">{% trans "Organization" %}</a>

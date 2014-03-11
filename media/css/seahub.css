@@ -1191,6 +1191,7 @@ textarea:-moz-placeholder {/* for FF */
     width:220px;
 }
 #top-nav-grp-info {
+    width:235px;
     top:40px;
     font-size:14px;
 }
@@ -1207,6 +1208,10 @@ textarea:-moz-placeholder {/* for FF */
     padding:5px 10px;
     border:none;
 }
+#top-nav-grp-list .item.hl {
+    background:#fafafa;
+    cursor:pointer;
+}
 .top-info-popup a.item:hover {
     background:#fafafa;
     text-decoration:none;
@@ -1215,6 +1220,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:1000px;
     margin-right:5px;
     vertical-align:middle;
+}
+#top-nav-grp-info .a {
+    margin-top:7px;
 }
 #top-nav-grp-info .all-grp {
     padding-left:50px;
@@ -1901,12 +1909,9 @@ textarea:-moz-placeholder {/* for FF */
     color:#666;
 }
 .group .fast .a {
-    font-size:18px;
     margin:8px 12px 0 0;
     display:inline-block;
     vertical-align:middle;
-    line-height:24px;
-    height:24px;
 }
 .group .fast .a:hover {
     text-decoration:none;
