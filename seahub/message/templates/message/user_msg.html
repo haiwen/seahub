@@ -1,10 +1,11 @@
 {% load seahub_tags avatar_tags i18n %}
 
-        <li class="msg w100 ovhd hide">
+    <li class="msg w100 hide" data-id="{{msg.message_id}}">
         <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">     
+                    <span class="msg-del op fright vh">{% trans "Delete" %}</span>
                     <a class="author" href="{% url 'user_profile' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
@@ -12,4 +13,4 @@
                 <span class="say"></span>
             </div>  
         </div>  
-        </li>
+    </li>

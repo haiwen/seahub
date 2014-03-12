@@ -1,5 +1,5 @@
 {% extends "home_base.html" %}
-{% load avatar_tags group_avatar_tags i18n seahub_tags %}
+{% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Messages" %}{% if total_unread > 0%}({{total_unread}}){%endif%} - {% endblock %}
 {% block extra_style %}
@@ -25,21 +25,12 @@
     {% if msgs %}
     {% for key,value in msgs %}
     {% with not_read=value.not_read %}
-    {% if value.type == 'user' %}
     <tr data-href="{% url 'user_msg_list' key|id_or_email %}" class="{% if not_read > 0 %}bold{% endif %}">
         <td class="alc">{% avatar key 20 %}</td>
         <td>{{ key|email2nickname }}{% if not_read > 0%}({{not_read}}){% endif %}</td>
         <td>{{ value.last_msg|seahub_urlize|truncatewords_html:12 }}</td>
         <td>{{ value.last_time|translate_seahub_time }}</td>
     </tr>
-    {% else %}
-    <tr data-href="{{ SITE_ROOT }}group/{{ value.id }}/discuss/" class="{% if not_read > 0 %}bold{% endif %}">
-        <td class="alc">{% grp_avatar value.id 20 %}</td>
-        <td>{{ key }}{% if not_read > 0 %}({{not_read}}){% endif %}</td>
-        <td>{{ value.last_msg|seahub_urlize|truncatewords_html:12 }}</td>
-        <td>{{ value.last_time|translate_seahub_time }}</td>
-    </tr>
-    {% endif %}
     {% endwith %}
     {% endfor %}
     {% endif %}
@@ -49,7 +40,7 @@
     <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
     <form id="send-msg-form" action="{% url 'message_send' %}?from=all" method="post" name="send-msg-form" class="hide">{% csrf_token %}
         <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
-        <select id="mass-receiver" name="mass_receiver" multiple="multiple"></select><br/>
+        <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
         <div id="msg-file-share">
             <button type="button" id="msg-file-share-btn"><span class="icon-plus-sign-alt"></span> {% trans "Add files" %}</button>
             <div id="msg-file-tree" class="hide"></div>
@@ -82,38 +73,26 @@ $('#add-msg').click(function() {
     }
     popup.removeClass('hide');
     $.ajax({
-        url:'{% url 'get_contacts_and_groups' %}',
+        url:'{% url 'get_contacts' %}',
         cache: false,
         dataType: 'json',
         success: function(data) {
             var contacts = data['contacts'],
-                groups = data['groups'],
                 opts = '',
-                email,
-                name;
+                email;
             if (contacts.length > 0) {
                 popup.find('.loading-tip').remove();
                 $('#send-msg-form').removeClass('hide');
 
-                var contact_len = contacts.length, group_len = groups.length;
-                for(var i = 0; i < contact_len; i++) {
+                for(var i = 0, len = contacts.length; i < len; i++) {
                     email = contacts[i].email;
-                    opts += '<option value="' + email + '" data-index="' + i + '" data-type="email">' + email + '</option>';
-                }
-                for (var i = 0; i < group_len; i++) {
-                    name = groups[i].name;
-                    opts += '<option value="' + groups[i].id + '" data-index="' + (i + contact_len) + '" data-type="group">' + name + '</option>';
+                    opts += '<option value="' + email + '" data-index="' + i + '">' + email + '</option>';
                 }
                 var format = function(item) {
-                    var idx = $(item.element).data('index');
-                    if (idx < contact_len) {
-                        return contacts[idx].avatar + '<span class="vam">' + item.text + '</span>';
-                    } else {
-                        return groups[idx - contact_len].avatar + '<span class="vam">' + item.text + '</span>';
-                    }
+                    return contacts[$(item.element).data('index')].avatar + '<span class="vam">' + item.text + '</span>';
                 }
-                $('#mass-receiver').html(opts).select2({
-                    placeholder: "{% trans "send to: click to select contacts/groups" %}",
+                $('#mass-email').html(opts).select2({
+                    placeholder: "{% trans "send to: click to select contacts" %}",
                     formatResult: format,
                     formatSelection: format,
                     escapeMarkup: function(m) { return m; }
@@ -123,7 +102,7 @@ $('#add-msg').click(function() {
             }
         },
         error: function() {
-            popup.html('<p class="error">' + "{% trans "Failed to get your contacts/groups for sending a message." %}" + '</p>');
+            popup.html('<p class="error">' + "{% trans "Failed to get your contacts for sending a message." %}" + '</p>');
         }
     });
 });
@@ -179,25 +158,14 @@ $('#send-msg-form').submit(function() {
         form_id = form.attr('id'),
         msg_input = $('[name="mass_msg"]', form),
         msg = $.trim(msg_input.val()),
-        receivers = $('[name="mass_receiver"] option:selected', form);
-
-    var emails = [],
-        groups = [];
-    receivers.each(function() {
-        var type = $(this).data('type');
-        if (type == "email") {
-            emails.push($(this).val());
-        } else if (type == "group") {
-            groups.push($(this).val());
-        }
-    });
+        emails = $('[name="mass_email"]', form).val();
 
     if (!msg) {
         apply_form_error(form_id, "{% trans "message is required" %}");
         return false;
     }
-    if (!emails && !groups) { // val is null or ['xx',...]
-        apply_form_error(form_id, "{% trans "contact/group is required" %}");
+    if (!emails) { // val is null or ['xx',...]
+        apply_form_error(form_id, "{% trans "contact is required" %}");
         return false;
     }
 
@@ -217,7 +185,7 @@ $('#send-msg-form').submit(function() {
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: { 'mass_msg': msg, 'mass_email': emails, 'mass_group': groups, 'selected': selected },
+        data: { 'mass_msg': msg, 'mass_email': emails, 'selected': selected },
         traditional: true,
         success: function(data) {
             msg_input.val('');

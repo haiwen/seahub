@@ -27,16 +27,16 @@
     <ul class="msg-list">
     {% for msg in person_msgs.object_list %}
         {% if msg.to_email == request.user.email %}
-        <li class="msg msg-received w100 ovhd" data-id="{{msg.message_id}}">
+        <li class="msg msg-received w100">
         <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
         {% else %}        
-        <li class="msg w100 ovhd" data-id="{{msg.message_id}}">
+        <li class="msg w100" data-id="{{msg.message_id}}">
         <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         {% endif %}
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">                    
-                    {% if request.user.is_staff or msg.from_email == request.user.username %}
+                    {% if msg.from_email == request.user.username %}
                     <span class="msg-del op fright vh">{% trans "Delete" %}</span>
                     {% endif %}
                     <a class="author" href="{% url 'user_profile' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
@@ -147,6 +147,7 @@ $('#personal-message-form').submit(function() {
                 form.after('<ul class="msg-list"></ul>');    
             }   
             $('.msg-list').prepend(new_msg);
+            bind_del(new_msg);
             new_msg.slideDown(400);
             msg_input.val('');
             enable(sb_btn);
@@ -164,8 +165,8 @@ $('#personal-message-form').submit(function() {
     return false;
 });
 
-
-$('.msg-del').click(function() {
+function bind_del(context) {
+$('.msg-del', context).click(function() {
     var msg = $(this).parents('.msg');
     var cfm;
     if (msg.find('.msg-del-confirm').length > 0) {
@@ -201,7 +202,7 @@ $('.msg-del').click(function() {
     });
 });
 
-$('.msg-main').hover(
+$('.msg-main', context).hover(
     function(){
         $(this).find('.op').removeClass('vh');
     },
@@ -209,7 +210,7 @@ $('.msg-main').hover(
         $(this).find('.op').addClass('vh');
     }
 );
-$('.msg .op').hover(
+$('.msg-main .op', context).hover(
     function() {
         $(this).css({'text-decoration':'underline'});
     },
@@ -217,10 +218,12 @@ $('.msg .op').hover(
         $(this).css({'text-decoration':'none'});
     }
 );
+}
+
+
+bind_del($('.msg'));
 </script>
 
 {% include 'snippets/add_to_contacts_js.html' %}
 
 {% endblock %}
-
-
