@@ -1227,6 +1227,9 @@ def my_shared_and_group_repos(request):
     username = request.user.username
     
     shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
+    for repo in shared_repos:
+        repo.user_perm = seafile_api.check_repo_access_permission(repo.repo_id, username)
+
     shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
     group_repos = []
