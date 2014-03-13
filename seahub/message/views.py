@@ -186,15 +186,22 @@ def message_send(request):
             continue
 
         usermsg = UserMessage.objects.add_unread_message(username, to_email, mass_msg)
-        msgs.append(usermsg)
+        usermsg.attachments = []
         if len(attached_items) > 0:
             for att_item in attached_items:
                 repo_id = att_item['repo_id']
                 path = att_item['path']
                 pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
                     username, to_email, repo_id, path)
-                UserMsgAttachment.objects.add_user_msg_attachment(usermsg, pfds)
+                att = UserMsgAttachment.objects.add_user_msg_attachment(usermsg, pfds)
 
+                att.repo_id = repo_id
+                att.path = path
+                att.name = os.path.basename(path.rstrip('/'))
+                att.token = pfds.token
+                usermsg.attachments.append(att)
+
+        msgs.append(usermsg)
         email_sended.append(to_email)
 
     html = ''
@@ -205,7 +212,7 @@ def message_send(request):
             html = render_to_string('message/all_msg.html', ctx)
         else:
             ctx['msg'] = msgs[0]   
-            html = render_to_string('message/user_msg.html', ctx)
+            html = render_to_string('message/user_msg.html', ctx, context_instance=RequestContext(request))
         return HttpResponse(json.dumps({"html": html, "error": errors}), content_type=content_type)
     else:
         return HttpResponse(json.dumps({"html": html, "error": errors}), status=400, content_type=content_type)
