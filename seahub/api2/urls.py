@@ -67,3 +67,18 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view()),
 )
+
+# serve office converter static files
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import OFFICE_HTML_DIR
+    urlpatterns += patterns('',
+        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
+        url(r'^office-convert/page-num/$', OfficeConvertQueryPageNum.as_view()),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
+    )
