@@ -7,8 +7,8 @@
         {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <li class="tab"><a href="#my-sub-repos" class="a">{% trans "Sub-libraries" %}</a></li>
         {% endif %}
-        <li class="tab"><a href="{% url 'my_shared_repos' %}" class="a">{% trans "Shared" %}</a></li>
-        <li class="tab"><a href="{% url 'my_group_repos' %}" class="a">{% trans "Group" %}</a></li>
+        <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
+        <li class="tab"><a href="#group-repos" class="a">{% trans "Group" %}</a></li>
     </ul>
     <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
 </div>
