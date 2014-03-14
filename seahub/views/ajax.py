@@ -141,7 +141,11 @@ def get_dirents(request, repo_id):
     return HttpResponse(json.dumps(dirent_list), content_type=content_type)
 
 @login_required
-def get_group_repos(request, group_id):
+def get_unenc_group_repos(request, group_id):
+    '''
+    Get unenc repos in a group. 
+    '''
+
     if not request.is_ajax():
         raise Http404
     
@@ -163,7 +167,8 @@ def get_group_repos(request, group_id):
     repos = seafile_api.get_group_repo_list(group_id_int)    
     repo_list = []
     for repo in repos:
-        repo_list.append({"name": repo.props.name, "id": repo.props.id})
+        if not repo.encrypted:
+            repo_list.append({"name": repo.props.name, "id": repo.props.id})
     
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
