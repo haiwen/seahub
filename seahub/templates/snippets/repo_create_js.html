@@ -1,7 +1,11 @@
 {% load i18n %}
 //repo-create-form
-$('#repo-create').click(function() {
-    $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
+$(function() {
+    $.getScript('{{MEDIA_URL}}js/repo_crypto.js', function() {
+        $('#repo-create').click(function() {
+            $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
+        });
+    });
 });
 $('#encrypt-switch').click(function () {
     var form = $('#repo-create-form'),

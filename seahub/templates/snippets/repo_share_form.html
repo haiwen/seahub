@@ -1,4 +1,4 @@
-{% load i18n avatar_tags group_avatar_tags %}
+{% load i18n %}
 <form id="repo-share-form" action="{{ post_url }}" method="post" name="repo-share-form" class="tab-popup hide">{% csrf_token %}
     <h3 class="hd">{% trans "Share %(lib_name)s" %}</h3>
     <div id="repo-share-tabs" class="tab-popup-tabs">
@@ -17,30 +17,8 @@
             <p class="tip">{% trans 'Tip: enter "all" to share to public library.' %}</p>
             {% endif %}
         </div>
-        <div id="share-grp-options" class="hide">
-            <ul class="option-list">
-                {% for group in groups %}
-                <li>
-                <label class="checkbox-label">
-                    <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span>
-                    {% grp_avatar group.id 20 %} <span class="checkbox-option">{{ group.group_name }}</span>
-                </label>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div id="share-contact-options" class="hide">
-            <ul class="option-list">
-            {% for contact in contacts %}
-            <li>
-            <label class="checkbox-label">
-                <span class="checkbox"><input type="checkbox" name="contact" value="{{ contact.contact_email }}" class="checkbox-orig" /></span>
-                {% avatar contact.contact_email 20 %} <span class="checkbox-option">{{ contact.contact_email }}</span>
-            </label>
-            </li>
-            {% endfor %}
-            </ul>
-        </div>
+        <div id="share-grp-options" class="hide"></div>
+        <div id="share-contact-options" class="hide"></div>
     </div>
     <div class="bot">
         <select name="permission" class="share-permission-select w100">

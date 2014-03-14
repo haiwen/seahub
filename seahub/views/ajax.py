@@ -1218,40 +1218,25 @@ def space_and_traffic(request):
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 @login_required
-def my_shared_repos(request):
-    """Return html snippet of repos that shared to user.
+def my_shared_and_group_repos(request):
+    """Return html snippet of repos that shared to user and group repos.
     
     Arguments:
     - `request`:
     """
     if not request.is_ajax():
         raise Http404
+
+    content_type = 'application/json; charset=utf-8'
 
     username = request.user.username
     
     shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
+    for repo in shared_repos:
+        repo.user_perm = seafile_api.check_repo_access_permission(repo.repo_id, username)
+
     shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
-    ctx = {
-        "shared_repos": shared_repos,
-        }
-    html = render_to_string('my_shared_repos.html', ctx,
-                            context_instance=RequestContext(request))
-
-    return HttpResponse(html)
-    
-@login_required
-def my_group_repos(request):
-    """Return html snippet of group repos.
-    
-    Arguments:
-    - `request`:
-    """
-    if not request.is_ajax():
-        raise Http404
-    
-    username = request.user.username
-    
     group_repos = []
     # Get all personal groups I joined.
     joined_groups = request.user.joined_groups
@@ -1285,11 +1270,16 @@ def my_group_repos(request):
             if repo.group.group_name != group_repos[i-1].group.group_name:
                 repo.show_group_name = True
 
-    ctx = {
+    ctx_shared = {
+        "shared_repos": shared_repos,
+        }
+    ctx_group = {
         "group_repos": group_repos,
         }
-    html = render_to_string('my_group_repos.html', ctx,
+    shared_repos_html = render_to_string('snippets/my_shared_repos.html', ctx_shared,
+                            context_instance=RequestContext(request))
+    group_repos_html = render_to_string('snippets/my_group_repos.html', ctx_group,
                             context_instance=RequestContext(request))
 
-    return HttpResponse(html)
-                
+    return HttpResponse(json.dumps({"shared": shared_repos_html, "group": group_repos_html}),
+            content_type=content_type)

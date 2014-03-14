@@ -387,44 +387,41 @@ def list_shared_links(request):
     fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
     for fs in fileshares:
-        if is_personal_repo(fs.repo_id):  # only list files in personal repos
-            r = seafile_api.get_repo(fs.repo_id)
-            if not r:
+        r = seafile_api.get_repo(fs.repo_id)
+        if not r:
+            fs.delete()
+            continue
+
+        if fs.s_type == 'f':
+            if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
                 fs.delete()
                 continue
-
-            if fs.s_type == 'f':
-                if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
-                    fs.delete()
-                    continue
-                fs.filename = os.path.basename(fs.path)
-                fs.shared_link = gen_file_share_link(fs.token) 
-            else:
-                if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
-                    fs.delete()
-                    continue
-                fs.filename = os.path.basename(fs.path.rstrip('/'))
-                fs.shared_link = gen_dir_share_link(fs.token)
-            fs.repo = r
-            p_fileshares.append(fs)
+            fs.filename = os.path.basename(fs.path)
+            fs.shared_link = gen_file_share_link(fs.token) 
+        else:
+            if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                fs.delete()
+                continue
+            fs.filename = os.path.basename(fs.path.rstrip('/'))
+            fs.shared_link = gen_dir_share_link(fs.token)
+        fs.repo = r
+        p_fileshares.append(fs)
 
     # upload links
     uploadlinks = UploadLinkShare.objects.filter(username=username)
     p_uploadlinks = []
     for link in uploadlinks:
-        if is_personal_repo(link.repo_id):
-            r = seafile_api.get_repo(link.repo_id)
-            if not r:
-                link.delete()
-                continue
-            if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
-                link.delete()
-                continue
-            link.dir_name = os.path.basename(link.path.rstrip('/'))
-            link.shared_link = gen_shared_upload_link(link.token)
-            link.repo = r
-            p_uploadlinks.append(link)
-
+        r = seafile_api.get_repo(link.repo_id)
+        if not r:
+            link.delete()
+            continue
+        if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
+            link.delete()
+            continue
+        link.dir_name = os.path.basename(link.path.rstrip('/'))
+        link.shared_link = gen_shared_upload_link(link.token)
+        link.repo = r
+        p_uploadlinks.append(link)
     
     return render_to_response('share/links.html', {
             "fileshares": p_fileshares,

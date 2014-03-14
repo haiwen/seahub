@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load url from future %}
 
 <!DOCTYPE html>
@@ -7,14 +7,11 @@
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/ui-lightness/jquery-ui-1.8.16.custom.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/font-awesome.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1393578720" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
-<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1393578720" />
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1394528138" />
 <!--[if IE]>
-<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1393578720"/>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1394528138"/>
 <![endif]-->
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.min.css?t=1394528138" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 </head>
@@ -35,7 +32,7 @@
                 {% block notice_panel %}{% endblock %}
                 <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
                     {% if seacloud_mode %}
-                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png" title="Seacloud" alt="logo" width="192" height="39" />
+                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1394528138" title="Seacloud" alt="logo" width="186" height="31" />
                     {% else %}
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
@@ -69,7 +66,7 @@
                             <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
                         </div>
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" title="{% trans "Log out" %}" id="logout">{% trans "Log out" %}</a>
+                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
                     {% if request.user.is_staff %}
                     <div class="manage">
@@ -112,23 +109,13 @@
             </div>
         </div>
 
-        <div id="footer" class="ovhd">           
-            <div class="items fleft">
-                {% include 'footer.html' %}
-            </div>
-            <div class="other-info fright">
-                <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
-                <p>© 2013 {% trans "Seafile" %}</p>
-                <p><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
-            </div>
-        </div>
+        {% include 'footer.html' %}
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1393578720"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}jstree_pre1.0_stable/jquery.jstree.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1393578720"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1394528138"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1394528138"></script>
 <script type="text/javascript">
+$.jstree._themes = '{{ MEDIA_URL }}js/themes/';
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
         feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
@@ -161,6 +148,40 @@ $('#info-bar .close').click(function() {
 });
 {% endif %}
 
+{% if grps %}
+$(function() {
+    $('#top-nav-grp').after('<div id="top-nav-grp-info" class="top-info-popup hide"></div>').click(function() {
+        var grp_nav = $(this),
+            popup = $('#top-nav-grp-info');
+        
+        if (!$.trim(popup.html())) {
+            var popup_con = '<ul id="top-nav-grp-list">';
+                {% for grp in grps %}
+            popup_con += '<li class="item" data-url="{% url "group_info" grp.id %}" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name|truncatechars:14 }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
+                {% endfor %}
+            popup_con += '</ul>';
+            popup_con += '<a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>';
+            popup.html(popup_con);
+            $('.item', popup).hover(
+                function() {
+                    $(this).addClass('hl').children('.a').removeClass('vh');
+                },
+                function() {
+                    $(this).removeClass('hl').children('.a').addClass('vh');
+                }
+            )
+            .click(function() {
+                location.href = $(this).data('url'); 
+            }); 
+        }
+
+        popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
+        popup.toggleClass('hide');
+        return false;
+    });
+});
+{% endif %}
+
 {% if has_file_search %}
     {% include 'snippets/search_js.html' %}
 {% endif %}
@@ -168,103 +189,6 @@ $('#info-bar .close').click(function() {
 {% endif %}
 </script>
 {% block extra_script %}{% endblock %}
-<script type="text/javascript">
-//font icons: for browsers that don't support ':before'
-    var sf_icons = [
-        {'name':'share', 'con':'e001'},
-        {'name':'removeformat', 'con':'f1e7'}
-    ];
-    var sf2_icons = [
-        {'name':'archive', 'con':'e600'}
-    ];
-    var fa_icons = [ 
-        {'name':'trash', 'con':'f014'},
-        {'name':'cog', 'con':'f013'},
-        {'name':'cloud-download', 'con':'f0ed'},
-        {'name':'search', 'con':'f002'},
-        {'name':'minus', 'con':'f068'},
-        {'name':'plus', 'con':'f067'},
-        {'name':'pencil', 'con':'f040'},
-        {'name':'globe', 'con':'f0ac'},
-        {'name':'comment-alt', 'con':'f0e5'},
-        {'name':'double-angle-right', 'con':'f101'},
-        {'name':'font', 'con':'f031'},
-        {'name':'text-height', 'con':'f034'},
-        {'name':'tint', 'con':'f043'},
-        {'name':'bold', 'con':'f032'},
-        {'name':'italic', 'con':'f033'},
-        {'name':'strikethrough', 'con':'f0cc'},
-        {'name':'underline', 'con':'f0cd'},
-        {'name':'list-ul', 'con':'f0ca'},
-        {'name':'list-ol', 'con':'f0cb'},
-        {'name':'indent-left', 'con':'f03b'},
-        {'name':'indent-right', 'con':'f03c'},
-        {'name':'align-left', 'con':'f036'},
-        {'name':'align-center', 'con':'f037'},
-        {'name':'align-right', 'con':'f038'},
-        {'name':'align-justify', 'con':'f039'},
-        {'name':'link', 'con':'f0c1'},
-        {'name':'cut', 'con':'f0c4'},
-        {'name':'picture', 'con':'f03e'},
-        {'name':'undo', 'con':'f0e2'},
-        {'name':'repeat', 'con':'f01e'},
-        {'name':'envelope', 'con':'f003'},
-        {'name':'star', 'con':'f005'},
-        {'name':'star-empty', 'con':'f006'},
-        {'name':'caret-down', 'con':'f0d7'},
-        {'name':'caret-up', 'con':'f0d8'},
-        {'name':'caret-right', 'con':'f0da'},
-        {'name':'ok', 'con':'f00c'},
-        {'name':'double-angle-left', 'con':'f100'},
-        {'name':'double-angle-right', 'con':'f101'},
-        {'name':'double-angle-up', 'con':'f102'},
-        {'name':'double-angle-down', 'con':'f103'},
-        {'name':'zoom-in', 'con':'f00e'},
-        {'name':'zoom-out', 'con':'f010'},
-        {'name':'signout', 'con':'f08b'},
-        {'name':'plus-sign-alt', 'con':'f0fe'},
-        {'name':'upload', 'con':'f01b'},
-        {'name':'ban-circle', 'con':'f05e'},
-        {'name':'move', 'con':'f047'},
-        {'name':'copy', 'con':'f0c5'},
-        {'name':'th', 'con':'f00a'},
-        {'name':'folder-close', 'con':'f07b'},
-        {'name':'rss', 'con':'f09e'},
-        {'name':'desktop', 'con':'f108'},
-        {'name':'user', 'con':'f007'},
-        {'name':'book', 'con':'f02d'},
-        {'name':'comment', 'con':'f075'},
-        {'name':'file', 'con':'f15b'},
-        {'name':'wrench', 'con':'f0ad'},
-        {'name':'group', 'con':'f0c0'},
-        {'name':'lightbulb', 'con':'f0eb'},
-        {'name':'upload-alt', 'con':'f093'},
-        {'name':'download', 'con':'f01a'},
-        {'name':'archive', 'con':'f187'}
-    ];  
-    function setCon(icon, icon_class_prefix, icon_list) {
-            for (var i = 0, len = icon_list.length; i < len; i++) {
-                if (icon.hasClass(icon_class_prefix + icon_list[i].name)) {
-                    icon.html('&#x' + icon_list[i].con + ';');
-                    break;
-                }
-            }
-    }
-    var pseudo_support = true;
-    var pseudo_test = $('body').append('<span class="sf-icon-share pseudo-test" style="color:#fff;position:fixed;left:0;bottom:0;"></span>').children('.pseudo-test');
-    if (pseudo_test.width() == 0) {
-        pseudo_support = false;
-        $('[class^="sf-icon-"]').each(function() {
-            setCon($(this), 'sf-icon-', sf_icons);
-        }); 
-        $('[class^="sf2-icon-"]').each(function() {
-            setCon($(this), 'sf2-icon-', sf2_icons);
-        }); 
-        $('[class^="icon-"], [class$=" icon-"]').each(function() {
-            setCon($(this), 'icon-', fa_icons);
-        }); 
-    }
-    pseudo_test.remove();
-</script>
+{% include 'snippets/font_icon_support_for_some_browsers.html' %}
 </body>
 </html>

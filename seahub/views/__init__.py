@@ -159,7 +159,10 @@ def get_user_permission(request, repo_id):
         return 'r' if token else ''
 
 def get_system_default_repo_id():
-    return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+    try:
+        return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+    except SearpcError as e:
+        return None
 
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
@@ -970,11 +973,19 @@ def create_default_library(username):
                                            username=username,
                                            passwd=None)
     sys_repo_id = get_system_default_repo_id()
-    dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
-    for e in dirents:
-        obj_name = e.obj_name
-        seafile_api.copy_file(sys_repo_id, '/', obj_name,
-                              default_repo, '/', obj_name, username)
+    if sys_repo_id is None:
+        return
+
+    try:
+        dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
+        for e in dirents:
+            obj_name = e.obj_name
+            seafile_api.copy_file(sys_repo_id, '/', obj_name,
+                                  default_repo, '/', obj_name, username)
+    except SearpcError as e:
+        logger.error(e)
+        return 
+        
     UserOptions.objects.set_default_repo(username, default_repo)
 
     return default_repo
@@ -1007,8 +1018,6 @@ def myhome(request):
     owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
 
     # misc
-    autocomp_groups = joined_groups = request.user.joined_groups
-    contacts = Contact.objects.get_contacts_by_user(username)
     allow_public_share = False if request.cloud_mode else True
 
     # user guide
@@ -1028,9 +1037,6 @@ def myhome(request):
             
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
-            "contacts": contacts,
-            "autocomp_groups": autocomp_groups,
-            "joined_groups": joined_groups,
             "create_shared_repo": False,
             "allow_public_share": allow_public_share,
             "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,

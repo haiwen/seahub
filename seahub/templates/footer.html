@@ -1,14 +1,24 @@
 {% load i18n %}
-<div class="item">
-    <h4>{% trans "Documents" %}</h4>
-    <ul>
+<div id="footer" class="ovhd">           
+  <div class="items fleft">
+    <div class="item">
+      <h4>{% trans "Documents" %}</h4>
+      <ul>
         <li><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}home/" target="_blank">{% trans "Introduction" %}</a></li>
-		<li><a href="{{SITE_ROOT}}help/" target="_blank">{% trans "Help" %}</a></li>
-    </ul>
-</div>
-<div class="item">
-    <h4>{% trans "Client" %}</h4>
-    <ul>
+	<li><a href="{{SITE_ROOT}}help/" target="_blank">{% trans "Help" %}</a></li>
+      </ul>
+    </div>
+    <div class="item">
+      <h4>{% trans "Client" %}</h4>
+      <ul>
         <li><a href="{% url 'download_client' %}">{% trans "Seafile for Windows, Mac and Linux" %}</a></li>
-    </ul>
+      </ul>
+    </div>
+  </div>
+  <div class="other-info fright">
+    <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
+    <p>© 2013 {% trans "Seafile" %}</p>
+    <p><a href="http://seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}contact/" target="_blank">{% trans "Contact Us" %}</a></p>
+  </div>
 </div>
+

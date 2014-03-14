@@ -16,15 +16,7 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
-$('#top-nav-grp').click(function() {
-    var grp_nav = $(this),
-        popup = $('#top-nav-grp-info');
-    popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
-    popup.toggleClass('hide');
-    return false;
-});
-
-$(document).ready(function(){
+$(function(){
     var msg_ct = $("#msg-count"); 
     $.ajax({
         url: msg_ct.data('cturl'),
@@ -36,7 +28,7 @@ $(document).ready(function(){
             }
         }
     });
-});
+
 $('#msg-count').click(function() {
     location.href = $(this).data('pgurl');
 });
@@ -64,6 +56,9 @@ $('#msg-count').click(function() {
         return false;
     });
 })();
+
+});
+
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
     var closePopup = function(popup, popup_switch) {

@@ -4,6 +4,7 @@
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <style type="text/css">
 #footer { display:none; }
 {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
@@ -25,7 +26,7 @@
                     <a href="{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}" target="_blank">{% trans "Download" %}</a>
                     {% endif %}
                     {% if is_repo_owner %}
-                    <a id="repo-setting-btn" href="{% url 'repo_settings' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/lib_setting.png" alt="" /><span class="vam">{% trans "Settings" %}</span></a>
+                    <a id="repo-setting-btn" href="{% url 'repo_settings' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/setting.png" alt="" /><span class="vam">{% trans "Settings" %}</span></a>
                     {% endif %}
                     {% if user_perm == 'rw' %}
                     <a id="recycle-btn" href="{% url 'repo_recycle_view' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/lib_trash.png" alt="" /><span class="vam">{% trans "Trash"%}</span></a>
@@ -228,10 +229,9 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/sjcl.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/CryptoJS/rollups/aes.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/client_crypto.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/repo_crypto.js"></script>
 {% else %}
 {% upload_js %}
 <script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>

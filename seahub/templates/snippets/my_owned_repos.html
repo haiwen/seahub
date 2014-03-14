@@ -1,4 +1,4 @@
-{% load seahub_tags group_avatar_tags i18n %}
+{% load seahub_tags i18n %}
 
 <div id="tabs" class="tab-tabs">
 <div class="hd ovhd">
@@ -105,6 +105,13 @@
 {% endif %}
 </div>
 {% endif %}
+
+<div id="repos-shared-to-me" class="hide">
+    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+</div>
+<div id="group-repos" class="hide">
+    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+</div>
 
 </div>
 

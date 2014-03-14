@@ -238,7 +238,6 @@ def render_repo(request, repo):
     domain = RequestSite(request).domain
 
     contacts = Contact.objects.get_contacts_by_user(username)
-    joined_groups = request.user.joined_groups
 
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:
@@ -292,7 +291,6 @@ def render_repo(request, repo):
             'zipped': zipped,
             'applet_root': applet_root,
             'groups': repo_groups,
-            'joined_groups': joined_groups,
             'repo_group_str': repo_group_str,
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,
