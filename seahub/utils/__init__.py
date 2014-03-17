@@ -73,7 +73,7 @@ PREVIEW_FILEEXT = {
     OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp', 'ods', 'fods'),
     MARKDOWN: ('markdown', 'md'),
     SF: ('seaf',),
-    VIDEO: ('mp4', 'ogv', 'webm', 'flv'),
+    VIDEO: ('mp4', 'ogv', 'webm', 'flv', 'wmv'),
     AUDIO: ('mp3',),
     '3D': ('stl', 'obj'),
 }
