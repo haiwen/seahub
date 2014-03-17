@@ -2,6 +2,21 @@
 
 {% load seahub_tags avatar_tags i18n %}
 
+{% block extra_style %}
+<style type="text/css">
+#selected-files .item {
+    padding:2px 3px;
+}
+#selected-files .item.hl {
+    background:#e8e8e8;
+}
+#selected-files .icon-remove,
+.add-file {
+    cursor:pointer;
+}
+</style>
+{% endblock %}
+
 {% block cur_discuss %}tab-cur{% endblock%}
 
 {% block right_panel %}
@@ -10,13 +25,23 @@
     <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
         {% avatar request.user.username 48 %}
         <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input">{{ form.data.message }}</textarea><br />
+        <ul class="hide" id="selected-files"></ul>
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}
         <button type="submit" class="submit hide">{% trans "Submit" %}</button>
         <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
+        <img src="{{ MEDIA_URL }}img/file/file.png" alt="" title="{% trans "Add files" %}" class="add-file vam hide" />
         <span class="say"></span>
     </form>
+    <div id="add-file-popup" class="file-choose-form hide">
+        <h3>{% trans "Choose a file or files:" %}</h3>
+        <div class="file-tree-cont" id="file-tree">
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+        </div>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button class="simplemodal-close">{% trans "Cancel"%}</button>
+    </div>
     {% else %}
     <p>{% trans "After login, you can post discussions and add replies." %}</p>
     {% endif %}
@@ -36,13 +61,14 @@
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
-                {% if msg.attachment %}
-                {% with ma=msg.attachment %}
-                <div class="msg-attachment">
+                {% if msg.attachments %}
+                <ul class="msg-attachment">
+                {% for ma in msg.attachments %}
+                    <li>
                     {% if ma.src == 'recommend' %}
                     {% if ma.attach_type == 'file' %}
                         {% if ma.filetype != 'Image'%}
-                        <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
+                        <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="" height="18" class="vam" />
                         <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
                         {% else %}
                             {% if ma.err %}
@@ -61,8 +87,9 @@
                     <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
                     <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
                     {% endif %}
-                </div>
-                {% endwith %}
+                    </li>
+                {% endfor %}
+                </ul>
                 {% endif %}
                 <span class="say"></span>
             </div>
@@ -139,7 +166,6 @@
                     <a href="{% url 'user_profile' request.user.username|id_or_email %}" class="author">{{ request.user.username|email2nickname }}</a>
                     <span class="time">{% trans "Just now" %}</span>
                 </div>
-                <p class="msg-con"></p>
                 <span class="say"></span>
             </div>
             <div class="msg-op">
@@ -191,15 +217,74 @@ $(window).scroll(function() {
 {% if request.user.is_authenticated %}
 $('#message').focus(function() {
     $(this).height(75);
-    $('.submit, .cancel', $('#group-message-form')).removeClass('hide');
+    $('.submit, .cancel, .add-file', $('#group-message-form')).removeClass('hide');
 });
 $('#group-message-form .cancel').click(function() {
-    $('.submit, .cancel', $('#group-message-form')).addClass('hide');
+    $('.submit, .cancel, .add-file', $('#group-message-form')).addClass('hide');
+    $('#selected-files').data('files', '').html('').addClass('hide');
     $('#message').val('').height(25);
 });
+$('.add-file').click(function() {
+    $('#add-file-popup').modal();    
+    $.ajax({
+        'url': '{% url 'get_group_repos' group.id %}',
+        'cache': false,
+        'dataType': 'json',
+        'success': function(data) {
+            var file_tree = new FileTree();
+            var repos = file_tree.format_repo_data(data);
+            if (repos.length > 0) {
+                file_tree.renderFileTree($('#file-tree').data('site_root', '{{SITE_ROOT}}'), repos);
+            } else {
+                $('#file-tree').html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>');
+            }
+        },
+        'error': function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                $('#file-tree').html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
+            }
+        }
+    });
+});
+
+$('#add-file-popup .submit').click(function() {
+    var files_ct = $('#selected-files');
+    var selected = files_ct.data('files') || [];
+
+    $('[name="selected"][checked="checked"]', $('#file-tree')).each(function() {
+        var val =  $(this).val();
+        if (val.charAt(val.length - 1) != '/') { // only submit file
+            selected.push($(this).val());
+        }
+    });
+    $.modal.close();
+
+    var files = '';
+    for (var i = 0, len = selected.length; i < len; i++) {
+        files += '<li class="item">' + selected[i].substr(selected[i].lastIndexOf('/') + 1) + '<span class="icon-remove vh fright" data-index="' + i + '"></span></li>';
+    }
+    files_ct.data('files', selected).html(files).removeClass('hide');
+    $('.item', files_ct).hover(
+        function() {
+            $(this).addClass('hl').children('.icon-remove').removeClass('vh');
+        },
+        function() {
+            $(this).removeClass('hl').children('.icon-remove').addClass('vh');
+        }
+    );
+    $('.icon-remove', files_ct).click(function() {
+        var selected_f = files_ct.data('files');
+        selected_f.splice($(this).data('index'), 1);
+        $(this).parent().remove();
+        files_ct.data('files', selected_f);
+    });
+});
+
 $('#group-message-form').submit(function() {
     var form = $(this);
     var msg_input = $('[name="message"]');
+    var files_ct = $('#selected-files');
+
     if (!$.trim(msg_input.val())) {
         return false;
     }
@@ -211,16 +296,18 @@ $('#group-message-form').submit(function() {
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: { 'message': msg_input.val() },
+        data: { 'message': msg_input.val(), 'selected': files_ct.data('files') || [] },
+        traditional: true,
         success: function(data) {
             var new_msg = $('.new-msg-list .msg').clone(true).attr('data-id', data['msg_id']);
-            $('.msg-con', new_msg).html(data['msg_con']); 
+            $('.msg-hd', new_msg).after(data['msg_con']); 
             if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
                 form.after('<ul class="msg-list"></ul>');    
             }
             $('.msg-list').prepend(new_msg);
             new_msg.slideDown(400);
             msg_input.val('');
+            files_ct.data('files','').html('').addClass('hide');
             enable(sb_btn);
         },
         error: function (xhr, textStatus, errorThrown) {

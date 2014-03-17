@@ -469,9 +469,9 @@ def msg_reply_new(request):
                 continue
             m.group_name = group.group_name
             
-            # get attachement
-            attachment = get_first_object_or_none(m.messageattachment_set.all())
-            if attachment:
+            # get attachements
+            attachments = m.messageattachment_set.all()
+            for attachment in attachments:
                 path = attachment.path
                 if path == '/':
                     repo = get_repo(attachment.repo_id)
@@ -480,7 +480,8 @@ def msg_reply_new(request):
                     attachment.name = repo.name
                 else:
                     attachment.name = os.path.basename(path)
-                m.attachment = attachment
+
+            m.attachments = attachments
 
             # get message replies
             reply_list = MessageReply.objects.filter(reply_to=m)
@@ -1165,25 +1166,42 @@ def group_add_discussion(request, group):
 
     username = request.user.username
 
-    form = MessageForm(request.POST)
-    if form.is_valid():
-        msg = form.cleaned_data['message']
-        message = GroupMessage()
-        message.group_id = group.id
-        message.from_email = username
-        message.message = msg
-        message.save()
+    #form = MessageForm(request.POST)
+    msg = request.POST.get('message')
+    selected = request.POST.getlist('selected') # files selected as attachment
 
-        # send signal
-        grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                          from_email=username)
-    
-        ctx = {'msg': msg}
-        msg_html = render_to_string("group/new_discussion_con.html", ctx)
-        return HttpResponse(json.dumps({'msg_id': message.id, 'msg_con': msg_html}), content_type=content_type)
-    else:
-        result['error'] = str(form.errors.values()[0])
+    if not msg:
+        result['error'] = _(u'Discussion is required.')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    gm = GroupMessage()
+    gm.group_id = group.id
+    gm.from_email = username
+    gm.message = msg
+    gm.save()
+
+    # send signal
+    grpmsg_added.send(sender=GroupMessage, group_id=group.id,
+                      from_email=username)
+
+    gm.attachments = []
+    if selected:
+        for item in selected:
+            if item[-1] == '/': # dir is not allowed, for now
+                continue
+
+            repo_id = item[0:36]
+            path = item[36:]
+            ma = MessageAttachment(group_message=gm, repo_id=repo_id,
+                attach_type='file', path=path, src='recommend')
+            ma.save()
+            ma.name = os.path.basename(path)
+            gm.attachments.append(ma)
+
+    ctx = { 'msg': gm }
+    msg_html = render_to_string("group/new_discussion_con.html", ctx,
+         context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({'msg_id': gm.id, 'msg_con': msg_html}), content_type=content_type)
 
 @group_check
 def group_discuss(request, group):
@@ -1218,7 +1236,7 @@ def group_discuss(request, group):
     # Force evaluate queryset to fix some database error for mysql.        
     group_msgs.object_list = list(group_msgs.object_list) 
 
-    attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
+    msg_attachments = MessageAttachment.objects.filter(group_message__in=group_msgs.object_list)
 
     msg_replies = MessageReply.objects.filter(reply_to__in=group_msgs.object_list)
     reply_to_list = [ r.reply_to_id for r in msg_replies ]
@@ -1230,8 +1248,9 @@ def group_discuss(request, group):
             if msg.id == r.reply_to_id:
                 msg.replies.append(r)
         msg.replies = msg.replies[-3:]
-            
-        for att in attachments:
+           
+        msg.attachments = []
+        for att in msg_attachments:
             if att.group_message_id != msg.id:
                 continue
 
@@ -1261,7 +1280,7 @@ def group_discuss(request, group):
                                                          'view', username)
                         att.img_url = gen_file_get_url(att.token, att.name)
 
-            msg.attachment = att
+            msg.attachments.append(att)
 
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_group(group.id)

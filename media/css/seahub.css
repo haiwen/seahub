@@ -2088,6 +2088,7 @@ textarea:-moz-placeholder {/* for FF */
     text-align:center;
     line-height:0;
     background:#fcfcfc;
+    padding:5px 0;
 }
 .msg-attachment .img {
     width:auto;

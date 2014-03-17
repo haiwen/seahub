@@ -11,7 +11,8 @@
 #selected-files .item.hl {
     background:#e8e8e8;
 }
-#selected-files .icon-remove {
+#selected-files .icon-remove,
+.add-file {
     cursor:pointer;
 }
 </style>
@@ -34,7 +35,7 @@
         <ul class="hide" id="selected-files"></ul>
         <button type="submit" class="submit hide">{% trans "Submit" %}</button>
         <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
-        <img src="{{ MEDIA_URL }}img/file/file.png" alt="" title="{% trans "Add files" %}" class="add-file vam hide" style="cursor:pointer;" />
+        <img src="{{ MEDIA_URL }}img/file/file.png" alt="" title="{% trans "Add files" %}" class="add-file vam hide" />
         <span class="say"></span>
     </form>
     <div id="add-file-popup" class="file-choose-form hide">
