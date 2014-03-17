@@ -228,7 +228,7 @@
     left:0;
     top:0;
 }
-#pdf2html-toolbar {
+.pdf2html-toolbar {
     position:fixed;
     left:50%;
     bottom:0;
@@ -241,9 +241,18 @@
     -webkit-user-select:none;
     user-select:none;
 }
-#pdf2html-toolbar span {
+.pdf2html-toolbar span {
     font-size:1.5em;
     color:#fff;
     cursor:pointer;
     margin: 0 0.3em;
+}
+#pdf2html-toolbar-1 {
+    border-top-left-radius:0;       
+    border-bottom-left-radius:0;    
+    padding:2px 0;
+}
+#pdf2html-toolbar-1 span {
+    padding:2px 12px;
+    margin:0;
 }
