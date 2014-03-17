@@ -221,6 +221,12 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
         (r'^pay/', include('seahub_extra.pay.urls')),
     )
 
+if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
+    from seahub_extra.sysadmin_extra.views import sys_login_admin
+    urlpatterns += patterns('',
+        url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
+    )
+    
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:

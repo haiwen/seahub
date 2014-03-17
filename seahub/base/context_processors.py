@@ -23,6 +23,10 @@ try:
     from seahub.settings import ENABLE_PUBFILE
 except ImportError:
     ENABLE_PUBFILE = False
+try:
+    from seahub.settings import ENABLE_SYSADMIN_EXTRA
+except ImportError:
+    ENABLE_SYSADMIN_EXTRA = False
 
 def base(request):
     """
@@ -70,6 +74,7 @@ def base(request):
         'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
+        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'mods_available': mods_available,
         'mods_enabled': mods_enabled,
         'grps': grps,

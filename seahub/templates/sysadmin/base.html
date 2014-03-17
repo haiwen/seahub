@@ -25,6 +25,11 @@
             <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="traffic">{% trans "Traffic" %}</a>
         </li>
         {% endif %}
+        {% if sysadmin_extra_enabled %}
+        <li class="tab {% block cur_login %}{% endblock %}">
+            <a href="{{ SITE_ROOT }}sys/loginadmin/" class="login">{% trans "Login" %}</a>
+        </li>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
