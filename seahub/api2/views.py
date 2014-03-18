@@ -1877,6 +1877,7 @@ class PrivateSharedFileDetailView(APIView):
         entry["mtime"] = c.ctime
         entry["repo_id"] = repo_id
         entry["path"] = path
+        entry["shared_by"] = shared_by
 
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
