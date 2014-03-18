@@ -1427,31 +1427,26 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
 }
 #events-loading,
-#events-more {
+#notices-loading,
+#events-more,
+#notices-more-btn {
     text-align:center;
     width:100%;
 }
-#events-more {
+#events-more,
+#notices-more-btn {
     color:#777;
     padding:.5em 0;
     border:0;
+    background: #efefef;
 }
-#events-more:hover {
+#events-more:hover,
+#notices-more-btn:hover {
     color:#000;
     background:#dfdfdf;
 }
 #notices-more {
-    margin-top: -40px;
-}
-#notices-more-btn {
-    text-align:center;
-    width:100%;
-    color:#777;
-    padding:.5em 0;
-}
-#notices-more-btn:hover {
-    color:#000;
-    background:#dfdfdf;
+    margin-top: -20px;
 }
 /* avatar */
 .avatar-op .avatar,
