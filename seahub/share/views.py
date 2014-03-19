@@ -1,16 +1,18 @@
 # encoding: utf-8
 import os
 import logging
+from dateutil.relativedelta import relativedelta
 import simplejson as json
+
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
-
 from django.contrib import messages
 # from django.contrib.sites.models import RequestSite
 from django.contrib.auth.hashers import make_password
@@ -660,51 +662,46 @@ def get_shared_link(request):
     use_passwd = request.POST.get('use_passwd', '0')
     if int(use_passwd) == 1:
         passwd = request.POST.get('passwd')
+    
+    try:
+        expire_days = int(request.POST.get('expire_days', 0))
+    except ValueError:
+        expire_days = 0
+    if expire_days <= 0:
+        expire_date = None
+    else:
+        expire_date = timezone.now() + relativedelta(days=expire_days)
 
     if not (repo_id and  path):
         err = _('Invalid arguments')
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
     
+    if share_type != 'f' and path == '/':
+        err = _('You cannot share the library in this way.')
+        data = json.dumps({'error': err})
+        return HttpResponse(data, status=400, content_type=content_type)
+
+    username = request.user.username
     if share_type == 'f':
-        if path[-1] == '/':     # cut out last '/' at end of path
-            path = path[:-1]
+        fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
+        if fs is None:
+            use_passwd = (int(use_passwd) == 1)
+            password = make_password(passwd) if use_passwd else None
+            fs = FileShare.objects.create_file_link(username, repo_id, path,
+                                                    use_passwd, password,
+                                                    expire_date)
     else:
-        if path == '/':         # can not share root dir
-            err = _('You cannot share the library in this way.')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=400, content_type=content_type)
-        else:
-            if path[-1] != '/': # append '/' at end of path
-                path += '/'
+        fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
+        if fs is None:
+            use_passwd = (int(use_passwd) == 1)
+            password = make_password(passwd) if use_passwd else None
+            fs = FileShare.objects.create_dir_link(username, repo_id, path,
+                                                   use_passwd, password,
+                                                   expire_date)
 
-    l = FileShare.objects.filter(repo_id=repo_id).filter(
-        username=request.user.username).filter(path=path)
-    if len(l) > 0:
-        fs = l[0]
-        token = fs.token
-    else:
-        token = gen_token(max_length=10)
-        
-        fs = FileShare()
-        fs.username = request.user.username
-        fs.repo_id = repo_id
-        fs.path = path
-        fs.token = token
-        fs.s_type = 'f' if share_type == 'f' else 'd'
-        fs.use_passwd = (int(use_passwd) == 1)
-        if fs.use_passwd:
-            fs.password = make_password(passwd)
-
-        try:
-            fs.save()
-        except IntegrityError, e:
-            err = _('Failed to get the link, please retry later.')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=500, content_type=content_type)
-
+    token = fs.token
     shared_link = gen_shared_link(token, fs.s_type)
-
     data = json.dumps({'token': token, 'shared_link': shared_link})
     return HttpResponse(data, status=200, content_type=content_type)
 

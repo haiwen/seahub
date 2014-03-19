@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.utils import timezone
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
@@ -13,6 +14,73 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
+class FileShareManager(models.Manager):
+    def _add_file_share(self, username, repo_id, path, s_type, use_passwd=False,
+                        password=None, expire_date=None):
+        if use_passwd is False:
+            password = None
+
+        token = gen_token(max_length=10)
+        fs = super(FileShareManager, self).create(
+            username=username, repo_id=repo_id, path=path, token=token,
+            s_type=s_type, use_passwd=use_passwd, password=password,
+            expire_date=expire_date)
+        fs.save()
+        return fs
+
+    def _get_file_share_by_path(self, username, repo_id, path):
+        fs = list(super(FileShareManager, self).filter(repo_id=repo_id).filter(
+            username=username).filter(path=path))
+        if len(fs) > 0:
+            return fs[0]
+        else:
+            return None
+
+    def _get_valid_file_share_by_token(self, token):
+        """Check whether token exists and not expire.
+        """
+        try:
+            fs = self.get(token=token)
+        except self.model.DoesNotExist:
+            return None
+
+        if fs.expire_date is None:
+            return fs            
+        else:
+            if timezone.now() > fs.expire_date:
+                return None
+            else:
+                return fs
+
+
+    ########## public methods ##########
+    def create_file_link(self, username, repo_id, path, use_passwd=False,
+                      password=None, expire_date=None):
+        path = normalize_file_path(path)
+        return self._add_file_share(username, repo_id, path, 'f', use_passwd,
+                                    password, expire_date)
+
+    def get_file_link_by_path(self, username, repo_id, path):
+        path = normalize_file_path(path)
+        return self._get_file_share_by_path(username, repo_id, path)
+
+    def get_valid_file_link_by_token(self, token):
+        return self._get_valid_file_share_by_token(token)
+    
+    def create_dir_link(self, username, repo_id, path, use_passwd=False,
+                      password=None, expire_date=None):
+        path = normalize_dir_path(path)
+        return self._add_file_share(username, repo_id, path, 'd', use_passwd,
+                                    password, expire_date)
+    
+    def get_dir_link_by_path(self, username, repo_id, path):
+        path = normalize_dir_path(path)
+        return self._get_file_share_by_path(username, repo_id, path)
+    
+    def get_valid_dir_link_by_token(self, token):
+        return self._get_valid_file_share_by_token(token)
+        
+        
 class FileShare(models.Model):
     """
     Model used for file or dir shared link.
@@ -26,6 +94,9 @@ class FileShare(models.Model):
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
     use_passwd = models.BooleanField(default=False)
     password = models.CharField(max_length=128)
+    expire_date = models.DateTimeField(null=True)
+
+    objects = FileShareManager()
 
 class UploadLinkShare(models.Model):
     """

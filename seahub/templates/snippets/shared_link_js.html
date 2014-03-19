@@ -212,7 +212,8 @@ $('#gen-link-btn').click(function() {
         form = $('#link-passwd-form'),
         form_id = form.attr('id'),
         use_passwd = $('#link-passwd-switch').attr('checked'),
-        passwd, passwd_again, post_data;
+        set_expiration = $('#link-expire-switch').attr('checked'),
+        passwd, passwd_again, expire_days, post_data;
 
     if (use_passwd) {
         passwd = $('input[name="passwd"]', form).val();
@@ -241,6 +242,20 @@ $('#gen-link-btn').click(function() {
         post_data = {'use_passwd': 1, 'passwd': passwd};
     } else {
         post_data = {'use_passwd': 0};
+    }
+
+    if (set_expiration) {
+        expire_days = $('input[name="expire-days"]', form).val();
+        if (!$.trim(expire_days)) {
+            apply_form_error(form_id, "{% trans "Please enter days" %}");
+            return false;
+        }
+        if (Math.floor(expire_days) == expire_days && $.isNumeric(expire_days)) {
+            post_data["expire_days"] = expire_days;
+        } else {
+            apply_form_error(form_id, "{% trans "Please enter valid days" %}");
+            return false;
+        }
     }
 
     $.ajax({
@@ -469,5 +484,16 @@ $('#link-passwd-switch').click(function () {
         pwd_input.attr('disabled', false).removeClass('input-disabled');
     } else {
         pwd_input.attr('disabled', true).addClass('input-disabled');
+    }
+});
+
+$('#link-expire-switch').click(function () {
+    var form = $('#link-passwd-form'),
+        days_input = $('input[name="expire-days"]', form);
+
+    if ($(this).attr('checked')) {
+        days_input.attr('disabled', false).removeClass('input-disabled');
+    } else {
+        days_input.attr('disabled', true).addClass('input-disabled');
     }
 });

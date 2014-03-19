@@ -594,9 +594,8 @@ def view_shared_file(request, token):
     """
     assert token is not None    # Checked by URLconf
 
-    try:
-        fileshare = FileShare.objects.get(token=token)
-    except FileShare.DoesNotExist:
+    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+    if fileshare is None:
         raise Http404
 
     if fileshare.use_passwd:
@@ -704,9 +703,8 @@ def view_shared_file(request, token):
 def view_file_via_shared_dir(request, token):
     assert token is not None    # Checked by URLconf
 
-    try:
-        fileshare = FileShare.objects.get(token=token)
-    except FileShare.DoesNotExist:
+    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+    if fileshare is None:
         raise Http404
 
     shared_by = fileshare.username
