@@ -31,7 +31,7 @@ from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
-    get_person_msgs, api_group_check, get_email, \
+    get_person_msgs, api_group_check, get_email, get_timetamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
@@ -252,6 +252,7 @@ class AccountInfo(APIView):
         email = request.user.username
         info['email'] = email
         info['total'] = get_user_quota(email)
+        info['nickname'] = email2nickname(email)
 
         if CALC_SHARE_USAGE:
             my_usage = get_user_quota_usage(email)
@@ -1995,10 +1996,11 @@ class GroupAndContacts(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        contacts, umsgnum, group_json, replynum, gmsgnum = get_group_and_contacts(request.user.username)
+        contacts, umsgnum, group_json, gmsgnum, replies, replynum = get_group_and_contacts(request.user.username)
         res = {
             "groups": group_json,
             "contacts": contacts,
+            "newreplies":replies,
             "replynum": replynum,
             "umsgnum" : umsgnum,
             "gmsgnum" : gmsgnum,
@@ -2088,7 +2090,8 @@ class GroupMsgsView(APIView):
         username = request.user.username
         page = get_page_index (request, 1)
         msgs, next_page  = get_group_msgs_json(group.id, page, username)
-
+        if not msgs:
+            msgs = []
         # remove user notifications
         UserNotification.objects.seen_group_msg_notices(username, group.id)
         ret = {
@@ -2137,6 +2140,8 @@ class GroupMsgView(APIView):
         msg = get_group_message_json(group.id, msg_id, True)
         if not msg:
             return api_error(status.HTTP_404_NOT_FOUND, 'Messageg not found.')
+
+        UserNotification.objects.seen_group_msg_reply_notice(request.user.username, msg_id)
         return Response(msg)
 
     @api_group_check
@@ -2177,6 +2182,12 @@ class UserMsgsView(APIView):
         page = get_page_index(request, 1)
 
         person_msgs = get_person_msgs(to_email, page, username)
+        if not person_msgs:
+            Response({
+                    'to_email' : to_email,
+                    'next_page' : next_page,
+                    'msgs' : [],})
+
         next_page = -1
         if person_msgs.has_next():
             next_page = person_msgs.next_page_number()
@@ -2191,10 +2202,11 @@ class UserMsgsView(APIView):
                         })
             m = {
                 'from_email' : msg.from_email,
-                'nick' : email2nickname(msg.from_email),
-                'time' : msg.timestamp,
+                'nickname' : email2nickname(msg.from_email),
+                'timestamp' : get_timetamp(msg.timestamp),
                 'msg' : msg.message,
                 'attachments' : atts,
+                'msgid' : msg.message_id,
                 }
             msgs.append(m)
 
@@ -2229,7 +2241,7 @@ class NewRepliesView(APIView):
         grpmsg_reply_list = [ n.grpmsg_reply_detail_to_dict().get('msg_id') for n in notes if n.msg_type == 'grpmsg_reply']
         group_msgs = []
         for msg_id in grpmsg_reply_list:
-            msg = get_group_message_json (None, msg_id, False)
+            msg = get_group_message_json (None, msg_id, True)
             if msg:
                 group_msgs.append(msg)
 

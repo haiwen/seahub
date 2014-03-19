@@ -196,7 +196,7 @@ class UserNotificationManager(models.Manager):
             qs = qs.filter(seen=seen)
         return qs
 
-    def seen_group_msg_reply_notice(self, to_user):
+    def seen_group_msg_reply_notice(self, to_user, msg_id=None):
         """Mark all group message replies of a user as seen.
         
         Arguments:
@@ -204,9 +204,19 @@ class UserNotificationManager(models.Manager):
         - `to_user`:
         - `msg_id`:
         """
-        super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY,
-            seen=False).update(seen=True)
+        if not msg_id:
+            super(UserNotificationManager, self).filter(
+                to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY,
+                seen=False).update(seen=True)
+        else:
+            notifs = super(UserNotificationManager, self).filter(
+                to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY,
+                seen=False)
+            for n in notifs:
+                d = n.grpmsg_reply_detail_to_dict()
+                if msg_id == d['msg_id']:
+                    n.seen = True
+                    n.save()
 
     def remove_group_msg_reply_notice(self, to_user):
         """Mark all group message replies of a user as seen.

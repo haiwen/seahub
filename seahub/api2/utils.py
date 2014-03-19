@@ -130,14 +130,25 @@ def get_groups(email):
         group_json.append(group)
     return group_json, replynum
 
+def get_msg_group_id(msg_id):
+    try:
+        msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        return None
+
+    return msg.group_id
+
 def get_group_and_contacts(email):
     group_json = []
     contacts_json = []
+    replies_json = []
+    gmsgnums = {}
+    umsgnums = {}
+    replies = {}
     gmsgnum = umsgnum = replynum = 0
 
     contacts = [c.contact_email for c in Contact.objects.filter(user_email=email)]
     joined_groups = get_personal_groups_by_user(email)
-    gmsgnums = umsgnums = {}
 
     notes = UserNotification.objects.get_user_notifications(email, seen=False)
     for n in notes:
@@ -148,11 +159,24 @@ def get_group_and_contacts(email):
                 continue
             gmsgnums[gid] = gmsgnums.get(gid, 0) + 1
         elif n.is_grpmsg_reply():
+            d = n.grpmsg_reply_detail_to_dict()
+            msg_id = d['msg_id']
+            if replies.get(msg_id, None):
+                replies[msg_id] = replies[msg_id] + 1
+            else:
+                replies[msg_id] = 1
+                d['mtime'] = n.timestamp
+                d['name'] = email2nickname(d['reply_from'])
+                d['group_id'] = get_msg_group_id(msg_id)
+                replies_json.append(d)
             replynum = replynum + 1
         elif n.is_user_message():
             if n.detail not in contacts:
                 contacts.append(n.detail)
             umsgnums[n.detail] = umsgnums.get(n.detail, 0) + 1
+
+    for r in replies_json:
+        r['msgnum'] = replies[r['msg_id']]
 
     for g in joined_groups:
         msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
@@ -186,7 +210,7 @@ def get_group_and_contacts(email):
         umsgnum = umsgnum + umsgnums.get(contact, 0)
         contacts_json.append(c)
     contacts_json.sort(key=lambda x: x["mtime"], reverse=True)
-    return contacts_json, umsgnum, group_json, replynum, gmsgnum
+    return contacts_json, umsgnum, group_json, gmsgnum, replies_json, replynum
 
 def prepare_events(event_groups):
     for g in event_groups:
@@ -259,12 +283,17 @@ def get_group_msgs(groupid, page, username):
 
     return group_msgs
 
+def get_timetamp(msgtimestamp):
+    timestamp = int(time.mktime(msgtimestamp.timetuple()))
+    return timestamp
+
 def group_msg_to_json(msg, get_all_replies):
     ret = {
         'from_email' : msg.from_email,
         'nickname' : email2nickname(msg.from_email),
-        'time' : msg.timestamp,
+        'timestamp' : get_timetamp(msg.timestamp),
         'msg' : msg.message,
+        'msgid' : msg.id,
         }
 
     try:
@@ -291,8 +320,10 @@ def group_msg_to_json(msg, get_all_replies):
     for reply in msg.replies:
         r = {
             'from_email' : reply.from_email,
-            'time' : reply.timestamp,
+            'nickname' : email2nickname(reply.from_email),
+            'timestamp' : get_timetamp(reply.timestamp),
             'msg' : reply.message,
+            'msgid' : reply.id,
             }
         replies.append(r)
 
@@ -309,7 +340,7 @@ def get_group_msgs_json(groupid, page, username):
     try:
         group_msgs = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        return None
+        return None, -1
 
     if group_msgs.has_next():
         next_page = group_msgs.next_page_number()
@@ -317,7 +348,7 @@ def get_group_msgs_json(groupid, page, username):
         next_page = -1
 
     group_msgs.object_list = list(group_msgs.object_list)
-    msgs = [ group_msg_to_json(msg, False) for msg in group_msgs.object_list ]
+    msgs = [ group_msg_to_json(msg, True) for msg in group_msgs.object_list ]
     return msgs, next_page
 
 def get_group_message_json(group_id, msg_id, get_all_replies):
@@ -339,7 +370,7 @@ def get_person_msgs(to_email, page, username):
     try:
         person_msgs = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        person_msgs = paginator.page(paginator.num_pages)
+        return None
 
     # Force evaluate queryset to fix some database error for mysql.
     person_msgs.object_list = list(person_msgs.object_list)
