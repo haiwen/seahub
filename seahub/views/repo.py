@@ -114,52 +114,6 @@ def get_upload_url(request, repo_id):
 #     else:
 #         return ''
 
-def get_ajax_upload_url(request, repo_id):
-    """Get file upload url for AJAX.
-    """
-    username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
-                                                        'upload', username)
-        return gen_file_upload_url(token, 'upload-aj')
-    else:
-        return ''
-
-def get_ajax_update_url(request, repo_id):
-    """Get file upload url for AJAX.
-    """
-    username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
-                                                        'update', username)
-        return gen_file_upload_url(token, 'update-aj')
-    else:
-        return ''
-
-def get_blks_upload_url(request, repo_id):
-    '''
-    Get upload url for encrypted file (uploaded in blocks)
-    '''
-    username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
-                                                        'upload-blks', username)
-        return gen_file_upload_url(token, 'upload-blks-aj')
-    else:
-        return ''
-    
-def get_blks_update_url(request, repo_id):
-    '''
-    Get update url for encrypted file (uploaded in blocks)
-    '''
-    username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
-                                                        'update-blks', username)
-        return gen_file_upload_url(token, 'update-blks-aj')
-    else:
-        return ''
-
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
         return None
@@ -264,12 +218,6 @@ def render_repo(request, repo):
         repo_group_str = ''
     upload_url = get_upload_url(request, repo.id)
 
-    if repo.encrypted and repo.enc_version == 2 and not server_crypto:
-        ajax_upload_url = get_blks_upload_url(request, repo.id)
-        ajax_update_url = get_blks_update_url(request, repo.id)
-    else:
-        ajax_upload_url = get_ajax_upload_url(request, repo.id)
-        ajax_update_url = get_ajax_update_url(request, repo.id)
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
     uploadlink = get_uploadlink(repo.id, username, path)
@@ -295,8 +243,6 @@ def render_repo(request, repo):
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,
             'upload_url': upload_url,
-            'ajax_upload_url': ajax_upload_url,
-            'ajax_update_url': ajax_update_url,
             'httpserver_root': httpserver_root,
             'protocol': protocol,
             'domain': domain,

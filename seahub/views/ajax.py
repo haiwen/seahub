@@ -34,7 +34,7 @@ from seahub.signals import repo_deleted
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, gen_block_get_url, \
     check_and_get_org_by_repo, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
-    get_repo_last_modify
+    get_repo_last_modify, gen_file_upload_url
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -1283,3 +1283,27 @@ def my_shared_and_group_repos(request):
 
     return HttpResponse(json.dumps({"shared": shared_repos_html, "group": group_repos_html}),
             content_type=content_type)
+
+@login_required
+def get_file_op_url(request, repo_id):
+    """Get file upload/update url for AJAX.
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    op_type = request.GET.get('op_type') # value can be 'upload', 'update', 'upload-blks', 'update-blks'
+    if not op_type:
+        err_msg = _(u'Argument missing')
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
+                            content_type=content_type)
+
+    username = request.user.username
+    url = ''
+    if check_repo_access_permission(repo_id, request.user) == 'rw':
+        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+                                                        op_type, username)
+        url = gen_file_upload_url(token, op_type + '-aj')
+    
+    return HttpResponse(json.dumps({"url": url}), content_type=content_type)

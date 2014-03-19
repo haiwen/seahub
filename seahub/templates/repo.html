@@ -56,7 +56,7 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}
-        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
+        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
             <input type="file" name="file" /><br />
             <p class="error hide">{% trans "Please select a file at first." %}</p>
@@ -792,8 +792,15 @@ $('#upload-file').click(function () {
         fd.append('file_size', file.size);
 
         $.modal.close();
-        var sb_url = form.attr('action');
-        encAndSubmitFile(file, fd, sb_url);
+        $.ajax({
+            url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('upload-blks'),
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                encAndSubmitFile(file, fd, data['url']);
+            },
+            error: ajaxErrorHandler
+        });
     });
 });
 {% else %}
@@ -816,23 +823,33 @@ $('#upload-file').click(function () {
     
     parent_dir.val(cur_path);
 
-    // Initialize the jQuery File Upload widget:
-    form.fileupload({
-        //singleFileUploads: false // using 1 request to upload all files of a selection
-        sequentialUploads: true
-    })
-    .bind('fileuploaddone', function(e, data) {
-        if (data.textStatus == 'success') {
-            upload_success = true; 
-        }
-    });
+    $.ajax({
+        url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('upload'),
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            form.attr('action', data['url']);
 
-    // Enable iframe cross-domain access via redirect option:
-    form.fileupload(
-        'option',
-        'redirect',
-        window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
-    );
+            // Initialize the jQuery File Upload widget, which needs to use form action
+            form.fileupload({
+                //singleFileUploads: false // using 1 request to upload all files of a selection
+                sequentialUploads: true
+            })
+            .bind('fileuploaddone', function(e, data) {
+                if (data.textStatus == 'success') {
+                    upload_success = true; 
+                }
+            });
+
+            // Enable iframe cross-domain access via redirect option:
+            form.fileupload(
+                'option',
+                'redirect',
+                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+            );
+        },
+        error: ajaxErrorHandler
+    });
 });
 {% endif %}
 
@@ -1302,8 +1319,16 @@ $('.file-update', context).click(function() {
 
         $.modal.close();
 
-        var sb_url = '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
-        encAndSubmitFile(file, fd, sb_url);
+        $.ajax({
+            url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('update-blks'),
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                var sb_url = data['url'] + '?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
+                encAndSubmitFile(file, fd, sb_url);
+            },
+            error: ajaxErrorHandler
+        });
     });
 
     return false;
@@ -1329,33 +1354,34 @@ $('.file-update', context).click(function() {
     var hd = $('#update-file-dialog .hd');
     hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
 
-    // Initialize the jQuery File Upload widget:
-    form.fileupload({
-        url: '{{ ajax_update_url }}?head=' + $('#repo-latest-commit .commit-msg').data('cmtid'),
-        {% if max_upload_file_size %}
-        maxFileSize: {{max_upload_file_size}}, // in bytes
-        {% endif %}
-        maxNumberOfFiles: 1 // only 1 file can be uploaded
-    })
-    .bind('fileuploaddone', function(e, data) {
-        if (data.textStatus == 'success') {
-            upload_success = true; 
-        }
-    });
+    $.ajax({
+        url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('update'),
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            // Initialize the jQuery File Upload widget:
+            form.fileupload({
+                url: data['url'] + '?head=' + $('#repo-latest-commit .commit-msg').data('cmtid'),
+                {% if max_upload_file_size %}
+                maxFileSize: {{max_upload_file_size}}, // in bytes
+                {% endif %}
+                maxNumberOfFiles: 1 // only 1 file can be uploaded
+            })
+            .bind('fileuploaddone', function(e, data) {
+                if (data.textStatus == 'success') {
+                    upload_success = true; 
+                }
+            });
 
-    {% if max_upload_file_size %}
-    form.fileupload('option', {
-        maxFileSize: {{max_upload_file_size}}
+            // Enable iframe cross-domain access via redirect option:
+            form.fileupload(
+                'option',
+                'redirect',
+                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+            );
+        },
+        error: ajaxErrorHandler
     });
-    {% endif %}
-    
-    // Enable iframe cross-domain access via redirect option:
-    form.fileupload(
-        'option',
-        'redirect',
-        window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
-    );
-
     return false;
 });
 {% endif %}
