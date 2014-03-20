@@ -1665,6 +1665,10 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #eee;
     margin:5px 0 10px;
 }
+.jstree.file-tree-cont [root_node]  > a > .jstree-checkbox,
+.jstree.file-tree-cont [type="dir"]  > a > .jstree-checkbox {
+    display:none;
+}
 .jstree .jstree-leaf[type=file] a ins.jstree-icon {
     background: transparent url('../img/file-icon-16.png') no-repeat left center;
     vertical-align:top;
