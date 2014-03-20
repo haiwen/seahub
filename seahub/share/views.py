@@ -28,6 +28,7 @@ from signals import share_repo_to_user_successful
 # from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
+from seahub.base.decorators import user_mods_check
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
@@ -324,6 +325,7 @@ def repo_remove_share(request):
 #             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def list_shared_repos(request):
     """
     List personal shared repos.
@@ -377,6 +379,7 @@ def list_shared_repos(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def list_shared_links(request):
     """List shared links, and remove invalid links(file/dir is deleted or moved).
     """
@@ -428,6 +431,7 @@ def list_shared_links(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def list_priv_shared_files(request):
     """List private shared files.
     """
@@ -450,6 +454,7 @@ def list_priv_shared_files(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def list_priv_shared_folders(request):
     """List private shared folders.
     
