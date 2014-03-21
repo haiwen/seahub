@@ -13,7 +13,7 @@ import StringIO
 import urlparse
 from datetime import datetime
 
-from seahub.utils.time import value_to_db_datetime
+from seahub.utils.timeutils import value_to_db_datetime
 
 class DatabaseStorage(Storage):
     """

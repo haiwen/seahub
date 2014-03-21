@@ -61,7 +61,7 @@ class PasswordResetTokenGenerator(object):
             user_last_login = UserLastLogin.objects.get(username=user.email)
             login_dt = user_last_login.last_login
         except UserLastLogin.DoesNotExist:
-            from seahub.utils.time import dt
+            from seahub.utils.timeutils import dt
             login_dt = dt(user.ctime)
         login_timestamp = login_dt.replace(microsecond=0, tzinfo=None)
 
