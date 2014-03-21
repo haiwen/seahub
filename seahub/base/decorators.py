@@ -33,8 +33,8 @@ def user_mods_check(func):
         request.user.mods_available = get_available_mods_by_user(username)
         request.user.mods_enabled = get_enabled_mods_by_user(username)
         return func(request, *args, **kwargs)
+    _decorated.__name__ = func.__name__
     return _decorated
-    
     
 # def ctx_switch_required(func):
 #     """
