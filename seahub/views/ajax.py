@@ -238,8 +238,8 @@ def list_dir(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
@@ -253,9 +253,14 @@ def list_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
 
+    if new_merge_with_no_conflict(head_commit):
+        info_commit = get_commit_before_new_merge(head_commit)
+    else:
+        info_commit = head_commit
+
     path = request.GET.get('p', '/')
     if path[-1] != '/':
-        path = path + '/' 
+        path = path + '/'
 
     more_start = None
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo.id, head_commit, path, offset=0, limit=100)
@@ -284,6 +289,7 @@ def list_dir(request, repo_id):
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
         "sub_lib_enabled": sub_lib_enabled,
         'current_commit': head_commit,
+        'info_commit': info_commit,
     }   
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
@@ -958,12 +964,15 @@ def get_current_commit(request, repo_id):
         err_msg = _(u'Error: no head commit id')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
+
     if new_merge_with_no_conflict(head_commit):
-        head_commit = get_commit_before_new_merge(head_commit)
+        info_commit = get_commit_before_new_merge(head_commit)
+    else:
+        info_commit = head_commit
 
     ctx = { 
         'repo': repo,
-        'current_commit': head_commit
+        'info_commit': info_commit
     }   
     html = render_to_string('snippets/current_commit.html', ctx,
                             context_instance=RequestContext(request))

@@ -187,7 +187,7 @@ def render_repo(request, repo):
     applet_root = get_ccnetapplet_root()
     httpserver_root = get_httpserver_root()
     max_upload_file_size = get_max_upload_file_size()
-    
+
     protocol = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
 
@@ -196,15 +196,18 @@ def render_repo(request, repo):
     head_commit = get_commit(repo.head_cmmt_id)
     if not head_commit:
         raise Http404
+
     if new_merge_with_no_conflict(head_commit):
-        head_commit = get_commit_before_new_merge(head_commit)
-    
+        info_commit = get_commit_before_new_merge(head_commit)
+    else:
+        info_commit = head_commit
+
     repo_size = get_repo_size(repo.id)
     no_quota = is_no_quota(repo.id)
     search_repo_id = None if repo.encrypted else repo.id
     repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
-    
+
     more_start = None
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo.id, head_commit, path, offset=0, limit=100)
     if dirent_more:
@@ -229,6 +232,7 @@ def render_repo(request, repo):
             'repo_owner': repo_owner,
             'is_repo_owner': is_repo_owner,
             'current_commit': head_commit,
+            'info_commit': info_commit,
             'password_set': True,
             'repo_size': repo_size,
             'dir_list': dir_list,
