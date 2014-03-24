@@ -16,11 +16,10 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 # from django.contrib.sites.models import RequestSite
 from django.contrib.auth.hashers import make_password
-from pysearpc import SearpcError
 import seaserv
 from seaserv import seafile_api
 from seaserv import seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    is_personal_repo, check_group_staff, is_org_group, get_org_id_by_group, \
+    check_group_staff, is_org_group, get_org_id_by_group, \
     del_org_group_repo, get_group_repos_by_owner, \
     list_inner_pub_repos_by_owner, remove_share
 
@@ -69,7 +68,7 @@ def share_to_group(request, repo, from_user, group, permission):
     repo_id = repo.id
     group_id = group.id
     group_name = group.group_name
-    
+
     if repo.id in seafile_api.get_group_repoids(group.id):
         msg = _(u'"%(repo)s" is already in group %(group)s. <a href="%(href)s">View</a>') % {
             'repo': repo.name, 'group': group.group_name,
@@ -86,9 +85,9 @@ def share_to_group(request, repo, from_user, group, permission):
         messages.error(request, msg)
     else:
         msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
-            {'group':group_name, 'share':reverse('share_admin')}
+            {'group': group_name, 'share': reverse('share_admin')}
         messages.success(request, msg)
-        
+
 def share_to_user(request, repo, from_user, to_user, permission):
     """Share repo to a user with given permission.
     """
@@ -126,7 +125,7 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
 
     if not seaserv.CALC_SHARE_USAGE:
         return True
-    
+
     check_pass = False
     quota = seafile_api.get_user_quota(username)
     self_usage = seafile_api.get_user_self_usage(username)
@@ -135,7 +134,7 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
     share_usage = 0
     if users:
         share_usage += seafile_api.get_repo_size(repo.id) * (len(users))
-        
+
     if groups:
         grp_members = []
         for group in groups:
@@ -152,7 +151,7 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
 def share_repo(request):
     """
     Handle POST method to share a repo to public/groups/users based on form
-    data. Return to ``myhome`` page and notify user whether success or failure. 
+    data. Return to ``myhome`` page and notify user whether success or failure.
     """
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -160,9 +159,9 @@ def share_repo(request):
 
     form = RepoShareForm(request.POST)
     if not form.is_valid():
-        # TODO: may display error msg on form 
+        # TODO: may display error msg on form
         raise Http404
-    
+
     email_or_group = form.cleaned_data['email_or_group']
     repo_id = form.cleaned_data['repo_id']
     permission = form.cleaned_data['permission']
@@ -177,7 +176,6 @@ def share_repo(request):
         msg = _(u'Only the owner of the library has permission to share it.')
         messages.error(request, msg)
         return HttpResponseRedirect(next)
-    
 
     # Parsing input values.
     share_to_list = string2list(email_or_group)
@@ -200,7 +198,6 @@ def share_repo(request):
         if group.group_name in share_to_group_names:
             share_to_groups.append(group)
 
-
     if share_to_all and not CLOUD_MODE:
         share_to_public(request, repo, permission)
 
@@ -208,7 +205,7 @@ def share_repo(request):
                                   groups=share_to_groups):
         messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
         return HttpResponseRedirect(next)
-        
+
     for group in share_to_groups:
         share_to_group(request, repo, from_email, group, permission)
 
@@ -239,7 +236,7 @@ def repo_remove_share(request):
         to_email = request.GET.get('to', '')
         if not is_valid_username(to_email):
             return render_error(request, _(u'Argument is not valid'))
-        
+
         if request.user.username != from_email and \
                 request.user.username != to_email:
             return render_permission_error(request, _(u'Failed to remove share'))
@@ -251,7 +248,7 @@ def repo_remove_share(request):
             return render_error(request, _(u'group id is not valid'))
 
         if not check_group_staff(group_id_int, request.user.username) \
-                and request.user.username != from_email: 
+                and request.user.username != from_email:
             return render_permission_error(request, _(u'Failed to remove share'))
 
         if is_org_group(group_id_int):
@@ -262,7 +259,7 @@ def repo_remove_share(request):
             group_unshare_repo(request, repo_id, group_id_int, from_email)
 
     messages.success(request, _('Successfully removed share'))
-        
+
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = SITE_ROOT
@@ -318,7 +315,7 @@ def repo_remove_share(request):
 #     # for link in out_links:
 #     #     repo = get_repo(link.repo_id)
 #     #     link.repo_name = repo.name
-#     #     link.remain_time = anon_share_token_generator.get_remain_time(link.token)        
+#     #     link.remain_time = anon_share_token_generator.get_remain_time(link.token)
 
 #     return render_to_response('repo/share_admin.html', {
 #             "org": None,
@@ -374,7 +371,7 @@ def list_shared_repos(request):
         out_repos.append(repo)
 
     out_repos.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
-    
+
     return render_to_response('share/repos.html', {
             "out_repos": out_repos,
             }, context_instance=RequestContext(request))
@@ -384,7 +381,7 @@ def list_shared_links(request):
     """List shared links, and remove invalid links(file/dir is deleted or moved).
     """
     username = request.user.username
-    
+
     # download links
     fileshares = FileShare.objects.filter(username=username)
     p_fileshares = []           # personal file share
@@ -399,7 +396,7 @@ def list_shared_links(request):
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path)
-            fs.shared_link = gen_file_share_link(fs.token) 
+            fs.shared_link = gen_file_share_link(fs.token)
         else:
             if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
                 fs.delete()
@@ -424,7 +421,7 @@ def list_shared_links(request):
         link.shared_link = gen_shared_upload_link(link.token)
         link.repo = r
         p_uploadlinks.append(link)
-    
+
     return render_to_response('share/links.html', {
             "fileshares": p_fileshares,
             "uploadlinks": p_uploadlinks,
@@ -446,7 +443,7 @@ def list_priv_shared_files(request):
     for e in priv_share_in:
         e.file_or_dir = os.path.basename(e.path.rstrip('/'))
         e.repo = seafile_api.get_repo(e.repo_id)
-    
+
     return render_to_response('share/priv_shared_files.html', {
             "priv_share_out": priv_share_out,
             "priv_share_in": priv_share_in,
@@ -455,7 +452,7 @@ def list_priv_shared_files(request):
 @login_required
 def list_priv_shared_folders(request):
     """List private shared folders.
-    
+
     Arguments:
     - `request`:
     """
@@ -510,7 +507,7 @@ def list_priv_shared_folders(request):
 @login_required
 def view_priv_shared_folder(request, repo_id):
     """
-    
+
     Arguments:
     - `request`:
     - `repo_id`:
@@ -524,15 +521,15 @@ def view_priv_shared_folder(request, repo_id):
 
     url = reverse('repo', args=[repo.origin_repo_id]) + '?p=' + repo.origin_path
     return HttpResponseRedirect(url)
-    
+
 @login_required
 def share_permission_admin(request):
     share_type = request.GET.get('share_type', '')
     content_type = 'application/json; charset=utf-8'
-    
+
     form = RepoShareForm(request.POST)
     form.is_valid()
-    
+
     email_or_group = form.cleaned_data['email_or_group']
     repo_id = form.cleaned_data['repo_id']
     permission = form.cleaned_data['permission']
@@ -542,7 +539,7 @@ def share_permission_admin(request):
         if not is_valid_username(email_or_group):
             return HttpResponse(json.dumps({'success': False}), status=400,
                                 content_type=content_type)
-            
+
         try:
             seafserv_threaded_rpc.set_share_permission(repo_id, from_email, email_or_group, permission)
         except:
@@ -579,7 +576,7 @@ def share_permission_admin(request):
 #         msg = _(u'Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site.') % anon_email
 #         messages.error(request, msg)
 #         return
-    
+
 #     token = anon_share_token_generator.make_token()
 
 #     anon_share = AnonymousShare()
@@ -635,17 +632,17 @@ def share_permission_admin(request):
 #         return res
 
 # def remove_anonymous_share(request, token):
-#     AnonymousShare.objects.filter(token=token).delete() 
+#     AnonymousShare.objects.filter(token=token).delete()
 
 #     next = request.META.get('HTTP_REFERER', None)
 #     if not next:
 #         next = reverse('share_admin')
 
 #     messages.add_message(request, messages.INFO, _(u'Deleted successfully.'))
-    
+
 #     return HttpResponseRedirect(next)
 
-########## share link    
+########## share link
 @login_required
 def get_shared_link(request):
     """
@@ -653,16 +650,16 @@ def get_shared_link(request):
     """
     if not request.is_ajax():
         raise Http404
-    
+
     content_type = 'application/json; charset=utf-8'
-    
+
     repo_id = request.GET.get('repo_id', '')
-    share_type = request.GET.get('type', 'f') # `f` or `d`
+    share_type = request.GET.get('type', 'f')  # `f` or `d`
     path = request.GET.get('p', '')
     use_passwd = request.POST.get('use_passwd', '0')
     if int(use_passwd) == 1:
         passwd = request.POST.get('passwd')
-    
+
     try:
         expire_days = int(request.POST.get('expire_days', 0))
     except ValueError:
@@ -672,11 +669,11 @@ def get_shared_link(request):
     else:
         expire_date = timezone.now() + relativedelta(days=expire_days)
 
-    if not (repo_id and  path):
+    if not (repo_id and path):
         err = _('Invalid arguments')
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
-    
+
     if share_type != 'f' and path == '/':
         err = _('You cannot share the library in this way.')
         data = json.dumps({'error': err})
@@ -711,7 +708,7 @@ def remove_shared_link(request):
     Handle request to remove file shared link.
     """
     token = request.GET.get('t')
-    
+
     if not request.is_ajax():
         FileShare.objects.filter(token=token).delete()
         next = request.META.get('HTTP_REFERER', None)
@@ -719,13 +716,13 @@ def remove_shared_link(request):
             next = reverse('share_admin')
 
         messages.success(request, _(u'Removed successfully'))
-        
+
         return HttpResponseRedirect(next)
 
     content_type = 'application/json; charset=utf-8'
     result = {}
 
-    if not token: 
+    if not token:
         result = {'error': _(u"Argument missing")}
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -784,7 +781,7 @@ def send_shared_link(request):
     if not IS_EMAIL_CONFIGURED:
         data = json.dumps({'error':_(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
-    
+
     from seahub.settings import SITE_NAME
 
     form = FileLinkShareForm(request.POST)
@@ -806,7 +803,7 @@ def send_shared_link(request):
 
             try:
                 send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
-                          'shared_link_email.html', c, None, [to_email])
+                                'shared_link_email.html', c, None, [to_email])
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
@@ -830,7 +827,7 @@ def save_shared_link(request):
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = SITE_ROOT
-    
+
     if not dst_repo_id or not dst_path:
         messages.error(request, _(u'Please choose a directory.'))
         return HttpResponseRedirect(next)
@@ -845,7 +842,7 @@ def save_shared_link(request):
     obj_name = os.path.basename(fs.path)
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-    
+
     seafile_api.copy_file(src_repo_id, src_path, obj_name,
                           dst_repo_id, dst_path, new_obj_name, username)
 
@@ -870,7 +867,7 @@ def gen_private_file_share(request, repo_id):
         if not is_registered_user(email):
             messages.error(request, _('Failed to share to "%s", user not found.') % email)
             continue
-        
+
         if s_type == 'f':
             pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(
                 username, email, repo_id, path)
@@ -898,10 +895,8 @@ def rm_private_file_share(request, token):
     except PrivateFileDirShare.DoesNotExist:
         raise Http404
 
-    
     from_user = pfs.from_user
     to_user = pfs.to_user
-    repo_id = pfs.repo_id
     path = pfs.path
     file_or_dir = os.path.basename(path.rstrip('/'))
     username = request.user.username
@@ -916,7 +911,7 @@ def rm_private_file_share(request, token):
     if not next:
         next = SITE_ROOT
     return HttpResponseRedirect(next)
-    
+
 @login_required
 def save_private_file_share(request, token):
     """
@@ -927,7 +922,7 @@ def save_private_file_share(request, token):
         pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
     except PrivateFileDirShare.DoesNotExist:
         raise Http404
-    
+
     from_user = pfs.from_user
     to_user = pfs.to_user
     repo_id = pfs.repo_id
@@ -944,7 +939,7 @@ def save_private_file_share(request, token):
                               dst_repo_id, dst_path, new_obj_name, username)
 
         messages.success(request, _(u'Successfully saved.'))
-        
+
     else:
         messages.error(request, _("You don't have permission to save %s.") % obj_name)
 
@@ -953,7 +948,7 @@ def save_private_file_share(request, token):
         next = SITE_ROOT
     return HttpResponseRedirect(next)
 
-@login_required    
+@login_required
 def user_share_list(request, id_or_email):
     """List sharing repos with ``to_email``.
     """
@@ -964,7 +959,7 @@ def user_share_list(request, id_or_email):
         except User.DoesNotExist:
             user = None
         if not user:
-            return render_to_response("user_404.html",{},
+            return render_to_response("user_404.html", {},
                                       context_instance=RequestContext(request))
         to_email = user.email
     except ValueError:
@@ -977,7 +972,7 @@ def user_share_list(request, id_or_email):
         if e.share_type == 'personal' and e.user == to_email:
             e.share_in = True
             share_list.append(e)
-    share_out = seafile_api.get_share_out_repo_list(username, -1, -1)    
+    share_out = seafile_api.get_share_out_repo_list(username, -1, -1)
     for e in share_out:
         if e.share_type == 'personal' and e.user == to_email:
             e.share_out = True
@@ -985,13 +980,13 @@ def user_share_list(request, id_or_email):
 
     c = Contact.objects.get_contact_by_user(username, to_email)
     add_to_contacts = True if c is None else False
-            
+
     return render_to_response('share/user_share_list.html', {
             'to_email': to_email,
             'share_list': share_list,
             'add_to_contacts': add_to_contacts,
             }, context_instance=RequestContext(request))
-    
+
 @login_required
 def get_shared_upload_link(request):
     """
@@ -1007,7 +1002,7 @@ def get_shared_upload_link(request):
     if int(use_passwd) == 1:
         passwd = request.POST.get('passwd')
 
-    if not (repo_id and  path):
+    if not (repo_id and path):
         err = _('Invalid arguments')
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
@@ -1083,7 +1078,7 @@ def send_shared_upload_link(request):
 
             try:
                 send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
-                          'shared_upload_link_email.html', c, None, [to_email])
+                                'shared_upload_link_email.html', c, None, [to_email])
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
