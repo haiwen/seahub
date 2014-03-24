@@ -7,6 +7,8 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
 from seahub.utils import check_and_get_org_by_repo, check_and_get_org_by_group, render_error
 from django.utils.translation import ugettext as _
+from seahub.views.modules import get_enabled_mods_by_user, \
+    get_available_mods_by_user
 from seahub.settings import FORCE_SERVER_CRYPTO
 
 def sys_staff_required(func):
@@ -17,6 +19,21 @@ def sys_staff_required(func):
         if request.user.is_staff:
             return func(request, *args, **kwargs)
         raise Http404
+    return _decorated
+
+def user_mods_check(func):
+    """Decorator for views that need user's enabled/available modules.
+    Populate modules to ``request.user``.
+    
+    Arguments:
+    - `func`:
+    """
+    def _decorated(request, *args, **kwargs):
+        username = request.user.username
+        request.user.mods_available = get_available_mods_by_user(username)
+        request.user.mods_enabled = get_enabled_mods_by_user(username)
+        return func(request, *args, **kwargs)
+    _decorated.__name__ = func.__name__
     return _decorated
     
 # def ctx_switch_required(func):

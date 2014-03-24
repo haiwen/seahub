@@ -14,7 +14,7 @@
         {% if events_enabled %}
         <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
         {% endif %}
-        {% for mod in mods_enabled %}
+        {% for mod in request.user.mods_enabled %}
         {% if mod == 'personal wiki' %}
         <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
         {% endif %}
@@ -38,11 +38,11 @@
 <form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
     <ul>
-    {% for mod in mods_available %}
+    {% for mod in request.user.mods_available %}
       {% if mod == 'personal wiki' %}
       <li>
       <label class="checkbox-label">
-          <span class="checkbox {% if mod in mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="personal_wiki" class="checkbox-orig" {%if mod in mods_enabled%}checked{% endif%} /></span>
+          <span class="checkbox {% if mod in request.user.mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="personal_wiki" class="checkbox-orig" {%if mod in request.user.mods_enabled%}checked{% endif%} /></span>
           <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
       </label>
       </li>

@@ -58,7 +58,7 @@ from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
 from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import sys_staff_required
+from seahub.base.decorators import sys_staff_required, user_mods_check
 from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
     UserStarredFiles, DirFilesLastModifiedInfo
 from seahub.contacts.models import Contact
@@ -991,6 +991,7 @@ def create_default_library(username):
     return default_repo
     
 @login_required
+@user_mods_check
 def myhome(request):
     username = request.user.username
 
@@ -1047,6 +1048,7 @@ def myhome(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def starred(request):
     """List starred files.
     
@@ -1062,6 +1064,7 @@ def starred(request):
             }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def client_mgmt(request):
     username = request.user.username
 

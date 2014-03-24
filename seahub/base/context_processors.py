@@ -9,8 +9,6 @@ RequestContext.
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, SITE_BASE, \
     ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
-from seahub.views.modules import get_enabled_mods_by_user, \
-    get_available_mods_by_user
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -23,6 +21,10 @@ try:
     from seahub.settings import ENABLE_PUBFILE
 except ImportError:
     ENABLE_PUBFILE = False
+try:
+    from seahub.settings import ENABLE_SYSADMIN_EXTRA
+except ImportError:
+    ENABLE_SYSADMIN_EXTRA = False
 
 def base(request):
     """
@@ -39,10 +41,6 @@ def base(request):
         base_template = 'myhome_base.html'
 
     username = request.user.username
-
-    # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_user(username)
-    mods_enabled = get_enabled_mods_by_user(username)
 
     # get 8 user groups
     try:
@@ -70,7 +68,6 @@ def base(request):
         'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
-        'mods_available': mods_available,
-        'mods_enabled': mods_enabled,
+        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'grps': grps,
         }

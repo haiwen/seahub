@@ -18,6 +18,7 @@ from message import msg_info_list
 from seaserv import get_repo
 from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
+from seahub.base.decorators import user_mods_check
 from seahub.views import is_registered_user
 from seahub.contacts.models import Contact
 from seahub.share.models import PrivateFileDirShare
@@ -26,6 +27,7 @@ from seahub.utils.paginator import Paginator
 from seahub.settings import SITE_ROOT
 
 @login_required
+@user_mods_check
 def message_list(request):
     """List and group messages related to the user, including he/she send to
     others and others send to he/she.
@@ -45,6 +47,7 @@ def message_list(request):
         }, context_instance=RequestContext(request))
 
 @login_required
+@user_mods_check
 def user_msg_list(request, id_or_email):
     """List messages related to a certain person.
     """

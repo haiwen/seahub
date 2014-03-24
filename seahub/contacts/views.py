@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 
 from models import Contact, ContactAddForm, ContactEditForm
 from seahub.auth.decorators import login_required
+from seahub.base.decorators import user_mods_check
 from seahub.utils import render_error, is_valid_email
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
 from seahub.views import is_registered_user
@@ -22,6 +23,7 @@ from seahub.settings import SITE_ROOT
 logger = logging.getLogger(__name__)
 
 @login_required
+@user_mods_check
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
     # registered_contacts = []
