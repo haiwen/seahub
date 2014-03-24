@@ -2,21 +2,20 @@
 from django.conf import settings
 import simplejson as json
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import Context, RequestContext
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, get_binding_peerids, \
-    seafile_api
-from pysearpc import SearpcError
+import seaserv
+from seaserv import seafile_api
 
-from forms import ProfileForm, DetailedProfileForm
+from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error, is_valid_username
+from seahub.utils import is_org_context
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -169,6 +168,11 @@ def delete_user_account(request):
         
     user = User.objects.get(email=username)
     user.delete()
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        seaserv.ccnet_threaded_rpc.remove_org_user(org_id, username)
+
     return HttpResponseRedirect(settings.LOGIN_URL)
 
 @login_required
