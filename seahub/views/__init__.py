@@ -15,6 +15,7 @@ import datetime as dt
 from datetime import datetime
 from math import ceil
 from urllib import quote
+from django.utils.datastructures import SortedDict
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -89,6 +90,7 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, \
     enable_mod_for_user, disable_mod_for_user
 from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.utils.devices import get_user_devices, do_unlink_device
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
@@ -1062,6 +1064,34 @@ def starred(request):
     return render_to_response('starred.html', {
             "starred_files": starred_files,
             }, context_instance=RequestContext(request))
+    
+
+@login_required
+def devices(request):
+    """List user devices"""
+    username = request.user.username
+    user_devices = get_user_devices(username)
+
+    return render_to_response('devices.html', {
+            "devices": user_devices,
+            }, context_instance=RequestContext(request))
+    
+@login_required
+def unlink_device(request):
+    if not request.is_ajax():
+        raise Http404
+        
+    content_type = 'application/json; charset=utf-8'
+    platform = request.POST.get('platform', '')
+    device_id = request.POST.get('device_id', '')
+    
+    if not platform or not device_id:
+        return HttpResponseBadRequest(content_type=content_type)
+        
+    do_unlink_device(request.user.username, platform, device_id)
+    
+    return HttpResponse(json.dumps({'success': True}),
+            content_type=content_type)
 
 @login_required
 @user_mods_check

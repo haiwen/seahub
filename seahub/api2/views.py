@@ -25,14 +25,13 @@ from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils import timezone
 
-from models import Token
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timetamp, \
-    get_group_message_json, get_group_msgs, get_group_msgs_json
+    get_group_message_json, get_group_msgs, get_group_msgs_json, get_client_ip
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo, DeviceToken
@@ -131,13 +130,13 @@ class ObtainAuthToken(APIView):
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,)
-    model = Token
 
     def post(self, request):
-        serializer = AuthTokenSerializer(data=request.DATA)
+        context = { 'request': request }
+        serializer = AuthTokenSerializer(data=request.DATA, context=context)
         if serializer.is_valid():
-            token, created = Token.objects.get_or_create(user=serializer.object['user'].username)
-            return Response({'token': token.key})
+            key = serializer.object
+            return Response({'token': key})
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -20,7 +20,7 @@
         {% endif %}
         {% endfor %}
         <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
-        <li class="tab {% block cur_clients %}{% endblock %}"><a href="{% url 'client_mgmt' %}" class="clients">{% trans "Clients" %}</a></li>
+        <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
         <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
     </ul>
 
