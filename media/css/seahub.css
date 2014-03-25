@@ -2867,11 +2867,46 @@ textarea:-moz-placeholder {/* for FF */
     width:432px;
 }
 /* payments */
-#current-plan p {
-    font-size:15px;
+#plans {
+    margin-top:24px;
 }
-#plan-form input[type=radio] {
-    margin-right: 10px;
+#plans p {
+    margin:13px 0;
+}
+#plans th,
+#plans td {
+    text-align:center;
+    padding:6px 10px;
+    border:1px solid #ede;
+}
+#plans th {
+    color:#eb8205;
+    font-weight:bold;
+    font-size:16px;
+}
+#plans .price {
+    color:#666;
+    font-size:14px;
+}
+#plans tr:nth-child(even) td {
+    background: #f8f8f8;
+}
+#plans .empty-cell {
+    border-top-color:transparent;
+    border-left-color:transparent;
+}
+#plans .item {
+   text-align:right; 
+   font-weight:bold;
+   color:#555;
+}
+#plan-form .options {
+    margin-right: 15px;
+}
+.signup-btn {
+    font-size:14px;
+    padding:10px 14px;
+    margin:10px 15px 20px 0;
 }
 #search-repo-form label,
 #search-user-form label {
@@ -2938,6 +2973,7 @@ textarea:-moz-placeholder {/* for FF */
 .client-list .dir-icon {
     color:#666;
 }
+
 /* side-info */
 .side-info {
     position: relative;
@@ -2966,3 +3002,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:30px;
 }
 
+/* org reg */
+#url_prefix {
+    width: 100px;
+}
