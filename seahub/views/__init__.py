@@ -1067,6 +1067,7 @@ def starred(request):
     
 
 @login_required
+@user_mods_check
 def devices(request):
     """List user devices"""
     username = request.user.username
